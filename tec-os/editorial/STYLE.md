@@ -186,7 +186,7 @@ controls of the web page, the steps of a procedure. A paragraph has one job.
 ## Conventions
 
 - Hexadecimal numbers have a trailing `h`, as `0100h`; sizes in bytes are
-  decimal, with a comma in thousands, as `46,854`. KiB and MiB are powers of
+  decimal, with a comma in thousands, as `46,869`. KiB and MiB are powers of
   two.
 - Times are in T-states, the Z80's clock cycles; at the TEC-1G's 4 MHz,
   4,000,000 T-states is one second.
