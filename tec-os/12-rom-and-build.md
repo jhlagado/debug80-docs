@@ -33,7 +33,7 @@ The figures are those of the build at commit 1f9542d. The build writes them to
 ROM's regions in `docs/memory-map.md`. The used part, from `C000h` to the end
 of the code, is 14,712 of the 16,384 bytes.
 
-The first three bytes are a jump, `JP COLD` (`src/reset.asm:6`), to `C33Ch`,
+The first three bytes are a jump, `JP COLD` (`src/reset.asm:7`), to `C33Ch`,
 the first byte of the code. Chapter 14 describes how the Z80 reaches it at
 reset.
 
@@ -98,7 +98,7 @@ and moves the address on without emitting anything (`src/ram.asm:6`,
 `src/ram.asm:9-190`). A second origin, at `RAMBIOS+BIOSLEN`, places the state
 that sits above the RAM BIOS table (`src/ram.asm:192-241`). Chapter 13
 describes that memory. Bytes start with `reset.asm` and its `ORG $C000`
-(`src/reset.asm:5`), and from there each file's bytes follow the last's.
+(`src/reset.asm:6`), and from there each file's bytes follow the last's.
 
 The table follows the reset jump because `abi.asm` follows `reset.asm`. The
 data follows the table because the four data files come next, and the code
@@ -178,14 +178,14 @@ A separate module, `tools/lib/assemble.mjs`, assembles stand-alone programs
 with the same assembler, at `0100h` for a `.COM` file
 (`tools/lib/assemble.mjs:10-20`). `npm run media` uses it to build the starter
 card's `MOUNT.COM` and, through `makeSvc`, its two drivers
-(`tools/lib/svc.mjs:104`), and the web page's `DEMO.COM`
-(`tools/media.mjs:235`). `npm run media` also copies `programs/SAMPLE.ASM` to the card as a
+(`tools/lib/svc.mjs:106`), and the web page's `DEMO.COM`
+(`tools/media.mjs:237`). `npm run media` also copies `programs/SAMPLE.ASM` to the card as a
 CP/M text file, with CR LF line ends and a `^Z` at the end
-(`tools/media.mjs:204-207`). The ROM's build does not use the module. The card's `TAS.COM` and
+(`tools/media.mjs:206-209`). The ROM's build does not use the module. The card's `TAS.COM` and
 `TED.COM` are built outside this repository, and the media step takes each
 from its pinned build and refuses one whose SHA-256 differs
-(`tools/media.mjs:27-36`, `tools/media.mjs:173-174`, `tools/media.mjs:202-203`,
-`tools/media.mjs:208-209`).
+(`tools/media.mjs:28-37`, `tools/media.mjs:175-176`, `tools/media.mjs:204-205`,
+`tools/media.mjs:210-211`).
 
 ## The build's checks
 
@@ -247,9 +247,9 @@ tecos: ROM 14712/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 704dcc07cf70
 
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
 media` then copies the three files to `dist/` as `tecos.rom`, `tecos.d8.json`
-and `tecos.census.json` (`tools/media.mjs:178-184`). It builds the starter card
-(`tools/media.mjs:231-232`) and writes `docs/memory-map.md` from the census
-(`tools/media.mjs:248`), and
+and `tecos.census.json` (`tools/media.mjs:180-186`). It builds the starter card
+(`tools/media.mjs:233-234`) and writes `docs/memory-map.md` from the census
+(`tools/media.mjs:250`), and
 prints a line of its own:
 
 ```text

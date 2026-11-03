@@ -51,7 +51,7 @@ Every write to it has to keep bit 6 high when the serial line is idle, or the
 terminal receives a start bit. The ROM's own writes do: the hardware service
 `DIGIT` lights each digit with bit 6 set, and `TONE` toggles bit 7 with bit 6
 set (`src/hwsvc.asm:17`, `src/hwsvc.asm:58-72`,
-`src/hwsvc.asm:142-161`). That shared port is why programs reach the digits
+`src/hwsvc.asm:146-165`). That shared port is why programs reach the digits
 and the speaker through the hardware services of Chapter 9 and not by writing
 the port.
 
@@ -91,7 +91,7 @@ not read, so TEC-OS keeps a copy of the last value written at `0040h`,
 
 | Bit | Value | Name | TEC-OS's use |
 | ---: | ---: | --- | --- |
-| 0 | `01h` | SHADOW | Set at cold boot to turn the boot overlay off, and never cleared (`src/boot.asm:11-12`) |
+| 0 | `01h` | SHADOW | Set at cold boot to turn the boot overlay off, and never cleared (`src/boot.asm:21-22`) |
 | 1 | `02h` | PROTECT | Not set; a program that sets it makes `4000h–7FFFh` read-only |
 | 2 | `04h` | EXPAND | EXPAND 1 at `8000h–BFFFh` in place of EXPAND 0, for the block cache and the history (`src/layout.asm:18`) |
 | 3 | `08h` | MAIN | Not set |
@@ -100,7 +100,7 @@ not read, so TEC-OS keeps a copy of the last value written at `0040h`,
 At reset the latch is `00h`, and with bit 0 low the first 2 KiB of the ROM
 also appear at `0000h–07FFh`. That is how the Z80, which starts at `0000h`,
 reaches the ROM: the jump there leads to `COLD` at its `C000h` address, which
-writes `01h` to the latch (`src/reset.asm:1-6`, `src/boot.asm:9-12`). A
+writes `01h` to the latch (`src/reset.asm:1-7`, `src/boot.asm:19-22`). A
 program that writes the latch itself has to write `0040h` to match, since
 TEC-OS's next write to the latch is made from the copy.
 
@@ -119,8 +119,8 @@ and EXPAND 1. The board's recommended build leaves U9 empty, and
 `docs/board-run.md` gives the chip as a 62256 or similar, with the board's
 EXPAND jumpers set for a 32 KiB chip. Before it prints anything, cold boot
 tests `8000h–BFFFh` and then EXPAND 1 behind it, and stops with `TEC-OS needs
-64K RAM` on the serial terminal if either is missing (`src/boot.asm:22`,
-`src/boot.asm:279-309`). Chapter 1 describes the check, and Chapter 13 what
+64K RAM` on the serial terminal if either is missing (`src/boot.asm:32`,
+`src/boot.asm:289-319`). Chapter 1 describes the check, and Chapter 13 what
 TEC-OS keeps in each half.
 
 ## The hex keypad and its NMI
@@ -152,11 +152,11 @@ shows.
 The DS1302 is an add-on on port `FCh`, with bit 4 the chip's enable, bit 6 its
 clock, bit 7 the data sent to it, bit 5 set to read and the data read on bit 0
 (`src/hwsvc.asm:13-14`). Each register is reached by a command byte sent least
-significant bit first (`src/hwsvc.asm:276-282`). TEC-OS counts the clock as
+significant bit first (`src/hwsvc.asm:284-290`). TEC-OS counts the clock as
 present when a read of the seconds register gives a value below `60h`, which a
 clock that answers gives and an empty port's `FFh` doesn't
-(`src/hwsvc.asm:256-268`). Cold boot makes that test once and keeps the result
-in bit 3 of `CONDEV` (`src/boot.asm:30-33`). The hardware service `INFO`
+(`src/hwsvc.asm:264-276`). Cold boot makes that test once and keeps the result
+in bit 3 of `CONDEV` (`src/boot.asm:40-43`). The hardware service `INFO`
 reports that bit in bit 3 of `B` without reading the port. `RTC` makes the
 test again at each call, and reads and sets the clock's seven BCD registers
 (Chapter 9).

@@ -187,7 +187,7 @@ behind and sends them to the card in batches. A volume is written behind when it
 descriptor has bit 0 of its cache byte, byte 15, set. `tecvol` sets the bit on
 one volume at most, and the ROM writes behind any volume that has it. `MNFILL`
 copies that bit into bit 1 of the drive's flags in the drive table
-(`src/vol.asm:346-350`). After its checks, BIOS `WRITE` sends a write on that
+(`src/vol.asm:362-366`). After its checks, BIOS `WRITE` sends a write on that
 drive to `CWRBH` in place of the written-through path
 (`src/bios.asm:277-281`). On the starter card the volume is `WORK` on drive B.
 
@@ -265,15 +265,15 @@ A flush has four occasions:
 
 - a directory write on the volume written behind, as above
 - `CTAKE` with every line dirty, which writes one line
-- every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:78`,
+- every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:88`,
   `src/cache.asm:354-365`)
 - every call of the services `MOUNT` and `UNMNT`, whose `VFLUSH` calls
   `CFLALL` before any drive changes, and fails if it fails
-  (`src/vol.asm:680-692`)
+  (`src/vol.asm:696-708`)
 
 The warm boot's flush is the one you can cause. A `^C` at the prompt is a warm
 boot, and after it every change is on the card. A reset writes nothing, since
-cold boot clears EXPAND 1 (`src/boot.asm:139-147`), and the changes in the
+cold boot clears EXPAND 1 (`src/boot.asm:149-157`), and the changes in the
 cache at the time of a reset are lost.
 
 ## Write lost
@@ -290,7 +290,7 @@ the write still fails.
 
 A card taken out while TEC-OS runs gives that: every write fails and the
 message comes at each `^C`, even with the same card put back, since only cold
-boot starts a card (`src/boot.asm:42`). The data that is only in the cache is lost when
+boot starts a card (`src/boot.asm:52`). The data that is only in the cache is lost when
 the board is reset or turned off. While dirty lines stay dirty, fewer lines
 are free for reads, and once all 30 are dirty every `CTAKE` starts with a
 write.
@@ -313,7 +313,7 @@ the result's Z flag into `A`, 0 for success and 1 for an error. `CEI` turns
 interrupts on again only if `CIFF` shows they were on at entry
 (`src/cache.asm:32-41`, `src/bios.asm:181-184`, `src/bios.asm:195-199`), so a
 call made with interrupts off returns with them off. `VFLUSH`, in the volume
-services, uses the same pair around its flush (`src/vol.asm:683-692`). `MVCOPY`
+services, uses the same pair around its flush (`src/vol.asm:699-708`). `MVCOPY`
 and the history's routines call `IFFGET` too and keep their own copy of the state
 (`src/cache.asm:396-398`, `src/history.asm:25-27`).
 

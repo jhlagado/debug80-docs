@@ -60,8 +60,8 @@ lies below `8000h` then (`src/cache.asm:387-392`).
 
 CP/M puts its fixed addresses in the first 256 bytes of memory, and TEC-OS
 writes them as CP/M 2.2 does. Cold boot clears all of page zero
-(`src/boot.asm:15-21`), and `PZINIT`, at cold boot and at every warm boot, writes
-the parts TEC-OS sets (`src/boot.asm:190-246`):
+(`src/boot.asm:25-31`), and `PZINIT`, at cold boot and at every warm boot, writes
+the parts TEC-OS sets (`src/boot.asm:200-256`):
 
 | Address | Contents |
 | --- | --- |
@@ -77,12 +77,12 @@ the parts TEC-OS sets (`src/boot.asm:190-246`):
 | `0080h` | the default DMA buffer and the command tail |
 
 `PZINIT` leaves the IOBYTE and the drive and user byte as they are
-(`src/boot.asm:187-189`). The word it writes at `0006h` is `PZTOP`, the entry
+(`src/boot.asm:197-199`). The word it writes at `0006h` is `PZTOP`, the entry
 of the lowest service or, with none, the BDOS entry jump itself
-(`src/boot.asm:195-196`). At each warm boot `PZINIT` also rewrites the restart
+(`src/boot.asm:205-206`). At each warm boot `PZINIT` also rewrites the restart
 vectors, as Chapter 14 describes. A vector that jumps above the top of the TPA,
 into a service, the workspace or the ROM, keeps its jump
-(`src/boot.asm:203-246`).
+(`src/boot.asm:213-256`).
 
 `PZINIT` doesn't write `0050h`. The CCP stores there the drive byte of the
 command's FCB just before it starts a program, as CP/M 3 does. A program that
@@ -195,23 +195,23 @@ needs 64 bytes, and a G8M volume, with `DSM` 2047, needs 256.
 Cold boot places the vectors after it has read the card, because the space
 each drive gets depends on the card. `ALVINIT` starts at `WSBASE` and works
 down, giving each drive its vector in drive order and putting each one's
-address in the drive's DPH (`src/vol.asm:496-569`).
+address in the drive's DPH (`src/vol.asm:512-585`).
 
 A card of container format 1.1 whose drives field is N gets a 256-byte slot for
 each of drives A to the Nth, mounted or not, so any of those drives can later
 take any volume. Any other card, including every format 1.0 card, gets a slot
-for each drive it mounts, of the size its volume needs (`src/vol.asm:516-544`).
+for each drive it mounts, of the size its volume needs (`src/vol.asm:532-560`).
 `DRVSLOT` records each drive's slot: 0 for none, 1 for 64 bytes and 2 for 256
-(`src/ram.asm:29`, `src/vol.asm:545-550`). The starter card is format 1.0 with
+(`src/ram.asm:29`, `src/vol.asm:561-566`). The starter card is format 1.0 with
 a G1M volume on A and a G8M volume on B. Its vectors take 64 and 256 bytes, 320
 in all, from `B818h` to `B957h`.
 
 Directly under the vectors goes the BDOS entry jump, `JP BENTRY`. `ALVINIT`
-takes the lowest vector's address and subtracts 3 (`src/vol.asm:570-575`). For
+takes the lowest vector's address and subtracts 3 (`src/vol.asm:586-591`). For
 the starter card that puts the jump at `B815h`, with no byte between it and the
 vectors. `STUBAD` keeps the address, and `PZINIT` writes the jump there. With no
 service loaded, `PZTOP`, the word `PZINIT` puts at `0006h`, is this address
-(`src/ram.asm:34`, `src/boot.asm:195-202`).
+(`src/ram.asm:34`, `src/boot.asm:205-212`).
 
 A service's header and image are moved to a page boundary below the BDOS entry
 jump. The loader writes `JP BENTRY` over the header's first three bytes, at
@@ -231,15 +231,15 @@ census and checks that the starter card's TPA is at least 45,830 bytes
 TEC-OS uses four stacks, and only the first is outside the workspace.
 
 The boot stack starts at `8000h`, `BOOTSTK`, and grows down into fixed RAM
-(`src/layout.asm:66`). Cold boot sets it first (`src/boot.asm:10`), because the
+(`src/layout.asm:66`). Cold boot sets it first (`src/boot.asm:20`), because the
 workspace is not yet known to be RAM. On this stack cold boot tests for a
 reset, clears page zero and runs the RAM check. After the check has passed and
 the workspace has been cleared, cold boot moves to the BIOS stack
-(`src/boot.asm:22-28`).
+(`src/boot.asm:32-38`).
 
 The BIOS stack, `BSTKB` to `BSTK`, is 38 bytes at `BCC5h–BCEAh`
 (`src/ram.asm:60-62`). Cold boot runs on it from the end of the RAM check. Warm
-boot sets it as soon as EXPAND 0 is back in view (`src/boot.asm:65-68`), and
+boot sets it as soon as EXPAND 0 is back in view (`src/boot.asm:75-78`), and
 the diagnostic prompt sets it again on entry (`src/diag.asm:5`).
 
 The CCP's stack, `CSTKBAS` to `CSTKTOP`, is 30 bytes at `BE59h–BE76h`
@@ -250,7 +250,7 @@ bytes below that return word (`src/cpm/ccp.asm:296-304`). CP/M 2.2 gives a
 program eight levels of stack and the return word, and those take 18 of the
 30 bytes (`src/layout.asm:77-78`). Below the stack is a
 guard of 13 bytes, `STKGUARD`, which warm boot fills with `A5h`
-(`src/ram.asm:119-124`, `src/boot.asm:263-267`), so a guard byte that is no
+(`src/ram.asm:119-124`, `src/boot.asm:273-277`), so a guard byte that is no
 longer `A5h` shows that the stack went past its bottom.
 
 The BDOS's stack, `STKBASE` to `STKTOP`, is 54 bytes at `BECAh–BEFFh`
@@ -308,5 +308,5 @@ in view use no stack until EXPAND 0 is back. A `PUSH` with EXPAND 1 in view
 would write into EXPAND 1, and the `POP` after it would read EXPAND 0. The
 cache's routines, the history's and `DETECT`, which the RAM check calls to
 find EXPAND 1, state the rule at their heads (`src/cache.asm:10-13`,
-`src/history.asm:16-18`, `src/boot.asm:157-160`). The SD card driver's block
+`src/history.asm:16-18`, `src/boot.asm:167-170`). The SD card driver's block
 loops keep to it when a cache line is the buffer (`src/sd.asm:272-274`).

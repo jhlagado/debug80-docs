@@ -33,14 +33,14 @@ The BDOS's variables and its 54-byte stack are in RAM, in the block from
 `BDOSRAM` to `BDOSRME`, `BE77h` to `BEFFh` (`src/ram.asm:130-190`,
 `src/layout.asm:79`). Warm boot clears that block, as a fresh load of the BDOS
 from disk would leave it, and sets the DMA address to `0080h`
-(`src/boot.asm:251-270`).
+(`src/boot.asm:261-280`).
 
 A few of the BDOS's variables are outside that block, because a warm boot must
 not clear them. `LOGINV`, in the BIOS's part of the workspace (`src/ram.asm:31`),
 has a bit for each logged-in drive, a drive whose allocation vector the BDOS has
 built from its directory, as the section on allocation vectors below describes.
 `PRGCODE`, the code of function 108, is above the RAM BIOS table, where cold boot
-clears it and warm boot does not (`src/ram.asm:228`, `src/boot.asm:23-27`). The
+clears it and warm boot does not (`src/ram.asm:228`, `src/boot.asm:33-37`). The
 rest of what the BDOS keeps for a drive is in the drive's disk parameter header,
 the DPH, 16 bytes holding the addresses of the drive's tables, which Chapter 18
 describes.
@@ -50,15 +50,15 @@ the BIOS entries are offsets from `RAMBIOS` (`src/cpm/bdos.asm:10-28`), so a
 program that replaces an entry there receives the BDOS's own calls, as Chapter 15
 describes. The one exception is the check for `^S` made before each character
 the BDOS prints, which calls the ROM's `BCONST` directly
-(`src/cpm/bdos.asm:2448-2452`), since the table's `CONST` draws the video cursor
+(`src/cpm/bdos.asm:2452-2456`), since the table's `CONST` draws the video cursor
 while no key is waiting (`src/console.asm:105-109`).
 
 ## The entry
 
 The jump at `0005h` leads to the BDOS entry jump directly below the allocation
 vectors or, with a service in, to the same jump at the start of the lowest
-service's page, as Chapter 20 describes (`src/vol.asm:570-574`,
-`src/boot.asm:190-202`, `src/svc.asm:203-206`). That jump goes
+service's page, as Chapter 20 describes (`src/vol.asm:586-590`,
+`src/boot.asm:200-212`, `src/svc.asm:203-206`). That jump goes
 to `BENTRY` (`src/cpm/bdos.asm:79-115`).
 
 `BENTRY` saves the caller's stack pointer in `OLDSP`, moves to the BDOS's own
@@ -108,15 +108,15 @@ The BDOS checks for `^S` while it prints, and the check takes any key typed off
 the console, so the console functions keep one character in reserve. `PENDING` is
 set while `PENDCHR` holds a character the BIOS has delivered and no program has
 read yet (`src/ram.asm:136-137`). `GETCHAR` returns that character if there is
-one and otherwise calls `CONIN` (`src/cpm/bdos.asm:2433-2440`), and the status
+one and otherwise calls `CONIN` (`src/cpm/bdos.asm:2437-2444`), and the status
 routines report a character waiting when `PENDING` is set
-(`src/cpm/bdos.asm:2442-2452`).
+(`src/cpm/bdos.asm:2446-2456`).
 
 The reserve is filled during output. Every character the BDOS prints for
 functions 2 and 9 goes through `OUTCHAR`, which expands a tab to spaces up to
 the next multiple of 8. Before each character it calls `CHKKEY`
-(`src/cpm/bdos.asm:2454-2471`), which tests the console's status and, if a key
-is waiting, reads it (`src/cpm/bdos.asm:2521-2538`). A `^S` stops the output
+(`src/cpm/bdos.asm:2458-2475`), which tests the console's status and, if a key
+is waiting, reads it (`src/cpm/bdos.asm:2525-2542`). A `^S` stops the output
 until the next key, which is read and discarded, and a `^P` turns on or off the
 copy of the console's output to the list device. Any other key goes into
 `PENDCHR`, to be the next character a program reads, so a key typed while a
@@ -124,7 +124,7 @@ program prints is kept, as it is in CP/M 2.2.
 
 `ECHORAW` sends each character to `CONOUT`, and to `LIST` while the `^P` copy
 is on. It also keeps `COLUMN`, the console column, for the tabs
-(`src/cpm/bdos.asm:2478-2493`).
+(`src/cpm/bdos.asm:2482-2497`).
 
 Function 1 reads a character with `GETCHAR` and echoes it, a control character
 too (`src/cpm/bdos.asm:147-153`). Function 6 is direct console I/O. With `E` =
@@ -144,7 +144,7 @@ are those of CP/M 2.2 (`src/cpm/bdos.asm:228-254`):
 
 - Backspace, `08h`, removes the last character and erases it on the screen
   with backspace, space, backspace (`src/cpm/bdos.asm:289-299`,
-  `src/cpm/bdos.asm:2546-2553`).
+  `src/cpm/bdos.asm:2550-2557`).
 - Delete, `7Fh`, removes the last character and echoes it, as a printing
   terminal shows a rubout (`src/cpm/bdos.asm:301-312`).
 - `^U` prints `#`, starts a new line and empties the buffer. `^R` prints `#`
@@ -223,7 +223,7 @@ A directory entry has the same first 32 bytes, with the user number in place
 of the drive. The allocation map holds 16 one-byte block numbers when the
 volume has 256 blocks or fewer, and 8 two-byte numbers otherwise. `FCBLOCK`
 and `BLOCKIDX` test the high byte of the disk's last block number, `DSM`, to
-choose (`src/cpm/bdos.asm:1100-1112`, `src/cpm/bdos.asm:1155-1173`). Both of
+choose (`src/cpm/bdos.asm:1102-1114`, `src/cpm/bdos.asm:1157-1175`). Both of
 TEC-OS's geometries have more than 256 blocks, so every map on a TEC-OS card
 holds eight two-byte numbers.
 
@@ -249,37 +249,37 @@ block is 4 KiB, so an entry holds 32 KiB, two extents, and `EXM` is 1.
 To read or write a record the BDOS needs the record's place on the volume.
 `FCBADDR` takes the extent's place within its entry, `EX` AND `EXM`,
 times 128. It adds `CR` and shifts right by `BSH` to give the index of the
-block in the map (`src/cpm/bdos.asm:1129-1153`). `POSREC` then turns the block
+block in the map (`src/cpm/bdos.asm:1131-1155`). `POSREC` then turns the block
 and record into the record's number on the volume: the block shifted left by
-`BSH`, plus `CR` AND `BLM` (`src/cpm/bdos.asm:1283-1311`).
+`BSH`, plus `CR` AND `BLM` (`src/cpm/bdos.asm:1285-1313`).
 
 The BIOS's interface takes a track and a sector, so `POSREC` divides that number
 by `SPT` with `DIV16`, which gives the track as the quotient and the sector as
 the remainder. It adds the reserved tracks and passes both to the BIOS through
-`SETTRK`, `SECTRAN` and `SETSEC` (`src/cpm/bdos.asm:1313-1334`). `DIV16` is a
+`SETTRK`, `SECTRAN` and `SETSEC` (`src/cpm/bdos.asm:1315-1336`). `DIV16` is a
 16-bit division by shifts and trial subtractions, 16 steps whatever the number
-(`src/cpm/bdos.asm:1336-1356`). The BIOS turns track and sector back into one
+(`src/cpm/bdos.asm:1338-1358`). The BIOS turns track and sector back into one
 record number, and four records into one 512-byte card block, as Chapter 18
 describes.
 
 `POSREC` checks the block number first. `CHKBLK` compares it with `DSM`, and a
 number past the end of the volume, which only a damaged directory holds, is a
-`Bad Sector` error (`src/cpm/bdos.asm:1285`, `src/cpm/bdos.asm:2407-2419`).
+`Bad Sector` error (`src/cpm/bdos.asm:1287`, `src/cpm/bdos.asm:2411-2423`).
 
 ### The directory search
 
 Every function that names a file works through one search routine, `FINDENT`,
-set up by `NEWSRCH` with a mode in `OPENMOD` (`src/cpm/bdos.asm:1593-1668`).
+set up by `NEWSRCH` with a mode in `OPENMOD` (`src/cpm/bdos.asm:1595-1670`).
 It reads the directory a record at a time, four entries, into the DPH's
 directory buffer, `DIRBUF`, and compares each entry with the FCB in `MATCHFCB`
-(`src/cpm/bdos.asm:1726-1807`).
+(`src/cpm/bdos.asm:1728-1809`).
 
 An entry matches when its user number is the current one and its name and type
 match the FCB's. Bit 7 of each byte is left out so that the attributes don't
 count, and a `?` in the FCB matches any character. In every mode but 2 the
 extent and `S2` must match too, unless the FCB's extent is `?`. The extent is
 compared outside the bits `EXM` covers, since one entry holds `EXM` + 1
-extents (`src/cpm/bdos.asm:1767-1799`). The modes are:
+extents (`src/cpm/bdos.asm:1769-1801`). The modes are:
 
 | Mode | Used by | Matches |
 | ---: | --- | --- |
@@ -293,76 +293,76 @@ extents (`src/cpm/bdos.asm:1767-1799`). The modes are:
 On a volume with few files most of the directory is unused, so a search stops at
 the drive's directory mark, `DIRUSED`, the number of entries up to the last one
 in use. Modes 3 and 5 are the exceptions, and go to the end of the directory
-(`src/cpm/bdos.asm:1612-1625`). The starter card's drive B has 512 entries, 32
+(`src/cpm/bdos.asm:1614-1627`). The starter card's drive B has 512 entries, 32
 card blocks of them, and with no files a search there reads none. `MAKEFCB`
-raises the mark when it uses an entry beyond it (`src/cpm/bdos.asm:748-755`).
+raises the mark when it uses an entry beyond it (`src/cpm/bdos.asm:750-757`).
 
 ### Open, read, write and close
 
 Function 15, open, searches in mode 1 and copies bytes 1 to 31 of the entry
 into the FCB, so a `?` in the FCB's name becomes the entry's character. The FCB
-keeps its own extent (`src/cpm/bdos.asm:1670-1716`). The entry's `RC` is the
+keeps its own extent (`src/cpm/bdos.asm:1672-1718`). The entry's `RC` is the
 record count of its highest extent. In a G8M file whose entry holds two extents,
 an FCB naming the earlier extent gets 128 records, and one naming a later, empty
 extent gets 0.
 
 A file that was only read has nothing to write back at its close, so the open
 sets bit 7 of `S2`, which records that nothing has been written through this FCB
-since. `ADVWRITE` clears it at the first write (`src/cpm/bdos.asm:895-912`).
+since. `ADVWRITE` clears it at the first write (`src/cpm/bdos.asm:897-914`).
 Function 16, close, returns at once when the bit is still set, with nothing
 written (`src/cpm/bdos.asm:558-564`). Otherwise it finds the entry again and
 copies the FCB's extent, record count and map into it, or only the map when the
 FCB is on an earlier extent than the entry records. It then writes the directory
-record back (`src/cpm/bdos.asm:566-600`).
+record back (`src/cpm/bdos.asm:566-602`).
 
 Function 20 reads the record at `CR` into the DMA address and moves `CR` on
-(`src/cpm/bdos.asm:918-960`). At `CR` = 128 it closes the FCB, opens the next
+(`src/cpm/bdos.asm:920-962`). At `CR` = 128 it closes the FCB, opens the next
 extent and starts it at record 0. It returns 1, end of file, when there is no
 next extent, when `CR` has reached `RC` or when the record's block is 0.
 
-Function 21 writes the record at `CR` (`src/cpm/bdos.asm:815-855`). If the map
+Function 21 writes the record at `CR` (`src/cpm/bdos.asm:817-857`). If the map
 has no block for it, `ALLOCBLK` takes the first free block of the drive, and the
 record then goes to the BIOS with write type 2, which marks the block as new
-(`src/cpm/bdos.asm:830-841`). The BIOS's other write types are 0, an ordinary
+(`src/cpm/bdos.asm:832-843`). The BIOS's other write types are 0, an ordinary
 data write, and 1, a write of the directory, which every directory write uses
-(`src/cpm/bdos.asm:1857-1863`). The write after record 127 finds `CR` at 128,
+(`src/cpm/bdos.asm:1859-1865`). The write after record 127 finds `CR` at 128,
 and it first closes the extent and makes or opens the next
-(`src/cpm/bdos.asm:816-825`, `src/cpm/bdos.asm:857-883`).
+(`src/cpm/bdos.asm:818-827`, `src/cpm/bdos.asm:859-885`).
 
 The write returns 2 when the drive has no free block. It returns 1 when the
 file needs a new directory entry for its next extent and the directory has
 none. The FCB then goes back to its extent with `CR` still at 128, so a write
 after an entry is freed makes the extent it needs
-(`src/cpm/bdos.asm:857-893`).
+(`src/cpm/bdos.asm:859-895`).
 
 Functions 33 and 34 read and write a record by number, from `R0` and `R1`
-(`src/cpm/bdos.asm:962-995`). `RANDPREP` splits the number into the record
+(`src/cpm/bdos.asm:964-997`). `RANDPREP` splits the number into the record
 within the extent and the extent, `EX` and `S2`, and if the extent is not the
 FCB's it closes the FCB and opens the one wanted
-(`src/cpm/bdos.asm:997-1081`). A number with `R2` not 0 is error 6 before
+(`src/cpm/bdos.asm:999-1083`). A number with `R2` not 0 is error 6 before
 anything changes. A read of a record the extent doesn't hold returns 1, and a
 read of an extent that has no entry is error 4. A write makes the extent, and
-is error 5 if the directory is full (`src/cpm/bdos.asm:1083-1094`). A failed
+is error 5 if the directory is full (`src/cpm/bdos.asm:1085-1096`). A failed
 close of the old extent is error 3. Function 40 is function 34 with each newly
-allocated block filled with zeros first (`src/cpm/bdos.asm:970-978`,
-`src/cpm/bdos.asm:1232-1281`).
+allocated block filled with zeros first (`src/cpm/bdos.asm:972-980`,
+`src/cpm/bdos.asm:1234-1283`).
 
 Function 35 puts the file's size in records in `R0` to `R2`: the end of the
 last record of whichever of the file's entries ends highest
-(`src/cpm/bdos.asm:1450-1518`). Function 36 sets `R0` to `R2` from the FCB's
-sequential position (`src/cpm/bdos.asm:1520-1543`).
+(`src/cpm/bdos.asm:1452-1520`). Function 36 sets `R0` to `R2` from the FCB's
+sequential position (`src/cpm/bdos.asm:1522-1545`).
 
 Function 22, make, takes the first empty entry and fills in the FCB's name,
 the current user number and an empty map. It writes the entry to the directory
-at once (`src/cpm/bdos.asm:679-760`). It clears the FCB from `EX` through the
+at once (`src/cpm/bdos.asm:681-762`). It clears the FCB from `EX` through the
 map first, so `EX` and `S2` are 0 and the entry is always the file's first
-extent (`src/cpm/bdos.asm:711-719`).
+extent (`src/cpm/bdos.asm:713-721`).
 
 Function 19 erases every entry that matches, frees its blocks and writes each
-changed directory record (`src/cpm/bdos.asm:647-677`). Function 23 renames
+changed directory record (`src/cpm/bdos.asm:649-679`). Function 23 renames
 every entry of the file to the name at offset 17 of the FCB. Function 30
 copies the FCB's name and its attribute bits into every entry
-(`src/cpm/bdos.asm:769-813`).
+(`src/cpm/bdos.asm:771-815`).
 
 ## Allocation vectors
 
@@ -371,45 +371,45 @@ write. Each drive therefore has an allocation vector, one bit for each block
 of the volume, set while the block is in use. A vector is 64 bytes for a G1M
 volume and 256 for a G8M volume. Cold boot places it below the workspace, as
 Chapter 13 describes. The DPH holds its address, and `LOGIN` copies it into
-`ALVPTR` (`src/cpm/bdos.asm:1939-1942`).
+`ALVPTR` (`src/cpm/bdos.asm:1941-1944`).
 
 `ALLOCBLK` scans the vector from block 0 for the first clear bit, sets it and
-puts the block's number in the FCB's map (`src/cpm/bdos.asm:1175-1230`). A
+puts the block's number in the FCB's map (`src/cpm/bdos.asm:1177-1232`). A
 delete clears the bits of each block the entry lists
-(`src/cpm/bdos.asm:2213-2268`). The blocks the directory itself occupies are
+(`src/cpm/bdos.asm:2215-2270`). The blocks the directory itself occupies are
 set from `AL0` and `AL1` when the vector is built, and are never given out
-(`src/cpm/bdos.asm:2099-2137`). The vector changes as soon as a block is
+(`src/cpm/bdos.asm:2101-2139`). The vector changes as soon as a block is
 taken, before the file is closed, so a block that a program has written but not
 yet closed is already in use for every other file.
 
 A vector is built when a drive is logged in, the first time it is selected
-after a disk reset (`src/cpm/bdos.asm:1898-2006`). `LOGIN` calls
+after a disk reset (`src/cpm/bdos.asm:1900-2008`). `LOGIN` calls
 the BIOS's `SELDSK` for the drive's DPH, and a drive with no volume gets 0,
-which is the `Select` error (`src/cpm/bdos.asm:1907-1915`). It copies from the
+which is the `Select` error (`src/cpm/bdos.asm:1909-1917`). It copies from the
 DPH the addresses of the translation table, the directory buffer, the DPB and
 the vector. A volume the card marks read-only then goes into the read-only
-vector (`src/cpm/bdos.asm:1944-1949`).
+vector (`src/cpm/bdos.asm:1946-1951`).
 
 For a drive not in `LOGINV`, `INITALV` clears the vector and sets the
 directory's bits, and the drive's bit in `LOGINV` is set. The whole directory
 is then read, a record at a time. `PARENT` sets the bit of every block that
 each entry in use lists, and moves the directory mark past the entry
-(`src/cpm/bdos.asm:1950-2006`, `src/cpm/bdos.asm:2139-2211`). A block number
+(`src/cpm/bdos.asm:1952-2008`, `src/cpm/bdos.asm:2141-2213`). A block number
 past the end of the volume has no bit, so `BITPTR` passes over it, the drive
 logs in, and a delete of that file passes over it too
-(`src/cpm/bdos.asm:2255-2279`). For a drive
+(`src/cpm/bdos.asm:2257-2281`). For a drive
 already in `LOGINV`, `LOGIN` reads nothing: `LOGFAST` takes the drive's mark
-from its DPH (`src/cpm/bdos.asm:2008-2026`).
+from its DPH (`src/cpm/bdos.asm:2010-2028`).
 
 The DPH has three words for the BDOS's own use, at offsets 2, 4 and 6, which
-`MNDPH` clears when it builds the DPH (`src/vol.asm:363-366`). TEC-OS's BDOS
+`MNDPH` clears when it builds the DPH (`src/vol.asm:379-382`). TEC-OS's BDOS
 puts in them what the scan at warm boot needs:
 
 | Offset | Contents | Written by |
 | ---: | --- | --- |
-| 2 | the sum of the vector's bytes at the end of the last scan | `LOGDONE` (`src/cpm/bdos.asm:2028-2043`) |
-| 4 | the changed flag: 1 once the vector may differ from the directory | `ALFOUND` (`src/cpm/bdos.asm:1206-1213`) and BIOS `WRITE` of a directory card block (`src/bios.asm:210-227`) set it; `LOGDONE` clears it |
-| 6 | the directory mark, `DIRUSED` | `DUSAVE` (`src/cpm/bdos.asm:2045-2063`), BIOS `WRITE` of a directory card block (`src/bios.asm:228-248`) |
+| 2 | the sum of the vector's bytes at the end of the last scan | `LOGDONE` (`src/cpm/bdos.asm:2030-2045`) |
+| 4 | the changed flag: 1 once the vector may differ from the directory | `ALFOUND` (`src/cpm/bdos.asm:1208-1215`) and BIOS `WRITE` of a directory card block (`src/bios.asm:210-227`) set it; `LOGDONE` clears it |
+| 6 | the directory mark, `DIRUSED` | `DUSAVE` (`src/cpm/bdos.asm:2047-2065`), BIOS `WRITE` of a directory card block (`src/bios.asm:228-248`) |
 
 The BIOS's part is in its `WRITE`. It tests whether the card block being written
 is one of the directory's, the first 16 card blocks of a G1M volume or 32 of a
@@ -434,10 +434,10 @@ binds the drive's pointers and reads nothing, and tests the drive's DPH:
 - If the changed flag is set, the drive is taken out of `LOGINV` and put in
   `WARMV`, the vector of drives to rebuild to their mark (`src/ram.asm:149`).
   At its next selection `LOGIN` builds the allocation vector again, but reads
-  the directory only up to the mark (`src/cpm/bdos.asm:1973-1987`). No entry
+  the directory only up to the mark (`src/cpm/bdos.asm:1975-1989`). No entry
   beyond the mark is in use, so none of them can hold a block.
 - If the flag is clear, `ALVSUM` adds up the vector's bytes
-  (`src/cpm/bdos.asm:2065-2091`). If the sum is what `LOGDONE` stored, the
+  (`src/cpm/bdos.asm:2067-2093`). If the sum is what `LOGDONE` stored, the
   drive stays logged in with its vector as it is. Any other sum means the
   vector has changed in a way that neither an allocation nor a directory write
   recorded, such as a stray write by a program. The drive is then taken out of
@@ -448,7 +448,7 @@ read-only vector, sets drive A, sets the DMA address to `0080h` and logs in
 drive A (`src/cpm/bdos.asm:440-451`). The CCP then sets the user
 number again from page zero. At the end of each full or partial scan,
 `LOGDONE` saves the mark, stores the new sum and clears the changed flag and
-the drive's bit in `WARMV` (`src/cpm/bdos.asm:2028-2043`).
+the drive's bit in `WARMV` (`src/cpm/bdos.asm:2030-2045`).
 
 A warm boot after a program that wrote nothing therefore reads no card block. One
 after a program that changed drive A reads A's directory only as far as its
@@ -458,8 +458,8 @@ A program's own call of function 13 finds `WRFLAG` clear, and empties `LOGINV`
 and `WARMV`. Every drive is then scanned in full at its next selection, as in
 CP/M 2.2 (`src/cpm/bdos.asm:436-439`). Function 37 takes the drives named by
 the bits of `DE` out of `LOGINV`, the read-only vector and `WARMV`
-(`src/cpm/bdos.asm:1577-1591`). The volume services `MOUNT` and `UNMNT` call
-it for a drive whose volume they have changed (`src/vol.asm:657-668`).
+(`src/cpm/bdos.asm:1579-1593`). The volume services `MOUNT` and `UNMNT` call
+it for a drive whose volume they have changed (`src/vol.asm:673-684`).
 
 ## BDOS errors
 
@@ -468,21 +468,21 @@ drive letter (`src/data3.asm:86-90`):
 
 - `Select`, for a drive past D, which the BIOS doesn't have, a drive with no
   volume or a `?` drive byte outside function 17
-  (`src/cpm/bdos.asm:2380-2386`).
+  (`src/cpm/bdos.asm:2384-2390`).
 - `R/O`, for a change to a drive that function 28 has made read-only or to a
   volume the card marks read-only, a close that would write the directory
-  included (`src/cpm/bdos.asm:570-571`, `src/cpm/bdos.asm:2366-2378`).
+  included (`src/cpm/bdos.asm:570-571`, `src/cpm/bdos.asm:2368-2382`).
 - `File R/O`, for function 19 or 23 on a directory entry with the read-only
   attribute, and for function 21, 34 or 40 through an FCB that has it
-  (`src/cpm/bdos.asm:634-645`).
+  (`src/cpm/bdos.asm:636-647`).
 - `Bad Sector`, for a BIOS `READ` or `WRITE` of a file's record that fails, a
   directory record that won't read, a failed directory write and a block
-  number past the end of the volume (`src/cpm/bdos.asm:1836`,
-  `src/cpm/bdos.asm:2399-2402`).
+  number past the end of the volume (`src/cpm/bdos.asm:1838`,
+  `src/cpm/bdos.asm:2403-2406`).
 
 `DISKERR` prints the message and waits for a key with `GETCHAR`, or takes the
 key already kept, if one was typed during output
-(`src/cpm/bdos.asm:2421-2440`). `CHDROP` then ends the program by warm boot,
+(`src/cpm/bdos.asm:2425-2444`). `CHDROP` then ends the program by warm boot,
 whatever the key (`src/cpm/bdos.asm:73-77`), so the function never returns to the
 program. `CHDROP` also drops the rest of a chained line, which Chapter 24
 describes.
@@ -490,7 +490,7 @@ describes.
 Chapter 3 shows `R/O` from a read-only volume and `File R/O` from `ERA`. The
 volume's read-only flag is in the drive table, and `LOGIN` sets the drive's bit
 in the read-only vector from it, so the BDOS refuses the change before any write
-to the card (`src/cpm/bdos.asm:1944-1949`). Function 16 makes the same test
+to the card (`src/cpm/bdos.asm:1946-1951`). Function 16 makes the same test
 before it writes the entry back, as CP/M 2.2's close does, so a file written
 on such a drive gives `R/O` at its close. A close of a file only read returns
 before the test (`src/cpm/bdos.asm:558-571`). A warm boot clears the vector,
@@ -503,7 +503,7 @@ With `DE` = `FFFFh` it returns the code in `HL`, and with any other `DE` it sets
 the code to `DE` and returns 0. There is one code, `PRGCODE`, for every program.
 Cold boot clears it with the rest of the workspace and warm boot leaves it, so a
 command finds the code its predecessor set (`src/ram.asm:228`,
-`src/boot.asm:23-27`).
+`src/boot.asm:33-37`).
 
 Function 47 is TEC-OS's chain to another command, from CP/M 3's
 (`src/cpm/bdos.asm:46-71`). The command is at the DMA address and ends with a
@@ -532,10 +532,10 @@ Research shipped are these:
   unchanged, and rebuilds a changed one from its directory up to the mark. A
   program's function 13 resets every drive, as in CP/M 2.2.
 - Function 22 always makes extent 0, with `EX` and `S2` cleared
-  (`src/cpm/bdos.asm:711-719`). Digital Research's keeps the FCB's `EX` and
+  (`src/cpm/bdos.asm:713-721`). Digital Research's keeps the FCB's `EX` and
   `S2`.
 - A `^P` typed while the BDOS prints turns the list device's copy on or off
-  (`src/cpm/bdos.asm:2530-2532`). Digital Research's keeps such a key for the
+  (`src/cpm/bdos.asm:2534-2536`). Digital Research's keeps such a key for the
   next read and takes `^P` only in line input.
 - Function 1 echoes every character, control characters too. Digital
   Research's echoes only printing characters, CR, LF, tab and backspace.

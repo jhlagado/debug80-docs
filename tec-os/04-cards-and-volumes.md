@@ -460,7 +460,7 @@ An older, standard-capacity card is addressed in bytes, and TEC-OS can name
 only its first 4 GiB. A block 4 GiB or more into such a card gives the same
 `Bad Sector`, and TEC-OS sends the card no command for it, so the card stays as
 it was. The web page can't show either failure: it refuses an image smaller
-than its container (`web/src/main.mjs:545`), and its card is high-capacity.
+than its container (`web/src/main.mjs:562`), and its card is high-capacity.
 
 The web page's "Open image" loads an image file from the PC into the page's
 card, and "Download image" saves the page's card as one. The same image

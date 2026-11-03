@@ -136,7 +136,7 @@ table and adds up its 512 bytes, and the total must be the header's table sum
 (`src/vol.asm:93-134`).
 
 Then it walks the descriptors in table order, checking each one and mounting
-it as it goes (`src/vol.asm:136-243`):
+it as it goes (`src/vol.asm:136-259`):
 
 | Code | Check |
 | --- | --- |
@@ -150,10 +150,10 @@ The order check makes overlapping volumes impossible, since each must start
 where the one before it ended or later. The descriptors therefore have to be
 in ascending order of their start block. The ROM uses only bit 0 of a
 descriptor's cache byte, the written-behind flag, and doesn't check the others
-(`src/vol.asm:346-350`).
+(`src/vol.asm:362-366`).
 
 Any failure unmounts every drive that the walk had mounted, so a card is
-mounted whole or not at all (`src/vol.asm:251-255`). The ROM can't find the
+mounted whole or not at all (`src/vol.asm:267-271`). The ROM can't find the
 card's capacity, and the walk checks a volume against the container's length
 only. A volume that runs past the end of the card is mounted, and the card
 rejects an access that reaches a block beyond its end. The driver returns error
@@ -182,7 +182,7 @@ A>
 ```
 
 Cold boot sends any failure, of the card or of the container, to the
-diagnostic prompt (`src/boot.asm:42-45`). For the run below, the starter
+diagnostic prompt (`src/boot.asm:52-55`). For the run below, the starter
 card's first byte was changed from `T` to `X` with
 `printf X | dd of=/tmp/bad.img bs=1 seek=0 conv=notrunc` on a copy of
 `dist/starter.img`. `H` was then typed at the prompt:
@@ -212,10 +212,10 @@ start block `0800h`, length `0800h`, geometry 2, flags 0, drive 0, cache byte
 
 The BIOS needs a volume's place on the card and the BDOS needs its parameters,
 so mounting builds an entry in the drive table and a DPH. Each descriptor that
-names a drive is mounted by `MNONE` (`src/vol.asm:308-320`). `MNFILL` writes
+names a drive is mounted by `MNONE` (`src/vol.asm:324-336`). `MNFILL` writes
 the drive's eight-byte entry in `DRVTAB`: the start block in four
 bytes, the length in blocks in two, the geometry and a flags byte with
-read-only in bit 0 and written-behind in bit 1 (`src/vol.asm:322-351`,
+read-only in bit 0 and written-behind in bit 1 (`src/vol.asm:338-367`,
 `src/ram.asm:22`). `DRVIDX` records which volume each drive holds, as its
 index in the container plus 1, 0 for none (`src/ram.asm:28`). The geometry
 byte is 0 for a drive with no volume, and for such a drive the BIOS's `SELDSK`
@@ -223,7 +223,7 @@ returns 0, no such drive (`src/bios.asm:23-43`).
 
 `MNDPH` builds the drive's disk parameter header, the 16 bytes through
 which the BDOS reaches a drive's parameters and buffers
-(`src/vol.asm:353-389`):
+(`src/vol.asm:369-405`):
 
 | Offset | Contents |
 | ---: | --- |
@@ -271,7 +271,7 @@ cache, as Chapter 19 describes. `WRITE` has more to do
 (`src/bios.asm:188-300`). After mapping it rejects a write to a read-only
 volume before anything changes, with error 1 (`src/bios.asm:204-208`). A change
 made through the BDOS doesn't get this far, since the BDOS's own `R/O` error
-comes first (`src/cpm/bdos.asm:2366-2378`). Function 16 tests the drive too,
+comes first (`src/cpm/bdos.asm:2368-2382`). Function 16 tests the drive too,
 before it writes the directory entry, so closing an FCB that was never opened
 on a read-only drive ends in `Bdos Err On B: R/O`, with the card unchanged
 (`src/cpm/bdos.asm:570-571`, `test/cpm22.test.mjs:174`). Only a program that
@@ -316,7 +316,7 @@ each of those two writes, since the data has replaced it in `BLKBUF`.
 
 `MOUNT` on the starter card is a program, so it changes and lists the drives
 through three of the ROM's numbered services, called through `ABICALL` with the
-number in `C`, as Chapter 20 describes (`src/abi.asm:10`, `src/abi.inc:55-67`):
+number in `C`, as Chapter 20 describes (`src/abi.asm:10`, `src/abi.inc:58-70`):
 
 - `MOUNT`, 9, mounts the volume at container index `E` on the drive in `B`, 0
   to 3 for A to D.
@@ -325,26 +325,26 @@ number in `C`, as Chapter 20 describes (`src/abi.asm:10`, `src/abi.inc:55-67`):
   its drive byte replaced by the drive the volume is on now, `FFh` for none.
 
 The three routines, `VSMNT`, `VSUNM` and `VSDSC`, each start with `VSIN`, which
-moves the drive from `B` to `C` (`src/vol.asm:577-589`, `src/vol.asm:674-678`).
+moves the drive from `B` to `C` (`src/vol.asm:593-605`, `src/vol.asm:690-694`).
 Each returns `A` = 0 with carry clear, or `TNEBAD`, 1, with carry set and
-nothing changed (`src/vol.asm:668-672`). A mount fails in four cases: an index
+nothing changed (`src/vol.asm:684-688`). A mount fails in four cases: an index
 past the table, a drive past D, a volume already on a drive and a drive whose
 vector slot is too small for the volume. An unmount fails for drive A, which is
-never left empty, and for a drive past D (`src/vol.asm:606-656`). The slot rule
+never left empty, and for a drive past D (`src/vol.asm:622-672`). The slot rule
 is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
-and any other needs a slot of either size (`src/vol.asm:633-646`). Chapter 13
+and any other needs a slot of either size (`src/vol.asm:649-662`). Chapter 13
 describes how cold boot gives out the slots. The three services may change `IX`
 and the alternate registers, and `abi.inc` states 24 bytes of stack for each
-(`src/abi.inc:18-21`, `src/abi.inc:55-67`).
+(`src/abi.inc:18-21`, `src/abi.inc:58-70`).
 
 A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of
 the block cache to the card, with interrupts off, and the call fails if any
-write fails (`src/vol.asm:680-692`). A mount then clears the drive's old
+write fails (`src/vol.asm:696-708`). A mount then clears the drive's old
 entry, fills the new one and its DPH with `MNONE`, and records the index. An
 unmount clears the entry. Either way the service ends by marking `BLKBUF`
 empty and calling BDOS function 37 to reset the drive, so that the drive's
-next access logs it in from its new directory (`src/vol.asm:657-669`). That
+next access logs it in from its new directory (`src/vol.asm:673-685`). That
 call runs on the BDOS's own stack, so a program calls `MOUNT` and `UNMNT` from
 outside its own BDOS calls (`src/abi.inc:21-23`).
 
