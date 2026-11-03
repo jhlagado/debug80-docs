@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 10. Writing services
 
-Checked against TEC-OS 1f9542d. The programs were assembled by the starter
+Checked against TEC-OS 7458352. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -250,12 +250,13 @@ line. The source must therefore have the line `ORG $0100`, indented and spelt
 that way, with no comment on it, exactly once. With no such line the tool
 stops with `has no "ORG $0100" line`, so `ORG 100H` won't do, although it
 means the same to the assembler. Only the first of two such lines is
-rewritten. `makeSvc` reads an included file from the source's directory, so
-`ABI.INC` is copied there first. It writes the same 111 bytes, where `TAS`'s
-file is rounded up to the record's 128:
+rewritten. `makeSvc` reads an included file from the source's directory and
+matches its name without regard to case, as `TAS` does, so `abi.inc` is copied
+there first and `ABI.INC` finds it. It writes the same 111 bytes, where
+`TAS`'s file is rounded up to the record's 128:
 
 ```sh
-cp dist/abi.inc ABI.INC
+cp dist/abi.inc .
 node --input-type=module -e '
 import { writeFileSync } from "node:fs";
 import { makeSvc } from "./tools/lib/svc.mjs";
