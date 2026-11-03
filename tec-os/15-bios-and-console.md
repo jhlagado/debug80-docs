@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 15. The BIOS and the console path
 
-Checked against TEC-OS 7458352.
+Checked against TEC-OS 7935507.
 
 The BIOS is the part of a CP/M system written for one machine, and on the TEC-1G
 most of it is the console. That console has a serial port made of two port bits
@@ -123,7 +123,7 @@ change.
 A display driver takes the console by the same route. `SVCGO` calls the
 loader, and when the service installed has a video table in its page, `SVCGO`
 writes the mode into the console field and sets `CONACT` to `FFh`, a value no
-field has, so that the `CONSEL` it calls next switches (`src/glcd.asm:83-115`).
+field has, so that the `CONSEL` it calls next switches (`src/loader.asm:447-472`).
 `PICO.SVC` always takes the console, and `GLCD.SVC` takes it only when
 `PICO.SVC` is not in.
 
@@ -336,23 +336,23 @@ output does not pay for drawing a cursor on every character
 The terminal's code is in the ROM and the drivers for the two displays are on
 the card, so the ROM needs the addresses of each driver's routines. `PICO.SVC`,
 in its three widths, and `GLCD.SVC` each give the ROM a table through `DRVR`,
-service 12, which goes to `SVDRV` and from there to `GLHOOK`
-(`src/tables.asm:59`, `src/glcd.asm:1-25`). The table is eight words. The
+service 12, which goes to `SVDRV` and from there to `VIDHOOK`
+(`src/tables.asm:59`, `src/video.asm:47-57`). The table is eight words. The
 first six are the terminal vectors `VPUT`, `VGET`, `VCLREOL`, `VREST`, `VRDROW`
 and `VWRROW`. The seventh is for the PICO9918's page functions, and the last
 word holds the screen's columns and rows.
 
 A driver calls the service with the mode in `B`, `CMCRT`, 1, for the PICO9918
 or `CMUC1`, 3, for the graphics LCD, and the table's address in `HL`. `SVDRV`
-passes the mode to `GLHOOK` in `A` (`src/services.asm:314-327`). Any other value in
+passes the mode to `VIDHOOK` in `A` (`src/services.asm:314-327`). Any other value in
 `B` returns `TNEBAD` with carry set, and nothing changes (`src/services.asm:315-322`).
-`GLHOOK` keeps the address in `PIVEC` or `GLVEC`, above the RAM BIOS table, and
+`VIDHOOK` keeps the address in `PIVEC` or `GLVEC`, above the RAM BIOS table, and
 returns `HL` pointing at `LINEBUF`, the buffer that the driver's row routines
 use (`src/video.asm:58-80`). When there is no matrix keyboard or the display already
 has a table, it changes nothing, and the service returns status 1, `TNEBAD`,
 with carry set.
 
-A driver's `REMOVE` calls the service with `HL` 0, and `GLHOOK` then drops the
+A driver's `REMOVE` calls the service with `HL` 0, and `VIDHOOK` then drops the
 display's table and sets the mode back to the serial terminal. It also sets
 `CONACT` to `FFh`, so that the next console call selects the console again from
 the IOBYTE (`src/video.asm:81-95`).
