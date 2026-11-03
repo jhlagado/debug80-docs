@@ -337,7 +337,7 @@ The terminal's code is in the ROM and the drivers for the two displays are on
 the card, so the ROM needs the addresses of each driver's routines. `PICO.SVC`,
 in its three widths, and `GLCD.SVC` each give the ROM a table through `DRVR`,
 service 12, which goes to `SVDRV` and from there to `VIDHOOK`
-(`src/tables.asm:59`, `src/video.asm:47-57`). The table is eight words. The
+(`src/tables.asm:59`, `src/services.asm:323`, `src/video.asm:47-57`). The table is eight words. The
 first six are the terminal vectors `VPUT`, `VGET`, `VCLREOL`, `VREST`, `VRDROW`
 and `VWRROW`. The seventh is for the PICO9918's page functions, and the last
 word holds the screen's columns and rows.
