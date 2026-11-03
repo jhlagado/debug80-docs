@@ -164,7 +164,6 @@ caret, so `^C` means Ctrl and C together.
     hardware services. The chapter then covers a service's entry, the
     relocation of its addresses and the seven steps of its load, and it ends
     with the registry, removal and the stack figures.
-
 21. **[Startup](21-startup.md).** `STBOOT`, `STLINE` and `STDONE`, with the
     one byte of state and the 128-byte record behind them. The chapter then
     follows a display line and covers the flag bit behind the LCD's words and

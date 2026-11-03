@@ -257,7 +257,8 @@ The Z80 enters `0038h` on an interrupt in mode 1, the mode cold boot sets, and
 TEC-OS has nothing there but the return. Warm boot disables interrupts and
 nothing in TEC-OS enables them, so a program starts with them off. A program
 that enables them keeps them on, except while TEC-OS reads or writes a card
-block, when TEC-OS holds them off and then restores them.
+block, sends or receives a serial byte or reads the command history, when
+TEC-OS holds them off and then restores them.
 
 `0066h`, where the Z80 goes on a non-maskable interrupt, lies inside the FCB
 at `005Ch`. On a board with the keypad NMI jumper fitted, a key on the hex
