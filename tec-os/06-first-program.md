@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 6. A first program
 
-Checked against TEC-OS ea9c1c0, with the ATOM assembler from the
+Checked against TEC-OS 60cfbdc, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, the starter card's
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. The
@@ -303,9 +303,10 @@ is a warm boot:
 - a key pressed after a BDOS error such as `Bdos Err On B: Bad Sector`
 
 The warm boot writes the block cache's changes to the card and puts back the
-jumps in page zero. The restart vectors at `0008h–0037h` are the addresses
-that `RST` instructions call (Chapter 7), and the warm boot clears each one a
-program set, keeping only a jump into the ROM. The warm boot then starts the
+jumps in page zero. The restart vectors at `0008h–003Fh` are the addresses
+that `RST` instructions call (Chapter 7), and the warm boot gives each one a
+program set its default, keeping only a `JP` whose target's page is at or above
+the page of the word at `0006h`. The warm boot then starts the
 CCP again and prints the prompt on the drive and in the user area held in the
 byte at `0004h`. The CCP writes that byte before it starts a program, so the
 prompt is on the drive and user area current then, unless the program changed
