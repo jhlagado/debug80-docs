@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. The SD card and the volumes
 
-Checked against TEC-OS 19ad916.
+Checked against TEC-OS 60e0768.
 
 The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
@@ -17,8 +17,8 @@ blocks, checks it and then builds the drive table and each drive's disk
 parameter header. At the top, the BIOS's disk entries turn a track and sector
 into a block of the card and a quarter of that block.
 
-This chapter takes the layers from the bottom up, and ends with the mount
-entry, through which `MOUNT` changes and lists the drives. Chapter
+This chapter takes the layers from the bottom up, and ends with the volume
+services, through which `MOUNT` changes and lists the drives. Chapter
 19 describes the block cache, which every read passes through.
 
 ## The SD card driver
@@ -252,11 +252,11 @@ cache, as Chapter 19 describes. `WRITE` has more to do
 (`src/bios.asm:188-300`). After mapping it rejects a write to a read-only
 volume before anything changes, with error 1 (`src/bios.asm:204-208`). A change
 made through the BDOS doesn't get this far, since the BDOS's own `R/O` error
-comes first (`src/cpm/bdos.asm:2366-2378`). The exception is function 16, which
-doesn't test the drive (`src/cpm/bdos.asm:558-600`): closing an FCB that was
-never opened on a read-only volume ends in `Bdos Err On B: Bad Sector`, with the
-card unchanged. Otherwise only a program that calls the BIOS itself receives the
-error.
+comes first (`src/cpm/bdos.asm:2366-2378`). Function 16 tests the drive too,
+before it writes the directory entry, so closing an FCB that was never opened
+on a read-only drive ends in `Bdos Err On B: R/O`, with the card unchanged
+(`src/cpm/bdos.asm:570-571`, `test/cpm22.test.mjs:172`). Only a program that
+calls the BIOS itself receives the error.
 
 A write to the directory can change which blocks are in use, so `WRITE` then
 tests for one of the directory's blocks, the first 32 blocks of a G8M volume
@@ -293,35 +293,43 @@ for each block, since the block goes to the card after each of its records.
 and two of the directory. It reads the directory's block from the card before
 each of those two writes, since the data has replaced it in `BLKBUF`.
 
-## The mount entry
+## The volume services
 
 `MOUNT` on the starter card is a program, so it changes and lists the drives
-through the mount entry, the jump `ABIVOL` at `C00Fh`, which goes
-to `VOLSVC` (`src/abi.asm:10`, `src/vol.asm:577-583`). It has three functions, chosen by `A`:
+through three of the ROM's numbered services, called through `ABICALL` with the
+number in `C`, as Chapter 20 describes (`src/abi.asm:10`, `src/abi.inc:55-67`):
 
-- `A` = 0 mounts the volume at container index `E` on drive `C`.
-- `A` = 1 unmounts drive `C`.
-- `A` = 2 copies the descriptor at index `E` to the 32 bytes at `HL`, with its
-  drive byte replaced by the drive the volume is on now, `FFh` for none.
+- `MOUNT`, 9, mounts the volume at container index `E` on the drive in `B`, 0
+  to 3 for A to D.
+- `UNMNT`, 10, unmounts the drive in `B`, 1 to 3.
+- `DESC`, 11, copies the descriptor at index `E` to the 32 bytes at `HL`, with
+  its drive byte replaced by the drive the volume is on now, `FFh` for none.
 
-Each returns `A` = 0, or `FFh` with nothing changed. A mount fails in four
-cases: an index past the table, a drive past D, a volume already on a drive
-and a drive whose vector slot is too small for the volume. An unmount fails
-for drive A, which is never left empty (`src/vol.asm:606-672`). The slot rule
+The three routines, `VSMNT`, `VSUNM` and `VSDSC`, each start with `VSIN`, which
+moves the drive from `B` to `C` (`src/vol.asm:577-589`, `src/vol.asm:674-678`).
+Each returns `A` = 0 with carry clear, or `TNEBAD`, 1, with carry set and
+nothing changed (`src/vol.asm:668-672`). A mount fails in four cases: an index
+past the table, a drive past D, a volume already on a drive and a drive whose
+vector slot is too small for the volume. An unmount fails for drive A, which is
+never left empty, and for a drive past D (`src/vol.asm:606-656`). The slot rule
 is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
 and any other needs a slot of either size (`src/vol.asm:633-646`). Chapter 13
-describes how cold boot gives out the slots.
+describes how cold boot gives out the slots. The three services may change `IX`
+and the alternate registers, and `abi.inc` states 24 bytes of stack for each
+(`src/abi.inc:18-21`, `src/abi.inc:55-67`).
 
 A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of
 the block cache to the card, with interrupts off, and the call fails if any
 write fails (`src/vol.asm:680-692`). A mount then clears the drive's old
 entry, fills the new one and its DPH with `MNONE`, and records the index. An
-unmount clears the entry. Either way `VOLSVC` ends by marking `BLKBUF`
+unmount clears the entry. Either way the service ends by marking `BLKBUF`
 empty and calling BDOS function 37 to reset the drive, so that the drive's
-next access logs it in from its new directory (`src/vol.asm:657-669`).
+next access logs it in from its new directory (`src/vol.asm:657-669`). That
+call runs on the BDOS's own stack, so a program calls `MOUNT` and `UNMNT` from
+outside its own BDOS calls (`src/abi.inc:21-23`).
 
-`VOLSVC` writes nothing of its own to the card, so the card's header still
+The services write nothing of their own to the card, so the card's header still
 names its own drives, and a power-off, or a reset whose kept selection no
 longer matches, brings them back.
 
