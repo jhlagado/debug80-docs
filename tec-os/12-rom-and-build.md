@@ -71,7 +71,7 @@ are the first of the block, the CCP's keyword `TYPE` and its zero
 The code starts at `COLD` and runs through every routine of TEC-OS to the label
 `CODEEND`, which `src/end.asm:2` defines after the last file. The free space is
 the rest of the ROM, in one gap, and the build fills it with
-`FFh` (`tools/build.mjs:262-265`).
+`FFh` (`tools/build.mjs:263-266`).
 
 ## The source files and their order
 
@@ -122,7 +122,7 @@ data block, under a heading with the file's name (`src/rom.asm:8-14`,
 The source needs settings that depend on the build, and a container layout it
 shares with the tools on the PC. So before assembling, the build writes three
 files into `src/gen/`, each headed with a line saying it is generated and not
-to be edited (`tools/build.mjs:63-139`).
+to be edited (`tools/build.mjs:64-140`).
 
 `gen/config.asm` holds the settings that depend on the build. `WSBASE` is the
 first byte of the resident workspace, which the build places as the next
@@ -132,9 +132,9 @@ the banner and the LCD's top row print from (`src/data.asm:18`,
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,
-`tools/build.mjs:40-61`). At ea9c1c0 they are 49, 105, 50, 74 and 77, and the
+`tools/build.mjs:40-62`). At ea9c1c0 they are 49, 105, 50, 74 and 77, and the
 build stops with an error if a count would not fit in a byte
-(`tools/build.mjs:48-50`). Chapter 15 explains the loops and the arithmetic
+(`tools/build.mjs:49-51`). Chapter 15 explains the loops and the arithmetic
 behind the counts.
 
 `gen/format.asm` and `gen/geom.asm` come from `format/format.json`, the one
@@ -145,12 +145,12 @@ drives, and the two geometries with their disk parameter blocks.
 
 `gen/format.asm` turns the field offsets and limits into equates, such as
 `HCOUNT EQU 14` for the volume count's offset in the header and `DMOUNT EQU 14`
-for the drive byte's offset in a descriptor (`tools/build.mjs:82-116`).
+for the drive byte's offset in a descriptor (`tools/build.mjs:83-117`).
 `gen/geom.asm` holds bytes, and it is the one generated file included in the
 data block (`src/rom.asm:12`). It has the container's name as `FMTMAG` and the two disk parameter
 blocks, `DPB1` and `DPB2`. Its table `GEOTAB` gives each geometry's id, its
 payload in blocks and the address of its disk parameter block
-(`tools/build.mjs:117-137`).
+(`tools/build.mjs:118-138`).
 
 `tools/lib/format.mjs` reads the same `format.json`, and `tecvol` and the other
 tools on the PC use that module, so the ROM and the tools take the container's
@@ -167,7 +167,7 @@ The ROM is assembled on the PC by ATOM, the npm package `atom-z80` at version
 0.3.7.
 `npm run build` runs `tools/build.mjs`, which calls ATOM as a library: first
 `assembleAtomProject` with `src/` as the root and `rom.asm` as the entry, then
-`writeAtomD8` for the symbol map (`tools/build.mjs:214-220`).
+`writeAtomD8` for the symbol map (`tools/build.mjs:215-221`).
 
 The build assembles the ROM twice, because the workspace's position depends on
 its size. The fixed workspace, the part below the RAM BIOS table, runs up to
@@ -175,14 +175,14 @@ the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
 therefore `BF00h` less the workspace's size, and the size is known only after
 an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
 build reads the address of `BDOSRME`, the label at the workspace's end, and
-takes `8000h` from it (`tools/build.mjs:250-254`). At ea9c1c0 that part is
+takes `8000h` from it (`tools/build.mjs:251-255`). At ea9c1c0 that part is
 1,448 bytes, so the second assembly has `WSBASE` at `B958h`
-(`tools/build.mjs:255-257`).
+(`tools/build.mjs:256-258`).
 
 The second assembly's output is the ROM. `materializeAtomGeneration` turns it
 into bytes from `C000h`, filling every gap with `FFh`, and the build copies
 them into a 16,384-byte array that is `FFh` everywhere else
-(`tools/build.mjs:262-265`).
+(`tools/build.mjs:263-266`).
 
 A separate module, `tools/lib/assemble.mjs`, assembles stand-alone programs
 with the same assembler, at `0100h` for a `.COM` file
@@ -196,43 +196,43 @@ card's own programs, and the ROM's build does not. The card's `TAS.COM` and
 Between the second assembly and writing the image, the build checks the result
 against the rules the layout depends on. When a rule fails, the build stops
 with `placement check failed:` and the rule's text
-(`tools/build.mjs:228-230`). The checks are:
+(`tools/build.mjs:229-231`). The checks are:
 
 - Every byte the assembly emitted is at `C000h` or above, so that no part of
   the source puts bytes in RAM, and the image is at most 16 KiB
-  (`tools/build.mjs:259-263`).
+  (`tools/build.mjs:260-264`).
 - `RESET` is at `C000h` and the ROM table at `C003h`. The data block starts where
   the table ends, and the `RET` at `C01Dh` is a `C9h`
-  (`tools/build.mjs:268-271`).
+  (`tools/build.mjs:269-272`).
 - The table, the data and the code are in that order, and the code ends
-  within the ROM (`tools/build.mjs:272-273`).
+  within the ROM (`tools/build.mjs:273-274`).
 - Every address in `src/abi.inc`, the include file that programs and services
   assemble with, equals the address of the matching label in `abi.asm`. Every
-  label there has an entry (`tools/build.mjs:145-152`, `tools/build.mjs:274`).
+  label there has an entry (`tools/build.mjs:146-153`, `tools/build.mjs:275`).
 - The hardware services' numbers and status codes in `abi.inc` are the ones
   in `hwsvc.asm`, and their bits match the `CD` bits of `layout.asm`
-  (`tools/build.mjs:156-166`).
+  (`tools/build.mjs:157-167`).
 - The PICO driver's table offsets in `abi.inc` name the right entries in each
-  width of `PICO.SVC`, which the check builds (`tools/build.mjs:170-182`).
+  width of `PICO.SVC`, which the check builds (`tools/build.mjs:171-183`).
 - `drivers/font.asm` is the font that
-  `format/font5x7.txt` gives (`tools/build.mjs:186-188`).
+  `format/font5x7.txt` gives (`tools/build.mjs:187-189`).
 - No `.asm` file in `src`, `drivers`, `diag` or `test/programs` names an
   address from `FF00h` to `FF27h`,
-  where an older table was (`tools/build.mjs:191-198`).
+  where an older table was (`tools/build.mjs:192-199`).
 - Each service's source reaches the ROM only through the
-  names in `abi.inc` (`tools/build.mjs:202-212`).
+  names in `abi.inc` (`tools/build.mjs:203-213`).
 - The RAM BIOS table is at `BF00h`, and the fixed workspace ends exactly there. The
   state above the table starts 51 bytes after it, at `SDBYTE`, and all of it
-  ends by `C000h` (`tools/build.mjs:280-283`).
+  ends by `C000h` (`tools/build.mjs:281-284`).
 - The BIOS stack ends at or below the start of the
-  CCP's workspace (`tools/build.mjs:284`).
+  CCP's workspace (`tools/build.mjs:285`).
 - On the starter card the TPA is at
-  least 45,830 bytes (`tools/build.mjs:286-287`).
+  least 45,830 bytes (`tools/build.mjs:287-288`).
 
 The last check works out the TPA without running the ROM. `cardLayout` follows
 the arithmetic of cold boot's `ALVINIT`, which Chapter 13 describes: the
 allocation vectors packed down from `WSBASE`, and the BDOS entry jump below
-them (`tools/build.mjs:238-242`). The starter card has two volumes, a G1M
+them (`tools/build.mjs:239-243`). The starter card has two volumes, a G1M
 whose last allocation block, `DSM`, is 511 and a G8M whose `DSM` is 2047. Their
 vectors take 320 bytes and the entry is at `B806h`, which leaves 46,854 bytes
 from `0100h`.
@@ -244,7 +244,7 @@ a directory for each of the profile names below.
 `tecos.rom` is the image. `tecos.d8.json` is the symbol map in Debug80's D8
 format, which `tools/capture.mjs` reads to find TEC-OS's labels. `census.json`
 holds the figures for the ROM's parts, the RAM's regions and the stacks
-(`tools/build.mjs:289-337`).
+(`tools/build.mjs:290-338`).
 
 The PICO9918's width is set by the driver loaded at startup (Chapter 5), so
 every board takes the same image. The build keeps four profile names,
@@ -252,7 +252,7 @@ every board takes the same image. The build keeps four profile names,
 a ROM by its profile's name still has a file to read, and all four name that
 image (`tools/build.mjs:28-35`). The build assembles the first profile and copies its
 image and map to the other three, and only the name and the description change
-in each census (`tools/build.mjs:341-355`). `npm run build` prints one line for
+in each census (`tools/build.mjs:342-356`). `npm run build` prints one line for
 each:
 
 ```text

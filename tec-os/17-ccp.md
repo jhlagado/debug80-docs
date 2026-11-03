@@ -53,7 +53,7 @@ both end with a jump to `CCPENT`, with `C` holding that byte. It has the user
 number in bits 4 to 7 and the drive in bits 0 to 3 (`src/boot.asm:80-82`,
 `src/cpm/ccp.asm:23-66`). Cold boot sets it to 0, drive A and user 0, before
 it falls into warm boot (`src/boot.asm:51-52`), and warm boot's `PZINIT`
-leaves it as the CCP last wrote it (`src/boot.asm:215-217`).
+leaves it as the CCP last wrote it (`src/boot.asm:216-218`).
 
 `CCPENT` sets its stack and keeps the drive in `BOOTDRV`
 (`src/cpm/ccp.asm:30-44`). It then sets `WRFLAG` and calls function 13, the
@@ -62,7 +62,7 @@ unchanged, as Chapter 16 describes. Warm boot has cleared the user number with
 the rest of the BDOS's variables, so `CCPENT` calls function 32 with the user
 number from the byte (`src/cpm/ccp.asm:45-59`). `STBOOT` comes next: it reads `A:STARTUP.CMD` the
 first time it is called after a cold boot and does nothing later
-(`src/cpm/ccp.asm:60`, `src/svc.asm:327-360`). Chapter 22 describes startup.
+(`src/cpm/ccp.asm:60`, `src/svc.asm:368-401`). Chapter 22 describes startup.
 Last, if the drive is not A, the CCP selects it with function 14
 (`src/cpm/ccp.asm:61-66`), then prints a new line and starts its loop at
 `STARTED` (`src/cpm/ccp.asm:68-70`).
@@ -113,7 +113,7 @@ startup file through `STLINE` and the keyboard through BDOS function 10, with
 `HFLAG` set for the history (`src/cpm/ccp.asm:80-89`). For the keyboard the
 CCP's buffer is `CMDBUF`, with `CMDLEN` after it for the count and `CMDTXT`
 for the characters (`src/ram.asm:75-80`). Warm boot sets the buffer's maximum
-to 127 (`src/boot.asm:280-281`).
+to 127 (`src/boot.asm:289-290`).
 
 `MLTAKE` takes one piece of the line up to its `!`, turns its letters to
 capitals and sets `PRGCODE`, the return code, to 0
@@ -200,8 +200,8 @@ Each built-in is a routine in `ccp.asm` or, for the service commands, in
 | `USER` | `CMDUSER` | `src/cpm/ccp.asm:1164-1194` |
 | `CON` | `CMDCON` | `src/cpm/ccp.asm:1105-1162` |
 | `COPY` | `CMDCOPY` | `src/cpm/ccp.asm:965-1097` |
-| `UNLOAD` | `CMDUNL` | `src/cpm/ccp.asm:1099-1103`, `src/svc.asm:26-52` |
-| `SERVICES` | `CMDSVC` | `src/svc.asm:301-325` |
+| `UNLOAD` | `CMDUNL` | `src/cpm/ccp.asm:1099-1103`, `src/svc.asm:28-66` |
+| `SERVICES` | `CMDSVC` | `src/svc.asm:341-366` |
 
 `DIR` turns a missing name into eleven `?`, sets the DMA address to `LOADBUF`
 and lists the entries that function 17 and then function 18 return
@@ -455,7 +455,7 @@ boot clears the CCP's block of RAM only from `CCPCLR` (`src/ram.asm:67-128`).
 Below that label is the command line, and before it the two FCBs, which need no
 clearing because each use parses them in full (`src/ram.asm:68-70`). From
 `CCPCLR` on, warm boot clears the CCP's bytes along with the BDOS's
-(`src/boot.asm:270-277`).
+(`src/boot.asm:279-286`).
 
 | Addresses | Bytes | Name | Contents |
 | --- | ---: | --- | --- |
@@ -472,7 +472,7 @@ clearing because each use parses them in full (`src/ram.asm:68-70`). From
 
 The addresses are those of the debug80 build. The guard is 43 bytes less the
 stack's 30 (`src/ram.asm:119-124`), and warm boot fills it with `A5h`
-(`src/boot.asm:282-286`), so a guard byte that is no longer `A5h` shows that
+(`src/boot.asm:291-295`), so a guard byte that is no longer `A5h` shows that
 the stack has run past its bottom. `test/stacks.test.mjs` checks the guard
 after the CCP's deepest paths, and Chapter 13 describes the measurement behind
 the stack's size.
@@ -487,6 +487,6 @@ of the program's stack.
 
 The CCP keeps nothing in the TPA: it leaves the TPA from `0100h` untouched
 until it loads a program or a service there, a service for `NAME.SVC` or
-`CON UC1` (`src/glcd.asm:71`, `src/svc.asm:54`). Only `SAVE` reads that area,
+`CON UC1` (`src/glcd.asm:71`, `src/svc.asm:69`). Only `SAVE` reads that area,
 which is how `SAVE` writes what a program or a loaded service file left in
 memory.

@@ -89,7 +89,7 @@ they keep is the claim byte, `VCLAIM`, in the workspace (`src/ram.asm:57`).
 console's columns in `L` and its rows in `H`, both 0 for the serial terminal
 (`src/hwsvc.asm:78-91`). Status is always 0. 1,552 T-states. The version has
 the major in `D` and the minor in `E`, so `0001h` is 0.1
-(`tools/build.mjs:72`). The bits of `B` are `CONDEV`'s, with bit 3 and bit 4
+(`tools/build.mjs:73`). The bits of `B` are `CONDEV`'s, with bit 3 and bit 4
 added (`src/hwsvc.asm:32-39`):
 
 | Bit | Value | `abi.inc` | Set when |
@@ -186,7 +186,7 @@ chip's write protect first and writes 0 to its control byte last.
 
 ## ABIVOL, mount and describe
 
-`CALL ABIVOL` with the operation in `A` (`src/vol.asm:578-604`):
+`CALL ABIVOL` with the operation in `A` (`src/vol.asm:577-603`):
 
 | `A` | Takes | Effect |
 | ---: | --- | --- |
@@ -203,8 +203,8 @@ only to the drives mounted at cold boot. A program tests `A`, since the flags
 mean nothing on the failure.
 
 A mount or an unmount writes the cache's changes for the card first and resets
-the drive by BDOS function 37 (`src/vol.asm:621`, `src/vol.asm:658`,
-`src/vol.asm:662-672`), so that the next access logs it in from its directory.
+the drive by BDOS function 37 (`src/vol.asm:620`, `src/vol.asm:657`,
+`src/vol.asm:661-671`), so that the next access logs it in from its directory.
 A mount or an unmount therefore can't be called from inside a BDOS call,
 unlike the hardware services. The call changes `BC`, `DE` and `HL`, and on the
 model a mount or a describe also changed `IX`. The most stack measured was 22
@@ -232,7 +232,7 @@ the return address.
 ## ABISVC, the registry
 
 `ABISVC` finds the records that services have published
-(`src/svc.asm:435-498`).
+(`src/svc.asm:476-539`).
 
 | `C` | Takes | Returns |
 | ---: | --- | --- |
@@ -241,7 +241,7 @@ the return address.
 | anything else | | Carry set |
 
 A record is 13 bytes: a link word, the 8-byte name, a version byte and the
-address of its table (`src/svc.asm:23`). Find takes the newest record whose
+address of its table (`src/svc.asm:25`). Find takes the newest record whose
 name matches and whose version is at least `B`. Each walk stops after 256
 records. Find takes 6 bytes of stack below its return address, and enumerate
 none. `AF`, `BC`, `DE` and `HL` are changed. `IX` and `IY` are kept. The call
@@ -266,4 +266,4 @@ four more:
 
 The caller must hold the claim. Each entry checks nothing and changes `AF`,
 `BC`, `DE` and `HL` (`src/abi.inc:48-54`). A count of 0 moves nothing
-(`drivers/pico.asm:164-199`).
+(`drivers/pico.asm:165-200`).

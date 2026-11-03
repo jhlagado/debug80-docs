@@ -30,7 +30,7 @@ interrupts off.
 The cache is 30 lines of 512 bytes, one card block each, at `8000h–BBFFh` in
 EXPAND 1 (`src/cache.asm:1-8`, `src/layout.asm:24-26`). Line n is at `8000h` +
 n × `200h`, which `CLADR` works out by doubling n and adding `80h` to give the
-high byte (`src/cache.asm:131-136`).
+high byte (`src/cache.asm:138-143`).
 
 The cache's table is the next page. From `CTAB`, `BC00h`, each line has four
 bytes holding the number of the card block it holds, `FFFFFFFFh` while it is
@@ -55,25 +55,25 @@ the workspace above the RAM BIOS table, at fixed addresses
 To read or write the table, a routine takes from `CXON` the latch value with
 `LATEXP` added to `LATCHV` and writes it to the latch. It reads or writes the
 bytes with no `PUSH`, `POP` or `CALL` in between, then writes `LATCHV` back to
-the latch (`src/cache.asm:36-44`). Chapter 13 explains why no stack may be
+the latch (`src/cache.asm:43-51`). Chapter 13 explains why no stack may be
 used while EXPAND 1 is in view.
 
 ## Reads through the cache
 
 Every volume's reads go through the cache. BIOS `READ` maps the record to a
 card block and a quarter of it, and calls `CREAD` (`src/bios.asm:179-184`,
-`src/cache.asm:271-281`). `CLOOK` compares `SDLBA` with each line's block
-number in turn, from line 0 (`src/cache.asm:46-85`). On a hit, `CRDREC` copies
+`src/cache.asm:278-288`). `CLOOK` compares `SDLBA` with each line's block
+number in turn, from line 0 (`src/cache.asm:53-92`). On a hit, `CRDREC` copies
 the record's 128 bytes from the line to the DMA address. On a miss, `CTAKE`
 gives out a line, `CFILL` reads the card block straight into it, and the
 record is then copied from the line.
 
 The block goes from the card into EXPAND 1 with no copy through `BLKBUF`,
 because `CFILL` sets `SDXB` to `LATEXP` for the call and `SDREAD`'s byte loop
-puts EXPAND 1 in view while it fills the buffer (`src/cache.asm:138-158`,
+puts EXPAND 1 in view while it fills the buffer (`src/cache.asm:145-165`,
 `src/sd.asm:258-262`). A failed read leaves the line empty.
 
-`CTAKE` gives out lines in turn (`src/cache.asm:214-248`). A clean line can be
+`CTAKE` gives out lines in turn (`src/cache.asm:221-255`). A clean line can be
 given out at any time, since the card has the same bytes, but a dirty line has
 to reach the card first. So `CTAKE` starts at `CNEXT` and takes the first
 clean line from there on, passing over dirty lines and wrapping from line 29
@@ -89,7 +89,7 @@ misses takes 235,309, nearly all of it the card. `CLOOK` takes 259 T-states
 when the block is in line 0 and about 2,000 to search all 30.
 
 The copy is the larger part of a hit. `CRDREC` and `CWRREC` use `MVCOPY`, the
-routine behind `XMOVE` and `MOVE` (`src/cache.asm:250-269`). A copy between
+routine behind `XMOVE` and `MOVE` (`src/cache.asm:257-276`). A copy between
 EXPAND 1 and an address in EXPAND 0, such as `DIRBUF`, goes a byte at a time,
 because the two share the window, and the latch is switched between each read
 and its write. A DMA address below `8000h`, in MAIN, is copied with one `LDIR`
@@ -159,7 +159,7 @@ read into `BLKBUF`, when there is one, comes from the card, not from the cache
 A later read of the block must not return the old contents, so the cache is
 kept up to date after such a write. `CREFR` looks the block up, and if a line
 holds it, copies the 512 bytes of `BLKBUF` over the line (`src/bios.asm:298`,
-`src/cache.asm:360-371`). A block not in the cache is not added to it. If the
+`src/cache.asm:367-378`). A block not in the cache is not added to it. If the
 card write fails, the block's line is dropped, since neither it nor `BLKBUF`
 can be known to match the card (`src/bios.asm:291-297`). A written-through
 volume's lines are therefore always clean.
@@ -177,7 +177,7 @@ drive to `CWRBH` in place of the written-through path
 (`src/bios.asm:277-281`). On the starter card the volume is `WORK` on drive B.
 
 `CWRBH` puts the record into the block's line and marks the line dirty
-(`src/cache.asm:283-345`). If no line holds the block, `CTAKE` gives one out.
+(`src/cache.asm:290-352`). If no line holds the block, `CTAKE` gives one out.
 Two cases follow, decided by the same rule `WRITE` uses for `BLKBUF`: whether
 the block holds anything the card's copy has to supply. If it might, the line
 is filled from the card first, unless it already held the block.
@@ -186,12 +186,12 @@ The card has nothing to supply when the write is CP/M's type 2, the first to a
 new allocation block, or a write to the next card block of an allocation block
 whose first card block was handled that way. The line is then cleared to zeros
 instead, with no read. `BLKBUF`'s key is set to record that block as cleared,
-so that the rule holds for the block after it (`src/cache.asm:298-316`).
+so that the rule holds for the block after it (`src/cache.asm:305-323`).
 
 Either way, the record's 128 bytes are then copied from the DMA address into
 the line with `CWRREC`, and `CDSET` marks the line dirty. A data write ends
 there and returns success with the card unchanged. A write of type 1, a
-directory write, goes on (`src/cache.asm:333-345`), because the card's
+directory write, goes on (`src/cache.asm:340-352`), because the card's
 directory must never list a block whose contents are not yet on the card.
 `CFLUSH` writes every dirty line except the directory's, and then `CWRITE`
 writes the directory's line, so the data reaches the card before the directory
@@ -225,37 +225,37 @@ change of drive.
 
 `CFLUSH` and `CFLALL` write dirty lines in line order, from line 0 to line 29.
 `CFLUSH` leaves out the line in `CSKIP`, and `CFLALL` sets `CSKIP` to `FFh`,
-which is no line (`src/cache.asm:197-212`). Line order is not block order,
+which is no line (`src/cache.asm:204-219`). Line order is not block order,
 since `CTAKE` gives lines out in turn. The blocks of a file can therefore
 reach the card in any order.
 
 A directory line is never left dirty: a directory write is written to the card
-at once, after the data (`src/cache.asm:283-286`). A flush at any other time
+at once, after the data (`src/cache.asm:290-293`). A flush at any other time
 therefore writes only data. A power cut during a directory write's flush
 leaves some of the new data blocks on the card and the directory block not yet
 written, so no entry on the card names a block that was missed
 (`docs/recovery.md` describes what the user sees).
 
-`CWRITE` writes one line (`src/cache.asm:138-195`). It takes the block number
+`CWRITE` writes one line (`src/cache.asm:145-202`). It takes the block number
 from the table and sets `SDXB` so that `SDWRITE` reads its 512 bytes straight
 from the line in EXPAND 1. On success it marks the line clean. On a failure it
 sets `CFAIL` and leaves the line dirty, and the flush stops: `CFLUSH` and
 `CFLALL` return at the first line that fails, and the lines after it stay
-dirty for the next flush (`src/cache.asm:197-207`).
+dirty for the next flush (`src/cache.asm:204-214`).
 
 A flush has four occasions:
 
 - a directory write on the volume written behind, as above
 - `CTAKE` with every line dirty, which writes one line
 - every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:79`,
-  `src/cache.asm:347-358`)
+  `src/cache.asm:354-365`)
 - every call of the mount entry that mounts or unmounts a drive, whose
   `VFLUSH` calls `CFLALL` before any drive changes, and fails if it fails
-  (`src/vol.asm:678-690`)
+  (`src/vol.asm:677-689`)
 
 The warm boot's flush is the one you can cause. A `^C` at the prompt is a warm
 boot, and after it every change is on the card. A reset writes nothing, since
-cold boot clears EXPAND 1 (`src/boot.asm:149-155`), and the changes in the
+cold boot clears EXPAND 1 (`src/boot.asm:150-156`), and the changes in the
 cache at the time of a reset are lost.
 
 ## Write lost
@@ -266,7 +266,7 @@ its own. That report is `Write lost`. `CWBOOT` writes every dirty line and
 then tests `CFAIL`, which is set if a line's write has failed since the last
 warm boot, including the flush it has just made. If it is set, `CWBOOT` clears
 it, drops the rest of a chained line and prints `Write lost` on its own line
-(`src/cache.asm:347-358`, `src/data3.asm:109`). The failed lines are still dirty and still hold their
+(`src/cache.asm:354-365`, `src/data3.asm:109`). The failed lines are still dirty and still hold their
 data, so each warm boot writes them again and prints the message again while
 the write still fails.
 
@@ -288,12 +288,12 @@ the stacks. An interrupt taken then would push its return address into EXPAND
 
 `CDI` at each entry reads the interrupt state with `LD A,I`, which copies the
 interrupt flip-flop into the P/V flag. It turns interrupts off with `DI` and
-saves the flags in `CIFF` (`src/cache.asm:17-24`). `BRET` at each exit turns
+saves the flags in `CIFF` (`src/cache.asm:24-31`). `BRET` at each exit turns
 the result's Z flag into `A`, 0 for success and 1 for an error. `CEI` turns
 interrupts on again only if `CIFF` shows they were on at entry
-(`src/cache.asm:25-34`, `src/bios.asm:181-184`, `src/bios.asm:195-199`), so a
+(`src/cache.asm:32-41`, `src/bios.asm:181-184`, `src/bios.asm:195-199`), so a
 call made with interrupts off returns with them off. The mount entry's
-`VFLUSH` uses the same pair around its flush (`src/vol.asm:681-690`). `MVCOPY`
+`VFLUSH` uses the same pair around its flush (`src/vol.asm:680-689`). `MVCOPY`
 and the history's routines keep their own copy of the state in the same way
 (`src/xmove.asm:40-42`, `src/history.asm:25-27`).
 
