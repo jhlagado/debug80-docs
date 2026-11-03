@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 7935507, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 626ee41, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
