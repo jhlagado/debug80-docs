@@ -827,7 +827,7 @@ and to each string in the first row.
 | --- | ---: | ---: |
 | `PUTAT`, the whole string in one call | 495 | 35,100 |
 | BIOS `CONOUT` | 786 | 35,400 |
-| BDOS function 2 | 3,906 | 38,400 |
+| BDOS function 2 | 3,908 | 38,400 |
 
 On the PICO9918 `PUTAT` is about eight times faster than the BDOS. The graphics
 LCD draws each cell pixel by pixel, so nearly all the time goes on the drawing
