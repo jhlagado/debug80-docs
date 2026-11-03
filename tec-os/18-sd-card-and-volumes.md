@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. The SD card and the volumes
 
-Checked against TEC-OS 4d6eeaa.
+Checked against TEC-OS 19ad916.
 
 The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
@@ -69,7 +69,11 @@ Every later access gives the driver a block number in `SDLBA`, four bytes,
 least significant first. `LBAARG` turns it into the command's argument, which
 depends on the card's capacity: a high-capacity card gets the number as it is,
 and a standard one gets it shifted left by 9, the block times 512
-(`src/sd.asm:206-221`).
+(`src/sd.asm:206-221`). The shift keeps only the low 32 bits of the product:
+the top byte of `SDLBA` is dropped and so is the bit carried out of the shift.
+On a standard-capacity card a block number of `800000h` or more, 4 GiB or more
+into the card, therefore wraps to a lower block, and block `800800h` is read and
+written as block `800h` with no error.
 
 `SDREAD` reads a block with `CMD17` (`src/sd.asm:223-252`). A nonzero R1 is
 error 5, `SDECMD`. The card then sends `FFh` until the data is ready and `FEh`
@@ -148,8 +152,15 @@ descriptor's cache byte, the written-behind flag, and doesn't check the others
 
 Any failure unmounts every drive that the walk had mounted, so a card is
 mounted whole or not at all (`src/vol.asm:251-255`). The ROM can't find the
-card's capacity, so a volume that runs past the end of the card fails only
-when a read reaches it.
+card's capacity, and the walk checks a volume against the container's length
+only. A volume that runs past the end of the card gives an error from the card
+when an access reaches a block beyond its end, provided the block's address
+reaches the card intact. On a standard-capacity card a block at 4 GiB or more
+wraps, as `LBAARG` above shows, and the access goes to a block near the start of
+the card, which may be the header or another volume's. The host model can't show
+either case: past the end of its image its card reads zeros and drops what is
+written, with no error, and it wraps a high-capacity card's byte offset at 32
+bits too.
 
 Cold boot sends any failure, of the card or of the container, to the
 diagnostic prompt (`src/boot.asm:37-40`). For the run below, the starter
