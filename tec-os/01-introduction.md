@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 7458352, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 7935507, with the starter card's `TED.COM` from Thorium
 128edb7 and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and
 `TAS.COM`'s is
