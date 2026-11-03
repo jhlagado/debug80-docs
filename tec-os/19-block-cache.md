@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 19ad916, with the ATOM assembler from the repository's
+Checked against TEC-OS 60e0768, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from
-Thorium 8fcc6ea, whose copy in `dist/files` has the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`; the
+Thorium 676075a, whose copy in `dist/files` has the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`. The
 timings and traces below were made on that card unless the text names another.
 
 Reading a block from the SD card takes TEC-OS about 55 milliseconds, because
@@ -83,19 +83,34 @@ one. The order is round-robin, not least-recently-used, so a block that is
 read often is still given up when its turn comes and read again from the card
 at its next use.
 
-On the model, with the starter card, a read that hits takes 13,698 T-states
+On the model, with the starter card, a read that hits takes 13,635 T-states
 when the record goes to the directory buffer `DIRBUF` at `BBD0h`. A read that
-misses takes 235,391, nearly all of it the card. `CLOOK` takes 259 T-states
+misses takes 235,328, nearly all of it the card. `CLOOK` takes 259 T-states
 when the block is in line 0 and about 2,000 to search all 30.
 
-The copy is the larger part of a hit. `CRDREC` and `CWRREC` use `MVCOPY`, the
-routine behind `XMOVE` and `MOVE` (`src/cache.asm:257-276`). A copy between
-EXPAND 1 and an address in EXPAND 0, such as `DIRBUF`, goes a byte at a time,
-because the two share the window, and the latch is switched between each read
-and its write. A DMA address below `8000h`, in MAIN, is copied with one `LDIR`
-while EXPAND 1 is in view (`src/xmove.asm:21-26`). A hit to a DMA address
-below `8000h`, such as the CCP's loads at `0100h` and up, takes from 4,808
-T-states, in line 0. A miss to such an address takes 226,501.
+The copy is the larger part of a hit. `CRDREC` and `CWRREC` put the two banks
+in `XMDST` and `XMSRC`, 0 for the program's view and 1 for EXPAND 1, and call
+`MVCOPY`, the cache's copy (`src/cache.asm:257-276`, `src/cache.asm:381-392`).
+A count of 0 returns at once. Any other copy runs with interrupts off:
+`IFFGET` reads the interrupt state, and `DI` and `PUSH AF` keep it for the end
+(`src/cache.asm:393-398`). `BC`, `DE` and `HL` hold the copy's own values, so
+the two latch values go in the alternate registers, whose old values are pushed
+first. `C'` is the port, and `D'` and `E'` are `LATCHV` with `LATEXP` set for
+each end in EXPAND 1 (`src/cache.asm:399-413`). Equal values mean one bank, and
+`MVLDIR` writes that latch and does one `LDIR` (`src/cache.asm:414-417`,
+`src/cache.asm:478-483`).
+
+A copy between EXPAND 1 and an address in EXPAND 0, such as `DIRBUF`, can't have
+both in view, because the two share the window. The part of the bank-0 end
+below `8000h` stays in view whatever the latch holds, so it goes by one `LDIR`
+with EXPAND 1 selected (`src/cache.asm:418-458`). The part in EXPAND 0 goes a
+byte at a time, and the latch is switched between each read and its write
+(`src/cache.asm:459-477`). While EXPAND 1 is in view the copy uses no stack,
+because the caller's stack may be in EXPAND 0 (`src/cache.asm:387-388`).
+`MVEND` writes `LATCHV` back to the latch, pops the alternates and enables
+interrupts only if `P/V` shows they were on (`src/cache.asm:484-494`). A hit to
+a DMA address below `8000h`, such as the CCP's loads at `0100h` and up, takes
+from 4,745 T-states, in line 0. A miss to such an address takes 226,438.
 
 `DIR` on the starter card's drive A shows the effect: after the first prompt
 the directory's blocks are in the cache, and `DIR`'s two BIOS reads are both
@@ -138,8 +153,8 @@ node tools/tecvol.mjs put time.img A data.bin
 `Machine` as `tools/capture.mjs` does. It reads the model's T-state count,
 `cycles` (`host/machine.mjs:262`), twice: when `READ DATA.BIN` has been typed
 and echoed, before the Return that ends it, and at the next prompt. After a
-cold boot, the command's first run took 6,641,268 T-states, 1.66 seconds, and
-its second 1,342,939, 0.34 seconds, a fifth of that. Both figures include
+cold boot, the command's first run took 6,633,385 T-states, 1.66 seconds, and
+its second 1,335,056, 0.33 seconds, a fifth of that. Both figures include
 loading the program from drive A.
 
 The gain needs the whole file in the cache. A file of 15,360 bytes took about
@@ -216,8 +231,8 @@ writes three of the first 32 data blocks early, because all 30 lines are dirty
 before the BDOS next writes the directory.
 
 On `time.img`, from the section on reads, `SAVE 64 X.COM`, 16 KiB, took
-30,833,645 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
-9,921,552, 2.48 seconds, about a third of that. Each run followed a cold boot
+30,829,851 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
+9,909,718, 2.48 seconds, about a third of that. Each run followed a cold boot
 and a change to the drive. The count, taken as for the reads, leaves out the
 change of drive.
 
@@ -250,13 +265,13 @@ A flush has four occasions:
 - `CTAKE` with every line dirty, which writes one line
 - every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:78`,
   `src/cache.asm:354-365`)
-- every call of the mount entry that mounts or unmounts a drive, whose
-  `VFLUSH` calls `CFLALL` before any drive changes, and fails if it fails
+- every call of the services `MOUNT` and `UNMNT`, whose `VFLUSH` calls
+  `CFLALL` before any drive changes, and fails if it fails
   (`src/vol.asm:680-692`)
 
 The warm boot's flush is the one you can cause. A `^C` at the prompt is a warm
 boot, and after it every change is on the card. A reset writes nothing, since
-cold boot clears EXPAND 1 (`src/boot.asm:141-147`), and the changes in the
+cold boot clears EXPAND 1 (`src/boot.asm:139-147`), and the changes in the
 cache at the time of a reset are lost.
 
 ## Write lost
@@ -295,16 +310,16 @@ saves the flags in `CIFF` (`src/cache.asm:24-31`). `BRET` at each exit turns
 the result's Z flag into `A`, 0 for success and 1 for an error. `CEI` turns
 interrupts on again only if `CIFF` shows they were on at entry
 (`src/cache.asm:32-41`, `src/bios.asm:181-184`, `src/bios.asm:195-199`), so a
-call made with interrupts off returns with them off. The mount entry's
-`VFLUSH` uses the same pair around its flush (`src/vol.asm:683-692`). `MVCOPY`
+call made with interrupts off returns with them off. `VFLUSH`, in the volume
+services, uses the same pair around its flush (`src/vol.asm:683-692`). `MVCOPY`
 and the history's routines call `IFFGET` too and keep their own copy of the state
-(`src/xmove.asm:40-42`, `src/history.asm:25-27`).
+(`src/cache.asm:396-398`, `src/history.asm:25-27`).
 
 For a program that uses interrupts, a BIOS disk call holds them off for its
 whole length. A read that misses holds them off for about 235,000 T-states, 59
 milliseconds. A directory write on the volume written behind holds them off
 while every dirty line is written. On the model the close of a file of four
-blocks took 1,111,332 T-states. A flush of all 30 lines takes about 30 ×
+blocks took 1,111,269 T-states. A flush of all 30 lines takes about 30 ×
 217,411, some 6.5 million T-states, or 1.6 seconds. Interrupts are on only
 when a program has enabled them, as Chapter 14 describes, so this affects only
 such a program.
