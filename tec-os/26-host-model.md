@@ -300,8 +300,9 @@ on the next line stays if the removed piece had its own, and otherwise a `:`
 that waited on a removed piece goes, on its line or first on the
 next (`host/card.mjs:26-108`). A card that fails the check is left as it is, and
 the reason goes to the serial terminal with the words `[power on]`. The reason
-is no drive A, a `.DRV` display file from an older TEC-OS, no such driver or a
-driver of another format. The message for an older card names the display's own
+is no drive A or a `.DRV` display file from an older TEC-OS, and with the graphics
+LCD chosen also no such driver or a driver of another format, since with the
+PICO9918 chosen the page writes `PICO.SVC` (`host/card.mjs:57-64`). The message for an older card names the display's own
 `.DRV` file if the card has it, and otherwise the first `.DRV` display file in
 the directory (`host/card.mjs:37-40`).
 

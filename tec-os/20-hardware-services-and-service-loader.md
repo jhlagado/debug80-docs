@@ -376,7 +376,7 @@ boot clears `SVCBSY` (`src/boot.asm:71-72`). The pages go back as if the load
 had never started, and `test/svc.test.mjs:432-445` checks that a later load
 works. Function 47 from `INIT` is a warm boot at the same point
 (`test/svc.test.mjs:894`). The sweep in `PZINIT` takes any restart vector `INIT`
-has set, since the new pages lie below `PZTOP` (`test/svc.test.mjs:796`).
+has pointed into its pages, since the new pages lie below `PZTOP` (`test/svc.test.mjs:796`).
 A hook already in the table then points into the TPA, which is
 why hooks go last (`test/svc.test.mjs:461-468`). A reset during a hung `INIT` is
 recognised all the same, because `RSLCAP` doesn't compare the word at `0006h`

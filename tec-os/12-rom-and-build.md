@@ -187,7 +187,8 @@ them into a 16,384-byte array that is `FFh` everywhere else
 A separate module, `tools/lib/assemble.mjs`, assembles stand-alone programs
 with the same assembler, at `0100h` for a `.COM` file
 (`tools/lib/assemble.mjs:10-20`). `npm run media` uses it to build the starter
-card's `MOUNT.COM`, and the ROM's build does not. The card's `TAS.COM` and
+card's `MOUNT.COM` and, through `makeSvc`, its two drivers
+(`tools/lib/svc.mjs:104`), and the ROM's build does not. The card's `TAS.COM` and
 `TED.COM` are built outside this repository, and the media step takes each
 from its pinned build and refuses one whose SHA-256 differs
 (`tools/media.mjs:27-36`, `tools/media.mjs:173-174`, `tools/media.mjs:197-200`).
