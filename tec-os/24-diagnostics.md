@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 24. Diagnostics
 
-Checked against TEC-OS 60cfbdc. The diagnostics ROM in this chapter is version
+Checked against TEC-OS 4d6eeaa. The diagnostics ROM in this chapter is version
 0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit.
 
 Two parts of the repository report what is wrong with a board. The TEC-OS ROM
