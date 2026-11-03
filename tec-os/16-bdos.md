@@ -25,7 +25,7 @@ and the differences from Digital Research's BDOS.
 TEC-OS's BDOS comes from Portable CP/M, an implementation of the documented
 CP/M 2.2 interface that uses no Digital Research source
 (`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the ROM
-that Chapter 12 describes it runs from `E0F0h`, `BDOSBAS`, to `EFF6h`, 3,847
+that Chapter 12 describes it runs from `E108h`, `BDOSBAS`, to `F00Eh`, 3,847
 bytes. Its table of functions and its error messages are in the
 ROM's data block (`src/data3.asm:73-90`). None of it can be patched.
 
