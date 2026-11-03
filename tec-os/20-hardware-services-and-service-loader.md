@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 20. The hardware services and the service loader
 
-Checked against TEC-OS 7458352, with the starter card's `TAS.COM` from Thorium
+Checked against TEC-OS 7935507, with the starter card's `TAS.COM` from Thorium
 dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -52,11 +52,12 @@ alternates (`src/abi.inc:18-21`).
 
 ## The routines
 
-Services 0 to 8 are the hardware services, in `src/hwsvc.asm`. The volume
+Services 0 to 8 are the hardware services, in `src/services.asm`. The volume
 services, 9 to 11, are in `src/vol.asm` and Chapter 18 describes them. `DRVR`,
-12, is the display drivers' hook in `src/glcd.asm`, which Chapter 21 describes,
-and `FIND` and `LIST`, 13 and 14, are the registry's, described below
-(`src/hwsvc.asm:4-6`, `src/tables.asm:53-60`).
+12, is `SVDRV`, also in `src/services.asm`. It checks the mode and calls
+`VIDHOOK`, the display drivers' hook in `src/video.asm`, which Chapter 21
+describes. `FIND` and `LIST`, 13 and 14, are the registry's, described below
+(`src/services.asm:4-6`, `src/services.asm:314-327`, `src/tables.asm:53-60`).
 
 The dispatcher, its exits and the nine hardware routines are 474 bytes of the
 ROM's code, by the symbol map of the build:
@@ -154,7 +155,7 @@ write. A write first clears write protect with `RTCPUT`, and its burst carries
 the 7 bytes and then the control byte, 0 (`src/services.asm:241-259`).
 
 None of these routines calls the BDOS, and their one byte of state, `VCLAIM`,
-is in the workspace (`src/abi.inc:21-23`, `src/hwsvc.asm:6-7`).
+is in the workspace (`src/abi.inc:21-23`, `src/services.asm:6-7`).
 
 ## From the command to the loader
 
@@ -595,7 +596,7 @@ alone, with the run on a volume written behind: 32, 16 and 16
 of the run of `CON UC1` on a board with the graphics LCD, which gives 22
 (`test/stacks.test.mjs:219`).
 
-`SVCLIM` holds the limits (`src/data3.asm:115`), and they are counted from the
+`SVCLIM` holds the limits (`src/tables.asm:67`), and they are counted from the
 base. Each limit is the largest even figure that, added to the base, leaves a
 quarter of the stack free: 40 of 54, 28 of 38 and 22 of 30. At this commit
 `GLCD.SVC` declares 2, 0 and 6 (`drivers/glcd.asm:18`). Its 6 is the difference
