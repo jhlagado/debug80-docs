@@ -1,77 +1,22 @@
 ---
-title: PRL programs and services
+title: Writing services
 parent: TEC-OS
 nav_order: 10
 nav_group: "Part I: Using and programming TEC-OS"
 ---
 
-# 10. PRL programs and services
+# 10. Writing services
 
-Checked against TEC-OS 4d6eeaa. The programs were assembled by the starter
+Checked against TEC-OS 60e0768. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
 Every program written so far has been a `.COM` file, which runs at `0100h` and
-is gone when it ends. This chapter describes two other kinds of file. A `.PRL`
-file is a program in a relocatable format, and a `.SVC` file stays in memory
-after its command ends. You first make a PRL. You then write a service that
-counts the console's characters, install it, measure what it costs and publish
-the count for a program to find. Chapter 21 explains the relocation data in
-both files, and Chapter 20 the loader.
-
-## PRL programs
-
-A PRL file is in Digital Research's page relocatable format: a program's code
-and a bitmap of the bytes that hold addresses, in the layout Chapter 21 gives.
-The bitmap is for a loader that puts the code somewhere else. To run the code
-at page `p`, such a loader adds `p - 1` to every byte whose bit is set.
-
-TEC-OS's loader never does this, because a program on TEC-OS always runs at
-`0100h`, where the code was made to run. The loader moves the code down over
-the header and starts it with no byte of it changed, so on TEC-OS a PRL does
-what a `.COM` file does and takes more room on the card and in memory.
-
-`TAS` doesn't write PRL files, but the repository's `makePrl` does, from the
-source of a program. Here it makes one from `area.asm`, the `AREA` program of
-Chapter 7, on a copy of the starter card that later sections use too:
-
-```sh
-cp dist/starter.img svc.img
-node tools/tecvol.mjs put svc.img B dist/abi.inc --text
-node tools/tecvol.mjs put svc.img B area.asm --text
-node --input-type=module -e '
-import { writeFileSync } from "node:fs";
-import { makePrl } from "./tools/lib/prl.mjs";
-writeFileSync("AREA.PRL", await makePrl("area.asm", "build/prl"));
-'
-node tools/tecvol.mjs put svc.img B AREA.PRL
-```
-
-`makePrl` assembles the source twice, and for the second assembly it rewrites
-the source's `ORG` line. The source must therefore have the line `ORG $0100`,
-indented and spelt that way, with no comment on it, exactly once. With no such
-line the tool stops with `has no "ORG $0100" line`, so `ORG 100H` won't do,
-although it means the same to the assembler. Only the first of two such lines
-is rewritten. The file for `AREA` is 339 bytes: a header of 256 bytes, 73
-bytes of code and 10 of bitmap.
-
-With no `AREA.COM` on the drive, the CCP looks for `AREA.PRL` and runs that:
-
-<!-- node tools/capture.mjs --card svc.img B: "DIR AREA.*" AREA -->
-```text
-A>B:
-B>DIR AREA.*
-AREA.ASM     AREA.PRL    
-2 files, 8164K free
-B>AREA
-46869 bytes
-
-B>
-```
-
-A file `NAME.COM` beside `NAME.PRL` is the one that runs. The whole file is in
-memory before the code moves, so the largest PRL program is smaller than the
-largest `.COM` file. Chapter 21 explains this with the figures.
+is gone when it ends. A `.SVC` file stays in memory after its command ends. In
+this chapter you write a service that counts the console's characters, install
+it, measure what it costs and publish the count for a program to find. Chapter
+20 describes the loader, and Appendix H the file's format, with its relocation
+data.
 
 ## Code that stays
 
@@ -98,8 +43,10 @@ work and then jumps to the address the entry held.
 ```asm
 ; COUNT.SVC: count the characters that reach the BIOS's CONOUT, and publish
 ; the count in a record. REMOVE puts CONOUT back.
+%INCLUDE "ABI.INC"
+
 	ORG	$0100
-HDR:	DB	'D',3,0,1	; magic, format, no dependencies, removable
+HDR:	DB	'D',SVCFMT,0,1	; magic, format, no dependencies, removable
 	DW	0,0,0,0		; REMOVE, size, extra memory, relocation
 	DB	2,2,2		; bytes added to the BDOS, BIOS, CCP stacks
 	DW	0		; INIT
@@ -167,14 +114,15 @@ finds `INIT` and `REMOVE` by those label names, and every service has both,
 even one that `UNLOAD` can't remove. `makeSvc` stops with `INIT and REMOVE
 required` if either is missing. The flags byte's bit 0 lets `UNLOAD`
 remove the service, and bits 1 to 7 claim restart vectors, as the rules below
-explain. A service that needs a buffer past its image gives the
+explain. The format byte is `SVCFMT`, which `abi.inc` defines as 4 at this
+commit, and the loader refuses a file of any other format. A service that needs a buffer past its image gives the
 size as its extra memory, and the loader sets aside that many bytes, not
 cleared. The name, 8 bytes padded with spaces, is what `SERVICES` prints.
 
 | Offset | Bytes | Contents | Written by |
 | ---: | ---: | --- | --- |
 | 0 | 1 | The letter `D`, `44h` | the source |
-| 1 | 1 | The format, 3 | the source, and `makeSvc` writes 3 over it |
+| 1 | 1 | The format, 4, `SVCFMT` in `abi.inc` | the source, and `makeSvc` writes 4 over it |
 | 2 | 1 | Number of dependencies | the tool |
 | 3 | 1 | Flags: bit 0, removable; bits 1 to 7, `RST 1` to `RST 7` claimed | the source |
 | 4 | 2 | `REMOVE`, from the header's start | the tool |
@@ -186,7 +134,7 @@ cleared. The name, 8 bytes padded with spaces, is what `SERVICES` prints.
 | 17 | 8 | The name | the source |
 
 After the header the file holds the image, then any dependencies, then the
-relocation data, which Chapter 21 describes. A file's end is rounded up to a
+relocation data, which Appendix H describes. A file's end is rounded up to a
 whole record on the card, and the loader ignores what follows the relocation
 data.
 
@@ -227,11 +175,15 @@ writes a flat image, except that it refuses `.DBG` and a type that starts with
 `$`. So `TAS COUNT COUNT.SVC` writes the
 service, in place of any `COUNT.SVC` already on the drive.
 
-`count.asm` and `chars.asm` go on the card, along with `HWLIB.ASM` from
-Chapter 9. `chars.asm` reads the count that `COUNT.SVC` publishes, and it is
-listed under "Publishing a record":
+These commands put `count.asm` on a copy of the starter card, with
+`abi.inc` and `HWLIB.ASM` from Chapter 9 and `area.asm`, the `AREA` program
+of Chapter 7. `chars.asm` reads the count that `COUNT.SVC` publishes, and it
+is listed under "Publishing a record":
 
 ```sh
+cp dist/starter.img svc.img
+node tools/tecvol.mjs put svc.img B dist/abi.inc --text
+node tools/tecvol.mjs put svc.img B area.asm --text
 node tools/tecvol.mjs put svc.img B hwlib.asm --text
 node tools/tecvol.mjs put svc.img B count.asm --text
 node tools/tecvol.mjs put svc.img B chars.asm --text
@@ -239,16 +191,16 @@ node tools/tecvol.mjs put svc.img B chars.asm --text
 
 The run assembles `AREA` and `CHARS`, then the service:
 
-<!-- node tools/capture.mjs --card svc.img B: "A:TAS AREA" "A:TAS CHARS" "A:TAS COUNT COUNT.SVC" AREA COUNT.SVC SERVICES AREA CHARS CHARS UNLOAD SERVICES AREA CHARS -->
+<!-- node tools/capture.mjs --card svc.img B: "TAS AREA" "TAS CHARS" "TAS COUNT COUNT.SVC" AREA COUNT.SVC SERVICES AREA CHARS CHARS UNLOAD SERVICES AREA CHARS -->
 ```text
 A>B:
-B>A:TAS AREA
+B>TAS AREA
 AREA.COM written
 
-B>A:TAS CHARS
+B>TAS CHARS
 CHARS.COM written
 
-B>A:TAS COUNT COUNT.SVC
+B>TAS COUNT COUNT.SVC
 COUNT.SVC written
 ```
 
@@ -292,11 +244,18 @@ The count rose by 18h, 24, between the two
 `CHARS` commands, the characters the console printed in between, because the
 hook stayed through each program's warm boot.
 
-On a PC the repository's `makeSvc` does the same job as `TAS`, by the two
-assemblies that `makePrl` uses, so it needs the same `ORG $0100` line. It writes
-the same 111 bytes, where `TAS`'s file is rounded up to the record's 128:
+On a PC the repository's `makeSvc` does the same job as `TAS`. It assembles
+the source twice, and for the second assembly it rewrites the source's `ORG`
+line. The source must therefore have the line `ORG $0100`, indented and spelt
+that way, with no comment on it, exactly once. With no such line the tool
+stops with `has no "ORG $0100" line`, so `ORG 100H` won't do, although it
+means the same to the assembler. Only the first of two such lines is
+rewritten. `makeSvc` reads an included file from the source's directory, so
+`ABI.INC` is copied there first. It writes the same 111 bytes, where `TAS`'s
+file is rounded up to the record's 128:
 
 ```sh
+cp dist/abi.inc ABI.INC
 node --input-type=module -e '
 import { writeFileSync } from "node:fs";
 import { makeSvc } from "./tools/lib/svc.mjs";
@@ -324,7 +283,8 @@ After a failed `INIT` the loader reads the 17 entries of the BIOS jump table for
 one that points into the service. If it finds one it keeps the pages, marks
 them as not removable and publishes no record. The scan covers the BIOS jump table
 alone, so the service itself must undo a vector anywhere else, such as a video
-table handed to `ABIGLCD`. The restart vectors have the rules given below.
+table handed to the ROM through service 12, `TNDRVR`. The restart vectors
+have the rules given below.
 
 `REMOVE` restores hooks in the reverse order of `INIT`. Only the lowest service
 can go, so when each `REMOVE` puts back what its `INIT` found, a hook on a hook
@@ -363,7 +323,7 @@ A service calls the ROM only through the ROM table at `C003h`, with
 `abi.inc`'s names, because the addresses behind it change from one build to
 the next. `makeSvc` rejects a source that writes a ROM address in hexadecimal,
 but `TAS` makes no such test. A service makes no test of the table's version,
-since a file of format 3 loads only on a ROM with this table.
+since a file of format 4 loads only on a ROM with this table.
 
 ## Stacks
 
@@ -379,7 +339,7 @@ so it and `COUNT.SVC` can't both be in. A copy of `COUNT` that declares 9 for
 the BDOS fails on its own, on any board. This run leaves out the lines that
 assemble it:
 
-<!-- sed 's/^\tDB\t2,2,2/\tDB\t9,2,2/;s/COUNT   "\t; the name/CHEAT   "\t; the name/' count.asm > cheat.asm; node tools/tecvol.mjs put svc.img B cheat.asm --text; node tools/capture.mjs --card svc.img B: "A:TAS CHEAT CHEAT.SVC" CHEAT.SVC SERVICES -->
+<!-- sed 's/^\tDB\t2,2,2/\tDB\t9,2,2/;s/COUNT   "\t; the name/CHEAT   "\t; the name/' count.asm > cheat.asm; node tools/tecvol.mjs put svc.img B cheat.asm --text; node tools/capture.mjs --card svc.img B: "TAS CHEAT CHEAT.SVC" CHEAT.SVC SERVICES -->
 ```text
 B>CHEAT.SVC
 CHEAT.SVC?
@@ -420,9 +380,10 @@ after it, and a program or service that names version 1 still works, because a
 find takes any record at that version or above.
 
 A client is a program or service that uses a record. It finds the table with
-`ABISVC`, the ROM table's entry at `C015h`. The call takes `C` = 0, `DE` at
-the 8-byte name and `B` holding the least version. It returns carry clear with
-the table in `HL`, or carry set if there is no such record. `CHARS` is a
+`FIND`, service 13, which `abi.inc` names `TNFIND`. The call takes `C` = 13,
+`DE` at the 8-byte name and `B` holding the least version, through `ABICALL`.
+It returns carry clear with the table in `HL`, or carry set if there is no
+such record. `CHARS` is a
 client, and it uses the routines in `HWLIB.ASM`:
 
 ```asm
@@ -431,12 +392,12 @@ BDOS	EQU	$0005
 %INCLUDE "ABI.INC"
 
 	ORG	$0100
-	CALL	CHKHW		; ABISVC is at C015h on ABI 4 only
+	CALL	CHKHW		; the numbers below hold only on ABI 5
 	JP	NZ,NOTHW	; prints and ends the program
 	LD	DE,NAME		; the record's eight-byte name
 	LD	B,1		; the least interface version
-	LD	C,0		; ABISVC's find
-	CALL	ABISVC
+	LD	C,TNFIND	; the registry's find
+	CALL	ABICALL
 	LD	DE,NONE
 	JP	C,SAY		; carry: no such record, so print and end
 	CALL	CALLHL		; offset 0 of the table: HL = the count
@@ -464,14 +425,14 @@ CRLF:	DB	13,10,"$"
 ```
 
 The Z80 has no indirect call, so a `CALL` to a `JP (HL)` does the job. The
-test at the top comes first because `ABISVC` is an address on TEC-OS with ABI
-4 alone, and on any other system a call to `C015h` would run whatever is
+test at the top comes first because the service numbers hold on TEC-OS with
+ABI 5 alone, and on any other system a call to `C008h` would run whatever is
 there. In the transcript above, `no COUNT record` is what `CHARS` printed once
 the service had gone.
 
-`ABISVC` also enumerates the registry. With `C` = 1 and `B` a number from 0, it
-returns the record itself in `HL`, the newest first, and carry set past the
-last. This program lists every record:
+`LIST`, service 14, `TNLIST`, enumerates the registry. With `B` a number from
+0, it returns the record itself in `HL`, the newest first, and carry set past
+the last. This program lists every record:
 
 ```asm
 ; RECS: list the registry, newest record first: each record's name, its
@@ -480,12 +441,12 @@ BDOS	EQU	$0005
 %INCLUDE "ABI.INC"
 
 	ORG	$0100
-	CALL	CHKHW		; ABISVC is at C015h on ABI 4 only
+	CALL	CHKHW		; the numbers below hold only on ABI 5
 	JP	NZ,NOTHW
 NEXT:	LD	A,(INDEX)	; the next record's number
 	LD	B,A		; B = that number
-	LD	C,1		; ABISVC's enumerate
-	CALL	ABISVC
+	LD	C,TNLIST	; the registry's enumerate
+	CALL	ABICALL
 	RET	C		; carry: past the last record
 	LD	A,(INDEX)	; the next one, for the next round
 	INC	A
@@ -532,10 +493,10 @@ CRLF:	DB	13,10,"$"
 `recs.asm` goes on the card as the others did. On the web page's board, with
 `COUNT.SVC` from `makeSvc` on the card, it finds two records:
 
-<!-- node tools/capture.mjs --card svc.img --board pico B: "A:TAS RECS" COUNT.SVC RECS -->
+<!-- node tools/capture.mjs --card svc.img --board pico B: "TAS RECS" COUNT.SVC RECS -->
 ```text
 A>B:
-B>A:TAS RECS
+B>TAS RECS
 RECS.COM written
 
 B>COUNT.SVC
@@ -568,9 +529,9 @@ do with it depends on what the client is:
   whatever is there. It looks the record up each time, or compares the
   generation, a byte described below.
 
-The *generation* is a byte that each removal raises by one, and `ABISVC`
-returns it in `A` from both calls. A service that kept a pointer compares the
-generation it stored with the one `ABISVC` returns now, and a difference means
+The *generation* is a byte that each removal raises by one, and `TNFIND` and
+`TNLIST` return it in `A`. A service that kept a pointer compares the
+generation it stored with the one a find returns now, and a difference means
 that some service has gone. The byte wraps, so after exactly 256 removals a
 stale pointer passes the comparison.
 
@@ -585,7 +546,7 @@ does nothing but bind to `COUNT`:
 %INCLUDE "ABI.INC"
 
 	ORG	$0100
-HDR:	DB	'D',3,0,1	; the tool writes the dependency count
+HDR:	DB	'D',SVCFMT,0,1	; the tool writes the dependency count
 	DW	0,0,0,0		; REMOVE, size, extra memory, relocation
 	DB	0,0,0		; no stack bytes added
 	DW	0		; INIT
@@ -595,8 +556,8 @@ HDR:	DB	'D',3,0,1	; the tool writes the dependency count
 ; Changes AF, BC and DE.
 INIT:	LD	DE,NAME		; the same name and version as the dependency
 	LD	B,1
-	LD	C,0		; ABISVC's find
-	CALL	ABISVC
+	LD	C,TNFIND	; the registry's find
+	CALL	ABICALL
 	RET	C		; the loader has checked this already
 	LD	(TABLE),HL	; safe to keep: COUNT can't leave first
 	LD	HL,0		; no record of its own
@@ -616,10 +577,10 @@ The loader checks each dependency before it changes anything, so `INIT`'s find
 can't fail. With no `COUNT.SVC` the load fails. With `COUNT.SVC` in, the two go
 in and come out last in, first out:
 
-<!-- node tools/tecvol.mjs put svc.img B needs.asm --text; node tools/capture.mjs --card svc.img B: "A:TAS NEEDS NEEDS.SVC" NEEDS.SVC COUNT.SVC NEEDS.SVC SERVICES UNLOAD UNLOAD SERVICES -->
+<!-- node tools/tecvol.mjs put svc.img B needs.asm --text; node tools/capture.mjs --card svc.img B: "TAS NEEDS NEEDS.SVC" NEEDS.SVC COUNT.SVC NEEDS.SVC SERVICES UNLOAD UNLOAD SERVICES -->
 ```text
 A>B:
-B>A:TAS NEEDS NEEDS.SVC
+B>TAS NEEDS NEEDS.SVC
 NEEDS.SVC written
 
 B>NEEDS.SVC
@@ -644,9 +605,9 @@ B>
 
 `PICO.SVC`, at each width, publishes the record `PICO`, version 2, which is
 how another service or a program finds the driver. Its table starts with the
-eight words it hands to `ABIGLCD`, and four words follow them, at offsets 16
-to 22. `abi.inc` names them `PICOREG`, `PICOFIL`, `PICOWR` and `PICORD`, and
-[Appendix B](appendix-b-rom-services.md) lists their registers. They write a
+eight words it hands to the ROM through `TNDRVR`, and four words follow them,
+at offsets 16 to 22. `abi.inc` names them `PICOREG`, `PICOFIL`, `PICOWR` and
+`PICORD`, and [Appendix B](appendix-b-rom-services.md) lists their registers. They write a
 register of the PICO9918's video chip, fill VRAM and copy between RAM and VRAM.
 
 A caller of these entries must hold the claim of Chapter 9, as a program
@@ -662,18 +623,18 @@ VRAM	EQU	$3000		; an address the text modes leave alone
 %INCLUDE "ABI.INC"
 
 	ORG	$0100
-	CALL	CHKHW		; ABISVC is at C015h on ABI 4 only
+	CALL	CHKHW		; the numbers below hold only on ABI 5
 	JP	NZ,NOTHW
 	LD	DE,NAME		; the record's eight-byte name
 	LD	B,2		; version 2 has the graphics entries
-	LD	C,0		; ABISVC's find
-	CALL	ABISVC
+	LD	C,TNFIND	; the registry's find
+	CALL	ABICALL
 	LD	DE,NONE
 	JP	C,SAY		; carry: no such record, so print and end
 	LD	(TABLE),HL	; good until this program exits
 	LD	B,1		; claim the PICO9918
-	LD	C,HWVIDEO
-	CALL	ABIHW
+	LD	C,TNVIDEO
+	CALL	ABICALL
 	LD	HL,VRAM		; PICOWR: BC bytes from DE to VRAM at HL
 	LD	DE,DATA		; the bytes to write
 	LD	BC,4
@@ -685,8 +646,8 @@ VRAM	EQU	$3000		; an address the text modes leave alone
 	LD	A,PICORD	; the entry's offset in the table
 	CALL	ENTRY
 	LD	B,0		; give it back: the console's screen returns
-	LD	C,HWVIDEO
-	CALL	ABIHW
+	LD	C,TNVIDEO
+	CALL	ABICALL
 	LD	DE,BACK		; the four bytes, as text
 	JP	SAY		; prints and ends the program
 
@@ -723,10 +684,10 @@ the word at the offset. `EX (SP),HL` and `RET` then jump to the routine with
 `TABLE` needs no generation test, because the program ends before any service
 can go.
 
-<!-- node tools/tecvol.mjs put svc.img B vtest.asm --text; node tools/capture.mjs --card svc.img --board pico B: "A:TAS VTEST" VTEST -->
+<!-- node tools/tecvol.mjs put svc.img B vtest.asm --text; node tools/capture.mjs --card svc.img --board pico B: "TAS VTEST" VTEST -->
 ```text
 A>B:
-B>A:TAS VTEST
+B>TAS VTEST
 VTEST.COM written
 
 B>VTEST
