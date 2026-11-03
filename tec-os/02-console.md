@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 2. The console
 
-Checked against TEC-OS 718c01b.
+Checked against TEC-OS ea9c1c0.
 
 The console is the device you type commands on and read TEC-OS's replies from.
 A TEC-1G can carry a serial terminal, a PICO9918 video card and a graphics LCD
