@@ -134,11 +134,11 @@ so files written on the card are still there after a reload. When a save to the
 browser's storage fails, the page keeps the card in memory, marked as unsaved, and
 shows `Card not saved in this browser`, with the browser's reason, under the
 heading "SD card". It saves again two seconds later, and again after
-that until one succeeds. After three failures in a row the message says that
-saving keeps failing and that the card is kept in memory only. One save runs at
-a time, and a change made during a save is saved at the next try. A reload before then brings back the card as it was
-last saved, so "Download image" is the way to keep a copy you can't afford to
-lose. These are its controls:
+that until one succeeds. A reload before a save succeeds brings back the card as
+it was last saved, so "Download image" is the way to keep a copy you can't afford
+to lose. After three failures in a row the message says that saving keeps failing
+and that the card is kept in memory only. One save runs at a time, and a change
+made during a save is saved at the next try. These are its controls:
 
 - "Display" selects a board with a PICO9918 or one with only the graphics LCD.
 - "ROM" selects the PICO9918's width: 80, 40 or 32 columns.
@@ -239,7 +239,8 @@ handler there. That address is inside CP/M's default file control block at
 
 At reset the TEC-1G shows the first 2 KiB of the ROM at `0000h` as well as at
 `C000h`, so the Z80, which starts at `0000h`, runs ROM code. The first
-instruction jumps to cold boot at its address in the ROM, above `C000h`. Cold
+instruction jumps to the ROM's own address above `C000h`, and at reset the code
+there goes on to cold boot. Cold
 boot turns the copy at `0000h` off, leaving RAM there, and then checks the RAM
 at `8000h–BFFFh`, clears the workspace, starts the serial terminal and prints
 the banner. Here is the whole of a first boot on a board with only a serial

@@ -190,7 +190,8 @@ still runs. A `^C` at a program's line input drops the rest of a line that holds
 
 TEC-OS restarts by one of three paths:
 
-- An *ordinary exit* is a program's return, a `^C` or a jump to `0000h`. It is
+- An *ordinary exit* is a program's return, a `^C`, or a jump to `0000h` or to
+  `C000h`. It is
   a warm boot: services stay, the drives hold the volumes they held and the
   startup file doesn't run.
 - A *recognised reset* is a press of the reset button, or a program's call of
