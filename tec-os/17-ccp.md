@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 718c01b, with the ATOM assembler from the repository's
+Checked against TEC-OS ea9c1c0, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `EDIT.COM` from Edit
 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
@@ -21,7 +21,7 @@ program with its page zero, and the CCP's RAM and stack.
 ## The CCP in the ROM
 
 The CCP's code is `src/cpm/ccp.asm`. In the debug80 build (Chapter 12) it runs
-from `CCPBAS`, `D796h`, to `E0DFh`, 2,378 bytes, followed directly by the
+from `CCPBAS`, `D796h`, to `E0F4h`, 2,399 bytes, followed directly by the
 BDOS. Its messages and the names of its built-in commands are in the ROM's
 data block (`src/data3.asm:7-71`), except for `TYPE`, whose name sits in front
 of the `RET` at `C01Dh` (`src/data.asm:9-14`). What the CCP changes has to be
@@ -242,13 +242,15 @@ the file (`src/cpm/ccp.asm:804-847`). A file that is not there gives
 `NO FILE`.
 
 `ERA` with a name that is all `?`, as `*.*` gives, prints `ALL (Y/N)?`, reads
-the answer with function 1 and reads on to a CR. Any answer but `Y` or `y`
-erases nothing (`src/cpm/ccp.asm:864-890`). The erase itself is function 19,
+the answer with function 1 and, unless that was a CR, reads on to one. Any
+answer but `Y` or `y` erases nothing (`src/cpm/ccp.asm:864-890`). The erase itself is function 19,
 and `NO FILE` when nothing matched (`src/cpm/ccp.asm:892-901`).
 
-`REN NEW=OLD` parses the new name into `RENFCB` and the old one into `CMDFCB`,
-and searches for the new name first. If it is there the command gives
-`FILE EXISTS` with nothing changed (`src/cpm/ccp.asm:903-948`). Otherwise the
+`REN NEW=OLD` parses the new name into `RENFCB` and the old one into `CMDFCB`.
+The two names share one drive: a name with no drive takes the other's, and two
+different drives are a bad command (`src/cpm/ccp.asm:926-939`). The command then
+searches for the new name. If it is there it gives `FILE EXISTS` with nothing
+changed (`src/cpm/ccp.asm:940-948`, `src/cpm/ccp.asm:961-963`). Otherwise the
 first 12 bytes of `RENFCB` are copied to offset 16 of `CMDFCB`, the second
 drive byte, so the new name follows it at offset 17, the place function 23
 reads it. The rename gives `NO FILE` if the old name is not there
