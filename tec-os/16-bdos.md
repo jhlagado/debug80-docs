@@ -7,11 +7,11 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 16. The BDOS
 
-Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
-`TAS.COM` from Thorium 7604daa, with the SHA-256
-`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
+`TAS.COM` from Thorium dbee66a, with the SHA-256
+`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
 A CP/M program puts a function number in `C` and an argument in `E` or `DE`,
 then calls `0005h`, as Chapter 6 describes. This chapter describes the BDOS
@@ -25,7 +25,7 @@ then covers the BDOS errors, the three functions whose meanings come from CP/M
 TEC-OS's BDOS comes from Portable CP/M, an implementation of the documented
 CP/M 2.2 interface that uses no Digital Research source
 (`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the
-debug80 build (Chapter 12) it runs from `E0E0h`, `BDOSBAS`, to `F014h`, 3,893
+debug80 build (Chapter 12) it runs from `E0F5h`, `BDOSBAS`, to `F039h`, 3,909
 bytes of the ROM. Its table of functions and its error messages are in the
 ROM's data block (`src/data3.asm:73-90`). None of it can be patched.
 
@@ -163,11 +163,11 @@ At the prompt, a `^U` partway through `TYPE X` starts the line again, and a
 A>TYPE X#
 DIR *.CMD
 STARTUP.CMD 
-1 file, 976K free
+1 file, 974K free
 A>DIR *.CMD#
 DIR *.CMD
 STARTUP.CMD 
-1 file, 976K free
+1 file, 974K free
 A>
 ```
 
@@ -179,7 +179,7 @@ typed:
 ```text
 A>TYPEEPYTDIR *.CMD
 STARTUP.CMD 
-1 file, 976K free
+1 file, 974K free
 A>
 ```
 
@@ -263,7 +263,7 @@ describes.
 
 `POSREC` checks the block number first. `CHKBLK` compares it with `DSM`, and a
 number past the end of the volume, which only a damaged directory holds, is a
-`Bad Sector` error (`src/cpm/bdos.asm:2355`).
+`Bad Sector` error (`src/cpm/bdos.asm:1334`, `src/cpm/bdos.asm:2456-2468`).
 
 ### The directory search
 
@@ -386,13 +386,17 @@ after a disk reset (`src/cpm/bdos.asm:1947-2055`). `LOGIN` calls
 the BIOS's `SELDSK` for the drive's DPH, and a drive with no volume gets 0,
 which is the `Select` error (`src/cpm/bdos.asm:1956-1964`). It copies from the
 DPH the addresses of the translation table, the directory buffer, the DPB and
-the vector.
+the vector. A volume the card marks read-only then goes into the read-only
+vector (`src/cpm/bdos.asm:1993-1998`).
 
 For a drive not in `LOGINV`, `INITALV` clears the vector and sets the
 directory's bits, and the drive's bit in `LOGINV` is set. The whole directory
 is then read, a record at a time. `PARENT` sets the bit of every block that
 each entry in use lists, and moves the directory mark past the entry
-(`src/cpm/bdos.asm:1999-2055`, `src/cpm/bdos.asm:2188-2260`). For a drive
+(`src/cpm/bdos.asm:1999-2055`, `src/cpm/bdos.asm:2188-2260`). A block number
+past the end of the volume has no bit, so `BITPTR` passes over it, the drive
+logs in, and a delete of that file passes over it too
+(`src/cpm/bdos.asm:2304-2328`). For a drive
 already in `LOGINV`, `LOGIN` reads nothing: `LOGFAST` takes the drive's mark
 from its DPH (`src/cpm/bdos.asm:2057-2075`).
 
@@ -464,30 +468,28 @@ drive letter (`src/data3.asm:86-90`):
 - `Select`, for a drive past D, which the BIOS doesn't have, a drive with no
   volume or a `?` drive byte outside function 17
   (`src/cpm/bdos.asm:2429-2435`).
-- `R/O`, for a change to a drive that function 28 has made read-only
-  (`src/cpm/bdos.asm:2415-2427`).
+- `R/O`, for a change to a drive that function 28 has made read-only or to a
+  volume the card marks read-only (`src/cpm/bdos.asm:2415-2427`).
 - `File R/O`, for function 19 or 23 on a directory entry with the read-only
   attribute, and for function 21, 34 or 40 through an FCB that has it
   (`src/cpm/bdos.asm:683-694`).
 - `Bad Sector`, for a BIOS `READ` or `WRITE` of a file's record that fails, a
-  failed directory write and a block number past the end of the volume
-  (`src/cpm/bdos.asm:2448-2451`).
+  directory record that won't read, a failed directory write and a block
+  number past the end of the volume (`src/cpm/bdos.asm:1885`,
+  `src/cpm/bdos.asm:2448-2451`).
 
 `DISKERR` prints the message and waits for a key with `GETCHAR`, or takes the
 key already kept, if one was typed during output
 (`src/cpm/bdos.asm:2470-2489`). `CHDROP` then ends the program by warm boot,
 whatever the key (`src/cpm/bdos.asm:73-77`), so the function never returns to the
 program. `CHDROP` also drops the rest of a chained line, which Chapter 25
-describes. One failure has no message: a directory record that won't read, in a
-search or a login, takes `RDFAIL` straight to `CHDROP`
-(`src/cpm/bdos.asm:1884-1885`, `src/cpm/bdos.asm:2447`).
+describes.
 
-Chapter 3 shows `Bad Sector` from a read-only volume and `File R/O` from
-`ERA`. A write to a read-only volume gives `Bad Sector` and not `R/O` because
-the volume's read-only flag is in the drive table, so it is the BIOS's `WRITE`
-that rejects the write to the card (`src/bios.asm:204-208`). The BDOS's own
-read-only vector, which `R/O` reports, holds only what function 28 has set, and a
-warm boot clears it.
+Chapter 3 shows `R/O` from a read-only volume and `File R/O` from `ERA`. The
+volume's read-only flag is in the drive table, and `LOGIN` sets the drive's bit
+in the read-only vector from it, so the BDOS refuses the change before any write
+to the card (`src/cpm/bdos.asm:1993-1998`). A warm boot clears the vector, and
+the drive's next selection sets the bit again.
 
 ## Function 50, MOVE and XMOVE
 
