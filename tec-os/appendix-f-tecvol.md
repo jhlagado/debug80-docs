@@ -235,8 +235,9 @@ erased the file from user area 3 and printed nothing.
 the volumes and the files to put on them (`tools/tecvol.mjs:155-161`).
 `npm run media` writes the starter card's recipe as `dist/starter.recipe.json`
 and builds `dist/starter.img` from it (`tools/media.mjs:208-228`). It also
-writes the web page's recipe, `dist/page.recipe.json`, which is the starter
-card's with one more component, `DEMO.COM` on drive A
+writes the web page's recipe, `dist/page.recipe.json`, which has the
+starter card's volumes and components with one more, `DEMO.COM` on drive A,
+and its own `id`, `name` and `instruction`
 (`tools/media.mjs:230-243`). A recipe has the schema `tecos-file-recipe-v1`, a
 list of `volumes` and a list of `components`, each with `files`. Each volume is
 in `create`'s terms: a geometry, a label, a drive and `readOnly` or
@@ -246,7 +247,7 @@ in `create`'s terms: a geometry, a label, a drive and `readOnly` or
 `sha256` of the PICO9918's driver built for each width, under the keys `80`,
 `40` and `32` (`tools/media.mjs:195-201`, `tools/media.mjs:215`). `tecvol`
 doesn't read it. The web page fetches those drivers at power-on, as
-[Chapter 22](22-startup.md#the-web-pages-rewrite) describes.
+[Chapter 22](22-startup.md#the-web-page-s-rewrite) describes.
 
 `tecvol` reads a file's `url` as a web address if it starts `http://` or
 `https://`, and otherwise as a path from the recipe's own folder

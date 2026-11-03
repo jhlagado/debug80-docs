@@ -241,7 +241,7 @@ in with it. The one import of Node.js's `fs` among them is pointed at a stub
 so no file of an older build is left there (`web/build.mjs:16`). It copies the
 page, its style sheet, the `debug80` ROM with a list of its symbols, the page's
 recipe and the files in `dist/files` (`web/build.mjs:32-45`). The page's recipe,
-`dist/page.recipe.json`, is the starter card's with one more file, `DEMO.COM`,
+`dist/page.recipe.json`, has the starter card's volumes and files with one more, `DEMO.COM`,
 and the build copies it under the name the page fetches, `starter.recipe.json`.
 `npm run media` writes it, and it assembles `DEMO.COM` from
 `test/programs/demo.asm` into `dist/files` (`tools/media.mjs:230-243`). The files
