@@ -7,13 +7,13 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
-845d062 and its `TAS.COM` from Thorium 7604daa. That Edit build's SHA-256 is
+Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from Edit
+845d062 and its `TAS.COM` from Thorium dbee66a. That Edit build's SHA-256 is
 `2c9e7d0ec588019b9184ca89543e5a644fafda864bb940445375edb50bbb0fe6`, the card's
 copy, with its ABI byte set to 4 by `npm run media`, is
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and
 `TAS.COM`'s is
-`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
+`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
 The TEC-1G starts in MON-3, its monitor ROM, which you work from the hex
 keypad. With TEC-OS in the ROM socket instead, the same board is a small disk
@@ -348,7 +348,7 @@ A>DIR
 TERM.COM     PROBE.COM    DEMO.COM     MOUNT.COM    VOLS.COM     PICO.SVC
 PICO40.SVC   PICO32.SVC   GLCD.SVC     STARTUP.CMD  EDIT.COM     TAS.COM
 README.TXT  
-13 files, 976K free
+13 files, 974K free
 A>
 ```
 
@@ -358,7 +358,7 @@ command that runs it. `PICO40.SVC` and `PICO32.SVC` hold the PICO9918's
 console at 40 columns and at 32 columns, and a line in `STARTUP.CMD` naming
 one of them in place of `PICO.SVC` selects the width. The last line of the
 listing is the number of files and the space left on the drive. A card made
-without Edit lists twelve files and ends `12 files, 984K free`.
+without Edit lists twelve files and ends `12 files, 982K free`.
 
 `TYPE` prints a text file, and the starter card's `README.TXT` lists the
 programs. The file is longer than the terminal's 24 rows, so `TYPE` stops at
@@ -376,6 +376,7 @@ PROBE              exercise the BDOS file functions
 DEMO               the LCD, digits, 8x8 LEDs and PICO9918; any key stops
 EDIT NAME.TXT      full-screen editor, if present: ^S save, ^Q quit
 TAS NAME           assemble NAME.ASM to NAME.COM and NAME.DBG
+TAS NAME NAME.SVC  assemble it to a service
 VOLS               list the card's volumes
 MOUNT B: NAME      put a volume on a drive; MOUNT B: takes it off
 
@@ -384,7 +385,7 @@ SERVICES           list the services installed, each with its pages
 UNLOAD             remove the last service installed
 
 A line chains commands with !, and a piece that starts with : runs only if the
-last command succeeded: ERA X.COM!EDIT X.ASM!TAS X!:X
+last command succeeded: EDIT X.ASM!TAS X!:X
 
 B: is an empty work disk, written behind: its changes reach the card when a
 file is closed, at ^C and at MOUNT. Press ^C at A> before reset or power off.
