@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 19ad916, with the starter card's `TED.COM` from Thorium
 8fcc6ea and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
 `9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and
 `TAS.COM`'s is
@@ -129,18 +129,24 @@ python3 -m http.server 8765 --directory web/dist
 ```
 
 The page is then at `http://localhost:8765`, and a click on the PICO9918's
-screen sends your typing to the matrix keyboard. The page stores its SD card
-in the browser's storage, so files written on the card are still there after a
-reload. These are its controls:
+screen sends your typing to the matrix keyboard. The page keeps its SD card in
+the browser's storage, saving it every two seconds while the card has changed,
+so files written on the card are still there after a reload. A save that the
+browser refuses goes unreported on the page: the page writes a warning to the
+browser's console once and carries on with the card in memory, and it doesn't
+try that save again. A reload then brings back the card as it was last saved,
+so "Download image" is the way to keep a copy you can't afford to lose. These
+are its controls:
 
 - "Display" selects a board with a PICO9918 or one with only the graphics LCD.
 - "ROM" selects the PICO9918's width: 80, 40 or 32 columns.
 - "Reset" is the board's reset button, which leaves the RAM as it is.
 - "Power cycle" turns the board off and on and so loses what the RAM held.
 - "Pause" stops the Z80 and starts it again.
-- "New starter card" builds a fresh card from the starter card's recipe, a
-  file listing the card's contents. It checks each file against the SHA-256
-  the recipe records.
+- "New starter card" builds a fresh card from the page's recipe, a file
+  listing the card's contents: the starter card's six files and `DEMO.COM`,
+  which Chapter 9 describes. It checks each file against the SHA-256 the
+  recipe records.
 - "Open image" loads a card image from the PC, and "Download image" saves the
   page's card to the PC.
 - "Copy file to drive" writes files from the PC onto the volume on the drive
@@ -149,9 +155,12 @@ reload. These are its controls:
 
 When you change the display or the width, the page turns the board off and on.
 At each power-on with the PICO9918 chosen, the page writes the driver built for
-the chosen width to drive A as `PICO.SVC` if the card's copy differs. It also puts
-the name of the chosen display's driver in the first line of the card's startup
-file.
+the chosen width to drive A as `PICO.SVC` when the card has no `PICO.SVC`, has
+one of the page's own builds at another width or has one of an older format.
+Any other `PICO.SVC` is one the card's owner built, and the page keeps it and
+says so in brackets in the serial terminal. The page also makes the chosen
+display's driver the only display line in the card's startup file, as its first
+line.
 
 ## Running TEC-OS from Node.js
 
@@ -317,7 +326,9 @@ A>
 `GLCD.SVC` fails here because the PICO9918 is already the console. The
 graphics LCD's driver installs only while the console is the serial terminal,
 or for the command `CON UC1`, which moves the console to the graphics LCD.
-Chapter 5 gives the rules for display drivers.
+Chapter 5 gives the rules for display drivers. The web page's own card has no
+`GLCD.SVC` line, because the page leaves only the chosen display's line in its
+startup file, and so the page's screen shows the prompt alone after the boot.
 
 A display driver takes 1,536 bytes of memory below the BDOS, which leaves less
 for programs. CP/M calls the memory a program may use the TPA, the Transient
