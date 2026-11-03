@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix A. BDOS functions
 
-Checked against TEC-OS 60e0768.
+Checked against TEC-OS 1f9542d.
 
 This appendix lists the BDOS functions of TEC-OS in number order: 0 to 40,
 then 47 and 108, whose meanings come from CP/M 3. Each entry gives the
