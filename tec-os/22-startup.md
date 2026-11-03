@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 22. Startup
 
-Checked against TEC-OS 718c01b.
+Checked against TEC-OS ea9c1c0.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and three
@@ -71,7 +71,7 @@ holds a key through reset to get past a service whose `INIT` never returns, and
 key is down, as Appendix G describes. A low bit returns from `STBOOT` with
 `STPOS` at `80h`, so a skip is the same state as a file that wasn't there. Bit 6
 is tested this one time, so the key has to be down when `STBOOT` starts, which
-on the model, with the web page's board and the starter card, is 5,864,626
+on the model, with the web page's board and the starter card, is 5,865,139
 T-states after reset, about 1.47 seconds.
 
 `STBOOT` then makes the read in the CCP's own FCB. It copies 12 bytes of
@@ -274,8 +274,10 @@ the words, all three having five characters.
 
 `PICO?` and `GLCD?` go through `LCDWRD`, which sets `CDWRD` first
 (`src/lcd.asm:36-39`). `GLCD?` comes from `GLCLD`, the path of `CON UC1`, when
-`SVCGO` returns carry (`src/glcd.asm:53-66`). `GLCLD` returns with `GLCD.SVC`
-already in at `src/glcd.asm:55`, so that case writes nothing.
+`SVCGO` returns carry (`src/glcd.asm:53-66`). It first puts the mode from
+`CONMOD` back in the console field through `CONFLD`, since the console hasn't
+moved (`src/glcd.asm:62-64`, `src/glcd.asm:96-100`). `GLCLD` returns with
+`GLCD.SVC` already in at `src/glcd.asm:55`, so that case writes nothing.
 
 A take of the console clears a word from the LCD, but by then the row may be a
 program's, and `CDWRD` separates the two cases. `WRDCLR` writes the blanks only
@@ -310,13 +312,16 @@ gets a message of its own, and the test for it reads the directory only
 the chosen display and width if the card has it, and otherwise the first `.DRV`
 display file in the directory.
 
-`setDisplayLine` reads the file up to its `^Z` and splits it into lines. Each
-line goes through `withoutDisplay`, which splits it at `!`, drops every piece
-that is a display driver's name under either type, with or without a leading
-`:`, and joins the rest (`host/card.mjs:12`, `host/card.mjs:58-79`). The piece
-after a dropped one loses a leading `:`, so the line `PICO.SVC!:VOLS` becomes
-`VOLS`, an ordinary line that runs even after a failed `GLCD.SVC` on the line
-before it (`test/pico.test.mjs:765-777`). Lines left blank are dropped. The new
+`setDisplayLine` reads the file up to its `^Z` and splits it into lines.
+`withoutDisplay` splits each line at `!`, drops every piece that is a display
+driver's name under either type, with or without a leading `:`, and joins the
+rest (`host/card.mjs:12`, `host/card.mjs:58-79`). A dropped piece passes its own
+`:` to the piece after it on its line, so `DIR!:PICO.SVC!VOLS` becomes
+`DIR!:VOLS`. Otherwise a `:` that waited on a dropped piece goes, on its line or
+first on the next, since it must not wait on what now comes before it. The line
+`PICO.SVC!:VOLS` becomes `VOLS`, an ordinary line that runs even after a failed
+`GLCD.SVC` on the line before it (`test/pico.test.mjs:765-777`). Lines left blank
+are dropped. The new
 file is the display's file, then `GLCD.SVC` on a PICO9918 board, then the
 remaining lines, and nothing is written if that equals the old text
 (`host/card.mjs:82-91`).
