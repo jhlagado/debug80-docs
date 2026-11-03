@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 20. The hardware services and the service loader
 
-Checked against TEC-OS 60cfbdc, with the starter card's `TAS.COM` from Thorium
+Checked against TEC-OS 4d6eeaa, with the starter card's `TAS.COM` from Thorium
 dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -376,7 +376,7 @@ boot clears `SVCBSY` (`src/boot.asm:71-72`). The pages go back as if the load
 had never started, and `test/svc.test.mjs:432-445` checks that a later load
 works. Function 47 from `INIT` is a warm boot at the same point
 (`test/svc.test.mjs:894`). The sweep in `PZINIT` takes any restart vector `INIT`
-has set, since the new pages lie below `PZTOP`'s page (`test/svc.test.mjs:796`).
+has set, since the new pages lie below `PZTOP` (`test/svc.test.mjs:796`).
 A hook already in the table then points into the TPA, which is
 why hooks go last (`test/svc.test.mjs:461-468`). A reset during a hung `INIT` is
 recognised all the same, because `RSLCAP` doesn't compare the word at `0006h`
@@ -425,9 +425,11 @@ record linked (`src/svc.asm:233-234`, `src/svc.asm:255-257`,
 A failed load may have left a hook in the RAM BIOS table, and the service's
 pages can't go while one points at them. So `SVCSCAN` tests the high byte of
 each of the 17 targets in the table against the service's pages
-(`src/svc.asm:236-244`, `src/layout.asm:74`). With no hit, the word at `0006h`
-goes back to `PZTOP`, `PZSWP` takes any restart vector into the pages, and the
-result is 1 (`src/svc.asm:247-251`). A hit writes
+(`src/svc.asm:236-244`, `src/layout.asm:74`). With no hit, `SVCFRE` clears the
+first byte of each restart vector the flags claim, and the word at `0006h` goes
+back to `PZTOP`. `PZSWP` then gives those vectors their defaults and takes any
+other vector into the pages, and the result is 1 (`src/svc.asm:245-251`,
+`src/svc.asm:281-293`). A hit writes
 0 over the flags, so `UNLOAD` will reject the service, and it goes to
 `SVCKEEP` (`src/svc.asm:252-257`). A hook left in the table then points at
 pages the service still holds, and `test/svc.test.mjs:386-398` shows them
@@ -480,8 +482,9 @@ flags must also be set (`src/svc.asm:35-40`).
 `SVCCALL` then runs `REMOVE`. `SVCSHUT` clears `SVCBSY` without touching the
 flags, and carry from `REMOVE` returns with nothing changed
 (`src/svc.asm:41-46`). Function 47 from `REMOVE` is a warm boot there, and the
-service stays listed (`test/svc.test.mjs:903`). With no carry, a loop writes 0 over
-the first byte of each restart vector the flags claim (`src/svc.asm:47-49`).
+service stays listed (`test/svc.test.mjs:903`). With no carry, `SVCFRE` writes 0
+over the first byte of each restart vector the flags claim (`src/svc.asm:47-49`,
+`src/svc.asm:281-293`).
 `LDIR` copies the 3 bytes at offset 6 back to `REGHEAD` and
 `SVCHEAD` (`src/svc.asm:50-53`), and this one copy removes all the service's
 records, whatever their number. `DE` is left at `SVCGEN`, and the code raises it
@@ -504,15 +507,16 @@ must go when the program ends, as Chapter 14 explains. One test separates the
 cases, where the jump lands.
 
 `PZSWP` walks the vectors from `0008h` to `003Fh`. A vector holding a `JP` whose
-target's page is at or above `PZTOP`'s page keeps its three bytes and has its other
+target is above `PZTOP`, compared as a word, keeps its three bytes and has its other
 five cleared. That bound takes in the services, the workspace and the ROM. Any other
 vector gets seven zeros and a `RET`, and if `0038h` holds no kept jump it gets `EI`
 and `RETI` (`src/boot.asm:239-274`). `PZINIT` runs into `PZSWP` at cold boot and at
 every warm boot. `UNLOAD` and a failed `INIT` call it once the top is back, so a
 vector into freed pages then fails the bound (`src/svc.asm:57-58`,
-`src/svc.asm:247-249`, `test/svc.test.mjs:773`, `test/svc.test.mjs:781`). The bound
-is a page, so it also keeps a jump into the bytes of the stub's page below the stub,
-which are the TPA's, and a jump into a service's header. A reset clears page zero,
+`src/svc.asm:247-249`, `test/svc.test.mjs:773`, `test/svc.test.mjs:781`). A jump
+to `PZTOP` itself goes, and so does one into the bytes of the stub's page below the
+stub, which are the TPA's. A jump into a service's header past the lowest service's
+first byte stays (`src/boot.asm:244-252`, `test/svc.test.mjs:735-760`). A reset clears page zero,
 so a vector goes with its service then too (`test/svc.test.mjs:821`).
 
 Two services can't share a vector, and `INIT` writes its own after the move, so the
@@ -521,8 +525,9 @@ vectors at `0008h` to `0038h`. Step 5 fails a load whose claimed vector holds a 
 (`test/svc.test.mjs:803`). The test reads one byte, so a jump into the ROM that a
 finished program left there counts as held until a reset. The loader reads only the
 flags, so a vector `INIT` writes with no claim goes unseen, as a vector in `ABIGLCD`'s
-table does. `UNLOAD` clears the first byte of each claimed vector before the sweep,
-which gives it its default whatever it held (`test/svc.test.mjs:761`). A jump the
+table does. `UNLOAD` and a failed `INIT` clear the first byte of each claimed vector
+before the sweep, which gives it its default whatever it held
+(`test/svc.test.mjs:761`, `test/svc.test.mjs:788`). A jump the
 service set outside its pages in a vector it didn't claim passes the bound, so
 `REMOVE` restores it. A failed `INIT` runs no `REMOVE`, so `INIT` restores it. `INIT`
 also turns off any source of interrupts it started, because an interrupt left on under
