@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 21. Startup
 
-Checked against TEC-OS 1f9542d.
+Checked against TEC-OS 7458352.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and three
@@ -39,7 +39,8 @@ that holds it starts above the RAM BIOS table (`src/ram.asm:192`), past
 never comes to `COLD` (`src/boot.asm:4-7`, `src/boot.asm:74-91`), so `STPOS` and
 `STREC` keep their values through every program in the file.
 
-Both kinds of reset enter at `COLD`, and a recognised reset differs from an
+Both kinds of reset enter at `RSTENT` and go on to `COLD`
+(`src/boot.asm:16-19`), and a recognised reset differs from an
 unrecognised one only in what `RSLCAP` copies to `RSLBUF` before the clear, the
 drive table (`src/boot.asm:24`, `src/boot.asm:140-147`). Cold boot then clears
 the whole workspace, `STPOS` included (`src/boot.asm:33-37`,
@@ -71,7 +72,7 @@ holds a key through reset to get past a service whose `INIT` never returns, and
 key is down, as Appendix G describes. A low bit returns from `STBOOT` with
 `STPOS` at `80h`, so a skip is the same state as a file that wasn't there. Bit 6
 is tested this one time, so the key has to be down when `STBOOT` starts, which
-on the model, with the web page's board and the starter card, is 5,863,636
+on the model, with the web page's board and the starter card, is 5,863,724
 T-states after reset, about 1.47 seconds.
 
 `STBOOT` then makes the read in the CCP's own FCB. It copies 12 bytes of
@@ -230,9 +231,12 @@ writes `PICO?`.
 
 The CCP separates a service from a program by the three type bytes in `CMDFCB`.
 `SVC` calls `SVCGO`, and any other type goes on to `CMDCOM` and the search for a
-`.COM` file (`src/cpm/ccp.asm:267-277`). The search looks on the current drive
-and then, when the command names no drive and the current drive isn't A:, on A:
-(`src/cpm/ccp.asm:283-295`). That is what becomes of an old card's `PICO.DRV`:
+`.COM` file (`src/cpm/ccp.asm:267-277`). The search looks on the drive the
+command names, or the current drive, in the current user and then in that
+drive's user 0. Then, for a plain name only and only when the current drive
+isn't A:, it looks on A: in the current user and then in A:'s user 0
+(`src/cpm/ccp.asm:283-295`, `src/cpm/ccp.asm:361-387`,
+`test/search.test.mjs:72-113`). That is what becomes of an old card's `PICO.DRV`:
 no `PICO.COM` is found on drive A, the current drive at startup, and the line
 fails.
 `SVCGO` reads the file with `LOADCOM` and installs it with `SVCLOAD`, and a
@@ -245,9 +249,10 @@ A display driver's load fails from inside, in the driver's own `INIT`.
 answered at cold boot (`drivers/pico.asm:47-51`). Each driver then passes its
 table to the numbered service `DRVR`, 12, with the console mode in `B`, 1 for
 `CRT:` or 3 for `UC1:` (`drivers/pico.asm:52-56`, `drivers/glcd.asm:46-50`).
-`SVDRV` passes the mode to `GLHOOK`, which returns carry if `CDMTX` is clear or
-if that slot already holds a table, and `SVDRV` then returns `TNEBAD` with
-carry (`src/glcd.asm:5-18`, `src/glcd.asm:32-41`). So a driver needs the
+`SVDRV` refuses any other mode with `TNEBAD` and carry, nothing changed. It
+passes 1 or 3 to `GLHOOK`, which returns carry if `CDMTX` is clear or if that
+slot already holds a table, and `SVDRV` then returns `TNEBAD` with carry
+(`src/glcd.asm:5-18`, `src/glcd.asm:32-41`). So a driver needs the
 matrix keyboard, and a second load of `PICO.SVC` fails while the first is in.
 
 `GLCD.SVC` has two more tests, both ahead of those. If the console field of the
