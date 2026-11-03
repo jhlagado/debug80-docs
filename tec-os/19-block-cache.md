@@ -98,7 +98,7 @@ below `8000h`, such as the CCP's loads at `0100h` and up, takes from 4,808
 T-states, in line 0. A miss to such an address takes 226,501.
 
 `DIR` on the starter card's drive A shows the effect: after the first prompt
-the directory's blocks are in the cache, and `DIR`'s two BIOS reads are all
+the directory's blocks are in the cache, and `DIR`'s two BIOS reads are both
 hits.
 
 A program that reads a file shows the gain over a whole file. This one
