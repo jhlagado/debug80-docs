@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 22. Startup
 
-Checked against TEC-OS 19ad916.
+Checked against TEC-OS 60e0768.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and three
@@ -21,8 +21,8 @@ model of Chapter 26.
 ## One byte of state
 
 Startup has to hold its place in the file across every program the file runs,
-and to start again after a reset. All of its state is `STPOS`, at `BF64h`, with
-the file's record after it in `STREC`, at `BF65h–BFE4h` (`src/ram.asm:237-238`).
+and to start again after a reset. All of its state is `STPOS`, at `BF63h`, with
+the file's record after it in `STREC`, at `BF64h–BFE3h` (`src/ram.asm:237-238`).
 The byte holds four kinds of value (`src/svc.asm:389-392`):
 
 | `STPOS` | Meaning |
@@ -71,7 +71,7 @@ holds a key through reset to get past a service whose `INIT` never returns, and
 key is down, as Appendix G describes. A low bit returns from `STBOOT` with
 `STPOS` at `80h`, so a skip is the same state as a file that wasn't there. Bit 6
 is tested this one time, so the key has to be down when `STBOOT` starts, which
-on the model, with the web page's board and the starter card, is 5,864,134
+on the model, with the web page's board and the starter card, is 5,861,134
 T-states after reset, about 1.47 seconds.
 
 `STBOOT` then makes the read in the CCP's own FCB. It copies 12 bytes of
@@ -204,10 +204,12 @@ the console devices (`src/layout.asm:37`, `src/layout.asm:49-54`):
 | 0 | `CDMTX` | The Matrix switch is on, so the matrix keyboard is read |
 | 1 | `CDTMS` | The PICO9918 answered at cold boot |
 | 2 | `CDGLC` | `GLCD.SVC` is in |
+| 3 | `CDRTC` | The DS1302 clock answered at cold boot |
 | 7 | `CDWRD` | One of the ROM's words is on the LCD's row 3 |
 
 `STDONE` masks off `CDWRD`, because `GLCD?` may already be there from a failed
-`CON UC1` in the file, and subtracts `CDMTX+CDTMS` (`src/svc.asm:485-487`). The
+`CON UC1` in the file, and `CDRTC`, since the clock has no part in the test. It
+then subtracts `CDMTX+CDTMS` (`src/svc.asm:485-487`). The
 result is zero only on a board with a PICO9918 and a matrix keyboard where
 `GLCD.SVC` isn't in. `OR` with the high byte of `PIVEC`, `PICO.SVC`'s table,
 comes next, and the result stays zero only if no PICO9918 driver is in either,
@@ -228,25 +230,29 @@ writes `PICO?`.
 
 The CCP separates a service from a program by the three type bytes in `CMDFCB`.
 `SVC` calls `SVCGO`, and any other type goes on to `CMDCOM` and the search for a
-`.COM` file, which is what becomes of an old card's `PICO.DRV` (`src/cpm/ccp.asm:267-277`).
+`.COM` file (`src/cpm/ccp.asm:267-277`). The search looks on the current drive
+and then, when the command names no drive and the current drive isn't A:, on A:
+(`src/cpm/ccp.asm:283-295`). That is what becomes of an old card's `PICO.DRV`:
+no `PICO.COM` is found on either drive, and the line fails.
 `SVCGO` reads the file with `LOADCOM` and installs it with `SVCLOAD`, and a
 failure of either returns carry to `BADCMD` for the name and question mark
-(`src/glcd.asm:79-82`, `src/cpm/ccp.asm:274-275`). Chapter 21 describes the file
-and its relocation, and Chapter 20 the loader.
+(`src/glcd.asm:79-82`, `src/cpm/ccp.asm:274-275`). Chapter 20 describes the
+loader and the relocation, and Appendix H the file.
 
 A display driver's load fails from inside, in the driver's own `INIT`.
 `PICO.SVC`'s `INIT` calls hardware service `INFO` for whether a PICO9918
 answered at cold boot (`drivers/pico.asm:47-51`). Each driver then passes its
-table to `GLHOOK` through `ABIGLCD` (`drivers/pico.asm:52-56`,
-`drivers/glcd.asm:46-50`), and `GLHOOK` returns carry if `CDMTX` is clear or if
-that slot already holds a table (`src/glcd.asm:25-34`). So a driver needs the
+table to the numbered service `DRVR`, 12, with the console mode in `B`, 1 for
+`CRT:` or 3 for `UC1:` (`drivers/pico.asm:52-56`, `drivers/glcd.asm:46-50`).
+`SVDRV` passes the mode to `GLHOOK`, which returns carry if `CDMTX` is clear or
+if that slot already holds a table, and `SVDRV` then returns `TNEBAD` with
+carry (`src/glcd.asm:5-11`, `src/glcd.asm:25-34`). So a driver needs the
 matrix keyboard, and a second load of `PICO.SVC` fails while the first is in.
 
 `GLCD.SVC` has two more tests, both ahead of those. If the console field of the
-IOBYTE is 3, `UC1:`, it goes on. Otherwise it reads the byte that `ABIVID`
-points at, the console's columns, and it fails if that byte isn't 0, which is
-the case while any display is the console (`drivers/glcd.asm:33-42`,
-`src/abi.asm:10`). `CMDCON` writes the field before it calls `GLCLD`
+IOBYTE is 3, `UC1:`, it goes on. Otherwise it calls `INFO`, whose `L` is the
+console's columns, and it fails if `L` isn't 0, which is the case while any
+display is the console (`drivers/glcd.asm:33-42`, `src/hwsvc.asm:54-55`). `CMDCON` writes the field before it calls `GLCLD`
 (`src/cpm/ccp.asm:1134-1137`), so `CON UC1` reaches the load with the field
 already 3, and a startup line `GLCD.SVC` under a PICO9918 console doesn't.
 `GLCD.SVC` then calls `GLCWAIT`, and a controller that doesn't answer fails the
