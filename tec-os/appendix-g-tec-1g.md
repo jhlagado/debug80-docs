@@ -139,9 +139,9 @@ off. A press with the jumper fitted is a crash.
 ## The 8 × 8 LEDs
 
 No hardware service drives the 8 × 8 LEDs, and the ROM never writes their ports.
-`DEMO`, a program Chapter 9 describes that isn't on the starter card, writes
-them itself, as the Debug80 runtime decodes them: port `05h` selects a row, and `06h`, `F8h` and `F9h` light its red,
-green and blue columns (`test/programs/demo.asm:14-17`,
+`DEMO`, which Chapter 9 builds and which isn't on the starter card, writes them
+itself, as the Debug80 runtime decodes them: port `05h` selects a row, and `06h`,
+`F8h` and `F9h` light its red, green and blue columns (`test/programs/demo.asm:14-17`,
 `test/programs/demo.asm:273-286`). The TEC-1G port list makes `05h` and `06h`
 the X and Y axes of a single-colour matrix, so `DEMO`'s pattern may look
 different on a board. Test T24 of the diagnostics ROM records what a board

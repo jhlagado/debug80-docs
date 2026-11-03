@@ -102,7 +102,7 @@ in the comments of `TOP` and `AREA` in Chapter 7 stays as it is. So does
 | startup file | | `STARTUP.CMD` | Chapter 1 | |
 | `MOUNT` | | The starter card's program, which puts a volume on a drive and with no argument lists the volumes | Chapter 4 | the ROM's `MOUNT` routine, its check of the container (Chapters 14, 18). The mount entry, `ABIVOL` (Chapter 18). |
 | `TED` | | The starter card's editor, `TED.COM` | Chapter 6 | |
-| project | | `THOR.PRJ`, the file `TED` keeps beside the source, naming the source its build keys take | Chapter 6 | |
+| project | | `THOR.PRJ`, the file `TED` keeps on the current drive, naming the source its build keys take | Chapter 6 | |
 | ABI | | The ROM table's application binary interface | Chapter 8, again in 9 | |
 | signature | | The letters `TNA` | Chapter 12 | Chapters 8 and 9 say "the letters" |
 
