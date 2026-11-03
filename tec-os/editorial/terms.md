@@ -16,7 +16,7 @@ Chapter 7 stay as they are.
 | resident workspace | workspace | TEC-OS's variables, buffers and stacks, `WSBASE` to `WSEND`, with the RAM BIOS table inside it. The allocation vectors and the BDOS entry jump are below it. | Chapter 7, in full 13 | fixed workspace: the part from `WSBASE` to `BEFFh`, whose size the build measures (Chapters 12, 13) |
 | page | | 256 bytes | Chapter 3 | page zero, `0000h–00FFh` (Chapter 2); a web page; a PICO9918 page (Chapter 15) |
 | BIOS jump table | | CP/M's table of 17 jumps | Chapter 7, in full 15 | RAM BIOS table: the copy at `BF00h` that every caller uses. `BIOSBAS`: the ROM's copy, never called. |
-| BDOS entry jump | BDOS's entry | The `JP BENTRY` in RAM at the address of the form `xx06h` | Chapter 5, in full 13 | `BENTRY`: the routine in the ROM, also "the BDOS's entry" in Chapters 16 and 25, where the code follows |
+| BDOS entry jump | BDOS's entry | The `JP BENTRY` in RAM directly below the allocation vectors, and the same jump at the start of each service's first page | Chapter 5, in full 13 | `BENTRY`: the routine in the ROM, also "the BDOS's entry" in Chapters 16 and 25, where the code follows |
 | boot overlay | overlay | The ROM's first 2 KiB, shown at `0000h–07FFh` while latch bit 0 is low | Chapter 13, in full 14 | Chapter 1 says "the copy" for a reader who has no need of the name. `LATSHAD` and SHADOW are the code's and the board's names for the bit. |
 | fixed RAM | | `0000h–7FFFh`; MAIN 0 is its name beside MAIN 1 | Chapters 1 and 7 | MAIN 1, the second 32 KiB a board may have |
 | EXPAND 0, EXPAND 1 | | The two halves of the RAM in U9 | Chapter 1 | expansion RAM: the chip as a whole. Bank 1: CP/M 3's name for EXPAND 1 in `MOVE` and `XMOVE`. The diagnostics ROM's "banks" are the runtime's. |
