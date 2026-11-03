@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 23. Command history
 
-Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
-845d062, whose copy in `dist/files` has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
+Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
+8fcc6ea, whose copy in `dist/files` has the SHA-256
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -56,11 +56,11 @@ and `CMD` was typed in their place:
 <!-- node tools/capture.mjs --board pico --screen "DIR *.SVC" "@start "$'\x17\x08\x08\x08CMD' -->
 ```text
 A>DIR *.SVC
-PICO.SVC     PICO40.SVC   PICO32.SVC   GLCD.SVC
-4 files, 974K free
+PICO.SVC     GLCD.SVC
+2 files, 984K free
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 974K free
+1 file, 984K free
 A>
 ```
 
@@ -75,7 +75,7 @@ A>CON
 CON: CRT: PICO9918
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 974K free
+1 file, 984K free
 A>
 A>
 ```
@@ -166,7 +166,7 @@ A>CON
 CON: CRT: PICO9918
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 974K free
+1 file, 984K free
 A>CON
 CON: CRT: PICO9918
 A>
