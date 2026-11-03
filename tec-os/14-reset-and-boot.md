@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from
+Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from
 Edit 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`; the
 timings below were measured on that card.
@@ -99,7 +99,7 @@ the host model. Three steps take most of it. The banner is 25 characters at
 9,372 T-states each through `CONOUT`, the read of the container's block 0 takes
 219,137 T-states and `MEMINIT` takes about 347,000, most of it the clearing of
 EXPAND 1. The startup file's commands then run before the first prompt, so the
-CCP's first call of `CONIN` at that prompt comes 8,910,182 T-states after reset.
+CCP's first call of `CONIN` at that prompt comes 8,911,370 T-states after reset.
 
 ## The two RAM checks
 
@@ -343,21 +343,21 @@ and before the console (`src/cpm/ccp.asm:80-84`).
 
 ## The cost of a warm boot
 
-On the starter card with the serial board, warm boot takes 31,455 T-states,
+On the starter card with the serial board, warm boot takes 31,712 T-states,
 about 8 milliseconds, from the first instruction of `WBOOTR` to the CCP's label
 `STARTED`, where it starts printing the prompt. The figure was measured on the
 host model with nothing changed since the last warm boot, and in that case warm
 boot reads no block. Of it, `CPMINIT` takes 7,427 T-states, the cache's flush in
 `CWBOOT`, with no line to write, takes 8,002 and the CCP's entry with its disk
-reset 13,828.
+reset 14,085.
 
-A warm boot after `SAVE 8 X.COM` on drive A takes 122,499 T-states on the same
+A warm boot after `SAVE 8 X.COM` on drive A takes 123,155 T-states on the same
 measure. The extra 91,000 or so are the rebuild of A's vector from its directory
 up to the last entry in use, and the directory is read from the block cache with
 no card access. For comparison, a disk reset of the kind a program makes drops
-drive A and scans its whole directory again, which takes 1,038,529 T-states on
+drive A and scans its whole directory again, which takes 1,039,042 T-states on
 the starter card even with the directory in the cache. The first scan of drive
 B's 512 entries, with the card read for each of its 32 directory blocks, takes
-9,163,477. The test `test/warmboot.test.mjs` checks the unchanged case on its
+9,163,606. The test `test/warmboot.test.mjs` checks the unchanged case on its
 own card: a warm boot that reads no block and takes at most 386,604 T-states
 (`test/warmboot.test.mjs:11-17`).
