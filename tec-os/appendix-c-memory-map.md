@@ -7,14 +7,14 @@ nav_group: "Appendices"
 
 # Appendix C. Memory map
 
-Checked against TEC-OS 60cfbdc.
+Checked against TEC-OS 4d6eeaa.
 
 This appendix gives the addresses TEC-OS uses: the CPU's address space, the
 ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
 the stacks. Chapter 13 explains the layout and Chapter 7 describes it from a
-program's side. The figures are those of the debug80 build at 60cfbdc, whose
+program's side. The figures are those of the debug80 build at 4d6eeaa, whose
 ROM has the SHA-256
-`61fced034a747640c712dde30b563c3a431167627affe89405565a3e59a93be0`. The
+`6f3e7467744ec00ee6a727c5a62c910e7b64b4ccc3fa622d778ea0b0c15b82f1`. The
 build's four profile names give the same image. Where the figures depend on
 the card they are those of the starter card, with a G1M volume on drive A and
 a G8M volume on drive B, and no service installed.
@@ -94,11 +94,11 @@ card the first service's pages end at `B7FFh`, so the 21 bytes from `B800h` to
 | `C000h–C002h` | 3 | the reset jump, `JP COLD` |
 | `C003h–C017h` | 21 | the ROM table |
 | `C018h–C33Dh` | 806 | the read-only data, `ROMDATA` to `ROMCODE` |
-| `C33Eh–FA58h` | 14,107 | the code |
-| `FA59h–FFFFh` | 1,447 | free |
+| `C33Eh–FA62h` | 14,117 | the code |
+| `FA63h–FFFFh` | 1,437 | free |
 
-Within the code, the CCP is at `D7B2h–E110h`, 2,399 bytes, and the BDOS at
-`E111h–F055h`, 3,909 bytes, in the order `src/rom.asm` includes them
+Within the code, the CCP is at `D7B4h–E112h`, 2,399 bytes, and the BDOS at
+`E113h–F057h`, 3,909 bytes, in the order `src/rom.asm` includes them
 (`src/rom.asm:24-26`). The ROM's own copy of the BIOS jump table is in the
 data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 (`src/data.asm:21-37`, `src/boot.asm:45-48`). The byte at `C01Dh` is a `RET`
@@ -112,7 +112,7 @@ data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 | `0003h` | the IOBYTE; TEC-OS acts on its console field, bits 0 and 1 |
 | `0004h` | the current drive in bits 0–3 and the user number in bits 4–7 |
 | `0005h` | `JP` to the BDOS entry jump or the start of the lowest service's page; the word at `0006h` is the top of the TPA |
-| `0008h–0037h` | restart vectors 1 to 6: each a `RET` after seven zeros, unless it holds a `JP` to a page at or above `PZTOP`'s |
+| `0008h–0037h` | restart vectors 1 to 6: each a `RET` after seven zeros, unless it holds a `JP` whose target is above `PZTOP` |
 | `0038h` | `EI`, `RETI`, for restart 7 and the interrupt of mode 1, unless it holds such a `JP` |
 | `0040h–004Fh` | TEC-OS's state, below |
 | `005Ch` | the default FCB |
@@ -121,9 +121,10 @@ data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 
 Cold boot clears page zero, and `PZINIT` writes it at cold boot and at every
 warm boot, leaving the IOBYTE and the drive and user byte as they are
-(`src/boot.asm:15-21`, `src/boot.asm:215-274`). An unload and a failed `INIT` run
-its sweep of the restart vectors, `PZSWP`, as well (`src/svc.asm:57-58`,
-`src/svc.asm:247-249`). The CCP writes the byte at
+(`src/boot.asm:15-21`, `src/boot.asm:215-274`). An unload and a failed `INIT` clear
+the first byte of each restart vector the service claimed and then run the
+same sweep of the vectors, `PZSWP` (`src/svc.asm:47-58`,
+`src/svc.asm:245-249`, `src/svc.asm:281-293`). The CCP writes the byte at
 `0004h` at each prompt and the FCBs and the tail before it runs a program
 (`src/cpm/ccp.asm:206-225`, `src/cpm/ccp.asm:1296-1329`).
 
