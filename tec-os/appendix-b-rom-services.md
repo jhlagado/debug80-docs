@@ -14,9 +14,9 @@ its one jump: the hardware services 0 to 8, the volume services 9 to 11, the
 display drivers' service 12 and the registry's services 13 and 14. Chapter 9
 describes the use of the hardware services, with programs. The names are those
 of `src/abi.inc`, which the ROM assembles from and which a build publishes as
-`dist/abi.inc` after checking the table's bytes and the services' numbers
+`dist/abi.inc` after checking the table's bytes, the number of services and `INFO`'s bits
 against the ROM (`src/abi.inc:1-4`, `tools/build.mjs:139-154`,
-`tools/media.mjs:206`). The stacks are `abi.inc`'s: the most each service takes
+`tools/media.mjs:206`). The stacks are `abi.inc`'s: a bound on what each service takes
 below its return address, the dispatcher's included. The T-states were measured
 on the model from the `JP` at `ABICALL` to the final `RET`, so a `CALL` adds 17
 to each.
