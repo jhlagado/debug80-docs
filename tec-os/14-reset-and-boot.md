@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS 7458352, with the starter card's `TED.COM` from
+Checked against TEC-OS 7935507, with the starter card's `TED.COM` from
 Thorium 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`; the
 timings below were measured on that card.
@@ -44,7 +44,7 @@ Interrupts come on only if a program or a service enables them, and nothing in
 the ROM does. The Z80 comes out of reset
 with interrupts off, and the ROM executes `EI` only to restore a state it saved:
 the routines that must run with interrupts off put them back as they were at
-entry (`src/cache.asm:466`, `src/console.asm:212`, `src/console.asm:248`,
+entry (`src/bios.asm:324`, `src/console.asm:212`, `src/console.asm:248`,
 `src/history.asm:39`, `src/cache.asm:466`). `VPAIR`, the routine in `PICO.SVC`
 that writes each pair to the VDP's control port, does the same
 (`drivers/pico.asm:226-238`). The one
