@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 20. The hardware services and the service loader
 
-Checked against TEC-OS 718c01b. The six bytes below were left by the starter
-card's `TAS.COM`, from Thorium 7604daa, SHA-256
-`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
+Checked against TEC-OS ea9c1c0. The six bytes below were left by the starter
+card's `TAS.COM`, from Thorium dbee66a, SHA-256
+`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
 Chapters 9 and 10 use two sets of ROM routines from a program's side. This
 chapter describes the code behind them: the dispatcher at `ABIHW` and each of
@@ -426,7 +426,7 @@ empties both lists (`src/boot.asm:23-27`, `test/svc.test.mjs:353`).
 
 ## The bytes below 0006h
 
-At 718c01b the word at `0006h` points at `xx06h` because the BDOS entry has
+At ea9c1c0 the word at `0006h` points at `xx06h` because the BDOS entry has
 that form in CP/M 2.2, as Chapter 13 explains, and the header keeps it by
 placing its `JP` at offset 6 (`src/svc.asm:177-179`). So offsets 0 to 5 of the
 lowest service lie below the word, in the TPA. Those six bytes are
@@ -470,17 +470,17 @@ for (const line of ["B:", "COUNT.SVC", "A:TAS AREA"]) {
 ```text
 B:           00 00 00 00 70 08 78 88 78 00 80 80 b0 c8 88 88
 COUNT.SVC    00 00 00 01 2e 00 c3 06 b8 00 0b 00 06 0a 04 19
-A:TAS AREA   7f 1e c6 17 b7 17 c3 06 b8 00 0b 00 06 0a 04 19
+A:TAS AREA   2b 1f c9 17 ba 17 c3 06 b8 00 0b 00 06 0a 04 19
 ```
 
 The first row is what memory held before the load. In the last, `TAS`'s three
-return addresses, `1E7Fh`, `17C6h` and `17B7h`, lie at offsets 0 to 5.
-`SERVICES` then follows the owner link to page `C6h`, in the ROM, and prints
+return addresses, `1F2Bh`, `17C9h` and `17BAh`, lie at offsets 0 to 5.
+`SERVICES` then follows the owner link to page `C9h`, in the ROM, and prints
 what it finds there, as the transcript in Chapter 10 shows. The `UNLOAD` after
-it takes `17B7h` as `REMOVE`'s offset and jumps into the ROM at `CEB7h`, and
+it takes `17BAh` as `REMOVE`'s offset and jumps into the ROM at `CEBAh`, and
 with no hook restored it frees the page with `CONOUT`'s target still at
-`B742h`. `UNLOAD` also copies `7Fh`, `1Eh` and `C6h` to `REGHEAD` and
-`SVCHEAD`, so `SERVICES` prints the same lines afterwards. `CEB7h` is inside
+`B742h`. `UNLOAD` also copies `2Bh`, `1Fh` and `C9h` to `REGHEAD` and
+`SVCHEAD`, so `SERVICES` prints the same lines afterwards. `CEBAh` is inside
 `SPIR`'s loop (`src/sd.asm:32-39`), and on the model a later read of the card
 fails with `Bad Sector`, and a reset then stops at the diagnostic prompt with
 error 02.
