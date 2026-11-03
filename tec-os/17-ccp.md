@@ -48,7 +48,7 @@ for the LCD's `PICO?` word, the console's `HEXHL` for `COPY`'s count in
 hexadecimal and the BDOS's division, `DIV16`
 (`src/cpm/ccp.asm:264`, `src/cpm/ccp.asm:1088`, `src/cpm/ccp.asm:1122`,
 `src/cpm/ccp.asm:1119`, `src/cpm/ccp.asm:1559`, `src/cpm/ccp.asm:1673`,
-`src/cpm/ccp.asm:1079-1084`, `src/cpm/ccp.asm:780`). Startup's `STBOOT` and `STLINE` and the `SERVICES`
+`src/cpm/ccp.asm:1081-1082`, `src/cpm/ccp.asm:780`). Startup's `STBOOT` and `STLINE` and the `SERVICES`
 command's `CMDSVC` are in `ccp.asm` itself (`src/cpm/ccp.asm:1546-1673`).
 
 ## The entry from boot
@@ -514,7 +514,7 @@ Below that label is the command line, and before it the two FCBs, which need no
 clearing because each use parses them in full (`src/ram.asm:68-70`). From
 `CCPCLR` on, warm boot clears the CCP's bytes along with the BDOS's
 (`src/boot.asm:262-269`). Before the CCP first runs, cold boot's `SHOWVOL`
-builds each drive's line of its list in `CMDTXT` (`src/boot.asm:322-330`).
+builds each drive's letter and label in `CMDTXT` (`src/boot.asm:322-330`).
 
 | Addresses | Bytes | Name | Contents |
 | --- | ---: | --- | --- |

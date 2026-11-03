@@ -192,7 +192,7 @@ the BDOS's block and leaves the rest (`src/boot.asm:262-281`).
 | `BC50h–BC51h` | 2 | `CSVDUM` | the unused check vector |
 | `BC52h–BC53h` | 2 | `STUBAD` | the BDOS entry jump's address |
 | `BC54h–BC61h` | 14 | `MNTCNT` to `MNTCB` | the `MOUNT` routine's scratch, which the volume services also use |
-| `BC62h–BCB1h` | 80 | `LINEBUF` | one display row, for scrolling |
+| `BC62h–BCB1h` | 80 | `LINEBUF` | one display row, for the terminal's row moves and the LCD's drive rows |
 | `BCB2h–BCBFh` | 14 | `VPUTV` to `VFNV` | the seven vectors into the display driver |
 | `BCC0h–BCC4h` | 5 | `VSTOP` to `CONMOD` | the scroll region, the console field acted on, the PICO9918's claim and the console mode |
 | `BCC5h–BCEAh` | 38 | `BSTKB` | the BIOS stack, up to `BSTK` |
