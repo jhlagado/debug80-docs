@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 15. The BIOS and the console path
 
-Checked against TEC-OS ea9c1c0.
+Checked against TEC-OS 60cfbdc.
 
 The BIOS is the part of a CP/M system written for one machine, and on the TEC-1G
 most of it is the console. That console has a serial port made of two port bits
@@ -166,26 +166,32 @@ digits, and receives on bit 7 of port `03h` (`src/layout.asm:10-11`). The
 settings are 4800 baud, 8 data bits, no parity and 2 stop bits
 (`src/console.asm:15-16`).
 
-`TXBYTE` sends a byte (`src/console.asm:224-248`). Its loop runs nine times,
+`TXBYTE` sends a byte (`src/console.asm:224-248`). It reads the interrupt state
+with `IFFGET`, which Chapter 19 describes, turns interrupts off so that none can
+stretch a bit, and puts them back as they were after the stop bits. Its loop runs
+nine times,
 for the start bit and the eight data bits from the lowest. Each pass turns the
 carry into `00h` or `40h` with `SBC A,A` and `AND 40h` and writes the port, then
 waits `TXDLY` passes of a 16-T-state delay and shifts the next bit into the
 carry. A pass takes 49 + 16 × `TXDLY` T-states, so with `TXDLY` at 49 it takes
 833, one bit at 4800 baud from a 4 MHz clock. The stop bits are the line held
-high for `TXSTOP` passes, 105. On the model `TXBYTE` takes 9,217 T-states for a
-whole character, and `BCONOUT`'s tests before it bring that to 9,372, so the
-serial terminal shows about 430 characters a second.
+high for `TXSTOP` passes, 105. On the model `TXBYTE` takes 9,293 T-states for a
+whole character, and `BCONOUT`'s tests before it bring that to 9,448, so the
+serial terminal shows about 420 characters a second.
 
 `RXBITS` receives a byte (`src/console.asm:192-212`). It is called just after a
-poll has read the start bit, so it first waits `RXHALF` passes, 74, to reach the
+poll has read the start bit, and the poll runs with interrupts as the caller left
+them. `RXBITS` turns them off for the whole byte, as `TXBYTE` does, and waits
+`RXHALF` passes, 70, to reach the
 middle of the first data bit. It then samples the line eight times, shifting
 each sample into `C`, with `RXDLY`, 50, passes between samples. A pass of its
 loop takes 38 + 16 × `RXDLY` T-states, 838.
 
 The polling loops that test for the start bit take 38 T-states a pass, so the
 edge can be up to 38 T-states old when it is read. `RXHALF` is reduced by half
-of that, to centre the samples on the bits (`src/console.asm:22-23`,
-`tools/build.mjs:40-48`). The counts come from the build, as Chapter 12
+of that, and by 58.5 for the 65 or 52 T-states `RXBITS` spends on the interrupt
+state, to centre the samples on the bits (`src/console.asm:22-23`,
+`src/console.asm:194-195`, `tools/build.mjs:40-48`). The counts come from the build, as Chapter 12
 describes, and they hold only for a 4 MHz clock, so on a board the CPU clock
 switch has to be on FAST.
 
