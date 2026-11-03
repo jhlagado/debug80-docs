@@ -83,8 +83,8 @@ caret, so `^C` means Ctrl and C together.
    history with `^W` and `^N`.
 4. **[Cards and volumes](04-cards-and-volumes.md).** The container and its
    volumes, the two geometries, and building and changing a card image on a PC
-   with `tecvol`. The chapter then covers `VOLS` and `MOUNT`, what each drive
-   costs in memory, the block cache and what a reset keeps. It ends with
+   with `tecvol`. The chapter then covers `MOUNT`, what each drive costs in
+   memory, the block cache and what a reset keeps. It ends with
    putting an image on a card and recovering after a power cut.
 5. **[Startup and services](05-startup-and-services.md).** The services TEC-OS
    loads, and the startup file that installs them. The chapter covers the
@@ -94,8 +94,8 @@ caret, so `^C` means Ctrl and C together.
 6. **[A first program](06-first-program.md).** Two programs that call the
    BDOS: one prints a line, and the other prints the file named on its command
    line. You assemble the first on a PC, copy it to a card and run it, then
-   assemble it again on the TEC-1G with `TAS`. The chapter ends with the
-   ways a program returns to TEC-OS.
+   assemble it again on the TEC-1G with `TAS` and edit, build and run it there
+   with `TED`. The chapter ends with the ways a program returns to TEC-OS.
 7. **[Memory for programs](07-memory.md).** The Z80's 64 KiB on a TEC-1G, the
    TPA and the word at `0006h` that marks its end, page zero and
    TEC-OS's own bytes at `0040h`. The chapter ends with EXPAND 1, reserved for
@@ -204,7 +204,7 @@ caret, so `^C` means Ctrl and C together.
   figures taken from the build.
 - **[D. Error messages](appendix-d-error-messages.md).** Every message TEC-OS
   prints, with its cause and its remedy: cold boot, the diagnostic prompt's
-  codes, the LCD's words, the CCP, the BDOS, `Write lost`, `MOUNT` and `VOLS`.
+  codes, the LCD's words, the CCP, the BDOS, `Write lost` and `MOUNT`.
 - **[E. The container format](appendix-e-container-format.md).** The header's
   fields, the volume descriptors, the table beyond block 0, the checks with
   their codes and the G1M and G8M geometries.
