@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix B. The ROM table and hardware services
 
-Checked against TEC-OS 7458352.
+Checked against TEC-OS 7935507.
 
 This appendix lists the ROM table at `C003h`, then the numbered services behind
 its one jump: the hardware services 0 to 8, the volume services 9 to 11, the
@@ -58,7 +58,7 @@ leave it as it falls (`src/vol.asm:605-607`, `src/services.asm:315-327`).
 
 The dispatcher reads the service's address from `SVTAB`, one word for each
 number, and jumps to it with `B`, `DE` and `HL` as they came
-(`src/services.asm:18-39`, `src/data3.asm:92-100`). Any number from `TNCOUNT`, 15,
+(`src/services.asm:18-39`, `src/tables.asm:53-60`). Any number from `TNCOUNT`, 15,
 up returns status 1 with `B`, `DE` and `HL` as they came, in 58 T-states with
 no stack used (`src/services.asm:21-24`).
 
@@ -87,9 +87,9 @@ Registers not named as results are destroyed (`src/abi.inc:18-26`).
 
 ## The hardware services
 
-The hardware services, 0 to 8, are in `src/hwsvc.asm`. None of them calls the
+The hardware services, 0 to 8, are in `src/services.asm`. None of them calls the
 BDOS, and the only state they keep is the claim byte, `VCLAIM`, in the
-workspace (`src/hwsvc.asm:1-7`, `src/ram.asm:57`).
+workspace (`src/services.asm:1-7`, `src/ram.asm:57`).
 
 **0 INFO.** Returns the devices in `B`, the ROM's version in `DE`, the
 console's columns in `L` and its rows in `H`, both 0 for the serial terminal
