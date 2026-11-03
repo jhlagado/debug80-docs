@@ -7,11 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
-845d062 and its `TAS.COM` from Thorium dbee66a. That Edit build's SHA-256 is
-`2c9e7d0ec588019b9184ca89543e5a644fafda864bb940445375edb50bbb0fe6`, the card's
-copy, with its ABI byte set to 4 by `npm run media`, is
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and
+Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
+8fcc6ea and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and
 `TAS.COM`'s is
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -110,18 +108,12 @@ host model runs on. `npm run build` assembles the ROM, and `npm run media`
 writes the ROM images, the starter card and its files to `dist/`. The starter
 card is `dist/starter.img`, an image of a whole SD card.
 
-The starter card always holds `TAS.COM`, an assembler that runs on TEC-OS.
-`npm run media` reads it from the path in the environment variable `TAS_COM` or
-else from `../thorium/build/tas/TAS.COM`, beside the clone. The command stops
-if the file isn't there or if its SHA-256 differs from the one in
-`test/inputs.json`.
-
-The starter card holds the Edit program only when `npm run media` finds a
-build of Edit outside the repository, at the path in the environment variable
-`EDIT_COM` or else at `../edit/dist/EDIT.COM`, beside the clone. The build
-must carry Edit's screen configuration, the tag `ECFG` at `0103h`, and an
-older build is left off the card with a message. Without Edit the card has
-twelve files, and the figures `DIR` prints below change with it.
+The starter card holds `TAS.COM`, an assembler, and `TED.COM`, an editor, both
+programs that run on TEC-OS and are built outside the repository.
+`npm run media` reads them from the paths in the environment variables
+`TAS_COM` and `TED_COM`, or else from `../thorium/dist/TAS.COM` and
+`../thorium/dist/TED.COM`, beside the clone. The command stops if either file
+isn't there or if its SHA-256 differs from the one in `test/inputs.json`.
 
 ## Running TEC-OS in a web page
 
@@ -155,9 +147,10 @@ reload. These are its controls:
   selected in "Drive", as text if "as text" is ticked. It then presses reset
   so that TEC-OS reads the changed card.
 
-When you change the display or the width, the page writes the matching display
-driver's name into the first line of the card's startup file and then turns
-the board off and on.
+When you change the display or the width, the page turns the board off and on.
+Before it does, it writes the PICO9918's driver built for the chosen width to
+drive A as `PICO.SVC`, and it puts the name of the chosen display's driver in
+the first line of the card's startup file.
 
 ## Running TEC-OS from Node.js
 
@@ -176,9 +169,8 @@ the graphics LCD and the matrix keyboard, as the web page has. `--lcd` prints
 the 20 × 4 LCD's rows at the end, `--screen` the display's text and `--serial`
 what left the serial port. `--card none` boots with the socket empty. The
 comment at the top of the script lists the rest. On stderr the script prints the
-SHA-256 of the card and of the card's `EDIT.COM`. The two hashes show whether
-your card is the one an example was captured from. A run of a few commands takes
-about a second.
+card's SHA-256, which shows whether your card is the one an example was
+captured from. A run of a few commands takes about a second.
 
 ## Running TEC-OS on a board
 
@@ -346,57 +338,24 @@ row then shows `PICO?`. That board may have no serial terminal attached.
 <!-- node tools/capture.mjs DIR -->
 ```text
 A>DIR
-TERM.COM     PROBE.COM    DEMO.COM     MOUNT.COM    VOLS.COM     PICO.SVC
-PICO40.SVC   PICO32.SVC   GLCD.SVC     STARTUP.CMD  EDIT.COM     TAS.COM
-README.TXT  
-13 files, 974K free
+MOUNT.COM    PICO.SVC     GLCD.SVC     STARTUP.CMD  TED.COM      TAS.COM
+6 files, 984K free
 A>
 ```
 
 A file name has up to eight characters, a full stop and a type of up to three.
 A file of type `.COM` is a program, and its name without the type is the
-command that runs it. `PICO40.SVC` and `PICO32.SVC` hold the PICO9918's
-console at 40 columns and at 32 columns, and a line in `STARTUP.CMD` naming
-one of them in place of `PICO.SVC` selects the width. The last line of the
-listing is the number of files and the space left on the drive. A card made
-without Edit lists twelve files and ends `12 files, 982K free`.
+command that runs it. The last line of the listing is the number of files and
+the space left on the drive. The starter card's six files are these:
 
-`TYPE` prints a text file, and the starter card's `README.TXT` lists the
-programs. The file is longer than the terminal's 24 rows, so `TYPE` stops at
-`[more]` before its last line, and a key, `x` in this run, rubs out `[more]`
-and goes on:
-
-<!-- node tools/capture.mjs "TYPE README.TXT" "@key x" -->
-```text
-A>TYPE README.TXT
-TEC-OS starter disk
-
-COPY SOURCE DEST   copy a file (built in), for example COPY TERM.COM B:TERM.COM
-TERM               draw on the video console; TERM S also scrolls
-PROBE              exercise the BDOS file functions
-DEMO               the LCD, digits, 8x8 LEDs and PICO9918; any key stops
-EDIT NAME.TXT      full-screen editor, if present: ^S save, ^Q quit
-TAS NAME           assemble NAME.ASM to NAME.COM and NAME.DBG
-TAS NAME NAME.SVC  assemble it to a service
-VOLS               list the card's volumes
-MOUNT B: NAME      put a volume on a drive; MOUNT B: takes it off
-
-NAME.SVC           install a service, such as a display's driver
-SERVICES           list the services installed, each with its pages
-UNLOAD             remove the last service installed
-
-A line chains commands with !, and a piece that starts with : runs only if the
-last command succeeded: EDIT X.ASM!TAS X!:X
-
-B: is an empty work disk, written behind: its changes reach the card when a
-file is closed, at ^C and at MOUNT. Press ^C at A> before reset or power off.
-
-A card with .DRV files is from an older TEC-OS and this ROM won't load them.
-Make a new starter card, or rename each file .SVC if its format is 3 and change
-STARTUP.CMD to match.
-
-A>
-```
+- `STARTUP.CMD` holds the commands the first boot ran.
+- `PICO.SVC` and `GLCD.SVC` are the display drivers. The starter card's
+  `PICO.SVC` draws 80 columns, and Chapter 5 describes a card made for 40 or
+  32.
+- `MOUNT.COM` lists the card's volumes and puts a volume on a drive, as
+  Chapter 4 describes.
+- `TAS.COM` is an assembler and `TED.COM` an editor. Chapter 6 describes
+  writing and building a program with them on the TEC-1G.
 
 A drive letter and a colon, typed alone, change the current drive:
 
@@ -411,46 +370,26 @@ A>
 
 Drive B is empty, and it is the place for your own files. Its volume is
 *written behind*: TEC-OS holds what a program writes to it in the block cache
-and writes it to the card later. `README.TXT` lists some of those times. One
-of them is a `^C`, Ctrl and C together, typed at the prompt, which ends the
-CCP, writes to the card every change the cache holds and starts the CCP again.
+and writes it to the card later, at times that Chapter 4 lists. One of them is
+a `^C`, Ctrl and C together, typed at the prompt, which ends the CCP, writes to
+the card every change the cache holds and starts the CCP again.
 A `^C` at the prompt before you press reset, turn the board off or take the
 card out therefore puts every change on the card. Chapter 4 explains the cache
 and what a power cut can lose.
 
 ## Running a program
 
-`DEMO` uses the hardware services described in Chapter 9. It beeps, puts a title
-on the 20 × 4 LCD, counts in hexadecimal on the 7-segment digits and moves a
-rainbow across the 8 × 8 LEDs. On a PICO9918 it also draws colour bars and a
-bouncing ball, and with a DS1302 clock fitted the LCD's last row shows the time.
-Any key stops it. Here it ran on the serial board, the one with only a serial
-terminal, until a key press stopped it. The run took 50 million T-states, the
-Z80's clock cycles, which is 12.5 seconds:
+`MOUNT` is a program, and typed with no argument it lists the volumes on the
+card, each with its number, its label, its size and the drive it is on.
+Chapter 4 explains the list:
 
-<!-- node tools/capture.mjs --lcd "@start DEMO" "@key x" -->
+<!-- node tools/capture.mjs MOUNT -->
 ```text
-A>DEMO
-
-TEC-OS hardware services demo
-PICO9918: no   GLCD: no   clock: yes
-Watch the LCD, the digits, the LEDs and the screen.
-Press any key to stop.
-
-Demo stopped.
+A>MOUNT
+00 SYSTEM      G1M A:
+01 WORK        G8M B:
 
 A>
-```
-
-The LCD goes on showing its last screen after `DEMO` stops. The time is from
-the model's clock, which started at 12:00:00 when the board was turned on:
-
-<!-- the same run's --lcd output -->
-```text
-TEC-OS hardware demo
-7-seg: hex counter
-8x8: moving rainbow
-Time     12:00:14
 ```
 
 When a program ends, TEC-OS runs a warm boot: it writes the cache's changes to
