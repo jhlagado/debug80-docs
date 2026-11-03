@@ -7,14 +7,14 @@ nav_group: "Appendices"
 
 # Appendix C. Memory map
 
-Checked against TEC-OS 7458352.
+Checked against TEC-OS 7935507.
 
 This appendix gives the addresses TEC-OS uses: the CPU's address space, the
 ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
 the stacks. Chapter 13 explains the layout and Chapter 7 describes it from a
-program's side. The figures are those of the build at 7458352, whose one
+program's side. The figures are those of the build at 7935507, whose one
 profile is `tecos` and whose ROM has the SHA-256
-`60abc9b43ce27071aabf50b6e4a336a5f79804494de4be5e67278905d5d36f76`. Where the
+`9c946bc259917dcaeecee4c776721e21f41264f1eb21d264d54b0960918e7a0c`. Where the
 figures depend on the card they are those of the starter card, with a G1M
 volume on drive A and a G8M volume on drive B, and no service installed.
 
@@ -96,9 +96,9 @@ card the first service's pages end at `B7FFh`, so the 21 bytes from `B800h` to
 | `C33Ch–F9EAh` | 13,999 | the code |
 | `F9EBh–FFFFh` | 1,557 | free |
 
-Within the code, the CCP is at `D7CDh–E157h`, 2,443 bytes, and the BDOS at
-`E158h–F065h`, 3,854 bytes, in the order `src/rom.asm` includes them
-(`src/rom.asm:25-27`). The ROM's own copy of the BIOS jump table is in the
+Within the code, the CCP is at `D82Dh–E28Eh`, 2,658 bytes, and the BDOS at
+`E28Fh–F19Ch`, 3,854 bytes, in the order `src/rom.asm` includes them
+(`src/rom.asm:24-26`). The ROM's own copy of the BIOS jump table is in the
 data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 (`src/tables.asm:10-26`, `src/boot.asm:61-64`).
 
@@ -293,4 +293,4 @@ The cache's addresses are in `src/layout.asm:21-23` and the history's page in
 The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:74-81`. A
 loaded service runs on its caller's stack, and `SVCLIM` gives what the services
 together may add: 8 bytes to the BDOS's, 12 to the BIOS's and 6 to the CCP's
-(`src/data3.asm:115`).
+(`src/tables.asm:67`).
