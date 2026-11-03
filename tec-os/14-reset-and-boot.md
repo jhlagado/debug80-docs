@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from
+Checked against TEC-OS 19ad916, with the starter card's `TED.COM` from
 Thorium 8fcc6ea, whose copy in `dist/files` has the SHA-256
 `9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`; the
 timings below were measured on that card.
@@ -242,8 +242,9 @@ open files and the history are gone and the console is the serial terminal again
 card is lost. Once a recognised reset has applied a selection, the next reset
 passes the test and applies it again while the card still holds those volumes.
 That card's own drives come back at a reset only when the test fails, as it does
-after a power cycle or for a reset pressed during cold boot. `docs/recovery.md`
-sets out these limits for the user.
+after a power cycle or for a reset pressed during cold boot. Chapter 4's
+[recovery section](04-cards-and-volumes.md#recovery-after-a-power-cut) sets out
+what a lost change leaves on the card and how to check it.
 
 ## Page zero
 
@@ -297,7 +298,9 @@ Warm boot's steps are:
 1. `DI`, then EXPAND 1 in view, and `JP WBOOTR` written at `BF03h` in EXPAND
    1 (`src/boot.asm:59-65`). The jump is for a program that ends with
    EXPAND 1 in view: its jump to `0000h` reaches `BF03h` in EXPAND 1, where
-   this jump is.
+   this jump is. Only a program that writes the latch itself can end that way,
+   since every TEC-OS routine that puts EXPAND 1 in view puts EXPAND 0 back
+   before it returns.
 2. The latch and `LATCHV` set to `LATCLAS`, which puts MAIN 0 and EXPAND 0
    back, and the stack set to the BIOS stack (`src/boot.asm:66-69`). The
    latch comes before the stack because the BIOS stack is in EXPAND 0.
