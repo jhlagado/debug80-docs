@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 21. Startup
 
-Checked against TEC-OS 60e0768.
+Checked against TEC-OS 1f9542d.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and three
@@ -71,7 +71,7 @@ holds a key through reset to get past a service whose `INIT` never returns, and
 key is down, as Appendix G describes. A low bit returns from `STBOOT` with
 `STPOS` at `80h`, so a skip is the same state as a file that wasn't there. Bit 6
 is tested this one time, so the key has to be down when `STBOOT` starts, which
-on the model, with the web page's board and the starter card, is 5,861,134
+on the model, with the web page's board and the starter card, is 5,863,636
 T-states after reset, about 1.47 seconds.
 
 `STBOOT` then makes the read in the CCP's own FCB. It copies 12 bytes of
@@ -153,7 +153,7 @@ the line and the LF being a blank line. The starter card's file has 21 bytes,
 
 With a line in hand, `STLINE` stores its length in `CMDLEN`, writes CR and `$`
 after it and prints the line from `CMDTXT` through `PUTSTR`, which is BDOS
-function 9 (`src/svc.asm:467-473`, `src/cpm/ccp.asm:1550-1552`). Function 9 ends
+function 9 (`src/svc.asm:467-473`, `src/cpm/ccp.asm:1552-1554`). Function 9 ends
 at the first `$`, so a `$` in the line ends the echo there, but the characters
 in `CMDTXT` aren't changed and the line runs whole. The CCP's own `CRLFMSG` at
 `NOTDRIVE` ends the echo's row whether or not the CR was reached
@@ -177,8 +177,8 @@ from that difference of letter case.
 
 The next line comes by whatever route the CCP takes back to `MLREAD`. A built-in
 or a failed command jumps to `STARTED` or `MAINLOOP` (`src/cpm/ccp.asm:68-74`,
-`src/cpm/ccp.asm:276`, `src/cpm/ccp.asm:1153`). A program returns to the `WBOOT`
-address that `CMDRUN` pushed (`src/cpm/ccp.asm:300-301`), and the warm boot
+`src/cpm/ccp.asm:276`, `src/cpm/ccp.asm:1155`). A program returns to the `WBOOT`
+address that `CMDRUN` pushed (`src/cpm/ccp.asm:302-303`), and the warm boot
 enters the CCP at `CCPENT`, where `STBOOT` returns at once. The loop then
 reaches `STLINE` with `STPOS` where the last line left it. A `^C` that ends a
 program is a warm boot too, so it leaves the file's position alone. Chapter 24
@@ -197,7 +197,7 @@ the first returns at once with carry set, for the keyboard
 (`src/svc.asm:484`).
 
 The test is a piece of arithmetic on `CONDEV`, the byte at `0045h` that records
-the console devices (`src/layout.asm:37`, `src/layout.asm:49-54`):
+the console devices (`src/layout.asm:39`, `src/layout.asm:51-56`):
 
 | Bit | Name | Meaning |
 | --- | --- | --- |
@@ -254,7 +254,7 @@ matrix keyboard, and a second load of `PICO.SVC` fails while the first is in.
 IOBYTE is 3, `UC1:`, it goes on. Otherwise it calls `INFO`, whose `L` is the
 console's columns, and it fails if `L` isn't 0, which is the case while any
 display is the console (`drivers/glcd.asm:33-42`, `src/hwsvc.asm:54-55`). `CMDCON` writes the field before it calls `GLCLD`
-(`src/cpm/ccp.asm:1134-1137`), so `CON UC1` reaches the load with the field
+(`src/cpm/ccp.asm:1136-1139`), so `CON UC1` reaches the load with the field
 already 3, and a startup line `GLCD.SVC` under a PICO9918 console doesn't.
 `GLCD.SVC` then calls `GLCWAIT`, and a controller that doesn't answer fails the
 load (`drivers/glcd.asm:43-45`), as `INFO`'s answer does for `PICO.SVC`.
@@ -294,7 +294,7 @@ loading under `PICO.SVC`, which keeps the console, clears one too
 (`src/glcd.asm:95`). Hardware service `LCD` clears the bit, with no write of
 blanks, when a program writes row 3 (`src/hwsvc.asm:79-83`), so the row is
 then the program's and a later take leaves it alone. `DEMO`, whose source is
-`test/programs/demo.asm`, writes its row 3 this way, and `test/pico.test.mjs:562`
+`test/programs/demo.asm`, writes its row 3 this way, and `test/pico.test.mjs:563`
 and `:571` check it for both words. A
 program that writes the LCD's port goes round this test. The bit then stays set,
 and a later take writes its five blanks over the start of the program's row.
@@ -312,57 +312,58 @@ from the port, so no reset begins with `CDWRD` set (`src/console.asm:30`,
 The web page sets the display and the width from its "Display" and "ROM"
 controls, and it keeps the card's `PICO.SVC` and first lines in step with them.
 At each power-on with the PICO9918, `powerOn` fetches the page's recipe and
-passes it to `widthDrivers` (`web/src/main.mjs:66-72`). The recipe's `widths`
+passes it to `widthDrivers` (`web/src/main.mjs:67-74`). The recipe's `widths`
 names three of the page's files, `PICO.SVC`, `PICO40.SVC` and `PICO32.SVC`, and
 `widthDrivers` fetches each and checks it against the SHA-256 there
-(`host/card.mjs:82-96`). If one can't be fetched or doesn't match, `prepareCard`
-gets no drivers and the page reports that the drivers couldn't be fetched.
-Otherwise `prepareCard` writes the driver at the chosen width to drive A as
-`PICO.SVC` when the card has none, has one of the three pinned builds at any
-width or has one of another format. It compares the build's bytes and the file's length in whole records with
-each build (`host/card.mjs:47`). Any other `PICO.SVC` is the card
-owner's build, so it stays, and the note `This card's own PICO.SVC is kept, at
-the width it was built for.` goes to the serial terminal. `prepareCard` writes
-nothing to a card with no drive A or with an older TEC-OS's `.DRV` files
-(`host/card.mjs:56-71`). It then leaves the startup file alone if `cardProblem`
-finds drive A missing, the display's file missing or that file in another
-format, and otherwise calls `setDisplayLine` (`host/card.mjs:25-44`,
-`host/card.mjs:72`). A card with no such file but with a `.DRV` display file
-gets a message of its own, and the test for it reads the directory only
-(`host/card.mjs:13`, `host/card.mjs:35-38`). The message names the chosen
-display's `.DRV` file if the card has it, and otherwise the first `.DRV` display
-file in the directory.
+(`host/card.mjs:99-113`). If one can't be fetched or doesn't match, the page
+reports that the drivers couldn't be fetched and the card is left as it is.
+`prepareCard` then gets no drivers, and it returns the card's problem, if any,
+with nothing changed, the startup file included (`host/card.mjs:58-60`).
+
+Otherwise `prepareCard` makes its changes on a copy of the image, and the copy
+goes over the card only once every change is made (`host/card.mjs:61-67`). It
+opens drive A read-only when the card's descriptor says so, and it looks only
+at user 0's files, the ones the ROM loads (`host/card.mjs:15-21`). A change it
+can't make, to a read-only drive A or in a full directory, throws, and the card
+stays as it was. The serial terminal then shows `This card couldn't be prepared
+for the page`, the reason in parentheses and `so it boots as it is.`
+(`host/card.mjs:68-69`).
+
+On the copy, `prepareCard` writes the driver at the chosen width to user 0 of
+drive A as `PICO.SVC` when user 0 has none, has one of the three pinned builds
+at any width or has one of another format. It compares the build's bytes and
+the file's length in whole records with each build (`host/card.mjs:49`). Any
+other `PICO.SVC` is the card owner's build, so it stays, and the note `This
+card's own PICO.SVC is kept, at the width it was built for.` goes to the serial
+terminal. `prepareCard` writes nothing to a card with no drive A or with an
+older TEC-OS's `.DRV` files (`host/card.mjs:73-88`). It then leaves the startup
+file alone if `cardProblem` finds drive A missing, the display's file missing
+or that file in another format, and otherwise calls `setDisplayLine`
+(`host/card.mjs:27-46`, `host/card.mjs:89`). A card with no such file but with a
+`.DRV` display file gets a message of its own, and the test for it reads the
+directory only (`host/card.mjs:13`, `host/card.mjs:37-40`). The message names
+the chosen display's `.DRV` file if the card has it, and otherwise the first
+`.DRV` display file in the directory.
 
 `setDisplayLine` reads the file up to its `^Z` and splits it into lines.
 `withoutDisplay` splits each line at `!`, drops every piece that is a display
 driver's name under either type, with or without a leading `:`, and joins the
-rest (`host/card.mjs:12`, `host/card.mjs:104-125`). A dropped piece passes its
+rest (`host/card.mjs:12`, `host/card.mjs:121-142`). A dropped piece passes its
 own `:` to the piece after it on its line, so `DIR!:PICO.SVC!MOUNT` becomes
 `DIR!:MOUNT`. A `:` first on the next line stays if the dropped piece had its
 own, so the lines `DIR`, `:PICO.SVC` and `:MOUNT` become `DIR` and `:MOUNT`.
 Otherwise a `:` that waited on a dropped piece goes, on its line or
 first on the next, since it must not wait on what now comes before it. The line
 `PICO.SVC!:MOUNT` becomes `MOUNT`, an ordinary line that runs after the
-display's line whatever that line did (`test/pico.test.mjs:829-841`). Lines left
+display's line whatever that line did (`test/pico.test.mjs:830-842`). Lines left
 blank are dropped. The new file is the chosen display's file, then the
 remaining lines, and nothing is written if that equals the old text
-(`host/card.mjs:127-139`). The file has no line for the other display. On the
+(`host/card.mjs:144-156`). The file has no line for the other display. On the
 page's board, which has both, a `GLCD.SVC` line after `PICO.SVC` would only give
 way and print `GLCD.SVC?`, and `CON UC1` loads `GLCD.SVC` itself when it is
-wanted (`src/cpm/ccp.asm:1135-1137`).
+wanted (`src/cpm/ccp.asm:1137-1139`).
 
-The preparation can change or stop on a card that its messages say it leaves
-alone. A failed fetch gives the message that the card is left as it is
-(`host/card.mjs:94`). `setDisplayLine` still runs on a card that passes
-`cardProblem`, though, so the starter card's `STARTUP.CMD` loses its `GLCD.SVC`
-line (`host/card.mjs:60-72`). `driveA` opens drive A for writing
-whatever its descriptor says, so a read-only drive A gets the page's
-`PICO.SVC` and `STARTUP.CMD` all the same (`host/card.mjs:15-19`). `cardProblem`
-looks for the display's file in every user area and then reads it from user 0,
-so a card whose only `PICO.SVC` is in user 1 makes the read throw
-(`host/card.mjs:35`, `host/card.mjs:41`). A `STARTUP.CMD` or `PICO.SVC` that
-must be made new in a full directory throws too. A throw stops the power-on
-before the machine is made, and its message reaches only the browser's console
-(`web/src/main.mjs:72-75`). A card you need is best copied to the PC before the
-page opens it. A card that stops the power-on can still be saved with "Download
-image" and mended with `tecvol`.
+A card that passes `cardProblem` has its startup file rewritten even when it
+needs no driver, so the starter card's `STARTUP.CMD` loses its `GLCD.SVC` line
+and holds `PICO.SVC` alone (`host/card.mjs:73-89`). A card whose startup file
+has to stay as it is is best copied to the PC before the page opens it.
