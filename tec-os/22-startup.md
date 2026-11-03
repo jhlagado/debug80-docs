@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 22. Startup
 
-Checked against TEC-OS 60cfbdc.
+Checked against TEC-OS 4d6eeaa.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and three
@@ -71,7 +71,7 @@ holds a key through reset to get past a service whose `INIT` never returns, and
 key is down, as Appendix G describes. A low bit returns from `STBOOT` with
 `STPOS` at `80h`, so a skip is the same state as a file that wasn't there. Bit 6
 is tested this one time, so the key has to be down when `STBOOT` starts, which
-on the model, with the web page's board and the starter card, is 5,875,333
+on the model, with the web page's board and the starter card, is 5,864,134
 T-states after reset, about 1.47 seconds.
 
 `STBOOT` then makes the read in the CCP's own FCB. It copies 12 bytes of
@@ -240,7 +240,7 @@ answered at cold boot (`drivers/pico.asm:47-51`). Each driver then passes its
 table to `GLHOOK` through `ABIGLCD` (`drivers/pico.asm:52-55`,
 `drivers/glcd.asm:46-49`), and `GLHOOK` returns carry if `CDMTX` is clear or if
 that slot already holds a table (`src/glcd.asm:17-26`). So a driver needs the
-matrix keyboard, and `PICO40.SVC` fails while `PICO.SVC` is in.
+matrix keyboard, and a second load of `PICO.SVC` fails while the first is in.
 
 `GLCD.SVC` has two more tests, both ahead of those. If the console field of the
 IOBYTE is 3, `UC1:`, it goes on. Otherwise it reads the byte that `ABIVID`
@@ -286,8 +286,9 @@ it, so any take of the console clears a word (`src/glcd.asm:89`), and `GLCD.SVC`
 loading under `PICO.SVC`, which keeps the console, clears one too
 (`src/glcd.asm:87`). Hardware service `LCD` clears the bit, with no write of
 blanks, when a program writes row 3 (`src/hwsvc.asm:114-118`), so the row is
-then the program's and a later take leaves it alone. `DEMO`'s row shows this in
-Chapter 5, and `test/pico.test.mjs:561` and `:570` check it for both words. A
+then the program's and a later take leaves it alone. `DEMO`, whose source is
+`test/programs/demo.asm`, writes its row 3 this way, and `test/pico.test.mjs:561`
+and `:570` check it for both words. A
 program that writes the LCD's port goes round this test. The bit then stays set,
 and a later take writes its five blanks over the start of the program's row.
 
@@ -302,26 +303,31 @@ from the port, so no reset begins with `CDWRD` set (`src/console.asm:29`,
 ## The web page's rewrite
 
 The web page sets the display and the width from its "Display" and "ROM"
-controls, and it keeps the card's first lines in step with them. At each
-power-on `powerOn` calls `prepareCard` (`web/src/main.mjs:66-67`), which leaves
-the card alone if `cardProblem` finds drive A missing, the display's file
-missing or that file in another format, and otherwise calls `setDisplayLine`
-(`host/card.mjs:27-67`). A card with no such file but with a `.DRV` display file
-gets a message of its own, and the test for it reads the directory only
-(`host/card.mjs:15`, `host/card.mjs:37-40`). The message names the `.DRV` file of
-the chosen display and width if the card has it, and otherwise the first `.DRV`
-display file in the directory.
+controls, and it keeps the card's `PICO.SVC` and first lines in step with them.
+At each power-on with the PICO9918, `powerOn` fetches the driver built at the
+chosen width, one of `PICO.SVC`, `PICO40.SVC` and `PICO32.SVC` among the page's
+files, and passes it to `prepareCard` (`web/src/main.mjs:66-68`,
+`host/card.mjs:11`). `prepareCard` writes that driver to drive A as `PICO.SVC`
+when the card's copy is missing, differs or is in another format. It writes
+nothing to a card with no drive A or with an older TEC-OS's `.DRV` files
+(`host/card.mjs:54-65`). It then leaves the card alone if `cardProblem` finds
+drive A missing, the display's file missing or that file in another format,
+and otherwise calls `setDisplayLine` (`host/card.mjs:27-67`). A card with no such file but with a
+`.DRV` display file gets a message of its own, and the test for it reads the
+directory only (`host/card.mjs:15`, `host/card.mjs:37-40`). The message names
+the chosen display's `.DRV` file if the card has it, and otherwise the first
+`.DRV` display file in the directory.
 
 `setDisplayLine` reads the file up to its `^Z` and splits it into lines.
 `withoutDisplay` splits each line at `!`, drops every piece that is a display
 driver's name under either type, with or without a leading `:`, and joins the
 rest (`host/card.mjs:14`, `host/card.mjs:75-96`). A dropped piece passes its own
-`:` to the piece after it on its line, so `DIR!:PICO.SVC!VOLS` becomes
-`DIR!:VOLS`. A `:` first on the next line stays if the dropped piece had its
-own, so the lines `DIR`, `:PICO.SVC` and `:VOLS` become `DIR` and `:VOLS`.
+`:` to the piece after it on its line, so `DIR!:PICO.SVC!MOUNT` becomes
+`DIR!:MOUNT`. A `:` first on the next line stays if the dropped piece had its
+own, so the lines `DIR`, `:PICO.SVC` and `:MOUNT` become `DIR` and `:MOUNT`.
 Otherwise a `:` that waited on a dropped piece goes, on its line or
 first on the next, since it must not wait on what now comes before it. The line
-`PICO.SVC!:VOLS` becomes `VOLS`, an ordinary line that runs even after a failed
+`PICO.SVC!:MOUNT` becomes `MOUNT`, an ordinary line that runs even after a failed
 `GLCD.SVC` on the line before it (`test/pico.test.mjs:769-781`). Lines left blank
 are dropped. The new
 file is the display's file, then `GLCD.SVC` on a PICO9918 board, then the
