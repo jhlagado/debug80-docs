@@ -7,9 +7,9 @@ nav_group: "Appendices"
 
 # Appendix F. `tecvol`
 
-Checked against TEC-OS 19ad916, with the starter card's `TED.COM` from Thorium
-8fcc6ea, with the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
+Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
+676075a, with the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -157,7 +157,7 @@ node tools/tecvol.mjs dir dist/starter.img A
  0 TED.COM         11904
 ```
 
-`MOUNT.COM` is 670 bytes on the PC and six records on the card.
+`MOUNT.COM` is 671 bytes on the PC and six records on the card.
 
 ## put
 
@@ -262,8 +262,8 @@ sha256sum build/fresh.img dist/starter.img
 ```
 
 ```text
-915684d55cbb2c445cc26a337d6837c361afd10fbe2b579a1f1486c8ad1ff188  build/fresh.img
-915684d55cbb2c445cc26a337d6837c361afd10fbe2b579a1f1486c8ad1ff188  dist/starter.img
+3671751cd22be4f7c412598d9b11ba557cf0ca1ca980ab3d34b8acab76a4fbc5  build/fresh.img
+3671751cd22be4f7c412598d9b11ba557cf0ca1ca980ab3d34b8acab76a4fbc5  dist/starter.img
 ```
 
 The two images are the same to the byte: the volumes' places, the `E5h` fill,
