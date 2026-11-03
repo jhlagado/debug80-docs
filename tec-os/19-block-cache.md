@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 60cfbdc, with the ATOM assembler from the repository's
-`atom-z80` 0.3.7 and the starter card's `EDIT.COM` from
-Edit 845d062, whose copy in `dist/files` has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`; the
+Checked against TEC-OS 4d6eeaa, with the ATOM assembler from the repository's
+`atom-z80` 0.3.7 and the starter card's `TED.COM` from
+Thorium 8fcc6ea, whose copy in `dist/files` has the SHA-256
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`; the
 timings and traces below were made on that card unless the text names another.
 
 Reading a block from the SD card takes TEC-OS about 55 milliseconds, because
@@ -98,7 +98,7 @@ below `8000h`, such as the CCP's loads at `0100h` and up, takes from 4,808
 T-states, in line 0. A miss to such an address takes 226,501.
 
 `DIR` on the starter card's drive A shows the effect: after the first prompt
-the directory's blocks are in the cache, and `DIR`'s four BIOS reads are all
+the directory's blocks are in the cache, and `DIR`'s two BIOS reads are all
 hits.
 
 A program that reads a file shows the gain over a whole file. This one
