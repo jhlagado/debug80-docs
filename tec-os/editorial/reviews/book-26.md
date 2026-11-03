@@ -6,7 +6,7 @@ a fresh copy of `$S/rev19a` (`$S/r9`), with every card built fresh from that cop
 
 ## Findings
 
-1. **appendix-f-tecvol.md:249, broken anchor.** `[Chapter 22](22-startup.md#the-web-pages-rewrite)`.
+1. **appendix-f-tecvol.md:249, broken anchor.** The link to Chapter 22 uses the anchor `the-web-pages-rewrite`.
    The site's slug for `## The web page's rewrite` is `the-web-page-s-rewrite`. The
    built page `.vitepress/dist/tec-os/22-startup.html` has `id="the-web-page-s-rewrite"`,
    and the book's other apostrophe headings link this way (`#the-ccp-s-messages`,
