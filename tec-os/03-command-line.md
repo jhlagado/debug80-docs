@@ -7,11 +7,11 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
-`TAS.COM` from Thorium 7604daa, with the SHA-256
-`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
+`TAS.COM` from Thorium dbee66a, with the SHA-256
+`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
 Everything you do at the `A>` prompt goes through the CCP, the command
 processor that Chapter 1 introduced. The CCP reads the line you type, finds
@@ -33,13 +33,13 @@ capital, so `dir *.com` and `DIR *.COM` are the same command:
 A>dir *.com
 TERM.COM     PROBE.COM    DEMO.COM     MOUNT.COM    VOLS.COM     EDIT.COM
 TAS.COM     
-7 files, 976K free
+7 files, 974K free
 A>DIR ????.COM
 TERM.COM     DEMO.COM     VOLS.COM     EDIT.COM     TAS.COM     
-5 files, 976K free
+5 files, 974K free
 A>DIR A:P*.*
 PROBE.COM    PICO.SVC     PICO40.SVC   PICO32.SVC  
-4 files, 976K free
+4 files, 974K free
 A>DIR B:
 NO FILE
 A>
@@ -224,6 +224,11 @@ because a file of the new name, `NOTES.TXT`, is there already, and `REN`
 changes nothing then. A `REN` whose old name isn't there prints `NO FILE`, and
 so does an `ERA` that matches no file, as the second `ERA` above shows.
 
+`REN` takes one drive for both names, from either name, so
+`REN B:NEW.TXT=OLD.TXT` and `REN NEW.TXT=B:OLD.TXT` both rename on drive B. With
+two different drives it fails, and prints its argument with a question mark, as
+`A:NEW.TXT=B:OLD.TXT?`.
+
 `COPY` works in the current user area, on both drives. A name with no drive
 means the current drive, so a destination can turn out to be the same file as
 the source, and that fails with `COPY?` before any file is opened. On drive A
@@ -258,7 +263,8 @@ and `CANNOT MAKE DEST` means the destination's directory is full.
 
 Before it erases with a name that matches every file, such as `*.*` or
 `B:*.*`, `ERA` prints `ALL (Y/N)?` and reads a line. A `Y` as the line's first
-character, in either case, erases the files, and anything else leaves them:
+character, in either case, erases the files, and anything else leaves them, as
+Return alone does:
 
 <!-- node tools/capture.mjs "COPY README.TXT B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
 ```text
@@ -472,17 +478,17 @@ The message is `Bdos Err On`, the drive and one of four causes:
 | Message | Cause |
 | --- | --- |
 | `Bdos Err On C: Select` | the drive has no volume |
-| `Bdos Err On C: Bad Sector` | a record couldn't be read from the card or written to it, or the volume is read-only |
+| `Bdos Err On C: Bad Sector` | a record couldn't be read from the card or written to it |
 | `Bdos Err On B: File R/O` | the file to be written, renamed or erased has its read-only attribute set |
-| `Bdos Err On B: R/O` | the drive was made read-only by BDOS function 28 |
+| `Bdos Err On C: R/O` | the volume is read-only, or the drive was made read-only by BDOS function 28 |
 
 After printing the message, the BDOS waits for a key, and any key ends the
 command, or the program that made the call, with a warm boot.
 
 A write to a read-only volume, such as one made with `tecvol create`'s `:ro`
-in Chapter 4, gives `Bad Sector`, the message for a failed disk write. These
-commands make a card with the starter card's `README.TXT` on drive B, its
-read-only attribute set, and a read-only volume on drive C:
+in Chapter 4, gives `R/O`. These commands make a card with the starter card's
+`README.TXT` on drive B, its read-only attribute set, and a read-only volume on
+drive C:
 
 ```sh
 node tools/tecvol.mjs create build/errs.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:ARCHIVE:C:ro
@@ -493,7 +499,7 @@ node tools/tecvol.mjs put build/errs.img B dist/files/README.TXT --ro
 ```text
 A>SAVE 1 C:X.COM
 
-Bdos Err On C: Bad Sector
+Bdos Err On C: R/O
 A>ERA B:README.TXT
 
 Bdos Err On B: File R/O
@@ -504,8 +510,8 @@ A>
 ```
 
 Neither command changed the card: `SAVE` made no file on drive C, and
-`README.TXT` is still on drive B. A drive made read-only by function 28, the
-cause of `R/O`, stays so until the next warm boot.
+`README.TXT` is still on drive B. A drive made read-only by function 28 stays
+so until the next warm boot, and a read-only volume stays so after it.
 
 ## Command history
 
@@ -527,12 +533,12 @@ GLCD.SVC?
 
 A>DIR *.SVC
 PICO.SVC     PICO40.SVC   PICO32.SVC   GLCD.SVC
-4 files, 976K free
+4 files, 974K free
 A>CON
 CON: CRT: PICO9918
 A>DIR *.SVC
 PICO.SVC     PICO40.SVC   PICO32.SVC   GLCD.SVC
-4 files, 976K free
+4 files, 974K free
 A>
 ```
 
