@@ -16,7 +16,7 @@ program's side. This chapter describes the code behind them: the dispatcher at
 `ABICALL` and each of the nine hardware services, a service's entry, the
 relocation of its addresses, the seven steps of its load, the registry, removal,
 the restart vectors and the stack figures the loader enforces. Appendix H lists
-the `.SVC` file's format, and Chapter 22 describes the path of a display line
+the `.SVC` file's format, and Chapter 21 describes the path of a display line
 after the load.
 
 ## The dispatcher
@@ -54,7 +54,7 @@ alternates (`src/abi.inc:18-21`).
 
 Services 0 to 8 are the hardware services, in `src/hwsvc.asm`. The volume
 services, 9 to 11, are in `src/vol.asm` and Chapter 18 describes them. `DRVR`,
-12, is the display drivers' hook in `src/glcd.asm`, which Chapter 22 describes,
+12, is the display drivers' hook in `src/glcd.asm`, which Chapter 21 describes,
 and `FIND` and `LIST`, 13 and 14, are the registry's, described below
 (`src/hwsvc.asm:4-6`, `src/data3.asm:94-101`).
 
@@ -91,7 +91,7 @@ the select bit with `TXIDLE` to `DIGPORT`. It then waits through 256 rounds of
 `01h` carries bit 6, so the serial line stays high.
 
 `LCD` tests the row before it does anything, then clears `CDWRD` for row 3, as
-Chapter 22 explains (`src/hwsvc.asm:74-83`). `LCDROWS` gives the row's
+Chapter 21 explains (`src/hwsvc.asm:74-83`). `LCDROWS` gives the row's
 display address, and then 20 characters go out, each after `LCDWAIT`
 (`src/hwsvc.asm:84-96`, `src/data2.asm:6`).
 
@@ -161,7 +161,7 @@ A command whose type is `SVC` calls `SVCGO`, as Chapter 17 explains
 `.COM` file to `0100h`. The file is then in the TPA, up to the page of the
 word at `0006h`, and `LOADTOP` gives its end (`src/glcd.asm:79-80`,
 `src/cpm/ccp.asm:361-373`, `src/ram.asm:229`). `SVCGO` then calls `SVCLOAD`
-(`src/glcd.asm:81`). Chapter 22 describes what the console does after a good
+(`src/glcd.asm:81`). Chapter 21 describes what the console does after a good
 load.
 
 `SVCLOAD` works on the file at `DF`, `0100h`, where the header's fields have
@@ -529,7 +529,7 @@ success (`src/svc.asm:72`).
 
 A warm boot keeps all of this, since `REGHEAD`, `SVCHEAD` and `PZTOP` lie past
 `BDOSRME`, the end of the range `CPMINIT` clears (`src/ram.asm:190-192`).
-Chapter 22 describes that boundary. Cold boot clears the workspace, so a reset
+Chapter 21 describes that boundary. Cold boot clears the workspace, so a reset
 empties both lists (`src/boot.asm:23-27`, `test/svc.test.mjs:349`).
 
 ## Restart vectors

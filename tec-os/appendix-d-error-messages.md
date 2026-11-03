@@ -21,7 +21,7 @@ a word from the command line and `LABEL` for a volume's label. `nn` stands for a
 code in hexadecimal, except in the list of volumes `MOUNT` prints, where it is
 a volume's index in decimal. The rest is printed as it stands.
 `tecvol` runs on a PC, and Appendix F describes it. The diagnostics ROM is a
-separate image, and Chapter 24 describes it.
+separate image, and Chapter 23 describes it.
 
 ## Cold boot
 
@@ -47,7 +47,7 @@ The console is the serial terminal at this point, and the LCD's last row shows
 and the mount again, so a card fixed or put in while TEC-OS waits at the prompt
 mounts with no reset. `H` prints the first 64 bytes of the last block read and
 gives the prompt again, and so does any other key, with no bytes printed
-(`src/diag.asm:22-46`). [Chapter 24](24-diagnostics.md#the-diagnostic-prompt)
+(`src/diag.asm:22-46`). [Chapter 23](23-diagnostics.md#the-diagnostic-prompt)
 explains the prompt and [Chapter 1](01-introduction.md#a-card-that-won-t-mount)
 shows it.
 
@@ -106,8 +106,8 @@ written and cleared.
 
 | Word | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| `CARD?` | TEC-OS is waiting at the diagnostic prompt. | As for the prompt. `R` starts the LCD again, so a retry that works clears the word. | [Chapter 22](22-startup.md#the-lcd-s-words), `src/diag.asm:7-8`, `src/data3.asm:106` |
-| `PICO?` | At the first prompt after startup, a board with a PICO9918 and a matrix keyboard has no display driver in. The driver's file may be missing or bad, `STARTUP.CMD` may be missing or have no display line, or startup was skipped. | Correct the card from the serial terminal or on a PC. On a running board, a `PICO.SVC` that loads clears the word. | [Chapter 22](22-startup.md#stdone), `src/svc.asm:482-493`, `src/data3.asm:107` |
+| `CARD?` | TEC-OS is waiting at the diagnostic prompt. | As for the prompt. `R` starts the LCD again, so a retry that works clears the word. | [Chapter 21](21-startup.md#the-lcd-s-words), `src/diag.asm:7-8`, `src/data3.asm:106` |
+| `PICO?` | At the first prompt after startup, a board with a PICO9918 and a matrix keyboard has no display driver in. The driver's file may be missing or bad, `STARTUP.CMD` may be missing or have no display line, or startup was skipped. | Correct the card from the serial terminal or on a PC. On a running board, a `PICO.SVC` that loads clears the word. | [Chapter 21](21-startup.md#stdone), `src/svc.asm:482-493`, `src/data3.asm:107` |
 | `GLCD?` | `CON UC1` couldn't load or install `A:GLCD.SVC`: the file is missing or bad, or the board has no graphics LCD or no matrix keyboard. The console stays where it was. | Put `GLCD.SVC` on drive A. The word stays until a display driver takes the console or a reset. | [Chapter 5](05-startup-and-services.md#words-on-the-lcd), `src/glcd.asm:61-74`, `src/glcd.asm:95-97`, `drivers/glcd.asm:43-45`, `src/data3.asm:105` |
 
 ## The CCP's failures
@@ -192,7 +192,7 @@ and the warm boot after the key prints `Write lost` too
 The data stays in the cache until a reset or a loss of power, either of which
 discards it, so don't reset the board first. Put right what stopped the write
 and press `^C` at the prompt for another warm boot. A warm boot with no message
-means the flush reached the card. On the [host model](26-host-model.md), a
+means the flush reached the card. On the [host model](25-host-model.md), a
 write failure that cleared with the card left in place gave that result at the
 next `^C`. Changes still in the cache when a card comes out are lost, even with
 the same card put back: each `^C` gives `Write lost` again, since only cold boot

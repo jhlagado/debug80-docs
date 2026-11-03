@@ -131,7 +131,7 @@ The ROM's `MOUNT` checks the header first and then each descriptor in table
 order, in one pass, mounting each one as it passes (`src/vol.asm:20-255`). The
 first check to fail stops the mount, unmounts any drive mounted so far and
 returns its code, which cold boot prints at the diagnostic prompt (Chapter
-24). The checks, in the order the ROM makes them:
+23). The checks, in the order the ROM makes them:
 
 | Code | Check | Source |
 | --- | --- | --- |

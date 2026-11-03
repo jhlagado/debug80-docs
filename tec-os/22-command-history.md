@@ -1,11 +1,11 @@
 ---
 title: Command history
 parent: TEC-OS
-nav_order: 23
+nav_order: 22
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 23. Command history
+# 22. Command history
 
 Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
 676075a, whose copy in `dist/files` has the SHA-256

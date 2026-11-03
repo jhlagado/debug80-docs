@@ -1,11 +1,11 @@
 ---
 title: Startup
 parent: TEC-OS
-nav_order: 22
+nav_order: 21
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 22. Startup
+# 21. Startup
 
 Checked against TEC-OS 60e0768.
 
@@ -16,7 +16,7 @@ line at a time, and `STDONE` runs once when the lines are finished. This chapter
 describes them in that order, then the path a display line takes, the flag bit
 behind the LCD's words and the web page's rewrite of the file.
 `test/startup.test.mjs` and `test/pico.test.mjs` check these rules on the host
-model of Chapter 26.
+model of Chapter 25.
 
 ## One byte of state
 
@@ -181,7 +181,7 @@ or a failed command jumps to `STARTED` or `MAINLOOP` (`src/cpm/ccp.asm:68-74`,
 address that `CMDRUN` pushed (`src/cpm/ccp.asm:300-301`), and the warm boot
 enters the CCP at `CCPENT`, where `STBOOT` returns at once. The loop then
 reaches `STLINE` with `STPOS` where the last line left it. A `^C` that ends a
-program is a warm boot too, so it leaves the file's position alone. Chapter 25
+program is a warm boot too, so it leaves the file's position alone. Chapter 24
 describes what `CHPOS` does for a line's pieces.
 
 ## STDONE

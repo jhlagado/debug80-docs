@@ -165,25 +165,23 @@ caret, so `^C` means Ctrl and C together.
     relocation of its addresses and the seven steps of its load, and it ends
     with the registry, removal and the stack figures.
 
-<!-- Chapter 21 was removed: the next list starts at 22. -->
-
-22. **[Startup](22-startup.md).** `STBOOT`, `STLINE` and `STDONE`, with the
+21. **[Startup](21-startup.md).** `STBOOT`, `STLINE` and `STDONE`, with the
     one byte of state and the 128-byte record behind them. The chapter then
     follows a display line and covers the flag bit behind the LCD's words and
     the web page's rewrite of the file.
-23. **[Command history](23-command-history.md).** The 256-byte ring at `BD00h`
+22. **[Command history](22-command-history.md).** The 256-byte ring at `BD00h`
     in EXPAND 1, storing a line, `^W` and `^N` inside BDOS function 10, and
     the effect of a warm boot and of a reset.
-24. **[Diagnostics](24-diagnostics.md).** The diagnostic prompt in the ROM and
+23. **[Diagnostics](23-diagnostics.md).** The diagnostic prompt in the ROM and
     the separate diagnostics ROM, with its tests and its report. The chapter
     ends with running that ROM on a board and comparing the board's report
     with the model's.
-25. **[Chaining inside](25-chaining-inside.md).** The code behind Chapter 11.
+24. **[Chaining inside](24-chaining-inside.md).** The code behind Chapter 11.
     The chapter follows a line through the CCP's main loop, from the line and
     `CHPOS` kept across a warm boot to taking a piece at `!`. It then covers
     the return code and `:`, the paths that drop the rest of a line and
     function 47's checks and copy.
-26. **[The host model and the web page](26-host-model.md).**
+25. **[The host model and the web page](25-host-model.md).**
     `host/machine.mjs` on the Debug80 TEC-1G runtime, with the SD card and
     clock attached to it and its checks on every write. The chapter then
     describes the tests and the web page: its build, its card in IndexedDB and

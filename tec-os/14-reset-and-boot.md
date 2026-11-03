@@ -310,7 +310,7 @@ allocation vectors below `WSBASE` and the RAM BIOS table at `BF00h` are outside
 what `CPMINIT` clears too. So are the two FCBs and the command buffer, the 202
 bytes of the CCP's RAM below `CCPCLR`, and `CHPOS`, the byte above the RAM BIOS
 table that marks a chained line's next piece. The rest of the line therefore
-outlives `CPMINIT` (`src/ram.asm:68-81`, `src/ram.asm:239`), as Chapter 25
+outlives `CPMINIT` (`src/ram.asm:68-81`, `src/ram.asm:239`), as Chapter 24
 describes. The services below the BDOS entry are kept too, and so are the
 registry's head and the display drivers' tables above the RAM BIOS table. The
 cache's lines and the history in EXPAND 1 stay as well.
@@ -329,7 +329,7 @@ Any other is dropped and is scanned in full when it is next selected
 set and drops every drive, as CP/M 2.2 does.
 
 The CCP then sets the user number from the byte it was given. It calls
-`STBOOT`, which starts the startup file once after a cold boot (Chapter 22
+`STBOOT`, which starts the startup file once after a cold boot (Chapter 21
 describes it), and it selects the drive if it is not A. Its main loop then takes a
 chained line's next piece, if one is left, before the startup file's next line
 and before the console (`src/cpm/ccp.asm:80-84`).

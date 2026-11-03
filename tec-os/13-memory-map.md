@@ -290,7 +290,7 @@ marks every cache line empty, as Chapter 14 describes. Its pages are:
 
 The cache's lines and its table are at fixed addresses
 (`src/layout.asm:21-23`), and so is the history's page, `HRING`
-(`src/history.asm:14`). Chapter 19 describes the cache and Chapter 23 the
+(`src/history.asm:14`). Chapter 19 describes the cache and Chapter 22 the
 history. The two pages from `BE00h` are unused.
 
 The cache's copies from its lines to the DMA buffer and back go through

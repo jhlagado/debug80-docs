@@ -15,7 +15,7 @@ socket U9, the hex keypad, the 8 × 8 LEDs, the DS1302 clock and the SD card
 adaptor. It describes the board as the code uses it. TEC-OS has run only on
 the host model, and where the model and the TEC-1G's own
 documents differ, the difference is noted with the test of the diagnostics ROM
-that settles it (Chapter 24).
+that settles it (Chapter 23).
 
 ## The ports
 
@@ -171,7 +171,7 @@ samples it on the rising edge. With nothing selected the port is written
 `05h`: select high, data high, clock low.
 
 Every wait for the card has a limit, and a card that doesn't answer gives one
-of the error codes of Chapter 24 and Appendix D (`src/sd.asm:4-17`). When a
+of the error codes of Chapter 23 and Appendix D (`src/sd.asm:4-17`). When a
 block goes to or from the block cache, the transfer loop runs with EXPAND 1 in
 view, writing the latch before the loop and its copy back after
 (`src/sd.asm:259-263`, `src/sd.asm:357-358`, `src/sd.asm:365-368`,

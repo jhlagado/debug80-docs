@@ -523,7 +523,7 @@ so until the next warm boot, and a read-only volume stays so after it.
 ## Command history
 
 You can bring back an earlier command line and save typing it again, because
-TEC-OS keeps the lines typed at the CCP's prompt, in a store that Chapter 23
+TEC-OS keeps the lines typed at the CCP's prompt, in a store that Chapter 22
 describes. `^W` at the prompt replaces the line being typed with the line
 typed before it, and a second `^W` with the one before that. `^N` moves the
 other way, toward the newest, and one step past the newest leaves an empty
