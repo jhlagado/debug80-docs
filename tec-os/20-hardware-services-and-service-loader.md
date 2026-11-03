@@ -7,15 +7,15 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 20. The hardware services and the service loader
 
-Checked against TEC-OS ea9c1c0. The six bytes below were left by the starter
-card's `TAS.COM`, from Thorium dbee66a, SHA-256
+Checked against TEC-OS 60cfbdc, with the starter card's `TAS.COM` from Thorium
+dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
 Chapters 9 and 10 use two sets of ROM routines from a program's side. This
 chapter describes the code behind them: the dispatcher at `ABIHW` and each of
-the nine hardware services, `XMOVE` and `MOVE`, the seven steps of a service's
-load, the registry, removal and the stack figures the loader enforces. Chapter
-21 describes the `.SVC` file's relocation data, and Chapter 22 the path of a
+the nine hardware services, `XMOVE` and `MOVE`, a service's entry, the seven
+steps of its load, the registry, removal, the restart vectors and the stack
+figures the loader enforces. Chapter 21 describes the `.SVC` file's relocation data, and Chapter 22 the path of a
 display line after the load.
 
 ## The dispatcher
@@ -173,8 +173,11 @@ to move lines to and from EXPAND 1 (`src/cache.asm:269-276`,
 since a program's `MOVE` to bank 1 never gets past `MVRANGE`.
 
 A count of 0 returns at once (`src/xmove.asm:37-39`). Any other copy moves the
-latch with interrupts off, so `LD A,I` copies the interrupt enable to the flag
-`P/V`, and `DI` and `PUSH AF` keep it for the end (`src/xmove.asm:40-42`). `BC`,
+latch with interrupts off. `IFFGET` reads the interrupt enable into the flag
+`P/V` with `LD A,I`, and reads it a second time if `P/V` is clear, because an
+NMOS Z80 can clear it when an interrupt is accepted during the first read
+(`src/cache.asm:17-22`). `DI` and `PUSH AF` then keep it for the end
+(`src/xmove.asm:40-42`). `BC`,
 `DE` and `HL` hold the copy's own values, so the two latch values go in the
 alternate registers, whose old values are pushed first: `C'` is the port, and
 `D'` and `E'` are `LATCHV` with `LATEXP` set for each end in bank 1
@@ -209,10 +212,65 @@ the offsets in Chapter 10's table (`src/svc.asm:11-24`). It reports through
 carry and `SVCRC` (`src/svc.asm:69-71`), and the CCP treats every carry alike,
 as a name with a question mark.
 
+## A service's entry
+
+The word at `0006h` has two jobs in CP/M. It is the target of the `JP` at `0005h`,
+so every BDOS call passes through it. It is also the top of the TPA, so a program
+sizes its memory from it. A program may also set `SP` from the word and fill
+memory up to it. The starter card's `TAS.COM` sets its stack this way, with `LD
+HL,($0006)` and `LD SP,HL` at `010Dh`. A service sits directly under the top of
+the TPA, so it has to hold a BDOS entry at the word's address and keep everything
+it needs at or above that address. A BDOS call should also cost the same however
+many services are in.
+
+Relocation adds a page number to the high byte of each address, so a service
+starts on a page boundary. With a service in, the word holds `xx00h`, the page's
+start. Offset 0 of the page holds `JP BENTRY`, a jump straight into the
+ROM (`src/svc.asm:198-201`, `test/svc.test.mjs:159`). Offset 0 is the service's
+lowest byte, so nothing the service needs lies below the word, and a stack set
+from the word grows away from it (`test/svc.test.mjs:813`). The loader puts no
+service on the path of a BDOS call, so each `JP` can go straight to `BENTRY`. A BDOS call is therefore
+always two jumps, the one at `0005h` and the one at the word, with none, one or
+two services in (`test/svc.test.mjs:844`).
+
+With no service in, the word holds the address of the BDOS entry jump, the *stub*,
+and `STUBAD` keeps that address. `ALVINIT` puts the stub directly below the lowest
+allocation vector, so the TPA keeps every byte up to the vectors
+(`src/vol.asm:570-574`). On the starter card the vectors start at `B818h` and the
+stub is at `B815h`. Its low byte varies with the card, so a program assumes
+nothing of it. `PZINIT` writes the stub's three bytes at every
+warm boot (`src/boot.asm:226-231`).
+
+The loader takes its pages below the page of the top (`src/svc.asm:95-97`), so
+the first service also costs the bytes from the start of the stub's page up to
+the stub. On the starter card those are the 21 bytes from `B800h` to `B814h`, and
+`COUNT.SVC`'s one page lowers the TPA by 277 bytes. A later service's top is a
+page's start, so it costs its pages and nothing more.
+
+The file's header has the layout in Chapter 10's table. In memory the loader has
+written over some of its fields, and a loaded service's header holds:
+
+| Offset | Bytes | In memory |
+| ---: | ---: | --- |
+| 0 | 3 | `JP BENTRY` |
+| 3 | 1 | The flags, or 0 if a hook kept the pages |
+| 4 | 2 | `REMOVE`, from the header's start |
+| 6 | 2 | The registry's head before this service |
+| 8 | 1 | The owner before it: the next older service's page, 0 at the last |
+| 9 | 3 | Unused |
+| 12 | 3 | Each stack's room left below this service |
+| 15 | 2 | Unused |
+| 17 | 8 | The name |
+
+A header holds no copy of the old top. `SVCABV` turns an owner into the page above a
+service, taking the stub's page when the owner is 0 (`src/svc.asm:308-313`).
+`PRLTOP` rebuilds the top in the same way when a service goes
+(`src/prl.asm:59-69`).
+
 ## The seven steps
 
 Before the move in step 5 a load changes only the file and the loader's own
-variables, so a failure in the first four steps leaves the rest of memory as it
+variables, so a failure before it leaves the rest of memory as it
 was (`src/svc.asm:69-71`). The write of `PZTOP` in step 7 is the commit: until
 then a warm boot gives the pages back, as step 6 describes.
 
@@ -229,7 +287,7 @@ records read (`src/svc.asm:81-84`, `src/svc.asm:324-330`). `SVCIN` checks that
 The page comes next, by the sum in Chapter 21. An overflow, a borrow or a page
 below `80h` fails the load, and the page goes in `PRLDL`
 (`src/svc.asm:91-101`). For `COUNT.SVC` on the serial board, with the top at
-`B806h` and 100 bytes, the page is `B7h`.
+`B815h` and 100 bytes, the page is `B7h`.
 
 ### 2. The dependencies
 
@@ -252,8 +310,7 @@ figure in the new header from that room and fails on a borrow, and it stores
 the difference over the figure in the new header (`src/svc.asm:135-145`). The
 header in memory then holds the room left below this service, and the loader
 keeps no other total. On the serial board, with limits 8, 12 and 6,
-`COUNT.SVC`'s figures of 2 each leave `06h`, `0Ah` and `04h` at `B70Ch`, as
-the script under "The bytes below 0006h" prints.
+`COUNT.SVC`'s figures of 2 each leave `06h`, `0Ah` and `04h` at `B70Ch`.
 
 ### 4. The relocation
 
@@ -290,14 +347,21 @@ B>
 The space at byte 24 has become `20h` + `B7h`, `D7h`, and `PUTTRIM` masks bit
 7 (`src/cpm/ccp.asm:755-757`), so the name prints with a `W`.
 
-### 5. The move
+### 5. The claims and the move
 
-Chapter 21 gives the fields the loader writes over the header, the `LDIR` that
-moves it and the new word at `0006h` (`src/svc.asm:194-210`). `PZTOP`, the word
-that warm boot puts at `0006h`, isn't written (`src/ram.asm:228`). Offset 8, the
-high byte of the `JP` written at offset 6, is the old top's page, the page above
-this service's last. `SVCBND` reads it there for the loader's bounds
-(`src/svc.asm:300-306`).
+`SVCMOV` reads the flags first. For each of bits 1 to 7 that is set it reads the
+first byte of that restart vector, and a `JP` there fails the load, with carry,
+`SVCRC` at 0 and nothing changed but the file (`src/svc.asm:178-191`). The section
+on restart vectors gives the reason.
+
+The size at offset 6 goes on the stack, since the resident fields are about to
+overwrite it. `LDIR` copies `REGHEAD` and `SVCHEAD`, 3 bytes, to offset 6, and
+`JP BENTRY` goes in at offset 0 (`src/svc.asm:192-202`). A second `LDIR` moves the
+header and image to the page, and the word at `0006h` becomes the page's start, with
+the 0 that `LDIR` leaves in `B` as its low byte (`src/svc.asm:203-210`). `PZTOP`,
+the word that warm boot puts at `0006h`, isn't written (`src/ram.asm:228`).
+`SVCBND` reads the owner at offset 8 for the loader's bounds, the page above this
+service's last (`src/svc.asm:300-313`).
 
 ### 6. INIT
 
@@ -310,7 +374,10 @@ A warm boot during `INIT` leaves the word at `0006h` correct, because `PZTOP` is
 untouched. `PZINIT` writes `PZTOP` to `0006h` (`src/boot.asm:224-225`), and warm
 boot clears `SVCBSY` (`src/boot.asm:71-72`). The pages go back as if the load
 had never started, and `test/svc.test.mjs:432-445` checks that a later load
-works. A hook already in the table then points into the TPA, which is
+works. Function 47 from `INIT` is a warm boot at the same point
+(`test/svc.test.mjs:868`). The sweep in `PZINIT` takes any restart vector `INIT`
+has set, since the new pages lie below `PZTOP`'s page (`test/svc.test.mjs:774`).
+A hook already in the table then points into the TPA, which is
 why hooks go last (`test/svc.test.mjs:461-468`). A reset during a hung `INIT` is
 recognised all the same, because `RSLCAP` doesn't compare the word at `0006h`
 with `PZTOP` (`src/boot.asm:88-89`).
@@ -338,14 +405,14 @@ final `CP 1` and `CCF` turn `SVCRC` into the carry (`src/svc.asm:280-286`).
 
 ## A failed load
 
-Until `SVCMOV` nothing but the file has changed, and each failure returns carry
+Until the move nothing but the file has changed, and each failure returns carry
 with `SVCRC` at 0. After the move there are three outcomes, and the labels
 `SVCSCAN`, `SVCRF` and `SVCKEEP` separate them.
 
 | `SVCRC` | Case | State after |
 | ---: | --- | --- |
 | 0 | Rejected before the move | As it was |
-| 1 | `INIT` or a record failed, nothing left behind | As it was; `0006h` put back |
+| 1 | `INIT` or a record failed, nothing left behind | As it was; `0006h` put back and the vectors swept |
 | 2 | A hook left behind, or `REMOVE` rejected the undo | Pages kept |
 
 A carry from `INIT` goes straight to `SVCSCAN`, since a failed `INIT` has undone
@@ -359,7 +426,8 @@ A failed load may have left a hook in the RAM BIOS table, and the service's
 pages can't go while one points at them. So `SVCSCAN` tests the high byte of
 each of the 17 targets in the table against the service's pages
 (`src/svc.asm:245-253`, `src/layout.asm:74`). With no hit, the word at `0006h`
-goes back to `PZTOP` and the result is 1 (`src/svc.asm:254-258`). A hit writes
+goes back to `PZTOP`, `PZSWP` takes any restart vector into the pages, and the
+result is 1 (`src/svc.asm:254-258`). A hit writes
 0 over the flags, so `UNLOAD` will reject the service, and it goes to
 `SVCKEEP` (`src/svc.asm:259-264`). A hook left in the table then points at
 pages the service still holds, and `test/svc.test.mjs:386-398` shows them
@@ -368,7 +436,7 @@ are beyond it (`test/svc.test.mjs:535`).
 
 A service kept this way appears in `SERVICES`, because `CMDSVC` walks the owner
 list from `SVCHEAD`, not the registry (`src/svc.asm:342-366`). Each header's
-offset 2 is the next older service's page, 0 at the end.
+offset 8 is the next older service's page, 0 at the end.
 
 ## The registry
 
@@ -400,7 +468,7 @@ can't find its own record during `INIT` (`test/svc.test.mjs:424`).
 
 Only the lowest service can go, and that rule keeps true the three bytes each
 header saves, the registry's head and the lowest service's page. Each header
-holds that state from before its own load (Chapter 21), and the states are
+holds that state from before its own load, and the states are
 stacked in memory in the order of the loads.
 
 `UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1101-1103`), which rejects the
@@ -411,79 +479,63 @@ flags must also be set (`src/svc.asm:35-40`).
 
 `SVCCALL` then runs `REMOVE`. `SVCSHUT` clears `SVCBSY` without touching the
 flags, and carry from `REMOVE` returns with nothing changed
-(`src/svc.asm:41-46`). With no carry, `A` is the 0 from `SVCSHUT`, so `LD L,A`
-points `HL` at the header's start. `LDIR` copies 3 bytes back to `REGHEAD` and
-`SVCHEAD` (`src/svc.asm:47-62`), and this one copy removes all the service's
+(`src/svc.asm:41-46`). Function 47 from `REMOVE` is a warm boot there, and the
+service stays listed (`test/svc.test.mjs:877`). With no carry, a loop writes 0 over
+the first byte of each restart vector the flags claim (`src/svc.asm:47-58`).
+`LDIR` copies the 3 bytes at offset 6 back to `REGHEAD` and
+`SVCHEAD` (`src/svc.asm:59-62`), and this one copy removes all the service's
 records, whatever their number. `DE` is left at `SVCGEN`, and the code raises it
 by swapping registers for one `INC (HL)` (`src/svc.asm:63-65`,
-`src/ram.asm:236`). `PRLTOP` reads the old top from the `JP`'s address at offset
-7 and writes it to `PZTOP` and `0006h` (`src/svc.asm:66`, `src/prl.asm:60-69`).
+`src/ram.asm:236`). `PRLTOP` then sets `PZTOP` and `0006h` from the `SVCHEAD` just
+restored, to that page's start, or to the stub if it is 0 (`src/svc.asm:66`,
+`src/prl.asm:59-69`). `PZSWP` runs last and leaves carry clear, so `UNLOAD` reports
+success (`src/svc.asm:67`).
 
 A warm boot keeps all of this, since `REGHEAD`, `SVCHEAD` and `PZTOP` lie past
 `BDOSRME`, the end of the range `CPMINIT` clears (`src/ram.asm:190-192`).
 Chapter 22 describes that boundary. Cold boot clears the workspace, so a reset
 empties both lists (`src/boot.asm:23-27`, `test/svc.test.mjs:353`).
 
-## The bytes below 0006h
+## Restart vectors
 
-At ea9c1c0 the word at `0006h` points at `xx06h` because the BDOS entry has
-that form in CP/M 2.2, as Chapter 13 explains, and the header keeps it by
-placing its `JP` at offset 6 (`src/svc.asm:208-210`). So offsets 0 to 5 of the
-lowest service lie below the word, in the TPA. Those six bytes are
-live: `SERVICES` reads the owner link at offset 2 (`src/svc.asm:364-365`),
-`UNLOAD` reads the flags at offset 3, `REMOVE`'s offset at 4 and 5, and
-restores from offsets 0 to 2 (`src/svc.asm:38-62`).
+A service that takes an interrupt or an `RST` needs its `JP` in page zero to last
+through warm boots and to go when its pages go. A program's vector into the TPA
+must go when the program ends, as Chapter 14 explains. One test separates the
+cases, where the jump lands.
 
-`LOADCOM` stops short of that page (`src/cpm/ccp.asm:369-371`), so loading a
-file can't reach them, but a program that sets `SP` from the word pushes onto
-them, and one that fills memory up to the word writes over them. Nothing tests
-for that. The starter card's `TAS.COM` sets its stack this way, with `LD
-HL,($0006)` and `LD SP,HL` at `010Dh`. This script runs the host model's
-`Machine` class, which `tools/capture.mjs` runs too, on `svc.img` from Chapter
-10, and prints the 16 bytes at `B700h` after each command:
+`PZSWP` walks the vectors from `0008h` to `003Fh`. A vector holding a `JP` whose
+target's page is at or above `PZTOP`'s page keeps its three bytes and has its other
+five cleared. That bound takes in the services, the workspace and the ROM. Any other
+vector gets seven zeros and a `RET`, and if `0038h` holds no kept jump it gets `EI`
+and `RETI` (`src/boot.asm:240-274`). `PZINIT` runs into `PZSWP` at cold boot and at
+every warm boot. `UNLOAD` and a failed `INIT` call it once the top is back, so a
+vector into freed pages then fails the bound (`src/svc.asm:66-67`,
+`src/svc.asm:254-256`, `test/svc.test.mjs:759`, `test/svc.test.mjs:767`). The bound
+is a page, so it also keeps a jump into the bytes of the stub's page below the stub,
+which are the TPA's, and a jump into a service's header. A reset clears page zero,
+so a vector goes with its service then too (`test/svc.test.mjs:799`).
 
-```sh
-node --input-type=module -e '
-import { readFileSync } from "node:fs";
-import { Machine, symbolsFromD8 } from "./host/machine.mjs";
-import { fontBytes } from "./tools/lib/font.mjs";
-Machine.font = fontBytes("./");
-const rom = readFileSync("dist/tecos-debug80.rom");
-const d8 = JSON.parse(readFileSync("dist/tecos-debug80.d8.json", "utf8"));
-const sdImage = new Uint8Array(readFileSync("svc.img"));
-const symbols = symbolsFromD8(d8);
-const m = new Machine({ rom, symbols, sdImage, glcd: false });
-const prompt = (from) => () => (m.pumpInput(), !m.pending?.length
-  && m.ready() && /[A-P]>$/.test(m.text(from)));
-const hex = (b) => b.toString(16).padStart(2, "0");
-m.runUntil(prompt(0), 800_000_000, "boot");
-for (const line of ["B:", "COUNT.SVC", "A:TAS AREA"]) {
-  const from = m.output.length;
-  m.enqueueInput(`${line}\r`, "serial");
-  m.runUntil(prompt(from), 800_000_000, line);
-  const bytes = Array.from({ length: 16 }, (_, i) => m.read(0xB700 + i));
-  console.log(line.padEnd(12), bytes.map(hex).join(" "));
-}
-'
-```
+Two services can't share a vector, and `INIT` writes its own after the move, so the
+loader needs the claim in the header. Flags bits 1 to 7 name `RST 1` to `RST 7`, the
+vectors at `0008h` to `0038h`. Step 5 fails a load whose claimed vector holds a `JP`
+(`test/svc.test.mjs:781`). The test reads one byte, so a jump into the ROM that a
+finished program left there counts as held until a reset. The loader reads only the
+flags, so a vector `INIT` writes with no claim goes unseen, as a vector in `ABIGLCD`'s
+table does. `UNLOAD` clears the first byte of each claimed vector before the sweep,
+which gives it its default whatever it held (`test/svc.test.mjs:747`). A jump the
+service set outside its pages in a vector it didn't claim passes the bound, so
+`REMOVE` restores it. A failed `INIT` runs no `REMOVE`, so `INIT` restores it. `INIT`
+also turns off any source of interrupts it started, because an interrupt left on under
+the default `EI` and `RETI` repeats for ever. A warm boot inside `INIT` leaves that source
+on.
 
-```text
-B:           00 00 00 00 70 08 78 88 78 00 80 80 b0 c8 88 88
-COUNT.SVC    00 00 00 01 2e 00 c3 06 b8 00 0b 00 06 0a 04 19
-A:TAS AREA   2b 1f c9 17 ba 17 c3 06 b8 00 0b 00 06 0a 04 19
-```
-
-The first row is what memory held before the load. In the last, `TAS`'s three
-return addresses, `1F2Bh`, `17C9h` and `17BAh`, lie at offsets 0 to 5.
-`SERVICES` then follows the owner link to page `C9h`, in the ROM, and prints
-what it finds there, as the transcript in Chapter 10 shows. The `UNLOAD` after
-it takes `17BAh` as `REMOVE`'s offset and jumps into the ROM at `CEBAh`, and
-with no hook restored it frees the page with `CONOUT`'s target still at
-`B742h`. `UNLOAD` also copies `2Bh`, `1Fh` and `C9h` to `REGHEAD` and
-`SVCHEAD`, so `SERVICES` prints the same lines afterwards. `CEBAh` is inside
-`SPIR`'s loop (`src/sd.asm:32-39`), and on the model a later read of the card
-fails with `Bad Sector`, and a reset then stops at the diagnostic prompt with
-error 02.
+Nothing in the ROM enables interrupts, as Chapter 14 describes. `WBOOTR` starts with
+`DI`, so a kept `0038h` runs after a warm boot only once a program or a service sets
+`EI` (`src/boot.asm:59`). A warm-boot hook can't do it, since a hook chains into
+`WBOOTR` and no service code runs after that. The sweep writes MAIN 0's page zero, and
+MAIN 1 keeps the copy cold boot gave it. A service that needs its vector there writes
+its own copy last, as with hooks, and restores it in `REMOVE`, and a warm boot inside
+`INIT` leaves that copy stale.
 
 ## The stack figures
 
@@ -492,7 +544,7 @@ reserves three stacks, of the sizes at `src/layout.asm:81-83`:
 
 | Stack | Reserved | Base | Census | `SVCLIM` |
 | --- | ---: | ---: | ---: | ---: |
-| BDOS | 54 | 32 | 34 | 8 |
+| BDOS | 54 | 32 | 32 | 8 |
 | BIOS | 38 | 16 | 16 | 12 |
 | CCP | 30 | 16 | 22 | 6 |
 
@@ -501,14 +553,16 @@ which records every write to memory under the heaviest workloads. The test
 passes only with a quarter of each stack free (`test/stacks.test.mjs:244-245`).
 Base is the same figure from its runs on the serial terminal and the PICO9918
 alone, with the run on a volume written behind: 32, 16 and 16
-(`test/stacks.test.mjs:212-223`). The census is higher for the BDOS and the CCP
-because of the runs with `GLCD.SVC`, which give 34 and 22.
+(`test/stacks.test.mjs:212-223`). The census is higher for the CCP alone, because
+of the run of `CON UC1` on a board with the graphics LCD, which gives 22
+(`test/stacks.test.mjs:219`).
 
 `SVCLIM` holds the limits (`src/data3.asm:112`), and they are counted from the
 base. Each limit is the largest even figure that, added to the base, leaves a
 quarter of the stack free: 40 of 54, 28 of 38 and 22 of 30. At this commit
-`GLCD.SVC` declares 2, 0 and 6 (`drivers/glcd.asm:19`), the difference between
-the base and the census. It therefore takes the whole of the CCP's allowance,
+`GLCD.SVC` declares 2, 0 and 6 (`drivers/glcd.asm:19`). Its 6 is the difference
+between the CCP's base and census, and its 2 is more than the BDOS's difference,
+which is 0. It takes the whole of the CCP's allowance,
 and `COUNT.SVC` with its 2 can't then load. `PICO.SVC` declares 0, 0 and 0,
 since its figures are in the base (`drivers/pico.asm:29`).
 
