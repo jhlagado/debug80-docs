@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. Chaining inside
 
-Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
-845d062, whose copy in `dist/files` has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
+Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
+8fcc6ea, whose copy in `dist/files` has the SHA-256
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -88,7 +88,7 @@ program that a startup line started. This card's startup file has three lines,
 and the first two hold `!`:
 
 ```sh
-printf 'DIR *.CMD!:TYPE STARTUP.CMD\nPICO.SVC!:VOLS\nUSER 0\n' > startup.cmd
+printf 'DIR *.CMD!:TYPE STARTUP.CMD\nPICO.SVC!:MOUNT\nUSER 0\n' > startup.cmd
 cp dist/starter.img start.img
 node tools/tecvol.mjs put start.img A startup.cmd --text
 ```
@@ -101,16 +101,16 @@ B: WORK
 
 A>DIR *.CMD!:TYPE STARTUP.CMD
 STARTUP.CMD 
-1 file, 974K free
+1 file, 984K free
 A>:TYPE STARTUP.CMD
 DIR *.CMD!:TYPE STARTUP.CMD
-PICO.SVC!:VOLS
+PICO.SVC!:MOUNT
 USER 0
 
-A>PICO.SVC!:VOLS
+A>PICO.SVC!:MOUNT
 PICO.SVC?
 
-A>:VOLS
+A>:MOUNT
 A>USER 0
 A>
 ```
@@ -118,7 +118,7 @@ A>
 `STLINE` echoes each line of the file whole, through BDOS function 9, so a `$`
 in a line would end its echo there (`src/svc.asm:455-459`). The CCP echoes the
 later pieces after their own prompts. `PICO.SVC` fails on this serial
-board, so `:VOLS` is dropped, and the loop goes on to the startup file's third
+board, so `:MOUNT` is dropped, and the loop goes on to the startup file's third
 line.
 
 `CHSKIP` reads `CHPOS` and returns at once with `Z` when it is 0. Otherwise it
