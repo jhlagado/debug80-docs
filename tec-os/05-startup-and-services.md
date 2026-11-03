@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS 7935507.
+Checked against TEC-OS 626ee41.
 
 Chapter 1's first boot ran two commands that nobody typed, and on the web
 page's board the first of them moved the console to the PICO9918. This chapter
@@ -331,8 +331,9 @@ The web page's "Display" and "ROM" controls change the card for you, through
 driver built for the chosen width to drive A as `PICO.SVC` when the card has no
 `PICO.SVC`, has one of the page's own three builds or has one of an older
 format. A `wide32.img` made as above holds one of those builds, so the page
-gives it the chosen width. Any other `PICO.SVC` counts as one you built
-yourself, and the page keeps it and says so in the serial terminal, so that
+gives it the chosen width. Any other `PICO.SVC`, one that differs from each of
+the page's builds anywhere in the file, the zeros after the build in its last
+record included, counts as one you built yourself, and the page keeps it and says so in the serial terminal, so that
 card stays at its own width whatever "ROM" says. The page then makes the card's
 first line the file for the chosen display, with no line for the other display,
 and keeps your other lines. On the

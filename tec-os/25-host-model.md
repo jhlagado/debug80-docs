@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. The host model and the web page
 
-Checked against TEC-OS 7935507, with `@jhlagado/debug80-runtime` 0.3.3, the
+Checked against TEC-OS 626ee41, with `@jhlagado/debug80-runtime` 0.3.3, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -205,7 +205,7 @@ were, as the board's reset button does (`host/machine.mjs:526-586`).
 ## The tests
 
 `npm test` runs every file in `test/` that ends `.test.mjs`, one at a time, with
-Node.js's own test runner (`package.json:17`). There are 48 such files, from
+Node.js's own test runner (`package.json:17`). There are 49 such files, from
 `arith.test.mjs` to `write.test.mjs`, each on one part of TEC-OS. Most build
 their machines with `boot` in `test/lib/fixtures.mjs`, which reads the one ROM,
 `build/tecos/tecos.rom`, and, when the board has a matrix keyboard, puts a
@@ -227,9 +227,11 @@ file system for a test to write files into.
 Two inputs the tests use come from outside the repository: the starter card's
 assembler, `TAS.COM`, and its editor, `TED.COM`. `test/inputs.json` records the
 default path, size and SHA-256 of each, and the repository, commit and path it
-comes from. `test/lib/inputs.mjs` reads each from its environment variable, its
-default path beside the clone or `.inputs/`, where `npm run inputs` fetches it
-from that repository at that commit. A file whose SHA-256 differs fails its
+comes from. `test/lib/inputs.mjs` reads each from its environment variable, or
+else from its default path beside the clone, or else from `.inputs/`, where
+`npm run inputs` fetches it from that repository at that commit
+(`tools/lib/pins.mjs:12-23`). The README's setup runs `npm run inputs` once on a
+fresh clone, after `npm ci` and the browser's install (`README.md:34-41`). A file whose SHA-256 differs fails its
 test, and a missing one skips it, or fails it with `STRICT=1`, which
 `npm run test:strict` sets (`test/lib/inputs.mjs:1-7`, `package.json:18`,
 `package.json:22`). The web page's tests, `test/web-touch.test.mjs` and
@@ -265,9 +267,12 @@ SHA-256 (`tools/media.mjs:197-203`, `tools/media.mjs:221`). The page uses one
 ROM for every display, since the PICO9918's width is the build of the card's
 `PICO.SVC` (`web/build.mjs:14`).
 
-At start the page loads the card it stored last time. If there is none, or the
-stored one isn't a valid container, it builds the starter card from the recipe
-(`web/src/main.mjs:690-707`). Building from the recipe fetches each file,
+At start the page loads the card it stored last time. If there is none, it
+builds the starter card from the recipe and stores it. A stored record that
+can't be read or isn't a valid container is left as it is: `loadCard` returns
+null for no record and throws on a failed read (`web/src/store.mjs:25-40`), and
+the page then runs a starter card that it doesn't store
+(`web/src/main.mjs:690-704`). Building from the recipe fetches each file,
 checks its length and SHA-256 against the recipe and writes it to its drive
 (`tools/lib/recipe.mjs:14-26`).
 
@@ -279,8 +284,15 @@ timer clears the mark before it stores the card. Each save opens its own
 connection to the database and closes it when the save ends
 (`web/src/store.mjs:42-59`). One save by the timer or by a new card runs at a time: such a save asked for
 while another runs marks the card changed, and the next tick saves the newest copy
-(`web/src/main.mjs:124-130`). Copying files onto the card stores it by
-`saveCard` directly (`web/src/main.mjs:634`), outside that guard. When the browser's storage fails, `saveCard`
+(`web/src/main.mjs:124-130`). Copying files onto the card waits for any save
+under way and then stores the card under the same guard, so an older card's
+save can't finish after it (`web/src/main.mjs:160-172`). On the starter card
+that runs after a stored record couldn't be read, no save stores anything, the
+timer's and a copy's included, so a copy reaches only the card in memory, and
+the line under the heading "SD card" says
+`The saved card couldn't be read, so this card isn't saved; reload to try
+again.` until a reload reads the record (`web/src/main.mjs:125`,
+`web/src/main.mjs:161`, `web/src/main.mjs:551-552`). When the browser's storage fails, `saveCard`
 writes a warning to the browser's console, the first of the session only, and
 passes the failure on (`web/src/store.mjs:19-23`). The page then marks the card
 changed again, so the next tick saves again, and the line under the heading "SD
@@ -288,8 +300,8 @@ card" says `Card not saved in this browser`, with the reason, and that the card
 is kept in memory and saved again shortly. After three failures in a row the
 line says instead that saving the card in this browser keeps failing, with the
 reason, and that the card is kept in memory only and "Download image" keeps a
-copy. The words stay until a save succeeds (`web/src/main.mjs:118-172`,
-`web/src/main.mjs:546-551`). A reload before then
+copy. The words stay until a save succeeds (`web/src/main.mjs:118-153`,
+`web/src/main.mjs:546-555`). A reload before then
 brings back the card last stored. "Download image" saves the card in memory
 whatever happened to the store.
 
@@ -323,14 +335,20 @@ The width and the display are kept in the browser's local storage
 (`web/src/main.mjs:17-19`, `web/src/main.mjs:660-672`). A power-on comes from a
 change to either of them, the Power cycle button or a new card, and it first
 prepares the card with `prepareCard` from `host/card.mjs`
-(`web/src/main.mjs:67-105`). For the PICO9918 the page fetches the recipe and the
+(`web/src/main.mjs:67-105`). The preparation and a copy of files onto the card
+take turns, one at a time, so a width chosen while files are copied is the one
+the card in the machine and the stored card both keep (`web/src/main.mjs:67-80`).
+For the PICO9918 the page fetches the recipe and the
 three drivers its `widths` pins, each checked by its SHA-256
 (`host/card.mjs:102-116`). When one can't be had, `prepareCard` changes nothing.
 Otherwise it works on a copy of the card, which goes over the card only once
 every change is made, and it reads user 0 of drive A, read-only when the card
 says so (`host/card.mjs:15-21`, `host/card.mjs:61-74`). `prepareCard` writes the
 driver at the chosen width to drive A as `PICO.SVC` when the card has no
-`PICO.SVC`, has one of those three builds or has one of an older format. Any other `PICO.SVC` is kept, with a note
+`PICO.SVC`, has one of those three builds or has one of an older format. A file
+is one of the builds only if the whole file matches, the build and then the
+zeros to the end of its last record (`host/card.mjs:48-52`). Any other
+`PICO.SVC`, one that differs from each build anywhere, is kept, with a note
 that it is the card's own, and a card with no drive A or from an older TEC-OS
 gets no driver (`host/card.mjs:61-93`). `prepareCard` checks that drive A has
 the display's driver file, in the format this ROM loads. If it does, the first
@@ -351,8 +369,8 @@ A change that can't be made, to a read-only drive A or in a full directory,
 leaves the card as it was, and the serial terminal says that it couldn't be
 prepared and boots as it is. Chapter 21 describes the preparation in full.
 
-"Copy file to drive" writes to a copy of the card while the machine is paused
-and saves it. Only when the save succeeds does it copy it into the card the
+"Copy file to drive" pauses the machine and reads the PC's files. Then, in its
+turn, it writes them to a copy of the card as the card is then, and saves it. Only when the save succeeds does it copy it into the card the
 machine is using and press reset (`web/src/main.mjs:623-655`). A failed save
 leaves the card as it was, and the line under the heading "SD card" says `Not copied` with
 the reason. The reset is a cold boot, so TEC-OS
