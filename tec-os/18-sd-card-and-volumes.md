@@ -274,7 +274,7 @@ cache, as Chapter 19 describes. `WRITE` has more to do
 (`src/bios.asm:188-300`). After mapping it rejects a write to a read-only
 volume before anything changes, with error 1 (`src/bios.asm:204-208`). A change
 made through the BDOS doesn't get this far, since the BDOS's own `R/O` error
-comes first (`src/cpm/bdos.asm:2368-2381`). Function 16 tests the drive too,
+comes first (`src/cpm/bdos.asm:2368-2382`). Function 16 tests the drive too,
 before it writes the directory entry, and on a read-only drive it writes
 nothing and returns success, as CP/M 2.2's close does. Closing an FCB that was
 never opened on such a drive returns 0 with the card unchanged
