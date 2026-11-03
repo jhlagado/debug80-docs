@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 12. The ROM and its build
 
-Checked against TEC-OS 7458352.
+Checked against TEC-OS 7935507.
 
 TEC-OS is one 16 KiB image for the addresses `C000h–FFFFh`. This chapter
 describes the image's layout, from the jump at its first byte to the free
@@ -28,7 +28,7 @@ The ROM has five parts, in this order:
 | `C33Ch–F9EAh` | 13,999 | the code |
 | `F9EBh–FFFFh` | 1,557 | free |
 
-The figures are those of the build at commit 7458352. The build writes them to
+The figures are those of the build at commit 7935507. The build writes them to
 `build/tecos/census.json` and, through `npm run media`, to the table of the
 ROM's regions in `docs/memory-map.md`. The used part, from `C000h` to the end
 of the code, is 14,827 of the 16,384 bytes.
@@ -45,12 +45,12 @@ table from a program's side and Chapter 20 the services behind it. The table
 ends at `C00Bh`, where the data begins.
 
 The data block runs from the label `ROMDATA` (`src/tables.asm:7`) to `ROMCODE`
-(`src/text.asm:98`). Four files that follow one another in the assembly make
-it up: `data.asm`, `data2.asm`, the generated `gen/geom.asm` and `data3.asm`
-(`src/rom.asm:11-14`). They hold the messages, the keyword strings, the
+(`src/text.asm:98`). Three files that follow one another in the assembly make
+it up: `tables.asm`, the generated `gen/geom.asm` and `text.asm`
+(`src/rom.asm:11-13`). They hold the messages, the keyword strings, the
 keyboard's tables, the container's name and disk parameters, the BDOS's
 function table and the table of the numbered services (`src/tables.asm:29-31`,
-`src/text.asm:29-46`, `src/tables.asm:41`, `src/tables.asm:53`). Each group is headed by the name of the source file
+`src/text.asm:27-46`, `src/tables.asm:41`, `src/tables.asm:53`). Each group is headed by the name of the source file
 whose code uses it, so `CWMSG`, the text `Write lost`, sits under `cache.asm`
 (`src/text.asm:95-96`). Nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
 (`src/tables.asm:10-26`) is in the block as the source of the copy that programs
@@ -75,17 +75,16 @@ assembled in the order they are listed (`src/rom.asm:1-3`):
 %INCLUDE "ram.asm"
 %INCLUDE "reset.asm"
 %INCLUDE "abi.asm"
-%INCLUDE "data.asm"
-%INCLUDE "data2.asm"
+%INCLUDE "tables.asm"
 %INCLUDE "gen/geom.asm"
-%INCLUDE "data3.asm"
+%INCLUDE "text.asm"
 %INCLUDE "boot.asm"
 ```
 
-The list goes on through `bios.asm`, `console.asm`, `term.asm`, `video.asm`,
-`tms.asm`, `lcd.asm`, `sd.asm`, `vol.asm`, `diag.asm`, `cpm/ccp.asm`,
-`cpm/bdos.asm`, `hwsvc.asm`, `glcd.asm`, `cache.asm`, `history.asm` and
-`svc.asm`, and ends with `end.asm` (`src/rom.asm:16-32`).
+The list goes on through `bios.asm`, `console.asm`, `keyboard.asm`, `term.asm`,
+`video.asm`, `tms.asm`, `lcd.asm`, `sd.asm`, `vol.asm`, `cpm/ccp.asm`,
+`cpm/bdos.asm`, `services.asm`, `cache.asm`, `history.asm` and `loader.asm`,
+and ends with `end.asm` (`src/rom.asm:15-30`).
 
 The first five files emit no bytes. `abi.inc`, `gen/config.asm` and
 `gen/format.asm` are equates. So is `layout.asm`, which names the ports, the
@@ -101,10 +100,10 @@ describes that memory. Bytes start with `reset.asm` and its `ORG $C000`
 (`src/reset.asm:6`), and from there each file's bytes follow the last's.
 
 The table follows the reset jump because `abi.asm` follows `reset.asm`. The
-data follows the table because the four data files come next, and the code
-follows the data because every file after `data3.asm` is code. So a code
+data follows the table because the three data files come next, and the code
+follows the data because every file after `text.asm` is code. So a code
 file's routines are in the code block, and its strings and tables are in the
-data block, under a heading with the file's name (`src/rom.asm:9-15`,
+data block, under a heading with the file's name (`src/rom.asm:9-14`,
 `src/text.asm:95`).
 
 ## The generated files
@@ -122,7 +121,7 @@ the banner and the LCD's top row print from (`src/text.asm:6`,
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,
-`tools/build.mjs:36-58`). At 7458352 they are 49, 105, 50, 70 and 77, and the
+`tools/build.mjs:36-58`). At 7935507 they are 49, 105, 50, 70 and 77, and the
 build stops with an error if a count would not fit in a byte
 (`tools/build.mjs:45-47`). Chapter 15 explains the loops and the arithmetic
 behind the counts.
@@ -165,7 +164,7 @@ the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
 therefore `BF00h` less the workspace's size, and the size is known only after
 an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
 build reads the address of `BDOSRME`, the label at the workspace's end, and
-takes `8000h` from it (`tools/build.mjs:228-232`). At 7458352 that part is
+takes `8000h` from it (`tools/build.mjs:228-232`). At 7935507 that part is
 1,448 bytes, so the second assembly has `WSBASE` at `B958h`
 (`tools/build.mjs:233-235`).
 
@@ -242,7 +241,7 @@ with an error when it is given any other name (`tools/build.mjs:28-31`,
 `tools/build.mjs:323`). `npm run build` prints one line:
 
 ```text
-tecos: ROM 14827/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 60abc9b43ce27071
+tecos: ROM 14827/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 9c946bc259917dca
 ```
 
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
@@ -257,4 +256,4 @@ dist: 1 ROM profiles, 7 starter files, starter.img
 ```
 
 The ROM in `dist/` has the SHA-256
-`60abc9b43ce27071aabf50b6e4a336a5f79804494de4be5e67278905d5d36f76`.
+`9c946bc259917dcaeecee4c776721e21f41264f1eb21d264d54b0960918e7a0c`.
