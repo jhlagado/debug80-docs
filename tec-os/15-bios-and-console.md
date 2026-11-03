@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 15. The BIOS and the console path
 
-Checked against TEC-OS 1f9542d.
+Checked against TEC-OS 7458352.
 
 The BIOS is the part of a CP/M system written for one machine, and on the TEC-1G
 most of it is the console. That console has a serial port made of two port bits
@@ -344,10 +344,11 @@ word holds the screen's columns and rows.
 
 A driver calls the service with the mode in `B`, `CMCRT`, 1, for the PICO9918
 or `CMUC1`, 3, for the graphics LCD, and the table's address in `HL`. `SVDRV`
-passes the mode to `GLHOOK` in `A` (`src/glcd.asm:5-18`). `GLHOOK` keeps the
-address in `PIVEC` or `GLVEC`, above the RAM BIOS table, and returns `HL`
-pointing at `LINEBUF`, the buffer that the driver's row routines use
-(`src/glcd.asm:26-48`). When there is no matrix keyboard or the display already
+passes the mode to `GLHOOK` in `A` (`src/glcd.asm:5-18`). Any other value in
+`B` returns `TNEBAD` with carry set, and nothing changes (`src/glcd.asm:6-13`).
+`GLHOOK` keeps the address in `PIVEC` or `GLVEC`, above the RAM BIOS table, and
+returns `HL` pointing at `LINEBUF`, the buffer that the driver's row routines
+use (`src/glcd.asm:26-48`). When there is no matrix keyboard or the display already
 has a table, it changes nothing, and the service returns status 1, `TNEBAD`,
 with carry set.
 
