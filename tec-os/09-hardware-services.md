@@ -7,9 +7,10 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 9. The hardware services
 
-Checked against TEC-OS 60cfbdc. The programs were assembled by the starter
+Checked against TEC-OS 4d6eeaa. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
-`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
+`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. `DEMO`
+was assembled on the PC by ATOM from the repository's `atom-z80` 0.3.7.
 
 A CP/M program has the BDOS for files and the console, and nothing for a
 7-segment digit or a speaker. This chapter describes the calls TEC-OS has for
@@ -47,7 +48,7 @@ Chapter 8 used the table to read the console's size.
 | `C015h` | `ABISVC` | a jump: the registry of services |
 
 The version is the table's ABI, its application binary interface, here 4.0.
-This chapter uses `ABIHW`. `MOUNT` and `VOLS` use `ABIVOL`, Chapter 10
+This chapter uses `ABIHW`. `MOUNT` uses `ABIVOL`, Chapter 10
 describes `ABISVC`, and Appendix B lists every entry. A build writes the
 table's addresses, the service numbers and the status codes to `dist/abi.inc`
 and checks that file against the ROM. A program includes the file and uses its
@@ -685,14 +686,20 @@ the program left it. The claim records no owner and a warm boot releases it in
 the same way, so a program that ends without a release still gets the console
 back. A release with no claim does nothing and returns status 0.
 
-`DEMO` on the starter card is the worked example, with its source in
-`test/programs/demo.asm`. It claims the chip if `INFO`'s bit 1 is set, sets
-Graphics I by the ports and draws colour bars and a ball until a key, then
-releases the chip:
+`DEMO` is the worked example. It claims the chip if `INFO`'s bit 1 is set,
+sets Graphics I by the ports and draws colour bars and a ball until a key,
+then releases the chip. It isn't on the starter card. Its source is
+`test/programs/demo.asm` in the repository, and these commands assemble it on
+the PC and put it on drive B of `hw.img`:
 
-<!-- node tools/capture.mjs --card hw.img --board pico --screen "@start DEMO" "@key x" -->
+```sh
+npx atom test/programs/demo.asm demo.com
+node tools/tecvol.mjs put hw.img B demo.com
+```
+
+<!-- node tools/capture.mjs --card hw.img --board pico --screen "@start B:DEMO" "@key x" -->
 ```text
-A>DEMO
+A>B:DEMO
 
 TEC-OS hardware services demo
 PICO9918: yes   GLCD: no   clock: yes
