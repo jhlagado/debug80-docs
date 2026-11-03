@@ -123,7 +123,7 @@ in the comments of `TOP` and `AREA` in Chapter 7 stays as it is.
 
 | Form | Short form | Meaning | Explained in | Correct and distinct |
 | --- | --- | --- | --- | --- |
-| host model | the model | `host/machine.mjs` on the runtime, the software TEC-1G | Chapter 1, in full 26 | Debug80 TEC-1G runtime, short form *the runtime*: the npm package under it, and the name to use for what the runtime does (Chapters 15, 25, G). `Machine`, "the machine": the class in Chapter 25. |
+| host model | the model | `host/machine.mjs` on the runtime, the software TEC-1G | Chapter 1, in full 25 | Debug80 TEC-1G runtime, short form *the runtime*: the npm package under it, and the name to use for what the runtime does (Chapters 15, 25, G). `Machine`, "the machine": the class in Chapter 25. |
 | serial board | | A board with only a serial terminal | Chapter 1 | `--board serial` |
 | web page's board | | A board with the PICO9918, the graphics LCD and the matrix keyboard, with Display on the PICO9918 | Chapter 1 | `--board pico`. With Display on the graphics LCD the page's board is `--board glcd`. |
 | web page | the page | The browser build | Chapter 1 | |
@@ -182,7 +182,7 @@ through `ABICALL` are *numbered services*. Numbers 0 to 8 are the *hardware
 services*, and 9 to 11 are the *volume services*. The table at `C003h`
 is the *ROM table*. *Service resident memory* is the pages services hold.
 
-`.DRV` names appear only where the text is about an old card, as in Chapters 1,
+`.DRV` names appear only where the text is about an old card, as in Chapters
 5, 21 and 25 and Appendix D. `DRVTAB`, `DRVIDX` and `DRVSLOT` name
 disk drives. The SD card driver
 and the hardware drivers of Chapter 15 are code in the ROM, so *driver* there
