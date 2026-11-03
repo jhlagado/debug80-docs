@@ -7,12 +7,12 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 6. A first program
 
-Checked against TEC-OS 60cfbdc, with the ATOM assembler from the
+Checked against TEC-OS 4d6eeaa, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, the starter card's
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. The
-starter card's `EDIT.COM` is from Edit 845d062, and its copy in `dist/files` has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
+starter card's `TED.COM` is from Thorium 8fcc6ea, with the SHA-256
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`.
 
 A program for TEC-OS is a CP/M program: Z80 code that TEC-OS loads at `0100h`
 and that reaches the console and the files through the BDOS. This chapter
@@ -20,8 +20,9 @@ describes two of them. You assemble the first, which prints a line, with ATOM
 on a PC, then copy it to a card and run it. The second prints the file named
 on its command line. Through it the chapter explains how the CCP passes a
 command line to a program and how a program opens and reads a file. You then
-assemble the first program again on the TEC-1G itself. The last section
-describes the ways a program returns to TEC-OS.
+assemble the first program again on the TEC-1G itself, and edit, build and run
+it there with the editor `TED`. The last section describes the ways a program
+returns to TEC-OS.
 
 ## Calling the BDOS
 
@@ -285,8 +286,123 @@ Hello from the TEC-1G
 B>
 ```
 
-`A:EDIT HELLO.ASM` runs the starter card's editor on the source, so the whole
-cycle of editing, assembling and running a program takes place on the TEC-1G.
+## Editing on the TEC-1G
+
+`TED`, the starter card's editor, works with `TAS`, so the whole cycle of
+editing, assembling and running a program takes place on the TEC-1G. `TED`
+takes a file's name and, as a second argument, a line number:
+`TED HELLO.ASM 7` opens `HELLO.ASM` with the cursor at line 7. The arrow keys move the cursor, `^S`
+saves the file and `^Q` quits. `^T` followed by a letter chains commands
+through the CCP, with BDOS function 47 (Chapter 11), and `TED` comes back
+after them:
+
+| Keys | Effect |
+| --- | --- |
+| `^T B` | Saves the file and builds it with `TAS`. A failed build opens at the error |
+| `^T R` | Builds the program as `^T B` does, then runs it |
+| `^T D` | Runs the program under `TDB`, a debugger |
+| `^T O` | Opens another file, named at a prompt |
+| `^T F` | Opens the previous file again |
+
+The starter card holds no `TDB.COM`, so `^T D` gets `TDB?` from the CCP and
+`TED` comes back at its place. On the starter card `TED` holds a file of up to
+33,067 bytes, and 31,510 with `PICO.SVC` installed.
+
+`TED` has two limits that bear on the work on drive B. It takes no drive in its
+argument, so the file must be on the current drive. The CCP searches only the
+current drive for the commands `TED` chains, which are `TAS` and `TED` itself.
+So `TED.COM` and `TAS.COM` need copies on drive B:
+
+<!-- node tools/capture.mjs --card work.img "TED B:HELLO.ASM" B: "TED HELLO.ASM" "COPY A:TED.COM B:" "COPY A:TAS.COM B:" -->
+```text
+A>TED B:HELLO.ASM
+
+EDIT error 01
+
+A>B:
+B>TED HELLO.ASM
+TED?
+
+B>COPY A:TED.COM B:
+COPIED 005D
+
+B>COPY A:TAS.COM B:
+COPIED 0051
+
+B>
+```
+
+A mistake shows the round of `^T B`. Here `TED HELLO.ASM 7` opened the source
+on the PICO9918 and a `1` was typed at the start of line 7. `^T B` saved the
+file and chained `TAS HELLO.ASM` and then `TED`. The screen showed this before
+`TED` drew its own again:
+
+<!-- a run on the host model, driven as test/ted.test.mjs drives TED, from the copies above: TED HELLO.ASM 7, 1, ^T B, Right, ^H, ^T R, a space, ^Q, DIR -->
+```text
+
+B>TAS HELLO.ASM
+HELLO.ASM:7:1: expected a label, instruction or directive
+
+B>TED
+```
+
+`TAS`'s message gives the file, the line and the column of the error. `TED`
+opened again with the cursor there and the message on its status row, the
+last of the screen's 24 rows. Here the 14 blank rows between the text and the
+status row are left out:
+
+<!-- the same run -->
+```text
+; HELLO: print a line and return to the CCP.
+BDOS    EQU     $0005
+
+        ORG     $0100
+        LD      DE,MESSAGE      ; the string, ended by $
+        LD      C,9             ; BDOS function 9: print a string
+1        CALL    BDOS
+        RET                     ; back to TEC-OS
+MESSAGE:DB      "Hello from the TEC-1G",13,10,"$"
+EDIT HELLO.ASM    expected a label, instruction or directive  ^S Save  ^Q Quit
+```
+
+The status row starts with `EDIT` and the file's name, though the program is
+`TED`. Otherwise it shows the cursor's line and column, as `L7 C1`. A `*`
+follows the name while the file has changes not yet saved. The matrix keyboard
+has no key for Delete, `7Fh`. So the fix here was the Right arrow, which moved
+the cursor past the `1`, and then `^H`, which removed it. `^T R` then saved the
+file, built the program and ran it, and `TED` waited for a key before it drew
+its screen again:
+
+<!-- the same run -->
+```text
+
+B>TAS HELLO.ASM
+HELLO.COM written
+
+B>TED
+
+B>HELLO
+Hello from the TEC-1G
+
+B>TED
+Press a key
+```
+
+A key brought `TED` back with the cursor at line 7, and `^Q` ended it. `TED`
+keeps its own files beside the source. `THOR.PRJ` is the project. After the
+first good build it names `HELLO.ASM` as the source the build keys take.
+`THOR.SES` holds the file and the place `TED` was at when it last left. `TED`
+also writes `THOR.ERR` before it chains a build, and `THOR.$$$` and
+`THOR.BAK` while it rewrites `THOR.PRJ`. A `DIR` after `^Q` shows the drive:
+
+<!-- the same run -->
+```text
+B>DIR
+THOR.PRJ     SHOW.COM     HELLO.ASM    TED.COM      TAS.COM      THOR.SES
+HELLO.DBG    HELLO.COM
+8 files, 8128K free
+B>
+```
 
 ## The ways a program ends
 
@@ -305,8 +421,8 @@ is a warm boot:
 The warm boot writes the block cache's changes to the card and puts back the
 jumps in page zero. The restart vectors at `0008h–003Fh` are the addresses
 that `RST` instructions call (Chapter 7), and the warm boot gives each one a
-program set its default, keeping only a `JP` whose target's page is at or above
-the page of the word at `0006h`. The warm boot then starts the
+program set its default, keeping only a `JP` whose target is above the address
+in the word at `0006h`. The warm boot then starts the
 CCP again and prints the prompt on the drive and in the user area held in the
 byte at `0004h`. The CCP writes that byte before it starts a program, so the
 prompt is on the drive and user area current then, unless the program changed
