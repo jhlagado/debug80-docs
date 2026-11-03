@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix B. The ROM table and hardware services
 
-Checked against TEC-OS ea9c1c0.
+Checked against TEC-OS 60cfbdc.
 
 This appendix lists the ROM table at `C003h` entry by entry, then the hardware
 services by number, and then the three other entries a program or a service
@@ -76,7 +76,7 @@ they keep is the claim byte, `VCLAIM`, in the workspace (`src/ram.asm:57`).
 | 19 | `INFO` | `HWINFO` | nothing | 6 |
 | 20 | `DIGIT` | `HWDIGIT` | `HL` → 6 segment bytes | 4 |
 | 21 | `LCD` | `HWLCD` | `B` = row, `HL` → 20 characters | 10 |
-| 22 | `VIDEO` | `HWVIDEO` | `B` = 0 release, other claim | 10 |
+| 22 | `VIDEO` | `HWVIDEO` | `B` = 0 release, other claim | 12 |
 | 23 | `TONE` | `HWTONE` | `B` = half period, `DE` = half cycles | 4 |
 | 24 | `JOY` | `HWJOY` | nothing | 4 |
 | 25 | `KEYS` | `HWKEYS` | `HL` → 8 bytes | 4 |
@@ -118,7 +118,7 @@ T-states, or 4,942 on row 3.
 (`src/hwsvc.asm:134-174`). Status 2 with no PICO9918 either way.
 
 A claim removes the cursor if the PICO9918 is the console and stores
-`HWBCLM`'s value in `VCLAIM`, in 1,033 T-states with a cursor to remove. While
+`HWBCLM`'s value in `VCLAIM`, in 1,167 T-states with a cursor to remove. While
 it holds, output to the PICO9918 is dropped, and no cursor or page flip
 touches the chip.
 
@@ -126,8 +126,8 @@ A release with no claim does nothing and returns status 0. Otherwise it clears
 `VCLAIM` and, with `PICO.SVC` in, calls the driver's restore routine for its
 text mode, font and page. If the PICO9918 is the console it then clears the
 screen and homes the cursor. With no `PICO.SVC`, nothing is restored. A
-release with the PICO9918 as the console takes 213,242 T-states at 80 columns
-and 145,685 with the console elsewhere. Warm boot makes the same call
+release with the PICO9918 as the console takes 216,030 T-states at 80 columns
+and 146,745 with the console elsewhere. Warm boot makes the same call
 (`src/boot.asm:74`).
 
 **23 TONE.** Makes a square wave on port `01h` bit 7, with bit 6 held high,
@@ -173,9 +173,9 @@ Text is clipped at the right edge. A row past the bottom writes nothing and
 returns status 0, and so does a count of 0, which also leaves the cursor
 alone. Status 2 means the console is the serial terminal, or the PICO9918 is
 claimed and is the console (`src/term.asm:533-544`). A claim doesn't stop
-`PUTAT` on the graphics LCD. The stack is 22 bytes on the graphics LCD and 16
-on `PICO.SVC` with a cursor to remove, and 18 and 12 with none. A cell along a
-row takes about 423 T-states on `PICO.SVC` at 80 columns and about 35,100 on
+`PUTAT` on the graphics LCD. The stack is 22 bytes on the graphics LCD and 18
+on `PICO.SVC` with a cursor to remove, and 18 and 14 with none. A cell along a
+row takes about 495 T-states on `PICO.SVC` at 80 columns and about 35,100 on
 `GLCD.SVC`.
 
 **27 RTC.** With `B` = 0, reads the DS1302 into the seven bytes at `HL`. With
