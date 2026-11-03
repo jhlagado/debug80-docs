@@ -56,7 +56,7 @@ to spare. The return code, `PRGCODE` at `BF57h`, is in the same block
 every cold boot, which runs on into warm boot (`src/boot.asm:288-290`,
 `src/boot.asm:54-59`). A startup line is cut to the same length, because
 `STLINE` copies at most 127 characters of a line of `STARTUP.CMD` into `CMDTXT`
-and passes over the rest of the line (`src/svc.asm:418`, `src/svc.asm:432-434`).
+and passes over the rest of the line (`src/svc.asm:425`, `src/svc.asm:439-441`).
 Function 47 takes a line whose 0 is within 128 bytes, so at most 127 characters
 too (`src/cpm/bdos.asm:51-64`).
 
@@ -116,7 +116,7 @@ A>
 ```
 
 `STLINE` echoes each line of the file whole, through BDOS function 9, so a `$`
-in a line would end its echo there (`src/svc.asm:448-452`). The CCP echoes the
+in a line would end its echo there (`src/svc.asm:455-459`). The CCP echoes the
 later pieces after their own prompts. `PICO.SVC` fails on this serial
 board, so `:VOLS` is dropped, and the loop goes on to the startup file's third
 line.
@@ -266,7 +266,7 @@ the loop stops at the first 0. A carriage return or a line feed before it, or
 through `RETA`, with the program's stack back and nothing changed
 (`src/cpm/bdos.asm:51-64`, `src/cpm/bdos.asm:122-130`). A line from the keyboard
 or the startup file can hold neither character, since function 10 and `STLINE`
-both end a line there (`src/svc.asm:428-431`).
+both end a line there (`src/svc.asm:435-438`).
 
 The second pass copies. `LDIR` copies 128 bytes from the DMA address into
 `CMDTXT`: the line, its 0 and whatever follows the 0. `CHPOS` is set to 1, the

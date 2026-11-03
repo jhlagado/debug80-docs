@@ -22,8 +22,8 @@ a G8M volume on drive B, and no service installed.
 ## Taking the figures from the build
 
 `npm run media` writes the summary tables to `docs/memory-map.md` from the
-build's census, `build/debug80/census.json` (`tools/media.mjs:102-201`,
-`tools/media.mjs:266`). The address of any label is in the build's symbol
+build's census, `build/debug80/census.json` (`tools/media.mjs:70-169`,
+`tools/media.mjs:223`). The address of any label is in the build's symbol
 file, `build/debug80/tecos.d8.json`. This command prints the addresses of the
 labels named after it:
 
@@ -121,9 +121,9 @@ data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 
 Cold boot clears page zero, and `PZINIT` writes it at cold boot and at every
 warm boot, leaving the IOBYTE and the drive and user byte as they are
-(`src/boot.asm:15-21`, `src/boot.asm:216-274`). An unload and a failed `INIT` run
-its sweep of the restart vectors, `PZSWP`, as well (`src/svc.asm:66-67`,
-`src/svc.asm:254-256`). The CCP writes the byte at
+(`src/boot.asm:15-21`, `src/boot.asm:215-274`). An unload and a failed `INIT` run
+its sweep of the restart vectors, `PZSWP`, as well (`src/svc.asm:57-58`,
+`src/svc.asm:247-249`). The CCP writes the byte at
 `0004h` at each prompt and the FCBs and the tail before it runs a program
 (`src/cpm/ccp.asm:206-225`, `src/cpm/ccp.asm:1296-1329`).
 

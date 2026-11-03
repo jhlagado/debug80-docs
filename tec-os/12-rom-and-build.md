@@ -188,8 +188,8 @@ A separate module, `tools/lib/assemble.mjs`, assembles stand-alone programs
 with the same assembler, at `0100h` for a `.COM` file
 (`tools/lib/assemble.mjs:10-20`). `npm run media` uses it to build the starter
 card's own programs, and the ROM's build does not. The card's `TAS.COM` and
-`EDIT.COM` are built outside this repository (`tools/media.mjs:60-68`,
-`tools/media.mjs:228-234`).
+`EDIT.COM` are built outside this repository (`tools/media.mjs:29-36`,
+`tools/media.mjs:197-198`).
 
 ## The build's checks
 
@@ -265,7 +265,7 @@ board: ROM 14937/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 61fced034a74
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
 media` then copies each profile's three files to `dist/` as
 `tecos-<profile>.rom`, `tecos-<profile>.d8.json` and
-`tecos-<profile>.census.json` (`tools/media.mjs:209-214`). It also writes
+`tecos-<profile>.census.json` (`tools/media.mjs:178-183`). It also writes
 `docs/memory-map.md` from the `debug80` census. The four ROM files in `dist/`
 have the same SHA-256,
 `61fced034a747640c712dde30b563c3a431167627affe89405565a3e59a93be0`.

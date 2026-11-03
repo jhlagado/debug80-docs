@@ -232,7 +232,7 @@ the return address.
 ## ABISVC, the registry
 
 `ABISVC` finds the records that services have published
-(`src/svc.asm:476-539`).
+(`src/svc.asm:483-546`).
 
 | `C` | Takes | Returns |
 | ---: | --- | --- |
