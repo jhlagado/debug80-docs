@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 16. The BDOS
 
-Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
-845d062, whose copy in `dist/files` has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
+Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
+8fcc6ea, whose copy in `dist/files` has the SHA-256
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -164,11 +164,11 @@ At the prompt, a `^U` partway through `TYPE X` starts the line again, and a
 A>TYPE X#
 DIR *.CMD
 STARTUP.CMD 
-1 file, 974K free
+1 file, 984K free
 A>DIR *.CMD#
 DIR *.CMD
 STARTUP.CMD 
-1 file, 974K free
+1 file, 984K free
 A>
 ```
 
@@ -180,7 +180,7 @@ typed:
 ```text
 A>TYPEEPYTDIR *.CMD
 STARTUP.CMD 
-1 file, 974K free
+1 file, 984K free
 A>
 ```
 
