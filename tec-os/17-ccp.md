@@ -245,7 +245,7 @@ the file (`src/cpm/ccp.asm:806-849`). A file that is not there gives
 
 `ERA` with a name that is all `?`, as `*.*` gives, prints `ALL (Y/N)?` and
 reads the answer with function 1. A Return alone is no. After any other key the
-CCP reads on to a Return, and an answer but `Y` or `y` erases nothing
+CCP reads on to a Return, and any answer but `Y` or `y` erases nothing
 (`src/cpm/ccp.asm:866-892`). The erase itself is function 19,
 and `NO FILE` when nothing matched (`src/cpm/ccp.asm:894-903`).
 

@@ -233,7 +233,8 @@ The CCP separates a service from a program by the three type bytes in `CMDFCB`.
 `.COM` file (`src/cpm/ccp.asm:267-277`). The search looks on the current drive
 and then, when the command names no drive and the current drive isn't A:, on A:
 (`src/cpm/ccp.asm:283-295`). That is what becomes of an old card's `PICO.DRV`:
-no `PICO.COM` is found on either drive, and the line fails.
+no `PICO.COM` is found on drive A, the current drive at startup, and the line
+fails.
 `SVCGO` reads the file with `LOADCOM` and installs it with `SVCLOAD`, and a
 failure of either returns carry to `BADCMD` for the name and question mark
 (`src/glcd.asm:79-82`, `src/cpm/ccp.asm:274-275`). Chapter 20 describes the

@@ -458,7 +458,7 @@ A program's own call of function 13 finds `WRFLAG` clear, and empties `LOGINV`
 and `WARMV`. Every drive is then scanned in full at its next selection, as in
 CP/M 2.2 (`src/cpm/bdos.asm:436-439`). Function 37 takes the drives named by
 the bits of `DE` out of `LOGINV`, the read-only vector and `WARMV`
-(`src/cpm/bdos.asm:1577-1591`). The volume services `MOUNT` and `UNMOUNT` call
+(`src/cpm/bdos.asm:1577-1591`). The volume services `MOUNT` and `UNMNT` call
 it for a drive whose volume they have changed (`src/vol.asm:657-668`).
 
 ## BDOS errors
