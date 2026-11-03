@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 8. Programs and the console
 
-Checked against TEC-OS ea9c1c0, with the ATOM assembler from the
+Checked against TEC-OS 60cfbdc, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `EDIT.COM` is from Edit
 845d062, and its copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
@@ -67,8 +67,10 @@ on `BF00h`:
 The BIOS acts on no key: `^C`, `^S` and `^P` from `CONIN` are bytes like any
 other, and `CONOUT` expands no tab and checks for no key.
 
-The routines behind these calls run with the caller's interrupt state. They
-keep the cursor at `0046h–0047h`, the escape sequence at `004Ah–004Ch` and the
+The routines behind these calls leave the interrupt state as they found it. The
+serial port's routines hold interrupts off while a byte goes out or comes in,
+and `PICO.SVC` holds them off for each pair of writes to the video chip's
+control port. The routines keep the cursor at `0046h–0047h`, the escape sequence at `004Ah–004Ch` and the
 video attributes at `004Eh` and `004Fh`, all fixed bytes, so an interrupt
 routine must not print through the console.
 
