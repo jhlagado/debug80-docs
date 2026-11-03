@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 12. The ROM and its build
 
-Checked against TEC-OS 1f9542d.
+Checked against TEC-OS 7458352.
 
 TEC-OS is one 16 KiB image for the addresses `C000h–FFFFh`. This chapter
 describes the image's layout, from the jump at its first byte to the free
@@ -25,15 +25,15 @@ The ROM has five parts, in this order:
 | `C000h–C002h` | 3 | the reset jump |
 | `C003h–C00Ah` | 8 | the ROM table |
 | `C00Bh–C33Bh` | 817 | the data |
-| `C33Ch–F977h` | 13,884 | the code |
-| `F978h–FFFFh` | 1,672 | free |
+| `C33Ch–F9EAh` | 13,999 | the code |
+| `F9EBh–FFFFh` | 1,557 | free |
 
-The figures are those of the build at commit 1f9542d. The build writes them to
+The figures are those of the build at commit 7458352. The build writes them to
 `build/tecos/census.json` and, through `npm run media`, to the table of the
 ROM's regions in `docs/memory-map.md`. The used part, from `C000h` to the end
-of the code, is 14,712 of the 16,384 bytes.
+of the code, is 14,827 of the 16,384 bytes.
 
-The first three bytes are a jump, `JP COLD` (`src/reset.asm:7`), to `C33Ch`,
+The first three bytes are a jump, `JP RSTENT` (`src/reset.asm:7`), to `C33Ch`,
 the first byte of the code. Chapter 14 describes how the Z80 reaches it at
 reset.
 
@@ -56,7 +56,7 @@ whose code uses it, so `CWMSG`, the text `Write lost`, sits under `cache.asm`
 (`src/data.asm:16-32`) is in the block as the source of the copy that programs
 and the BDOS call, which Chapter 15 describes.
 
-The code starts at `COLD` and runs through every routine of TEC-OS to the label
+The code starts at `RSTENT` (`src/boot.asm:16`) and runs through every routine of TEC-OS to the label
 `CODEEND`, which `src/end.asm:2` defines after the last file. The free space is
 the rest of the ROM, in one gap, and the build fills it with
 `FFh` (`tools/build.mjs:240-243`).
@@ -122,7 +122,7 @@ the banner and the LCD's top row print from (`src/data.asm:13`,
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,
-`tools/build.mjs:36-58`). At 1f9542d they are 49, 105, 50, 70 and 77, and the
+`tools/build.mjs:36-58`). At 7458352 they are 49, 105, 50, 70 and 77, and the
 build stops with an error if a count would not fit in a byte
 (`tools/build.mjs:45-47`). Chapter 15 explains the loops and the arithmetic
 behind the counts.
@@ -165,7 +165,7 @@ the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
 therefore `BF00h` less the workspace's size, and the size is known only after
 an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
 build reads the address of `BDOSRME`, the label at the workspace's end, and
-takes `8000h` from it (`tools/build.mjs:228-232`). At 1f9542d that part is
+takes `8000h` from it (`tools/build.mjs:228-232`). At 7458352 that part is
 1,448 bytes, so the second assembly has `WSBASE` at `B958h`
 (`tools/build.mjs:233-235`).
 
@@ -242,7 +242,7 @@ with an error when it is given any other name (`tools/build.mjs:28-31`,
 `tools/build.mjs:323`). `npm run build` prints one line:
 
 ```text
-tecos: ROM 14712/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 704dcc07cf70fead
+tecos: ROM 14827/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 60abc9b43ce27071
 ```
 
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
@@ -257,4 +257,4 @@ dist: 1 ROM profiles, 7 starter files, starter.img
 ```
 
 The ROM in `dist/` has the SHA-256
-`704dcc07cf70fead69dffb26801ee94d68eda11c5405c86f2e4add3a825a1754`.
+`60abc9b43ce27071aabf50b6e4a336a5f79804494de4be5e67278905d5d36f76`.
