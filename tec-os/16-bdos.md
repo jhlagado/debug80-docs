@@ -33,7 +33,7 @@ The BDOS's variables and its 54-byte stack are in RAM, in the block from
 `BDOSRAM` to `BDOSRME`, `BE77h` to `BEFFh` (`src/ram.asm:130-190`,
 `src/layout.asm:81`). Warm boot clears that block, as a fresh load of the BDOS
 from disk would leave it, and sets the DMA address to `0080h`
-(`src/boot.asm:270-289`).
+(`src/boot.asm:279-298`).
 
 A few of the BDOS's variables are outside that block, because a warm boot must
 not clear them. `LOGINV`, in the BIOS's part of the workspace (`src/ram.asm:31`),
@@ -57,7 +57,7 @@ while no key is waiting (`src/console.asm:104-108`).
 
 The jump at `0005h` leads to a jump at an address of the form `xx06h` below
 the allocation vectors, or to a service's jump that leads on to it, as Chapter
-13 describes (`src/vol.asm:571-576`, `src/boot.asm:218-230`). That jump goes
+13 describes (`src/vol.asm:570-575`, `src/boot.asm:219-231`). That jump goes
 to `BENTRY` (`src/cpm/bdos.asm:79-117`).
 
 `BENTRY` saves the caller's stack pointer in `OLDSP`, moves to the BDOS's own
@@ -458,7 +458,7 @@ and `WARMV`. Every drive is then scanned in full at its next selection, as in
 CP/M 2.2 (`src/cpm/bdos.asm:487-490`). Function 37 takes the drives named by
 the bits of `DE` out of `LOGINV`, the read-only vector and `WARMV`
 (`src/cpm/bdos.asm:1626-1640`). The mount entry calls it for a drive whose
-volume it has changed (`src/vol.asm:662-673`).
+volume it has changed (`src/vol.asm:661-672`).
 
 ## BDOS errors
 

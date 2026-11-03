@@ -122,7 +122,7 @@ at least one character (`src/cpm/bdos.asm:442-455`).
 When a program calls function 10 itself, `HFLAG` is clear. `LINDONE` cleared it
 after the CCP's line (`src/cpm/bdos.asm:451-453`), and for a line the CCP
 abandoned at `^C`, every warm boot clears it too, with the rest of the RAM from
-`CCPCLR` up (`src/boot.asm:73`, `src/boot.asm:273-277`). So only the lines typed
+`CCPCLR` up (`src/boot.asm:73`, `src/boot.asm:282-286`). So only the lines typed
 at the CCP's prompt go into the history.
 
 A chained line (Chapter 11) goes in once, whole, with its `!` and `:`, so `^W`
@@ -183,7 +183,7 @@ only whole lines. When nothing was overwritten, the byte at `HHEAD` was already
 0, and the loop clears that one byte.
 
 Each line takes its length and one byte more. The CCP's buffer holds up to 127
-characters (`src/boot.asm:280-281`), so a line of that length takes 128 bytes of
+characters (`src/boot.asm:289-290`), so a line of that length takes 128 bytes of
 the ring, half of it, and short commands such as `DIR` take four bytes each.
 
 ## ^W and ^N in function 10
@@ -225,7 +225,7 @@ ones.
 A warm boot leaves the history as it was. Nothing in the warm boot path writes
 to EXPAND 1's page at `BD00h`, and `HHEAD` is in the part of the workspace above
 the RAM BIOS table at `BF00h`, outside the RAM that `CPMINIT` clears
-(`src/boot.asm:59-82`, `src/boot.asm:273-277`, `src/ram.asm:190`,
+(`src/boot.asm:59-82`, `src/boot.asm:282-286`, `src/ram.asm:190`,
 `src/ram.asm:221`). A program's exit, a `^C` at the prompt and BDOS function 0
 all keep it. Here `^C` at the prompt was followed by `^W`:
 
@@ -241,11 +241,11 @@ A>
 
 A reset clears it. Cold boot clears the resident workspace, `HHEAD` with it
 (`src/boot.asm:23-27`), and `MEMINIT` fills all of EXPAND 1 with 0 before it
-marks the cache's lines empty (`src/boot.asm:149-160`). The page at `BD00h` is
+marks the cache's lines empty (`src/boot.asm:150-161`). The page at `BD00h` is
 then all zeros, `HHEAD` is 0 and the byte before it, at offset `FFh`, is 0, so
 the ring is empty and still kept as `HSTORE` and `HREC` require. This holds for
 a recognised reset too, the one that keeps the selected volumes, since only the
-drive table is carried across it (`src/boot.asm:131-135`). After the reset in
+drive table is carried across it (`src/boot.asm:132-136`). After the reset in
 this run, `^W` and Return gave an empty line:
 
 <!-- node tools/capture.mjs CON "@reset" "@start "$'\x17' -->

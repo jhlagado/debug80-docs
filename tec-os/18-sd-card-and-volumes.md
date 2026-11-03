@@ -286,7 +286,7 @@ each of those two writes, since the data has replaced it in `BLKBUF`.
 
 `MOUNT` and `VOLS` on the starter card are programs, so they change and list
 the drives through the mount entry, the jump `ABIVOL` at `C00Fh`, which goes
-to `VOLSVC` (`src/abi.asm:14`, `src/vol.asm:578-584`). It has three functions, chosen by `A`:
+to `VOLSVC` (`src/abi.asm:14`, `src/vol.asm:577-583`). It has three functions, chosen by `A`:
 
 - `A` = 0 mounts the volume at container index `E` on drive `C`.
 - `A` = 1 unmounts drive `C`.
@@ -296,19 +296,19 @@ to `VOLSVC` (`src/abi.asm:14`, `src/vol.asm:578-584`). It has three functions, c
 Each returns `A` = 0, or `FFh` with nothing changed. A mount fails in four
 cases: an index past the table, a drive past D, a volume already on a drive
 and a drive whose vector slot is too small for the volume. An unmount fails
-for drive A, which is never left empty (`src/vol.asm:611-676`). The slot rule
+for drive A, which is never left empty (`src/vol.asm:610-675`). The slot rule
 is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
-and any other needs a slot of either size (`src/vol.asm:638-651`). Chapter 13
+and any other needs a slot of either size (`src/vol.asm:637-650`). Chapter 13
 describes how cold boot gives out the slots.
 
 A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of
 the block cache to the card, with interrupts off, and the call fails if any
-write fails (`src/vol.asm:678-690`). A mount then clears the drive's old
+write fails (`src/vol.asm:677-689`). A mount then clears the drive's old
 entry, fills the new one and its DPH with `MNONE`, and records the index. An
 unmount clears the entry. Either way `VOLSVC` ends by marking `BLKBUF`
 empty and calling BDOS function 37 to reset the drive, so that the drive's
-next access logs it in from its new directory (`src/vol.asm:662-674`).
+next access logs it in from its new directory (`src/vol.asm:661-673`).
 
 `VOLSVC` writes nothing of its own to the card, so the card's header still
 names its own drives, and a power-off, or a reset whose kept selection no

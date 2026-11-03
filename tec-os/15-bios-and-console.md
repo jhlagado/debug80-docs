@@ -166,7 +166,7 @@ digits, and receives on bit 7 of port `03h` (`src/layout.asm:10-11`). The
 settings are 4800 baud, 8 data bits, no parity and 2 stop bits
 (`src/console.asm:15-16`).
 
-`TXBYTE` sends a byte (`src/console.asm:218-236`). Its loop runs nine times,
+`TXBYTE` sends a byte (`src/console.asm:224-248`). Its loop runs nine times,
 for the start bit and the eight data bits from the lowest. Each pass turns the
 carry into `00h` or `40h` with `SBC A,A` and `AND 40h` and writes the port, then
 waits `TXDLY` passes of a 16-T-state delay and shifts the next bit into the
@@ -176,7 +176,7 @@ high for `TXSTOP` passes, 105. On the model `TXBYTE` takes 9,217 T-states for a
 whole character, and `BCONOUT`'s tests before it bring that to 9,372, so the
 serial terminal shows about 430 characters a second.
 
-`RXBITS` receives a byte (`src/console.asm:192-206`). It is called just after a
+`RXBITS` receives a byte (`src/console.asm:192-212`). It is called just after a
 poll has read the start bit, so it first waits `RXHALF` passes, 74, to reach the
 middle of the first data bit. It then samples the line eight times, shifting
 each sample into `C`, with `RXDLY`, 50, passes between samples. A pass of its
@@ -185,7 +185,7 @@ loop takes 38 + 16 × `RXDLY` T-states, 838.
 The polling loops that test for the start bit take 38 T-states a pass, so the
 edge can be up to 38 T-states old when it is read. `RXHALF` is reduced by half
 of that, to centre the samples on the bits (`src/console.asm:22-23`,
-`tools/build.mjs:40-47`). The counts come from the build, as Chapter 12
+`tools/build.mjs:40-48`). The counts come from the build, as Chapter 12
 describes, and they hold only for a 4 MHz clock, so on a board the CPU clock
 switch has to be on FAST.
 
@@ -200,7 +200,7 @@ calls `CONIN` or `READER`.
 CP/M 2.2 gives a program three more character devices through the BIOS. The
 list device, a printer, and the punch are for output, and the reader is for
 input. TEC-OS has no printer, and it puts the other two on the serial port
-(`src/console.asm:271-288`):
+(`src/console.asm:283-300`):
 
 - `LIST` returns at once, so whatever a program prints to the list device is
   discarded. `LISTST` returns `FFh`, ready, so a program that waits for the
@@ -213,11 +213,11 @@ input. TEC-OS has no printer, and it puts the other two on the serial port
 The punch and reader are the serial port even while the console is a display,
 so a program on the PICO9918's console can exchange binary data with a PC over
 the serial line. A byte that `CONST` has already received stays in `RXCHAR` for
-the console, and `READER` does not return it (`src/console.asm:278-279`). The
+the console, and `READER` does not return it (`src/console.asm:290-291`). The
 console mode `BAT:` takes its input from the serial port, as the reader does,
 but `CONIN` serves it through `CINLP`, which clears bit 7 and skips `NUL`
 (`src/console.asm:155-157`, `src/console.asm:182-190`). It sends its output to
-the list device, and so discards it (`src/console.asm:215-216`).
+the list device, and so discards it (`src/console.asm:221-222`).
 
 ## The matrix keyboard
 
@@ -226,23 +226,23 @@ with `C` at `FEh` puts `B` on the high half of the address bus, and the low bit
 in `B` selects one of eight rows. The byte read has a low bit for each key down
 in that row. Key number k is row k / 8, bit k mod 8. Keys 0, 1 and 2 are Shift,
 Ctrl and Fn, keys 3 to 6 are the arrows and key 7 is Caps Lock
-(`src/console.asm:292-295`, `src/console.asm:366-367`).
+(`src/console.asm:304-307`, `src/console.asm:378-379`).
 
 TEC-OS reads the keyboard only when the board's Matrix switch was on at cold
 boot. `CONINIT` copies bit 0 of port `03h` into `CONDEV`'s bit `CDMTX`
 (`src/console.asm:41-43`), and `KBPOLL` returns at once without it
-(`src/console.asm:299-301`).
+(`src/console.asm:311-313`).
 
-`KBSTEP` reads one row each time it is called (`src/console.asm:311-342`).
+`KBSTEP` reads one row each time it is called (`src/console.asm:323-354`).
 `CONIN` calls it in a loop, and `CONST` calls `KBPOLL`, which runs the eight
 steps of one full scan (`src/console.asm:159-160`,
-`src/console.asm:297-309`). `KBMASK` holds the row's select byte, rotated left
+`src/console.asm:309-321`). `KBMASK` holds the row's select byte, rotated left
 after each row, and `KBBASE` the number of the row's first key. For each key
 down, `KBSTEP` moves the last key seen, `KBE`, into `KBD` and records the new
 one in `KBE`, so after a scan `KBE` holds the highest-numbered key down and `KBD`
 the one below it.
 
-After the eighth row `KBEVAL` evaluates the scan (`src/console.asm:343-391`).
+After the eighth row `KBEVAL` evaluates the scan (`src/console.asm:355-403`).
 A key that is still the one held at the last scan, `KBLAST`, gives nothing, so
 a key is delivered once when it goes down and holding it does not repeat. A
 second key down must be a modifier, since modifiers have the lowest numbers, and
@@ -252,7 +252,7 @@ The first is delivered at once, and the other two are kept in `KBT1` and `KBT2`
 for the next two calls of `CONIN`.
 
 Any other key goes through `KBASCII`, which looks it up
-(`src/console.asm:399-454`). Return, Esc, space, quote and backslash come from a
+(`src/console.asm:411-466`). Return, Esc, space, quote and backslash come from a
 table of plain and shifted values. Digits and punctuation come with their
 shifted forms from `KBSHIFT`. Letters come in lower case, in upper case with
 Shift or Caps Lock, and as control codes 01h to 1Ah with Ctrl.
@@ -264,7 +264,7 @@ sequences, and `BCONOUT` sends every byte untouched. A display has no such
 program, so on a video console every character of output goes through `VTOUT`, a
 terminal emulator of the VT100's kind (`src/term.asm:1-21`).
 
-`BCONOUT` itself is short (`src/console.asm:208-217`). After `CONSEL` it drops
+`BCONOUT` itself is short (`src/console.asm:214-223`). After `CONSEL` it drops
 the character if a program has claimed the PICO9918 and the PICO9918 is the
 console. It goes to `VTOUT` for `CRT:` and `UC1:`. For `BAT:`, whose output goes
 to the list device and so is discarded, it returns with the character dropped.
@@ -353,7 +353,7 @@ The seventh vector carries three functions that only the PICO9918's driver
 needs (`src/video.asm:26-45`). That driver has two name tables in VRAM, its two
 pages, one shown and one hidden, so a move of rows can be built out of sight and
 shown with one register write (`drivers/pico.asm:17-18`,
-`drivers/pico.asm:301-305`). Function 0 shows the page the terminal has drawn.
+`drivers/pico.asm:314-318`). Function 0 shows the page the terminal has drawn.
 `CONST` and `CONIN` call it, so that by the time a program
 waits for a key the screen shows what it drew (`src/console.asm:118`,
 `src/console.asm:151`). Functions 1 and 2 begin and end a move of rows, around a
@@ -396,7 +396,7 @@ terminal to show a message on. `CARD?` appears at the diagnostic prompt
 (`src/cpm/ccp.asm:1135`, `src/glcd.asm:49-66`). `PICO?` appears when a board
 with a PICO9918 and the matrix keyboard reaches its first prompt with no display
 driver
-(`src/svc.asm:430-431`).
+(`src/svc.asm:471-472`).
 
 Writing `PICO?` or `GLCD?` sets `CDWRD` in `CONDEV` (`src/lcd.asm:34-39`), and
 `WRDCLR` writes blanks over the row only while that bit is set. A word TEC-OS

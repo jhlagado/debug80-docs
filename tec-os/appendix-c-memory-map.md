@@ -72,12 +72,12 @@ The latch is the system latch at port `FFh`, which TEC-OS writes from the copy
 it keeps at `0040h` (`src/layout.asm:13-23`). Its value while TEC-OS runs is
 `01h`: the boot overlay off, MAIN 0 and EXPAND 0 in view. It is
 `81h` while the matrix keyboard's Caps Lock is on, which sets bit 7
-(`src/console.asm:392-397`).
+(`src/console.asm:404-409`).
 
 The TPA ends below the BDOS entry jump, whose address is in the word at
 `0006h`. Cold boot places the jump below the allocation vectors of the card's
 drives: it takes the lowest vector's address, subtracts 9 and sets the low
-byte to 6 (`src/vol.asm:571-576`). A service goes in whole pages below the jump
+byte to 6 (`src/vol.asm:570-575`). A service goes in whole pages below the jump
 and lowers the word at `0006h` to its own jump, at offset 6 of its first page.
 
 | Card | Vectors | BDOS entry | TPA |
@@ -119,7 +119,7 @@ data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 
 Cold boot clears page zero, and `PZINIT` writes it at cold boot and at every
 warm boot, leaving the IOBYTE and the drive and user byte as they are
-(`src/boot.asm:15-21`, `src/boot.asm:215-265`). The CCP writes the byte at
+(`src/boot.asm:15-21`, `src/boot.asm:216-274`). The CCP writes the byte at
 `0004h` at each prompt and the FCBs and the tail before it runs a program
 (`src/cpm/ccp.asm:206-225`, `src/cpm/ccp.asm:1296-1329`).
 
@@ -164,11 +164,11 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 
 The part from `WSBASE`, `B958h`, to `BEFFh` has the same addresses on every
 card. The build places `WSBASE` so that the part ends at `BF00h`
-(`tools/build.mjs:250-257`, `src/layout.asm:69-72`). The part above the table
+(`tools/build.mjs:251-258`, `src/layout.asm:69-72`). The part above the table
 starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:192`). Cold boot
 clears the workspace from `WSBASE` up to `WSEND`, `B958h` to `BFE5h`
 (`src/boot.asm:23-27`). Warm boot clears the part from `CCPCLR` to the end of
-the BDOS's block and leaves the rest (`src/boot.asm:270-289`).
+the BDOS's block and leaves the rest (`src/boot.asm:279-298`).
 
 ### The BIOS's block
 
