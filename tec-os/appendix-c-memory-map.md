@@ -7,14 +7,14 @@ nav_group: "Appendices"
 
 # Appendix C. Memory map
 
-Checked against TEC-OS ea9c1c0.
+Checked against TEC-OS 60cfbdc.
 
 This appendix gives the addresses TEC-OS uses: the CPU's address space, the
 ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
 the stacks. Chapter 13 explains the layout and Chapter 7 describes it from a
-program's side. The figures are those of the debug80 build at ea9c1c0, whose
+program's side. The figures are those of the debug80 build at 60cfbdc, whose
 ROM has the SHA-256
-`c3f8164ebab315bd7d2fa18de82369573d12e814e921cf0cd041761f76c5a8e3`. The
+`61fced034a747640c712dde30b563c3a431167627affe89405565a3e59a93be0`. The
 build's four profile names give the same image. Where the figures depend on
 the card they are those of the starter card, with a G1M volume on drive A and
 a G8M volume on drive B, and no service installed.
@@ -64,8 +64,8 @@ MAIN 0 and EXPAND 0 in view, TEC-OS uses them in this way:
 | Addresses | Contents |
 | --- | --- |
 | `0000h–00FFh` | page zero |
-| `0100h–B805h` | the TPA, 46,854 bytes |
-| `B806h–BFFFh` | the BDOS entry jump and the resident workspace, in EXPAND 0 |
+| `0100h–B814h` | the TPA, 46,869 bytes |
+| `B815h–BFFFh` | the BDOS entry jump and the resident workspace, in EXPAND 0 |
 | `C000h–FFFFh` | the ROM |
 
 The latch is the system latch at port `FFh`, which TEC-OS writes from the copy
@@ -75,15 +75,17 @@ it keeps at `0040h` (`src/layout.asm:13-23`). Its value while TEC-OS runs is
 (`src/console.asm:404-409`).
 
 The TPA ends below the BDOS entry jump, whose address is in the word at
-`0006h`. Cold boot places the jump below the allocation vectors of the card's
-drives: it takes the lowest vector's address, subtracts 9 and sets the low
-byte to 6 (`src/vol.asm:570-575`). A service goes in whole pages below the jump
-and lowers the word at `0006h` to its own jump, at offset 6 of its first page.
+`0006h`. Cold boot places the jump directly below the lowest allocation vector
+of the card's drives, 3 bytes under that vector's address (`src/vol.asm:570-574`).
+A service goes in whole pages below the jump's page and lowers the word at `0006h`
+to the start of its first page, which holds its own `JP BENTRY`. On the starter
+card the first service's pages end at `B7FFh`, so the 21 bytes from `B800h` to
+`B814h` leave the TPA with it.
 
 | Card | Vectors | BDOS entry | TPA |
 | --- | ---: | --- | ---: |
-| the starter card, G1M on A and G8M on B | 320 bytes | `B806h` | 46,854 bytes |
-| four G8M volumes | 1,024 bytes | `B506h` | 46,086 bytes |
+| the starter card, G1M on A and G8M on B | 320 bytes | `B815h` | 46,869 bytes |
+| four G8M volumes | 1,024 bytes | `B555h` | 46,165 bytes |
 
 ## The ROM
 
@@ -92,11 +94,11 @@ and lowers the word at `0006h` to its own jump, at offset 6 of its first page.
 | `C000h–C002h` | 3 | the reset jump, `JP COLD` |
 | `C003h–C017h` | 21 | the ROM table |
 | `C018h–C33Dh` | 806 | the read-only data, `ROMDATA` to `ROMCODE` |
-| `C33Eh–F9E9h` | 13,996 | the code |
-| `F9EAh–FFFFh` | 1,558 | free |
+| `C33Eh–FA58h` | 14,107 | the code |
+| `FA59h–FFFFh` | 1,447 | free |
 
-Within the code, the CCP is at `D796h–E0F4h`, 2,399 bytes, and the BDOS at
-`E0F5h–F039h`, 3,909 bytes, in the order `src/rom.asm` includes them
+Within the code, the CCP is at `D7B2h–E110h`, 2,399 bytes, and the BDOS at
+`E111h–F055h`, 3,909 bytes, in the order `src/rom.asm` includes them
 (`src/rom.asm:24-26`). The ROM's own copy of the BIOS jump table is in the
 data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 (`src/data.asm:21-37`, `src/boot.asm:45-48`). The byte at `C01Dh` is a `RET`
@@ -109,9 +111,9 @@ data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 | `0000h` | `JP BF03h`, warm boot through the RAM BIOS table |
 | `0003h` | the IOBYTE; TEC-OS acts on its console field, bits 0 and 1 |
 | `0004h` | the current drive in bits 0–3 and the user number in bits 4–7 |
-| `0005h` | `JP` to the BDOS entry or the lowest service; the word at `0006h` is the top of the TPA |
-| `0008h–0037h` | restart vectors 1 to 6: each a `RET` after seven zeros, unless it holds a jump into the ROM |
-| `0038h` | `EI`, `RETI`, for restart 7 and the interrupt of mode 1 |
+| `0005h` | `JP` to the BDOS entry jump or the start of the lowest service's page; the word at `0006h` is the top of the TPA |
+| `0008h–0037h` | restart vectors 1 to 6: each a `RET` after seven zeros, unless it holds a `JP` to a page at or above `PZTOP`'s |
+| `0038h` | `EI`, `RETI`, for restart 7 and the interrupt of mode 1, unless it holds such a `JP` |
 | `0040h–004Fh` | TEC-OS's state, below |
 | `005Ch` | the default FCB |
 | `006Ch` | the second FCB, overlapping the first's last 20 bytes |
@@ -119,7 +121,9 @@ data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 
 Cold boot clears page zero, and `PZINIT` writes it at cold boot and at every
 warm boot, leaving the IOBYTE and the drive and user byte as they are
-(`src/boot.asm:15-21`, `src/boot.asm:216-274`). The CCP writes the byte at
+(`src/boot.asm:15-21`, `src/boot.asm:216-274`). An unload and a failed `INIT` run
+its sweep of the restart vectors, `PZSWP`, as well (`src/svc.asm:66-67`,
+`src/svc.asm:254-256`). The CCP writes the byte at
 `0004h` at each prompt and the FCBs and the tail before it runs a program
 (`src/cpm/ccp.asm:206-225`, `src/cpm/ccp.asm:1296-1329`).
 
@@ -151,8 +155,7 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
-| `B806h–B808h` | 3 | the BDOS entry jump, `JP BENTRY` |
-| `B809h–B817h` | 15 | unused |
+| `B815h–B817h` | 3 | the BDOS entry jump, `JP BENTRY` |
 | `B818h–B957h` | 320 | the allocation vectors: B's 256 bytes at `B818h`, then A's 64 at `B918h` |
 | `B958h–BCC4h` | 877 | the BIOS's disk state and buffers, the `MOUNT` routine's scratch and the video terminal's state |
 | `BCC5h–BCEAh` | 38 | the BIOS stack |
