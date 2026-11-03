@@ -50,10 +50,10 @@ service commands' routines `CMDSVC` and `SVCUNL`. The others are `GLCLD` for
 A warm boot restarts the CCP, which has to come back on the drive and user it
 was on, and the byte at `0004h` carries them across. Cold boot and warm boot
 both end with a jump to `CCPENT`, with `C` holding that byte. It has the user
-number in bits 4 to 7 and the drive in bits 0 to 3 (`src/boot.asm:89-91`,
+number in bits 4 to 7 and the drive in bits 0 to 3 (`src/boot.asm:90-92`,
 `src/cpm/ccp.asm:23-66`). Cold boot sets it to 0, drive A and user 0, before
-it falls into warm boot (`src/boot.asm:66-67`), and warm boot's `PZINIT`
-leaves it as the CCP last wrote it (`src/boot.asm:197-199`).
+it falls into warm boot (`src/boot.asm:67-68`), and warm boot's `PZINIT`
+leaves it as the CCP last wrote it (`src/boot.asm:198-200`).
 
 `CCPENT` sets its stack and keeps the drive in `BOOTDRV`
 (`src/cpm/ccp.asm:30-44`). It then sets `WRFLAG` and calls function 13, the
@@ -62,7 +62,7 @@ unchanged, as Chapter 16 describes. Warm boot has cleared the user number with
 the rest of the BDOS's variables, so `CCPENT` calls function 32 with the user
 number from the byte (`src/cpm/ccp.asm:45-59`). `STBOOT` comes next: it reads `A:STARTUP.CMD` the
 first time it is called after a cold boot and does nothing later
-(`src/cpm/ccp.asm:60`, `src/svc.asm:389-422`). Chapter 21 describes startup.
+(`src/cpm/ccp.asm:60`, `src/cpm/ccp.asm:1615-1648`). Chapter 21 describes startup.
 Last, if the drive is not A, the CCP selects it with function 14
 (`src/cpm/ccp.asm:61-66`), then prints a new line and starts its loop at
 `STARTED` (`src/cpm/ccp.asm:68-70`).
@@ -113,7 +113,7 @@ startup file through `STLINE` and the keyboard through BDOS function 10, with
 `HFLAG` set for the history (`src/cpm/ccp.asm:80-89`). For the keyboard the
 CCP's buffer is `CMDBUF`, with `CMDLEN` after it for the count and `CMDTXT`
 for the characters (`src/ram.asm:75-80`). Warm boot sets the buffer's maximum
-to 127 (`src/boot.asm:271-272`).
+to 127 (`src/boot.asm:272-273`).
 
 `MLTAKE` takes one piece of the line up to its `!`, turns its letters to
 capitals and sets `PRGCODE`, the return code, to 0
@@ -148,7 +148,7 @@ built-in. The first is the program `DIR` on drive A and the second the program
 A word that is none of the built-ins names a program, and must be a single
 file name with no wildcard (`src/cpm/ccp.asm:264-266`). The type selects what
 follows. A type of `SVC` installs a service through `SVCGO`
-(`src/cpm/ccp.asm:267-276`, `src/glcd.asm:83-108`), which Chapter 20 describes.
+(`src/cpm/ccp.asm:267-276`, `src/loader.asm:447-472`), which Chapter 20 describes.
 Any other type, or none, is replaced by `COM` (`src/cpm/ccp.asm:277-282`), so
 `MOUNT.TXT` runs `MOUNT.COM`. A program is looked for in user 0 after the
 current user, and a command that names no drive runs a program from drive A
@@ -180,7 +180,7 @@ A name ends at a 0, a space, `=` or `.` (`src/cpm/ccp.asm:1540-1549`). Inside
 it, `*` fills the rest of its field with `?` (`src/cpm/ccp.asm:1525-1538`).
 `VALIDCHR` rejects the thirteen characters in `BADCHARS`, the ones CP/M 2.2
 reserves: `<`, `>`, `,`, `;`, `:`, `[`, `]`, `%`, `|`, `(`, `)`, `/` and `\`
-(`src/cpm/ccp.asm:1500-1523`, `src/data3.asm:70-71`). A field with more
+(`src/cpm/ccp.asm:1500-1523`, `src/text.asm:77-78`). A field with more
 characters than it holds is an error too: `PARLONG` moves past the rest of the
 word and returns the error flag (`src/cpm/ccp.asm:1450-1468`).
 
@@ -203,8 +203,8 @@ Each built-in is a routine in `ccp.asm` or, for the service commands, in
 | `USER` | `CMDUSER` | `src/cpm/ccp.asm:1196-1226` |
 | `CON` | `CMDCON` | `src/cpm/ccp.asm:1137-1194` |
 | `COPY` | `CMDCOPY` | `src/cpm/ccp.asm:997-1129` |
-| `UNLOAD` | `CMDUNL` | `src/cpm/ccp.asm:1131-1135`, `src/svc.asm:42-72` |
-| `SERVICES` | `CMDSVC` | `src/svc.asm:362-387` |
+| `UNLOAD` | `CMDUNL` | `src/cpm/ccp.asm:1131-1135`, `src/loader.asm:42-72` |
+| `SERVICES` | `CMDSVC` | `src/cpm/ccp.asm:1588-1613` |
 
 `DIR` turns a missing name into eleven `?`, sets the DMA address to `LOADBUF`
 and lists the entries that function 17 and then function 18 return
@@ -504,7 +504,7 @@ boot clears the CCP's block of RAM only from `CCPCLR` (`src/ram.asm:67-128`).
 Below that label is the command line, and before it the two FCBs, which need no
 clearing because each use parses them in full (`src/ram.asm:68-70`). From
 `CCPCLR` on, warm boot clears the CCP's bytes along with the BDOS's
-(`src/boot.asm:261-268`).
+(`src/boot.asm:262-269`).
 
 | Addresses | Bytes | Name | Contents |
 | --- | ---: | --- | --- |
@@ -521,7 +521,7 @@ clearing because each use parses them in full (`src/ram.asm:68-70`). From
 
 The addresses are those of the build at 7458352. The guard is 43 bytes less the
 stack's 30 (`src/ram.asm:119-124`), and warm boot fills it with `A5h`
-(`src/boot.asm:273-277`), so a guard byte that is no longer `A5h` shows that
+(`src/boot.asm:274-278`), so a guard byte that is no longer `A5h` shows that
 the stack has run past its bottom. `test/stacks.test.mjs` checks the guard
 after the CCP's deepest paths, and Chapter 13 describes the measurement behind
 the stack's size.
@@ -536,6 +536,6 @@ of the program's stack.
 
 The CCP keeps nothing in the TPA: it leaves the TPA from `0100h` untouched
 until it loads a program or a service there, a service for `NAME.SVC` or
-`CON UC1` (`src/glcd.asm:86`, `src/svc.asm:74`). Only `SAVE` reads that area,
+`CON UC1` (`src/loader.asm:450`, `src/loader.asm:74`). Only `SAVE` reads that area,
 which is how `SAVE` writes what a program or a loaded service file left in
 memory.

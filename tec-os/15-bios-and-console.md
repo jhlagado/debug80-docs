@@ -26,7 +26,7 @@ table.
 CP/M 2.2 defines the BIOS as a table of jumps at the start of a page, one for
 each function, in a fixed order, so the BDOS and programs reach a machine's BIOS
 at the same offsets wherever its routines are. TEC-OS's table has the seventeen
-entries of CP/M 2.2 (`src/data.asm:16-32`):
+entries of CP/M 2.2 (`src/tables.asm:10-26`):
 
 | Offset | Entry | Routine |
 | ---: | --- | --- |
@@ -50,7 +50,7 @@ entries of CP/M 2.2 (`src/data.asm:16-32`):
 
 A CP/M program may write over an entry of this table, so TEC-OS's table has to
 be in RAM. The table in the ROM is never called. Cold boot copies it to `BF00h`,
-the start of the page above the BDOS's workspace (`src/boot.asm:60-63`), and
+the start of the page above the BDOS's workspace (`src/boot.asm:61-64`), and
 every caller goes through the copy. The word at `0001h` points at its warm boot
 entry, `BF03h`, and a program reaches the table the way CP/M 2.2 programs do, by
 taking that word and subtracting 3. The BDOS calls the same copy, since its
@@ -62,7 +62,7 @@ may write its own jump over an entry, to receive every character the BDOS
 prints or to put its own routine behind `CONIN`, and the BDOS then calls the
 program's routine. Cold boot is the only time the table is copied, so warm boot
 leaves a replaced entry in place, as CP/M 2.2's warm boot does
-(`src/boot.asm:60-62`). A program that replaces an entry has to put it back
+(`src/boot.asm:61-63`). A program that replaces an entry has to put it back
 before it ends, or the replacement's code in the TPA is called after the
 program has gone.
 
@@ -95,7 +95,7 @@ mode. Unless a program has claimed the PICO9918, it also restores the display's
 mode, homes the cursor and clears the screen. For `TTY:` or `BAT:` it sets
 `VWID` and `VHGT` at `0048h` to 0, so the hardware service `INFO` returns 0 for
 the columns and rows: the console has no screen of known size
-(`src/hwsvc.asm:46-56`).
+(`src/services.asm:46-56`).
 
 Since `CONSEL` runs at the next console call, a change to the IOBYTE takes
 effect at the next character. `CON TTY` shows this on the web page's board,
@@ -231,23 +231,23 @@ with `C` at `FEh` puts `B` on the high half of the address bus, and the low bit
 in `B` selects one of eight rows. The byte read has a low bit for each key down
 in that row. Key number k is row k / 8, bit k mod 8. Keys 0, 1 and 2 are Shift,
 Ctrl and Fn, keys 3 to 6 are the arrows and key 7 is Caps Lock
-(`src/console.asm:305-308`, `src/console.asm:379-380`).
+(`src/keyboard.asm:4-7`, `src/keyboard.asm:78-79`).
 
 TEC-OS reads the keyboard only when the board's Matrix switch was on at cold
 boot. `CONINIT` copies bit 0 of port `03h` into `CONDEV`'s bit `CDMTX`
 (`src/console.asm:42-44`), and `KBPOLL` returns at once without it
-(`src/console.asm:312-314`).
+(`src/keyboard.asm:11-13`).
 
-`KBSTEP` reads one row each time it is called (`src/console.asm:324-355`).
+`KBSTEP` reads one row each time it is called (`src/keyboard.asm:23-54`).
 `CONIN` calls it in a loop, and `CONST` calls `KBPOLL`, which runs the eight
 steps of one full scan (`src/console.asm:160-161`,
-`src/console.asm:310-322`). `KBMASK` holds the row's select byte, rotated left
+`src/keyboard.asm:9-21`). `KBMASK` holds the row's select byte, rotated left
 after each row, and `KBBASE` the number of the row's first key. For each key
 down, `KBSTEP` moves the last key seen, `KBE`, into `KBD` and records the new
 one in `KBE`, so after a scan `KBE` holds the highest-numbered key down and `KBD`
 the one below it.
 
-After the eighth row `KBEVAL` evaluates the scan (`src/console.asm:356-404`).
+After the eighth row `KBEVAL` evaluates the scan (`src/keyboard.asm:55-103`).
 A key that is still the one held at the last scan, `KBLAST`, gives nothing, so
 a key is delivered once when it goes down and holding it does not repeat. A
 second key down must be a modifier, since modifiers have the lowest numbers, and
@@ -257,7 +257,7 @@ The first is delivered at once, and the other two are kept in `KBT1` and `KBT2`
 for the next two calls of `CONIN`.
 
 Any other key goes through `KBASCII`, which looks it up
-(`src/console.asm:412-467`). Return, Esc, space, quote and backslash come from a
+(`src/keyboard.asm:111-166`). Return, Esc, space, quote and backslash come from a
 table of plain and shifted values. Digits and punctuation come with their
 shifted forms from `KBSHIFT`. Letters come in lower case, in upper case with
 Shift or Caps Lock, and as control codes 01h to 1Ah with Ctrl.
@@ -337,25 +337,25 @@ The terminal's code is in the ROM and the drivers for the two displays are on
 the card, so the ROM needs the addresses of each driver's routines. `PICO.SVC`,
 in its three widths, and `GLCD.SVC` each give the ROM a table through `DRVR`,
 service 12, which goes to `SVDRV` and from there to `GLHOOK`
-(`src/data3.asm:100`, `src/glcd.asm:1-25`). The table is eight words. The
+(`src/tables.asm:59`, `src/glcd.asm:1-25`). The table is eight words. The
 first six are the terminal vectors `VPUT`, `VGET`, `VCLREOL`, `VREST`, `VRDROW`
 and `VWRROW`. The seventh is for the PICO9918's page functions, and the last
 word holds the screen's columns and rows.
 
 A driver calls the service with the mode in `B`, `CMCRT`, 1, for the PICO9918
 or `CMUC1`, 3, for the graphics LCD, and the table's address in `HL`. `SVDRV`
-passes the mode to `GLHOOK` in `A` (`src/glcd.asm:5-18`). Any other value in
-`B` returns `TNEBAD` with carry set, and nothing changes (`src/glcd.asm:6-13`).
+passes the mode to `GLHOOK` in `A` (`src/services.asm:314-327`). Any other value in
+`B` returns `TNEBAD` with carry set, and nothing changes (`src/services.asm:315-322`).
 `GLHOOK` keeps the address in `PIVEC` or `GLVEC`, above the RAM BIOS table, and
 returns `HL` pointing at `LINEBUF`, the buffer that the driver's row routines
-use (`src/glcd.asm:26-48`). When there is no matrix keyboard or the display already
+use (`src/video.asm:58-80`). When there is no matrix keyboard or the display already
 has a table, it changes nothing, and the service returns status 1, `TNEBAD`,
 with carry set.
 
 A driver's `REMOVE` calls the service with `HL` 0, and `GLHOOK` then drops the
 display's table and sets the mode back to the serial terminal. It also sets
 `CONACT` to `FFh`, so that the next console call selects the console again from
-the IOBYTE (`src/glcd.asm:49-63`).
+the IOBYTE (`src/video.asm:81-95`).
 
 The seventh vector carries three functions that only the PICO9918's driver
 needs (`src/video.asm:26-45`). That driver has two name tables in VRAM, its two
@@ -370,11 +370,11 @@ terminal calls them only when the console is the PICO9918 and no program has
 claimed it.
 
 A program claims the PICO9918 through the hardware service `VIDEO`, number 3,
-to draw on it directly (`src/hwsvc.asm:99-119`). While it is claimed and is the console,
+to draw on it directly (`src/services.asm:99-119`). While it is claimed and is the console,
 `VTOWN` reports it and the terminal leaves the display alone: `BCONOUT` drops
 output, and there is no cursor and no page flip (`src/term.asm:533-544`). The
 claim ends with the hardware service's release or at warm boot, when `HWVREL`
-gives the display back to the driver (`src/boot.asm:83`).
+gives the display back to the driver (`src/boot.asm:84`).
 
 The ROM's own part of the PICO9918 is the probe at cold boot. `TMSINIT` writes
 `5Ah` to VRAM address `3FFFh` through ports `BFh` and `BEh` and reads it
@@ -387,27 +387,27 @@ The 20 × 4 LCD is an HD44780 on port `04h` for commands and `84h` for data
 (`src/lcd.asm:1-6`). `LCDINIT` sends four commands, `38h`, `0Ch`, `06h` and
 `01h`. The first three set an eight-bit interface with two-line addressing, the
 display on with no cursor and the address moving right after each character, and
-the last clears the display (`src/lcd.asm:8-15`, `src/data2.asm:4`). Before each
+the last clears the display (`src/lcd.asm:8-15`, `src/tables.asm:34`). Before each
 command or character `LCDWAIT` reads the busy flag, bit 7 of port `04h`, at most
 256 times, so a board with no LCD costs only that wait and no hang
 (`src/lcd.asm:17-25`). The rows start at display addresses `80h`, `C0h`, `94h`
-and `D4h` (`src/data2.asm:6`), and `LCDROW` writes a string from column 0 of a
+and `D4h` (`src/tables.asm:36`), and `LCDROW` writes a string from column 0 of a
 row (`src/lcd.asm:45-66`).
 
 Cold boot writes `TEC-OS 0.1  TEC-1G` on row 0 and the letters and labels of
 drives A and B on rows 1 and 2. Drives C and D have no row
-(`src/boot.asm:49-51`, `src/boot.asm:65`, `src/lcd.asm:67-104`).
+(`src/boot.asm:50-52`, `src/boot.asm:66`, `src/lcd.asm:67-104`).
 
 Row 3 is for one of three words that TEC-OS shows when a board may have no
 terminal to show a message on. `CARD?` appears at the diagnostic prompt
-(`src/diag.asm:7-8`). `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`
-(`src/cpm/ccp.asm:1167`, `src/glcd.asm:64-81`). `PICO?` appears when a board
+(`src/boot.asm:447-448`). `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`
+(`src/cpm/ccp.asm:1167`, `src/loader.asm:428-445`). `PICO?` appears when a board
 with a PICO9918 and the matrix keyboard reaches its first prompt with no display
 driver
-(`src/svc.asm:492-493`).
+(`src/cpm/ccp.asm:1718-1719`).
 
 Writing `PICO?` or `GLCD?` sets `CDWRD` in `CONDEV` (`src/lcd.asm:34-39`), and
 `WRDCLR` writes blanks over the row only while that bit is set. A word TEC-OS
 wrote is therefore cleared when a display driver is installed, and a row a
-program wrote is left alone (`src/glcd.asm:117-129`). Programs reach the LCD
+program wrote is left alone (`src/loader.asm:474-486`). Programs reach the LCD
 through the hardware service `LCD`, number 2, as Chapter 9 describes.

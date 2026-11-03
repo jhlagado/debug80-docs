@@ -21,47 +21,47 @@ with its remedy.
 
 ## The diagnostic prompt
 
-Cold boot sets up the LCD and the card at `COLDRT` (`src/boot.asm:49`). It
+Cold boot sets up the LCD and the card at `COLDRT` (`src/boot.asm:50`). It
 starts the card with `SDINIT` and checks the container with `MOUNT`, and a
 failure of either jumps to `DIAG` with an error code in `A`
-(`src/boot.asm:52-55`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
+(`src/boot.asm:53-56`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
 `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:8-18`). The banner is
-printed before the card is touched (`src/boot.asm:45-46`), so it appears
+printed before the card is touched (`src/boot.asm:46-47`), so it appears
 whatever the card holds. Only the RAM check comes before it. `RAMCHK` writes and
 reads back the bytes at `8000h` and `BFFFh` and looks for EXPAND 1 behind the
 window, and a board that lacks either
 prints `TEC-OS needs 64K RAM` on the serial port and stops there
-(`src/boot.asm:32`, `src/boot.asm:289-319`, `src/data.asm:12`).
+(`src/boot.asm:33`, `src/boot.asm:290-320`, `src/text.asm:5`).
 
 `DIAG` resets the stack to the BIOS's, since a mount that failed part way may
-have left it deep, and keeps the code on it (`src/diag.asm:5-6`). It writes
-`CARD?` on the LCD's last row (`src/diag.asm:7-8`, `src/data3.asm:106`,
+have left it deep, and keeps the code on it (`src/boot.asm:445-446`). It writes
+`CARD?` on the LCD's last row (`src/boot.asm:447-448`, `src/text.asm:10`,
 `src/lcd.asm:43`) and then prints `No volume mounted, error ` and the code as
-two hexadecimal digits (`src/diag.asm:9-13`, `src/data3.asm:4`).
+two hexadecimal digits (`src/boot.asm:449-453`, `src/text.asm:8`).
 
-At the prompt `R retry, H header> ` (`src/data3.asm:5`), `DIAG` reads one key
+At the prompt `R retry, H header> ` (`src/text.asm:9`), `DIAG` reads one key
 with `BCONIN`, turns a small letter into a capital, echoes it and ends the line
-(`src/diag.asm:14-21`). Any key but `R` or `H` gives the prompt again. The
+(`src/boot.asm:454-461`). Any key but `R` or `H` gives the prompt again. The
 console at this point is always the serial terminal. Cold boot starts it there,
 and no display driver has been installed, since the startup file is on the card.
 So on a board with no terminal attached, the LCD's `CARD?` is the only sign.
 
 `H` prints the first 64 bytes of `BLKBUF`, the 512-byte buffer that holds the
-last block read from the card, in four rows of 16 (`src/diag.asm:26-46`,
+last block read from the card, in four rows of 16 (`src/boot.asm:466-486`,
 `src/ram.asm:20`). For a container that fails its checks that block is usually
 block 0, the header, as in Chapter 18's example. With no card, or a card that
 fails before block 0 is read, the buffer still holds the zeros cold boot
 cleared it to, as Chapter 1 shows.
 
-`R` jumps back to `COLDRT` (`src/diag.asm:22-23`). That starts the LCD again,
+`R` jumps back to `COLDRT` (`src/boot.asm:462-463`). That starts the LCD again,
 which clears `CARD?`, and then repeats the card's start and the mount, so a card
 fixed or put in while the prompt waits is mounted without a reset.
 
 The retry keeps a selection of volumes carried over from a recognised reset,
 which Chapter 14 explains. `RSLCAP` copies the drive table to `RSLBUF` before
-cold boot clears anything (`src/boot.asm:24`), and nothing writes `RSLBUF`
+cold boot clears anything (`src/boot.asm:25`), and nothing writes `RSLBUF`
 before `MEMINIT`, which runs only after a mount has succeeded
-(`src/boot.asm:69`, `src/boot.asm:100-101`).
+(`src/boot.asm:70`, `src/boot.asm:101-102`).
 
 ## The diagnostics ROM
 

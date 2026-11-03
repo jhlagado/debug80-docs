@@ -65,7 +65,7 @@ The header's fields (`format/format.json`, `header`):
 The checksum is the 16-bit sum of all 512 bytes of block 0 except the two
 bytes of the checksum itself (`tools/lib/container.mjs:51-59`). The ROM sums
 all 512 and then takes the two checksum bytes back out
-(`src/vol.asm:799-820`). The sum covers the descriptors in block 0 as well as
+(`src/vol.asm:718-739`). The sum covers the descriptors in block 0 as well as
 the header's fields, so a change to any byte of block 0 needs a new checksum.
 
 A card's minor version sets three things. A 1.0 card has no drives field and
@@ -249,7 +249,7 @@ allocation blocks. A G8M volume has 2,048 allocation blocks and a G1M volume
 
 The ROM's geometry table has an entry of 6 bytes for each geometry: the id, a
 0, the payload in blocks as a word and the address of the disk parameter block
-(`src/gen/geom.asm`). `GEOFIND` looks an id up in it (`src/vol.asm:767-775`),
+(`src/gen/geom.asm`). `GEOFIND` looks an id up in it (`src/vol.asm:686-694`),
 and the length check compares the descriptor's length with that word and
 requires its two high bytes to be 0 (`src/vol.asm:161-175`).
 
@@ -258,7 +258,7 @@ requires its two high bytes to be 0 (`src/vol.asm:161-175`).
 TEC-OS's workspace has a 16-byte disk parameter header for each of the four
 drives (`src/ram.asm:30`, `src/layout.asm:85`). The allocation vectors, one
 bit for each allocation block of a volume, go below the workspace. `ALVINIT`
-sizes the vectors at cold boot (`src/vol.asm:518-578`). On a 1.1 card that
+sizes the vectors at cold boot (`src/boot.asm:366-426`). On a 1.1 card that
 gives N drives, each of drives A to the Nth gets 256 bytes, enough for a G8M
 volume, whether or not a volume is on it, so that any drive can take any
 volume later. On any other card each mounted drive gets a vector sized for its

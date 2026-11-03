@@ -33,14 +33,14 @@ The BDOS's variables and its 54-byte stack are in RAM, in the block from
 `BDOSRAM` to `BDOSRME`, `BE77h` to `BEFFh` (`src/ram.asm:130-190`,
 `src/layout.asm:79`). Warm boot clears that block, as a fresh load of the BDOS
 from disk would leave it, and sets the DMA address to `0080h`
-(`src/boot.asm:261-280`).
+(`src/boot.asm:262-281`).
 
 A few of the BDOS's variables are outside that block, because a warm boot must
 not clear them. `LOGINV`, in the BIOS's part of the workspace (`src/ram.asm:31`),
 has a bit for each logged-in drive, a drive whose allocation vector the BDOS has
 built from its directory, as the section on allocation vectors below describes.
 `PRGCODE`, the code of function 108, is above the RAM BIOS table, where cold boot
-clears it and warm boot does not (`src/ram.asm:228`, `src/boot.asm:33-37`). The
+clears it and warm boot does not (`src/ram.asm:228`, `src/boot.asm:34-38`). The
 rest of what the BDOS keeps for a drive is in the drive's disk parameter header,
 the DPH, 16 bytes holding the addresses of the drive's tables, which Chapter 18
 describes.
@@ -57,8 +57,8 @@ while no key is waiting (`src/console.asm:105-109`).
 
 The jump at `0005h` leads to the BDOS entry jump directly below the allocation
 vectors or, with a service in, to the same jump at the start of the lowest
-service's page, as Chapter 20 describes (`src/vol.asm:586-590`,
-`src/boot.asm:200-212`, `src/svc.asm:203-206`). That jump goes
+service's page, as Chapter 20 describes (`src/boot.asm:434-438`,
+`src/boot.asm:201-213`, `src/loader.asm:203-206`). That jump goes
 to `BENTRY` (`src/cpm/bdos.asm:79-115`).
 
 `BENTRY` saves the caller's stack pointer in `OLDSP`, moves to the BDOS's own
@@ -69,13 +69,13 @@ number, 108 and 47 (`src/cpm/bdos.asm:83-87`). Any other number of 41 or more
 returns 0 at once (`src/cpm/bdos.asm:88-89`).
 
 A function from 0 to 40 is found in `FNTAB`, a table of 41 words, one routine
-each (`src/data3.asm:76-83`, `src/cpm/bdos.asm:90-97`). Functions 38 and 39,
+each (`src/tables.asm:41-48`, `src/cpm/bdos.asm:90-97`). Functions 38 and 39,
 which CP/M 2.2 leaves undefined and MP/M uses, are `RETZERO`.
 
 Some functions take an FCB, a file control block, and work on the drive its
 first byte names, so that drive has to be selected before such a function runs.
 `FCBMAP`, six bytes, has a bit for each function, bit n mod 8 of byte n / 8,
-set where the FCB's drive is selected first (`src/data3.asm:84`). The bits are
+set where the FCB's drive is selected first (`src/tables.asm:49`). The bits are
 set for functions 15, 16, 17, 19 to 23, 30, 33 to 35 and 40. `BENTRY` finds
 the byte by subtracting 8 from the number until it goes below zero. It rotates
 the byte left until the function's bit is in the carry flag, and if the bit is
@@ -460,12 +460,12 @@ and `WARMV`. Every drive is then scanned in full at its next selection, as in
 CP/M 2.2 (`src/cpm/bdos.asm:436-439`). Function 37 takes the drives named by
 the bits of `DE` out of `LOGINV`, the read-only vector and `WARMV`
 (`src/cpm/bdos.asm:1579-1593`). The volume services `MOUNT` and `UNMNT` call
-it for a drive whose volume they have changed (`src/vol.asm:673-684`).
+it for a drive whose volume they have changed (`src/vol.asm:592-603`).
 
 ## BDOS errors
 
 The BDOS has four error messages, each printed after `Bdos Err On` and the
-drive letter (`src/data3.asm:86-90`):
+drive letter (`src/text.asm:84-88`):
 
 - `Select`, for a drive past D, which the BIOS doesn't have, a drive with no
   volume or a `?` drive byte outside function 17
@@ -503,7 +503,7 @@ With `DE` = `FFFFh` it returns the code in `HL`, and with any other `DE` it sets
 the code to `DE` and returns 0. There is one code, `PRGCODE`, for every program.
 Cold boot clears it with the rest of the workspace and warm boot leaves it, so a
 command finds the code its predecessor set (`src/ram.asm:228`,
-`src/boot.asm:33-37`).
+`src/boot.asm:34-38`).
 
 Function 47 is TEC-OS's chain to another command, from CP/M 3's
 (`src/cpm/bdos.asm:46-71`). The command is at the DMA address and ends with a
@@ -522,7 +522,7 @@ TEC-OS's BDOS has the interface of CP/M 2.2, and function 12 returns `22h`
 (`src/cpm/bdos.asm:423-425`). Its differences from the BDOS that Digital
 Research shipped are these:
 
-- It is in ROM (`src/rom.asm:25-26`). A write to the BDOS's code changes
+- It is in ROM (`src/rom.asm:24-25`). A write to the BDOS's code changes
   nothing, and a hook goes in the RAM BIOS table.
 - Functions 47 and 108 have meanings that come from CP/M 3, and every other
   function above 40 returns 0.

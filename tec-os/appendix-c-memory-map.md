@@ -57,7 +57,7 @@ The Z80's 64 KiB are three windows:
 | `C000h–FFFFh` | the ROM |
 
 At reset the first 2 KiB of the ROM also appear at `0000h–07FFh`, until cold
-boot sets bit 0 of the latch (`src/reset.asm:1-3`, `src/boot.asm:21-22`). With
+boot sets bit 0 of the latch (`src/reset.asm:1-3`, `src/boot.asm:22-23`). With
 EXPAND 0 in view, TEC-OS uses them in this way:
 
 | Addresses | Contents |
@@ -71,11 +71,11 @@ The latch is the system latch at port `FFh`, which TEC-OS writes from the copy
 it keeps at `0040h` (`src/layout.asm:13-20`). Its value while TEC-OS runs is
 `01h`: the boot overlay off and EXPAND 0 in view. It is
 `81h` while the matrix keyboard's Caps Lock is on, which sets bit 7
-(`src/console.asm:405-410`).
+(`src/keyboard.asm:104-109`).
 
 The TPA ends below the BDOS entry jump, whose address is in the word at
 `0006h`. Cold boot places the jump directly below the lowest allocation vector
-of the card's drives, 3 bytes under that vector's address (`src/vol.asm:586-590`).
+of the card's drives, 3 bytes under that vector's address (`src/boot.asm:434-438`).
 A service goes in whole pages below the jump's page and lowers the word at `0006h`
 to the start of its first page, which holds its own `JP BENTRY`. On the starter
 card the first service's pages end at `B7FFh`, so the 21 bytes from `B800h` to
@@ -100,7 +100,7 @@ Within the code, the CCP is at `D7CDh–E157h`, 2,443 bytes, and the BDOS at
 `E158h–F065h`, 3,854 bytes, in the order `src/rom.asm` includes them
 (`src/rom.asm:25-27`). The ROM's own copy of the BIOS jump table is in the
 data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
-(`src/data.asm:16-32`, `src/boot.asm:60-63`).
+(`src/tables.asm:10-26`, `src/boot.asm:61-64`).
 
 ## Page zero
 
@@ -120,10 +120,10 @@ data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 
 Cold boot clears page zero, and `PZINIT` writes it at cold boot and at every
 warm boot, leaving the IOBYTE and the drive and user byte as they are
-(`src/boot.asm:25-31`, `src/boot.asm:197-256`). An unload and a failed `INIT` clear
+(`src/boot.asm:26-32`, `src/boot.asm:198-257`). An unload and a failed `INIT` clear
 the first byte of each restart vector the service claimed and then run the
-same sweep of the vectors, `PZSWP` (`src/svc.asm:61-72`,
-`src/svc.asm:259-263`, `src/svc.asm:295-307`). The CCP writes the byte at
+same sweep of the vectors, `PZSWP` (`src/loader.asm:61-72`,
+`src/loader.asm:259-263`, `src/loader.asm:295-307`). The CCP writes the byte at
 `0004h` at each prompt, and the FCBs, the tail and the byte at `0050h` before
 it runs a program (`src/cpm/ccp.asm:206-225`, `src/cpm/ccp.asm:296-298`,
 `src/cpm/ccp.asm:1328-1362`).
@@ -169,8 +169,8 @@ card. The build places `WSBASE` so that the part ends at `BF00h`
 (`tools/build.mjs:228-233`, `src/layout.asm:67-70`). The part above the table
 starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:192`). Cold boot
 clears the workspace from `WSBASE` up to `WSEND`, `B958h` to `BFE4h`
-(`src/boot.asm:33-37`). Warm boot clears the part from `CCPCLR` to the end of
-the BDOS's block and leaves the rest (`src/boot.asm:261-280`).
+(`src/boot.asm:34-38`). Warm boot clears the part from `CCPCLR` to the end of
+the BDOS's block and leaves the rest (`src/boot.asm:262-281`).
 
 ### The BIOS's block
 
@@ -256,7 +256,7 @@ clears the rest:
 
 ## EXPAND 1
 
-Cold boot clears all of EXPAND 1 (`src/boot.asm:149-157`). No BDOS or BIOS
+Cold boot clears all of EXPAND 1 (`src/boot.asm:150-158`). No BDOS or BIOS
 call gives a program a range in it. A program that writes the latch can still
 switch it in. If it ends with EXPAND 1 in view, the jump at `0000h` goes to
 `BF03h` in EXPAND 1. That page holds zeros, which the Z80 runs as `NOP`s up to
@@ -264,8 +264,8 @@ the reset jump at `C000h`. The jump's target, `RSTENT`, reads the byte at
 `0002h`, which holds the jump's own high byte only at reset, while the boot
 overlay is on. Here it holds the RAM BIOS table's, and the machine warm boots:
 EXPAND 0 comes back into view and the cache's dirty lines are written to the
-card, as at any exit (`src/boot.asm:10-18`, `src/boot.asm:74-88`). A reset and
-BIOS function 0 cold boot (`src/data.asm:16`).
+card, as at any exit (`src/boot.asm:11-19`, `src/boot.asm:75-89`). A reset and
+BIOS function 0 cold boot (`src/tables.asm:10`).
 
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
@@ -285,7 +285,7 @@ The cache's addresses are in `src/layout.asm:21-23` and the history's page in
 
 | Stack | Addresses | Bytes | Used by |
 | --- | --- | ---: | --- |
-| boot | below `8000h` | | cold boot, until the workspace is cleared (`src/layout.asm:66`, `src/boot.asm:20`) |
+| boot | below `8000h` | | cold boot, until the workspace is cleared (`src/layout.asm:66`, `src/boot.asm:21`) |
 | BIOS | `BCC5h–BCEAh` | 38 | cold boot after the RAM check, warm boot and the diagnostic prompt |
 | CCP | `BE59h–BE76h` | 30 | the CCP, and a program from its start, with `0000h` pushed |
 | BDOS | `BECAh–BEFFh` | 54 | every BDOS function and the BIOS calls it makes |

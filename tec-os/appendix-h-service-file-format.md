@@ -32,11 +32,11 @@ its start, so an address in the image counts from the header's first byte. The
 loader moves the header and the image together to a page boundary and writes
 its own fields over some of the header's, as Chapter 20's table shows. A file's
 end is rounded up to a whole record of 128 bytes on the card, and the loader
-reads nothing after the relocation data (`src/svc.asm:155-159`).
+reads nothing after the relocation data (`src/loader.asm:155-159`).
 
 ## The header
 
-The loader names the fields at `src/svc.asm:11-24`.
+The loader names the fields at `src/loader.asm:11-24`.
 
 | Offset | Bytes | Contents | The loader's check |
 | ---: | ---: | --- | --- |
@@ -53,7 +53,7 @@ The loader names the fields at `src/svc.asm:11-24`.
 | 17 | 8 | The name, padded with spaces | None |
 
 The loader compares the first two bytes, as a word, with `DMAGIC`, which is
-`SVCFMT * 256 + 'D'` (`src/svc.asm:11`, `src/svc.asm:82-85`). `SVCFMT` is 4,
+`SVCFMT * 256 + 'D'` (`src/loader.asm:11`, `src/loader.asm:82-85`). `SVCFMT` is 4,
 from `abi.inc`, and a file of any other format fails the load
 (`src/abi.inc:96-98`). A source writes the byte by that name, as
 `DB 'D',SVCFMT,0,1` with `abi.inc` included, which is how `PICO.SVC` and
@@ -68,8 +68,8 @@ file, `TAS` on the card or `makeSvc` on a PC, writes the number of
 dependencies, the two entry offsets and the two sizes
 (`tools/lib/svc.mjs:117-126`).
 The loader's checks of the entry offsets, the sizes and the page are at
-`src/svc.asm:86-106`, `src/svc.asm:345-360`, and of the stack figures at
-`src/svc.asm:134-150`.
+`src/loader.asm:86-106`, `src/loader.asm:345-360`, and of the stack figures at
+`src/loader.asm:134-150`.
 
 ## The dependencies
 
@@ -77,7 +77,7 @@ Each dependency is 9 bytes: the least version of the record, then its 8-byte
 name, padded with spaces (`tools/lib/svc.mjs:112`). The entries follow the
 image and are no part of it, so the loader relocates none of their bytes. It
 looks each one up in the registry, and a name that isn't there, or is there at
-a lower version, fails the load (`src/svc.asm:107-126`). `makeSvc` takes them
+a lower version, fails the load (`src/loader.asm:107-126`). `makeSvc` takes them
 from its `deps` option and rejects a name of more than 8 bytes
 (`tools/lib/svc.mjs:111`). `TAS` takes them from what follows a label named
 `DEPS` in the source, as whole 9-byte entries in `DB`.
@@ -105,7 +105,7 @@ reached.
 
 Every position the list reaches, a gap of 255 included, must lie inside the
 header and image, below the size at offset 6, or the load fails
-(`src/svc.asm:153-181`). A first gap of 0 fixes header byte 24, the name's last.
+(`src/loader.asm:153-181`). A first gap of 0 fixes header byte 24, the name's last.
 `makeSvc` never writes one, since every fixup it finds lies in the image. The
 loader doesn't test for one, and Chapter 20 shows what such a list does.
 

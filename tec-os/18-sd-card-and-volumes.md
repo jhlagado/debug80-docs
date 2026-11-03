@@ -185,7 +185,7 @@ A>
 ```
 
 Cold boot sends any failure, of the card or of the container, to the
-diagnostic prompt (`src/boot.asm:52-55`). For the run below, the starter
+diagnostic prompt (`src/boot.asm:53-56`). For the run below, the starter
 card's first byte was changed from `T` to `X` with
 `printf X | dd of=/tmp/bad.img bs=1 seek=0 conv=notrunc` on a copy of
 `dist/starter.img`. `H` was then typed at the prompt:
@@ -202,7 +202,7 @@ R retry, H header> H
 R retry, H header> 
 ```
 
-`H` prints the first 64 bytes of `BLKBUF` (`src/diag.asm:26-45`), which here
+`H` prints the first 64 bytes of `BLKBUF` (`src/boot.asm:466-485`), which here
 hold block 0 as read. The first row is the name, with `58h` for the `X`. Then
 come the version 1.0, the header size `0200h`, the descriptor size `0020h` and
 the count, 2. The second row starts with the container's length, `00005000h`
@@ -329,14 +329,14 @@ number in `C`, as Chapter 20 describes (`src/abi.asm:10`, `src/abi.inc:58-70`):
   its drive byte replaced by the drive the volume is on now, `FFh` for none.
 
 The three routines, `VSMNT`, `VSUNM` and `VSDSC`, each start with `VSIN`, which
-moves the drive from `B` to `C` (`src/vol.asm:593-605`, `src/vol.asm:690-694`).
+moves the drive from `B` to `C` (`src/vol.asm:512-524`, `src/vol.asm:609-613`).
 Each returns `A` = 0 with carry clear, or `TNEBAD`, 1, with carry set and
-nothing changed (`src/vol.asm:684-688`). A mount fails in four cases: an index
+nothing changed (`src/vol.asm:603-607`). A mount fails in four cases: an index
 past the table, a drive past D, a volume already on a drive and a drive whose
 vector slot is too small for the volume. An unmount fails for drive A, which is
-never left empty, and for a drive past D (`src/vol.asm:622-672`). The slot rule
+never left empty, and for a drive past D (`src/vol.asm:541-591`). The slot rule
 is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
-and any other needs a slot of either size (`src/vol.asm:649-662`). Chapter 13
+and any other needs a slot of either size (`src/vol.asm:568-581`). Chapter 13
 describes how cold boot gives out the slots. The three services may change `IX`
 and the alternate registers, and `abi.inc` gives 24 bytes as a bound on the
 stack each takes (`src/abi.inc:18-25`, `src/abi.inc:58-70`). With dirty lines
@@ -346,11 +346,11 @@ written behind waiting, `MOUNT` and `UNMNT` each take 22
 A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of
 the block cache to the card, with interrupts off, and the call fails if any
-write fails (`src/vol.asm:696-708`). A mount then clears the drive's old
+write fails (`src/vol.asm:615-627`). A mount then clears the drive's old
 entry, fills the new one and its DPH with `MNONE`, and records the index. An
 unmount clears the entry. Either way the service ends by marking `BLKBUF`
 empty and calling BDOS function 37 to reset the drive, so that the drive's
-next access logs it in from its new directory (`src/vol.asm:673-685`). That
+next access logs it in from its new directory (`src/vol.asm:592-604`). That
 call runs on the BDOS's own stack, so a program calls `MOUNT` and `UNMNT` from
 outside its own BDOS calls (`src/abi.inc:21-23`).
 

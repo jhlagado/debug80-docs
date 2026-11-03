@@ -44,19 +44,19 @@ and the ABI's major and minor version, 5 and 0. At `C008h` is its one jump, to
 table from a program's side and Chapter 20 the services behind it. The table
 ends at `C00Bh`, where the data begins.
 
-The data block runs from the label `ROMDATA` (`src/data.asm:6`) to `ROMCODE`
-(`src/data3.asm:117`). Four files that follow one another in the assembly make
+The data block runs from the label `ROMDATA` (`src/tables.asm:7`) to `ROMCODE`
+(`src/text.asm:98`). Four files that follow one another in the assembly make
 it up: `data.asm`, `data2.asm`, the generated `gen/geom.asm` and `data3.asm`
 (`src/rom.asm:11-14`). They hold the messages, the keyword strings, the
 keyboard's tables, the container's name and disk parameters, the BDOS's
-function table and the table of the numbered services (`src/data.asm:35-37`,
-`src/data3.asm:22-39`, `src/data3.asm:76`, `src/data3.asm:94`). Each group is headed by the name of the source file
+function table and the table of the numbered services (`src/tables.asm:29-31`,
+`src/text.asm:29-46`, `src/tables.asm:41`, `src/tables.asm:53`). Each group is headed by the name of the source file
 whose code uses it, so `CWMSG`, the text `Write lost`, sits under `cache.asm`
-(`src/data3.asm:111-112`). Nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
-(`src/data.asm:16-32`) is in the block as the source of the copy that programs
+(`src/text.asm:95-96`). Nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
+(`src/tables.asm:10-26`) is in the block as the source of the copy that programs
 and the BDOS call, which Chapter 15 describes.
 
-The code starts at `RSTENT` (`src/boot.asm:16`) and runs through every routine of TEC-OS to the label
+The code starts at `RSTENT` (`src/boot.asm:17`) and runs through every routine of TEC-OS to the label
 `CODEEND`, which `src/end.asm:2` defines after the last file. The free space is
 the rest of the ROM, in one gap, and the build fills it with
 `FFh` (`tools/build.mjs:240-243`).
@@ -105,7 +105,7 @@ data follows the table because the four data files come next, and the code
 follows the data because every file after `data3.asm` is code. So a code
 file's routines are in the code block, and its strings and tables are in the
 data block, under a heading with the file's name (`src/rom.asm:9-15`,
-`src/data3.asm:111`).
+`src/text.asm:95`).
 
 ## The generated files
 
@@ -117,8 +117,8 @@ to be edited (`tools/build.mjs:60-136`).
 `gen/config.asm` holds the settings that depend on the build. `WSBASE` is the
 first byte of the resident workspace, which the build places as the next
 section describes. `VERHI`, `VERLO` and `ROMVER` are the version, 0.1, which
-the banner and the LCD's top row print from (`src/data.asm:13`,
-`src/data2.asm:8`). The last five, `TXDLY`, `TXSTOP`, `RXDLY`, `RXHALF` and
+the banner and the LCD's top row print from (`src/text.asm:6`,
+`src/text.asm:81`). The last five, `TXDLY`, `TXSTOP`, `RXDLY`, `RXHALF` and
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,
@@ -137,7 +137,7 @@ drives, and the two geometries with their disk parameter blocks.
 `HCOUNT EQU 14` for the volume count's offset in the header and `DMOUNT EQU 14`
 for the drive byte's offset in a descriptor (`tools/build.mjs:79-113`).
 `gen/geom.asm` holds bytes, and it is the one generated file included in the
-data block (`src/rom.asm:13`). It has the container's name as `FMTMAG` and the two disk parameter
+data block (`src/rom.asm:12`). It has the container's name as `FMTMAG` and the two disk parameter
 blocks, `DPB1` and `DPB2`. Its table `GEOTAB` gives each geometry's id, its
 payload in blocks and the address of its disk parameter block
 (`tools/build.mjs:114-134`).
