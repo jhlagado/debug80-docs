@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 12. The ROM and its build
 
-Checked against TEC-OS 718c01b.
+Checked against TEC-OS ea9c1c0.
 
 TEC-OS is one 16 KiB image for the addresses `C000h–FFFFh`. This chapter
 describes the image's layout, from the jump at its first byte to the free
@@ -25,13 +25,13 @@ The ROM has five parts, in this order:
 | `C000h–C002h` | 3 | the reset jump |
 | `C003h–C017h` | 21 | the ROM table |
 | `C018h–C33Dh` | 806 | the data |
-| `C33Eh–F9B9h` | 13,948 | the code |
-| `F9BAh–FFFFh` | 1,606 | free |
+| `C33Eh–F9E9h` | 13,996 | the code |
+| `F9EAh–FFFFh` | 1,558 | free |
 
-The figures are those of the build at commit 718c01b. The build writes them to
+The figures are those of the build at commit ea9c1c0. The build writes them to
 `build/debug80/census.json` and, through `npm run media`, to the table of the
 ROM's regions in `docs/memory-map.md`. The used part, from `C000h` to the end
-of the code, is 14,778 of the 16,384 bytes.
+of the code, is 14,826 of the 16,384 bytes.
 
 The first three bytes are a jump, `JP COLD` (`src/reset.asm:6`), to `C33Eh`,
 the first byte of the code. Chapter 14 describes how the Z80 reaches it at
@@ -132,7 +132,7 @@ the banner and the LCD's top row print from (`src/data.asm:18`,
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,
-`tools/build.mjs:40-61`). At 718c01b they are 49, 105, 50, 74 and 77, and the
+`tools/build.mjs:40-61`). At ea9c1c0 they are 49, 105, 50, 74 and 77, and the
 build stops with an error if a count would not fit in a byte
 (`tools/build.mjs:48-50`). Chapter 15 explains the loops and the arithmetic
 behind the counts.
@@ -175,7 +175,7 @@ the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
 therefore `BF00h` less the workspace's size, and the size is known only after
 an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
 build reads the address of `BDOSRME`, the label at the workspace's end, and
-takes `8000h` from it (`tools/build.mjs:250-254`). At 718c01b that part is
+takes `8000h` from it (`tools/build.mjs:250-254`). At ea9c1c0 that part is
 1,448 bytes, so the second assembly has `WSBASE` at `B958h`
 (`tools/build.mjs:255-257`).
 
@@ -256,10 +256,10 @@ in each census (`tools/build.mjs:341-355`). `npm run build` prints one line for
 each:
 
 ```text
-debug80: ROM 14778/16384 bytes, TPA $0100-$B805 (46854 bytes), sha256 debba41f1c4bbdbf
-debug80t40: ROM 14778/16384 bytes, TPA $0100-$B805 (46854 bytes), sha256 debba41f1c4bbdbf
-debug80g32: ROM 14778/16384 bytes, TPA $0100-$B805 (46854 bytes), sha256 debba41f1c4bbdbf
-board: ROM 14778/16384 bytes, TPA $0100-$B805 (46854 bytes), sha256 debba41f1c4bbdbf
+debug80: ROM 14826/16384 bytes, TPA $0100-$B805 (46854 bytes), sha256 c3f8164ebab315bd
+debug80t40: ROM 14826/16384 bytes, TPA $0100-$B805 (46854 bytes), sha256 c3f8164ebab315bd
+debug80g32: ROM 14826/16384 bytes, TPA $0100-$B805 (46854 bytes), sha256 c3f8164ebab315bd
+board: ROM 14826/16384 bytes, TPA $0100-$B805 (46854 bytes), sha256 c3f8164ebab315bd
 ```
 
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
@@ -268,4 +268,4 @@ media` then copies each profile's three files to `dist/` as
 `tecos-<profile>.census.json` (`tools/media.mjs:209-214`). It also writes
 `docs/memory-map.md` from the `debug80` census. The four ROM files in `dist/`
 have the same SHA-256,
-`debba41f1c4bbdbfcb34bb118956dd38cab88ca00ad76848474b10ee3848a301`.
+`c3f8164ebab315bd7d2fa18de82369573d12e814e921cf0cd041761f76c5a8e3`.
