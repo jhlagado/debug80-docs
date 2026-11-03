@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 718c01b, with the ATOM assembler from the repository's
+Checked against TEC-OS ea9c1c0, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `EDIT.COM` from
 Edit 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`; the
@@ -138,8 +138,8 @@ node tools/tecvol.mjs put time.img A data.bin
 `Machine` as `tools/capture.mjs` does. It reads the model's T-state count,
 `cycles` (`host/machine.mjs:261`), twice: when `READ DATA.BIN` has been typed
 and echoed, before the Return that ends it, and at the next prompt. After a
-cold boot, the command's first run took 6,628,187 T-states, 1.66 seconds, and
-its second 1,329,981, 0.33 seconds, a fifth of that. Both figures include
+cold boot, the command's first run took 6,631,064 T-states, 1.66 seconds, and
+its second 1,332,858, 0.33 seconds, a fifth of that. Both figures include
 loading the program from drive A.
 
 The gain needs the whole file in the cache. A file of 15,360 bytes took about
@@ -216,8 +216,8 @@ writes three of the first 32 data blocks early, because all 30 lines are dirty
 before the BDOS next writes the directory.
 
 On `time.img`, from the section on reads, `SAVE 64 X.COM`, 16 KiB, took
-30,822,909 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
-9,905,568, 2.48 seconds, about a third of that. Each run followed a cold boot
+30,826,365 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
+9,909,024, 2.48 seconds, about a third of that. Each run followed a cold boot
 and a change to the drive. The count, taken as for the reads, leaves out the
 change of drive.
 
@@ -271,7 +271,8 @@ data, so each warm boot writes them again and prints the message again while
 the write still fails.
 
 A card taken out while TEC-OS runs gives that: every write fails and the
-message comes at each `^C`. The data that is only in the cache is lost when
+message comes at each `^C`, even with the same card put back, since only cold
+boot starts a card (`src/boot.asm:37`). The data that is only in the cache is lost when
 the board is reset or turned off. While dirty lines stay dirty, fewer lines
 are free for reads, and once all 30 are dirty every `CTAKE` starts with a
 write.
