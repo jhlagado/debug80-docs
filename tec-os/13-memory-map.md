@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 13. The memory map
 
-Checked against TEC-OS 60e0768.
+Checked against TEC-OS 1f9542d.
 
 TEC-OS has 16 KiB of ROM and, of RAM, the 64 KiB that a TEC-1G with U9 fitted
 has. Chapter 7 describes that memory from a program's side, and this chapter
@@ -15,7 +15,7 @@ from TEC-OS's side. It starts with the way the system latch puts RAM and ROM
 into the Z80's 64 KiB, and the state TEC-OS keeps in page zero. It goes on to
 the resident workspace at the top of EXPAND 0 and the allocation vectors below
 it. It ends with the four stacks, the measurements that size them and TEC-OS's
-use of EXPAND 1. The addresses are those of the build at 60e0768 with the starter
+use of EXPAND 1. The addresses are those of the build at 1f9542d with the starter
 card in the socket. `docs/memory-map.md`, which `npm run media` writes from the
 build's census, has the same figures.
 
@@ -72,6 +72,7 @@ the parts TEC-OS sets (`src/boot.asm:190-246`):
 | `0008h–0037h` | the restart vectors 1 to 6, each a `RET` unless it jumps above the top of the TPA |
 | `0038h` | `EI` and `RETI`, for restart 7 and the interrupt of mode 1, unless it jumps above the top of the TPA |
 | `0040h–004Fh` | TEC-OS's state |
+| `0050h` | the drive the CCP loaded the running program from: 0 for the current drive, 1 for A: and so on |
 | `005Ch` | the default file control block |
 | `0080h` | the default DMA buffer and the command tail |
 
@@ -82,6 +83,11 @@ of the lowest service or, with none, the BDOS entry jump itself
 vectors, as Chapter 14 describes. A vector that jumps above the top of the TPA,
 into a service, the workspace or the ROM, keeps its jump
 (`src/boot.asm:203-246`).
+
+`PZINIT` doesn't write `0050h`. The CCP stores there the drive byte of the
+command's FCB just before it starts a program, as CP/M 3 does. A program that
+the CCP found on A: by its search sees 1 (`src/layout.asm:29-30`,
+`src/cpm/ccp.asm:296-298`). Chapter 17 describes the search.
 
 The bytes `0040h–004Fh` are the sixteen that CP/M 2.2 leaves to the BIOS, and
 TEC-OS keeps fourteen bytes of its state there, of which only `LATCHV` has to be
