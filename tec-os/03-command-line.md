@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
-845d062, whose copy in `dist/files` has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
+Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
+8fcc6ea, with the SHA-256
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -31,15 +31,14 @@ capital, so `dir *.com` and `DIR *.COM` are the same command:
 <!-- node tools/capture.mjs "dir *.com" "DIR ????.COM" "DIR A:P*.*" "DIR B:" -->
 ```text
 A>dir *.com
-TERM.COM     PROBE.COM    DEMO.COM     MOUNT.COM    VOLS.COM     EDIT.COM
-TAS.COM     
-7 files, 974K free
+MOUNT.COM    TED.COM      TAS.COM     
+3 files, 984K free
 A>DIR ????.COM
-TERM.COM     DEMO.COM     VOLS.COM     EDIT.COM     TAS.COM     
-5 files, 974K free
+TED.COM      TAS.COM     
+2 files, 984K free
 A>DIR A:P*.*
-PROBE.COM    PICO.SVC     PICO40.SVC   PICO32.SVC  
-4 files, 974K free
+PICO.SVC    
+1 file, 984K free
 A>DIR B:
 NO FILE
 A>
@@ -51,13 +50,13 @@ spaces, are its arguments. A command is a built-in, one of the commands the
 CCP carries in the ROM, or else the name of a program file on the card.
 
 Two characters have a meaning of their own in a line. `!` separates commands,
-so `DIR!TYPE README.TXT` runs `DIR` and then `TYPE`, and a command that starts
+so `DIR!TYPE STARTUP.CMD` runs `DIR` and then `TYPE`, and a command that starts
 with `:` runs only if the one before it succeeded. Chapter 11 describes both.
 
 ## File names
 
 A CP/M file name has up to eight characters, then a full stop and a type of up
-to three: `README.TXT`, `PICO.SVC`. The type may be left out, with its full
+to three: `STARTUP.CMD`, `PICO.SVC`. The type may be left out, with its full
 stop, and then it is three spaces. A drive letter and a colon in front of the
 name, as in `B:NOTES.TXT`, name a file on another drive. Without one, the name
 is on the current drive, the one the prompt shows.
@@ -105,7 +104,7 @@ every file whose name starts with `P`, whatever its type. Characters after a
 A `?` also matches a space, and a name shorter than eight characters is padded
 with spaces. So `????.COM` is `????` and four spaces, which is why in the
 transcript above it matches the names of up to four characters with the type
-`COM`, and not `PROBE.COM` or `MOUNT.COM`.
+`COM`, and not `MOUNT.COM`.
 
 Only `DIR` and `ERA` take a name with wildcards. `TYPE`, `REN`, `SAVE` and
 `COPY` each work on one file, and a wildcard in their names makes the command
@@ -177,49 +176,49 @@ that isn't there gives `NO FILE`, and so does `TYPE` with no name. Like `DIR`,
 
 ## COPY, REN and ERA
 
-`COPY` copies one file to another name, to another drive or both. Chapter 1
-showed it in the starter card's `README.TXT`. When the destination is a drive
-alone, as in `COPY README.TXT B:`, the copy has the source's name. A
-destination with a type and no name, such as `B:.DOC` or `B:.*`, also takes
-the whole of the source's name, and the type you typed has no effect. The copy
-goes a record at a time, and `COPIED` and a number report the records copied,
-in hexadecimal: `000A` is ten records, 1,280 bytes. A file of the destination's
-name is erased first, so `COPY` replaces it.
+`COPY` copies one file to another name, to another drive or both. When the
+destination is a drive alone, as in `COPY STARTUP.CMD B:`, the copy has the
+source's name. A destination with a type and no name, such as `B:.DOC` or
+`B:.*`, also takes the whole of the source's name, and the type you typed has
+no effect. The copy goes a record at a time, and `COPIED` and a number report
+the records copied, in hexadecimal: `000A` is ten records, 1,280 bytes. A file
+of the destination's name is erased first, so `COPY` replaces it.
 
 `REN` renames a file, with the new name first, an equals sign and the old name
-after it, as CP/M 2.2 has it. `ERA` erases files. Here a copy of `README.TXT`
-is made on drive B under two names, and one is renamed and then erased:
+after it, as CP/M 2.2 has it. `ERA` erases files. Here a copy of
+`STARTUP.CMD` is made on drive B under two names, and one is renamed and then
+erased:
 
-<!-- node tools/capture.mjs "COPY README.TXT B:" "COPY README.TXT B:COPY.TXT" B: DIR "REN NOTES.TXT=COPY.TXT" "REN NOTES.TXT=README.TXT" DIR "ERA NOTES.TXT" "ERA NOTES.TXT" DIR -->
+<!-- node tools/capture.mjs "COPY STARTUP.CMD B:" "COPY STARTUP.CMD B:COPY.TXT" B: DIR "REN NOTES.TXT=COPY.TXT" "REN NOTES.TXT=STARTUP.CMD" DIR "ERA NOTES.TXT" "ERA NOTES.TXT" DIR -->
 ```text
-A>COPY README.TXT B:
-COPIED 000A
+A>COPY STARTUP.CMD B:
+COPIED 0001
 
-A>COPY README.TXT B:COPY.TXT
-COPIED 000A
+A>COPY STARTUP.CMD B:COPY.TXT
+COPIED 0001
 
 A>B:
 B>DIR
-README.TXT   COPY.TXT    
+STARTUP.CMD  COPY.TXT    
 2 files, 8168K free
 B>REN NOTES.TXT=COPY.TXT
-B>REN NOTES.TXT=README.TXT
+B>REN NOTES.TXT=STARTUP.CMD
 FILE EXISTS
 B>DIR
-README.TXT   NOTES.TXT   
+STARTUP.CMD  NOTES.TXT   
 2 files, 8168K free
 B>ERA NOTES.TXT
 B>ERA NOTES.TXT
 NO FILE
 B>DIR
-README.TXT  
+STARTUP.CMD 
 1 file, 8172K free
 B>
 ```
 
-Each 1,280-byte file takes 4 KiB of the drive, since the volume on drive B,
-`WORK`, gives space to files in allocation blocks of 4 KiB. Chapter 4
-describes the volumes and their allocation blocks. The second `REN` fails
+`STARTUP.CMD` is one record, and each copy of it takes 4 KiB of the drive,
+since the volume on drive B, `WORK`, gives space to files in allocation blocks
+of 4 KiB. Chapter 4 describes the volumes and their allocation blocks. The second `REN` fails
 because a file of the new name, `NOTES.TXT`, is there already, and `REN`
 changes nothing then. A `REN` whose old name isn't there prints `NO FILE`, and
 so does an `ERA` that matches no file, as the second `ERA` above shows.
@@ -232,29 +231,29 @@ two different drives it fails, and prints its argument with a question mark, as
 `COPY` works in the current user area, on both drives. A name with no drive
 means the current drive, so a destination can turn out to be the same file as
 the source, and that fails with `COPY?` before any file is opened. On drive A
-that covers `COPY README.TXT A:`, `COPY A:README.TXT README.TXT` and
-`COPY README.TXT` with no destination, which has the source's name and the
+that covers `COPY STARTUP.CMD A:`, `COPY A:STARTUP.CMD STARTUP.CMD` and
+`COPY STARTUP.CMD` with no destination, which has the source's name and the
 current drive. Here the first copy has a type and no name, and the next two
 fail:
 
-<!-- node tools/capture.mjs "COPY README.TXT B:.DOC" "DIR B:" "COPY A:README.TXT README.TXT" "COPY README.TXT" -->
+<!-- node tools/capture.mjs "COPY STARTUP.CMD B:.DOC" "DIR B:" "COPY A:STARTUP.CMD STARTUP.CMD" "COPY STARTUP.CMD" -->
 ```text
-A>COPY README.TXT B:.DOC
-COPIED 000A
+A>COPY STARTUP.CMD B:.DOC
+COPIED 0001
 
 A>DIR B:
-README.TXT  
+STARTUP.CMD 
 1 file, 8172K free
-A>COPY A:README.TXT README.TXT
+A>COPY A:STARTUP.CMD STARTUP.CMD
 COPY?
 
-A>COPY README.TXT
+A>COPY STARTUP.CMD
 COPY?
 
 A>
 ```
 
-The same rule makes `COPY A:README.TXT` on drive B a copy to drive B.
+The same rule makes `COPY A:STARTUP.CMD` on drive B a copy to drive B.
 
 `COPY` has four messages of its own. `NO SOURCE` means the source isn't there,
 and `CANNOT MAKE DEST` means the destination's directory is full.
@@ -266,16 +265,16 @@ Before it erases with a name that matches every file, such as `*.*` or
 character, in either case, erases the files, and anything else leaves them, as
 Return alone does:
 
-<!-- node tools/capture.mjs "COPY README.TXT B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
+<!-- node tools/capture.mjs "COPY STARTUP.CMD B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
 ```text
-A>COPY README.TXT B:
-COPIED 000A
+A>COPY STARTUP.CMD B:
+COPIED 0001
 
 A>B:
 B>ERA *.*
 ALL (Y/N)?n
 B>DIR
-README.TXT  
+STARTUP.CMD 
 1 file, 8172K free
 B>ERA *.*
 ALL (Y/N)?y
@@ -354,15 +353,15 @@ where the starter card's files all are, and `USER` and a number select another
 area. The prompt doesn't show the area, so the files of area 0 disappear from
 view after `USER 3`:
 
-<!-- node tools/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" VOLS "USER 0" "DIR B:" -->
+<!-- node tools/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" MOUNT "USER 0" "DIR B:" -->
 ```text
 A>USER 3
 A>SAVE 1 B:MINE.COM
 A>DIR B:
 MINE.COM    
 1 file, 8172K free
-A>VOLS
-VOLS?
+A>MOUNT
+MOUNT?
 
 A>USER 0
 A>DIR B:
@@ -370,7 +369,7 @@ NO FILE
 A>
 ```
 
-In area 3 the program `VOLS` isn't found, since `VOLS.COM` is in area 0, and
+In area 3 the program `MOUNT` isn't found, since `MOUNT.COM` is in area 0, and
 back in area 0 `MINE.COM` is out of view. `COPY` works within one area, so it
 can't move a file from one area to another, but `tecvol put --user N`, from
 Chapter 4, puts a file from a PC into area `N`. A number outside 0 to 15, or
@@ -420,25 +419,25 @@ directory of the current drive, in the current user area, for the file
 relocatable PRL format, which Chapter 10 describes. A drive in front of the
 name runs the program from that drive, and the CCP searches no other:
 
-<!-- node tools/capture.mjs B: "A:VOLS" VOLS "README.TXT" -->
+<!-- node tools/capture.mjs B: "A:MOUNT" MOUNT "STARTUP.CMD" -->
 ```text
 A>B:
-B>A:VOLS
+B>A:MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
-B>VOLS
-VOLS?
+B>MOUNT
+MOUNT?
 
-B>README.TXT
-README.TXT?
+B>STARTUP.CMD
+STARTUP.CMD?
 
 B>
 ```
 
-A type after a program's name is replaced, so `VOLS.COM` runs `VOLS`, and
-`README.TXT` as a command searches for `README.COM` and then `README.PRL` and
-finds neither. The exception is `.SVC`, which installs a service.
+A type after a program's name is replaced, so `MOUNT.COM` runs `MOUNT`, and
+`STARTUP.CMD` as a command searches for `STARTUP.COM` and then `STARTUP.PRL`
+and finds neither. The exception is `.SVC`, which installs a service.
 
 The command fails, with its name and a question mark, when neither file is
 there. It also fails when `NAME.COM` is there but is too large for the TPA. A
@@ -487,30 +486,30 @@ command, or the program that made the call, with a warm boot.
 
 A write to a read-only volume, such as one made with `tecvol create`'s `:ro`
 in Chapter 4, gives `R/O`. These commands make a card with the starter card's
-`README.TXT` on drive B, its read-only attribute set, and a read-only volume on
-drive C:
+`STARTUP.CMD` on drive B, its read-only attribute set, and a read-only volume
+on drive C:
 
 ```sh
 node tools/tecvol.mjs create build/errs.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:ARCHIVE:C:ro
-node tools/tecvol.mjs put build/errs.img B dist/files/README.TXT --ro
+node tools/tecvol.mjs put build/errs.img B dist/files/STARTUP.CMD --ro
 ```
 
-<!-- node tools/capture.mjs --card build/errs.img "@start SAVE 1 C:X.COM" "@key x" "@start ERA B:README.TXT" "@key x" "DIR B:" -->
+<!-- node tools/capture.mjs --card build/errs.img "@start SAVE 1 C:X.COM" "@key x" "@start ERA B:STARTUP.CMD" "@key x" "DIR B:" -->
 ```text
 A>SAVE 1 C:X.COM
 
 Bdos Err On C: R/O
-A>ERA B:README.TXT
+A>ERA B:STARTUP.CMD
 
 Bdos Err On B: File R/O
 A>DIR B:
-README.TXT  
+STARTUP.CMD 
 1 file, 8172K free
 A>
 ```
 
 Neither command changed the card: `SAVE` made no file on drive C, and
-`README.TXT` is still on drive B. A drive made read-only by function 28 stays
+`STARTUP.CMD` is still on drive B. A drive made read-only by function 28 stays
 so until the next warm boot, and a read-only volume stays so after it.
 
 ## Command history
@@ -532,13 +531,13 @@ A>GLCD.SVC
 GLCD.SVC?
 
 A>DIR *.SVC
-PICO.SVC     PICO40.SVC   PICO32.SVC   GLCD.SVC
-4 files, 974K free
+PICO.SVC     GLCD.SVC
+2 files, 984K free
 A>CON
 CON: CRT: PICO9918
 A>DIR *.SVC
-PICO.SVC     PICO40.SVC   PICO32.SVC   GLCD.SVC
-4 files, 974K free
+PICO.SVC     GLCD.SVC
+2 files, 984K free
 A>
 ```
 
