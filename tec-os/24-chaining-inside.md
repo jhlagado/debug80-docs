@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 24. Chaining inside
 
-Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
-04ec086, whose copy in `dist/files` has the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and its
+Checked against TEC-OS 7458352, with the starter card's `TED.COM` from Thorium
+128edb7, whose copy in `dist/files` has the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -160,10 +160,12 @@ typed line and `STLINE` a startup line, so neither goes through `MLECHO`.
 The CCP then tests what the piece is. A drive letter and a colon alone select
 the drive (`src/cpm/ccp.asm:164-185`), and anything else goes to `NOTDRIVE`
 (Chapter 17), which compares the command with the built-ins' names and otherwise
-loads a program or installs a service (`src/cpm/ccp.asm:227-304`). A program not
-on the current drive is looked for on A:, when the command names no drive and
-the current drive isn't A:, so `B:NAME` looks on B: alone
-(`src/cpm/ccp.asm:283-295`).
+loads a program or installs a service (`src/cpm/ccp.asm:227-304`). A program is
+looked for on the drive named, or the current drive, in the current user and
+then in that drive's user 0. One not found there is looked for on A:, in the
+current user and then in user 0, when the command names no drive and the
+current drive isn't A:, so `B:NAME` looks on B: alone
+(`src/cpm/ccp.asm:283-295`, `src/cpm/ccp.asm:361-387`).
 
 Every routine after `MLTAKE` reads the piece through `ARGSTRT` and stops at its
 0, so a built-in or a program reads its own piece and nothing of the pieces
