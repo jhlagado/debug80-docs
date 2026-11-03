@@ -2488,10 +2488,6 @@ export const sidebars = {
           "link": "/tec-os/20-hardware-services-and-service-loader.html"
         },
         {
-          "text": "PRL relocation",
-          "link": "/tec-os/21-prl-relocation.html"
-        },
-        {
           "text": "Startup",
           "link": "/tec-os/22-startup.html"
         },
@@ -2544,6 +2540,10 @@ export const sidebars = {
         {
           "text": "G. The TEC-1G as TEC-OS uses it",
           "link": "/tec-os/appendix-g-tec-1g.html"
+        },
+        {
+          "text": "H. The service file format",
+          "link": "/tec-os/appendix-h-service-file-format.html"
         }
       ]
     }
