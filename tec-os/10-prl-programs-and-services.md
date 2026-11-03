@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 10. PRL programs and services
 
-Checked against TEC-OS 60cfbdc. The programs were assembled by the starter
+Checked against TEC-OS 4d6eeaa. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -344,11 +344,12 @@ loader reads only the flags, so a vector `INIT` writes without claiming it goes
 unseen.
 
 At cold boot, at every warm boot, after an unload and after a failed `INIT`, a
-sweep of `0008h` to `003Fh` keeps a `JP` whose target's page is at or above the
-page of the word at `0006h`, and gives anything else its default: seven zeros and
+sweep of `0008h` to `003Fh` keeps a `JP` whose target is above the address in
+the word at `0006h`, and gives anything else its default: seven zeros and
 a `RET`, or `EI` and `RETI` at `0038h`. A handler in the service's pages therefore
 stays through warm boots and goes with the service. `UNLOAD` also gives each
-claimed vector its default, whatever it holds. `REMOVE` restores any jump the
+claimed vector its default, whatever it holds, and so does a failed `INIT`
+whose pages the loader frees. `REMOVE` restores any jump the
 service set in a vector it didn't claim and that leads outside its pages. A
 failed `INIT` runs no `REMOVE`, so `INIT` restores such a jump itself and turns
 off any source of interrupts it started. A warm boot inside `INIT` leaves that
