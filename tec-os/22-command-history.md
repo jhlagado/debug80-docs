@@ -133,7 +133,7 @@ the CCP takes each of them from `STLINE` in place of function 10
 (`src/cpm/ccp.asm:83-84`). After cold boot the history is therefore empty.
 
 `HSTORE` stores the line as function 10 returns it. The CCP turns small letters
-into capitals later, a piece at a time (`src/cpm/ccp.asm:140-152`), so a recalled
+into capitals later, a piece at a time (`src/cpm/ccp.asm:138-150`), so a recalled
 line comes back as it was typed:
 
 <!-- node tools/capture.mjs --board pico --screen con "@start "$'\x17' -->

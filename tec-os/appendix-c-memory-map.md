@@ -75,7 +75,7 @@ it keeps at `0040h` (`src/layout.asm:13-20`). Its value while TEC-OS runs is
 
 The TPA ends below the BDOS entry jump, whose address is in the word at
 `0006h`. Cold boot places the jump directly below the lowest allocation vector
-of the card's drives, 3 bytes under that vector's address (`src/boot.asm:434-438`).
+of the card's drives, 3 bytes under that vector's address (`src/boot.asm:412-416`).
 A service goes in whole pages below the jump's page and lowers the word at `0006h`
 to the start of its first page, which holds its own `JP BENTRY`. On the starter
 card the first service's pages end at `B7FFh`, so the 21 bytes from `B800h` to
@@ -125,8 +125,8 @@ the first byte of each restart vector the service claimed and then run the
 same sweep of the vectors, `PZSWP` (`src/loader.asm:61-72`,
 `src/loader.asm:259-263`, `src/loader.asm:295-307`). The CCP writes the byte at
 `0004h` at each prompt, and the FCBs, the tail and the byte at `0050h` before
-it runs a program (`src/cpm/ccp.asm:206-225`, `src/cpm/ccp.asm:296-298`,
-`src/cpm/ccp.asm:1328-1362`).
+it runs a program (`src/cpm/ccp.asm:204-223`, `src/cpm/ccp.asm:286-288`,
+`src/cpm/ccp.asm:1279-1313`).
 
 TEC-OS's own bytes are fourteen of the sixteen that CP/M 2.2 leaves to the
 BIOS. `0041h` and `0044h` are unused (`src/layout.asm:34-49`):
@@ -293,4 +293,4 @@ The cache's addresses are in `src/layout.asm:21-23` and the history's page in
 The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:74-81`. A
 loaded service runs on its caller's stack, and `SVCLIM` gives what the services
 together may add: 8 bytes to the BDOS's, 12 to the BIOS's and 6 to the CCP's
-(`src/tables.asm:67`).
+(`src/tables.asm:91`).

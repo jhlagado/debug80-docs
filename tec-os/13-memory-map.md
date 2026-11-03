@@ -87,7 +87,7 @@ into a service, the workspace or the ROM, keeps its jump
 `PZINIT` doesn't write `0050h`. The CCP stores there the drive byte of the
 command's FCB just before it starts a program, as CP/M 3 does. A program that
 the CCP found on A: by its search finds 1 there (`src/layout.asm:29-30`,
-`src/cpm/ccp.asm:296-298`). Chapter 17 describes the search.
+`src/cpm/ccp.asm:286-288`). Chapter 17 describes the search.
 
 The bytes `0040h–004Fh` are the sixteen that CP/M 2.2 leaves to the BIOS, and
 TEC-OS keeps fourteen bytes of its state there, of which only `LATCHV` has to be
@@ -195,19 +195,19 @@ needs 64 bytes, and a G8M volume, with `DSM` 2047, needs 256.
 Cold boot places the vectors after it has read the card, because the space
 each drive gets depends on the card. `ALVINIT` starts at `WSBASE` and works
 down, giving each drive its vector in drive order and putting each one's
-address in the drive's DPH (`src/boot.asm:360-433`).
+address in the drive's DPH (`src/boot.asm:344-411`).
 
 A card of container format 1.1 whose drives field is N gets a 256-byte slot for
 each of drives A to the Nth, mounted or not, so any of those drives can later
 take any volume. Any other card, including every format 1.0 card, gets a slot
-for each drive it mounts, of the size its volume needs (`src/boot.asm:380-408`).
+for each drive it mounts, of the size its volume needs (`src/boot.asm:358-386`).
 `DRVSLOT` records each drive's slot: 0 for none, 1 for 64 bytes and 2 for 256
-(`src/ram.asm:29`, `src/boot.asm:409-414`). The starter card is format 1.0 with
+(`src/ram.asm:29`, `src/boot.asm:387-392`). The starter card is format 1.0 with
 a G1M volume on A and a G8M volume on B. Its vectors take 64 and 256 bytes, 320
 in all, from `B818h` to `B957h`.
 
 Directly under the vectors goes the BDOS entry jump, `JP BENTRY`. `ALVINIT`
-takes the lowest vector's address and subtracts 3 (`src/boot.asm:434-439`). For
+takes the lowest vector's address and subtracts 3 (`src/boot.asm:412-417`). For
 the starter card that puts the jump at `B815h`, with no byte between it and the
 vectors. `STUBAD` keeps the address, and `PZINIT` writes the jump there. With no
 service loaded, `PZTOP`, the word `PZINIT` puts at `0006h`, is this address
@@ -240,13 +240,13 @@ the workspace has been cleared, cold boot moves to the BIOS stack
 The BIOS stack, `BSTKB` to `BSTK`, is 38 bytes at `BCC5h–BCEAh`
 (`src/ram.asm:60-62`). Cold boot runs on it from the end of the RAM check. Warm
 boot sets it as soon as EXPAND 0 is back in view (`src/boot.asm:76-79`), and
-the diagnostic prompt sets it again on entry (`src/boot.asm:445`).
+the diagnostic prompt sets it again on entry (`src/boot.asm:423`).
 
 The CCP's stack, `CSTKBAS` to `CSTKTOP`, is 30 bytes at `BE59h–BE76h`
 (`src/ram.asm:125-127`). The CCP sets it on entry and at the top of its main
 loop. It is also the stack a program starts with. The CCP sets it again, pushes
 the address of warm boot and jumps to `0100h`, which leaves the program 28
-bytes below that return word (`src/cpm/ccp.asm:296-304`). CP/M 2.2 gives a
+bytes below that return word (`src/cpm/ccp.asm:286-294`). CP/M 2.2 gives a
 program eight levels of stack and the return word, and those take 18 of the
 30 bytes (`src/layout.asm:77-78`). Below the stack is a
 guard of 13 bytes, `STKGUARD`, which warm boot fills with `A5h`
@@ -278,7 +278,7 @@ depths include no NMI frame, as the comment at `src/layout.asm:75-77` says.
 A loaded service runs on its caller's stack, so the services' own depths add
 to these. `SVCLIM` gives the most that the services together may add to each
 stack: 8 bytes on the BDOS's, 12 on the BIOS's and 6 on the CCP's
-(`src/tables.asm:67`). Chapter 20 describes how the loader uses them.
+(`src/tables.asm:91`). Chapter 20 describes how the loader uses them.
 
 ## EXPAND 1
 

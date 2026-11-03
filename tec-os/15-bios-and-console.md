@@ -205,7 +205,7 @@ calls `CONIN` or `READER`.
 CP/M 2.2 gives a program three more character devices through the BIOS. The
 list device, a printer, and the punch are for output, and the reader is for
 input. TEC-OS has no printer, and it puts the other two on the serial port
-(`src/console.asm:284-301`):
+(`src/console.asm:289-306`):
 
 - `LIST` returns at once, so whatever a program prints to the list device is
   discarded. `LISTST` returns `FFh`, ready, so a program that waits for the
@@ -218,7 +218,7 @@ input. TEC-OS has no printer, and it puts the other two on the serial port
 The punch and reader are the serial port even while the console is a display,
 so a program on the PICO9918's console can exchange binary data with a PC over
 the serial line. A byte that `CONST` has already received stays in `RXCHAR` for
-the console, and `READER` does not return it (`src/console.asm:291-292`). The
+the console, and `READER` does not return it (`src/console.asm:296-297`). The
 console mode `BAT:` takes its input from the serial port, as the reader does,
 but `CONIN` serves it through `CINLP`, which clears bit 7 and skips `NUL`
 (`src/console.asm:156-158`, `src/console.asm:183-191`). It sends its output to
@@ -337,7 +337,7 @@ The terminal's code is in the ROM and the drivers for the two displays are on
 the card, so the ROM needs the addresses of each driver's routines. `PICO.SVC`,
 in its three widths, and `GLCD.SVC` each give the ROM a table through `DRVR`,
 service 12, which goes to `SVDRV` and from there to `VIDHOOK`
-(`src/tables.asm:59`, `src/services.asm:323`, `src/video.asm:47-57`). The table is eight words. The
+(`src/tables.asm:83`, `src/services.asm:323`, `src/video.asm:47-57`). The table is eight words. The
 first six are the terminal vectors `VPUT`, `VGET`, `VCLREOL`, `VREST`, `VRDROW`
 and `VWRROW`. The seventh is for the PICO9918's page functions, and the last
 word holds the screen's columns and rows.
@@ -396,15 +396,15 @@ row (`src/lcd.asm:45-66`).
 
 Cold boot writes `TEC-OS 0.1  TEC-1G` on row 0 and the letters and labels of
 drives A and B on rows 1 and 2. Drives C and D have no row
-(`src/boot.asm:50-52`, `src/boot.asm:66`, `src/lcd.asm:67-104`).
+(`src/boot.asm:50-52`, `src/boot.asm:66`, `src/lcd.asm:67-86`).
 
 Row 3 is for one of three words that TEC-OS shows when a board may have no
 terminal to show a message on. `CARD?` appears at the diagnostic prompt
-(`src/boot.asm:447-448`). `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`
-(`src/cpm/ccp.asm:1167`, `src/loader.asm:428-445`). `PICO?` appears when a board
+(`src/boot.asm:425-426`). `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`
+(`src/cpm/ccp.asm:1122`, `src/loader.asm:428-445`). `PICO?` appears when a board
 with a PICO9918 and the matrix keyboard reaches its first prompt with no display
 driver
-(`src/cpm/ccp.asm:1718-1719`).
+(`src/cpm/ccp.asm:1672-1673`).
 
 Writing `PICO?` or `GLCD?` sets `CDWRD` in `CONDEV` (`src/lcd.asm:34-39`), and
 `WRDCLR` writes blanks over the row only while that bit is set. A word TEC-OS

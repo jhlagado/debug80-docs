@@ -61,7 +61,7 @@ used while EXPAND 1 is in view.
 ## Reads through the cache
 
 Every volume's reads go through the cache. BIOS `READ` maps the record to a
-card block and a quarter of it, and calls `CREAD` (`src/bios.asm:179-184`,
+card block and a quarter of it, and calls `CREAD` (`src/bios.asm:180-185`,
 `src/cache.asm:252-262`). `CLOOK` compares `SDLBA` with each line's block
 number in turn, from line 0 (`src/cache.asm:27-66`). On a hit, `CRDREC` copies
 the record's 128 bytes from the line to the DMA address. On a miss, `CTAKE`
@@ -169,14 +169,14 @@ in `bios.asm`, and Chapter 18 describes it. The block is read into the
 deblocking buffer `BLKBUF` unless that holds it already or the write needs no
 read. The record is then merged and `SDWRITE` writes `BLKBUF` to the card. The
 read into `BLKBUF`, when there is one, comes from the card, not from the cache
-(`src/bios.asm:127-164`).
+(`src/bios.asm:128-165`).
 
 A later read of the block must not return the old contents, so the cache is
 kept up to date after such a write. `CREFR` looks the block up, and if a line
-holds it, copies the 512 bytes of `BLKBUF` over the line (`src/bios.asm:298`,
+holds it, copies the 512 bytes of `BLKBUF` over the line (`src/bios.asm:299`,
 `src/cache.asm:341-352`). A block not in the cache is not added to it. If the
 card write fails, the block's line is dropped, since neither it nor `BLKBUF`
-can be known to match the card (`src/bios.asm:291-297`). A written-through
+can be known to match the card (`src/bios.asm:292-298`). A written-through
 volume's lines are therefore always clean.
 
 ## Writes behind
@@ -187,9 +187,9 @@ behind and sends them to the card in batches. A volume is written behind when it
 descriptor has bit 0 of its cache byte, byte 15, set. `tecvol` sets the bit on
 one volume at most, and the ROM writes behind any volume that has it. `MNFILL`
 copies that bit into bit 1 of the drive's flags in the drive table
-(`src/vol.asm:362-366`). After its checks, BIOS `WRITE` sends a write on that
+(`src/vol.asm:338-342`). After its checks, BIOS `WRITE` sends a write on that
 drive to `CWRBH` in place of the written-through path
-(`src/bios.asm:277-281`). On the starter card the volume is `WORK` on drive B.
+(`src/bios.asm:278-282`). On the starter card the volume is `WORK` on drive B.
 
 `CWRBH` puts the record into the block's line and marks the line dirty
 (`src/cache.asm:264-326`). If no line holds the block, `CTAKE` gives one out.
@@ -269,7 +269,7 @@ A flush has four occasions:
   `src/cache.asm:328-339`)
 - every call of the services `MOUNT` and `UNMNT`, whose `VFLUSH` calls
   `CFLALL` before any drive changes, and fails if it fails
-  (`src/vol.asm:615-627`)
+  (`src/vol.asm:584-596`)
 
 The warm boot's flush is the one you can cause. A `^C` at the prompt is a warm
 boot, and after it every change is on the card. A reset writes nothing, since
@@ -284,7 +284,7 @@ its own. That report is `Write lost`. `CWBOOT` writes every dirty line and
 then tests `CFAIL`, which is set if a line's write has failed since the last
 warm boot, including the flush it has just made. If it is set, `CWBOOT` clears
 it, drops the rest of a chained line and prints `Write lost` on its own line
-(`src/cache.asm:328-339`, `src/text.asm:96`). The failed lines are still dirty and still hold their
+(`src/cache.asm:328-339`, `src/text.asm:76`). The failed lines are still dirty and still hold their
 data, so each warm boot writes them again and prints the message again while
 the write still fails.
 
@@ -307,13 +307,13 @@ the stacks. An interrupt taken then would push its return address into EXPAND
 `CDI` at each entry calls `IFFGET`, whose `LD A,I` copies the
 interrupt flip-flop into the P/V flag. An NMOS Z80 can clear that flag if an
 interrupt is accepted during the read, so `IFFGET` reads again when the flag is
-clear (`src/bios.asm:302-307`). `CDI` turns interrupts off with `DI` and
-saves the flags in `CIFF` (`src/bios.asm:309-316`). `BRET` at each exit turns
+clear (`src/bios.asm:303-308`). `CDI` turns interrupts off with `DI` and
+saves the flags in `CIFF` (`src/bios.asm:310-317`). `BRET` at each exit turns
 the result's Z flag into `A`, 0 for success and 1 for an error. `CEI` turns
 interrupts on again only if `CIFF` shows they were on at entry
-(`src/bios.asm:317-326`, `src/bios.asm:181-184`, `src/bios.asm:195-199`), so a
+(`src/bios.asm:318-327`, `src/bios.asm:182-185`, `src/bios.asm:196-200`), so a
 call made with interrupts off returns with them off. `VFLUSH`, in the volume
-services, uses the same pair around its flush (`src/vol.asm:618-627`). `MVCOPY`
+services, uses the same pair around its flush (`src/vol.asm:587-596`). `MVCOPY`
 and the history's routines call `IFFGET` too and keep their own copy of the state
 (`src/cache.asm:370-372`, `src/history.asm:25-27`).
 

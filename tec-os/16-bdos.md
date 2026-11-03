@@ -27,7 +27,7 @@ CP/M 2.2 interface that uses no Digital Research source
 (`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the ROM
 that Chapter 12 describes it runs from `E28Fh`, `BDOSBAS`, to `F19Ch`, 3,854
 bytes. Its table of functions and its error messages are in the
-ROM's data block (`src/tables.asm:38-49`, `src/text.asm:83-88`). None of it can be patched.
+ROM's data block (`src/tables.asm:62-73`, `src/text.asm:63-68`). None of it can be patched.
 
 The BDOS's variables and its 54-byte stack are in RAM, in the block from
 `BDOSRAM` to `BDOSRME`, `BE77h` to `BEFFh` (`src/ram.asm:130-190`,
@@ -57,7 +57,7 @@ while no key is waiting (`src/console.asm:105-109`).
 
 The jump at `0005h` leads to the BDOS entry jump directly below the allocation
 vectors or, with a service in, to the same jump at the start of the lowest
-service's page, as Chapter 20 describes (`src/boot.asm:434-438`,
+service's page, as Chapter 20 describes (`src/boot.asm:412-416`,
 `src/boot.asm:201-213`, `src/loader.asm:203-206`). That jump goes
 to `BENTRY` (`src/cpm/bdos.asm:79-115`).
 
@@ -69,13 +69,13 @@ number, 108 and 47 (`src/cpm/bdos.asm:83-87`). Any other number of 41 or more
 returns 0 at once (`src/cpm/bdos.asm:88-89`).
 
 A function from 0 to 40 is found in `FNTAB`, a table of 41 words, one routine
-each (`src/tables.asm:41-48`, `src/cpm/bdos.asm:90-97`). Functions 38 and 39,
+each (`src/tables.asm:65-72`, `src/cpm/bdos.asm:90-97`). Functions 38 and 39,
 which CP/M 2.2 leaves undefined and MP/M uses, are `RETZERO`.
 
 Some functions take an FCB, a file control block, and work on the drive its
 first byte names, so that drive has to be selected before such a function runs.
 `FCBMAP`, six bytes, has a bit for each function, bit n mod 8 of byte n / 8,
-set where the FCB's drive is selected first (`src/tables.asm:49`). The bits are
+set where the FCB's drive is selected first (`src/tables.asm:73`). The bits are
 set for functions 15, 16, 17, 19 to 23, 30, 33 to 35 and 40. `BENTRY` finds
 the byte by subtracting 8 from the number until it goes below zero. It rotates
 the byte left until the function's bit is in the carry flag, and if the bit is
@@ -403,19 +403,19 @@ already in `LOGINV`, `LOGIN` reads nothing: `LOGFAST` takes the drive's mark
 from its DPH (`src/cpm/bdos.asm:2010-2028`).
 
 The DPH has three words for the BDOS's own use, at offsets 2, 4 and 6, which
-`MNDPH` clears when it builds the DPH (`src/vol.asm:379-382`). TEC-OS's BDOS
+`MNDPH` clears when it builds the DPH (`src/vol.asm:348-351`). TEC-OS's BDOS
 puts in them what the scan at warm boot needs:
 
 | Offset | Contents | Written by |
 | ---: | --- | --- |
 | 2 | the sum of the vector's bytes at the end of the last scan | `LOGDONE` (`src/cpm/bdos.asm:2030-2045`) |
-| 4 | the changed flag: 1 once the vector may differ from the directory | `ALFOUND` (`src/cpm/bdos.asm:1208-1215`) and BIOS `WRITE` of a directory card block (`src/bios.asm:210-227`) set it; `LOGDONE` clears it |
-| 6 | the directory mark, `DIRUSED` | `DUSAVE` (`src/cpm/bdos.asm:2047-2065`), BIOS `WRITE` of a directory card block (`src/bios.asm:228-248`) |
+| 4 | the changed flag: 1 once the vector may differ from the directory | `ALFOUND` (`src/cpm/bdos.asm:1208-1215`) and BIOS `WRITE` of a directory card block (`src/bios.asm:211-228`) set it; `LOGDONE` clears it |
+| 6 | the directory mark, `DIRUSED` | `DUSAVE` (`src/cpm/bdos.asm:2047-2065`), BIOS `WRITE` of a directory card block (`src/bios.asm:229-249`) |
 
 The BIOS's part is in its `WRITE`. It tests whether the card block being written
 is one of the directory's, the first 16 card blocks of a G1M volume or 32 of a
 G8M volume. For such a card block it sets the changed flag and raises the mark to
-the end of that card block's 16 entries (`src/bios.asm:210-248`). It does that for
+the end of that card block's 16 entries (`src/bios.asm:211-249`). It does that for
 every write, so a program's own directory write through BIOS `WRITE` sets the
 flag and raises the mark as well. `DUSAVE` writes the BDOS's mark only when it
 is higher than the one there, and so keeps the higher of the two.
@@ -460,12 +460,12 @@ and `WARMV`. Every drive is then scanned in full at its next selection, as in
 CP/M 2.2 (`src/cpm/bdos.asm:436-439`). Function 37 takes the drives named by
 the bits of `DE` out of `LOGINV`, the read-only vector and `WARMV`
 (`src/cpm/bdos.asm:1579-1593`). The volume services `MOUNT` and `UNMNT` call
-it for a drive whose volume they have changed (`src/vol.asm:592-603`).
+it for a drive whose volume they have changed (`src/vol.asm:561-572`).
 
 ## BDOS errors
 
 The BDOS has four error messages, each printed after `Bdos Err On` and the
-drive letter (`src/text.asm:84-88`):
+drive letter (`src/text.asm:64-68`):
 
 - `Select`, for a drive past D, which the BIOS doesn't have, a drive with no
   volume or a `?` drive byte outside function 17

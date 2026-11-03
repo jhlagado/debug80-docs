@@ -28,7 +28,7 @@ A function that takes an FCB, a 36-byte file control block whose layout
 Chapter 16 gives, works on the drive in its first byte: 0 for the default
 drive, 1 to 16 for A to P. The BDOS selects that drive before the function
 runs, for functions 15, 16, 17, 19 to 23, 30, 33 to 35 and 40
-(`src/tables.asm:49`, `src/cpm/bdos.asm:98-112`). A `?` in the drive byte is
+(`src/tables.asm:73`, `src/cpm/bdos.asm:98-112`). A `?` in the drive byte is
 allowed only for function 17.
 
 A function that can't be carried out at all prints one of the BDOS's errors
@@ -215,7 +215,7 @@ default drive's DPB (`src/cpm/bdos.asm:1434-1436`).
 With any other `E`, sets the user number to the low five bits of `E` and
 returns 0, as in CP/M 2.2 (`src/cpm/bdos.asm:1438-1450`). The CCP's `USER`
 command takes 0 to 15, and the byte at `0004h` holds only four bits of the
-number (`src/cpm/ccp.asm:206-225`).
+number (`src/cpm/ccp.asm:204-223`).
 
 **33 Read random.** Reads the record whose number is in the FCB's `R0` and
 `R1` into the DMA address and leaves the FCB's extent and `CR` at that record,
@@ -245,7 +245,7 @@ Returns 0. The drive is logged in again, and its directory read, at its next
 selection.
 
 **38 Access drive** and **39 Free drive.** MP/M's functions, which CP/M 2.2
-does not define. Both return 0 and do nothing (`src/tables.asm:48`).
+does not define. Both return 0 and do nothing (`src/tables.asm:72`).
 
 **40 Write random with zero fill.** Function 34, with each allocation block the
 write newly allocates filled with zeros before the record is written
@@ -264,7 +264,7 @@ in `HL`. With any other `DE`, sets the code to `DE` and returns 0
 to 0 and a warm boot keeps it. The CCP sets it to 0 as it takes each command
 and to `FF00h` when a command fails, and a piece of a command line that starts
 with `:` runs only when the code is not from `FF00h` to `FFFEh`
-(`src/cpm/ccp.asm:125-137`).
+(`src/cpm/ccp.asm:123-135`).
 
 ## Other numbers
 

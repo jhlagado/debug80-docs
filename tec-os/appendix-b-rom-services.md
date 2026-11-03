@@ -54,11 +54,11 @@ nothing changed. `FIND` and `LIST` return otherwise, as their entries say
 
 A program tests carry or `A` after a failure. The hardware services and the
 dispatcher clear zero with the status, and the volume and display services
-leave it as it falls (`src/vol.asm:605-607`, `src/services.asm:315-327`).
+leave it as it falls (`src/vol.asm:574-576`, `src/services.asm:315-327`).
 
 The dispatcher reads the service's address from `SVTAB`, one word for each
 number, and jumps to it with `B`, `DE` and `HL` as they came
-(`src/services.asm:18-39`, `src/tables.asm:53-60`). Any number from `TNCOUNT`, 15,
+(`src/services.asm:18-39`, `src/tables.asm:77-84`). Any number from `TNCOUNT`, 15,
 up returns status 1 with `B`, `DE` and `HL` as they came, in 58 T-states with
 no stack used (`src/services.asm:21-24`).
 
@@ -195,7 +195,7 @@ last.
 
 ## The volume services, 9 to 11
 
-The volume services are `MOUNT`, `UNMNT` and `DESC` (`src/vol.asm:512-539`):
+The volume services are `MOUNT`, `UNMNT` and `DESC` (`src/vol.asm:481-508`):
 
 | `C` | Takes | Effect |
 | ---: | --- | --- |
@@ -211,8 +211,8 @@ attempt to leave drive A empty and a failed write of the cache. A format 1.0
 card gives a slot only to the drives mounted at cold boot.
 
 A mount or an unmount writes the cache's changes for the card first and resets
-the drive by BDOS function 37 on the BDOS's own stack (`src/vol.asm:551`,
-`src/vol.asm:588`, `src/vol.asm:592-602`), so that the next access logs it in
+the drive by BDOS function 37 on the BDOS's own stack (`src/vol.asm:520`,
+`src/vol.asm:557`, `src/vol.asm:561-571`), so that the next access logs it in
 from its directory. A program therefore calls them from outside its own BDOS
 calls, unlike the other services. On the model a mount or a describe changed
 `IX`.
