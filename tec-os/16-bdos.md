@@ -488,7 +488,8 @@ describes.
 Chapter 3 shows `R/O` from a read-only volume and `File R/O` from `ERA`. The
 volume's read-only flag is in the drive table, and `LOGIN` sets the drive's bit
 in the read-only vector from it, so the BDOS refuses the change before any write
-to the card (`src/cpm/bdos.asm:1993-1998`). A warm boot clears the vector, and
+to the card (`src/cpm/bdos.asm:1993-1998`). Function 16 makes no such test, and
+Chapter 18 gives the result. A warm boot clears the vector, and
 the drive's next selection sets the bit again.
 
 ## Function 50, MOVE and XMOVE

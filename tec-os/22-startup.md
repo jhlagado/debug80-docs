@@ -317,7 +317,9 @@ display file in the directory.
 driver's name under either type, with or without a leading `:`, and joins the
 rest (`host/card.mjs:12`, `host/card.mjs:58-79`). A dropped piece passes its own
 `:` to the piece after it on its line, so `DIR!:PICO.SVC!VOLS` becomes
-`DIR!:VOLS`. Otherwise a `:` that waited on a dropped piece goes, on its line or
+`DIR!:VOLS`. A `:` first on the next line stays if the dropped piece had its
+own, so the lines `DIR`, `:PICO.SVC` and `:VOLS` become `DIR` and `:VOLS`.
+Otherwise a `:` that waited on a dropped piece goes, on its line or
 first on the next, since it must not wait on what now comes before it. The line
 `PICO.SVC!:VOLS` becomes `VOLS`, an ordinary line that runs even after a failed
 `GLCD.SVC` on the line before it (`test/pico.test.mjs:765-777`). Lines left blank

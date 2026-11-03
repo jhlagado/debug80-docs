@@ -376,7 +376,7 @@ When a changed data block can't be written, it stays in the cache, and each
 warm boot repeats the write and prints `Write lost` while the write still
 fails. A directory block that can't be written is dropped from the cache, and
 the directory is read from the card again. A reset or a power cut discards a
-data block held in this way. When a card comes out with changes in the cache,
+data block held in this way. When a card comes out with changed data blocks in the cache,
 they stay held in this way even if the same card goes back: only cold boot
 starts a card, so each warm boot prints `Write lost` again, and the reset that
 starts the card discards them.
