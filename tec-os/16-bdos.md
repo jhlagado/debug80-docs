@@ -188,7 +188,7 @@ Two more keys belong to the CCP alone. `^W` and `^N` recall lines from the
 command history when `HFLAG` is set, which the CCP does immediately before its
 own call of function 10, so for a program's call they are characters like any
 other (`src/cpm/bdos.asm:282-287`). The line the CCP reads is stored in the
-history when it ends (`src/cpm/bdos.asm:400-404`). Chapter 23 describes the
+history when it ends (`src/cpm/bdos.asm:400-404`). Chapter 22 describes the
 history.
 
 Function 9 prints from `DE` up to a `$`, through `OUTCHAR`
@@ -484,7 +484,7 @@ drive letter (`src/data3.asm:86-90`):
 key already kept, if one was typed during output
 (`src/cpm/bdos.asm:2421-2440`). `CHDROP` then ends the program by warm boot,
 whatever the key (`src/cpm/bdos.asm:73-77`), so the function never returns to the
-program. `CHDROP` also drops the rest of a chained line, which Chapter 25
+program. `CHDROP` also drops the rest of a chained line, which Chapter 24
 describes.
 
 Chapter 3 shows `R/O` from a read-only volume and `File R/O` from `ERA`. The
@@ -513,7 +513,7 @@ Otherwise the function copies 128 bytes over the CCP's command line, `CMDTXT`,
 which warm boot keeps, and ends the program by warm boot. It does not return.
 `E` is ignored.
 
-Chapter 25 describes the CCP's side of both, the `:` that tests the code and
+Chapter 24 describes the CCP's side of both, the `:` that tests the code and
 the pieces of a chained line. Chapter 11 shows both in use.
 
 ## Differences from Digital Research's BDOS

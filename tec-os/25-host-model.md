@@ -1,11 +1,11 @@
 ---
 title: The host model and the web page
 parent: TEC-OS
-nav_order: 26
+nav_order: 25
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 26. The host model and the web page
+# 25. The host model and the web page
 
 Checked against TEC-OS 60e0768, with `@jhlagado/debug80-runtime` 0.3.1, the
 version `package.json` names.
@@ -229,7 +229,7 @@ with `STRICT=1`, which `npm run test:strict` sets (`test/lib/inputs.mjs:1-6`,
 Every test is evidence from the model. In some behaviours the model differs from
 the board as its documents describe it, such as a write under the boot overlay
 or the decoding of the latch's upper bits, and such a behaviour gives a passing
-test and may give a different result on a board. Chapter 24 describes the
+test and may give a different result on a board. Chapter 23 describes the
 diagnostics ROM, which tests those points on a board.
 
 ## The web page
@@ -322,7 +322,7 @@ also no such driver or a driver of another format, since with the PICO9918
 chosen the page writes `PICO.SVC` (`host/card.mjs:60-70`). The message for an
 older card names the display's own `.DRV` file if the card has it, and
 otherwise the first `.DRV` display file in the directory (`host/card.mjs:35-38`).
-Chapter 22 describes the cases in which the preparation changes or stops on a
+Chapter 21 describes the cases in which the preparation changes or stops on a
 card its messages say it leaves alone.
 
 "Copy file to drive" writes to a copy of the card while the machine is paused

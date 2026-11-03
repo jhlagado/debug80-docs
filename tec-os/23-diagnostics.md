@@ -1,11 +1,11 @@
 ---
 title: Diagnostics
 parent: TEC-OS
-nav_order: 24
+nav_order: 23
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 24. Diagnostics
+# 23. Diagnostics
 
 Checked against TEC-OS 60e0768. The diagnostics ROM in this chapter is version
 0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit.
@@ -132,7 +132,7 @@ matrix keyboard when the Matrix switch is on, with a time-out counted in half
 seconds (`diag/out.asm:240-275`). On the keypad `+` reads as `Y`, `-` as `N`,
 `GO` as Return and `AD` as Esc (`diag/out.asm:326`).
 
-`tools/diag-check.mjs` runs the ROM on the host model of Chapter 26 and keeps
+`tools/diag-check.mjs` runs the ROM on the host model of Chapter 25 and keeps
 what the serial port printed in `build/diag` beside the image. The model has
 the PICO9918, the matrix keyboard, a new card with the starter card's two
 volumes, empty, and no DS1302 clock (`tools/diag-check.mjs:110-134`). One

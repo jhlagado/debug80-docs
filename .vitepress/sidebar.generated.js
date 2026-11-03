@@ -2489,23 +2489,23 @@ export const sidebars = {
         },
         {
           "text": "Startup",
-          "link": "/tec-os/22-startup.html"
+          "link": "/tec-os/21-startup.html"
         },
         {
           "text": "Command history",
-          "link": "/tec-os/23-command-history.html"
+          "link": "/tec-os/22-command-history.html"
         },
         {
           "text": "Diagnostics",
-          "link": "/tec-os/24-diagnostics.html"
+          "link": "/tec-os/23-diagnostics.html"
         },
         {
           "text": "Chaining inside",
-          "link": "/tec-os/25-chaining-inside.html"
+          "link": "/tec-os/24-chaining-inside.html"
         },
         {
           "text": "The host model and the web page",
-          "link": "/tec-os/26-host-model.html"
+          "link": "/tec-os/25-host-model.html"
         }
       ]
     },

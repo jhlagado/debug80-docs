@@ -247,7 +247,7 @@ in `create`'s terms: a geometry, a label, a drive and `readOnly` or
 `sha256` of the PICO9918's driver built for each width, under the keys `80`,
 `40` and `32` (`tools/media.mjs:195-201`, `tools/media.mjs:215`). `tecvol`
 doesn't read it. The web page fetches those drivers at power-on, as
-[Chapter 22](22-startup.md#the-web-page-s-rewrite) describes.
+[Chapter 21](21-startup.md#the-web-page-s-rewrite) describes.
 
 `tecvol` reads a file's `url` as a web address if it starts `http://` or
 `https://`, and otherwise as a path from the recipe's own folder

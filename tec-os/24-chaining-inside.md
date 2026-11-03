@@ -1,11 +1,11 @@
 ---
 title: Chaining inside
 parent: TEC-OS
-nav_order: 25
+nav_order: 24
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 25. Chaining inside
+# 24. Chaining inside
 
 Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
 676075a, whose copy in `dist/files` has the SHA-256
@@ -26,7 +26,7 @@ The code is in `src/cpm/ccp.asm`, with function 47 and function 108 in
 `src/cpm/bdos.asm` and the line's storage in `src/ram.asm`. Chapter 17
 describes the CCP's other routines named here, and Chapter 16 the BDOS's
 entry. `test/chain.test.mjs` checks these rules on the host model of Chapter
-26.
+25.
 
 ## The line kept across a warm boot
 

@@ -15,7 +15,7 @@ in the comments of `TOP` and `AREA` in Chapter 7 stays as it is.
 | resident workspace | workspace | TEC-OS's variables, buffers and stacks, `WSBASE` to `WSEND`, with the RAM BIOS table inside it. The allocation vectors and the BDOS entry jump are below it. | Chapter 7, in full 13 | fixed workspace: the part from `WSBASE` to `BEFFh`, whose size the build measures (Chapters 12, 13) |
 | page | | 256 bytes | Chapter 3 | page zero, `0000h–00FFh` (Chapter 2); a web page; a PICO9918 page (Chapter 15) |
 | BIOS jump table | | CP/M's table of 17 jumps | Chapter 7, in full 15 | RAM BIOS table: the copy at `BF00h` that every caller uses. `BIOSBAS`: the ROM's copy, never called. |
-| BDOS entry jump | BDOS's entry | The `JP BENTRY` in RAM directly below the allocation vectors, and the same jump at the start of each service's first page | Chapter 5, in full 13 | `BENTRY`: the routine in the ROM, also "the BDOS's entry" in Chapters 16 and 25, where the code follows |
+| BDOS entry jump | BDOS's entry | The `JP BENTRY` in RAM directly below the allocation vectors, and the same jump at the start of each service's first page | Chapter 5, in full 13 | `BENTRY`: the routine in the ROM, also "the BDOS's entry" in Chapters 16 and 24, where the code follows |
 | boot overlay | overlay | The ROM's first 2 KiB, shown at `0000h–07FFh` while latch bit 0 is low | Chapter 13, in full 14 | Chapter 1 says "the copy" for a reader who has no need of the name. `LATSHAD` and SHADOW are the code's and the board's names for the bit. |
 | fixed RAM | | `0000h–7FFFh` | Chapters 1 and 7 | |
 | EXPAND 0, EXPAND 1 | | The two halves of the RAM in U9 | Chapter 1 | expansion RAM: the chip as a whole. The diagnostics ROM's "banks" are the runtime's. |
@@ -123,7 +123,7 @@ in the comments of `TOP` and `AREA` in Chapter 7 stays as it is.
 
 | Form | Short form | Meaning | Explained in | Correct and distinct |
 | --- | --- | --- | --- | --- |
-| host model | the model | `host/machine.mjs` on the runtime, the software TEC-1G | Chapter 1, in full 26 | Debug80 TEC-1G runtime, short form *the runtime*: the npm package under it, and the name to use for what the runtime does (Chapters 15, 26, G). `Machine`, "the machine": the class in Chapter 26. |
+| host model | the model | `host/machine.mjs` on the runtime, the software TEC-1G | Chapter 1, in full 26 | Debug80 TEC-1G runtime, short form *the runtime*: the npm package under it, and the name to use for what the runtime does (Chapters 15, 25, G). `Machine`, "the machine": the class in Chapter 25. |
 | serial board | | A board with only a serial terminal | Chapter 1 | `--board serial` |
 | web page's board | | A board with the PICO9918, the graphics LCD and the matrix keyboard, with Display on the PICO9918 | Chapter 1 | `--board pico`. With Display on the graphics LCD the page's board is `--board glcd`. |
 | web page | the page | The browser build | Chapter 1 | |
@@ -183,7 +183,7 @@ services*, and 9 to 11 are the *volume services*. The table at `C003h`
 is the *ROM table*. *Service resident memory* is the pages services hold.
 
 `.DRV` names appear only where the text is about an old card, as in Chapters 1,
-5, 22 and 26 and Appendix D. `DRVTAB`, `DRVIDX` and `DRVSLOT` name
+5, 21 and 25 and Appendix D. `DRVTAB`, `DRVIDX` and `DRVSLOT` name
 disk drives. The SD card driver
 and the hardware drivers of Chapter 15 are code in the ROM, so *driver* there
 has its older sense. "Registry's records" and "service's records" are in use,

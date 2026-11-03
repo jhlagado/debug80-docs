@@ -20,7 +20,7 @@ a built-in or a program. A command written with `:` in front runs only if the
 one before it succeeded, and a program reports success or failure through a
 return code that it sets with BDOS function 108. A program can also end by
 handing the CCP a new command line, with BDOS function 47. CP/M 2.2 runs one
-command per line, but TEC-OS takes these rules from CP/M 3's CCP. Chapter 25
+command per line, but TEC-OS takes these rules from CP/M 3's CCP. Chapter 24
 describes the code behind them.
 
 ## Several commands on one line

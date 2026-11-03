@@ -62,7 +62,7 @@ unchanged, as Chapter 16 describes. Warm boot has cleared the user number with
 the rest of the BDOS's variables, so `CCPENT` calls function 32 with the user
 number from the byte (`src/cpm/ccp.asm:45-59`). `STBOOT` comes next: it reads `A:STARTUP.CMD` the
 first time it is called after a cold boot and does nothing later
-(`src/cpm/ccp.asm:60`, `src/svc.asm:389-422`). Chapter 22 describes startup.
+(`src/cpm/ccp.asm:60`, `src/svc.asm:389-422`). Chapter 21 describes startup.
 Last, if the drive is not A, the CCP selects it with function 14
 (`src/cpm/ccp.asm:61-66`), then prints a new line and starts its loop at
 `STARTED` (`src/cpm/ccp.asm:68-70`).
@@ -117,9 +117,9 @@ to 127 (`src/boot.asm:261-262`).
 
 `MLTAKE` takes one piece of the line up to its `!`, turns its letters to
 capitals and sets `PRGCODE`, the return code, to 0
-(`src/cpm/ccp.asm:120-163`). Chapter 25 describes the chained line, the `:`
+(`src/cpm/ccp.asm:120-163`). Chapter 24 describes the chained line, the `:`
 test, the return code and the ways the rest of a line is dropped, and Chapter
-22 the startup file.
+21 the startup file.
 
 ## Drive changes and the command word
 
@@ -158,7 +158,7 @@ A command that fails ends at `BADCMD`, which prints the word from `CMDSTRT` up
 to its first space with a question mark after it, then a new line
 (`src/cpm/ccp.asm:331-350`). `BADCMD` and the built-ins' messages of failure
 go through `ERRGO`, which sets the return code to `FF00h` first
-(`src/cpm/ccp.asm:351-357`). Chapter 25 lists them. `ERRGO` and the built-ins
+(`src/cpm/ccp.asm:351-357`). Chapter 24 lists them. `ERRGO` and the built-ins
 end at one of two labels: `STARTED` starts a new line and prints the prompt,
 and `MAINLOOP` prints the prompt on the line the command left.
 
