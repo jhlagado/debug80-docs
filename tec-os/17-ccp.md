@@ -23,7 +23,7 @@ program with its page zero, and the CCP's RAM and stack.
 The CCP's code is `src/cpm/ccp.asm`. In the ROM that Chapter 12 describes it
 runs from `CCPBAS`, `D82Dh`, to `E28Eh`, 2,658 bytes, followed directly by the
 BDOS. Its messages and the names of its built-in commands are in the ROM's
-data block (`src/text.asm:12-78`). What the CCP changes has to be
+data block (`src/text.asm:12-78`, `src/text.asm:90-93`). What the CCP changes has to be
 in RAM, so its variables, buffers and stack are there, from `CCPRAM`, `BCEBh`,
 to `BE76h` (`src/ram.asm:64-128`).
 
@@ -40,8 +40,10 @@ IOBYTE and the top of the TPA at `0007h`. It also sets the BDOS's flags
 (`src/cpm/ccp.asm:52-53`, `src/cpm/ccp.asm:86-87`, `src/cpm/ccp.asm:128`,
 `src/cpm/ccp.asm:159`, `src/cpm/ccp.asm:356`). It calls a few of TEC-OS's
 routines directly: the service loader through `SVCGO`, `SVCUNL` for `UNLOAD`,
-`GLCLD` for `CON UC1` and the BDOS's division, `DIV16`
+`GLCLD` for `CON UC1`, `CONFLD` for `CON`, `SVCABV` for `SERVICES`, `LCDWRD`
+for the LCD's `PICO?` word and the BDOS's division, `DIV16`
 (`src/cpm/ccp.asm:274`, `src/cpm/ccp.asm:1133`, `src/cpm/ccp.asm:1167`,
+`src/cpm/ccp.asm:1164`, `src/cpm/ccp.asm:1603`, `src/cpm/ccp.asm:1719`,
 `src/cpm/ccp.asm:808`). Startup's `STBOOT` and `STLINE` and the `SERVICES`
 command's `CMDSVC` are in `ccp.asm` itself (`src/cpm/ccp.asm:1588-1719`).
 
