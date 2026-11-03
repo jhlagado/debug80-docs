@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 26. The host model and the web page
 
-Checked against TEC-OS 60cfbdc, with `@jhlagado/debug80-runtime` 0.3.1, the
+Checked against TEC-OS 4d6eeaa, with `@jhlagado/debug80-runtime` 0.3.1, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -77,8 +77,8 @@ the same emulated seconds (`host/machine.mjs:86-119`).
 
 The time a run reads is then the same on any PC, however fast it runs. The tests
 start the clock at 1 January 2026, 12:00 (`test/lib/fixtures.mjs:111-112`), and
-`tools/capture.mjs` at 1 November 2026, 12:00, so the capture of `DEMO` in
-Chapter 1 shows `12:00:14` on any PC.
+`tools/capture.mjs` at 1 November 2026, 12:00, so a capture that reads the
+clock shows the same time on any PC.
 
 ## Checks on every write
 
@@ -214,11 +214,11 @@ starter card's two volumes, `SYSTEM` on A and `WORK` on B, both empty
 (`test/lib/fixtures.mjs:96-103`), and `volume` opens a drive of it as a CP/M
 file system for a test to write files into.
 
-Three inputs the tests use come from outside the repository: the starter card's
-assembler, `TAS.COM`, the Edit program, `EDIT.COM`, and a directory of the
-package `triptych-headless`. `test/inputs.json` records the default path and
-SHA-256 of each, and the size of each file. It also has an entry for ATOM's CP/M
-build, `ATOM.COM`, which no `.test.mjs` file reads. `test/lib/inputs.mjs` reads
+Two inputs the tests use come from outside the repository: the starter card's
+assembler, `TAS.COM`, and its editor, `TED.COM`. `test/inputs.json` records the
+default path, size and SHA-256 of each. It also has entries for ATOM's CP/M
+build, `ATOM.COM`, and a directory of the package `triptych-headless`, which no
+`.test.mjs` file reads. `test/lib/inputs.mjs` reads
 each from its environment variable or its default path beside the clone. A file
 whose SHA-256 differs fails its test, and a missing one skips it, or fails it
 with `STRICT=1`, which `npm run test:strict` sets (`test/lib/inputs.mjs:1-6`,
@@ -239,9 +239,10 @@ everything it imports into one file, `app.js`, with esbuild, and
 in with it. The one import of Node.js's `fs` among them is pointed at a stub
 (`web/build.mjs:19-29`, `web/stub/fs.mjs`). The build copies the page, its style
 sheet, the `debug80` ROM with a list of its symbols, the starter card's recipe
-and the starter card's files (`web/build.mjs:31-43`). The page uses one ROM for
-every display, since the PICO9918's width is the driver named in the startup
-file (`web/build.mjs:14`).
+and the files in `dist/files`: the starter card's, and the PICO9918's driver
+built at 40 and 32 columns (`web/build.mjs:31-43`). The page uses one ROM for
+every display, since the PICO9918's width is the build of the card's
+`PICO.SVC` (`web/build.mjs:14`).
 
 At start the page loads the card it stored last time. If there is none, or the
 stored one isn't a valid container, it builds the starter card from the recipe
@@ -287,8 +288,11 @@ The width and the display are kept in the browser's local storage
 (`web/src/main.mjs:17-19`, `web/src/main.mjs:577-589`). A power-on comes from a
 change to either of them, the Power cycle button or a new card, and it first
 prepares the card with `prepareCard` from `host/card.mjs`
-(`web/src/main.mjs:66-84`). `prepareCard` checks that drive A has the display's
-driver file, in the format this ROM loads. If it does, the first line of
+(`web/src/main.mjs:66-84`). For the PICO9918 the page fetches the driver built
+at the chosen width, and `prepareCard` writes it to drive A as `PICO.SVC` when
+the card's copy differs, unless the card has no drive A or is from an older
+TEC-OS (`host/card.mjs:54-65`). `prepareCard` checks that drive A has the
+display's driver file, in the format this ROM loads. If it does, the first line of
 `STARTUP.CMD` becomes that file's name, followed by `GLCD.SVC` on a board with
 the PICO9918. `STARTUP.CMD`'s other lines stay, less their display pieces. A
 removed piece passes its own `:` to the piece after it on its line, a `:` first
