@@ -7,14 +7,14 @@ nav_group: "Appendices"
 
 # Appendix C. Memory map
 
-Checked against TEC-OS 718c01b.
+Checked against TEC-OS ea9c1c0.
 
 This appendix gives the addresses TEC-OS uses: the CPU's address space, the
 ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
 the stacks. Chapter 13 explains the layout and Chapter 7 describes it from a
-program's side. The figures are those of the debug80 build at 718c01b, whose
+program's side. The figures are those of the debug80 build at ea9c1c0, whose
 ROM has the SHA-256
-`debba41f1c4bbdbfcb34bb118956dd38cab88ca00ad76848474b10ee3848a301`. The
+`c3f8164ebab315bd7d2fa18de82369573d12e814e921cf0cd041761f76c5a8e3`. The
 build's four profile names give the same image. Where the figures depend on
 the card they are those of the starter card, with a G1M volume on drive A and
 a G8M volume on drive B, and no service installed.
@@ -92,11 +92,11 @@ and lowers the word at `0006h` to its own jump, at offset 6 of its first page.
 | `C000h–C002h` | 3 | the reset jump, `JP COLD` |
 | `C003h–C017h` | 21 | the ROM table |
 | `C018h–C33Dh` | 806 | the read-only data, `ROMDATA` to `ROMCODE` |
-| `C33Eh–F9B9h` | 13,948 | the code |
-| `F9BAh–FFFFh` | 1,606 | free |
+| `C33Eh–F9E9h` | 13,996 | the code |
+| `F9EAh–FFFFh` | 1,558 | free |
 
-Within the code, the CCP is at `D796h–E0DFh`, 2,378 bytes, and the BDOS at
-`E0E0h–F014h`, 3,893 bytes, in the order `src/rom.asm` includes them
+Within the code, the CCP is at `D796h–E0F4h`, 2,399 bytes, and the BDOS at
+`E0F5h–F039h`, 3,909 bytes, in the order `src/rom.asm` includes them
 (`src/rom.asm:24-26`). The ROM's own copy of the BIOS jump table is in the
 data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 (`src/data.asm:21-37`, `src/boot.asm:45-48`). The byte at `C01Dh` is a `RET`
