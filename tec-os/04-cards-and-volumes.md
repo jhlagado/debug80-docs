@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
-04ec086, with the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and its
+Checked against TEC-OS 7458352, with the starter card's `TED.COM` from Thorium
+128edb7, with the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -111,7 +111,10 @@ node tools/tecvol.mjs create my.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb
 ```
 
 `create` fails if the image exists already. A card must have a volume on drive
-A, and no two volumes on one drive.
+A, and no two volumes on one drive. `--drives` takes a whole number from 1 to 4,
+and `--align`, which sets the multiple of blocks each volume starts on in place
+of 2,048, a whole number from 1 up. Anything else stops `tecvol` with its usage
+message, and no image is made.
 
 `tecvol put` then copies a file from the PC onto a volume, named by its drive
 letter or its label, and `tecvol dir` lists a volume. A PC's file name becomes
@@ -457,10 +460,12 @@ A>
 ```
 
 An older, standard-capacity card is addressed in bytes, and TEC-OS can name
-only its first 4 GiB. A block 4 GiB or more into such a card gives the same
-`Bad Sector`, and TEC-OS sends the card no command for it, so the card stays as
-it was. The web page can't show either failure: it refuses an image smaller
-than its container (`web/src/main.mjs:562`), and its card is high-capacity.
+only its first 4 GiB, the blocks below `800000h`. On such a card, a volume that
+ends past that point, or starts past it, fails the checks on the container, and
+cold boot stops at the diagnostic prompt with error 27 (`src/vol.asm:216-230`).
+The card stays as it was. The web page can't show either failure: it refuses an
+image smaller than its container (`web/src/main.mjs:562`), and its card is
+high-capacity.
 
 The web page's "Open image" loads an image file from the PC into the page's
 card, and "Download image" saves the page's card as one. The same image
