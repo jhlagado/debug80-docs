@@ -152,7 +152,7 @@ follows. A type of `SVC` installs a service through `SVCGO`
 Any other type, or none, is replaced by `COM` (`src/cpm/ccp.asm:277-282`), so
 `MOUNT.TXT` runs `MOUNT.COM`. A program is looked for in user 0 after the
 current user, and a command that names no drive runs a program from drive A
-when the current drive has neither, as the section on loading below
+when the current drive has it in neither user, as the section on loading below
 describes.
 
 A command that fails ends at `BADCMD`, which prints the word from `CMDSTRT` up

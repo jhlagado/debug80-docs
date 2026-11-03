@@ -85,7 +85,7 @@ or the card out, and press reset after putting it back.
 multiple of 8. The default is 2,048, 1 MiB (`tools/lib/container.mjs:14`,
 `tools/lib/container.mjs:89-99`). `--drives N`, 1 to 4, records in the header
 the number of drives TEC-OS is to set up at cold boot. Each `N` is a whole
-number in decimal, from 1 to 16,777,215 for `--align` and from 1 to 4 for
+number in decimal, from 1 to 16,777,215 for `--align`, which must also be a multiple of 8, and from 1 to 4 for
 `--drives`. Any other `N` is a mistake in the command line, found before the
 image is made (`tools/tecvol.mjs:33-37`, `tools/tecvol.mjs:50-51`). With `--drives`, or
 with more than 8 volumes, the card is format 1.1, and otherwise 1.0
