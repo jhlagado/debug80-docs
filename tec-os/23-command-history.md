@@ -241,11 +241,11 @@ A>
 
 A reset clears it. Cold boot clears the resident workspace, `HHEAD` with it
 (`src/boot.asm:23-27`), and `MEMINIT` fills all of EXPAND 1 with 0 before it
-marks the cache's lines empty (`src/boot.asm:150-161`). The page at `BD00h` is
+marks the cache's lines empty (`src/boot.asm:149-160`). The page at `BD00h` is
 then all zeros, `HHEAD` is 0 and the byte before it, at offset `FFh`, is 0, so
 the ring is empty and still kept as `HSTORE` and `HREC` require. This holds for
 a recognised reset too, the one that keeps the selected volumes, since only the
-drive table is carried across it (`src/boot.asm:132-136`). After the reset in
+drive table is carried across it (`src/boot.asm:131-135`). After the reset in
 this run, `^W` and Return gave an empty line:
 
 <!-- node tools/capture.mjs CON "@reset" "@start "$'\x17' -->

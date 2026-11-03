@@ -58,7 +58,7 @@ while no key is waiting (`src/console.asm:104-108`).
 The jump at `0005h` leads to the BDOS entry jump directly below the allocation
 vectors or, with a service in, to the same jump at the start of the lowest
 service's page, as Chapter 20 describes (`src/vol.asm:570-574`,
-`src/boot.asm:219-231`, `src/svc.asm:198-201`). That jump goes
+`src/boot.asm:218-230`, `src/svc.asm:189-192`). That jump goes
 to `BENTRY` (`src/cpm/bdos.asm:79-117`).
 
 `BENTRY` saves the caller's stack pointer in `OLDSP`, moves to the BDOS's own

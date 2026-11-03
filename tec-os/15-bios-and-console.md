@@ -402,7 +402,7 @@ terminal to show a message on. `CARD?` appears at the diagnostic prompt
 (`src/cpm/ccp.asm:1135`, `src/glcd.asm:49-66`). `PICO?` appears when a board
 with a PICO9918 and the matrix keyboard reaches its first prompt with no display
 driver
-(`src/svc.asm:471-472`).
+(`src/svc.asm:478-479`).
 
 Writing `PICO?` or `GLCD?` sets `CDWRD` in `CONDEV` (`src/lcd.asm:34-39`), and
 `WRDCLR` writes blanks over the row only while that bit is set. A word TEC-OS

@@ -53,7 +53,7 @@ both end with a jump to `CCPENT`, with `C` holding that byte. It has the user
 number in bits 4 to 7 and the drive in bits 0 to 3 (`src/boot.asm:80-82`,
 `src/cpm/ccp.asm:23-66`). Cold boot sets it to 0, drive A and user 0, before
 it falls into warm boot (`src/boot.asm:51-52`), and warm boot's `PZINIT`
-leaves it as the CCP last wrote it (`src/boot.asm:216-218`).
+leaves it as the CCP last wrote it (`src/boot.asm:215-217`).
 
 `CCPENT` sets its stack and keeps the drive in `BOOTDRV`
 (`src/cpm/ccp.asm:30-44`). It then sets `WRFLAG` and calls function 13, the
@@ -62,7 +62,7 @@ unchanged, as Chapter 16 describes. Warm boot has cleared the user number with
 the rest of the BDOS's variables, so `CCPENT` calls function 32 with the user
 number from the byte (`src/cpm/ccp.asm:45-59`). `STBOOT` comes next: it reads `A:STARTUP.CMD` the
 first time it is called after a cold boot and does nothing later
-(`src/cpm/ccp.asm:60`, `src/svc.asm:368-401`). Chapter 22 describes startup.
+(`src/cpm/ccp.asm:60`, `src/svc.asm:375-408`). Chapter 22 describes startup.
 Last, if the drive is not A, the CCP selects it with function 14
 (`src/cpm/ccp.asm:61-66`), then prints a new line and starts its loop at
 `STARTED` (`src/cpm/ccp.asm:68-70`).
@@ -200,8 +200,8 @@ Each built-in is a routine in `ccp.asm` or, for the service commands, in
 | `USER` | `CMDUSER` | `src/cpm/ccp.asm:1164-1194` |
 | `CON` | `CMDCON` | `src/cpm/ccp.asm:1105-1162` |
 | `COPY` | `CMDCOPY` | `src/cpm/ccp.asm:965-1097` |
-| `UNLOAD` | `CMDUNL` | `src/cpm/ccp.asm:1099-1103`, `src/svc.asm:28-67` |
-| `SERVICES` | `CMDSVC` | `src/svc.asm:341-366` |
+| `UNLOAD` | `CMDUNL` | `src/cpm/ccp.asm:1099-1103`, `src/svc.asm:28-58` |
+| `SERVICES` | `CMDSVC` | `src/svc.asm:348-373` |
 
 `DIR` turns a missing name into eleven `?`, sets the DMA address to `LOADBUF`
 and lists the entries that function 17 and then function 18 return
@@ -487,6 +487,6 @@ of the program's stack.
 
 The CCP keeps nothing in the TPA: it leaves the TPA from `0100h` untouched
 until it loads a program or a service there, a service for `NAME.SVC` or
-`CON UC1` (`src/glcd.asm:71`, `src/svc.asm:69`). Only `SAVE` reads that area,
+`CON UC1` (`src/glcd.asm:71`, `src/svc.asm:60`). Only `SAVE` reads that area,
 which is how `SAVE` writes what a program or a loaded service file left in
 memory.

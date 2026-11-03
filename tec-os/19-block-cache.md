@@ -255,7 +255,7 @@ A flush has four occasions:
 
 The warm boot's flush is the one you can cause. A `^C` at the prompt is a warm
 boot, and after it every change is on the card. A reset writes nothing, since
-cold boot clears EXPAND 1 (`src/boot.asm:150-156`), and the changes in the
+cold boot clears EXPAND 1 (`src/boot.asm:149-155`), and the changes in the
 cache at the time of a reset are lost.
 
 ## Write lost

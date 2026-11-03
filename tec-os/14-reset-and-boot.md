@@ -122,7 +122,7 @@ since the console isn't started yet and that routine uses only the port and
 the stack (`src/boot.asm:22`, `src/boot.asm:29`, `src/console.asm:224-248`).
 
 The second check is in `MEMINIT`, near the end of cold boot, and it tests for
-EXPAND 1 (`src/boot.asm:144-149`). It uses `DETECT`, the routine that also
+EXPAND 1 (`src/boot.asm:143-148`). It uses `DETECT`, the routine that also
 counts MAIN regions. If the count is not 2, it jumps to the same `RAMBAD`, so
 the same message goes to the serial port, this time after the volumes have been
 printed. `EXPANDS` at `0044h` therefore always holds 2 once cold boot has
@@ -131,7 +131,7 @@ finished (`src/layout.asm:41`).
 ## Counting MAIN and EXPAND
 
 `DETECT` tests whether setting a given latch bit puts different RAM at a given
-address (`src/boot.asm:186-214`). A bit that selects nothing leaves the same RAM
+address (`src/boot.asm:185-213`). A bit that selects nothing leaves the same RAM
 in view, so a write made with the bit set still shows once the bit is clear. The
 routine reads the byte at the address with the bit clear, sets the bit and reads
 the byte again. It then writes the complement of the first byte and clears the
@@ -143,17 +143,17 @@ without and with the bit in `D` and `E`. Nothing is pushed while the bit is set,
 because the stack itself may be in the RAM the bit replaces.
 
 `MEMINIT` tests EXPAND at `8000h` with `LATEXP`, and MAIN at `0100h` with
-`LATMAIN` (`src/layout.asm:21-22`, `src/boot.asm:144-172`). With EXPAND 1
+`LATMAIN` (`src/layout.asm:21-22`, `src/boot.asm:143-171`). With EXPAND 1
 found, it uses `DETECT`'s latch value to put EXPAND 1 in view and clears all
 16 KiB of it. It fills the cache's 120 bytes of line addresses with `FFh`,
-which marks every line empty, and puts EXPAND 0 back (`src/boot.asm:150-163`).
+which marks every line empty, and puts EXPAND 0 back (`src/boot.asm:149-162`).
 It sets EXPAND 1's low mark to `80h`, which closes it to programs' copies
-(`src/boot.asm:164-166`). The count of MAIN regions goes to `MAINS` at `0041h`,
+(`src/boot.asm:163-165`). The count of MAIN regions goes to `MAINS` at `0041h`,
 which the ROM table's word at `C00Dh` points at. With a second MAIN, `MNCOPY`
 copies page zero into it a byte at a time, switching the latch between each read and its
-write (`src/boot.asm:173-184`). MAIN 1's `0000h` then also jumps to the RAM
+write (`src/boot.asm:172-183`). MAIN 1's `0000h` then also jumps to the RAM
 BIOS table, so a program that ends with MAIN 1 in view still reaches warm boot
-(`src/boot.asm:141-143`).
+(`src/boot.asm:140-142`).
 
 ## The reset test
 
@@ -164,7 +164,7 @@ that to keep one thing across a reset, the selection of volumes on the drives,
 so a reset of a board whose drives were changed with `MOUNT` comes back with the
 same drives.
 
-The test is `RSLCAP` (`src/boot.asm:84-139`). The RAM may hold anything at this
+The test is `RSLCAP` (`src/boot.asm:84-138`). The RAM may hold anything at this
 point, so `RSLCAP` reads only page zero, the word `STUBAD`, the three bytes at
 the address that word holds and the drive table, and it runs none of the code it
 reads. The RAM passes when all of these hold:
@@ -188,11 +188,11 @@ its jumps again only at step 13, so a reset pressed during cold boot before that
 step, or at the diagnostic prompt, fails the test too.
 
 Cold boot is about to clear the drive table, so when the RAM passes, `RSLCAP`
-copies it, 32 bytes, to `RSLBUF` at `0100h` in the TPA (`src/boot.asm:132-136`,
+copies it, 32 bytes, to `RSLBUF` at `0100h` in the TPA (`src/boot.asm:131-135`,
 `src/layout.asm:90-96`). Nothing writes there between `COLD` and `MEMINIT`, so
 the copy survives the clearing of the workspace and is still there for the
 diagnostic prompt's retry. When the RAM fails, `RSLCAP` puts 0 in drive A's
-geometry byte in `RSLBUF`, which means no selection (`src/boot.asm:137-139`).
+geometry byte in `RSLBUF`, which means no selection (`src/boot.asm:136-138`).
 
 `RESEL` applies the selection after `MOUNT` has accepted the card in the socket
 and `ALVINIT` has given its drives their vectors in the usual way, so neither
@@ -236,7 +236,7 @@ A>
 The selection is all that a reset keeps. Cold boot clears page zero, the
 workspace and EXPAND 1 as on any cold boot, so services, the registry, the cache,
 open files and the history are gone and the console is the serial terminal again
-(`src/boot.asm:15-28`, `src/boot.asm:150-156`). A change the cache held for the
+(`src/boot.asm:15-28`, `src/boot.asm:149-155`). A change the cache held for the
 card is lost. Once a recognised reset has applied a selection, the next reset
 passes the test and applies it again while the card still holds those volumes.
 That card's own drives come back at a reset only when the test fails, as it does
@@ -247,7 +247,7 @@ sets out these limits for the user.
 
 A program is free to write over page zero, so `PZINIT` writes page zero's fixed
 parts at every warm boot as well as at the end of cold boot
-(`src/boot.asm:216-274`).
+(`src/boot.asm:215-274`).
 It puts `JP BF03h` at `0000h`, a `JP` at `0005h` to `PZTOP` and `JP BENTRY` at
 the address in `STUBAD`. It then runs on into `PZSWP`, which rewrites the restart
 vectors at `0008h–003Fh`.
@@ -258,7 +258,7 @@ service. A vector holding a `JP` whose target's page is at or above `PZTOP`'s pa
 keeps its jump and has the rest of its eight bytes zeroed, which keeps a jump
 into a service, the workspace or the ROM. Any other becomes seven zeros and a
 `RET`, so that an `RST` through it returns at once with the interrupt state
-unchanged (`src/boot.asm:240-264`). `0038h`, where interrupt mode 1 and `RST 38h`
+unchanged (`src/boot.asm:239-264`). `0038h`, where interrupt mode 1 and `RST 38h`
 go, then gets `EI` and `RETI` unless it kept a jump (`src/boot.asm:265-274`).
 Chapter 20 describes how a service claims a vector, and the unload and the failed
 `INIT` that also run this sweep. The IOBYTE at `0003h` and the drive and user byte at
