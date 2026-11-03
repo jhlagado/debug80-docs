@@ -159,7 +159,7 @@ only. A volume that runs past the end of the card is mounted, and the card
 rejects an access that reaches a block beyond its end. The driver returns error
 5, and the BDOS reports `Bad Sector` for that drive while the rest of the card
 works. On a standard-capacity card a block at 4 GiB or more fails the same way,
-refused by `LBAARG` before any command, so the access never reaches a lower
+rejected by `LBAARG` before any command, so the access never reaches a lower
 block. `test/sd-range.test.mjs` moves drive B's volume of a standard-capacity
 card to block `800800h`. There `SAVE` and `DIR` on B give `Bad Sector`,
 `SDERR` holds 9 and no byte of the card changes.

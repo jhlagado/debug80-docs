@@ -130,10 +130,10 @@ python3 -m http.server 8765 --directory web/dist
 The page is then at `http://localhost:8765`, and a click on the PICO9918's
 screen sends your typing to the matrix keyboard. The page keeps its SD card in
 the browser's storage, saving it every two seconds while the card has changed,
-so files written on the card are still there after a reload. When the browser
-refuses a save, the page keeps the card in memory, marked as unsaved, and
+so files written on the card are still there after a reload. When a save to the
+browser's storage fails, the page keeps the card in memory, marked as unsaved, and
 shows `Card not saved in this browser`, with the browser's reason, under the
-heading "SD card". It tries the save again two seconds later, and again after
+heading "SD card". It saves again two seconds later, and again after
 that until one succeeds. A reload before then brings back the card as it was
 last saved, so "Download image" is the way to keep a copy you can't afford to
 lose. These are its controls:
@@ -165,8 +165,8 @@ display's driver the only display line in the card's startup file, as its first
 line. It reads only the files on drive A that TEC-OS loads at boot, those of
 user area 0, one of the groups of files that Chapter 3 describes. It makes
 these changes on a copy of the card, and the copy replaces the card only once
-every change is made. A card whose drive A is read-only or whose directory is
-full is therefore left as it was and boots as it is, and so is the card when
+every change is made. A card whose drive A is read-only, or whose directory has
+no room for a file the page must add, is therefore left as it was and boots as it is, and so is the card when
 the page can't fetch the PICO9918's drivers. The page says so in brackets in
 the serial terminal.
 

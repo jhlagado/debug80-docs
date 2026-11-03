@@ -174,7 +174,7 @@ Every wait for the card has a limit, and a card that doesn't answer gives one
 of the error codes of Chapter 23 and Appendix D (`src/sd.asm:4-18`). A
 high-capacity card takes a block's number as its address, and a
 standard-capacity card takes the block's byte address in 32 bits, so the
-driver can name no block 4 GiB or more into a standard card. It refuses such a
+driver can name no block 4 GiB or more into a standard card. It rejects such a
 block before any command, with code 9, and a volume placed there gives `Bad
 Sector` (`src/sd.asm:207-236`, Chapter 18). When a
 block goes to or from the block cache, the transfer loop runs with EXPAND 1 in

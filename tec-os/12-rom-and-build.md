@@ -179,7 +179,7 @@ with the same assembler, at `0100h` for a `.COM` file
 (`tools/lib/assemble.mjs:10-20`). `npm run media` uses it to build the starter
 card's `MOUNT.COM` and, through `makeSvc`, its two drivers
 (`tools/lib/svc.mjs:104`), and the web page's `DEMO.COM`
-(`tools/media.mjs:235`). It also copies `programs/SAMPLE.ASM` to the card as a
+(`tools/media.mjs:235`). `npm run media` also copies `programs/SAMPLE.ASM` to the card as a
 CP/M text file, with CR LF line ends and a `^Z` at the end
 (`tools/media.mjs:204-207`). The ROM's build does not use the module. The card's `TAS.COM` and
 `TED.COM` are built outside this repository, and the media step takes each
