@@ -679,7 +679,7 @@ printed before the claim.
 
 A release with `PICO.SVC` in restores the driver's text mode, font and page,
 and if the PICO9918 is the console it also clears the screen and puts the
-cursor at the top left. That took 213,242 T-states on the model, about 53 ms,
+cursor at the top left. That took 216,030 T-states on the model, about 53 ms,
 at 80 columns. With `PICO.SVC` out, nothing is restored and the chip stays as
 the program left it. The claim records no owner and a warm boot releases it in
 the same way, so a program that ends without a release still gets the console
@@ -813,11 +813,11 @@ and to each string in the first row.
 
 | Path | PICO9918 | Graphics LCD |
 | --- | ---: | ---: |
-| `PUTAT`, the whole string in one call | 423 | 35,100 |
-| BIOS `CONOUT` | 714 | 35,400 |
-| BDOS function 2 | 3,860 | 38,400 |
+| `PUTAT`, the whole string in one call | 495 | 35,100 |
+| BIOS `CONOUT` | 786 | 35,400 |
+| BDOS function 2 | 3,922 | 38,400 |
 
-On the PICO9918 `PUTAT` is about nine times faster than the BDOS. The graphics
+On the PICO9918 `PUTAT` is about eight times faster than the BDOS. The graphics
 LCD draws each cell pixel by pixel, so nearly all the time goes on the drawing
 and the three paths come out close.
 

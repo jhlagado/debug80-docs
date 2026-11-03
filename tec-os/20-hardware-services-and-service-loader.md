@@ -218,9 +218,9 @@ The word at `0006h` has two jobs in CP/M. It is the target of the `JP` at `0005h
 so every BDOS call passes through it. It is also the top of the TPA, so a program
 sizes its memory from it. A program may also set `SP` from the word and fill
 memory up to it. The starter card's `TAS.COM` sets its stack this way, with `LD
-HL,($0006)` and `LD SP,HL` at `010Dh`. A service sits directly under the top of
-the TPA, so it has to hold a BDOS entry at the word's address and keep everything
-it needs at or above that address. A BDOS call should also cost the same however
+HL,($0006)` and `LD SP,HL` at `010Dh`. A service takes the pages just below the top of
+the TPA and its first byte becomes the new top, so it has to hold a BDOS entry at
+that address and keep everything it needs at or above it. A BDOS call should also cost the same however
 many services are in.
 
 Relocation adds a page number to the high byte of each address, so a service
@@ -532,7 +532,8 @@ on.
 Nothing in the ROM enables interrupts, as Chapter 14 describes. `WBOOTR` starts with
 `DI`, so a kept `0038h` runs after a warm boot only once a program or a service sets
 `EI` (`src/boot.asm:59`). A warm-boot hook can't do it, since a hook chains into
-`WBOOTR` and no service code runs after that. The sweep writes MAIN 0's page zero, and
+`WBOOTR`, whose first instruction is `DI`. Only code that runs later, such as a
+program or a hooked BIOS entry, can. The sweep writes MAIN 0's page zero, and
 MAIN 1 keeps the copy cold boot gave it. A service that needs its vector there writes
 its own copy last, as with hooks, and restores it in `REMOVE`, and a warm boot inside
 `INIT` leaves that copy stale.
