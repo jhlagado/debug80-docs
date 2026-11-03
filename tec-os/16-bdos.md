@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 16. The BDOS
 
-Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
-8fcc6ea, whose copy in `dist/files` has the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
+Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
+676075a, whose copy in `dist/files` has the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -17,16 +17,16 @@ A CP/M program puts a function number in `C` and an argument in `E` or `DE`,
 then calls `0005h`, as Chapter 6 describes. This chapter describes the BDOS
 from that entry: the function table, the console functions, the way a file's
 records are found and the allocation vectors with the scan at warm boot. It
-then covers the BDOS errors, the three functions whose meanings come from CP/M
-3 and the differences from Digital Research's BDOS.
+then covers the BDOS errors, the two functions whose meanings come from CP/M 3
+and the differences from Digital Research's BDOS.
 
 ## The BDOS in the ROM
 
 TEC-OS's BDOS comes from Portable CP/M, an implementation of the documented
 CP/M 2.2 interface that uses no Digital Research source
-(`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the
-debug80 build (Chapter 12) it runs from `E113h`, `BDOSBAS`, to `F057h`, 3,909
-bytes of the ROM. Its table of functions and its error messages are in the
+(`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the ROM
+that Chapter 12 describes it runs from `E0F0h`, `BDOSBAS`, to `EFF6h`, 3,847
+bytes. Its table of functions and its error messages are in the
 ROM's data block (`src/data3.asm:73-90`). None of it can be patched.
 
 The BDOS's variables and its 54-byte stack are in RAM, in the block from
@@ -64,8 +64,8 @@ to `BENTRY` (`src/cpm/bdos.asm:79-115`).
 `BENTRY` saves the caller's stack pointer in `OLDSP`, moves to the BDOS's own
 stack and keeps `DE` in `PARAM` (`src/cpm/bdos.asm:80-82`). Every function, and
 every BIOS call it makes, runs on that stack, so the caller's stack holds only
-the return address of its `CALL`. `BENTRY` then tests for three functions by
-number: 50, 108 and 47 (`src/cpm/bdos.asm:83-87`). Any other number of 41 or more
+the return address of its `CALL`. `BENTRY` then tests for two functions by
+number, 108 and 47 (`src/cpm/bdos.asm:83-87`). Any other number of 41 or more
 returns 0 at once (`src/cpm/bdos.asm:88-89`).
 
 A function from 0 to 40 is found in `FNTAB`, a table of 41 words, one routine
@@ -458,8 +458,8 @@ A program's own call of function 13 finds `WRFLAG` clear, and empties `LOGINV`
 and `WARMV`. Every drive is then scanned in full at its next selection, as in
 CP/M 2.2 (`src/cpm/bdos.asm:436-439`). Function 37 takes the drives named by
 the bits of `DE` out of `LOGINV`, the read-only vector and `WARMV`
-(`src/cpm/bdos.asm:1577-1591`). The mount entry calls it for a drive whose
-volume it has changed (`src/vol.asm:657-668`).
+(`src/cpm/bdos.asm:1577-1591`). The volume services `MOUNT` and `UNMOUNT` call
+it for a drive whose volume they have changed (`src/vol.asm:657-668`).
 
 ## BDOS errors
 
@@ -470,7 +470,8 @@ drive letter (`src/data3.asm:86-90`):
   volume or a `?` drive byte outside function 17
   (`src/cpm/bdos.asm:2380-2386`).
 - `R/O`, for a change to a drive that function 28 has made read-only or to a
-  volume the card marks read-only (`src/cpm/bdos.asm:2366-2378`).
+  volume the card marks read-only, a close that would write the directory
+  included (`src/cpm/bdos.asm:570-571`, `src/cpm/bdos.asm:2366-2378`).
 - `File R/O`, for function 19 or 23 on a directory entry with the read-only
   attribute, and for function 21, 34 or 40 through an FCB that has it
   (`src/cpm/bdos.asm:634-645`).
@@ -489,32 +490,11 @@ describes.
 Chapter 3 shows `R/O` from a read-only volume and `File R/O` from `ERA`. The
 volume's read-only flag is in the drive table, and `LOGIN` sets the drive's bit
 in the read-only vector from it, so the BDOS refuses the change before any write
-to the card (`src/cpm/bdos.asm:1944-1949`). Function 16 makes no such test, and
-Chapter 18 gives the result. A warm boot clears the vector, and
-the drive's next selection sets the bit again.
-
-## Function 50, MOVE and XMOVE
-
-Function 50 is CP/M 3's direct BIOS call. `DE` points at eight bytes, the
-BIOSPB: the BIOS function's number, then the values for `A`, `BC`,
-`DE` and `HL` (`src/cpm/bdos.asm:132`). Functions 0 to 16 are the entries
-of the RAM BIOS table, at `BF00h` plus three times the number, so a program's
-hook there receives them. Function 25 is `MOVE` and 29 is `XMOVE`, CP/M 3's
-copies. Any other number returns `A` = `FFh` with nothing called.
-
-`FNBIOS` pushes the address of its own exit and the BIOS routine's address,
-then loads the registers from the BIOSPB. It passes `A` through the alternate
-`AF` so that the loads do not disturb it, and returns into the routine. The
-routine runs on the BDOS's stack and returns through `FNBIOSR`, which puts the
-caller's stack pointer back and returns with the registers as the BIOS routine
-left them (`src/cpm/bdos.asm:132`). The alternate `AF` is not kept.
-
-`XMOVE` sets the banks for the next `MOVE`, and `MOVE` copies `BC` bytes from
-`DE` to `HL`, as CP/M 3 defines them. TEC-OS's bank 1 is EXPAND 1, which holds
-the block cache and the history, so `MOVE` rejects every range in it. It also
-rejects a range in bank 0 that goes past the word at `0006h`, and a bank
-number other than 0 and 1 (`src/xmove.asm:147-169`). Chapter 20 describes
-their checks and Chapter 7 their use from a program.
+to the card (`src/cpm/bdos.asm:1944-1949`). Function 16 makes the same test
+before it writes the entry back, as CP/M 2.2's close does, so a file written
+on such a drive gives `R/O` at its close. A close of a file only read returns
+before the test (`src/cpm/bdos.asm:558-571`). A warm boot clears the vector,
+and the drive's next selection sets the bit again.
 
 ## Functions 108 and 47
 
@@ -544,8 +524,8 @@ Research shipped are these:
 
 - It is in ROM (`src/rom.asm:25-26`). A write to the BDOS's code changes
   nothing, and a hook goes in the RAM BIOS table.
-- Functions 47, 50 and 108 have meanings that come from CP/M 3, and every
-  other function above 40 returns 0.
+- Functions 47 and 108 have meanings that come from CP/M 3, and every other
+  function above 40 returns 0.
 - A key after `^S` resumes the output and is discarded, `^C` included. In
   Digital Research's BDOS a `^C` there ends the program.
 - The CCP's disk reset at warm boot keeps each drive whose vector is
