@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 19ad916, with the starter card's `TED.COM` from Thorium
-8fcc6ea, with the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
+Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
+676075a, with the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -137,7 +137,7 @@ its size in bytes:
 ```
 
 The size is whole records of 128 bytes, because CP/M records a file's length
-only in records. `MOUNT.COM` is 670 bytes on the PC and takes six records,
+only in records. `MOUNT.COM` is 671 bytes on the PC and takes six records,
 and `tecvol get`, which copies a file back to the PC, gives back all six.
 With `--text`, `get` stops at the first `^Z` and turns each carriage return
 and line feed back into a line feed.
@@ -200,8 +200,8 @@ Each file, inside the `components` list, has an entry such as this one:
   "name": "MOUNT.COM",
   "url": "files/MOUNT.COM",
   "drive": "A",
-  "bytes": 670,
-  "sha256": "e8db95fa4f3ea5b3f95214fac9d522ca4a555825792d13ee4ac25b5f0c22957e"
+  "bytes": 671,
+  "sha256": "5273f0ba443817f9168a1909fe7c934a5ad186ba1480d35b7ab169c27ead83cc"
 }
 ```
 
