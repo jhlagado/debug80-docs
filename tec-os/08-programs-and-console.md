@@ -7,10 +7,10 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 8. Programs and the console
 
-Checked against TEC-OS 1f9542d, with the ATOM assembler from the
+Checked against TEC-OS 7458352, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
-04ec086, and its copy in `dist/files` has the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`.
+128edb7, and its copy in `dist/files` has the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
 
 Chapter 2 described the console as you use it at the prompt. This chapter
 describes it as a program uses it, starting with the BDOS's console functions
