@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -300,7 +300,7 @@ gives out the space in one of two ways.
 A card in format 1.0, or one in format 1.1 whose header gives no number of
 drives, gets a vector for each drive cold boot puts a volume on, sized for its
 volume. The starter card's two drives take 64 and 256 bytes, the word at
-`0006h` is `B806h`, and programs have 46,854 bytes. Drives C and D get no
+`0006h` is `B815h`, and programs have 46,869 bytes. Drives C and D get no
 vector, so on the starter card no volume can be mounted on them. A drive keeps
 its vector when `MOUNT` empties it, and drive B's, of 256 bytes, can take a
 G1M or a G8M volume:
@@ -325,10 +325,9 @@ A card in format 1.1 whose header gives N drives, as
 `tecvol create --drives N` makes it, gets a 256-byte vector for each of drives
 A to the Nth. Each gets one whether a volume is on it at cold boot or not, so
 any of those drives can take any volume later. `my.img`'s header gives four,
-so its vectors take 1,024 bytes, the word at `0006h` is `B506h` and programs
-have 46,086 bytes. That is 768 fewer than on the starter card, since the
-BDOS's entry goes at offset 6 of the page below the vectors. A drive past the
-Nth gets no vector, and a card whose header puts a volume on such a drive
+so its vectors take 1,024 bytes, the word at `0006h` is `B555h` and programs
+have 46,165 bytes. That is 704 fewer than on the starter card, the difference
+between the two cards' vectors. A drive past the Nth gets no vector, and a card whose header puts a volume on such a drive
 fails the checks at cold boot. Chapter 7 describes the TPA, and Chapter 13 the
 rest of the map.
 
