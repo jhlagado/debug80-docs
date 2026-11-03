@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 21. PRL relocation
 
-Checked against TEC-OS 718c01b.
+Checked against TEC-OS ea9c1c0.
 
 A `.COM` file holds code assembled for one address, `0100h`, and runs only
 there. Code that is to run at an address chosen at load time has to carry a list
@@ -31,7 +31,8 @@ to each.
 The tools in the repository find those bytes by assembling the source twice.
 `assembleAt` in `tools/lib/prl.mjs:15` assembles a copy of the source with its
 `ORG $0100` line changed to another origin, and `makePrl` and `makeSvc` both
-assemble at `0000h` and at `0100h`. A byte that is the same in the two
+assemble at `0000h` and at `0100h`. That line has to be indented, with nothing
+after it (`tools/lib/prl.mjs:12`). A byte that is the same in the two
 assemblies is left alone, because it is no part of an address of the program's
 own, or it is the low byte of one, which a move by whole pages doesn't change. A
 byte that is one greater in the second assembly is the high byte of an address.
@@ -179,7 +180,8 @@ A service is the code that does move. The loader puts it in whole pages
 immediately below the current top of the TPA, so its page depends on the services
 already installed. `makeSvc` in `tools/lib/svc.mjs:87` assembles the service's
 source at `0000h` and at `0100h` and keeps the first assembly, made for page 0,
-with the service's 25-byte header at its start (`tools/lib/svc.mjs:103-114`).
+with the service's 25-byte header at its start (`tools/lib/svc.mjs:103-114`). It
+refuses a source with no `INIT` or `REMOVE` (`tools/lib/svc.mjs:105`).
 Placed at page `p`, every address in it needs `p` added to its high byte.
 
 The bytes that need it, the fixups, are found by the same comparison as a PRL's
