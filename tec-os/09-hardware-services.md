@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 9. The hardware services
 
-Checked against TEC-OS 19ad916. The programs were assembled by the starter
+Checked against TEC-OS 60e0768. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. `DEMO`
 was assembled on the PC by ATOM from the repository's `atom-z80` 0.3.7.
@@ -15,9 +15,9 @@ was assembled on the PC by ATOM from the repository's `atom-z80` 0.3.7.
 A CP/M program has the BDOS for files and the console, and nothing for a
 7-segment digit or a speaker. This chapter describes the calls TEC-OS has for
 the board's own devices. It starts with the ROM table at `C003h`, the test a
-program makes before using it and the calling convention. The nine hardware
-services follow, most with a program of their own, and `DEMO` at the end uses
-them together.
+program makes before using it and the calling convention. The table leads to
+15 numbered services, and the nine hardware services among them follow, most
+with a program of their own. `DEMO` at the end uses them together.
 
 ## The ROM table
 
@@ -31,36 +31,38 @@ services do these jobs with bit 6 held high and with the console's state kept
 right.
 
 A program finds the services through the *ROM table*, which starts at `C003h`,
-after the reset jump. The table and a `RET` at `C01Dh` are the ROM's only
-fixed addresses, and everything else can move from one build to the next.
+after the reset jump. The table is the only part of the ROM at a fixed
+address, and everything else can move from one build to the next.
 Chapter 8 used the table to read the console's size.
 
 | Address | Name | Contents |
 | --- | --- | --- |
 | `C003h` | `ABITAB` | the letters `TNA` |
-| `C006h` | `ABIMAJ` | the major version, 4 |
+| `C006h` | `ABIMAJ` | the major version, 5 |
 | `C007h` | `ABIMIN` | the minor version, 0 |
-| `C008h` | `ABIVID` | a word: the address of the console's columns, with the rows after |
-| `C00Ah` | `ABIHW` | a jump: the hardware services |
-| `C00Dh` | `ABIMAIN` | a word: the address of the count of MAIN regions fitted |
-| `C00Fh` | `ABIVOL` | a jump: mount, unmount and describe volumes |
-| `C012h` | `ABIGLCD` | a jump: a display driver hands the ROM its table |
-| `C015h` | `ABISVC` | a jump: the registry of services |
+| `C008h` | `ABICALL` | a jump: the numbered services |
 
-The version is the table's ABI, its application binary interface, here 4.0.
-This chapter uses `ABIHW`. `MOUNT` uses `ABIVOL`, Chapter 10
-describes `ABISVC`, and Appendix B lists every entry. A build writes the
-table's addresses, the service numbers and the status codes to `dist/abi.inc`
-and checks that file against the ROM. A program includes the file and uses its
-names, as these programs do.
+`ABIEND`, `C00Bh`, is the first address after the table's 8 bytes. The
+version is the table's ABI, its application binary interface, here 5.0. The
+jump at `ABICALL` leads to 15 services, numbered from 0 to 14. Numbers 0 to 8
+are the hardware services this chapter describes. `MOUNT` uses 9 to 11, which mount, unmount and describe
+volumes, and a display driver hands the ROM its table through 12. Chapter 10
+describes 13 and 14, the registry of services, and Appendix B lists every
+number.
+
+The names of the table's addresses, the service numbers and the status codes
+are in `abi.inc`. The ROM is assembled from that file, and a build publishes
+it as `dist/abi.inc`. A program includes the file and uses its names, as these
+programs do.
 
 ## Checking for TEC-OS
 
 A CP/M program may run on a machine with no ROM table at `C003h`, so it tests
 before it calls. The test has two parts: the three letters, and a major
-version of exactly 4. A later major version may move the entries after
-`ABIMAIN` and renumber the services, so a program written for 4 can't use a 5
-or a 3. `SIZE` in Chapter 8 tests the same four bytes.
+version of exactly 5. A later major version may renumber the services, and a
+later minor version only adds numbers at the end, so a program written for 5.0
+runs on a 5.1 but can't use a 6 or a 4. `SIZE` in Chapter 8 tests the same
+four bytes.
 
 A program that finds something else is on another system and leaves the
 board's devices alone: these programs print a line and end. `CHKHW` below
@@ -70,11 +72,11 @@ makes the test, in a file of routines that this chapter's programs share:
 ; HWLIB.ASM: routines this chapter's programs share. It goes after a
 ; program's own code, since it makes bytes where it is included.
 
-; Test for TEC-OS with ABI 4. Returns Z if the table's four bytes match,
+; Test for TEC-OS with ABI 5. Returns Z if the table's four bytes match,
 ; NZ if not. Changes AF, B, DE and HL.
 CHKHW:	LD	HL,ABITAB	; signature, then the major version
 	LD	DE,TAG		; what they must be
-	LD	B,4		; a major of 5 fails as a wrong letter does
+	LD	B,4		; a major of 6 fails as a wrong letter does
 CHKH1:	LD	A,(DE)
 	CP	(HL)
 	RET	NZ		; NZ: not what TAG holds
@@ -121,8 +123,8 @@ NIBB1:	LD	E,A		; BDOS console output
 	LD	C,2
 	JP	BDOS		; its RET is this routine's
 
-TAG:	DB	"TNA",4
-NOTMSG:	DB	"not TEC-OS with ABI 4",13,10,"$"
+TAG:	DB	"TNA",5
+NOTMSG:	DB	"not TEC-OS with ABI 5",13,10,"$"
 ```
 
 `LABHEX` falls through into `HEX`, and `NOTHW` into `SAY`. A BCD byte holds
@@ -130,40 +132,41 @@ one decimal digit in each half, so `HEX` prints it in decimal.
 
 ## Calling a hardware service
 
-The call has one form for all nine. The program puts the service's number in
-`C` and the arguments in `B`, `DE` and `HL`, and calls `ABIHW`. `A` takes no
-argument, because the dispatcher uses it to look the number up. On return `A`
-holds a status, with the flags set to match:
+The call has one form for every numbered service. The program puts the
+service's number in `C` and the arguments in `B`, `DE` and `HL`, and calls
+`ABICALL`. `A` takes no argument, because the dispatcher uses it to look the
+number up. On return `A` holds a status, with the flags set to match, except
+after the registry's two services, which Chapter 10 describes:
 
 | Status | Flags | Meaning |
 | ---: | --- | --- |
 | 0 | zero set, carry clear | success |
-| 1 | carry set | no such service, or an argument out of range |
+| 1 | carry set | no such service, an argument out of range, or a request refused with nothing changed |
 | 2 | carry set | the device isn't fitted, or isn't the console |
 
 `JP NZ` and `JP C` both catch a failure. Results are in registers that differ
 from service to service. `IX`, `IY` and the alternate registers keep their
-values, and a program treats `BC`, `DE` and `HL` as changed unless a service
-returns something there.
+values, except that the volume services, 9 to 11, may change `IX` and the
+alternates. A program treats `BC`, `DE` and `HL` as changed unless a service
+returns something there. Any number from 15 up returns status 1 with `B`, `DE`
+and `HL` as they were.
 
-The numbers run from 19 to 27, and every other number returns status 1 with
-`B`, `DE` and `HL` as they were. The numbers start at 19 because the previous
-version of the table stopped at 18, so a program written for that version gets
-a failure in place of the wrong service.
-
-The services run on the caller's stack. The deepest is `PUTAT` on the graphics
-LCD, which takes 22 bytes on top of the `CALL`'s return address, and that fits
-the 28 bytes of the CCP's stack in a program that has pushed nothing. No
-service calls the BDOS, so a program can call one from code that runs inside a
-BDOS call, such as a routine reached through its own jump in the BIOS jump
-table. The services keep their one byte of state, the claim on the PICO9918
-described later in this chapter, in TEC-OS's workspace.
+The services run on the caller's stack. The deepest hardware service is
+`PUTAT` on the graphics LCD, which takes 22 bytes on top of the `CALL`'s return
+address, the dispatcher's included, and that fits the 28 bytes of the CCP's
+stack in a program that has pushed nothing. No hardware service calls the
+BDOS, so a program can call one from code that runs inside a BDOS call, such
+as a routine reached through its own jump in the BIOS jump table. The mount
+and unmount services reset the drive through BDOS function 37, so a program
+calls those two from outside its own BDOS calls. The hardware services keep
+their one byte of state, the claim on the PICO9918 described later in this
+chapter, in TEC-OS's workspace.
 
 ## A message on the LCD
 
-`LCD`, number 21, writes one row of the 20 × 4 LCD. `B` is the row, 0 to 3,
+`LCD`, number 2, writes one row of the 20 × 4 LCD. `B` is the row, 0 to 3,
 and `HL` points at 20 characters, so a program pads a shorter message with
-spaces. A row of 4 or more returns status 1. `TONE`, number 23, sounds the
+spaces. A row of 4 or more returns status 1. `TONE`, number 4, sounds the
 speaker, and this program uses both, after the check:
 
 ```asm
@@ -172,16 +175,16 @@ BDOS	EQU	$0005
 %INCLUDE "ABI.INC"
 
 	ORG	$0100
-	CALL	CHKHW		; the numbers below hold only on ABI 4
+	CALL	CHKHW		; the numbers below hold only on ABI 5
 	JP	NZ,NOTHW
 	LD	B,1		; the LCD's second row
 	LD	HL,TEXT		; exactly 20 characters
-	LD	C,HWLCD
-	CALL	ABIHW		; A is the status, 0 for this row
+	LD	C,TNLCD
+	CALL	ABICALL		; A is the status, 0 for this row
 	LD	B,120		; about 1 kHz
 	LD	DE,400		; 400 half cycles, about 0.2 s
-	LD	C,HWTONE
-	CALL	ABIHW		; returns when the tone ends
+	LD	C,TNTONE
+	CALL	ABICALL		; returns when the tone ends
 	LD	DE,DONE
 	JP	SAY		; prints and ends the program
 
@@ -205,13 +208,14 @@ node tools/tecvol.mjs put hw.img B lcdmsg.asm --text
 Each later program's source goes on `hw.img` the same way.
 
 `TAS LCDMSG` reads `LCDMSG.ASM` from the current drive and writes `LCDMSG.COM`
-and `LCDMSG.DBG` beside it. `A:` goes in front of the command because
-`TAS.COM` isn't on drive B. The run:
+and `LCDMSG.DBG` beside it. `TAS.COM` is on drive A, and the CCP runs a `.COM`
+from A: when it isn't on the current drive and the command names no drive.
+The run:
 
-<!-- node tools/capture.mjs --card hw.img --lcd B: "A:TAS LCDMSG" LCDMSG -->
+<!-- node tools/capture.mjs --card hw.img --lcd B: "TAS LCDMSG" LCDMSG -->
 ```text
 A>B:
-B>A:TAS LCDMSG
+B>TAS LCDMSG
 LCDMSG.COM written
 
 B>LCDMSG
@@ -230,8 +234,8 @@ Hello on the LCD
 B: WORK
 ```
 
-The row stays after the program ends. On a ROM whose major version isn't 4,
-the same program prints `not TEC-OS with ABI 4` and leaves the LCD alone.
+The row stays after the program ends. On a ROM whose major version isn't 5,
+the same program prints `not TEC-OS with ABI 5` and leaves the LCD alone.
 
 A program may write row 3 as freely as the others, and that row has one rule of
 its own. TEC-OS puts the words `PICO?` and `GLCD?` there, as Chapter 5
@@ -268,7 +272,7 @@ the serial line stays idle throughout.
 ## The board's report
 
 A program can test what is on the board before it uses a device. `INFO`,
-number 19, takes no arguments and returns the devices in `B`, the ROM's
+number 0, takes no arguments and returns the devices in `B`, the ROM's
 version in `DE`, the console's columns in `L` and its rows in `H`. The columns
 and rows are 0 for the serial terminal. The bits of `B` are these:
 
@@ -277,14 +281,13 @@ and rows are 0 for the serial terminal. The bits of `B` are these:
 | 0 | `01h` | the matrix keyboard is enabled, by the board's Matrix switch |
 | 1 | `02h` | a PICO9918 answered at cold boot |
 | 2 | `04h` | `GLCD.SVC` is in |
-| 3 | `08h` | a DS1302 clock answers |
+| 3 | `08h` | a DS1302 clock answered at cold boot |
 | 4 | `10h` | the PICO9918 is claimed |
 | 7 | `80h` | a word of the ROM's, `PICO?` or `GLCD?`, is on LCD row 3 |
 
-`INFO` sets bit 3 afresh at each call by reading the clock's seconds, so it
-takes about 1,550 T-states. `DE` holds the major version in `D` and the minor
-in `E`, so `0001h` is version 0.1. This program prints all of it, then calls
-number 18 to show a failure:
+`DE` holds the major version in `D` and the minor in `E`, so `0001h` is
+version 0.1. This program prints all of it, then calls number 15, one past the
+last service, to show a failure:
 
 ```asm
 ; BOARD: print what INFO reports, then what a bad number returns.
@@ -292,10 +295,10 @@ BDOS	EQU	$0005
 %INCLUDE "ABI.INC"
 
 	ORG	$0100
-	CALL	CHKHW		; the numbers below hold only on ABI 4
+	CALL	CHKHW		; the numbers below hold only on ABI 5
 	JP	NZ,NOTHW
-	LD	C,HWINFO
-	CALL	ABIHW
+	LD	C,TNINFO
+	CALL	ABICALL
 	PUSH	HL		; the size, across the printing
 	PUSH	DE		; and the version
 	LD	A,B		; the device bits
@@ -316,8 +319,8 @@ BDOS	EQU	$0005
 	LD	A,H
 	LD	DE,MSGROW	; the fourth
 	CALL	LABHEX
-	LD	C,HWBASE-1	; the number below the first service
-	CALL	ABIHW
+	LD	C,TNCOUNT	; the number after the last service
+	CALL	ABICALL
 	PUSH	AF		; the status, and its carry
 	LD	DE,MSGBAD
 	CALL	LABHEX
@@ -333,7 +336,7 @@ MSGVER:	DB	13,10,"Version DE = $"
 MSGCOL:	DB	13,10,"Columns  L = $"
 MSGROW:	DB	13,10,"Rows     H = $"
 ; The last line: the status, then its carry.
-MSGBAD:	DB	13,10,"Number 18: status $"
+MSGBAD:	DB	13,10,"Number 15: status $"
 MSGC:	DB	", carry set",13,10,"$"
 MSGNC:	DB	", carry clear",13,10,"$"
 %INCLUDE "HWLIB.ASM"
@@ -342,10 +345,10 @@ MSGNC:	DB	", carry clear",13,10,"$"
 On the board with only a serial terminal, where the clock is the one device,
 `BOARD` prints this:
 
-<!-- node tools/capture.mjs --card hw.img B: "A:TAS BOARD" BOARD -->
+<!-- node tools/capture.mjs --card hw.img B: "TAS BOARD" BOARD -->
 ```text
 A>B:
-B>A:TAS BOARD
+B>TAS BOARD
 BOARD.COM written
 
 B>BOARD
@@ -353,7 +356,7 @@ Devices  B = 08
 Version DE = 0001
 Columns  L = 00
 Rows     H = 00
-Number 18: status 01, carry set
+Number 15: status 01, carry set
 
 B>
 ```
@@ -361,10 +364,10 @@ B>
 On the web page's board, with `PICO.SVC` in, bits 0 and 1 are set as well, and
 the console has a size, 50h columns and 18h rows:
 
-<!-- node tools/capture.mjs --card hw.img --board pico B: "A:TAS BOARD" BOARD -->
+<!-- node tools/capture.mjs --card hw.img --board pico B: "TAS BOARD" BOARD -->
 ```text
 A>B:
-B>A:TAS BOARD
+B>TAS BOARD
 BOARD.COM written
 
 B>BOARD
@@ -372,7 +375,7 @@ Devices  B = 0B
 Version DE = 0001
 Columns  L = 50
 Rows     H = 18
-Number 18: status 01, carry set
+Number 15: status 01, carry set
 
 B>
 ```
@@ -387,11 +390,11 @@ pattern and port `01h` selects a digit, so the board lights one digit at a
 time. Each digit is lit for its turn alone, so the display looks steady only
 while the Z80 goes round the six fast enough for the eye to merge them.
 
-`DIGIT`, number 20, makes one pass. `HL` points at six segment patterns, the
+`DIGIT`, number 1, makes one pass. `HL` points at six segment patterns, the
 leftmost digit first, and each byte is the pattern of lit segments. The
 service lights each digit for about 0.84 ms and turns them all off at the end,
 so the program calls it again and again from its main loop. A pass takes
-20,677 T-states, about 5.2 ms. No service turns a number into a pattern, so a
+20,670 T-states, about 5.2 ms. No service turns a number into a pattern, so a
 program holds its own table.
 
 `DIGCLK` shows the time. Its loop makes one pass, checks for a key with BDOS
@@ -403,7 +406,7 @@ BDOS	EQU	$0005
 %INCLUDE "ABI.INC"
 
 	ORG	$0100
-	CALL	CHKHW		; the numbers below hold only on ABI 4
+	CALL	CHKHW		; the numbers below hold only on ABI 5
 	JP	NZ,NOTHW
 LOOP:	LD	HL,PASSES	; the clock is read one pass in 32
 	INC	(HL)
@@ -411,8 +414,8 @@ LOOP:	LD	HL,PASSES	; the clock is read one pass in 32
 	AND	31		; 0 on every 32nd pass
 	CALL	Z,TOSEG
 	LD	HL,DIGS		; one pass over the six digits
-	LD	C,HWDIGIT
-	CALL	ABIHW
+	LD	C,TNDIGIT
+	CALL	ABICALL
 	LD	E,$FF		; BDOS direct input: a key, or 0
 	LD	C,6
 	CALL	BDOS
@@ -424,8 +427,8 @@ LOOP:	LD	HL,PASSES	; the clock is read one pass in 32
 ; DIGS. Changes AF, BC, DE and HL; with no clock DIGS stays as it was.
 TOSEG:	LD	HL,TIME		; seven BCD bytes, seconds first
 	LD	B,0		; B = 0: read
-	LD	C,HWRTC
-	CALL	ABIHW
+	LD	C,TNRTC
+	CALL	ABICALL
 	RET	NZ		; status 2: no clock
 	LD	DE,DIGS		; the leftmost digit's pattern first
 	LD	A,(TIME+2)	; hours
@@ -464,20 +467,20 @@ TIME:	DS	7
 %INCLUDE "HWLIB.ASM"
 ```
 
-On the model's serial board the loop goes round every 24,456 T-states, 164
-times a second, and every 32nd round takes 32,093 for the clock. A video
-console saves 630 to 750 a round. The digits are dark for the time the program
+On the model's serial board the loop goes round every 24,435 T-states, 164
+times a second, and every 32nd round takes 32,065 for the clock. A video
+console saves 640 to 760 a round. The digits are dark for the time the program
 spends outside `DIGIT`, about 15 percent of the loop here, so a loop's other
 work costs brightness and, if it runs long, flicker. `DIGCLK` has no code to
 clear the digits at its end, since they are dark as soon as the calls stop.
 
 ## The clock
 
-`RTC`, number 27, reads or sets a DS1302 clock. `HL` points at seven bytes in
+`RTC`, number 8, reads or sets a DS1302 clock. `HL` points at seven bytes in
 BCD: seconds, minutes, hours, date, month, weekday and year. `B = 0` reads
 them into memory, and any other value sets the clock from them. With no clock
-the service returns status 2, and bit 3 of `INFO` gives the same answer in
-advance. `NOW` reads the clock and prints the date and time:
+the service returns status 2, and bit 3 of `INFO` records whether a clock
+answered at cold boot. `NOW` reads the clock and prints the date and time:
 
 ```asm
 ; NOW: print the date and time from the clock.
@@ -485,12 +488,12 @@ BDOS	EQU	$0005
 %INCLUDE "ABI.INC"
 
 	ORG	$0100
-	CALL	CHKHW		; the numbers below hold only on ABI 4
+	CALL	CHKHW		; the numbers below hold only on ABI 5
 	JP	NZ,NOTHW
 	LD	HL,TIME		; seven BCD bytes
 	LD	B,0		; B = 0: read
-	LD	C,HWRTC
-	CALL	ABIHW
+	LD	C,TNRTC
+	CALL	ABICALL
 	LD	DE,NOCLK
 	JP	NZ,SAY		; status 2: no clock answered
 	LD	DE,CENTY	; the clock holds two digits of the year
@@ -532,10 +535,10 @@ TIME:	DS	7
 print after that field, and the pairs turn the clock's order into the order
 people write dates in:
 
-<!-- node tools/capture.mjs --card hw.img B: "A:TAS NOW" NOW -->
+<!-- node tools/capture.mjs --card hw.img B: "TAS NOW" NOW -->
 ```text
 A>B:
-B>A:TAS NOW
+B>TAS NOW
 NOW.COM written
 
 B>NOW
@@ -551,9 +554,9 @@ this Sunday is `07`.
 ## The joystick and the matrix keyboard
 
 A game reads every key held down at a given moment, but the BDOS and the BIOS
-give keys as characters, one at a time. `KEYS`, number 25, reads the matrix
+give keys as characters, one at a time. `KEYS`, number 6, reads the matrix
 keyboard's eight rows into eight bytes at `HL`, row 0 first, with a 1 for each
-key down. `JOY`, number 24, returns the joystick in `B`, again with a 1 for
+key down. `JOY`, number 5, returns the joystick in `B`, again with a 1 for
 each line active.
 
 Both always return status 0, so it is `INFO`'s bit 0 that reports whether
@@ -567,17 +570,17 @@ BDOS	EQU	$0005
 %INCLUDE "ABI.INC"
 
 	ORG	$0100
-	CALL	CHKHW		; the numbers below hold only on ABI 4
+	CALL	CHKHW		; the numbers below hold only on ABI 5
 	JP	NZ,NOTHW
-	LD	C,HWINFO	; is there a matrix keyboard to wait for?
-	CALL	ABIHW
+	LD	C,TNINFO	; is there a matrix keyboard to wait for?
+	CALL	ABICALL
 	BIT	0,B		; INFO's matrix bit
 	LD	DE,NOMTX
 	JP	Z,SAY		; none: the wait would never end
 WAIT:	CALL	SCAN		; until a key is down
 	JR	Z,WAIT
-	LD	C,HWJOY		; the same moment, read as the joystick
-	CALL	ABIHW
+	LD	C,TNJOY		; the same moment, read as the joystick
+	CALL	ABICALL
 	LD	A,B		; its bits
 	LD	(STICK),A	; printed after the rows
 	LD	HL,BUF		; the eight rows, on one line
@@ -605,8 +608,8 @@ DRAIN:	CALL	SCAN		; end only when every key is up
 ; Read the rows into BUF. Returns Z if no key is down, NZ if one is.
 ; Changes AF, BC, DE and HL.
 SCAN:	LD	HL,BUF		; eight bytes, row 0 first
-	LD	C,HWKEYS
-	CALL	ABIHW
+	LD	C,TNKEYS
+	CALL	ABICALL
 	LD	HL,BUF		; OR the rows together
 	LD	B,8
 	XOR	A		; nothing seen yet
@@ -627,10 +630,10 @@ STICK:	DS	1		; JOY's byte
 `--board pico` has a matrix keyboard, and `@key` presses a key on it. The key
 `x` is in row 7:
 
-<!-- node tools/capture.mjs --card hw.img --board pico B: "A:TAS ROWS" "@start ROWS" "@key x" -->
+<!-- node tools/capture.mjs --card hw.img --board pico B: "TAS ROWS" "@start ROWS" "@key x" -->
 ```text
 A>B:
-B>A:TAS ROWS
+B>TAS ROWS
 ROWS.COM written
 
 B>ROWS
@@ -643,10 +646,10 @@ B>
 selects row 3, so the two share a row. The key `5` is in row 3, and it shows
 in both:
 
-<!-- node tools/capture.mjs --card hw.img --board pico B: "A:TAS ROWS" "@start ROWS" "@key 5" -->
+<!-- node tools/capture.mjs --card hw.img --board pico B: "TAS ROWS" "@start ROWS" "@key 5" -->
 ```text
 A>B:
-B>A:TAS ROWS
+B>TAS ROWS
 ROWS.COM written
 
 B>ROWS
@@ -667,7 +670,7 @@ confirms that each bit reaches `B` and leaves the labels unconfirmed.
 ## Claiming the PICO9918
 
 For graphics on the PICO9918, a program first claims it with `VIDEO`, service
-number 22. Any nonzero `B` claims and `B = 0` releases, and on a board with no
+number 3. Any nonzero `B` claims and `B = 0` releases, and on a board with no
 PICO9918 both return status 2.
 
 While the chip is claimed, the terminal code leaves it alone: output to it is
@@ -680,7 +683,7 @@ printed before the claim.
 
 A release with `PICO.SVC` in restores the driver's text mode, font and page,
 and if the PICO9918 is the console it also clears the screen and puts the
-cursor at the top left. That took 216,030 T-states on the model, about 53 ms,
+cursor at the top left. That took 216,023 T-states on the model, about 54 ms,
 at 80 columns. With `PICO.SVC` out, nothing is restored and the chip stays as
 the program left it. The claim records no owner and a warm boot releases it in
 the same way, so a program that ends without a release still gets the console
@@ -726,7 +729,7 @@ A>
 
 ## Text at a screen position
 
-`PUTAT`, number 26, writes `B` characters from `HL` at row `D`, column `E`,
+`PUTAT`, number 7, writes `B` characters from `HL` at row `D`, column `E`,
 counted from 0, on a video console. It leaves the cursor's position as it was
 and doesn't pass through the escape-sequence parser, so a full-screen program
 can use it to redraw part of the screen. The text is clipped at the right
@@ -742,7 +745,7 @@ BDOS	EQU	$0005
 %INCLUDE "ABI.INC"
 
 	ORG	$0100
-	CALL	CHKHW		; the numbers below hold only on ABI 4
+	CALL	CHKHW		; the numbers below hold only on ABI 5
 	JP	NZ,NOTHW
 	LD	DE,$0A1E	; row 10, column 30
 	LD	HL,PLAIN
@@ -758,8 +761,8 @@ BDOS	EQU	$0005
 ; Write the six characters at HL at row D, column E. Returns the status
 ; in A. Changes F, BC, DE and HL.
 WRITE:	LD	B,6
-	LD	C,HWPUTAT
-	JP	ABIHW		; its RET is this routine's
+	LD	C,TNPUTAT
+	JP	ABICALL		; its RET is this routine's
 
 PLAIN:	DB	"TEC-OS"
 INVERT:	DB	$D4,$C5,$C3	; "TEC" with bit 7 set: reverse images
@@ -775,14 +778,14 @@ bytes, as Chapter 8 says, so `PUTAT` is how a program draws reverse characters
 with no escape sequence. On the PICO9918 the screen ends like this, with the
 second copy in reverse, though a text capture shows the two the same:
 
-<!-- node tools/capture.mjs --card hw.img --board pico --screen B: "A:TAS PLACE" PLACE -->
+<!-- node tools/capture.mjs --card hw.img --board pico --screen B: "TAS PLACE" PLACE -->
 ```text
 
 A>GLCD.SVC
 GLCD.SVC?
 
 A>B:
-B>A:TAS PLACE
+B>TAS PLACE
 PLACE.COM written
 
 B>PLACE
@@ -796,10 +799,10 @@ reached row 11 and left the word in place. On the graphics LCD, whose screen
 has 8 rows, row 10 is below the screen, so `PLACE` writes nothing and reports
 status 0. On the serial terminal it reports status 2:
 
-<!-- node tools/capture.mjs --card hw.img B: "A:TAS PLACE" PLACE -->
+<!-- node tools/capture.mjs --card hw.img B: "TAS PLACE" PLACE -->
 ```text
 A>B:
-B>A:TAS PLACE
+B>TAS PLACE
 PLACE.COM written
 
 B>PLACE
@@ -824,7 +827,7 @@ and to each string in the first row.
 | --- | ---: | ---: |
 | `PUTAT`, the whole string in one call | 495 | 35,100 |
 | BIOS `CONOUT` | 786 | 35,400 |
-| BDOS function 2 | 3,922 | 38,400 |
+| BDOS function 2 | 3,906 | 38,400 |
 
 On the PICO9918 `PUTAT` is about eight times faster than the BDOS. The graphics
 LCD draws each cell pixel by pixel, so nearly all the time goes on the drawing
