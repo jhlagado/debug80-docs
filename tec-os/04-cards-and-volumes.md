@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 19ad916, with the starter card's `TED.COM` from Thorium
 8fcc6ea, with the SHA-256
 `9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -208,7 +208,9 @@ Each file, inside the `components` list, has an entry such as this one:
 A volume in a recipe can have `"readOnly": true`. `tecvol recipe` writes every
 file first and sets the read-only flags last, so a recipe is the way to make a
 read-only volume that holds files. The web page's "New starter card" builds
-its card from the same recipe and checks the same SHA-256s.
+its card from `dist/page.recipe.json`, which `npm run media` also writes. It is
+the same recipe with one more file, `DEMO.COM` on drive A, and the page checks
+the same SHA-256s and that one too.
 
 ## Drives and MOUNT
 
@@ -434,8 +436,13 @@ node tools/tecvol.mjs install my.img /dev/rdiskN --yes
 form and on Linux one such as `/dev/sdb`. As Chapter 1 says, `install`
 overwrites the device from block 0, and it does nothing without `--yes`. The
 card must be at least as large as the container. TEC-OS can't read the card's
-size, so a volume that runs past the end of a smaller card fails with a BDOS
-error when TEC-OS reaches the missing blocks.
+size. On a smaller card a volume that runs past the card's end gives a BDOS
+error when TEC-OS reaches the missing blocks. An older, standard-capacity card
+is the exception. TEC-OS keeps only the low 32 bits of a block's byte address
+on such a card, so a block 4 GiB or more into the container is read and written
+at a lower address with no error, and the write can overwrite the header or
+another volume. The web page can't show either failure, because its card reads zeros and
+drops writes past the end of the image.
 
 The web page's "Open image" loads an image file from the PC into the page's
 card, and "Download image" saves the page's card as one. The same image
@@ -454,10 +461,13 @@ TEC-OS adds no journal. Once a file is closed, its data and its directory
 entry are both on the card, but until then a power cut or a reset can lose it,
 in one of these ways:
 
-- On a volume written through, a cut between the data and the directory leaves
-  new data in allocation blocks the directory doesn't name. The file reads back
-  as it was before, and the blocks are free space again the next time the
-  drive's allocation vector is built.
+- On a volume written through, each record a program writes is on the card at
+  once. A cut between the data and the directory leaves new data in allocation
+  blocks the directory doesn't name, and those blocks are free space again the
+  next time the drive's allocation vector is built. A record written over one
+  the file already had replaces it on the card at once, so after a cut the file
+  holds the new records with the old ones the program hadn't reached. Nothing
+  on the card keeps the old file.
 - On the volume written behind, a change since the last directory write, warm
   boot or `MOUNT` is lost if it is still in the cache. A block TEC-OS has
   already written to make room in a full cache is on the card, and so are the
