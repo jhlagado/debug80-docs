@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 15. The BIOS and the console path
 
-Checked against TEC-OS 4d6eeaa.
+Checked against TEC-OS 60e0768.
 
 The BIOS is the part of a CP/M system written for one machine, and on the TEC-1G
 most of it is the console. That console has a serial port made of two port bits
@@ -55,8 +55,7 @@ every caller goes through the copy. The word at `0001h` points at its warm boot
 entry, `BF03h`, and a program reaches the table the way CP/M 2.2 programs do, by
 taking that word and subtracting 3. The BDOS calls the same copy, since its
 names for the BIOS entries are offsets from `RAMBIOS`
-(`src/cpm/bdos.asm:14-28`). Its function 50, the direct BIOS call of CP/M 3,
-sends functions 0 to 16 through the copy as well (`src/cpm/bdos.asm:132`).
+(`src/cpm/bdos.asm:14-28`).
 
 Because every caller goes through RAM, the table is a set of hooks. A program
 may write its own jump over an entry, to receive every character the BDOS
@@ -65,14 +64,13 @@ program's routine. Cold boot is the only time the table is copied, so warm boot
 leaves a replaced entry in place, as CP/M 2.2's warm boot does
 (`src/boot.asm:50-52`). A program that replaces an entry has to put it back
 before it ends, or the replacement's code in the TPA is called after the
-program has gone. The one jump warm boot writes is in EXPAND 1's page at
-`BF00h`, not in this table, and Chapter 14 describes it.
+program has gone.
 
 ## The IOBYTE and the console mode
 
 CP/M 2.2's IOBYTE, at `0003h`, gives each of four logical devices a field of
 two bits. The two low bits are the console's, `CON:`, and TEC-OS uses them for
-its four consoles (`src/console.asm:1-7`, `src/layout.asm:56-61`):
+its four consoles (`src/console.asm:1-8`, `src/layout.asm:56-61`):
 
 | Value | Device | Input | Output |
 | ---: | --- | --- | --- |
@@ -95,8 +93,9 @@ terminal. With a driver it copies the driver's seven vectors and the screen's
 columns and rows into the workspace, then resets the scroll region and sets the
 mode. Unless a program has claimed the PICO9918, it also restores the display's
 mode, homes the cursor and clears the screen. For `TTY:` or `BAT:` it sets
-`VWID` and `VHGT` at `0048h` to 0, so a program reading them through the ROM
-table's word at `C008h` gets 0: the console has no screen of known size.
+`VWID` and `VHGT` at `0048h` to 0, so the hardware service `INFO` returns 0 for
+the columns and rows: the console has no screen of known size
+(`src/hwsvc.asm:46-56`).
 
 Since `CONSEL` runs at the next console call, a change to the IOBYTE takes
 effect at the next character. `CON TTY` shows this on the web page's board,
@@ -332,28 +331,30 @@ output does not pay for drawing a cursor on every character
 (`src/term.asm:16-17`). The next character of output removes it first
 (`src/term.asm:24`). There is no cursor cell while a wrap is pending.
 
-## The display drivers and ABIGLCD
+## The display drivers and their service
 
 The terminal's code is in the ROM and the drivers for the two displays are on
 the card, so the ROM needs the addresses of each driver's routines. `PICO.SVC`,
-in its three widths, and `GLCD.SVC` each give the ROM a table through `ABIGLCD`,
-the jump at `C012h`, which goes to `GLHOOK` (`src/abi.asm:10`,
-`src/glcd.asm:1-18`). The table is eight words. The first six are the terminal
-vectors `VPUT`, `VGET`, `VCLREOL`, `VREST`, `VRDROW` and `VWRROW`. The seventh is
-for the PICO9918's page functions, and the last word holds the screen's columns
-and rows.
+in its three widths, and `GLCD.SVC` each give the ROM a table through `DRVR`,
+service 12, which goes to `SVDRV` and from there to `GLHOOK`
+(`src/data3.asm:100`, `src/glcd.asm:1-18`). The table is eight words. The
+first six are the terminal vectors `VPUT`, `VGET`, `VCLREOL`, `VREST`, `VRDROW`
+and `VWRROW`. The seventh is for the PICO9918's page functions, and the last
+word holds the screen's columns and rows.
 
-`GLHOOK` takes the mode in `A`, `CMCRT` for the PICO9918 or `CMUC1` for the
-graphics LCD, and the table's address in `HL` (`src/glcd.asm:19-41`). It keeps
-the address in `PIVEC` or `GLVEC`, above the RAM BIOS table, and returns `HL`
-pointing at `LINEBUF`, the buffer that the driver's row routines use. It sets
-carry and changes nothing when there is no matrix keyboard or the display
-already has a table.
+A driver calls the service with the mode in `B`, `CMCRT`, 1, for the PICO9918
+or `CMUC1`, 3, for the graphics LCD, and the table's address in `HL`. `SVDRV`
+passes the mode to `GLHOOK` in `A` (`src/glcd.asm:5-11`). `GLHOOK` keeps the
+address in `PIVEC` or `GLVEC`, above the RAM BIOS table, and returns `HL`
+pointing at `LINEBUF`, the buffer that the driver's row routines use
+(`src/glcd.asm:19-41`). When there is no matrix keyboard or the display already
+has a table, it changes nothing, and the service returns status 1, `TNEBAD`,
+with carry set.
 
-A driver's `REMOVE` calls it with `HL` 0, and `GLHOOK` then drops the display's
-table and sets the mode back to the serial terminal. It also sets `CONACT` to
-`FFh`, so that the next console call selects the console again from the IOBYTE
-(`src/glcd.asm:42-56`).
+A driver's `REMOVE` calls the service with `HL` 0, and `GLHOOK` then drops the
+display's table and sets the mode back to the serial terminal. It also sets
+`CONACT` to `FFh`, so that the next console call selects the console again from
+the IOBYTE (`src/glcd.asm:42-56`).
 
 The seventh vector carries three functions that only the PICO9918's driver
 needs (`src/video.asm:26-45`). That driver has two name tables in VRAM, its two
@@ -367,8 +368,8 @@ scroll or a line insert or delete (`src/term.asm:465`, `src/term.asm:524`). The
 terminal calls them only when the console is the PICO9918 and no program has
 claimed it.
 
-A program claims the PICO9918 through the hardware services, to draw on it
-directly (`src/hwsvc.asm:99-115`). While it is claimed and is the console,
+A program claims the PICO9918 through the hardware service `VIDEO`, number 3,
+to draw on it directly (`src/hwsvc.asm:99-115`). While it is claimed and is the console,
 `VTOWN` reports it and the terminal leaves the display alone: `BCONOUT` drops
 output, and there is no cursor and no page flip (`src/term.asm:533-544`). The
 claim ends with the hardware service's release or at warm boot, when `HWVREL`
@@ -408,4 +409,4 @@ Writing `PICO?` or `GLCD?` sets `CDWRD` in `CONDEV` (`src/lcd.asm:34-39`), and
 `WRDCLR` writes blanks over the row only while that bit is set. A word TEC-OS
 wrote is therefore cleared when a display driver is installed, and a row a
 program wrote is left alone (`src/glcd.asm:110-122`). Programs reach the LCD
-through the hardware services, as Chapter 9 describes.
+through the hardware service `LCD`, number 2, as Chapter 9 describes.
