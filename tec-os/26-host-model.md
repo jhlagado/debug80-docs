@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 26. The host model and the web page
 
-Checked against TEC-OS 718c01b, with `@jhlagado/debug80-runtime` 0.3.1, the
+Checked against TEC-OS ea9c1c0, with `@jhlagado/debug80-runtime` 0.3.1, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -195,7 +195,7 @@ were, as the board's reset button does (`host/machine.mjs:522-582`).
 ## The tests
 
 `npm test` runs every file in `test/` that ends `.test.mjs`, one at a time, with
-Node.js's own test runner (`package.json:17`). There are 38 such files, from
+Node.js's own test runner (`package.json:17`). There are 39 such files, from
 `arith.test.mjs` to `xmove.test.mjs`, each on one part of TEC-OS. Most build
 their machines with `boot` in `test/lib/fixtures.mjs`, which reads the ROM of a
 profile from `build/` and, when the board has a matrix keyboard, puts a display
@@ -290,9 +290,10 @@ prepares the card with `prepareCard` from `host/card.mjs`
 (`web/src/main.mjs:66-83`). `prepareCard` checks that drive A has the display's
 driver file, in the format this ROM loads. If it does, the first line of
 `STARTUP.CMD` becomes that file's name, followed by `GLCD.SVC` on a board with
-the PICO9918. `STARTUP.CMD`'s other lines stay, less their display pieces, and a
-`:` piece that followed a display piece loses its `:` and runs as an ordinary
-line (`host/card.mjs:24-91`). A card that fails the check is left as it is, and
+the PICO9918. `STARTUP.CMD`'s other lines stay, less their display pieces. A
+removed piece passes its own `:` to the piece after it on its line, and
+otherwise a `:` that waited on a removed piece goes, on its line or first on the
+next (`host/card.mjs:24-91`). A card that fails the check is left as it is, and
 the reason goes to the serial terminal with the words `[power on]`. The reason
 is no drive A, a `.DRV` display file from an older TEC-OS, no such driver or a
 driver of another format. The message for an older card names the display's own
