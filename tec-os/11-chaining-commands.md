@@ -7,10 +7,10 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 11. Chaining commands
 
-Checked against TEC-OS 60cfbdc, with the ATOM assembler from the
-repository's `atom-z80` 0.3.7. The starter card's `EDIT.COM` is from Edit
-845d062, and its copy in `dist/files` has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`. Its
+Checked against TEC-OS 4d6eeaa, with the ATOM assembler from the
+repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
+8fcc6ea, and its copy in `dist/files` has the SHA-256
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`. Its
 `TAS.COM` is from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -29,16 +29,16 @@ describes the code behind them.
 after the first is echoed after its own prompt, so the screen reads as if you
 had typed the commands one at a time:
 
-<!-- node tools/capture.mjs "DIR *.CMD!TYPE STARTUP.CMD" "vols!!  ! dir b:!" -->
+<!-- node tools/capture.mjs "DIR *.CMD!TYPE STARTUP.CMD" "mount!!  ! dir b:!" -->
 ```text
 A>DIR *.CMD!TYPE STARTUP.CMD
 STARTUP.CMD 
-1 file, 974K free
+1 file, 984K free
 A>TYPE STARTUP.CMD
 PICO.SVC
 GLCD.SVC
 
-A>vols!!  ! dir b:!
+A>mount!!  ! dir b:!
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
@@ -49,7 +49,7 @@ A>
 
 The part of a line between two `!`, or between a `!` and an end of the line,
 is a *piece*. The second line shows the CCP passing over an empty piece, a
-piece of spaces and a `!` at the end, so `vols!!  ! dir b:!` is two commands. A
+piece of spaces and a `!` at the end, so `mount!!  ! dir b:!` is two commands. A
 line of nothing but spaces and `!` runs nothing. The CCP turns each piece into
 capitals as it takes it to run, but the echo of a piece is as you typed it, so
 `dir b:` stays in lower case on the screen.
@@ -97,14 +97,14 @@ NOSUCH?
 
 A>:DIR *.CMD
 A>DIR *.SVC!:DIR *.CMD
-PICO.SVC     PICO40.SVC   PICO32.SVC   GLCD.SVC    
-4 files, 974K free
+PICO.SVC     GLCD.SVC    
+2 files, 984K free
 A>:DIR *.CMD
 STARTUP.CMD 
-1 file, 974K free
+1 file, 984K free
 A>:DIR *.CMD
 STARTUP.CMD 
-1 file, 974K free
+1 file, 984K free
 A>
 ```
 
@@ -256,9 +256,9 @@ NOTRUN: DB      "Not run",13,10,"$"
 The CCP puts a 0 after the command tail at `0081h`, so the tail is a line ready
 for function 47, with the space before its first word, which the CCP passes
 over. `RUN DIR` therefore runs `DIR`. A line from function 47 takes the place
-of what was left of the line, so in `RUN A:VOLS!DIR` the `DIR` never runs:
+of what was left of the line, so in `RUN A:MOUNT!DIR` the `DIR` never runs:
 
-<!-- node tools/capture.mjs --card chain.img B: "RUN DIR" "RUN A:VOLS!DIR" "RUN NOSUCH!DIR" "RUN" -->
+<!-- node tools/capture.mjs --card chain.img B: "RUN DIR" "RUN A:MOUNT!DIR" "RUN NOSUCH!DIR" "RUN" -->
 ```text
 A>B:
 B>RUN DIR
@@ -266,9 +266,9 @@ B>RUN DIR
 B>DIR
 EXISTS.COM   RUN.COM     
 2 files, 8168K free
-B>RUN A:VOLS!DIR
+B>RUN A:MOUNT!DIR
 
-B>A:VOLS
+B>A:MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
@@ -320,11 +320,11 @@ These events drop what is left of a line:
 After function 47 its own line runs in place of the rest. After a reset TEC-OS
 starts again from the startup file. After the others the CCP prints the prompt
 and waits for a new line. Here the BDOS error for a drive with no volume,
-ended by the key `x`, drops the `VOLS` after it:
+ended by the key `x`, drops the `MOUNT` after it:
 
-<!-- node tools/capture.mjs "@start DIR C:!VOLS" "@key x" -->
+<!-- node tools/capture.mjs "@start DIR C:!MOUNT" "@key x" -->
 ```text
-A>DIR C:!VOLS
+A>DIR C:!MOUNT
 
 Bdos Err On C: Select
 A>
