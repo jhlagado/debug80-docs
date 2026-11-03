@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 7458352, with the ATOM assembler from the repository's
+Checked against TEC-OS 7935507, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
@@ -21,10 +21,9 @@ program with its page zero, and the CCP's RAM and stack.
 ## The CCP in the ROM
 
 The CCP's code is `src/cpm/ccp.asm`. In the ROM that Chapter 12 describes it
-runs from `CCPBAS`, `D7CDh`, to `E157h`, 2,443 bytes, followed directly by the
+runs from `CCPBAS`, `D82Dh`, to `E28Eh`, 2,658 bytes, followed directly by the
 BDOS. Its messages and the names of its built-in commands are in the ROM's
-data block (`src/data3.asm:7-71`), except for `TYPE`, whose name is the
-block's first five bytes (`src/data.asm:6-9`). What the CCP changes has to be
+data block (`src/text.asm:12-78`). What the CCP changes has to be
 in RAM, so its variables, buffers and stack are there, from `CCPRAM`, `BCEBh`,
 to `BE76h` (`src/ram.asm:64-128`).
 
@@ -40,10 +39,11 @@ IOBYTE and the top of the TPA at `0007h`. It also sets the BDOS's flags
 `HFLAG` and `WRFLAG`, and it reads and sets the return code `PRGCODE`
 (`src/cpm/ccp.asm:52-53`, `src/cpm/ccp.asm:86-87`, `src/cpm/ccp.asm:128`,
 `src/cpm/ccp.asm:159`, `src/cpm/ccp.asm:356`). It calls a few of TEC-OS's
-routines directly: startup's `STBOOT` and `STLINE`, the service loader and the
-service commands' routines `CMDSVC` and `SVCUNL`. The others are `GLCLD` for
-`CON UC1` and the BDOS's division, `DIV16`
-(`src/cpm/ccp.asm:260-263`, `src/cpm/ccp.asm:1133`, `src/cpm/ccp.asm:1167`).
+routines directly: the service loader through `SVCGO`, `SVCUNL` for `UNLOAD`,
+`GLCLD` for `CON UC1` and the BDOS's division, `DIV16`
+(`src/cpm/ccp.asm:274`, `src/cpm/ccp.asm:1133`, `src/cpm/ccp.asm:1167`,
+`src/cpm/ccp.asm:808`). Startup's `STBOOT` and `STLINE` and the `SERVICES`
+command's `CMDSVC` are in `ccp.asm` itself (`src/cpm/ccp.asm:1588-1719`).
 
 ## The entry from boot
 
@@ -190,8 +190,8 @@ name and any `?` (`src/cpm/ccp.asm:1470-1498`).
 
 ## The built-in commands
 
-Each built-in is a routine in `ccp.asm` or, for the service commands, in
-`svc.asm`:
+Each built-in is a routine in `ccp.asm`, and the one for `UNLOAD` calls
+`SVCUNL` in `loader.asm`:
 
 | Command | Routine | Source |
 | --- | --- | --- |
@@ -519,7 +519,7 @@ clearing because each use parses them in full (`src/ram.asm:68-70`). From
 | `BE4Ch–BE58h` | 13 | `STKGUARD` | the stack guard, `A5h` in each byte |
 | `BE59h–BE76h` | 30 | `CSTKBAS` | the CCP's stack, up to `CSTKTOP` at `BE77h` |
 
-The addresses are those of the build at 7458352. The guard is 43 bytes less the
+The addresses are those of the build at 7935507. The guard is 43 bytes less the
 stack's 30 (`src/ram.asm:119-124`), and warm boot fills it with `A5h`
 (`src/boot.asm:274-278`), so a guard byte that is no longer `A5h` shows that
 the stack has run past its bottom. `test/stacks.test.mjs` checks the guard
