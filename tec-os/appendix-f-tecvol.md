@@ -7,9 +7,9 @@ nav_group: "Appendices"
 
 # Appendix F. `tecvol`
 
-Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
-04ec086, with the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and its
+Checked against TEC-OS 7458352, with the starter card's `TED.COM` from Thorium
+128edb7, with the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -84,7 +84,10 @@ or the card out, and press reset after putting it back.
 `--align N` places each volume at a multiple of `N` blocks, which must be a
 multiple of 8. The default is 2,048, 1 MiB (`tools/lib/container.mjs:14`,
 `tools/lib/container.mjs:89-99`). `--drives N`, 1 to 4, records in the header
-the number of drives TEC-OS is to set up at cold boot. With `--drives`, or
+the number of drives TEC-OS is to set up at cold boot. Each `N` is a whole
+number in decimal, from 1 to 16,777,215 for `--align` and from 1 to 4 for
+`--drives`. Any other `N` is a mistake in the command line, found before the
+image is made (`tools/tecvol.mjs:33-37`, `tools/tecvol.mjs:50-51`). With `--drives`, or
 with more than 8 volumes, the card is format 1.1, and otherwise 1.0
 (`tools/lib/container.mjs:79-80`). Every payload is filled with `E5h`, so each
 volume starts as an empty CP/M disk. One volume must be on drive A.
@@ -157,7 +160,7 @@ node tools/tecvol.mjs dir dist/starter.img A
  0 SAMPLE.ASM       4480
  0 STARTUP.CMD       128
  0 TAS.COM         10368
- 0 TED.COM         11904
+ 0 TED.COM         12032
 ```
 
 `MOUNT.COM` is 671 bytes on the PC and six records on the card.
@@ -277,8 +280,8 @@ sha256sum build/fresh.img dist/starter.img
 ```
 
 ```text
-4eb807c1f9bc47f14b172abd9c239e5e981167acde64c09fe7ed85d3abfd786d  build/fresh.img
-4eb807c1f9bc47f14b172abd9c239e5e981167acde64c09fe7ed85d3abfd786d  dist/starter.img
+0764d1b722d506362a547b3da58fe15eed4ca9551a5e5de1d9938ba8ad4fd1b9  build/fresh.img
+0764d1b722d506362a547b3da58fe15eed4ca9551a5e5de1d9938ba8ad4fd1b9  dist/starter.img
 ```
 
 The two images are the same to the byte: the volumes' places, the `E5h` fill,
