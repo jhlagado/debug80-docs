@@ -318,9 +318,9 @@ from the port, so no reset begins with `CDWRD` set (`src/console.asm:30`,
 
 The web page sets the display and the width from its "Display" and "ROM"
 controls, and it keeps the card's `PICO.SVC` and first lines in step with them.
-`powerOn` runs the preparation in its turn, one at a time with a copy of files
-onto the card, as Chapter 25 describes (`web/src/main.mjs:67-80`). At each
-power-on with the PICO9918 it fetches the page's recipe and passes it to
+`powerOn` queues the preparation, `powerOnNow`, to take its turn with any copy
+of files onto the card, as Chapter 25 describes (`web/src/main.mjs:67-80`). At
+each power-on with the PICO9918, `powerOnNow` fetches the page's recipe and passes it to
 `widthDrivers` (`web/src/main.mjs:82-87`). The recipe's `widths`
 names three of the page's files, `PICO.SVC`, `PICO40.SVC` and `PICO32.SVC`, and
 `widthDrivers` fetches each and checks it against the SHA-256 there
