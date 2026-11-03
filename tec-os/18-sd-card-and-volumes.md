@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. The SD card and the volumes
 
-Checked against TEC-OS 718c01b.
+Checked against TEC-OS ea9c1c0.
 
 The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
@@ -239,8 +239,10 @@ tracks, and a G1M volume has 128 tracks.
 `READ` maps the record and copies it to the DMA address through the block
 cache, as Chapter 19 describes. `WRITE` has more to do
 (`src/bios.asm:188-300`). After mapping it rejects a write to a read-only
-volume before anything changes, with error 1, which the BDOS reports, for a
-file's data, as `Bad Sector` (`src/cpm/bdos.asm:897-904`).
+volume before anything changes, with error 1 (`src/bios.asm:204-208`). A change
+made through the BDOS doesn't get this far, since the BDOS's own `R/O` error
+comes first (`src/cpm/bdos.asm:2415-2427`), so only a program that calls the
+BIOS itself receives the error.
 
 A write to the directory can change which blocks are in use, so `WRITE` then
 tests for one of the directory's blocks, the first 32 blocks of a G8M volume
