@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS 7458352.
+Checked against TEC-OS 7935507.
 
 Chapter 1's first boot ran two commands that nobody typed, and on the web
 page's board the first of them moved the console to the PICO9918. This chapter
