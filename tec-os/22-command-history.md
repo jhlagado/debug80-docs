@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 22. Command history
 
-Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
-04ec086, whose copy in `dist/files` has the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and its
+Checked against TEC-OS 7458352, with the starter card's `TED.COM` from Thorium
+128edb7, whose copy in `dist/files` has the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
