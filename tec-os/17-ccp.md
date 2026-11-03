@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 1f9542d, with the ATOM assembler from the repository's
+Checked against TEC-OS 7458352, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from Thorium
-04ec086, whose copy in `dist/files` has the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`.
+128edb7, whose copy in `dist/files` has the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
 
 The CCP prints the prompt, reads a command line and carries it out, as Chapter
 3 describes from the keyboard's side. This chapter describes the CCP's code:
@@ -21,7 +21,7 @@ program with its page zero, and the CCP's RAM and stack.
 ## The CCP in the ROM
 
 The CCP's code is `src/cpm/ccp.asm`. In the ROM that Chapter 12 describes it
-runs from `CCPBAS`, `D7A3h`, to `E107h`, 2,405 bytes, followed directly by the
+runs from `CCPBAS`, `D7CDh`, to `E157h`, 2,443 bytes, followed directly by the
 BDOS. Its messages and the names of its built-in commands are in the ROM's
 data block (`src/data3.asm:7-71`), except for `TYPE`, whose name is the
 block's first five bytes (`src/data.asm:6-9`). What the CCP changes has to be
@@ -150,9 +150,10 @@ file name with no wildcard (`src/cpm/ccp.asm:264-266`). The type selects what
 follows. A type of `SVC` installs a service through `SVCGO`
 (`src/cpm/ccp.asm:267-276`, `src/glcd.asm:83-108`), which Chapter 20 describes.
 Any other type, or none, is replaced by `COM` (`src/cpm/ccp.asm:277-282`), so
-`MOUNT.TXT` runs `MOUNT.COM`. A command that names no drive runs a program
-from drive A when the current drive has no such file, as the section on
-loading below describes.
+`MOUNT.TXT` runs `MOUNT.COM`. A program is looked for in user 0 after the
+current user, and a command that names no drive runs a program from drive A
+when the current drive has neither, as the section on loading below
+describes.
 
 A command that fails ends at `BADCMD`, which prints the word from `CMDSTRT` up
 to its first space with a question mark after it, then a new line
@@ -340,13 +341,18 @@ BIG?
 B>
 ```
 
-`NOTDRIVE` calls `LOADCOM` for `NAME.COM` on the drive the command names, or on
-the current drive (`src/cpm/ccp.asm:277-285`), and the zero flag separates the
-two failures. A file that is there but too large is a bad command at once.
-When there is no such file, the CCP looks on drive A, but only when the command
-names no drive and the current drive is not A. It sets the FCB's drive byte to
-1, for A, and calls `LOADCOM` again (`src/cpm/ccp.asm:286-295`). So from drive
-B a plain `MOUNT` runs `A:MOUNT.COM`, and `B:MOUNT` looks on B alone:
+`NOTDRIVE` calls `LOADA` for `NAME.COM` on the drive the command names, or on
+the current drive (`src/cpm/ccp.asm:277-285`). `LOADA` calls `LOADCOM` in the
+current user and, when there is no such file and the user is not 0, again in
+user 0, with function 32 before and after the second call. The file needs no
+system attribute, and the user is put back before `LOADA` returns
+(`src/cpm/ccp.asm:361-387`). The zero flag separates the two failures. A file
+that is there but too large is a bad command at once. When there is no such
+file, the CCP looks on drive A, but only when the command names no drive and
+the current drive is not A. It sets the FCB's drive byte to 1, for A, and
+calls `LOADA` again, so A's current user comes before its user 0
+(`src/cpm/ccp.asm:286-295`). So from drive B a plain `MOUNT` runs
+`A:MOUNT.COM`, and `B:MOUNT` looks on B alone:
 
 <!-- node tools/capture.mjs B: MOUNT B:MOUNT -->
 ```text
@@ -358,6 +364,29 @@ B>MOUNT
 B>B:MOUNT
 B:MOUNT?
 
+B>
+```
+
+Under user 3 on the card above, `ARGS` runs from user 0 of drive B and `MOUNT`
+from user 0 of drive A, while `DIR` lists user 3, which holds no file:
+
+<!-- node tools/capture.mjs --card build/ccp.img B: "USER 3" ARGS MOUNT B:MOUNT DIR -->
+```text
+A>B:
+B>USER 3
+B>ARGS
+0            
+0            
+[]
+B>MOUNT
+00 SYSTEM      G1M A:
+01 WORK        G8M B:
+
+B>B:MOUNT
+B:MOUNT?
+
+B>DIR
+NO FILE
 B>
 ```
 
@@ -490,7 +519,7 @@ clearing because each use parses them in full (`src/ram.asm:68-70`). From
 | `BE4Ch–BE58h` | 13 | `STKGUARD` | the stack guard, `A5h` in each byte |
 | `BE59h–BE76h` | 30 | `CSTKBAS` | the CCP's stack, up to `CSTKTOP` at `BE77h` |
 
-The addresses are those of the build at 1f9542d. The guard is 43 bytes less the
+The addresses are those of the build at 7458352. The guard is 43 bytes less the
 stack's 30 (`src/ram.asm:119-124`), and warm boot fills it with `A5h`
 (`src/boot.asm:273-277`), so a guard byte that is no longer `A5h` shows that
 the stack has run past its bottom. `test/stacks.test.mjs` checks the guard
