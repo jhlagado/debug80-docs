@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS 7935507, with the starter card's `TED.COM` from
+Checked against TEC-OS 626ee41, with the starter card's `TED.COM` from
 Thorium 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`; the
 timings below were measured on that card.
@@ -100,13 +100,13 @@ The diagnostic prompt's `R` jumps back to `COLDRT`, step 7 (`src/boot.asm:440-44
 `src/boot.asm:48-50`), so a retry clears the LCD, starts the card again and
 mounts it, without clearing the memory or printing the banner a second time.
 
-On the starter card with the serial board, cold boot takes 1,285,483 T-states,
+On the starter card with the serial board, cold boot takes 1,286,306 T-states,
 about 0.32 seconds, from the first instruction to the CCP's entry, measured on
 the host model. Three steps take most of it. The banner is 25 characters at
 9,448 T-states each through `CONOUT`, the read of the container's block 0 takes
 219,144 T-states and `MEMINIT` takes about 347,000, most of it the clearing of
 EXPAND 1. The startup file's commands then run before the first prompt, so the
-CCP's first call of `CONIN` at that prompt comes 8,838,438 T-states after reset.
+CCP's first call of `CONIN` at that prompt comes 8,844,627 T-states after reset.
 
 ## The RAM check
 
