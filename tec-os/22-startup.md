@@ -312,8 +312,8 @@ names three of the page's files, `PICO.SVC`, `PICO40.SVC` and `PICO32.SVC`, and
 gets no drivers and the page reports that the drivers couldn't be fetched.
 Otherwise `prepareCard` writes the driver at the chosen width to drive A as
 `PICO.SVC` when the card has none, has one of the three pinned builds at any
-width or has one of another format. It compares the whole file with each build,
-padded to whole records (`host/card.mjs:47`). Any other `PICO.SVC` is the card
+width or has one of another format. It compares the build's bytes and the file's length in whole records with
+each build (`host/card.mjs:47`). Any other `PICO.SVC` is the card
 owner's build, so it stays, and the note `This card's own PICO.SVC is kept, at
 the width it was built for.` goes to the serial terminal. `prepareCard` writes
 nothing to a card with no drive A or with an older TEC-OS's `.DRV` files
@@ -342,7 +342,7 @@ remaining lines, and nothing is written if that equals the old text
 (`host/card.mjs:127-139`). The file has no line for the other display. On the
 page's board, which has both, a `GLCD.SVC` line after `PICO.SVC` would only give
 way and print `GLCD.SVC?`, and `CON UC1` loads `GLCD.SVC` itself when it is
-wanted (`test/pico.test.mjs:816-827`, `src/cpm/ccp.asm:1133-1135`).
+wanted (`src/cpm/ccp.asm:1133-1135`).
 
 The preparation can change or stop on a card that its messages say it leaves
 alone. A failed fetch gives the message that the card is left as it is

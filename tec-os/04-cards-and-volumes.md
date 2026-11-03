@@ -208,8 +208,8 @@ Each file, inside the `components` list, has an entry such as this one:
 A volume in a recipe can have `"readOnly": true`. `tecvol recipe` writes every
 file first and sets the read-only flags last, so a recipe is the way to make a
 read-only volume that holds files. The web page's "New starter card" builds
-its card from `dist/page.recipe.json`, which `npm run media` also writes. It is
-the same recipe with one more file, `DEMO.COM` on drive A, and the page checks
+its card from `dist/page.recipe.json`, which `npm run media` also writes. It has
+the same volumes and files with one more, `DEMO.COM` on drive A, and the page checks
 the same SHA-256s and that one too.
 
 ## Drives and MOUNT
@@ -441,8 +441,8 @@ error when TEC-OS reaches the missing blocks. An older, standard-capacity card
 is the exception. TEC-OS keeps only the low 32 bits of a block's byte address
 on such a card, so a block 4 GiB or more into the container is read and written
 at a lower address with no error, and the write can overwrite the header or
-another volume. The web page can't show either failure, because its card reads zeros and
-drops writes past the end of the image.
+another volume. The web page can't show either failure: it refuses an image smaller than its
+container (`web/src/main.mjs:527`), and its card is high-capacity.
 
 The web page's "Open image" loads an image file from the PC into the page's
 card, and "Download image" saves the page's card as one. The same image

@@ -52,7 +52,8 @@ uses it (`src/layout.asm:17`). The matrix keyboard's Caps key toggles bit 7 in
 The latch moves `8000h–BFFFh` from one half to the other, so anything TEC-OS
 must reach while EXPAND 1 is in view has to be outside the window. `LATCHV` is
 the one such byte: the routines that put EXPAND 1 in view, such as the cache's
-lookup above, read no byte outside EXPAND 1 but `LATCHV` while it is in view.
+lookup above, read none of TEC-OS's own state outside EXPAND 1 but `LATCHV` while it is in
+view. `MOVE` also copies a program's bytes below `8000h` then (`src/xmove.asm:88-95`).
 `LATCHV` is in page zero with the rest of TEC-OS's fixed state.
 
 ## Page zero
@@ -82,7 +83,7 @@ vectors, as Chapter 14 describes.
 
 The bytes `0040h–004Fh` are the sixteen that CP/M 2.2 leaves to the BIOS, and
 TEC-OS keeps sixteen bytes of its state there, of which only `LATCHV` has to be
-in view whatever the window shows (`src/layout.asm:35-52`):
+in view whatever the window shows (`src/layout.asm:37-52`):
 
 | Address | Name | Contents |
 | --- | --- | --- |
