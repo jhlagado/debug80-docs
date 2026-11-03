@@ -7,9 +7,9 @@ nav_group: "Appendices"
 
 # Appendix F. `tecvol`
 
-Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
-845d062, whose copy in `dist/files` has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
+Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
+8fcc6ea, with the SHA-256
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -149,22 +149,15 @@ node tools/tecvol.mjs dir dist/starter.img A
 ```
 
 ```text
- 0 DEMO.COM         1280
- 0 EDIT.COM         7936
  0 GLCD.SVC         1664
- 0 MOUNT.COM         512
+ 0 MOUNT.COM         768
  0 PICO.SVC         1408
- 0 PICO32.SVC       1408
- 0 PICO40.SVC       1408
- 0 PROBE.COM        1024
- 0 README.TXT       1280
  0 STARTUP.CMD       128
  0 TAS.COM         10368
- 0 TERM.COM          128
- 0 VOLS.COM          384
+ 0 TED.COM         11904
 ```
 
-`TERM.COM` is 95 bytes on the PC and one record on the card.
+`MOUNT.COM` is 670 bytes on the PC and six records on the card.
 
 ## put
 
@@ -186,8 +179,8 @@ attribute and `--sys` its system attribute. `--user N` puts it in user area
 ```sh
 printf 'hello\nworld\n' > build/hello.txt
 node tools/tecvol.mjs put build/my.img A build/hello.txt --text
-node tools/tecvol.mjs put build/my.img A dist/files/VOLS.COM
-node tools/tecvol.mjs put build/my.img B dist/files/TERM.COM --user 3
+node tools/tecvol.mjs put build/my.img A dist/files/MOUNT.COM
+node tools/tecvol.mjs put build/my.img B dist/files/TAS.COM --user 3
 ```
 
 A copy to the read-only volume fails:
@@ -224,16 +217,16 @@ world
 mistake in the command line, with exit status 2.
 
 ```sh
-node tools/tecvol.mjs era build/my.img B TERM.COM
-node tools/tecvol.mjs era build/my.img B TERM.COM --user 3
+node tools/tecvol.mjs era build/my.img B TAS.COM
+node tools/tecvol.mjs era build/my.img B TAS.COM --user 3
 ```
 
 ```text
-tecvol: TERM.COM not found
+tecvol: TAS.COM not found
 usage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/tecvol.mjs)
 ```
 
-The first command searched user area 0, which has no `TERM.COM`. The second
+The first command searched user area 0, which has no `TAS.COM`. The second
 erased the file from user area 3 and printed nothing.
 
 ## recipe
@@ -261,8 +254,8 @@ sha256sum build/fresh.img dist/starter.img
 ```
 
 ```text
-3e9a80d6c1d733ef6b39768329da760cfc81c5030d562738d458b023f89929c5  build/fresh.img
-3e9a80d6c1d733ef6b39768329da760cfc81c5030d562738d458b023f89929c5  dist/starter.img
+915684d55cbb2c445cc26a337d6837c361afd10fbe2b579a1f1486c8ad1ff188  build/fresh.img
+915684d55cbb2c445cc26a337d6837c361afd10fbe2b579a1f1486c8ad1ff188  dist/starter.img
 ```
 
 The two images are the same to the byte: the volumes' places, the `E5h` fill,
@@ -297,26 +290,26 @@ node tools/tecvol.mjs dir build/my.img A
 
 ```text
  0 HELLO.TXT         128
- 0 VOLS.COM          384
+ 0 MOUNT.COM         768
 ```
 
 The card boots with its two drives, and the text file reads back with TEC-OS's
 `TYPE`:
 
-<!-- node tools/capture.mjs --card build/my.img DIR "TYPE HELLO.TXT" VOLS -->
+<!-- node tools/capture.mjs --card build/my.img DIR "TYPE HELLO.TXT" MOUNT -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
 A>DIR
-HELLO.TXT    VOLS.COM    
+HELLO.TXT    MOUNT.COM   
 2 files, 1012K free
 A>TYPE HELLO.TXT
 hello
 world
 
-A>VOLS
+A>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 02 ARCHIVE     G1M R/O
@@ -325,4 +318,5 @@ A>
 ```
 
 The card has no `STARTUP.CMD`, so no lines follow the volumes before the first
-prompt. `VOLS` lists all three volumes, `ARCHIVE` on no drive.
+prompt. `MOUNT` with no argument lists all three volumes, `ARCHIVE` on no
+drive.
