@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 16. The BDOS
 
-Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -25,7 +25,7 @@ then covers the BDOS errors, the three functions whose meanings come from CP/M
 TEC-OS's BDOS comes from Portable CP/M, an implementation of the documented
 CP/M 2.2 interface that uses no Digital Research source
 (`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the
-debug80 build (Chapter 12) it runs from `E0F5h`, `BDOSBAS`, to `F039h`, 3,909
+debug80 build (Chapter 12) it runs from `E111h`, `BDOSBAS`, to `F055h`, 3,909
 bytes of the ROM. Its table of functions and its error messages are in the
 ROM's data block (`src/data3.asm:73-90`). None of it can be patched.
 
@@ -55,9 +55,10 @@ while no key is waiting (`src/console.asm:104-108`).
 
 ## The entry
 
-The jump at `0005h` leads to a jump at an address of the form `xx06h` below
-the allocation vectors, or to a service's jump that leads on to it, as Chapter
-13 describes (`src/vol.asm:570-575`, `src/boot.asm:219-231`). That jump goes
+The jump at `0005h` leads to the BDOS entry jump directly below the allocation
+vectors or, with a service in, to the same jump at the start of the lowest
+service's page, as Chapter 20 describes (`src/vol.asm:570-574`,
+`src/boot.asm:219-231`, `src/svc.asm:198-201`). That jump goes
 to `BENTRY` (`src/cpm/bdos.asm:79-117`).
 
 `BENTRY` saves the caller's stack pointer in `OLDSP`, moves to the BDOS's own
