@@ -70,7 +70,7 @@ program has gone.
 
 CP/M 2.2's IOBYTE, at `0003h`, gives each of four logical devices a field of
 two bits. The two low bits are the console's, `CON:`, and TEC-OS uses them for
-its four consoles (`src/console.asm:1-8`, `src/layout.asm:56-61`):
+its four consoles (`src/console.asm:1-8`, `src/layout.asm:58-63`):
 
 | Value | Device | Input | Output |
 | ---: | --- | --- | --- |
@@ -400,7 +400,7 @@ drives A and B on rows 1 and 2. Drives C and D have no row
 Row 3 is for one of three words that TEC-OS shows when a board may have no
 terminal to show a message on. `CARD?` appears at the diagnostic prompt
 (`src/diag.asm:7-8`). `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`
-(`src/cpm/ccp.asm:1137`, `src/glcd.asm:57-74`). `PICO?` appears when a board
+(`src/cpm/ccp.asm:1139`, `src/glcd.asm:57-74`). `PICO?` appears when a board
 with a PICO9918 and the matrix keyboard reaches its first prompt with no display
 driver
 (`src/svc.asm:492-493`).

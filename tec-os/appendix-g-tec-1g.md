@@ -87,7 +87,7 @@ board. The Protect and Expand switches are not read.
 The system latch at port `FFh` can be written but, on the board's documents,
 not read, so TEC-OS keeps a copy of the last value written at `0040h`,
 `LATCHV`, and builds each new value from the copy (`src/layout.asm:13`,
-`src/layout.asm:34`). Its bits:
+`src/layout.asm:36`). Its bits:
 
 | Bit | Value | Name | TEC-OS's use |
 | ---: | ---: | --- | --- |
@@ -174,8 +174,8 @@ Every wait for the card has a limit, and a card that doesn't answer gives one
 of the error codes of Chapter 23 and Appendix D (`src/sd.asm:4-17`). When a
 block goes to or from the block cache, the transfer loop runs with EXPAND 1 in
 view, writing the latch before the loop and its copy back after
-(`src/sd.asm:259-263`, `src/sd.asm:357-358`, `src/sd.asm:365-368`,
-`src/sd.asm:427-428`). `docs/diagnostics.md` gives the cost of a block read
+(`src/sd.asm:273-277`, `src/sd.asm:371-372`, `src/sd.asm:379-382`,
+`src/sd.asm:441-442`). `docs/diagnostics.md` gives the cost of a block read
 with the same driver in the diagnostics ROM as 354,216 T-states and 678 for
 each wait for the card, about 89 ms at 4 MHz, and test T20 measures it on a
 board.

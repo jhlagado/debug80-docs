@@ -40,25 +40,25 @@ tecvol install IMAGE DEVICE --yes
 ```
 
 The options may come anywhere after the command, and an unknown option is an
-error (`tools/tecvol.mjs:33-50`). Every command but `create` and `recipe`
+error (`tools/tecvol.mjs:33-54`). Every command but `create` and `recipe`
 opens an existing image and checks it as a container first, with the checks
-Appendix E lists. An image that fails is not used (`tools/tecvol.mjs:60-63`).
+Appendix E lists. An image that fails is not used (`tools/tecvol.mjs:64-67`).
 A command that changes an image checks the result as a container, writes it to
 a temporary file beside the image and renames that file over the image,
 so a failure leaves the image as it was (`tools/tecvol.mjs:17-19`,
-`tools/tecvol.mjs:52-58`).
+`tools/tecvol.mjs:56-62`).
 
 `DRIVE` names a volume by its drive letter, with or without a colon, by its
 label or by its id, tried in that order (`tools/lib/container.mjs:201-209`). A
 volume on no drive is reached by its label or id. `--user N` selects user area
 `N`, 0 to 15. Without it `put`, `get` and `era` use user area 0, and `dir`
-lists every user area (`tools/tecvol.mjs:94`, `tools/tecvol.mjs:123`).
+lists every user area (`tools/tecvol.mjs:98`, `tools/tecvol.mjs:127`).
 
 For a mistake in the command line, `tecvol` prints the reason and a line of
 usage and ends with exit status 2. For any other failure, such as a bad
 container, a full volume or a missing file, it prints `tecvol: ` and the
 reason and ends with exit status 1 (`tools/tecvol.mjs:27-31`,
-`tools/tecvol.mjs:179-184`).
+`tools/tecvol.mjs:183-188`).
 
 `tecvol` and TEC-OS must never change the same card at the same time
 (`tools/tecvol.mjs:18-19`). TEC-OS holds each drive's map of free space in
@@ -69,9 +69,9 @@ or the card out, and press reset after putting it back.
 ## create
 
 `create IMAGE --volume SPEC ...` makes a new image
-(`tools/tecvol.mjs:96-101`). It fails if the image already exists. Each
+(`tools/tecvol.mjs:100-105`). It fails if the image already exists. Each
 `--volume` adds one volume, in the order given, from a spec of the form
-`GEOMETRY:LABEL:DRIVE[:ro][:wb]` (`tools/tecvol.mjs:72-76`):
+`GEOMETRY:LABEL:DRIVE[:ro][:wb]` (`tools/tecvol.mjs:76-80`):
 
 - `GEOMETRY` is `G1M` or `G8M`.
 - `LABEL` is up to 11 characters, put in capitals, and labels must differ.
@@ -102,7 +102,7 @@ node tools/tecvol.mjs create build/my.img --volume G1M:SYSTEM:A --volume G8M:WOR
 volumes, with the number of drives a 1.1 card gives, and then one line for
 each volume: its drive or `-`, its label, its id, its geometry, its start
 block, `rw` or `ro`, `wb` for a volume written behind, its number of files and
-its free bytes (`tools/tecvol.mjs:102-119`). Under a volume whose CP/M
+its free bytes (`tools/tecvol.mjs:106-123`). Under a volume whose CP/M
 directory has a fault, such as a block given to two files, it prints a line
 for each fault, starting `problem:` (`tools/lib/cpmfs.mjs:224-251`).
 
@@ -139,7 +139,7 @@ tecvol: header checksum mismatch
 ## dir
 
 `dir IMAGE [DRIVE]` lists a volume's files, drive A's by default, one line
-each: the user area, the name and the size (`tools/tecvol.mjs:120-127`). The
+each: the user area, the name and the size (`tools/tecvol.mjs:124-131`). The
 size is in whole records, 128 bytes each, since CP/M records no size more
 exact. `R/O` and `SYS` follow a file with those attributes. The starter card's
 drive A:
@@ -162,7 +162,7 @@ node tools/tecvol.mjs dir dist/starter.img A
 ## put
 
 `put IMAGE DRIVE FILE [CPMNAME]` copies a file from the PC to a volume
-(`tools/tecvol.mjs:128-136`). The name on the card is `CPMNAME`, or the PC
+(`tools/tecvol.mjs:132-140`). The name on the card is `CPMNAME`, or the PC
 file's own name in capitals. It must be a CP/M name: up to 8 characters, then
 optionally a full stop and up to 3 (`tools/lib/cpmfs.mjs:15-20`). A file of
 the same name in the same user area is replaced. The copy fails if the volume
@@ -197,7 +197,7 @@ tecvol: volume is read-only
 
 `get IMAGE DRIVE CPMNAME [OUTFILE]` copies a file from a volume to the PC,
 into `OUTFILE`, or to the standard output with none
-(`tools/tecvol.mjs:137-146`). Without `--text` the copy is every record,
+(`tools/tecvol.mjs:141-150`). Without `--text` the copy is every record,
 padding included. With `--text` it stops at the first `^Z` and turns each CR
 LF into a line feed (`tools/lib/cpmfs.mjs:123-142`).
 
@@ -213,7 +213,7 @@ world
 ## era
 
 `era IMAGE DRIVE CPMNAME` erases a file from one user area, 0 or the one
-`--user` gives (`tools/tecvol.mjs:147-154`). A name not found there is a
+`--user` gives (`tools/tecvol.mjs:151-158`). A name not found there is a
 mistake in the command line, with exit status 2.
 
 ```sh
@@ -232,26 +232,26 @@ erased the file from user area 3 and printed nothing.
 ## recipe
 
 `recipe RECIPE.json IMAGE` builds a card from a recipe, a JSON file that lists
-the volumes and the files to put on them (`tools/tecvol.mjs:155-161`).
+the volumes and the files to put on them (`tools/tecvol.mjs:159-165`).
 `npm run media` writes the starter card's recipe as `dist/starter.recipe.json`
-and builds `dist/starter.img` from it (`tools/media.mjs:208-228`). It also
+and builds `dist/starter.img` from it (`tools/media.mjs:212-232`). It also
 writes the web page's recipe, `dist/page.recipe.json`, which has the
 starter card's volumes and components with one more, `DEMO.COM` on drive A,
 and its own `id`, `name` and `instruction`
-(`tools/media.mjs:230-243`). A recipe has the schema `tecos-file-recipe-v1`, a
+(`tools/media.mjs:234-247`). A recipe has the schema `tecos-file-recipe-v1`, a
 list of `volumes` and a list of `components`, each with `files`. Each volume is
 in `create`'s terms: a geometry, a label, a drive and `readOnly` or
 `writeBehind`. Each file has a name, a `url`, a drive, a size in `bytes`, a
 `sha256` and optionally a user area (`tools/lib/recipe.mjs:13-26`). Both of
 `npm run media`'s recipes also have `widths`, which gives the `url` and
 `sha256` of the PICO9918's driver built for each width, under the keys `80`,
-`40` and `32` (`tools/media.mjs:195-201`, `tools/media.mjs:215`). `tecvol`
+`40` and `32` (`tools/media.mjs:195-201`, `tools/media.mjs:219`). `tecvol`
 doesn't read it. The web page fetches those drivers at power-on, as
 [Chapter 21](21-startup.md#the-web-page-s-rewrite) describes.
 
 `tecvol` reads a file's `url` as a web address if it starts `http://` or
 `https://`, and otherwise as a path from the recipe's own folder
-(`tools/tecvol.mjs:78-88`). It checks each file's size and SHA-256 against the
+(`tools/tecvol.mjs:82-92`). It checks each file's size and SHA-256 against the
 recipe and stops at the first that differs. The read-only flags go on last,
 after every file is written (`tools/lib/recipe.mjs:27-34`). The web page
 builds its "New starter card" from its own recipe with the same function.
@@ -273,7 +273,7 @@ PC.
 ## install
 
 `install IMAGE DEVICE --yes` writes the image to a device, from its first
-block (`tools/tecvol.mjs:162-173`). It checks the image as a container and
+block (`tools/tecvol.mjs:166-177`). It checks the image as a container and
 writes it whole, over whatever the device held. Without `--yes` it stops with
 a usage error.
 

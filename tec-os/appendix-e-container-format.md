@@ -256,7 +256,7 @@ requires its two high bytes to be 0 (`src/vol.asm:161-175`).
 ## The cost in memory
 
 TEC-OS's workspace has a 16-byte disk parameter header for each of the four
-drives (`src/ram.asm:30`, `src/layout.asm:83`). The allocation vectors, one
+drives (`src/ram.asm:30`, `src/layout.asm:85`). The allocation vectors, one
 bit for each allocation block of a volume, go below the workspace. `ALVINIT`
 sizes the vectors at cold boot (`src/vol.asm:502-562`). On a 1.1 card that
 gives N drives, each of drives A to the Nth gets 256 bytes, enough for a G8M

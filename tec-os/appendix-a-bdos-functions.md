@@ -22,7 +22,7 @@ in `A` as well and the high byte in `B` (`src/cpm/bdos.asm:117-128`). A
 function that returns a byte has 0 in `H` and `B`. One that returns nothing
 returns 0. No other register is kept, as in CP/M 2.2. The call uses two bytes
 of the program's stack, for its return address: the BDOS runs on its own
-54-byte stack (`src/cpm/bdos.asm:79-82`, `src/layout.asm:77`).
+54-byte stack (`src/cpm/bdos.asm:79-82`, `src/layout.asm:79`).
 
 A function that takes an FCB, a 36-byte file control block whose layout
 Chapter 16 gives, works on the drive in its first byte: 0 for the default

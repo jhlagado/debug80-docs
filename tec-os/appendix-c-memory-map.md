@@ -22,7 +22,7 @@ volume on drive A and a G8M volume on drive B, and no service installed.
 
 `npm run media` writes the summary tables to `docs/memory-map.md` from the
 build's census, `build/tecos/census.json` (`tools/media.mjs:70-169`,
-`tools/media.mjs:244`). The address of any label is in the build's symbol
+`tools/media.mjs:248`). The address of any label is in the build's symbol
 file, `build/tecos/tecos.d8.json`. This command prints the addresses of the
 labels named after it:
 
@@ -124,10 +124,10 @@ the first byte of each restart vector the service claimed and then run the
 same sweep of the vectors, `PZSWP` (`src/svc.asm:61-72`,
 `src/svc.asm:259-263`, `src/svc.asm:295-307`). The CCP writes the byte at
 `0004h` at each prompt and the FCBs and the tail before it runs a program
-(`src/cpm/ccp.asm:206-225`, `src/cpm/ccp.asm:1298-1331`).
+(`src/cpm/ccp.asm:206-225`, `src/cpm/ccp.asm:1300-1333`).
 
 TEC-OS's own bytes are fourteen of the sixteen that CP/M 2.2 leaves to the
-BIOS. `0041h` and `0044h` are unused (`src/layout.asm:32-47`):
+BIOS. `0041h` and `0044h` are unused (`src/layout.asm:34-49`):
 
 | Address | Name | Contents |
 | --- | --- | --- |
@@ -164,7 +164,7 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 
 The part from `WSBASE`, `B958h`, to `BEFFh` has the same addresses on every
 card. The build places `WSBASE` so that the part ends at `BF00h`
-(`tools/build.mjs:228-233`, `src/layout.asm:65-68`). The part above the table
+(`tools/build.mjs:228-233`, `src/layout.asm:67-70`). The part above the table
 starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:192`). Cold boot
 clears the workspace from `WSBASE` up to `WSEND`, `B958h` to `BFE4h`
 (`src/boot.asm:23-27`). Warm boot clears the part from `CCPCLR` to the end of
@@ -279,12 +279,12 @@ The cache's addresses are in `src/layout.asm:21-23` and the history's page in
 
 | Stack | Addresses | Bytes | Used by |
 | --- | --- | ---: | --- |
-| boot | below `8000h` | | cold boot, until the workspace is cleared (`src/layout.asm:64`, `src/boot.asm:10`) |
+| boot | below `8000h` | | cold boot, until the workspace is cleared (`src/layout.asm:66`, `src/boot.asm:10`) |
 | BIOS | `BCC5h–BCEAh` | 38 | cold boot after the RAM check, warm boot and the diagnostic prompt |
 | CCP | `BE59h–BE76h` | 30 | the CCP, and a program from its start, with `0000h` pushed |
 | BDOS | `BECAh–BEFFh` | 54 | every BDOS function and the BIOS calls it makes |
 
-The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:72-79`. A
+The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:74-81`. A
 loaded service runs on its caller's stack, and `SVCLIM` gives what the services
 together may add: 8 bytes to the BDOS's, 12 to the BIOS's and 6 to the CCP's
 (`src/data3.asm:115`).

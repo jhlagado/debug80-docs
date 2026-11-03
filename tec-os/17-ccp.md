@@ -31,19 +31,19 @@ to `BE76h` (`src/ram.asm:64-128`).
 In most of what it does the CCP is an ordinary CP/M program: it reads and
 writes files and the console through `CALL 0005h`, as a program in the TPA
 does. `DIR` lists with functions 17 and 18, `TYPE` reads with function 20 and
-`ERA` erases with function 19 (`src/cpm/ccp.asm:466-468`,
-`src/cpm/ccp.asm:821-824`, `src/cpm/ccp.asm:894-897`).
+`ERA` erases with function 19 (`src/cpm/ccp.asm:468-470`,
+`src/cpm/ccp.asm:823-826`, `src/cpm/ccp.asm:896-899`).
 
 Outside that interface the CCP reads a few of TEC-OS's own bytes: the
 console's width and height at `0048h` and `0049h`, the console mode, the
 IOBYTE and the top of the TPA at `0007h`. It also sets the BDOS's flags
 `HFLAG` and `WRFLAG`, and it reads and sets the return code `PRGCODE`
 (`src/cpm/ccp.asm:52-53`, `src/cpm/ccp.asm:86-87`, `src/cpm/ccp.asm:128`,
-`src/cpm/ccp.asm:159`, `src/cpm/ccp.asm:354`). It calls a few of TEC-OS's
+`src/cpm/ccp.asm:159`, `src/cpm/ccp.asm:356`). It calls a few of TEC-OS's
 routines directly: startup's `STBOOT` and `STLINE`, the service loader and the
 service commands' routines `CMDSVC` and `SVCUNL`. The others are `GLCLD` for
 `CON UC1` and the BDOS's division, `DIV16`
-(`src/cpm/ccp.asm:260-263`, `src/cpm/ccp.asm:1103`, `src/cpm/ccp.asm:1137`).
+(`src/cpm/ccp.asm:260-263`, `src/cpm/ccp.asm:1105`, `src/cpm/ccp.asm:1139`).
 
 ## The entry from boot
 
@@ -135,13 +135,13 @@ over spaces and parses the first word with `CMDPARSE`, as a file name, into
 `CMDFCB` (`src/cpm/ccp.asm:227-233`). `CMDSTRT` keeps where the word starts,
 for an error message, and `ARGSTRT` keeps where it ends, the start of the
 arguments. A word that doesn't parse as a file name is a bad command already
-(`src/cpm/ccp.asm:325-330`).
+(`src/cpm/ccp.asm:327-332`).
 
 The CCP then compares the word with the names of its ten built-in commands, in
 the order `DIR`, `TYPE`, `ERA`, `REN`, `SAVE`, `USER`, `CON`, `COPY`, `UNLOAD`
 and `SERVICES` (`src/cpm/ccp.asm:234-263`). `ISCMD` compares the text at
 `CMDSTRT`, not the FCB, and requires a space or the end of the piece after the
-name (`src/cpm/ccp.asm:1528-1548`). So `A:DIR` and `DIR.COM` are not the
+name (`src/cpm/ccp.asm:1530-1550`). So `A:DIR` and `DIR.COM` are not the
 built-in. The first is the program `DIR` on drive A and the second the program
 `DIR`, and both fail with no `DIR.COM` on the card.
 
@@ -156,9 +156,9 @@ loading below describes.
 
 A command that fails ends at `BADCMD`, which prints the word from `CMDSTRT` up
 to its first space with a question mark after it, then a new line
-(`src/cpm/ccp.asm:331-350`). `BADCMD` and the built-ins' messages of failure
+(`src/cpm/ccp.asm:333-352`). `BADCMD` and the built-ins' messages of failure
 go through `ERRGO`, which sets the return code to `FF00h` first
-(`src/cpm/ccp.asm:351-357`). Chapter 24 lists them. `ERRGO` and the built-ins
+(`src/cpm/ccp.asm:353-359`). Chapter 24 lists them. `ERRGO` and the built-ins
 end at one of two labels: `STARTED` starts a new line and prints the prompt,
 and `MAINLOOP` prints the prompt on the line the command left.
 
@@ -166,26 +166,26 @@ and `MAINLOOP` prints the prompt on the line the command left.
 
 The CCP parses every file name through one routine. `PARSEFCB` reads one file
 reference into the first 16 bytes of an FCB and leaves `HL` at the character
-after it (`src/cpm/ccp.asm:1333-1438`). It first clears all 36 bytes of the
+after it (`src/cpm/ccp.asm:1335-1440`). It first clears all 36 bytes of the
 FCB: 0 for the drive, spaces for the name and type, zeros for the rest. A
 command after `TYPE` therefore loads from the start of its file and not from
-where `TYPE` stopped (`src/cpm/ccp.asm:1337-1362`). A letter and a colon at
+where `TYPE` stopped (`src/cpm/ccp.asm:1339-1364`). A letter and a colon at
 the start set the drive byte, 1 to 16 for `A` to `P`, and any other character
-before the colon is an error (`src/cpm/ccp.asm:1364-1380`). Up to eight
+before the colon is an error (`src/cpm/ccp.asm:1366-1382`). Up to eight
 characters go into the name and, after a full stop, up to three into the type
-(`src/cpm/ccp.asm:1382-1402`).
+(`src/cpm/ccp.asm:1384-1404`).
 
-A name ends at a 0, a space, `=` or `.` (`src/cpm/ccp.asm:1510-1519`). Inside
-it, `*` fills the rest of its field with `?` (`src/cpm/ccp.asm:1495-1508`).
+A name ends at a 0, a space, `=` or `.` (`src/cpm/ccp.asm:1512-1521`). Inside
+it, `*` fills the rest of its field with `?` (`src/cpm/ccp.asm:1497-1510`).
 `VALIDCHR` rejects the thirteen characters in `BADCHARS`, the ones CP/M 2.2
 reserves: `<`, `>`, `,`, `;`, `:`, `[`, `]`, `%`, `|`, `(`, `)`, `/` and `\`
-(`src/cpm/ccp.asm:1470-1493`, `src/data3.asm:70-71`). A field with more
+(`src/cpm/ccp.asm:1472-1495`, `src/data3.asm:70-71`). A field with more
 characters than it holds is an error too: `PARLONG` moves past the rest of the
-word and returns the error flag (`src/cpm/ccp.asm:1420-1438`).
+word and returns the error flag (`src/cpm/ccp.asm:1422-1440`).
 
 The commands that take exactly one file, `TYPE`, `REN`, `SAVE`, `COPY` and a
 program's name, test the parsed FCB with `UNAMBIG`, which rejects an empty
-name and any `?` (`src/cpm/ccp.asm:1440-1468`).
+name and any `?` (`src/cpm/ccp.asm:1442-1470`).
 
 ## The built-in commands
 
@@ -194,30 +194,30 @@ Each built-in is a routine in `ccp.asm` or, for the service commands, in
 
 | Command | Routine | Source |
 | --- | --- | --- |
-| `DIR` | `CMDDIR` | `src/cpm/ccp.asm:420-633` |
-| `TYPE` | `CMDTYPE` | `src/cpm/ccp.asm:806-849` |
-| `ERA` | `CMDERA` | `src/cpm/ccp.asm:855-903` |
-| `REN` | `CMDREN` | `src/cpm/ccp.asm:905-965` |
-| `SAVE` | `CMDSAVE` | `src/cpm/ccp.asm:1198-1296` |
-| `USER` | `CMDUSER` | `src/cpm/ccp.asm:1166-1196` |
-| `CON` | `CMDCON` | `src/cpm/ccp.asm:1107-1164` |
-| `COPY` | `CMDCOPY` | `src/cpm/ccp.asm:967-1099` |
-| `UNLOAD` | `CMDUNL` | `src/cpm/ccp.asm:1101-1105`, `src/svc.asm:42-72` |
+| `DIR` | `CMDDIR` | `src/cpm/ccp.asm:422-635` |
+| `TYPE` | `CMDTYPE` | `src/cpm/ccp.asm:808-851` |
+| `ERA` | `CMDERA` | `src/cpm/ccp.asm:857-905` |
+| `REN` | `CMDREN` | `src/cpm/ccp.asm:907-967` |
+| `SAVE` | `CMDSAVE` | `src/cpm/ccp.asm:1200-1298` |
+| `USER` | `CMDUSER` | `src/cpm/ccp.asm:1168-1198` |
+| `CON` | `CMDCON` | `src/cpm/ccp.asm:1109-1166` |
+| `COPY` | `CMDCOPY` | `src/cpm/ccp.asm:969-1101` |
+| `UNLOAD` | `CMDUNL` | `src/cpm/ccp.asm:1103-1107`, `src/svc.asm:42-72` |
 | `SERVICES` | `CMDSVC` | `src/svc.asm:362-387` |
 
 `DIR` turns a missing name into eleven `?`, sets the DMA address to `LOADBUF`
 and lists the entries that function 17 and then function 18 return
-(`src/cpm/ccp.asm:420-468`). It passes over an entry whose system attribute,
-bit 7 of its second type byte, is set (`src/cpm/ccp.asm:483-488`). The CCP's
+(`src/cpm/ccp.asm:422-470`). It passes over an entry whose system attribute,
+bit 7 of its second type byte, is set (`src/cpm/ccp.asm:485-490`). The CCP's
 FCB has extent 0, so only the entry that holds a file's first extent matches,
 and each file is listed once. The number of columns is the console's width at
 `0048h` divided by 13, at least one, and a width of 0, on the serial terminal,
-is taken as 80 (`src/cpm/ccp.asm:447-464`). Each name is printed as
+is taken as 80 (`src/cpm/ccp.asm:449-466`). Each name is printed as
 `NAME.EXT`, padded to 12 characters unless it ends the row
-(`src/cpm/ccp.asm:504-549`).
+(`src/cpm/ccp.asm:506-551`).
 
 `DIR`'s last line gives the number of files and the free space on the drive it
-listed (`src/cpm/ccp.asm:562-633`). For the free space it selects that drive
+listed (`src/cpm/ccp.asm:564-635`). For the free space it selects that drive
 with function 14, if the listing named one. It takes the DPB's address from
 function 31 and the allocation vector's from function 27, then counts the
 clear bits for the `DSM` + 1 blocks of the volume. The count of blocks is
@@ -226,7 +226,7 @@ it selects the drive from `0004h` again. A listing with no file gives
 `NO FILE`.
 
 A listing longer than the screen would scroll out of view, so `DIR` and `TYPE`
-print through the pager (`src/cpm/ccp.asm:635-753`). `PGINIT` takes the
+print through the pager (`src/cpm/ccp.asm:637-755`). `PGINIT` takes the
 console's height and width from `0049h` and `0048h`, or 24 and 80 on the
 serial terminal, and keeps one row for the pause. `PGPUT` counts each
 character's column: back to 0 at CR, back one at backspace and on to the next
@@ -240,47 +240,47 @@ other key shows the next screen.
 
 `TYPE` opens its one file and reads it a record at a time into `LOADBUF`. It
 prints each byte through the pager up to the first `^Z`, `1Ah`, or the end of
-the file (`src/cpm/ccp.asm:806-849`). A file that is not there gives
+the file (`src/cpm/ccp.asm:808-851`). A file that is not there gives
 `NO FILE`.
 
 `ERA` with a name that is all `?`, as `*.*` gives, prints `ALL (Y/N)?` and
 reads the answer with function 1. A Return alone is no. After any other key the
 CCP reads on to a Return, and any answer but `Y` or `y` erases nothing
-(`src/cpm/ccp.asm:866-892`). The erase itself is function 19,
-and `NO FILE` when nothing matched (`src/cpm/ccp.asm:894-903`).
+(`src/cpm/ccp.asm:868-894`). The erase itself is function 19,
+and `NO FILE` when nothing matched (`src/cpm/ccp.asm:896-905`).
 
 `REN NEW=OLD` parses the new name into `RENFCB` and the old one into `CMDFCB`.
 The two names share one drive: a name with no drive takes the other's, and two
-different drives are a bad command (`src/cpm/ccp.asm:928-941`). The command then
+different drives are a bad command (`src/cpm/ccp.asm:930-943`). The command then
 searches for the new name. If it is there it gives `FILE EXISTS` with nothing
-changed (`src/cpm/ccp.asm:942-950`, `src/cpm/ccp.asm:963-965`). Otherwise the
+changed (`src/cpm/ccp.asm:944-952`, `src/cpm/ccp.asm:965-967`). Otherwise the
 first 12 bytes of `RENFCB` are copied to offset 16 of `CMDFCB`, the second
 drive byte, so the new name follows it at offset 17, the place function 23
 reads it. The rename gives `NO FILE` if the old name is not there
-(`src/cpm/ccp.asm:952-965`).
+(`src/cpm/ccp.asm:954-967`).
 
 `SAVE N NAME` reads a decimal count of 256-byte pages and rejects any count
 that reaches the page of the word at `0006h`. It erases the file, makes it
 again and writes the pages from `0100h` on, two records each
-(`src/cpm/ccp.asm:1198-1296`). On the starter card that page is `B8h`, so the
+(`src/cpm/ccp.asm:1200-1298`). On the starter card that page is `B8h`, so the
 largest `SAVE` is 183 pages, `0100h` to `B7FFh`. A failed make, write or close
 gives `NO SPACE`.
 
-`USER N` takes 0 to 15 and calls function 32 (`src/cpm/ccp.asm:1166-1196`).
+`USER N` takes 0 to 15 and calls function 32 (`src/cpm/ccp.asm:1168-1198`).
 
 `CON` with no argument names the console in use. With `TTY`, `CRT`, `BAT` or
 `UC1`, a colon after it allowed, it sets the IOBYTE's console field, and for
-`UC1` it also loads `GLCD.SVC` if it is not in (`src/cpm/ccp.asm:1107-1164`).
+`UC1` it also loads `GLCD.SVC` if it is not in (`src/cpm/ccp.asm:1109-1166`).
 Chapter 15 describes the BIOS's side.
 
 `COPY SOURCE DEST` copies a file within the user area
-(`src/cpm/ccp.asm:967-1099`). Both names are parsed with the current drive put
+(`src/cpm/ccp.asm:969-1101`). Both names are parsed with the current drive put
 in a 0 drive byte, so that they can be compared. A destination with no name
 takes the source's whole name, and a destination equal to the source, all 12
-bytes, is a bad command, with nothing opened (`src/cpm/ccp.asm:1000-1026`). The
+bytes, is a bad command, with nothing opened (`src/cpm/ccp.asm:1002-1028`). The
 copy goes a record at a time through the default DMA buffer at `0080h`, so it
 uses none of the TPA. The count of records is kept in `DIRNUM` and printed in
-hexadecimal after `COPIED` (`src/cpm/ccp.asm:1027-1072`).
+hexadecimal after `COPIED` (`src/cpm/ccp.asm:1029-1074`).
 
 `SERVICES` prints each service's name and its pages from the list of services,
 and `UNLOAD` removes the lowest. `NAME.SVC` as a command installs one. Chapter
@@ -289,20 +289,20 @@ and `UNLOAD` removes the lowest. `NAME.SVC` as a command installs one. Chapter
 ## Loading a program
 
 `LOADCOM` loads a `.COM` file at `0100h` through the BDOS
-(`src/cpm/ccp.asm:359-418`). It opens `CMDFCB`, and if there is no such file
+(`src/cpm/ccp.asm:361-420`). It opens `CMDFCB`, and if there is no such file
 it returns with the carry flag and the zero flag set. Otherwise it reads the
 file a record at a time, with function 26 setting the DMA address to each
 record's place from `0100h` up. The reading stops at the end of the file or
 when the address reaches the page of the word at `0006h`, the byte at `0007h`
-(`src/cpm/ccp.asm:368-386`).
+(`src/cpm/ccp.asm:370-388`).
 
 A file may end exactly at that page, so `LOADLIM` reads one more record, into
 `LOADBUF`, where it can't reach the resident CCP, to find out. If that read
 is the end of the file the load is
 complete. Otherwise the file is too large, and the carry flag is set with the
-zero flag clear (`src/cpm/ccp.asm:388-402`). A file that fits leaves in
+zero flag clear (`src/cpm/ccp.asm:390-404`). A file that fits leaves in
 `LOADTOP` the address after its last record, which the service loader uses,
-and is closed (`src/cpm/ccp.asm:404-414`).
+and is closed (`src/cpm/ccp.asm:406-416`).
 
 The largest program is therefore the 256-byte pages from `0100h` up to the
 page that holds the BDOS entry. On the starter card, whose entry is at
@@ -370,7 +370,7 @@ A loaded program gets the page zero that CP/M 2.2 defines. `PREPPAGE` parses
 the first two words of the arguments into the FCBs at `005Ch` and `006Ch`. It
 copies the arguments to `0080h`, the command tail, with their length in front
 and a 0 after them, and sets the DMA address to `0080h` with function 26
-(`src/cpm/ccp.asm:1298-1331`). The tail starts with the space after the
+(`src/cpm/ccp.asm:1300-1333`). The tail starts with the space after the
 command's name and ends at the end of the piece, and its letters are the
 capitals `MLTAKE` made.
 
@@ -456,7 +456,7 @@ The `*` of `*.C` is eight `?`. The tail of `ARGS X Y` keeps the space before
 the `!`, and a command with no arguments gets blank FCBs and a tail of
 length 0.
 
-With page zero ready, the CCP starts the program (`src/cpm/ccp.asm:296-302`).
+With page zero ready, the CCP starts the program (`src/cpm/ccp.asm:296-304`).
 It sets the stack pointer to `CSTKTOP`, the top of its own stack, pushes
 `0000h` and jumps to `0100h`. A program that ends with `RET` returns to
 `0000h`, the jump to warm boot, and so does one that jumps to `0000h` or calls
@@ -496,7 +496,7 @@ the stack's size.
 The stack is the CCP's and, from the jump to `0100h`, the program's. With
 `0000h` pushed, the program starts with 28 bytes below its return word, more
 than the 16 of CP/M 2.2's eight levels. Its stack pointer is in the workspace
-above the TPA (`src/cpm/ccp.asm:297-299`, `src/layout.asm:72-78`). A program
+above the TPA (`src/cpm/ccp.asm:299-301`, `src/layout.asm:74-80`). A program
 that needs more sets its own stack, as many CP/M programs do. Every BDOS call
 moves to the BDOS's stack, so a program's calls of `0005h` use only two bytes
 of the program's stack.
