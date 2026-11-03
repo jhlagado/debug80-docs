@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 9. The hardware services
 
-Checked against TEC-OS 4d6eeaa. The programs were assembled by the starter
+Checked against TEC-OS 19ad916. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. `DEMO`
 was assembled on the PC by ATOM from the repository's `atom-z80` 0.3.7.
@@ -688,9 +688,11 @@ back. A release with no claim does nothing and returns status 0.
 
 `DEMO` is the worked example. It claims the chip if `INFO`'s bit 1 is set,
 sets Graphics I by the ports and draws colour bars and a ball until a key,
-then releases the chip. It isn't on the starter card. Its source is
-`test/programs/demo.asm` in the repository, and these commands assemble it on
-the PC and put it on drive B of `hw.img`:
+then releases the chip. It isn't on the starter card, but the web page's card
+has it on drive A, so there `DEMO` at the prompt runs it. Its source is
+`test/programs/demo.asm` in the repository, and `npm run media` writes the same
+program to `dist/files/DEMO.COM`. These commands assemble it on the PC and put
+it on drive B of `hw.img`:
 
 ```sh
 npx atom test/programs/demo.asm demo.com
