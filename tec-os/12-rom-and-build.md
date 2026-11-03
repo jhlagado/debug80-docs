@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 12. The ROM and its build
 
-Checked against TEC-OS 7935507.
+Checked against TEC-OS 626ee41.
 
 TEC-OS is one 16 KiB image for the addresses `C000h–FFFFh`. This chapter
 describes the image's layout, from the jump at its first byte to the free
@@ -24,16 +24,16 @@ The ROM has five parts, in this order:
 | --- | ---: | --- |
 | `C000h–C002h` | 3 | the reset jump |
 | `C003h–C00Ah` | 8 | the ROM table |
-| `C00Bh–C33Bh` | 817 | the data |
-| `C33Ch–F9EAh` | 13,999 | the code |
-| `F9EBh–FFFFh` | 1,557 | free |
+| `C00Bh–C350h` | 838 | the data |
+| `C351h–F934h` | 13,796 | the code |
+| `F935h–FFFFh` | 1,739 | free |
 
-The figures are those of the build at commit 7935507. The build writes them to
+The figures are those of the build at commit 626ee41. The build writes them to
 `build/tecos/census.json` and, through `npm run media`, to the table of the
 ROM's regions in `docs/memory-map.md`. The used part, from `C000h` to the end
-of the code, is 14,827 of the 16,384 bytes.
+of the code, is 14,645 of the 16,384 bytes.
 
-The first three bytes are a jump, `JP RSTENT` (`src/reset.asm:7`), to `C33Ch`,
+The first three bytes are a jump, `JP RSTENT` (`src/reset.asm:7`), to `C351h`,
 the first byte of the code. Chapter 14 describes how the Z80 reaches it at
 reset.
 
@@ -47,10 +47,11 @@ ends at `C00Bh`, where the data begins.
 The data block runs from the label `ROMDATA` (`src/tables.asm:7`) to `ROMCODE`
 (`src/text.asm:78`). Three files that follow one another in the assembly make
 it up: `tables.asm`, the generated `gen/geom.asm` and `text.asm`
-(`src/rom.asm:11-13`). They hold the messages, the keyword strings, the
-keyboard's tables, the container's name and disk parameters, the BDOS's
-function table and the table of the numbered services (`src/tables.asm:29-31`,
-`src/text.asm:26-26`, `src/tables.asm:65`, `src/tables.asm:77`). Each group is headed by the name of the source file
+(`src/rom.asm:11-13`). They hold the messages, the table of the built-in
+commands' words and their handlers, the keyboard's tables, the container's name
+and disk parameters, the BDOS's function table and the table of the numbered
+services (`src/tables.asm:29-31`, `src/tables.asm:40-60`, `src/tables.asm:65`,
+`src/tables.asm:77`). Each group is headed by the name of the source file
 whose code uses it, so `CWMSG`, the text `Write lost`, sits under `cache.asm`
 (`src/text.asm:75-76`). Nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
 (`src/tables.asm:10-26`) is in the block as the source of the copy that programs
@@ -121,7 +122,7 @@ the banner and the LCD's top row print from (`src/text.asm:6`,
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,
-`tools/build.mjs:36-58`). At 7935507 they are 49, 105, 50, 70 and 77, and the
+`tools/build.mjs:36-58`). At 626ee41 they are 49, 105, 50, 70 and 77, and the
 build stops with an error if a count would not fit in a byte
 (`tools/build.mjs:45-47`). Chapter 15 explains the loops and the arithmetic
 behind the counts.
@@ -164,7 +165,7 @@ the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
 therefore `BF00h` less the workspace's size, and the size is known only after
 an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
 build reads the address of `BDOSRME`, the label at the workspace's end, and
-takes `8000h` from it (`tools/build.mjs:228-232`). At 7935507 that part is
+takes `8000h` from it (`tools/build.mjs:228-232`). At 626ee41 that part is
 1,448 bytes, so the second assembly has `WSBASE` at `B958h`
 (`tools/build.mjs:233-235`).
 
@@ -241,7 +242,7 @@ with an error when it is given any other name (`tools/build.mjs:28-31`,
 `tools/build.mjs:323`). `npm run build` prints one line:
 
 ```text
-tecos: ROM 14827/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 9c946bc259917dca
+tecos: ROM 14645/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 9eebcf3a0fbe15e2
 ```
 
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
@@ -256,4 +257,4 @@ dist: 1 ROM profiles, 7 starter files, starter.img
 ```
 
 The ROM in `dist/` has the SHA-256
-`9c946bc259917dcaeecee4c776721e21f41264f1eb21d264d54b0960918e7a0c`.
+`9eebcf3a0fbe15e2a74bb01a036ac8c4b514710bfaa744fb9ca6a77eb2c5bd5a`.
