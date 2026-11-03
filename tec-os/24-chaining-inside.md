@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 24. Chaining inside
 
-Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
-676075a, whose copy in `dist/files` has the SHA-256
-`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and its
+Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
+04ec086, whose copy in `dist/files` has the SHA-256
+`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -66,7 +66,9 @@ program's name has at least one character, so its tail has at most 126.
 lands at `00FFh` at the latest (`src/cpm/ccp.asm:1312-1329`). A tail one
 character longer would put its 0 at `0100h`, the first byte of the program,
 which `LOADCOM` (Chapter 17) has already loaded by then
-(`src/cpm/ccp.asm:283-296`).
+(`src/cpm/ccp.asm:283-296`). The byte at `0050h`, where the CCP stores the
+drive the program came from, is below the tail's buffer, so no tail reaches it
+(`src/cpm/ccp.asm:297-298`).
 
 ## The main loop
 
@@ -101,7 +103,7 @@ B: WORK
 
 A>DIR *.CMD!:TYPE STARTUP.CMD
 STARTUP.CMD 
-1 file, 984K free
+1 file, 978K free
 A>:TYPE STARTUP.CMD
 DIR *.CMD!:TYPE STARTUP.CMD
 PICO.SVC!:MOUNT
