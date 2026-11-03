@@ -7,11 +7,11 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. Chaining inside
 
-Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
-`TAS.COM` from Thorium 7604daa, with the SHA-256
-`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
+`TAS.COM` from Thorium dbee66a, with the SHA-256
+`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
 Chapter 11 describes a command line split at `!`, the condition `:`, the return
 code and BDOS function 47 as you use them. Behind them are a command line that
@@ -101,7 +101,7 @@ B: WORK
 
 A>DIR *.CMD!:TYPE STARTUP.CMD
 STARTUP.CMD 
-1 file, 976K free
+1 file, 974K free
 A>:TYPE STARTUP.CMD
 DIR *.CMD!:TYPE STARTUP.CMD
 PICO.SVC!:VOLS
@@ -235,8 +235,7 @@ through `CHDROP`:
   `Select` from `SELFAIL` and `Bad Sector` from `BADSECT`
   (`src/cpm/bdos.asm:686-694`, `src/cpm/bdos.asm:2415-2435`,
   `src/cpm/bdos.asm:2448-2451`). A failed read of a directory record goes to
-  `RDFAIL`, which jumps to `CHDROP` with no message (`src/cpm/bdos.asm:1885`,
-  `src/cpm/bdos.asm:2447`).
+  `BADSECT` too (`src/cpm/bdos.asm:1885`).
 
 A reset drops the line by clearing `CHPOS` with the rest of the workspace
 (`src/boot.asm:23-27`).
