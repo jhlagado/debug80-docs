@@ -7,9 +7,9 @@ nav_group: "Appendices"
 
 # Appendix F. `tecvol`
 
-Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
-676075a, with the SHA-256
-`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and its
+Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
+04ec086, with the SHA-256
+`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -51,7 +51,9 @@ so a failure leaves the image as it was (`tools/tecvol.mjs:17-19`,
 `DRIVE` names a volume by its drive letter, with or without a colon, by its
 label or by its id, tried in that order (`tools/lib/container.mjs:201-209`). A
 volume on no drive is reached by its label or id. `--user N` selects user area
-`N`, 0 to 15. Without it `put`, `get` and `era` use user area 0, and `dir`
+`N`, a whole number from 0 to 15 in one or two digits. Any other `N` is a
+mistake in the command line, found before the image is opened
+(`tools/tecvol.mjs:39-43`). Without it `put`, `get` and `era` use user area 0, and `dir`
 lists every user area (`tools/tecvol.mjs:98`, `tools/tecvol.mjs:127`).
 
 For a mistake in the command line, `tecvol` prints the reason and a line of
@@ -152,6 +154,7 @@ node tools/tecvol.mjs dir dist/starter.img A
  0 GLCD.SVC         1664
  0 MOUNT.COM         768
  0 PICO.SVC         1408
+ 0 SAMPLE.ASM       4480
  0 STARTUP.CMD       128
  0 TAS.COM         10368
  0 TED.COM         11904
@@ -191,6 +194,18 @@ node tools/tecvol.mjs put build/my.img ARCHIVE build/hello.txt
 
 ```text
 tecvol: volume is read-only
+```
+
+A user area that isn't a number from 0 to 15 stops the command with exit
+status 2 before the image is opened:
+
+```sh
+node tools/tecvol.mjs put build/my.img A build/hello.txt --user 1.5
+```
+
+```text
+tecvol: --user "1.5": a user number 0 to 15
+usage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/tecvol.mjs)
 ```
 
 ## get
@@ -262,8 +277,8 @@ sha256sum build/fresh.img dist/starter.img
 ```
 
 ```text
-3671751cd22be4f7c412598d9b11ba557cf0ca1ca980ab3d34b8acab76a4fbc5  build/fresh.img
-3671751cd22be4f7c412598d9b11ba557cf0ca1ca980ab3d34b8acab76a4fbc5  dist/starter.img
+4eb807c1f9bc47f14b172abd9c239e5e981167acde64c09fe7ed85d3abfd786d  build/fresh.img
+4eb807c1f9bc47f14b172abd9c239e5e981167acde64c09fe7ed85d3abfd786d  dist/starter.img
 ```
 
 The two images are the same to the byte: the volumes' places, the `E5h` fill,
