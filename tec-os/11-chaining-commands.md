@@ -7,10 +7,10 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 11. Chaining commands
 
-Checked against TEC-OS 60e0768, with the ATOM assembler from the
+Checked against TEC-OS 1f9542d, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
-676075a, and its copy in `dist/files` has the SHA-256
-`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`. Its
+04ec086, and its copy in `dist/files` has the SHA-256
+`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`. Its
 `TAS.COM` is from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -33,7 +33,7 @@ had typed the commands one at a time:
 ```text
 A>DIR *.CMD!TYPE STARTUP.CMD
 STARTUP.CMD 
-1 file, 984K free
+1 file, 978K free
 A>TYPE STARTUP.CMD
 PICO.SVC
 GLCD.SVC
@@ -98,13 +98,13 @@ NOSUCH?
 A>:DIR *.CMD
 A>DIR *.SVC!:DIR *.CMD
 PICO.SVC     GLCD.SVC    
-2 files, 984K free
+2 files, 978K free
 A>:DIR *.CMD
 STARTUP.CMD 
-1 file, 984K free
+1 file, 978K free
 A>:DIR *.CMD
 STARTUP.CMD 
-1 file, 984K free
+1 file, 978K free
 A>
 ```
 
