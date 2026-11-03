@@ -21,17 +21,17 @@ with its remedy.
 
 ## The diagnostic prompt
 
-Cold boot sets up the LCD and the card at `COLDRT` (`src/boot.asm:39`). It
+Cold boot sets up the LCD and the card at `COLDRT` (`src/boot.asm:49`). It
 starts the card with `SDINIT` and checks the container with `MOUNT`, and a
 failure of either jumps to `DIAG` with an error code in `A`
-(`src/boot.asm:42-45`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
+(`src/boot.asm:52-55`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
 `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:8-18`). The banner is
-printed before the card is touched (`src/boot.asm:35-36`), so it appears
+printed before the card is touched (`src/boot.asm:45-46`), so it appears
 whatever the card holds. Only the RAM check comes before it. `RAMCHK` writes and
 reads back the bytes at `8000h` and `BFFFh` and looks for EXPAND 1 behind the
 window, and a board that lacks either
 prints `TEC-OS needs 64K RAM` on the serial port and stops there
-(`src/boot.asm:22`, `src/boot.asm:279-309`, `src/data.asm:12`).
+(`src/boot.asm:32`, `src/boot.asm:289-319`, `src/data.asm:12`).
 
 `DIAG` resets the stack to the BIOS's, since a mount that failed part way may
 have left it deep, and keeps the code on it (`src/diag.asm:5-6`). It writes
@@ -59,9 +59,9 @@ fixed or put in while the prompt waits is mounted without a reset.
 
 The retry keeps a selection of volumes carried over from a recognised reset,
 which Chapter 14 explains. `RSLCAP` copies the drive table to `RSLBUF` before
-cold boot clears anything (`src/boot.asm:14`), and nothing writes `RSLBUF`
+cold boot clears anything (`src/boot.asm:24`), and nothing writes `RSLBUF`
 before `MEMINIT`, which runs only after a mount has succeeded
-(`src/boot.asm:59`, `src/boot.asm:90-91`).
+(`src/boot.asm:69`, `src/boot.asm:100-101`).
 
 ## The diagnostics ROM
 

@@ -84,7 +84,7 @@ the second. After TEC-OS writes a time, it counts on from what was written, by
 the same emulated seconds (`host/machine.mjs:86-119`).
 
 The time a run reads is then the same on any PC, however fast it runs. The tests
-start the clock at 1 January 2026, 12:00 (`test/lib/fixtures.mjs:112-113`), and
+start the clock at 1 January 2026, 12:00 (`test/lib/fixtures.mjs:72-73`), and
 `tools/capture.mjs` at 1 November 2026, 12:00, so a capture that reads the
 clock shows the same time on any PC.
 
@@ -209,19 +209,19 @@ their machines with `boot` in `test/lib/fixtures.mjs`, which reads the one ROM,
 `build/tecos/tecos.rom`, and, when the board has a matrix keyboard, puts a
 display driver and a startup file on the card. A test's profile name sets
 only the width of that driver. It then runs to the first prompt with the
-clock at the tests' starting time (`test/lib/fixtures.mjs:22-28`,
-`test/lib/fixtures.mjs:145-153`, `test/lib/fixtures.mjs:156-163`).
+clock at the tests' starting time (`test/lib/fixtures.mjs:21-27`,
+`test/lib/fixtures.mjs:105-113`, `test/lib/fixtures.mjs:116-123`).
 
 `test/lib/fixtures.mjs` also makes the files the tests load. `program` assembles
 a source in `test/programs/` with ATOM and keeps the result in
-`build/test-programs` (`test/lib/fixtures.mjs:81-96`), filed under a digest of
+`build/test-programs` (`test/lib/fixtures.mjs:41-56`), filed under a digest of
 the source and every file it includes, so that a changed include assembles again
-(`test/lib/fixtures.mjs:31-43`). `prl` makes a file in Digital Research's PRL
+(`test/lib/fixtures.mjs:30-39`). `prl` makes a file in Digital Research's PRL
 format from two assemblies, which TEC-OS no longer loads, and `service` a `.SVC`
-file with `makeSvc` (`test/lib/fixtures.mjs:58-79`,
-`test/lib/fixtures.mjs:115-116`). `standardCard` is a new container with the
+file with `makeSvc` (`test/lib/fixtures.mjs:39`,
+`test/lib/fixtures.mjs:75-76`). `standardCard` is a new container with the
 starter card's two volumes, `SYSTEM` on A and `WORK` on B, both empty
-(`test/lib/fixtures.mjs:97-104`), and `volume` opens a drive of it as a CP/M
+(`test/lib/fixtures.mjs:57-64`), and `volume` opens a drive of it as a CP/M
 file system for a test to write files into.
 
 Two inputs the tests use come from outside the repository: the starter card's
@@ -231,7 +231,7 @@ build, `ATOM.COM`, and a directory of the package `triptych-headless`, which no
 `.test.mjs` file reads. `test/lib/inputs.mjs` reads
 each from its environment variable or its default path beside the clone. A file
 whose SHA-256 differs fails its test, and a missing one skips it, or fails it
-with `STRICT=1`, which `npm run test:strict` sets (`test/lib/inputs.mjs:1-6`,
+with `STRICT=1`, which `npm run test:strict` sets (`test/lib/inputs.mjs:1-7`,
 `package.json:18`). The web page's tests, `test/web-touch.test.mjs` and
 `test/web-store.test.mjs`, drive Chromium through `playwright`, which
 `package.json` pins at 1.62.1, and `npx playwright install chromium` fetches
@@ -258,16 +258,16 @@ recipe and the files in `dist/files` (`web/build.mjs:32-45`). The page's recipe,
 `dist/page.recipe.json`, has the starter card's volumes and files with one more, `DEMO.COM`,
 and the build copies it under the name the page fetches, `starter.recipe.json`.
 `npm run media` writes it, and it assembles `DEMO.COM` from
-`test/programs/demo.asm` into `dist/files` (`tools/media.mjs:234-247`). The files
+`test/programs/demo.asm` into `dist/files` (`tools/media.mjs:236-249`). The files
 are the starter card's, `DEMO.COM` and the PICO9918's driver built at 40 and 32
 columns. The recipe's `widths` pins each of the three drivers by its URL and
-SHA-256 (`tools/media.mjs:195-201`, `tools/media.mjs:219`). The page uses one
+SHA-256 (`tools/media.mjs:197-203`, `tools/media.mjs:221`). The page uses one
 ROM for every display, since the PICO9918's width is the build of the card's
 `PICO.SVC` (`web/build.mjs:14`).
 
 At start the page loads the card it stored last time. If there is none, or the
 stored one isn't a valid container, it builds the starter card from the recipe
-(`web/src/main.mjs:629-641`). Building from the recipe fetches each file,
+(`web/src/main.mjs:646-658`). Building from the recipe fetches each file,
 checks its length and SHA-256 against the recipe and writes it to its drive
 (`tools/lib/recipe.mjs:14-26`).
 
@@ -278,42 +278,42 @@ every 2 seconds a changed card is stored again (`web/src/main.mjs:97-101`). The
 timer clears the mark before it stores the card. When the browser's storage
 fails, `saveCard` writes a warning to the browser's console, the first of the
 session only, and passes the failure on (`web/src/store.mjs:18-22`,
-`web/src/store.mjs:38-52`). The page then marks the card changed again, so the
+`web/src/store.mjs:41-58`). The page then marks the card changed again, so the
 next tick saves again, and the line under the heading "SD card" says `Card not
 saved in this browser`, with the reason, and that the card is kept in memory
 and saved again shortly. The words stay until a save succeeds
-(`web/src/main.mjs:103-117`, `web/src/main.mjs:491-496`). A reload before then
+(`web/src/main.mjs:103-134`, `web/src/main.mjs:508-513`). A reload before then
 brings back the card last stored. "Download image" saves the card in memory
 whatever happened to the store.
 
 Each frame of the browser's display, the page runs the machine for the time
 since the last frame at 4 MHz, at most 100 ms of it, and it stops early after 30
-ms of the PC's time (`web/src/main.mjs:125-141`). It then draws the PICO9918's
+ms of the PC's time (`web/src/main.mjs:142-158`). It then draws the PICO9918's
 screen, the 7-segment digits, the 8 × 8 LEDs, the 20 × 4 LCD and the graphics
 LCD from the runtime's state, and it shows the latch's value, the bank in the
-window and the Caps lamp under the board (`web/src/main.mjs:173-184`). Once a
-second it shows the speed reached, in MHz (`web/src/main.mjs:142-146`). The
+window and the Caps lamp under the board (`web/src/main.mjs:190-201`). Once a
+second it shows the speed reached, in MHz (`web/src/main.mjs:159-163`). The
 machine is made with no `clock`, so its DS1302 reads the PC's time
 (`web/src/main.mjs:77-86`).
 
-Typing goes to the board two ways (`web/src/main.mjs:339-378`). With the
+Typing goes to the board two ways (`web/src/main.mjs:356-395`). With the
 PICO9918's screen or the graphics LCD focused, a key goes to the matrix
 keyboard, and the arrow keys become its own arrow keys. With the serial
 terminal focused, a key goes to the serial port, and an arrow key is sent as
 `ESC [` and a letter. On a phone or tablet a tap on either gives focus to a
 hidden text field that brings up the on-screen keyboard
-(`web/src/main.mjs:380-475`). A row of buttons gives Ctrl, Esc, Tab and the
+(`web/src/main.mjs:397-492`). A row of buttons gives Ctrl, Esc, Tab and the
 arrows (`web/index.html:36-44`). The serial terminal on the page drops the
 escape sequences TEC-OS sends and acts on backspace
-(`web/src/main.mjs:309-337`).
+(`web/src/main.mjs:326-354`).
 
 Chapter 1 lists the page's controls (`web/index.html:12-30`,
 `web/index.html:68-82`). The page also lists each file of the drive chosen in
 "Drive", with its user area, its size and a Download button, which saves the
-file to the PC, as text when "as text" is ticked (`web/src/main.mjs:516-529`).
+file to the PC, as text when "as text" is ticked (`web/src/main.mjs:533-546`).
 
 The width and the display are kept in the browser's local storage
-(`web/src/main.mjs:17-19`, `web/src/main.mjs:599-611`). A power-on comes from a
+(`web/src/main.mjs:17-19`, `web/src/main.mjs:616-628`). A power-on comes from a
 change to either of them, the Power cycle button or a new card, and it first
 prepares the card with `prepareCard` from `host/card.mjs`
 (`web/src/main.mjs:67-90`). For the PICO9918 the page fetches the recipe and the
@@ -346,7 +346,7 @@ prepared and boots as it is. Chapter 21 describes the preparation in full.
 
 "Copy file to drive" writes to a copy of the card while the machine is paused
 and saves it. Only when the save succeeds does it copy it into the card the
-machine is using and press reset (`web/src/main.mjs:564-594`). A failed save
+machine is using and press reset (`web/src/main.mjs:581-611`). A failed save
 leaves the card as it was, and the line under the heading "SD card" says `Not copied` with
 the reason. The reset is a cold boot, so TEC-OS
 rebuilds its map of each drive's free space from the changed card and its

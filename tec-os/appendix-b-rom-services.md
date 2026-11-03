@@ -16,7 +16,7 @@ describes the use of the hardware services, with programs. The names are those
 of `src/abi.inc`, which the ROM assembles from and which a build publishes as
 `dist/abi.inc` after checking the table's bytes, the number of services and `INFO`'s bits
 against the ROM (`src/abi.inc:1-4`, `tools/build.mjs:139-154`,
-`tools/media.mjs:210`). The stacks are `abi.inc`'s: a bound on what each service takes
+`tools/media.mjs:212`). The stacks are `abi.inc`'s: a bound on what each service takes
 below its return address, the dispatcher's included. The T-states were measured
 on the model from the `JP` at `ABICALL` to the final `RET`, so a `CALL` adds 17
 to each.
@@ -44,7 +44,7 @@ A program puts the service's number in `C` and the arguments in `B`, `DE` and
 `HL`, and calls `ABICALL`. `A` is never an argument. A service returns `A` = 0
 with zero set and carry clear on success, or a status with carry set and
 nothing changed. `FIND` and `LIST` return otherwise, as their entries say
-(`src/abi.inc:15-26`, `src/hwsvc.asm:40-44`).
+(`src/abi.inc:15-27`, `src/hwsvc.asm:40-44`).
 
 | Status | `abi.inc` | Meaning |
 | ---: | --- | --- |
@@ -54,7 +54,7 @@ nothing changed. `FIND` and `LIST` return otherwise, as their entries say
 
 A program tests carry or `A` after a failure. The hardware services and the
 dispatcher clear zero with the status, and the volume and display services
-leave it as it falls (`src/vol.asm:670-672`, `src/glcd.asm:6-11`).
+leave it as it falls (`src/vol.asm:686-688`, `src/glcd.asm:6-18`).
 
 The dispatcher reads the service's address from `SVTAB`, one word for each
 number, and jumps to it with `B`, `DE` and `HL` as they came
@@ -65,7 +65,7 @@ no stack used (`src/hwsvc.asm:21-24`).
 Each service returns with the interrupt state as it found it and runs on the
 caller's stack. Each keeps `IX`, `IY` and the alternate registers, except
 `MOUNT`, `UNMNT` and `DESC`, which may change `IX` and the alternates.
-Registers not named as results are destroyed (`src/abi.inc:18-25`).
+Registers not named as results are destroyed (`src/abi.inc:18-26`).
 
 | `C` | Name | `abi.inc` | Takes | Stack |
 | ---: | --- | --- | --- | ---: |
@@ -103,7 +103,7 @@ T-states. The version has the major in `D` and the minor in `E`, so `0001h` is
 | 0 | `01h` | `HWBMTX` | The matrix keyboard is enabled |
 | 1 | `02h` | `HWBPICO` | A PICO9918 answered at cold boot |
 | 2 | `04h` | `HWBGLCD` | `GLCD.SVC` is in |
-| 3 | `08h` | `HWBRTC` | A DS1302 answered at cold boot: its seconds read below `60h` (`src/boot.asm:30-33`, `src/hwsvc.asm:256-268`) |
+| 3 | `08h` | `HWBRTC` | A DS1302 answered at cold boot: its seconds read below `60h` (`src/boot.asm:40-43`, `src/hwsvc.asm:264-276`) |
 | 4 | `10h` | `HWBCLM` | The PICO9918 is claimed |
 | 7 | `80h` | `HWBWRD` | A word of the ROM's, `PICO?` or `GLCD?`, is on LCD row 3 |
 
@@ -121,7 +121,7 @@ clears `HWBWRD`, so that no display driver blanks the program's text. 4,915
 T-states, or 4,935 on row 3.
 
 **3 VIDEO.** With `B` = 1, claims the PICO9918. With `B` = 0, releases it
-(`src/hwsvc.asm:99-139`). The code tests only for 0, so any other value claims
+(`src/hwsvc.asm:99-143`). The code tests only for 0, so any other value claims
 as 1 does. Status 2 with no PICO9918 either way.
 
 A claim removes the cursor if the PICO9918 is the console and stores
@@ -135,11 +135,11 @@ text mode, font and page. If the PICO9918 is the console it then clears the
 screen and homes the cursor. With no `PICO.SVC`, nothing is restored. A
 release with the PICO9918 as the console takes 216,023 T-states at 80 columns
 and 146,738 with the console elsewhere. Warm boot makes the same call
-(`src/boot.asm:73`).
+(`src/boot.asm:83`).
 
 **4 TONE.** Makes a square wave on port `01h` bit 7, with bit 6 held high,
 for `DE` half cycles, each of 16 × `B` + 51 T-states
-(`src/hwsvc.asm:142-161`). `B` = 0 counts as 256. `DE` = 0 returns at once. A
+(`src/hwsvc.asm:146-165`). `B` = 0 counts as 256. `DE` = 0 returns at once. A
 call takes `DE` half cycles plus 222 T-states. The speaker ends off. Status is
 always 0.
 
@@ -154,7 +154,7 @@ The last half cycle takes 5 T-states less, measured between the two writes
 that bound it.
 
 **5 JOY.** Returns the joystick in `B`, 1 for each active line, read from
-port `FEh` with `BC` = `F7FEh` and complemented (`src/hwsvc.asm:164-168`).
+port `FEh` with `BC` = `F7FEh` and complemented (`src/hwsvc.asm:168-172`).
 Status is always 0. 214 T-states. That port address also selects row 3 of the
 matrix keyboard, so a key in that row sets a bit here, and a line here reads
 as a key in that row. The diagnostics ROM's test labels the bits, after MON-3:
@@ -163,14 +163,14 @@ as a key in that row. The diagnostics ROM's test labels the bits, after MON-3:
 unconfirmed.
 
 **6 KEYS.** Reads the matrix keyboard's eight rows into the eight bytes at
-`HL`, row 0 first, 1 for each key down (`src/hwsvc.asm:170-177`). Each read is
+`HL`, row 0 first, 1 for each key down (`src/hwsvc.asm:174-181`). Each read is
 of port `FEh` with one bit low in the high byte of the address, `FEh` for row
 0 to `7Fh` for row 7. Status is always 0. 581 T-states. `HWBMTX` reports
 whether there is a matrix keyboard.
 
 **7 PUTAT.** On a video console, writes `B` characters from `HL` at row `D`,
 column `E`, both from 0, through the driver's cell routine
-(`src/hwsvc.asm:179-221`). The cursor's position is unchanged, though its cell
+(`src/hwsvc.asm:183-225`). The cursor's position is unchanged, though its cell
 is removed. The console draws it again when it next waits for a key
 (`src/console.asm:159`). The escape parser isn't used, and bytes `80h` to
 `FFh` reach the driver, which draws them as reverse images of `00h` to `7Fh`
@@ -186,7 +186,7 @@ row takes about 487 T-states on `PICO.SVC` at 80 columns and about 35,750 on
 `GLCD.SVC`.
 
 **8 RTC.** With `B` = 0, reads the DS1302 into the seven bytes at `HL`. With
-`B` = 1, sets it from them (`src/hwsvc.asm:223-254`). The code tests only for
+`B` = 1, sets it from them (`src/hwsvc.asm:227-262`). The code tests only for
 0, so any other value sets as 1 does. The bytes are BCD: seconds, minutes,
 hours, date, month, weekday, year. Each call tests the clock again, and status
 2 means no clock answers. A read takes 6,918 T-states and a set 7,752. A set
@@ -195,7 +195,7 @@ last.
 
 ## The volume services, 9 to 11
 
-The volume services are `MOUNT`, `UNMNT` and `DESC` (`src/vol.asm:577-604`):
+The volume services are `MOUNT`, `UNMNT` and `DESC` (`src/vol.asm:593-620`):
 
 | `C` | Takes | Effect |
 | ---: | --- | --- |
@@ -211,8 +211,8 @@ attempt to leave drive A empty and a failed write of the cache. A format 1.0
 card gives a slot only to the drives mounted at cold boot.
 
 A mount or an unmount writes the cache's changes for the card first and resets
-the drive by BDOS function 37 on the BDOS's own stack (`src/vol.asm:616`,
-`src/vol.asm:653`, `src/vol.asm:657-667`), so that the next access logs it in
+the drive by BDOS function 37 on the BDOS's own stack (`src/vol.asm:632`,
+`src/vol.asm:669`, `src/vol.asm:673-683`), so that the next access logs it in
 from its directory. A program therefore calls them from outside its own BDOS
 calls, unlike the other services. On the model a mount or a describe changed
 `IX`.
@@ -220,8 +220,8 @@ calls, unlike the other services. On the model a mount or a describe changed
 ## A display driver's table, 12
 
 A display driver calls `DRVR` from its `INIT` with `B` = 1 for `CRT:` or 3 for
-`UC1:` and `HL` pointing at its table (`src/glcd.asm:5-11`,
-`src/glcd.asm:13-18`). The table is eight words: six routines the terminal
+`UC1:` and `HL` pointing at its table (`src/glcd.asm:5-18`,
+`src/glcd.asm:20-25`). The table is eight words: six routines the terminal
 calls, a routine for the page functions and a last word holding the columns
 and then the rows. The six, in order, are put, get, clear to the end of the
 line, restore, read a row and write a row. Only `CRT:` calls the seventh, which
@@ -232,7 +232,7 @@ write a row, with `A` = 0 and carry clear. `TNEBAD` with carry means nothing
 changed: that mode has a table already, or there is no matrix keyboard.
 
 `HL` = 0 drops the mode's table, with carry clear, and the console is chosen
-again at its next call (`src/glcd.asm:42-56`). Each `REMOVE` calls it that way.
+again at its next call (`src/glcd.asm:49-63`). Each `REMOVE` calls it that way.
 
 ## The registry, 13 and 14
 
@@ -267,5 +267,5 @@ four more:
 | 22 | `PICORD` | `HL` = VRAM address, `DE` = destination, `BC` = count | Copies VRAM to RAM |
 
 The caller must hold the claim. Each entry checks nothing and changes `AF`,
-`BC`, `DE` and `HL` (`src/abi.inc:103-109`). A count of 0 moves nothing
+`BC`, `DE` and `HL` (`src/abi.inc:108-114`). A count of 0 moves nothing
 (`drivers/pico.asm:166-210`).
