@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 21. Startup
 
-Checked against TEC-OS 7935507.
+Checked against TEC-OS 626ee41.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and three
@@ -72,7 +72,7 @@ holds a key through reset to get past a service whose `INIT` never returns, and
 key is down, as Appendix G describes. A low bit returns from `STBOOT` with
 `STPOS` at `80h`, so a skip is the same state as a file that wasn't there. Bit 6
 is tested this one time, so the key has to be down when `STBOOT` starts, which
-on the model, with the web page's board and the starter card, is 5,863,724
+on the model, with the web page's board and the starter card, is 5,864,547
 T-states after reset, about 1.47 seconds.
 
 `STBOOT` then makes the read in the CCP's own FCB. It copies 12 bytes of
@@ -81,7 +81,9 @@ T-states after reset, about 1.47 seconds.
 rest of `CMDFCB` zero. Drive byte 1 is drive A whichever drive is current, and
 `RESEL` has already put back a recognised reset's selection (`src/boot.asm:58`),
 so the file comes from the volume on drive A at that moment, as Chapter 5's
-`SPARE` example shows. Three BDOS calls follow (`src/cpm/ccp.asm:1586-1597`):
+`SPARE` example shows. Three BDOS calls follow, the second and third through
+`CPSRC`, which points `DE` at `CMDFCB` (`src/cpm/ccp.asm:1587-1597`,
+`src/cpm/ccp.asm:1072-1074`):
 
 - function 26 points the DMA address at `STREC`;
 - function 15 opens the file, and `INC A` turns its `FFh` for no file into zero;
@@ -316,8 +318,10 @@ from the port, so no reset begins with `CDWRD` set (`src/console.asm:30`,
 
 The web page sets the display and the width from its "Display" and "ROM"
 controls, and it keeps the card's `PICO.SVC` and first lines in step with them.
-At each power-on with the PICO9918, `powerOn` fetches the page's recipe and
-passes it to `widthDrivers` (`web/src/main.mjs:67-89`). The recipe's `widths`
+`powerOn` runs the preparation in its turn, one at a time with a copy of files
+onto the card, as Chapter 25 describes (`web/src/main.mjs:67-80`). At each
+power-on with the PICO9918 it fetches the page's recipe and passes it to
+`widthDrivers` (`web/src/main.mjs:82-87`). The recipe's `widths`
 names three of the page's files, `PICO.SVC`, `PICO40.SVC` and `PICO32.SVC`, and
 `widthDrivers` fetches each and checks it against the SHA-256 there
 (`host/card.mjs:102-116`). If one can't be fetched or doesn't match, the page
@@ -336,9 +340,11 @@ for the page`, the reason in parentheses and `so it boots as it is.`
 
 On the copy, `prepareCard` writes the driver at the chosen width to user 0 of
 drive A as `PICO.SVC` when user 0 has none, has one of the three pinned builds
-at any width or has one of another format. It compares the build's bytes and
-the file's length in whole records with each build (`host/card.mjs:48`). Any
-other `PICO.SVC` is the card owner's build, so it stays, and the note `This
+at any width or has one of another format. It compares the whole file with each
+build: the file's length in whole records, then the build's bytes, then zeros to
+the end of the last record (`host/card.mjs:48-52`). Any other `PICO.SVC`, one
+that differs from each build anywhere, its last record's tail included, is the
+card owner's build, so it stays, and the note `This
 card's own PICO.SVC is kept, at the width it was built for.` goes to the serial
 terminal. `prepareCard` writes nothing to a card with no drive A or with an
 older TEC-OS's `.DRV` files (`host/card.mjs:76-91`). It then leaves the startup
