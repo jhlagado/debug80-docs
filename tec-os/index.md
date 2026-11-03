@@ -78,9 +78,9 @@ caret, so `^C` means Ctrl and C together.
    taking the console, the matrix keyboard, the keys that edit a line and
    `[more]` in long listings.
 3. **[The command line](03-command-line.md).** File names, wildcards and each
-   command built into the CCP. The chapter also covers running a `.COM` or
-   `.PRL` file, user areas, the messages a failed command prints and command
-   history with `^W` and `^N`.
+   command built into the CCP. The chapter also covers running a `.COM` file,
+   from the current drive or from drive A, user areas, the messages a failed
+   command prints and command history with `^W` and `^N`.
 4. **[Cards and volumes](04-cards-and-volumes.md).** The container and its
    volumes, the two geometries, and building and changing a card image on a PC
    with `tecvol`. The chapter then covers `MOUNT`, what each drive costs in
@@ -98,23 +98,22 @@ caret, so `^C` means Ctrl and C together.
    with `TED`. The chapter ends with the ways a program returns to TEC-OS.
 7. **[Memory for programs](07-memory.md).** The Z80's 64 KiB on a TEC-1G, the
    TPA and the word at `0006h` that marks its end, page zero and
-   TEC-OS's own bytes at `0040h`. The chapter ends with EXPAND 1, reserved for
-   TEC-OS, and CP/M 3's `XMOVE` and `MOVE`.
+   TEC-OS's own bytes at `0040h`. The chapter ends with EXPAND 1, which TEC-OS
+   keeps for itself.
 8. **[Programs and the console](08-programs-and-console.md).** The console as
    a program uses it: the BDOS's console functions, the BIOS's console calls,
    the control characters and ANSI escape sequences the video terminal acts
-   on, and the cursor. The chapter ends with the console's size at `0048h` and
-   the IOBYTE's other devices, the list device, the punch and the reader.
+   on, and the cursor. The chapter ends with the console's size, which a
+   program reads from the hardware service `INFO`, and the IOBYTE's other
+   devices, the list device, the punch and the reader.
 9. **[The hardware services](09-hardware-services.md).** The calls TEC-OS has
    for the board's own devices. The chapter starts with the ROM table and the
-   check for TEC-OS. It then covers the nine hardware services, most with a
-   program of their own, and `DEMO`, which uses them together.
-10. **[PRL programs and services](10-prl-programs-and-services.md).** Two
-    kinds of file beyond `.COM`. A `.PRL` file is a program in a relocatable
-    format, and a `.SVC` file stays in memory after its command ends. You make
-    a PRL, write a service that counts the console's characters, install it
-    and measure what it costs. You then publish the count for a program to
-    find.
+   check for TEC-OS. It then covers the nine hardware services, numbered 0 to
+   8, most with a program of their own, and `DEMO`, which uses them together.
+10. **[Writing services](10-prl-programs-and-services.md).** A `.SVC` file
+    holds a service, code that stays in memory after its command ends. You
+    write a service that counts the console's characters, install it and
+    measure what it costs. You then publish the count for a program to find.
 11. **[Chaining commands](11-chaining-commands.md).** Several commands on one
     line with `!`, and a command that runs only after a success with `:`. The
     chapter describes the return code of BDOS function 108 and a program that
@@ -126,8 +125,8 @@ caret, so `^C` means Ctrl and C together.
 12. **[The ROM and its build](12-rom-and-build.md).** The 16 KiB image from
     the jump at `C000h` to the free space at its end. The chapter then follows
     the build: the source files and their order, the generated include files,
-    ATOM and `tools/build.mjs`, the checks on the result and the four names of
-    the one image.
+    ATOM and `tools/build.mjs`, the checks on the result and the one image,
+    `dist/tecos.rom`.
 13. **[The memory map](13-memory-map.md).** Memory from TEC-OS's side: the
     system latch, page zero, the resident workspace and the allocation vectors
     below it. The chapter ends with the four stacks and their limits and
@@ -135,18 +134,17 @@ caret, so `^C` means Ctrl and C together.
 14. **[Reset, cold boot and warm boot](14-reset-and-boot.md).** Cold boot from
     its first instruction at `0000h` to the point where it falls into warm
     boot, then warm boot as far as the CCP, with its cost in T-states. On the
-    way the chapter describes the boot overlay, the two RAM checks, the count
-    of MAIN and EXPAND, the reset test and the rebuilding of page zero.
+    way the chapter describes the boot overlay, the RAM check, the reset test
+    and the rebuilding of page zero.
 15. **[The BIOS and the console path](15-bios-and-console.md).** The RAM BIOS
     table at `BF00h`, the console by IOBYTE, and the list, punch and reader
     entries. The chapter also covers the bit-banged serial port, the matrix
     keyboard scan, the terminal's escape parser, the display drivers with
-    `ABIGLCD` and the 20 × 4 LCD.
+    their service, number 12, and the 20 × 4 LCD.
 16. **[The BDOS](16-bdos.md).** The entry, the function table and the console
     functions, then files, extents and records, and the allocation vectors
-    with the scan at warm boot. The chapter ends with BDOS errors, function 50
-    with `MOVE` and `XMOVE`, functions 108 and 47 and the differences from
-    Digital Research's BDOS.
+    with the scan at warm boot. The chapter ends with BDOS errors, functions 108
+    and 47 and the differences from Digital Research's BDOS.
 17. **[The CCP](17-ccp.md).** The entry from boot, the prompt, and the parsing
     of the command word and file names. The chapter then covers the built-in
     commands, `LOADCOM`, `PREPPAGE` and the jump to `0100h`, and the CCP's RAM
@@ -154,21 +152,21 @@ caret, so `^C` means Ctrl and C together.
 18. **[The SD card and the volumes](18-sd-card-and-volumes.md).** The layers
     between the BDOS's 128-byte records and the card's 512-byte blocks. The
     chapter covers the SD card driver and its error codes, the container's checks,
-    the drive table, deblocking and the mount entry, `ABIVOL`. Chapter 13
-    describes the allocation vectors at cold boot.
+    the drive table, deblocking and the volume services, numbers 9 to 11.
+    Chapter 13 describes the allocation vectors at cold boot.
 19. **[The block cache](19-block-cache.md).** Thirty lines in EXPAND 1, reads
     through the cache, and writes through and behind. The chapter also covers
     the order of a flush, the flush at warm boot, `Write lost` and the
     interrupts held off across a block.
 20. **[The hardware services and the service
     loader](20-hardware-services-and-service-loader.md).** The code behind
-    Chapters 9 and 10: the dispatcher at `ABIHW` and each of the nine
-    hardware services, then `XMOVE` and `MOVE`. The chapter ends with the seven
-    steps of a service's load, the registry, removal and the stack figures.
-21. **[PRL relocation](21-prl-relocation.md).** The relocation of a file
-    loaded at an address chosen at load time. The chapter follows a `.PRL`
-    file from the tool that makes it to the jump to `0100h`, then a `.SVC`
-    file's relocation data from the tool to the bytes in memory.
+    Chapters 9 and 10: the dispatcher at `ABICALL` and each of the nine
+    hardware services. The chapter then covers a service's entry, the
+    relocation of its addresses and the seven steps of its load, and it ends
+    with the registry, removal and the stack figures.
+
+<!-- Chapter 21 was removed: the next list starts at 22. -->
+
 22. **[Startup](22-startup.md).** `STBOOT`, `STLINE` and `STDONE`, with the
     one byte of state and the 128-byte record behind them. The chapter then
     follows a display line and covers the flag bit behind the LCD's words and
@@ -194,11 +192,11 @@ caret, so `^C` means Ctrl and C together.
 ### Appendices
 
 - **[A. BDOS functions](appendix-a-bdos-functions.md).** Each function from 0
-  to 40, with 47, 50 and 108: its registers, its result and any difference
-  from CP/M 2.2.
+  to 40, with 47 and 108: its registers, its result and any difference from
+  CP/M 2.2.
 - **[B. The ROM table and hardware services](appendix-b-rom-services.md).**
-  The ROM table entry by entry, the hardware services by number with their
-  registers and status codes, and the entries `ABIVOL`, `ABIGLCD` and `ABISVC`.
+  The ROM table at `C003h`, then the numbered services behind its jump, 0 to
+  14, with their registers and status codes.
 - **[C. Memory map](appendix-c-memory-map.md).** The CPU's address space, the
   ROM, page zero, the resident workspace, EXPAND 1 and the stacks, with the
   figures taken from the build.
@@ -215,3 +213,6 @@ caret, so `^C` means Ctrl and C together.
   TEC-OS reads and writes, the system latch's bits, the configuration switches
   and U9. The appendix also covers the hex keypad and its NMI, the 8 × 8 LEDs,
   the DS1302 clock and the SD card adaptor.
+- **[H. The service file format](appendix-h-service-file-format.md).** The
+  `.SVC` file's header with the loader's check of each field, its dependencies
+  and its relocation data, with the starter card's `PICO.SVC` as an example.
