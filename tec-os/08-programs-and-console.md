@@ -7,10 +7,10 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 8. Programs and the console
 
-Checked against TEC-OS 4d6eeaa, with the ATOM assembler from the
+Checked against TEC-OS 60e0768, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
-8fcc6ea, and its copy in `dist/files` has the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`.
+676075a, and its copy in `dist/files` has the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`.
 
 Chapter 2 described the console as you use it at the prompt. This chapter
 describes it as a program uses it, starting with the BDOS's console functions
@@ -265,27 +265,28 @@ is past the right edge, waiting for a wrap.
 
 ## The console's size
 
-A program that lays out a screen, such as an editor, uses the console's size,
-and TEC-OS keeps the columns at `0048h` and the rows at `0049h`. Both are 0
-while the console is the serial terminal, whose size TEC-OS can't read, so a
-program then uses 80 by 24, as the CCP does for `[more]`.
+A program that lays out a screen, such as an editor, uses the console's size.
+TEC-OS gives both the columns and the rows as 0 while the console is the
+serial terminal, whose size TEC-OS can't read, so a program then uses 80 by
+24, as the CCP does for `[more]`.
 
-The ROM table at `C003h`, which Chapter 9 describes, has the same bytes through
-a pointer. It starts with the letters `TNA` and the table's
-major version, 4, the version of its ABI, its application binary interface.
-The word at `C008h` is the address of the columns, with the rows in the byte
-after. A program that checks the letters and the version and then reads the
-size through the word works on every TEC-OS with this version of the table,
-wherever a later ROM keeps the bytes:
+A program reads the size through the ROM table at `C003h`, which Chapter 9
+describes. The table starts with the letters `TNA` and its major version, 5,
+the version of its ABI, its application binary interface. At `C008h` is a jump
+to TEC-OS's numbered services, and service 0, `INFO`, returns the columns in
+`L` and the rows in `H`. A program that checks the letters and the version
+and then calls `INFO` works on every TEC-OS with this version of the table,
+wherever a later ROM keeps the size:
 
 ```asm
 ; SIZE: print the console's size, read through TEC-OS's table.
 BDOS    EQU     $0005
 ABITAB  EQU     $C003           ; "TNA", then the major version
-ABIVID  EQU     $C008           ; the address of the columns, then the rows
+ABICALL EQU     $C008           ; a jump to the service numbered in C
+TNINFO  EQU     0               ; INFO: L = the columns, H = the rows
 
         ORG     $0100
-        LD      HL,ABITAB       ; is this TEC-OS with ABI 4?
+        LD      HL,ABITAB       ; is this TEC-OS with ABI 5?
         LD      DE,TAG
         LD      B,4
 CHECK:  LD      A,(DE)
@@ -294,12 +295,12 @@ CHECK:  LD      A,(DE)
         INC     HL
         INC     DE
         DJNZ    CHECK
-        LD      HL,(ABIVID)
-        LD      A,(HL)          ; the columns
+        LD      C,TNINFO
+        CALL    ABICALL
+        LD      A,L             ; the columns
         OR      A
         JR      Z,SERIAL        ; 0: the serial terminal
-        INC     HL
-        LD      B,(HL)          ; the rows
+        LD      B,H             ; the rows
         PUSH    BC
         CALL    DEC
         LD      DE,BY
@@ -333,11 +334,11 @@ UNITS:  POP     AF
         LD      C,2
         JP      BDOS
 
-TAG:    DB      "TNA",4
+TAG:    DB      "TNA",5
 BY:     DB      " columns, $"
 ROWS:   DB      " rows",13,10,"$"
 SERMSG: DB      "serial terminal",13,10,"$"
-NOTMSG: DB      "not TEC-OS with ABI 4",13,10,"$"
+NOTMSG: DB      "not TEC-OS with ABI 5",13,10,"$"
 ```
 
 `DEC` counts tens in `B` by subtracting 10 until the subtraction borrows. The
