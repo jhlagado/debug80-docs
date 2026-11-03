@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. The SD card and the volumes
 
-Checked against TEC-OS 60cfbdc.
+Checked against TEC-OS 4d6eeaa.
 
 The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
@@ -18,7 +18,7 @@ parameter header. At the top, the BIOS's disk entries turn a track and sector
 into a block of the card and a quarter of that block.
 
 This chapter takes the layers from the bottom up, and ends with the mount
-entry, through which `MOUNT` and `VOLS` change and list the drives. Chapter
+entry, through which `MOUNT` changes and lists the drives. Chapter
 19 describes the block cache, which every read passes through.
 
 ## The SD card driver
@@ -284,8 +284,8 @@ each of those two writes, since the data has replaced it in `BLKBUF`.
 
 ## The mount entry
 
-`MOUNT` and `VOLS` on the starter card are programs, so they change and list
-the drives through the mount entry, the jump `ABIVOL` at `C00Fh`, which goes
+`MOUNT` on the starter card is a program, so it changes and lists the drives
+through the mount entry, the jump `ABIVOL` at `C00Fh`, which goes
 to `VOLSVC` (`src/abi.asm:14`, `src/vol.asm:577-583`). It has three functions, chosen by `A`:
 
 - `A` = 0 mounts the volume at container index `E` on drive `C`.
@@ -317,10 +317,11 @@ longer matches, brings them back.
 The run below shows the slot rule on the starter card. It is a format 1.0 card
 whose two drives have vector slots, and whose C and D have none.
 `MOUNT C: WORK` fails first because `WORK` is on B, and again after B is
-unmounted because C has no slot. `MOUNT B: WORK` puts it back, and `VOLS`
-lists the container through the describe function:
+unmounted because C has no slot. `MOUNT B: WORK` puts it back, and `MOUNT`
+with no argument lists the container through the describe function
+(`test/programs/mount.asm:160-209`):
 
-<!-- node tools/capture.mjs "MOUNT C: WORK" "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" VOLS -->
+<!-- node tools/capture.mjs "MOUNT C: WORK" "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" MOUNT -->
 ```text
 A>MOUNT C: WORK
 Cannot mount: in use or too large
@@ -334,7 +335,7 @@ Cannot mount: in use or too large
 A>MOUNT B: WORK
 B: WORK       
 
-A>VOLS
+A>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
