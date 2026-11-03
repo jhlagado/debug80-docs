@@ -7,14 +7,14 @@ nav_group: "Appendices"
 
 # Appendix C. Memory map
 
-Checked against TEC-OS 1f9542d.
+Checked against TEC-OS 7458352.
 
 This appendix gives the addresses TEC-OS uses: the CPU's address space, the
 ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
 the stacks. Chapter 13 explains the layout and Chapter 7 describes it from a
-program's side. The figures are those of the build at 1f9542d, whose one
+program's side. The figures are those of the build at 7458352, whose one
 profile is `tecos` and whose ROM has the SHA-256
-`704dcc07cf70fead69dffb26801ee94d68eda11c5405c86f2e4add3a825a1754`. Where the
+`60abc9b43ce27071aabf50b6e4a336a5f79804494de4be5e67278905d5d36f76`. Where the
 figures depend on the card they are those of the starter card, with a G1M
 volume on drive A and a G8M volume on drive B, and no service installed.
 
@@ -90,14 +90,14 @@ card the first service's pages end at `B7FFh`, so the 21 bytes from `B800h` to
 
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
-| `C000h–C002h` | 3 | the reset jump, `JP COLD` |
+| `C000h–C002h` | 3 | the reset jump, `JP RSTENT` |
 | `C003h–C00Ah` | 8 | the ROM table |
 | `C00Bh–C33Bh` | 817 | the read-only data, `ROMDATA` to `ROMCODE` |
-| `C33Ch–F977h` | 13,884 | the code |
-| `F978h–FFFFh` | 1,672 | free |
+| `C33Ch–F9EAh` | 13,999 | the code |
+| `F9EBh–FFFFh` | 1,557 | free |
 
-Within the code, the CCP is at `D7A3h–E107h`, 2,405 bytes, and the BDOS at
-`E108h–F00Eh`, 3,847 bytes, in the order `src/rom.asm` includes them
+Within the code, the CCP is at `D7CDh–E157h`, 2,443 bytes, and the BDOS at
+`E158h–F065h`, 3,854 bytes, in the order `src/rom.asm` includes them
 (`src/rom.asm:25-27`). The ROM's own copy of the BIOS jump table is in the
 data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 (`src/data.asm:16-32`, `src/boot.asm:60-63`).
@@ -258,10 +258,14 @@ clears the rest:
 
 Cold boot clears all of EXPAND 1 (`src/boot.asm:149-157`). No BDOS or BIOS
 call gives a program a range in it. A program that writes the latch can still
-switch it in, and it must switch EXPAND 0 back before it ends, since the jump
-at `0000h` goes to `BF03h` in whichever half is in view. In EXPAND 1 that page
-holds zeros, which the Z80 runs as `NOP`s up to the reset jump at `C000h`, and
-the machine cold boots.
+switch it in. If it ends with EXPAND 1 in view, the jump at `0000h` goes to
+`BF03h` in EXPAND 1. That page holds zeros, which the Z80 runs as `NOP`s up to
+the reset jump at `C000h`. The jump's target, `RSTENT`, reads the byte at
+`0002h`, which holds the jump's own high byte only at reset, while the boot
+overlay is on. Here it holds the RAM BIOS table's, and the machine warm boots:
+EXPAND 0 comes back into view and the cache's dirty lines are written to the
+card, as at any exit (`src/boot.asm:10-18`, `src/boot.asm:74-88`). A reset and
+BIOS function 0 cold boot (`src/data.asm:16`).
 
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
