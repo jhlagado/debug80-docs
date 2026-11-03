@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
-676075a and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
-`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and
+Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
+04ec086 and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
+`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and
 `TAS.COM`'s is
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -130,12 +130,13 @@ python3 -m http.server 8765 --directory web/dist
 The page is then at `http://localhost:8765`, and a click on the PICO9918's
 screen sends your typing to the matrix keyboard. The page keeps its SD card in
 the browser's storage, saving it every two seconds while the card has changed,
-so files written on the card are still there after a reload. A save that the
-browser refuses goes unreported on the page: the page writes a warning to the
-browser's console once and carries on with the card in memory, and it doesn't
-try that save again. A reload then brings back the card as it was last saved,
-so "Download image" is the way to keep a copy you can't afford to lose. These
-are its controls:
+so files written on the card are still there after a reload. When the browser
+refuses a save, the page keeps the card in memory, marked as unsaved, and
+shows `Card not saved in this browser`, with the browser's reason, under the
+heading "SD card". It tries the save again two seconds later, and again after
+that until one succeeds. A reload before then brings back the card as it was
+last saved, so "Download image" is the way to keep a copy you can't afford to
+lose. These are its controls:
 
 - "Display" selects a board with a PICO9918 or one with only the graphics LCD.
 - "ROM" selects the PICO9918's width: 80, 40 or 32 columns.
@@ -143,14 +144,16 @@ are its controls:
 - "Power cycle" turns the board off and on and so loses what the RAM held.
 - "Pause" stops the Z80 and starts it again.
 - "New starter card" builds a fresh card from the page's recipe, a file
-  listing the card's contents: the starter card's six files and `DEMO.COM`,
+  listing the card's contents: the starter card's seven files and `DEMO.COM`,
   which Chapter 9 describes. It checks each file against the SHA-256 the
   recipe records.
 - "Open image" loads a card image from the PC, and "Download image" saves the
   page's card to the PC.
 - "Copy file to drive" writes files from the PC onto the volume on the drive
-  selected in "Drive", as text if "as text" is ticked. It then presses reset
-  so that TEC-OS reads the changed card.
+  selected in "Drive", as text if "as text" is ticked. It saves the changed
+  card in the browser and then presses reset so that TEC-OS reads it. When
+  the save fails, the page shows `Not copied` under "SD card", and the card is
+  as it was.
 
 When you change the display or the width, the page turns the board off and on.
 At each power-on with the PICO9918 chosen, the page writes the driver built for
@@ -159,7 +162,13 @@ one of the page's own builds at another width or has one of an older format.
 Any other `PICO.SVC` is one the card's owner built, and the page keeps it and
 says so in brackets in the serial terminal. The page also makes the chosen
 display's driver the only display line in the card's startup file, as its first
-line.
+line. It reads only the files on drive A that TEC-OS loads at boot, those of
+user area 0, one of the groups of files that Chapter 3 describes. It makes
+these changes on a copy of the card, and the copy replaces the card only once
+every change is made. A card whose drive A is read-only or whose directory is
+full is therefore left as it was and boots as it is, and so is the card when
+the page can't fetch the PICO9918's drivers. The page says so in brackets in
+the serial terminal.
 
 ## Running TEC-OS from Node.js
 
@@ -348,15 +357,16 @@ row then shows `PICO?`. That board may have no serial terminal attached.
 <!-- node tools/capture.mjs DIR -->
 ```text
 A>DIR
-MOUNT.COM    PICO.SVC     GLCD.SVC     STARTUP.CMD  TED.COM      TAS.COM
-6 files, 984K free
+MOUNT.COM    PICO.SVC     GLCD.SVC     STARTUP.CMD  TED.COM      SAMPLE.ASM
+TAS.COM     
+7 files, 978K free
 A>
 ```
 
 A file name has up to eight characters, a full stop and a type of up to three.
 A file of type `.COM` is a program, and its name without the type is the
 command that runs it. The last line of the listing is the number of files and
-the space left on the drive. The starter card's six files are these:
+the space left on the drive. The starter card's seven files are these:
 
 - `STARTUP.CMD` holds the commands the first boot ran.
 - `PICO.SVC` and `GLCD.SVC` are the display drivers. The starter card's
@@ -366,6 +376,8 @@ the space left on the drive. The starter card's six files are these:
   Chapter 4 describes.
 - `TAS.COM` is an assembler and `TED.COM` an editor. Chapter 6 describes
   writing and building a program with them on the TEC-1G.
+- `SAMPLE.ASM` is the source of a short program, a text file that `TAS`
+  assembles, as the next section shows.
 
 A drive letter and a colon, typed alone, change the current drive:
 
@@ -409,6 +421,40 @@ which CP/M divides the files on a drive, and Chapter 3 explains them. The `^C`
 at the prompt is a warm boot too, and so is a `^C` typed as the first key of a
 line that a program reads with BDOS function 10, CP/M's line input. Chapter 14
 explains the warm boot.
+
+`SAMPLE.ASM` becomes a program in two commands. `TAS SAMPLE` assembles the
+source into `SAMPLE.COM` on the same drive, and `SAMPLE` runs it:
+
+<!-- node tools/capture.mjs --lcd "TAS SAMPLE" SAMPLE -->
+```text
+A>TAS SAMPLE
+SAMPLE.COM written
+
+A>SAMPLE
+Hello from TEC-OS.
+Screen: 0 by 0
+Back to the prompt.
+
+A>
+```
+
+`SAMPLE` prints its lines on the console and reaches the board's own devices
+through the hardware services that Chapter 9 describes. It reads the screen's
+size, which is 0 by 0 on the serial terminal and 80 by 24 on the PICO9918. It
+writes `Hello from SAMPLE` on the second row of the 20 × 4 LCD, shows `123456`
+on the 7-segment digits for about a second and beeps. After the run the LCD
+shows this:
+
+<!-- the same run's --lcd output -->
+```text
+TEC-OS 0.1  TEC-1G
+Hello from SAMPLE
+B: WORK
+```
+
+`TAS` also writes `SAMPLE.DBG`, a debug file, beside `SAMPLE.COM`, so drive A
+then holds nine files. Chapter 6 explains how a program such as this one is
+written.
 
 A command that is neither built into the CCP nor the name of a program file on
 the current drive or on drive A is printed back with a question mark:
