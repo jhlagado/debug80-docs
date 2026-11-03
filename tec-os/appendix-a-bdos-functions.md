@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix A. BDOS functions
 
-Checked against TEC-OS 718c01b.
+Checked against TEC-OS ea9c1c0.
 
 This appendix lists the BDOS functions of TEC-OS in number order: 0 to 40,
 then 47, 50 and 108, whose meanings come from CP/M 3. Each entry gives the
@@ -39,19 +39,16 @@ return (`src/cpm/bdos.asm:2429-2480`). The errors are:
 - `Bdos Err On d: Select`, for a drive with no volume, a drive past D or a `?`
   drive byte outside function 17.
 - `Bdos Err On d: R/O`, for a change to a drive that function 28 has made
-  read-only, by function 19, 21, 22, 23, 30, 34 or 40
+  read-only or to a volume the card marks read-only, by function 19, 21, 22,
+  23, 30, 34 or 40
   (`src/cpm/bdos.asm:2415-2427`).
 - `Bdos Err On d: File R/O`, for function 19 or 23 on a directory entry whose
   read-only attribute is set, and for function 21, 34 or 40 through an FCB
   that has it (`src/cpm/bdos.asm:683-694`).
 - `Bdos Err On d: Bad Sector`, for a record or a directory record that can't
-  be written, a record of a file that can't be read or an allocation block number
-  past the end of the volume (`src/cpm/bdos.asm:2355`,
-  `src/cpm/bdos.asm:2448-2451`). A failed write includes every write to a
-  volume the card marks read-only.
-
-A directory record that can't be read ends the program by warm boot with no
-message (`src/cpm/bdos.asm:1884-1885`, `src/cpm/bdos.asm:2447`).
+  be read or written, or an allocation block number past the end of the volume
+  in a read or a write (`src/cpm/bdos.asm:1334`, `src/cpm/bdos.asm:1885`,
+  `src/cpm/bdos.asm:2448-2460`).
 
 The file functions return a directory code in `A` where CP/M 2.2 does: 0 to 3,
 the place in the 128-byte directory record of the entry found, or `FFh` for
@@ -200,8 +197,8 @@ warm boot, disk reset or function 37 for the drive
 (`src/cpm/bdos.asm:1463-1475`, `src/cpm/bdos.asm:1636-1637`).
 
 **29 Get read-only vector.** Returns the read-only vector in `HL`, bit 0 for A
-(`src/cpm/bdos.asm:1477-1479`). A volume that the card marks read-only does
-not appear in it.
+(`src/cpm/bdos.asm:1477-1479`). A volume that the card marks read-only appears
+in it once its drive has been selected (`src/cpm/bdos.asm:1993-1998`).
 
 **30 Set file attributes.** Copies the FCB's name and type, with their bit 7
 attributes, into every entry of the file (`src/cpm/bdos.asm:818-822`,
