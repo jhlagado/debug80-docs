@@ -7,11 +7,11 @@ nav_group: "Appendices"
 
 # Appendix F. `tecvol`
 
-Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
-`TAS.COM` from Thorium 7604daa, with the SHA-256
-`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
+`TAS.COM` from Thorium dbee66a, with the SHA-256
+`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
 This appendix lists the nine commands of `tecvol`, the repository's tool for
 TEC-OS cards on a PC, with their options and an example of each, and ends with
@@ -159,7 +159,7 @@ node tools/tecvol.mjs dir dist/starter.img A
  0 PROBE.COM        1024
  0 README.TXT       1280
  0 STARTUP.CMD       128
- 0 TAS.COM         10112
+ 0 TAS.COM         10368
  0 TERM.COM          128
  0 VOLS.COM          384
 ```
@@ -261,8 +261,8 @@ sha256sum build/fresh.img dist/starter.img
 ```
 
 ```text
-d827a53934bb8da7756622498b76a0ab0c528975f2309158fce68c7d35109c28  build/fresh.img
-d827a53934bb8da7756622498b76a0ab0c528975f2309158fce68c7d35109c28  dist/starter.img
+3e9a80d6c1d733ef6b39768329da760cfc81c5030d562738d458b023f89929c5  build/fresh.img
+3e9a80d6c1d733ef6b39768329da760cfc81c5030d562738d458b023f89929c5  dist/starter.img
 ```
 
 The two images are the same to the byte: the volumes' places, the `E5h` fill,
