@@ -7,9 +7,9 @@ nav_group: "Appendices"
 
 # Appendix E. The container format
 
-Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
-04ec086, with the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`.
+Checked against TEC-OS 7458352, with the starter card's `TED.COM` from Thorium
+128edb7, with the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
 
 This appendix lists the container format: the header's fields, the volume
 descriptors, the table's blocks beyond block 0, the ROM's checks with their
@@ -146,7 +146,7 @@ returns its code, which cold boot prints at the diagnostic prompt (Chapter
 | `25h` | 1.1: the table sum differs | `src/vol.asm:130-134` |
 | `26h` | A volume's id is 0, a flag other than read-only is set, the geometry is unknown, the length is not the geometry's, or the start is 0 or not a multiple of 8 | `src/vol.asm:147-185` |
 | `28h` | A volume starts before the end of the one before it in the table | `src/vol.asm:186-193` |
-| `27h` | A volume's end passes `FFFFFFFFh`, or the container's length | `src/vol.asm:194-215` |
+| `27h` | A volume's end passes `FFFFFFFFh` or the container's length, or on a standard-capacity card block `7FFFFFh`, the last its byte addresses reach | `src/vol.asm:194-230` |
 | `29h` | A drive byte is neither `FFh` nor 0 to 3, the drive is past the number the drives field gives, or two volumes name one drive | `src/vol.asm:232-250` |
 | `2Ah` | No volume is on drive A | `src/vol.asm:260-263` |
 
