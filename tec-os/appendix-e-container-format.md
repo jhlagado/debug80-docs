@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix E. The container format
 
-Checked against TEC-OS 7935507, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 626ee41, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
 
@@ -65,7 +65,7 @@ The header's fields (`format/format.json`, `header`):
 The checksum is the 16-bit sum of all 512 bytes of block 0 except the two
 bytes of the checksum itself (`tools/lib/container.mjs:51-59`). The ROM sums
 all 512 and then takes the two checksum bytes back out
-(`src/vol.asm:687-699`). The sum covers the descriptors in block 0 as well as
+(`src/vol.asm:687-714`). The sum covers the descriptors in block 0 as well as
 the header's fields, so a change to any byte of block 0 needs a new checksum.
 
 A card's minor version sets three things. A 1.0 card has no drives field and
@@ -144,7 +144,7 @@ returns its code, which cold boot prints at the diagnostic prompt (Chapter
 | `23h` | 1.1: the drives field is more than 4 | `src/vol.asm:86-90` |
 | `20h` | 1.1: a block of the table can't be read | `src/vol.asm:106-111` |
 | `25h` | 1.1: the table sum differs | `src/vol.asm:121-125` |
-| `26h` | A volume's id is 0, a flag other than read-only is set, the geometry is unknown, the length is not the geometry's, or the start is 0 or not a multiple of 8 | `src/vol.asm:138-168` |
+| `26h` | A volume's id is 0, a flag other than read-only is set, the geometry is unknown, the length is not the geometry's, or the start is 0 or not a multiple of 8 | `src/vol.asm:138-168`, `src/vol.asm:250` |
 | `28h` | A volume starts before the end of the one before it in the table | `src/vol.asm:169-176` |
 | `27h` | A volume's end passes `FFFFFFFFh` or the container's length, or on a standard-capacity card block `7FFFFFh`, the last its byte addresses reach | `src/vol.asm:177-213` |
 | `29h` | A drive byte is neither `FFh` nor 0 to 3, the drive is past the number the drives field gives, or two volumes name one drive | `src/vol.asm:215-233` |
