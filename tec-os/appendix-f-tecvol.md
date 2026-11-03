@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix F. `tecvol`
 
-Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 19ad916, with the starter card's `TED.COM` from Thorium
 8fcc6ea, with the SHA-256
 `9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -234,19 +234,26 @@ erased the file from user area 3 and printed nothing.
 `recipe RECIPE.json IMAGE` builds a card from a recipe, a JSON file that lists
 the volumes and the files to put on them (`tools/tecvol.mjs:155-161`).
 `npm run media` writes the starter card's recipe as `dist/starter.recipe.json`
-and builds `dist/starter.img` from it (`tools/media.mjs:203-222`). A recipe
-has the schema `tecos-file-recipe-v1`, a list of `volumes` and a list of
-`components`, each with `files`. Each volume is in `create`'s terms: a
-geometry, a label, a drive and `readOnly` or `writeBehind`. Each file has a
-name, a `url`, a drive, a size in `bytes`, a `sha256` and optionally a user
-area (`tools/lib/recipe.mjs:13-26`).
+and builds `dist/starter.img` from it (`tools/media.mjs:208-228`). It also
+writes the web page's recipe, `dist/page.recipe.json`, which is the starter
+card's with one more component, `DEMO.COM` on drive A
+(`tools/media.mjs:230-243`). A recipe has the schema `tecos-file-recipe-v1`, a
+list of `volumes` and a list of `components`, each with `files`. Each volume is
+in `create`'s terms: a geometry, a label, a drive and `readOnly` or
+`writeBehind`. Each file has a name, a `url`, a drive, a size in `bytes`, a
+`sha256` and optionally a user area (`tools/lib/recipe.mjs:13-26`). Both of
+`npm run media`'s recipes also have `widths`, which gives the `url` and
+`sha256` of the PICO9918's driver built for each width, under the keys `80`,
+`40` and `32` (`tools/media.mjs:195-201`, `tools/media.mjs:215`). `tecvol`
+doesn't read it. The web page fetches those drivers at power-on, as
+[Chapter 22](22-startup.md#the-web-pages-rewrite) describes.
 
 `tecvol` reads a file's `url` as a web address if it starts `http://` or
 `https://`, and otherwise as a path from the recipe's own folder
 (`tools/tecvol.mjs:78-88`). It checks each file's size and SHA-256 against the
 recipe and stops at the first that differs. The read-only flags go on last,
 after every file is written (`tools/lib/recipe.mjs:27-34`). The web page
-builds its "New starter card" with the same function.
+builds its "New starter card" from its own recipe with the same function.
 
 ```sh
 node tools/tecvol.mjs recipe dist/starter.recipe.json build/fresh.img
