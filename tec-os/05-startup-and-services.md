@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS 19ad916.
+Checked against TEC-OS 60e0768.
 
 Chapter 1's first boot ran two commands that nobody typed, and on the web
 page's board the first of them moved the console to the PICO9918. This chapter
@@ -99,8 +99,9 @@ At each prompt the CCP takes the next line in place of the keyboard. The line
 is echoed as it stands in the file, so `mount` appears in small letters, and it
 then runs as if typed. The CCP prints a failed line's usual message and the
 next line runs. Each line's effects last: `B:` and `USER 3` change the drive
-and the user area for the lines after them, which is why `MOUNT` isn't found
-and why the first prompt you can type at is `B>`.
+and the user area for the lines after them, so the first prompt you can type at
+is `B>`. `MOUNT` isn't found because `MOUNT.COM` is in user area 0: the CCP's
+search of drive A is made in area 3 too.
 
 TEC-OS reads the file once, into memory, before the first line runs, so the
 changes of drive and user area had no effect on reading it. It reads one
@@ -435,7 +436,7 @@ clears it.
 A command that names a file of type `.SVC` installs the service in it. The file
 comes from the current drive or from a drive named in the command, such as
 `B:NAME.SVC`. The command must include the type, because `NAME` alone makes the
-CCP search for `NAME.COM` and then `NAME.PRL`. `NAME.DRV` is an ordinary file
+CCP search for the program `NAME.COM`. `NAME.DRV` is an ordinary file
 name to the CCP, which searches for a program. `SERVICES` lists what is
 installed and `UNLOAD` removes it. On a card with no startup file, on the serial
 board, nothing is installed and neither display driver can be:
@@ -534,7 +535,7 @@ of the old display files, and leaves the card as it is.
 There are two ways out. "New starter card",
 or a new image from `npm run media`, replaces the card. The other way keeps
 the card: rename each file `.SVC` and change `STARTUP.CMD` to match, which
-works if the file's format, its second byte, is 3, the format this ROM loads.
+works if the file's format, its second byte, is 4, the format this ROM loads.
 This image is a copy of the starter card with its display drivers under the
 old type:
 
