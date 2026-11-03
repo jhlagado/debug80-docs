@@ -301,7 +301,7 @@ compares each test with the TEC-1G's own documents, which describe the latch as
 write-only and bits 3 to 6 as unconnected to U9, so a board can be expected to
 answer T10 and T12 differently. TEC-OS uses neither. It keeps a copy of the
 latch at `0040h` and never reads port `FFh` (`src/layout.asm:13`,
-`src/layout.asm:34`), and it selects EXPAND 1 with bit 2 alone
+`src/layout.asm:36`), and it selects EXPAND 1 with bit 2 alone
 (`src/layout.asm:18`).
 
 ## Running it on a board

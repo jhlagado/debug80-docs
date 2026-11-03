@@ -41,7 +41,7 @@ for the length read, `CMDLEN`, and 128 bytes of characters, `CMDTXT`, at `BD35h`
 `BDOSRME`, the end of the BDOS's RAM, 331 bytes, so the command buffer and the
 two FCBs before it are kept (`src/boot.asm:251-258`, `src/boot.asm:72`). The
 FCBs need no clearing, since each use of them parses a name into them in full
-and clears the rest (`src/cpm/ccp.asm:1336-1361`).
+and clears the rest (`src/cpm/ccp.asm:1338-1363`).
 
 The position of the next piece is `CHPOS`, one byte at `BFE4h`, in the part of
 the workspace above the RAM BIOS table, which `CPMINIT` doesn't clear
@@ -63,7 +63,7 @@ too (`src/cpm/bdos.asm:51-64`).
 With that limit a piece's command tail fits the page-zero buffer at `0080h`. A
 program's name has at least one character, so its tail has at most 126.
 `PREPPAGE` (Chapter 17) copies the tail to `0081h` with a 0 after it, and the 0
-lands at `00FFh` at the latest (`src/cpm/ccp.asm:1310-1327`). A tail one
+lands at `00FFh` at the latest (`src/cpm/ccp.asm:1312-1329`). A tail one
 character longer would put its 0 at `0100h`, the first byte of the program,
 which `LOADCOM` (Chapter 17) has already loaded by then
 (`src/cpm/ccp.asm:283-296`).
@@ -158,7 +158,7 @@ typed line and `STLINE` a startup line, so neither goes through `MLECHO`.
 The CCP then tests what the piece is. A drive letter and a colon alone select
 the drive (`src/cpm/ccp.asm:164-185`), and anything else goes to `NOTDRIVE`
 (Chapter 17), which compares the command with the built-ins' names and otherwise
-loads a program or installs a service (`src/cpm/ccp.asm:227-302`). A program not
+loads a program or installs a service (`src/cpm/ccp.asm:227-304`). A program not
 on the current drive is looked for on A:, when the command names no drive and
 the current drive isn't A:, so `B:NAME` looks on B: alone
 (`src/cpm/ccp.asm:283-295`).
@@ -166,7 +166,7 @@ the current drive isn't A:, so `B:NAME` looks on B: alone
 Every routine after `MLTAKE` reads the piece through `ARGSTRT` and stops at its
 0, so a built-in or a program reads its own piece and nothing of the pieces
 after it. `PREPPAGE` copies the command tail from `ARGSTRT` up to the 0, which
-leaves the tail at `0080h` ending at the `!` (`src/cpm/ccp.asm:1299-1327`).
+leaves the tail at `0080h` ending at the `!` (`src/cpm/ccp.asm:1301-1329`).
 
 `CHPOS` is set before the command runs. A program that ends normally, by `RET`,
 by a jump to `0000h` or by BDOS function 0 (`src/cpm/bdos.asm:130-131`), reaches
@@ -208,18 +208,18 @@ function 108 with `DE = FFFFh` at its start reads that 0.
 The CCP sets the code to a failure in one place, `ERRGO`, which Chapter 17
 describes with `BADCMD`. `ERRGO` stores `RCFAIL`, `FF00h`, and prints the
 message at `DE` before it goes to `STARTED` (`src/cpm/ccp.asm:20`,
-`src/cpm/ccp.asm:351-357`). `BADCMD`, which prints a command or argument with
-a question mark, falls through into it (`src/cpm/ccp.asm:331-354`). The
+`src/cpm/ccp.asm:353-359`). `BADCMD`, which prints a command or argument with
+a question mark, falls through into it (`src/cpm/ccp.asm:333-356`). The
 built-ins' messages go there by `JP ERRGO`: `NO FILE` from `FILENO`,
 `FILE EXISTS` from `REN`, `NO SPACE` from `SAVE` and `COPY`'s four messages
-through `CPFAIL` (`src/cpm/ccp.asm:851-853`, `src/cpm/ccp.asm:963-965`,
-`src/cpm/ccp.asm:1294-1296`, `src/cpm/ccp.asm:1073-1074`).
+through `CPFAIL` (`src/cpm/ccp.asm:853-855`, `src/cpm/ccp.asm:965-967`,
+`src/cpm/ccp.asm:1296-1298`, `src/cpm/ccp.asm:1075-1076`).
 
 A program that isn't found on the drives the search looks at, or fails to load,
 or a service that fails to install, reaches `BADCMD` (`src/cpm/ccp.asm:264-295`). Every other end of a built-in
 leaves the code at 0, including `COPY`'s `COPIED` line, which is printed through
-`PRTGO`, the entry after the store (`src/cpm/ccp.asm:1065-1072`,
-`src/cpm/ccp.asm:355`).
+`PRTGO`, the entry after the store (`src/cpm/ccp.asm:1067-1074`,
+`src/cpm/ccp.asm:357`).
 
 ## Paths that drop the rest
 
@@ -249,8 +249,8 @@ bit 5 with `AND DFh` and compares it with `03h`, `1Bh` and `Q`, so `^C`, Esc,
 and Esc. `^C` and `#` go to `PGDROP`, which clears `CHPOS`. The other keys leave
 `CHPOS` as it was, and the line runs on. A key that stops the listing sets carry
 in `PGNEWL`, and `DIR` and `TYPE` then end through `STARTED` like a listing that
-ran to its end (`src/cpm/ccp.asm:723-753`, `src/cpm/ccp.asm:502`,
-`src/cpm/ccp.asm:564`, `src/cpm/ccp.asm:840-849`).
+ran to its end (`src/cpm/ccp.asm:725-755`, `src/cpm/ccp.asm:504`,
+`src/cpm/ccp.asm:566`, `src/cpm/ccp.asm:842-851`).
 
 `Write lost` drops the line too. `CWBOOT` prints that message at a warm boot when
 a cache write has failed since the last one, after clearing `CFAIL` and `CHPOS`.

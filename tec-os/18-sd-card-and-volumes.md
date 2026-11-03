@@ -33,20 +33,20 @@ Z on success, and on failure NZ with an error code in `A` and in `SDERR`.
 
 Sending a byte is eight passes of a loop. Each pass shifts the top bit of `C`
 into the carry, puts it on bit 0 with the clock low, then writes the same bit
-with the clock high (`src/sd.asm:19-28`). Receiving is the same loop with MOSI
+with the clock high (`src/sd.asm:20-29`). Receiving is the same loop with MOSI
 held high: clock low, clock high, read the port and shift bit 7 into the
-result (`src/sd.asm:30-43`). `SPIEND` raises chip select and gives the card
-eight more clocks (`src/sd.asm:45-56`).
+result (`src/sd.asm:31-44`). `SPIEND` raises chip select and gives the card
+eight more clocks (`src/sd.asm:46-57`).
 
 A command is six bytes after an idle `FFh`: the command number with bit 6 set,
 four argument bytes from `SDARG`, most significant first, and a CRC byte
-(`src/sd.asm:58-94`). In SPI mode the card checks the CRC only of `CMD0` and
+(`src/sd.asm:59-95`). In SPI mode the card checks the CRC only of `CMD0` and
 `CMD8`, so `SDCMD` sends `95h` and `87h`, the correct bytes for those two with
 the arguments TEC-OS uses, and `01h`, the end bit alone, for the rest. It then
 reads up to 16 bytes, waiting for the response byte R1, whose bit 7 is 0.
 
 `SDINIT` starts the card at cold boot, and each step has its own error code
-(`src/sd.asm:114-204`):
+(`src/sd.asm:115-205`):
 
 1. Chip select high and 80 clocks, more than the 74 the card needs after
    power-up, then `CMD0`, which puts the card in SPI mode and its idle state.
@@ -69,19 +69,19 @@ Every later access gives the driver a block number in `SDLBA`, four bytes,
 least significant first. `LBAARG` turns it into the command's argument, which
 depends on the card's capacity: a high-capacity card gets the number as it is,
 and a standard one gets it shifted left by 9, the block times 512
-(`src/sd.asm:206-221`). The shift keeps only the low 32 bits of the product:
+(`src/sd.asm:207-231`). The shift keeps only the low 32 bits of the product:
 the top byte of `SDLBA` is dropped and so is the bit carried out of the shift.
 On a standard-capacity card a block number of `800000h` or more, 4 GiB or more
 into the card, therefore wraps to a lower block, and block `800800h` is read and
 written as block `800h` with no error.
 
-`SDREAD` reads a block with `CMD17` (`src/sd.asm:223-252`). A nonzero R1 is
+`SDREAD` reads a block with `CMD17` (`src/sd.asm:233-263`). A nonzero R1 is
 error 5, `SDECMD`. The card then sends `FFh` until the data is ready and `FEh`
 before it. The driver polls for that token up to 65,536 times before it gives
 error 6, `SDETOK`. The 512 bytes follow, then a two-byte CRC that the driver
 reads and doesn't check.
 
-`SDWRITE` writes a block with `CMD24` (`src/sd.asm:431-477`). R1 must be 0, or
+`SDWRITE` writes a block with `CMD24` (`src/sd.asm:445-492`). R1 must be 0, or
 the error is 5. The driver then sends `FFh`, the token `FEh`, the 512 bytes
 and two CRC bytes. The card's data response must come within 16 bytes and have
 `05h` in its low five bits, data accepted, or the error is 7, `SDEWRSP`. The
@@ -93,14 +93,14 @@ reporting busy.
 The two block loops, `SDRBLK` and `SDWBLK`, are unrolled, with eight bits
 written out in full for each byte. `SDRBLK` keeps its count of 256 two-byte
 passes in the Z80's `I` register, which is free in interrupt mode 1
-(`src/sd.asm:254-429`). On the model `SDREAD` takes 219,137 T-states for one
+(`src/sd.asm:268-443`). On the model `SDREAD` takes 219,137 T-states for one
 block, about 55 milliseconds, and `SDWRITE` 216,154, nearly all of it the
 4,096 bits of the block moved one at a time.
 
 When `SDXB` holds `LATEXP` the buffer is a line of the block cache in
 EXPAND 1. Each loop then puts EXPAND 1 in view around itself and uses no stack
-while it is (`src/sd.asm:258-262`, `src/sd.asm:356-359`, `src/sd.asm:364-368`,
-`src/sd.asm:427-428`).
+while it is (`src/sd.asm:272-276`, `src/sd.asm:370-373`, `src/sd.asm:378-382`,
+`src/sd.asm:441-442`).
 
 ## The container's checks
 
@@ -255,7 +255,7 @@ made through the BDOS doesn't get this far, since the BDOS's own `R/O` error
 comes first (`src/cpm/bdos.asm:2366-2378`). Function 16 tests the drive too,
 before it writes the directory entry, so closing an FCB that was never opened
 on a read-only drive ends in `Bdos Err On B: R/O`, with the card unchanged
-(`src/cpm/bdos.asm:570-571`, `test/cpm22.test.mjs:172`). Only a program that
+(`src/cpm/bdos.asm:570-571`, `test/cpm22.test.mjs:174`). Only a program that
 calls the BIOS itself receives the error.
 
 A write to the directory can change which blocks are in use, so `WRITE` then

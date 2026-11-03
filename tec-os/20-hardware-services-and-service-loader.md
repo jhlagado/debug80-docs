@@ -77,11 +77,11 @@ ROM's code, by the symbol map of the build:
 `INFO` reads no device. `B` is the byte `CONDEV`, the devices found at cold
 boot, with `VCLAIM` ORed in (`src/hwsvc.asm:49-53`). Bit 3 of `CONDEV`,
 `CDRTC`, is set once at cold boot, when `RTCHAS` finds the clock
-(`src/boot.asm:30-33`, `src/layout.asm:52`). `VCLAIM` holds `CDCLM`, which has
+(`src/boot.asm:30-33`, `src/layout.asm:54`). `VCLAIM` holds `CDCLM`, which has
 the value of `INFO`'s bit 4, while the chip is claimed (`src/ram.asm:57`,
-`src/layout.asm:53`). `DE` is `ROMVER`, and one 16-bit load from `VWID` gets
+`src/layout.asm:55`). `DE` is `ROMVER`, and one 16-bit load from `VWID` gets
 `L` and `H` (`src/hwsvc.asm:54-56`), because the columns and rows are adjacent
-bytes at `0048h` and `0049h` (`src/layout.asm:40-41`).
+bytes at `0048h` and `0049h` (`src/layout.asm:42-43`).
 
 `DIGIT` walks one set bit in `C` from `20h` down, one bit for each digit, and
 stops when `SRL C` empties the register (`src/hwsvc.asm:59`,
@@ -97,7 +97,7 @@ display address, and then 20 characters go out, each after `LCDWAIT`
 
 `VIDEO` returns status 2 unless `CDTMS` is set, the bit of `CONDEV` that
 records a PICO9918 answering at cold boot (`src/hwsvc.asm:103-106`,
-`src/layout.asm:50`). A claim hides the cursor if the PICO9918 is the console,
+`src/layout.asm:52`). A claim hides the cursor if the PICO9918 is the console,
 and stores `CDCLM` in `VCLAIM` (`src/hwsvc.asm:110-115`). The console tests
 that byte and `CONMOD` through `VTOWN`, so a claim stops it only while the
 PICO9918 is the console (`src/term.asm:533-544`).
@@ -160,7 +160,7 @@ A command whose type is `SVC` calls `SVCGO`, as Chapter 17 explains
 (`src/cpm/ccp.asm:267-276`). `SVCGO` calls `LOADCOM`, the routine that reads a
 `.COM` file to `0100h`. The file is then in the TPA, up to the page of the
 word at `0006h`, and `LOADTOP` gives its end (`src/glcd.asm:79-80`,
-`src/cpm/ccp.asm:361-373`, `src/ram.asm:229`). `SVCGO` then calls `SVCLOAD`
+`src/cpm/ccp.asm:363-375`, `src/ram.asm:229`). `SVCGO` then calls `SVCLOAD`
 (`src/glcd.asm:81`). Chapter 21 describes what the console does after a good
 load.
 
@@ -376,7 +376,7 @@ B>
 ```
 
 The space at byte 24 has become `20h` + `B7h`, `D7h`, and `PUTTRIM` masks bit
-7 (`src/cpm/ccp.asm:757-759`), so the name prints with a `W`.
+7 (`src/cpm/ccp.asm:759-761`), so the name prints with a `W`.
 
 ### 5. The claims and the move
 
@@ -456,7 +456,7 @@ record linked (`src/svc.asm:247-248`, `src/svc.asm:269-271`,
 A failed load may have left a hook in the RAM BIOS table, and the service's
 pages can't go while one points at them. So `SVCSCAN` tests the high byte of
 each of the 17 targets in the table against the service's pages
-(`src/svc.asm:250-258`, `src/layout.asm:70`). With no hit, `SVCFRE` clears the
+(`src/svc.asm:250-258`, `src/layout.asm:72`). With no hit, `SVCFRE` clears the
 first byte of each restart vector the flags claim, and the word at `0006h` goes
 back to `PZTOP`. `PZSWP` then gives those vectors their defaults and takes any
 other vector into the pages, and the result is 1 (`src/svc.asm:259-265`,
@@ -506,7 +506,7 @@ header saves, the registry's head and the lowest service's page. Each header
 holds that state from before its own load, and the states are
 stacked in memory in the order of the loads.
 
-`UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1103-1105`), which rejects the
+`UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1105-1107`), which rejects the
 command while `SVCBSY` is set. It uses the 0 it read there as `L`, making `HL`
 the base of the page in `PZTOP` (`src/svc.asm:44-48`). That page must equal
 `SVCHEAD`, which is 0 with no service in, so the test then fails. Bit 0 of the
@@ -576,7 +576,7 @@ program or a hooked BIOS entry, can.
 ## The stack figures
 
 A service's code runs on its caller's stack (`drivers/glcd.asm:5`), and the ROM
-reserves three stacks, of the sizes at `src/layout.asm:77-79`:
+reserves three stacks, of the sizes at `src/layout.asm:79-81`:
 
 | Stack | Reserved | Base | Census | `SVCLIM` |
 | --- | ---: | ---: | ---: | ---: |

@@ -71,7 +71,7 @@ record is then copied from the line.
 The block goes from the card into EXPAND 1 with no copy through `BLKBUF`,
 because `CFILL` sets `SDXB` to `LATEXP` for the call and `SDREAD`'s byte loop
 puts EXPAND 1 in view while it fills the buffer (`src/cache.asm:145-165`,
-`src/sd.asm:258-262`). A failed read leaves the line empty.
+`src/sd.asm:272-276`). A failed read leaves the line empty.
 
 `CTAKE` gives out lines in turn (`src/cache.asm:221-255`). A clean line can be
 given out at any time, since the card has the same bytes, but a dirty line has

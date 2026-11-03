@@ -442,7 +442,7 @@ is the exception. TEC-OS keeps only the low 32 bits of a block's byte address
 on such a card, so a block 4 GiB or more into the container is read and written
 at a lower address with no error, and the write can overwrite the header or
 another volume. The web page can't show either failure: it refuses an image smaller than its
-container (`web/src/main.mjs:527`), and its card is high-capacity.
+container (`web/src/main.mjs:545`), and its card is high-capacity.
 
 The web page's "Open image" loads an image file from the PC into the page's
 card, and "Download image" saves the page's card as one. The same image

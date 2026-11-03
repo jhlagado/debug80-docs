@@ -31,7 +31,7 @@ ROM's data block (`src/data3.asm:73-90`). None of it can be patched.
 
 The BDOS's variables and its 54-byte stack are in RAM, in the block from
 `BDOSRAM` to `BDOSRME`, `BE77h` to `BEFFh` (`src/ram.asm:130-190`,
-`src/layout.asm:77`). Warm boot clears that block, as a fresh load of the BDOS
+`src/layout.asm:79`). Warm boot clears that block, as a fresh load of the BDOS
 from disk would leave it, and sets the DMA address to `0080h`
 (`src/boot.asm:251-270`).
 

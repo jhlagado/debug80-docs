@@ -34,7 +34,7 @@ TEC-OS runs with the latch at `LATCLAS`, `01h`: the overlay off and EXPAND 0 in
 view (`src/layout.asm:19`).
 
 The latch can be written but not read, so TEC-OS keeps what it last wrote in a
-byte of page zero, `LATCHV` at `0040h` (`src/layout.asm:34`). A routine that
+byte of page zero, `LATCHV` at `0040h` (`src/layout.asm:36`). A routine that
 changes a bank for a moment reads `LATCHV`, sets its bit and writes the result
 to the port, and when it is done it writes `LATCHV` to the port unchanged. The
 block cache's lookup is an example. It writes `LATCHV` with `LATEXP` added to
@@ -85,7 +85,7 @@ into a service, the workspace or the ROM, keeps its jump
 
 The bytes `0040h–004Fh` are the sixteen that CP/M 2.2 leaves to the BIOS, and
 TEC-OS keeps fourteen bytes of its state there, of which only `LATCHV` has to be
-in view whatever the window shows (`src/layout.asm:34-47`). `0041h` and `0044h`
+in view whatever the window shows (`src/layout.asm:36-49`). `0041h` and `0044h`
 are unused:
 
 | Address | Name | Contents |
@@ -162,7 +162,7 @@ follow, then the directory search state, the file's position and the BDOS's
 stack (`src/ram.asm:130-190`). The block ends at `BDOSRME`, `BF00h`.
 
 `BF00h–BF32h` is the RAM BIOS table, seventeen three-byte jumps at the start
-of a page (`src/layout.asm:69-70`). Chapter 15 describes it.
+of a page (`src/layout.asm:71-72`). Chapter 15 describes it.
 
 Above the table, from `SDBYTE` at `BF33h`, is state that the build puts at a
 fixed offset from it, 51 bytes on (`src/ram.asm:192`). It starts with the SD
@@ -225,7 +225,7 @@ census and checks that the starter card's TPA is at least 45,830 bytes
 TEC-OS uses four stacks, and only the first is outside the workspace.
 
 The boot stack starts at `8000h`, `BOOTSTK`, and grows down into fixed RAM
-(`src/layout.asm:64`). Cold boot sets it first (`src/boot.asm:10`), because the
+(`src/layout.asm:66`). Cold boot sets it first (`src/boot.asm:10`), because the
 workspace is not yet known to be RAM. On this stack cold boot tests for a
 reset, clears page zero and runs the RAM check. After the check has passed and
 the workspace has been cleared, cold boot moves to the BIOS stack
@@ -240,9 +240,9 @@ The CCP's stack, `CSTKBAS` to `CSTKTOP`, is 30 bytes at `BE59h–BE76h`
 (`src/ram.asm:125-127`). The CCP sets it on entry and at the top of its main
 loop. It is also the stack a program starts with. The CCP sets it again, pushes
 the address of warm boot and jumps to `0100h`, which leaves the program 28
-bytes below that return word (`src/cpm/ccp.asm:296-302`). CP/M 2.2 gives a
+bytes below that return word (`src/cpm/ccp.asm:296-304`). CP/M 2.2 gives a
 program eight levels of stack and the return word, and those take 18 of the
-30 bytes (`src/layout.asm:75-76`). Below the stack is a
+30 bytes (`src/layout.asm:77-78`). Below the stack is a
 guard of 13 bytes, `STKGUARD`, which warm boot fills with `A5h`
 (`src/ram.asm:119-124`, `src/boot.asm:263-267`), so a guard byte that is no
 longer `A5h` shows that the stack went past its bottom.
@@ -253,9 +253,9 @@ stack pointer in `OLDSP`. It runs every function on this stack, the BIOS calls
 from the BDOS included.
 
 The three sizes in the workspace are equates in `layout.asm`: 54 for the BDOS,
-30 for the CCP and 38 for the BIOS (`src/layout.asm:77-79`). The comment above
+30 for the CCP and 38 for the BIOS (`src/layout.asm:79-81`). The comment above
 them gives the rule: each is the deepest use and a quarter more
-(`src/layout.asm:72-73`).
+(`src/layout.asm:74-75`).
 
 The measurement is `test/stacks.test.mjs`. The test boots the model under the
 heaviest workloads of the test suite, and it runs them on each console, on a
@@ -267,7 +267,7 @@ deepest use leaves at least a quarter of it free and no guard byte has changed
 (`test/stacks.test.mjs:211`, `test/stacks.test.mjs:243-246`). It presses the
 keypad's NMI at each new depth only while `0066h` holds a `RETN`
 (`test/stacks.test.mjs:62-69`). TEC-OS puts no handler there, so the measured
-depths include no NMI frame, as the comment at `src/layout.asm:73-75` says.
+depths include no NMI frame, as the comment at `src/layout.asm:75-77` says.
 
 A loaded service runs on its caller's stack, so the services' own depths add
 to these. `SVCLIM` gives the most that the services together may add to each
@@ -303,4 +303,4 @@ would write into EXPAND 1, and the `POP` after it would read EXPAND 0. The
 cache's routines, the history's and `DETECT`, which the RAM check calls to
 find EXPAND 1, state the rule at their heads (`src/cache.asm:10-13`,
 `src/history.asm:16-18`, `src/boot.asm:157-160`). The SD card driver's block
-loops keep to it when a cache line is the buffer (`src/sd.asm:258-260`).
+loops keep to it when a cache line is the buffer (`src/sd.asm:272-274`).

@@ -175,7 +175,7 @@ step, or at the diagnostic prompt, fails the test too.
 
 Cold boot is about to clear the drive table, so when the RAM passes, `RSLCAP`
 copies it, 32 bytes, to `RSLBUF` at `0100h` in the TPA (`src/boot.asm:130-134`,
-`src/layout.asm:86-92`). Nothing writes there between `COLD` and `MEMINIT`, so
+`src/layout.asm:88-94`). Nothing writes there between `COLD` and `MEMINIT`, so
 the copy survives the clearing of the workspace and is still there for the
 diagnostic prompt's retry. When the RAM fails, `RSLCAP` puts 0 in drive A's
 geometry byte in `RSLBUF`, which means no selection (`src/boot.asm:135-137`).
@@ -259,7 +259,7 @@ Warm boot is `WBOOTR`, `src/boot.asm:61-81`, the second entry of the BIOS jump
 table, and the jump at `0000h` leads to it through the RAM BIOS table at
 `BF03h`. A program reaches it by returning from `0100h`, since the CCP pushes
 `0000h` before it jumps there (`src/cpm/ccp.asm:14`,
-`src/cpm/ccp.asm:299-302`). A program also reaches it by jumping to `0000h` or
+`src/cpm/ccp.asm:301-304`). A program also reaches it by jumping to `0000h` or
 by calling BDOS function 0 (`src/cpm/bdos.asm:130-131`). A call of BDOS function
 47 that succeeds ends there too (`src/cpm/bdos.asm:65-71`).
 
