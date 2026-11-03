@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 60e0768, with the ATOM assembler from the repository's
+Checked against TEC-OS 1f9542d, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from Thorium
-676075a, whose copy in `dist/files` has the SHA-256
-`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`.
+04ec086, whose copy in `dist/files` has the SHA-256
+`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`.
 
 The CCP prints the prompt, reads a command line and carries it out, as Chapter
 3 describes from the keyboard's side. This chapter describes the CCP's code:
@@ -21,7 +21,7 @@ program with its page zero, and the CCP's RAM and stack.
 ## The CCP in the ROM
 
 The CCP's code is `src/cpm/ccp.asm`. In the ROM that Chapter 12 describes it
-runs from `CCPBAS`, `D791h`, to `E0EFh`, 2,399 bytes, followed directly by the
+runs from `CCPBAS`, `D7A3h`, to `E107h`, 2,405 bytes, followed directly by the
 BDOS. Its messages and the names of its built-in commands are in the ROM's
 data block (`src/data3.asm:7-71`), except for `TYPE`, whose name is the
 block's first five bytes (`src/data.asm:6-9`). What the CCP changes has to be
@@ -457,7 +457,11 @@ the `!`, and a command with no arguments gets blank FCBs and a tail of
 length 0.
 
 With page zero ready, the CCP starts the program (`src/cpm/ccp.asm:296-304`).
-It sets the stack pointer to `CSTKTOP`, the top of its own stack, pushes
+It first stores the drive byte of `CMDFCB` at `0050h`, as CP/M 3 does, so the
+program can find the drive it came from (`src/cpm/ccp.asm:297-298`). The byte
+is 0 for a plain name found on the current drive and the drive's number for a
+name such as `B:ARGS`. It is 1 for a program the search found on drive A, since
+the search set the FCB's drive byte to 1. The CCP then sets the stack pointer to `CSTKTOP`, the top of its own stack, pushes
 `0000h` and jumps to `0100h`. A program that ends with `RET` returns to
 `0000h`, the jump to warm boot, and so does one that jumps to `0000h` or calls
 function 0. The CCP prints a new line at `STARTED` after the warm boot, so a
@@ -486,7 +490,7 @@ clearing because each use parses them in full (`src/ram.asm:68-70`). From
 | `BE4Ch–BE58h` | 13 | `STKGUARD` | the stack guard, `A5h` in each byte |
 | `BE59h–BE76h` | 30 | `CSTKBAS` | the CCP's stack, up to `CSTKTOP` at `BE77h` |
 
-The addresses are those of the build at 60e0768. The guard is 43 bytes less the
+The addresses are those of the build at 1f9542d. The guard is 43 bytes less the
 stack's 30 (`src/ram.asm:119-124`), and warm boot fills it with `A5h`
 (`src/boot.asm:263-267`), so a guard byte that is no longer `A5h` shows that
 the stack has run past its bottom. `test/stacks.test.mjs` checks the guard
