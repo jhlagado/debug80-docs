@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 4d6eeaa, with the ATOM assembler from the repository's
+Checked against TEC-OS 19ad916, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from
 Thorium 8fcc6ea, whose copy in `dist/files` has the SHA-256
 `9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`; the
@@ -234,7 +234,8 @@ at once, after the data (`src/cache.asm:290-293`). A flush at any other time
 therefore writes only data. A power cut during a directory write's flush
 leaves some of the new data blocks on the card and the directory block not yet
 written, so no entry on the card names a block that was missed
-(`docs/recovery.md` describes what the user sees).
+(Chapter 4's [recovery section](04-cards-and-volumes.md#recovery-after-a-power-cut)
+describes what the user sees).
 
 `CWRITE` writes one line (`src/cache.asm:145-202`). It takes the block number
 from the table and sets `SDXB` so that `SDWRITE` reads its 512 bytes straight
