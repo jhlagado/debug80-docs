@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 7. Memory for programs
 
-Checked against TEC-OS 60e0768, with the ATOM assembler from the
+Checked against TEC-OS 1f9542d, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7.
 
 A program on TEC-OS has most of the Z80's memory to itself, and the rest is
@@ -238,6 +238,7 @@ CP/M fixes the use of the first 256 bytes, and TEC-OS follows it:
 | `0008h–0037h` | the restart vectors of `RST 08h` to `RST 30h` |
 | `0038h–003Ah` | `EI` and `RETI`, the return from an interrupt in mode 1 |
 | `0040h–004Fh` | TEC-OS's own bytes, below |
+| `0050h` | the drive the CCP loaded the program from, 0 for the current drive (Chapter 6) |
 | `005Ch–007Fh` | the FCB the CCP fills from the first word of the command tail |
 | `006Ch–007Bh` | the second word's name, inside the first FCB |
 | `0080h–00FFh` | the command tail, then the default DMA buffer |
