@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 11. Chaining commands
 
-Checked against TEC-OS 4d6eeaa, with the ATOM assembler from the
+Checked against TEC-OS 19ad916, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
 8fcc6ea, and its copy in `dist/files` has the SHA-256
 `9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`. Its
@@ -113,9 +113,10 @@ was dropped with the rest of the line. In the second line `DIR *.SVC`
 succeeded and `:DIR *.CMD` ran. The third line starts with `:`, and the
 command it tests is the last one of the line before, the `DIR *.CMD` that
 succeeded. A `:` at the start of a line typed after a failure runs nothing. On
-the serial board and on the web page's board, the starter card's last
+the serial board, and on a board with both displays, the starter card's last
 startup line `GLCD.SVC` fails, so a `:` that starts the first line typed runs
-nothing there too.
+nothing there too. The web page's card has only the chosen display's line,
+which installs, so on the page such a `:` runs.
 
 ## Return codes
 
