@@ -235,7 +235,8 @@ leaves `AB`. It then writes `X` at row 5, column 10 and a reverse `R` after
 it. It isn't on the starter card. Its source is `test/programs/term.asm`, and
 the commands under "The BIOS's console calls" assemble it on the PC and put it
 on drive B of `con.img`. On the PICO9918 the screen shows this after it ends.
-The screen text that `capture.mjs` prints leaves out reverse video, so the `R` appears as an ordinary letter:
+The screen text that `capture.mjs` prints leaves out reverse video, so the
+`R` appears as an ordinary letter:
 
 <!-- node tools/capture.mjs --board pico --screen --card con.img B:TERM -->
 ```text
