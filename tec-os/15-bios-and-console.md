@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 15. The BIOS and the console path
 
-Checked against TEC-OS 718c01b.
+Checked against TEC-OS ea9c1c0.
 
 The BIOS is the part of a CP/M system written for one machine, and on the TEC-1G
 most of it is the console. That console has a serial port made of two port bits
@@ -124,7 +124,7 @@ change.
 A display driver takes the console by the same route. `SVCGO` calls the
 loader, and when the service installed has a video table in its page, `SVCGO`
 writes the mode into the console field and sets `CONACT` to `FFh`, a value no
-field has, so that the `CONSEL` it calls next switches (`src/glcd.asm:68-93`).
+field has, so that the `CONSEL` it calls next switches (`src/glcd.asm:68-100`).
 `PICO.SVC` always takes the console, and `GLCD.SVC` takes it only when
 `PICO.SVC` is not in.
 
