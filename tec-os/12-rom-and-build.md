@@ -7,14 +7,14 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 12. The ROM and its build
 
-Checked against TEC-OS 19ad916.
+Checked against TEC-OS 60e0768.
 
 TEC-OS is one 16 KiB image for the addresses `C000h–FFFFh`. This chapter
 describes the image's layout, from the jump at its first byte to the free
 space at its end. It then follows the build that makes the image: the source
 files and their order, the include files the build generates and the two
 assemblies that place the workspace. The chapter ends with the checks on the
-result and the four names of the one image.
+result and the files the build writes.
 
 ## The image from C000h
 
@@ -23,50 +23,38 @@ The ROM has five parts, in this order:
 | Addresses | Bytes | Part |
 | --- | ---: | --- |
 | `C000h–C002h` | 3 | the reset jump |
-| `C003h–C017h` | 21 | the ROM table |
-| `C018h–C33Dh` | 806 | the data |
-| `C33Eh–FA62h` | 14,117 | the code |
-| `FA63h–FFFFh` | 1,437 | free |
+| `C003h–C00Ah` | 8 | the ROM table |
+| `C00Bh–C33Bh` | 817 | the data |
+| `C33Ch–F95Fh` | 13,860 | the code |
+| `F960h–FFFFh` | 1,696 | free |
 
-The figures are those of the build at commit 19ad916. The build writes them to
-`build/debug80/census.json` and, through `npm run media`, to the table of the
+The figures are those of the build at commit 60e0768. The build writes them to
+`build/tecos/census.json` and, through `npm run media`, to the table of the
 ROM's regions in `docs/memory-map.md`. The used part, from `C000h` to the end
-of the code, is 14,947 of the 16,384 bytes.
+of the code, is 14,688 of the 16,384 bytes.
 
-The first three bytes are a jump, `JP COLD` (`src/reset.asm:6`), to `C33Eh`,
+The first three bytes are a jump, `JP COLD` (`src/reset.asm:6`), to `C33Ch`,
 the first byte of the code. Chapter 14 describes how the Z80 reaches it at
 reset.
 
 The ROM table at `C003h` is the fixed interface for programs and services
-(`src/abi.asm:7-10`). It starts with the signature `TNA` and the ABI's major
-and minor version, 4 and 0. Next comes a word, `0048h`, that points at the
-console's columns and rows in page zero. After it are a jump to the hardware
-services at `C00Ah` and a word at `C00Dh` that points at the count of MAIN
-regions. Three more jumps follow: the mount entry at `C00Fh`, the display
-drivers' hook at `C012h` and the registry at `C015h`. Chapter 9 describes the
-table from a program's side and Chapter 20 the hardware services and the
-registry behind it. The table ends at `C018h`, where the data begins.
+(`src/abi.asm:7-10`). It is 8 bytes long. It starts with the signature `TNA`
+and the ABI's major and minor version, 5 and 0. At `C008h` is its one jump, to
+`SVCDSP`, the dispatcher of the numbered services. Chapter 9 describes the
+table from a program's side and Chapter 20 the services behind it. The table
+ends at `C00Bh`, where the data begins.
 
 The data block runs from the label `ROMDATA` (`src/data.asm:6`) to `ROMCODE`
 (`src/data3.asm:117`). Four files that follow one another in the assembly make
 it up: `data.asm`, `data2.asm`, the generated `gen/geom.asm` and `data3.asm`
 (`src/rom.asm:11-14`). They hold the messages, the keyword strings, the
 keyboard's tables, the container's name and disk parameters, the BDOS's
-function table and the hardware services' table (`src/data.asm:35-37`,
+function table and the table of the numbered services (`src/data.asm:35-37`,
 `src/data3.asm:22-39`, `src/data3.asm:76`, `src/data3.asm:94`). Each group is headed by the name of the source file
 whose code uses it, so `CWMSG`, the text `Write lost`, sits under `cache.asm`
-(`src/data3.asm:111-112`). Apart from the `RET` at `C01Dh`, described below,
-nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
+(`src/data3.asm:111-112`). Nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
 (`src/data.asm:16-32`) is in the block as the source of the copy that programs
 and the BDOS call, which Chapter 15 describes.
-
-The `RET` at `C01Dh` (`src/data.asm:9`) is there for programs from the
-previous ABI. ABI 3 had its mount entry at `C01Dh`, and a card from that
-time can hold a `MOUNT.COM` or `VOLS.COM` that calls `C01Dh` without testing
-the table. The `RET` sends such a call straight back with nothing done
-(`src/data.asm:7`). The five bytes between the table's end and that address
-are the first of the block, the CCP's keyword `TYPE` and its zero
-(`src/data.asm:8-9`).
 
 The code starts at `COLD` and runs through every routine of TEC-OS to the label
 `CODEEND`, which `src/end.asm:2` defines after the last file. The free space is
@@ -80,6 +68,7 @@ is in `src/`, and its top file, `src/rom.asm`, holds only includes, which are
 assembled in the order they are listed (`src/rom.asm:1-3`):
 
 ```asm
+%INCLUDE "abi.inc"
 %INCLUDE "gen/config.asm"
 %INCLUDE "gen/format.asm"
 %INCLUDE "layout.asm"
@@ -95,12 +84,13 @@ assembled in the order they are listed (`src/rom.asm:1-3`):
 
 The list goes on through `bios.asm`, `console.asm`, `term.asm`, `video.asm`,
 `tms.asm`, `lcd.asm`, `sd.asm`, `vol.asm`, `diag.asm`, `cpm/ccp.asm`,
-`cpm/bdos.asm`, `hwsvc.asm`, `xmove.asm`, `glcd.asm`, `cache.asm`,
-`history.asm`, `prl.asm` and `svc.asm`, and ends with `end.asm`
-(`src/rom.asm:5-32`).
+`cpm/bdos.asm`, `hwsvc.asm`, `glcd.asm`, `cache.asm`, `history.asm` and
+`svc.asm`, and ends with `end.asm` (`src/rom.asm:16-31`).
 
-The first four files emit no bytes. `gen/config.asm` and `gen/format.asm` are
-equates. So is `layout.asm`, which names the ports, the system latch's values,
+The first five files emit no bytes. `abi.inc`, `gen/config.asm` and
+`gen/format.asm` are equates. `abi.inc` is the file that programs and services
+assemble with, so the ROM takes the table's addresses and the services'
+numbers from the same equates as a program does (`src/rom.asm:4`). So is `layout.asm`, which names the ports, the system latch's values,
 TEC-OS's bytes in page zero and the fixed addresses in RAM
 (`src/layout.asm:8-92`). `ram.asm` names the resident workspace: it sets the
 origin to `WSBASE` and reserves each variable with `DS`, which defines a label
@@ -132,7 +122,7 @@ the banner and the LCD's top row print from (`src/data.asm:13`,
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,
-`tools/build.mjs:36-58`). At 19ad916 they are 49, 105, 50, 70 and 77, and the
+`tools/build.mjs:36-58`). At 60e0768 they are 49, 105, 50, 70 and 77, and the
 build stops with an error if a count would not fit in a byte
 (`tools/build.mjs:45-47`). Chapter 15 explains the loops and the arithmetic
 behind the counts.
@@ -175,7 +165,7 @@ the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
 therefore `BF00h` less the workspace's size, and the size is known only after
 an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
 build reads the address of `BDOSRME`, the label at the workspace's end, and
-takes `8000h` from it (`tools/build.mjs:228-232`). At 19ad916 that part is
+takes `8000h` from it (`tools/build.mjs:228-232`). At 60e0768 that part is
 1,448 bytes, so the second assembly has `WSBASE` at `B958h`
 (`tools/build.mjs:233-235`).
 
@@ -205,23 +195,18 @@ with `placement check failed:` and the rule's text
   the source puts bytes in RAM, and the image is at most 16 KiB
   (`tools/build.mjs:237-241`).
 - `RESET` is at `C000h` and the ROM table at `C003h`. The data block starts where
-  the table ends, and the `RET` at `C01Dh` is a `C9h`
-  (`tools/build.mjs:246-248`).
+  the table ends (`tools/build.mjs:246-248`).
 - The table, the data and the code are in that order, and the code ends
   within the ROM (`tools/build.mjs:249-250`).
-- Every address in `src/abi.inc`, the include file that programs and services
-  assemble with, equals the address of the matching label in `abi.asm`. Every
-  label there has an entry (`tools/build.mjs:142-149`, `tools/build.mjs:251`).
-- The hardware services' numbers and status codes in `abi.inc` are the ones
-  in `hwsvc.asm`, and their bits match the `CD` bits of `layout.asm`
-  (`tools/build.mjs:153-154`).
+- The table holds `TNA` and the version 5.0, its jump is `JP SVCDSP`, and it is
+  8 bytes long. `SVCFMT` in `abi.inc` is the service format that the tools on
+  the PC write. Every entry in the service table `SVTAB` is in the code, and the
+  device bits in `abi.inc` are the `CD` bits of `layout.asm`
+  (`tools/build.mjs:143-154`, `tools/build.mjs:251`).
 - The PICO driver's table offsets in `abi.inc` name the right entries in each
   width of `PICO.SVC`, which the check builds (`tools/build.mjs:158-170`).
 - `drivers/font.asm` is the font that
   `format/font5x7.txt` gives (`tools/build.mjs:174-176`).
-- No `.asm` file in `src`, `drivers`, `diag` or `test/programs` names an
-  address from `FF00h` to `FF27h`,
-  where an older table was (`tools/build.mjs:177`).
 - Each service's source reaches the ROM only through the
   names in `abi.inc` (`tools/build.mjs:180-190`).
 - The RAM BIOS table is at `BF00h`, and the fixed workspace ends exactly there. The
@@ -240,35 +225,32 @@ whose last allocation block, `DSM`, is 511 and a G8M whose `DSM` is 2047. Their
 vectors take 320 bytes and the entry is at `B815h`, which leaves 46,869 bytes
 from `0100h`.
 
-## One image, four names
+## One image
 
-When the checks pass, the build writes three files into `build/<profile>/`,
-a directory for each of the profile names below.
+When the checks pass, the build writes three files into `build/tecos/`.
 `tecos.rom` is the image. `tecos.d8.json` is the symbol map in Debug80's D8
 format, which `tools/capture.mjs` reads to find TEC-OS's labels. `census.json`
 holds the figures for the ROM's parts, the RAM's regions and the stacks
 (`tools/build.mjs:264-312`).
 
 The PICO9918's width is set by the driver loaded at startup (Chapter 5), so
-every board takes the same image. The build keeps four profile names,
-`debug80`, `debug80t40`, `debug80g32` and `board`, so that anything that reads
-a ROM by its profile's name still has a file to read, and all four name that
-image (`tools/build.mjs:28-31`). The build assembles the first profile and copies its
-image and map to the other three, and only the name and the description change
-in each census (`tools/build.mjs:316-318`). `npm run build` prints one line for
-each:
+every board takes the same image. The build has one profile, `tecos`, and stops
+with an error when it is given any other name (`tools/build.mjs:28-31`,
+`tools/build.mjs:323`). `npm run build` prints one line:
 
 ```text
-debug80: ROM 14947/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 6f3e7467744ec00e
-debug80t40: ROM 14947/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 6f3e7467744ec00e
-debug80g32: ROM 14947/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 6f3e7467744ec00e
-board: ROM 14947/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 6f3e7467744ec00e
+tecos: ROM 14688/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 f26c3215d0f3de36
 ```
 
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
-media` then copies each profile's three files to `dist/` as
-`tecos-<profile>.rom`, `tecos-<profile>.d8.json` and
-`tecos-<profile>.census.json` (`tools/media.mjs:178-183`). It also writes
-`docs/memory-map.md` from the `debug80` census. The four ROM files in `dist/`
-have the same SHA-256,
-`6f3e7467744ec00ee6a727c5a62c910e7b64b4ccc3fa622d778ea0b0c15b82f1`.
+media` then copies the three files to `dist/` as `tecos.rom`, `tecos.d8.json`
+and `tecos.census.json` (`tools/media.mjs:178-184`). It builds the starter card
+and writes `docs/memory-map.md` from the census (`tools/media.mjs:244`), and
+prints a line of its own:
+
+```text
+dist: 1 ROM profiles, 6 starter files, starter.img
+```
+
+The ROM in `dist/` has the SHA-256
+`f26c3215d0f3de368fcf343c1cc0c8bcd1a152291e0e4dec31a12bfaf1747186`.
