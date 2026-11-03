@@ -41,7 +41,7 @@ in the files that drive them.
 The read of port `00h` takes nothing from the keypad. It is there for the
 Debug80 runtime, whose serial input starts a queued byte at a read of that port
 (`src/layout.asm:9`, `src/console.asm:130`, `src/console.asm:184`,
-`src/console.asm:296`).
+`src/console.asm:301`).
 
 ## Port 01h and the serial line
 
@@ -72,13 +72,13 @@ TEC-OS reads three bits of port `03h` (`src/layout.asm:11`):
   matrix keyboard, and both display drivers fail to install, since each needs
   the keyboard.
 - **Bit 6, a keypad key down.** Read once, at cold boot, just before the
-  startup file is opened. A low bit skips the file (`src/cpm/ccp.asm:1624-1626`).
+  startup file is opened. A low bit skips the file (`src/cpm/ccp.asm:1580-1582`).
 - **Bit 7, the serial line's input.** Read by the serial routines
   (`src/console.asm:132`, `src/console.asm:185`, `src/console.asm:202`).
 
 The TEC-1G's documents and the Debug80 runtime describe the other bits of port
 `03h` differently. On bit 6 the two agree: it is low while a keypad key is
-down, which is how TEC-OS reads it (`src/cpm/ccp.asm:1624-1626`).
+down, which is how TEC-OS reads it (`src/cpm/ccp.asm:1580-1582`).
 `docs/diagnostics.md` records the comparison, and test T11 reads the port on a
 board. The Protect and Expand switches are not read.
 
@@ -178,7 +178,7 @@ standard-capacity card takes the block's byte address in 32 bits, so the
 driver can name no block 4 GiB or more into a standard card. It rejects such a
 block before any command, with code 9. A standard card with a volume that
 reaches past block `7FFFFFh`, the last below 4 GiB, fails the mount with code
-`27h` (`src/sd.asm:207-236`, `src/vol.asm:216-230`, Chapter 18). When a
+`27h` (`src/sd.asm:207-236`, `src/vol.asm:199-213`, Chapter 18). When a
 block goes to or from the block cache, the transfer loop runs with EXPAND 1 in
 view, writing the latch before the loop and its copy back after
 (`src/sd.asm:273-277`, `src/sd.asm:371-372`, `src/sd.asm:379-382`,

@@ -43,11 +43,11 @@ R retry, H header>
 ```
 
 The console is the serial terminal at this point, and the LCD's last row shows
-`CARD?` (`src/boot.asm:445-454`, `src/text.asm:8-9`). `R` starts the LCD, the card
+`CARD?` (`src/boot.asm:423-432`, `src/text.asm:8-9`). `R` starts the LCD, the card
 and the mount again, so a card fixed or put in while TEC-OS waits at the prompt
 mounts with no reset. `H` prints the first 64 bytes of the last block read and
 gives the prompt again, and so does any other key, with no bytes printed
-(`src/boot.asm:462-486`). [Chapter 23](23-diagnostics.md#the-diagnostic-prompt)
+(`src/boot.asm:440-464`). [Chapter 23](23-diagnostics.md#the-diagnostic-prompt)
 explains the prompt and [Chapter 1](01-introduction.md#a-card-that-won-t-mount)
 shows it.
 
@@ -71,7 +71,7 @@ and a failed read or write after it is a BDOS error or `Write lost`. The
 
 Codes `20h` to `2Ah` come from the ROM's `MOUNT` routine, its check of the
 container. The first check to fail stops the mount, and no drive stays mounted
-(`src/vol.asm:267-271`).
+(`src/vol.asm:251-255`).
 [Appendix E](appendix-e-container-format.md#the-checks-and-their-codes) gives
 every check in order, and
 [Chapter 18](18-sd-card-and-volumes.md#the-container-s-checks) explains them.
@@ -107,32 +107,32 @@ written and cleared.
 
 | Word | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| `CARD?` | TEC-OS is waiting at the diagnostic prompt. | As for the prompt. `R` starts the LCD again, so a retry that works clears the word. | [Chapter 21](21-startup.md#the-lcd-s-words), `src/boot.asm:447-448`, `src/text.asm:10` |
-| `PICO?` | At the first prompt after startup, a board with a PICO9918 and a matrix keyboard has no display driver in. The driver's file may be missing or bad, `STARTUP.CMD` may be missing or have no display line, or startup was skipped. | Correct the card from the serial terminal or on a PC. On a running board, a `PICO.SVC` that loads clears the word. | [Chapter 21](21-startup.md#stdone), `src/cpm/ccp.asm:1708-1719`, `src/text.asm:92` |
-| `GLCD?` | `CON UC1` couldn't load or install `A:GLCD.SVC`: the file is missing or bad, or the board has no graphics LCD or no matrix keyboard. The console stays where it was. | Put `GLCD.SVC` on drive A. The word stays until a display driver takes the console or a reset. | [Chapter 5](05-startup-and-services.md#words-on-the-lcd), `src/loader.asm:432-445`, `src/loader.asm:466-468`, `drivers/glcd.asm:43-45`, `src/text.asm:91` |
+| `CARD?` | TEC-OS is waiting at the diagnostic prompt. | As for the prompt. `R` starts the LCD again, so a retry that works clears the word. | [Chapter 21](21-startup.md#the-lcd-s-words), `src/boot.asm:425-426`, `src/text.asm:10` |
+| `PICO?` | At the first prompt after startup, a board with a PICO9918 and a matrix keyboard has no display driver in. The driver's file may be missing or bad, `STARTUP.CMD` may be missing or have no display line, or startup was skipped. | Correct the card from the serial terminal or on a PC. On a running board, a `PICO.SVC` that loads clears the word. | [Chapter 21](21-startup.md#stdone), `src/cpm/ccp.asm:1662-1673`, `src/text.asm:72` |
+| `GLCD?` | `CON UC1` couldn't load or install `A:GLCD.SVC`: the file is missing or bad, or the board has no graphics LCD or no matrix keyboard. The console stays where it was. | Put `GLCD.SVC` on drive A. The word stays until a display driver takes the console or a reset. | [Chapter 5](05-startup-and-services.md#words-on-the-lcd), `src/loader.asm:432-445`, `src/loader.asm:466-468`, `drivers/glcd.asm:43-45`, `src/text.asm:71` |
 
 ## The CCP's failures
 
 Each failure in this section sets the return code to `FF00h`, and a `:` piece
 after it in a chained line then drops the rest of the line
-(`src/cpm/ccp.asm:355-359`, `src/cpm/ccp.asm:125-137`).
+(`src/cpm/ccp.asm:343-347`, `src/cpm/ccp.asm:123-135`).
 [Chapter 11](11-chaining-commands.md#a-command-that-depends-on-the-one-before)
 explains the code.
 
 | Message | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| `NO FILE` | `DIR` matched nothing, or only files with the system attribute. `TYPE` found no such file or was given no name. `ERA` matched nothing. `REN` found no file of the old name. | Check the name, the drive and the user area: a file in another user area isn't found. | [Chapter 3](03-command-line.md#the-ccp-s-messages), `src/cpm/ccp.asm:587-590`, `src/cpm/ccp.asm:881-883`, `src/text.asm:15-16` |
-| `FILE EXISTS` | `REN` found a file with the new name on its drive. | `ERA` that file or choose another name. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:976-995`, `src/text.asm:71-72` |
-| `NO SPACE` | `SAVE` couldn't make the file, write a record or close the file: the drive or its directory is full. `SAVE` erases any file of that name first, so an old copy is gone and a part of the new file can remain, in whole extents of 16 KiB. | `ERA` files on the drive, or `SAVE` to another drive. Press `^C` before `DIR` to see the space free: the allocation blocks of the unclosed extent stay counted as used until a warm boot. | [Chapter 3](03-command-line.md#save), `src/cpm/ccp.asm:1275-1284`, `src/cpm/ccp.asm:1302-1326`, `src/text.asm:73-74` |
-| `NO SOURCE` | `COPY`'s source isn't on its drive in the current user area. Nothing has changed. | Check the name, the drive and the user area. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1061-1065`, `src/text.asm:47-48` |
-| `CANNOT MAKE DEST` | `COPY` couldn't make the destination: its directory is full. | `ERA` files on that drive, or copy to another drive. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1066-1072`, `src/text.asm:49-50` |
-| `WRITE ERROR` | `COPY` couldn't write a record: the drive is full, or the directory has no entry for the next extent. The destination isn't closed. It keeps only the extents already written to its directory, so its length is a multiple of 16 KiB, and 0 if the first extent was the one being written. | `ERA` the destination, free some space, press `^C` to give back the allocation blocks of the unclosed extent, and copy again. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1079-1084`, `src/text.asm:51-52` |
-| `CLOSE ERROR` | `COPY` read the whole source, but function 16 found no directory entry for the destination. On the host model this message came only from a run that altered the destination's name in the FCB. | `DIR` the destination and copy again. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1089-1094`, `src/text.asm:53-54` |
+| `NO FILE` | `DIR` matched nothing, or only files with the system attribute. `TYPE` found no such file or was given no name. `ERA` matched nothing. `REN` found no file of the old name. | Check the name, the drive and the user area: a file in another user area isn't found. | [Chapter 3](03-command-line.md#the-ccp-s-messages), `src/cpm/ccp.asm:563-566`, `src/cpm/ccp.asm:846-848`, `src/text.asm:15-16` |
+| `FILE EXISTS` | `REN` found a file with the new name on its drive. | `ERA` that file or choose another name. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:940-958`, `src/text.asm:51-52` |
+| `NO SPACE` | `SAVE` couldn't make the file, write a record or close the file: the drive or its directory is full. `SAVE` erases any file of that name first, so an old copy is gone and a part of the new file can remain, in whole extents of 16 KiB. | `ERA` files on the drive, or `SAVE` to another drive. Press `^C` before `DIR` to see the space free: the allocation blocks of the unclosed extent stay counted as used until a warm boot. | [Chapter 3](03-command-line.md#save), `src/cpm/ccp.asm:1229-1237`, `src/cpm/ccp.asm:1255-1277`, `src/text.asm:53-54` |
+| `NO SOURCE` | `COPY`'s source isn't on its drive in the current user area. Nothing has changed. | Check the name, the drive and the user area. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1024-1028`, `src/text.asm:27-28` |
+| `CANNOT MAKE DEST` | `COPY` couldn't make the destination: its directory is full. | `ERA` files on that drive, or copy to another drive. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1029-1035`, `src/text.asm:29-30` |
+| `WRITE ERROR` | `COPY` couldn't write a record: the drive is full, or the directory has no entry for the next extent. The destination isn't closed. It keeps only the extents already written to its directory, so its length is a multiple of 16 KiB, and 0 if the first extent was the one being written. | `ERA` the destination, free some space, press `^C` to give back the allocation blocks of the unclosed extent, and copy again. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1042-1047`, `src/text.asm:31-32` |
+| `CLOSE ERROR` | `COPY` read the whole source, but function 16 found no directory entry for the destination. On the host model this message came only from a run that altered the destination's name in the FCB. | `DIR` the destination and copy again. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1052-1057`, `src/text.asm:33-34` |
 
 ### `NAME?`
 
 The CCP prints the word it stopped at, up to the next space, with a question
-mark and a blank line (`src/cpm/ccp.asm:333-353`). For a program, a service,
+mark and a blank line (`src/cpm/ccp.asm:323-340`). For a program, a service,
 `COPY` and `UNLOAD` the word is the command's own. Any other built-in prints
 its first argument, whichever argument was wrong, and prints the question mark
 alone when it needs an argument and has none.
@@ -140,21 +140,21 @@ alone when it needs an argument and has none.
 
 | Word or command | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| A program's name | No `NAME.COM` on the drive in the current user area or in user 0. When the command names no drive and the current drive isn't A, none on drive A in the current user area or in user 0 either. A type other than `.SVC` is ignored, so `PICO.DRV` looks for `PICO.COM`. The web page reports a card with no `.SVC` file for the chosen display and a `.DRV` display file when it powers on, naming the chosen display's `.DRV` file if the card has it and another of them if not. | Check the name, the drive and the user area, or name the drive, as `B:NAME`. A card from an older TEC-OS needs the steps in [Chapter 5](05-startup-and-services.md#a-card-from-an-older-tec-os). | [Chapter 3](03-command-line.md#running-a-program), `src/cpm/ccp.asm:277-295`, `src/cpm/ccp.asm:361-387`, `host/card.mjs:37-40` |
-| A program's name | The name is ambiguous or has no name part, is longer than 8 and 3 characters, has a bad character or names a drive past P. | Correct the name. | [Chapter 3](03-command-line.md#file-names), `src/cpm/ccp.asm:232`, `src/cpm/ccp.asm:264-266`, `src/cpm/ccp.asm:1366-1468`, `src/cpm/ccp.asm:1473-1523` |
-| A program's name | `NAME.COM` doesn't fit below the BDOS's entry, the address in the word at `0006h`. | Use `UNLOAD` to free service resident memory. | [Chapter 17](17-ccp.md#loading-a-program), `src/cpm/ccp.asm:401-403`, `src/cpm/ccp.asm:420-432` |
+| A program's name | No `NAME.COM` on the drive in the current user area or in user 0. When the command names no drive and the current drive isn't A, none on drive A in the current user area or in user 0 either. A type other than `.SVC` is ignored, so `PICO.DRV` looks for `PICO.COM`. The web page reports a card with no `.SVC` file for the chosen display and a `.DRV` display file when it powers on, naming the chosen display's `.DRV` file if the card has it and another of them if not. | Check the name, the drive and the user area, or name the drive, as `B:NAME`. A card from an older TEC-OS needs the steps in [Chapter 5](05-startup-and-services.md#a-card-from-an-older-tec-os). | [Chapter 3](03-command-line.md#running-a-program), `src/cpm/ccp.asm:267-285`, `src/cpm/ccp.asm:349-375`, `host/card.mjs:37-40` |
+| A program's name | The name is ambiguous or has no name part, is longer than 8 and 3 characters, has a bad character or names a drive past P. | Correct the name. | [Chapter 3](03-command-line.md#file-names), `src/cpm/ccp.asm:230`, `src/cpm/ccp.asm:254-256`, `src/cpm/ccp.asm:1317-1419`, `src/cpm/ccp.asm:1424-1474` |
+| A program's name | `NAME.COM` doesn't fit below the BDOS's entry, the address in the word at `0006h`. | Use `UNLOAD` to free service resident memory. | [Chapter 17](17-ccp.md#loading-a-program), `src/cpm/ccp.asm:388-390`, `src/cpm/ccp.asm:406-417` |
 | `NAME.SVC` | The file is missing or doesn't read, isn't a service of format 4, or fails while installing. A display driver also fails when its display or the matrix keyboard is missing, or when that display has a driver already. `GLCD.SVC` also fails while the PICO9918 is the console, and only `CON UC1` installs it then, so the starter card's `STARTUP.CMD` gives `GLCD.SVC?` at each boot on a board with both displays. | Check the board, the name and `SERVICES`. A card from an older TEC-OS needs the steps in Chapter 5. With the PICO9918 as the console, `GLCD.SVC?` from `STARTUP.CMD` needs no remedy. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), [Chapter 20](20-hardware-services-and-service-loader.md#a-failed-load), `src/loader.asm:450-465`, `src/loader.asm:77-105`, `drivers/pico.asm:47-60`, `drivers/glcd.asm:33-54` |
-| `UNLOAD` | No service is installed, or the newest can't be removed, as `PICO.SVC` can't be while the PICO9918 is the console. | `CON TTY` first for a console driver. Services go newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccp.asm:1133-1135`, `src/loader.asm:44-54` |
-| `COPY` | A name is missing or has a wildcard, or the destination is the source. | Name one source and a destination that differs. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1030-1056` |
-| `ERA` | No name, more than one, or a bad name. | `ERA NAME`. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:886-890` |
-| `REN` | The form isn't `NEW=OLD`, a name has a wildcard, a name is missing, or the names give two different drives. | `REN NEW=OLD`, with a drive on one name or the same drive on both. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:937-971` |
-| `SAVE` | The count isn't decimal, it reaches the page of the address at `0006h`, or the name is missing or has a wildcard. | `SAVE n NAME.COM`, with a smaller count. | [Chapter 3](03-command-line.md#save), `src/cpm/ccp.asm:1230-1274` |
-| `USER` | The argument isn't a number from 0 to 15. | `USER n`. | [Chapter 3](03-command-line.md#user-areas), `src/cpm/ccp.asm:1197-1224` |
-| `CON` | The argument isn't `TTY`, `CRT`, `BAT` or `UC1`, or something follows it. | Use one of the four names. | [Chapter 2](02-console.md#the-con-command), `src/cpm/ccp.asm:1141-1194` |
-| `DIR` or `TYPE` | `DIR` has more than one argument or a bad name. `TYPE` has more than one, a wildcard, a bad name or no name part. | Name one file for `TYPE`, one pattern for `DIR`. | [Chapter 3](03-command-line.md#file-names), `src/cpm/ccp.asm:452-454`, `src/cpm/ccp.asm:837-840` |
+| `UNLOAD` | No service is installed, or the newest can't be removed, as `PICO.SVC` can't be while the PICO9918 is the console. | `CON TTY` first for a console driver. Services go newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccp.asm:1088-1090`, `src/loader.asm:44-54` |
+| `COPY` | A name is missing or has a wildcard, or the destination is the source. | Name one source and a destination that differs. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:993-1019` |
+| `ERA` | No name, more than one, or a bad name. | `ERA NAME`. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:851-855` |
+| `REN` | The form isn't `NEW=OLD`, a name has a wildcard, a name is missing, or the names give two different drives. | `REN NEW=OLD`, with a drive on one name or the same drive on both. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:901-935` |
+| `SAVE` | The count isn't decimal, it reaches the page of the address at `0006h`, or the name is missing or has a wildcard. | `SAVE n NAME.COM`, with a smaller count. | [Chapter 3](03-command-line.md#save), `src/cpm/ccp.asm:1185-1229` |
+| `USER` | The argument isn't a number from 0 to 15. | `USER n`. | [Chapter 3](03-command-line.md#user-areas), `src/cpm/ccp.asm:1152-1179` |
+| `CON` | The argument isn't `TTY`, `CRT`, `BAT` or `UC1`, or something follows it. | Use one of the four names. | [Chapter 2](02-console.md#the-con-command), `src/cpm/ccp.asm:1096-1149` |
+| `DIR` or `TYPE` | `DIR` has more than one argument or a bad name. `TYPE` has more than one, a wildcard, a bad name or no name part. | Name one file for `TYPE`, one pattern for `DIR`. | [Chapter 3](03-command-line.md#file-names), `src/cpm/ccp.asm:436-438`, `src/cpm/ccp.asm:805-808` |
 
 The bad characters in a name are `<>,;:[]%|()/\`, from `BADCHARS`
-(`src/text.asm:77-78`).
+(`src/text.asm:57-58`).
 
 ## The BDOS's errors
 
@@ -168,10 +168,10 @@ function.
 
 | Message | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| `Bdos Err On d: Select` | The drive has no volume or is past D, or a program's FCB has `?` in its drive byte outside function 17. The warm boot gives a prompt on drive A if the drive at `0004h` has no volume (`src/cpm/ccp.asm:33-43`). | `MOUNT` a volume on the drive, or use another drive. | [Chapter 3](03-command-line.md#drives), `src/cpm/bdos.asm:2387-2390`, `src/text.asm:85` |
-| `Bdos Err On d: R/O` | A program changed a drive that function 28 made read-only: a write, a make, delete, rename or attribute change. A close writes nothing there and gives no error. | The warm boot clears the state, as CP/M 2.2's does. Run the program again, and correct a program that writes to a drive it protected. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:2368-2382`, `src/cpm/bdos.asm:570-573`, `src/cpm/bdos.asm:457-458`, `src/text.asm:87` |
-| `Bdos Err On d: R/O` | A change to a volume the card marks read-only. `SAVE`, `ERA`, `REN` and `COPY` onto such a volume give it too. The card isn't changed. | Use a volume that takes writes. The volume's read-only flag is set when the card is built. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:1946-1951`, `src/cpm/bdos.asm:2368-2382`, `src/text.asm:87` |
-| `Bdos Err On d: File R/O` | A delete, a rename or a sequential or random write reached a file with the read-only attribute. `ERA`, `REN`, `SAVE` and `COPY` onto such a file give it too. An `ERA` with a wildcard has already erased the matching files before it in the directory. | Clear the attribute with BDOS function 30, or on a PC `tecvol get` the file and `tecvol put` it without `--ro`. The CCP has no command for it. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:639-647`, `src/cpm/bdos.asm:765`, `src/cpm/bdos.asm:800-805`, `src/cpm/bdos.asm:984`, `src/text.asm:88` |
+| `Bdos Err On d: Select` | The drive has no volume or is past D, or a program's FCB has `?` in its drive byte outside function 17. The warm boot gives a prompt on drive A if the drive at `0004h` has no volume (`src/cpm/ccp.asm:33-43`). | `MOUNT` a volume on the drive, or use another drive. | [Chapter 3](03-command-line.md#drives), `src/cpm/bdos.asm:2387-2390`, `src/text.asm:65` |
+| `Bdos Err On d: R/O` | A program changed a drive that function 28 made read-only: a write, a make, delete, rename or attribute change. A close writes nothing there and gives no error. | The warm boot clears the state, as CP/M 2.2's does. Run the program again, and correct a program that writes to a drive it protected. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:2368-2382`, `src/cpm/bdos.asm:570-573`, `src/cpm/bdos.asm:457-458`, `src/text.asm:67` |
+| `Bdos Err On d: R/O` | A change to a volume the card marks read-only. `SAVE`, `ERA`, `REN` and `COPY` onto such a volume give it too. The card isn't changed. | Use a volume that takes writes. The volume's read-only flag is set when the card is built. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:1946-1951`, `src/cpm/bdos.asm:2368-2382`, `src/text.asm:67` |
+| `Bdos Err On d: File R/O` | A delete, a rename or a sequential or random write reached a file with the read-only attribute. `ERA`, `REN`, `SAVE` and `COPY` onto such a file give it too. An `ERA` with a wildcard has already erased the matching files before it in the directory. | Clear the attribute with BDOS function 30, or on a PC `tecvol get` the file and `tecvol put` it without `--ro`. The CCP has no command for it. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:639-647`, `src/cpm/bdos.asm:765`, `src/cpm/bdos.asm:800-805`, `src/cpm/bdos.asm:984`, `src/text.asm:68` |
 | `Bdos Err On d: Bad Sector` | A record or a directory record couldn't be read from the card or written to it. | Copy the card to a PC and run `tecvol verify`. Replace a card that keeps failing. | [Chapter 16](16-bdos.md#bdos-errors), `src/cpm/bdos.asm:957`, `src/cpm/bdos.asm:1268`, `src/cpm/bdos.asm:1838`, `src/cpm/bdos.asm:1873` |
 | `Bdos Err On d: Bad Sector` | The volume runs past the end of the card. The card rejects a block past its end, and no other block of the card changes. | Use a card that holds the whole container, or build the card again with `tecvol create` so that every volume lies on the card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:233-263`, `src/sd.asm:445-452` |
 | `Bdos Err On d: Bad Sector` | A directory entry names an allocation block past the end of the volume: the directory is damaged. The drive logs in and the rest of the volume works, and reading that block gives this. | `ERA` takes the file. Run `tecvol verify` on a copy, as in [Chapter 4](04-cards-and-volumes.md#recovery-after-a-power-cut). | [Chapter 16](16-bdos.md#files-extents-and-records), `src/cpm/bdos.asm:1287`, `src/cpm/bdos.asm:2274-2281`, `src/cpm/bdos.asm:2411-2415` |
@@ -182,7 +182,7 @@ function.
 cache. At each warm boot TEC-OS writes every changed block in the cache, then
 prints this message on a line of its own if any such write has failed since the
 last warm boot, including one that a later attempt got through. It also drops
-the rest of a chained line (`src/cache.asm:330-339`, `src/text.asm:96`).
+the rest of a chained line (`src/cache.asm:330-339`, `src/text.asm:76`).
 
 A flush stops at the first block that fails. That block and those after it stay
 in the cache, and each warm boot writes them again and prints the message again
@@ -218,9 +218,9 @@ volume services behind it.
 | Message | Cause | Remedy | See |
 | --- | --- | --- | --- |
 | `MOUNT [D: [NAME or INDEX]]` | The usage line: the argument doesn't start with a drive letter from A to D and a colon. | `MOUNT` alone to list the volumes, `MOUNT B: NAME`, `MOUNT B: 2`, or `MOUNT B:` to empty the drive. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:33-44`, `test/programs/mount.asm:241-242` |
-| `No such volume` | No volume has that label or index. A failed read of the table gives this too. | `MOUNT` with no argument lists the labels and indexes. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:106-107`, `test/programs/mount.asm:129-130`, `src/vol.asm:645-673` |
-| `Cannot mount: in use or too large` | The volume is on another drive, the drive has no vector or one too small for the volume, or writing the cache's changes to the card failed. | Empty the other drive first with `MOUNT d:`. For size, use a drive whose vector takes the volume, as [Chapter 4](04-cards-and-volumes.md#drives-and-their-cost-in-memory) explains. A failed write is `Write lost`'s case. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `src/vol.asm:541-553`, `src/vol.asm:571-581`, `src/vol.asm:618-627` |
-| `Cannot unmount` | The drive is A, which always has a volume, or writing the cache's changes to the card failed. | Mount another volume on drive A in place of the one there. A failed write is `Write lost`'s case. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `src/vol.asm:583-589` |
+| `No such volume` | No volume has that label or index. A failed read of the table gives this too. | `MOUNT` with no argument lists the labels and indexes. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:106-107`, `test/programs/mount.asm:129-130`, `src/vol.asm:614-642` |
+| `Cannot mount: in use or too large` | The volume is on another drive, the drive has no vector or one too small for the volume, or writing the cache's changes to the card failed. | Empty the other drive first with `MOUNT d:`. For size, use a drive whose vector takes the volume, as [Chapter 4](04-cards-and-volumes.md#drives-and-their-cost-in-memory) explains. A failed write is `Write lost`'s case. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `src/vol.asm:510-522`, `src/vol.asm:540-550`, `src/vol.asm:587-596` |
+| `Cannot unmount` | The drive is A, which always has a volume, or writing the cache's changes to the card failed. | Mount another volume on drive A in place of the one there. A failed write is `Write lost`'s case. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `src/vol.asm:552-558` |
 | `MOUNT needs TEC-OS with ABI 5.` | The ROM table is missing, or its major version isn't 5: the program is from another version of TEC-OS. | Use the `MOUNT.COM` that matches the ROM, from a new starter card. | [Chapter 9](09-hardware-services.md#checking-for-tec-os), `test/programs/mount.asm:14-31` |
 
 ## Lines that report no fault
@@ -229,14 +229,14 @@ These lines appear in ordinary runs and need no remedy.
 
 | Line | Meaning | See |
 | --- | --- | --- |
-| `TEC-OS 0.1 for TEC-1G` | The banner on the console at cold boot. The LCD's first row has `TEC-OS 0.1  TEC-1G`. | [Chapter 1](01-introduction.md#the-first-boot), `src/text.asm:6`, `src/text.asm:81` |
-| `d: LABEL` | A drive and its volume's label, at cold boot. A volume the card marks read-only has ` (read-only)` after the label. The LCD's two rows below the banner show drives A and B in the same form, with no read-only mark. | [Chapter 1](01-introduction.md#the-first-boot), `src/boot.asm:323-352`, `src/lcd.asm:67-104`, `src/text.asm:7` |
+| `TEC-OS 0.1 for TEC-1G` | The banner on the console at cold boot. The LCD's first row has `TEC-OS 0.1  TEC-1G`. | [Chapter 1](01-introduction.md#the-first-boot), `src/text.asm:6`, `src/text.asm:61` |
+| `d: LABEL` | A drive and its volume's label, at cold boot. A volume the card marks read-only has ` (read-only)` after the label. The LCD's two rows below the banner show drives A and B in the same form, with no read-only mark. | [Chapter 1](01-introduction.md#the-first-boot), `src/boot.asm:323-336`, `src/lcd.asm:67-86`, `src/text.asm:7` |
 | `n files, nK free` | `DIR`'s last line: the files listed and the space free on the drive. One file gives `1 file, nK free`. | [Chapter 3](03-command-line.md#dir), `src/text.asm:17-22` |
-| `[more]` | `DIR` or `TYPE` has filled the screen. Any key shows the next screen. Esc, `Q`, `q` and `;` end the listing, and `^C` and `#` also drop the rest of a chained line, since the test clears bit 5 of the key before it compares. | [Chapter 2](02-console.md#pauses-in-long-listings), `src/cpm/ccp.asm:751-783`, `src/text.asm:23-24` |
-| `ALL (Y/N)?` | `ERA` was given a name that is all wildcards. A line that starts with `Y` or `y` erases every file of the current user area on the drive. Any other line erases nothing, and the command counts as a success. A Return alone is the whole answer and erases nothing. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:896-923`, `src/text.asm:75-76` |
-| `COPIED nnnn` | `COPY` finished. `nnnn` is the number of records, in hexadecimal. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1095-1101`, `src/text.asm:55-56` |
-| `CON: TTY: serial terminal`, `CON: CRT: PICO9918`, `CON: UC1: GLCD` | The console in use, after `CON`. A `CON CRT` that can't take effect reports the serial terminal, and a `CON UC1` that can't take effect reports the console in use. `CON: BAT: reader and list` goes to the list device, which discards it, so it appears nowhere. | [Chapter 2](02-console.md#the-con-command), `src/cpm/ccp.asm:1168-1182`, `src/console.asm:287`, `src/text.asm:59-68` |
-| `NAME n` | `SERVICES`: a service's name and its pages, the newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccp.asm:1589-1613` |
+| `[more]` | `DIR` or `TYPE` has filled the screen. Any key shows the next screen. Esc, `Q`, `q` and `;` end the listing, and `^C` and `#` also drop the rest of a chained line, since the test clears bit 5 of the key before it compares. | [Chapter 2](02-console.md#pauses-in-long-listings), `src/cpm/ccp.asm:727-759`, `src/text.asm:23-24` |
+| `ALL (Y/N)?` | `ERA` was given a name that is all wildcards. A line that starts with `Y` or `y` erases every file of the current user area on the drive. Any other line erases nothing, and the command counts as a success. A Return alone is the whole answer and erases nothing. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:861-888`, `src/text.asm:55-56` |
+| `COPIED nnnn` | `COPY` finished. `nnnn` is the number of records, in hexadecimal. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1058-1064`, `src/text.asm:35-36` |
+| `CON: TTY: serial terminal`, `CON: CRT: PICO9918`, `CON: UC1: GLCD` | The console in use, after `CON`. A `CON CRT` that can't take effect reports the serial terminal, and a `CON UC1` that can't take effect reports the console in use. `CON: BAT: reader and list` goes to the list device, which discards it, so it appears nowhere. | [Chapter 2](02-console.md#the-con-command), `src/cpm/ccp.asm:1123-1137`, `src/console.asm:292`, `src/text.asm:39-48` |
+| `NAME n` | `SERVICES`: a service's name and its pages, the newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccp.asm:1547-1568` |
 | `d: LABEL` from `MOUNT` | The drive and the volume now on it, also when the volume was there already. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:149-157` |
 | `Unmounted` | `MOUNT d:` has emptied the drive. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:49-57` |
 | `nn LABEL G1M`, `nn LABEL G8M` | `MOUNT` with no argument: a volume's index in decimal, its label and its geometry, with ` R/O` after a read-only volume and the drive after a mounted one, as `d:`. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:159-208` |

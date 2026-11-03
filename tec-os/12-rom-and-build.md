@@ -45,14 +45,14 @@ table from a program's side and Chapter 20 the services behind it. The table
 ends at `C00Bh`, where the data begins.
 
 The data block runs from the label `ROMDATA` (`src/tables.asm:7`) to `ROMCODE`
-(`src/text.asm:98`). Three files that follow one another in the assembly make
+(`src/text.asm:78`). Three files that follow one another in the assembly make
 it up: `tables.asm`, the generated `gen/geom.asm` and `text.asm`
 (`src/rom.asm:11-13`). They hold the messages, the keyword strings, the
 keyboard's tables, the container's name and disk parameters, the BDOS's
 function table and the table of the numbered services (`src/tables.asm:29-31`,
-`src/text.asm:27-46`, `src/tables.asm:41`, `src/tables.asm:53`). Each group is headed by the name of the source file
+`src/text.asm:26-26`, `src/tables.asm:65`, `src/tables.asm:77`). Each group is headed by the name of the source file
 whose code uses it, so `CWMSG`, the text `Write lost`, sits under `cache.asm`
-(`src/text.asm:95-96`). Nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
+(`src/text.asm:75-76`). Nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
 (`src/tables.asm:10-26`) is in the block as the source of the copy that programs
 and the BDOS call, which Chapter 15 describes.
 
@@ -104,7 +104,7 @@ data follows the table because the three data files come next, and the code
 follows the data because every file after `text.asm` is code. So a code
 file's routines are in the code block, and its strings and tables are in the
 data block, under a heading with the file's name (`src/rom.asm:9-14`,
-`src/text.asm:95`).
+`src/text.asm:75`).
 
 ## The generated files
 
@@ -117,7 +117,7 @@ to be edited (`tools/build.mjs:60-136`).
 first byte of the resident workspace, which the build places as the next
 section describes. `VERHI`, `VERLO` and `ROMVER` are the version, 0.1, which
 the banner and the LCD's top row print from (`src/text.asm:6`,
-`src/text.asm:81`). The last five, `TXDLY`, `TXSTOP`, `RXDLY`, `RXHALF` and
+`src/text.asm:61`). The last five, `TXDLY`, `TXSTOP`, `RXDLY`, `RXHALF` and
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,

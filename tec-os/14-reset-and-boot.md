@@ -44,7 +44,7 @@ Interrupts come on only if a program or a service enables them, and nothing in
 the ROM does. The Z80 comes out of reset
 with interrupts off, and the ROM executes `EI` only to restore a state it saved:
 the routines that must run with interrupts off put them back as they were at
-entry (`src/bios.asm:324`, `src/console.asm:212`, `src/console.asm:248`,
+entry (`src/bios.asm:325`, `src/console.asm:212`, `src/console.asm:248`,
 `src/history.asm:39`, `src/cache.asm:466`). `VPAIR`, the routine in `PICO.SVC`
 that writes each pair to the VDP's control port, does the same
 (`drivers/pico.asm:226-238`). The one
@@ -96,7 +96,7 @@ stack move into it. Step 11 runs at cold boot only, for the reason Chapter 15
 gives. Chapter 18 describes steps 8 and 9, and the rest of this chapter steps 2,
 4 and 14.
 
-The diagnostic prompt's `R` jumps back to `COLDRT`, step 7 (`src/boot.asm:462-463`,
+The diagnostic prompt's `R` jumps back to `COLDRT`, step 7 (`src/boot.asm:440-441`,
 `src/boot.asm:48-50`), so a retry clears the LCD, starts the card again and
 mounts it, without clearing the memory or printing the banner a second time.
 
@@ -184,7 +184,7 @@ geometry byte in `RSLBUF`, which means no selection (`src/boot.asm:146-148`).
 
 `RESEL` applies the selection after `MOUNT` has accepted the card in the socket
 and `ALVINIT` has given its drives their vectors in the usual way, so neither
-the slots nor the TPA varies with the selection (`src/vol.asm:407-496`). The card
+the slots nor the TPA varies with the selection (`src/vol.asm:376-465`). The card
 in the socket may no longer hold the kept volumes, so `RESEL` works in two steps
 and changes the drives only if the first step succeeds. The first step changes
 no drive. It walks the card's descriptors and compares each with every kept
@@ -197,7 +197,7 @@ volume would not fit its slot, or a kept drive is left with no match.
 The second step runs only when every kept drive has matched. It copies `RSLBUF`
 over the drive table and the drives' indexes and builds each drive's DPH. That
 step reads nothing and can't fail. A drive that was empty before the reset stays
-empty, even if the card names a volume for it (`src/vol.asm:418-420`).
+empty, even if the card names a volume for it (`src/vol.asm:387-389`).
 
 The run below unmounts drive B with `MOUNT B:`, then presses reset. The kept
 selection has no volume on B and the starter card's two volumes still match, so
@@ -262,7 +262,7 @@ Warm boot is `WBOOTR`, `src/boot.asm:72-92`, the second entry of the BIOS jump
 table, and the jump at `0000h` leads to it through the RAM BIOS table at
 `BF03h`. A program reaches it by returning from `0100h`, since the CCP pushes
 `0000h` before it jumps there (`src/cpm/ccp.asm:14`,
-`src/cpm/ccp.asm:301-304`). A program also reaches it by jumping to `0000h` or
+`src/cpm/ccp.asm:291-294`). A program also reaches it by jumping to `0000h` or
 by calling BDOS function 0 (`src/cpm/bdos.asm:130-131`). A call of BDOS function
 47 that succeeds ends there too (`src/cpm/bdos.asm:65-71`).
 

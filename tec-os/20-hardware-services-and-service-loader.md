@@ -38,7 +38,7 @@ with `B`, `DE` and `HL` unchanged (`src/services.asm:21-24`,
 The lookup needs a register pair, and all three carry arguments, so `SVCDSP`
 pushes `HL` and `DE` and doubles the number into `DE`. It adds that to `SVTAB`,
 the table of 15 routine addresses, 30 bytes in the ROM's data block
-(`src/services.asm:25-32`, `src/tables.asm:53-60`). The routine's address goes to
+(`src/services.asm:25-32`, `src/tables.asm:77-84`). The routine's address goes to
 `HL` and the caller's `DE` comes back. Two instructions finish the job:
 `EX (SP),HL` swaps the routine's address with the saved `HL` on the stack, and
 `RET` jumps to it (`src/services.asm:33-39`). The routine starts with every
@@ -57,7 +57,7 @@ services, 9 to 11, are in `src/vol.asm` and Chapter 18 describes them. `DRVR`,
 12, is `SVDRV`, also in `src/services.asm`. It checks the mode and calls
 `VIDHOOK`, the display drivers' hook in `src/video.asm`, which Chapter 21
 describes. `FIND` and `LIST`, 13 and 14, are the registry's, described below
-(`src/services.asm:4-6`, `src/services.asm:314-327`, `src/tables.asm:53-60`).
+(`src/services.asm:4-6`, `src/services.asm:314-327`, `src/tables.asm:77-84`).
 
 The dispatcher, its exits and the nine hardware routines are 474 bytes of the
 ROM's code, by the symbol map of the build:
@@ -160,10 +160,10 @@ is in the workspace (`src/abi.inc:21-23`, `src/services.asm:6-7`).
 ## From the command to the loader
 
 A command whose type is `SVC` calls `SVCGO`, as Chapter 17 explains
-(`src/cpm/ccp.asm:267-276`). `SVCGO` calls `LOADCOM`, the routine that reads a
+(`src/cpm/ccp.asm:257-266`). `SVCGO` calls `LOADCOM`, the routine that reads a
 `.COM` file to `0100h`. The file is then in the TPA, up to the page of the
 word at `0006h`, and `LOADTOP` gives its end (`src/loader.asm:450-451`,
-`src/cpm/ccp.asm:391-403`, `src/ram.asm:229`). `SVCGO` then calls `SVCLOAD`
+`src/cpm/ccp.asm:378-390`, `src/ram.asm:229`). `SVCGO` then calls `SVCLOAD`
 (`src/loader.asm:452`). Chapter 21 describes what the console does after a good
 load.
 
@@ -196,7 +196,7 @@ two services in (`test/svc.test.mjs:866`).
 With no service in, the word holds the address of the BDOS entry jump, the *stub*,
 and `STUBAD` keeps that address. `ALVINIT` puts the stub directly below the lowest
 allocation vector, so the TPA keeps every byte up to the vectors
-(`src/boot.asm:434-438`). On the starter card the vectors start at `B818h` and the
+(`src/boot.asm:412-416`). On the starter card the vectors start at `B818h` and the
 stub is at `B815h`. Its low byte varies with the card, so a program assumes
 nothing of it. `PZINIT` writes the stub's three bytes at every
 warm boot (`src/boot.asm:208-213`).
@@ -340,7 +340,7 @@ image starts with the table of words the driver passes to the ROM's terminal,
 `0187h`, `0192h`, `019Bh` and so on in the file. After the load they read
 `B387h`, `B392h` and `B39Bh` at `B219h`, each high byte raised by `B2h`.
 `SERVICES` prints each page count as the page above the service less the
-service's own page (`src/cpm/ccp.asm:1600-1607`), so the count includes the part of
+service's own page (`src/cpm/ccp.asm:1556-1563`), so the count includes the part of
 the last page the service doesn't fill. `PICO.SVC`'s 1,315 bytes of header and
 image take six pages, and with the 21 bytes below the stub they lower the TPA
 from 46,869 bytes to 45,312:
@@ -379,7 +379,7 @@ B>
 ```
 
 The space at byte 24 has become `20h` + `B7h`, `D7h`, and `PUTTRIM` masks bit
-7 (`src/cpm/ccp.asm:787-789`), so the name prints with a `W`.
+7 (`src/cpm/ccp.asm:763-765`), so the name prints with a `W`.
 
 ### 5. The claims and the move
 
@@ -402,7 +402,7 @@ service's last (`src/loader.asm:321-334`).
 `SVCCALL` sets `SVCBSY`, reads the 2-byte offset at `HL`, adds the page to its
 high byte and jumps (`src/loader.asm:216-217`, `src/loader.asm:310-318`). The header
 is on a page boundary, so no 16-bit addition is needed. `INIT` returns to the
-instruction after the call, on the CCP's stack (`src/cpm/ccp.asm:274`).
+instruction after the call, on the CCP's stack (`src/cpm/ccp.asm:264`).
 
 A warm boot during `INIT` leaves the word at `0006h` correct, because `PZTOP` is
 untouched. `PZINIT` writes `PZTOP` to `0006h` (`src/boot.asm:206-207`), and warm
@@ -471,14 +471,14 @@ surviving a warm boot. The scan reads only that table, so the tables that `DRVR`
 records for the display modes are beyond it (`test/svc.test.mjs:531`).
 
 A service kept this way appears in `SERVICES`, because `CMDSVC` walks the owner
-list from `SVCHEAD`, not the registry (`src/cpm/ccp.asm:1589-1613`). Each header's
+list from `SVCHEAD`, not the registry (`src/cpm/ccp.asm:1547-1568`). Each header's
 offset 8 is the next older service's page, 0 at the end.
 
 ## The registry
 
 A client reaches the registry through two numbered services, `FIND`, 13, and
 `LIST`, 14, whose routines are `SVFND` and `SVLST` (`src/abi.inc:79-87`,
-`src/tables.asm:59-60`). `FIND` takes the name at `DE` and the least version
+`src/tables.asm:83-84`). `FIND` takes the name at `DE` and the least version
 in `B`. `SVFND` moves `B` to `C`, clears `B` and goes to `REGFIND`. `LIST`
 takes an index in `B`, and `SVLST` moves it to `C` (`src/loader.asm:362-368`).
 
@@ -509,7 +509,7 @@ header saves, the registry's head and the lowest service's page. Each header
 holds that state from before its own load, and the states are
 stacked in memory in the order of the loads.
 
-`UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1133-1135`), which rejects the
+`UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1088-1090`), which rejects the
 command while `SVCBSY` is set. It uses the 0 it read there as `L`, making `HL`
 the base of the page in `PZTOP` (`src/loader.asm:44-48`). That page must equal
 `SVCHEAD`, which is 0 with no service in, so the test then fails. Bit 0 of the
@@ -596,7 +596,7 @@ alone, with the run on a volume written behind: 32, 16 and 16
 of the run of `CON UC1` on a board with the graphics LCD, which gives 22
 (`test/stacks.test.mjs:219`).
 
-`SVCLIM` holds the limits (`src/tables.asm:67`), and they are counted from the
+`SVCLIM` holds the limits (`src/tables.asm:91`), and they are counted from the
 base. Each limit is the largest even figure that, added to the base, leaves a
 quarter of the stack free: 40 of 54, 28 of 38 and 22 of 30. At this commit
 `GLCD.SVC` declares 2, 0 and 6 (`drivers/glcd.asm:18`). Its 6 is the difference

@@ -34,26 +34,26 @@ prints `TEC-OS needs 64K RAM` on the serial port and stops there
 (`src/boot.asm:33`, `src/boot.asm:290-320`, `src/text.asm:5`).
 
 `DIAG` resets the stack to the BIOS's, since a mount that failed part way may
-have left it deep, and keeps the code on it (`src/boot.asm:445-446`). It writes
-`CARD?` on the LCD's last row (`src/boot.asm:447-448`, `src/text.asm:10`,
+have left it deep, and keeps the code on it (`src/boot.asm:423-424`). It writes
+`CARD?` on the LCD's last row (`src/boot.asm:425-426`, `src/text.asm:10`,
 `src/lcd.asm:43`) and then prints `No volume mounted, error ` and the code as
-two hexadecimal digits (`src/boot.asm:449-453`, `src/text.asm:8`).
+two hexadecimal digits (`src/boot.asm:427-431`, `src/text.asm:8`).
 
 At the prompt `R retry, H header> ` (`src/text.asm:9`), `DIAG` reads one key
 with `BCONIN`, turns a small letter into a capital, echoes it and ends the line
-(`src/boot.asm:454-461`). Any key but `R` or `H` gives the prompt again. The
+(`src/boot.asm:432-439`). Any key but `R` or `H` gives the prompt again. The
 console at this point is always the serial terminal. Cold boot starts it there,
 and no display driver has been installed, since the startup file is on the card.
 So on a board with no terminal attached, the LCD's `CARD?` is the only sign.
 
 `H` prints the first 64 bytes of `BLKBUF`, the 512-byte buffer that holds the
-last block read from the card, in four rows of 16 (`src/boot.asm:466-486`,
+last block read from the card, in four rows of 16 (`src/boot.asm:444-464`,
 `src/ram.asm:20`). For a container that fails its checks that block is usually
 block 0, the header, as in Chapter 18's example. With no card, or a card that
 fails before block 0 is read, the buffer still holds the zeros cold boot
 cleared it to, as Chapter 1 shows.
 
-`R` jumps back to `COLDRT` (`src/boot.asm:462-463`). That starts the LCD again,
+`R` jumps back to `COLDRT` (`src/boot.asm:440-441`). That starts the LCD again,
 which clears `CARD?`, and then repeats the card's start and the mount, so a card
 fixed or put in while the prompt waits is mounted without a reset.
 
