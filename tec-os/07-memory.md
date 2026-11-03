@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 7. Memory for programs
 
-Checked against TEC-OS 1f9542d, with the ATOM assembler from the
+Checked against TEC-OS 7458352, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7.
 
 A program on TEC-OS has most of the Z80's memory to itself, and the rest is
@@ -310,4 +310,12 @@ the CCP's stack is out of view. A program on that stack has lost its stack and
 the BDOS before it writes a byte. A write to the window then damages the
 cache, and the next flush can write wrong data to the card. TEC-OS has no
 call that gives a program space there.
+
+A program that ends with `JP 0000h` while EXPAND 1 is in view still reaches a
+warm boot. The jump at `0000h` leads to `BF03h`, which in EXPAND 1 holds zeros
+unless a program wrote there, and the Z80 runs on through them into the ROM at
+`C000h`. The ROM's reset entry tells this from a reset by the byte at `0002h`
+and goes to the warm boot, which puts EXPAND 0 back and writes the cache's
+changes to the card as at any program's end (`src/boot.asm:16-18`). A reset
+and BIOS function 0 run cold boot.
 
