@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from
-Thorium 676075a, whose copy in `dist/files` has the SHA-256
-`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`; the
+Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from
+Thorium 04ec086, whose copy in `dist/files` has the SHA-256
+`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`; the
 timings below were measured on that card.
 
 TEC-OS starts in two ways. Cold boot runs after power-on, after the reset
@@ -98,13 +98,13 @@ The diagnostic prompt's `R` jumps back to `COLDRT`, step 7 (`src/diag.asm:22-23`
 `src/boot.asm:37-39`), so a retry clears the LCD, starts the card again and
 mounts it, without clearing the memory or printing the banner a second time.
 
-On the starter card with the serial board, cold boot takes 1,285,388 T-states,
+On the starter card with the serial board, cold boot takes 1,285,395 T-states,
 about 0.32 seconds, from the first instruction to the CCP's entry, measured on
 the host model. Three steps take most of it. The banner is 25 characters at
 9,448 T-states each through `CONOUT`, the read of the container's block 0 takes
-219,137 T-states and `MEMINIT` takes about 347,000, most of it the clearing of
+219,144 T-states and `MEMINIT` takes about 347,000, most of it the clearing of
 EXPAND 1. The startup file's commands then run before the first prompt, so the
-CCP's first call of `CONIN` at that prompt comes 8,835,792 T-states after reset.
+CCP's first call of `CONIN` at that prompt comes 8,838,350 T-states after reset.
 
 ## The RAM check
 
@@ -223,7 +223,8 @@ The selection is all that a reset keeps. Cold boot clears page zero, the
 workspace and EXPAND 1 as on any cold boot, so services, the registry, the cache,
 open files and the history are gone and the console is the serial terminal again
 (`src/boot.asm:15-28`, `src/boot.asm:141-147`). A change the cache held for the
-card is lost. Once a recognised reset has applied a selection, the next reset
+card is lost, and one the cache had already written stays on the card, since
+nothing is rolled back. Once a recognised reset has applied a selection, the next reset
 passes the test and applies it again while the card still holds those volumes.
 That card's own drives come back at a reset only when the test fails, as it does
 after a power cycle or for a reset pressed during cold boot. Chapter 4's
@@ -344,13 +345,13 @@ boot reads no block. Of it, `CPMINIT` takes 7,427 T-states, the cache's flush in
 `CWBOOT`, with no line to write, takes 8,002 and the CCP's entry with its disk
 reset 14,058.
 
-A warm boot after `SAVE 8 X.COM` on drive A takes 112,303 T-states on the same
+A warm boot after `SAVE 8 X.COM` on drive A takes 114,737 T-states on the same
 measure. The extra 80,000 or so are the rebuild of A's vector from its directory
 up to the last entry in use, and the directory is read from the block cache with
 no card access. For comparison, a disk reset of the kind a program makes drops
-drive A and scans its whole directory again, which takes 1,029,045 T-states on
+drive A and scans its whole directory again, which takes 1,031,428 T-states on
 the starter card even with the directory in the cache. The first scan of drive
 B's 512 entries, with the card read for each of its 32 directory blocks, takes
-9,166,178. The test `test/warmboot.test.mjs` checks the unchanged case on its
+9,166,402. The test `test/warmboot.test.mjs` checks the unchanged case on its
 own card: a warm boot that reads no block and takes at most 386,604 T-states
 (`test/warmboot.test.mjs:11-17`).
