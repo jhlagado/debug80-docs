@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 9. The hardware services
 
-Checked against TEC-OS 1f9542d. The programs were assembled by the starter
+Checked against TEC-OS 7458352. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. `DEMO`
 was assembled on the PC by ATOM from the repository's `atom-z80` 0.3.7.
@@ -151,10 +151,10 @@ alternates. A program treats `BC`, `DE` and `HL` as changed unless a service
 returns something there. Any number from 15 up returns status 1 with `B`, `DE`
 and `HL` as they were.
 
-The services run on the caller's stack. The deepest hardware service is
-`PUTAT` on the graphics LCD, which takes 22 bytes on top of the `CALL`'s return
-address, the dispatcher's included, and that fits the 28 bytes of the CCP's
-stack in a program that has pushed nothing. No hardware service calls the
+The services run on the caller's stack. `abi.inc` gives a bound for each, the
+most it takes on top of the `CALL`'s return address, the dispatcher's included.
+The deepest hardware service is `PUTAT`, whose bound is 22 bytes, and that fits
+the 28 bytes of the CCP's stack in a program that has pushed nothing. No hardware service calls the
 BDOS, so a program can call one from code that runs inside a BDOS call, such
 as a routine reached through its own jump in the BIOS jump table. The mount
 and unmount services reset the drive through BDOS function 37, so a program
@@ -468,7 +468,7 @@ TIME:	DS	7
 ```
 
 On the model's serial board the loop goes round every 24,435 T-states, 164
-times a second, and every 32nd round takes 32,065 for the clock. A video
+times a second, and every 32nd round takes 32,093 for the clock. A video
 console saves 640 to 760 a round. The digits are dark for the time the program
 spends outside `DIGIT`, about 15 percent of the loop here, so a loop's other
 work costs brightness and, if it runs long, flicker. `DIGCLK` has no code to
@@ -478,8 +478,8 @@ clear the digits at its end, since they are dark as soon as the calls stop.
 
 `RTC`, number 8, reads or sets a DS1302 clock. `HL` points at seven bytes in
 BCD: seconds, minutes, hours, date, month, weekday and year. `B = 0` reads
-them into memory, and any other value sets the clock from them. With no clock
-the service returns status 2, and bit 3 of `INFO` records whether a clock
+them into memory, and `B = 1` sets the clock from them. Any other `B` returns
+status 1 and leaves the clock alone. With no clock the service returns status 2, and bit 3 of `INFO` records whether a clock
 answered at cold boot. `NOW` reads the clock and prints the date and time:
 
 ```asm
@@ -670,8 +670,9 @@ confirms that each bit reaches `B` and leaves the labels unconfirmed.
 ## Claiming the PICO9918
 
 For graphics on the PICO9918, a program first claims it with `VIDEO`, service
-number 3. Any nonzero `B` claims and `B = 0` releases, and on a board with no
-PICO9918 both return status 2.
+number 3. `B = 1` claims and `B = 0` releases, and any other `B` returns
+status 1 with nothing changed. On a board with no PICO9918 a claim and a
+release both return status 2.
 
 While the chip is claimed, the terminal code leaves it alone: output to it is
 dropped, no cursor is drawn and no pages flip. The program may therefore set
@@ -683,7 +684,7 @@ printed before the claim.
 
 A release with `PICO.SVC` in restores the driver's text mode, font and page,
 and if the PICO9918 is the console it also clears the screen and puts the
-cursor at the top left. That took 216,023 T-states on the model, about 54 ms,
+cursor at the top left. That took 216,051 T-states on the model, about 54 ms,
 at 80 columns. With `PICO.SVC` out, nothing is restored and the chip stays as
 the program left it. The claim records no owner and a warm boot releases it in
 the same way, so a program that ends without a release still gets the console
