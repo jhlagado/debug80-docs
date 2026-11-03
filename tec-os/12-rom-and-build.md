@@ -85,14 +85,14 @@ assembled in the order they are listed (`src/rom.asm:1-3`):
 The list goes on through `bios.asm`, `console.asm`, `term.asm`, `video.asm`,
 `tms.asm`, `lcd.asm`, `sd.asm`, `vol.asm`, `diag.asm`, `cpm/ccp.asm`,
 `cpm/bdos.asm`, `hwsvc.asm`, `glcd.asm`, `cache.asm`, `history.asm` and
-`svc.asm`, and ends with `end.asm` (`src/rom.asm:16-31`).
+`svc.asm`, and ends with `end.asm` (`src/rom.asm:16-32`).
 
 The first five files emit no bytes. `abi.inc`, `gen/config.asm` and
-`gen/format.asm` are equates. `abi.inc` is the file that programs and services
-assemble with, so the ROM takes the table's addresses and the services'
-numbers from the same equates as a program does (`src/rom.asm:4`). So is `layout.asm`, which names the ports, the system latch's values,
-TEC-OS's bytes in page zero and the fixed addresses in RAM
-(`src/layout.asm:8-92`). `ram.asm` names the resident workspace: it sets the
+`gen/format.asm` are equates. So is `layout.asm`, which names the ports, the
+system latch's values, TEC-OS's bytes in page zero and the fixed addresses in
+RAM (`src/layout.asm:8-92`). `abi.inc` is the file that programs and services
+assemble with, so the ROM takes the table's addresses and the services' numbers
+from the same equates as a program does (`src/rom.asm:4`). `ram.asm` names the resident workspace: it sets the
 origin to `WSBASE` and reserves each variable with `DS`, which defines a label
 and moves the address on without emitting anything (`src/ram.asm:6`,
 `src/ram.asm:9-190`). A second origin, at `RAMBIOS+BIOSLEN`, places the state
@@ -245,7 +245,8 @@ tecos: ROM 14688/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 f26c3215d0f3
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
 media` then copies the three files to `dist/` as `tecos.rom`, `tecos.d8.json`
 and `tecos.census.json` (`tools/media.mjs:178-184`). It builds the starter card
-and writes `docs/memory-map.md` from the census (`tools/media.mjs:244`), and
+(`tools/media.mjs:227-228`) and writes `docs/memory-map.md` from the census
+(`tools/media.mjs:244`), and
 prints a line of its own:
 
 ```text

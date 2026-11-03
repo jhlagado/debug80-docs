@@ -50,9 +50,9 @@ uses it (`src/layout.asm:17`). The matrix keyboard's Caps key toggles bit 7 in
 
 The latch moves `8000h–BFFFh` from one half to the other, so anything TEC-OS
 must reach while EXPAND 1 is in view has to be outside the window. `LATCHV` is
-the one such byte: the routines that put EXPAND 1 in view, such as the cache's
-lookup above, read none of TEC-OS's own state outside EXPAND 1 but `LATCHV` while it is in
-view. The cache's copy routine `MVCOPY` also copies the part of a buffer that
+the one such byte. While a routine has EXPAND 1 in view, as the cache's lookup
+above does, the only state of TEC-OS's own that it reads outside EXPAND 1 is
+`LATCHV`. The cache's copy routine `MVCOPY` also copies the part of a buffer that
 lies below `8000h` then (`src/cache.asm:387-392`).
 `LATCHV` is in page zero with the rest of TEC-OS's fixed state.
 

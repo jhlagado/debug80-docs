@@ -153,8 +153,8 @@ node tools/tecvol.mjs put time.img A data.bin
 `Machine` as `tools/capture.mjs` does. It reads the model's T-state count,
 `cycles` (`host/machine.mjs:262`), twice: when `READ DATA.BIN` has been typed
 and echoed, before the Return that ends it, and at the next prompt. After a
-cold boot, the command's first run took 6,633,385 T-states, 1.66 seconds, and
-its second 1,335,056, 0.33 seconds, a fifth of that. Both figures include
+cold boot, the command's first run took 6,633,371 T-states, 1.66 seconds, and
+its second 1,335,042, 0.33 seconds, a fifth of that. Both figures include
 loading the program from drive A.
 
 The gain needs the whole file in the cache. A file of 15,360 bytes took about
@@ -231,8 +231,8 @@ writes three of the first 32 data blocks early, because all 30 lines are dirty
 before the BDOS next writes the directory.
 
 On `time.img`, from the section on reads, `SAVE 64 X.COM`, 16 KiB, took
-30,829,851 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
-9,909,718, 2.48 seconds, about a third of that. Each run followed a cold boot
+30,829,837 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
+9,909,704, 2.48 seconds, about a third of that. Each run followed a cold boot
 and a change to the drive. The count, taken as for the reads, leaves out the
 change of drive.
 

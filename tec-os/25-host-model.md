@@ -105,8 +105,8 @@ Any other write is recorded in the machine's `expand1Writes` and, for the first
 16, in `EXPAND1_WRITES`, shared by every machine in the process. The Node.js
 wrapper the tests use fails a test file if that list isn't empty at its end
 (`test/lib/machine.mjs:14-17`). The history's page at `BD00h` is left out of the
-watch, since `HSTORE` writes it, and so is the page at `BF00h`, which is free
-(`host/machine.mjs:219`).
+watch, since `HSTORE` writes it, and so is the page at `BF00h`, though nothing
+writes it now (`host/machine.mjs:219`).
 
 ## Driving the machine
 
