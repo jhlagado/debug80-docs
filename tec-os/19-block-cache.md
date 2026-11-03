@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 60e0768, with the ATOM assembler from the repository's
+Checked against TEC-OS 1f9542d, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from
-Thorium 676075a, whose copy in `dist/files` has the SHA-256
-`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`. The
+Thorium 04ec086, whose copy in `dist/files` has the SHA-256
+`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`. The
 timings and traces below were made on that card unless the text names another.
 
 Reading a block from the SD card takes TEC-OS about 55 milliseconds, because
@@ -85,7 +85,7 @@ at its next use.
 
 On the model, with the starter card, a read that hits takes 13,635 T-states
 when the record goes to the directory buffer `DIRBUF` at `BBD0h`. A read that
-misses takes 235,328, nearly all of it the card. `CLOOK` takes 259 T-states
+misses takes 235,335, nearly all of it the card. `CLOOK` takes 259 T-states
 when the block is in line 0 and about 2,000 to search all 30.
 
 The copy is the larger part of a hit. `CRDREC` and `CWRREC` put the two banks
@@ -110,7 +110,7 @@ because the caller's stack may be in EXPAND 0 (`src/cache.asm:387-388`).
 `MVEND` writes `LATCHV` back to the latch, pops the alternates and enables
 interrupts only if `P/V` shows they were on (`src/cache.asm:484-494`). A hit to
 a DMA address below `8000h`, such as the CCP's loads at `0100h` and up, takes
-from 4,745 T-states, in line 0. A miss to such an address takes 226,438.
+from 4,745 T-states, in line 0. A miss to such an address takes 226,445.
 
 `DIR` on the starter card's drive A shows the effect: after the first prompt
 the directory's blocks are in the cache, and `DIR`'s two BIOS reads are both
@@ -153,8 +153,8 @@ node tools/tecvol.mjs put time.img A data.bin
 `Machine` as `tools/capture.mjs` does. It reads the model's T-state count,
 `cycles` (`host/machine.mjs:262`), twice: when `READ DATA.BIN` has been typed
 and echoed, before the Return that ends it, and at the next prompt. After a
-cold boot, the command's first run took 6,633,371 T-states, 1.66 seconds, and
-its second 1,335,042, 0.33 seconds, a fifth of that. Both figures include
+cold boot, the command's first run took 6,633,572 T-states, 1.66 seconds, and
+its second 1,335,075, 0.33 seconds, a fifth of that. Both figures include
 loading the program from drive A.
 
 The gain needs the whole file in the cache. A file of 15,360 bytes took about
@@ -231,8 +231,8 @@ writes three of the first 32 data blocks early, because all 30 lines are dirty
 before the BDOS next writes the directory.
 
 On `time.img`, from the section on reads, `SAVE 64 X.COM`, 16 KiB, took
-30,829,837 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
-9,909,704, 2.48 seconds, about a third of that. Each run followed a cold boot
+30,831,158 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
+9,910,058, 2.48 seconds, about a third of that. Each run followed a cold boot
 and a change to the drive. The count, taken as for the reads, leaves out the
 change of drive.
 
@@ -248,7 +248,9 @@ A directory line is never left dirty: a directory write is written to the card
 at once, after the data (`src/cache.asm:290-293`). A flush at any other time
 therefore writes only data. A power cut during a directory write's flush
 leaves some of the new data blocks on the card and the directory block not yet
-written, so no entry on the card names a block that was missed
+written, so no entry on the card names a block that was missed. Nothing is
+rolled back either: a block the file already had, once written, holds its new
+contents on the card whether or not the directory block follows
 (Chapter 4's [recovery section](04-cards-and-volumes.md#recovery-after-a-power-cut)
 describes what the user sees).
 
@@ -319,7 +321,7 @@ For a program that uses interrupts, a BIOS disk call holds them off for its
 whole length. A read that misses holds them off for about 235,000 T-states, 59
 milliseconds. A directory write on the volume written behind holds them off
 while every dirty line is written. On the model the close of a file of four
-blocks took 1,111,269 T-states. A flush of all 30 lines takes about 30 ×
-217,411, some 6.5 million T-states, or 1.6 seconds. Interrupts are on only
+blocks took 1,111,319 T-states. A flush of all 30 lines takes about 30 ×
+217,421, some 6.5 million T-states, or 1.6 seconds. Interrupts are on only
 when a program has enabled them, as Chapter 14 describes, so this affects only
 such a program.
