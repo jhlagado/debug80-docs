@@ -5,8 +5,7 @@ it, and the variants that are correct because they name something else. A
 term means what the code at a chapter's commit makes it mean. A short form is the full
 form with a word left out, used once the full form has appeared in the chapter.
 Fenced blocks and captured output keep their own words, so the "program area"
-in the comments of `TOP` and `AREA` in Chapter 7 stays as it is. So does
-`TED`'s status row, which reads `EDIT` at Thorium 8fcc6ea.
+in the comments of `TOP` and `AREA` in Chapter 7 stays as it is.
 
 ## Memory
 
@@ -18,8 +17,8 @@ in the comments of `TOP` and `AREA` in Chapter 7 stays as it is. So does
 | BIOS jump table | | CP/M's table of 17 jumps | Chapter 7, in full 15 | RAM BIOS table: the copy at `BF00h` that every caller uses. `BIOSBAS`: the ROM's copy, never called. |
 | BDOS entry jump | BDOS's entry | The `JP BENTRY` in RAM directly below the allocation vectors, and the same jump at the start of each service's first page | Chapter 5, in full 13 | `BENTRY`: the routine in the ROM, also "the BDOS's entry" in Chapters 16 and 25, where the code follows |
 | boot overlay | overlay | The ROM's first 2 KiB, shown at `0000h–07FFh` while latch bit 0 is low | Chapter 13, in full 14 | Chapter 1 says "the copy" for a reader who has no need of the name. `LATSHAD` and SHADOW are the code's and the board's names for the bit. |
-| fixed RAM | | `0000h–7FFFh`; MAIN 0 is its name beside MAIN 1 | Chapters 1 and 7 | MAIN 1, the second 32 KiB a board may have |
-| EXPAND 0, EXPAND 1 | | The two halves of the RAM in U9 | Chapter 1 | expansion RAM: the chip as a whole. Bank 1: CP/M 3's name for EXPAND 1 in `MOVE` and `XMOVE`. The diagnostics ROM's "banks" are the runtime's. |
+| fixed RAM | | `0000h–7FFFh` | Chapters 1 and 7 | |
+| EXPAND 0, EXPAND 1 | | The two halves of the RAM in U9 | Chapter 1 | expansion RAM: the chip as a whole. The diagnostics ROM's "banks" are the runtime's. |
 | window | | `8000h–BFFFh`, showing one half of U9 | Chapter 7 | |
 | service resident memory | | The pages loaded services hold | Chapter 5 | |
 
@@ -49,7 +48,7 @@ in the comments of `TOP` and `AREA` in Chapter 7 stays as it is. So does
 | record | | CP/M's 128 bytes | Chapter 3, in full 4 | a service's record (Chapter 5) |
 | sector | | CP/M's number for a record within a track | Chapters 16 and 18 | `Bad Sector`, a message |
 | extent | | 128 records of a file | Chapter 16 | |
-| directory mark | mark | The number of directory entries up to the last in use | Chapter 16 | low mark, `XMARK` (Chapter 13) |
+| directory mark | mark | The number of directory entries up to the last in use | Chapter 16 | |
 | logged in | | A drive whose allocation vector the BDOS has built | Chapter 13, in full 16 | |
 | check vector | | CP/M's checksum of a directory, unused here | Chapter 16 | |
 | DMA address | | The address the BDOS reads a record to or writes it from | Chapter 6 | default DMA buffer: `0080h–00FFh` |
@@ -100,7 +99,7 @@ in the comments of `TOP` and `AREA` in Chapter 7 stays as it is. So does
 | return code | | The word function 108 sets | Chapter 11 | |
 | user area | | One of CP/M's 16 groups of files | Chapter 1 | user number: its number in a directory entry, the BDOS or the byte at `0004h` |
 | startup file | | `STARTUP.CMD` | Chapter 1 | |
-| `MOUNT` | | The starter card's program, which puts a volume on a drive and with no argument lists the volumes | Chapter 4 | the ROM's `MOUNT` routine, its check of the container (Chapters 14, 18). The mount entry, `ABIVOL` (Chapter 18). |
+| `MOUNT` | | The starter card's program, which puts a volume on a drive and with no argument lists the volumes | Chapter 4 | the ROM's `MOUNT` routine, its check of the container (Chapters 14, 18). The volume services, numbers 9 to 11 (Chapter 18). |
 | `TED` | | The starter card's editor, `TED.COM` | Chapter 6 | |
 | project | | `THOR.PRJ`, the file `TED` keeps on the current drive, naming the source its build keys take | Chapter 6 | |
 | ABI | | The ROM table's application binary interface | Chapter 8, again in 9 | |
@@ -110,13 +109,14 @@ in the comments of `TOP` and `AREA` in Chapter 7 stays as it is. So does
 
 | Form | Short form | Meaning | Explained in | Correct and distinct |
 | --- | --- | --- | --- | --- |
-| service | | What a `.SVC` file installs: code in pages below the BDOS, kept until a reset or `UNLOAD` | Chapter 5, in full 10 and 20 | hardware service, a call in the ROM. `SERVICES`, the built-in that lists loaded services. |
+| service | | What a `.SVC` file installs: code in pages below the BDOS, kept until a reset or `UNLOAD` | Chapter 5, in full 10 and 20 | numbered service, a call in the ROM. `SERVICES`, the built-in that lists loaded services. |
 | library | | A service that provides routines for programs | Chapter 5, again in 10 | |
 | driver | | A service that drives hardware | Chapter 5 | display driver, one that holds a display's console. The SD card driver and the hardware drivers of Chapter 15 are code in the ROM. |
 | record, of a service | | What a service publishes in the registry | Chapter 5, in full 10 | CP/M's record of 128 bytes |
-| hardware service | | A numbered call in the ROM, through `ABIHW` | Chapter 1 by name, in full 9, 20 and B | a service, which is loaded from the card |
-| ROM table | | The ROM's table at `C003h` | Chapter 1 by name, in full 9 | RAM BIOS table, the copy at `BF00h` |
-| mount entry | | The ROM table's jump `ABIVOL` at `C00Fh`, which goes to `VOLSVC` | Chapter 18 | `MOUNT`, the program and the ROM routine |
+| numbered service | | A call in the ROM through `ABICALL`, by its number in `C`, 0 to 14 | Chapter 9, in full B | a service, which is loaded from the card |
+| hardware service | | Numbered services 0 to 8, in `src/hwsvc.asm` | Chapter 1 by name, in full 9, 20 and B | the volume services, 9 to 11, the display drivers' service, 12, and the registry's, 13 and 14 |
+| volume services | | Numbered services 9 to 11, `MOUNT`, `UNMNT` and `DESC`, in `src/vol.asm` | Chapter 18 | `MOUNT`, the program and the ROM routine |
+| ROM table | | The ROM's table at `C003h`: `TNA`, the version and the jump `ABICALL` | Chapter 1 by name, in full 9 | RAM BIOS table, the copy at `BF00h` |
 | stub | | The BDOS entry jump directly below the allocation vectors, at `STUBAD`, which `(0006h)` addresses when no service is in | Chapter 20 | a service's entry at `xx00h`, which `(0006h)` addresses when a service is in |
 
 ## The model and the page
@@ -164,8 +164,10 @@ in the comments of `TOP` and `AREA` in Chapter 7 stays as it is. So does
 | driver loader | service loader |
 | driver registry | registry |
 | table at `C003h`, table of services, ROM's table of services | ROM table |
-| ROM services, for the calls through `ABIHW` | hardware services |
-| mount service | mount entry |
+| ROM services, for the calls through `ABICALL` | numbered services, or hardware services for 0 to 8 |
+| mount service, mount entry, `ABIVOL` | volume services |
+| `ABIHW`, `ABIGLCD`, `ABISVC` | `ABICALL` with the service's number |
+| PRL program, `.PRL` file, for a current card | no form: TEC-OS loads none |
 | `book/capture.mjs` | `tools/capture.mjs` |
 | ATOM on the card | `TAS` |
 | `VOLS` | `MOUNT` with no argument |
@@ -175,14 +177,14 @@ in the comments of `TOP` and `AREA` in Chapter 7 stays as it is. So does
 
 A *service* is what a `.SVC` file installs. A *library* is a service that
 provides routines for programs, and a *driver* is a service that drives
-hardware. What a service publishes in the registry is a *record*. The numbered
-calls through `ABIHW` are *hardware services*, the table at `C003h` is the *ROM
-table* and its jump `ABIVOL` is the *mount entry*. *Service resident memory* is
-the pages services hold.
+hardware. What a service publishes in the registry is a *record*. The calls
+through `ABICALL` are *numbered services*. Numbers 0 to 8 are the *hardware
+services*, and 9 to 11 are the *volume services*. The table at `C003h`
+is the *ROM table*. *Service resident memory* is the pages services hold.
 
 `.DRV` names appear only where the text is about an old card, as in Chapters 1,
 5, 22 and 26 and Appendix D. `DRVTAB`, `DRVIDX` and `DRVSLOT` name
-disk drives. `VOLSVC` is the routine behind the mount entry. The SD card driver
+disk drives. The SD card driver
 and the hardware drivers of Chapter 15 are code in the ROM, so *driver* there
 has its older sense. "Registry's records" and "service's records" are in use,
 and every 128-byte record is CP/M's. A JavaScript module is a module.
