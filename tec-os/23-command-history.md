@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 23. Command history
 
-Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
-8fcc6ea, whose copy in `dist/files` has the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
+Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
+676075a, whose copy in `dist/files` has the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -86,9 +86,9 @@ nothing.
 ## The ring at BD00h
 
 The history is the page at `BD00h` in EXPAND 1, `HRING` (`src/history.asm:14`).
-Chapter 13 lists EXPAND 1's other pages, and it explains why programs can't
-reach this page through `XMOVE` and `MOVE` and why no stack is in use while it
-is in view.
+Chapter 13 lists EXPAND 1's other pages and explains why no stack is in use
+while EXPAND 1 is in view. No BDOS function and no numbered service gives a
+program a way into the page.
 
 Two routines read and write the ring a byte at a time. `HGET` returns the byte
 at offset `L` in `A`, and `HPUT` writes `A` there, with `H` holding the ring's
@@ -241,7 +241,7 @@ A>
 
 A reset clears it. Cold boot clears the resident workspace, `HHEAD` with it
 (`src/boot.asm:23-27`), and `MEMINIT` fills all of EXPAND 1 with 0 before it
-marks the cache's lines empty (`src/boot.asm:141-152`). The page at `BD00h` is
+marks the cache's lines empty (`src/boot.asm:139-152`). The page at `BD00h` is
 then all zeros, `HHEAD` is 0 and the byte before it, at offset `FFh`, is 0, so
 the ring is empty and still kept as `HSTORE` and `HREC` require. This holds for
 a recognised reset too, the one that keeps the selected volumes, since only the
