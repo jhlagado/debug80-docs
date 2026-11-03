@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 19ad916, with the starter card's `TED.COM` from Thorium
-8fcc6ea and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and
+Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
+676075a and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and
 `TAS.COM`'s is
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -77,11 +77,10 @@ system latch selects the half that is there. Programs and TEC-OS's workspace,
 the memory that holds its variables, buffers and stacks, use EXPAND 0, and
 TEC-OS holds its block cache and command history in EXPAND 1.
 
-Cold boot, the start after power-on or a reset, checks the RAM twice. Before
-it prints anything it tests `8000h–BFFFh`, and with no RAM there it sends
-`TEC-OS needs 64K RAM` to the serial port. It tests for EXPAND 1 later, after
-printing the volumes on the card, and a board without EXPAND 1 gets the same
-message there. In both cases TEC-OS then stops.
+Cold boot, the start after power-on or a reset, checks the RAM once, before
+it prints anything. It tests `8000h–BFFFh` and then looks for EXPAND 1 behind
+it. A board without either sends `TEC-OS needs 64K RAM` to the serial port,
+and TEC-OS stops there.
 
 TEC-OS also needs an SD card on the board's SD card adaptor and a console, the
 device you type on and read from. The console is a terminal program on a PC
@@ -105,7 +104,7 @@ npm run media
 
 `npm ci` installs the assembler, ATOM, and the Debug80 TEC-1G runtime that the
 host model runs on. `npm run build` assembles the ROM, and `npm run media`
-writes the ROM images, the starter card and its files to `dist/`. The starter
+writes the ROM image, the starter card and its files to `dist/`. The starter
 card is `dist/starter.img`, an image of a whole SD card.
 
 The starter card holds `TAS.COM`, an assembler, and `TED.COM`, an editor, both
@@ -187,12 +186,11 @@ captured from. A run of a few commands takes about a second.
 TEC-OS has not yet run on a physical TEC-1G, so what follows comes from the
 code and the repository's documents.
 
-On a TEC-1G, TEC-OS replaces MON-3, and its image for the board is
-`dist/tecos-board.rom`, 16 KiB for `C000h–FFFFh`. In a 32 KiB ROM chip the
-image goes into both halves, at `0000h` and at `4000h`, so that the board's
-ROM Lo/Hi switch runs it in either position. All of TEC-OS's images are the
-same ROM: `tecos-board.rom`, `tecos-debug80.rom` and the others in `dist/`
-differ only in name.
+On a TEC-1G, TEC-OS replaces MON-3, and its image is `dist/tecos.rom`, 16 KiB
+for `C000h–FFFFh`. The same image runs on the board, in the host model and in
+the web page. In a 32 KiB ROM chip the image goes into both halves, at `0000h`
+and at `4000h`, so that the board's ROM Lo/Hi switch runs it in either
+position.
 
 The repository also has a diagnostics ROM for testing a board's hardware,
 built by `npm run diag` into `build/diag/diag.rom`. `docs/board-run.md` is the
@@ -413,7 +411,7 @@ line that a program reads with BDOS function 10, CP/M's line input. Chapter 14
 explains the warm boot.
 
 A command that is neither built into the CCP nor the name of a program file on
-the drive is printed back with a question mark:
+the current drive or on drive A is printed back with a question mark:
 
 <!-- node tools/capture.mjs NOSUCH -->
 ```text
