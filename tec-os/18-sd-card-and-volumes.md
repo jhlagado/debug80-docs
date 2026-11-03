@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. The SD card and the volumes
 
-Checked against TEC-OS 1f9542d.
+Checked against TEC-OS 7458352.
 
 The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
@@ -142,7 +142,7 @@ it as it goes (`src/vol.asm:136-259`):
 | --- | --- |
 | `26h` | the volume id is not 0; no flag but read-only is set; the geometry is known; the length is that geometry's payload exactly; the start block is not 0 and a multiple of 8 |
 | `28h` | the start is at or after the previous volume's end |
-| `27h` | start plus length has no carry out of 32 bits, and ends within the container |
+| `27h` | start plus length has no carry out of 32 bits and ends within the container, and on a standard-capacity card at or before block `800000h` |
 | `29h` | the drive byte is `FFh` or 0 to 3, below a 1.1 header's drives field when that field is not 0, and not a drive already taken |
 | `2Ah` | after the last descriptor, drive A has a volume |
 
@@ -154,15 +154,18 @@ descriptor's cache byte, the written-behind flag, and doesn't check the others
 
 Any failure unmounts every drive that the walk had mounted, so a card is
 mounted whole or not at all (`src/vol.asm:267-271`). The ROM can't find the
-card's capacity, and the walk checks a volume against the container's length
-only. A volume that runs past the end of the card is mounted, and the card
-rejects an access that reaches a block beyond its end. The driver returns error
-5, and the BDOS reports `Bad Sector` for that drive while the rest of the card
-works. On a standard-capacity card a block at 4 GiB or more fails the same way,
-rejected by `LBAARG` before any command, so the access never reaches a lower
-block. `test/sd-range.test.mjs` moves drive B's volume of a standard-capacity
-card to block `800800h`. There `SAVE` and `DIR` on B give `Bad Sector`,
-`SDERR` holds 9 and no byte of the card changes.
+card's capacity, and the walk checks a volume against the container's length.
+A volume that runs past the end of the card is mounted, and the card rejects
+an access that reaches a block beyond its end. The driver returns error 5, and
+the BDOS reports `Bad Sector` for that drive while the rest of the card works.
+On a standard-capacity card the walk also refuses, with error `27h`, a volume
+that ends past block `800000h`, whether it starts beyond that block or
+straddles it, since `LBAARG` can't name its blocks (`src/vol.asm:216-231`).
+`test/sd-range.test.mjs` places drive B's volume of a standard-capacity card at
+block `800800h` and then at `7FF000h`. Both times cold boot stops at the
+diagnostic prompt with error 27 and no byte of the card changes. A volume
+ending at `800000h` itself mounts, and so does the straddling volume on a
+high-capacity card (`test/sd-range.test.mjs:36-45`).
 
 The host model's card fails an access past the end of its image in the same way
 and changes nothing. For the run below, a copy of `dist/starter.img` was cut to
@@ -271,10 +274,11 @@ cache, as Chapter 19 describes. `WRITE` has more to do
 (`src/bios.asm:188-300`). After mapping it rejects a write to a read-only
 volume before anything changes, with error 1 (`src/bios.asm:204-208`). A change
 made through the BDOS doesn't get this far, since the BDOS's own `R/O` error
-comes first (`src/cpm/bdos.asm:2368-2382`). Function 16 tests the drive too,
-before it writes the directory entry, so closing an FCB that was never opened
-on a read-only drive ends in `Bdos Err On B: R/O`, with the card unchanged
-(`src/cpm/bdos.asm:570-571`, `test/cpm22.test.mjs:174`). Only a program that
+comes first (`src/cpm/bdos.asm:2368-2381`). Function 16 tests the drive too,
+before it writes the directory entry, and on a read-only drive it writes
+nothing and returns success, as CP/M 2.2's close does. Closing an FCB that was
+never opened on such a drive returns 0 with the card unchanged
+(`src/cpm/bdos.asm:570-573`, `test/cpm22.test.mjs:174`). Only a program that
 calls the BIOS itself receives the error.
 
 A write to the directory can change which blocks are in use, so `WRITE` then
@@ -334,8 +338,10 @@ never left empty, and for a drive past D (`src/vol.asm:622-672`). The slot rule
 is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
 and any other needs a slot of either size (`src/vol.asm:649-662`). Chapter 13
 describes how cold boot gives out the slots. The three services may change `IX`
-and the alternate registers, and `abi.inc` states 24 bytes of stack for each
-(`src/abi.inc:18-21`, `src/abi.inc:58-70`).
+and the alternate registers, and `abi.inc` gives 24 bytes as a bound on the
+stack each takes (`src/abi.inc:18-25`, `src/abi.inc:58-70`). With dirty lines
+written behind waiting, `MOUNT` and `UNMNT` each take 22
+(`test/storage-boundaries.test.mjs:170-198`).
 
 A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of
