@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 13. The memory map
 
-Checked against TEC-OS 7458352.
+Checked against TEC-OS 7935507.
 
 TEC-OS has 16 KiB of ROM and, of RAM, the 64 KiB that a TEC-1G with U9 fitted
 has. Chapter 7 describes that memory from a program's side, and this chapter
@@ -15,7 +15,7 @@ from TEC-OS's side. It starts with the way the system latch puts RAM and ROM
 into the Z80's 64 KiB, and the state TEC-OS keeps in page zero. It goes on to
 the resident workspace at the top of EXPAND 0 and the allocation vectors below
 it. It ends with the four stacks, the measurements that size them and TEC-OS's
-use of EXPAND 1. The addresses are those of the build at 7458352 with the starter
+use of EXPAND 1. The addresses are those of the build at 7935507 with the starter
 card in the socket. `docs/memory-map.md`, which `npm run media` writes from the
 build's census, has the same figures.
 
@@ -278,7 +278,7 @@ depths include no NMI frame, as the comment at `src/layout.asm:75-77` says.
 A loaded service runs on its caller's stack, so the services' own depths add
 to these. `SVCLIM` gives the most that the services together may add to each
 stack: 8 bytes on the BDOS's, 12 on the BIOS's and 6 on the CCP's
-(`src/data3.asm:115`). Chapter 20 describes how the loader uses them.
+(`src/tables.asm:67`). Chapter 20 describes how the loader uses them.
 
 ## EXPAND 1
 
