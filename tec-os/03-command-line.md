@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 19ad916, with the starter card's `TED.COM` from Thorium
 8fcc6ea, with the SHA-256
 `9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -283,6 +283,10 @@ NO FILE
 B>
 ```
 
+A `-` as the answer's first character ends the answer at once, as Return does,
+and leaves the files. Whatever you type after it, its Return included, goes to
+the next prompt as a command line, so `-y` and Return give `Y?`.
+
 A name with wildcards that matches only some files, such as `ERA *.TXT`, erases
 them with no question.
 
@@ -386,9 +390,9 @@ service is code that TEC-OS keeps in memory below the BDOS until a reset or
 services installed, the newest first, each with the number of 256-byte pages it
 takes. `UNLOAD` removes the newest one if that service can be removed, and
 otherwise it changes nothing and prints `UNLOAD?`. It prints the same with no
-service installed. On the web page's board, where `PICO.SVC` is installed at
-startup, the PICO9918's screen shows this, from the startup file's second line
-on:
+service installed. With the starter card on the web page's board, where
+`PICO.SVC` is installed at startup, the PICO9918's screen shows this, from the
+startup file's second line on:
 
 <!-- node tools/capture.mjs --board pico --screen SERVICES UNLOAD -->
 ```text
