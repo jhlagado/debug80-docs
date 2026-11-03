@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 16. The BDOS
 
-Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
-04ec086, whose copy in `dist/files` has the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and its
+Checked against TEC-OS 7458352, with the starter card's `TED.COM` from Thorium
+128edb7, whose copy in `dist/files` has the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -25,7 +25,7 @@ and the differences from Digital Research's BDOS.
 TEC-OS's BDOS comes from Portable CP/M, an implementation of the documented
 CP/M 2.2 interface that uses no Digital Research source
 (`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the ROM
-that Chapter 12 describes it runs from `E108h`, `BDOSBAS`, to `F00Eh`, 3,847
+that Chapter 12 describes it runs from `E158h`, `BDOSBAS`, to `F065h`, 3,854
 bytes. Its table of functions and its error messages are in the
 ROM's data block (`src/data3.asm:73-90`). None of it can be patched.
 
@@ -310,10 +310,11 @@ A file that was only read has nothing to write back at its close, so the open
 sets bit 7 of `S2`, which records that nothing has been written through this FCB
 since. `ADVWRITE` clears it at the first write (`src/cpm/bdos.asm:897-914`).
 Function 16, close, returns at once when the bit is still set, with nothing
-written (`src/cpm/bdos.asm:558-564`). Otherwise it finds the entry again and
-copies the FCB's extent, record count and map into it, or only the map when the
-FCB is on an earlier extent than the entry records. It then writes the directory
-record back (`src/cpm/bdos.asm:566-602`).
+written (`src/cpm/bdos.asm:558-564`). On a read-only drive it also returns
+success with nothing written (`src/cpm/bdos.asm:570-573`). Otherwise it finds
+the entry again and copies the FCB's extent, record count and map into it, or
+only the map when the FCB is on an earlier extent than the entry records. It
+then writes the directory record back (`src/cpm/bdos.asm:566-602`).
 
 Function 20 reads the record at `CR` into the DMA address and moves `CR` on
 (`src/cpm/bdos.asm:920-962`). At `CR` = 128 it closes the FCB, opens the next
@@ -470,8 +471,7 @@ drive letter (`src/data3.asm:86-90`):
   volume or a `?` drive byte outside function 17
   (`src/cpm/bdos.asm:2384-2390`).
 - `R/O`, for a change to a drive that function 28 has made read-only or to a
-  volume the card marks read-only, a close that would write the directory
-  included (`src/cpm/bdos.asm:570-571`, `src/cpm/bdos.asm:2368-2382`).
+  volume the card marks read-only (`src/cpm/bdos.asm:2368-2382`).
 - `File R/O`, for function 19 or 23 on a directory entry with the read-only
   attribute, and for function 21, 34 or 40 through an FCB that has it
   (`src/cpm/bdos.asm:636-647`).
@@ -490,11 +490,11 @@ describes.
 Chapter 3 shows `R/O` from a read-only volume and `File R/O` from `ERA`. The
 volume's read-only flag is in the drive table, and `LOGIN` sets the drive's bit
 in the read-only vector from it, so the BDOS refuses the change before any write
-to the card (`src/cpm/bdos.asm:1946-1951`). Function 16 makes the same test
-before it writes the entry back, as CP/M 2.2's close does, so a file written
-on such a drive gives `R/O` at its close. A close of a file only read returns
-before the test (`src/cpm/bdos.asm:558-571`). A warm boot clears the vector,
-and the drive's next selection sets the bit again.
+to the card (`src/cpm/bdos.asm:1946-1951`). Function 16 tests the same bit
+before it writes the entry back, and on a read-only drive it returns 0,
+success, with nothing written, as CP/M 2.2's close does
+(`src/cpm/bdos.asm:566-573`). A warm boot clears the vector, and the drive's
+next selection sets the bit again.
 
 ## Functions 108 and 47
 
