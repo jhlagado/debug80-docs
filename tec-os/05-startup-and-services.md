@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS 4d6eeaa.
+Checked against TEC-OS 19ad916.
 
 Chapter 1's first boot ran two commands that nobody typed, and on the web
 page's board the first of them moved the console to the PICO9918. This chapter
@@ -323,11 +323,18 @@ A>
 
 The web page's "Display" and "ROM" controls change the card for you, through
 `host/card.mjs`. At each power-on with the PICO9918 chosen, the page writes the
-driver built for the chosen width to drive A as `PICO.SVC`, if the card's
-differs. It then makes the card's first line the file for the chosen display,
-adds `GLCD.SVC` as the second on a board with the PICO9918 and keeps your other
-lines. A display driver chained in one of those lines is taken out and the rest
-of the line kept. The piece
+driver built for the chosen width to drive A as `PICO.SVC` when the card has no
+`PICO.SVC`, has one of the page's own three builds or has one of an older
+format. A `wide32.img` made as above holds one of those builds, so the page
+gives it the chosen width. Any other `PICO.SVC` counts as one you built
+yourself, and the page keeps it and says so in the serial terminal, so that
+card stays at its own width whatever "ROM" says. The page then makes the card's
+first line the file for the chosen display, with no line for the other display,
+and keeps your other lines. On the
+page's board, with both displays, a `GLCD.SVC` line would only give way to
+`PICO.SVC` and print `GLCD.SVC?`, and `CON UC1` loads `GLCD.SVC` when you want
+the graphics LCD. A display driver chained in one of your lines is taken out and
+the rest of the line kept. The piece
 taken out passes its own `:` to the piece after it on its line, and a `:` first
 on the next line stays if the piece taken out had its own. Any other `:` that
 waited on a piece taken out goes, on its line or first on the next, so that
