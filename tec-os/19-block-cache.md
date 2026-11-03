@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 7935507, with the ATOM assembler from the repository's
+Checked against TEC-OS 626ee41, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from
 Thorium 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. The
@@ -153,8 +153,8 @@ node tools/tecvol.mjs put time.img A data.bin
 `Machine` as `tools/capture.mjs` does. It reads the model's T-state count,
 `cycles` (`host/machine.mjs:265`), twice: when `READ DATA.BIN` has been typed
 and echoed, before the Return that ends it, and at the next prompt. After a
-cold boot, the command's first run took 6,633,600 T-states, 1.66 seconds, and
-its second 1,335,103, 0.33 seconds, a fifth of that. Both figures include
+cold boot, the command's first run took 6,635,741 T-states, 1.66 seconds, and
+its second 1,337,244, 0.33 seconds, a fifth of that. Both figures include
 loading the program from drive A.
 
 The gain needs the whole file in the cache. A file of 15,360 bytes took about
@@ -231,8 +231,8 @@ writes three of the first 32 data blocks early, because all 30 lines are dirty
 before the BDOS next writes the directory.
 
 On `time.img`, from the section on reads, `SAVE 64 X.COM`, 16 KiB, took
-30,834,679 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
-9,913,579, 2.48 seconds, about a third of that. Each run followed a cold boot
+30,836,844 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
+9,915,744, 2.48 seconds, about a third of that. Each run followed a cold boot
 and a change to the drive. The count, taken as for the reads, leaves out the
 change of drive.
 
@@ -273,8 +273,11 @@ A flush has four occasions:
 
 The warm boot's flush is the one you can cause. A `^C` at the prompt is a warm
 boot, and after it every change is on the card. A reset writes nothing, since
-cold boot clears EXPAND 1 (`src/boot.asm:150-158`), and the changes in the
-cache at the time of a reset are lost.
+cold boot clears EXPAND 1 (`src/boot.asm:150-158`), and the changes the cache
+still holds unwritten at the time of a reset are lost. Some changes since the
+last directory write may already be on the card, written by `CTAKE` when their
+lines were given out for other blocks (`src/cache.asm:212-220`), so the card
+can then hold a mix of old and new blocks.
 
 ## Write lost
 
