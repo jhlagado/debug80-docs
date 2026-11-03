@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 22. Command history
 
-Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
-676075a, whose copy in `dist/files` has the SHA-256
-`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and its
+Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
+04ec086, whose copy in `dist/files` has the SHA-256
+`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -57,10 +57,10 @@ and `CMD` was typed in their place:
 ```text
 A>DIR *.SVC
 PICO.SVC     GLCD.SVC
-2 files, 984K free
+2 files, 978K free
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 984K free
+1 file, 978K free
 A>
 ```
 
@@ -75,7 +75,7 @@ A>CON
 CON: CRT: PICO9918
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 984K free
+1 file, 978K free
 A>
 A>
 ```
@@ -166,7 +166,7 @@ A>CON
 CON: CRT: PICO9918
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 984K free
+1 file, 978K free
 A>CON
 CON: CRT: PICO9918
 A>
