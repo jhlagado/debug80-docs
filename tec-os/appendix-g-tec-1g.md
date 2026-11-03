@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix G. The TEC-1G as TEC-OS uses it
 
-Checked against TEC-OS 60e0768.
+Checked against TEC-OS 1f9542d.
 
 This appendix lists the parts of the TEC-1G that TEC-OS reads and writes: its
 ports, the bits of the system latch, the configuration switches, the RAM in
@@ -171,7 +171,12 @@ samples it on the rising edge. With nothing selected the port is written
 `05h`: select high, data high, clock low.
 
 Every wait for the card has a limit, and a card that doesn't answer gives one
-of the error codes of Chapter 23 and Appendix D (`src/sd.asm:4-17`). When a
+of the error codes of Chapter 23 and Appendix D (`src/sd.asm:4-18`). A
+high-capacity card takes a block's number as its address, and a
+standard-capacity card takes the block's byte address in 32 bits, so the
+driver can name no block 4 GiB or more into a standard card. It refuses such a
+block before any command, with code 9, and a volume placed there gives `Bad
+Sector` (`src/sd.asm:207-236`, Chapter 18). When a
 block goes to or from the block cache, the transfer loop runs with EXPAND 1 in
 view, writing the latch before the loop and its copy back after
 (`src/sd.asm:273-277`, `src/sd.asm:371-372`, `src/sd.asm:379-382`,
