@@ -7,12 +7,12 @@ nav_group: "Appendices"
 
 # Appendix C. Memory map
 
-Checked against TEC-OS 4d6eeaa.
+Checked against TEC-OS 19ad916.
 
 This appendix gives the addresses TEC-OS uses: the CPU's address space, the
 ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
 the stacks. Chapter 13 explains the layout and Chapter 7 describes it from a
-program's side. The figures are those of the debug80 build at 4d6eeaa, whose
+program's side. The figures are those of the debug80 build at 19ad916, whose
 ROM has the SHA-256
 `6f3e7467744ec00ee6a727c5a62c910e7b64b4ccc3fa622d778ea0b0c15b82f1`. The
 build's four profile names give the same image. Where the figures depend on
@@ -23,7 +23,7 @@ a G8M volume on drive B, and no service installed.
 
 `npm run media` writes the summary tables to `docs/memory-map.md` from the
 build's census, `build/debug80/census.json` (`tools/media.mjs:70-169`,
-`tools/media.mjs:223`). The address of any label is in the build's symbol
+`tools/media.mjs:244`). The address of any label is in the build's symbol
 file, `build/debug80/tecos.d8.json`. This command prints the addresses of the
 labels named after it:
 
