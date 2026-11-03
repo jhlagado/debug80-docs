@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
-676075a, with the SHA-256
-`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and its
+Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
+04ec086, with the SHA-256
+`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -44,7 +44,7 @@ node tools/tecvol.mjs info dist/starter.img
 
 ```text
 container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
-  A: SYSTEM      id 1 G1M start 2048 rw 6 file(s), 1007616 bytes free
+  A: SYSTEM      id 1 G1M start 2048 rw 7 file(s), 1001472 bytes free
   B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
 ```
 
@@ -144,7 +144,9 @@ and line feed back into a line feed.
 
 `tecvol era` erases a file. `put`, `get` and `era` work in user area 0 unless
 `--user N` names another, and `dir` lists every user area unless `--user N`
-names one. `put` takes `--ro` and `--sys` to set the file's read-only and
+names one. `N` is a whole number from 0 to 15, and anything else, such as
+`oops`, `1.5` or `16`, stops `tecvol` with its usage message before it changes
+the image. `put` takes `--ro` and `--sys` to set the file's read-only and
 system attributes.
 
 `put` writes to a volume only if the volume can be written, so a read-only
@@ -436,13 +438,29 @@ node tools/tecvol.mjs install my.img /dev/rdiskN --yes
 form and on Linux one such as `/dev/sdb`. As Chapter 1 says, `install`
 overwrites the device from block 0, and it does nothing without `--yes`. The
 card must be at least as large as the container. TEC-OS can't read the card's
-size. On a smaller card a volume that runs past the card's end gives a BDOS
-error when TEC-OS reaches the missing blocks. An older, standard-capacity card
-is the exception. TEC-OS keeps only the low 32 bits of a block's byte address
-on such a card, so a block 4 GiB or more into the container is read and written
-at a lower address with no error, and the write can overwrite the header or
-another volume. The web page can't show either failure: it refuses an image smaller than its
-container (`web/src/main.mjs:545`), and its card is high-capacity.
+size, so on a smaller card a volume that runs past the card's end gives the
+BDOS error `Bad Sector` when TEC-OS reaches the missing blocks. Here the
+starter card's image is cut to 4,110 blocks, so that it ends 14 blocks into
+`WORK`, inside the volume's directory:
+
+```sh
+cp dist/starter.img short.img
+truncate -s 2104320 short.img
+```
+
+<!-- node tools/capture.mjs --card short.img "@start DIR B:" "@key x" -->
+```text
+A>DIR B:
+
+Bdos Err On B: Bad Sector
+A>
+```
+
+An older, standard-capacity card is addressed in bytes, and TEC-OS can name
+only its first 4 GiB. A block 4 GiB or more into such a card gives the same
+`Bad Sector`, and TEC-OS sends the card no command for it, so the card stays as
+it was. The web page can't show either failure: it refuses an image smaller
+than its container (`web/src/main.mjs:545`), and its card is high-capacity.
 
 The web page's "Open image" loads an image file from the PC into the page's
 card, and "Download image" saves the page's card as one. The same image
@@ -458,8 +476,9 @@ doesn't match them, and a warm boot doesn't read the card again.
 
 CP/M writes a file's data blocks first and its directory entry after them, and
 TEC-OS adds no journal. Once a file is closed, its data and its directory
-entry are both on the card, but until then a power cut or a reset can lose it,
-in one of these ways:
+entry are both on the card. Before the close, some of a file's writes may
+already be on the card and others not, and nothing puts the old contents back.
+A power cut or a reset then leaves the file in one of these ways:
 
 - On a volume written through, each record a program writes is on the card at
   once. A cut between the data and the directory leaves new data in allocation
@@ -472,7 +491,8 @@ in one of these ways:
   boot or `MOUNT` is lost if it is still in the cache. A block TEC-OS has
   already written to make room in a full cache is on the card, and so are the
   blocks a flush finished before the cut. Any new data block among them has no
-  directory entry naming it, as above. A cut never leaves an entry naming a
+  directory entry naming it, as above, and a block the file already had holds
+  the new records in place of the old. A cut never leaves an entry naming a
   block whose data isn't there.
 - A cut during the write of one block can leave that block with old, new or
   mixed contents. If the block is part of a directory, it holds 16 directory
