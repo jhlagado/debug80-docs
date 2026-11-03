@@ -345,8 +345,8 @@ line, which would otherwise wait on the display lines.
 The page reads only the files of user area 0 on drive A, the area from which
 TEC-OS loads `STARTUP.CMD` and the display drivers. It makes its changes on a
 copy of the card, and the copy replaces the card only once every change is
-made. A card whose drive A is read-only, or whose directory is full, is left as
-it was, and the page says in the serial terminal that it
+made. A card whose drive A is read-only, or whose directory has no room for a file
+the page must add, is left as it was, and the page says in the serial terminal that it
 boots as it is. When the page can't fetch its builds of the driver, it leaves
 the card as it is and says so too.
 

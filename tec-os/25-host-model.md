@@ -71,7 +71,7 @@ with an error, the parameter-error bit of its first answer, and moves no data.
 TEC-OS's driver then fails the access with error 5, and the image is
 unchanged. A high-capacity card takes the block number as it is. With
 `highCapacity` false the model takes byte addresses, as a standard-capacity
-card does, and `test/sd-range.test.mjs` uses such a card for the ROM's refusal
+card does, and `test/sd-range.test.mjs` uses such a card for the ROM's rejection
 of a block 4 GiB or more into the card, which Chapter 18 describes.
 
 The DS1302 is attached the same way, on port `FCh`, with the runtime's
@@ -279,7 +279,7 @@ timer clears the mark before it stores the card. When the browser's storage
 fails, `saveCard` writes a warning to the browser's console, the first of the
 session only, and passes the failure on (`web/src/store.mjs:18-22`,
 `web/src/store.mjs:38-52`). The page then marks the card changed again, so the
-next tick tries the save again, and the line under the board says `Card not
+next tick saves again, and the line under the heading "SD card" says `Card not
 saved in this browser`, with the reason, and that the card is kept in memory
 and saved again shortly. The words stay until a save succeeds
 (`web/src/main.mjs:103-117`, `web/src/main.mjs:491-496`). A reload before then
@@ -347,7 +347,7 @@ prepared and boots as it is. Chapter 21 describes the preparation in full.
 "Copy file to drive" writes to a copy of the card while the machine is paused
 and saves it. Only when the save succeeds does it copy it into the card the
 machine is using and press reset (`web/src/main.mjs:564-594`). A failed save
-leaves the card as it was, and the line under the board says `Not copied` with
+leaves the card as it was, and the line under the heading "SD card" says `Not copied` with
 the reason. The reset is a cold boot, so TEC-OS
 rebuilds its map of each drive's free space from the changed card and its
 block cache from nothing. A change still in that cache, on the work volume,

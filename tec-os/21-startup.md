@@ -295,7 +295,7 @@ loading under `PICO.SVC`, which keeps the console, clears one too
 blanks, when a program writes row 3 (`src/hwsvc.asm:79-83`), so the row is
 then the program's and a later take leaves it alone. `DEMO`, whose source is
 `test/programs/demo.asm`, writes its row 3 this way, and `test/pico.test.mjs:563`
-and `:571` check it for both words. A
+and `:572` check it for both words. A
 program that writes the LCD's port goes round this test. The bit then stays set,
 and a later take writes its five blanks over the start of the program's row.
 
@@ -364,6 +364,6 @@ way and print `GLCD.SVC?`, and `CON UC1` loads `GLCD.SVC` itself when it is
 wanted (`src/cpm/ccp.asm:1137-1139`).
 
 A card that passes `cardProblem` has its startup file rewritten even when it
-needs no driver, so the starter card's `STARTUP.CMD` loses its `GLCD.SVC` line
-and holds `PICO.SVC` alone (`host/card.mjs:73-89`). A card whose startup file
+needs no driver, so the starter card's `STARTUP.CMD` is left holding the chosen
+display's line alone (`host/card.mjs:73-89`). A card whose startup file
 has to stay as it is is best copied to the PC before the page opens it.

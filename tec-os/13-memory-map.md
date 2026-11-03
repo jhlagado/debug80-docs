@@ -86,7 +86,7 @@ into a service, the workspace or the ROM, keeps its jump
 
 `PZINIT` doesn't write `0050h`. The CCP stores there the drive byte of the
 command's FCB just before it starts a program, as CP/M 3 does. A program that
-the CCP found on A: by its search sees 1 (`src/layout.asm:29-30`,
+the CCP found on A: by its search finds 1 there (`src/layout.asm:29-30`,
 `src/cpm/ccp.asm:296-298`). Chapter 17 describes the search.
 
 The bytes `0040h–004Fh` are the sixteen that CP/M 2.2 leaves to the BIOS, and
