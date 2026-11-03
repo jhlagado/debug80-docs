@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
-676075a, with the SHA-256
-`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and its
+Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
+04ec086, with the SHA-256
+`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -32,13 +32,13 @@ capital, so `dir *.com` and `DIR *.COM` are the same command:
 ```text
 A>dir *.com
 MOUNT.COM    TED.COM      TAS.COM     
-3 files, 984K free
+3 files, 978K free
 A>DIR ????.COM
 TED.COM      TAS.COM     
-2 files, 984K free
+2 files, 978K free
 A>DIR A:P*.*
 PICO.SVC    
-1 file, 984K free
+1 file, 978K free
 A>DIR B:
 NO FILE
 A>
@@ -456,7 +456,11 @@ passed over for one on drive A. A read that fails on the card gives the BDOS's
 The rest of the line after the program's name is the command tail. The CCP
 copies it to `0080h` for the program and fills the two file control blocks at
 `005Ch` and `006Ch` from the tail's first two words, so a file name is ready
-for a program that takes one. Chapter 6 describes both. When the program ends,
+for a program that takes one. Chapter 6 describes both. The CCP also stores
+the drive it loaded the program from in the byte at `0050h`, as CP/M 3 does.
+The byte is 0 for a program found on the current drive and 1 for one found by
+the search of drive A. A drive named in the command gives its number, 1 for A,
+2 for B and so on. When the program ends,
 TEC-OS runs a warm boot, and the CCP then starts a new line and prints the
 prompt.
 
@@ -540,12 +544,12 @@ GLCD.SVC?
 
 A>DIR *.SVC
 PICO.SVC     GLCD.SVC
-2 files, 984K free
+2 files, 978K free
 A>CON
 CON: CRT: PICO9918
 A>DIR *.SVC
 PICO.SVC     GLCD.SVC
-2 files, 984K free
+2 files, 978K free
 A>
 ```
 
