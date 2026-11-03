@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS ea9c1c0.
+Checked against TEC-OS 60cfbdc.
 
 Chapter 1's first boot ran two commands that nobody typed, and on the web
 page's board the first of them moved the console to the PICO9918. This chapter
@@ -36,15 +36,18 @@ records and how a service is made.
 A service takes whole pages of 256 bytes, and those bytes come from the TPA,
 the memory programs have. Installing one lowers the word at `0006h`, the
 address that gives a program the top of its memory (Chapter 7). The pages that
-loaded services hold, from the lowest service up to the BDOS entry jump, are the
-*service resident memory*. A display driver on the starter card takes six
+loaded services hold, from the lowest service up to the BDOS entry jump's page,
+are the *service resident memory*. A display driver on the starter card takes six
 pages, and a run on the model gives:
 
 | Installed | Word at `0006h` | Bytes for programs |
 | --- | --- | --- |
-| Nothing | `B806h` | 46,854 |
-| One display driver | `B206h` | 45,318 |
-| Both displays' drivers | `AC06h` | 43,782 |
+| Nothing | `B815h` | 46,869 |
+| One display driver | `B200h` | 45,312 |
+| Both displays' drivers | `AC00h` | 43,776 |
+
+The first service's pages end at `B7FFh`, so the 21 bytes from `B800h` to `B814h`
+go with it.
 
 ## The startup file
 
@@ -452,7 +455,7 @@ display that already has one fails the same way: `PICO40.SVC` fails while
 `PICO.SVC` is in.
 
 `UNLOAD` removes the newest service, the one lowest in memory, and the word at
-`0006h` goes back up by its pages. If that service can't be removed, nothing
+`0006h` goes back to what it held before that service. If that service can't be removed, nothing
 changes and `UNLOAD?` is printed. Services therefore go in the opposite order to
 their installation, and an older one stays until every newer one has gone. A
 warm boot keeps all of them, and a reset empties the list.
