@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. The SD card and the volumes
 
-Checked against TEC-OS 60e0768.
+Checked against TEC-OS 1f9542d.
 
 The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
@@ -69,13 +69,15 @@ Every later access gives the driver a block number in `SDLBA`, four bytes,
 least significant first. `LBAARG` turns it into the command's argument, which
 depends on the card's capacity: a high-capacity card gets the number as it is,
 and a standard one gets it shifted left by 9, the block times 512
-(`src/sd.asm:207-231`). The shift keeps only the low 32 bits of the product:
-the top byte of `SDLBA` is dropped and so is the bit carried out of the shift.
-On a standard-capacity card a block number of `800000h` or more, 4 GiB or more
-into the card, therefore wraps to a lower block, and block `800800h` is read and
-written as block `800h` with no error.
+(`src/sd.asm:207-231`). The argument has 32 bits, so a standard-capacity card
+can't be given a block number of `800000h` or more, 4 GiB or more into the
+card: the shift would lose its top bits and name a lower block. For such a
+block `LBAARG` returns with carry set and `SDARG` unchanged. `SDREAD` and
+`SDWRITE` then send no command and fail with error 9, `SDERNG`
+(`src/sd.asm:18`, `src/sd.asm:234-236`, `src/sd.asm:264-266`,
+`src/sd.asm:447-449`).
 
-`SDREAD` reads a block with `CMD17` (`src/sd.asm:233-263`). A nonzero R1 is
+`SDREAD` reads a block with `CMD17` (`src/sd.asm:233-266`). A nonzero R1 is
 error 5, `SDECMD`. The card then sends `FFh` until the data is ready and `FEh`
 before it. The driver polls for that token up to 65,536 times before it gives
 error 6, `SDETOK`. The 512 bytes follow, then a two-byte CRC that the driver
@@ -93,8 +95,8 @@ reporting busy.
 The two block loops, `SDRBLK` and `SDWBLK`, are unrolled, with eight bits
 written out in full for each byte. `SDRBLK` keeps its count of 256 two-byte
 passes in the Z80's `I` register, which is free in interrupt mode 1
-(`src/sd.asm:268-443`). On the model `SDREAD` takes 219,137 T-states for one
-block, about 55 milliseconds, and `SDWRITE` 216,154, nearly all of it the
+(`src/sd.asm:268-443`). On the model `SDREAD` takes 219,144 T-states for one
+block, about 55 milliseconds, and `SDWRITE` 216,164, nearly all of it the
 4,096 bits of the block moved one at a time.
 
 When `SDXB` holds `LATEXP` the buffer is a line of the block cache in
@@ -153,14 +155,31 @@ descriptor's cache byte, the written-behind flag, and doesn't check the others
 Any failure unmounts every drive that the walk had mounted, so a card is
 mounted whole or not at all (`src/vol.asm:251-255`). The ROM can't find the
 card's capacity, and the walk checks a volume against the container's length
-only. A volume that runs past the end of the card gives an error from the card
-when an access reaches a block beyond its end, provided the block's address
-reaches the card intact. On a standard-capacity card a block at 4 GiB or more
-wraps, as `LBAARG` above shows, and the access goes to a block near the start of
-the card, which may be the header or another volume's. The host model can't show
-either case: past the end of its image its card reads zeros and drops what is
-written, with no error, and it wraps a high-capacity card's byte offset at 32
-bits too.
+only. A volume that runs past the end of the card is mounted, and the card
+rejects an access that reaches a block beyond its end. The driver returns error
+5, and the BDOS reports `Bad Sector` for that drive while the rest of the card
+works. On a standard-capacity card a block at 4 GiB or more fails the same way,
+refused by `LBAARG` before any command, so the access never reaches a lower
+block. `test/sd-range.test.mjs` moves drive B's volume of a standard-capacity
+card to block `800800h`. There `SAVE` and `DIR` on B give `Bad Sector`,
+`SDERR` holds 9 and no byte of the card changes.
+
+The host model's card fails an access past the end of its image in the same way
+and changes nothing. For the run below, a copy of `dist/starter.img` was cut to
+its first 4,112 blocks with `truncate -s 2105344 build/short.img`, which leaves
+the first 16 of drive B's 32 directory blocks. `DIR B:` logs the drive in, and
+the read of its 17th directory block fails:
+
+<!-- node tools/capture.mjs --card build/short.img "@start DIR B:" "@key x" "DIR A:*.CMD" -->
+```text
+A>DIR B:
+
+Bdos Err On B: Bad Sector
+A>DIR A:*.CMD
+STARTUP.CMD 
+1 file, 978K free
+A>
+```
 
 Cold boot sends any failure, of the card or of the container, to the
 diagnostic prompt (`src/boot.asm:42-45`). For the run below, the starter
