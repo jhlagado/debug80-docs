@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix G. The TEC-1G as TEC-OS uses it
 
-Checked against TEC-OS 4d6eeaa.
+Checked against TEC-OS 60e0768.
 
 This appendix lists the parts of the TEC-1G that TEC-OS reads and writes: its
 ports, the bits of the system latch, the configuration switches, the RAM in
@@ -33,7 +33,7 @@ in the files that drive them.
 | `05h`, `06h`, `F8h`, `F9h` | out | 8 × 8 LEDs | No hardware service; Chapter 9's `DEMO` writes them |
 | `07h`, `87h` | in, out | Graphics LCD, ST7920 | `GLCD.SVC` only |
 | `BEh`, `BFh` | in, out | PICO9918, data and control | The probe at cold boot; the console and hardware service `VIDEO`'s restore, both in `PICO.SVC` |
-| `FCh` | in, out | DS1302 clock | Hardware services `INFO` and `RTC` |
+| `FCh` | in, out | DS1302 clock | The probe at cold boot and hardware service `RTC` |
 | `FDh` | in, out | SD card adaptor | The SD card driver |
 | `FEh` | in | Matrix keyboard and joystick | The keyboard scan, hardware services `KEYS` and `JOY` |
 | `FFh` | out | System latch | Overlay, banks and the Caps lamp |
@@ -94,7 +94,7 @@ not read, so TEC-OS keeps a copy of the last value written at `0040h`,
 | 0 | `01h` | SHADOW | Set at cold boot to turn the boot overlay off, and never cleared (`src/boot.asm:11-12`) |
 | 1 | `02h` | PROTECT | Not set; a program that sets it makes `4000h–7FFFh` read-only |
 | 2 | `04h` | EXPAND | EXPAND 1 at `8000h–BFFFh` in place of EXPAND 0, for the block cache and the history (`src/layout.asm:18`) |
-| 3 | `08h` | MAIN | Tested at cold boot for a second 32 KiB at `0000h–7FFFh` (`src/layout.asm:19`, `src/boot.asm:154-155`) |
+| 3 | `08h` | MAIN | Not set |
 | 7 | `80h` | CAPS | The Caps lamp, toggled with Caps Lock on the matrix keyboard (`src/console.asm:405-408`) |
 
 At reset the latch is `00h`, and with bit 0 low the first 2 KiB of the ROM
@@ -108,8 +108,8 @@ EXPAND is set only while no stack is in use, since the stacks TEC-OS uses once
 cold boot has set them up are in `8000h–BFFFh`, in EXPAND 0
 (`src/history.asm:16-42`, `src/cache.asm:11-14`). Bits 3 to 6 are a bank field
 for the window in the Debug80 runtime, and unconnected to U9 in the board's
-documents. TEC-OS uses bit 2 for EXPAND 1 and bit 3 only for the test above.
-Test T12 of the diagnostics ROM reports what a board does with them.
+documents. Of bits 2 to 6, TEC-OS uses only bit 2, for EXPAND 1. Test T12 of
+the diagnostics ROM reports what a board does with bits 3 to 6.
 
 ## U9 and the RAM
 
@@ -117,11 +117,11 @@ TEC-OS needs 64 KiB of RAM: the board's fixed 32 KiB at `0000h–7FFFh` and a 32
 KiB RAM in socket U9 for `8000h–BFFFh`, whose two 16 KiB halves are EXPAND 0
 and EXPAND 1. The board's recommended build leaves U9 empty, and
 `docs/board-run.md` gives the chip as a 62256 or similar, with the board's
-EXPAND jumpers set for a 32 KiB chip. Cold boot tests `8000h–BFFFh` before it
-prints anything, and EXPAND 1 later, and stops with `TEC-OS needs 64K RAM` on
-the serial terminal if either is missing (`src/boot.asm:22`,
-`src/boot.asm:141`, `src/boot.asm:272-292`). Chapter 1 describes the two
-checks, and Chapter 13 what TEC-OS keeps in each half.
+EXPAND jumpers set for a 32 KiB chip. Before it prints anything, cold boot
+tests `8000h–BFFFh` and then EXPAND 1 behind it, and stops with `TEC-OS needs
+64K RAM` on the serial terminal if either is missing (`src/boot.asm:22`,
+`src/boot.asm:279-309`). Chapter 1 describes the check, and Chapter 13 what
+TEC-OS keeps in each half.
 
 ## The hex keypad and its NMI
 
@@ -155,8 +155,11 @@ clock, bit 7 the data sent to it, bit 5 set to read and the data read on bit 0
 significant bit first (`src/hwsvc.asm:276-282`). TEC-OS counts the clock as
 present when a read of the seconds register gives a value below `60h`, which a
 clock that answers gives and an empty port's `FFh` doesn't
-(`src/hwsvc.asm:257-268`). The hardware service `INFO` reports it in bit 3 of
-`B`, and `RTC` reads and sets its seven BCD registers (Chapter 9).
+(`src/hwsvc.asm:256-268`). Cold boot makes that test once and keeps the result
+in bit 3 of `CONDEV` (`src/boot.asm:30-33`). The hardware service `INFO`
+reports that bit in bit 3 of `B` without reading the port. `RTC` makes the
+test again at each call, and reads and sets the clock's seven BCD registers
+(Chapter 9).
 
 ## The SD card adaptor
 
