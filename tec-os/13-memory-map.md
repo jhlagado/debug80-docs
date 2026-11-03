@@ -29,25 +29,25 @@ EXPAND 0 and EXPAND 1, each 16 KiB.
 The system latch at port `FFh` (`src/layout.asm:13`) selects what is in view.
 Bit 2, `LATEXP`, selects EXPAND 1 when it is set (`src/layout.asm:18`).
 Bit 3, `LATMAIN`, selects a second 32 KiB at `0000h–7FFFh`, MAIN 1, on a board
-that has one (`src/layout.asm:20`). Bit 0, `LATSHAD`, high, turns off the boot
+that has one (`src/layout.asm:19`). Bit 0, `LATSHAD`, high, turns off the boot
 overlay, the copy of the ROM's first 2 KiB that the board shows at `0000h` after a
 reset (`src/layout.asm:16`). TEC-OS runs with the latch at `LATCLAS`, `01h`: the
 overlay off, MAIN 0 and EXPAND 0 in view (`src/layout.asm:19`).
 
 The latch can be written but not read, so TEC-OS keeps what it last wrote in a
-byte of page zero, `LATCHV` at `0040h` (`src/layout.asm:37`). A routine that
+byte of page zero, `LATCHV` at `0040h` (`src/layout.asm:34`). A routine that
 changes a bank for a moment reads `LATCHV`, sets its bit and writes the result
 to the port, and when it is done it writes `LATCHV` to the port unchanged. The
 block cache's lookup is an example. It writes `LATCHV` with `LATEXP` added to
 put EXPAND 1 in view and searches the table of cache lines there, as Chapter 19
 describes, and it ends with `LD A,(LATCHV)` and `OUT (SYSLAT),A`
-(`src/cache.asm:42-44`, `src/cache.asm:74-75`).
+(`src/cache.asm:49-51`, `src/cache.asm:81-82`).
 
 Because each routine starts from `LATCHV`, a bank change leaves the latch's
 other bits as they were. Those are bit 0, bit 1, which the board calls PROTECT,
 and bit 7, CAPS. The equate `LATKEEP`, `83h`, names those bits, but no routine
 uses it (`src/layout.asm:17`). The matrix keyboard's Caps key toggles bit 7 in
-`LATCHV` and in the latch (`src/console.asm:392-397`).
+`LATCHV` and in the latch (`src/console.asm:405-410`).
 
 The latch moves `8000h–BFFFh` from one half to the other, so anything TEC-OS
 must reach while EXPAND 1 is in view has to be outside the window. `LATCHV` is
@@ -61,7 +61,7 @@ view. `MOVE` also copies a program's bytes below `8000h` then (`src/xmove.asm:88
 CP/M puts its fixed addresses in the first 256 bytes of memory, and TEC-OS
 writes them as CP/M 2.2 does. Cold boot clears all of page zero
 (`src/boot.asm:15-21`), and `PZINIT`, at cold boot and at every warm boot, writes
-the parts TEC-OS sets (`src/boot.asm:218-265`):
+the parts TEC-OS sets (`src/boot.asm:190-246`):
 
 | Address | Contents |
 | --- | --- |
@@ -76,14 +76,14 @@ the parts TEC-OS sets (`src/boot.asm:218-265`):
 | `0080h` | the default DMA buffer and the command tail |
 
 `PZINIT` leaves the IOBYTE and the drive and user byte as they are
-(`src/boot.asm:215-217`). The word it writes at `0006h` is `PZTOP`, the entry
+(`src/boot.asm:187-189`). The word it writes at `0006h` is `PZTOP`, the entry
 of the lowest service or, with none, the BDOS entry jump itself
-(`src/boot.asm:223-224`). At each warm boot `PZINIT` also rewrites the restart
+(`src/boot.asm:195-196`). At each warm boot `PZINIT` also rewrites the restart
 vectors, as Chapter 14 describes.
 
 The bytes `0040h–004Fh` are the sixteen that CP/M 2.2 leaves to the BIOS, and
 TEC-OS keeps sixteen bytes of its state there, of which only `LATCHV` has to be
-in view whatever the window shows (`src/layout.asm:37-52`):
+in view whatever the window shows (`src/layout.asm:34-47`):
 
 | Address | Name | Contents |
 | --- | --- | --- |
@@ -106,11 +106,11 @@ in view whatever the window shows (`src/layout.asm:37-52`):
 
 Two of these are published. The ROM table has a word at `C008h` that
 points at `VWID`, so a program can find the console's size, and a word at
-`C00Dh` that points at `MAINS` (`src/abi.asm:10-13`). Chapter 15 describes the
+`C00Dh` that points at `MAINS` (`src/abi.asm:10`). Chapter 15 describes the
 console's bytes.
 
 On a board with MAIN 1, cold boot copies page zero into it as well
-(`src/boot.asm:140-142`, `src/boot.asm:172-183`). The jump at MAIN 1's `0000h`
+(`src/boot.asm:139-141`, `src/boot.asm:154-155`). The jump at MAIN 1's `0000h`
 then leads to the RAM BIOS table in EXPAND 0, so a program that ends with
 MAIN 1 in view still reaches warm boot.
 
@@ -168,7 +168,7 @@ follow, then the directory search state, the file's position and the BDOS's
 stack (`src/ram.asm:130-190`). The block ends at `BDOSRME`, `BF00h`.
 
 `BF00h–BF32h` is the RAM BIOS table, seventeen three-byte jumps at the start
-of a page (`src/layout.asm:73-74`). Chapter 15 describes it.
+of a page (`src/layout.asm:69-70`). Chapter 15 describes it.
 
 Above the table, from `SDBYTE` at `BF33h`, is state that the build puts at a
 fixed offset from it, 51 bytes on (`src/ram.asm:192`). It starts with the SD
@@ -179,9 +179,9 @@ head, `XMOVE`'s banks, `PZTOP` and the program return code `PRGCODE`. After
 them come the PRL loader's and service loader's state and the registry's head.
 The last items are the 128-byte record of `A:STARTUP.CMD` that startup reads,
 and `CHPOS`, the next command, or piece, of a chained line (Chapter 11,
-`src/ram.asm:193-240`). This state ends at
+`src/ram.asm:193-239`). This state ends at
 `WSEND`, `BFE6h`, and the build checks that it ends by `C000h`
-(`src/ram.asm:241-242`, `tools/build.mjs:283`).
+(`src/ram.asm:240-241`, `tools/build.mjs:258`).
 
 ## The allocation vectors and the BDOS entry
 
@@ -195,14 +195,14 @@ needs 64 bytes, and a G8M volume, with `DSM` 2047, needs 256.
 Cold boot places the vectors after it has read the card, because the space
 each drive gets depends on the card. `ALVINIT` starts at `WSBASE` and works
 down, giving each drive its vector in drive order and putting each one's
-address in the drive's DPH (`src/vol.asm:496-570`).
+address in the drive's DPH (`src/vol.asm:496-569`).
 
 A card of container format 1.1 whose drives field is N gets a 256-byte slot for
 each of drives A to the Nth, mounted or not, so any of those drives can later
 take any volume. Any other card, including every format 1.0 card, gets a slot
-for each drive it mounts, of the size its volume needs (`src/vol.asm:517-545`).
+for each drive it mounts, of the size its volume needs (`src/vol.asm:516-544`).
 `DRVSLOT` records each drive's slot: 0 for none, 1 for 64 bytes and 2 for 256
-(`src/ram.asm:29`, `src/vol.asm:546-551`). The starter card is format 1.0 with
+(`src/ram.asm:29`, `src/vol.asm:545-550`). The starter card is format 1.0 with
 a G1M volume on A and a G8M volume on B. Its vectors take 64 and 256 bytes, 320
 in all, from `B818h` to `B957h`.
 
@@ -210,32 +210,32 @@ Under the vectors goes the BDOS entry jump, `JP BENTRY`. CP/M 2.2's own BDOS
 starts on a page boundary and is entered six bytes in, after its serial number.
 The word at `0006h` therefore has the form `xx06h`, and TEC-OS gives its jump
 the same form. `ALVINIT` takes the lowest vector's address, subtracts 9 and sets the low
-byte to 6 (`src/vol.asm:571-576`). The result is the highest address of the
+byte to 6 (`src/vol.asm:570-575`). The result is the highest address of the
 form `xx06h` at which the three-byte jump still ends below the vectors. For the
 starter card that is `B806h`, and the bytes from `B809h` to `B817h` are left
 unused. `STUBAD` keeps the address, and `PZINIT` writes the jump there. With no
 service loaded, `PZTOP`, the word `PZINIT` puts at `0006h`, is this address
-(`src/ram.asm:34`, `src/boot.asm:223-230`).
+(`src/ram.asm:34`, `src/boot.asm:195-202`).
 
 Every service keeps that form. A service's header and image are moved to a
 page boundary below the BDOS entry jump, so the header's bytes at offset 6
 are at an address of the form `xx06h`. They become the service's jump, and
 loading the service lowers the word at `0006h` to that jump (`src/svc.asm:1-5`,
-`src/svc.asm:16`, `src/boot.asm:121-124`). Chapter 20 describes the loader.
+`src/svc.asm:16`, `src/boot.asm:116-117`). Chapter 20 describes the loader.
 
 The word at `0006h` is the top of the TPA, so the card sets how much memory
 programs have. The starter card gives 46,854 bytes, from `0100h` to `B805h`.
 The largest card, four G8M volumes, takes four 256-byte vectors, puts the entry
 at `B506h` and leaves 46,086 bytes. The build works out both figures in its
 census and checks that the starter card's TPA is at least 45,830 bytes
-(`tools/build.mjs:232-242`, `tools/build.mjs:286-287`).
+(`tools/build.mjs:210-220`, `tools/build.mjs:261-262`).
 
 ## The four stacks
 
 TEC-OS uses four stacks, and only the first is outside the workspace.
 
 The boot stack starts at `8000h`, `BOOTSTK`, and grows down into fixed RAM
-(`src/layout.asm:68`). Cold boot sets it first (`src/boot.asm:10`), because the
+(`src/layout.asm:64`). Cold boot sets it first (`src/boot.asm:10`), because the
 workspace is not yet known to be RAM. On this stack cold boot tests for a
 reset, clears page zero and runs the RAM check. After the check has passed and
 the workspace has been cleared, cold boot moves to the BIOS stack
@@ -243,18 +243,18 @@ the workspace has been cleared, cold boot moves to the BIOS stack
 
 The BIOS stack, `BSTKB` to `BSTK`, is 38 bytes at `BCC5h–BCEAh`
 (`src/ram.asm:60-62`). Cold boot runs on it from the end of the RAM check. Warm
-boot sets it as soon as EXPAND 0 is back in view (`src/boot.asm:66-69`), and
+boot sets it as soon as EXPAND 0 is back in view (`src/boot.asm:65-68`), and
 the diagnostic prompt sets it again on entry (`src/diag.asm:5`).
 
 The CCP's stack, `CSTKBAS` to `CSTKTOP`, is 30 bytes at `BE59h–BE76h`
 (`src/ram.asm:125-127`). The CCP sets it on entry and at the top of its main
 loop. It is also the stack a program starts with. The CCP sets it again, pushes
 the address of warm boot and jumps to `0100h`, which leaves the program 28
-bytes below that return word (`src/cpm/ccp.asm:294-300`). CP/M 2.2 gives a
+bytes below that return word (`src/cpm/ccp.asm:296-302`). CP/M 2.2 gives a
 program eight levels of stack and the return word, and those take 18 of the
-30 bytes (`src/layout.asm:79-80`). Below the stack is a
+30 bytes (`src/layout.asm:75-76`). Below the stack is a
 guard of 13 bytes, `STKGUARD`, which warm boot fills with `A5h`
-(`src/ram.asm:119-124`, `src/boot.asm:282-286`), so a guard byte that is no
+(`src/ram.asm:119-124`, `src/boot.asm:263-267`), so a guard byte that is no
 longer `A5h` shows that the stack went past its bottom.
 
 The BDOS's stack, `STKBASE` to `STKTOP`, is 54 bytes at `BECAh–BEFFh`
@@ -263,9 +263,9 @@ stack pointer in `OLDSP`. It runs every function on this stack, the BIOS calls
 from the BDOS included.
 
 The three sizes in the workspace are equates in `layout.asm`: 54 for the BDOS,
-30 for the CCP and 38 for the BIOS (`src/layout.asm:81-83`). The comment above
+30 for the CCP and 38 for the BIOS (`src/layout.asm:77-79`). The comment above
 them gives the rule: each is the deepest use and a quarter more
-(`src/layout.asm:76-77`).
+(`src/layout.asm:72-73`).
 
 The measurement is `test/stacks.test.mjs`. The test boots the model under the
 heaviest workloads of the test suite, and it runs them on each console, on a
@@ -277,12 +277,12 @@ deepest use leaves at least a quarter of it free and no guard byte has changed
 (`test/stacks.test.mjs:211`, `test/stacks.test.mjs:243-246`). It presses the
 keypad's NMI at each new depth only while `0066h` holds a `RETN`
 (`test/stacks.test.mjs:62-69`). TEC-OS puts no handler there, so the measured
-depths include no NMI frame, as the comment at `src/layout.asm:77-79` says.
+depths include no NMI frame, as the comment at `src/layout.asm:73-75` says.
 
 A loaded service runs on its caller's stack, so the services' own depths add
 to these. `SVCLIM` gives the most that the services together may add to each
 stack: 8 bytes on the BDOS's, 12 on the BIOS's and 6 on the CCP's
-(`src/data3.asm:112`). Chapter 20 describes how the loader uses them.
+(`src/data3.asm:115`). Chapter 20 describes how the loader uses them.
 
 ## EXPAND 1
 
@@ -300,7 +300,7 @@ marks every cache line empty, as Chapter 14 describes. Its pages are:
 | `BF00h–BFFFh` | 256 | reserved |
 
 The cache's lines and its table are at fixed addresses
-(`src/layout.asm:24-26`), and so is the history's page, `HRING`
+(`src/layout.asm:21-23`), and so is the history's page, `HRING`
 (`src/history.asm:14`). Chapter 19 describes the cache and Chapter 23 the
 history. The page at `BE00h` is unused. The page at `BF00h` matches the RAM
 BIOS table's page in EXPAND 0. Warm boot writes one jump into it, at `BF03h`,
@@ -309,20 +309,20 @@ jump. Only a program that writes the latch itself can end that way, since every
 TEC-OS routine that puts EXPAND 1 in view puts EXPAND 0 back before it returns.
 
 CP/M 3's `XMOVE` and `MOVE` copy between banks, and TEC-OS gives them to
-programs through BDOS function 50 (`src/cpm/bdos.asm:135-137`). They treat
+programs through BDOS function 50 (`src/cpm/bdos.asm:132`). They treat
 bank 1 as EXPAND 1 from `8000h` up to a low mark, `XMARK`. Cold boot sets the
 mark to `80h`, the start of the window, so that bank 1 has no bytes a program may copy to or from
-(`src/xmove.asm:1-7`, `src/boot.asm:163-165`, `src/layout.asm:23`). `MVRANGE`
+(`src/xmove.asm:1-7`, `src/boot.asm:154`, `src/layout.asm:20`). `MVRANGE`
 rejects every range in bank 1 that does not lie between `8000h` and the mark,
 and in bank 0 every range that does not end by the word at `0006h`
 (`src/xmove.asm:147-169`). TEC-OS's own copies, from the cache's lines to the
 DMA buffer and back, use the same routine without the check, `MVCOPY`
-(`src/xmove.asm:27-37`, `src/cache.asm:259-269`).
+(`src/xmove.asm:27-37`, `src/cache.asm:266-276`).
 
 All three resident stacks are in the window, so the routines that put EXPAND 1
 in view use no stack until EXPAND 0 is back. A `PUSH` with EXPAND 1 in view
 would write into EXPAND 1, and the `POP` after it would read EXPAND 0. The
 cache's routines, the history's and `DETECT`, which counts the regions at cold
 boot, state the rule at their heads (`src/cache.asm:10-13`,
-`src/history.asm:16-18`, `src/boot.asm:185-188`). The SD card driver's block
+`src/history.asm:16-18`, `src/boot.asm:157-160`). The SD card driver's block
 loops keep to it when a cache line is the buffer (`src/sd.asm:258-260`).

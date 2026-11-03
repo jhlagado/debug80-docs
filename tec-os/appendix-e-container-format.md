@@ -20,7 +20,7 @@ CP/M disk. Chapter 4 describes the container from the user's side and Chapter
 
 The format is defined once, in `format/format.json`. The build generates the
 ROM's field offsets and its geometry table from that file, as
-`src/gen/format.asm` and `src/gen/geom.asm` (`tools/build.mjs:83-138`), and
+`src/gen/format.asm` and `src/gen/geom.asm` (`tools/build.mjs:79-134`), and
 `tools/lib/container.mjs` and `tecvol` read the same file through
 `tools/lib/format.mjs`. All numbers of more than one byte are little-endian. A
 block is 512 bytes, and block numbers count from the start of the container,
@@ -65,7 +65,7 @@ The header's fields (`format/format.json`, `header`):
 The checksum is the 16-bit sum of all 512 bytes of block 0 except the two
 bytes of the checksum itself (`tools/lib/container.mjs:51-59`). The ROM sums
 all 512 and then takes the two checksum bytes back out
-(`src/vol.asm:780-801`). The sum covers the descriptors in block 0 as well as
+(`src/vol.asm:783-804`). The sum covers the descriptors in block 0 as well as
 the header's fields, so a change to any byte of block 0 needs a new checksum.
 
 A card's minor version sets three things. A 1.0 card has no drives field and
@@ -249,14 +249,14 @@ allocation blocks. A G8M volume has 2,048 allocation blocks and a G1M volume
 
 The ROM's geometry table has an entry of 6 bytes for each geometry: the id, a
 0, the payload in blocks as a word and the address of the disk parameter block
-(`src/gen/geom.asm`). `GEOFIND` looks an id up in it (`src/vol.asm:748-756`),
+(`src/gen/geom.asm`). `GEOFIND` looks an id up in it (`src/vol.asm:751-759`),
 and the length check compares the descriptor's length with that word and
 requires its two high bytes to be 0 (`src/vol.asm:161-175`).
 
 ## The cost in memory
 
 TEC-OS's workspace has a 16-byte disk parameter header for each of the four
-drives (`src/ram.asm:30`, `src/layout.asm:87`). The allocation vectors, one
+drives (`src/ram.asm:30`, `src/layout.asm:83`). The allocation vectors, one
 bit for each allocation block of a volume, go below the workspace. `ALVINIT`
 sizes the vectors at cold boot (`src/vol.asm:502-562`). On a 1.1 card that
 gives N drives, each of drives A to the Nth gets 256 bytes, enough for a G8M

@@ -63,7 +63,7 @@ attaches its own instance of the runtime's `SdSpi` class on port `FDh`
 card is then the caller's array of bytes: a write by TEC-OS changes that array
 at once, and the caller can read the files from it, save it or swap it.
 `swapCard` puts a different image, or none, in the socket for the next command
-(`host/machine.mjs:517-521`), and the web page saves the same array to the
+(`host/machine.mjs:518-522`), and the web page saves the same array to the
 browser's storage.
 
 The DS1302 is attached the same way, on port `FCh`, with the runtime's
@@ -76,7 +76,7 @@ the second. After TEC-OS writes a time, it counts on from what was written, by
 the same emulated seconds (`host/machine.mjs:86-119`).
 
 The time a run reads is then the same on any PC, however fast it runs. The tests
-start the clock at 1 January 2026, 12:00 (`test/lib/fixtures.mjs:111-112`), and
+start the clock at 1 January 2026, 12:00 (`test/lib/fixtures.mjs:112-113`), and
 `tools/capture.mjs` at 1 November 2026, 12:00, so a capture that reads the
 clock shows the same time on any PC.
 
@@ -84,7 +84,7 @@ clock shows the same time on any PC.
 
 Two kinds of write could make a program behave differently on the model and on a
 board, so the machine passes every memory write through a check of its own
-(`host/machine.mjs:209-229`). A write to `C000h–FFFFh`, the ROM, is recorded as
+(`host/machine.mjs:210-230`). A write to `C000h–FFFFh`, the ROM, is recorded as
 a `rom-write`, and a write to `0000h–07FFh` while the boot overlay is on is
 recorded as an `overlay-write`. Each goes in `violations` with the address and
 the program counter.
@@ -94,7 +94,7 @@ runtime but to the ROM in the TEC-1G's own documents (`docs/diagnostics.md`,
 T08). TEC-OS never makes either write, and 24 of the test files check that
 `violations` is empty.
 
-A second watch covers EXPAND 1 (`host/machine.mjs:180-222`). From cold boot's
+A second watch covers EXPAND 1 (`host/machine.mjs:180-223`). From cold boot's
 clear of EXPAND 1 until the next cold boot, only the block cache may write
 `8000h–BCFFh`, and nothing may write the free page `BE00h–BEFFh` in that time.
 The machine takes the end of the clear from its `LDIR` in `MEMINIT`, and the
@@ -110,7 +110,7 @@ writes its jump.
 
 ## Driving the machine
 
-`step` runs one instruction (`host/machine.mjs:255-263`). Before the instruction
+`step` runs one instruction (`host/machine.mjs:256-264`). Before the instruction
 runs, when the program counter is at `BCONOUT`, the BIOS's console output, the
 byte in `C` goes into `output`, so `output` holds every byte TEC-OS put on the
 console, whichever device it went to. A second record, `serial`, holds the bytes
@@ -163,34 +163,34 @@ A>
 ```
 
 `runUntil` steps until a test function returns true, and fails after a limit of
-cycles (`host/machine.mjs:265-276`). `expect` runs until the console output
+cycles (`host/machine.mjs:266-277`). `expect` runs until the console output
 matches a pattern, testing it only when the output has grown, and then runs on
 until the console waits, so that the last character has reached the screen
-(`host/machine.mjs:298-317`). `waitingForInput` is true while the program
+(`host/machine.mjs:299-318`). `waitingForInput` is true while the program
 counter is in one of the console's input loops, found by symbol
-(`host/machine.mjs:319-331`). `ready` adds that the startup file has finished
+(`host/machine.mjs:320-332`). `ready` adds that the startup file has finished
 and the CCP is reading a line, from `STPOS` and `HFLAG`
-(`host/machine.mjs:333-338`), and `capture.mjs` waits on `ready` and on output
+(`host/machine.mjs:334-339`), and `capture.mjs` waits on `ready` and on output
 ending in a prompt.
 
 Typing takes two forms. `type` sends each character to the serial port only when
 TEC-OS is waiting for one, and waits until TEC-OS has taken it
-(`host/machine.mjs:350-367`). With a display as the console it presses keys on
+(`host/machine.mjs:351-368`). With a display as the console it presses keys on
 the matrix keyboard instead, holding each, with its Shift or Ctrl, until
-TEC-OS's scan has read it and then releasing it (`host/machine.mjs:448-462`).
+TEC-OS's scan has read it and then releasing it (`host/machine.mjs:449-463`).
 `enqueueInput` and `pumpInput` do the same without blocking, one step at a time,
-for the web page's run loop and for `capture.mjs` (`host/machine.mjs:464-516`).
+for the web page's run loop and for `capture.mjs` (`host/machine.mjs:465-517`).
 Either way the model paces input to TEC-OS, but a terminal on a board sends each
 character when it is typed.
 
 The rest reads or sets the board's state. `screen` turns the PICO9918's name
 table into rows of text, from the layout its registers select
-(`host/machine.mjs:376-401`). `glcdScreen` matches each 6 × 8 cell of the
+(`host/machine.mjs:377-402`). `glcdScreen` matches each 6 × 8 cell of the
 graphics LCD's memory against the font, which the caller supplies in
-`Machine.font` since the ROM holds none (`host/machine.mjs:405-445`).
+`Machine.font` since the ROM holds none (`host/machine.mjs:406-446`).
 `ramImage` and `loadRam` copy all of RAM, EXPAND 1 included, out and in.
 `reset` resets the CPU and the latches and leaves RAM and the card as they
-were, as the board's reset button does (`host/machine.mjs:522-582`).
+were, as the board's reset button does (`host/machine.mjs:523-583`).
 
 ## The tests
 
@@ -200,18 +200,18 @@ Node.js's own test runner (`package.json:17`). There are 41 such files, from
 their machines with `boot` in `test/lib/fixtures.mjs`, which reads the ROM of a
 profile from `build/` and, when the board has a matrix keyboard, puts a display
 driver and a startup file on the card. It then runs to the first prompt with the
-clock at the tests' starting time (`test/lib/fixtures.mjs:22-27`,
-`test/lib/fixtures.mjs:144-152`, `test/lib/fixtures.mjs:155-162`).
+clock at the tests' starting time (`test/lib/fixtures.mjs:22-28`,
+`test/lib/fixtures.mjs:145-153`, `test/lib/fixtures.mjs:156-163`).
 
 `test/lib/fixtures.mjs` also makes the files the tests load. `program` assembles
 a source in `test/programs/` with ATOM and keeps the result in
-`build/test-programs` (`test/lib/fixtures.mjs:80-95`), filed under a digest of
+`build/test-programs` (`test/lib/fixtures.mjs:81-96`), filed under a digest of
 the source and every file it includes, so that a changed include assembles again
-(`test/lib/fixtures.mjs:30-42`). `prl` makes a PRL file from two assemblies, and
-`service` a `.SVC` file with `makeSvc` (`test/lib/fixtures.mjs:57-78`,
-`test/lib/fixtures.mjs:114-115`). `standardCard` is a new container with the
+(`test/lib/fixtures.mjs:31-43`). `prl` makes a PRL file from two assemblies, and
+`service` a `.SVC` file with `makeSvc` (`test/lib/fixtures.mjs:58-79`,
+`test/lib/fixtures.mjs:115-116`). `standardCard` is a new container with the
 starter card's two volumes, `SYSTEM` on A and `WORK` on B, both empty
-(`test/lib/fixtures.mjs:96-103`), and `volume` opens a drive of it as a CP/M
+(`test/lib/fixtures.mjs:97-104`), and `volume` opens a drive of it as a CP/M
 file system for a test to write files into.
 
 Two inputs the tests use come from outside the repository: the starter card's

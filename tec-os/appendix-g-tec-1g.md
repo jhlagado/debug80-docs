@@ -40,8 +40,8 @@ in the files that drive them.
 
 The read of port `00h` takes nothing from the keypad. It is there for the
 Debug80 runtime, whose serial input starts a queued byte at a read of that port
-(`src/layout.asm:9`, `src/console.asm:129`, `src/console.asm:183`,
-`src/console.asm:295`).
+(`src/layout.asm:9`, `src/console.asm:130`, `src/console.asm:184`,
+`src/console.asm:296`).
 
 ## Port 01h and the serial line
 
@@ -50,16 +50,16 @@ serial line's output in bit 6 and the speaker in bit 7 (`src/layout.asm:10`).
 Every write to it has to keep bit 6 high when the serial line is idle, or the
 terminal receives a start bit. The ROM's own writes do: the hardware service
 `DIGIT` lights each digit with bit 6 set, and `TONE` toggles bit 7 with bit 6
-set (`src/hwsvc.asm:45`, `src/hwsvc.asm:93-107`,
-`src/hwsvc.asm:177-196`). That shared port is why programs reach the digits
+set (`src/hwsvc.asm:17`, `src/hwsvc.asm:58-72`,
+`src/hwsvc.asm:142-161`). That shared port is why programs reach the digits
 and the speaker through the hardware services of Chapter 9 and not by writing
 the port.
 
 The serial line is bit-banged: TEC-OS sends each bit by writing bit 6 of port
 `01h` and receives by sampling bit 7 of port `03h`, at 4800 baud, 8 data bits,
 no parity and 2 stop bits. The bit times are counted in T-states for a 4 MHz
-clock (`tools/build.mjs:25`, `tools/build.mjs:40-58`,
-`src/console.asm:193-203`), so the board's CPU clock switch has to be on FAST
+clock (`tools/build.mjs:25`, `tools/build.mjs:36-54`,
+`src/console.asm:194-204`), so the board's CPU clock switch has to be on FAST
 with the 4 MHz oscillator. There is no receive buffer in hardware: a byte
 reaches TEC-OS only while it is polling bit 7 for a start bit.
 
@@ -68,17 +68,17 @@ reaches TEC-OS only while it is polling bit 7 for a start bit.
 TEC-OS reads three bits of port `03h` (`src/layout.asm:11`):
 
 - **Bit 0, the Matrix switch.** Read once, at cold boot, into `CONDEV`
-  (`src/console.asm:41-43`). With the switch off the console never scans the
+  (`src/console.asm:42-44`). With the switch off the console never scans the
   matrix keyboard, and both display drivers fail to install, since each needs
   the keyboard.
 - **Bit 6, a keypad key down.** Read once, at cold boot, just before the
-  startup file is opened. A low bit skips the file (`src/svc.asm:384-386`).
+  startup file is opened. A low bit skips the file (`src/svc.asm:398-400`).
 - **Bit 7, the serial line's input.** Read by the serial routines
-  (`src/console.asm:131`, `src/console.asm:184`, `src/console.asm:201`).
+  (`src/console.asm:132`, `src/console.asm:185`, `src/console.asm:202`).
 
 The TEC-1G's documents and the Debug80 runtime describe the other bits of port
 `03h` differently. On bit 6 the two agree: it is low while a keypad key is
-down, which is how TEC-OS reads it (`src/svc.asm:384-386`).
+down, which is how TEC-OS reads it (`src/svc.asm:398-400`).
 `docs/diagnostics.md` records the comparison, and test T11 reads the port on a
 board. The Protect and Expand switches are not read.
 
@@ -87,15 +87,15 @@ board. The Protect and Expand switches are not read.
 The system latch at port `FFh` can be written but, on the board's documents,
 not read, so TEC-OS keeps a copy of the last value written at `0040h`,
 `LATCHV`, and builds each new value from the copy (`src/layout.asm:13`,
-`src/layout.asm:37`). Its bits:
+`src/layout.asm:34`). Its bits:
 
 | Bit | Value | Name | TEC-OS's use |
 | ---: | ---: | --- | --- |
 | 0 | `01h` | SHADOW | Set at cold boot to turn the boot overlay off, and never cleared (`src/boot.asm:11-12`) |
 | 1 | `02h` | PROTECT | Not set; a program that sets it makes `4000h–7FFFh` read-only |
 | 2 | `04h` | EXPAND | EXPAND 1 at `8000h–BFFFh` in place of EXPAND 0, for the block cache and the history (`src/layout.asm:18`) |
-| 3 | `08h` | MAIN | Tested at cold boot for a second 32 KiB at `0000h–7FFFh` (`src/layout.asm:20`, `src/boot.asm:166-183`) |
-| 7 | `80h` | CAPS | The Caps lamp, toggled with Caps Lock on the matrix keyboard (`src/console.asm:404-407`) |
+| 3 | `08h` | MAIN | Tested at cold boot for a second 32 KiB at `0000h–7FFFh` (`src/layout.asm:19`, `src/boot.asm:154-155`) |
+| 7 | `80h` | CAPS | The Caps lamp, toggled with Caps Lock on the matrix keyboard (`src/console.asm:405-408`) |
 
 At reset the latch is `00h`, and with bit 0 low the first 2 KiB of the ROM
 also appear at `0000h–07FFh`. That is how the Z80, which starts at `0000h`,
@@ -120,7 +120,7 @@ and EXPAND 1. The board's recommended build leaves U9 empty, and
 EXPAND jumpers set for a 32 KiB chip. Cold boot tests `8000h–BFFFh` before it
 prints anything, and EXPAND 1 later, and stops with `TEC-OS needs 64K RAM` on
 the serial terminal if either is missing (`src/boot.asm:22`,
-`src/boot.asm:143-148`, `src/boot.asm:300-312`). Chapter 1 describes the two
+`src/boot.asm:141`, `src/boot.asm:272-292`). Chapter 1 describes the two
 checks, and Chapter 13 what TEC-OS keeps in each half.
 
 ## The hex keypad and its NMI
@@ -151,11 +151,11 @@ shows.
 
 The DS1302 is an add-on on port `FCh`, with bit 4 the chip's enable, bit 6 its
 clock, bit 7 the data sent to it, bit 5 set to read and the data read on bit 0
-(`src/hwsvc.asm:41-42`). Each register is reached by a command byte sent least
-significant bit first (`src/hwsvc.asm:311-317`). TEC-OS counts the clock as
+(`src/hwsvc.asm:13-14`). Each register is reached by a command byte sent least
+significant bit first (`src/hwsvc.asm:276-282`). TEC-OS counts the clock as
 present when a read of the seconds register gives a value below `60h`, which a
 clock that answers gives and an empty port's `FFh` doesn't
-(`src/hwsvc.asm:292-303`). The hardware service `INFO` reports it in bit 3 of
+(`src/hwsvc.asm:257-268`). The hardware service `INFO` reports it in bit 3 of
 `B`, and `RTC` reads and sets its seven BCD registers (Chapter 9).
 
 ## The SD card adaptor

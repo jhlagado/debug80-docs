@@ -163,7 +163,7 @@ written, with no error, and it wraps a high-capacity card's byte offset at 32
 bits too.
 
 Cold boot sends any failure, of the card or of the container, to the
-diagnostic prompt (`src/boot.asm:37-40`). For the run below, the starter
+diagnostic prompt (`src/boot.asm:42-45`). For the run below, the starter
 card's first byte was changed from `T` to `X` with
 `printf X | dd of=/tmp/bad.img bs=1 seek=0 conv=notrunc` on a copy of
 `dist/starter.img`. `H` was then typed at the prompt:
@@ -225,7 +225,7 @@ fixed media.
 To keep a drive logged in across a warm boot, TEC-OS's BDOS uses the three
 scratch words for a sum of its allocation vector, a flag set when it has
 changed and a mark, the number of directory entries to read when the vector is
-rebuilt (`src/cpm/bdos.asm:504-543`). Chapter 16 describes that, and Chapter
+rebuilt (`src/cpm/bdos.asm:453-492`). Chapter 16 describes that, and Chapter
 13 how `ALVINIT` places the vectors at cold boot.
 
 ## Deblocking
@@ -252,8 +252,8 @@ cache, as Chapter 19 describes. `WRITE` has more to do
 (`src/bios.asm:188-300`). After mapping it rejects a write to a read-only
 volume before anything changes, with error 1 (`src/bios.asm:204-208`). A change
 made through the BDOS doesn't get this far, since the BDOS's own `R/O` error
-comes first (`src/cpm/bdos.asm:2415-2427`). The exception is function 16, which
-doesn't test the drive (`src/cpm/bdos.asm:609-649`): closing an FCB that was
+comes first (`src/cpm/bdos.asm:2366-2378`). The exception is function 16, which
+doesn't test the drive (`src/cpm/bdos.asm:558-600`): closing an FCB that was
 never opened on a read-only volume ends in `Bdos Err On B: Bad Sector`, with the
 card unchanged. Otherwise only a program that calls the BIOS itself receives the
 error.
@@ -297,7 +297,7 @@ each of those two writes, since the data has replaced it in `BLKBUF`.
 
 `MOUNT` on the starter card is a program, so it changes and lists the drives
 through the mount entry, the jump `ABIVOL` at `C00Fh`, which goes
-to `VOLSVC` (`src/abi.asm:14`, `src/vol.asm:577-583`). It has three functions, chosen by `A`:
+to `VOLSVC` (`src/abi.asm:10`, `src/vol.asm:577-583`). It has three functions, chosen by `A`:
 
 - `A` = 0 mounts the volume at container index `E` on drive `C`.
 - `A` = 1 unmounts drive `C`.
@@ -307,19 +307,19 @@ to `VOLSVC` (`src/abi.asm:14`, `src/vol.asm:577-583`). It has three functions, c
 Each returns `A` = 0, or `FFh` with nothing changed. A mount fails in four
 cases: an index past the table, a drive past D, a volume already on a drive
 and a drive whose vector slot is too small for the volume. An unmount fails
-for drive A, which is never left empty (`src/vol.asm:610-675`). The slot rule
+for drive A, which is never left empty (`src/vol.asm:606-672`). The slot rule
 is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
-and any other needs a slot of either size (`src/vol.asm:637-650`). Chapter 13
+and any other needs a slot of either size (`src/vol.asm:633-646`). Chapter 13
 describes how cold boot gives out the slots.
 
 A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of
 the block cache to the card, with interrupts off, and the call fails if any
-write fails (`src/vol.asm:677-689`). A mount then clears the drive's old
+write fails (`src/vol.asm:680-692`). A mount then clears the drive's old
 entry, fills the new one and its DPH with `MNONE`, and records the index. An
 unmount clears the entry. Either way `VOLSVC` ends by marking `BLKBUF`
 empty and calling BDOS function 37 to reset the drive, so that the drive's
-next access logs it in from its new directory (`src/vol.asm:661-673`).
+next access logs it in from its new directory (`src/vol.asm:657-669`).
 
 `VOLSVC` writes nothing of its own to the card, so the card's header still
 names its own drives, and a power-off, or a reset whose kept selection no
@@ -330,7 +330,7 @@ whose two drives have vector slots, and whose C and D have none.
 `MOUNT C: WORK` fails first because `WORK` is on B, and again after B is
 unmounted because C has no slot. `MOUNT B: WORK` puts it back, and `MOUNT`
 with no argument lists the container through the describe function
-(`test/programs/mount.asm:160-209`):
+(`test/programs/mount.asm:159-208`):
 
 <!-- node tools/capture.mjs "MOUNT C: WORK" "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" MOUNT -->
 ```text
