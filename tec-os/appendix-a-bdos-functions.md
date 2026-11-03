@@ -7,10 +7,10 @@ nav_group: "Appendices"
 
 # Appendix A. BDOS functions
 
-Checked against TEC-OS 4d6eeaa.
+Checked against TEC-OS 60e0768.
 
 This appendix lists the BDOS functions of TEC-OS in number order: 0 to 40,
-then 47, 50 and 108, whose meanings come from CP/M 3. Each entry gives the
+then 47 and 108, whose meanings come from CP/M 3. Each entry gives the
 registers the function takes, what it returns and where it differs from CP/M
 2.2. Chapter 16 describes the mechanism behind them.
 
@@ -39,8 +39,8 @@ return (`src/cpm/bdos.asm:2380-2431`). The errors are:
 - `Bdos Err On d: Select`, for a drive with no volume, a drive past D or a `?`
   drive byte outside function 17.
 - `Bdos Err On d: R/O`, for a change to a drive that function 28 has made
-  read-only or to a volume the card marks read-only, by function 19, 21, 22,
-  23, 30, 34 or 40
+  read-only or to a volume the card marks read-only, by function 16, 19, 21,
+  22, 23, 30, 34 or 40
   (`src/cpm/bdos.asm:2366-2378`).
 - `Bdos Err On d: File R/O`, for function 19 or 23 on a directory entry whose
   read-only attribute is set, and for function 21, 34 or 40 through an FCB
@@ -138,6 +138,9 @@ earlier extent than its entry's writes back only the allocation map
 (`src/cpm/bdos.asm:566-568`, `src/cpm/bdos.asm:588-595`). Returns the
 directory code, or `FFh` if the entry is not found. If nothing has been
 written through the FCB since its open, the call writes nothing and returns 0.
+Any other FCB on a read-only drive is the `R/O` error before the directory is
+searched, so an FCB that was never opened is one too
+(`src/cpm/bdos.asm:558-571`).
 
 **17 Search for first.** Searches for the first entry that matches the FCB,
 with `?` matching any character, and copies the directory record that holds it
@@ -256,28 +259,6 @@ bytes, and ends the program by warm boot. The CCP runs the command next
 no 0 in its first 128 bytes, or with a CR or LF before the 0, returns `FFh` in
 `A`, and the program goes on with the line unchanged. `E` is ignored.
 
-**50 Direct BIOS call.** Calls a BIOS function with the registers given in the
-BIOSPB at `DE` (`src/cpm/bdos.asm:132`):
-
-| Offset | Contents |
-| ---: | --- |
-| 0 | the BIOS function's number |
-| 1 | `A` |
-| 2–3 | `BC` |
-| 4–5 | `DE` |
-| 6–7 | `HL` |
-
-Functions 0 to 16 call the entry of the RAM BIOS table at `BF00h` plus three
-times the number, so a replaced entry is called. Function 25 is `MOVE`, which
-copies `BC` bytes from `DE` to `HL`, and 29 is `XMOVE`, which sets the banks,
-`B` for the destination and `C` for the source, for the next `MOVE`
-(`src/xmove.asm:9-19`). A range in bank 1, EXPAND 1, or one in bank 0 that
-goes past the word at `0006h`, or a bank number other than 0 and 1, makes
-`MOVE` return `FFh` with nothing copied (`src/xmove.asm:16-19`,
-`src/xmove.asm:147-169`). Any other function returns `FFh` in `A`. The call
-returns with the registers the BIOS routine left. The alternate `AF` is
-changed.
-
 **108 Get or set program return code.** With `DE` = `FFFFh`, returns the code
 in `HL`. With any other `DE`, sets the code to `DE` and returns 0
 (`src/cpm/bdos.asm:133-145`). All programs share one code. A reset clears it
@@ -288,5 +269,8 @@ with `:` runs only when the code is not from `FF00h` to `FFFEh`
 
 ## Other numbers
 
-Every other function number, from 41 to 255 except 47, 50 and 108, returns 0
-in `A` and `HL` and does nothing (`src/cpm/bdos.asm:88-89`).
+Every other function number, from 41 to 255 except 47 and 108, returns 0 in
+`A` and `HL` and does nothing (`src/cpm/bdos.asm:88-89`). Function 50, CP/M
+3's direct BIOS call, is one of them. A program reaches the BIOS through its
+jump table, whose warm boot entry is the address at `0001h`
+(`src/boot.asm:97-98`).
