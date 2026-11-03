@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 19ad916, with the starter card's `TED.COM` from Thorium
-8fcc6ea, with the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
+Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
+676075a, with the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -418,10 +418,11 @@ Chapter 10 describes how a service is made.
 
 A command that isn't a built-in names a program. The CCP searches the
 directory of the current drive, in the current user area, for the file
-`NAME.COM`, then loads the file at `0100h` and starts it. If there is no
-`NAME.COM`, it searches for `NAME.PRL`, a program in Digital Research's
-relocatable PRL format, which Chapter 10 describes. A drive in front of the
-name runs the program from that drive, and the CCP searches no other:
+`NAME.COM`, then loads the file at `0100h` and starts it. If the current drive
+has no `NAME.COM` and the command names no drive, the CCP searches drive A in
+the same user area and runs the program from there. The current drive stays as
+it was. A drive in front of the name runs the program from that drive, and the
+CCP searches no other:
 
 <!-- node tools/capture.mjs B: "A:MOUNT" MOUNT "STARTUP.CMD" -->
 ```text
@@ -431,7 +432,8 @@ B>A:MOUNT
 01 WORK        G8M B:
 
 B>MOUNT
-MOUNT?
+00 SYSTEM      G1M A:
+01 WORK        G8M B:
 
 B>STARTUP.CMD
 STARTUP.CMD?
@@ -440,14 +442,16 @@ B>
 ```
 
 A type after a program's name is replaced, so `MOUNT.COM` runs `MOUNT`, and
-`STARTUP.CMD` as a command searches for `STARTUP.COM` and then `STARTUP.PRL`
-and finds neither. The exception is `.SVC`, which installs a service.
+`STARTUP.CMD` as a command searches for `STARTUP.COM` on drive B and then on
+drive A and finds it on neither. The exception is `.SVC`, which installs a
+service from the current drive or the drive named, and never from drive A in
+its place.
 
-The command fails, with its name and a question mark, when neither file is
-there. It also fails when `NAME.COM` is there but is too large for the TPA. A
-`NAME.COM` that is too large is not passed over for a `NAME.PRL`. A read that
-fails on the card gives the BDOS's `Bad Sector` message, described below, and
-no question mark.
+The command fails, with its name and a question mark, when no `NAME.COM` is
+found. It also fails when `NAME.COM` is there but is too large for the TPA,
+and the CCP then searches no further: a `NAME.COM` too large on drive B is not
+passed over for one on drive A. A read that fails on the card gives the BDOS's
+`Bad Sector` message, described below, and no question mark.
 
 The rest of the line after the program's name is the command tail. The CCP
 copies it to `0080h` for the program and fills the two file control blocks at
