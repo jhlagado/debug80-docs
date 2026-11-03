@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
-845d062, whose copy in `dist/files` has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
+Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
+8fcc6ea, with the SHA-256
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -44,7 +44,7 @@ node tools/tecvol.mjs info dist/starter.img
 
 ```text
 container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
-  A: SYSTEM      id 1 G1M start 2048 rw 13 file(s), 997376 bytes free
+  A: SYSTEM      id 1 G1M start 2048 rw 6 file(s), 1007616 bytes free
   B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
 ```
 
@@ -118,13 +118,13 @@ letter or its label, and `tecvol dir` lists a volume. A PC's file name becomes
 the CP/M name in capitals, and a fourth argument gives another name. `--text`
 turns each line feed into a carriage return and line feed and ends the file with
 `^Z`, CP/M's end of a text file. That is the form in which CP/M programs and
-`TYPE` read text. These commands put two programs on `SYSTEM`, one on `GAMES`
-and a text file, `hello.txt`, holding the line `Hello from the PC.`, on `SPARE`:
+`TYPE` read text. These commands put the starter card's `MOUNT.COM` on
+`SYSTEM`, its `TAS.COM` on `GAMES` and a text file, `hello.txt`, holding the
+line `Hello from the PC.`, on `SPARE`:
 
 ```sh
-node tools/tecvol.mjs put my.img A dist/files/VOLS.COM
 node tools/tecvol.mjs put my.img A dist/files/MOUNT.COM
-node tools/tecvol.mjs put my.img GAMES dist/files/TERM.COM
+node tools/tecvol.mjs put my.img GAMES dist/files/TAS.COM
 node tools/tecvol.mjs put my.img SPARE hello.txt --text
 node tools/tecvol.mjs dir my.img
 ```
@@ -133,13 +133,12 @@ The last of them lists drive A, the default, with each file's user area and
 its size in bytes:
 
 ```text
- 0 MOUNT.COM         512
- 0 VOLS.COM          384
+ 0 MOUNT.COM         768
 ```
 
-The sizes are whole records of 128 bytes, because CP/M records a file's length
-only in records. `VOLS.COM` is 266 bytes on the PC and takes three records,
-and `tecvol get`, which copies a file back to the PC, gives back all three.
+The size is whole records of 128 bytes, because CP/M records a file's length
+only in records. `MOUNT.COM` is 670 bytes on the PC and takes six records,
+and `tecvol get`, which copies a file back to the PC, gives back all six.
 With `--text`, `get` stops at the first `^Z` and turns each carriage return
 and line feed back into a line feed.
 
@@ -159,9 +158,9 @@ one, so an interrupted change leaves the old image whole. `tecvol info` on
 
 ```text
 container: format 1.1, 38912 blocks (19922944 bytes), 4 volume(s), 4 drive(s) wanted
-  A: SYSTEM      id 1 G1M start 2048 rw 2 file(s), 1036288 bytes free
+  A: SYSTEM      id 1 G1M start 2048 rw 1 file(s), 1038336 bytes free
   B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
-  -: GAMES       id 3 G8M start 20480 rw 1 file(s), 8368128 bytes free
+  -: GAMES       id 3 G8M start 20480 rw 1 file(s), 8359936 bytes free
   -: SPARE       id 4 G1M start 36864 rw 1 file(s), 1038336 bytes free
 ```
 
@@ -198,11 +197,11 @@ Each file, inside the `components` list, has an entry such as this one:
 
 ```json
 {
-  "name": "VOLS.COM",
-  "url": "files/VOLS.COM",
+  "name": "MOUNT.COM",
+  "url": "files/MOUNT.COM",
   "drive": "A",
-  "bytes": 266,
-  "sha256": "d2914530cdf5ae7e8e71f30adc623c4b0728551e7b8ba511dd6734436e5f1432"
+  "bytes": 670,
+  "sha256": "e8db95fa4f3ea5b3f95214fac9d522ca4a555825792d13ee4ac25b5f0c22957e"
 }
 ```
 
@@ -211,7 +210,7 @@ file first and sets the read-only flags last, so a recipe is the way to make a
 read-only volume that holds files. The web page's "New starter card" builds
 its card from the same recipe and checks the same SHA-256s.
 
-## Drives, VOLS and MOUNT
+## Drives and MOUNT
 
 Cold boot puts each volume on the drive its descriptor names and prints the
 drives that have one. On `my.img` the boot prints this, with the prompt
@@ -226,14 +225,14 @@ B: WORK
 A>
 ```
 
-Two programs from the starter card, which `my.img` has too, work with the
-volumes while TEC-OS runs. `VOLS` lists every volume in the container with its
-index, its label, its geometry and the drive it is on. `MOUNT` puts a volume
-on a drive, by label or by the index `VOLS` prints:
+`MOUNT`, the starter card's program that `my.img` has too, works with the
+volumes while TEC-OS runs. With no argument it lists every volume in the
+container with its index, its label, its geometry and the drive it is on. With
+a drive and a label or an index, it puts that volume on the drive:
 
-<!-- node tools/capture.mjs --card my.img VOLS "MOUNT C: GAMES" "MOUNT D: 3" VOLS "DIR C:" "TYPE D:HELLO.TXT" "MOUNT C: SPARE" -->
+<!-- node tools/capture.mjs --card my.img MOUNT "MOUNT C: GAMES" "MOUNT D: 3" MOUNT "DIR C:" "TYPE D:HELLO.TXT" "MOUNT C: SPARE" -->
 ```text
-A>VOLS
+A>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 02 GAMES       G8M
@@ -245,15 +244,15 @@ C: GAMES
 A>MOUNT D: 3
 D: SPARE      
 
-A>VOLS
+A>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 02 GAMES       G8M C:
 03 SPARE       G1M D:
 
 A>DIR C:
-TERM.COM    
-1 file, 8172K free
+TAS.COM     
+1 file, 8164K free
 A>TYPE D:HELLO.TXT
 Hello from the PC.
 
@@ -265,7 +264,8 @@ A>
 
 `MOUNT C: SPARE` fails because `SPARE` is on drive D already, and a volume is
 on one drive at most. `MOUNT B:`, with no volume, takes the volume off drive
-B, and `MOUNT` alone prints how it is used. Drive A always has a volume, so
+B, and an argument `MOUNT` can't read makes it print how it is used,
+`MOUNT [D: [NAME or INDEX]]`. Drive A always has a volume, so
 `MOUNT A:` prints `Cannot unmount`, and a volume can be mounted on drive A
 only in place of the one there.
 
@@ -390,7 +390,7 @@ TEC-OS had reached a prompt before the reset and each volume on a drive is
 still on the card, at the same place and of the same size and kind. The drives
 then hold the same volumes after the reset as before it:
 
-<!-- node tools/capture.mjs --card my.img "MOUNT C: GAMES" "MOUNT B:" "@reset" VOLS -->
+<!-- node tools/capture.mjs --card my.img "MOUNT C: GAMES" "MOUNT B:" "@reset" MOUNT -->
 ```text
 A>MOUNT C: GAMES
 C: GAMES      
@@ -403,7 +403,7 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 C: GAMES      
 
-A>VOLS
+A>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M
 02 GAMES       G8M C:
