@@ -113,8 +113,9 @@ node tools/tecvol.mjs create my.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb
 `create` fails if the image exists already. A card must have a volume on drive
 A, and no two volumes on one drive. `--drives` takes a whole number from 1 to 4,
 and `--align`, which sets the multiple of blocks each volume starts on in place
-of 2,048, a whole number from 1 up. Anything else stops `tecvol` with its usage
-message, and no image is made.
+of 2,048, a multiple of 8 below 16,777,216. A value that isn't a whole number in
+range stops `tecvol` with its usage message, and one that isn't a multiple of 8
+with `alignment must be a multiple of 8 blocks`. Either way no image is made.
 
 `tecvol put` then copies a file from the PC onto a volume, named by its drive
 letter or its label, and `tecvol dir` lists a volume. A PC's file name becomes
