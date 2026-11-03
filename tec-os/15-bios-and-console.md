@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 15. The BIOS and the console path
 
-Checked against TEC-OS 60e0768.
+Checked against TEC-OS 1f9542d.
 
 The BIOS is the part of a CP/M system written for one machine, and on the TEC-1G
 most of it is the console. That console has a serial port made of two port bits
