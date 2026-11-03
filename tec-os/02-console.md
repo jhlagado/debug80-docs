@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 2. The console
 
-Checked against TEC-OS ea9c1c0.
+Checked against TEC-OS 60cfbdc.
 
 The console is the device you type commands on and read TEC-OS's replies from.
 A TEC-1G can carry a serial terminal, a PICO9918 video card and a graphics LCD
@@ -211,7 +211,7 @@ keyboard, with the board's Matrix configuration switch on. Otherwise the
 installation fails and the console stays where it was, which on a board with
 only a serial terminal is that terminal. A display driver takes 1,536 bytes of
 memory, as Chapter 1 explained, so with both displays' drivers installed
-programs have 3,072 bytes less. Chapter 5 gives the rules for the startup file
+programs have 3,093 bytes less than with none. Chapter 5 gives the rules for the startup file
 and for installing and removing services.
 
 A console on a display is a *video console*, and there TEC-OS is the terminal.
