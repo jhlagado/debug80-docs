@@ -175,8 +175,8 @@ calls through `ABIHW` are *hardware services*, the table at `C003h` is the *ROM
 table* and its jump `ABIVOL` is the *mount entry*. *Service resident memory* is
 the pages services hold.
 
-`.DRV` names appear only where the text is about an old card or `TAS`'s output
-at its pin, as in Chapters 1, 5, 10, 22 and 26 and Appendix D. `DRVTAB`, `DRVIDX` and `DRVSLOT` name
+`.DRV` names appear only where the text is about an old card, as in Chapters 1,
+5, 22 and 26 and Appendix D. `DRVTAB`, `DRVIDX` and `DRVSLOT` name
 disk drives. `VOLSVC` is the routine behind the mount entry. The SD card driver
 and the hardware drivers of Chapter 15 are code in the ROM, so *driver* there
 has its older sense. "Registry's records" and "service's records" are in use,

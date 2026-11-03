@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 10. PRL programs and services
 
-Checked against TEC-OS 718c01b. The programs were assembled by the starter
-card's `TAS.COM`, from Thorium 7604daa, SHA-256
-`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
+Checked against TEC-OS ea9c1c0. The programs were assembled by the starter
+card's `TAS.COM`, from Thorium dbee66a, SHA-256
+`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
 Every program written so far has been a `.COM` file, which runs at `0100h` and
 is gone when it ends. This chapter describes two other kinds of file. A `.PRL`
@@ -164,7 +164,8 @@ The first 25 bytes of the file are the header, and the source writes it as
 data at `0100h`. A service sets a few of its fields and leaves the rest at 0,
 for the tool that makes the file, `TAS` or `makeSvc`, to fill in. The tool
 finds `INIT` and `REMOVE` by those label names, and every service has both,
-even one that `UNLOAD` can't remove. The flags byte's bit 0 lets `UNLOAD`
+even one that `UNLOAD` can't remove. `makeSvc` stops with `INIT and REMOVE
+required` if either is missing. The flags byte's bit 0 lets `UNLOAD`
 remove the service. A service that needs a buffer past its image gives the
 size as its extra memory, and the loader sets aside that many bytes, not
 cleared. The name, 8 bytes padded with spaces, is what `SERVICES` prints.
@@ -218,15 +219,11 @@ how `PICO.SVC` stays while the PICO9918 is the console.
 
 ## Assembling and installing
 
-Assembling a service follows Chapter 9's route, with one step more.
-`TAS NAME OUT.TYP` writes the output file named, but the `TAS.COM` on this
-starter card makes a service only for the output type `.DRV`, the type of older
-cards. For that type it fills in the header's fields and the relocation data.
-For any other type it writes a flat image, so `TAS COUNT COUNT.SVC` gives a
-file that won't install. The format is the same under either name, so you
-assemble to `COUNT.DRV` and give that file its proper name with `REN`. When
-`COUNT.SVC` is already on the drive, `REN` prints `FILE EXISTS` and changes
-nothing, so `ERA COUNT.SVC` comes first.
+Assembling a service follows Chapter 9's route, with the output named.
+`TAS NAME OUT.TYP` writes the output file named. For the output type `.SVC` it
+fills in the header's fields and the relocation data, and for any type but
+`.COM` and `.SVC` it writes a flat image. So `TAS COUNT COUNT.SVC` writes the
+service, in place of any `COUNT.SVC` already on the drive.
 
 `count.asm` and `chars.asm` go on the card, along with `HWLIB.ASM` from
 Chapter 9. `chars.asm` reads the count that `COUNT.SVC` publishes, and it is
@@ -238,9 +235,9 @@ node tools/tecvol.mjs put svc.img B count.asm --text
 node tools/tecvol.mjs put svc.img B chars.asm --text
 ```
 
-The run assembles `AREA` and `CHARS`, then the service, and renames it:
+The run assembles `AREA` and `CHARS`, then the service:
 
-<!-- node tools/capture.mjs --card svc.img B: "A:TAS AREA" "A:TAS CHARS" "A:TAS COUNT COUNT.DRV" "REN COUNT.SVC=COUNT.DRV" AREA COUNT.SVC SERVICES AREA CHARS CHARS UNLOAD SERVICES AREA CHARS -->
+<!-- node tools/capture.mjs --card svc.img B: "A:TAS AREA" "A:TAS CHARS" "A:TAS COUNT COUNT.SVC" AREA COUNT.SVC SERVICES AREA CHARS CHARS UNLOAD SERVICES AREA CHARS -->
 ```text
 A>B:
 B>A:TAS AREA
@@ -249,10 +246,8 @@ AREA.COM written
 B>A:TAS CHARS
 CHARS.COM written
 
-B>A:TAS COUNT COUNT.DRV
-COUNT.DRV written
-
-B>REN COUNT.SVC=COUNT.DRV
+B>A:TAS COUNT COUNT.SVC
+COUNT.SVC written
 ```
 
 `AREA` now measures the TPA before and after the service, and
@@ -296,8 +291,7 @@ hook stayed through each program's warm boot.
 
 On a PC the repository's `makeSvc` does the same job as `TAS`, by the two
 assemblies that `makePrl` uses, so it needs the same `ORG $0100` line. It writes
-the same 111 bytes, where `TAS`'s file is rounded up to the record's 128.
-`makeSvc`'s output can have the type `.SVC` from the start:
+the same 111 bytes, where `TAS`'s file is rounded up to the record's 128:
 
 ```sh
 node --input-type=module -e '
@@ -317,8 +311,8 @@ stack at that word, as `EDIT` does and as many CP/M programs do, so its first
 pushes land on them, and a program that fills the area reaches them too. With
 `COUNT.SVC` in, a run of `TAS` leaves `SERVICES` printing lines of stray
 characters under `COUNT 1`, and the `UNLOAD` after it returns with `CONOUT`
-still pointing into the freed page. This transcript leaves a control character
-out of the first stray line and shows eight `00h` bytes in the second as
+still pointing into the freed page. This transcript leaves control characters
+out of the first two stray lines and shows eight `00h` bytes in the third as
 spaces:
 
 <!-- node tools/capture.mjs --card svc.img B: COUNT.SVC "A:TAS AREA" SERVICES UNLOAD SERVICES -->
@@ -331,13 +325,15 @@ AREA.COM written
 
 B>SERVICES
 COUNT 1
-I:b97(: 39
-         214
+~mx/(W 247
+0##"0I 11
+         159
 B>UNLOAD
 
 B>SERVICES
-I:b97(: 39
-         214
+~mx/(W 247
+0##"0I 11
+         159
 B>
 ```
 
@@ -401,7 +397,7 @@ so it and `COUNT.SVC` can't both be in. A copy of `COUNT` that declares 9 for
 the BDOS fails on its own, on any board. This run leaves out the lines that
 assemble it:
 
-<!-- sed 's/^\tDB\t2,2,2/\tDB\t9,2,2/;s/COUNT   "\t; the name/CHEAT   "\t; the name/' count.asm > cheat.asm; node tools/tecvol.mjs put svc.img B cheat.asm --text; node tools/capture.mjs --card svc.img B: "A:TAS CHEAT CHEAT.DRV" "REN CHEAT.SVC=CHEAT.DRV" CHEAT.SVC SERVICES -->
+<!-- sed 's/^\tDB\t2,2,2/\tDB\t9,2,2/;s/COUNT   "\t; the name/CHEAT   "\t; the name/' count.asm > cheat.asm; node tools/tecvol.mjs put svc.img B cheat.asm --text; node tools/capture.mjs --card svc.img B: "A:TAS CHEAT CHEAT.SVC" CHEAT.SVC SERVICES -->
 ```text
 B>CHEAT.SVC
 CHEAT.SVC?
@@ -638,13 +634,12 @@ The loader checks each dependency before it changes anything, so `INIT`'s find
 can't fail. With no `COUNT.SVC` the load fails. With `COUNT.SVC` in, the two go
 in and come out last in, first out:
 
-<!-- node tools/tecvol.mjs put svc.img B needs.asm --text; node tools/capture.mjs --card svc.img B: "A:TAS NEEDS NEEDS.DRV" "REN NEEDS.SVC=NEEDS.DRV" NEEDS.SVC COUNT.SVC NEEDS.SVC SERVICES UNLOAD UNLOAD SERVICES -->
+<!-- node tools/tecvol.mjs put svc.img B needs.asm --text; node tools/capture.mjs --card svc.img B: "A:TAS NEEDS NEEDS.SVC" NEEDS.SVC COUNT.SVC NEEDS.SVC SERVICES UNLOAD UNLOAD SERVICES -->
 ```text
 A>B:
-B>A:TAS NEEDS NEEDS.DRV
-NEEDS.DRV written
+B>A:TAS NEEDS NEEDS.SVC
+NEEDS.SVC written
 
-B>REN NEEDS.SVC=NEEDS.DRV
 B>NEEDS.SVC
 NEEDS.SVC?
 
