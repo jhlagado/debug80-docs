@@ -241,8 +241,11 @@ cache, as Chapter 19 describes. `WRITE` has more to do
 (`src/bios.asm:188-300`). After mapping it rejects a write to a read-only
 volume before anything changes, with error 1 (`src/bios.asm:204-208`). A change
 made through the BDOS doesn't get this far, since the BDOS's own `R/O` error
-comes first (`src/cpm/bdos.asm:2415-2427`), so only a program that calls the
-BIOS itself receives the error.
+comes first (`src/cpm/bdos.asm:2415-2427`). The exception is function 16, which
+doesn't test the drive (`src/cpm/bdos.asm:609-649`): closing an FCB that was
+never opened on a read-only volume ends in `Bdos Err On B: Bad Sector`, with the
+card unchanged. Otherwise only a program that calls the BIOS itself receives the
+error.
 
 A write to the directory can change which blocks are in use, so `WRITE` then
 tests for one of the directory's blocks, the first 32 blocks of a G8M volume

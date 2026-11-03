@@ -242,8 +242,9 @@ the file (`src/cpm/ccp.asm:804-847`). A file that is not there gives
 `NO FILE`.
 
 `ERA` with a name that is all `?`, as `*.*` gives, prints `ALL (Y/N)?`, reads
-the answer with function 1 and, unless that was a CR, reads on to one. Any
-answer but `Y` or `y` erases nothing (`src/cpm/ccp.asm:864-890`). The erase itself is function 19,
+the answer with function 1 and, unless that was a CR, reads on to one. The
+test follows an `AND DFh`, so a `-` counts as a CR here and the Return after it
+reaches the prompt. Any answer but `Y` or `y` erases nothing (`src/cpm/ccp.asm:864-890`). The erase itself is function 19,
 and `NO FILE` when nothing matched (`src/cpm/ccp.asm:892-901`).
 
 `REN NEW=OLD` parses the new name into `RENFCB` and the old one into `CMDFCB`.

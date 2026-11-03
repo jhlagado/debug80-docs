@@ -221,8 +221,9 @@ how `PICO.SVC` stays while the PICO9918 is the console.
 
 Assembling a service follows Chapter 9's route, with the output named.
 `TAS NAME OUT.TYP` writes the output file named. For the output type `.SVC` it
-fills in the header's fields and the relocation data, and for any type but
-`.COM` and `.SVC` it writes a flat image. So `TAS COUNT COUNT.SVC` writes the
+fills in the header's fields and the relocation data, and for any other type it
+writes a flat image, except that it refuses `.DBG` and a type that starts with
+`$`. So `TAS COUNT COUNT.SVC` writes the
 service, in place of any `COUNT.SVC` already on the drive.
 
 `count.asm` and `chars.asm` go on the card, along with `HWLIB.ASM` from

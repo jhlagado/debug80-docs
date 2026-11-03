@@ -291,8 +291,9 @@ prepares the card with `prepareCard` from `host/card.mjs`
 driver file, in the format this ROM loads. If it does, the first line of
 `STARTUP.CMD` becomes that file's name, followed by `GLCD.SVC` on a board with
 the PICO9918. `STARTUP.CMD`'s other lines stay, less their display pieces. A
-removed piece passes its own `:` to the piece after it on its line, and
-otherwise a `:` that waited on a removed piece goes, on its line or first on the
+removed piece passes its own `:` to the piece after it on its line, a `:` first
+on the next line stays if the removed piece had its own, and otherwise a `:`
+that waited on a removed piece goes, on its line or first on the
 next (`host/card.mjs:24-91`). A card that fails the check is left as it is, and
 the reason goes to the serial terminal with the words `[power on]`. The reason
 is no drive A, a `.DRV` display file from an older TEC-OS, no such driver or a

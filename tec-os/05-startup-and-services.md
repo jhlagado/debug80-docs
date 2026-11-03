@@ -321,7 +321,8 @@ through `host/card.mjs`. At each power-on the page makes the card's first line
 the file for the chosen display and width, adds `GLCD.SVC` as the second on a
 board with the PICO9918 and keeps your other lines. A display driver chained
 in one of those lines is taken out and the rest of the line kept. The piece
-taken out passes its own `:` to the piece after it on its line. A `:` that
+taken out passes its own `:` to the piece after it on its line, and a `:` first
+on the next line stays if the piece taken out had its own. Any other `:` that
 waited on a piece taken out goes, on its line or first on the next, so that
 piece runs as an ordinary command. So does a piece with `:` first in your first
 line, which would otherwise wait on the display lines.
