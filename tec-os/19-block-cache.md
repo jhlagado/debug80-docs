@@ -28,7 +28,7 @@ interrupts off.
 ## Thirty lines
 
 The cache is 30 lines of 512 bytes, one card block each, at `8000h–BBFFh` in
-EXPAND 1 (`src/cache.asm:1-8`, `src/layout.asm:24-26`). Line n is at `8000h` +
+EXPAND 1 (`src/cache.asm:1-8`, `src/layout.asm:21-23`). Line n is at `8000h` +
 n × `200h`, which `CLADR` works out by doubling n and adding `80h` to give the
 high byte (`src/cache.asm:138-143`).
 
@@ -136,7 +136,7 @@ node tools/tecvol.mjs put time.img A data.bin
 
 `tools/capture.mjs` prints no count. The figures come from a script that drives
 `Machine` as `tools/capture.mjs` does. It reads the model's T-state count,
-`cycles` (`host/machine.mjs:261`), twice: when `READ DATA.BIN` has been typed
+`cycles` (`host/machine.mjs:262`), twice: when `READ DATA.BIN` has been typed
 and echoed, before the Return that ends it, and at the next prompt. After a
 cold boot, the command's first run took 6,641,268 T-states, 1.66 seconds, and
 its second 1,342,939, 0.34 seconds, a fifth of that. Both figures include
@@ -248,15 +248,15 @@ A flush has four occasions:
 
 - a directory write on the volume written behind, as above
 - `CTAKE` with every line dirty, which writes one line
-- every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:79`,
+- every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:78`,
   `src/cache.asm:354-365`)
 - every call of the mount entry that mounts or unmounts a drive, whose
   `VFLUSH` calls `CFLALL` before any drive changes, and fails if it fails
-  (`src/vol.asm:677-689`)
+  (`src/vol.asm:680-692`)
 
 The warm boot's flush is the one you can cause. A `^C` at the prompt is a warm
 boot, and after it every change is on the card. A reset writes nothing, since
-cold boot clears EXPAND 1 (`src/boot.asm:149-155`), and the changes in the
+cold boot clears EXPAND 1 (`src/boot.asm:141-147`), and the changes in the
 cache at the time of a reset are lost.
 
 ## Write lost
@@ -267,13 +267,13 @@ its own. That report is `Write lost`. `CWBOOT` writes every dirty line and
 then tests `CFAIL`, which is set if a line's write has failed since the last
 warm boot, including the flush it has just made. If it is set, `CWBOOT` clears
 it, drops the rest of a chained line and prints `Write lost` on its own line
-(`src/cache.asm:354-365`, `src/data3.asm:109`). The failed lines are still dirty and still hold their
+(`src/cache.asm:354-365`, `src/data3.asm:112`). The failed lines are still dirty and still hold their
 data, so each warm boot writes them again and prints the message again while
 the write still fails.
 
 A card taken out while TEC-OS runs gives that: every write fails and the
 message comes at each `^C`, even with the same card put back, since only cold
-boot starts a card (`src/boot.asm:37`). The data that is only in the cache is lost when
+boot starts a card (`src/boot.asm:42`). The data that is only in the cache is lost when
 the board is reset or turned off. While dirty lines stay dirty, fewer lines
 are free for reads, and once all 30 are dirty every `CTAKE` starts with a
 write.
@@ -296,7 +296,7 @@ the result's Z flag into `A`, 0 for success and 1 for an error. `CEI` turns
 interrupts on again only if `CIFF` shows they were on at entry
 (`src/cache.asm:32-41`, `src/bios.asm:181-184`, `src/bios.asm:195-199`), so a
 call made with interrupts off returns with them off. The mount entry's
-`VFLUSH` uses the same pair around its flush (`src/vol.asm:680-689`). `MVCOPY`
+`VFLUSH` uses the same pair around its flush (`src/vol.asm:683-692`). `MVCOPY`
 and the history's routines call `IFFGET` too and keep their own copy of the state
 (`src/xmove.asm:40-42`, `src/history.asm:25-27`).
 

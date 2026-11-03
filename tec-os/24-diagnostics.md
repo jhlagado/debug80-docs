@@ -21,17 +21,17 @@ with its remedy.
 
 ## The diagnostic prompt
 
-Cold boot sets up the LCD and the card at `COLDRT` (`src/boot.asm:34`). It
+Cold boot sets up the LCD and the card at `COLDRT` (`src/boot.asm:39`). It
 starts the card with `SDINIT` and checks the container with `MOUNT`, and a
 failure of either jumps to `DIAG` with an error code in `A`
-(`src/boot.asm:37-40`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
+(`src/boot.asm:42-45`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
 `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:8-18`). The banner is
-printed before the card is touched (`src/boot.asm:29-31`), so it appears
+printed before the card is touched (`src/boot.asm:29-36`), so it appears
 whatever the card holds.
 
 `DIAG` resets the stack to the BIOS's, since a mount that failed part way may
 have left it deep, and keeps the code on it (`src/diag.asm:5-6`). It writes
-`CARD?` on the LCD's last row (`src/diag.asm:7-8`, `src/data3.asm:103`,
+`CARD?` on the LCD's last row (`src/diag.asm:7-8`, `src/data3.asm:106`,
 `src/lcd.asm:43`) and then prints `No volume mounted, error ` and the code as
 two hexadecimal digits (`src/diag.asm:9-13`, `src/data3.asm:4`).
 
@@ -57,7 +57,7 @@ The retry keeps a selection of volumes carried over from a recognised reset,
 which Chapter 14 explains. `RSLCAP` copies the drive table to `RSLBUF` before
 cold boot clears anything (`src/boot.asm:14`), and nothing writes `RSLBUF`
 before `MEMINIT`, which runs only after a mount has succeeded
-(`src/boot.asm:54`, `src/boot.asm:91-92`).
+(`src/boot.asm:59`, `src/boot.asm:90-91`).
 
 ## The diagnostics ROM
 
@@ -297,7 +297,7 @@ compares each test with the TEC-1G's own documents, which describe the latch as
 write-only and bits 3 to 6 as unconnected to U9, so a board can be expected to
 answer T10 and T12 differently. TEC-OS uses neither. It keeps a copy of the
 latch at `0040h` and never reads port `FFh` (`src/layout.asm:13`,
-`src/layout.asm:37`), and it selects EXPAND 1 with bit 2 alone
+`src/layout.asm:34`), and it selects EXPAND 1 with bit 2 alone
 (`src/layout.asm:18`).
 
 ## Running it on a board

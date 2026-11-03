@@ -39,12 +39,12 @@ table may gain entries at its end, `C018h`.
 | `C012h` | 3 | `ABIGLCD` | `JP` to take a display driver's table |
 | `C015h` | 3 | `ABISVC` | `JP` to the registry of services |
 
-The rows are `src/abi.asm:7-19`, and the two addresses are `src/layout.asm:38`
-and `src/layout.asm:45-46`. `abi.inc` keeps `ABIDRV` as another name for
-`ABISVC`, for older sources (`src/abi.inc:17`).
+The rows are `src/abi.asm:7-10`, and the two addresses are `src/layout.asm:34`
+and `src/layout.asm:40-41`. `abi.inc` keeps `ABIDRV` as another name for
+`ABISVC`, for older sources (`src/abi.inc:13`).
 
 The only other fixed address in the ROM is `C01Dh`, which holds a `RET`
-(`src/data.asm:9-14`). The previous version of the table had its mount entry
+(`src/data.asm:7-9`). The previous version of the table had its mount entry
 there, and a card can still hold a `MOUNT.COM` or `VOLS.COM` from that time
 that tests nothing. The `RET` returns to such a program with nothing done. The
 build checks that it stays.
@@ -58,13 +58,13 @@ are as each entry says. `IX`, `IY` and the alternate registers are kept. `BC`,
 
 | Status | `abi.inc` | Flags | Meaning |
 | ---: | --- | --- | --- |
-| 0 | | zero set, carry clear | Success (`src/hwsvc.asm:75-76`) |
+| 0 | | zero set, carry clear | Success (`src/hwsvc.asm:43-44`) |
 | 1 | `HWEBAD` | carry set, zero clear | No such number, or an argument out of range |
 | 2 | `HWENODV` | carry set, zero clear | The device isn't fitted, or isn't the console |
 
-The failures return through `src/hwsvc.asm:72-74`. Every number outside 19 to
+The failures return through `src/hwsvc.asm:40-42`. Every number outside 19 to
 27 returns status 1 with `B`, `DE` and `HL` as they came, in 65 T-states with
-no stack used (`src/hwsvc.asm:52-56`). `abi.inc` names the first number
+no stack used (`src/hwsvc.asm:23-24`). `abi.inc` names the first number
 `HWBASE`, 19, and the count `HWCOUNT`, 9.
 
 No hardware service calls the BDOS. Each runs on the caller's stack, and the deepest
@@ -87,22 +87,22 @@ they keep is the claim byte, `VCLAIM`, in the workspace (`src/ram.asm:57`).
 
 **19 INFO.** Returns the devices in `B`, the ROM's version in `DE`, the
 console's columns in `L` and its rows in `H`, both 0 for the serial terminal
-(`src/hwsvc.asm:78-91`). Status is always 0. 1,552 T-states. The version has
+(`src/hwsvc.asm:46-56`). Status is always 0. 1,552 T-states. The version has
 the major in `D` and the minor in `E`, so `0001h` is 0.1
-(`tools/build.mjs:73`). The bits of `B` are `CONDEV`'s, with bit 3 and bit 4
-added (`src/hwsvc.asm:32-39`):
+(`tools/build.mjs:69`). The bits of `B` are `CONDEV`'s, with bit 3 and bit 4
+added (`src/hwsvc.asm:11`):
 
 | Bit | Value | `abi.inc` | Set when |
 | ---: | ---: | --- | --- |
 | 0 | `01h` | `HWBMTX` | The matrix keyboard is enabled |
 | 1 | `02h` | `HWBPICO` | A PICO9918 answered at cold boot |
 | 2 | `04h` | `HWBGLCD` | `GLCD.SVC` is in |
-| 3 | `08h` | `HWBRTC` | A DS1302 answers, tested at this call: its seconds read below `60h` (`src/hwsvc.asm:291-303`) |
+| 3 | `08h` | `HWBRTC` | A DS1302 answers, tested at this call: its seconds read below `60h` (`src/hwsvc.asm:256-268`) |
 | 4 | `10h` | `HWBCLM` | The PICO9918 is claimed |
 | 7 | `80h` | `HWBWRD` | A word of the ROM's, `PICO?` or `GLCD?`, is on LCD row 3 |
 
 **20 DIGIT.** Makes one pass over the six digits from the six segment patterns
-at `HL`, the leftmost digit first (`src/hwsvc.asm:93-107`). For each it writes
+at `HL`, the leftmost digit first (`src/hwsvc.asm:58-72`). For each it writes
 the pattern to port `02h` and the digit's bit to port `01h`, bit 5 for the
 leftmost and bit 0 for the rightmost, with bit 6 held high. A digit stays lit
 for 3,348 T-states, 0.84 ms, of which a `DJNZ` count of 256 is 3,323, and it
@@ -110,12 +110,12 @@ is then turned off. All are off at the end. Status is always 0. 20,677
 T-states.
 
 **21 LCD.** Writes the 20 characters at `HL` to row `B`, 0 to 3, of the 20 × 4
-LCD (`src/hwsvc.asm:109-132`). A row above 3 returns status 1. Row 3 also
+LCD (`src/hwsvc.asm:74-97`). A row above 3 returns status 1. Row 3 also
 clears `HWBWRD`, so that no display driver blanks the program's text. 4,922
 T-states, or 4,942 on row 3.
 
 **22 VIDEO.** With `B` not 0, claims the PICO9918. With `B` = 0, releases it
-(`src/hwsvc.asm:134-174`). Status 2 with no PICO9918 either way.
+(`src/hwsvc.asm:99-139`). Status 2 with no PICO9918 either way.
 
 A claim removes the cursor if the PICO9918 is the console and stores
 `HWBCLM`'s value in `VCLAIM`, in 1,167 T-states with a cursor to remove. While
@@ -128,11 +128,11 @@ text mode, font and page. If the PICO9918 is the console it then clears the
 screen and homes the cursor. With no `PICO.SVC`, nothing is restored. A
 release with the PICO9918 as the console takes 216,030 T-states at 80 columns
 and 146,745 with the console elsewhere. Warm boot makes the same call
-(`src/boot.asm:74`).
+(`src/boot.asm:73`).
 
 **23 TONE.** Makes a square wave on port `01h` bit 7, with bit 6 held high,
 for `DE` half cycles, each of 16 × `B` + 51 T-states
-(`src/hwsvc.asm:179-196`). `B` = 0 counts as 256. `DE` = 0 returns at once. A
+(`src/hwsvc.asm:144-161`). `B` = 0 counts as 256. `DE` = 0 returns at once. A
 call takes `DE` half cycles plus 229 T-states. The speaker ends off. Status is
 always 0.
 
@@ -147,7 +147,7 @@ The last half cycle takes 5 T-states less, measured between the two writes
 that bound it.
 
 **24 JOY.** Returns the joystick in `B`, 1 for each active line, read from
-port `FEh` with `BC` = `F7FEh` and complemented (`src/hwsvc.asm:199-203`).
+port `FEh` with `BC` = `F7FEh` and complemented (`src/hwsvc.asm:164-168`).
 Status is always 0. 221 T-states. That port address also selects row 3 of the
 matrix keyboard, so a key in that row sets a bit here, and a line here reads
 as a key in that row. The diagnostics ROM's test labels the bits, after MON-3:
@@ -156,18 +156,18 @@ as a key in that row. The diagnostics ROM's test labels the bits, after MON-3:
 unconfirmed.
 
 **25 KEYS.** Reads the matrix keyboard's eight rows into the eight bytes at
-`HL`, row 0 first, 1 for each key down (`src/hwsvc.asm:205-212`). Each read is
+`HL`, row 0 first, 1 for each key down (`src/hwsvc.asm:170-177`). Each read is
 of port `FEh` with one bit low in the high byte of the address, `FEh` for row
 0 to `7Fh` for row 7. Status is always 0. 588 T-states. `HWBMTX` reports
 whether there is a matrix keyboard.
 
 **26 PUTAT.** On a video console, writes `B` characters from `HL` at row `D`,
 column `E`, both from 0, through the driver's cell routine
-(`src/hwsvc.asm:214-256`). The cursor's position is unchanged, though its cell
+(`src/hwsvc.asm:179-221`). The cursor's position is unchanged, though its cell
 is removed. The console draws it again when it next waits for a key
-(`src/console.asm:158`). The escape parser isn't used, and bytes `80h` to
+(`src/console.asm:159`). The escape parser isn't used, and bytes `80h` to
 `FFh` reach the driver, which draws them as reverse images of `00h` to `7Fh`
-(`drivers/pico.asm:16`, `drivers/glcd.asm:336`).
+(`drivers/pico.asm:16`, `drivers/glcd.asm:338`).
 
 Text is clipped at the right edge. A row past the bottom writes nothing and
 returns status 0, and so does a count of 0, which also leaves the cursor
@@ -179,14 +179,14 @@ row takes about 495 T-states on `PICO.SVC` at 80 columns and about 35,100 on
 `GLCD.SVC`.
 
 **27 RTC.** With `B` = 0, reads the DS1302 into the seven bytes at `HL`. With
-`B` not 0, sets it from them (`src/hwsvc.asm:258-289`). The bytes are BCD:
+`B` not 0, sets it from them (`src/hwsvc.asm:223-254`). The bytes are BCD:
 seconds, minutes, hours, date, month, weekday, year. Status 2 if no clock
 answers. A read takes 6,925 T-states and a set 7,759. A set turns off the
 chip's write protect first and writes 0 to its control byte last.
 
 ## ABIVOL, mount and describe
 
-`CALL ABIVOL` with the operation in `A` (`src/vol.asm:577-603`):
+`CALL ABIVOL` with the operation in `A` (`src/vol.asm:577-599`):
 
 | `A` | Takes | Effect |
 | ---: | --- | --- |
@@ -203,8 +203,8 @@ only to the drives mounted at cold boot. A program tests `A`, since the flags
 mean nothing on the failure.
 
 A mount or an unmount writes the cache's changes for the card first and resets
-the drive by BDOS function 37 (`src/vol.asm:620`, `src/vol.asm:657`,
-`src/vol.asm:661-671`), so that the next access logs it in from its directory.
+the drive by BDOS function 37 (`src/vol.asm:616`, `src/vol.asm:653`,
+`src/vol.asm:657-667`), so that the next access logs it in from its directory.
 A mount or an unmount therefore can't be called from inside a BDOS call,
 unlike the hardware services. The call changes `BC`, `DE` and `HL`, and on the
 model a mount or a describe also changed `IX`. The most stack measured was 22
@@ -213,26 +213,26 @@ bytes, for a mount or an unmount with a dirty cache line to write.
 ## ABIGLCD, a display driver's table
 
 A display driver calls this from its `INIT` with `A` = 1 for `CRT:` or 3 for
-`UC1:` and `HL` pointing at its table (`src/glcd.asm:5-11`). The table is
+`UC1:` and `HL` pointing at its table (`src/glcd.asm:13-19`). The table is
 eight words: six routines the terminal calls, a routine for the page functions
 and a last word holding the columns and then the rows. The six, in order, are
 put, get, clear to the end of the line, restore, read a row and write a row.
 Only `CRT:` calls the seventh, which may be 0 elsewhere
-(`src/video.asm:37-45`, `drivers/glcd.asm:26`).
+(`src/video.asm:37-45`, `drivers/glcd.asm:25`).
 
 On success `HL` returns `LINEBUF`'s address, where the row routines read and
 write a row, with carry clear. Carry set means nothing changed: that mode has
 a table already, or there is no matrix keyboard.
 
 `HL` = 0 drops the mode's table, with carry clear, and the console is chosen
-again at its next call (`src/glcd.asm:34-48`). Each `REMOVE` calls it that
+again at its next call (`src/glcd.asm:42-56`). Each `REMOVE` calls it that
 way. `A`, `DE` and `HL` are changed, `BC` is kept and no stack is used beyond
 the return address.
 
 ## ABISVC, the registry
 
 `ABISVC` finds the records that services have published
-(`src/svc.asm:483-546`).
+(`src/svc.asm:497-556`).
 
 | `C` | Takes | Returns |
 | ---: | --- | --- |
@@ -247,7 +247,7 @@ records. Find takes 6 bytes of stack below its return address, and enumerate
 none. `AF`, `BC`, `DE` and `HL` are changed. `IX` and `IY` are kept. The call
 can be made on any stack, since it makes no BDOS or BIOS call.
 
-The generation is `SVCGEN`, raised by each removal (`src/ram.asm:236`). It is
+The generation is `SVCGEN`, raised by each removal (`src/ram.asm:235`). It is
 8 bits, so after 256 removals it repeats. A program can keep a record's
 address until it exits, since no service can be removed while the program
 runs. A service that looks a record up later compares the generation or names
@@ -265,5 +265,5 @@ four more:
 | 22 | `PICORD` | `HL` = VRAM address, `DE` = destination, `BC` = count | Copies VRAM to RAM |
 
 The caller must hold the claim. Each entry checks nothing and changes `AF`,
-`BC`, `DE` and `HL` (`src/abi.inc:48-54`). A count of 0 moves nothing
-(`drivers/pico.asm:165-200`).
+`BC`, `DE` and `HL` (`src/abi.inc:103-109`). A count of 0 moves nothing
+(`drivers/pico.asm:166-201`).
