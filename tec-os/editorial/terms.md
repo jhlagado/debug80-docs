@@ -4,9 +4,9 @@ This list holds each term's one form, what it means, the chapter that explains
 it, and the variants that are correct because they name something else. A
 term means what the code at a chapter's commit makes it mean. A short form is the full
 form with a word left out, used once the full form has appeared in the chapter.
-Fenced blocks and captured output keep their own words, so `README.TXT`'s
-"starter disk" and the "program area" in the comments of `TOP` and `AREA` in
-Chapter 7 stay as they are.
+Fenced blocks and captured output keep their own words, so the "program area"
+in the comments of `TOP` and `AREA` in Chapter 7 stays as it is. So does
+`TED`'s status row, which reads `EDIT` at Thorium 8fcc6ea.
 
 ## Memory
 
@@ -38,7 +38,7 @@ Chapter 7 stay as they are.
 | Form | Short form | Meaning | Explained in | Correct and distinct |
 | --- | --- | --- | --- | --- |
 | SD card | the card | The card in the board's SD card adaptor | Chapter 1 | video card: the PICO9918. A "card" in `tecvol` and the page is a card or its image. |
-| starter card | | The image `npm run media` builds, and a card holding it | Chapter 1 | |
+| starter card | | The image `npm run media` builds, and a card holding it: six files on drive A, `STARTUP.CMD`, `PICO.SVC`, `GLCD.SVC`, `MOUNT.COM`, `TAS.COM` and `TED.COM`, and an empty drive B | Chapter 1 | |
 | image | | A card image, in Chapters 1, 4 and F | Chapter 4 | ROM image (Chapter 1). A service's bytes after the header are its image (Chapter 10). |
 | container | | The header and the volumes on a card | Chapter 4 | |
 | volume | | One CP/M disk in the container | Chapter 1 | CP/M's word *disk* stays where CP/M is the subject: disk parameters, disk reset, the BIOS's disk entries |
@@ -100,7 +100,9 @@ Chapter 7 stay as they are.
 | return code | | The word function 108 sets | Chapter 11 | |
 | user area | | One of CP/M's 16 groups of files | Chapter 1 | user number: its number in a directory entry, the BDOS or the byte at `0004h` |
 | startup file | | `STARTUP.CMD` | Chapter 1 | |
-| `MOUNT` | | The starter card's program | Chapter 4 | the ROM's `MOUNT` routine, its check of the container (Chapters 14, 18). The mount entry, `ABIVOL` (Chapter 18). |
+| `MOUNT` | | The starter card's program, which puts a volume on a drive and with no argument lists the volumes | Chapter 4 | the ROM's `MOUNT` routine, its check of the container (Chapters 14, 18). The mount entry, `ABIVOL` (Chapter 18). |
+| `TED` | | The starter card's editor, `TED.COM` | Chapter 6 | |
+| project | | `THOR.PRJ`, the file `TED` keeps beside the source, naming the source its build keys take | Chapter 6 | |
 | ABI | | The ROM table's application binary interface | Chapter 8, again in 9 | |
 | signature | | The letters `TNA` | Chapter 12 | Chapters 8 and 9 say "the letters" |
 
@@ -166,6 +168,8 @@ Chapter 7 stay as they are.
 | mount service | mount entry |
 | `book/capture.mjs` | `tools/capture.mjs` |
 | ATOM on the card | `TAS` |
+| `VOLS` | `MOUNT` with no argument |
+| `EDIT`, Edit, for the card's editor | `TED` |
 
 ## Words in force
 
