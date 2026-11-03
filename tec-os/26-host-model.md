@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 26. The host model and the web page
 
-Checked against TEC-OS 19ad916, with `@jhlagado/debug80-runtime` 0.3.1, the
+Checked against TEC-OS 60e0768, with `@jhlagado/debug80-runtime` 0.3.1, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -91,7 +91,7 @@ the program counter.
 
 On a board the first reaches the ROM chip. The second goes to RAM in the
 runtime but to the ROM in the TEC-1G's own documents (`docs/diagnostics.md`,
-T08). TEC-OS never makes either write, and 24 of the test files check that
+T08). TEC-OS never makes either write, and 25 of the test files check that
 `violations` is empty.
 
 A second watch covers EXPAND 1 (`host/machine.mjs:180-223`). From cold boot's
@@ -105,8 +105,8 @@ Any other write is recorded in the machine's `expand1Writes` and, for the first
 16, in `EXPAND1_WRITES`, shared by every machine in the process. The Node.js
 wrapper the tests use fails a test file if that list isn't empty at its end
 (`test/lib/machine.mjs:14-17`). The history's page at `BD00h` is left out of the
-watch, since `HSTORE` writes it, and so is the page at `BF00h`, where warm boot
-writes its jump.
+watch, since `HSTORE` writes it, and so is the page at `BF00h`, which is free
+(`host/machine.mjs:219`).
 
 ## Driving the machine
 
@@ -196,10 +196,11 @@ were, as the board's reset button does (`host/machine.mjs:523-583`).
 
 `npm test` runs every file in `test/` that ends `.test.mjs`, one at a time, with
 Node.js's own test runner (`package.json:17`). There are 41 such files, from
-`arith.test.mjs` to `xmove.test.mjs`, each on one part of TEC-OS. Most build
-their machines with `boot` in `test/lib/fixtures.mjs`, which reads the ROM of a
-profile from `build/` and, when the board has a matrix keyboard, puts a display
-driver and a startup file on the card. It then runs to the first prompt with the
+`arith.test.mjs` to `write.test.mjs`, each on one part of TEC-OS. Most build
+their machines with `boot` in `test/lib/fixtures.mjs`, which reads the one ROM,
+`build/tecos/tecos.rom`, and, when the board has a matrix keyboard, puts a
+display driver and a startup file on the card. A test's profile name sets
+only the width of that driver. It then runs to the first prompt with the
 clock at the tests' starting time (`test/lib/fixtures.mjs:22-28`,
 `test/lib/fixtures.mjs:145-153`, `test/lib/fixtures.mjs:156-163`).
 
@@ -207,8 +208,9 @@ clock at the tests' starting time (`test/lib/fixtures.mjs:22-28`,
 a source in `test/programs/` with ATOM and keeps the result in
 `build/test-programs` (`test/lib/fixtures.mjs:81-96`), filed under a digest of
 the source and every file it includes, so that a changed include assembles again
-(`test/lib/fixtures.mjs:31-43`). `prl` makes a PRL file from two assemblies, and
-`service` a `.SVC` file with `makeSvc` (`test/lib/fixtures.mjs:58-79`,
+(`test/lib/fixtures.mjs:31-43`). `prl` makes a file in Digital Research's PRL
+format from two assemblies, which TEC-OS no longer loads, and `service` a `.SVC`
+file with `makeSvc` (`test/lib/fixtures.mjs:58-79`,
 `test/lib/fixtures.mjs:115-116`). `standardCard` is a new container with the
 starter card's two volumes, `SYSTEM` on A and `WORK` on B, both empty
 (`test/lib/fixtures.mjs:97-104`), and `volume` opens a drive of it as a CP/M
@@ -239,7 +241,7 @@ everything it imports into one file, `app.js`, with esbuild, and
 in with it. The one import of Node.js's `fs` among them is pointed at a stub
 (`web/build.mjs:20-30`, `web/stub/fs.mjs`). The build first deletes `web/dist`,
 so no file of an older build is left there (`web/build.mjs:16`). It copies the
-page, its style sheet, the `debug80` ROM with a list of its symbols, the page's
+page, its style sheet, the ROM, `tecos.rom`, with a list of its symbols, the page's
 recipe and the files in `dist/files` (`web/build.mjs:32-45`). The page's recipe,
 `dist/page.recipe.json`, has the starter card's volumes and files with one more, `DEMO.COM`,
 and the build copies it under the name the page fetches, `starter.recipe.json`.
