@@ -148,9 +148,10 @@ reload. These are its controls:
   so that TEC-OS reads the changed card.
 
 When you change the display or the width, the page turns the board off and on.
-Before it does, it writes the PICO9918's driver built for the chosen width to
-drive A as `PICO.SVC`, and it puts the name of the chosen display's driver in
-the first line of the card's startup file.
+At each power-on with the PICO9918 chosen, the page writes the driver built for
+the chosen width to drive A as `PICO.SVC` if the card's copy differs. It also puts
+the name of the chosen display's driver in the first line of the card's startup
+file.
 
 ## Running TEC-OS from Node.js
 

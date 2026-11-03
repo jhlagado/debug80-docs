@@ -306,7 +306,7 @@ after them:
 
 The starter card holds no `TDB.COM`, so `^T D` gets `TDB?` from the CCP and
 `TED` comes back at its place. On the starter card `TED` holds a file of up to
-33,067 bytes, and 31,510 with `PICO.SVC` installed.
+33,067 bytes, and 31,510 with a display's driver installed.
 
 `TED` has two limits that bear on the work on drive B. It takes no drive in its
 argument, so the file must be on the current drive. The CCP searches only the
