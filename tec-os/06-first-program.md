@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 6. A first program
 
-Checked against TEC-OS 4d6eeaa, with the ATOM assembler from the
+Checked against TEC-OS 19ad916, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, the starter card's
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. The
@@ -306,7 +306,9 @@ after them:
 
 The starter card holds no `TDB.COM`, so `^T D` gets `TDB?` from the CCP and
 `TED` comes back at its place. On the starter card `TED` holds a file of up to
-33,067 bytes, and 31,510 with a display's driver installed.
+33,067 bytes on a board with only a serial terminal, where no display's driver
+installs. On a board with both displays one driver installs as it boots, and
+`TED` holds 31,510 bytes.
 
 `TED` has two limits that bear on the work on drive B. It takes no drive in its
 argument, so the file must be on the current drive. The CCP searches only the
