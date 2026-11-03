@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 20. The hardware services and the service loader
 
-Checked against TEC-OS 7935507, with the starter card's `TAS.COM` from Thorium
+Checked against TEC-OS 626ee41, with the starter card's `TAS.COM` from Thorium
 dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -163,7 +163,7 @@ A command whose type is `SVC` calls `SVCGO`, as Chapter 17 explains
 (`src/cpm/ccp.asm:257-266`). `SVCGO` calls `LOADCOM`, the routine that reads a
 `.COM` file to `0100h`. The file is then in the TPA, up to the page of the
 word at `0006h`, and `LOADTOP` gives its end (`src/loader.asm:450-451`,
-`src/cpm/ccp.asm:378-390`, `src/ram.asm:229`). `SVCGO` then calls `SVCLOAD`
+`src/cpm/ccp.asm:379-390`, `src/ram.asm:229`). `SVCGO` then calls `SVCLOAD`
 (`src/loader.asm:452`). Chapter 21 describes what the console does after a good
 load.
 
@@ -471,7 +471,7 @@ surviving a warm boot. The scan reads only that table, so the tables that `DRVR`
 records for the display modes are beyond it (`test/svc.test.mjs:531`).
 
 A service kept this way appears in `SERVICES`, because `CMDSVC` walks the owner
-list from `SVCHEAD`, not the registry (`src/cpm/ccp.asm:1547-1568`). Each header's
+list from `SVCHEAD`, not the registry (`src/cpm/ccp.asm:1547-1569`). Each header's
 offset 8 is the next older service's page, 0 at the end.
 
 ## The registry
