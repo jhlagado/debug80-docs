@@ -7,11 +7,11 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 21. Startup
 
-Checked against TEC-OS 7458352.
+Checked against TEC-OS 7935507.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and three
-routines in `src/svc.asm`: `STBOOT` reads the file, `STLINE` gives the CCP one
+routines in `src/cpm/ccp.asm`: `STBOOT` reads the file, `STLINE` gives the CCP one
 line at a time, and `STDONE` runs once when the lines are finished. This chapter
 describes them in that order, then the path a display line takes, the flag bit
 behind the LCD's words and the web page's rewrite of the file.
@@ -216,7 +216,7 @@ result is zero only on a board with a PICO9918 and a matrix keyboard where
 comes next, and the result stays zero only if no PICO9918 driver is in either,
 since a table in RAM is at `0100h` or above (`src/cpm/ccp.asm:1714-1715`,
 `src/ram.asm:217`). `SCF` sets carry for the return, and any non-zero result
-leaves (`src/video.asm:72-73`). A zero result writes `PICO?` with `LCDWRD`,
+leaves (`src/cpm/ccp.asm:1716-1717`). A zero result writes `PICO?` with `LCDWRD`,
 which also returns carry set (`src/cpm/ccp.asm:1718-1719`, `src/lcd.asm:45-46`).
 
 That one test gives the cases Chapter 5 lists. No `STARTUP.CMD`, an empty one, a
@@ -250,7 +250,7 @@ answered at cold boot (`drivers/pico.asm:47-51`). Each driver then passes its
 table to the numbered service `DRVR`, 12, with the console mode in `B`, 1 for
 `CRT:` or 3 for `UC1:` (`drivers/pico.asm:52-56`, `drivers/glcd.asm:46-50`).
 `SVDRV` refuses any other mode with `TNEBAD` and carry, nothing changed. It
-passes 1 or 3 to `GLHOOK`, which returns carry if `CDMTX` is clear or if that
+passes 1 or 3 to `VIDHOOK`, which returns carry if `CDMTX` is clear or if that
 slot already holds a table, and `SVDRV` then returns `TNEBAD` with carry
 (`src/services.asm:314-327`, `src/video.asm:64-73`). So a driver needs the
 matrix keyboard, and a second load of `PICO.SVC` fails while the first is in.
@@ -279,8 +279,8 @@ then jumps to `CONSEL`, which moves the console (`src/loader.asm:468-472`,
 All three words go to the LCD's row 3 through `LCD3`, which is `LCDROW` with `B`
 at 3 (`src/lcd.asm:41-43`). `LCDROW` selects the row, writes up to the zero and
 returns with carry set, so a routine reporting a failure can end with a jump to
-it (`src/lcd.asm:45-66`). The strings are in `src/data3.asm:105-108`. `PICMSG`
-has no zero of its own and runs on into `PICCLR`, five blanks and a zero, so
+it (`src/lcd.asm:45-66`). The strings are in `src/text.asm:10` and
+`src/text.asm:91-93`. `PICMSG` has no zero of its own and runs on into `PICCLR`, five blanks and a zero, so
 `PICO?` also blanks the five columns after it, and `PICCLR` alone wipes any of
 the words, all three having five characters.
 
