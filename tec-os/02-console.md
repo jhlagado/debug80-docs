@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 2. The console
 
-Checked against TEC-OS 60cfbdc.
+Checked against TEC-OS 4d6eeaa.
 
 The console is the device you type commands on and read TEC-OS's replies from.
 A TEC-1G can carry a serial terminal, a PICO9918 video card and a graphics LCD
@@ -200,8 +200,8 @@ memory below the BDOS. Chapter 1 showed the starter card's startup file
 installing these drivers before the first prompt. Installing a display driver
 can move the console:
 
-- `PICO.SVC`, `PICO40.SVC` or `PICO32.SVC` makes the PICO9918 the console, at
-  80, 40 or 32 columns.
+- `PICO.SVC` makes the PICO9918 the console, at 80 columns on the starter
+  card, or at 40 or 32 on a card made for that width, as Chapter 5 describes.
 - `GLCD.SVC` makes the graphics LCD the console unless a PICO9918 driver is
   already installed, in which case the console stays where it was. While a
   display is the console, `GLCD.SVC` installs only for `CON UC1`.
@@ -250,8 +250,9 @@ for them:
 | Left | `ESC [ D` |
 
 A program that reads the arrow keys from a PC's terminal program, such as the
-starter card's editor, reads them from the matrix keyboard in the same way.
-TEC-OS's translation of the keys gives no `]`, `}`, `` ` `` or `~`.
+starter card's editor, `TED`, reads them from the matrix keyboard in the same
+way. TEC-OS's translation of the keys gives no `]`, `}`, `` ` `` or `~`, and no
+Delete, `7Fh`.
 
 A key is sent once, when it goes down, and holding it doesn't repeat it.
 TEC-OS scans the keyboard while it waits for a key and when the BDOS checks
@@ -296,36 +297,46 @@ console's right edge and continues on the next row. One line short of a full
 screen they print `[more]` on the last row and wait for a key. On the serial
 terminal they count as for 80 columns and 24 rows.
 
-The graphics LCD, with 8 rows of 21 characters, shows the pause soonest. On a
-board with the graphics LCD and no PICO9918, `TYPE README.TXT` stops after
+The graphics LCD, with 8 rows of 21 characters, shows the pause soonest. The
+starter card's text file, `STARTUP.CMD`, is too short to fill it, so this card
+adds `LINES.TXT`, a text file of ten lines. `tecvol`, the card tool that
+Chapter 4 describes, puts it on a copy of the starter card:
+
+```sh
+printf 'The graphics LCD has 8 rows of 21 characters.\nA line wider than that goes on in the next row.\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen\n' > lines.txt
+cp dist/starter.img long.img
+node tools/tecvol.mjs put long.img A lines.txt --text
+```
+
+On a board with the graphics LCD and no PICO9918, `TYPE LINES.TXT` stops after
 seven rows, and the screen shows this:
 
-<!-- node tools/capture.mjs --board glcd --screen "TYPE README.TXT" -->
+<!-- node tools/capture.mjs --card long.img --board glcd --screen "TYPE LINES.TXT" -->
 ```text
-TEC-OS starter disk
-
-COPY SOURCE DEST   co
-py a file (built in),
- for example COPY TER
-M.COM B:TERM.COM
-TERM               dr
+The graphics LCD has
+8 rows of 21 characte
+rs.
+A line wider than tha
+t goes on in the next
+ row.
+Three
 [more]
 ```
 
-The line about `COPY` is longer than the screen is wide, and it takes four
-rows. The count starts at the listing's first row, so the command line above
-it has scrolled away by the time `[more]` appears. A key, `x` in this run,
-rubs out `[more]` and prints the next seven rows:
+The file's first two lines are longer than the screen is wide, and each takes
+three rows. The count starts at the listing's first row, so the command line
+above it has scrolled away by the time `[more]` appears. A key, `x` in this
+run, rubs out `[more]` and prints the next seven rows:
 
-<!-- node tools/capture.mjs --board glcd --screen "TYPE README.TXT" "@key x" -->
+<!-- node tools/capture.mjs --card long.img --board glcd --screen "TYPE LINES.TXT" "@key x" -->
 ```text
-aw on the video conso
-le; TERM S also scrol
-ls
-PROBE              ex
-ercise the BDOS file
-functions
-DEMO               th
+Four
+Five
+Six
+Seven
+Eight
+Nine
+Ten
 [more]
 ```
 
@@ -333,14 +344,14 @@ DEMO               th
 the listing there. After `q` at the first pause the CCP starts a new line for
 the prompt, below the row `[more]` was on. The graphics LCD shows this:
 
-<!-- node tools/capture.mjs --board glcd --screen "TYPE README.TXT" "@key q" -->
+<!-- node tools/capture.mjs --card long.img --board glcd --screen "TYPE LINES.TXT" "@key q" -->
 ```text
-
-COPY SOURCE DEST   co
-py a file (built in),
- for example COPY TER
-M.COM B:TERM.COM
-TERM               dr
+8 rows of 21 characte
+rs.
+A line wider than tha
+t goes on in the next
+ row.
+Three
 
 A>
 ```
