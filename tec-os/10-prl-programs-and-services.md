@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 10. PRL programs and services
 
-Checked against TEC-OS ea9c1c0. The programs were assembled by the starter
+Checked against TEC-OS 60cfbdc. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -64,7 +64,7 @@ B>DIR AREA.*
 AREA.ASM     AREA.PRL    
 2 files, 8164K free
 B>AREA
-46854 bytes
+46869 bytes
 
 B>
 ```
@@ -166,7 +166,8 @@ for the tool that makes the file, `TAS` or `makeSvc`, to fill in. The tool
 finds `INIT` and `REMOVE` by those label names, and every service has both,
 even one that `UNLOAD` can't remove. `makeSvc` stops with `INIT and REMOVE
 required` if either is missing. The flags byte's bit 0 lets `UNLOAD`
-remove the service. A service that needs a buffer past its image gives the
+remove the service, and bits 1 to 7 claim restart vectors, as the rules below
+explain. A service that needs a buffer past its image gives the
 size as its extra memory, and the loader sets aside that many bytes, not
 cleared. The name, 8 bytes padded with spaces, is what `SERVICES` prints.
 
@@ -175,7 +176,7 @@ cleared. The name, 8 bytes padded with spaces, is what `SERVICES` prints.
 | 0 | 1 | The letter `D`, `44h` | the source |
 | 1 | 1 | The format, 3 | the source, and `makeSvc` writes 3 over it |
 | 2 | 1 | Number of dependencies | the tool |
-| 3 | 1 | Flags: bit 0, removable | the source |
+| 3 | 1 | Flags: bit 0, removable; bits 1 to 7, `RST 1` to `RST 7` claimed | the source |
 | 4 | 2 | `REMOVE`, from the header's start | the tool |
 | 6 | 2 | Size of the header and image | the tool |
 | 8 | 2 | Extra memory after the image | the source |
@@ -257,14 +258,14 @@ COUNT.SVC written
 <!-- the same run, continued -->
 ```text
 B>AREA
-46854 bytes
+46869 bytes
 
 B>COUNT.SVC
 
 B>SERVICES
 COUNT 1
 B>AREA
-46598 bytes
+46592 bytes
 
 B>CHARS
 count 003A
@@ -276,7 +277,7 @@ B>UNLOAD
 
 B>SERVICES
 B>AREA
-46854 bytes
+46869 bytes
 
 B>CHARS
 no COUNT record
@@ -285,8 +286,8 @@ B>
 ```
 
 The file is 100 bytes of header and image and 11 of relocation data. It takes
-a whole page, so the TPA falls by 256 bytes and `SERVICES` shows 1 page, and
-`UNLOAD` gives the bytes back. The count rose by 18h, 24, between the two
+a whole page, so `SERVICES` shows 1 page. The TPA falls by 277 bytes, that page
+and the 21 bytes from `B800h` to `B814h`, and `UNLOAD` gives them back. The count rose by 18h, 24, between the two
 `CHARS` commands, the characters the console printed in between, because the
 hook stayed through each program's warm boot.
 
@@ -304,48 +305,6 @@ writeFileSync("COUNT.SVC", file);
 node tools/tecvol.mjs put svc.img B COUNT.SVC
 ```
 
-Run `TAS` before you install a service. At the commit named at the head of
-this chapter, the word at `0006h` points 6 bytes into the lowest service's
-first page. Those 6 bytes hold the service's links, its flags and the offset
-of its `REMOVE`, and the word puts them in the TPA. `TAS` starts its
-stack at that word, as `EDIT` does and as many CP/M programs do, so its first
-pushes land on them, and a program that fills the area reaches them too. With
-`COUNT.SVC` in, a run of `TAS` leaves `SERVICES` printing lines of stray
-characters under `COUNT 1`, and the `UNLOAD` after it returns with `CONOUT`
-still pointing into the freed page. This transcript leaves control characters
-out of the first two stray lines and shows eight `00h` bytes in the third as
-spaces:
-
-<!-- node tools/capture.mjs --card svc.img B: COUNT.SVC "A:TAS AREA" SERVICES UNLOAD SERVICES -->
-```text
-A>B:
-B>COUNT.SVC
-
-B>A:TAS AREA
-AREA.COM written
-
-B>SERVICES
-COUNT 1
-~mx/(W 247
-0##"0I 11
-         159
-B>UNLOAD
-
-B>SERVICES
-~mx/(W 247
-0##"0I 11
-         159
-B>
-```
-
-The service's code goes on running. A reset clears the damage if no `UNLOAD`
-has run. On the serial board the `UNLOAD` also runs part of the ROM's card
-routine, so on the model a read of `B:` can then report `Bdos Err On B: Bad
-Sector`, a reset stops at `No volume mounted, error 02`, and only a new start
-of the model with the same card brings the system back. On the web page's
-board `PICO.SVC` is the lowest service, so after a run of `TAS` there
-`SERVICES` and `UNLOAD` aren't reliable until the next reset.
-
 ## The rules for INIT and REMOVE
 
 The rules for `INIT` and `REMOVE` come from what the loader can and can't put
@@ -356,13 +315,15 @@ then fails with the name and a question mark. `GLCD.SVC` and `PICO.SVC` fail
 this way on a board without their display. `INIT` makes its hooks last, as
 `COUNT` does, because a warm boot during `INIT` takes the pages back with no
 call to the service, and a hook already made would then point into free
-memory.
+memory. A call of function 47 from `INIT` or `REMOVE` is a warm boot there: its
+line runs, from `INIT` the load rolls back, and from `REMOVE` the service stays
+listed.
 
 After a failed `INIT` the loader reads the 17 entries of the BIOS jump table for
 one that points into the service. If it finds one it keeps the pages, marks
 them as not removable and publishes no record. The scan covers the BIOS jump table
 alone, so the service itself must undo a vector anywhere else, such as a video
-table handed to `ABIGLCD`.
+table handed to `ABIGLCD`. The restart vectors have the rules given below.
 
 `REMOVE` restores hooks in the reverse order of `INIT`. Only the lowest service
 can go, so when each `REMOVE` puts back what its `INIT` found, a hook on a hook
@@ -374,9 +335,27 @@ While `INIT` or `REMOVE` runs, another load or removal is rejected. No command
 can reach that case, and the test stops a service that calls the ROM's
 routines by their addresses.
 
-A service can't keep an interrupt handler. Each warm boot rewrites the vector
-at `0038h` and the restart vectors, so a handler a service installed wouldn't
-last until its `REMOVE`.
+A service can keep a handler in a restart vector. Flags bits 1 to 7 claim
+`RST 1` to `RST 7`, the vectors at `0008h` to `0038h`, and `INIT` writes the `JP`
+itself. A load whose claimed vector holds a `JP` fails with nothing changed, and
+a jump into the ROM that a finished program left there counts until a reset. The
+loader reads only the flags, so a vector `INIT` writes without claiming it goes
+unseen.
+
+At cold boot, at every warm boot, after an unload and after a failed `INIT`, a
+sweep of `0008h` to `003Fh` keeps a `JP` whose target's page is at or above the
+page of the word at `0006h`, and gives anything else its default: seven zeros and
+a `RET`, or `EI` and `RETI` at `0038h`. A handler in the service's pages therefore
+stays through warm boots and goes with the service. `UNLOAD` also gives each
+claimed vector its default, whatever it holds. `REMOVE` restores any jump the
+service set in a vector it didn't claim and that leads outside its pages. A
+failed `INIT` runs no `REMOVE`, so `INIT` restores such a jump itself and turns
+off any source of interrupts it started. A warm boot inside `INIT` leaves that
+source on.
+
+Nothing in the ROM turns interrupts on. Cold boot and warm boot leave them off,
+and each routine that masks them puts back the state it found, so a handler at
+`0038h` runs after a warm boot only once a program or a service sets `EI`.
 
 A service calls the ROM only through the ROM table at `C003h`, with
 `abi.inc`'s names, because the addresses behind it change from one build to
