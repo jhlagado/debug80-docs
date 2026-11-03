@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 2. The console
 
-Checked against TEC-OS 60e0768.
+Checked against TEC-OS 1f9542d.
 
 The console is the device you type commands on and read TEC-OS's replies from.
 A TEC-1G can carry a serial terminal, a PICO9918 video card and a graphics LCD
@@ -298,8 +298,8 @@ screen they print `[more]` on the last row and wait for a key. On the serial
 terminal they count as for 80 columns and 24 rows.
 
 The graphics LCD, with 8 rows of 21 characters, shows the pause soonest. The
-starter card's text file, `STARTUP.CMD`, is too short to fill it, so this card
-adds `LINES.TXT`, a text file of ten lines. `tecvol`, the card tool that
+starter card's `STARTUP.CMD` is too short to fill it, so this card adds
+`LINES.TXT`, a text file of ten lines. `tecvol`, the card tool that
 Chapter 4 describes, puts it on a copy of the starter card:
 
 ```sh
