@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 26. The host model and the web page
 
-Checked against TEC-OS ea9c1c0, with `@jhlagado/debug80-runtime` 0.3.1, the
+Checked against TEC-OS 60cfbdc, with `@jhlagado/debug80-runtime` 0.3.1, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
