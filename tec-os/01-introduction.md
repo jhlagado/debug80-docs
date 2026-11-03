@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
-04ec086 and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and
+Checked against TEC-OS 7458352, with the starter card's `TED.COM` from Thorium
+128edb7 and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and
 `TAS.COM`'s is
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -134,7 +134,9 @@ so files written on the card are still there after a reload. When a save to the
 browser's storage fails, the page keeps the card in memory, marked as unsaved, and
 shows `Card not saved in this browser`, with the browser's reason, under the
 heading "SD card". It saves again two seconds later, and again after
-that until one succeeds. A reload before then brings back the card as it was
+that until one succeeds. After three failures in a row the message says that
+saving keeps failing and that the card is kept in memory only. One save runs at
+a time, and a change made during a save is saved at the next try. A reload before then brings back the card as it was
 last saved, so "Download image" is the way to keep a copy you can't afford to
 lose. These are its controls:
 
