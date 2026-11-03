@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix B. The ROM table and hardware services
 
-Checked against TEC-OS 1f9542d.
+Checked against TEC-OS 7458352.
 
 This appendix lists the ROM table at `C003h`, then the numbered services behind
 its one jump: the hardware services 0 to 8, the volume services 9 to 11, the
@@ -121,11 +121,11 @@ clears `HWBWRD`, so that no display driver blanks the program's text. 4,915
 T-states, or 4,935 on row 3.
 
 **3 VIDEO.** With `B` = 1, claims the PICO9918. With `B` = 0, releases it
-(`src/hwsvc.asm:99-143`). The code tests only for 0, so any other value claims
-as 1 does. Status 2 with no PICO9918 either way.
+(`src/hwsvc.asm:99-143`). Any other `B` returns status 1 with nothing
+changed. With `B` = 0 or 1, status 2 means there is no PICO9918.
 
 A claim removes the cursor if the PICO9918 is the console and stores
-`HWBCLM`'s value in `VCLAIM`, in 1,160 T-states with a cursor to remove. While
+`HWBCLM`'s value in `VCLAIM`, in 1,188 T-states with a cursor to remove. While
 it holds, output to the PICO9918 is dropped, and no cursor or page flip
 touches the chip.
 
@@ -133,8 +133,8 @@ A release with no claim does nothing and returns status 0. Otherwise it clears
 `VCLAIM` and, with `PICO.SVC` in, calls the driver's restore routine for its
 text mode, font and page. If the PICO9918 is the console it then clears the
 screen and homes the cursor. With no `PICO.SVC`, nothing is restored. A
-release with the PICO9918 as the console takes 216,023 T-states at 80 columns
-and 146,738 with the console elsewhere. Warm boot makes the same call
+release with the PICO9918 as the console takes 216,051 T-states at 80 columns
+and 146,766 with the console elsewhere. Warm boot makes the same call
 (`src/boot.asm:83`).
 
 **4 TONE.** Makes a square wave on port `01h` bit 7, with bit 6 held high,
@@ -186,10 +186,10 @@ row takes about 487 T-states on `PICO.SVC` at 80 columns and about 35,750 on
 `GLCD.SVC`.
 
 **8 RTC.** With `B` = 0, reads the DS1302 into the seven bytes at `HL`. With
-`B` = 1, sets it from them (`src/hwsvc.asm:227-262`). The code tests only for
-0, so any other value sets as 1 does. The bytes are BCD: seconds, minutes,
-hours, date, month, weekday, year. Each call tests the clock again, and status
-2 means no clock answers. A read takes 6,918 T-states and a set 7,752. A set
+`B` = 1, sets it from them (`src/hwsvc.asm:227-262`). Any other `B` returns
+status 1 and touches no clock. The bytes are BCD: seconds, minutes, hours,
+date, month, weekday, year. Each call tests the clock again, and status 2 means
+no clock answers. A read takes 6,946 T-states and a set 7,780. A set
 turns off the chip's write protect first and writes 0 to its control byte
 last.
 
@@ -229,10 +229,11 @@ may be 0 elsewhere (`src/video.asm:37-45`, `drivers/glcd.asm:25`).
 
 On success `HL` returns `LINEBUF`'s address, where the row routines read and
 write a row, with `A` = 0 and carry clear. `TNEBAD` with carry means nothing
-changed: that mode has a table already, or there is no matrix keyboard.
+changed: `B` is neither 1 nor 3, that mode has a table already, or there is no
+matrix keyboard (`src/glcd.asm:5-18`).
 
-`HL` = 0 drops the mode's table, with carry clear, and the console is chosen
-again at its next call (`src/glcd.asm:49-63`). Each `REMOVE` calls it that way.
+`HL` = 0 drops the mode's table, with `A` = 0, carry clear and `HL` destroyed,
+and the console is chosen again at its next call (`src/glcd.asm:49-63`). Each `REMOVE` calls it that way.
 
 ## The registry, 13 and 14
 
