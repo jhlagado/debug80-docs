@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS 1f9542d.
+Checked against TEC-OS 7458352.
 
 Chapter 1's first boot ran two commands that nobody typed, and on the web
 page's board the first of them moved the console to the PICO9918. This chapter
@@ -84,7 +84,8 @@ B: WORK
 A>B:
 B>USER 3
 B>mount
-MOUNT?
+00 SYSTEM      G1M A:
+01 WORK        G8M B:
 
 B>DIR
 NO FILE
@@ -100,8 +101,10 @@ is echoed as it stands in the file, so `mount` appears in small letters, and it
 then runs as if typed. The CCP prints a failed line's usual message and the
 next line runs. Each line's effects last: `B:` and `USER 3` change the drive
 and the user area for the lines after them, so the first prompt you can type at
-is `B>`. `MOUNT` isn't found because `MOUNT.COM` is in user area 0: the CCP's
-search of drive A is made in area 3 too.
+is `B>`. `MOUNT` runs although `MOUNT.COM` is in user area 0 of drive A,
+because the CCP's search for a program goes on to area 0 of each drive it
+searches, as Chapter 3 describes. `DIR` lists area 3 of drive B, which is
+empty.
 
 TEC-OS reads the file once, into memory, before the first line runs, so the
 changes of drive and user area had no effect on reading it. It reads one
