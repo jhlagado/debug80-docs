@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 24. Diagnostics
 
-Checked against TEC-OS 4d6eeaa. The diagnostics ROM in this chapter is version
+Checked against TEC-OS 60e0768. The diagnostics ROM in this chapter is version
 0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit.
 
 Two parts of the repository report what is wrong with a board. The TEC-OS ROM
@@ -26,8 +26,12 @@ starts the card with `SDINIT` and checks the container with `MOUNT`, and a
 failure of either jumps to `DIAG` with an error code in `A`
 (`src/boot.asm:42-45`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
 `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:8-18`). The banner is
-printed before the card is touched (`src/boot.asm:29-36`), so it appears
-whatever the card holds.
+printed before the card is touched (`src/boot.asm:35-36`), so it appears
+whatever the card holds. Only the RAM check comes before it. `RAMCHK` writes and
+reads back the bytes at `8000h` and `BFFFh` and looks for EXPAND 1 behind the
+window, and a board that lacks either
+prints `TEC-OS needs 64K RAM` on the serial port and stops there
+(`src/boot.asm:22`, `src/boot.asm:279-309`, `src/data.asm:12`).
 
 `DIAG` resets the stack to the BIOS's, since a mount that failed part way may
 have left it deep, and keeps the code on it (`src/diag.asm:5-6`). It writes
