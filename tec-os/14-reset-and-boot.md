@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from
-Thorium 04ec086, whose copy in `dist/files` has the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`; the
+Checked against TEC-OS 7458352, with the starter card's `TED.COM` from
+Thorium 128edb7, whose copy in `dist/files` has the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`; the
 timings below were measured on that card.
 
 TEC-OS starts in two ways. Cold boot runs after power-on, after the reset
@@ -30,10 +30,12 @@ board has to put ROM code at `0000h` for the first instruction. When the TEC-1G
 comes out of reset its system latch is `00h`, and with bit 0 of the latch low
 the board shows the ROM's first 2 KiB, the boot overlay, at `0000h–07FFh` as
 well as at `C000h–C7FFh`. The Z80 therefore runs ROM code before any RAM has
-been written. The ROM's first instruction is `JP COLD` (`src/reset.asm:6-7`),
+been written. The ROM's first instruction is `JP RSTENT` (`src/reset.asm:6-7`),
 and the Z80 runs it from the overlay at `0000h`. The jump's target is an address
-in `C000h–FFFFh`, so the next instruction comes from the ROM proper. `COLD`
-executes `DI`, loads the stack pointer and then writes `LATCLAS`, `01h`, to the
+in `C000h–FFFFh`, so the next instruction comes from the ROM proper. `RSTENT`
+reads the byte at `0002h`, which with the overlay on is the jump's own high
+byte, and when it is `HIGH(RSTENT)` goes on to `COLD` (`src/boot.asm:16-19`).
+`COLD` executes `DI`, loads the stack pointer and then writes `LATCLAS`, `01h`, to the
 latch (`src/boot.asm:19-22`). Bit 0 high turns the overlay off, so `0000h–07FFh`
 is RAM again, and the latch now has EXPAND 0 in view
 (`src/layout.asm:16`, `src/layout.asm:19`).
@@ -98,13 +100,13 @@ The diagnostic prompt's `R` jumps back to `COLDRT`, step 7 (`src/diag.asm:22-23`
 `src/boot.asm:47-49`), so a retry clears the LCD, starts the card again and
 mounts it, without clearing the memory or printing the banner a second time.
 
-On the starter card with the serial board, cold boot takes 1,285,395 T-states,
+On the starter card with the serial board, cold boot takes 1,285,483 T-states,
 about 0.32 seconds, from the first instruction to the CCP's entry, measured on
 the host model. Three steps take most of it. The banner is 25 characters at
 9,448 T-states each through `CONOUT`, the read of the container's block 0 takes
 219,144 T-states and `MEMINIT` takes about 347,000, most of it the clearing of
 EXPAND 1. The startup file's commands then run before the first prompt, so the
-CCP's first call of `CONIN` at that prompt comes 8,838,350 T-states after reset.
+CCP's first call of `CONIN` at that prompt comes 8,838,438 T-states after reset.
 
 ## The RAM check
 
@@ -277,6 +279,15 @@ the CCP reads its line with function 10:
 A>^C
 A>
 ```
+
+A program that ends with EXPAND 1 in view, by a return or a jump to `0000h`,
+reaches warm boot through the reset jump. The jump at `0000h` leads to
+`BF03h`, which in EXPAND 1 is part of the free space that cold boot clears, so
+the Z80 runs its zeros as `NOP`s on to `C000h` and `JP RSTENT`. The overlay is
+off, so `0002h` holds `BFh`, the RAM BIOS table's high byte, and `RSTENT` goes
+to `WBOOTR` (`src/boot.asm:10-18`). Warm boot then puts EXPAND 0 back and
+writes the cache's dirty lines, as it does at any program's end. A reset and
+BIOS function 0 cold boot.
 
 Warm boot's steps are:
 
