@@ -28,7 +28,7 @@ A function that takes an FCB, a 36-byte file control block whose layout
 Chapter 16 gives, works on the drive in its first byte: 0 for the default
 drive, 1 to 16 for A to P. The BDOS selects that drive before the function
 runs, for functions 15, 16, 17, 19 to 23, 30, 33 to 35 and 40
-(`src/data3.asm:84`, `src/cpm/bdos.asm:98-112`). A `?` in the drive byte is
+(`src/tables.asm:49`, `src/cpm/bdos.asm:98-112`). A `?` in the drive byte is
 allowed only for function 17.
 
 A function that can't be carried out at all prints one of the BDOS's errors
@@ -245,7 +245,7 @@ Returns 0. The drive is logged in again, and its directory read, at its next
 selection.
 
 **38 Access drive** and **39 Free drive.** MP/M's functions, which CP/M 2.2
-does not define. Both return 0 and do nothing (`src/data3.asm:83`).
+does not define. Both return 0 and do nothing (`src/tables.asm:48`).
 
 **40 Write random with zero fill.** Function 34, with each allocation block the
 write newly allocates filled with zeros before the record is written
@@ -272,4 +272,4 @@ Every other function number, from 41 to 255 except 47 and 108, returns 0 in
 `A` and `HL` and does nothing (`src/cpm/bdos.asm:88-89`). Function 50, CP/M
 3's direct BIOS call, is one of them. A program reaches the BIOS through its
 jump table, whose warm boot entry is the address at `0001h`
-(`src/boot.asm:107-108`).
+(`src/boot.asm:108-109`).

@@ -63,7 +63,7 @@ attaches its own instance of the runtime's `SdSpi` class on port `FDh`
 card is then the caller's array of bytes: a write by TEC-OS changes that array
 at once, and the caller can read the files from it, save it or swap it.
 `swapCard` puts a different image, or none, in the socket for the next command
-(`host/machine.mjs:518-522`), and the web page saves the same array to the
+(`host/machine.mjs:521-525`), and the web page saves the same array to the
 browser's storage.
 
 The card model answers a read or a write of a block past the end of the image
@@ -93,7 +93,7 @@ clock shows the same time on any PC.
 
 Two kinds of write could make a program behave differently on the model and on a
 board, so the machine passes every memory write through a check of its own
-(`host/machine.mjs:210-230`). A write to `C000h–FFFFh`, the ROM, is recorded as
+(`host/machine.mjs:213-233`). A write to `C000h–FFFFh`, the ROM, is recorded as
 a `rom-write`, and a write to `0000h–07FFh` while the boot overlay is on is
 recorded as an `overlay-write`. Each goes in `violations` with the address and
 the program counter.
@@ -114,13 +114,13 @@ Any other write is recorded in the machine's `expand1Writes` and, for the first
 16, in `EXPAND1_WRITES`, shared by every machine in the process. The Node.js
 wrapper the tests use fails a test file if that list isn't empty at its end
 (`test/lib/machine.mjs:14-17`). The history's page at `BD00h` is left out of the
-watch, since `HSTORE` writes it (`host/machine.mjs:219`). In
+watch, since `HSTORE` writes it (`host/machine.mjs:222`). In
 `test/expand.test.mjs:67-77` a program puts EXPAND 1 in view and writes
 `BF80h`, and the watch records that one write.
 
 ## Driving the machine
 
-`step` runs one instruction (`host/machine.mjs:256-264`). Before the instruction
+`step` runs one instruction (`host/machine.mjs:259-267`). Before the instruction
 runs, when the program counter is at `BCONOUT`, the BIOS's console output, the
 byte in `C` goes into `output`, so `output` holds every byte TEC-OS put on the
 console, whichever device it went to. A second record, `serial`, holds the bytes
@@ -173,34 +173,34 @@ A>
 ```
 
 `runUntil` steps until a test function returns true, and fails after a limit of
-cycles (`host/machine.mjs:266-277`). `expect` runs until the console output
+cycles (`host/machine.mjs:269-280`). `expect` runs until the console output
 matches a pattern, testing it only when the output has grown, and then runs on
 until the console waits, so that the last character has reached the screen
-(`host/machine.mjs:299-318`). `waitingForInput` is true while the program
+(`host/machine.mjs:302-321`). `waitingForInput` is true while the program
 counter is in one of the console's input loops, found by symbol
-(`host/machine.mjs:320-332`). `ready` adds that the startup file has finished
+(`host/machine.mjs:323-335`). `ready` adds that the startup file has finished
 and the CCP is reading a line, from `STPOS` and `HFLAG`
-(`host/machine.mjs:334-339`), and `capture.mjs` waits on `ready` and on output
+(`host/machine.mjs:337-342`), and `capture.mjs` waits on `ready` and on output
 ending in a prompt.
 
 Typing takes two forms. `type` sends each character to the serial port only when
 TEC-OS is waiting for one, and waits until TEC-OS has taken it
-(`host/machine.mjs:351-368`). With a display as the console it presses keys on
+(`host/machine.mjs:354-371`). With a display as the console it presses keys on
 the matrix keyboard instead, holding each, with its Shift or Ctrl, until
-TEC-OS's scan has read it and then releasing it (`host/machine.mjs:449-463`).
+TEC-OS's scan has read it and then releasing it (`host/machine.mjs:452-466`).
 `enqueueInput` and `pumpInput` do the same without blocking, one step at a time,
-for the web page's run loop and for `capture.mjs` (`host/machine.mjs:465-517`).
+for the web page's run loop and for `capture.mjs` (`host/machine.mjs:468-520`).
 Either way the model paces input to TEC-OS, but a terminal on a board sends each
 character when it is typed.
 
 The rest reads or sets the board's state. `screen` turns the PICO9918's name
 table into rows of text, from the layout its registers select
-(`host/machine.mjs:377-402`). `glcdScreen` matches each 6 × 8 cell of the
+(`host/machine.mjs:380-405`). `glcdScreen` matches each 6 × 8 cell of the
 graphics LCD's memory against the font, which the caller supplies in
-`Machine.font` since the ROM holds none (`host/machine.mjs:406-446`).
+`Machine.font` since the ROM holds none (`host/machine.mjs:409-449`).
 `ramImage` and `loadRam` copy all of RAM, EXPAND 1 included, out and in.
 `reset` resets the CPU and the latches and leaves RAM and the card as they
-were, as the board's reset button does (`host/machine.mjs:523-583`).
+were, as the board's reset button does (`host/machine.mjs:526-586`).
 
 ## The tests
 

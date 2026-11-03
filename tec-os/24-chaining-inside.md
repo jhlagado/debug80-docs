@@ -39,7 +39,7 @@ function 10 fills. The buffer is a byte for its maximum length, `CMDBUF`, a byte
 for the length read, `CMDLEN`, and 128 bytes of characters, `CMDTXT`, at `BD35h`
 (`src/ram.asm:68-81`). `CPMINIT`, which warm boot calls, clears from `CCPCLR` to
 `BDOSRME`, the end of the BDOS's RAM, 331 bytes, so the command buffer and the
-two FCBs before it are kept (`src/boot.asm:261-268`, `src/boot.asm:82`). The
+two FCBs before it are kept (`src/boot.asm:262-269`, `src/boot.asm:83`). The
 FCBs need no clearing, since each use of them parses a name into them in full
 and clears the rest (`src/cpm/ccp.asm:1366-1391`).
 
@@ -49,14 +49,14 @@ the workspace above the RAM BIOS table, which `CPMINIT` doesn't clear
 plus one, and 0 when no piece is left, so one byte covers the 128 offsets with 0
 to spare. The return code, `PRGCODE` at `BF56h`, is in the same block
 (`src/ram.asm:228`). Cold boot clears the whole resident workspace, from
-`WSBASE` to `WSEND`, which ends after `CHPOS` (`src/boot.asm:33-37`,
+`WSBASE` to `WSEND`, which ends after `CHPOS` (`src/boot.asm:34-38`,
 `src/ram.asm:240-241`), so after a reset no piece is left and the code is 0.
 
 `CPMINIT` sets the buffer's maximum length, 127, at every warm boot and so at
-every cold boot, which runs on into warm boot (`src/boot.asm:270-272`,
-`src/boot.asm:69-74`). A startup line is cut to the same length, because
+every cold boot, which runs on into warm boot (`src/boot.asm:271-273`,
+`src/boot.asm:70-75`). A startup line is cut to the same length, because
 `STLINE` copies at most 127 characters of a line of `STARTUP.CMD` into `CMDTXT`
-and passes over the rest of the line (`src/svc.asm:439`, `src/svc.asm:453-455`).
+and passes over the rest of the line (`src/cpm/ccp.asm:1665`, `src/cpm/ccp.asm:1679-1681`).
 Function 47 takes a line whose 0 is within 128 bytes, so at most 127 characters
 too (`src/cpm/bdos.asm:51-64`).
 
@@ -118,7 +118,7 @@ A>
 ```
 
 `STLINE` echoes each line of the file whole, through BDOS function 9, so a `$`
-in a line would end its echo there (`src/svc.asm:469-473`). The CCP echoes the
+in a line would end its echo there (`src/cpm/ccp.asm:1695-1699`). The CCP echoes the
 later pieces after their own prompts. `PICO.SVC` fails on this serial
 board, so `:MOUNT` is dropped, and the loop goes on to the startup file's third
 line.
@@ -245,7 +245,7 @@ through `CHDROP`:
   `BADSECT` too (`src/cpm/bdos.asm:1838`).
 
 A reset drops the line by clearing `CHPOS` with the rest of the workspace
-(`src/boot.asm:33-37`).
+(`src/boot.asm:34-38`).
 
 A `[more]` pause drops the line only on `^C`. `PGWAIT` reads a key, clears its
 bit 5 with `AND DFh` and compares it with `03h`, `1Bh` and `Q`, so `^C`, Esc,
@@ -259,7 +259,7 @@ ran to its end (`src/cpm/ccp.asm:753-783`, `src/cpm/ccp.asm:532`,
 `Write lost` drops the line too. `CWBOOT` prints that message at a warm boot when
 a cache write has failed since the last one, after clearing `CFAIL` and `CHPOS`.
 `WBOOTR` then jumps to the CCP's entry with `CHPOS` at 0 (`src/ram.asm:202`,
-`src/cache.asm:198`, `src/cache.asm:354-365`, `src/boot.asm:88-91`).
+`src/cache.asm:172`, `src/cache.asm:328-339`, `src/boot.asm:89-92`).
 
 ## Function 47
 
@@ -273,7 +273,7 @@ the loop stops at the first 0. A carriage return or a line feed before it, or
 through `RETA`, with the program's stack back and nothing changed
 (`src/cpm/bdos.asm:51-64`, `src/cpm/bdos.asm:120-128`). A line from the keyboard
 or the startup file can hold neither character, since function 10 and `STLINE`
-both end a line there (`src/svc.asm:449-452`).
+both end a line there (`src/cpm/ccp.asm:1675-1678`).
 
 The second pass copies. `LDIR` copies 128 bytes from the DMA address into
 `CMDTXT`: the line, its 0 and whatever follows the 0. `CHPOS` is set to 1, the
@@ -293,7 +293,7 @@ calling program left.
 
 TEC-OS doesn't read `E`, which CP/M 3's function 47 reads. The CCP's entry
 takes the drive and user area from `0004h`, as after any program
-(`src/boot.asm:89-91`, `src/cpm/ccp.asm:29-66`).
+(`src/boot.asm:90-92`, `src/cpm/ccp.asm:29-66`).
 
 The line from function 47 replaces the whole of the old line, and `CHPOS` points
 at its start, so the pieces of the old line after the program are gone. An empty
