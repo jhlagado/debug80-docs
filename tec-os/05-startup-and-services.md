@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS 718c01b.
+Checked against TEC-OS ea9c1c0.
 
 Chapter 1's first boot ran two commands that nobody typed, and on the web
 page's board the first of them moved the console to the PICO9918. This chapter
@@ -320,8 +320,11 @@ The web page's "Display" and "ROM" controls change these lines for you,
 through `host/card.mjs`. At each power-on the page makes the card's first line
 the file for the chosen display and width, adds `GLCD.SVC` as the second on a
 board with the PICO9918 and keeps your other lines. A display driver chained
-in one of those lines is taken out and the rest of the line kept. A piece after
-it that starts with `:` loses the `:`, so the piece runs as an ordinary command.
+in one of those lines is taken out and the rest of the line kept. The piece
+taken out passes its own `:` to the piece after it on its line. A `:` that
+waited on a piece taken out goes, on its line or first on the next, so that
+piece runs as an ordinary command. So does a piece with `:` first in your first
+line, which would otherwise wait on the display lines.
 
 ## The keypad skip
 
@@ -354,9 +357,8 @@ TEC-OS writes one of three words there:
   causes are a driver's file that is missing or bad with no other display
   driver installed, no `STARTUP.CMD`, a file with no display line and a skip.
   That board's screen is dark.
-- `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`. The console is then on
-  the serial terminal, even from the PICO9918, and `CON CRT` typed there moves
-  it back.
+- `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`. The console stays where
+  it was.
 - `CARD?` appears each time a card won't mount, with the diagnostic prompt of
   Chapter 1.
 
