@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 26. The host model and the web page
 
-Checked against TEC-OS 4d6eeaa, with `@jhlagado/debug80-runtime` 0.3.1, the
+Checked against TEC-OS 19ad916, with `@jhlagado/debug80-runtime` 0.3.1, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -195,7 +195,7 @@ were, as the board's reset button does (`host/machine.mjs:522-582`).
 ## The tests
 
 `npm test` runs every file in `test/` that ends `.test.mjs`, one at a time, with
-Node.js's own test runner (`package.json:17`). There are 39 such files, from
+Node.js's own test runner (`package.json:17`). There are 41 such files, from
 `arith.test.mjs` to `xmove.test.mjs`, each on one part of TEC-OS. Most build
 their machines with `boot` in `test/lib/fixtures.mjs`, which reads the ROM of a
 profile from `build/` and, when the board has a matrix keyboard, puts a display
@@ -237,78 +237,95 @@ diagnostics ROM, which tests those points on a board.
 everything it imports into one file, `app.js`, with esbuild, and
 `host/machine.mjs` and the container and file system modules from `tools/lib` go
 in with it. The one import of Node.js's `fs` among them is pointed at a stub
-(`web/build.mjs:19-29`, `web/stub/fs.mjs`). The build copies the page, its style
-sheet, the `debug80` ROM with a list of its symbols, the starter card's recipe
-and the files in `dist/files`: the starter card's, and the PICO9918's driver
-built at 40 and 32 columns (`web/build.mjs:31-43`). The page uses one ROM for
-every display, since the PICO9918's width is the build of the card's
+(`web/build.mjs:20-30`, `web/stub/fs.mjs`). The build first deletes `web/dist`,
+so no file of an older build is left there (`web/build.mjs:16`). It copies the
+page, its style sheet, the `debug80` ROM with a list of its symbols, the page's
+recipe and the files in `dist/files` (`web/build.mjs:32-45`). The page's recipe,
+`dist/page.recipe.json`, is the starter card's with one more file, `DEMO.COM`,
+and the build copies it under the name the page fetches, `starter.recipe.json`.
+`npm run media` writes it, and it assembles `DEMO.COM` from
+`test/programs/demo.asm` into `dist/files` (`tools/media.mjs:230-243`). The files
+are the starter card's, `DEMO.COM` and the PICO9918's driver built at 40 and 32
+columns. The recipe's `widths` pins each of the three drivers by its URL and
+SHA-256 (`tools/media.mjs:195-201`, `tools/media.mjs:215`). The page uses one
+ROM for every display, since the PICO9918's width is the build of the card's
 `PICO.SVC` (`web/build.mjs:14`).
 
 At start the page loads the card it stored last time. If there is none, or the
 stored one isn't a valid container, it builds the starter card from the recipe
-(`web/src/main.mjs:607-619`). Building from the recipe fetches each file,
+(`web/src/main.mjs:611-623`). Building from the recipe fetches each file,
 checks its length and SHA-256 against the recipe and writes it to its drive
 (`tools/lib/recipe.mjs:14-26`).
 
 The card is kept in the browser's IndexedDB, in the database `tecos`, the
 store `cards`, under the key `current` (`web/src/store.mjs:4-6`). Each write
-TEC-OS makes to the card marks it changed (`web/src/main.mjs:77-79`), and
-every 2 seconds a changed card is stored again (`web/src/main.mjs:91-95`).
-When the browser's storage fails, the page writes one warning to the browser's
-console and runs on with the card in memory (`web/src/store.mjs:1-2`,
-`web/src/store.mjs:17-21`).
+TEC-OS makes to the card marks it changed (`web/src/main.mjs:81-83`), and
+every 2 seconds a changed card is stored again (`web/src/main.mjs:95-99`). The
+timer clears the mark before it stores the card, and `saveCard` catches a
+failure of the browser's storage. The page then writes one warning to the
+browser's console, the first of the session only, and shows nothing on the
+page. The mark stays clear, so the card isn't stored again until TEC-OS next
+writes to it, and a reload before then brings back the card last stored
+(`web/src/store.mjs:17-21`, `web/src/store.mjs:37-49`). "Download image" saves
+the card in memory whatever happened to the store.
 
 Each frame of the browser's display, the page runs the machine for the time
 since the last frame at 4 MHz, at most 100 ms of it, and it stops early after 30
-ms of the PC's time (`web/src/main.mjs:103-119`). It then draws the PICO9918's
+ms of the PC's time (`web/src/main.mjs:107-123`). It then draws the PICO9918's
 screen, the 7-segment digits, the 8 × 8 LEDs, the 20 × 4 LCD and the graphics
 LCD from the runtime's state, and it shows the latch's value, the bank in the
-window and the Caps lamp under the board (`web/src/main.mjs:151-162`). Once a
-second it shows the speed reached, in MHz (`web/src/main.mjs:120-124`). The
+window and the Caps lamp under the board (`web/src/main.mjs:155-166`). Once a
+second it shows the speed reached, in MHz (`web/src/main.mjs:124-128`). The
 machine is made with no `clock`, so its DS1302 reads the PC's time
-(`web/src/main.mjs:71-80`).
+(`web/src/main.mjs:75-84`).
 
-Typing goes to the board two ways (`web/src/main.mjs:317-356`). With the
+Typing goes to the board two ways (`web/src/main.mjs:321-360`). With the
 PICO9918's screen or the graphics LCD focused, a key goes to the matrix
 keyboard, and the arrow keys become its own arrow keys. With the serial
 terminal focused, a key goes to the serial port, and an arrow key is sent as
 `ESC [` and a letter. On a phone or tablet a tap on either gives focus to a
 hidden text field that brings up the on-screen keyboard
-(`web/src/main.mjs:358-453`). A row of buttons gives Ctrl, Esc, Tab and the
+(`web/src/main.mjs:362-457`). A row of buttons gives Ctrl, Esc, Tab and the
 arrows (`web/index.html:36-44`). The serial terminal on the page drops the
 escape sequences TEC-OS sends and acts on backspace
-(`web/src/main.mjs:287-315`).
+(`web/src/main.mjs:291-319`).
 
 Chapter 1 lists the page's controls (`web/index.html:12-30`,
 `web/index.html:68-82`). The page also lists each file of the drive chosen in
 "Drive", with its user area, its size and a Download button, which saves the
-file to the PC, as text when "as text" is ticked (`web/src/main.mjs:494-507`).
+file to the PC, as text when "as text" is ticked (`web/src/main.mjs:498-511`).
 
 The width and the display are kept in the browser's local storage
-(`web/src/main.mjs:17-19`, `web/src/main.mjs:577-589`). A power-on comes from a
+(`web/src/main.mjs:17-19`, `web/src/main.mjs:581-593`). A power-on comes from a
 change to either of them, the Power cycle button or a new card, and it first
 prepares the card with `prepareCard` from `host/card.mjs`
-(`web/src/main.mjs:66-84`). For the PICO9918 the page fetches the driver built
-at the chosen width, and `prepareCard` writes it to drive A as `PICO.SVC` when
-the card's copy differs, unless the card has no drive A or is from an older
-TEC-OS (`host/card.mjs:54-65`). `prepareCard` checks that drive A has the
-display's driver file, in the format this ROM loads. If it does, the first line of
-`STARTUP.CMD` becomes that file's name, followed by `GLCD.SVC` on a board with
-the PICO9918. `STARTUP.CMD`'s other lines stay, less their display pieces. A
-removed piece passes its own `:` to the piece after it on its line, a `:` first
-on the next line stays if the removed piece had its own, and otherwise a `:`
-that waited on a removed piece goes, on its line or first on the
-next (`host/card.mjs:26-108`). A card that fails the check is left as it is, and
-the reason goes to the serial terminal with the words `[power on]`. The reason
-is no drive A or a `.DRV` display file from an older TEC-OS, and with the graphics
-LCD chosen also no such driver or a driver of another format, since with the
-PICO9918 chosen the page writes `PICO.SVC` (`host/card.mjs:57-64`). The message for an older card names the display's own
-`.DRV` file if the card has it, and otherwise the first `.DRV` display file in
-the directory (`host/card.mjs:37-40`).
+(`web/src/main.mjs:66-88`). For the PICO9918 the page fetches the recipe and the
+three drivers its `widths` pins, each checked by its SHA-256
+(`host/card.mjs:82-96`). `prepareCard` writes the one at the chosen width to
+drive A as `PICO.SVC` when the card has no `PICO.SVC`, has one of those three
+builds or has one of an older format. Any other `PICO.SVC` is kept, with a note
+that it is the card's own, and a card with no drive A or from an older TEC-OS
+gets no driver (`host/card.mjs:56-73`). `prepareCard` checks that drive A has
+the display's driver file, in the format this ROM loads. If it does, the first
+line of `STARTUP.CMD` becomes that file's name, with no line for the other
+display. `STARTUP.CMD`'s other lines stay, less their display pieces. A removed
+piece passes its own `:` to the piece after it on its line, a `:` first on the
+next line stays if the removed piece had its own, and otherwise a `:` that
+waited on a removed piece goes, on its line or first on the next
+(`host/card.mjs:98-139`). A card that fails the check gets no new `STARTUP.CMD`,
+and the reason goes to the serial terminal after the words `[power on]`, as do a
+failed fetch and the note (`web/src/main.mjs:86-87`). The reason is no drive A
+or a `.DRV` display file from an older TEC-OS, and with the graphics LCD chosen
+also no such driver or a driver of another format, since with the PICO9918
+chosen the page writes `PICO.SVC` (`host/card.mjs:60-70`). The message for an
+older card names the display's own `.DRV` file if the card has it, and
+otherwise the first `.DRV` display file in the directory (`host/card.mjs:35-38`).
+Chapter 22 describes the cases in which the preparation changes or stops on a
+card its messages say it leaves alone.
 
 "Copy file to drive" writes to a copy of the card while the machine is paused
 and saves it. It then copies it into the card the machine is using and presses
-reset (`web/src/main.mjs:542-572`). The reset is a cold boot, so TEC-OS
+reset (`web/src/main.mjs:546-576`). The reset is a cold boot, so TEC-OS
 rebuilds its map of each drive's free space from the changed card and its
 block cache from nothing. A change still in that cache, on the work volume,
 written behind, is lost by the reset, as it would be on a board. A `^C` at the
