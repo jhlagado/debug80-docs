@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 11. Chaining commands
 
-Checked against TEC-OS ea9c1c0, with the ATOM assembler from the
+Checked against TEC-OS 60cfbdc, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `EDIT.COM` is from Edit
 845d062, and its copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`. Its
