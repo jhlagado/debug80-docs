@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix G. The TEC-1G as TEC-OS uses it
 
-Checked against TEC-OS 1f9542d.
+Checked against TEC-OS 7458352.
 
 This appendix lists the parts of the TEC-1G that TEC-OS reads and writes: its
 ports, the bits of the system latch, the configuration switches, the RAM in
@@ -99,8 +99,9 @@ not read, so TEC-OS keeps a copy of the last value written at `0040h`,
 
 At reset the latch is `00h`, and with bit 0 low the first 2 KiB of the ROM
 also appear at `0000h–07FFh`. That is how the Z80, which starts at `0000h`,
-reaches the ROM: the jump there leads to `COLD` at its `C000h` address, which
-writes `01h` to the latch (`src/reset.asm:1-7`, `src/boot.asm:19-22`). A
+reaches the ROM: the jump there leads to `RSTENT` at its `C000h` address,
+which goes on at reset to `COLD`, and `COLD` writes `01h` to the latch
+(`src/reset.asm:1-7`, `src/boot.asm:10-22`). A
 program that writes the latch itself has to write `0040h` to match, since
 TEC-OS's next write to the latch is made from the copy.
 
@@ -175,8 +176,9 @@ of the error codes of Chapter 23 and Appendix D (`src/sd.asm:4-18`). A
 high-capacity card takes a block's number as its address, and a
 standard-capacity card takes the block's byte address in 32 bits, so the
 driver can name no block 4 GiB or more into a standard card. It rejects such a
-block before any command, with code 9, and a volume placed there gives `Bad
-Sector` (`src/sd.asm:207-236`, Chapter 18). When a
+block before any command, with code 9. A standard card with a volume that
+reaches past block `7FFFFFh`, the last below 4 GiB, fails the mount with code
+`27h` (`src/sd.asm:207-236`, `src/vol.asm:216-230`, Chapter 18). When a
 block goes to or from the block cache, the transfer loop runs with EXPAND 1 in
 view, writing the latch before the loop and its copy back after
 (`src/sd.asm:273-277`, `src/sd.asm:371-372`, `src/sd.asm:379-382`,
