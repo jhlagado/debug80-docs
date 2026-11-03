@@ -7,9 +7,9 @@ nav_group: "Appendices"
 
 # Appendix E. The container format
 
-Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
-8fcc6ea, with the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`.
+Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
+676075a, with the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`.
 
 This appendix lists the container format: the header's fields, the volume
 descriptors, the table's blocks beyond block 0, the ROM's checks with their
