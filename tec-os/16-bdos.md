@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 16. The BDOS
 
-Checked against TEC-OS 7458352, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 7935507, with the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -25,9 +25,9 @@ and the differences from Digital Research's BDOS.
 TEC-OS's BDOS comes from Portable CP/M, an implementation of the documented
 CP/M 2.2 interface that uses no Digital Research source
 (`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the ROM
-that Chapter 12 describes it runs from `E158h`, `BDOSBAS`, to `F065h`, 3,854
+that Chapter 12 describes it runs from `E28Fh`, `BDOSBAS`, to `F19Ch`, 3,854
 bytes. Its table of functions and its error messages are in the
-ROM's data block (`src/data3.asm:73-90`). None of it can be patched.
+ROM's data block (`src/tables.asm:38-49`, `src/text.asm:83-88`). None of it can be patched.
 
 The BDOS's variables and its 54-byte stack are in RAM, in the block from
 `BDOSRAM` to `BDOSRME`, `BE77h` to `BEFFh` (`src/ram.asm:130-190`,
