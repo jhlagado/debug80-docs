@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. The host model and the web page
 
-Checked against TEC-OS 60e0768, with `@jhlagado/debug80-runtime` 0.3.1, the
+Checked against TEC-OS 1f9542d, with `@jhlagado/debug80-runtime` 0.3.3, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -65,6 +65,14 @@ at once, and the caller can read the files from it, save it or swap it.
 `swapCard` puts a different image, or none, in the socket for the next command
 (`host/machine.mjs:518-522`), and the web page saves the same array to the
 browser's storage.
+
+The card model answers a read or a write of a block past the end of the image
+with an error, the parameter-error bit of its first answer, and moves no data.
+TEC-OS's driver then fails the access with error 5, and the image is
+unchanged. A high-capacity card takes the block number as it is. With
+`highCapacity` false the model takes byte addresses, as a standard-capacity
+card does, and `test/sd-range.test.mjs` uses such a card for the ROM's refusal
+of a block 4 GiB or more into the card, which Chapter 18 describes.
 
 The DS1302 is attached the same way, on port `FCh`, with the runtime's
 `rtcEnabled` turned off (`host/machine.mjs:72`, `host/machine.mjs:85`,
@@ -195,7 +203,7 @@ were, as the board's reset button does (`host/machine.mjs:523-583`).
 ## The tests
 
 `npm test` runs every file in `test/` that ends `.test.mjs`, one at a time, with
-Node.js's own test runner (`package.json:17`). There are 41 such files, from
+Node.js's own test runner (`package.json:17`). There are 45 such files, from
 `arith.test.mjs` to `write.test.mjs`, each on one part of TEC-OS. Most build
 their machines with `boot` in `test/lib/fixtures.mjs`, which reads the one ROM,
 `build/tecos/tecos.rom`, and, when the board has a matrix keyboard, puts a
@@ -224,7 +232,11 @@ build, `ATOM.COM`, and a directory of the package `triptych-headless`, which no
 each from its environment variable or its default path beside the clone. A file
 whose SHA-256 differs fails its test, and a missing one skips it, or fails it
 with `STRICT=1`, which `npm run test:strict` sets (`test/lib/inputs.mjs:1-6`,
-`package.json:18`).
+`package.json:18`). The web page's tests, `test/web-touch.test.mjs` and
+`test/web-store.test.mjs`, drive Chromium through `playwright`, which
+`package.json` pins at 1.62.1, and `npx playwright install chromium` fetches
+the browser that version expects (`package.json:27`, `README.md:36`).
+`test/deps.test.mjs` checks the pin and that the README gives the install.
 
 Every test is evidence from the model. In some behaviours the model differs from
 the board as its documents describe it, such as a write under the boot overlay
@@ -263,13 +275,16 @@ The card is kept in the browser's IndexedDB, in the database `tecos`, the
 store `cards`, under the key `current` (`web/src/store.mjs:5-7`). Each write
 TEC-OS makes to the card marks it changed (`web/src/main.mjs:83-85`), and
 every 2 seconds a changed card is stored again (`web/src/main.mjs:97-101`). The
-timer clears the mark before it stores the card, and `saveCard` catches a
-failure of the browser's storage. The page then writes one warning to the
-browser's console, the first of the session only, and shows nothing on the
-page. The mark stays clear, so the card isn't stored again until TEC-OS next
-writes to it, and a reload before then brings back the card last stored
-(`web/src/store.mjs:18-22`, `web/src/store.mjs:38-52`). "Download image" saves
-the card in memory whatever happened to the store.
+timer clears the mark before it stores the card. When the browser's storage
+fails, `saveCard` writes a warning to the browser's console, the first of the
+session only, and passes the failure on (`web/src/store.mjs:18-22`,
+`web/src/store.mjs:38-52`). The page then marks the card changed again, so the
+next tick tries the save again, and the line under the board says `Card not
+saved in this browser`, with the reason, and that the card is kept in memory
+and saved again shortly. The words stay until a save succeeds
+(`web/src/main.mjs:103-117`, `web/src/main.mjs:491-496`). A reload before then
+brings back the card last stored. "Download image" saves the card in memory
+whatever happened to the store.
 
 Each frame of the browser's display, the page runs the machine for the time
 since the last frame at 4 MHz, at most 100 ms of it, and it stops early after 30
@@ -303,9 +318,12 @@ change to either of them, the Power cycle button or a new card, and it first
 prepares the card with `prepareCard` from `host/card.mjs`
 (`web/src/main.mjs:67-90`). For the PICO9918 the page fetches the recipe and the
 three drivers its `widths` pins, each checked by its SHA-256
-(`host/card.mjs:99-113`). `prepareCard` writes the one at the chosen width to
-drive A as `PICO.SVC` when the card has no `PICO.SVC`, has one of those three
-builds or has one of an older format. Any other `PICO.SVC` is kept, with a note
+(`host/card.mjs:99-113`). When one can't be had, `prepareCard` changes nothing.
+Otherwise it works on a copy of the card, which goes over the card only once
+every change is made, and it reads user 0 of drive A, read-only when the card
+says so (`host/card.mjs:15-21`, `host/card.mjs:58-71`). `prepareCard` writes the
+driver at the chosen width to drive A as `PICO.SVC` when the card has no
+`PICO.SVC`, has one of those three builds or has one of an older format. Any other `PICO.SVC` is kept, with a note
 that it is the card's own, and a card with no drive A or from an older TEC-OS
 gets no driver (`host/card.mjs:58-90`). `prepareCard` checks that drive A has
 the display's driver file, in the format this ROM loads. If it does, the first
@@ -322,12 +340,15 @@ also no such driver or a driver of another format, since with the PICO9918
 chosen the page writes `PICO.SVC` (`host/card.mjs:77-87`). The message for an
 older card names the display's own `.DRV` file if the card has it, and
 otherwise the first `.DRV` display file in the directory (`host/card.mjs:37-40`).
-Chapter 21 describes the cases in which the preparation changes or stops on a
-card its messages say it leaves alone.
+A change that can't be made, to a read-only drive A or in a full directory,
+leaves the card as it was, and the serial terminal says that it couldn't be
+prepared and boots as it is. Chapter 21 describes the preparation in full.
 
 "Copy file to drive" writes to a copy of the card while the machine is paused
-and saves it. It then copies it into the card the machine is using and presses
-reset (`web/src/main.mjs:564-594`). The reset is a cold boot, so TEC-OS
+and saves it. Only when the save succeeds does it copy it into the card the
+machine is using and press reset (`web/src/main.mjs:564-594`). A failed save
+leaves the card as it was, and the line under the board says `Not copied` with
+the reason. The reset is a cold boot, so TEC-OS
 rebuilds its map of each drive's free space from the changed card and its
 block cache from nothing. A change still in that cache, on the work volume,
 written behind, is lost by the reset, as it would be on a board. A `^C` at the
