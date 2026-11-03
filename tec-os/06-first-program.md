@@ -7,12 +7,12 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 6. A first program
 
-Checked against TEC-OS 19ad916, with the ATOM assembler from the
+Checked against TEC-OS 60e0768, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, the starter card's
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. The
-starter card's `TED.COM` is from Thorium 8fcc6ea, with the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`.
+starter card's `TED.COM` is from Thorium 676075a, with the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`.
 
 A program for TEC-OS is a CP/M program: Z80 code that TEC-OS loads at `0100h`
 and that reaches the console and the files through the BDOS. This chapter
@@ -118,8 +118,8 @@ B>
 The transcript leaves out the boot before `B:`. The blank line before the
 prompt comes from TEC-OS: when a program ends, the CCP starts a new line
 before it prints the prompt again. The CCP searches for the program on the
-current drive only, so at `A>` the command `HELLO` gives `HELLO?`, and
-`B:HELLO` runs the program from drive B.
+current drive and then on drive A, so at `A>` the command `HELLO` gives
+`HELLO?`, and `B:HELLO` runs the program from drive B.
 
 The web page copies a file from the PC to its card without `tecvol`. Its "Drive"
 list holds the drives the card's header names, and "Copy file to drive" writes
@@ -310,36 +310,17 @@ The starter card holds no `TDB.COM`, so `^T D` gets `TDB?` from the CCP and
 installs. On a board with both displays one driver installs as it boots, and
 `TED` holds 31,510 bytes.
 
-`TED` has two limits that bear on the work on drive B. It takes no drive in its
-argument, so the file must be on the current drive. The CCP searches only the
-current drive for the commands `TED` chains, which are `TAS` and `TED` itself.
-So `TED.COM` and `TAS.COM` need copies on drive B:
+The source is on drive B, and `TED.COM` and `TAS.COM` are on drive A. With
+drive B current, the CCP runs `TED` from drive A, and the commands `TED` chains,
+`TAS` and `TED` itself, run from there too. `TED` also takes a drive in its
+argument, so `TED B:HELLO.ASM` typed at `A>` opens the same file.
 
-<!-- node tools/capture.mjs --card work.img "TED B:HELLO.ASM" B: "TED HELLO.ASM" "COPY A:TED.COM B:" "COPY A:TAS.COM B:" -->
-```text
-A>TED B:HELLO.ASM
+A mistake shows the round of `^T B`. Here `B:` made drive B current,
+`TED HELLO.ASM 7` opened the source on the PICO9918 and a `1` was typed at the
+start of line 7. `^T B` saved the file and chained `TAS HELLO.ASM` and then
+`TED`. The screen showed this before `TED` drew its own again:
 
-EDIT error 01
-
-A>B:
-B>TED HELLO.ASM
-TED?
-
-B>COPY A:TED.COM B:
-COPIED 005D
-
-B>COPY A:TAS.COM B:
-COPIED 0051
-
-B>
-```
-
-A mistake shows the round of `^T B`. Here `TED HELLO.ASM 7` opened the source
-on the PICO9918 and a `1` was typed at the start of line 7. `^T B` saved the
-file and chained `TAS HELLO.ASM` and then `TED`. The screen showed this before
-`TED` drew its own again:
-
-<!-- a run on the host model, driven as test/ted.test.mjs drives TED, from the copies above: TED HELLO.ASM 7, 1, ^T B, Right, ^H, ^T R, a space, ^Q, DIR -->
+<!-- a run on the host model with work.img, driven as test/ted.test.mjs at 60e0768 drives TED: B:, TED HELLO.ASM 7, 1, ^T B, Right, ^H, ^T R, a space, ^Q, DIR -->
 ```text
 
 B>TAS HELLO.ASM
@@ -364,12 +345,12 @@ BDOS    EQU     $0005
 1        CALL    BDOS
         RET                     ; back to TEC-OS
 MESSAGE:DB      "Hello from the TEC-1G",13,10,"$"
-EDIT HELLO.ASM    expected a label, instruction or directive  ^S Save  ^Q Quit
+TED  HELLO.ASM    expected a label, instruction or directive  ^S Save  ^Q Quit
 ```
 
-The status row starts with `EDIT` and the file's name, though the program is
-`TED`. Otherwise it shows the cursor's line and column, as `L7 C1`. A `*`
-follows the name while the file has changes not yet saved. The matrix keyboard
+The status row starts with `TED` and the file's name. Otherwise it shows the
+cursor's line and column, as `L7 C1`. A `*` follows the name while the file
+has changes not yet saved. The matrix keyboard
 has no key for Delete, `7Fh`. So the fix here was the Right arrow, which moved
 the cursor past the `1`, and then `^H`, which removed it. `^T R` then saved the
 file, built the program and ran it, and `TED` waited for a key before it drew
@@ -400,9 +381,8 @@ also writes `THOR.ERR` before it chains a build, and `THOR.$$$` and
 <!-- the same run -->
 ```text
 B>DIR
-THOR.PRJ     SHOW.COM     HELLO.ASM    TED.COM      TAS.COM      THOR.SES
-HELLO.DBG    HELLO.COM
-8 files, 8128K free
+THOR.PRJ     SHOW.COM     HELLO.ASM    THOR.SES     HELLO.DBG    HELLO.COM
+6 files, 8152K free
 B>
 ```
 
