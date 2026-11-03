@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix B. The ROM table and hardware services
 
-Checked against TEC-OS 718c01b.
+Checked against TEC-OS ea9c1c0.
 
 This appendix lists the ROM table at `C003h` entry by entry, then the hardware
 services by number, and then the three other entries a program or a service
