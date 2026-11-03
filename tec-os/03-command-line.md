@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 1f9542d, with the starter card's `TED.COM` from Thorium
-04ec086, with the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`, and its
+Checked against TEC-OS 7458352, with the starter card's `TED.COM` from Thorium
+128edb7, with the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -351,8 +351,10 @@ A if the drive has lost its volume, and a reset returns it to drive A.
 ## User areas
 
 CP/M divides the files on a drive into 16 user areas, numbered 0 to 15, and
-every file belongs to one. A command, a program and `DIR` work only on the
-files of the current user area, on every drive. TEC-OS starts in user area 0,
+every file belongs to one. The built-in commands, and a program's files, are
+those of the current user area, on every drive. The one exception is the search
+for a program, which also looks in area 0, as the section on running a program
+describes. TEC-OS starts in user area 0,
 where the starter card's files all are, and `USER` and a number select another
 area. The prompt doesn't show the area, so the files of area 0 disappear from
 view after `USER 3`:
@@ -365,7 +367,8 @@ A>DIR B:
 MINE.COM    
 1 file, 8172K free
 A>MOUNT
-MOUNT?
+00 SYSTEM      G1M A:
+01 WORK        G8M B:
 
 A>USER 0
 A>DIR B:
@@ -373,8 +376,9 @@ NO FILE
 A>
 ```
 
-In area 3 the program `MOUNT` isn't found, since `MOUNT.COM` is in area 0, and
-back in area 0 `MINE.COM` is out of view. `COPY` works within one area, so it
+`DIR B:` in area 3 lists only `MINE.COM`, and back in area 0 `MINE.COM` is out
+of view. `MOUNT` still runs in area 3, because the search for a program goes on
+to area 0 when the current area has no `MOUNT.COM`. `COPY` works within one area, so it
 can't move a file from one area to another, but `tecvol put --user N`, from
 Chapter 4, puts a file from a PC into area `N`. A number outside 0 to 15, or
 `USER` with no number, fails with a question mark.
@@ -417,12 +421,15 @@ Chapter 10 describes how a service is made.
 ## Running a program
 
 A command that isn't a built-in names a program. The CCP searches the
-directory of the current drive, in the current user area, for the file
-`NAME.COM`, then loads the file at `0100h` and starts it. If the current drive
-has no `NAME.COM` and the command names no drive, the CCP searches drive A in
-the same user area and runs the program from there. The current drive stays as
-it was. A drive in front of the name runs the program from that drive, and the
-CCP searches no other:
+directory of the current drive for the file `NAME.COM`, first in the current
+user area and then, if that area isn't 0, in area 0. It then loads the file at
+`0100h` and starts it. A file in area 0 is found whether or not its system
+attribute is set, and the current user area stays as it was. If the current
+drive has neither, the command names no drive and the current drive isn't A,
+the CCP searches drive A in the same way and runs the program from there. The
+current drive stays as it was. A drive in front of the name runs the program
+from that drive, in the current user area or area 0, and the CCP searches no
+other:
 
 <!-- node tools/capture.mjs B: "A:MOUNT" MOUNT "STARTUP.CMD" -->
 ```text
