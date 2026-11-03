@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. The host model and the web page
 
-Checked against TEC-OS 1f9542d, with `@jhlagado/debug80-runtime` 0.3.3, the
+Checked against TEC-OS 7458352, with `@jhlagado/debug80-runtime` 0.3.3, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -71,8 +71,9 @@ with an error, the parameter-error bit of its first answer, and moves no data.
 TEC-OS's driver then fails the access with error 5, and the image is
 unchanged. A high-capacity card takes the block number as it is. With
 `highCapacity` false the model takes byte addresses, as a standard-capacity
-card does, and `test/sd-range.test.mjs` uses such a card for the ROM's rejection
-of a block 4 GiB or more into the card, which Chapter 18 describes.
+card does, and `test/sd-range.test.mjs` uses such a card for the ROM's refusal
+at mount of a volume that ends past block `800000h`, 4 GiB into the card, which
+Chapter 18 describes.
 
 The DS1302 is attached the same way, on port `FCh`, with the runtime's
 `rtcEnabled` turned off (`host/machine.mjs:72`, `host/machine.mjs:85`,
@@ -99,12 +100,12 @@ the program counter.
 
 On a board the first reaches the ROM chip. The second goes to RAM in the
 runtime but to the ROM in the TEC-1G's own documents (`docs/diagnostics.md`,
-T08). TEC-OS never makes either write, and 25 of the test files check that
+T08). TEC-OS never makes either write, and 26 of the test files check that
 `violations` is empty.
 
-A second watch covers EXPAND 1 (`host/machine.mjs:180-223`). From cold boot's
+A second watch covers EXPAND 1 (`host/machine.mjs:177-223`). From cold boot's
 clear of EXPAND 1 until the next cold boot, only the block cache may write
-`8000h–BCFFh`, and nothing may write the free page `BE00h–BEFFh` in that time.
+`8000h–BCFFh`, and nothing may write the free pages `BE00h–BFFFh` in that time.
 The machine takes the end of the clear from its `LDIR` in `MEMINIT`, and the
 cache's writers from their symbols: the cache's own routines, the SD card's
 block loops and the copy routine `MVCOPY` when the cache called it.
@@ -113,8 +114,9 @@ Any other write is recorded in the machine's `expand1Writes` and, for the first
 16, in `EXPAND1_WRITES`, shared by every machine in the process. The Node.js
 wrapper the tests use fails a test file if that list isn't empty at its end
 (`test/lib/machine.mjs:14-17`). The history's page at `BD00h` is left out of the
-watch, since `HSTORE` writes it, and so is the page at `BF00h`, though nothing
-writes it now (`host/machine.mjs:219`).
+watch, since `HSTORE` writes it (`host/machine.mjs:219`). In
+`test/expand.test.mjs:67-77` a program puts EXPAND 1 in view and writes
+`BF80h`, and the watch records that one write.
 
 ## Driving the machine
 
@@ -207,35 +209,33 @@ Node.js's own test runner (`package.json:17`). There are 45 such files, from
 `arith.test.mjs` to `write.test.mjs`, each on one part of TEC-OS. Most build
 their machines with `boot` in `test/lib/fixtures.mjs`, which reads the one ROM,
 `build/tecos/tecos.rom`, and, when the board has a matrix keyboard, puts a
-display driver and a startup file on the card. A test's profile name sets
-only the width of that driver. It then runs to the first prompt with the
-clock at the tests' starting time (`test/lib/fixtures.mjs:21-27`,
+display driver and a startup file on the card. The driver for the PICO9918 is
+80 columns wide unless the test asks for another width. It then runs to the
+first prompt with the clock at the tests' starting time (`test/lib/fixtures.mjs:21-27`,
 `test/lib/fixtures.mjs:105-113`, `test/lib/fixtures.mjs:116-123`).
 
 `test/lib/fixtures.mjs` also makes the files the tests load. `program` assembles
 a source in `test/programs/` with ATOM and keeps the result in
 `build/test-programs` (`test/lib/fixtures.mjs:41-56`), filed under a digest of
 the source and every file it includes, so that a changed include assembles again
-(`test/lib/fixtures.mjs:30-39`). `prl` makes a file in Digital Research's PRL
-format from two assemblies, which TEC-OS no longer loads, and `service` a `.SVC`
-file with `makeSvc` (`test/lib/fixtures.mjs:39`,
-`test/lib/fixtures.mjs:75-76`). `standardCard` is a new container with the
+(`test/lib/fixtures.mjs:30-39`). `service` makes a `.SVC` file with `makeSvc`
+(`test/lib/fixtures.mjs:75-76`). `standardCard` is a new container with the
 starter card's two volumes, `SYSTEM` on A and `WORK` on B, both empty
 (`test/lib/fixtures.mjs:57-64`), and `volume` opens a drive of it as a CP/M
 file system for a test to write files into.
 
 Two inputs the tests use come from outside the repository: the starter card's
 assembler, `TAS.COM`, and its editor, `TED.COM`. `test/inputs.json` records the
-default path, size and SHA-256 of each. It also has entries for ATOM's CP/M
-build, `ATOM.COM`, and a directory of the package `triptych-headless`, which no
-`.test.mjs` file reads. `test/lib/inputs.mjs` reads
-each from its environment variable or its default path beside the clone. A file
-whose SHA-256 differs fails its test, and a missing one skips it, or fails it
-with `STRICT=1`, which `npm run test:strict` sets (`test/lib/inputs.mjs:1-7`,
-`package.json:18`). The web page's tests, `test/web-touch.test.mjs` and
+default path, size and SHA-256 of each, and the repository, commit and path it
+comes from. `test/lib/inputs.mjs` reads each from its environment variable, its
+default path beside the clone or `.inputs/`, where `npm run inputs` fetches it
+from that repository at that commit. A file whose SHA-256 differs fails its
+test, and a missing one skips it, or fails it with `STRICT=1`, which
+`npm run test:strict` sets (`test/lib/inputs.mjs:1-7`, `package.json:18`,
+`package.json:22`). The web page's tests, `test/web-touch.test.mjs` and
 `test/web-store.test.mjs`, drive Chromium through `playwright`, which
 `package.json` pins at 1.62.1, and `npx playwright install chromium` fetches
-the browser that version expects (`package.json:27`, `README.md:36`).
+the browser that version expects (`package.json:28`, `README.md:36`).
 `test/deps.test.mjs` checks the pin and that the README gives the install.
 
 Every test is evidence from the model. In some behaviours the model differs from
@@ -275,14 +275,20 @@ The card is kept in the browser's IndexedDB, in the database `tecos`, the
 store `cards`, under the key `current` (`web/src/store.mjs:5-7`). Each write
 TEC-OS makes to the card marks it changed (`web/src/main.mjs:83-85`), and
 every 2 seconds a changed card is stored again (`web/src/main.mjs:97-101`). The
-timer clears the mark before it stores the card. When the browser's storage
-fails, `saveCard` writes a warning to the browser's console, the first of the
-session only, and passes the failure on (`web/src/store.mjs:18-22`,
-`web/src/store.mjs:41-58`). The page then marks the card changed again, so the
-next tick saves again, and the line under the heading "SD card" says `Card not
-saved in this browser`, with the reason, and that the card is kept in memory
-and saved again shortly. The words stay until a save succeeds
-(`web/src/main.mjs:103-134`, `web/src/main.mjs:508-513`). A reload before then
+timer clears the mark before it stores the card. Each save opens its own
+connection to the database and closes it when the save ends
+(`web/src/store.mjs:41-58`). One save runs at a time: a save asked for while
+another runs marks the card changed, and the next tick saves the newest copy
+(`web/src/main.mjs:109-114`). When the browser's storage fails, `saveCard`
+writes a warning to the browser's console, the first of the session only, and
+passes the failure on (`web/src/store.mjs:18-22`). The page then marks the card
+changed again, so the next tick saves again, and the line under the heading "SD
+card" says `Card not saved in this browser`, with the reason, and that the card
+is kept in memory and saved again shortly. After three failures in a row the
+line says instead that saving the card in this browser keeps failing, with the
+reason, and that the card is kept in memory only and "Download image" keeps a
+copy. The words stay until a save succeeds (`web/src/main.mjs:103-134`,
+`web/src/main.mjs:508-513`). A reload before then
 brings back the card last stored. "Download image" saves the card in memory
 whatever happened to the store.
 
