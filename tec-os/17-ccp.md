@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS ea9c1c0, with the ATOM assembler from the repository's
+Checked against TEC-OS 60cfbdc, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `EDIT.COM` from Edit
 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
@@ -21,7 +21,7 @@ program with its page zero, and the CCP's RAM and stack.
 ## The CCP in the ROM
 
 The CCP's code is `src/cpm/ccp.asm`. In the debug80 build (Chapter 12) it runs
-from `CCPBAS`, `D796h`, to `E0F4h`, 2,399 bytes, followed directly by the
+from `CCPBAS`, `D7B2h`, to `E110h`, 2,399 bytes, followed directly by the
 BDOS. Its messages and the names of its built-in commands are in the ROM's
 data block (`src/data3.asm:7-71`), except for `TYPE`, whose name sits in front
 of the `RET` at `C01Dh` (`src/data.asm:9-14`). What the CCP changes has to be
@@ -200,7 +200,7 @@ Each built-in is a routine in `ccp.asm` or, for the service commands, in
 | `USER` | `CMDUSER` | `src/cpm/ccp.asm:1164-1194` |
 | `CON` | `CMDCON` | `src/cpm/ccp.asm:1105-1162` |
 | `COPY` | `CMDCOPY` | `src/cpm/ccp.asm:965-1097` |
-| `UNLOAD` | `CMDUNL` | `src/cpm/ccp.asm:1099-1103`, `src/svc.asm:28-66` |
+| `UNLOAD` | `CMDUNL` | `src/cpm/ccp.asm:1099-1103`, `src/svc.asm:28-67` |
 | `SERVICES` | `CMDSVC` | `src/svc.asm:341-366` |
 
 `DIR` turns a missing name into eleven `?`, sets the DMA address to `LOADBUF`
@@ -304,9 +304,9 @@ closed (`src/cpm/ccp.asm:402-412`).
 
 The largest program is therefore the 256-byte pages from `0100h` up to the
 page that holds the BDOS entry. On the starter card, whose entry is at
-`B806h`, that is 46,848 bytes, six fewer than the TPA. With a service loaded
-the word at `0006h` is the service's jump, at offset 6 of the service's first
-page, and the limit is then that page.
+`B815h`, that is 46,848 bytes, 21 fewer than the TPA. With a service loaded
+the word at `0006h` is the start of the service's first page, and the limit is
+then that page.
 
 The examples from here on use a copy of the starter card with three files on
 drive B. Two are programs that are a `RET` and zeros, of 46,848 and 46,849
