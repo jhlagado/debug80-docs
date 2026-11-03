@@ -25,7 +25,7 @@ then covers the BDOS errors, the three functions whose meanings come from CP/M
 TEC-OS's BDOS comes from Portable CP/M, an implementation of the documented
 CP/M 2.2 interface that uses no Digital Research source
 (`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the
-debug80 build (Chapter 12) it runs from `E111h`, `BDOSBAS`, to `F055h`, 3,909
+debug80 build (Chapter 12) it runs from `E113h`, `BDOSBAS`, to `F057h`, 3,909
 bytes of the ROM. Its table of functions and its error messages are in the
 ROM's data block (`src/data3.asm:73-90`). None of it can be patched.
 

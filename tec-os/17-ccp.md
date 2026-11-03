@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 60cfbdc, with the ATOM assembler from the repository's
-`atom-z80` 0.3.7 and the starter card's `EDIT.COM` from Edit
-845d062, whose copy in `dist/files` has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
+Checked against TEC-OS 4d6eeaa, with the ATOM assembler from the repository's
+`atom-z80` 0.3.7 and the starter card's `TED.COM` from Thorium
+8fcc6ea, whose copy in `dist/files` has the SHA-256
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`.
 
 The CCP prints the prompt, reads a command line and carries it out, as Chapter
 3 describes from the keyboard's side. This chapter describes the CCP's code:
@@ -21,7 +21,7 @@ program with its page zero, and the CCP's RAM and stack.
 ## The CCP in the ROM
 
 The CCP's code is `src/cpm/ccp.asm`. In the debug80 build (Chapter 12) it runs
-from `CCPBAS`, `D7B2h`, to `E110h`, 2,399 bytes, followed directly by the
+from `CCPBAS`, `D7B4h`, to `E112h`, 2,399 bytes, followed directly by the
 BDOS. Its messages and the names of its built-in commands are in the ROM's
 data block (`src/data3.asm:7-71`), except for `TYPE`, whose name sits in front
 of the `RET` at `C01Dh` (`src/data.asm:9-14`). What the CCP changes has to be
@@ -150,7 +150,7 @@ file name with no wildcard (`src/cpm/ccp.asm:264-266`). The type selects what
 follows. A type of `SVC` installs a service through `SVCGO`
 (`src/cpm/ccp.asm:267-276`, `src/glcd.asm:68-93`), which Chapter 20 describes.
 Any other type, or none, is replaced by `COM` (`src/cpm/ccp.asm:277-282`), so
-`VOLS.TXT` runs `VOLS.COM`.
+`MOUNT.TXT` runs `MOUNT.COM`.
 
 A command that fails ends at `BADCMD`, which prints the word from `CMDSTRT` up
 to its first space with a question mark after it, then a new line
