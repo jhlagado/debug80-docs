@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 4d6eeaa, with the ATOM assembler from the repository's
+Checked against TEC-OS 60e0768, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from Thorium
-8fcc6ea, whose copy in `dist/files` has the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`.
+676075a, whose copy in `dist/files` has the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`.
 
 The CCP prints the prompt, reads a command line and carries it out, as Chapter
 3 describes from the keyboard's side. This chapter describes the CCP's code:
@@ -20,11 +20,11 @@ program with its page zero, and the CCP's RAM and stack.
 
 ## The CCP in the ROM
 
-The CCP's code is `src/cpm/ccp.asm`. In the debug80 build (Chapter 12) it runs
-from `CCPBAS`, `D7B4h`, to `E112h`, 2,399 bytes, followed directly by the
+The CCP's code is `src/cpm/ccp.asm`. In the ROM that Chapter 12 describes it
+runs from `CCPBAS`, `D791h`, to `E0EFh`, 2,399 bytes, followed directly by the
 BDOS. Its messages and the names of its built-in commands are in the ROM's
-data block (`src/data3.asm:7-71`), except for `TYPE`, whose name sits in front
-of the `RET` at `C01Dh` (`src/data.asm:7-9`). What the CCP changes has to be
+data block (`src/data3.asm:7-71`), except for `TYPE`, whose name is the
+block's first five bytes (`src/data.asm:6-9`). What the CCP changes has to be
 in RAM, so its variables, buffers and stack are there, from `CCPRAM`, `BCEBh`,
 to `BE76h` (`src/ram.asm:64-128`).
 
@@ -42,7 +42,7 @@ IOBYTE and the top of the TPA at `0007h`. It also sets the BDOS's flags
 `src/cpm/ccp.asm:159`, `src/cpm/ccp.asm:354`). It calls a few of TEC-OS's
 routines directly: startup's `STBOOT` and `STLINE`, the service loader and the
 service commands' routines `CMDSVC` and `SVCUNL`. The others are `GLCLD` for
-`CON UC1`, the PRL loader and the BDOS's division, `DIV16`
+`CON UC1` and the BDOS's division, `DIV16`
 (`src/cpm/ccp.asm:260-263`, `src/cpm/ccp.asm:1103`, `src/cpm/ccp.asm:1137`).
 
 ## The entry from boot
@@ -150,7 +150,9 @@ file name with no wildcard (`src/cpm/ccp.asm:264-266`). The type selects what
 follows. A type of `SVC` installs a service through `SVCGO`
 (`src/cpm/ccp.asm:267-276`, `src/glcd.asm:76-101`), which Chapter 20 describes.
 Any other type, or none, is replaced by `COM` (`src/cpm/ccp.asm:277-282`), so
-`MOUNT.TXT` runs `MOUNT.COM`.
+`MOUNT.TXT` runs `MOUNT.COM`. A command that names no drive runs a program
+from drive A when the current drive has no such file, as the section on
+loading below describes.
 
 A command that fails ends at `BADCMD`, which prints the word from `CMDSTRT` up
 to its first space with a question mark after it, then a new line
@@ -241,10 +243,10 @@ prints each byte through the pager up to the first `^Z`, `1Ah`, or the end of
 the file (`src/cpm/ccp.asm:806-849`). A file that is not there gives
 `NO FILE`.
 
-`ERA` with a name that is all `?`, as `*.*` gives, prints `ALL (Y/N)?`, reads
-the answer with function 1 and, unless that was a CR, reads on to one. The
-test follows an `AND DFh`, so a `-` counts as a CR here and the Return after it
-reaches the prompt. Any answer but `Y` or `y` erases nothing (`src/cpm/ccp.asm:866-892`). The erase itself is function 19,
+`ERA` with a name that is all `?`, as `*.*` gives, prints `ALL (Y/N)?` and
+reads the answer with function 1. A Return alone is no. After any other key the
+CCP reads on to a Return, and an answer but `Y` or `y` erases nothing
+(`src/cpm/ccp.asm:866-892`). The erase itself is function 19,
 and `NO FILE` when nothing matched (`src/cpm/ccp.asm:894-903`).
 
 `REN NEW=OLD` parses the new name into `RENFCB` and the old one into `CMDFCB`.
@@ -299,8 +301,8 @@ A file may end exactly at that page, so `LOADLIM` reads one more record, into
 is the end of the file the load is
 complete. Otherwise the file is too large, and the carry flag is set with the
 zero flag clear (`src/cpm/ccp.asm:388-402`). A file that fits leaves in
-`LOADTOP` the address after its last record, which the PRL loader uses, and is
-closed (`src/cpm/ccp.asm:404-414`).
+`LOADTOP` the address after its last record, which the service loader uses,
+and is closed (`src/cpm/ccp.asm:404-414`).
 
 The largest program is therefore the 256-byte pages from `0100h` up to the
 page that holds the BDOS entry. On the starter card, whose entry is at
@@ -338,15 +340,29 @@ BIG?
 B>
 ```
 
-`NOTDRIVE` calls `LOADCOM` for `NAME.COM` first (`src/cpm/ccp.asm:277-285`),
-and the zero flag separates the two failures. A file that is there but too
-large is a bad command at once. Only when there is no `NAME.COM` does the CCP
-change the type to `PRL` and call `LOADCOM` again. It then calls `PRLGO`,
-which checks the PRL's header against what was loaded and moves the code down
-from `0200h` to `0100h` (`src/cpm/ccp.asm:286-293`, `src/prl.asm:12-58`).
-Chapter 21 describes the PRL loader. A read error during a load is a
-`Bad Sector` from the BDOS, which ends the command by warm boot before
-`LOADCOM` returns.
+`NOTDRIVE` calls `LOADCOM` for `NAME.COM` on the drive the command names, or on
+the current drive (`src/cpm/ccp.asm:277-285`), and the zero flag separates the
+two failures. A file that is there but too large is a bad command at once.
+When there is no such file, the CCP looks on drive A, but only when the command
+names no drive and the current drive is not A. It sets the FCB's drive byte to
+1, for A, and calls `LOADCOM` again (`src/cpm/ccp.asm:286-295`). So from drive
+B a plain `MOUNT` runs `A:MOUNT.COM`, and `B:MOUNT` looks on B alone:
+
+<!-- node tools/capture.mjs B: MOUNT B:MOUNT -->
+```text
+A>B:
+B>MOUNT
+00 SYSTEM      G1M A:
+01 WORK        G8M B:
+
+B>B:MOUNT
+B:MOUNT?
+
+B>
+```
+
+A read error during a load is a `Bad Sector` from the BDOS, which ends the
+command by warm boot before `LOADCOM` returns.
 
 ## Page zero and the jump
 
@@ -470,7 +486,7 @@ clearing because each use parses them in full (`src/ram.asm:68-70`). From
 | `BE4Ch–BE58h` | 13 | `STKGUARD` | the stack guard, `A5h` in each byte |
 | `BE59h–BE76h` | 30 | `CSTKBAS` | the CCP's stack, up to `CSTKTOP` at `BE77h` |
 
-The addresses are those of the debug80 build. The guard is 43 bytes less the
+The addresses are those of the build at 60e0768. The guard is 43 bytes less the
 stack's 30 (`src/ram.asm:119-124`), and warm boot fills it with `A5h`
 (`src/boot.asm:263-267`), so a guard byte that is no longer `A5h` shows that
 the stack has run past its bottom. `test/stacks.test.mjs` checks the guard
