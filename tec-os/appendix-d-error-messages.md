@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix D. Error messages
 
-Checked against TEC-OS 60e0768.
+Checked against TEC-OS 1f9542d.
 
 This appendix lists every message TEC-OS prints, with its cause and its
 remedy, in the order a run can reach them: cold boot and the diagnostic
@@ -61,9 +61,10 @@ Codes `01h` to `04h` come from `SDINIT`, the start of the card
 | `03` | `CMD58`, which reads the card's capacity type, failed. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:172-199` |
 | `04` | `CMD16`, which sets a standard-capacity card's block length, failed. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:188-197` |
 
-Codes `05h` to `08h` are the SD card driver's codes for a block read or write:
-command rejected, no data token, write not accepted and card stayed busy
-(`src/sd.asm:14-17`). They never reach this prompt. The driver stores them in
+Codes `05h` to `09h` are the SD card driver's codes for a block read or write:
+command rejected, no data token, write not accepted, card stayed busy and a
+standard-capacity card's block 4 GiB or more into it, refused before any
+command (`src/sd.asm:14-18`). They never reach this prompt. The driver stores them in
 `SDERR`, which nothing reads. A failed read during the mount is code `20h`,
 and a failed read or write after it is a BDOS error or `Write lost`. The
 `MOUNT` program's own reads and writes give the messages in its table below.
@@ -172,6 +173,7 @@ function.
 | `Bdos Err On d: R/O` | A change to a volume the card marks read-only. `SAVE`, `ERA`, `REN` and `COPY` onto such a volume give it too. The card isn't changed. | Use a volume that takes writes. The volume's read-only flag is set when the card is built. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:1944-1949`, `src/cpm/bdos.asm:2366-2378`, `src/data3.asm:89` |
 | `Bdos Err On d: File R/O` | A delete, a rename or a sequential or random write reached a file with the read-only attribute. `ERA`, `REN`, `SAVE` and `COPY` onto such a file give it too. An `ERA` with a wildcard has already erased the matching files before it in the directory. | Clear the attribute with BDOS function 30, or on a PC `tecvol get` the file and `tecvol put` it without `--ro`. The CCP has no command for it. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:637-645`, `src/cpm/bdos.asm:763`, `src/cpm/bdos.asm:798-803`, `src/cpm/bdos.asm:982`, `src/data3.asm:90` |
 | `Bdos Err On d: Bad Sector` | A record or a directory record couldn't be read from the card or written to it. | Copy the card to a PC and run `tecvol verify`. Replace a card that keeps failing. | [Chapter 16](16-bdos.md#bdos-errors), `src/cpm/bdos.asm:955`, `src/cpm/bdos.asm:1266`, `src/cpm/bdos.asm:1836`, `src/cpm/bdos.asm:1871` |
+| `Bdos Err On d: Bad Sector` | The volume runs past the end of the card, or lies 4 GiB or more into a standard-capacity card, whose byte addresses can't reach that far. The card rejects a block past its end, and the driver refuses a block past 4 GiB before any command. No other block of the card changes. | Use a card that holds the whole container, or for a volume past 4 GiB a high-capacity card. Or build the card again with `tecvol create` so that every volume lies below both limits. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:207-236`, `src/sd.asm:264-266`, `src/sd.asm:447-449` |
 | `Bdos Err On d: Bad Sector` | A directory entry names an allocation block past the end of the volume: the directory is damaged. The drive logs in and the rest of the volume works, and reading that block gives this. | `ERA` takes the file. Run `tecvol verify` on a copy, as in [Chapter 4](04-cards-and-volumes.md#recovery-after-a-power-cut). | [Chapter 16](16-bdos.md#files-extents-and-records), `src/cpm/bdos.asm:1285`, `src/cpm/bdos.asm:2272-2279`, `src/cpm/bdos.asm:2407-2411` |
 
 ## `Write lost`
