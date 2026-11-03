@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from
+Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from
 Edit 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`; the
 timings below were measured on that card.
@@ -38,12 +38,16 @@ latch (`src/boot.asm:9-12`). Bit 0 high turns the overlay off, so `0000h–07FFh
 is RAM again, and the latch now has MAIN 0 and EXPAND 0 in view
 (`src/layout.asm:16`, `src/layout.asm:19`).
 
-Interrupts come on only if a program enables them. The Z80 comes out of reset
+Interrupts come on only if a program or a service enables them, and nothing in
+the ROM does. The Z80 comes out of reset
 with interrupts off, and the ROM executes `EI` only to restore a state it saved:
 the routines that must run with interrupts off put them back as they were at
-entry (`src/cache.asm:39`, `src/history.asm:39`, `src/xmove.asm:136`). The one
+entry (`src/cache.asm:39`, `src/console.asm:211`, `src/console.asm:247`,
+`src/history.asm:39`, `src/xmove.asm:136`). `VPAIR`, the routine in `PICO.SVC`
+that writes each pair to the VDP's control port, does the same
+(`drivers/pico.asm:225-237`). The one
 other `EI` is in page zero. `PZINIT` writes it at `0038h`
-(`src/boot.asm:232-235`). It runs on an interrupt, which needs interrupts on
+(`src/boot.asm:268-273`). It runs on an interrupt, which needs interrupts on
 already, and on a program's `RST 38h`, which turns them on. Chapter 19
 describes what interrupts cost a program that enables them.
 
@@ -93,13 +97,13 @@ The diagnostic prompt's `R` jumps back to `COLDRT`, step 7 (`src/diag.asm:22-23`
 `src/boot.asm:32-34`), so a retry clears the LCD, starts the card again and
 mounts it, without clearing the memory or printing the banner a second time.
 
-On the starter card with the serial board, cold boot takes 1,279,382 T-states,
+On the starter card with the serial board, cold boot takes 1,284,328 T-states,
 about 0.32 seconds, from the first instruction to the CCP's entry, measured on
 the host model. Three steps take most of it. The banner is 25 characters at
-9,372 T-states each through `CONOUT`, the read of the container's block 0 takes
+9,448 T-states each through `CONOUT`, the read of the container's block 0 takes
 219,137 T-states and `MEMINIT` takes about 347,000, most of it the clearing of
 EXPAND 1. The startup file's commands then run before the first prompt, so the
-CCP's first call of `CONIN` at that prompt comes 8,911,370 T-states after reset.
+CCP's first call of `CONIN` at that prompt comes 8,934,115 T-states after reset.
 
 ## The two RAM checks
 
@@ -167,11 +171,10 @@ reads. The RAM passes when all of these hold:
 
 - `0000h` holds a `JP` to `BF03h`, the RAM BIOS table's warm boot entry.
 - `0005h` holds a `JP`.
-- The word in `STUBAD`, the address where cold boot put the BDOS entry jump,
-  is an address of the form `xx06h`, and the three bytes there are
-  `JP BENTRY`, the BDOS entry of this ROM.
-- The word at `0006h` is of the form `xx06h`, at least `8000h`, and no
-  higher than `STUBAD`'s page.
+- The word in `STUBAD` is the address where cold boot put the BDOS entry jump,
+  and the three bytes there are `JP BENTRY`, the BDOS entry of this ROM.
+- The word at `0006h` is that address, or a page's start at least `8000h` and
+  no higher than `STUBAD`'s page.
 
 The last condition allows for services, which lower the word at `0006h`. The
 word is not compared with `PZTOP`, so that a reset pressed to recover from a
@@ -246,14 +249,19 @@ A program is free to write over page zero, so `PZINIT` writes page zero's fixed
 parts at every warm boot as well as at the end of cold boot
 (`src/boot.asm:216-274`).
 It puts `JP BF03h` at `0000h`, a `JP` at `0005h` to `PZTOP` and `JP BENTRY` at
-the address in `STUBAD`. It writes `EI` and `RETI` at `0038h`, where interrupt
-mode 1 and `RST 38h` go, and it rewrites the restart vectors at `0008h–0037h`.
+the address in `STUBAD`. It then runs on into `PZSWP`, which rewrites the restart
+vectors at `0008h–003Fh`.
 
 The vectors are rewritten so that a vector a program pointed into the TPA does
-not outlive the program. A vector that jumps into the ROM keeps its jump and has
-the rest of its eight bytes zeroed. Any other becomes seven zeros and a `RET`,
-so that an `RST` through it returns at once with the interrupt state unchanged
-(`src/boot.asm:236-274`). The IOBYTE at `0003h` and the drive and user byte at
+not outlive the program, and a vector into a service lasts as long as the
+service. A vector holding a `JP` whose target's page is at or above `PZTOP`'s page
+keeps its jump and has the rest of its eight bytes zeroed, which keeps a jump
+into a service, the workspace or the ROM. Any other becomes seven zeros and a
+`RET`, so that an `RST` through it returns at once with the interrupt state
+unchanged (`src/boot.asm:240-264`). `0038h`, where interrupt mode 1 and `RST 38h`
+go, then gets `EI` and `RETI` unless it kept a jump (`src/boot.asm:265-274`).
+Chapter 20 describes how a service claims a vector, and the unload and the failed
+`INIT` that also run this sweep. The IOBYTE at `0003h` and the drive and user byte at
 `0004h` are left as they are. Chapter 13 lists page zero in full.
 
 ## Warm boot
@@ -343,7 +351,7 @@ and before the console (`src/cpm/ccp.asm:80-84`).
 
 ## The cost of a warm boot
 
-On the starter card with the serial board, warm boot takes 31,712 T-states,
+On the starter card with the serial board, warm boot takes 32,024 T-states,
 about 8 milliseconds, from the first instruction of `WBOOTR` to the CCP's label
 `STARTED`, where it starts printing the prompt. The figure was measured on the
 host model with nothing changed since the last warm boot, and in that case warm
@@ -351,13 +359,13 @@ boot reads no block. Of it, `CPMINIT` takes 7,427 T-states, the cache's flush in
 `CWBOOT`, with no line to write, takes 8,002 and the CCP's entry with its disk
 reset 14,085.
 
-A warm boot after `SAVE 8 X.COM` on drive A takes 123,155 T-states on the same
-measure. The extra 91,000 or so are the rebuild of A's vector from its directory
+A warm boot after `SAVE 8 X.COM` on drive A takes 123,795 T-states on the same
+measure. The extra 92,000 or so are the rebuild of A's vector from its directory
 up to the last entry in use, and the directory is read from the block cache with
 no card access. For comparison, a disk reset of the kind a program makes drops
-drive A and scans its whole directory again, which takes 1,039,042 T-states on
+drive A and scans its whole directory again, which takes 1,044,290 T-states on
 the starter card even with the directory in the cache. The first scan of drive
 B's 512 entries, with the card read for each of its 32 directory blocks, takes
-9,163,606. The test `test/warmboot.test.mjs` checks the unchanged case on its
+9,174,102. The test `test/warmboot.test.mjs` checks the unchanged case on its
 own card: a warm boot that reads no block and takes at most 386,604 T-states
 (`test/warmboot.test.mjs:11-17`).
