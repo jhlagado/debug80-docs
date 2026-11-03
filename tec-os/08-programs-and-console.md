@@ -7,10 +7,10 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 8. Programs and the console
 
-Checked against TEC-OS 60cfbdc, with the ATOM assembler from the
-repository's `atom-z80` 0.3.7. The starter card's `EDIT.COM` is from Edit
-845d062, and its copy in `dist/files` has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
+Checked against TEC-OS 4d6eeaa, with the ATOM assembler from the
+repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
+8fcc6ea, and its copy in `dist/files` has the SHA-256
+`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`.
 
 Chapter 2 described the console as you use it at the prompt. This chapter
 describes it as a program uses it, starting with the BDOS's console functions
@@ -137,15 +137,18 @@ STACK:
 The program writes each entry's address into a `JP` of its own, at `CONIN` and
 `CONOUT`, so that a `CALL` to the label reaches the BIOS. Its stack holds no
 return word, so it ends with `JP $0000`, as Chapter 6 describes. These
-commands assemble it and `size.asm`, from the section on the console's size,
-and copy both to drive B of a copy of the starter card:
+commands assemble it, `size.asm` from the section on the console's size and
+the repository's `TERM` from the next section, and copy all three to drive B
+of a copy of the starter card:
 
 ```sh
 cp dist/starter.img con.img
 npx atom size.asm size.com
 npx atom key.asm key.com
+npx atom test/programs/term.asm term.com
 node tools/tecvol.mjs put con.img B size.com
 node tools/tecvol.mjs put con.img B key.com
+node tools/tecvol.mjs put con.img B term.com
 ```
 
 Here `a`, `Z`, `^C`, Esc and Return were typed at the serial terminal:
@@ -226,14 +229,15 @@ TEC-OS reads any other sequence to its final letter and ignores it, and an
 `ESC` followed by anything but `[` ends there. A program written for a larger
 terminal therefore leaves no stray characters on the screen.
 
-The starter card's `TERM` uses several of these. It clears the screen, writes
-`ABCDEFG` at the top left, moves to row 1, column 3 and clears to the end of
-the line, which leaves `AB`. It then writes `X` at row 5, column 10 and a
-reverse `R` after it. Its source is `test/programs/term.asm`. On the PICO9918
-the screen shows this after it ends. The screen text that `capture.mjs` prints
-leaves out reverse video, so the `R` appears as an ordinary letter:
+`TERM` uses several of these. It clears the screen, writes `ABCDEFG` at the
+top left, moves to row 1, column 3 and clears to the end of the line, which
+leaves `AB`. It then writes `X` at row 5, column 10 and a reverse `R` after
+it. It isn't on the starter card. Its source is `test/programs/term.asm`, and
+the commands under "The BIOS's console calls" assemble it on the PC and put it
+on drive B of `con.img`. On the PICO9918 the screen shows this after it ends.
+The screen text that `capture.mjs` prints leaves out reverse video, so the `R` appears as an ordinary letter:
 
-<!-- node tools/capture.mjs --board pico --screen --card con.img TERM -->
+<!-- node tools/capture.mjs --board pico --screen --card con.img B:TERM -->
 ```text
 AB
 
@@ -244,7 +248,7 @@ AB
 A>
 ```
 
-With anything after its name, as in `TERM S`, `TERM` goes on to print 30
+With anything after its name, as in `B:TERM S`, `TERM` goes on to print 30
 numbered lines, `L00` to `L29`, which scroll the screen.
 
 ## The cursor
