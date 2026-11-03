@@ -137,8 +137,8 @@ heading "SD card". It saves again two seconds later, and again after
 that until one succeeds. A reload before a save succeeds brings back the card as
 it was last saved, so "Download image" is the way to keep a copy you can't afford
 to lose. After three failures in a row the message says that saving keeps failing
-and that the card is kept in memory only. One save runs at a time, and a change
-made during a save is saved at the next try. These are its controls:
+and that the card is kept in memory only. The timed saves run one at a time, and a
+change made during one is saved at the next try. These are its controls:
 
 - "Display" selects a board with a PICO9918 or one with only the graphics LCD.
 - "ROM" selects the PICO9918's width: 80, 40 or 32 columns.

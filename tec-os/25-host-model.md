@@ -72,7 +72,7 @@ TEC-OS's driver then fails the access with error 5, and the image is
 unchanged. A high-capacity card takes the block number as it is. With
 `highCapacity` false the model takes byte addresses, as a standard-capacity
 card does, and `test/sd-range.test.mjs` uses such a card for the ROM's refusal
-at mount of a volume that ends past block `800000h`, 4 GiB into the card, which
+at mount of a volume that runs past block `7FFFFFh`, the last below 4 GiB, which
 Chapter 18 describes.
 
 The DS1302 is attached the same way, on port `FCh`, with the runtime's
@@ -277,9 +277,10 @@ TEC-OS makes to the card marks it changed (`web/src/main.mjs:83-85`), and
 every 2 seconds a changed card is stored again (`web/src/main.mjs:97-101`). The
 timer clears the mark before it stores the card. Each save opens its own
 connection to the database and closes it when the save ends
-(`web/src/store.mjs:41-58`). One save runs at a time: a save asked for while
-another runs marks the card changed, and the next tick saves the newest copy
-(`web/src/main.mjs:109-114`). When the browser's storage fails, `saveCard`
+(`web/src/store.mjs:41-58`). One save by the timer or by a new card runs at a time: such a save asked for
+while another runs marks the card changed, and the next tick saves the newest copy
+(`web/src/main.mjs:109-114`). Copying files onto the card stores it by
+`saveCard` directly (`web/src/main.mjs:600`), outside that guard. When the browser's storage fails, `saveCard`
 writes a warning to the browser's console, the first of the session only, and
 passes the failure on (`web/src/store.mjs:18-22`). The page then marks the card
 changed again, so the next tick saves again, and the line under the heading "SD

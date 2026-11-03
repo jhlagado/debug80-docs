@@ -142,7 +142,7 @@ it as it goes (`src/vol.asm:136-259`):
 | --- | --- |
 | `26h` | the volume id is not 0; no flag but read-only is set; the geometry is known; the length is that geometry's payload exactly; the start block is not 0 and a multiple of 8 |
 | `28h` | the start is at or after the previous volume's end |
-| `27h` | start plus length has no carry out of 32 bits and ends within the container, and on a standard-capacity card at or before block `800000h` |
+| `27h` | start plus length has no carry out of 32 bits and ends within the container, and on a standard-capacity card with its last block at or below `7FFFFFh` |
 | `29h` | the drive byte is `FFh` or 0 to 3, below a 1.1 header's drives field when that field is not 0, and not a drive already taken |
 | `2Ah` | after the last descriptor, drive A has a volume |
 
@@ -159,12 +159,12 @@ A volume that runs past the end of the card is mounted, and the card rejects
 an access that reaches a block beyond its end. The driver returns error 5, and
 the BDOS reports `Bad Sector` for that drive while the rest of the card works.
 On a standard-capacity card the walk also refuses, with error `27h`, a volume
-that ends past block `800000h`, whether it starts beyond that block or
+that runs past block `7FFFFFh`, whether it starts beyond that block or
 straddles it, since `LBAARG` can't name its blocks (`src/vol.asm:216-231`).
 `test/sd-range.test.mjs` places drive B's volume of a standard-capacity card at
 block `800800h` and then at `7FF000h`. Both times cold boot stops at the
 diagnostic prompt with error 27 and no byte of the card changes. A volume
-ending at `800000h` itself mounts, and so does the straddling volume on a
+whose last block is `7FFFFFh` mounts, and so does the straddling volume on a
 high-capacity card (`test/sd-range.test.mjs:36-45`).
 
 The host model's card fails an access past the end of its image in the same way
