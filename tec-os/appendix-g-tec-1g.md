@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix G. The TEC-1G as TEC-OS uses it
 
-Checked against TEC-OS 60cfbdc.
+Checked against TEC-OS 4d6eeaa.
 
 This appendix lists the parts of the TEC-1G that TEC-OS reads and writes: its
 ports, the bits of the system latch, the configuration switches, the RAM in
@@ -30,7 +30,7 @@ in the files that drive them.
 | `03h` | in | System input | Bit 0 the Matrix switch, bit 6 a keypad key down, bit 7 the serial line's input |
 | `04h` | in, out | 20 × 4 LCD, instructions and status | The busy flag, the LCD's setup and its rows |
 | `84h` | out | 20 × 4 LCD, data | The same |
-| `05h`, `06h`, `F8h`, `F9h` | out | 8 × 8 LEDs | No hardware service; `DEMO` writes them |
+| `05h`, `06h`, `F8h`, `F9h` | out | 8 × 8 LEDs | No hardware service; Chapter 9's `DEMO` writes them |
 | `07h`, `87h` | in, out | Graphics LCD, ST7920 | `GLCD.SVC` only |
 | `BEh`, `BFh` | in, out | PICO9918, data and control | The probe at cold boot; the console and hardware service `VIDEO`'s restore, both in `PICO.SVC` |
 | `FCh` | in, out | DS1302 clock | Hardware services `INFO` and `RTC` |
@@ -139,8 +139,8 @@ off. A press with the jumper fitted is a crash.
 ## The 8 × 8 LEDs
 
 No hardware service drives the 8 × 8 LEDs, and the ROM never writes their ports.
-`DEMO` on the starter card writes them itself, as the Debug80 runtime decodes
-them: port `05h` selects a row, and `06h`, `F8h` and `F9h` light its red,
+`DEMO`, a program Chapter 9 describes that isn't on the starter card, writes
+them itself, as the Debug80 runtime decodes them: port `05h` selects a row, and `06h`, `F8h` and `F9h` light its red,
 green and blue columns (`test/programs/demo.asm:14-17`,
 `test/programs/demo.asm:273-286`). The TEC-1G port list makes `05h` and `06h`
 the X and Y axes of a single-colour matrix, so `DEMO`'s pattern may look
