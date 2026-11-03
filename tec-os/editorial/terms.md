@@ -115,6 +115,7 @@ Chapter 7 stay as they are.
 | hardware service | | A numbered call in the ROM, through `ABIHW` | Chapter 1 by name, in full 9, 20 and B | a service, which is loaded from the card |
 | ROM table | | The ROM's table at `C003h` | Chapter 1 by name, in full 9 | RAM BIOS table, the copy at `BF00h` |
 | mount entry | | The ROM table's jump `ABIVOL` at `C00Fh`, which goes to `VOLSVC` | Chapter 18 | `MOUNT`, the program and the ROM routine |
+| stub | | The BDOS entry jump directly below the allocation vectors, at `STUBAD`, which `(0006h)` addresses when no service is in | Chapter 20 | a service's entry at `xx00h`, which `(0006h)` addresses when a service is in |
 
 ## The model and the page
 

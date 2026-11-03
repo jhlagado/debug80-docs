@@ -343,5 +343,5 @@ A>
 
 A card of format 1.1 with a drives field of 4 gives each of A to D a 256-byte
 slot at cold boot, so on such a card `MOUNT C:` with a volume that is on no
-other drive succeeds. The slots cost TPA: with four of them the TPA is 46,086
-bytes, 768 fewer than the starter card gives.
+other drive succeeds. The slots cost TPA: with four of them the TPA is 46,165
+bytes, 704 fewer than the starter card gives.

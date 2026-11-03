@@ -46,8 +46,8 @@ entry (`src/cache.asm:39`, `src/console.asm:211`, `src/console.asm:247`,
 `src/history.asm:39`, `src/xmove.asm:136`). `VPAIR`, the routine in `PICO.SVC`
 that writes each pair to the VDP's control port, does the same
 (`drivers/pico.asm:225-237`). The one
-other `EI` is in page zero. `PZINIT` writes it at `0038h`
-(`src/boot.asm:268-273`). It runs on an interrupt, which needs interrupts on
+other `EI` is in page zero. Each boot writes it at `0038h` unless a jump is kept
+there (`src/boot.asm:265-274`). It runs on an interrupt, which needs interrupts on
 already, and on a program's `RST 38h`, which turns them on. Chapter 19
 describes what interrupts cost a program that enables them.
 

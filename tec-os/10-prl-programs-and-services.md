@@ -287,7 +287,8 @@ B>
 
 The file is 100 bytes of header and image and 11 of relocation data. It takes
 a whole page, so `SERVICES` shows 1 page. The TPA falls by 277 bytes, that page
-and the 21 bytes from `B800h` to `B814h`, and `UNLOAD` gives them back. The count rose by 18h, 24, between the two
+and the 21 bytes from `B800h` to `B814h`, and `UNLOAD` gives them back.
+The count rose by 18h, 24, between the two
 `CHARS` commands, the characters the console printed in between, because the
 hook stayed through each program's warm boot.
 
