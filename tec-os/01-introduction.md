@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
 845d062 and its `TAS.COM` from Thorium dbee66a. That Edit build's SHA-256 is
 `2c9e7d0ec588019b9184ca89543e5a644fafda864bb940445375edb50bbb0fe6`, the card's
 copy, with its ABI byte set to 4 by `npm run media`, is
@@ -36,7 +36,7 @@ games and BASIC interpreters. TEC-OS implements the interface as CP/M 2.2
 defined it, so a CP/M 2.2 program runs on the TEC-1G unchanged if it uses only
 the documented interface, sizes its memory from the word at `0006h` and fits
 in the memory left for programs. The starter card, the card image built with
-TEC-OS, leaves 46,854 bytes.
+TEC-OS, leaves 46,869 bytes.
 
 A CP/M system has three parts. The BDOS provides the functions at `0005h`, and
 the CCP, the Console Command Processor, prints the prompt, reads a command and
@@ -330,9 +330,10 @@ A display driver takes 1,536 bytes of memory below the BDOS, which leaves less
 for programs. CP/M calls the memory a program may use the TPA, the Transient
 Program Area. It starts at `0100h` and ends below the address in the word at
 `0006h`, which is the BDOS's entry or, with a service installed, the lowest
-service's jump to it. On the starter card with no service the word is `B806h`,
-and programs have 46,854 bytes. With `PICO.SVC` installed it is `B206h`, and
-programs have 45,318. Chapter 7 explains a program's memory.
+service's jump to it. On the starter card with no service the word is `B815h`,
+and programs have 46,869 bytes. With `PICO.SVC` installed it is `B200h`, and
+programs have 45,312: the driver's pages end at `B7FFh`, so the 21 bytes from
+`B800h` to `B814h` go too. Chapter 7 explains a program's memory.
 
 A board with a PICO9918 and the matrix keyboard has a dark screen if no display
 driver was installed by the time of the first prompt, and the 20 × 4 LCD's last
