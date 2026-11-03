@@ -2438,8 +2438,8 @@ export const sidebars = {
           "link": "/tec-os/09-hardware-services.html"
         },
         {
-          "text": "PRL programs and services",
-          "link": "/tec-os/10-prl-programs-and-services.html"
+          "text": "Writing services",
+          "link": "/tec-os/10-writing-services.html"
         },
         {
           "text": "Chaining commands",

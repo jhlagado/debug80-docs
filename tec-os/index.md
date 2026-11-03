@@ -110,7 +110,7 @@ caret, so `^C` means Ctrl and C together.
    for the board's own devices. The chapter starts with the ROM table and the
    check for TEC-OS. It then covers the nine hardware services, numbered 0 to
    8, most with a program of their own, and `DEMO`, which uses them together.
-10. **[Writing services](10-prl-programs-and-services.md).** A `.SVC` file
+10. **[Writing services](10-writing-services.md).** A `.SVC` file
     holds a service, code that stays in memory after its command ends. You
     write a service that counts the console's characters, install it and
     measure what it costs. You then publish the count for a program to find.
