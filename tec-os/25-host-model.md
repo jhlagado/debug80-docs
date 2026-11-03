@@ -227,8 +227,8 @@ file system for a test to write files into.
 Two inputs the tests use come from outside the repository: the starter card's
 assembler, `TAS.COM`, and its editor, `TED.COM`. `test/inputs.json` records the
 default path, size and SHA-256 of each, and the repository, commit and path it
-comes from. `test/lib/inputs.mjs` reads each from its environment variable, or
-else from its default path beside the clone, or else from `.inputs/`, where
+comes from. `test/lib/inputs.mjs` reads each from its environment variable when that is set,
+and otherwise from its default path beside the clone, or else from `.inputs/`, where
 `npm run inputs` fetches it from that repository at that commit
 (`tools/lib/pins.mjs:12-23`). The README's setup runs `npm run inputs` once on a
 fresh clone, after `npm ci` and the browser's install (`README.md:34-41`). A file whose SHA-256 differs fails its
@@ -286,9 +286,10 @@ connection to the database and closes it when the save ends
 while another runs marks the card changed, and the next tick saves the newest copy
 (`web/src/main.mjs:124-130`). Copying files onto the card waits for any save
 under way and then stores the card under the same guard, so an older card's
-save can't finish after it (`web/src/main.mjs:160-172`). On the starter card
-that runs after a stored record couldn't be read, no save stores anything, the
-timer's and a copy's included, so a copy reaches only the card in memory, and
+save can't finish after it (`web/src/main.mjs:160-172`). After a stored record
+couldn't be read, no save stores anything until a reload, the timer's, a copy's
+and a new or opened card's included, so a change reaches only the card in
+memory (`web/src/main.mjs:599-609`), and
 the line under the heading "SD card" says
 `The saved card couldn't be read, so this card isn't saved; reload to try
 again.` until a reload reads the record (`web/src/main.mjs:125`,

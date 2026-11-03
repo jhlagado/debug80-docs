@@ -110,7 +110,7 @@ card is `dist/starter.img`, an image of a whole SD card.
 The starter card holds `TAS.COM`, an assembler, and `TED.COM`, an editor, both
 programs that run on TEC-OS and are built outside the repository.
 `npm run media` reads them from the paths in the environment variables
-`TAS_COM` and `TED_COM`, or else from `../thorium/dist/TAS.COM` and
+`TAS_COM` and `TED_COM` when they are set, and otherwise from `../thorium/dist/TAS.COM` and
 `../thorium/dist/TED.COM`, beside the clone, or else from `.inputs/`. On a
 fresh clone with neither, `npm run inputs` fetches each file into `.inputs/`
 from its repository at the commit `test/inputs.json` pins. The command stops if either file
@@ -141,8 +141,9 @@ it was last saved, so "Download image" is the way to keep a copy you can't affor
 to lose. After three failures in a row the message says that saving keeps failing
 and that the card is kept in memory only. The timed saves run one at a time, and a
 change made during one is saved at the next try. When the card the page stored
-can't be read, the page leaves it as it is and runs a starter card that it
-doesn't save, and the line under "SD card" says `The saved card couldn't be
+can't be read, or the browser's storage can't be opened, the page leaves the
+stored card as it is and runs a starter card. Until a reload it saves no card,
+a new or opened one included, and the line under "SD card" says `The saved card couldn't be
 read, so this card isn't saved; reload to try again.` These are its controls:
 
 - "Display" selects a board with a PICO9918 or one with only the graphics LCD.
