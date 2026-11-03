@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 7935507, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 626ee41, with the starter card's `TED.COM` from Thorium
 128edb7 and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and
 `TAS.COM`'s is
@@ -111,7 +111,9 @@ The starter card holds `TAS.COM`, an assembler, and `TED.COM`, an editor, both
 programs that run on TEC-OS and are built outside the repository.
 `npm run media` reads them from the paths in the environment variables
 `TAS_COM` and `TED_COM`, or else from `../thorium/dist/TAS.COM` and
-`../thorium/dist/TED.COM`, beside the clone. The command stops if either file
+`../thorium/dist/TED.COM`, beside the clone, or else from `.inputs/`. On a
+fresh clone with neither, `npm run inputs` fetches each file into `.inputs/`
+from its repository at the commit `test/inputs.json` pins. The command stops if either file
 isn't there or if its SHA-256 differs from the one in `test/inputs.json`.
 
 ## Running TEC-OS in a web page
@@ -138,7 +140,10 @@ that until one succeeds. A reload before a save succeeds brings back the card as
 it was last saved, so "Download image" is the way to keep a copy you can't afford
 to lose. After three failures in a row the message says that saving keeps failing
 and that the card is kept in memory only. The timed saves run one at a time, and a
-change made during one is saved at the next try. These are its controls:
+change made during one is saved at the next try. When the card the page stored
+can't be read, the page leaves it as it is and runs a starter card that it
+doesn't save, and the line under "SD card" says `The saved card couldn't be
+read, so this card isn't saved; reload to try again.` These are its controls:
 
 - "Display" selects a board with a PICO9918 or one with only the graphics LCD.
 - "ROM" selects the PICO9918's width: 80, 40 or 32 columns.
@@ -158,10 +163,13 @@ change made during one is saved at the next try. These are its controls:
   as it was.
 
 When you change the display or the width, the page turns the board off and on.
+The page makes one change to the card at a time, so a width chosen while files
+are being copied to the card is the one the card keeps.
 At each power-on with the PICO9918 chosen, the page writes the driver built for
 the chosen width to drive A as `PICO.SVC` when the card has no `PICO.SVC`, has
 one of the page's own builds at another width or has one of an older format.
-Any other `PICO.SVC` is one the card's owner built, and the page keeps it and
+Any other `PICO.SVC`, one that differs from each of the page's builds anywhere
+in the file, is one the card's owner built, and the page keeps it and
 says so in brackets in the serial terminal. The page also makes the chosen
 display's driver the only display line in the card's startup file, as its first
 line. It reads only the files on drive A that TEC-OS loads at boot, those of
