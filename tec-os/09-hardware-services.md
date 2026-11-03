@@ -45,10 +45,10 @@ Chapter 8 used the table to read the console's size.
 `ABIEND`, `C00Bh`, is the first address after the table's 8 bytes. The
 version is the table's ABI, its application binary interface, here 5.0. The
 jump at `ABICALL` leads to 15 services, numbered from 0 to 14. Numbers 0 to 8
-are the hardware services this chapter describes. `MOUNT` uses 9 to 11, which mount, unmount and describe
-volumes, and a display driver hands the ROM its table through 12. Chapter 10
-describes 13 and 14, the registry of services, and Appendix B lists every
-number.
+are the hardware services this chapter describes. `MOUNT` uses 9 to 11, which
+mount, unmount and describe volumes, and a display driver hands the ROM its
+table through 12. Chapter 10 describes 13 and 14, the registry of services,
+and Appendix B lists every number.
 
 The names of the table's addresses, the service numbers and the status codes
 are in `abi.inc`. The ROM is assembled from that file, and a build publishes
