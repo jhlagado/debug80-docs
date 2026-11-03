@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix A. BDOS functions
 
-Checked against TEC-OS 1f9542d.
+Checked against TEC-OS 7458352.
 
 This appendix lists the BDOS functions of TEC-OS in number order: 0 to 40,
 then 47 and 108, whose meanings come from CP/M 3. Each entry gives the
@@ -39,8 +39,8 @@ return (`src/cpm/bdos.asm:2384-2435`). The errors are:
 - `Bdos Err On d: Select`, for a drive with no volume, a drive past D or a `?`
   drive byte outside function 17.
 - `Bdos Err On d: R/O`, for a change to a drive that function 28 has made
-  read-only or to a volume the card marks read-only, by function 16, 19, 21,
-  22, 23, 30, 34 or 40
+  read-only or to a volume the card marks read-only, by function 19, 21, 22,
+  23, 30, 34 or 40
   (`src/cpm/bdos.asm:2368-2382`).
 - `Bdos Err On d: File R/O`, for function 19 or 23 on a directory entry whose
   read-only attribute is set, and for function 21, 34 or 40 through an FCB
@@ -138,9 +138,8 @@ earlier extent than its entry's writes back only the allocation map
 (`src/cpm/bdos.asm:566-568`, `src/cpm/bdos.asm:590-597`). Returns the
 directory code, or `FFh` if the entry is not found. If nothing has been
 written through the FCB since its open, the call writes nothing and returns 0.
-Any other FCB on a read-only drive is the `R/O` error before the directory is
-searched, so an FCB that was never opened is one too
-(`src/cpm/bdos.asm:558-571`).
+On a read-only drive it writes nothing and returns 0 for any FCB, one that was
+never opened too, as CP/M 2.2's close does (`src/cpm/bdos.asm:558-573`).
 
 **17 Search for first.** Searches for the first entry that matches the FCB,
 with `?` matching any character, and copies the directory record that holds it
