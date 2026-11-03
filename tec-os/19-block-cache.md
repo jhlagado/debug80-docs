@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 1f9542d, with the ATOM assembler from the repository's
+Checked against TEC-OS 7458352, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from
-Thorium 04ec086, whose copy in `dist/files` has the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`. The
+Thorium 128edb7, whose copy in `dist/files` has the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. The
 timings and traces below were made on that card unless the text names another.
 
 Reading a block from the SD card takes TEC-OS about 55 milliseconds, because
@@ -153,8 +153,8 @@ node tools/tecvol.mjs put time.img A data.bin
 `Machine` as `tools/capture.mjs` does. It reads the model's T-state count,
 `cycles` (`host/machine.mjs:262`), twice: when `READ DATA.BIN` has been typed
 and echoed, before the Return that ends it, and at the next prompt. After a
-cold boot, the command's first run took 6,633,572 T-states, 1.66 seconds, and
-its second 1,335,075, 0.33 seconds, a fifth of that. Both figures include
+cold boot, the command's first run took 6,633,600 T-states, 1.66 seconds, and
+its second 1,335,103, 0.33 seconds, a fifth of that. Both figures include
 loading the program from drive A.
 
 The gain needs the whole file in the cache. A file of 15,360 bytes took about
@@ -231,8 +231,8 @@ writes three of the first 32 data blocks early, because all 30 lines are dirty
 before the BDOS next writes the directory.
 
 On `time.img`, from the section on reads, `SAVE 64 X.COM`, 16 KiB, took
-30,831,158 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
-9,910,058, 2.48 seconds, about a third of that. Each run followed a cold boot
+30,834,679 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
+9,913,579, 2.48 seconds, about a third of that. Each run followed a cold boot
 and a change to the drive. The count, taken as for the reads, leaves out the
 change of drive.
 
