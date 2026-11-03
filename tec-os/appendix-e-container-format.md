@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix E. The container format
 
-Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
