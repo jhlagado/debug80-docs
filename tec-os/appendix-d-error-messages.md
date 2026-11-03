@@ -7,19 +7,19 @@ nav_group: "Appendices"
 
 # Appendix D. Error messages
 
-Checked against TEC-OS 60cfbdc.
+Checked against TEC-OS 4d6eeaa.
 
 This appendix lists every message TEC-OS prints, with its cause and its
 remedy, in the order a run can reach them: cold boot and the diagnostic
-prompt, the LCD's words, the CCP, the BDOS and the block cache. `MOUNT` and
-`VOLS` follow, and then the lines that report no fault. The last column of
+prompt, the LCD's words, the CCP, the BDOS and the block cache. `MOUNT`
+follows, and then the lines that report no fault. The last column of
 each table links to the chapter that explains the message or its subject and
 gives the source.
 
 In a message, `d` stands for a drive letter, `n` for a decimal number, `NAME` for
 a word from the command line and `LABEL` for a volume's label. `nn` stands for a
-code in hexadecimal, except in the lines `VOLS` prints, where it is a volume's
-index in decimal. The rest is printed as it stands.
+code in hexadecimal, except in the list of volumes `MOUNT` prints, where it is
+a volume's index in decimal. The rest is printed as it stands.
 `tecvol` runs on a PC, and Appendix F describes it. The diagnostics ROM is a
 separate image, and Chapter 24 describes it.
 
@@ -203,24 +203,23 @@ and the file needs writing again.
 [Chapter 4](04-cards-and-volumes.md#the-block-cache-and-the-volume-written-behind)
 the volume written behind.
 
-## `MOUNT` and `VOLS`
+## `MOUNT`
 
-These two programs on the starter card print their own messages
-(`test/programs/mount.asm:256-263`, `test/programs/vols.asm:27`). After each
+This program on the starter card prints its own messages
+(`test/programs/mount.asm:32`, `test/programs/mount.asm:256-263`). After each
 message the program returns to the prompt with a return code of 0, so a `:`
 piece after it runs.
-[Chapter 4](04-cards-and-volumes.md#drives-vols-and-mount) explains the
-programs, and [Chapter 18](18-sd-card-and-volumes.md#the-mount-entry) the
-ROM entry behind them.
+[Chapter 4](04-cards-and-volumes.md#drives-and-mount) explains the
+program, and [Chapter 18](18-sd-card-and-volumes.md#the-mount-entry) the
+ROM entry behind it.
 
 | Message | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| `MOUNT D: [NAME or INDEX]` | The usage line: `MOUNT` has no drive letter from A to D and colon. | `MOUNT B: NAME`, `MOUNT B: 2`, or `MOUNT B:` to empty the drive. | [Chapter 4](04-cards-and-volumes.md#drives-vols-and-mount), `test/programs/mount.asm:33-45`, `test/programs/mount.asm:242-243` |
-| `No such volume` | No volume has that label or index. A failed read of the table gives this too. | `VOLS` lists the labels and indexes. | [Chapter 4](04-cards-and-volumes.md#drives-vols-and-mount), `test/programs/mount.asm:107-108`, `test/programs/mount.asm:130-131`, `src/vol.asm:707-735` |
-| `Cannot mount: in use or too large` | The volume is on another drive, the drive has no vector or one too small for the volume, or writing the cache's changes to the card failed. | Empty the other drive first with `MOUNT d:`. For size, use a drive whose vector takes the volume, as [Chapter 4](04-cards-and-volumes.md#drives-and-their-cost-in-memory) explains. A failed write is `Write lost`'s case. | [Chapter 4](04-cards-and-volumes.md#drives-vols-and-mount), `src/vol.asm:610-622`, `src/vol.asm:640-650`, `src/vol.asm:680-689` |
-| `Cannot unmount` | The drive is A, which always has a volume, or writing the cache's changes to the card failed. | Mount another volume on drive A in place of the one there. A failed write is `Write lost`'s case. | [Chapter 4](04-cards-and-volumes.md#drives-vols-and-mount), `src/vol.asm:652-658` |
+| `MOUNT [D: [NAME or INDEX]]` | The usage line: the argument doesn't start with a drive letter from A to D and a colon. | `MOUNT` alone to list the volumes, `MOUNT B: NAME`, `MOUNT B: 2`, or `MOUNT B:` to empty the drive. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:34-45`, `test/programs/mount.asm:242-243` |
+| `No such volume` | No volume has that label or index. A failed read of the table gives this too. | `MOUNT` with no argument lists the labels and indexes. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:107-108`, `test/programs/mount.asm:130-131`, `src/vol.asm:707-735` |
+| `Cannot mount: in use or too large` | The volume is on another drive, the drive has no vector or one too small for the volume, or writing the cache's changes to the card failed. | Empty the other drive first with `MOUNT d:`. For size, use a drive whose vector takes the volume, as [Chapter 4](04-cards-and-volumes.md#drives-and-their-cost-in-memory) explains. A failed write is `Write lost`'s case. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `src/vol.asm:610-622`, `src/vol.asm:640-650`, `src/vol.asm:680-689` |
+| `Cannot unmount` | The drive is A, which always has a volume, or writing the cache's changes to the card failed. | Mount another volume on drive A in place of the one there. A failed write is `Write lost`'s case. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `src/vol.asm:652-658` |
 | `MOUNT needs TEC-OS with ABI 4.` | The ROM table is missing, or its major version isn't 4: the program is from another version of TEC-OS. | Use the `MOUNT.COM` that matches the ROM, from a new starter card. | [Chapter 9](09-hardware-services.md#checking-for-tec-os), `test/programs/mount.asm:15-32` |
-| `VOLS needs TEC-OS with ABI 4.` | The same test in `VOLS`. | Use the `VOLS.COM` that matches the ROM, from a new starter card. | [Chapter 9](09-hardware-services.md#checking-for-tec-os), `test/programs/vols.asm:27` |
 
 ## Lines that report no fault
 
@@ -236,6 +235,6 @@ These lines appear in ordinary runs and need no remedy.
 | `COPIED nnnn` | `COPY` finished. `nnnn` is the number of records, in hexadecimal. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1063-1069`, `src/data3.asm:48-49` |
 | `CON: TTY: serial terminal`, `CON: CRT: PICO9918`, `CON: UC1: GLCD` | The console in use, after `CON`. A `CON CRT` that can't take effect reports the serial terminal, and a `CON UC1` that can't take effect reports the console in use. `CON: BAT: reader and list` goes to the list device, which discards it, so it appears nowhere. | [Chapter 2](02-console.md#the-con-command), `src/cpm/ccp.asm:1136-1150`, `src/console.asm:286`, `src/data3.asm:52-61` |
 | `NAME n` | `SERVICES`: a service's name and its pages, the newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/svc.asm:349-373` |
-| `d: LABEL` from `MOUNT` | The drive and the volume now on it, also when the volume was there already. | [Chapter 4](04-cards-and-volumes.md#drives-vols-and-mount), `test/programs/mount.asm:150-158` |
-| `Unmounted` | `MOUNT d:` has emptied the drive. | [Chapter 4](04-cards-and-volumes.md#drives-vols-and-mount), `test/programs/mount.asm:50-58` |
-| `nn LABEL G1M`, `nn LABEL G8M` | `VOLS`: an index in decimal, a label and a geometry, with ` R/O` after a read-only volume and the drive letter after a mounted one. | [Chapter 4](04-cards-and-volumes.md#drives-vols-and-mount), `test/programs/vols.asm:107-111` |
+| `d: LABEL` from `MOUNT` | The drive and the volume now on it, also when the volume was there already. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:150-158` |
+| `Unmounted` | `MOUNT d:` has emptied the drive. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:50-58` |
+| `nn LABEL G1M`, `nn LABEL G8M` | `MOUNT` with no argument: a volume's index in decimal, its label and its geometry, with ` R/O` after a read-only volume and the drive after a mounted one, as `d:`. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:160-209` |
