@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. The SD card and the volumes
 
-Checked against TEC-OS 7935507.
+Checked against TEC-OS 626ee41.
 
 The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
@@ -119,7 +119,7 @@ the ROM uses come from `format/format.json` through the generated
 A card can hold anything, so the ROM's `MOUNT` routine checks block 0 before it
 uses any of it (`src/vol.asm:3-6`). It reads the block into `BLKBUF` and makes
 the checks in a fixed order, stopping at the first failure with that check's
-code (`src/vol.asm:8-18`, `src/vol.asm:20-126`):
+code (`src/vol.asm:8-18`, `src/vol.asm:20-125`):
 
 | Code | Check |
 | --- | --- |
@@ -133,7 +133,9 @@ code (`src/vol.asm:8-18`, `src/vol.asm:20-126`):
 Any minor version other than 0 is read as 1.1 (`src/vol.asm:83-85`). For a 1.1
 card with more than fifteen volumes, `MOUNT` reads each further block of the
 table and adds up its 512 bytes, and the total must be the header's table sum
-(`src/vol.asm:93-125`).
+(`src/vol.asm:93-125`). The table's blocks and the header are added up by the
+same routine, `SUMDE` (`src/vol.asm:116`, `src/vol.asm:690`,
+`src/vol.asm:701-714`).
 
 Then it walks the descriptors in table order, checking each one and mounting
 it as it goes (`src/vol.asm:127-242`):
@@ -145,6 +147,10 @@ it as it goes (`src/vol.asm:127-242`):
 | `27h` | start plus length has no carry out of 32 bits and ends within the container, and on a standard-capacity card with its last block at or below `7FFFFFh` |
 | `29h` | the drive byte is `FFh` or 0 to 3, below a 1.1 header's drives field when that field is not 0, and not a drive already taken |
 | `2Ah` | after the last descriptor, drive A has a volume |
+
+The checks of code `26h` share one failure path: each jumps to `MNDBAD`, which
+loads the code and runs on into `MNTERR` (`src/vol.asm:138-168`,
+`src/vol.asm:250-251`).
 
 The order check makes overlapping volumes impossible, since each must start
 where the one before it ended or later. The descriptors therefore have to be
@@ -218,15 +224,18 @@ so mounting builds an entry in the drive table and a DPH. Each descriptor that
 names a drive is mounted by `MNONE` (`src/vol.asm:308-320`). `MNFILL` writes
 the drive's eight-byte entry in `DRVTAB`: the start block in four
 bytes, the length in blocks in two, the geometry and a flags byte with
-read-only in bit 0 and written-behind in bit 1 (`src/vol.asm:322-343`,
+read-only in bit 0 and written-behind in bit 1. The start and the length's low
+half lie together in the descriptor, so one `LDIR` copies those six bytes
+(`src/vol.asm:322-343`,
 `src/ram.asm:22`). `DRVIDX` records which volume each drive holds, as its
 index in the container plus 1, 0 for none (`src/ram.asm:28`). The geometry
 byte is 0 for a drive with no volume, and for such a drive the BIOS's `SELDSK`
 returns 0, no such drive (`src/bios.asm:23-44`).
 
 `MNDPH` builds the drive's disk parameter header, the 16 bytes through
-which the BDOS reaches a drive's parameters and buffers
-(`src/vol.asm:345-374`):
+which the BDOS reaches a drive's parameters and buffers, at the address that
+`DPHADR` computes, for `SELDSK` too (`src/vol.asm:345-374`,
+`src/bios.asm:33-42`):
 
 | Offset | Contents |
 | ---: | --- |
