@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 23. Command history
 
-Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 60cfbdc, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
