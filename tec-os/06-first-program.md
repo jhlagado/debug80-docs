@@ -7,12 +7,12 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 6. A first program
 
-Checked against TEC-OS 60e0768, with the ATOM assembler from the
+Checked against TEC-OS 1f9542d, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, the starter card's
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. The
-starter card's `TED.COM` is from Thorium 676075a, with the SHA-256
-`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`.
+starter card's `TED.COM` is from Thorium 04ec086, with the SHA-256
+`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`.
 
 A program for TEC-OS is a CP/M program: Z80 code that TEC-OS loads at `0100h`
 and that reaches the console and the files through the BDOS. This chapter
@@ -135,7 +135,7 @@ each with a "Download" button that copies it back to the PC.
 
 The second program, `SHOW`, prints a text file. The file's name is the first
 word after the command: `SHOW HELLO.ASM` prints `HELLO.ASM`. Before the CCP
-starts a program it prepares two things in page zero, the first 256 bytes of
+starts a program it prepares three things in page zero, the first 256 bytes of
 memory, and `SHOW` uses one of them.
 
 The first is the command tail at `0080h`. Its first byte is the number of
@@ -159,6 +159,11 @@ This is the number of the next 128-byte record that a sequential read takes,
 within the part of the file the FCB is on. A program sets it to 0 before the
 first read. The CCP clears it already, but a program that opens a file from
 its own FCB, or opens the same FCB again, sets it itself.
+
+The third is the byte at `0050h`, which holds the drive the CCP loaded the
+program from, as CP/M 3 keeps it. It is 0 for a program found on the current
+drive and 1 for one found by the search of drive A. A drive typed in front of
+the name gives its number, so `B:SHOW` at `A>` leaves 2 there.
 
 ## A program that reads a file
 
@@ -286,6 +291,11 @@ Hello from the TEC-1G
 B>
 ```
 
+The starter card's `SAMPLE.ASM`, which Chapter 1 assembled with `TAS SAMPLE`
+and ran, is a longer program in the same language. It prints through the BDOS
+as `HELLO` does, and it reaches the LCD, the digits and the speaker through
+the hardware services that Chapter 9 describes.
+
 ## Editing on the TEC-1G
 
 `TED`, the starter card's editor, works with `TAS`, so the whole cycle of
@@ -320,7 +330,7 @@ A mistake shows the round of `^T B`. Here `B:` made drive B current,
 start of line 7. `^T B` saved the file and chained `TAS HELLO.ASM` and then
 `TED`. The screen showed this before `TED` drew its own again:
 
-<!-- a run on the host model with work.img, driven as test/ted.test.mjs at 60e0768 drives TED: B:, TED HELLO.ASM 7, 1, ^T B, Right, ^H, ^T R, a space, ^Q, DIR -->
+<!-- a run on the host model with work.img, driven as test/ted.test.mjs at 1f9542d drives TED: B:, TED HELLO.ASM 7, 1, ^T B, Right, ^H, ^T R, a space, ^Q, DIR -->
 ```text
 
 B>TAS HELLO.ASM
