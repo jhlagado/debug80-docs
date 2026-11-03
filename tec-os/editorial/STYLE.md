@@ -203,8 +203,8 @@ controls of the web page, the steps of a procedure. A paragraph has one job.
 The book describes the product as it is at each chapter's commit. It gives no
 account of how TEC-OS was developed: no internal plans, no work records and
 no numbering from them. History belongs in the book only where it explains
-the product as it is, such as the reason for a `RET` at `C01Dh`. The book
-never mentions the tools used to write it.
+the product as it is, such as the reason an old card's `.DRV` files no longer
+load. The book never mentions the tools used to write it.
 
 ## Writing a chapter
 
