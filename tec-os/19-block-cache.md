@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 5a25178, with the ATOM assembler from the repository's
+Checked against TEC-OS 58d4345, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from
 Thorium 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. The
@@ -88,7 +88,7 @@ read often is still given up when its turn comes and read again from the card
 at its next use.
 
 On the model, with the starter card, a read in `DIR` that hits took 13,718
-T-states, with the record going to the directory buffer `DIRBUF` at `BBAEh`. A
+T-states, with the record going to the directory buffer `DIRBUF` at `BB5Fh`. A
 read in `DIR B:` that missed took 235,357, nearly all of it the card. `CLOOK`
 takes 259 T-states when the block is in line 0 and about 2,000 to search all
 30.
