@@ -31,7 +31,7 @@ display or on the LCD.
 
 | Message | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| `TEC-OS needs 64K RAM` | `8000h–BFFFh` has no RAM, or EXPAND 1, the second half of the chip in U9, is missing. One check tests both. | Fit the 32 KiB RAM chip in socket U9, then reset. | [Chapter 1](01-introduction.md#the-board), `src/boot.asm:36`, `src/boot.asm:323-358`, `src/text.asm:5` |
+| `TEC-OS needs 64K RAM` | `8000h–BFFFh` has no RAM, or EXPAND 1, the second half of the chip in U9, is missing. One check tests both. | Fit the 32 KiB RAM chip in socket U9, then reset. | [Appendix G](appendix-g-tec-1g.md#u9-and-the-ram), `src/boot.asm:36`, `src/boot.asm:323-358`, `src/text.asm:5` |
 
 ## The diagnostic prompt
 
@@ -48,8 +48,7 @@ LCD's last row shows `CARD?` (`src/boot.asm:471-478`, `src/text.asm:8-10`). `R` 
 and the mount again, so a card fixed or put in while TEC-OS waits at the prompt
 mounts with no reset. The key is echoed as typed, and `r` retries too. Any
 other key gives the prompt again (`src/boot.asm:479-489`). [Chapter 23](23-diagnostics.md#the-diagnostic-prompt)
-explains the prompt and [Chapter 1](01-introduction.md#a-card-that-won-t-mount)
-shows it.
+explains the prompt.
 
 Codes `01h` to `04h` and `0Bh` come from `SDINIT`, the start of the card
 (`src/boot.asm:67-68`):
@@ -232,8 +231,8 @@ These lines appear in ordinary runs and need no remedy.
 
 | Line | Meaning | See |
 | --- | --- | --- |
-| `TEC-OS 0.1 for TEC-1G` | The banner on the console at cold boot. The LCD's first row has `TEC-OS 0.1  TEC-1G`. | [Chapter 1](01-introduction.md#the-first-boot), `src/text.asm:6`, `src/text.asm:53` |
-| `d: LABEL` | A drive and its volume's label, at cold boot. A volume the card marks read-only has ` (read-only)` after the label. The LCD's two rows below the banner show drives A and B in the same form, with no read-only mark. | [Chapter 1](01-introduction.md#the-first-boot), `src/boot.asm:360-383`, `src/lcd.asm:69-89`, `src/lcd.asm:91-114`, `src/text.asm:7` |
+| `TEC-OS 0.1 for TEC-1G` | The banner on the console at cold boot. The LCD's first row has `TEC-OS 0.1  TEC-1G`. | [Chapter 1](01-introduction.md#turning-it-on), `src/text.asm:6`, `src/text.asm:53` |
+| `d: LABEL` | A drive and its volume's label, at cold boot. A volume the card marks read-only has ` (read-only)` after the label. The LCD's two rows below the banner show drives A and B in the same form, with no read-only mark. | [Chapter 1](01-introduction.md#turning-it-on), `src/boot.asm:360-383`, `src/lcd.asm:69-89`, `src/lcd.asm:91-114`, `src/text.asm:7` |
 | `n files, nK free` | `DIR`'s last line: the files listed and the space free on the drive. One file gives `1 file, nK free`. | [Chapter 3](03-command-line.md#dir), `src/text.asm:17-22` |
 | `[more]` | `DIR` or `TYPE` has filled the screen. Any key shows the next screen. Esc, `Q`, `q` and `;` end the listing, and `^C` and `#` also drop the rest of a chained line, since the test clears bit 5 of the key before it compares. | [Chapter 2](02-console.md#pauses-in-long-listings), `src/cpm/ccpfile.asm:288-320`, `src/text.asm:23-24` |
 | `ALL (Y/N)?` | `ERA` was given a name that is all wildcards. A line that starts with `Y` or `y` erases every file of the current user area on the drive. Any other line erases nothing, and the command counts as a success. A Return alone is the whole answer and erases nothing. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccpfile.asm:429-453`, `src/text.asm:47-48` |
