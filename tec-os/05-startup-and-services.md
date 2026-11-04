@@ -370,7 +370,7 @@ on the next, so that piece runs as an ordinary command. So does a piece with
 The page reads only the files of user area 0 on drive A, the area from which
 TEC-OS loads `STARTUP.CMD` and `GLCD.SVC`. It makes its change on a copy of the
 card, and the copy replaces the card only once the change is made. A card whose
-drive A is read-only, whose `STARTUP.CMD` has its read-only attribute set, or
+drive A is read-only, whose `STARTUP.CMD` has its read-only attribute set or
 whose directory has no room for a new `STARTUP.CMD` is left as it was when the
 file needs a change, and the page says in the serial terminal that it boots as
 it is. With the graphics LCD chosen, a card with no `GLCD.SVC` on drive A, or one
@@ -406,7 +406,7 @@ TEC-OS writes one of two words there:
 - `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`. The console stays where
   it was.
 - `CARD?` appears each time a card won't mount, with the diagnostic prompt of
-  Chapter 1.
+  Chapter 23.
 
 A board with the PICO9918 and the matrix keyboard has its console from cold
 boot, so it needs no word for a missing driver. A failed `CON UC1` leaves

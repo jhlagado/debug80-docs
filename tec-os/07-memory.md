@@ -267,8 +267,8 @@ TEC-OS holds them off and then restores them.
 
 `0066h`, where the Z80 goes on a non-maskable interrupt, lies inside the FCB
 at `005Ch`. On a board with the keypad NMI jumper fitted, a key on the hex
-keypad lands there, so Chapter 1 says to keep off the keypad while a program
-runs.
+keypad lands there, so the keypad is best left alone while a program runs
+([Appendix G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi)).
 
 ## TEC-OS's byte at 0040h
 

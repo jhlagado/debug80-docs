@@ -330,8 +330,8 @@ arrows (`web/index.html:36-44`). The serial terminal on the page drops the
 escape sequences TEC-OS sends and acts on backspace
 (`web/src/main.mjs:358-386`).
 
-Chapter 1 lists the page's controls (`web/index.html:12-30`,
-`web/index.html:68-82`). The page also lists each file of the drive chosen in
+The page's controls are set out at `web/index.html:12-30` and
+`web/index.html:68-82`. The page also lists each file of the drive chosen in
 "Drive", with its user area, its size and a Download button, which saves the
 file to the PC, as text when "as text" is ticked (`web/src/main.mjs:569-582`).
 
