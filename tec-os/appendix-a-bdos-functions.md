@@ -7,10 +7,10 @@ nav_group: "Appendices"
 
 # Appendix A. BDOS functions
 
-Checked against TEC-OS 626ee41.
+Checked against TEC-OS 5a25178.
 
 This appendix lists the BDOS functions of TEC-OS in number order: 0 to 40,
-then 47 and 108, whose meanings come from CP/M 3. Each entry gives the
+then 45, 47, 48 and 108, whose meanings come from CP/M 3. Each entry gives the
 registers the function takes, what it returns and where it differs from CP/M
 2.2. Chapter 16 describes the mechanism behind them.
 
@@ -31,24 +31,26 @@ runs, for functions 15, 16, 17, 19 to 23, 30, 33 to 35 and 40
 (`src/tables.asm:73`, `src/cpm/bdos.asm:102-116`). A `?` in the drive byte is
 allowed only for function 17.
 
-A function that can't be carried out at all prints one of the BDOS's errors
-and waits for a key, or takes the key already kept if one was typed during
-output. It then ends the program by warm boot, whatever the key, and does not
-return (`src/cpm/bdos.asm:2338-2405`). The errors are:
+A function that can't be carried out at all gives one of the BDOS's errors. In
+the default error mode it prints the error and waits for a key, or takes the
+key already kept if one was typed during output. It then ends the program by
+warm boot, whatever the key, and does not return. Function 45 can set a mode
+in which the function returns instead, with `A` = `FFh` and the error's code in
+`H` (`src/cpm/bdos.asm:2338-2405`). The errors are:
 
-- `Bdos Err On d: Select`, for a drive with no volume, a drive past D or a `?`
-  drive byte outside function 17.
-- `Bdos Err On d: R/O`, for a change to a drive that function 28 has made
-  read-only or to a volume the card marks read-only, by function 19, 21, 22,
-  23, 30, 34 or 40
-  (`src/cpm/bdos.asm:2329-2335`).
-- `Bdos Err On d: File R/O`, for function 19 or 23 on a directory entry whose
-  read-only attribute is set, and for function 21, 34 or 40 through an FCB
-  that has it (`src/cpm/bdos.asm:655-665`).
-- `Bdos Err On d: Bad Sector`, for a record or a directory record that can't
-  be read or written, or an allocation block number past the end of the volume
-  in a read or a write (`src/cpm/bdos.asm:1296`, `src/cpm/bdos.asm:1841`,
-  `src/cpm/bdos.asm:2357-2385`).
+- `Bdos Err On d: Select`, code 4, for a drive with no volume, a drive past D
+  or a `?` drive byte outside function 17 (`src/cpm/bdos.asm:2341-2344`).
+- `Bdos Err On d: R/O`, code 2, for a change to a drive that function 28 has
+  made read-only or to a volume the card marks read-only, by function 19, 21,
+  22, 23, 30, 34 or 40 (`src/cpm/bdos.asm:2329-2336`).
+- `Bdos Err On d: File R/O`, code 3, for function 19 or 23 on a directory
+  entry whose read-only attribute is set, and for function 21, 34 or 40
+  through an FCB that has it (`src/cpm/bdos.asm:655-666`).
+- `Bdos Err On d: Bad Sector`, code 1, for a record or a directory record that
+  can't be read or written, or an allocation block number past the end of the
+  volume in a read or a write (`src/cpm/bdos.asm:1296`,
+  `src/cpm/bdos.asm:1841`, `src/cpm/bdos.asm:2357-2359`,
+  `src/cpm/bdos.asm:2381-2384`).
 
 The file functions return a directory code in `A` where CP/M 2.2 does: 0 to 3,
 the place in the 128-byte directory record of the entry found, or `FFh` for
@@ -166,7 +168,7 @@ address and moves on, to the next extent after record 127
 new extent, or 2 if the drive is full. After a 1 the FCB stays on its extent
 with `CR` at 128, so a write after an entry is freed makes the extent it needs
 (`src/cpm/bdos.asm:878-914`). An FCB with the read-only attribute set is the
-`File R/O` error (`src/cpm/bdos.asm:658-665`).
+`File R/O` error (`src/cpm/bdos.asm:658-666`).
 
 **22 Make file.** Creates an empty entry for the FCB's name in the current
 user area, writes it to the directory and opens it
@@ -251,12 +253,29 @@ does not define. Both return 0 and do nothing (`src/tables.asm:72`).
 write newly allocates filled with zeros before the record is written
 (`src/cpm/bdos.asm:992-1003`, `src/cpm/bdos.asm:1243-1292`).
 
+**45 Set BDOS error mode.** Sets the mode to `E` and returns 0
+(`src/cpm/bdos.asm:137-143`). With `E` = `FFh` a BDOS error returns to the
+program with `A` = `FFh` and the error's code in `H`, prints nothing and keeps
+the rest of a chained line. With `E` = `FEh` it prints the message first and
+then returns in the same way. Any other `E` is the default, the message, a key
+and the end of the program with the rest of a chained line dropped
+(`src/cpm/bdos.asm:2361-2376`). A warm boot puts the default back. A read or
+write that returns an error leaves the FCB on the record it didn't read or
+write, as in CP/M 3 (`src/cpm/bdos.asm:864-873`, `src/cpm/bdos.asm:971-978`).
+
 **47 Chain to program.** Replaces what is left of the CCP's command line with
 the command at the DMA address, which ends with a 0 within its first 128
 bytes, and ends the program by warm boot. The CCP runs the command next
 (`src/cpm/bdos.asm:46-71`). The command may hold `!` and `:`. A command with
 no 0 in its first 128 bytes, or with a CR or LF before the 0, returns `FFh` in
-`A`, and the program goes on with the line unchanged. `E` is ignored.
+`A`, and the program goes on with the line unchanged. `E` is ignored. Warm
+boot's flush puts the records written behind on the card before the CCP loads
+the chained command.
+
+**48 Flush buffers.** Writes every changed line of the block cache to the card
+and returns 0 in `A`, or `FFh` if a write failed and its line was dropped
+(`src/cpm/bdos.asm:145-150`, `src/vol.asm:634-646`). `E` = `FFh`, CP/M 3's
+purge, gives the same flush.
 
 **108 Get or set program return code.** With `DE` = `FFFFh`, returns the code
 in `HL`. With any other `DE`, sets the code to `DE` and returns 0
@@ -268,8 +287,8 @@ with `:` runs only when the code is not from `FF00h` to `FFFEh`
 
 ## Other numbers
 
-Every other function number, from 41 to 255 except 47 and 108, returns 0 in
-`A` and `HL` and does nothing (`src/cpm/bdos.asm:92-93`). Function 50, CP/M
+Every other function number, from 41 to 255 except 45, 47, 48 and 108,
+returns 0 in `A` and `HL` and does nothing (`src/cpm/bdos.asm:92-93`). Function 50, CP/M
 3's direct BIOS call, is one of them. A program reaches the BIOS through its
 jump table, whose warm boot entry is the address at `0001h`
 (`src/boot.asm:108-109`).
