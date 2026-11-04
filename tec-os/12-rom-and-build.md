@@ -248,7 +248,7 @@ holds the figures for the ROM's parts, the RAM's regions and the stacks
 (`tools/build.mjs:262-310`).
 
 The PICO9918's console is in the ROM at each of its three widths, 80 columns
-from reset and 40 or 32 through `CON` (Chapter 15), and the GLCD's is a driver
+from reset and 40 or 32 through `CON` (Chapter 17), and the GLCD's is a driver
 on the card, so every board takes the same image. The build has one profile, `tecos`, and stops
 with an error when it is given any other name (`tools/build.mjs:28-31`,
 `tools/build.mjs:321`). `npm run build` prints one line:

@@ -147,7 +147,7 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 | `BCEDh–BE75h` | 393 | the CCP's state and stack |
 | `BE76h–BEFFh` | 138 | the BDOS's state and stack |
 | `BF00h–BF32h` | 51 | the RAM BIOS table, 17 jumps |
-| `BF33h–BFFFh` | 205 | the SD card's, cache's, keyboard's, consoles', loader's, startup's and chained line's state, the console's state and the rest of the `MOUNT` routine's scratch |
+| `BF33h–BFFFh` | 205 | state for the SD card, cache, keyboard, displays, loader, startup, chained line and console, and the rest of the `MOUNT` routine's scratch |
 
 The part from `WSBASE`, `BAE7h`, to `BEFFh` has the same addresses on every
 card. The build places `WSBASE` so that the part ends at `BF00h`

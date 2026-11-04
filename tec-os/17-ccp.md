@@ -302,8 +302,8 @@ After `CRT` or `PICO`, and a space, `CON` takes a width of two digits. It
 finds the PICO9918 console's record with `TNFIND`, under the name `PICO` at
 version 3, and calls the table's `PICOWID` entry with the width, which accepts
 80, 40 or 32. A name run into its width, a width after any other name, any
-other width and a board with no PICO9918 console are bad commands, and the
-error names the width (`src/cpm/ccp.asm:1115-1158`). On the web page's board:
+other width and a board with no PICO9918 console are bad commands. The
+error names the width, or the whole word for a name run into its width (`src/cpm/ccp.asm:1115-1158`). On the web page's board:
 
 <!-- node tools/capture.mjs --board pico "CON PICO 40" "CON CRT80" "CON PICO 50" "CON TTY 80" "CON CRT: 32" -->
 ```text
@@ -325,7 +325,7 @@ A>
 
 The new width clears the screen at the next console call. It is kept in
 `PIBLK`, which a warm boot leaves, so it lasts until a reset, which starts the
-console at 80 columns again (`src/pico.asm:46-62`, Chapter 15).
+console at 80 columns again (`src/ram.asm:36-39`, `src/pico.asm:46-62`, Chapter 14).
 
 `COPY SOURCE DEST` copies a file within the user area
 (`src/cpm/ccp.asm:927-1057`). Both names are parsed with the current drive put

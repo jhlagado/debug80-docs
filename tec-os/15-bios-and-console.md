@@ -366,7 +366,7 @@ nothing, and the service returns status 1, `TNEBAD`, with carry set.
 
 The driver's `REMOVE` calls the service with `HL` 0, and `VIDHOOK` then drops
 the table and puts the serial terminal in `CONMOD`. The field still names
-`UC1:`, so the next console call acts on it and, with no table now, falls back
+the console it named, `UC1:` unless the GLCD gave way, so the next console call acts on it and, with no table now, falls back
 to the serial terminal (`src/video.asm:81-90`).
 
 The seventh vector carries three functions that only the PICO9918's console
