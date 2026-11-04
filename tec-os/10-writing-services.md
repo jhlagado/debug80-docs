@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 10. Writing services
 
-Checked against TEC-OS 58d4345. The programs were assembled by the starter
+Checked against TEC-OS 621201d. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -345,7 +345,9 @@ and `CONOUT` can be called on any of the three, so `COUNT` declares 2, 2 and 2.
 The loader adds each figure to those of the services already in, and the load
 fails if a sum would pass the limit: 8 bytes on the BDOS's stack, 12 on the
 BIOS's and 6 on the CCP's. At this commit `GLCD.SVC` declares 6 for the CCP's,
-so it and `COUNT.SVC` can't both be in. A copy of `COUNT` that declares 9 for
+so it and `COUNT.SVC` can't both be in. On a board with only the graphics LCD,
+where the startup file installs `GLCD.SVC`, the load of `COUNT.SVC` then
+fails with `COUNT.SVC?`. A copy of `COUNT` that declares 9 for
 the BDOS fails on its own, on any board. This run leaves out the lines that
 assemble it:
 
@@ -501,17 +503,15 @@ CRLF:	DB	13,10,"$"
 ```
 
 `recs.asm` goes on the card as the others did. With the starter card on a board with both
-displays, `GLCD.SVC` is in from the startup file, and it and `COUNT.SVC` can't both be
-in, so `UNLOAD` takes it out first. With `COUNT.SVC` from `makeSvc` on the
-card, `RECS` then finds two records:
+displays, the startup file leaves `GLCD.SVC` out while the PICO9918 is the
+console, so `COUNT.SVC` loads. With `COUNT.SVC` from `makeSvc` on the card,
+`RECS` then finds two records:
 
-<!-- node tools/capture.mjs --card svc.img --board pico B: "TAS RECS" UNLOAD COUNT.SVC RECS -->
+<!-- node tools/capture.mjs --card svc.img --board pico B: "TAS RECS" COUNT.SVC RECS -->
 ```text
 A>B:
 B>TAS RECS
 RECS.COM written
-
-B>UNLOAD
 
 B>COUNT.SVC
 
