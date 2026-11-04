@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 24. Chaining inside
 
-Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -90,7 +90,7 @@ program that a startup line started. This card's startup file has three lines,
 and the first two hold `!`:
 
 ```sh
-printf 'DIR *.CMD!:TYPE STARTUP.CMD\nPICO.SVC!:MOUNT\nUSER 0\n' > startup.cmd
+printf 'DIR *.CMD!:TYPE STARTUP.CMD\nNOSUCH.SVC!:MOUNT\nUSER 0\n' > startup.cmd
 cp dist/starter.img start.img
 node tools/tecvol.mjs put start.img A startup.cmd --text
 ```
@@ -103,14 +103,14 @@ B: WORK
 
 A>DIR *.CMD!:TYPE STARTUP.CMD
 STARTUP.CMD 
-1 file, 978K free
+1 file, 980K free
 A>:TYPE STARTUP.CMD
 DIR *.CMD!:TYPE STARTUP.CMD
-PICO.SVC!:MOUNT
+NOSUCH.SVC!:MOUNT
 USER 0
 
-A>PICO.SVC!:MOUNT
-PICO.SVC?
+A>NOSUCH.SVC!:MOUNT
+NOSUCH.SVC?
 
 A>:MOUNT
 A>USER 0
@@ -119,9 +119,11 @@ A>
 
 `STLINE` echoes each line of the file whole, through BDOS function 9, so a `$`
 in a line would end its echo there (`src/cpm/ccp.asm:1646-1650`). The CCP echoes the
-later pieces after their own prompts. `PICO.SVC` fails on this serial
-board, so `:MOUNT` is dropped, and the loop goes on to the startup file's third
-line.
+later pieces after their own prompts. The card has no `NOSUCH.SVC`, so the
+service fails, `:MOUNT` is dropped, and the loop goes on to the startup file's
+third line. A `GLCD.SVC` in its place would fail quietly on this board, which
+has no graphics LCD, and leave the code at 0, so `:MOUNT` would run, as Chapter
+21 describes.
 
 `CHSKIP` reads `CHPOS` and returns at once with `Z` when it is 0. Otherwise it
 points `HL` at `CMDTXT - 1` plus `CHPOS` and steps past spaces and `!`, and it
@@ -186,7 +188,7 @@ on.
 ## The return code and the `:` test
 
 BDOS function 108 is `FNRETC` (`src/cpm/bdos.asm:166-178`), and the BDOS's entry
-sends function 108 there before its table, as it does 47, 45 and 48
+sends function 108 there before its table, as it does 47, 44, 45, 46, 48 and 99
 (`src/cpm/bdos.asm:81-100`). `FNRETC` tests `DE`: `H AND L` is `FFh` only for
 `FFFFh`. For that value it returns `PRGCODE` in `HL`, with `A` and `B` set from
 it as for every word the BDOS returns (`src/cpm/bdos.asm:142-146`). Any other
@@ -220,7 +222,10 @@ through `CPFAIL` (`src/cpm/ccp.asm:813-815`, `src/cpm/ccp.asm:923-925`,
 `src/cpm/ccp.asm:1306-1308`, `src/cpm/ccp.asm:1033-1034`).
 
 A program that isn't found on the drives the search looks at, or fails to load,
-or a service that fails to install, reaches `BADCMD` (`src/cpm/ccp.asm:265-303`). Every other end of a built-in
+or a service that fails to install, reaches `BADCMD` (`src/cpm/ccp.asm:265-303`).
+The one exception is a line from the startup file whose driver finds its device
+absent, which goes to the prompt with the code at 0 (`src/cpm/ccp.asm:277-284`).
+Every other end of a built-in
 leaves the code at 0, including `COPY`'s `COPIED` line, which is printed through
 `PRTGO`, the entry after the store (`src/cpm/ccp.asm:1025-1032`,
 `src/cpm/ccp.asm:363`).
