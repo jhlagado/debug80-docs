@@ -339,7 +339,7 @@ any of those drives can take any volume later. `my.img`'s header gives four,
 so its vectors take 1,024 bytes, the word at `0006h` is `B6E4h` and programs
 have 46,564 bytes. That is 704 fewer than on the starter card, the difference
 between the two cards' vectors. A drive past the Nth gets no vector, and a card whose header puts a volume on such a drive
-fails the checks at cold boot. Chapter 7 describes the TPA, and Chapter 13 the
+fails the checks at cold boot. Chapter 8 describes the TPA, and Chapter 14 the
 rest of the map.
 
 ## The block cache and the volume written behind
@@ -352,7 +352,7 @@ is read from the card. A block written to the card is also brought up to date
 in the cache, so the cache never holds a stale copy. On the model, a program
 took 1.66 seconds to read a 12 KiB file the first time and 0.34 seconds the
 second time, a fifth of that. A file too large for the cache took as long the
-second time. Chapter 19 gives the method.
+second time. Chapter 18 gives the method.
 
 A volume is *written through* by default: a write reaches the card before
 TEC-OS reports it done. When a program writes a record, TEC-OS writes the
@@ -438,7 +438,7 @@ A>
 If any of the volumes doesn't match a descriptor on the card in the socket,
 the whole selection is dropped and the drives get the volumes the header
 names, as after a power cycle. Turning the board off always gives the header's
-drives, since the selection is held only in RAM. Chapter 14 describes the test
+drives, since the selection is held only in RAM. Chapter 15 describes the test
 cold boot applies to the RAM a reset leaves.
 
 A `^C` at the prompt before a reset puts the cache's changes on the card, as

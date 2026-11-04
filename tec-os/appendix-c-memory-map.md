@@ -11,7 +11,7 @@ nav_group: "Appendices"
 
 This appendix gives the addresses TEC-OS uses: the CPU's address space, the
 ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
-the stacks. Chapter 13 explains the layout and Chapter 7 describes it from a
+the stacks. Chapter 14 explains the layout and Chapter 8 describes it from a
 program's side. The figures are those of the build at 78127ec, whose one
 profile is `tecos` and whose ROM has the SHA-256
 `8cad40923ce1c3c6079d3201a1a8cc294dbe501838ed54505ca12287672f8b9f`. Where the

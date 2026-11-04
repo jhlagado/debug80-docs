@@ -1,11 +1,11 @@
 ---
 title: The ROM and its build
 parent: TEC-OS
-nav_order: 12
+nav_order: 13
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 12. The ROM and its build
+# 13. The ROM and its build
 
 <!-- Checked against TEC-OS 78127ec. -->
 
@@ -34,14 +34,14 @@ ROM's regions in `docs/memory-map.md`. The used part, from `C000h` to the end
 of the code, is 16,018 of the 16,384 bytes.
 
 The first three bytes are a jump, `JP RSTENT` (`src/reset.asm:6`), to `C60Ah`,
-the first byte of the code. Chapter 14 describes how the Z80 reaches it at
+the first byte of the code. Chapter 15 describes how the Z80 reaches it at
 reset.
 
 The ROM table at `C003h` is the fixed interface for programs and services
 (`src/abi.asm:7-10`). It is 8 bytes long. It starts with the signature `TNA`
 and the ABI's major and minor version, 5 and 1. At `C008h` is its one jump, to
-`SVCDSP`, the dispatcher of the numbered services. Chapter 9 describes the
-table from a program's side and Chapter 20 the services behind it. The table
+`SVCDSP`, the dispatcher of the numbered services. Chapter 10 describes the
+table from a program's side and Chapter 23 the services behind it. The table
 ends at `C00Bh`, where the data begins.
 
 The data block runs from the label `ROMDATA` (`src/tables.asm:8`) to `ROMCODE`
@@ -55,7 +55,7 @@ table and the table of the numbered services (`src/tables.asm:31-35`,
 whose code uses it, so `CWMSG`, the text `Write lost`, sits under `cache.asm`
 (`src/text.asm:68-69`). Nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
 (`src/tables.asm:11-28`) is in the block as the source of the copy that programs
-and the BDOS call, which Chapter 15 describes.
+and the BDOS call, which Chapter 16 describes.
 
 The code starts at `RSTENT` (`src/boot.asm:20`) and runs through every routine of TEC-OS to the label
 `CODEEND`, which `src/end.asm:2` defines after the last file. The free space is
@@ -102,7 +102,7 @@ from the same equates as a program does (`src/rom.asm:4`). `ram.asm` names the r
 origin to `WSBASE` and reserves each variable with `DS`, which defines a label
 and moves the address on without emitting anything (`src/ram.asm:6`,
 `src/ram.asm:9-216`). A second origin, at `RAMBIOS+BIOSLEN`, places the state
-that sits above the RAM BIOS table (`src/ram.asm:218-301`). Chapter 13
+that sits above the RAM BIOS table (`src/ram.asm:218-301`). Chapter 14
 describes that memory. Bytes start with `reset.asm` and its `ORG $C000`
 (`src/reset.asm:1`), and from there each file's bytes follow the last's.
 
@@ -131,7 +131,7 @@ them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:25-26`,
 `tools/build.mjs:37-59`). At 78127ec they are 49, 105, 50, 70 and 77, and the
 build stops with an error if a count would not fit in a byte
-(`tools/build.mjs:46-48`). Chapter 15 explains the loops and the arithmetic
+(`tools/build.mjs:46-48`). Chapter 16 explains the loops and the arithmetic
 behind the counts.
 
 `gen/format.asm` and `gen/geom.asm` come from `format/format.json`, the one
@@ -163,8 +163,8 @@ layout from one file. `geometryInfo` in the module checks each
 geometry before either uses it. A geometry must have 64 records a track, no
 reserved tracks and no check vector. Its allocation vector must be at most 256
 bytes. Its `EXM` and directory blocks must match the block size and the number
-of directory entries (`tools/lib/format.mjs:9-41`). Chapter 16 describes those
-fields, and Chapter 18 the container.
+of directory entries (`tools/lib/format.mjs:9-41`). Chapter 19 describes those
+fields, and Chapter 17 the container.
 
 ## ATOM and the two assemblies
 
@@ -240,7 +240,7 @@ with `placement check failed:` and the rule's text
   least 45,830 bytes (`tools/build.mjs:264-265`).
 
 The last check works out the TPA without running the ROM. `cardLayout` follows
-the arithmetic of cold boot's `ALVINIT`, which Chapter 13 describes: the
+the arithmetic of cold boot's `ALVINIT`, which Chapter 14 describes: the
 allocation vectors packed down from `WSBASE`, and the BDOS entry jump below
 them (`tools/build.mjs:220-224`). The starter card has two volumes, a G1M
 whose last allocation block, `DSM`, is 511 and a G8M whose `DSM` is 2047. Their
@@ -259,7 +259,7 @@ and after a build `dist/` holds the same ROM as `build/tecos/`
 (`tools/build.mjs:320-334`).
 
 The PICO9918's console is in the ROM at each of its three widths, 80 columns
-from reset and 40 or 32 through `CON` (Chapter 17), and the GLCD's is a driver
+from reset and 40 or 32 through `CON` (Chapter 20), and the GLCD's is a driver
 on the card, so every board takes the same image. The build has one profile, `tecos`, and stops
 with an error when it is given any other name (`tools/build.mjs:29-32`,
 `tools/build.mjs:343`). `npm run build` prints one line:

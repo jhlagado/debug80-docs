@@ -21,7 +21,7 @@ a word from the command line and `LABEL` for a volume's label. `nn` stands for a
 code in hexadecimal, except in the list of volumes `MOUNT` prints, where it is
 a volume's index in decimal. The rest is printed as it stands.
 `tecvol` runs on a PC, and Appendix F describes it. The diagnostics ROM is a
-separate image, and Chapter 23 describes it.
+separate image, and Chapter 26 describes it.
 
 ## Cold boot
 
@@ -47,7 +47,7 @@ PICO9918 and the matrix keyboard, and the serial terminal on any other. The
 LCD's last row shows `CARD?` (`src/boot.asm:471-478`, `src/text.asm:8-10`). `R` starts the LCD, the card
 and the mount again, so a card fixed or put in while TEC-OS waits at the prompt
 mounts with no reset. The key is echoed as typed, and `r` retries too. Any
-other key gives the prompt again (`src/boot.asm:479-489`). [Chapter 23](23-diagnostics.md#the-diagnostic-prompt)
+other key gives the prompt again (`src/boot.asm:479-489`). [Chapter 26](26-diagnostics.md#the-diagnostic-prompt)
 explains the prompt.
 
 Codes `01h` to `04h` and `0Bh` come from `SDINIT`, the start of the card
@@ -55,11 +55,11 @@ Codes `01h` to `04h` and `0Bh` come from `SDINIT`, the start of the card
 
 | Code | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| `01` | No answer to `CMD0`, the first command, in 10 tries. An empty socket gives this code. | Put a card in and press `R`. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:141-159` |
-| `02` | `ACMD41` didn't report the card ready in 256 tries, or the card answered a `CMD55` with an error bit set. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:180-202` |
-| `03` | `CMD58`, which reads the card's capacity type, failed. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:203-230` |
-| `04` | `CMD16`, which sets a standard-capacity card's block length, failed. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:219-228` |
-| `0B` | The card's answer to `CMD8` echoed another voltage range than 2.7 to 3.6 V, or another check pattern than `AAh`. | Use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:160-178` |
+| `01` | No answer to `CMD0`, the first command, in 10 tries. An empty socket gives this code. | Put a card in and press `R`. | [Chapter 17](17-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:141-159` |
+| `02` | `ACMD41` didn't report the card ready in 256 tries, or the card answered a `CMD55` with an error bit set. | Press `R`. If the code comes back, use another card. | [Chapter 17](17-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:180-202` |
+| `03` | `CMD58`, which reads the card's capacity type, failed. | Press `R`. If the code comes back, use another card. | [Chapter 17](17-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:203-230` |
+| `04` | `CMD16`, which sets a standard-capacity card's block length, failed. | Press `R`. If the code comes back, use another card. | [Chapter 17](17-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:219-228` |
+| `0B` | The card's answer to `CMD8` echoed another voltage range than 2.7 to 3.6 V, or another check pattern than `AAh`. | Use another card. | [Chapter 17](17-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:160-178` |
 
 Codes `05h` to `0Ah` are the SD card driver's codes for a block read or write:
 command rejected, no data token, write not accepted, card stayed busy, a
@@ -75,7 +75,7 @@ container. The first check to fail stops the mount, and no drive stays mounted
 (`src/vol.asm:272-276`).
 [Appendix E](appendix-e-container-format.md#the-checks-and-their-codes) gives
 every check in order, and
-[Chapter 18](18-sd-card-and-volumes.md#the-container-s-checks) explains them.
+[Chapter 17](17-sd-card-and-volumes.md#the-container-s-checks) explains them.
 
 | Code | Cause | Constant |
 | --- | --- | --- |
@@ -103,20 +103,20 @@ so it reads no file from a copy that fails it. Write a new image with
 
 TEC-OS writes two words on the 20 × 4 LCD's last row, for a board that may
 have no terminal attached.
-[Chapter 5](05-startup-and-services.md#words-on-the-lcd) explains when each is
+[Chapter 6](06-startup-file.md#words-on-the-lcd) explains when each is
 written and cleared.
 
 | Word | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| `CARD?` | TEC-OS is waiting at the diagnostic prompt. | As for the prompt. `R` starts the LCD again, so a retry that works clears the word. | [Chapter 21](21-startup.md#the-lcd-s-words), `src/boot.asm:472-473`, `src/text.asm:10` |
-| `GLCD?` | `CON UC1` couldn't load or install `A:GLCD.SVC`: the file is missing or bad, or the board has no graphics LCD or no matrix keyboard. The console stays where it was. | Put `GLCD.SVC` on drive A. The word stays until `GLCD.SVC` loads or a reset. | [Chapter 5](05-startup-and-services.md#words-on-the-lcd), `src/loader.asm:512-525`, `src/loader.asm:544-550`, `drivers/glcd.asm:38-50`, `src/text.asm:65` |
+| `CARD?` | TEC-OS is waiting at the diagnostic prompt. | As for the prompt. `R` starts the LCD again, so a retry that works clears the word. | [Chapter 25](25-startup.md#the-lcd-s-words), `src/boot.asm:472-473`, `src/text.asm:10` |
+| `GLCD?` | `CON UC1` couldn't load or install `A:GLCD.SVC`: the file is missing or bad, or the board has no graphics LCD or no matrix keyboard. The console stays where it was. | Put `GLCD.SVC` on drive A. The word stays until `GLCD.SVC` loads or a reset. | [Chapter 6](06-startup-file.md#words-on-the-lcd), `src/loader.asm:512-525`, `src/loader.asm:544-550`, `drivers/glcd.asm:38-50`, `src/text.asm:65` |
 
 ## The CCP's failures
 
 Each failure in this section sets the return code to `FF00h`, and a `:` piece
 after it in a chained line then drops the rest of the line
 (`src/cpm/ccp.asm:377-381`, `src/cpm/ccp.asm:143-155`).
-[Chapter 11](11-chaining-commands.md#a-command-that-depends-on-the-one-before)
+[Chapter 11](11-return-codes-and-chaining.md#a-command-that-depends-on-the-one-before)
 explains the code.
 
 | Message | Cause | Remedy | See |
@@ -140,11 +140,11 @@ alone when it needs an argument and has none.
 
 | Word or command | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| A program's name | No `NAME.COM` on the drive in the current user area or in user 0. When the command names no drive and the current drive isn't A, none on drive A in the current user area or in user 0 either. A type other than `.SVC` is ignored, so `PICO.DRV` looks for `PICO.COM`. With the graphics LCD chosen, the web page reports a card with no `GLCD.SVC` and a `.DRV` display file when it powers on, naming `GLCD.DRV` if the card has it and another of them if not. | Check the name, the drive and the user area, or name the drive, as `B:NAME`. A card from an older TEC-OS needs the steps in [Chapter 5](05-startup-and-services.md#a-card-from-an-older-tec-os). | [Chapter 3](03-command-line.md#running-a-program), `src/cpm/ccp.asm:298-316`, `src/cpm/ccp.asm:383-410`, `host/card.mjs:41-44` |
+| A program's name | No `NAME.COM` on the drive in the current user area or in user 0. When the command names no drive and the current drive isn't A, none on drive A in the current user area or in user 0 either. A type other than `.SVC` is ignored, so `PICO.DRV` looks for `PICO.COM`. With the graphics LCD chosen, the web page reports a card with no `GLCD.SVC` and a `.DRV` display file when it powers on, naming `GLCD.DRV` if the card has it and another of them if not. | Check the name, the drive and the user area, or name the drive, as `B:NAME`. A card from an older TEC-OS needs the steps in [Chapter 6](06-startup-file.md#a-card-from-an-older-tec-os). | [Chapter 3](03-command-line.md#running-a-program), `src/cpm/ccp.asm:298-316`, `src/cpm/ccp.asm:383-410`, `host/card.mjs:41-44` |
 | A program's name | The name is ambiguous or has no name part, is longer than 8 and 3 characters, has a bad character or names a drive past P. | Correct the name. | [Chapter 3](03-command-line.md#file-names), `src/cpm/ccp.asm:256`, `src/cpm/ccp.asm:278-280`, `src/cpm/ccpcmd.asm:319-409`, `src/cpm/ccpcmd.asm:415-446` |
-| A program's name | `NAME.COM` doesn't fit below the BDOS's entry, the address in the word at `0006h`. | Use `UNLOAD` to free service resident memory. | [Chapter 17](17-ccp.md#loading-a-program), `src/cpm/ccp.asm:425-427`, `src/cpm/ccp.asm:441-449` |
-| `NAME.SVC` | The file is missing or doesn't read, isn't a service of format 4, or fails while installing. `GLCD.SVC` also fails when the graphics LCD or the matrix keyboard is missing, when it is in already, or on a ROM before ABI 5.1. An old card's `PICO.SVC` fails too, since `CRT:`'s table is the ROM's. From `STARTUP.CMD`, a driver whose `INIT` finds its device absent prints nothing, so the starter card's `GLCD.SVC` line is quiet on a board with no graphics LCD. On a board with both displays a `GLCD.SVC` line in `STARTUP.CMD` passes over quietly and loads nothing, and a `GLCD.SVC` typed at the prompt loads and gives way to the PICO9918 with no message. A service whose record is refused after its `INIT` succeeds prints its name from `STARTUP.CMD`, whatever `INIT` returned in `A`. | Check the board, the name and `SERVICES`. A card from an older TEC-OS needs the steps in Chapter 5, and its `PICO.SVC` line can go. | [Chapter 21](21-startup.md#the-quiet-rule), [Chapter 20](20-hardware-services-and-service-loader.md#a-failed-load), `src/loader.asm:532-547`, `src/loader.asm:97-127`, `src/loader.asm:289-291`, `src/cpm/ccp.asm:288-296`, `src/services.asm:368-380`, `drivers/glcd.asm:38-50` |
-| `UNLOAD` | No service is installed, or the newest can't be removed: its flags mark it as not removable, or its `REMOVE` returned carry. | Services go newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccpcmd.asm:8-10`, `src/loader.asm:61-71` |
+| A program's name | `NAME.COM` doesn't fit below the BDOS's entry, the address in the word at `0006h`. | Use `UNLOAD` to free service resident memory. | [Chapter 20](20-ccp.md#loading-a-program), `src/cpm/ccp.asm:425-427`, `src/cpm/ccp.asm:441-449` |
+| `NAME.SVC` | The file is missing or doesn't read, isn't a service of format 4, or fails while installing. `GLCD.SVC` also fails when the graphics LCD or the matrix keyboard is missing, when it is in already, or on a ROM before ABI 5.1. An old card's `PICO.SVC` fails too, since `CRT:`'s table is the ROM's. From `STARTUP.CMD`, a driver whose `INIT` finds its device absent prints nothing, so the starter card's `GLCD.SVC` line is quiet on a board with no graphics LCD. On a board with both displays a `GLCD.SVC` line in `STARTUP.CMD` passes over quietly and loads nothing, and a `GLCD.SVC` typed at the prompt loads and gives way to the PICO9918 with no message. A service whose record is refused after its `INIT` succeeds prints its name from `STARTUP.CMD`, whatever `INIT` returned in `A`. | Check the board, the name and `SERVICES`. A card from an older TEC-OS needs the steps in Chapter 6, and its `PICO.SVC` line can go. | [Chapter 25](25-startup.md#the-quiet-rule), [Chapter 23](23-hardware-services-inside.md#a-failed-load), `src/loader.asm:532-547`, `src/loader.asm:97-127`, `src/loader.asm:289-291`, `src/cpm/ccp.asm:288-296`, `src/services.asm:368-380`, `drivers/glcd.asm:38-50` |
+| `UNLOAD` | No service is installed, or the newest can't be removed: its flags mark it as not removable, or its `REMOVE` returned carry. | Services go newest first. | [Chapter 6](06-startup-file.md#installing-listing-and-removing-services), `src/cpm/ccpcmd.asm:8-10`, `src/loader.asm:61-71` |
 | `COPY` | A name is missing or has a wildcard, the destination is the source or something follows the destination. | Name one source and a destination that differs, and nothing after it. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccpfile.asm:571-598` |
 | `ERA` | No name, more than one, or a bad name. | `ERA NAME`. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccpfile.asm:420-424` |
 | `REN` | The form isn't `NEW=OLD`, a name has a wildcard, a name is missing, or the names give two different drives. | `REN NEW=OLD`, with a drive on one name or the same drive on both. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccpfile.asm:473-507` |
@@ -169,7 +169,7 @@ printed first and the error then returns the same way. Neither drops the rest
 of a chained line, and a sequential read or write that returns an error leaves
 the FCB on the record it didn't read or write. Every warm boot puts the default
 back (`src/cpm/bdos.asm:166-173`, `src/ram.asm:144-146`).
-[Chapter 16](16-bdos.md#bdos-errors) explains them and
+[Chapter 19](19-bdos.md#bdos-errors) explains them and
 [Appendix A](appendix-a-bdos-functions.md#calling-a-function) lists them by
 function.
 
@@ -179,9 +179,9 @@ function.
 | `Bdos Err On d: R/O` | 2 | A program changed a drive that function 28 made read-only: a write, a make, delete, rename or attribute change. A close writes nothing there and gives no error. | The warm boot clears the state, as CP/M 2.2's does. Run the program again, and correct a program that writes to a drive it protected. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdoslog.asm:567-571`, `src/cpm/bdosfile.asm:169-172`, `src/cpm/bdosfile.asm:33-40`, `src/text.asm:60` |
 | `Bdos Err On d: R/O` | 2 | A change to a volume the card marks read-only. `SAVE`, `ERA`, `REN` and `COPY` onto such a volume give it too. The card isn't changed. | Use a volume that takes writes. The volume's read-only flag is set when the card is built. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdoslog.asm:159-164`, `src/cpm/bdoslog.asm:567-571`, `src/text.asm:60` |
 | `Bdos Err On d: File R/O` | 3 | A delete, a rename or a sequential or random write reached a file with the read-only attribute. `ERA`, `REN`, `SAVE` and `COPY` onto such a file give it too. An `ERA` with a wildcard has already erased the matching files before it in the directory. | Clear the attribute with BDOS function 30, or on a PC `tecvol get` the file and `tecvol put` it with `--force` and without `--ro`, since `tecvol` refuses to write over a read-only file without `--force`. The CCP has no command for it. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdosfile.asm:253-261`, `src/cpm/bdosfile.asm:389`, `src/cpm/bdosfile.asm:432-437`, `src/cpm/bdosrec.asm:217`, `src/text.asm:61-62` |
-| `Bdos Err On d: Bad Sector` | 1 | A record or a directory record couldn't be read from the card or written to it. | Copy the card to a PC and run `tecvol verify`. Replace a card that keeps failing. | [Chapter 16](16-bdos.md#bdos-errors), `src/cpm/bdosrec.asm:175`, `src/cpm/bdosrec.asm:48-57`, `src/cpm/bdoslog.asm:76-78`, `src/cpm/bdoscon.asm:21-23` |
-| `Bdos Err On d: Bad Sector` | 1 | The volume runs past the end of the card. The card rejects a block past its end, and no other block of the card changes. | Use a card that holds the whole container, or build the card again with `tecvol create` so that every volume lies on the card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:272-279`, `src/sd.asm:498-506` |
-| `Bdos Err On d: Bad Sector` | 1 | A directory entry names an allocation block past the end of the volume: the directory is damaged. The drive logs in and the rest of the volume works, and reading that block gives this. | `ERA` takes the file. Run `tecvol verify` on a copy, as in [Chapter 4](04-cards-and-volumes.md#recovery-after-a-power-cut). | [Chapter 16](16-bdos.md#files-extents-and-records), `src/cpm/bdosrec.asm:552`, `src/cpm/bdoslog.asm:468-475`, `src/cpm/bdoscon.asm:46-49` |
+| `Bdos Err On d: Bad Sector` | 1 | A record or a directory record couldn't be read from the card or written to it. | Copy the card to a PC and run `tecvol verify`. Replace a card that keeps failing. | [Chapter 19](19-bdos.md#bdos-errors), `src/cpm/bdosrec.asm:175`, `src/cpm/bdosrec.asm:48-57`, `src/cpm/bdoslog.asm:76-78`, `src/cpm/bdoscon.asm:21-23` |
+| `Bdos Err On d: Bad Sector` | 1 | The volume runs past the end of the card. The card rejects a block past its end, and no other block of the card changes. | Use a card that holds the whole container, or build the card again with `tecvol create` so that every volume lies on the card. | [Chapter 17](17-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:272-279`, `src/sd.asm:498-506` |
+| `Bdos Err On d: Bad Sector` | 1 | A directory entry names an allocation block past the end of the volume: the directory is damaged. The drive logs in and the rest of the volume works, and reading that block gives this. | `ERA` takes the file. Run `tecvol verify` on a copy, as in [Chapter 4](04-cards-and-volumes.md#recovery-after-a-power-cut). | [Chapter 19](19-bdos.md#files-extents-and-records), `src/cpm/bdosrec.asm:552`, `src/cpm/bdoslog.asm:468-475`, `src/cpm/bdoscon.asm:46-49` |
 
 ## `Write lost`
 
@@ -205,7 +205,7 @@ only cold boot starts a card (`src/boot.asm:67`), and the first warm boot after
 it gives `Write lost`. BDOS function 48 reports a failure to a program at
 once: it writes every changed block and returns `A` = `FFh` if any write failed
 (`src/cpm/bdos.asm:175-180`).
-[Chapter 19](19-block-cache.md#write-lost) explains the mechanism and
+[Chapter 18](18-block-cache.md#write-lost) explains the mechanism and
 [Chapter 4](04-cards-and-volumes.md#the-block-cache-and-the-volume-written-behind)
 the volume written behind.
 
@@ -216,7 +216,7 @@ This program on the starter card prints its own messages
 message the program returns to the prompt with a return code of 0, so a `:`
 piece after it runs.
 [Chapter 4](04-cards-and-volumes.md#drives-and-mount) explains the
-program, and [Chapter 18](18-sd-card-and-volumes.md#the-volume-services) the
+program, and [Chapter 17](17-sd-card-and-volumes.md#the-volume-services) the
 volume services behind it.
 
 | Message | Cause | Remedy | See |
@@ -225,7 +225,7 @@ volume services behind it.
 | `No such volume` | No volume has that label or index. A failed read of the table gives this too. | `MOUNT` with no argument lists the labels and indexes. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:106-107`, `test/programs/mount.asm:129-130`, `src/vol.asm:732-762` |
 | `Cannot mount: in use or too large` | The volume is on another drive, the drive has no vector or one too small for the volume, or writing the cache's changes to the card failed. | Empty the other drive first with `MOUNT d:`. For size, use a drive whose vector takes the volume, as [Chapter 4](04-cards-and-volumes.md#drives-and-their-cost-in-memory) explains. A failed write drops the changes the cache held for those blocks, as under `Write lost`, and no message follows. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `src/vol.asm:607-619`, `src/vol.asm:637-647`, `src/vol.asm:704-713` |
 | `Cannot unmount` | The drive is A, which always has a volume, or writing the cache's changes to the card failed. | Mount another volume on drive A in place of the one there. A failed write drops the changes the cache held for those blocks, as under `Write lost`, and no message follows. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `src/vol.asm:653-659` |
-| `MOUNT needs TEC-OS with ABI 5.` | The ROM table is missing, or its major version isn't 5: the program is from another version of TEC-OS. | Use the `MOUNT.COM` that matches the ROM, from a new starter card. | [Chapter 9](09-hardware-services.md#checking-for-tec-os), `test/programs/mount.asm:14-31` |
+| `MOUNT needs TEC-OS with ABI 5.` | The ROM table is missing, or its major version isn't 5: the program is from another version of TEC-OS. | Use the `MOUNT.COM` that matches the ROM, from a new starter card. | [Chapter 10](10-hardware-services.md#checking-for-tec-os), `test/programs/mount.asm:14-31` |
 
 ## Lines that report no fault
 
@@ -240,7 +240,7 @@ These lines appear in ordinary runs and need no remedy.
 | `ALL (Y/N)?` | `ERA` was given a name that is all wildcards. A line that starts with `Y` or `y` erases every file of the current user area on the drive. Any other line erases nothing, and the command counts as a success. A Return alone is the whole answer and erases nothing. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccpfile.asm:429-453`, `src/text.asm:47-48` |
 | `COPIED nnnn` | `COPY` finished. `nnnn` is the number of records, in hexadecimal. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccpfile.asm:636-642`, `src/text.asm:35-36` |
 | `CON: TTY:`, `CON: CRT:`, `CON: UC1:` | The console mode in effect, after `CON`. A `CON CRT` on a board with no PICO9918 console reports `TTY:`, and a `CON UC1` that can't take effect reports the console in use. `CON: BAT:` goes to the list device, which discards it, so it appears nowhere. | [Chapter 2](02-console.md#the-con-command), `src/cpm/ccpcmd.asm:120-137`, `src/console.asm:53-55`, `src/console.asm:331`, `src/text.asm:37-42` |
-| `NAME n` | `SERVICES`: a service's name and its pages, the newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccpcmd.asm:529-551` |
+| `NAME n` | `SERVICES`: a service's name and its pages, the newest first. | [Chapter 6](06-startup-file.md#installing-listing-and-removing-services), `src/cpm/ccpcmd.asm:529-551` |
 | `d: LABEL` from `MOUNT` | The drive and the volume now on it, also when the volume was there already. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:149-157` |
 | `Unmounted` | `MOUNT d:` has emptied the drive. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:49-57` |
 | `nn LABEL G1M`, `nn LABEL G8M` | `MOUNT` with no argument: a volume's index in decimal, its label and its geometry, with ` R/O` after a read-only volume and the drive after a mounted one, as `d:`. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:159-208` |

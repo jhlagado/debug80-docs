@@ -1,15 +1,15 @@
 ---
 title: Startup
 parent: TEC-OS
-nav_order: 21
+nav_order: 25
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 21. Startup
+# 25. Startup
 
 <!-- Checked against TEC-OS 78127ec. -->
 
-Chapter 5 describes the startup file, the display lines and the LCD's words as
+Chapter 6 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and two
 routines in `src/cpm/ccpcmd.asm`: `STBOOT` reads the file, and `STLINE` gives the
 CCP one line at a time. This chapter describes them in that order, then the
@@ -17,7 +17,7 @@ path a display line takes, the rule that keeps some of the file's failures
 quiet, the flag bit behind the LCD's words and the web page's rewrite of the
 file.
 `test/startup.test.mjs` and `test/pico.test.mjs` check these rules on the host
-model of Chapter 25.
+model of Chapter 27.
 
 ## One byte of state
 
@@ -80,7 +80,7 @@ T-states after reset, about 1.46 seconds.
 (`src/cpm/ccpcmd.asm:565-568`, `src/tables.asm:93`), and cold boot's clear has left the
 rest of `CMDFCB` zero. Drive byte 1 is drive A whichever drive is current, and
 `RESEL` has already put back a recognised reset's selection (`src/boot.asm:72`),
-so the file comes from the volume on drive A at that moment, as Chapter 5's
+so the file comes from the volume on drive A at that moment, as Chapter 6's
 `SPARE` example shows. Three BDOS calls follow, the second and third through
 `DOSSEQ`, which takes the function's number from the byte after its `CALL` and
 points `DE` at `CMDFCB` (`src/cpm/ccpcmd.asm:569-579`,
@@ -160,7 +160,7 @@ at the first `$`, so a `$` in the line ends the echo there, but the characters
 in `CMDTXT` aren't changed and the line runs whole. The CCP's own `CRLFMSG` at
 `NOTDRIVE` ends the echo's row whether or not the CR was reached
 (`src/cpm/ccp.asm:251-253`), so the output after a cut echo starts on a new row,
-as Chapter 5's transcript shows.
+as Chapter 6's transcript shows.
 
 The `$` needs one more byte than the buffer. `CMDTXT` is 128 bytes and is
 followed at once by `BOOTDRV` (`src/ram.asm:94-98`), so a line of 127 characters
@@ -183,7 +183,7 @@ or a failed command jumps to `STARTED` or `MAINLOOP` (`src/cpm/ccp.asm:70-79`,
 address that `CMDRUN` pushed (`src/cpm/ccp.asm:324-325`), and the warm boot
 enters the CCP at `CCPENT`, where `STBOOT` returns at once. The loop then
 reaches `STLINE` with `STPOS` where the last line left it. A `^C` that ends a
-program is a warm boot too, so it leaves the file's position alone. Chapter 24
+program is a warm boot too, so it leaves the file's position alone. Chapter 21
 describes what `CHPOS` does for a line's pieces.
 
 ## The path of a display line
@@ -200,7 +200,7 @@ no `PICO.COM` is found on drive A, the current drive at startup, and the line
 fails.
 `SVCGO` reads the file with `LOADCOM` and installs it with `SVCLOAD`, and a
 failure of either returns carry to the CCP (`src/loader.asm:532-537`,
-`src/cpm/ccp.asm:288-289`). Chapter 20 describes the loader and the relocation,
+`src/cpm/ccp.asm:288-289`). Chapter 23 describes the loader and the relocation,
 and Appendix H the file.
 
 Only the GLCD has a display line. The PICO9918's console is the ROM's, started
@@ -287,7 +287,7 @@ question mark (`src/cpm/ccpcmd.asm:95-103`, `test/startup.test.mjs:82-93`).
 with `:` runs only when the code shows no failure (`src/cpm/ccp.asm:143-155`,
 `src/cpm/ccp.asm:374-378`). The quiet path leaves the 0 that `MLTAKE` wrote
 there before the command (`src/cpm/ccp.asm:175-177`), so a `:` line after a
-quiet `GLCD.SVC` runs, and after a `GLCD.SVC?` it goes. Chapter 24 describes
+quiet `GLCD.SVC` runs, and after a `GLCD.SVC?` it goes. Chapter 21 describes
 the code and the `:`.
 
 ## The LCD's words
@@ -343,7 +343,7 @@ from the port, so no reset begins with `CDWRD` set (`src/console.asm:36`,
 The web page sets the display and the width from its "Display" and "ROM"
 controls, and it keeps the first line of the card's startup file in step with
 them. `powerOn` queues the preparation, `powerOnNow`, to take its turn with any
-copy of files onto the card, as Chapter 25 describes (`web/src/main.mjs:67-80`).
+copy of files onto the card, as Chapter 27 describes (`web/src/main.mjs:67-80`).
 At each power-on `powerOnNow` passes the card, the display and the width to
 `prepareCard` (`web/src/main.mjs:82-84`). The PICO9918's console is the ROM's,
 so the page writes no driver. A width other than 80 goes in a `CON PICO` line

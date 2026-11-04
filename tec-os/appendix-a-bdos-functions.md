@@ -12,7 +12,7 @@ nav_group: "Appendices"
 This appendix lists the BDOS functions of TEC-OS in number order: 0 to 40,
 then 44 to 48, 99 and 108, whose meanings come from CP/M 3. Each entry gives the
 registers the function takes, what it returns and where it differs from CP/M
-2.2. Chapter 16 describes the mechanism behind them.
+2.2. Chapter 19 describes the mechanism behind them.
 
 ## Calling a function
 
@@ -25,7 +25,7 @@ of the program's stack, for its return address: the BDOS runs on its own
 54-byte stack (`src/cpm/bdos.asm:89-92`, `src/layout.asm:71`).
 
 A function that takes an FCB, a 36-byte file control block whose layout
-Chapter 16 gives, works on the drive in its first byte: 0 for the default
+Chapter 19 gives, works on the drive in its first byte: 0 for the default
 drive, 1 to 16 for A to P. The BDOS selects that drive before the function
 runs, for functions 15, 16, 17, 19 to 23, 30, 33 to 35 and 40
 (`src/tables.asm:78`, `src/cpm/bdos.asm:118-133`). A `?` in the drive byte is
@@ -105,7 +105,7 @@ printed, as function 2 prints each (`src/cpm/bdos.asm:265-276`).
 characters it takes. The BDOS returns the number read in the second byte, with
 the characters from the third on. Return or LF ends the line, and so does the
 last character the buffer takes. The editing keys are backspace, Delete, `^U`,
-`^R`, `^X`, `^E`, `^P` and `^C` as the line's first key, as Chapter 16
+`^R`, `^X`, `^E`, `^P` and `^C` as the line's first key, as Chapter 19
 describes. When the CCP calls it for the prompt, `^W` and `^N` recall lines
 from the command history. For a program they are characters
 (`src/cpm/bdos.asm:356-361`).

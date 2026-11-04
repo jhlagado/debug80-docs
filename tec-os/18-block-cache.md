@@ -1,11 +1,11 @@
 ---
 title: The block cache
 parent: TEC-OS
-nav_order: 19
+nav_order: 18
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 19. The block cache
+# 18. The block cache
 
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the repository's
      `atom-z80` 0.3.7 and the starter card's `TED.COM` from
@@ -14,7 +14,7 @@ nav_group: "Part II: Inside TEC-OS"
      timings and traces below were made on that card unless the text names another. -->
 
 Reading a block from the SD card takes TEC-OS about 55 milliseconds, because
-every bit of it passes through a port one at a time, as Chapter 18 describes.
+every bit of it passes through a port one at a time, as Chapter 17 describes.
 A CP/M program reads the same blocks again and again, the directory above all. The
 block cache keeps the blocks it has read in EXPAND 1, so that a second read of
 a block is a copy in memory. Every write goes through the same cache. On a
@@ -39,9 +39,9 @@ bytes holding the number of the card block it holds, `FFFFFFFFh` while it is
 empty. From `CDIRTY`, `BC80h`, each line has a byte that is nonzero while the
 line holds changes the card lacks. Every line starts empty and clean, since
 cold boot clears EXPAND 1 and marks each line empty before it mounts the card,
-as Chapter 14 describes (`src/boot.asm:54`). The mount then reads the
+as Chapter 15 describes (`src/boot.asm:54`). The mount then reads the
 container's table into a line, an ordinary clean one that `CTAKE` gives out
-again in turn (Chapter 18).
+again in turn (Chapter 17).
 
 The lines are keyed by the block's number on the card, `SDLBA`, and not by
 drive and block within the volume. A block has one number whichever drive
@@ -59,7 +59,7 @@ the workspace above the RAM BIOS table, at fixed addresses
 To read or write the table, a routine takes from `CXON` the latch value with
 `LATEXP` added to `LATCHV` and writes it to the latch. It reads or writes the
 bytes with no `PUSH`, `POP` or `CALL` in between, then writes `LATCHV` back to
-the latch (`src/cache.asm:17-26`). Chapter 13 explains why no stack may be
+the latch (`src/cache.asm:17-26`). Chapter 14 explains why no stack may be
 used while EXPAND 1 is in view.
 
 ## Reads through the cache
@@ -189,7 +189,7 @@ hit.
 ## Writes behind
 
 Writing through costs four card writes for each block of a new file, as
-Chapter 18 shows, so the block cache keeps the records of the volume written
+Chapter 17 shows, so the block cache keeps the records of the volume written
 behind and sends them to the card in batches. A volume is written behind when its
 descriptor has bit 0 of its cache byte, byte 15, set. `tecvol` sets the bit on
 one volume at most, and the ROM writes behind any volume that has it. `MNFILL`
@@ -200,7 +200,7 @@ starter card the volume is `WORK` on drive B.
 
 `CWRBH`, the path of every write, puts the record into the block's line and marks the line dirty
 (`src/cache.asm:296-386`). If no line holds the block, `CTAKE` gives one out.
-Two cases follow, decided by `WRITE`'s rule from Chapter 18: whether the block
+Two cases follow, decided by `WRITE`'s rule from Chapter 17: whether the block
 holds anything the card's copy has to supply. If it might, the line
 is filled from the card first, unless it already held the block.
 
@@ -240,7 +240,7 @@ the file is created. Nothing is written while the four data blocks go into the
 cache. At the close come 4,130, 4,131, 4,128 and 4,129, the data in the order
 of their lines, and then 4,096 again. The trace was taken on the host model by
 recording `SDLBA` at each call of `SDWRITE`. Six card writes do what eighteen
-do on drive A, which is written through (Chapter 18).
+do on drive A, which is written through (Chapter 17).
 
 A larger file fills the lines. In `SAVE 160 Z.COM` on B, 80 blocks, `CTAKE`
 writes three of the first 32 data blocks early, because all 30 lines are dirty
@@ -356,5 +356,5 @@ milliseconds. A directory write on the volume written behind holds them off
 while every dirty line is written. On the model the close of a file of four
 blocks took 1,111,542 T-states. A flush of all 30 lines takes about 30 ×
 217,421, some 6.5 million T-states, or 1.6 seconds. Interrupts are on only
-when a program has enabled them, as Chapter 14 describes, so this affects only
+when a program has enabled them, as Chapter 15 describes, so this affects only
 such a program.

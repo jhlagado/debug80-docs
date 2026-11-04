@@ -17,8 +17,8 @@ it. Part II explains how it works inside, and the appendices are the reference.
 
 The book is written for someone who knows the TEC-1G, or a Z80 board like it,
 and wants to use the board as a small disk computer rather than a trainer.
-Chapters 1 to 5 begin at the first prompt, and a reader of them needs no
-programming. Chapters 6 to 11 are for readers of Z80 assembly, and they
+Chapters 1 to 6 begin at the first prompt, and a reader of them needs no
+programming. Chapters 7 to 11 are for readers of Z80 assembly, and they
 explain each part of CP/M where a program first uses it. Part II is for
 readers who want the mechanism: how an operating system with a CP/M interface
 fits in 16 KiB, and the reasons for its layout.
@@ -84,34 +84,34 @@ caret, so `^C` means Ctrl and C together.
    with `tecvol`. The chapter then covers `MOUNT`, what each drive costs in
    memory, the block cache and what a reset keeps. It ends with
    putting an image on a card and recovering after a power cut.
-5. **[Startup and services](05-startup-and-services.md).** The services TEC-OS
+5. **[Startup and services](06-startup-file.md).** The services TEC-OS
    loads, and the startup file that installs them. The chapter covers the
    file's rules, the display lines and the PICO9918's three widths, and the
    keypad skip. It also covers the words `GLCD?` and `CARD?` on the LCD, and the commands that install, list and remove a service.
-6. **[A first program](06-first-program.md).** Two programs that call the
+6. **[A first program](07-first-program.md).** Two programs that call the
    BDOS: one prints a line, and the other prints the file named on its command
    line. You assemble the first on a PC, copy it to a card and run it, then
    assemble it again on the TEC-1G with `TAS` and edit, build and run it there
    with `TED`. The chapter ends with the ways a program returns to TEC-OS.
-7. **[Memory for programs](07-memory.md).** The Z80's 64 KiB on a TEC-1G, the
+7. **[Memory for programs](08-memory.md).** The Z80's 64 KiB on a TEC-1G, the
    TPA and the word at `0006h` that marks its end, page zero and
    TEC-OS's own bytes at `0040h`. The chapter ends with EXPAND 1, which TEC-OS
    keeps for itself.
-8. **[Programs and the console](08-programs-and-console.md).** The console as
+8. **[Programs and the console](09-programs-and-console.md).** The console as
    a program uses it: the BDOS's console functions, the BIOS's console calls,
    the control characters and ANSI escape sequences the video terminal acts
    on, and the cursor. The chapter ends with the console's size, which a
    program reads from the hardware service `INFO`, and the IOBYTE's other
    devices, the list device, the punch and the reader.
-9. **[The hardware services](09-hardware-services.md).** The calls TEC-OS has
+9. **[The hardware services](10-hardware-services.md).** The calls TEC-OS has
    for the board's own devices. The chapter starts with the ROM table and the
    check for TEC-OS. It then covers the nine hardware services, numbered 0 to
    8, most with a program of their own, and `DEMO`, which uses them together.
-10. **[Writing services](10-writing-services.md).** A `.SVC` file
+10. **[Writing services](12-writing-services.md).** A `.SVC` file
     holds a service, code that stays in memory after its command ends. You
     write a service that counts the console's characters, install it and
     measure what it costs. You then publish the count for a program to find.
-11. **[Chaining commands](11-chaining-commands.md).** Several commands on one
+11. **[Chaining commands](11-return-codes-and-chaining.md).** Several commands on one
     line with `!`, and a command that runs only after a success with `:`. The
     chapter describes the return code of BDOS function 108 and a program that
     ends by starting another with BDOS function 47. It ends with the events
@@ -119,67 +119,67 @@ caret, so `^C` means Ctrl and C together.
 
 ### Part II: Inside TEC-OS
 
-12. **[The ROM and its build](12-rom-and-build.md).** The 16 KiB image from
+12. **[The ROM and its build](13-rom-and-build.md).** The 16 KiB image from
     the jump at `C000h` to the free space at its end. The chapter then follows
     the build: the source files and their order, the generated include files,
     ATOM and `tools/build.mjs`, the checks on the result and the one image,
     `dist/tecos.rom`.
-13. **[The memory map](13-memory-map.md).** Memory from TEC-OS's side: the
+13. **[The memory map](14-memory-map.md).** Memory from TEC-OS's side: the
     system latch, page zero, the resident workspace and the allocation vectors
     below it. The chapter ends with the four stacks and their limits and
     TEC-OS's use of EXPAND 1.
-14. **[Reset, cold boot and warm boot](14-reset-and-boot.md).** Cold boot from
+14. **[Reset, cold boot and warm boot](15-reset-and-boot.md).** Cold boot from
     its first instruction at `0000h` to the point where it falls into warm
     boot, then warm boot as far as the CCP, with its cost in T-states. On the
     way the chapter describes the boot overlay, the RAM check, the reset test
     and the rebuilding of page zero.
-15. **[The BIOS and the console path](15-bios-and-console.md).** The RAM BIOS
+15. **[The BIOS and the console path](16-bios-and-console.md).** The RAM BIOS
     table at `BF00h`, the console by IOBYTE, and the list, punch and reader
     entries. The chapter also covers the bit-banged serial port, the matrix
     keyboard scan, the terminal's escape parser, the PICO9918's console in the
     ROM, the graphics LCD's driver with its service, number 12, and the 20 × 4
     LCD.
-16. **[The BDOS](16-bdos.md).** The entry, the function table and the console
+16. **[The BDOS](19-bdos.md).** The entry, the function table and the console
     functions, then files, extents and records, and the allocation vectors
     with the scan at warm boot. The chapter ends with BDOS errors, functions
     108, 47, 44 to 46, 48 and 99 and the differences from Digital Research's
     BDOS.
-17. **[The CCP](17-ccp.md).** The entry from boot, the prompt, and the parsing
+17. **[The CCP](20-ccp.md).** The entry from boot, the prompt, and the parsing
     of the command word and file names. The chapter then covers the built-in
     commands, `LOADCOM`, `PREPPAGE` and the jump to `0100h`, and the CCP's RAM
     and stack.
-18. **[The SD card and the volumes](18-sd-card-and-volumes.md).** The layers
+18. **[The SD card and the volumes](17-sd-card-and-volumes.md).** The layers
     between the BDOS's 128-byte records and the card's 512-byte blocks. The
     chapter covers the SD card driver and its error codes, the container's checks,
     the drive table, deblocking and the volume services, numbers 9 to 11.
-    Chapter 13 describes the allocation vectors at cold boot.
-19. **[The block cache](19-block-cache.md).** Thirty lines in EXPAND 1, reads
+    Chapter 14 describes the allocation vectors at cold boot.
+19. **[The block cache](18-block-cache.md).** Thirty lines in EXPAND 1, reads
     through the cache, and writes through and behind. The chapter also covers
     the order of a flush, the flush at warm boot, `Write lost` and the
     interrupts held off across a block.
 20. **[The hardware services and the service
-    loader](20-hardware-services-and-service-loader.md).** The code behind
-    Chapters 9 and 10: the dispatcher at `ABICALL` and each of the nine
+    loader](23-hardware-services-inside.md).** The code behind
+    Chapters 10 and 12: the dispatcher at `ABICALL` and each of the nine
     hardware services. The chapter then covers a service's entry, the
     relocation of its addresses and the seven steps of its load, and it ends
     with the registry, removal and the stack figures.
-21. **[Startup](21-startup.md).** `STBOOT` and `STLINE`, with the
+21. **[Startup](25-startup.md).** `STBOOT` and `STLINE`, with the
     one byte of state and the 128-byte record behind them. The chapter then
     follows a display line and covers the flag bit behind the LCD's word and
     the web page's rewrite of the file.
 22. **[Command history](22-command-history.md).** The 256-byte ring at `BD00h`
     in EXPAND 1, storing a line, `^W` and `^N` inside BDOS function 10, and
     the effect of a warm boot and of a reset.
-23. **[Diagnostics](23-diagnostics.md).** The diagnostic prompt in the ROM and
+23. **[Diagnostics](26-diagnostics.md).** The diagnostic prompt in the ROM and
     the separate diagnostics ROM, with its tests and its report. The chapter
     ends with running that ROM on a board and comparing the board's report
     with the model's.
-24. **[Chaining inside](24-chaining-inside.md).** The code behind Chapter 11.
+24. **[Chaining inside](21-chaining-inside.md).** The code behind Chapter 11.
     The chapter follows a line through the CCP's main loop, from the line and
     `CHPOS` kept across a warm boot to taking a piece at `!`. It then covers
     the return code and `:`, the paths that drop the rest of a line and
     function 47's checks and copy.
-25. **[The host model and the web page](25-host-model.md).**
+25. **[The host model and the web page](27-host-model.md).**
     `host/machine.mjs` on the Debug80 TEC-1G runtime, with the SD card and
     clock attached to it and its checks on every write. The chapter then
     describes the tests and the web page: its build, its card in IndexedDB and

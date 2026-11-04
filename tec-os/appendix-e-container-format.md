@@ -16,7 +16,7 @@ descriptors, the table's blocks beyond block 0, the ROM's checks with their
 error codes, the two geometries and their cost in memory. A TEC-OS card holds
 one container: block 0 is its header, and its volumes follow, each an ordinary
 CP/M disk. Chapter 4 describes the container from the user's side and Chapter
-18 the ROM's mount.
+17 the ROM's mount.
 
 The format is defined once, in `format/format.json`. The build generates the
 ROM's field offsets and its geometry table from that file, as
@@ -132,7 +132,7 @@ The ROM's `MOUNT` checks the header first and then each descriptor in table
 order, in one pass, mounting each one as it passes (`src/vol.asm:32-264`). The
 first check to fail stops the mount, unmounts any drive mounted so far and
 returns its code, which cold boot prints at the diagnostic prompt (Chapter
-23). The checks, in the order the ROM makes them:
+26). The checks, in the order the ROM makes them:
 
 | Code | Check | Source |
 | --- | --- | --- |

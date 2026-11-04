@@ -15,7 +15,7 @@ socket U9, the hex keypad, the 8 × 8 LEDs, the DS1302 clock and the SD card
 adaptor. It describes the board as the code uses it. TEC-OS has run only on
 the host model, and where the model and the TEC-1G's own
 documents differ, the difference is noted with the test of the diagnostics ROM
-that settles it (Chapter 23).
+that settles it (Chapter 26).
 
 ## The ports
 
@@ -30,7 +30,7 @@ in the files that drive them.
 | `03h` | in | System input | Bit 0 the Matrix switch, bit 6 a keypad key down, bit 7 the serial line's input |
 | `04h` | in, out | 20 × 4 LCD, instructions and status | The busy flag, the LCD's setup and its rows |
 | `84h` | out | 20 × 4 LCD, data | The same |
-| `05h`, `06h`, `F8h`, `F9h` | out | 8 × 8 LEDs | No hardware service; Chapter 9's `DEMO` writes them |
+| `05h`, `06h`, `F8h`, `F9h` | out | 8 × 8 LEDs | No hardware service; Chapter 10's `DEMO` writes them |
 | `07h`, `87h` | in, out | Graphics LCD, ST7920 | `GLCD.SVC` only |
 | `BEh`, `BFh` | in, out | PICO9918, data and control | The probe at cold boot; the ROM's PICO9918 console, and hardware service `VIDEO`'s restore through it |
 | `FCh` | in, out | DS1302 clock | The probe at cold boot and hardware service `RTC` |
@@ -58,7 +58,7 @@ terminal receives a start bit. The ROM's own writes do: the hardware service
 `DIGIT` lights each digit with bit 6 set, and `TONE` toggles bit 7 with bit 6
 set (`src/services.asm:17`, `src/services.asm:65-81`,
 `src/services.asm:166-187`). That shared port is why programs reach the digits
-and the speaker through the hardware services of Chapter 9 and not by writing
+and the speaker through the hardware services of Chapter 10 and not by writing
 the port.
 
 The serial line is bit-banged: TEC-OS sends each bit by writing bit 6 of port
@@ -127,7 +127,7 @@ and EXPAND 1. The board's recommended build leaves U9 empty, and
 EXPAND jumpers set for a 32 KiB chip. Before it prints anything, cold boot
 tests `8000h–BFFFh` and then EXPAND 1 behind it, and stops with `TEC-OS needs
 64K RAM` on the serial terminal if either is missing (`src/boot.asm:36`,
-`src/boot.asm:323-358`). Chapter 1 describes the check, and Chapter 13 what
+`src/boot.asm:323-358`). Chapter 1 describes the check, and Chapter 14 what
 TEC-OS keeps in each half.
 
 ## The hex keypad and its NMI
@@ -146,7 +146,7 @@ off. A press with the jumper fitted is a crash.
 ## The 8 × 8 LEDs
 
 No hardware service drives the 8 × 8 LEDs, and the ROM never writes their ports.
-`DEMO`, which Chapter 9 builds and which isn't on the starter card, writes them
+`DEMO`, which Chapter 10 builds and which isn't on the starter card, writes them
 itself, as the Debug80 runtime decodes them: port `05h` selects a row, and `06h`,
 `F8h` and `F9h` light its red, green and blue columns (`test/programs/demo.asm:14-17`,
 `test/programs/demo.asm:273-286`). The TEC-1G port list makes `05h` and `06h`
@@ -166,7 +166,7 @@ clock that answers gives and an empty port's `FFh` doesn't
 in bit 3 of `CONDEV` (`src/boot.asm:47-50`). The hardware service `INFO`
 reports that bit in bit 3 of `B` without reading the port. `RTC` makes the
 test again at each call, and reads and sets the clock's seven BCD registers
-(Chapter 9).
+(Chapter 10).
 
 ## The SD card adaptor
 
@@ -178,7 +178,7 @@ samples it on the rising edge. With nothing selected the port is written
 `05h`: select high, data high, clock low.
 
 Every wait for the card has a limit, and a card that doesn't answer gives one
-of the error codes of Chapter 23 and Appendix D (`src/sd.asm:10-20`). A card
+of the error codes of Chapter 26 and Appendix D (`src/sd.asm:10-20`). A card
 that answers wrongly fails in the same way. A data error token in place of a
 block's data fails the read at once with code `0Ah`. A wrong echo of CMD8's
 voltage or check pattern fails the card's start with code `0Bh`, and an error
@@ -189,7 +189,7 @@ standard-capacity card takes the block's byte address in 32 bits, so the
 driver can name no block 4 GiB or more into a standard card. It rejects such a
 block before any command, with code 9. A standard card with a volume that
 reaches past block `7FFFFFh`, the last below 4 GiB, fails the mount with code
-`27h` (`src/sd.asm:243-274`, `src/vol.asm:221-235`, Chapter 18). When a
+`27h` (`src/sd.asm:243-274`, `src/vol.asm:221-235`, Chapter 17). When a
 block goes to or from the block cache, the transfer loop runs with EXPAND 1 in
 view, writing the latch before the loop and its copy back after
 (`src/sd.asm:321-325`, `src/sd.asm:420-421`, `src/sd.asm:427-431`,

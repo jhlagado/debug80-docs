@@ -1,11 +1,11 @@
 ---
-title: Startup and services
+title: The startup file
 parent: TEC-OS
-nav_order: 5
+nav_order: 6
 nav_group: "Part I: Using and programming TEC-OS"
 ---
 
-# 5. Startup and services
+# 6. The startup file
 
 <!-- Checked against TEC-OS 78127ec. -->
 
@@ -27,15 +27,15 @@ provides routines for programs. The starter card's one service is a driver,
 `GLCD.SVC`, which holds the graphics LCD's console. The PICO9918's console is
 in the ROM, so nothing is loaded for it.
 
-The *hardware services* of Chapter 9 are another thing. They are numbered
+The *hardware services* of Chapter 10 are another thing. They are numbered
 calls inside the ROM, so nothing is loaded for them and the `SERVICES` command
 doesn't list them. A loaded service can publish named *records* in TEC-OS's
-registry, and a program finds the service through them. Chapter 10 describes
+registry, and a program finds the service through them. Chapter 12 describes
 records and how a service is made.
 
 A service takes whole pages of 256 bytes, and those bytes come from the TPA,
 the memory programs have. Installing one lowers the word at `0006h`, the
-address that gives a program the top of its memory (Chapter 7). The pages that
+address that gives a program the top of its memory (Chapter 8). The pages that
 loaded services hold, from the lowest service up to the BDOS entry jump's page,
 are the *service resident memory*. `GLCD.SVC` on the starter card takes three
 pages, and a run on the model gives:
@@ -464,7 +464,7 @@ the rest is on the graphics LCD, which `G.SVC` made the console.
 Clearing writes blanks only over the word itself. A program that writes the
 LCD's last row through the LCD's hardware service replaces the word, and when
 the driver later installs, that row is left alone. `DEMO`, the program Chapter
-9 describes, is such a program, and its last screen stays through a later
+10 describes, is such a program, and its last screen stays through a later
 `GLCD.SVC`. A program that writes over the word at the LCD's port bypasses
 TEC-OS, so the driver's next installation writes five blanks over the start of
 the row. `CARD?` goes when `R` at the diagnostic prompt starts the LCD again,

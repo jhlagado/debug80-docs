@@ -1,11 +1,11 @@
 ---
-title: The host model and the web page
+title: The host model
 parent: TEC-OS
-nav_order: 25
+nav_order: 27
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 25. The host model and the web page
+# 27. The host model
 
 <!-- Checked against TEC-OS 78127ec, with `@jhlagado/debug80-runtime` 0.3.3, the
      version `package.json` names. -->
@@ -73,7 +73,7 @@ unchanged. A high-capacity card takes the block number as it is. With
 `highCapacity` false the model takes byte addresses, as a standard-capacity
 card does, and `test/sd-range.test.mjs` uses such a card for the ROM's refusal
 at mount of a volume that runs past block `7FFFFFh`, the last below 4 GiB, which
-Chapter 18 describes.
+Chapter 17 describes.
 
 The DS1302 is attached the same way, on port `FCh`, with the runtime's
 `rtcEnabled` turned off (`host/machine.mjs:72`, `host/machine.mjs:85`,
@@ -247,7 +247,7 @@ the browser that version expects (`package.json:28`, `README.md:36`).
 Every test is evidence from the model. In some behaviours the model differs from
 the board as its documents describe it, such as a write under the boot overlay
 or the decoding of the latch's upper bits, and such a behaviour gives a passing
-test and may give a different result on a board. Chapter 23 describes the
+test and may give a different result on a board. Chapter 26 describes the
 diagnostics ROM, which tests those points on a board.
 
 ## The web page
@@ -366,7 +366,7 @@ A change that can't be made, to a read-only drive A or in a full directory,
 leaves the card as it was, and the serial terminal says that it couldn't be
 prepared and boots as it is. A `STARTUP.CMD` with the read-only attribute is
 not forced: the card stays as it was, and the terminal says that the file is
-read-only and the card boots as it is (`host/card.mjs:68-70`). Chapter 21 describes the preparation in full.
+read-only and the card boots as it is (`host/card.mjs:68-70`). Chapter 25 describes the preparation in full.
 
 "Copy file to drive" pauses the machine and reads the PC's files. Then, in its
 turn, it writes them to a copy of the card as the card is then, and saves it. Only when the save succeeds does it copy it into the card the

@@ -1,11 +1,11 @@
 ---
 title: Diagnostics
 parent: TEC-OS
-nav_order: 23
+nav_order: 26
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 23. Diagnostics
+# 26. Diagnostics
 
 <!-- Checked against TEC-OS 78127ec. The diagnostics ROM in this chapter is version
      0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit. -->
@@ -15,7 +15,7 @@ itself stops at a diagnostic prompt when cold boot can't mount the card, and the
 diagnostics ROM, built from `diag/`, is a separate image that tests each part of
 the board TEC-OS uses and prints a report. This chapter describes the prompt,
 then follows the diagnostics ROM from its build to a report from a board.
-Chapter 1 shows the prompt from the user's side, and Chapter 18 shows the
+Chapter 1 shows the prompt from the user's side, and Chapter 17 shows the
 container's checks. Appendix D gives every error code
 with its remedy.
 
@@ -40,7 +40,7 @@ before the first mount reads the container's table through a line
 `DIAG` runs on the BDOS's stack as `COLDRT` set it. Both jumps to `DIAG` are
 `COLDRT`'s, made after its calls have returned, so the stack is at its top, and
 `DIAG` keeps the code on it (`src/boot.asm:463-471`). The BIOS's stack then holds only warm boot's use, as
-Chapter 20's stack figures assume. It writes
+Chapter 23's stack figures assume. It writes
 `CARD?` on the LCD's last row (`src/boot.asm:472-473`, `src/text.asm:10`,
 `src/lcd.asm:45`) and then prints `No volume mounted, error ` and the code as
 two hexadecimal digits (`src/boot.asm:474-478`, `src/text.asm:8`).
@@ -73,7 +73,7 @@ reads each block of the table from the card again, whatever a line holds
 (`src/vol.asm:33-36`).
 
 The retry keeps a selection of volumes carried over from a recognised reset,
-which Chapter 14 explains. `RSLCAP` copies the drive table to `RSLBUF` before
+which Chapter 15 explains. `RSLCAP` copies the drive table to `RSLBUF` before
 cold boot clears anything (`src/boot.asm:28`). `RSLBUF` is at `0100h`, in the
 fixed RAM (`src/layout.asm:84`), and nothing on the path from there to the
 prompt writes it: `MEMINIT` clears EXPAND 1 alone, and the mount reads the
@@ -149,7 +149,7 @@ matrix keyboard when the Matrix switch is on, with a time-out counted in half
 seconds (`diag/out.asm:240-275`). On the keypad `+` reads as `Y`, `-` as `N`,
 `GO` as Return and `AD` as Esc (`diag/out.asm:326`).
 
-`tools/diag-check.mjs` runs the ROM on the host model of Chapter 25 and keeps
+`tools/diag-check.mjs` runs the ROM on the host model of Chapter 27 and keeps
 what the serial port printed in `build/diag` beside the image. The model has
 the PICO9918, the matrix keyboard, a new card with the starter card's two
 volumes, empty, and no DS1302 clock (`tools/diag-check.mjs:110-134`). One

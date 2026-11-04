@@ -12,7 +12,7 @@ nav_group: "Appendices"
 This appendix lists the ROM table at `C003h`, then the numbered services behind
 its one jump: the hardware services 0 to 8, the volume services 9 to 11, the
 display driver's service 12, the registry's services 13 and 14 and the font's
-service 15. Chapter 9
+service 15. Chapter 10
 describes the use of the hardware services, with programs. The names are those
 of `src/abi.inc`, which the ROM assembles from and which a build publishes as
 `dist/abi.inc` after checking the table's bytes, the number of services and `INFO`'s bits
@@ -266,13 +266,13 @@ address of its table (`src/loader.asm:33`). `FIND` takes the newest record whose
 name matches and whose version is at least `B`. Each walk stops after 256
 records, and the loader refuses a service whose records would take the
 registry past 256, so every record is found (`src/loader.asm:250-267`, Chapter
-20). Neither makes a BDOS or BIOS call, so either can be made on any stack.
+23). Neither makes a BDOS or BIOS call, so either can be made on any stack.
 
 The generation is `SVCGEN`, raised by each removal (`src/ram.asm:265`). It is
 8 bits, so after 256 removals it repeats. A program can keep a record's
 address until it exits, since no service can be removed while the program
 runs. A service that looks a record up later compares the generation or names
-the record as a dependency, as Chapter 10 describes.
+the record as a dependency, as Chapter 12 describes.
 
 The ROM's PICO9918 console publishes one record, `PICO`, version 3, in its
 block `PIBLK`. `PISTART` makes it the registry's last record at cold boot, and

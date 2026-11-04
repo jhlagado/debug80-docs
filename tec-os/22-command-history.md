@@ -85,7 +85,7 @@ nothing.
 ## The ring at BD00h
 
 The history is the page at `BD00h` in EXPAND 1, `HRING` (`src/history.asm:14`).
-Chapter 13 lists EXPAND 1's other pages and explains why no stack is in use
+Chapter 14 lists EXPAND 1's other pages and explains why no stack is in use
 while EXPAND 1 is in view. No BDOS function and no numbered service gives a
 program a way into the page.
 

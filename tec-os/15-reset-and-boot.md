@@ -1,11 +1,11 @@
 ---
 title: Reset, cold boot and warm boot
 parent: TEC-OS
-nav_order: 14
+nav_order: 15
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 14. Reset, cold boot and warm boot
+# 15. Reset, cold boot and warm boot
 
 <!-- Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from
      Thorium 128edb7, whose copy in `dist/files` has the SHA-256
@@ -50,7 +50,7 @@ routine that writes each pair to the VDP's control port, does the same
 (`src/pico.asm:262-276`). The one
 other `EI` is in page zero. Each boot writes it at `0038h` unless a jump is kept
 there (`src/boot.asm:274-283`). It runs on an interrupt, which needs interrupts on
-already, and on a program's `RST 38h`, which turns them on. Chapter 19
+already, and on a program's `RST 38h`, which turns them on. Chapter 18
 describes what interrupts cost a program that enables them.
 
 ## Cold boot
@@ -101,8 +101,8 @@ the steps after it clear the memory it reads. The workspace is cleared only
 after the RAM check, since until then it may not be RAM, and only then does the
 stack move into it. `MEMINIT` comes before the card is started because the
 mount reads the container's table through a cache line, so the mount's lines
-start empty. Step 12 runs at cold boot only, for the reason Chapter 15
-gives. Chapter 18 describes steps 9 and 10, and the rest of this chapter steps 2,
+start empty. Step 12 runs at cold boot only, for the reason Chapter 16
+gives. Chapter 17 describes steps 9 and 10, and the rest of this chapter steps 2,
 4 and 7.
 
 The diagnostic prompt's `R` jumps back to `COLDRT`, step 8 (`src/boot.asm:487-488`,
@@ -261,9 +261,9 @@ unchanged (`src/boot.asm:247-273`). A jump to `PZTOP` itself, the BDOS entry,
 gets the default too, and so does a jump into the TPA's bytes on the stub's
 page (`src/boot.asm:252-260`). `0038h`, where interrupt mode 1 and `RST 38h`
 go, then gets `EI` and `RETI` unless it kept a jump (`src/boot.asm:274-283`).
-Chapter 20 describes how a service claims a vector, and the unload and the failed
+Chapter 23 describes how a service claims a vector, and the unload and the failed
 `INIT` that also run this sweep. The IOBYTE at `0003h` and the drive and user byte at
-`0004h` are left as they are. Chapter 13 lists page zero in full.
+`0004h` are left as they are. Chapter 14 lists page zero in full.
 
 ## Warm boot
 
@@ -281,7 +281,7 @@ BDOS takes that route after a `^C` typed as the first key of a line read with
 function 10 (`src/cpm/bdos.asm:400-404`), after a `^C` typed to resume output
 that `^S` paused (`src/cpm/bdoscon.asm:209-214`), and after it has reported a BDOS error
 such as `Bdos Err On B: Select` in the default error mode, which function 45
-can change (Chapter 16, `src/cpm/bdoslog.asm:575-578`,
+can change (Chapter 19, `src/cpm/bdoslog.asm:575-578`,
 `src/cpm/bdoscon.asm:25-41`). A `^C` at the prompt is the first case, since
 the CCP reads its line with function 10:
 
@@ -322,7 +322,7 @@ Warm boot's steps are:
 6. The console put right. `VREST` restores the display's mode if the console
    is on one, and `VTREGR` resets the scroll region to the whole screen
    (`src/boot.asm:104-107`).
-7. `CWBOOT`, which tries every dirty line of the cache (Chapter 19). A line
+7. `CWBOOT`, which tries every dirty line of the cache (Chapter 18). A line
    whose write fails is dropped, so the card's copy stands, and the flush goes
    on to the next. If any failed, `CWBOOT` prints `Write lost` once and drops
    the rest of a chained line (`src/boot.asm:108`, `src/cache.asm:182-215`,
@@ -332,13 +332,13 @@ Warm boot's steps are:
    byte from `0004h` (`src/boot.asm:109-111`).
 
 Warm boot leaves the rest alone. The drive table, the DPHs and `LOGINV`, the
-BDOS's record of the logged-in drives (Chapter 16), are in the BIOS's part of
+BDOS's record of the logged-in drives (Chapter 19), are in the BIOS's part of
 the workspace, which `CPMINIT` does not clear (`src/ram.asm:28-39`). The
 allocation vectors below `WSBASE` and the RAM BIOS table at `BF00h` are outside
 what `CPMINIT` clears too. So are the two FCBs and the command buffer, the 202
 bytes of the CCP's RAM below `CCPCLR`, and `CHPOS`, the byte above the RAM BIOS
 table that marks a chained line's next piece. The rest of the line therefore
-outlives `CPMINIT` (`src/ram.asm:82-96`, `src/ram.asm:272`), as Chapter 24
+outlives `CPMINIT` (`src/ram.asm:82-96`, `src/ram.asm:272`), as Chapter 21
 describes. The services below the BDOS entry are kept too, and so are the
 registry's head and the two consoles' table addresses above the RAM BIOS
 table. `PIBLK`, the PICO9918 console's state, is in the BIOS's part of the
@@ -359,7 +359,7 @@ Any other is dropped and is scanned in full when it is next selected
 set and drops every drive, as CP/M 2.2 does.
 
 The CCP then sets the user number from the byte it was given. It calls
-`STBOOT`, which starts the startup file once after a cold boot (Chapter 21
+`STBOOT`, which starts the startup file once after a cold boot (Chapter 25
 describes it), and it selects the drive if it is not A. Its main loop then takes a
 chained line's next piece, if one is left, before the startup file's next line
 and before the console (`src/cpm/ccp.asm:97-101`).
