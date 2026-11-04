@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 21. Startup
 
-Checked against TEC-OS 626ee41.
+Checked against TEC-OS 5a25178.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and three
@@ -21,8 +21,8 @@ model of Chapter 25.
 ## One byte of state
 
 Startup has to hold its place in the file across every program the file runs,
-and to start again after a reset. All of its state is `STPOS`, at `BF63h`, with
-the file's record after it in `STREC`, at `BF64h–BFE3h` (`src/ram.asm:237-238`).
+and to start again after a reset. All of its state is `STPOS`, at `BF61h`, with
+the file's record after it in `STREC`, at `BF62h–BFE1h` (`src/ram.asm:237-238`).
 The byte holds four kinds of value (`src/cpm/ccp.asm:1528-1531`):
 
 | `STPOS` | Meaning |
@@ -72,8 +72,8 @@ holds a key through reset to get past a service whose `INIT` never returns, and
 key is down, as Appendix G describes. A low bit returns from `STBOOT` with
 `STPOS` at `80h`, so a skip is the same state as a file that wasn't there. Bit 6
 is tested this one time, so the key has to be down when `STBOOT` starts, which
-on the model, with the web page's board and the starter card, is 5,864,547
-T-states after reset, about 1.47 seconds.
+on the model, with the web page's board and the starter card, is 5,954,548
+T-states after reset, about 1.49 seconds.
 
 `STBOOT` then makes the read in the CCP's own FCB. It copies 12 bytes of
 `STFCB`, a drive byte of 1 and the name `STARTUP CMD`, to `CMDFCB`
@@ -82,7 +82,8 @@ rest of `CMDFCB` zero. Drive byte 1 is drive A whichever drive is current, and
 `RESEL` has already put back a recognised reset's selection (`src/boot.asm:59`),
 so the file comes from the volume on drive A at that moment, as Chapter 5's
 `SPARE` example shows. Three BDOS calls follow, the second and third through
-`CPSRC`, which points `DE` at `CMDFCB` (`src/cpm/ccp.asm:1544-1554`,
+`DOSSEQ`, which takes the function's number from the byte after its `CALL` and
+points `DE` at `CMDFCB` (`src/cpm/ccp.asm:1544-1554`,
 `src/cpm/ccp.asm:1053-1065`):
 
 - function 26 points the DMA address at `STREC`;
@@ -165,7 +166,7 @@ as Chapter 5's transcript shows.
 
 The `$` needs one more byte than the buffer. `CMDTXT` is 128 bytes and is
 followed at once by `BOOTDRV` (`src/ram.asm:80-84`), so a line of 127 characters
-puts its CR in the last byte of `CMDTXT`, at `BDB4h`, and its `$` at `BDB5h`, in
+puts its CR in the last byte of `CMDTXT`, at `BDB3h`, and its `$` at `BDB4h`, in
 `BOOTDRV`. The order in `CCPENT` makes this harmless. `BOOTDRV` has one reader,
 at `src/cpm/ccp.asm:60`, and the CCP's entry writes the byte before that
 (`src/cpm/ccp.asm:43`), so the `$` is rewritten before it is read.
