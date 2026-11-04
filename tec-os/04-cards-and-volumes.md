@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -281,7 +281,9 @@ only in place of the one there.
 `MOUNT` changes only TEC-OS's memory. The card's header still names the drives
 it named before, so a power cycle puts the volumes back on them. Before a
 drive's volume changes, TEC-OS writes to the card every change the block cache
-holds, and it reads the directory again the next time the drive is used.
+holds, and it reads the directory again the next time the drive is used. A
+volume mounted on the current drive is read at once, because TEC-OS selects
+the drive again as the mount ends.
 
 A drive with no volume can't be selected. On the starter card, where drive C
 has none, `C:` gives a BDOS error, and a key returns to the prompt on drive A:
@@ -384,12 +386,18 @@ writes a directory block only after every changed data block the cache holds,
 so the directory never names a block whose data isn't on the card.
 
 A block that can't be written while a program runs gives the program the BDOS
-error `Bad Sector`. In a flush TEC-OS tries every changed block and drops from
-the cache each one it can't write, so the card keeps its old copy and the
-change is lost. A warm boot whose flush
-dropped a block prints `Write lost` once, and the next warm boot has nothing
-more to report. A directory block that can't be written is dropped from the
-cache in the same way, and the directory is read from the card again. When a
+error `Bad Sector`. A flush tries every changed block. The flush before a
+directory write keeps each data block it can't write in the cache, still to be
+written, and drops the directory block, so the card's directory stays as it
+was and is read from the card again. A program that has the error returned
+with function 45 and closes the file again gets the error again until the data
+can be written. The flushes at a warm boot, at `MOUNT` and at function 48 drop
+from the cache each block they can't write, so the card keeps its old copy and
+the change is lost. A warm boot whose flush dropped a block prints `Write lost`
+once, and the next warm boot has nothing more to report. So a close that fails
+on the volume written behind gives `Bad Sector`, and the warm boot after it
+tries the data again and prints `Write lost` if it still can't be written, as
+the section on putting an image on a card shows. When a
 card comes out with changed blocks in the cache, they are lost even if the same
 card goes back: only cold boot starts a card, so the first warm boot after the
 card comes out prints `Write lost` and drops them, and a reset discards any
@@ -466,6 +474,33 @@ A>DIR B:
 Bdos Err On B: Bad Sector
 A>
 ```
+
+A card that ends past the volume's directory fails later, at the first write
+to a missing block, and on the volume written behind that write waits for the
+close. Here the image ends 32 blocks into `WORK`, just past its directory:
+
+```sh
+cp dist/starter.img nodata.img
+truncate -s 2113536 nodata.img
+```
+
+<!-- node tools/capture.mjs --card nodata.img "@start SAVE 1 B:X.COM" "@key x" "DIR B:" -->
+```text
+A>SAVE 1 B:X.COM
+
+Bdos Err On B: Bad Sector
+Write lost
+A>DIR B:
+X.COM       
+1 file, 8176K free
+A>
+```
+
+`SAVE` made `X.COM`'s directory entry as it opened the file, and the record
+went into the cache. The close's flush couldn't write the record's block, so
+the close failed with `Bad Sector`. The warm boot after the key tried the block
+again, dropped it and printed `Write lost`, and `X.COM` is on the card with no
+records.
 
 An older, standard-capacity card is addressed in bytes, and TEC-OS can name
 only its first 4 GiB, the blocks below `800000h`. On such a card, a volume that
