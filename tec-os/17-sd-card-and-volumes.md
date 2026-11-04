@@ -370,7 +370,7 @@ describes how cold boot gives out the slots.
 contract. Each may take 24 bytes of stack below its return address. On the
 model `MOUNT` and `UNMNT` take 24 and `DESC` 22, and with every line dirty
 all three take 24 (`src/abi.inc:18-25`,
-`test/storage-boundaries.test.mjs:176-241`).
+`test/storage-boundaries.test.mjs:172-241`).
 
 A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of

@@ -198,8 +198,8 @@ X.COM
 A>
 ```
 
-`SAVE` made `X.COM`'s directory entry as it opened the file, and the record
-went into the cache. The close's flush couldn't write the record's block, so
+`SAVE` made `X.COM`'s directory entry as it opened the file, and its two
+records went into the cache. The close's flush couldn't write their block, so
 the close failed with `Bad Sector`. The warm boot after the key tried the
 block again, dropped it and printed `Write lost`. `X.COM` is on the card with
 no records.
