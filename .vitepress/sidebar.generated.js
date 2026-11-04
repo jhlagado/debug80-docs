@@ -2402,7 +2402,7 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
-          "text": "Introduction and first boot",
+          "text": "Introduction",
           "link": "/tec-os/01-introduction.html"
         },
         {
@@ -2418,32 +2418,36 @@ export const sidebars = {
           "link": "/tec-os/04-cards-and-volumes.html"
         },
         {
-          "text": "Startup and services",
-          "link": "/tec-os/05-startup-and-services.html"
+          "text": "Drives, the cache and your work",
+          "link": "/tec-os/05-drives-and-cache.html"
+        },
+        {
+          "text": "The startup file",
+          "link": "/tec-os/06-startup-file.html"
         },
         {
           "text": "A first program",
-          "link": "/tec-os/06-first-program.html"
+          "link": "/tec-os/07-first-program.html"
         },
         {
           "text": "Memory for programs",
-          "link": "/tec-os/07-memory.html"
+          "link": "/tec-os/08-memory.html"
         },
         {
           "text": "Programs and the console",
-          "link": "/tec-os/08-programs-and-console.html"
+          "link": "/tec-os/09-programs-and-console.html"
         },
         {
           "text": "The hardware services",
-          "link": "/tec-os/09-hardware-services.html"
+          "link": "/tec-os/10-hardware-services.html"
+        },
+        {
+          "text": "Return codes and chaining",
+          "link": "/tec-os/11-return-codes-and-chaining.html"
         },
         {
           "text": "Writing services",
-          "link": "/tec-os/10-writing-services.html"
-        },
-        {
-          "text": "Chaining commands",
-          "link": "/tec-os/11-chaining-commands.html"
+          "link": "/tec-os/12-writing-services.html"
         }
       ]
     },
@@ -2453,59 +2457,63 @@ export const sidebars = {
       "items": [
         {
           "text": "The ROM and its build",
-          "link": "/tec-os/12-rom-and-build.html"
+          "link": "/tec-os/13-rom-and-build.html"
         },
         {
           "text": "The memory map",
-          "link": "/tec-os/13-memory-map.html"
+          "link": "/tec-os/14-memory-map.html"
         },
         {
           "text": "Reset, cold boot and warm boot",
-          "link": "/tec-os/14-reset-and-boot.html"
+          "link": "/tec-os/15-reset-and-boot.html"
         },
         {
           "text": "The BIOS and the console path",
-          "link": "/tec-os/15-bios-and-console.html"
-        },
-        {
-          "text": "The BDOS",
-          "link": "/tec-os/16-bdos.html"
-        },
-        {
-          "text": "The CCP",
-          "link": "/tec-os/17-ccp.html"
+          "link": "/tec-os/16-bios-and-console.html"
         },
         {
           "text": "The SD card and the volumes",
-          "link": "/tec-os/18-sd-card-and-volumes.html"
+          "link": "/tec-os/17-sd-card-and-volumes.html"
         },
         {
           "text": "The block cache",
-          "link": "/tec-os/19-block-cache.html"
+          "link": "/tec-os/18-block-cache.html"
         },
         {
-          "text": "The hardware services and the service loader",
-          "link": "/tec-os/20-hardware-services-and-service-loader.html"
+          "text": "The BDOS",
+          "link": "/tec-os/19-bdos.html"
         },
         {
-          "text": "Startup",
-          "link": "/tec-os/21-startup.html"
+          "text": "The CCP",
+          "link": "/tec-os/20-ccp.html"
+        },
+        {
+          "text": "Chaining inside",
+          "link": "/tec-os/21-chaining-inside.html"
         },
         {
           "text": "Command history",
           "link": "/tec-os/22-command-history.html"
         },
         {
+          "text": "The hardware services in the ROM",
+          "link": "/tec-os/23-hardware-services-inside.html"
+        },
+        {
+          "text": "The service loader",
+          "link": "/tec-os/24-service-loader.html"
+        },
+        {
+          "text": "Startup",
+          "link": "/tec-os/25-startup.html"
+        },
+        {
           "text": "Diagnostics",
-          "link": "/tec-os/23-diagnostics.html"
+          "link": "/tec-os/26-diagnostics.html"
         },
         {
-          "text": "Chaining inside",
-          "link": "/tec-os/24-chaining-inside.html"
-        },
-        {
-          "text": "The host model and the web page",
-          "link": "/tec-os/25-host-model.html"
+          "text": "The host model",
+          "link": "/tec-os/27-host-model.html"
         }
       ]
     },
@@ -2544,6 +2552,10 @@ export const sidebars = {
         {
           "text": "H. The service file format",
           "link": "/tec-os/appendix-h-service-file-format.html"
+        },
+        {
+          "text": "I. The web page",
+          "link": "/tec-os/appendix-i-web-page.html"
         }
       ]
     }
