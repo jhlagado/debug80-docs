@@ -409,7 +409,7 @@ puts in them what the scan at warm boot needs:
 | Offset | Contents | Written by |
 | ---: | --- | --- |
 | 2 | the sum of the vector's bytes at the end of the last scan | `LOGDONE` (`src/cpm/bdos.asm:2091-2106`) |
-| 4 | the changed flag: 1 once the vector may differ from the directory | `ALFOUND` (`src/cpm/bdos.asm:1231-1238`) and BIOS `WRITE` of a directory card block (`src/bios.asm:172-189`) set it; `LOGDONE` clears it |
+| 4 | the changed flag: 1 once the vector may differ from the directory | `ALFOUND` (`src/cpm/bdos.asm:1231-1238`) and BIOS `WRITE` of a directory card block (`src/bios.asm:172-189`) set it, and `LOGDONE` clears it |
 | 6 | the directory mark, `DIRUSED` | `DUSAVE` (`src/cpm/bdos.asm:2108-2126`), BIOS `WRITE` of a directory card block (`src/bios.asm:190-210`) |
 
 The BIOS's part is in its `WRITE`. It tests whether the card block being written

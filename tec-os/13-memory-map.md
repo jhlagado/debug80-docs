@@ -111,7 +111,7 @@ memory from that jump to `BFFFh` is laid out like this:
 | `BCEDh–BE75h` | 393 | CCP state and stack |
 | `BE76h–BEFFh` | 138 | BDOS state and stack |
 | `BF00h–BF32h` | 51 | RAM BIOS table |
-| `BF33h–BFFFh` | 205 | SD, keyboard, graphics LCD and console state |
+| `BF33h–BFFFh` | 205 | SD card, cache, keyboard, display, loader, startup, chained line and console state, and the rest of the `MOUNT` scratch |
 
 The image initialises none of it. `ram.asm` reserves each byte with `DS`, and
 cold boot and warm boot clear and set it (`src/ram.asm:1-4`).
@@ -134,10 +134,10 @@ jump's address, and `PIBLK`, the PICO9918 console's 95 bytes at
 the registry, the pages it draws and shows, and the address of each row in its
 name table
 (`src/ram.asm:36-49`). Chapter 15 describes them. Two of the `MOUNT` routine's
-scratch bytes follow, which the volume services also use: the count `MNTCNT`
+scratch areas follow, which the volume services also use: the count `MNTCNT`
 and `MNBUF`, 32 bytes of the container's table copied from the cache line that
 holds it (`src/ram.asm:51-53`). The video terminal's state follows: an 80-byte
-row buffer for scrolling, the seven vectors into the display driver, the scroll
+row buffer for scrolling, the seven vectors into the display's table, the scroll
 region, the PICO9918's claim and the console mode (`src/ram.asm:55-67`).
 
 The second block is the CCP's, from `CCPRAM` at `BCEDh` (`src/ram.asm:73-74`).

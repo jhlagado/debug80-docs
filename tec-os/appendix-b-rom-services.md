@@ -174,12 +174,12 @@ of port `FEh` with one bit low in the high byte of the address, `FEh` for row
 whether there is a matrix keyboard.
 
 **7 PUTAT.** On a video console, writes `B` characters from `HL` at row `D`,
-column `E`, both from 0, through the driver's cell routine
+column `E`, both from 0, through the display's cell routine
 (`src/services.asm:184-226`). The cursor's position is unchanged, though its cell
 is removed. The console draws it again when it next waits for a key
 (`src/console.asm:160`). The escape parser isn't used, and bytes `80h` to
 `FFh` reach the display, which draws them as reverse images of `00h` to `7Fh`
-(`src/pico.asm:136-139`, `drivers/glcd.asm:333-334`).
+(`src/pico.asm:136-139`, `drivers/glcd.asm:334-335`).
 
 Text is clipped at the right edge. A row past the bottom writes nothing and
 returns status 0, and so does a count of 0, which also leaves the cursor
@@ -236,7 +236,7 @@ write a row. Only `CRT:` calls the seventh, so a driver's may be 0
 
 On success `HL` returns `LINEBUF`'s address, where the row routines read and
 write a row, with `A` = 0 and carry clear. `TNEBAD` with carry means nothing
-changed: `B` is not 3, `UC1:` has a table already, or there is no matrix
+changed: `B` is not 3, `UC1:` has a table already or there is no matrix
 keyboard (`src/services.asm:320-331`). `B` = 1 is refused because `CRT:`'s
 table is the ROM's own, so a `PICO.SVC` from an older card fails at its
 `INIT`.

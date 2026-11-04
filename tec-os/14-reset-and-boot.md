@@ -303,7 +303,7 @@ Warm boot's steps are:
    and the stack set to the BIOS stack (`src/boot.asm:81-85`). The latch comes
    before the stack because the BIOS stack is in EXPAND 0.
 2. `HWVREL`, which gives back the PICO9918 if a program claimed it, so that
-   the driver's registers, its interrupt among them, are restored before page
+   the console's registers, its interrupt among them, are restored before page
    zero is rebuilt (`src/boot.asm:86-88`, `src/services.asm:121-129`).
 3. `PZINIT`, as above (`src/boot.asm:87`).
 4. `SVCBSY` cleared, so that a service's `INIT` or `REMOVE` that a program's
