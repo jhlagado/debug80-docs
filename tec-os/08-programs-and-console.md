@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 8. Programs and the console
 
-Checked against TEC-OS 626ee41, with the ATOM assembler from the
+Checked against TEC-OS 5a25178, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
 128edb7, and its copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
