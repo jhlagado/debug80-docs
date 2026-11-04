@@ -7,10 +7,10 @@ nav_group: "Appendices"
 
 # Appendix A. BDOS functions
 
-Checked against TEC-OS 5a25178.
+Checked against TEC-OS 58d4345.
 
 This appendix lists the BDOS functions of TEC-OS in number order: 0 to 40,
-then 45, 47, 48 and 108, whose meanings come from CP/M 3. Each entry gives the
+then 44 to 48, 99 and 108, whose meanings come from CP/M 3. Each entry gives the
 registers the function takes, what it returns and where it differs from CP/M
 2.2. Chapter 16 describes the mechanism behind them.
 
@@ -253,6 +253,10 @@ does not define. Both return 0 and do nothing (`src/tables.asm:72`).
 write newly allocates filled with zeros before the record is written
 (`src/cpm/bdos.asm:1006-1017`, `src/cpm/bdos.asm:1257-1306`).
 
+**44 Set multi-sector count.** With `E` = 1 returns 0. With any other `E`
+returns `FFh` in `A` and changes nothing (`src/cpm/bdos.asm:129-136`). TEC-OS
+reads and writes one record a call, so 1 is the only count.
+
 **45 Set BDOS error mode.** Sets the mode to `E` and returns 0
 (`src/cpm/bdos.asm:151-157`). With `E` = `FFh` a BDOS error returns to the
 program with `A` = `FFh` and the error's code in `H`, prints nothing and keeps
@@ -262,6 +266,12 @@ and the end of the program with the rest of a chained line dropped
 (`src/cpm/bdos.asm:2419-2434`). A warm boot puts the default back. A read or
 write that returns an error leaves the FCB on the record it didn't read or
 write, as in CP/M 3 (`src/cpm/bdos.asm:878-887`, `src/cpm/bdos.asm:985-992`).
+
+**46 Get disk free space.** Selects the drive in `E`, 0 to 15 for A to P, as
+an FCB's drive is selected, and puts its free space, in records, in the three
+bytes at the DMA address, low byte first (`src/cpm/bdos.asm:1439-1481`).
+Returns 0. The default drive stays as it was. A drive past D or with no volume
+is the `Select` error.
 
 **47 Chain to program.** Replaces what is left of the CCP's command line with
 the command at the DMA address, which ends with a 0 within its first 128
@@ -277,6 +287,9 @@ and returns 0 in `A`, or `FFh` if a write failed and its line was dropped
 (`src/cpm/bdos.asm:159-164`, `src/vol.asm:634-646`). `E` = `FFh`, CP/M 3's
 purge, gives the same flush.
 
+**99 Truncate file.** Returns `FFh` in `A` and changes nothing
+(`src/cpm/bdos.asm:63-64`, `src/cpm/bdos.asm:98-99`). TEC-OS has no truncate.
+
 **108 Get or set program return code.** With `DE` = `FFFFh`, returns the code
 in `HL`. With any other `DE`, sets the code to `DE` and returns 0
 (`src/cpm/bdos.asm:166-178`). All programs share one code. A reset clears it
@@ -287,8 +300,8 @@ with `:` runs only when the code is not from `FF00h` to `FFFEh`
 
 ## Other numbers
 
-Every other function number, from 41 to 255 except 45, 47, 48 and 108,
+Every other function number, from 41 to 255 except 44 to 48, 99 and 108,
 returns 0 in `A` and `HL` and does nothing (`src/cpm/bdos.asm:100-101`). Function 50, CP/M
 3's direct BIOS call, is one of them. A program reaches the BIOS through its
 jump table, whose warm boot entry is the address at `0001h`
-(`src/boot.asm:114-115`).
+(`src/boot.asm:207-210`).
