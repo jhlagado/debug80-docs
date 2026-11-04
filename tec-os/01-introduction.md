@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction
 
-<!-- Checked against TEC-OS 621201d, with TED.COM from Thorium 128edb7 and
+<!-- Checked against TEC-OS 78127ec, with TED.COM from Thorium 128edb7 and
      TAS.COM from Thorium dbee66a. -->
 
 TEC-OS turns the TEC-1G into a small disk computer. In place of MON-3 and the
