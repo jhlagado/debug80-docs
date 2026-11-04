@@ -23,7 +23,7 @@ model of Chapter 25.
 Startup has to hold its place in the file across every program the file runs,
 and to start again after a reset. All of its state is `STPOS`, at `BF63h`, with
 the file's record after it in `STREC`, at `BF64h–BFE3h` (`src/ram.asm:237-238`).
-The byte holds four kinds of value (`src/cpm/ccp.asm:1571-1574`):
+The byte holds four kinds of value (`src/cpm/ccp.asm:1528-1531`):
 
 | `STPOS` | Meaning |
 | --- | --- |
@@ -33,10 +33,10 @@ The byte holds four kinds of value (`src/cpm/ccp.asm:1571-1574`):
 | `FFh` | Finished, and `STDONE` has run |
 
 The byte's place in memory separates an ordinary exit from a reset. The block
-that holds it starts above the RAM BIOS table (`src/ram.asm:192`), past
+that holds it starts above the RAM BIOS table (`src/ram.asm:194`), past
 `BDOSRME`, the end of the range `CPMINIT` clears (`src/boot.asm:265-269`,
-`src/ram.asm:190`). An ordinary exit is a warm boot, which calls `CPMINIT` and
-never comes to `COLD` (`src/boot.asm:5-8`, `src/boot.asm:75-92`), so `STPOS` and
+`src/ram.asm:192`). An ordinary exit is a warm boot, which calls `CPMINIT` and
+never comes to `COLD` (`src/boot.asm:5-8`, `src/boot.asm:75-91`), so `STPOS` and
 `STREC` keep their values through every program in the file.
 
 Both kinds of reset enter at `RSTENT` and go on to `COLD`
@@ -46,26 +46,26 @@ drive table (`src/boot.asm:25`, `src/boot.asm:141-148`). Cold boot then clears
 the whole workspace, `STPOS` included (`src/boot.asm:34-38`,
 `src/ram.asm:240-241`). A retry from the diagnostic prompt returns to `COLDRT`,
 after that clear, with `STPOS` still 0, because the CCP hasn't run yet
-(`src/boot.asm:48-50`, `src/boot.asm:440-441`).
+(`src/boot.asm:49-51`, `src/boot.asm:440-441`).
 
 ## STBOOT
 
 Every entry to the CCP sets the user number and then calls `STBOOT`
-(`src/cpm/ccp.asm:54-60`). Cold boot sets the drive and user byte to 0 and then
-runs on into warm boot, which passes that byte to the CCP (`src/boot.asm:67-70`,
+(`src/cpm/ccp.asm:53-59`). Cold boot sets the drive and user byte to 0 and then
+runs on into warm boot, which passes that byte to the CCP (`src/boot.asm:68-70`,
 `src/boot.asm:90-92`), so at the first call the user area is 0. `STBOOT` returns
-at once if `STPOS` isn't 0 (`src/cpm/ccp.asm:1575-1578`), which is the case at every
+at once if `STPOS` isn't 0 (`src/cpm/ccp.asm:1532-1535`), which is the case at every
 other entry.
 
 A BDOS error during the read ends in a warm boot, so `STBOOT` marks the file
 finished before it touches the card. Its next instruction sets bit 7, making
-`STPOS` `80h`, before any part of the read (`src/cpm/ccp.asm:1579`). After a failure
+`STPOS` `80h`, before any part of the read (`src/cpm/ccp.asm:1536`). After a failure
 the next call of `STBOOT` returns at the same test, so an unreadable file can't
 repeat. `test/startup.test.mjs:172-192` makes the card fail at the file's block
 and reaches a prompt with nothing from the file run.
 
 The keypad test comes next, and it gives a way past a file that keeps the board
-from reaching a prompt (`src/cpm/ccp.asm:1580-1582`). `test/startup.test.mjs:46-58`
+from reaching a prompt (`src/cpm/ccp.asm:1537-1539`). `test/startup.test.mjs:46-58`
 holds a key through reset to get past a service whose `INIT` never returns, and
 `:194-207` does the same for a file that resets the board at every boot.
 `STSPORT` is port `03h` (`src/layout.asm:11`), and bit 6 is low while a keypad
@@ -77,13 +77,13 @@ T-states after reset, about 1.47 seconds.
 
 `STBOOT` then makes the read in the CCP's own FCB. It copies 12 bytes of
 `STFCB`, a drive byte of 1 and the name `STARTUP CMD`, to `CMDFCB`
-(`src/cpm/ccp.asm:1583-1586`, `src/tables.asm:88`), and cold boot's clear has left the
+(`src/cpm/ccp.asm:1540-1543`, `src/tables.asm:88`), and cold boot's clear has left the
 rest of `CMDFCB` zero. Drive byte 1 is drive A whichever drive is current, and
-`RESEL` has already put back a recognised reset's selection (`src/boot.asm:58`),
+`RESEL` has already put back a recognised reset's selection (`src/boot.asm:59`),
 so the file comes from the volume on drive A at that moment, as Chapter 5's
 `SPARE` example shows. Three BDOS calls follow, the second and third through
-`CPSRC`, which points `DE` at `CMDFCB` (`src/cpm/ccp.asm:1587-1597`,
-`src/cpm/ccp.asm:1072-1074`):
+`CPSRC`, which points `DE` at `CMDFCB` (`src/cpm/ccp.asm:1544-1554`,
+`src/cpm/ccp.asm:1053-1065`):
 
 - function 26 points the DMA address at `STREC`;
 - function 15 opens the file, and `INC A` turns its `FFh` for no file into zero;
@@ -91,10 +91,10 @@ so the file comes from the volume on drive A at that moment, as Chapter 5's
   or an error.
 
 After a good read `A` is 0, and `INC A` stores `STPOS` as 1, the file's first
-byte (`src/cpm/ccp.asm:1598-1599`). Each failure jumps past that store and leaves
+byte (`src/cpm/ccp.asm:1555-1556`). Each failure jumps past that store and leaves
 `80h`. `test/startup.test.mjs:97-106` writes a line into `STREC` before a read
 that returns an error, and the line doesn't run. All three outcomes meet at
-`STBDMA`, which writes `DEFDMA` straight to `CURDMA` (`src/cpm/ccp.asm:1600-1602`), so
+`STBDMA`, which writes `DEFDMA` straight to `CURDMA` (`src/cpm/ccp.asm:1557-1559`), so
 a program started by the first line finds the DMA address at `0080h`, with or
 without a file (`test/startup.test.mjs:89-95`).
 
@@ -107,29 +107,29 @@ file's limit at 128 bytes.
 
 The CCP takes one line for each prompt. `MLREAD` prints the prompt and then goes
 to a chained line's next piece, to `STLINE` and to the keyboard, in that order
-(`src/cpm/ccp.asm:74-89`). `STLINE` returns with carry clear when it has put a
+(`src/cpm/ccp.asm:73-88`). `STLINE` returns with carry clear when it has put a
 line in the command buffer, and the CCP goes straight to `MLGOT`. With carry set
 the CCP sets `HFLAG` and reads the keyboard with function 10. `HFLAG` is set on
 that path alone, and function 10 stores a line in the history only if it is set
-(`src/cpm/bdos.asm:400-404`), so startup lines are not in the history.
+(`src/cpm/bdos.asm:419-423`), so startup lines are not in the history.
 
 `STLINE` starts by rotating `STPOS` left, which moves the finished bit to carry
 and sends a finished file to `STDONE`. Otherwise it rotates the position back
-and adds it to `STREC`'s low byte (`src/cpm/ccp.asm:1610-1617`). The record lies within
+and adds it to `STREC`'s low byte (`src/cpm/ccp.asm:1567-1574`). The record lies within
 one page, `BFxxh`, so the sum needs no high byte. `DE` is `CMDTXT`, and `B`
-counts down from 127, the characters a line may hold (`src/cpm/ccp.asm:1618-1619`).
+counts down from 127, the characters a line may hold (`src/cpm/ccp.asm:1575-1576`).
 
 The loop tests the record's end before each read, and then reads a byte and
-tests it for 0, `^Z`, CR and LF (`src/cpm/ccp.asm:1620-1632`). Any other byte is a
+tests it for 0, `^Z`, CR and LF (`src/cpm/ccp.asm:1577-1589`). Any other byte is a
 character. The characters past the 127th are read and dropped, by the test of
-`B` at `src/cpm/ccp.asm:1633-1635`, so the scan still reaches the line's real end and
+`B` at `src/cpm/ccp.asm:1590-1592`, so the scan still reaches the line's real end and
 the next line starts in the right place.
 
 The loop has two ways out. A CR or LF jumps to `STL2` with `HL` past it, and the
 record's end, a zero or `^Z` jumps to `STLE`, which first sets `L` to the
-record's last byte, `STLAST` (`src/loader.asm:26`, `src/cpm/ccp.asm:1640`). `STL2` then
+record's last byte, `STLAST` (`src/loader.asm:26`, `src/cpm/ccp.asm:1597`). `STL2` then
 computes the next byte's offset plus 1 from `L` and stores it
-(`src/cpm/ccp.asm:1641-1643`).
+(`src/cpm/ccp.asm:1598-1600`).
 
 From `STLE` that sum is exactly `80h`, finished. Any characters already in
 `CMDTXT` still run as a line, so a line cut off by the record's end runs as far
@@ -137,11 +137,11 @@ as it goes. The same value comes out of a CR or LF that leaves the next byte at
 offset 127. A line starting at the 128th byte therefore never runs, because its
 position would be `80h`. A CR or LF in the record's last byte leaves `HL` one
 past the record, and `STL2` stores `81h`, also finished
-(`src/cpm/ccp.asm:1641-1643`). A test fills the record to its last byte with a line at
+(`src/cpm/ccp.asm:1598-1600`). A test fills the record to its last byte with a line at
 the end, and that line runs (`test/startup.test.mjs:74-79`).
 
 If no character was copied the line was blank, and `STLINE` goes round again
-(`src/cpm/ccp.asm:1644-1646`). A CR and LF therefore take two passes, the CR ending
+(`src/cpm/ccp.asm:1601-1603`). A CR and LF therefore take two passes, the CR ending
 the line and the LF being a blank line. The starter card's file has 21 bytes,
 `PICO.SVC`, `GLCD.SVC` and `^Z` with a CR and LF after each name:
 
@@ -156,32 +156,32 @@ the line and the LF being a blank line. The starter card's file has 21 bytes,
 
 With a line in hand, `STLINE` stores its length in `CMDLEN`, writes CR and `$`
 after it and prints the line from `CMDTXT` through `PUTSTR`, which is BDOS
-function 9 (`src/cpm/ccp.asm:1647-1653`, `src/cpm/ccp.asm:1531-1533`). Function 9 ends
+function 9 (`src/cpm/ccp.asm:1604-1610`, `src/cpm/ccp.asm:1488-1490`). Function 9 ends
 at the first `$`, so a `$` in the line ends the echo there, but the characters
 in `CMDTXT` aren't changed and the line runs whole. The CCP's own `CRLFMSG` at
 `NOTDRIVE` ends the echo's row whether or not the CR was reached
-(`src/cpm/ccp.asm:225-227`), so the output after a cut echo starts on a new row,
+(`src/cpm/ccp.asm:223-225`), so the output after a cut echo starts on a new row,
 as Chapter 5's transcript shows.
 
 The `$` needs one more byte than the buffer. `CMDTXT` is 128 bytes and is
-followed at once by `BOOTDRV` (`src/ram.asm:79-83`), so a line of 127 characters
+followed at once by `BOOTDRV` (`src/ram.asm:80-84`), so a line of 127 characters
 puts its CR in the last byte of `CMDTXT`, at `BDB4h`, and its `$` at `BDB5h`, in
 `BOOTDRV`. The order in `CCPENT` makes this harmless. `BOOTDRV` has one reader,
-at `src/cpm/ccp.asm:61`, and the CCP's entry writes the byte before that
-(`src/cpm/ccp.asm:44`), so the `$` is rewritten before it is read.
+at `src/cpm/ccp.asm:60`, and the CCP's entry writes the byte before that
+(`src/cpm/ccp.asm:43`), so the `$` is rewritten before it is read.
 
 `MLGOT` treats a startup line and a typed one alike from there. It writes a 0
 over the CR, sets `CHPOS` to 1 and takes the first piece
-(`src/cpm/ccp.asm:93-103`). `MLTAKE` turns the piece's letters to capitals in
-place, after the echo (`src/cpm/ccp.asm:143-148`), which is why the echo keeps a
+(`src/cpm/ccp.asm:92-101`). `MLTAKE` turns the piece's letters to capitals in
+place, after the echo (`src/cpm/ccp.asm:141-146`), which is why the echo keeps a
 line's small letters. `test/startup.test.mjs:153-170` compares each line run
 from the file with the same line typed, in its output and its BDOS calls, apart
 from that difference of letter case.
 
 The next line comes by whatever route the CCP takes back to `MLREAD`. A built-in
-or a failed command jumps to `STARTED` or `MAINLOOP` (`src/cpm/ccp.asm:68-74`,
-`src/cpm/ccp.asm:266`, `src/cpm/ccp.asm:1138`). A program returns to the `WBOOT`
-address that `CMDRUN` pushed (`src/cpm/ccp.asm:292-293`), and the warm boot
+or a failed command jumps to `STARTED` or `MAINLOOP` (`src/cpm/ccp.asm:67-73`,
+`src/cpm/ccp.asm:262`, `src/cpm/ccp.asm:1128`). A program returns to the `WBOOT`
+address that `CMDRUN` pushed (`src/cpm/ccp.asm:288-289`), and the warm boot
 enters the CCP at `CCPENT`, where `STBOOT` returns at once. The loop then
 reaches `STLINE` with `STPOS` where the last line left it. A `^C` that ends a
 program is a warm boot too, so it leaves the file's position alone. Chapter 24
@@ -196,8 +196,8 @@ it at every prompt once the file has finished, with carry set and `A` holding
 `STPOS` rotated left: `01h` for `80h`, `03h` for `81h` and `FFh` for `FFh`.
 `INC A` leaves carry alone and gives zero only for `FFh`, so every prompt after
 the first returns at once with carry set, for the keyboard
-(`src/cpm/ccp.asm:1662-1663`). The first one stores `FFh` and tests the board
-(`src/cpm/ccp.asm:1664`).
+(`src/cpm/ccp.asm:1619-1620`). The first one stores `FFh` and tests the board
+(`src/cpm/ccp.asm:1621`).
 
 The test is a piece of arithmetic on `CONDEV`, the byte at `0045h` that records
 the console devices (`src/layout.asm:39`, `src/layout.asm:51-56`):
@@ -212,14 +212,14 @@ the console devices (`src/layout.asm:39`, `src/layout.asm:51-56`):
 
 `STDONE` masks off `CDWRD`, because `GLCD?` may already be there from a failed
 `CON UC1` in the file, and `CDRTC`, since the clock has no part in the test. It
-then subtracts `CDMTX+CDTMS` (`src/cpm/ccp.asm:1665-1667`). The
+then subtracts `CDMTX+CDTMS` (`src/cpm/ccp.asm:1622-1624`). The
 result is zero only on a board with a PICO9918 and a matrix keyboard where
 `GLCD.SVC` isn't in. `OR` with the high byte of `PIVEC`, `PICO.SVC`'s table,
 comes next, and the result stays zero only if no PICO9918 driver is in either,
-since a table in RAM is at `0100h` or above (`src/cpm/ccp.asm:1668-1669`,
+since a table in RAM is at `0100h` or above (`src/cpm/ccp.asm:1625-1626`,
 `src/ram.asm:217`). `SCF` sets carry for the return, and any non-zero result
-leaves (`src/cpm/ccp.asm:1670-1671`). A zero result writes `PICO?` with `LCDWRD`,
-which also returns carry set (`src/cpm/ccp.asm:1672-1673`, `src/lcd.asm:45-46`).
+leaves (`src/cpm/ccp.asm:1627-1628`). A zero result writes `PICO?` with `LCDWRD`,
+which also returns carry set (`src/cpm/ccp.asm:1629-1630`, `src/lcd.asm:45-46`).
 
 That one test gives the cases Chapter 5 lists. No `STARTUP.CMD`, an empty one, a
 driver's file missing or bad with no other driver in, and a skip all arrive with
@@ -233,17 +233,17 @@ writes `PICO?`.
 
 The CCP separates a service from a program by the three type bytes in `CMDFCB`.
 `SVC` calls `SVCGO`, and any other type goes on to `CMDCOM` and the search for a
-`.COM` file (`src/cpm/ccp.asm:257-267`). The search looks on the drive the
+`.COM` file (`src/cpm/ccp.asm:253-263`). The search looks on the drive the
 command names, or the current drive, in the current user and then in that
 drive's user 0. Then, for a plain name only and only when the current drive
 isn't A:, it looks on A: in the current user and then in A:'s user 0
-(`src/cpm/ccp.asm:273-285`, `src/cpm/ccp.asm:349-375`,
+(`src/cpm/ccp.asm:269-281`, `src/cpm/ccp.asm:345-371`,
 `test/search.test.mjs:72-113`). That is what becomes of an old card's `PICO.DRV`:
 no `PICO.COM` is found on drive A, the current drive at startup, and the line
 fails.
 `SVCGO` reads the file with `LOADCOM` and installs it with `SVCLOAD`, and a
 failure of either returns carry to `BADCMD` for the name and question mark
-(`src/loader.asm:450-453`, `src/cpm/ccp.asm:264-265`). Chapter 20 describes the
+(`src/loader.asm:450-453`, `src/cpm/ccp.asm:260-261`). Chapter 20 describes the
 loader and the relocation, and Appendix H the file.
 
 A display driver's load fails from inside, in the driver's own `INIT`.
@@ -261,7 +261,7 @@ matrix keyboard, and a second load of `PICO.SVC` fails while the first is in.
 IOBYTE is 3, `UC1:`, it goes on. Otherwise it calls `INFO`, whose `L` is the
 console's columns, and it fails if `L` isn't 0, which is the case while any
 display is the console (`drivers/glcd.asm:33-42`, `src/services.asm:54-55`). `CMDCON` writes the field before it calls `GLCLD`
-(`src/cpm/ccp.asm:1119-1122`), so `CON UC1` reaches the load with the field
+(`src/cpm/ccp.asm:1109-1112`), so `CON UC1` reaches the load with the field
 already 3, and a startup line `GLCD.SVC` under a PICO9918 console doesn't.
 `GLCD.SVC` then calls `GLCWAIT`, and a controller that doesn't answer fails the
 load (`drivers/glcd.asm:43-45`), as `INFO`'s answer does for `PICO.SVC`.
@@ -309,7 +309,7 @@ and a later take writes its five blanks over the start of the program's row.
 `CARD?` takes the other route. `DIAG` writes it with `LCD3`, with no `CDWRD`
 (`src/boot.asm:425-426`), since no take can happen at the diagnostic prompt. `R`
 jumps to `COLDRT`, where `LCDINIT` clears the whole display
-(`src/boot.asm:440-441`, `src/boot.asm:48-50`), and a retry that fails writes the
+(`src/boot.asm:440-441`, `src/boot.asm:49-51`), and a retry that fails writes the
 word again. `CONDEV` itself starts each cold boot at 0, with `CDMTX` then read
 from the port, so no reset begins with `CDWRD` set (`src/console.asm:30`,
 `src/console.asm:42-44`).
@@ -372,7 +372,7 @@ remaining lines, and nothing is written if that equals the old text
 (`host/card.mjs:147-159`). The file has no line for the other display. On the
 page's board, which has both, a `GLCD.SVC` line after `PICO.SVC` would only give
 way and print `GLCD.SVC?`, and `CON UC1` loads `GLCD.SVC` itself when it is
-wanted (`src/cpm/ccp.asm:1120-1122`).
+wanted (`src/cpm/ccp.asm:1110-1112`).
 
 A card that passes `cardProblem` has its startup file rewritten even when it
 needs no driver, so the starter card's `STARTUP.CMD` is left holding the chosen

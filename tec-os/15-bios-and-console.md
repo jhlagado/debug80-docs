@@ -50,7 +50,7 @@ entries of CP/M 2.2 (`src/tables.asm:10-26`):
 
 A CP/M program may write over an entry of this table, so TEC-OS's table has to
 be in RAM. The table in the ROM is never called. Cold boot copies it to `BF00h`,
-the start of the page above the BDOS's workspace (`src/boot.asm:61-64`), and
+the start of the page above the BDOS's workspace (`src/boot.asm:62-65`), and
 every caller goes through the copy. The word at `0001h` points at its warm boot
 entry, `BF03h`, and a program reaches the table the way CP/M 2.2 programs do, by
 taking that word and subtracting 3. The BDOS calls the same copy, since its
@@ -62,7 +62,7 @@ may write its own jump over an entry, to receive every character the BDOS
 prints or to put its own routine behind `CONIN`, and the BDOS then calls the
 program's routine. Cold boot is the only time the table is copied, so warm boot
 leaves a replaced entry in place, as CP/M 2.2's warm boot does
-(`src/boot.asm:61-63`). A program that replaces an entry has to put it back
+(`src/boot.asm:62-64`). A program that replaces an entry has to put it back
 before it ends, or the replacement's code in the TPA is called after the
 program has gone.
 
@@ -396,15 +396,15 @@ row (`src/lcd.asm:45-66`).
 
 Cold boot writes `TEC-OS 0.1  TEC-1G` on row 0 and the letters and labels of
 drives A and B on rows 1 and 2. Drives C and D have no row
-(`src/boot.asm:50-52`, `src/boot.asm:66`, `src/lcd.asm:67-111`).
+(`src/boot.asm:51-53`, `src/boot.asm:67`, `src/lcd.asm:67-111`).
 
 Row 3 is for one of three words that TEC-OS shows when a board may have no
 terminal to show a message on. `CARD?` appears at the diagnostic prompt
 (`src/boot.asm:425-426`). `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`
-(`src/cpm/ccp.asm:1122`, `src/loader.asm:428-445`). `PICO?` appears when a board
+(`src/cpm/ccp.asm:1112`, `src/loader.asm:428-445`). `PICO?` appears when a board
 with a PICO9918 and the matrix keyboard reaches its first prompt with no display
 driver
-(`src/cpm/ccp.asm:1672-1673`).
+(`src/cpm/ccp.asm:1629-1630`).
 
 Writing `PICO?` or `GLCD?` sets `CDWRD` in `CONDEV` (`src/lcd.asm:34-39`), and
 `WRDCLR` writes blanks over the row only while that bit is set. A word TEC-OS

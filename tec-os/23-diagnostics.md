@@ -21,10 +21,10 @@ with its remedy.
 
 ## The diagnostic prompt
 
-Cold boot sets up the LCD and the card at `COLDRT` (`src/boot.asm:50`). It
+Cold boot sets up the LCD and the card at `COLDRT` (`src/boot.asm:51`). It
 starts the card with `SDINIT` and checks the container with `MOUNT`, and a
 failure of either jumps to `DIAG` with an error code in `A`
-(`src/boot.asm:53-56`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
+(`src/boot.asm:54-57`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
 `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:8-18`). The banner is
 printed before the card is touched (`src/boot.asm:46-47`), so it appears
 whatever the card holds. Only the RAM check comes before it. `RAMCHK` writes and
@@ -47,8 +47,8 @@ and no display driver has been installed, since the startup file is on the card.
 So on a board with no terminal attached, the LCD's `CARD?` is the only sign.
 
 `H` prints the first 64 bytes of `BLKBUF`, the 512-byte buffer that holds the
-last block read from the card, in four rows of 16 (`src/boot.asm:444-464`,
-`src/ram.asm:20`). For a container that fails its checks that block is usually
+last block read from the card, in four rows of 16 (`src/boot.asm:442-442`,
+`src/ram.asm:19`). For a container that fails its checks that block is usually
 block 0, the header, as in Chapter 18's example. With no card, or a card that
 fails before block 0 is read, the buffer still holds the zeros cold boot
 cleared it to, as Chapter 1 shows.

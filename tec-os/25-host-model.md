@@ -260,10 +260,10 @@ recipe and the files in `dist/files` (`web/build.mjs:32-45`). The page's recipe,
 `dist/page.recipe.json`, has the starter card's volumes and files with one more, `DEMO.COM`,
 and the build copies it under the name the page fetches, `starter.recipe.json`.
 `npm run media` writes it, and it assembles `DEMO.COM` from
-`test/programs/demo.asm` into `dist/files` (`tools/media.mjs:236-249`). The files
+`test/programs/demo.asm` into `dist/files` (`tools/media.mjs:234-247`). The files
 are the starter card's, `DEMO.COM` and the PICO9918's driver built at 40 and 32
 columns. The recipe's `widths` pins each of the three drivers by its URL and
-SHA-256 (`tools/media.mjs:197-203`, `tools/media.mjs:221`). The page uses one
+SHA-256 (`tools/media.mjs:195-201`, `tools/media.mjs:219`). The page uses one
 ROM for every display, since the PICO9918's width is the build of the card's
 `PICO.SVC` (`web/build.mjs:14`).
 

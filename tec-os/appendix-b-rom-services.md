@@ -16,7 +16,7 @@ describes the use of the hardware services, with programs. The names are those
 of `src/abi.inc`, which the ROM assembles from and which a build publishes as
 `dist/abi.inc` after checking the table's bytes, the number of services and `INFO`'s bits
 against the ROM (`src/abi.inc:1-4`, `tools/build.mjs:139-154`,
-`tools/media.mjs:212`). The stacks are `abi.inc`'s: a bound on what each service takes
+`tools/media.mjs:210`). The stacks are `abi.inc`'s: a bound on what each service takes
 below its return address, the dispatcher's included. The T-states were measured
 on the model from the `JP` at `ABICALL` to the final `RET`, so a `CALL` adds 17
 to each.
@@ -54,7 +54,7 @@ nothing changed. `FIND` and `LIST` return otherwise, as their entries say
 
 A program tests carry or `A` after a failure. The hardware services and the
 dispatcher clear zero with the status, and the volume and display services
-leave it as it falls (`src/vol.asm:574-576`, `src/services.asm:315-327`).
+leave it as it falls (`src/vol.asm:624-626`, `src/services.asm:315-327`).
 
 The dispatcher reads the service's address from `SVTAB`, one word for each
 number, and jumps to it with `B`, `DE` and `HL` as they came
@@ -89,7 +89,7 @@ Registers not named as results are destroyed (`src/abi.inc:18-26`).
 
 The hardware services, 0 to 8, are in `src/services.asm`. None of them calls the
 BDOS, and the only state they keep is the claim byte, `VCLAIM`, in the
-workspace (`src/services.asm:1-7`, `src/ram.asm:57`).
+workspace (`src/services.asm:1-7`, `src/ram.asm:58`).
 
 **0 INFO.** Returns the devices in `B`, the ROM's version in `DE`, the
 console's columns in `L` and its rows in `H`, both 0 for the serial terminal
@@ -195,7 +195,7 @@ last.
 
 ## The volume services, 9 to 11
 
-The volume services are `MOUNT`, `UNMNT` and `DESC` (`src/vol.asm:481-508`):
+The volume services are `MOUNT`, `UNMNT` and `DESC` (`src/vol.asm:532-558`):
 
 | `C` | Takes | Effect |
 | ---: | --- | --- |
@@ -211,8 +211,8 @@ attempt to leave drive A empty and a failed write of the cache. A format 1.0
 card gives a slot only to the drives mounted at cold boot.
 
 A mount or an unmount writes the cache's changes for the card first and resets
-the drive by BDOS function 37 on the BDOS's own stack (`src/vol.asm:520`,
-`src/vol.asm:557`, `src/vol.asm:561-571`), so that the next access logs it in
+the drive by BDOS function 37 on the BDOS's own stack (`src/vol.asm:570`,
+`src/vol.asm:607`, `src/vol.asm:611-621`), so that the next access logs it in
 from its directory. A program therefore calls them from outside its own BDOS
 calls, unlike the other services. On the model a mount or a describe changed
 `IX`.

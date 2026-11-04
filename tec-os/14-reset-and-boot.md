@@ -44,8 +44,8 @@ Interrupts come on only if a program or a service enables them, and nothing in
 the ROM does. The Z80 comes out of reset
 with interrupts off, and the ROM executes `EI` only to restore a state it saved:
 the routines that must run with interrupts off put them back as they were at
-entry (`src/bios.asm:325`, `src/console.asm:212`, `src/console.asm:248`,
-`src/history.asm:39`, `src/cache.asm:466`). `VPAIR`, the routine in `PICO.SVC`
+entry (`src/bios.asm:270`, `src/console.asm:212`, `src/console.asm:248`,
+`src/history.asm:39`, `src/cache.asm:474`). `VPAIR`, the routine in `PICO.SVC`
 that writes each pair to the VDP's control port, does the same
 (`drivers/pico.asm:226-238`). The one
 other `EI` is in page zero. Each boot writes it at `0038h` unless a jump is kept
@@ -72,19 +72,19 @@ its lines in order:
 6. `CONINIT`, which starts the serial terminal, reads the Matrix switch and
    probes for the PICO9918. Then `RTCHAS`, which probes for the clock and sets
    bit 3 of `CONDEV` when one answers, and the banner (`src/boot.asm:40-47`).
-7. `LCDINIT` and the LCD's top row (`src/boot.asm:50-52`).
+7. `LCDINIT` and the LCD's top row (`src/boot.asm:51-53`).
 8. `SDINIT`, which starts the card, and `MOUNT`, which reads and checks the
    container and fills the drive table. Either failure goes to the
-   diagnostic prompt, `DIAG` (`src/boot.asm:53-56`).
+   diagnostic prompt, `DIAG` (`src/boot.asm:54-57`).
 9. `ALVINIT`, which places the allocation vectors and the BDOS entry jump,
    and `RESEL`, which applies the kept selection if the card still has it
-   (`src/boot.asm:57-58`).
+   (`src/boot.asm:58-59`).
 10. `PZTOP`, the top of the TPA, set to the BDOS entry jump, since no service
-    is loaded yet (`src/boot.asm:59-60`).
-11. The BIOS jump table copied from the ROM to `BF00h` (`src/boot.asm:61-64`).
-12. The volumes printed on the console and on the LCD (`src/boot.asm:65-66`).
+    is loaded yet (`src/boot.asm:60-61`).
+11. The BIOS jump table copied from the ROM to `BF00h` (`src/boot.asm:62-65`).
+12. The volumes printed on the console and on the LCD (`src/boot.asm:66-67`).
 13. Drive A and user 0 at `0004h`, and page zero built by `PZINIT`
-    (`src/boot.asm:67-69`).
+    (`src/boot.asm:68-70`).
 14. `MEMINIT`, which clears EXPAND 1 and marks every cache line empty
     (`src/boot.asm:70`). When it returns, cold boot runs on into warm boot,
     the next routine in the file.
@@ -97,7 +97,7 @@ gives. Chapter 18 describes steps 8 and 9, and the rest of this chapter steps 2,
 4 and 14.
 
 The diagnostic prompt's `R` jumps back to `COLDRT`, step 7 (`src/boot.asm:440-441`,
-`src/boot.asm:48-50`), so a retry clears the LCD, starts the card again and
+`src/boot.asm:49-51`), so a retry clears the LCD, starts the card again and
 mounts it, without clearing the memory or printing the banner a second time.
 
 On the starter card with the serial board, cold boot takes 1,286,306 T-states,
@@ -184,7 +184,7 @@ geometry byte in `RSLBUF`, which means no selection (`src/boot.asm:146-148`).
 
 `RESEL` applies the selection after `MOUNT` has accepted the card in the socket
 and `ALVINIT` has given its drives their vectors in the usual way, so neither
-the slots nor the TPA varies with the selection (`src/vol.asm:376-465`). The card
+the slots nor the TPA varies with the selection (`src/vol.asm:427-516`). The card
 in the socket may no longer hold the kept volumes, so `RESEL` works in two steps
 and changes the drives only if the first step succeeds. The first step changes
 no drive. It walks the card's descriptors and compares each with every kept
@@ -197,7 +197,7 @@ volume would not fit its slot, or a kept drive is left with no match.
 The second step runs only when every kept drive has matched. It copies `RSLBUF`
 over the drive table and the drives' indexes and builds each drive's DPH. That
 step reads nothing and can't fail. A drive that was empty before the reset stays
-empty, even if the card names a volume for it (`src/vol.asm:387-389`).
+empty, even if the card names a volume for it (`src/vol.asm:438-440`).
 
 The run below unmounts drive B with `MOUNT B:`, then presses reset. The kept
 selection has no volume on B and the starter card's two volumes still match, so
@@ -258,20 +258,20 @@ Chapter 20 describes how a service claims a vector, and the unload and the faile
 
 ## Warm boot
 
-Warm boot is `WBOOTR`, `src/boot.asm:72-92`, the second entry of the BIOS jump
+Warm boot is `WBOOTR`, `src/boot.asm:72-91`, the second entry of the BIOS jump
 table, and the jump at `0000h` leads to it through the RAM BIOS table at
 `BF03h`. A program reaches it by returning from `0100h`, since the CCP pushes
-`0000h` before it jumps there (`src/cpm/ccp.asm:14`,
-`src/cpm/ccp.asm:291-294`). A program also reaches it by jumping to `0000h` or
-by calling BDOS function 0 (`src/cpm/bdos.asm:130-131`). A call of BDOS function
+`0000h` before it jumps there (`src/cpm/ccp.asm:13`,
+`src/cpm/ccp.asm:287-290`). A program also reaches it by jumping to `0000h` or
+by calling BDOS function 0 (`src/cpm/bdos.asm:134-135`). A call of BDOS function
 47 that succeeds ends there too (`src/cpm/bdos.asm:65-71`).
 
 The BDOS goes there itself through `CHDROP`, which first drops the rest of a
 chained line, a line split at `!` (Chapter 11, `src/cpm/bdos.asm:75-77`). The
 BDOS takes that route after a `^C` typed as the first key of a line read with
-function 10 (`src/cpm/bdos.asm:320-324`), and after it has reported a BDOS error
-such as `Bdos Err On B: Select` (`src/cpm/bdos.asm:2387-2390`,
-`src/cpm/bdos.asm:2403-2406`). A `^C` at the prompt is the first case, since
+function 10 (`src/cpm/bdos.asm:339-343`), and after it has reported a BDOS error
+such as `Bdos Err On B: Select` (`src/cpm/bdos.asm:2341-2343`,
+`src/cpm/bdos.asm:2357-2359`). A `^C` at the prompt is the first case, since
 the CCP reads its line with function 10:
 
 <!-- node tools/capture.mjs ^C -->
@@ -296,55 +296,55 @@ Warm boot's steps are:
    before the stack because the BIOS stack is in EXPAND 0.
 2. `PZINIT`, as above (`src/boot.asm:80`).
 3. `SVCBSY` cleared, so that a service's `INIT` or `REMOVE` that a program's
-   end interrupted is not taken to be still running (`src/boot.asm:81-82`).
+   end interrupted is not taken to be still running (`src/boot.asm:80-80`).
 4. `CPMINIT`, which clears the CCP's state and the BDOS's,
    331 bytes from `CCPCLR` to `BDOSRME`, as a fresh load of them from disk
    would leave it. It keeps the command buffer below `CCPCLR` for a chained
    line's next piece. It puts the DMA address back at `0080h`, sets the command
    buffer's maximum length to 127 and fills the CCP stack's guard with `A5h`.
    It marks the deblocking buffer empty so that a changed card is read again
-   (`src/boot.asm:262-281`, `src/ram.asm:68-81`).
+   (`src/boot.asm:262-281`, `src/ram.asm:69-82`).
 5. The console put right. `HWVREL` gives back the PICO9918 if a program
    claimed it, `VREST` restores the display's mode if the console is
    on one, and `VTREGR` resets the scroll region to the whole screen
-   (`src/boot.asm:84-88`).
+   (`src/boot.asm:84-87`).
 6. `CWBOOT`, which writes every dirty line of the cache (Chapter 19) to the
    card. If any write has failed since the last warm boot, it prints
    `Write lost` and drops the rest of a chained line (`src/boot.asm:89`,
-   `src/cache.asm:328-339`).
+   `src/cache.asm:351-351`).
 7. A jump to the CCP's entry, `CCPENT`, with `C` holding the drive and user
    byte from `0004h` (`src/boot.asm:90-92`).
 
 Warm boot leaves the rest alone. The drive table, the DPHs and `LOGINV`, the
 BDOS's record of the logged-in drives (Chapter 16), are in the BIOS's part of
-the workspace, which `CPMINIT` does not clear (`src/ram.asm:22-34`). The
+the workspace, which `CPMINIT` does not clear (`src/ram.asm:21-33`). The
 allocation vectors below `WSBASE` and the RAM BIOS table at `BF00h` are outside
 what `CPMINIT` clears too. So are the two FCBs and the command buffer, the 202
 bytes of the CCP's RAM below `CCPCLR`, and `CHPOS`, the byte above the RAM BIOS
 table that marks a chained line's next piece. The rest of the line therefore
-outlives `CPMINIT` (`src/ram.asm:68-81`, `src/ram.asm:239`), as Chapter 24
+outlives `CPMINIT` (`src/ram.asm:69-82`, `src/ram.asm:239`), as Chapter 24
 describes. The services below the BDOS entry are kept too, and so are the
 registry's head and the display drivers' tables above the RAM BIOS table. The
 cache's lines and the history in EXPAND 1 stay as well.
 
-The CCP's entry does the rest (`src/cpm/ccp.asm:29-66`). It sets its stack and
+The CCP's entry does the rest (`src/cpm/ccp.asm:28-65`). It sets its stack and
 puts A: in place of a drive past D: or with no volume, because selecting such a
 drive would give a `Select` error and a warm boot back to the same place
-(`src/cpm/ccp.asm:33-44`). It sets `WRFLAG` before it calls BDOS function 13,
+(`src/cpm/ccp.asm:32-43`). It sets `WRFLAG` before it calls BDOS function 13,
 the disk reset, so that the reset doesn't read every directory again. With that
 flag set, function 13 keeps a logged-in drive if nothing has changed its vector
 since it was last built and the vector still sums as it did then. A drive that a
 write has changed is marked for a rebuild at its next selection, from its
 directory entries up to the highest one in use.
 Any other is dropped and is scanned in full when it is next selected
-(`src/cpm/bdos.asm:430-491`). A program's own call of function 13 has no flag
+(`src/cpm/bdos.asm:449-510`). A program's own call of function 13 has no flag
 set and drops every drive, as CP/M 2.2 does.
 
 The CCP then sets the user number from the byte it was given. It calls
 `STBOOT`, which starts the startup file once after a cold boot (Chapter 21
 describes it), and it selects the drive if it is not A. Its main loop then takes a
 chained line's next piece, if one is left, before the startup file's next line
-and before the console (`src/cpm/ccp.asm:80-84`).
+and before the console (`src/cpm/ccp.asm:79-83`).
 
 ## The cost of a warm boot
 
