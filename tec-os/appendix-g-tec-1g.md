@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix G. The TEC-1G as TEC-OS uses it
 
-Checked against TEC-OS 58d4345.
+Checked against TEC-OS 621201d.
 
 This appendix lists the parts of the TEC-1G that TEC-OS reads and writes: its
 ports, the bits of the system latch, the configuration switches, the RAM in
@@ -45,8 +45,8 @@ Debug80 runtime, whose serial input starts a queued byte at a read of that port
 
 At cold boot TEC-OS probes the PICO9918 through ports `BEh` and `BFh`. When the
 chip answers and the Matrix switch has enabled the keyboard, cold boot starts
-the ROM's console on it at 80 columns, before the banner (`src/video.asm:7-11`,
-`src/pico.asm:30-44`). With the switch off the chip stays unprogrammed until a
+the ROM's console on it at 80 columns, before the banner (`src/video.asm:8-16`,
+`src/pico.asm:27-47`). With the switch off the chip stays unprogrammed until a
 program claims it.
 
 ## Port 01h and the serial line
@@ -80,7 +80,7 @@ TEC-OS reads three bits of port `03h` (`src/layout.asm:11`):
 - **Bit 6, a keypad key down.** Read once, at cold boot, just before the
   startup file is opened. A low bit skips the file (`src/cpm/ccpcmd.asm:562-564`).
 - **Bit 7, the serial line's input.** Read by the serial routines
-  (`src/console.asm:133`, `src/console.asm:214`, `src/console.asm:232`).
+  (`src/console.asm:152`, `src/console.asm:214`, `src/console.asm:232`).
 
 The TEC-1G's documents and the Debug80 runtime describe the other bits of port
 `03h` differently. On bit 6 the two agree: it is low while a keypad key is
@@ -113,7 +113,7 @@ TEC-OS's next write to the latch is made from the copy.
 
 EXPAND is set only while no stack is in use, since the stacks TEC-OS uses once
 cold boot has set them up are in `8000h–BFFFh`, in EXPAND 0
-(`src/history.asm:16-43`, `src/cache.asm:17-19`). Bits 3 to 6 are a bank field
+(`src/history.asm:16-43`, `src/cache.asm:10-13`). Bits 3 to 6 are a bank field
 for the window in the Debug80 runtime, and unconnected to U9 in the board's
 documents. Of bits 2 to 6, TEC-OS uses only bit 2, for EXPAND 1. Test T12 of
 the diagnostics ROM reports what a board does with bits 3 to 6.
@@ -127,7 +127,7 @@ and EXPAND 1. The board's recommended build leaves U9 empty, and
 EXPAND jumpers set for a 32 KiB chip. Before it prints anything, cold boot
 tests `8000h–BFFFh` and then EXPAND 1 behind it, and stops with `TEC-OS needs
 64K RAM` on the serial terminal if either is missing (`src/boot.asm:36`,
-`src/boot.asm:296-326`). Chapter 1 describes the check, and Chapter 13 what
+`src/boot.asm:323-358`). Chapter 1 describes the check, and Chapter 13 what
 TEC-OS keeps in each half.
 
 ## The hex keypad and its NMI
@@ -173,12 +173,17 @@ test again at each call, and reads and sets the clock's seven BCD registers
 The SD card adaptor is on port `FDh`, driven in SPI mode by bit-banging: bit 0
 is the data to the card, bit 1 the clock and bit 2 the card's select, low to
 select it, and the card's data comes back on bit 7 (`src/layout.asm:12`,
-`src/sd.asm:8`). The data changes while the clock is low, and the card
+`src/sd.asm:3-8`). The data changes while the clock is low, and the card
 samples it on the rising edge. With nothing selected the port is written
 `05h`: select high, data high, clock low.
 
 Every wait for the card has a limit, and a card that doesn't answer gives one
-of the error codes of Chapter 23 and Appendix D (`src/sd.asm:8-18`). A
+of the error codes of Chapter 23 and Appendix D (`src/sd.asm:10-20`). A card
+that answers wrongly fails in the same way. A data error token in place of a
+block's data fails the read at once with code `0Ah`. A wrong echo of CMD8's
+voltage or check pattern fails the card's start with code `0Bh`, and an error
+bit in the answer to CMD55 fails it with code 2 (`src/sd.asm:160-202`,
+`src/sd.asm:280-298`). A
 high-capacity card takes a block's number as its address, and a
 standard-capacity card takes the block's byte address in 32 bits, so the
 driver can name no block 4 GiB or more into a standard card. It rejects such a
@@ -187,8 +192,9 @@ reaches past block `7FFFFFh`, the last below 4 GiB, fails the mount with code
 `27h` (`src/sd.asm:243-274`, `src/vol.asm:221-235`, Chapter 18). When a
 block goes to or from the block cache, the transfer loop runs with EXPAND 1 in
 view, writing the latch before the loop and its copy back after
-(`src/sd.asm:322-326`, `src/sd.asm:420-421`, `src/sd.asm:428-431`,
-`src/sd.asm:420-421`). `docs/diagnostics.md` gives the cost of a block read
-with the same driver in the diagnostics ROM as 354,216 T-states and 678 for
+(`src/sd.asm:321-325`, `src/sd.asm:420-421`, `src/sd.asm:427-431`,
+`src/sd.asm:490-491`). `docs/diagnostics.md` gives the cost of a block read
+with the diagnostics ROM's copy of the driver as 354,216 T-states and 678 for
 each wait for the card, about 89 ms at 4 MHz, and test T20 measures it on a
-board.
+board. TEC-OS's own driver also tests each byte of that wait for a data error
+token, which adds 11 T-states to each wait (`src/sd.asm:282-292`).
