@@ -79,7 +79,7 @@ ROM's code, by the symbol map of the build:
 boot, with `VCLAIM` ORed in (`src/services.asm:49-53`). Bit 3 of `CONDEV`,
 `CDRTC`, is set once at cold boot, when `RTCHAS` finds the clock
 (`src/boot.asm:41-44`, `src/layout.asm:54`). `VCLAIM` holds `CDCLM`, which has
-the value of `INFO`'s bit 4, while the chip is claimed (`src/ram.asm:57`,
+the value of `INFO`'s bit 4, while the chip is claimed (`src/ram.asm:58`,
 `src/layout.asm:55`). `DE` is `ROMVER`, and one 16-bit load from `VWID` gets
 `L` and `H` (`src/services.asm:54-56`), because the columns and rows are adjacent
 bytes at `0048h` and `0049h` (`src/layout.asm:42-43`).
@@ -160,10 +160,10 @@ is in the workspace (`src/abi.inc:21-23`, `src/services.asm:6-7`).
 ## From the command to the loader
 
 A command whose type is `SVC` calls `SVCGO`, as Chapter 17 explains
-(`src/cpm/ccp.asm:257-266`). `SVCGO` calls `LOADCOM`, the routine that reads a
+(`src/cpm/ccp.asm:253-262`). `SVCGO` calls `LOADCOM`, the routine that reads a
 `.COM` file to `0100h`. The file is then in the TPA, up to the page of the
 word at `0006h`, and `LOADTOP` gives its end (`src/loader.asm:450-451`,
-`src/cpm/ccp.asm:379-390`, `src/ram.asm:229`). `SVCGO` then calls `SVCLOAD`
+`src/cpm/ccp.asm:374-386`, `src/ram.asm:229`). `SVCGO` then calls `SVCLOAD`
 (`src/loader.asm:452`). Chapter 21 describes what the console does after a good
 load.
 
@@ -340,7 +340,7 @@ image starts with the table of words the driver passes to the ROM's terminal,
 `0187h`, `0192h`, `019Bh` and so on in the file. After the load they read
 `B387h`, `B392h` and `B39Bh` at `B219h`, each high byte raised by `B2h`.
 `SERVICES` prints each page count as the page above the service less the
-service's own page (`src/cpm/ccp.asm:1556-1563`), so the count includes the part of
+service's own page (`src/cpm/ccp.asm:1513-1520`), so the count includes the part of
 the last page the service doesn't fill. `PICO.SVC`'s 1,315 bytes of header and
 image take six pages, and with the 21 bytes below the stub they lower the TPA
 from 46,869 bytes to 45,312:
@@ -379,7 +379,7 @@ B>
 ```
 
 The space at byte 24 has become `20h` + `B7h`, `D7h`, and `PUTTRIM` masks bit
-7 (`src/cpm/ccp.asm:763-765`), so the name prints with a `W`.
+7 (`src/cpm/ccp.asm:756-758`), so the name prints with a `W`.
 
 ### 5. The claims and the move
 
@@ -402,11 +402,11 @@ service's last (`src/loader.asm:321-334`).
 `SVCCALL` sets `SVCBSY`, reads the 2-byte offset at `HL`, adds the page to its
 high byte and jumps (`src/loader.asm:216-217`, `src/loader.asm:310-318`). The header
 is on a page boundary, so no 16-bit addition is needed. `INIT` returns to the
-instruction after the call, on the CCP's stack (`src/cpm/ccp.asm:264`).
+instruction after the call, on the CCP's stack (`src/cpm/ccp.asm:260`).
 
 A warm boot during `INIT` leaves the word at `0006h` correct, because `PZTOP` is
 untouched. `PZINIT` writes `PZTOP` to `0006h` (`src/boot.asm:206-207`), and warm
-boot clears `SVCBSY` (`src/boot.asm:81-82`). The pages go back as if the load
+boot clears `SVCBSY` (`src/boot.asm:80-80`). The pages go back as if the load
 had never started, and `test/svc.test.mjs:428-441` checks that a later load
 works. Function 47 from `INIT` is a warm boot at the same point
 (`test/svc.test.mjs:890`). The sweep in `PZINIT` takes any restart vector `INIT`
@@ -471,7 +471,7 @@ surviving a warm boot. The scan reads only that table, so the tables that `DRVR`
 records for the display modes are beyond it (`test/svc.test.mjs:531`).
 
 A service kept this way appears in `SERVICES`, because `CMDSVC` walks the owner
-list from `SVCHEAD`, not the registry (`src/cpm/ccp.asm:1547-1569`). Each header's
+list from `SVCHEAD`, not the registry (`src/cpm/ccp.asm:1504-1526`). Each header's
 offset 8 is the next older service's page, 0 at the end.
 
 ## The registry
@@ -509,7 +509,7 @@ header saves, the registry's head and the lowest service's page. Each header
 holds that state from before its own load, and the states are
 stacked in memory in the order of the loads.
 
-`UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1088-1090`), which rejects the
+`UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1078-1080`), which rejects the
 command while `SVCBSY` is set. It uses the 0 it read there as `L`, making `HL`
 the base of the page in `PZTOP` (`src/loader.asm:44-48`). That page must equal
 `SVCHEAD`, which is 0 with no service in, so the test then fails. Bit 0 of the
@@ -531,7 +531,7 @@ restored, to that page's start, or to the stub if it is 0 (`src/loader.asm:71`,
 success (`src/loader.asm:72`).
 
 A warm boot keeps all of this, since `REGHEAD`, `SVCHEAD` and `PZTOP` lie past
-`BDOSRME`, the end of the range `CPMINIT` clears (`src/ram.asm:190-192`).
+`BDOSRME`, the end of the range `CPMINIT` clears (`src/ram.asm:192-194`).
 Chapter 21 describes that boundary. Cold boot clears the workspace, so a reset
 empties both lists (`src/boot.asm:34-38`, `test/svc.test.mjs:349`).
 

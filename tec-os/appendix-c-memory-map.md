@@ -21,8 +21,8 @@ volume on drive A and a G8M volume on drive B, and no service installed.
 ## Taking the figures from the build
 
 `npm run media` writes the summary tables to `docs/memory-map.md` from the
-build's census, `build/tecos/census.json` (`tools/media.mjs:71-171`,
-`tools/media.mjs:250`). The address of any label is in the build's symbol
+build's census, `build/tecos/census.json` (`tools/media.mjs:71-168`,
+`tools/media.mjs:248`). The address of any label is in the build's symbol
 file, `build/tecos/tecos.d8.json`. This command prints the addresses of the
 labels named after it:
 
@@ -100,7 +100,7 @@ Within the code, the CCP is at `D801h–E1D8h`, 2,520 bytes, and the BDOS at
 `E1D9h–F0E6h`, 3,854 bytes, in the order `src/rom.asm` includes them
 (`src/rom.asm:24-26`). The ROM's own copy of the BIOS jump table is in the
 data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
-(`src/tables.asm:10-26`, `src/boot.asm:61-64`).
+(`src/tables.asm:10-26`, `src/boot.asm:62-65`).
 
 ## Page zero
 
@@ -125,8 +125,8 @@ the first byte of each restart vector the service claimed and then run the
 same sweep of the vectors, `PZSWP` (`src/loader.asm:61-72`,
 `src/loader.asm:259-263`, `src/loader.asm:295-307`). The CCP writes the byte at
 `0004h` at each prompt, and the FCBs, the tail and the byte at `0050h` before
-it runs a program (`src/cpm/ccp.asm:204-223`, `src/cpm/ccp.asm:286-288`,
-`src/cpm/ccp.asm:1279-1313`).
+it runs a program (`src/cpm/ccp.asm:202-221`, `src/cpm/ccp.asm:282-284`,
+`src/cpm/ccp.asm:1269-1302`).
 
 TEC-OS's own bytes are fourteen of the sixteen that CP/M 2.2 leaves to the
 BIOS. `0041h` and `0044h` are unused (`src/layout.asm:34-49`):
@@ -167,14 +167,14 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 The part from `WSBASE`, `B958h`, to `BEFFh` has the same addresses on every
 card. The build places `WSBASE` so that the part ends at `BF00h`
 (`tools/build.mjs:228-233`, `src/layout.asm:67-70`). The part above the table
-starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:192`). Cold boot
+starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:194`). Cold boot
 clears the workspace from `WSBASE` up to `WSEND`, `B958h` to `BFE4h`
 (`src/boot.asm:34-38`). Warm boot clears the part from `CCPCLR` to the end of
 the BDOS's block and leaves the rest (`src/boot.asm:262-281`).
 
 ### The BIOS's block
 
-`src/ram.asm:8-62`:
+`src/ram.asm:8-63`:
 
 | Addresses | Bytes | Name | Contents |
 | --- | ---: | --- | --- |
@@ -199,7 +199,7 @@ the BDOS's block and leaves the rest (`src/boot.asm:262-281`).
 
 ### The CCP's block
 
-`src/ram.asm:67-128`. Warm boot keeps the bytes below `CCPCLR`, `BDB5h`, and
+`src/ram.asm:68-129`. Warm boot keeps the bytes below `CCPCLR`, `BDB5h`, and
 clears the rest:
 
 | Addresses | Bytes | Name | Contents |
@@ -217,7 +217,7 @@ clears the rest:
 
 ### The BDOS's block
 
-`src/ram.asm:130-190`:
+`src/ram.asm:131-192`:
 
 | Addresses | Bytes | Name | Contents |
 | --- | ---: | --- | --- |
@@ -236,7 +236,7 @@ clears the rest:
 
 ### Above the RAM BIOS table
 
-`src/ram.asm:192-241`:
+`src/ram.asm:194-240`:
 
 | Addresses | Bytes | Name | Contents |
 | --- | ---: | --- | --- |
@@ -264,7 +264,7 @@ the reset jump at `C000h`. The jump's target, `RSTENT`, reads the byte at
 `0002h`, which holds the jump's own high byte only at reset, while the boot
 overlay is on. Here it holds the RAM BIOS table's, and the machine warm boots:
 EXPAND 0 comes back into view and the cache's dirty lines are written to the
-card, as at any exit (`src/boot.asm:11-19`, `src/boot.asm:75-89`). A reset and
+card, as at any exit (`src/boot.asm:11-19`, `src/boot.asm:75-88`). A reset and
 BIOS function 0 cold boot (`src/tables.asm:10`).
 
 | Addresses | Bytes | Contents |

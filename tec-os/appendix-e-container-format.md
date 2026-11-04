@@ -65,7 +65,7 @@ The header's fields (`format/format.json`, `header`):
 The checksum is the 16-bit sum of all 512 bytes of block 0 except the two
 bytes of the checksum itself (`tools/lib/container.mjs:51-59`). The ROM sums
 all 512 and then takes the two checksum bytes back out
-(`src/vol.asm:687-714`). The sum covers the descriptors in block 0 as well as
+(`src/vol.asm:737-767`). The sum covers the descriptors in block 0 as well as
 the header's fields, so a change to any byte of block 0 needs a new checksum.
 
 A card's minor version sets three things. A 1.0 card has no drives field and
@@ -74,7 +74,7 @@ to 127, may give a number of drives and has the table sum
 (`tools/lib/container.mjs:76-80`, `tools/lib/container.mjs:140-148`).
 `tecvol create` makes a 1.1 card when it is given more than 8 volumes or
 `--drives`, and a 1.0 card otherwise. The ROM treats any minor version other
-than 0 as 1.1 (`src/vol.asm:83-85`).
+than 0 as 1.1 (`src/vol.asm:82-84`).
 
 ## The volume descriptor
 
@@ -121,34 +121,34 @@ on every card, whether or not the table uses them.
 The table sum in the header, at offset 23, is the 16-bit sum of every byte of
 the blocks after block 0 that hold descriptors
 (`tools/lib/container.mjs:44-49`). The ROM reads `count / 16` of them, rounded
-down, and sums them (`src/vol.asm:93-125`). With 15 descriptors in block 0,
+down, and sums them (`src/vol.asm:92-120`). With 15 descriptors in block 0,
 that is the number of blocks the table needs. A difference gives code `25h`,
 as the header's checksum does.
 
 ## The checks and their codes
 
 The ROM's `MOUNT` checks the header first and then each descriptor in table
-order, in one pass, mounting each one as it passes (`src/vol.asm:20-255`). The
+order, in one pass, mounting each one as it passes (`src/vol.asm:20-249`). The
 first check to fail stops the mount, unmounts any drive mounted so far and
 returns its code, which cold boot prints at the diagnostic prompt (Chapter
 23). The checks, in the order the ROM makes them:
 
 | Code | Check | Source |
 | --- | --- | --- |
-| `20h` | Block 0 can't be read | `src/vol.asm:26-29` |
-| `21h` | The first 8 bytes are not `TECOSVOL` | `src/vol.asm:30-39` |
+| `20h` | Block 0 can't be read | `src/vol.asm:23-28` |
+| `21h` | The first 8 bytes are not `TECOSVOL` | `src/vol.asm:29-39` |
 | `22h` | The major version is not 1 | `src/vol.asm:40-43` |
 | `23h` | The header bytes are not 512, or the descriptor bytes not 32 | `src/vol.asm:44-54` |
 | `24h` | The number of volumes is 0, or more than 127 | `src/vol.asm:55-67` |
-| `25h` | The checksum differs | `src/vol.asm:70-75` |
-| `23h` | 1.1: the drives field is more than 4 | `src/vol.asm:86-90` |
-| `20h` | 1.1: a block of the table can't be read | `src/vol.asm:106-111` |
-| `25h` | 1.1: the table sum differs | `src/vol.asm:121-125` |
-| `26h` | A volume's id is 0, a flag other than read-only is set, the geometry is unknown, the length is not the geometry's, or the start is 0 or not a multiple of 8 | `src/vol.asm:138-168`, `src/vol.asm:250` |
-| `28h` | A volume starts before the end of the one before it in the table | `src/vol.asm:169-176` |
-| `27h` | A volume's end passes `FFFFFFFFh` or the container's length, or on a standard-capacity card block `7FFFFFh`, the last its byte addresses reach | `src/vol.asm:177-213` |
-| `29h` | A drive byte is neither `FFh` nor 0 to 3, the drive is past the number the drives field gives, or two volumes name one drive | `src/vol.asm:215-233` |
-| `2Ah` | No volume is on drive A | `src/vol.asm:243-246` |
+| `25h` | The checksum differs | `src/vol.asm:70-74` |
+| `23h` | 1.1: the drives field is more than 4 | `src/vol.asm:85-89` |
+| `20h` | 1.1: a block of the table can't be read | `src/vol.asm:105-110` |
+| `25h` | 1.1: the table sum differs | `src/vol.asm:116-120` |
+| `26h` | A volume's id is 0, a flag other than read-only is set, the geometry is unknown, the length is not the geometry's, or the start is 0 or not a multiple of 8 | `src/vol.asm:133-163`, `src/vol.asm:244` |
+| `28h` | A volume starts before the end of the one before it in the table | `src/vol.asm:164-171` |
+| `27h` | A volume's end passes `FFFFFFFFh` or the container's length, or on a standard-capacity card block `7FFFFFh`, the last its byte addresses reach | `src/vol.asm:172-208` |
+| `29h` | A drive byte is neither `FFh` nor 0 to 3, the drive is past the number the drives field gives, or two volumes name one drive | `src/vol.asm:210-228` |
+| `2Ah` | No volume is on drive A | `src/vol.asm:238-241` |
 
 The ascending order behind `28h` is checked on every card, 1.0 and 1.1 alike.
 It keeps two volumes from overlapping: each must start at or after the end of
@@ -193,7 +193,7 @@ order, so a card made by either passes the ROM's order check.
 
 The drives field limits the drive bytes. On a 1.1 card that gives N drives, a
 volume may name only drives A to the Nth. With N of 0, or on a 1.0 card, a
-volume may name any of the four (`src/vol.asm:221-225`). The ROM stops a card
+volume may name any of the four (`src/vol.asm:216-220`). The ROM stops a card
 that breaks this at the diagnostic prompt with code `29h`. `tecvol` makes the
 same check (`tools/lib/container.mjs:178`), so `tecvol verify` rejects such a
 card, and `tecvol create` rejects a volume on drive C with `--drives 2`:
@@ -249,14 +249,14 @@ allocation blocks. A G8M volume has 2,048 allocation blocks and a G1M volume
 
 The ROM's geometry table has an entry of 6 bytes for each geometry: the id, a
 0, the payload in blocks as a word and the address of the disk parameter block
-(`src/gen/geom.asm`). `GEOFIND` looks an id up in it (`src/vol.asm:655-663`),
+(`src/gen/geom.asm`). `GEOFIND` looks an id up in it (`src/vol.asm:706-714`),
 and the length check compares the descriptor's length with that word and
-requires its two high bytes to be 0 (`src/vol.asm:149-160`).
+requires its two high bytes to be 0 (`src/vol.asm:144-155`).
 
 ## The cost in memory
 
 TEC-OS's workspace has a 16-byte disk parameter header for each of the four
-drives (`src/ram.asm:30`, `src/layout.asm:85`). The allocation vectors, one
+drives (`src/ram.asm:29`, `src/layout.asm:85`). The allocation vectors, one
 bit for each allocation block of a volume, go below the workspace. `ALVINIT`
 sizes the vectors at cold boot (`src/boot.asm:350-404`). On a 1.1 card that
 gives N drives, each of drives A to the Nth gets 256 bytes, enough for a G8M

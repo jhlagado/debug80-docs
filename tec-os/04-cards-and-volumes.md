@@ -463,7 +463,7 @@ A>
 An older, standard-capacity card is addressed in bytes, and TEC-OS can name
 only its first 4 GiB, the blocks below `800000h`. On such a card, a volume that
 ends past that point, or starts past it, fails the checks on the container, and
-cold boot stops at the diagnostic prompt with error 27 (`src/vol.asm:199-213`).
+cold boot stops at the diagnostic prompt with error 27 (`src/vol.asm:194-208`).
 The card stays as it was. The web page can't show either failure: it refuses an
 image smaller than its container (`web/src/main.mjs:604`), and its card is
 high-capacity.
