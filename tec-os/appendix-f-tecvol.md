@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix F. `tecvol`
 
-Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -274,8 +274,8 @@ sha256sum build/fresh.img dist/starter.img
 ```
 
 ```text
-f828071db005cb5ae422306dd9165fc2ed2fb4047e15055df3970ac71ecfd442  build/fresh.img
-f828071db005cb5ae422306dd9165fc2ed2fb4047e15055df3970ac71ecfd442  dist/starter.img
+22881c466664eedeed4c7482fba6e9a798b77d83d2c6666d9a2a2e8b05286f70  build/fresh.img
+22881c466664eedeed4c7482fba6e9a798b77d83d2c6666d9a2a2e8b05286f70  dist/starter.img
 ```
 
 The two images are the same to the byte: the volumes' places, the `E5h` fill,
