@@ -389,7 +389,7 @@ extents. `S1`, `RC` and the map are cleared in the FCB too
 a next extent and the random write make their entries through the same
 `MAKEFCB`, with the FCB's `S2` kept (`src/cpm/bdosfile.asm:320-327`).
 
-Function 19 marks every entry that matches `E5h`, writes its directory record
+Function 19 marks each matching entry empty, `E5h`, writes its directory record
 and only then frees its blocks (`src/cpm/bdosfile.asm:263-303`). If a
 directory write fails in a mode of function 45 that returns the error to the
 program, that entry's blocks stay in use, as the card still has them, and the

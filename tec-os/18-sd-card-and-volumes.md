@@ -369,7 +369,7 @@ and the alternate registers, and `abi.inc` gives 24 bytes as a bound on the
 stack each takes (`src/abi.inc:18-25`, `src/abi.inc:58-70`). On the model
 `MOUNT` and `UNMNT` each take 24 and `DESC` 22, and with every line dirty, so
 that the line taken for the table is written first, all three take 24
-(`test/storage-boundaries.test.mjs:176-241`).
+(`test/storage-boundaries.test.mjs:172-241`).
 
 A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of
