@@ -22,32 +22,32 @@ with its remedy.
 ## The diagnostic prompt
 
 Cold boot sets up the LCD and the card at `COLDRT`, on the BDOS's stack, which
-nothing else uses before the CCP runs (`src/boot.asm:54-57`). It starts the card with `SDINIT` and checks the container with `MOUNT`, and a
+nothing else uses before the CCP runs (`src/boot.asm:63-64`). It starts the card with `SDINIT` and checks the container with `MOUNT`, and a
 failure of either jumps to `DIAG` with an error code in `A`
-(`src/boot.asm:60-63`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
-`MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:8-18`). The banner is
-printed before the card is touched (`src/boot.asm:49-50`), so it appears
+(`src/boot.asm:67-70`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
+`MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:13-24`). The banner is
+printed before the card is touched (`src/boot.asm:52-53`), so it appears
 whatever the card holds. Only the RAM check, `CONINIT`, which starts the PICO9918's console, and the
-clock's test come before it (`src/boot.asm:33-48`). `RAMCHK` writes
+clock's test come before it (`src/boot.asm:36-51`). `RAMCHK` writes
 and reads back the bytes at `8000h` and `BFFFh` and looks for EXPAND 1 behind
 the window, and a board that lacks either prints `TEC-OS needs 64K RAM` on the
-serial port and stops there (`src/boot.asm:33`, `src/boot.asm:296-326`,
+serial port and stops there (`src/boot.asm:36`, `src/boot.asm:296-326`,
 `src/text.asm:5`). After the banner `MEMINIT` empties the block cache's lines,
 before the first mount reads the container's table through a line
-(`src/boot.asm:51`).
+(`src/boot.asm:54`).
 
 `DIAG` resets the stack to the BDOS's, as `COLDRT` does, since a mount that
 failed part way may have left it deep, and keeps the code on it
 (`src/boot.asm:429-432`). The BIOS's stack then holds only warm boot's use, as
 Chapter 20's stack figures assume. It writes
-`CARD?` on the LCD's last row (`src/boot.asm:433-434`, `src/text.asm:10`,
-`src/lcd.asm:43`) and then prints `No volume mounted, error ` and the code as
-two hexadecimal digits (`src/boot.asm:435-439`, `src/text.asm:8`).
+`CARD?` on the LCD's last row (`src/boot.asm:472-473`, `src/text.asm:10`,
+`src/lcd.asm:45`) and then prints `No volume mounted, error ` and the code as
+two hexadecimal digits (`src/boot.asm:474-478`, `src/text.asm:8`).
 
 At the prompt `R retry> ` (`src/text.asm:9`), `DIAG` reads one key with
 `BCONIN`, turns a small letter into a capital, echoes it and ends the line
-(`src/boot.asm:440-447`). Any key but `R` gives the prompt again
-(`src/boot.asm:450`). On a board with the PICO9918 and the matrix keyboard the
+(`src/boot.asm:479-485`). Any key but `R` gives the prompt again
+(`src/boot.asm:489`). On a board with the PICO9918 and the matrix keyboard the
 console at this point is the ROM's PICO9918 console, which cold boot starts
 before the banner, so the prompt is on that screen and the key comes from the
 matrix keyboard (`src/video.asm:7-11`, `src/pico.asm:27-44`). On any other board
@@ -64,19 +64,19 @@ R retry> H
 R retry>
 ```
 
-`R` jumps back to `COLDRT` (`src/boot.asm:448-449`). That starts the LCD again,
+`R` jumps back to `COLDRT` (`src/boot.asm:487-488`). That starts the LCD again,
 which clears `CARD?`, and then repeats the card's start and the mount, so a card
 fixed or put in while the prompt waits is mounted without a reset. `MOUNT`
 reads each block of the table from the card again, whatever a line holds
-(`src/vol.asm:23-26`).
+(`src/vol.asm:33-36`).
 
 The retry keeps a selection of volumes carried over from a recognised reset,
 which Chapter 14 explains. `RSLCAP` copies the drive table to `RSLBUF` before
-cold boot clears anything (`src/boot.asm:25`). `RSLBUF` is at `0100h`, in the
-fixed RAM (`src/layout.asm:82`), and nothing on the path from there to the
+cold boot clears anything (`src/boot.asm:28`). `RSLBUF` is at `0100h`, in the
+fixed RAM (`src/layout.asm:84`), and nothing on the path from there to the
 prompt writes it: `MEMINIT` clears EXPAND 1 alone, and the mount reads the
-table into a line in EXPAND 1 (`src/boot.asm:51`, `src/boot.asm:156-172`,
-`src/vol.asm:251-281`).
+table into a line in EXPAND 1 (`src/boot.asm:54`, `src/boot.asm:156-172`,
+`src/vol.asm:278-310`).
 
 ## The diagnostics ROM
 
@@ -315,9 +315,9 @@ T12 says that the latch's bits 3 to 6 select nine banks. `docs/diagnostics.md`
 compares each test with the TEC-1G's own documents, which describe the latch as
 write-only and bits 3 to 6 as unconnected to U9, so a board can be expected to
 answer T10 and T12 differently. TEC-OS uses neither. It keeps a copy of the
-latch at `0040h` and never reads port `FFh` (`src/layout.asm:13`,
-`src/layout.asm:37`), and it selects EXPAND 1 with bit 2 alone
-(`src/layout.asm:18`).
+latch at `0040h` and never reads port `FFh` (`src/layout.asm:14`,
+`src/layout.asm:39`), and it selects EXPAND 1 with bit 2 alone
+(`src/layout.asm:20`).
 
 ## Running it on a board
 

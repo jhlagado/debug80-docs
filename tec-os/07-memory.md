@@ -309,7 +309,7 @@ warm boot. The jump at `0000h` leads to `BF03h`, which in EXPAND 1 holds zeros
 unless a program wrote there, and the Z80 runs on through them into the ROM at
 `C000h`. The ROM's reset entry tells this from a reset by the byte at `0002h`
 and goes to the warm boot, which puts EXPAND 0 back and writes the cache's
-changes to the card as at any program's end (`src/boot.asm:17-19`,
-`src/boot.asm:81-95`). A reset
+changes to the card as at any program's end (`src/boot.asm:20-22`,
+`src/boot.asm:92-108`). A reset
 and BIOS function 0 run cold boot.
 

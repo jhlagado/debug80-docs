@@ -33,14 +33,14 @@ Z on success, and on failure NZ with an error code in `A` and in `SDERR`.
 
 Sending a byte is eight passes of a loop. Each pass shifts the top bit of `C`
 into the carry, puts it on bit 0 with the clock low, then writes the same bit
-with the clock high (`src/sd.asm:20-29`). Receiving is the same loop with MOSI
+with the clock high (`src/sd.asm:22-33`). Receiving is the same loop with MOSI
 held high: clock low, clock high, read the port and shift bit 7 into the
-result (`src/sd.asm:31-44`). `SPIEND` raises chip select and gives the card
-eight more clocks (`src/sd.asm:46-57`).
+result (`src/sd.asm:35-49`). `SPIEND` raises chip select and gives the card
+eight more clocks (`src/sd.asm:51-64`).
 
 A command is six bytes after an idle `FFh`: the command number with bit 6 set,
 four argument bytes from `SDARG`, most significant first, and a CRC byte
-(`src/sd.asm:59-95`). In SPI mode the card checks the CRC only of `CMD0` and
+(`src/sd.asm:66-108`). In SPI mode the card checks the CRC only of `CMD0` and
 `CMD8`, so `SDCMD` sends `95h` and `87h`, the correct bytes for those two with
 the arguments TEC-OS uses, and `01h`, the end bit alone, for the rest. It then
 reads up to 16 bytes, waiting for the response byte R1, whose bit 7 is 0.
@@ -69,12 +69,12 @@ Every later access gives the driver a block number in `SDLBA`, four bytes,
 least significant first. `LBAARG` turns it into the command's argument, which
 depends on the card's capacity: a high-capacity card gets the number as it is,
 and a standard one gets it shifted left by 9, the block times 512
-(`src/sd.asm:207-231`). The argument has 32 bits, so a standard-capacity card
+(`src/sd.asm:243-267`). The argument has 32 bits, so a standard-capacity card
 can't be given a block number of `800000h` or more, 4 GiB or more into the
 card: the shift would lose its top bits and name a lower block. For such a
 block `LBAARG` returns with carry set and `SDARG` unchanged. `SDREAD` and
 `SDWRITE` then send no command and fail with error 9, `SDERNG`
-(`src/sd.asm:18`, `src/sd.asm:234-236`, `src/sd.asm:264-266`,
+(`src/sd.asm:18`, `src/sd.asm:272-274`, `src/sd.asm:313-315`,
 `src/sd.asm:447-449`).
 
 `SDREAD` reads a block with `CMD17` (`src/sd.asm:233-266`). A nonzero R1 is
@@ -95,14 +95,14 @@ reporting busy.
 The two block loops, `SDRBLK` and `SDWBLK`, are unrolled, with eight bits
 written out in full for each byte. `SDRBLK` keeps its count of 256 two-byte
 passes in the Z80's `I` register, which is free in interrupt mode 1
-(`src/sd.asm:268-443`). On the model `SDREAD` takes 219,144 T-states for one
+(`src/sd.asm:317-492`). On the model `SDREAD` takes 219,144 T-states for one
 block, about 55 milliseconds, and `SDWRITE` 216,164, nearly all of it the
 4,096 bits of the block moved one at a time.
 
 When `SDXB` holds `LATEXP` the buffer is a line of the block cache in
 EXPAND 1. Each loop then puts EXPAND 1 in view around itself and uses no stack
-while it is (`src/sd.asm:272-276`, `src/sd.asm:370-373`, `src/sd.asm:378-382`,
-`src/sd.asm:441-442`).
+while it is (`src/sd.asm:321-325`, `src/sd.asm:419-422`, `src/sd.asm:427-431`,
+`src/sd.asm:420-421`).
 
 ## The container's checks
 
@@ -121,10 +121,10 @@ uses any of it (`src/vol.asm:3-6`). `MNBLK` reads each block of the table into
 a line of the block cache, from the card whenever the mount asks for a table
 block other than the last one it read, and the same path serves cold boot and the volume services. `MNCP` copies 32
 bytes of the line into `MNBUF`, a buffer in the workspace, where the header's
-fields and each descriptor are read (`src/vol.asm:22-29`,
-`src/vol.asm:251-298`, `src/ram.asm:53`). `MOUNT` makes the checks in a fixed
+fields and each descriptor are read (`src/vol.asm:32-39`,
+`src/vol.asm:278-328`, `src/ram.asm:58`). `MOUNT` makes the checks in a fixed
 order, stopping at the first failure with that check's code
-(`src/vol.asm:8-18`, `src/vol.asm:20-120`):
+(`src/vol.asm:13-24`, `src/vol.asm:20-120`):
 
 | Code | Check |
 | --- | --- |
@@ -135,17 +135,17 @@ order, stopping at the first failure with that check's code
 | `24h` | the volume count is from 1 to 127 |
 | `25h` | the header's checksum, the 16-bit sum of its other 510 bytes; in 1.1, the table's sum |
 
-Any minor version other than 0 is read as 1.1 (`src/vol.asm:82-84`). For a 1.1
+Any minor version other than 0 is read as 1.1 (`src/vol.asm:104-106`). For a 1.1
 card with more than fifteen volumes, `MOUNT` reads each further block of the
 table and adds up its 512 bytes, and the total must be the header's table sum
-(`src/vol.asm:92-120`). The table's blocks and the header are added up by the
+(`src/vol.asm:116-145`). The table's blocks and the header are added up by the
 same routine, `MNSUM`, which copies the block from its line through `MNBUF`
 32 bytes at a time and adds each 32 with `SUMDE`, since no code that uses the
-stack runs with EXPAND 1 in view (`src/vol.asm:112`, `src/vol.asm:300-319`,
-`src/vol.asm:737-767`).
+stack runs with EXPAND 1 in view (`src/vol.asm:137`, `src/vol.asm:330-349`,
+`src/volutil.asm:53-84`).
 
 Then it walks the descriptors in table order, checking each one and mounting
-it as it goes (`src/vol.asm:122-237`):
+it as it goes (`src/vol.asm:147-264`):
 
 | Code | Check |
 | --- | --- |
@@ -156,24 +156,24 @@ it as it goes (`src/vol.asm:122-237`):
 | `2Ah` | after the last descriptor, drive A has a volume |
 
 The checks of code `26h` share one failure path: each jumps to `MNDBAD`, which
-loads the code and runs on into `MNTERR` (`src/vol.asm:133-163`,
-`src/vol.asm:244-245`).
+loads the code and runs on into `MNTERR` (`src/vol.asm:160-190`,
+`src/vol.asm:271-272`).
 
 The order check makes overlapping volumes impossible, since each must start
 where the one before it ended or later. The descriptors therefore have to be
 in ascending order of their start block. The ROM uses only bit 0 of a
 descriptor's cache byte, the written-behind flag, and doesn't check the others
-(`src/vol.asm:389-393`).
+(`src/vol.asm:420-424`).
 
 Any failure unmounts every drive that the walk had mounted, so a card is
-mounted whole or not at all (`src/vol.asm:245-249`). The ROM can't find the
+mounted whole or not at all (`src/vol.asm:272-276`). The ROM can't find the
 card's capacity, and the walk checks a volume against the container's length.
 A volume that runs past the end of the card is mounted, and the card rejects
 an access that reaches a block beyond its end. The driver returns error 5, and
 the BDOS reports `Bad Sector` for that drive while the rest of the card works.
 On a standard-capacity card the walk also refuses, with error `27h`, a volume
 that runs past block `7FFFFFh`, whether it starts beyond that block or
-straddles it, since `LBAARG` can't name its blocks (`src/vol.asm:194-209`).
+straddles it, since `LBAARG` can't name its blocks (`src/vol.asm:221-236`).
 `test/sd-range.test.mjs` places drive B's volume of a standard-capacity card at
 block `800800h` and then at `7FF000h`. Both times cold boot stops at the
 diagnostic prompt with error 27 and no byte of the card changes. A volume
@@ -198,7 +198,7 @@ A>
 ```
 
 Cold boot sends any failure, of the card or of the container, to the
-diagnostic prompt (`src/boot.asm:60-63`). For the run below, the starter
+diagnostic prompt (`src/boot.asm:67-70`). For the run below, the starter
 card's first byte was changed from `T` to `X` with
 `printf X | dd of=build/bad.img bs=1 seek=0 conv=notrunc` on a copy of
 `dist/starter.img`. `H` was then typed at the prompt:
@@ -211,29 +211,29 @@ R retry> H
 R retry> 
 ```
 
-Error 21 is `MEMAGIC`, the check of the name (`src/vol.asm:9`). Any key but
-`R` gives the prompt again (`src/boot.asm:440-450`), and the header's bytes can
+Error 21 is `MEMAGIC`, the check of the name (`src/vol.asm:14`). Any key but
+`R` gives the prompt again (`src/boot.asm:479-489`), and the header's bytes can
 be read on a PC, as Appendix E shows.
 
 ## The drive table and the DPHs
 
 The BIOS needs a volume's place on the card and the BDOS needs its parameters,
 so mounting builds an entry in the drive table and a DPH. Each descriptor that
-names a drive is mounted by `MNONE` (`src/vol.asm:359-371`). `MNFILL` writes
+names a drive is mounted by `MNONE` (`src/vol.asm:389-402`). `MNFILL` writes
 the drive's eight-byte entry in `DRVTAB`: the start block in four
 bytes, the length in blocks in two, the geometry and a flags byte with
 read-only in bit 0 and written-behind in bit 1. The start and the length's low
 half lie together in the descriptor, so one `LDIR` copies those six bytes
-(`src/vol.asm:373-394`,
-`src/ram.asm:22`). `DRVIDX` records which volume each drive holds, as its
-index in the container plus 1, 0 for none (`src/ram.asm:28`). The geometry
+(`src/vol.asm:404-425`,
+`src/ram.asm:23-27`). `DRVIDX` records which volume each drive holds, as its
+index in the container plus 1, 0 for none (`src/ram.asm:29`). The geometry
 byte is 0 for a drive with no volume, and for such a drive the BIOS's `SELDSK`
 returns 0, no such drive (`src/bios.asm:23-44`).
 
 `MNDPH` builds the drive's disk parameter header, the 16 bytes through
 which the BDOS reaches a drive's parameters and buffers, at the address that
-`DPHADR` computes, for `SELDSK` too (`src/vol.asm:396-425`,
-`src/bios.asm:33-42`):
+`DPHADR` computes, for `SELDSK` too (`src/vol.asm:427-457`,
+`src/bios.asm:49-58`):
 
 | Offset | Contents |
 | ---: | --- |
@@ -254,7 +254,7 @@ fixed media.
 To keep a drive logged in across a warm boot, TEC-OS's BDOS uses the three
 scratch words for a sum of its allocation vector, a flag set when it has
 changed and a mark, the number of directory entries to read when the vector is
-rebuilt (`src/cpm/bdos.asm:486-525`). Chapter 16 describes that, and Chapter
+rebuilt (`src/cpm/bdosfile.asm:41-75`). Chapter 16 describes that, and Chapter
 13 how `ALVINIT` places the vectors at cold boot.
 
 ## Deblocking
@@ -267,7 +267,7 @@ sector. Four records share one 512-byte block of the card
 `HOME` sets track 0, and `SECTRAN` returns the sector unchanged
 (`src/bios.asm:12-21`).
 
-`MAPREC` does the arithmetic (`src/bios.asm:58-126`). It rejects a sector of
+`MAPREC` does the arithmetic (`src/bios.asm:74-144`). It rejects a sector of
 64 or more and a track of 1,024 or more, whose record number would not fit in
 16 bits. It keeps the record's low two bits as `BLKSLOT`, the quarter of the
 block, and the record divided by 4 becomes `BLKOFF`, the block within the
@@ -278,14 +278,14 @@ tracks, and a G1M volume has 128 tracks.
 
 `READ` maps the record and copies it to the DMA address through the block
 cache, as Chapter 19 describes. `WRITE` has more to do
-(`src/bios.asm:149-246`). After mapping it rejects a write to a read-only
-volume before anything changes, with error 1 (`src/bios.asm:166-170`). A change
+(`src/bios.asm:171-271`). After mapping it rejects a write to a read-only
+volume before anything changes, with error 1 (`src/bios.asm:191-195`). A change
 made through the BDOS doesn't get this far, since the BDOS's own `R/O` error
-comes first (`src/cpm/bdos.asm:2390-2394`). Function 16 tests the drive too,
+comes first (`src/cpm/bdoslog.asm:567-571`). Function 16 tests the drive too,
 before it writes the directory entry, and on a read-only drive it writes
 nothing and returns success, as CP/M 2.2's close does. Closing an FCB that was
 never opened on such a drive returns 0 with the card unchanged
-(`src/cpm/bdos.asm:603-606`, `test/cpm22.test.mjs:174`). Only a program that
+(`src/cpm/bdosfile.asm:169-172`, `test/cpm22.test.mjs:174`). Only a program that
 calls the BIOS itself receives the error.
 
 A write to the directory can change which blocks are in use, so `WRITE` then
@@ -293,12 +293,12 @@ tests for one of the directory's blocks, the first 32 blocks of a G8M volume
 or 16 of a G1M. For such a block it sets the drive's changed flag in the DPH
 and raises its mark to cover the 16 entries of this block, so that the next
 warm boot rebuilds the drive's vector from the entries up to there
-(`src/bios.asm:172-210`).
+(`src/bios.asm:197-235`).
 
 A record is a quarter of a block, so a write merges its record into a whole
 block. Every BIOS `WRITE` does this in the block's line of the block cache,
 which is the one write path: `WRITE` decides whether the block has to be read
-first and then goes to `CWRBH` (`src/bios.asm:149-156`, `src/bios.asm:211-246`).
+first and then goes to `CWRBH` (`src/bios.asm:171-181`, `src/bios.asm:236-271`).
 
 The read is skipped when the card's copy of the block holds nothing that has
 to be kept. CP/M's write type 2 marks the first write to an allocation block
@@ -306,13 +306,13 @@ the BDOS has just given the file, and for it the line is cleared to zeros
 instead. The next write may go to the next block of the same allocation block,
 with the block before it cleared. `GETKEY` records such a block in its key,
 `BUFDRV` and `BUFBLK` with `BUFOK` at 2, and the next block is then cleared too
-and not read (`src/bios.asm:128-138`, `src/bios.asm:211-238`,
-`src/cache.asm:292-310`).
+and not read (`src/bios.asm:146-156`, `src/bios.asm:236-263`,
+`src/cache.asm:310-328`).
 
 On a volume written through, `WRITE` sets bit 7 of `CWTYPE` before it goes to
 `CWRBH`, and the line goes to the card before the call returns. If that write
 fails, the line is dropped, so the next read of the block comes from the card
-(`src/bios.asm:239-246`, `src/cache.asm:327-349`). On the volume written
+(`src/bios.asm:264-271`, `src/cache.asm:351-373`). On the volume written
 behind the line stays dirty, as Chapter 19 describes.
 
 A program that writes a new file sequentially on a volume written through
@@ -326,7 +326,7 @@ a line.
 
 `MOUNT` on the starter card is a program, so it changes and lists the drives
 through three of the ROM's numbered services, called through `ABICALL` with the
-number in `C`, as Chapter 20 describes (`src/abi.asm:10`, `src/abi.inc:58-70`):
+number in `C`, as Chapter 20 describes (`src/abi.asm:10`, `src/abi.inc:58-67`):
 
 - `MOUNT`, 9, mounts the volume at container index `E` on the drive in `B`, 0
   to 3 for A to D.
@@ -336,18 +336,18 @@ number in `C`, as Chapter 20 describes (`src/abi.asm:10`, `src/abi.inc:58-70`):
 
 The three routines, `VSMNT`, `VSUNM` and `VSDSC`, each start with `VSIN`, which
 moves the drive from `B` to `C` and sets `MNTCB` to `FFh`, so that the table's
-blocks are read again from the card (`src/vol.asm:532-544`,
-`src/vol.asm:628-632`).
+blocks are read again from the card (`src/vol.asm:566-578`,
+`src/vol.asm:668-673`).
 Each returns `A` = 0 with carry clear, or `TNEBAD`, 1, with carry set and
-nothing changed (`src/vol.asm:622-626`). A mount fails in four cases: an index
+nothing changed (`src/vol.asm:662-666`). A mount fails in four cases: an index
 past the table, a drive past D, a volume already on a drive and a drive whose
 vector slot is too small for the volume. An unmount fails for drive A, which is
-never left empty, and for a drive past D (`src/vol.asm:560-610`). The slot rule
+never left empty, and for a drive past D (`src/vol.asm:596-650`). The slot rule
 is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
-and any other needs a slot of either size (`src/vol.asm:587-600`). Chapter 13
+and any other needs a slot of either size (`src/vol.asm:623-636`). Chapter 13
 describes how cold boot gives out the slots. The three services may change `IX`
 and the alternate registers, and `abi.inc` gives 24 bytes as a bound on the
-stack each takes (`src/abi.inc:18-25`, `src/abi.inc:58-70`). On the model
+stack each takes (`src/abi.inc:18-25`, `src/abi.inc:58-67`). On the model
 `MOUNT` and `UNMNT` each take 24 and `DESC` 22, and with every line dirty, so
 that the line taken for the table is written first, all three take 24
 (`test/storage-boundaries.test.mjs:172-224`).
@@ -356,11 +356,11 @@ A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of
 the block cache to the card, with interrupts off. A line whose write fails is
 dropped and the rest are still written, and the call then fails
-(`src/vol.asm:634-646`, `src/cache.asm:177-202`). A mount then clears the drive's old
+(`src/vol.asm:675-688`, `src/cache.asm:182-208`). A mount then clears the drive's old
 entry, fills the new one and its DPH with `MNONE`, and records the index. An
 unmount clears the entry. Either way the service ends by clearing `GETKEY`'s
 key and calling BDOS function 37 to reset the drive, so that the drive's
-next access logs it in from its new directory (`src/vol.asm:611-623`). That
+next access logs it in from its new directory (`src/vol.asm:651-663`). That
 call runs on the BDOS's own stack, so a program calls `MOUNT` and `UNMNT` from
 outside its own BDOS calls (`src/abi.inc:21-23`).
 

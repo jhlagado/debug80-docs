@@ -20,7 +20,7 @@ that module, then the tests and the web page built on it.
 
 The tests and the capture script run under Node.js and the web page in a
 browser, and all of them can use the same file because `host/machine.mjs` has no
-Node.js dependencies (`host/machine.mjs:1-2`). It imports only the runtime and
+Node.js dependencies (`host/machine.mjs:1-8`). It imports only the runtime and
 `tools/lib/bytes.mjs`. A caller gives it the ROM's bytes and the ROM's symbol
 map, which holds the names and addresses the build writes to the `.d8.json` file
 beside each image. `symbolsFromD8` turns that file into a map
@@ -63,7 +63,7 @@ attaches its own instance of the runtime's `SdSpi` class on port `FDh`
 card is then the caller's array of bytes: a write by TEC-OS changes that array
 at once, and the caller can read the files from it, save it or swap it.
 `swapCard` puts a different image, or none, in the socket for the next command
-(`host/machine.mjs:521-525`), and the web page saves the same array to the
+(`host/machine.mjs:522-526`), and the web page saves the same array to the
 browser's storage.
 
 The card model answers a read or a write of a block past the end of the image
@@ -167,10 +167,10 @@ A>
 ```
 
 `runUntil` steps until a test function returns true, and fails after a limit of
-cycles (`host/machine.mjs:269-280`). `expect` runs until the console output
+cycles (`host/machine.mjs:269-279`). `expect` runs until the console output
 matches a pattern, testing it only when the output has grown, and then runs on
 until the console waits, so that the last character has reached the screen
-(`host/machine.mjs:302-321`). `waitingForInput` is true while the program
+(`host/machine.mjs:301-321`). `waitingForInput` is true while the program
 counter is in one of the console's input loops, found by symbol
 (`host/machine.mjs:323-335`). `ready` adds that the startup file has finished
 and the CCP is reading a line, from `STPOS` and `HFLAG`
@@ -181,20 +181,20 @@ Typing takes two forms. `type` sends each character to the serial port only when
 TEC-OS is waiting for one, and waits until TEC-OS has taken it
 (`host/machine.mjs:354-371`). With a display as the console it presses keys on
 the matrix keyboard instead, holding each, with its Shift or Ctrl, until
-TEC-OS's scan has read it and then releasing it (`host/machine.mjs:452-466`).
+TEC-OS's scan has read it and then releasing it (`host/machine.mjs:453-467`).
 `enqueueInput` and `pumpInput` do the same without blocking, one step at a time,
-for the web page's run loop and for `capture.mjs` (`host/machine.mjs:468-520`).
+for the web page's run loop and for `capture.mjs` (`host/machine.mjs:470-520`).
 Either way the model paces input to TEC-OS, but a terminal on a board sends each
 character when it is typed.
 
 The rest reads or sets the board's state. `screen` turns the PICO9918's name
 table into rows of text, from the layout its registers select
-(`host/machine.mjs:380-405`). `glcdScreen` matches each 6 × 8 cell of the
+(`host/machine.mjs:380-404`). `glcdScreen` matches each 6 × 8 cell of the
 graphics LCD's memory against the font, which the caller supplies in
-`Machine.font` (`host/machine.mjs:409-449`).
+`Machine.font` (`host/machine.mjs:409-450`).
 `ramImage` and `loadRam` copy all of RAM, EXPAND 1 included, out and in.
 `reset` resets the CPU and the latches and leaves RAM and the card as they
-were, as the board's reset button does (`host/machine.mjs:526-586`).
+were, as the board's reset button does (`host/machine.mjs:528-587`).
 
 ## The tests
 
@@ -212,9 +212,9 @@ runs to the first prompt with the clock at the tests' starting time
 
 `test/lib/fixtures.mjs` also makes the files the tests load. `program` assembles
 a source in `test/programs/` with ATOM and keeps the result in
-`build/test-programs` (`test/lib/fixtures.mjs:41-56`), filed under a digest of
+`build/test-programs` (`test/lib/fixtures.mjs:41-55`), filed under a digest of
 the source and every file it includes, so that a changed include assembles again
-(`test/lib/fixtures.mjs:30-39`). `service` makes a `.SVC` file with `makeSvc`
+(`test/lib/fixtures.mjs:30-38`). `service` makes a `.SVC` file with `makeSvc`
 (`test/lib/fixtures.mjs:75-76`). `standardCard` is a new container with the
 starter card's two volumes, `SYSTEM` on A and `WORK` on B, both empty
 (`test/lib/fixtures.mjs:57-64`), and `volume` opens a drive of it as a CP/M
