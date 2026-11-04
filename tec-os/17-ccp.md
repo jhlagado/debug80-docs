@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 626ee41, with the ATOM assembler from the repository's
+Checked against TEC-OS 5a25178, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
@@ -21,20 +21,25 @@ program with its page zero, and the CCP's RAM and stack.
 ## The CCP in the ROM
 
 The CCP's code is `src/cpm/ccp.asm`. In the ROM that Chapter 12 describes it
-runs from `CCPBAS`, `D801h`, to `E1D8h`, 2,520 bytes, followed directly by the
+runs from `CCPBAS`, `D7C1h`, to `E144h`, 2,436 bytes, followed directly by the
 BDOS. Its messages are in the ROM's data block (`src/text.asm:12-58`,
 `src/text.asm:70-73`), and so is `KEYTAB`, the table of its built-in commands'
 names (`src/tables.asm:38-60`). What the CCP changes has to be
-in RAM, so its variables, buffers and stack are there, from `CCPRAM`, `BCEBh`,
-to `BE76h` (`src/ram.asm:65-129`).
+in RAM, so its variables, buffers and stack are there, from `CCPRAM`, `BCEAh`,
+to `BE75h` (`src/ram.asm:65-129`).
 
 In most of what it does the CCP is an ordinary CP/M program: it reads and
 writes files and the console through `CALL 0005h`, as a program in the TPA
 does. `DIR` lists with functions 17 and 18, `TYPE` reads with function 20 and
-`ERA` erases with function 19 (`src/cpm/ccp.asm:478-478`,
-`src/cpm/ccp.asm:802-803`, `src/cpm/ccp.asm:873-874`). Each call on the
-command's FCB goes through `CPSRC`, which loads `CMDFCB`'s address and jumps to
-`0005h` (`src/cpm/ccp.asm:1053-1065`).
+`ERA` erases with function 19 (`src/cpm/ccp.asm:478-479`,
+`src/cpm/ccp.asm:551-552`, `src/cpm/ccp.asm:803-804`,
+`src/cpm/ccp.asm:874-875`). Most of the calls that name one of the CCP's two
+FCBs, 22 of them, go through `DOSSEQ`. Each `CALL DOSSEQ` is followed by one
+byte, the function's number times 2, plus 1 for `RENFCB` or 0 for `CMDFCB`.
+`DOSSEQ` reads the byte at its return address and moves that address past it,
+puts the function in `C` and the FCB's address in `DE`, and jumps to `0005h`,
+so the BDOS returns to the instruction after the byte
+(`src/cpm/ccp.asm:1053-1067`).
 
 Outside that interface the CCP reads a few of TEC-OS's own bytes: the
 console's width and height at `0048h` and `0049h`, the console mode, the
@@ -148,7 +153,7 @@ the order `DIR`, `TYPE`, `ERA`, `REN`, `SAVE`, `USER`, `CON`, `COPY`, `UNLOAD`
 and `SERVICES`. `KEYTAB` holds each name with a 0 after it and then its
 routine's address, and a 0 ends the table. One loop, from `KEYNXT`, calls
 `ISCMD` for each name and jumps to the routine of the one that matches
-(`src/cpm/ccp.asm:230-248`, `src/tables.asm:38-60`). `ISCMD` compares the text at
+(`src/cpm/ccp.asm:230-249`, `src/tables.asm:38-60`). `ISCMD` compares the text at
 `CMDSTRT`, not the FCB, and requires a space or the end of the piece after the
 name (`src/cpm/ccp.asm:1466-1486`). So `A:DIR` and `DIR.COM` are not the
 built-in. The first is the program `DIR` on drive A and the second the program
@@ -195,7 +200,7 @@ word and returns the error flag (`src/cpm/ccp.asm:1387-1398`).
 
 The commands that take exactly one file, `TYPE`, `REN`, `SAVE`, `COPY` and a
 program's name, test the parsed FCB with `UNAMBIG`, which rejects an empty
-name and any `?` (`src/cpm/ccp.asm:1400-1410`).
+name and any `?` (`src/cpm/ccp.asm:1400-1414`, `src/cpm/ccp.asm:1425-1431`).
 
 ## The built-in commands
 
@@ -205,7 +210,7 @@ Each built-in is a routine in `ccp.asm`, and the one for `UNLOAD` calls
 | Command | Routine | Source |
 | --- | --- | --- |
 | `DIR` | `CMDDIR` | `src/cpm/ccp.asm:433-632` |
-| `TYPE` | `CMDTYPE` | `src/cpm/ccp.asm:787-828` |
+| `TYPE` | `CMDTYPE` | `src/cpm/ccp.asm:788-828` |
 | `ERA` | `CMDERA` | `src/cpm/ccp.asm:834-881` |
 | `REN` | `CMDREN` | `src/cpm/ccp.asm:883-942` |
 | `SAVE` | `CMDSAVE` | `src/cpm/ccp.asm:1173-1267` |
@@ -217,7 +222,7 @@ Each built-in is a routine in `ccp.asm`, and the one for `UNLOAD` calls
 
 `DIR` turns a missing name into eleven `?`, sets the DMA address to `LOADBUF`
 and lists the entries that function 17 and then function 18 return
-(`src/cpm/ccp.asm:433-478`). It passes over an entry whose system attribute,
+(`src/cpm/ccp.asm:433-479`). It passes over an entry whose system attribute,
 bit 7 of its second type byte, is set (`src/cpm/ccp.asm:494-499`). The CCP's
 FCB has extent 0, so only the entry that holds a file's first extent matches,
 and each file is listed once. The number of columns is the console's width at
@@ -250,7 +255,7 @@ other key shows the next screen.
 
 `TYPE` opens its one file and reads it a record at a time into `LOADBUF`. It
 prints each byte through the pager up to the first `^Z`, `1Ah`, or the end of
-the file (`src/cpm/ccp.asm:787-828`). A file that is not there gives
+the file (`src/cpm/ccp.asm:788-828`). A file that is not there gives
 `NO FILE`.
 
 `ERA` with a name that is all `?`, as `*.*` gives, prints `ALL (Y/N)?` and
@@ -272,8 +277,8 @@ reads it. The rename gives `NO FILE` if the old name is not there
 `SAVE N NAME` reads a decimal count of 256-byte pages and rejects any count
 that reaches the page of the word at `0006h`. It erases the file, makes it
 again and writes the pages from `0100h` on, two records each
-(`src/cpm/ccp.asm:1173-1267`). On the starter card that page is `B8h`, so the
-largest `SAVE` is 183 pages, `0100h` to `B7FFh`. A failed make, write or close
+(`src/cpm/ccp.asm:1173-1267`). On the starter card that page is `B9h`, so the
+largest `SAVE` is 184 pages, `0100h` to `B8FFh`. A failed make, write or close
 gives `NO SPACE`.
 
 `USER N` takes 0 to 15 and calls function 32 (`src/cpm/ccp.asm:1141-1171`).
@@ -299,10 +304,10 @@ and `UNLOAD` removes the lowest. `NAME.SVC` as a command installs one. Chapter
 ## Loading a program
 
 `LOADCOM` loads a `.COM` file at `0100h` through the BDOS
-(`src/cpm/ccp.asm:372-422`). It opens `CMDFCB`, and if there is no such file
+(`src/cpm/ccp.asm:373-431`). It opens `CMDFCB`, and if there is no such file
 it returns with the carry flag and the zero flag set. Otherwise it reads the
-file a record at a time, with function 26 setting the DMA address to each
-record's place from `0100h` up. The reading stops at the end of the file or
+file a record at a time through `READSRC`, which sets the DMA address with
+function 26 to each record's place from `0100h` up and reads with function 20. The reading stops at the end of the file or
 when the address reaches the page of the word at `0006h`, the byte at `0007h`
 (`src/cpm/ccp.asm:381-395`).
 
@@ -316,19 +321,19 @@ and is closed (`src/cpm/ccp.asm:409-418`).
 
 The largest program is therefore the 256-byte pages from `0100h` up to the
 page that holds the BDOS entry. On the starter card, whose entry is at
-`B815h`, that is 46,848 bytes, 21 fewer than the TPA. With a service loaded
+`B9F3h`, that is 47,104 bytes, 243 fewer than the TPA. With a service loaded
 the word at `0006h` is the start of the service's first page, and the limit is
 then that page.
 
 The examples from here on use a copy of the starter card with three files on
-drive B. Two are programs that are a `RET` and zeros, of 46,848 and 46,849
+drive B. Two are programs that are a `RET` and zeros, of 47,104 and 47,105
 bytes. The third is `ARGS`, whose source, saved as `build/args.asm`, is in the
 section on page zero below:
 
 ```sh
 node -e 'const b = n => { const x = Buffer.alloc(n); x[0] = 0xC9; return x; };
-require("fs").writeFileSync("build/fits.com", b(46848));
-require("fs").writeFileSync("build/big.com", b(46849));'
+require("fs").writeFileSync("build/fits.com", b(47104));
+require("fs").writeFileSync("build/big.com", b(47105));'
 npx atom build/args.asm build/args.com
 cp dist/starter.img build/ccp.img
 node tools/tecvol.mjs put build/ccp.img B build/args.com
@@ -336,7 +341,7 @@ node tools/tecvol.mjs put build/ccp.img B build/fits.com
 node tools/tecvol.mjs put build/ccp.img B build/big.com
 ```
 
-`FITS.COM`, 46,848 bytes, loads and runs, and `BIG.COM`, one byte more,
+`FITS.COM`, 47,104 bytes, loads and runs, and `BIG.COM`, one byte more,
 doesn't:
 
 <!-- node tools/capture.mjs --card build/ccp.img B: FITS BIG -->
@@ -518,18 +523,18 @@ builds each drive's letter and label in `CMDTXT` (`src/boot.asm:322-330`).
 
 | Addresses | Bytes | Name | Contents |
 | --- | ---: | --- | --- |
-| `BCEBh–BD0Eh` | 36 | `CMDFCB` | the command's FCB, and the source's for `COPY` |
-| `BD0Fh–BD32h` | 36 | `RENFCB` | the new name's FCB for `REN`, the destination's for `COPY` |
-| `BD33h` | 1 | `CMDBUF` | function 10's maximum, 127 |
-| `BD34h` | 1 | `CMDLEN` | the line's length |
-| `BD35h–BDB4h` | 128 | `CMDTXT` | the line |
-| `BDB5h` | 1 | `BOOTDRV` | the drive from `0004h` at entry, or of a drive change |
-| `BDB6h–BDCBh` | 22 | | the parser's pointers and the state of `DIR`, the pager, `SAVE` and `ERA` |
-| `BDCCh–BE4Bh` | 128 | `LOADBUF` | scratch: `DIR`'s and `REN`'s directory records, `TYPE`'s records, the load's extra record |
-| `BE4Ch–BE58h` | 13 | `STKGUARD` | the stack guard, `A5h` in each byte |
-| `BE59h–BE76h` | 30 | `CSTKBAS` | the CCP's stack, up to `CSTKTOP` at `BE77h` |
+| `BCEAh–BD0Dh` | 36 | `CMDFCB` | the command's FCB, and the source's for `COPY` |
+| `BD0Eh–BD31h` | 36 | `RENFCB` | the new name's FCB for `REN`, the destination's for `COPY` |
+| `BD32h` | 1 | `CMDBUF` | function 10's maximum, 127 |
+| `BD33h` | 1 | `CMDLEN` | the line's length |
+| `BD34h–BDB3h` | 128 | `CMDTXT` | the line |
+| `BDB4h` | 1 | `BOOTDRV` | the drive from `0004h` at entry, or of a drive change |
+| `BDB5h–BDCAh` | 22 | | the parser's pointers and the state of `DIR`, the pager, `SAVE` and `ERA` |
+| `BDCBh–BE4Ah` | 128 | `LOADBUF` | scratch: `DIR`'s and `REN`'s directory records, `TYPE`'s records, the load's extra record |
+| `BE4Bh–BE57h` | 13 | `STKGUARD` | the stack guard, `A5h` in each byte |
+| `BE58h–BE75h` | 30 | `CSTKBAS` | the CCP's stack, up to `CSTKTOP` at `BE76h` |
 
-The addresses are those of the build at 626ee41. The guard is 43 bytes less the
+The addresses are those of the build at 5a25178. The guard is 43 bytes less the
 stack's 30 (`src/ram.asm:120-125`), and warm boot fills it with `A5h`
 (`src/boot.asm:274-278`), so a guard byte that is no longer `A5h` shows that
 the stack has run past its bottom. `test/stacks.test.mjs` checks the guard
