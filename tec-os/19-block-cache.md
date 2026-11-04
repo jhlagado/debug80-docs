@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 58d4345, with the ATOM assembler from the repository's
+Checked against TEC-OS 621201d, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from
 Thorium 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. The
@@ -77,7 +77,7 @@ buffer, because `CFILL` sets `SDXB` to `LATEXP` for the call and `SDREAD`'s byte
 puts EXPAND 1 in view while it fills the buffer (`src/cache.asm:122-144`,
 `src/sd.asm:321-325`). A failed read leaves the line empty.
 
-`CTAKE` gives out lines in turn (`src/cache.asm:204-238`). A clean line can be
+`CTAKE` gives out lines in turn (`src/cache.asm:210-250`). A clean line can be
 given out at any time, since the card has the same bytes, but a dirty line has
 to reach the card first. So `CTAKE` starts at `CNEXT` and takes the first
 clean line from there on, passing over dirty lines and wrapping from line 29
@@ -111,11 +111,11 @@ below `8000h` stays in view whatever the latch holds, so it goes by one `LDIR`
 with EXPAND 1 selected (`src/cache.asm:427-467`). The part in EXPAND 0 goes a
 byte at a time, and the latch is switched between each read and its write
 (`src/cache.asm:468-486`). While EXPAND 1 is in view the copy uses no stack,
-because the caller's stack may be in EXPAND 0 (`src/cache.asm:388-399`).
+because the caller's stack may be in EXPAND 0 (`src/cache.asm:394-395`).
 `MVEND` writes `LATCHV` back to the latch, pops the alternates and enables
 interrupts only if `P/V` shows they were on (`src/cache.asm:493-504`). A hit to
 a DMA address below `8000h`, such as the CCP's loads at `0100h` and up, took
-6,270 T-states in a load of `MOUNT.COM`, and a miss to such an address
+6,026 T-states in a load of `MOUNT.COM`, and a miss to such an address
 226,445.
 
 `DIR` on the starter card's drive A shows the effect: after the first prompt
@@ -159,8 +159,8 @@ node tools/tecvol.mjs put time.img A data.bin
 `Machine` as `tools/capture.mjs` does. It reads the model's T-state count,
 `cycles` (`host/machine.mjs:265`), twice: when `READ DATA.BIN` has been typed
 and echoed, before the Return that ends it, and at the next prompt. After a
-cold boot, the command's first run took 6,642,461 T-states, 1.66 seconds, and
-its second 1,343,554, 0.34 seconds, a fifth of that. Both figures include
+cold boot, the command's first run took 6,642,581 T-states, 1.66 seconds, and
+its second 1,343,674, 0.34 seconds, a fifth of that. Both figures include
 loading the program from drive A.
 
 The gain needs the whole file in the cache. A file of 15,360 bytes took about
@@ -239,8 +239,8 @@ writes three of the first 32 data blocks early, because all 30 lines are dirty
 before the BDOS next writes the directory.
 
 On `time.img`, from the section on reads, `SAVE 64 X.COM`, 16 KiB, took
-30,609,364 T-states, 7.65 seconds, on `THROUGH`. On `BEHIND` it took
-9,945,845, 2.49 seconds, about a third of that. Each run followed a cold boot
+30,609,632 T-states, 7.65 seconds, on `THROUGH`. On `BEHIND` it took
+9,946,134, 2.49 seconds, about a third of that. Each run followed a cold boot
 and a change to the drive. The count, taken as for the reads, leaves out the
 change of drive.
 
@@ -269,8 +269,10 @@ failure it leaves the line dirty and returns `NZ`. A flush tries every line:
 `CFLUSH` and `CFLALL` drop each line whose write fails, so the card's copy of
 that block stands, go on to the next and return `NZ` if any failed
 (`src/cache.asm:182-208`). `CTAKE`'s write of one line, when every line is
-dirty, is the exception: a line that fails there stays dirty, and `CTAKE`
-returns the error (`src/cache.asm:227-229`).
+dirty, is the exception: a line that fails there stays dirty for a later
+flush to try, and `CTAKE` returns the error with `CNEXT` moved past it. The
+next miss then writes the line after it, so one failing block can't fail
+every later miss (`src/cache.asm:237-247`).
 
 A flush has five occasions:
 
@@ -286,10 +288,10 @@ A flush has five occasions:
 
 The warm boot's flush is the one you can cause. A `^C` at the prompt is a warm
 boot, and after it every change is on the card. A reset writes nothing, since
-cold boot clears EXPAND 1 (`src/boot.asm:156-164`), and the changes the cache
+cold boot clears EXPAND 1 (`src/boot.asm:169-188`), and the changes the cache
 still holds unwritten at the time of a reset are lost. Some changes since the
 last directory write may already be on the card, written by `CTAKE` when their
-lines were given out for other blocks (`src/cache.asm:221-229`), so the card
+lines were given out for other blocks (`src/cache.asm:234-241`), so the card
 can then hold a mix of old and new blocks.
 
 ## Write lost
@@ -320,7 +322,7 @@ it is in view the `8000h–BFFFh` window holds the cache, not the workspace and
 the stacks. An interrupt taken then would push its return address into EXPAND
 1 and run its handler with the wrong memory in the window. So the BIOS's
 `READ` and `WRITE` run with interrupts off from start to end
-(`src/cache.asm:17-19`).
+(`src/cache.asm:10-13`).
 
 `CDI` at each entry calls `IFFGET`, whose `LD A,I` copies the
 interrupt flip-flop into the P/V flag. An NMOS Z80 can clear that flag if an
@@ -339,7 +341,7 @@ For a program that uses interrupts, a BIOS disk call holds them off for its
 whole length. A read that misses holds them off for about 235,000 T-states, 59
 milliseconds. A directory write on the volume written behind holds them off
 while every dirty line is written. On the model the close of a file of four
-blocks took 1,111,809 T-states. A flush of all 30 lines takes about 30 ×
+blocks took 1,111,504 T-states. A flush of all 30 lines takes about 30 ×
 217,421, some 6.5 million T-states, or 1.6 seconds. Interrupts are on only
 when a program has enabled them, as Chapter 14 describes, so this affects only
 such a program.
