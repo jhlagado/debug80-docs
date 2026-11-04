@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 23. Diagnostics
 
-Checked against TEC-OS 626ee41. The diagnostics ROM in this chapter is version
+Checked against TEC-OS 5a25178. The diagnostics ROM in this chapter is version
 0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit.
 
 Two parts of the repository report what is wrong with a board. The TEC-OS ROM
@@ -16,7 +16,7 @@ diagnostics ROM, built from `diag/`, is a separate image that tests each part of
 the board TEC-OS uses and prints a report. This chapter describes the prompt,
 then follows the diagnostics ROM from its build to a report from a board.
 Chapter 1 shows the prompt from the user's side, and Chapter 18 shows the
-container's checks and a header read with `H`. Appendix D gives every error code
+container's checks. Appendix D gives every error code
 with its remedy.
 
 ## The diagnostic prompt
@@ -27,11 +27,13 @@ failure of either jumps to `DIAG` with an error code in `A`
 (`src/boot.asm:54-57`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
 `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:8-18`). The banner is
 printed before the card is touched (`src/boot.asm:46-47`), so it appears
-whatever the card holds. Only the RAM check comes before it. `RAMCHK` writes and
-reads back the bytes at `8000h` and `BFFFh` and looks for EXPAND 1 behind the
-window, and a board that lacks either
-prints `TEC-OS needs 64K RAM` on the serial port and stops there
-(`src/boot.asm:33`, `src/boot.asm:290-320`, `src/text.asm:5`).
+whatever the card holds. Only the RAM check comes before it. `RAMCHK` writes
+and reads back the bytes at `8000h` and `BFFFh` and looks for EXPAND 1 behind
+the window, and a board that lacks either prints `TEC-OS needs 64K RAM` on the
+serial port and stops there (`src/boot.asm:33`, `src/boot.asm:290-320`,
+`src/text.asm:5`). After the banner `MEMINIT` empties the block cache's lines,
+before the first mount reads the container's table through a line
+(`src/boot.asm:48`).
 
 `DIAG` resets the stack to the BIOS's, since a mount that failed part way may
 have left it deep, and keeps the code on it (`src/boot.asm:423-424`). It writes
@@ -39,29 +41,27 @@ have left it deep, and keeps the code on it (`src/boot.asm:423-424`). It writes
 `src/lcd.asm:43`) and then prints `No volume mounted, error ` and the code as
 two hexadecimal digits (`src/boot.asm:427-431`, `src/text.asm:8`).
 
-At the prompt `R retry, H header> ` (`src/text.asm:9`), `DIAG` reads one key
-with `BCONIN`, turns a small letter into a capital, echoes it and ends the line
-(`src/boot.asm:432-439`). Any key but `R` or `H` gives the prompt again. The
-console at this point is always the serial terminal. Cold boot starts it there,
-and no display driver has been installed, since the startup file is on the card.
-So on a board with no terminal attached, the LCD's `CARD?` is the only sign.
-
-`H` prints the first 64 bytes of `BLKBUF`, the 512-byte buffer that holds the
-last block read from the card, in four rows of 16 (`src/boot.asm:442-442`,
-`src/ram.asm:19`). For a container that fails its checks that block is usually
-block 0, the header, as in Chapter 18's example. With no card, or a card that
-fails before block 0 is read, the buffer still holds the zeros cold boot
-cleared it to, as Chapter 1 shows.
+At the prompt `R retry> ` (`src/text.asm:9`), `DIAG` reads one key with
+`BCONIN`, turns a small letter into a capital, echoes it and ends the line
+(`src/boot.asm:432-439`). Any key but `R` gives the prompt again
+(`src/boot.asm:442`). The console at this point is always the serial terminal.
+Cold boot starts it there, and no display driver has been installed, since the
+startup file is on the card. So on a board with no terminal attached, the LCD's
+`CARD?` is the only sign.
 
 `R` jumps back to `COLDRT` (`src/boot.asm:440-441`). That starts the LCD again,
 which clears `CARD?`, and then repeats the card's start and the mount, so a card
-fixed or put in while the prompt waits is mounted without a reset.
+fixed or put in while the prompt waits is mounted without a reset. `MOUNT`
+reads each block of the table from the card again, whatever a line holds
+(`src/vol.asm:23-26`).
 
 The retry keeps a selection of volumes carried over from a recognised reset,
 which Chapter 14 explains. `RSLCAP` copies the drive table to `RSLBUF` before
-cold boot clears anything (`src/boot.asm:25`), and nothing writes `RSLBUF`
-before `MEMINIT`, which runs only after a mount has succeeded
-(`src/boot.asm:70`, `src/boot.asm:101-102`).
+cold boot clears anything (`src/boot.asm:25`). `RSLBUF` is at `0100h`, in the
+fixed RAM (`src/layout.asm:92`), and nothing on the path from there to the
+prompt writes it: `MEMINIT` clears EXPAND 1 alone, and the mount reads the
+table into a line in EXPAND 1 (`src/boot.asm:101-102`, `src/boot.asm:150-166`,
+`src/vol.asm:251-281`).
 
 ## The diagnostics ROM
 
