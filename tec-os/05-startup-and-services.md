@@ -380,9 +380,8 @@ of an older format, is left as it is too, and the page says so.
 A startup line that hangs, or that resets the board, would run at every boot.
 To get past one, hold any key on the hex keypad from the reset until the
 prompt appears. With the board's keypad NMI jumper fitted a key press is a
-crash, so the skip is for a board with that jumper off, as [Chapter
-1](01-introduction.md#running-tec-os-on-a-board) and [Appendix
-G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi) describe. TEC-OS reads the
+crash, so the skip is for a board with that jumper off, as [Appendix
+G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi) describes. TEC-OS reads the
 keypad's state once, just before it opens the file, about 1.5 seconds after a
 reset on the model, and with a key down it doesn't read the file.
 `test/startup.test.mjs` runs the case: with a key held, a card whose service
