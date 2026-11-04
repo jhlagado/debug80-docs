@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 9. The hardware services
 
-Checked against TEC-OS 626ee41. The programs were assembled by the starter
+Checked against TEC-OS 5a25178. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. `DEMO`
 was assembled on the PC by ATOM from the repository's `atom-z80` 0.3.7.
