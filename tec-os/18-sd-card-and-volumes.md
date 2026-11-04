@@ -118,8 +118,8 @@ the ROM uses come from `format/format.json` through the generated
 
 A card can hold anything, so the ROM's `MOUNT` routine checks block 0 before it
 uses any of it (`src/vol.asm:3-6`). `MNBLK` reads each block of the table into
-a line of the block cache, from the card the first time a mount asks for it,
-and the same path serves cold boot and the volume services. `MNCP` copies 32
+a line of the block cache, from the card whenever the mount asks for a table
+block other than the last one it read, and the same path serves cold boot and the volume services. `MNCP` copies 32
 bytes of the line into `MNBUF`, a buffer in the workspace, where the header's
 fields and each descriptor are read (`src/vol.asm:22-29`,
 `src/vol.asm:251-298`, `src/ram.asm:44`). `MOUNT` makes the checks in a fixed
@@ -312,7 +312,7 @@ and not read (`src/bios.asm:128-138`, `src/bios.asm:211-238`,
 On a volume written through, `WRITE` sets bit 7 of `CWTYPE` before it goes to
 `CWRBH`, and the line goes to the card before the call returns. If that write
 fails, the line is dropped, so the next read of the block comes from the card
-(`src/bios.asm:239-246`, `src/cache.asm:327-342`). On the volume written
+(`src/bios.asm:239-246`, `src/cache.asm:327-349`). On the volume written
 behind the line stays dirty, as Chapter 19 describes.
 
 A program that writes a new file sequentially on a volume written through
