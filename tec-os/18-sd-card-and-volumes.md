@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. The SD card and the volumes
 
-Checked against TEC-OS 621201d.
+Checked against TEC-OS 78127ec.
 
 The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
@@ -127,7 +127,11 @@ the ROM uses come from `format/format.json` through the generated
 A card can hold anything, so the ROM's `MOUNT` routine checks block 0 before it
 uses any of it (`src/vol.asm:3-6`). `MNBLK` reads each block of the table into
 a line of the block cache, from the card whenever the mount asks for a table
-block other than the last one it read, and the same path serves cold boot and the volume services. `MNCP` copies 32
+block other than the last one it read, and the same path serves cold boot and the volume services. With every line
+dirty, the line taken is written to the card first, and that write leaves the
+card block number, `SDLBA`, on the BIOS's record. `MNBLK` therefore sets
+`SDLBA` to the table block again with `MNLBA` before the read, so the line
+holds the table block even then (`src/vol.asm:300-319`). `MNCP` copies 32
 bytes of the line into `MNBUF`, a buffer in the workspace, where the header's
 fields and each descriptor are read (`src/vol.asm:32-39`,
 `src/vol.asm:285-337`, `src/ram.asm:58`). `MOUNT` makes the checks in a fixed
@@ -319,7 +323,10 @@ instead. The next write may go to the next block of the same allocation block,
 with the block before it cleared. `GETKEY` records such a block in its key,
 `BUFDRV` and `BUFBLK` with `BUFOK` at 2, and the next block is then cleared too
 and not read (`src/bios.asm:146-156`, `src/bios.asm:236-263`,
-`src/cache.asm:317-335`).
+`src/cache.asm:317-335`). Any other write that keeps a line's bytes, read
+first or a hit, drops the key unless its block is the key's own on the key's
+drive. Random writes into a new allocation block out of order therefore never
+clear a block that an earlier write has filled (`src/cache.asm:338-355`).
 
 On a volume written through, `WRITE` sets bit 7 of `CWTYPE` before it goes to
 `CWRBH`, and the line goes to the card before the call returns. If that write
@@ -354,7 +361,7 @@ Each returns `A` = 0 with carry clear, or `TNEBAD`, 1, with carry set and
 nothing changed (`src/vol.asm:673-677`). A mount fails in four cases: an index
 past the table, a drive past D, a volume already on a drive and a drive whose
 vector slot is too small for the volume. An unmount fails for drive A, which is
-never left empty, and for a drive past D (`src/vol.asm:596-650`). The slot rule
+never left empty, and for a drive past D (`src/vol.asm:603-659`). The slot rule
 is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
 and any other needs a slot of either size (`src/vol.asm:634-647`). Chapter 13
 describes how cold boot gives out the slots. The three services may change `IX`
@@ -368,11 +375,14 @@ A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of
 the block cache to the card, with interrupts off. A line whose write fails is
 dropped and the rest are still written, and the call then fails
-(`src/vol.asm:700-713`, `src/cache.asm:182-208`). A mount then clears the drive's old
+(`src/vol.asm:700-713`, `src/cache.asm:182-215`). A mount then clears the drive's old
 entry, fills the new one and its DPH with `MNONE`, and records the index. An
 unmount clears the entry. Either way the service ends by clearing `GETKEY`'s
 key and calling BDOS function 37 to reset the drive, so that the drive's
-next access logs it in from its new directory (`src/vol.asm:662-674`). That
+next access logs it in from its new directory (`src/vol.asm:662-674`). A mount
+onto the default drive then selects it again with function 14, which logs the
+new volume in at once, so functions 27 and 31 return its allocation vector and
+DPB rather than the old volume's (`src/vol.asm:679-691`). That
 call runs on the BDOS's own stack, so a program calls `MOUNT` and `UNMNT` from
 outside its own BDOS calls (`src/abi.inc:21-23`).
 
