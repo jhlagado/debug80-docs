@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 8. Programs and the console
 
-Checked against TEC-OS 58d4345, with the ATOM assembler from the
+Checked against TEC-OS 621201d, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
 128edb7, and its copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
@@ -40,7 +40,8 @@ carriage return, and they copy what they print to the list device while `^P`
 has turned the copy on. Functions 2 and 9 also check for a key before each
 character they print: `^S` stops the output until the next key, `^P` turns the
 copy on or off, and any other key is held for the program's next console read,
-as Chapter 2 describes. Function 10 gives the line the editing keys of Chapter
+as Chapter 2 describes. The key that ends a `^S` pause is taken and dropped,
+except a `^C`, which ends the program with a warm boot. Function 10 gives the line the editing keys of Chapter
 2, and a `^C` as its first key ends the program with a warm boot.
 
 Function 6 does none of this. With a character in `E` it passes the byte
@@ -213,9 +214,9 @@ separated by `;`, then a letter that names the action. In the table, `n`,
 | --- | --- |
 | `ESC [ n A`, `B`, `C`, `D` | the cursor up, down, right or left `n` places, stopping at the edge; `n` is 1 when it is left out or 0 |
 | `ESC [ r ; c H`, or `f` | the cursor to row `r`, column `c`, counted from 1; a number left out is 1 |
-| `ESC [ J` | clears from the cursor to the end of the screen |
+| `ESC [ J` | clears from the cursor to the end of the screen, as does `ESC [ n J` for any `n` but 2 |
 | `ESC [ 2 J` | clears the whole screen, leaving the cursor where it is |
-| `ESC [ K` | clears from the cursor to the end of the line |
+| `ESC [ K` | clears from the cursor to the end of the line, as does `ESC [ n K` for any `n` |
 | `ESC [ 7 m`, `ESC [ 0 m` | reverse video on, and off |
 | `ESC [ n @`, `ESC [ n P` | inserts `n` blanks at the cursor, or deletes `n` characters there; the rest of the line moves right or left |
 | `ESC [ t ; b r` | makes rows `t` to `b` the scroll region and puts the cursor at the top left |
@@ -227,8 +228,8 @@ and leaves the rows outside it as they are. Below the region, a line feed
 stops at the last row. The region goes back to the whole screen when the
 console changes and at every warm boot.
 
-TEC-OS reads any other sequence to its final letter and ignores it, and an
-`ESC` followed by anything but `[` ends there. A program written for a larger
+TEC-OS reads any other sequence to its final letter and ignores it. An
+`ESC` followed by anything but `[` ends there, and that byte isn't drawn. A program written for a larger
 terminal therefore leaves no stray characters on the screen.
 
 `TERM` uses several of these. It clears the screen, writes `ABCDEFG` at the
