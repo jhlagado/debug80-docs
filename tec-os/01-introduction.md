@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
 128edb7 and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and
 `TAS.COM`'s is
@@ -34,7 +34,7 @@ games and BASIC interpreters. TEC-OS implements the interface as CP/M 2.2
 defined it, so a CP/M 2.2 program runs on the TEC-1G unchanged if it uses only
 the documented interface, sizes its memory from the word at `0006h` and fits
 in the memory left for programs. The starter card, the card image built with
-TEC-OS, leaves 47,347 bytes.
+TEC-OS, leaves 47,268 bytes.
 
 A CP/M system has three parts. The BDOS provides the functions at `0005h`, and
 the CCP, the Console Command Processor, prints the prompt, reads a command and
@@ -59,7 +59,8 @@ TEC-OS has more than CP/M 2.2 had:
   again from memory.
 - A work volume whose writes reach the card in batches.
 - A console on the PICO9918 video card, on the 128 × 64 graphics LCD or on a
-  serial terminal. Each display's console is a driver loaded from the card.
+  serial terminal. The PICO9918's console is in the ROM, and the graphics LCD's
+  is a driver loaded from the card.
 - Hardware services, numbered calls through the ROM table at `C003h`. With them
   a program reaches the 7-segment digits, the 20 × 4 LCD, the PICO9918's
   graphics, the speaker, the joystick and the clock with no port numbers of its
@@ -152,7 +153,7 @@ read, so this card isn't saved; reload to try again.` These are its controls:
 - "Power cycle" turns the board off and on and so loses what the RAM held.
 - "Pause" stops the Z80 and starts it again.
 - "New starter card" builds a fresh card from the page's recipe, a file
-  listing the card's contents: the starter card's seven files and `DEMO.COM`,
+  listing the card's contents: the starter card's six files and `DEMO.COM`,
   which Chapter 9 describes. It checks each file against the SHA-256 the
   recipe records.
 - "Open image" loads a card image from the PC, and "Download image" saves the
@@ -166,20 +167,20 @@ read, so this card isn't saved; reload to try again.` These are its controls:
 When you change the display or the width, the page turns the board off and on.
 The page makes one change to the card at a time, so a width chosen while files
 are being copied to the card is the one the card keeps.
-At each power-on with the PICO9918 chosen, the page writes the driver built for
-the chosen width to drive A as `PICO.SVC` when the card has no `PICO.SVC`, has
-one of the page's own builds at another width or has one of an older format.
-Any other `PICO.SVC`, one that differs from each of the page's builds anywhere
-in the file, is one the card's owner built, and the page keeps it and
-says so in brackets in the serial terminal. The page also makes the chosen
-display's driver the only display line in the card's startup file, as its first
-line. It reads only the files on drive A that TEC-OS loads at boot, those of
-user area 0, one of the groups of files that Chapter 3 describes. It makes
-these changes on a copy of the card, and the copy replaces the card only once
-every change is made. A card whose drive A is read-only, or whose directory has
-no room for a file the page must add, is therefore left as it was and boots as it is, and so is the card when
-the page can't fetch the PICO9918's drivers. The page says so in brackets in
-the serial terminal.
+At each power-on the page rewrites the card's startup file for the chosen
+display. It takes out every display line: a line naming a display driver, and a
+`CON PICO` or `CON CRT` line with a width, which Chapter 2 describes. It then
+puts the chosen display's line first. For the graphics LCD that line is
+`GLCD.SVC`. For the PICO9918 at 40 or 32 columns it is `CON PICO 40` or
+`CON PICO 32`, and at 80 columns there is none, since the PICO9918's console
+starts at 80 columns. The page reads only the files on drive A that TEC-OS
+loads at boot, those of user area 0, one of the groups of files that Chapter 3
+describes. It makes the change on a copy of the card, and the copy replaces the
+card only once the change is made. A card whose drive A is read-only, or whose
+directory has no room for a new startup file, is therefore left as it was and
+boots as it is. The page says so in brackets in the serial terminal. It does the
+same, and leaves the card as it is, when the graphics LCD is chosen and drive A
+has no `GLCD.SVC` or one from an older TEC-OS.
 
 ## Running TEC-OS from Node.js
 
@@ -235,8 +236,9 @@ with the CPU clock switch on FAST and the 4 MHz oscillator.
 
 A board with the matrix keyboard has its Matrix configuration switch on. Cold
 boot reads the switch, bit 0 of port `03h`, and TEC-OS reads the matrix
-keyboard only when the switch is on. With it off, both display drivers fail to
-install and the console stays on the serial terminal.
+keyboard only when the switch is on. With it off, the PICO9918's console
+doesn't start, the graphics LCD's driver fails to install and the console stays
+on the serial terminal.
 
 Keep off the hex keypad while a program runs. With the board's keypad NMI
 jumper fitted, a key press interrupts the Z80 at `0066h`, and TEC-OS has no
@@ -251,8 +253,8 @@ At reset the TEC-1G shows the first 2 KiB of the ROM at `0000h` as well as at
 instruction jumps to the ROM's own address above `C000h`, and at reset the code
 there goes on to cold boot. Cold
 boot turns the copy at `0000h` off, leaving RAM there, and then checks the RAM
-at `8000h–BFFFh`, clears the workspace, starts the serial terminal and prints
-the banner. Here is the whole of a first boot on a board with only a serial
+at `8000h–BFFFh`, clears the workspace, starts the console and prints the
+banner. Here is the whole of a first boot on a board with only a serial
 terminal:
 
 <!-- node tools/capture.mjs -->
@@ -261,17 +263,14 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.SVC
-PICO.SVC?
-
 A>GLCD.SVC
-GLCD.SVC?
 
 A>
 ```
 
-The first line is the banner, with the version, 0.1. After a reset the console
-is always the serial terminal, so the banner goes there on every board.
+The first line is the banner, with the version, 0.1. Cold boot starts the
+console on the PICO9918 when the board has one and the matrix keyboard, and on
+the serial terminal otherwise, and the banner goes to that console.
 
 The next two lines are the volumes on the drives. A volume is one CP/M disk
 inside the container on the card, and a drive is one of the letters `A` to `D`
@@ -293,74 +292,66 @@ B: WORK
 
 After a blank line comes the prompt, `A>`. The letter is the current drive,
 the one a command uses when it names a file with no drive. Here the prompt is
-followed at once by `PICO.SVC`, though nobody typed it. Before the CCP waits
+followed at once by `GLCD.SVC`, though nobody typed it. Before the CCP waits
 for the first line from the keyboard, it reads the first 128 bytes of the file
 `STARTUP.CMD` from drive A, if the file is there, and runs each line as a
 command, echoed after the prompt as if it had been typed. The starter card's
-`STARTUP.CMD` has two lines, `PICO.SVC` and `GLCD.SVC`.
+`STARTUP.CMD` has one line, `GLCD.SVC`.
 
 A command that names a `.SVC` file installs a service from that file: TEC-OS
 loads the service from the card into memory below the BDOS, where it stays
 until a reset or until the `UNLOAD` command removes it. A service that drives
-hardware is a driver. `PICO.SVC` holds the PICO9918's console at 80 columns and
-makes the PICO9918 the console when it is installed. `GLCD.SVC` holds the
-graphics LCD's console and makes the graphics LCD the console unless `PICO.SVC`
-is in.
+hardware is a driver. `GLCD.SVC` holds the graphics LCD's console and makes the
+graphics LCD the console unless the PICO9918 has it.
 
-This board has neither display nor a matrix keyboard, so both installations
-fail and the CCP prints the name of each failed command with a question mark:
-`PICO.SVC?` and `GLCD.SVC?`. The console stays on the serial terminal. The
-startup file is read only once, after cold boot, and a program's exit doesn't
-run it again.
+This board has no graphics LCD, so the installation fails. A command that fails
+is printed back with a question mark, but a line from `STARTUP.CMD` whose driver
+finds no device fails quietly, so the line is followed only by the blank line
+before the next prompt. The console stays on the serial terminal. The startup
+file is read only once, after cold boot, and a program's exit doesn't run it
+again.
 
 ## The first boot with a PICO9918
 
 The web page's board has a PICO9918, the graphics LCD and the matrix keyboard,
-and there the boot goes differently. Its serial terminal shows this:
-
-<!-- node tools/capture.mjs --board pico --serial -->
-```text
-TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
-B: WORK       
-
-A>PICO.SVC
-
-```
-
-When `PICO.SVC` installs, the PICO9918 becomes the console, and from then on
-TEC-OS writes nothing more to the serial terminal and reads the matrix keyboard
-in place of the serial port. The BIOS clears the screen when `PICO.SVC` takes
-the console, so the PICO9918 shows only what followed:
+and there the boot goes differently. The PICO9918's console is in the ROM, and
+cold boot starts it before the banner, so the PICO9918 shows the whole boot:
 
 <!-- node tools/capture.mjs --board pico --screen -->
 ```text
 
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+
 A>GLCD.SVC
-GLCD.SVC?
 
 A>
 ```
 
-`GLCD.SVC` fails here because the PICO9918 is already the console. The
-graphics LCD's driver installs only while the console is the serial terminal,
-or for the command `CON UC1`, which moves the console to the graphics LCD.
-Chapter 5 gives the rules for display drivers. The web page's own card has no
-`GLCD.SVC` line, because the page leaves only the chosen display's line in its
-startup file, and so the page's screen shows the prompt alone after the boot.
+From the banner on, TEC-OS writes to the PICO9918 and reads the matrix
+keyboard in place of the serial port, and the serial terminal shows nothing at
+all. A board with a PICO9918 and the matrix keyboard therefore needs no serial
+terminal attached.
 
-A display driver takes 1,536 bytes of memory below the BDOS, which leaves less
-for programs. CP/M calls the memory a program may use the TPA, the Transient
-Program Area. It starts at `0100h` and ends below the address in the word at
-`0006h`, which is the BDOS's entry or, with a service installed, the lowest
-service's jump to it. On the starter card with no service the word is `B9F3h`,
-and programs have 47,347 bytes. With `PICO.SVC` installed it is `B300h`, and
-programs have 45,568: the driver's pages end at `B8FFh`, so the 243 bytes from
-`B900h` to `B9F2h` go too. Chapter 7 explains a program's memory.
+`GLCD.SVC` installs here, and stays in memory, but leaves the console on the
+PICO9918, as it does whenever the PICO9918 is the console. The command
+`CON UC1` then moves the console to the graphics LCD. Chapter 5 gives the rules
+for display drivers. The web page's own card has no `GLCD.SVC` line with the
+PICO9918 chosen, because the page leaves only the chosen display's line in its
+startup file, and so the page's screen shows the banner, the volumes and the
+prompt and nothing else.
 
-A board with a PICO9918 and the matrix keyboard has a dark screen if no display
-driver was installed by the time of the first prompt, and the 20 × 4 LCD's last
-row then shows `PICO?`. That board may have no serial terminal attached.
+A display driver takes memory below the BDOS, which leaves less for programs.
+CP/M calls the memory a program may use the TPA, the Transient Program Area. It
+starts at `0100h` and ends below the address in the word at `0006h`, which is
+the BDOS's entry or, with a service installed, the lowest service's jump to it.
+On the starter card with no service the word is `B9A4h`, and programs have
+47,268 bytes. With `GLCD.SVC` installed it is `B600h`, and programs have
+46,336: the driver's three pages end at `B8FFh`, so the 164 bytes from `B900h`
+to `B9A3h` go too. The PICO9918's console loads nothing below the BDOS. Its
+state, 95 bytes, is part of TEC-OS's workspace on every board, so the figure is
+the same with the PICO9918 as without it. Chapter 7 explains a program's memory.
 
 ## The starter card
 
@@ -369,21 +360,19 @@ row then shows `PICO?`. That board may have no serial terminal attached.
 <!-- node tools/capture.mjs DIR -->
 ```text
 A>DIR
-MOUNT.COM    PICO.SVC     GLCD.SVC     STARTUP.CMD  TED.COM      SAMPLE.ASM
-TAS.COM     
-7 files, 978K free
+MOUNT.COM    GLCD.SVC     STARTUP.CMD  TED.COM      SAMPLE.ASM   TAS.COM
+6 files, 980K free
 A>
 ```
 
 A file name has up to eight characters, a full stop and a type of up to three.
 A file of type `.COM` is a program, and its name without the type is the
 command that runs it. The last line of the listing is the number of files and
-the space left on the drive. The starter card's seven files are these:
+the space left on the drive. The starter card's six files are these:
 
-- `STARTUP.CMD` holds the commands the first boot ran.
-- `PICO.SVC` and `GLCD.SVC` are the display drivers. The starter card's
-  `PICO.SVC` draws 80 columns, and Chapter 5 describes a card made for 40 or
-  32.
+- `STARTUP.CMD` holds the command the first boot ran.
+- `GLCD.SVC` is the graphics LCD's driver. The PICO9918 needs no file, and
+  Chapter 2 describes its widths of 80, 40 and 32 columns.
 - `MOUNT.COM` lists the card's volumes and puts a volume on a drive, as
   Chapter 4 describes.
 - `TAS.COM` is an assembler and `TED.COM` an editor. Chapter 6 describes
@@ -465,7 +454,7 @@ B: WORK
 ```
 
 `TAS` also writes `SAMPLE.DBG`, a debug file, beside `SAMPLE.COM`, so drive A
-then holds nine files. Chapter 6 explains how a program such as this one is
+then holds eight files. Chapter 6 explains how a program such as this one is
 written.
 
 A command that is neither built into the CCP nor the name of a program file on
@@ -484,20 +473,20 @@ A>
 <!-- node tools/capture.mjs CON -->
 ```text
 A>CON
-CON: TTY: serial terminal
+CON: TTY:
 A>
 ```
 
 `TTY:` is the serial terminal. With the PICO9918 as the console the reply is
-`CON: CRT: PICO9918`, and with the graphics LCD it is `CON: UC1: GLCD`.
+`CON: CRT:`, and with the graphics LCD it is `CON: UC1:`.
 Chapter 2 explains the console devices and moving the console from one to
 another.
 
 ## Reset and power
 
-Pressing reset runs cold boot again, so the banner, the volumes and the startup
-file's lines appear, the console starts on the serial terminal and the prompt is
-on drive A in user area 0. One thing survives a reset pressed after TEC-OS has
+Pressing reset runs cold boot again, so the console starts as it did at
+power-on, the banner, the volumes and the startup file's lines appear and the
+prompt is on drive A in user area 0. One thing survives a reset pressed after TEC-OS has
 reached a prompt: the selection of volumes on the drives. A volume put on a
 drive while TEC-OS ran is on that drive again after the reset, as long as the
 card still has it. Everything else TEC-OS holds in memory, the cache included,
@@ -513,8 +502,9 @@ at the prompt, and press reset after putting a changed card back.
 ## A card that won't mount
 
 When the card doesn't answer, or its contents don't pass the checks, cold boot
-stops after the banner and prints the diagnostic prompt. Here the socket is
-empty:
+stops after the banner and prints the diagnostic prompt on the console, which
+is the PICO9918's screen on a board with the PICO9918 and the matrix keyboard.
+Here the socket is empty:
 
 <!-- node tools/capture.mjs --card none --lcd -->
 ```text
