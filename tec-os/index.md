@@ -55,7 +55,7 @@ reply:
 
 ```text
 A>CON
-CON: TTY: serial terminal
+CON: TTY:
 A>
 ```
 
@@ -74,8 +74,8 @@ caret, so `^C` means Ctrl and C together.
    diagnostic prompt for a card that won't mount.
 2. **[The console](02-console.md).** The four console devices, `TTY:`, `CRT:`,
    `BAT:` and `UC1:`, and the `CON` command that moves the console between
-   them. The chapter then describes the serial terminal, a display driver
-   taking the console, the matrix keyboard, the keys that edit a line and
+   them. The chapter then describes the serial terminal, a display taking the
+   console, the matrix keyboard, the keys that edit a line and
    `[more]` in long listings.
 3. **[The command line](03-command-line.md).** File names, wildcards and each
    command built into the CCP. The chapter also covers running a `.COM` file,
@@ -89,8 +89,7 @@ caret, so `^C` means Ctrl and C together.
 5. **[Startup and services](05-startup-and-services.md).** The services TEC-OS
    loads, and the startup file that installs them. The chapter covers the
    file's rules, the display lines and the PICO9918's three widths, and the
-   keypad skip. It also covers the words `PICO?`, `GLCD?` and `CARD?` on the
-   LCD, and the commands that install, list and remove a service.
+   keypad skip. It also covers the words `GLCD?` and `CARD?` on the LCD, and the commands that install, list and remove a service.
 6. **[A first program](06-first-program.md).** Two programs that call the
    BDOS: one prints a line, and the other prints the file named on its command
    line. You assemble the first on a PC, copy it to a card and run it, then
@@ -139,12 +138,14 @@ caret, so `^C` means Ctrl and C together.
 15. **[The BIOS and the console path](15-bios-and-console.md).** The RAM BIOS
     table at `BF00h`, the console by IOBYTE, and the list, punch and reader
     entries. The chapter also covers the bit-banged serial port, the matrix
-    keyboard scan, the terminal's escape parser, the display drivers with
-    their service, number 12, and the 20 × 4 LCD.
+    keyboard scan, the terminal's escape parser, the PICO9918's console in the
+    ROM, the graphics LCD's driver with its service, number 12, and the 20 × 4
+    LCD.
 16. **[The BDOS](16-bdos.md).** The entry, the function table and the console
     functions, then files, extents and records, and the allocation vectors
     with the scan at warm boot. The chapter ends with BDOS errors, functions
-    108, 47, 45 and 48 and the differences from Digital Research's BDOS.
+    108, 47, 44 to 46, 48 and 99 and the differences from Digital Research's
+    BDOS.
 17. **[The CCP](17-ccp.md).** The entry from boot, the prompt, and the parsing
     of the command word and file names. The chapter then covers the built-in
     commands, `LOADCOM`, `PREPPAGE` and the jump to `0100h`, and the CCP's RAM
@@ -164,9 +165,9 @@ caret, so `^C` means Ctrl and C together.
     hardware services. The chapter then covers a service's entry, the
     relocation of its addresses and the seven steps of its load, and it ends
     with the registry, removal and the stack figures.
-21. **[Startup](21-startup.md).** `STBOOT`, `STLINE` and `STDONE`, with the
+21. **[Startup](21-startup.md).** `STBOOT` and `STLINE`, with the
     one byte of state and the 128-byte record behind them. The chapter then
-    follows a display line and covers the flag bit behind the LCD's words and
+    follows a display line and covers the flag bit behind the LCD's word and
     the web page's rewrite of the file.
 22. **[Command history](22-command-history.md).** The 256-byte ring at `BD00h`
     in EXPAND 1, storing a line, `^W` and `^N` inside BDOS function 10, and
@@ -189,11 +190,11 @@ caret, so `^C` means Ctrl and C together.
 ### Appendices
 
 - **[A. BDOS functions](appendix-a-bdos-functions.md).** Each function from 0
-  to 40, with 45, 47, 48 and 108: its registers, its result and any difference from
+  to 40, with 44 to 48, 99 and 108: its registers, its result and any difference from
   CP/M 2.2.
 - **[B. The ROM table and hardware services](appendix-b-rom-services.md).**
   The ROM table at `C003h`, then the numbered services behind its jump, 0 to
-  14, with their registers and status codes.
+  15, with their registers and status codes.
 - **[C. Memory map](appendix-c-memory-map.md).** The CPU's address space, the
   ROM, page zero, the resident workspace, EXPAND 1 and the stacks, with the
   figures taken from the build.
@@ -212,4 +213,4 @@ caret, so `^C` means Ctrl and C together.
   the DS1302 clock and the SD card adaptor.
 - **[H. The service file format](appendix-h-service-file-format.md).** The
   `.SVC` file's header with the loader's check of each field, its dependencies
-  and its relocation data, with the starter card's `PICO.SVC` as an example.
+  and its relocation data, with the starter card's `GLCD.SVC` as an example.
