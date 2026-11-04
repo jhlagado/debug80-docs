@@ -109,7 +109,7 @@ B9A4h
 A>
 ```
 
-On the web page's board the PICO9918's console is in the ROM and takes no
+With the starter card on a board with both displays, the PICO9918's console is in the ROM and takes no
 memory below the word. The startup file's `GLCD.SVC` loads and leaves the
 console on the PICO9918, so the word falls once, and `CON UC1` then makes the
 graphics LCD the console with nothing more to load. `B:TOP`, its reply and the
