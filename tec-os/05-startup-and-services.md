@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS 621201d.
+Checked against TEC-OS 78127ec.
 
 Chapter 1's first boot ran a command that nobody typed, `GLCD.SVC`, which on a
 board with only a serial terminal failed without a word. This chapter explains
@@ -370,9 +370,10 @@ on the next, so that piece runs as an ordinary command. So does a piece with
 The page reads only the files of user area 0 on drive A, the area from which
 TEC-OS loads `STARTUP.CMD` and `GLCD.SVC`. It makes its change on a copy of the
 card, and the copy replaces the card only once the change is made. A card whose
-drive A is read-only, or whose directory has no room for a new `STARTUP.CMD`,
-is left as it was, and the page says in the serial terminal that it boots as it
-is. With the graphics LCD chosen, a card with no `GLCD.SVC` on drive A, or one
+drive A is read-only, whose `STARTUP.CMD` has its read-only attribute set, or
+whose directory has no room for a new `STARTUP.CMD` is left as it was when the
+file needs a change, and the page says in the serial terminal that it boots as
+it is. With the graphics LCD chosen, a card with no `GLCD.SVC` on drive A, or one
 of an older format, is left as it is too, and the page says so.
 
 ## The keypad skip
