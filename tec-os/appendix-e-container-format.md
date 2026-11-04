@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix E. The container format
 
-Checked against TEC-OS 626ee41, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
 
@@ -64,8 +64,8 @@ The header's fields (`format/format.json`, `header`):
 
 The checksum is the 16-bit sum of all 512 bytes of block 0 except the two
 bytes of the checksum itself (`tools/lib/container.mjs:51-59`). The ROM sums
-all 512 and then takes the two checksum bytes back out
-(`src/vol.asm:737-767`). The sum covers the descriptors in block 0 as well as
+all 512, 32 at a time from the block's cache line, and then takes the two
+checksum bytes back out (`src/vol.asm:300-319`, `src/vol.asm:737-767`). The sum covers the descriptors in block 0 as well as
 the header's fields, so a change to any byte of block 0 needs a new checksum.
 
 A card's minor version sets three things. A 1.0 card has no drives field and
@@ -185,7 +185,7 @@ tecvol: volume 1: not after volume 0
 ```text
 TEC-OS 0.1 for TEC-1G
 No volume mounted, error 28
-R retry, H header> 
+R retry> 
 ```
 
 `tecvol create` and the starter card's recipe always place the volumes in
