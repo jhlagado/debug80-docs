@@ -28,7 +28,7 @@ The new chapter 1 has no `CON` run, no serial timing, no `GLCD.SVC` memory figur
 
 Outside this batch, the same fault is in 23-diagnostics.md:18 ("Chapter 1 shows the prompt from the user's side") and 25-host-model.md:333 ("Chapter 1 lists the page's controls").
 
-Every link (`](file.md#anchor)`) in this batch lands on a heading that exists. That includes 05:384-385 to `appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi`, and the only links into chapter 1 left in the book (appendix D:236-237, `#turning-it-on`).
+Every link to a file and an anchor in this batch lands on a heading that exists. That includes 05:384-385 to `appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi`, and the only links into chapter 1 left in the book (appendix D:236-237, `#turning-it-on`).
 
 ### Chapter 1's facts at 78127ec
 
