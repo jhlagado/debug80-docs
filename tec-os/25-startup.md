@@ -76,7 +76,8 @@ of `STFCB`, a drive byte of 1 and the name `STARTUP CMD`, to `CMDFCB`
 workspace has left the rest of `CMDFCB` zero. Drive byte 1 is drive A
 whichever drive is current. `RESEL` has already put back a recognised reset's
 selection (`src/boot.asm:72`), so the file comes from the volume on drive A at
-that moment. Three BDOS calls follow (`src/cpm/ccpcmd.asm:569-579`). The
+that moment, as [Chapter 6](06-startup-file.md)'s `SPARE` example shows. Three
+BDOS calls follow (`src/cpm/ccpcmd.asm:569-579`). The
 second and third go through `DOSSEQ`, which takes the function's number from
 the byte after its `CALL` and points `DE` at `CMDFCB`
 (`src/cpm/ccpfile.asm:655-664`):
@@ -200,17 +201,15 @@ before ABI 5.1 (`drivers/glcd.asm:38-41`). It then calls `GLCWAIT`, and a
 controller that doesn't answer returns `TNENODV` with carry
 (`drivers/glcd.asm:42-45`). Last, it passes its table to service 12, `DRVR`,
 with the console mode in `B`, 3 for `UC1:` (`drivers/glcd.asm:46-50`). `SVDRV`
-rejects any other mode with `TNEBAD` and carry, nothing changed. That is what
-becomes of an older card's `PICO.SVC`: it passes a table for `CRT:`, whose
-table is the ROM's own, and its name is printed from the file
-(`test/ks39.test.mjs:124-135`). A line from
-the file while the console field is `CRT:`, the PICO9918's console, has its
-table rejected with `TNENODV`, as for an absent device
-(`src/services.asm:362-380`). Otherwise `VIDHOOK` returns carry if `CDMTX` is
-clear or `UC1:`'s slot already holds a table, and `SVDRV` then returns
-`TNEBAD` (`src/services.asm:381-386`, `src/video.asm:86-95`). The driver
-therefore needs the matrix keyboard, and a second `GLCD.SVC` fails while the
-first is in.
+rejects the table in two cases that concern the file. In a line from the file
+while the console field is `CRT:`, the PICO9918's console, the status is
+`TNENODV`, as for an absent device (`src/services.asm:368-380`). With no matrix
+keyboard, or with `UC1:`'s slot already holding a table, it is `TNEBAD`
+(`src/services.asm:381-386`, `src/video.asm:86-95`). The driver therefore
+needs the matrix keyboard, and a second `GLCD.SVC` fails while the first is in.
+[Chapter 16](16-bios-and-console.md#the-displays-and-the-claim) describes
+`SVDRV`'s other rejections, among them the `TNEBAD` that an older card's
+`PICO.SVC` gets for a table it passes for `CRT:` (`test/ks39.test.mjs:124-135`).
 
 After a good load `SVCGO` compares `SVCHEAD`, the new service's page, with the
 page of the table in `GLVEC` (`src/loader.asm:538-541`). No match is some

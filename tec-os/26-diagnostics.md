@@ -110,8 +110,8 @@ The build checks the image before writing it (`tools/diag.mjs:104-112`). The
 reset entry must be at `C000h` and the interrupt entries at `C038h` and
 `C066h`. Cold boot and the first RAM check must lie in the first 2 KiB, which
 is all the board shows at `0000h` after a reset. The code must end below the
-image ID, the variables below the stack's page, and the NMI handler must fit
-below `0038h`.
+image ID and the variables below the stack's page. The NMI handler the ROM
+copies to `0066h` must be at most `38h` bytes, so that it fits in page zero.
 
 The ROM starts as TEC-OS does. At reset the board's boot overlay shows the
 first 2 KiB of the ROM at `0000h`. The code there jumps to `COLD` at its

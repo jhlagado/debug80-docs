@@ -88,15 +88,8 @@ mounted on the current drive is read at once, because TEC-OS selects the drive
 again as the mount ends.
 
 A drive with no volume can't be selected. On the starter card, where drive C
-has none, `C:` gives a BDOS error. A key then returns to the prompt on drive
-A:
-
-<!-- node tools/capture.mjs "@start C:" "@key x" -->
-```text
-A>C:
-Bdos Err On C: Select
-A>
-```
+has none, `C:` gives the BDOS error that
+[Chapter 3](03-command-line.md#drives-and-user-areas) showed.
 
 Which drives can take a volume depends on the card. A drive that cold boot
 sets up costs memory, because the BDOS keeps an allocation vector for it. The
@@ -211,10 +204,10 @@ the close failed with `Bad Sector`. The warm boot after the key tried the
 block again, dropped it and printed `Write lost`. `X.COM` is on the card with
 no records.
 
-A card that comes out of the board gets nothing more from the cache, even if
-the same card goes back. Only cold boot starts a card. The first warm boot
-after the card comes out prints `Write lost` and drops the changed blocks. A
-reset discards anything written behind after that.
+A card that comes out of the board gets no more writes from the cache, even
+when the same card goes back in. Only cold boot starts a card. So the first
+warm boot after the card came out prints `Write lost` and drops the changed
+blocks, and a reset discards anything written behind after that.
 
 ## The drives after a reset
 
@@ -287,9 +280,8 @@ a reset then leaves the file in one of these ways:
   entries, and any of them can be damaged.
 
 To recover a card after a cut, copy it to the PC first and work on the copy.
-`dd` copies the starter card's 20,480 blocks from the card's device. On a Mac
-the device is a name such as `/dev/rdiskN`, and on Linux one such as
-`/dev/sdb`:
+`dd` copies the starter card's 20,480 blocks from the card's device, named as
+in [Chapter 4](04-cards-and-volumes.md#putting-an-image-on-a-card):
 
 ```sh
 dd if=/dev/rdiskN of=card.img bs=512 count=20480

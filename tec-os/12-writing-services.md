@@ -13,9 +13,8 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 Every program written so far has been a `.COM` file, which runs at `0100h`
 and is gone when it ends. A `.SVC` file stays in memory after its command
-ends. Here you write a service that counts the console's characters. You
-install it, measure what it costs and publish the count for a program to
-find.
+ends. Here you write a service that counts the console's characters, install
+it, measure what it costs and publish the count for a program to find.
 [Chapter 24](24-service-loader.md) describes the loader, and
 [Appendix H](appendix-h-service-file-format.md) the file's format.
 
@@ -32,23 +31,22 @@ card's one service, `GLCD.SVC`, is a driver. The example here is both.
 
 The pages come from the TPA. Installing a service lowers the word at
 `0006h`, the top of a program's memory, as [Chapter 8](08-memory.md)
-describes. The pages that loaded services hold, from the lowest service up
-to the BDOS entry jump's page, are the *service resident memory*. The
-hardware services of [Chapter 10](10-hardware-services.md) are another
-thing. They are numbered calls inside the ROM, which take no pages and which
-`SERVICES` doesn't list. A loaded service reaches programs by publishing
-named *records* in TEC-OS's registry. The two numbered services Chapter 10
-left to this chapter read the registry.
+describes. The hardware services of [Chapter 10](10-hardware-services.md)
+are another thing: numbered calls inside the ROM, which take no pages and
+which `SERVICES` doesn't list. A loaded service reaches programs by
+publishing named *records* in TEC-OS's registry. The two numbered services
+Chapter 10 left to this chapter read the registry.
 
 A service reaches the programs that run after it through the BIOS jump
 table. The table is in RAM at `BF00h`, and the word at `0001h` holds the
 address of its `WBOOT` entry. Each entry is a 3-byte `JP`. Warm boot leaves
 the table as it is, so a changed entry lasts through every warm boot. The
 BDOS reaches the console and the disk through those entries. A replaced
-entry therefore receives the console output of a program and of the CCP.
-`PUTAT` and the ROM's own messages go straight to the ROM's routines and
-miss the entry. A *hook* on an entry is a routine that does its own work and
-then jumps to the address the entry held.
+entry therefore receives the console output of a program and of the CCP. `PUTAT` and
+the ROM's own messages go straight to the ROM's routines and miss the entry.
+A *hook* on an entry is a routine that does its own work and then jumps to
+the address the entry held. [Chapter 16](16-bios-and-console.md) lists the
+table's entries.
 
 ## COUNT.SVC
 
@@ -128,7 +126,7 @@ tool finds `INIT` and `REMOVE` by those label names. Every service has both,
 even one that `UNLOAD` can't remove. The flags byte's bit 0 lets `UNLOAD`
 remove the service, and bits 1 to 7 claim restart vectors, as a later
 section explains. The format byte is `SVCFMT`, which `abi.inc` defines as 4
-at this commit. The loader rejects a file of any other format. A service
+at this commit, and the loader rejects a file of any other format. A service
 that needs a buffer past its image gives the size as its extra memory, and
 the loader sets aside that many bytes, not cleared. The name, 8 bytes padded
 with spaces, is what `SERVICES` prints.
@@ -159,7 +157,9 @@ adjusted the addresses in the image. `CONSLOT` finds `CONOUT`'s entry from
 the word at `0001h`. After the `WBOOT` entry come `CONST`, `CONIN` and
 `CONOUT`, so `CONOUT`'s `JP` is at the word's value plus 9. The `+ 1` steps
 past the `JP`'s opcode to the two bytes of its target. `INIT` saves those
-two bytes in `OLDCO` and writes the address of `MYCO` over them.
+two bytes in `OLDCO` and writes the address of `MYCO` over them, as its last
+act before it returns. The order is deliberate, and a later section says
+why.
 
 A return with carry clear means that the service is ready, and `HL` gives
 its record, which a later section describes. A service that publishes no
@@ -168,16 +168,17 @@ record returns `HL` = 0.
 ### The hook
 
 `MYCO` runs inside every call of the `CONOUT` entry. `CONOUT` takes its
-character in `C`. `MYCO` puts back the one register it uses, so the entry it
-replaced runs with the registers it would have had. `MYCO`'s last
+character in `C`. `MYCO` puts back the one register it uses, so the entry
+it replaced runs with the registers it would have had. `MYCO`'s last
 instruction is a `JP` written as data, whose target is the two bytes `INIT`
 filled in at `OLDCO`. The old `CONOUT` therefore returns straight to the
 caller.
 
 ### REMOVE
 
-`REMOVE` undoes `INIT`, and `UNLOAD` calls it. A return with carry clear
-lets the removal go ahead, and carry set stops it with nothing changed.
+`REMOVE` undoes `INIT`, and `UNLOAD` calls it. It writes the two bytes
+saved in `OLDCO` back over `CONOUT`'s target. A return with carry clear lets
+the removal go ahead, and carry set stops it with nothing changed.
 
 ## Assembling, installing and measuring
 
@@ -190,7 +191,7 @@ of any `COUNT.SVC` already on the drive.
 These commands put `count.asm` on a copy of the starter card, with
 `abi.inc` and `HWLIB.ASM` from Chapter 10 and `area.asm`, the `AREA`
 program of Chapter 8. `chars.asm` reads the count that `COUNT.SVC`
-publishes, and it is listed under "Publishing a record":
+publishes. It is listed under "Publishing a record":
 
 ```sh
 cp dist/starter.img svc.img
@@ -251,8 +252,8 @@ B>
 
 The file is 100 bytes of header and image and 11 of relocation data. It
 takes a whole page, so `SERVICES` shows 1 page. The TPA falls by 420 bytes,
-and `UNLOAD` gives them back. The page is 256 of them. The other 164 are the
-bytes from `B900h` to `B9A3h`, between the first service's page and the
+and `UNLOAD` gives them back. The page is 256 of them. The other 164 are
+the bytes from `B900h` to `B9A3h`, between the first service's page and the
 BDOS entry jump, which Chapter 8 shows go with the first service. The count
 rose by `18h`, 24, between the two `CHARS` commands. Those are the
 characters the console printed in between, counted because the hook stayed
@@ -274,15 +275,34 @@ writeFileSync("COUNT.SVC", file);
 node tools/tecvol.mjs put svc.img B COUNT.SVC
 ```
 
-## The rules for INIT and REMOVE
+## Beyond the loader's checks
 
 The loader checks the file, the dependencies, the stacks and the records,
-and it moves the image. What `INIT` and `REMOVE` do is beyond its reach. The
-rules here are what the loader can't put right.
+and it moves the image. `INIT` and `REMOVE` are the service's own code, and
+what they do to the rest of memory is beyond its reach. `COUNT` shows what
+that leaves to the programmer.
+
+### The hook as INIT's last act
+
+Suppose `COUNT`'s `INIT` wrote the hook first and then did something that
+failed, or that a warm boot interrupted it. A call of BDOS function 47 from
+`INIT` is such a warm boot, as [Chapter 11](11-return-codes-and-chaining.md)
+says of every call. Its line runs and the load rolls back. Either way the
+loader gives the pages back with no call to the service. `CONOUT`'s entry
+would still point at `MYCO`, now in free memory, and the next character
+printed would run whatever the next program had loaded there. So `INIT`
+does everything that can fail first and writes its hook as its last act.
+
+The loader has one defence of its own here. After a failed `INIT` it reads
+the 17 entries of the BIOS jump table for one that points into the
+service's pages. If it finds one it keeps the pages, marks the service as
+not removable and publishes no record. The scan covers the jump table
+alone. A vector anywhere else, such as a display driver's table handed to
+the ROM through service 12, is the service's own to undo.
 
 ### A failed INIT
 
-`INIT` returns carry set only after undoing everything it did, and the load
+An `INIT` that returns carry set has undone everything it did, and the load
 then fails with the name and a question mark. `FAIL.SVC` does nothing but
 that. The run below leaves out the lines that assemble it and `AREA`:
 
@@ -319,50 +339,41 @@ B>AREA
 B>
 ```
 
-The pages went back, so `AREA` reports the TPA as it was. `GLCD.SVC` fails
-this way on a board without the graphics LCD or the matrix keyboard. An
-`INIT` that returns status 2 in `A` with the carry reports its device
-absent. In a line of `STARTUP.CMD` that failure prints nothing and counts as
-a success for a `:` after it, as Chapter 6 explains. `GLCD.SVC` returns
-status 2 when no graphics LCD answers.
+The pages went back, so `AREA` reports the TPA as it was. A failed `INIT`
+runs no `REMOVE`, so an `INIT` that has started a source of interrupts turns
+it off before it returns the carry.
 
-After a failed `INIT` the loader reads the 17 entries of the BIOS jump
-table for one that points into the service. If it finds one it keeps the
-pages, marks them as not removable and publishes no record. The scan covers
-the BIOS jump table alone. A vector anywhere else, such as a display
-driver's table handed to the ROM through service 12, is the service's own
-to undo. A failed `INIT` runs no `REMOVE`, so `INIT` also turns off any
-source of interrupts it started.
+`GLCD.SVC` fails this way on a board without the graphics LCD or the matrix
+keyboard, and its `INIT` says why in `A`. When no graphics LCD answers it
+returns status 2 with the carry, which Chapter 10 gives as the status of an
+absent device. In a line of `STARTUP.CMD` that one failure prints
+nothing and counts as a success for a `:` after it, as
+[Chapter 6](06-startup-file.md) explains. A driver of your own that finds
+its device missing returns the same status. The startup file then passes
+over its line on the boards without the device.
 
-A call of BDOS function 47 from `INIT` or `REMOVE` is a warm boot there, as
-[Chapter 11](11-return-codes-and-chaining.md) says of every call. Its line
-runs. From `INIT` the load rolls back, and from `REMOVE` the service stays
-listed. A warm boot during `INIT` takes the pages back with no call to the
-service, and a hook already made would then point into free memory. `INIT`
-therefore makes its hooks last, as `COUNT` does.
+### REMOVE and a hook on a hook
 
-### Hooks and REMOVE
-
-`REMOVE` restores hooks in the reverse order of `INIT`. Only the lowest
-service can go. When each `REMOVE` puts back what its `INIT` found, a hook
-on a hook therefore comes off in the right order. `UNLOAD` calls `REMOVE`
-from the CCP, so no program is running. `REMOVE` may also run after a good
-`INIT` whose records the loader rejected.
-
-While `INIT` or `REMOVE` runs, another load or removal is rejected. No
-command can reach that case. The test stops a service that calls the ROM's
-routines by their addresses. A service calls the ROM only through the ROM
-table at `C003h`, with `abi.inc`'s names, because the addresses behind it
-change from one build to the next. `makeSvc` rejects a source that writes a
-ROM address in hexadecimal, but `TAS` makes no such test. A service makes no
-test of the table's version, since a file of format 4 loads only on a ROM
-with this table.
+`REMOVE` puts back what `INIT` found. Suppose a second service, loaded after
+`COUNT`, hooked `CONOUT` too. Its `INIT` would find `MYCO`'s address in the
+entry and save it. Every character would then pass through the newer hook,
+then `MYCO`, then the ROM's routine. Only the lowest service can go, so the
+newer service goes first, and its `REMOVE` puts `MYCO`'s address back.
+`COUNT`'s `REMOVE` then puts the ROM's address back. Each `REMOVE`
+restores what its own `INIT` found, and a hook on a hook comes off in the
+right order. `UNLOAD` calls `REMOVE` from the CCP, so no program is running
+at the time. `REMOVE` may also run after a good `INIT` whose records the
+loader rejected, as described under "Publishing a record". A call of
+function 47 from `REMOVE` is a warm boot there too: its line runs and the
+service stays listed.
 
 ### Restart vectors
 
-A service can keep a handler in a restart vector. Flags bits 1 to 7 claim
-`RST 1` to `RST 7`, the vectors at `0008h` to `0038h`, and `INIT` writes the
-`JP` itself. A load whose claimed vector holds a `JP` fails with nothing
+`COUNT` keeps nothing in page zero. A service that handles an interrupt or
+an `RST` needs more: a `JP` in a restart vector that lasts through warm
+boots and goes when its pages go. Flags bits 1 to 7 claim `RST 1` to
+`RST 7`, the vectors at `0008h` to `0038h`, and `INIT` writes the `JP`
+itself. A load whose claimed vector already holds a `JP` fails with nothing
 changed. A jump into the ROM that a finished program left there counts until
 a reset. The loader reads only the flags, so a vector `INIT` writes without
 claiming it goes unseen.
@@ -371,15 +382,24 @@ A sweep of `0008h` to `003Fh` runs at cold boot, at every warm boot, after
 an unload and after a failed `INIT`. It keeps a `JP` whose target is above
 the top of the TPA. Anything else gets its default: seven zeros and a `RET`,
 or `EI` and `RETI` at `0038h`. A handler in the service's pages therefore
-stays through warm boots and goes with the service. `UNLOAD` also gives each
-claimed vector its default, whatever it holds. So does a failed `INIT` whose
-pages the loader frees. `REMOVE` restores any jump the service set in a
-vector it didn't claim and that leads outside its pages.
+stays through warm boots. It goes with the service, because `UNLOAD` and a
+failed `INIT` give each claimed vector its default before the sweep,
+whatever it holds. A jump the service set outside its pages, in a vector it
+didn't claim, passes the sweep, so `REMOVE` restores it. Nothing in the ROM
+turns interrupts on. Cold boot and warm boot leave them off, and a handler
+at `0038h` runs only once a program or a service sets `EI`.
 
-Nothing in the ROM turns interrupts on. Cold boot and warm boot leave them
-off, and each routine that masks them puts back the state it found. A
-handler at `0038h` therefore runs after a warm boot only once a program or a
-service sets `EI`.
+### The ROM's addresses
+
+A service calls the ROM only through the ROM table at `C003h`, with
+`abi.inc`'s names, as `CHARS` and `NEEDS` below do. The addresses behind the
+table change from one build to the next. A service that calls a ROM routine
+by its address runs on one ROM alone. `makeSvc` rejects a source that writes
+a ROM address in hexadecimal, but `TAS` makes no such test. The loader also
+rejects a load or removal while an `INIT` or `REMOVE` is still running. No
+command can reach that case, and only such a call could. A service makes no
+test of the table's version, since a file of format 4 loads only on a ROM
+with this table.
 
 ## Stacks
 
@@ -427,13 +447,13 @@ record is 13 bytes in the service's own memory:
 | 11 | 2 | Its entry table's address |
 
 `INIT` returns the address of its first record in `HL`, and the records are
-linked through their first words. `COUNT` has one, `REC`. The loader writes
-the link when it joins the list to the older records. The loader tests that
-each record and its table's address lie in the service's pages, but it can't
-test what is in a table. A find or a list walks 256 records at most. One
-service may therefore publish at most 255, and a service whose records would
-take the registry past 256 is rejected. A rejected service's `REMOVE` undoes
-its `INIT`, and the load fails with the name and a question mark.
+linked through their first words. `COUNT` has one, `REC`, and the loader
+writes its link when it joins the list to the older records. The loader
+tests that each record and its table's address lie in the service's pages,
+but it can't test what is in a table. A find or a list walks 256 records at
+most. One service may therefore publish at most 255, and a service whose
+records would take the registry past 256 is rejected. A rejected service's `REMOVE`
+undoes its `INIT`, and the load fails with the name and a question mark.
 
 The layout of an entry table is the service's own, and the record's name
 and version identify it. Version 1 of `COUNT`'s table is one `JP`, at offset

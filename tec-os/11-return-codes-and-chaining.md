@@ -29,10 +29,10 @@ is from `FF00h` to `FFFEh`, and any other value is a success. A call with
 sets the code to it. `FFFFh` itself can't be set, and it counts as a success.
 
 The CCP sets the code to 0 as it takes each piece, after testing a `:` and
-before it searches for the command. A program that reads the code when it
-starts therefore always finds 0. A built-in that succeeds leaves the code at
-0, and so does a program that never calls function 108. An ordinary CP/M 2.2
-program therefore always succeeds.
+before it searches for the command, so a program that reads the code when it
+starts always finds 0. A built-in that succeeds leaves the code at 0, and so
+does a program that never calls function 108. An ordinary CP/M 2.2 program
+therefore always succeeds. A reset leaves the code at 0 too.
 
 The CCP sets the code to `FF00h` when a command fails at the CCP. That covers
 a command that isn't found, a program that won't load and a service that
@@ -151,8 +151,8 @@ the call doesn't return. TEC-OS copies the line and ends the program with a
 warm boot. The CCP then runs the line next, in place of whatever was left of
 the line the program came from. The warm boot writes the cache's changes to
 the card first, so what the program wrote is on the card before the chained
-command runs. `TED`'s `^T` keys end this way. That is how `^T B` saves the
-file and then runs `TAS` on it.
+command runs. `TED`'s `^T` keys end this way: `^T B` saves the file and then
+chains `TAS` on it.
 
 `RUN` ends by running the rest of its own command line as a command:
 
@@ -209,12 +209,12 @@ does, with its name and a question mark. `RUN` alone chains an empty line.
 That ends the program, runs nothing, and the prompt comes back.
 
 The line may be up to 127 characters. It may hold `!` and `:`, which the CCP
-treats as in a typed line, and a `:` at its start tests the code the program
-set before the call. The line is copied as soon as the function is called.
-It may therefore be anywhere in memory, even where the next program loads.
-CP/M 3's function 47 also takes register `E`, which TEC-OS ignores. The
-chained command runs on the drive and in the user area held in the byte at
-`0004h`, as any command after a program's end does.
+treats as in a typed line. A `:` at its start tests the code the program set
+before the call. The line is copied as soon as the function is called, so it
+may be anywhere in memory, even where the next program loads. CP/M 3's
+function 47 also takes register `E`, which TEC-OS ignores. The chained
+command runs on the drive and in the user area held in the byte at `0004h`,
+as any command after a program's end does.
 
 Function 47 rejects a line with no 0 in its first 128 bytes, or with a
 carriage return or a line feed before the 0. It then returns with `A = FFh`,

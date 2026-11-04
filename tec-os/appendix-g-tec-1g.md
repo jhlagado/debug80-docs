@@ -55,16 +55,16 @@ program claims it.
 Port `01h` carries three things at once: the digit select in bits 0 to 5, the
 serial line's output in bit 6 and the speaker in bit 7 (`src/layout.asm:10`).
 Every write to it has to keep bit 6 high when the serial line is idle, or the
-terminal receives a start bit. The ROM's own writes do: the hardware service
+terminal receives a start bit. The ROM's own writes do. The hardware service
 `DIGIT` lights each digit with bit 6 set, and `TONE` toggles bit 7 with bit 6
 set (`src/services.asm:17`, `src/services.asm:65-81`,
 `src/services.asm:166-187`). That shared port is why programs reach the digits
 and the speaker through the hardware services of Chapter 10 and not by writing
 the port.
 
-The serial line is bit-banged: TEC-OS sends each bit by writing bit 6 of port
-`01h` and receives by sampling bit 7 of port `03h`, at 4800 baud, 8 data bits,
-no parity and 2 stop bits (`src/console.asm:222-234`). The bit times are
+The serial line is bit-banged. TEC-OS sends each bit by writing bit 6 of port
+`01h` and receives by sampling bit 7 of port `03h`. The line runs at 4800
+baud, 8 data bits, no parity and 2 stop bits (`src/console.asm:222-234`). The bit times are
 counted for a 4 MHz clock (`tools/build.mjs:26`, `tools/build.mjs:37-55`), so
 the board's CPU clock switch has to be on FAST with the 4 MHz oscillator.
 There is no receive buffer in hardware: a byte reaches TEC-OS only while it is
@@ -89,8 +89,8 @@ switches are not read.
 
 ## The system latch
 
-The system latch at port `FFh` can be written but, on the board's documents,
-not read, so TEC-OS keeps a copy of the last value written at `0040h`,
+On the board's documents the system latch at port `FFh` can be written but
+not read. TEC-OS therefore keeps a copy of the last value written at `0040h`,
 `LATCHV`, and builds each new value from the copy (`src/layout.asm:14`,
 `src/layout.asm:39`). Its bits:
 
@@ -104,8 +104,8 @@ not read, so TEC-OS keeps a copy of the last value written at `0040h`,
 
 At reset the latch is `00h`, and with bit 0 low the first 2 KiB of the ROM
 also appear at `0000h–07FFh`. That is how the Z80, which starts at `0000h`,
-reaches the ROM. The jump there leads to `RSTENT` at its `C000h` address,
-which at reset continues to `COLD`, and `COLD` writes `01h` to the latch
+reaches the ROM. The jump there leads to `RSTENT` at its `C000h` address.
+At reset `RSTENT` continues to `COLD`, which writes `01h` to the latch
 (`src/reset.asm:1-6`, `src/boot.asm:11-26`). A program that writes the latch
 itself has to write `0040h` to match, since TEC-OS's next write to the latch
 is made from the copy.
@@ -138,8 +138,8 @@ skip.
 With the board's keypad NMI jumper fitted, a key press makes a non-maskable
 interrupt, and the Z80 pushes its return address and jumps to `0066h`. TEC-OS
 puts no handler there. `0066h` is inside CP/M's default file control block,
-`005Ch–007Fh`, which programs and the CCP write, so an NMI runs whatever bytes
-the FCB holds. `docs/board-run.md` lists TEC-OS as running with the jumper
+`005Ch–007Fh`, which programs and the CCP write. An NMI therefore runs
+whatever bytes the FCB holds. `docs/board-run.md` lists TEC-OS as running with the jumper
 off. A press with the jumper fitted is a crash.
 
 ## The 20 × 4 LCD
@@ -156,10 +156,10 @@ boot (`src/lcd.asm:8-16`, `src/tables.asm:38`):
 | `01h` | The display cleared |
 
 Before each command or character `LCDWAIT` reads the busy flag, bit 7 of port
-`04h`, at most 256 times, so a board with no LCD costs only that wait and no
+`04h`, at most 256 times. A board with no LCD costs only that wait and no
 hang (`src/lcd.asm:18-27`). The rows start at display addresses `80h`, `C0h`,
 `94h` and `D4h` (`src/tables.asm:40-41`). Cold boot writes the banner on row 0
-and drives A and B on rows 1 and 2, and row 3 holds the words `CARD?` and
+and drives A and B on rows 1 and 2. Row 3 holds the words `CARD?` and
 `GLCD?` that Appendix D lists. The hardware service `LCD` writes a row for
 a program, and Appendix B gives its cost.
 
@@ -167,12 +167,12 @@ a program, and Appendix B gives its cost.
 
 No hardware service drives the 8 × 8 LEDs, and the ROM never writes their
 ports. `DEMO`, the program Chapter 10 builds, writes them itself as the
-Debug80 runtime decodes them: port `05h` selects a row, and ports `06h`,
+Debug80 runtime decodes them. Port `05h` selects a row, and ports `06h`,
 `F8h` and `F9h` light its red, green and blue columns
 (`test/programs/demo.asm:14-17`, `test/programs/demo.asm:273-286`). `DEMO`
 isn't on the starter card. The TEC-1G port list makes `05h` and `06h` the X
-and Y axes of a single-colour matrix, so `DEMO`'s pattern may look different
-on a board. Test T24 of the diagnostics ROM records what a board shows.
+and Y axes of a single-colour matrix. `DEMO`'s pattern may therefore look
+different on a board. Test T24 of the diagnostics ROM records what a board shows.
 
 ## The DS1302 clock
 
@@ -185,8 +185,8 @@ The DS1302 is an add-on on port `FCh` (`src/services.asm:13-14`):
 | 5 | Set to read |
 | 6 | The chip's clock |
 | 7 | The data sent to the chip |
- Each register is reached by a command byte sent
-least significant bit first (`src/services.asm:318-326`). TEC-OS counts the
+
+Each register is reached by a command byte sent least significant bit first (`src/services.asm:318-326`). TEC-OS counts the
 clock as present when a read of the seconds register gives a value below
 `60h`. A clock that answers gives such a value and an empty port's `FFh`
 doesn't (`src/services.asm:296-309`). Cold boot makes that test once and keeps
@@ -212,8 +212,8 @@ rising edge. With nothing selected the port is written `05h`: select high,
 data high, clock low.
 
 A high-capacity card takes a block's number as its address. A
-standard-capacity card takes the block's byte address in 32 bits, so the
-driver can name no block 4 GiB or more into such a card
+standard-capacity card takes the block's byte address in 32 bits. The driver
+can therefore name no block 4 GiB or more into such a card
 (`src/sd.asm:243-274`). Every wait for the card has a limit. A card that
 doesn't answer, or answers wrongly, fails with one of the driver's codes
 (`src/sd.asm:10-20`). Appendix D lists the codes and Chapter 17 the driver.

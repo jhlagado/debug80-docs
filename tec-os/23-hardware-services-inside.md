@@ -50,11 +50,11 @@ alternates (`src/abi.inc:18-21`).
 Services 0 to 8 are the hardware services, in `src/services.asm`, and 15 is
 the font. The volume services, 9 to 11, are in `src/vol.asm`, and
 [Chapter 17](17-sd-card-and-volumes.md#the-volume-services) describes them.
-`DRVR`, 12, is `SVDRV`, the entry through which a display driver offers its
-table (`src/services.asm:362-386`). [Chapter 16](16-bios-and-console.md)
-describes the table and what `SVDRV` rejects. `FIND` and `LIST`, 13 and 14,
-read the registry, and [Chapter 24](24-service-loader.md) describes them with
-it. The dispatcher, its exits, the nine hardware routines and the font's take 480
+`DRVR`, 12, is `SVDRV`, the entry through which a display driver passes its
+table to the ROM (`src/services.asm:362-386`).
+[Chapter 16](16-bios-and-console.md#the-displays-and-the-claim) describes the
+table and what `SVDRV` rejects. `FIND` and `LIST`, 13 and 14, read the
+registry. [Chapter 24](24-service-loader.md) describes them with it. The dispatcher, its exits, the nine hardware routines and the font's take 480
 bytes of the ROM's code:
 
 | Number | Name | Routine | Bytes |
@@ -80,9 +80,9 @@ the value of `INFO`'s bit 4, while the chip is claimed (`src/ram.asm:72`,
 and `H` (`src/services.asm:61-63`). The columns and rows are adjacent bytes at
 `BFEAh` and `BFEBh`, at the workspace's end (`src/ram.asm:281-282`).
 
-The three services that drive the board's outputs share port `01h` with the
-serial transmit line. So each write to the port carries bit 6, `TXIDLE`, and
-the line stays high (`src/services.asm:9-11`, `src/services.asm:17`). `DIGIT`
+`DIGIT` and `TONE` write port `01h`, which also carries the serial transmit
+line. So each write to the port carries bit 6, `TXIDLE`, and the line stays
+high (`src/services.asm:9-11`, `src/services.asm:17`). `DIGIT`
 walks one set bit in `C` from `20h` down, one bit for each digit, and stops
 when `SRL C` empties the register (`src/services.asm:68`,
 `src/services.asm:79-80`). For each digit it writes the pattern to `SEGPORT`
@@ -93,7 +93,7 @@ of `DJNZ`, about 0.8 ms, and writes `TXIDLE` alone (`src/services.asm:69-77`).
 `CDWRD`, the bit that records a word of the ROM's on that row
 (`src/services.asm:87-96`). `LCDROWS` gives the row's display address, and then
 20 characters go out, each after `LCDWAIT` (`src/services.asm:97-109`,
-`src/tables.asm:40-41`). [Chapter 25](25-startup.md#the-lcds-words) explains
+`src/tables.asm:40-41`). [Chapter 25](25-startup.md#the-lcd-s-words) explains
 the ROM's words and why a program's row 3 clears the bit.
 
 `TONE` toggles bit 7 of `A`, which starts as `TXIDLE`, and writes it to port
@@ -169,8 +169,8 @@ None of these routines calls the BDOS (`src/abi.inc:21-23`). A program may
 therefore call any of them from inside a BDOS call of its own or from a
 service's `INIT`. Only the two mount services forbid that. Their state is in
 the resident workspace (`src/services.asm:6-7`). It is `VCLAIM`, the claim,
-which warm boot clears through `HWVREL`, and the bits of `CONDEV` that `LCD`
-and a release change.
+and the bits of `CONDEV` that `LCD` and a release change. Warm boot clears the
+claim through `HWVREL`.
 
 Each runs on the caller's stack. The caller can be the CCP, a program or the
 BDOS with a few bytes of its own stack left. So `abi.inc` gives each service a

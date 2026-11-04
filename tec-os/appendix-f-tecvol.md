@@ -43,9 +43,9 @@ The options may come anywhere after the command, and an unknown option is an
 error (`tools/tecvol.mjs:41-63`). Every command but `create` and `recipe`
 opens an existing image and checks it as a container first, with the checks
 Appendix E lists. An image that fails is not used (`tools/tecvol.mjs:73-76`).
-A command that changes an image checks the result as a container, writes it to
-a temporary file beside the image and renames that file over the image,
-so a failure leaves the image as it was (`tools/tecvol.mjs:19-21`,
+A command that changes an image checks the result as a container. It writes
+the result to a temporary file beside the image and renames that file over
+it, so a failure leaves the image as it was (`tools/tecvol.mjs:19-21`,
 `tools/tecvol.mjs:65-71`).
 
 `DRIVE` names a volume by its drive letter, with or without a colon, by its
@@ -133,8 +133,8 @@ at 2 KiB each.
 Under a volume whose CP/M directory has a fault, such as two directory
 entries for one part of a file, `info` prints a line for each fault, starting
 `problem:` (`tools/lib/cpmfs.mjs:240-267`). A block given to two files, or a
-block number above the volume's last, DSM, stops the command instead, with
-exit status 1 and a message naming the file and the block, before the
+block number above the volume's last, DSM, stops the command instead. It ends
+with exit status 1 and a message naming the file and the block, before the
 volume's line is printed (`tools/lib/cpmfs.mjs:78-89`,
 `tools/tecvol.mjs:124-127`).
 
@@ -183,10 +183,10 @@ node tools/tecvol.mjs dir dist/starter.img A
 file's own name in capitals. It must be a CP/M name: up to 8 characters, then
 optionally a full stop and up to 3 (`tools/lib/cpmfs.mjs:15-20`). A file of
 the same name in the same user area is replaced, unless it has the read-only
-attribute: TEC-OS rejects a write over such a file, and so does `put` unless
+attribute. TEC-OS rejects a write over such a file, and so does `put` unless
 `--force` is given. The copy fails if the volume is read-only, if the file
-there is read-only or if its blocks or its directory entries run out, and then
-the image is left as it was (`tools/lib/cpmfs.mjs:180-206`).
+there is read-only or if its blocks or directory entries run out. The image
+is then left as it was (`tools/lib/cpmfs.mjs:180-206`).
 
 The file is stored in whole records of 128 bytes. A binary file's last record
 is padded with zeros. With `--text`, each line end becomes CR LF, a `^Z` is
@@ -231,11 +231,11 @@ into `OUTFILE`, or to the standard output with none
 (`tools/tecvol.mjs:150-159`). Without `--text` the copy is every record,
 padding included. With `--text` it stops at the first `^Z` and turns each CR
 LF into a line feed (`tools/lib/cpmfs.mjs:123-150`). Each directory entry gives
-the records up to its own record count and no further, so the records of a
+the records up to its own record count and no further. The records of a
 sparse file that no entry holds, the gaps a program's random writes can leave,
 come back as zeros (`tools/lib/cpmfs.mjs:133-146`). An entry that names a block
-above DSM is damage, and `get` stops with exit status 1, naming the file, the
-extent, the directory entry and the block, and writes no file
+above DSM is damage. `get` then stops with exit status 1, names the file, the
+extent, the entry and the block, and writes no file
 (`tools/lib/cpmfs.mjs:140`).
 
 ```sh
@@ -298,8 +298,8 @@ geometry, a label, a drive and `readOnly` or `writeBehind`. Each file has a
 name, a `url`, a drive, a size in `bytes`, a `sha256` and optionally a user
 area (`tools/lib/recipe.mjs:13-26`).
 
-`tecvol` reads a file's `url` as a web address if it starts `http://` or
-`https://`, and otherwise as a path from the recipe's own folder
+A file's `url` is a web address if it starts `http://` or `https://`.
+Otherwise it is a path from the recipe's own folder
 (`tools/tecvol.mjs:91-101`). It checks each file's size and SHA-256 against the
 recipe and stops at the first that differs. The read-only flags go on last,
 after every file is written (`tools/lib/recipe.mjs:27-34`). The web page
@@ -315,9 +315,8 @@ sha256sum build/fresh.img dist/starter.img
 22881c466664eedeed4c7482fba6e9a798b77d83d2c6666d9a2a2e8b05286f70  dist/starter.img
 ```
 
-The two images are the same to the byte: the volumes' places, the `E5h` fill,
-the files' blocks and the header hold nothing that depends on the time or the
-PC.
+The two images are the same to the byte. Nothing in the header, the volumes'
+places, the `E5h` fill or the files' blocks depends on the time or the PC.
 
 ## install
 
@@ -332,8 +331,8 @@ node tools/tecvol.mjs install dist/starter.img /dev/rdiskN --yes
 
 `/dev/rdiskN` stands for the card's raw device on a Mac. On Linux it is a
 device such as `/dev/sdX`. Opening a device usually needs the PC's
-administrator rights. `install` checks nothing about the device, so the device
-name needs checking twice before the command runs: given the PC's own disk, it
+administrator rights. `install` checks nothing about the device. Check the
+device name twice before the command runs: given the PC's own disk, it
 overwrites that disk's first blocks.
 
 ## A worked example

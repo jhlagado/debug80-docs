@@ -311,11 +311,11 @@ or under the overlay goes unreported, and the model records it as a
 violation. A write to EXPAND 1 by anything but the cache fails a test file. A
 program that passes here makes neither write.
 
-The model also differs from the board's documents in two ways, both in its
-runtime and neither in TEC-OS. A write under the boot overlay reaches the RAM
+The model also differs from the board's documents in three ways, all in its
+runtime and none in TEC-OS. A write under the boot overlay reaches the RAM
 in the runtime, and in the documents the overlay selects the ROM. The latch's
 bits 3 to 6 select nine banks in the runtime and nothing in the documents.
-The latch also reads back in the runtime and is write-only in the documents.
+The latch reads back in the runtime and is write-only in the documents.
 TEC-OS depends on none of those behaviours. A test that crosses one of them
 still passes on the model and may give a different result on a board.
 

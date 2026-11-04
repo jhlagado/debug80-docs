@@ -172,11 +172,11 @@ chained line's next piece:
 | `BD35h` | 1 | `CMDBUF` | function 10's maximum, 127 | cold boot; warm boot writes 127 |
 | `BD36h` | 1 | `CMDLEN` | the line's length | cold boot |
 | `BD37h–BDB6h` | 128 | `CMDTXT` | the command line | cold boot |
-| `BDB7h` | 1 | `BOOTDRV` | the drive at the CCP's entry | cold and warm boot |
-| `BDB8h–BDCAh` | 19 | `CMDSTRT` to `ERAALL` | the parser's pointers and the state of `DIR`, the pager, `SAVE` and `ERA` | cold and warm boot |
-| `BDCBh–BE4Ah` | 128 | `LOADBUF` | the CCP's scratch record | cold and warm boot |
-| `BE4Bh–BE55h` | 11 | `STKGUARD` | the CCP stack's guard, `A5h` in each byte | cold and warm boot; warm boot then writes the pattern |
-| `BE56h–BE75h` | 32 | `CSTKBAS` | the CCP's stack, up to `CSTKTOP` | cold and warm boot |
+| `BDB7h` | 1 | `BOOTDRV` | the drive at the CCP's entry | cold boot and warm boot |
+| `BDB8h–BDCAh` | 19 | `CMDSTRT` to `ERAALL` | the parser's pointers and the state of `DIR`, the pager, `SAVE` and `ERA` | cold boot and warm boot |
+| `BDCBh–BE4Ah` | 128 | `LOADBUF` | the CCP's scratch record | cold boot and warm boot |
+| `BE4Bh–BE55h` | 11 | `STKGUARD` | the CCP stack's guard, `A5h` in each byte | cold boot and warm boot; warm boot then writes the pattern |
+| `BE56h–BE75h` | 32 | `CSTKBAS` | the CCP's stack, up to `CSTKTOP` | cold boot and warm boot |
 
 ### The BDOS's block
 
@@ -185,18 +185,18 @@ and then sets the DMA address to `0080h`:
 
 | Addresses | Bytes | Name | Contents | Cleared by |
 | --- | ---: | --- | --- | --- |
-| `BE76h–BE7Ah` | 5 | `OLDSP`, `ERRMODE`, `PARAM` | the caller's stack pointer, function 45's error mode and the caller's `DE` | cold and warm boot |
-| `BE7Bh–BE7Eh` | 4 | `COLUMN`, `LISTEN`, `PENDING`, `PENDCHR` | the console column, the `^P` copy and the kept character | cold and warm boot |
-| `BE7Fh–BE84h` | 6 | `LINPTR` to `HPOS` | function 10's state, `HFLAG` and the history line shown | cold and warm boot |
-| `BE85h–BE8Ah` | 6 | `CURDRV` to `DEFALV` | the bound drive and the default drive with its DPB and vector | cold and warm boot |
-| `BE8Bh` | 1 | `USERNO` | the user number | cold and warm boot |
-| `BE8Ch` | 1 | `WRFLAG` | set by the CCP for its reset | cold and warm boot |
-| `BE8Dh–BE8Eh` | 2 | `WARMV` | the drives to rebuild to their mark | cold and warm boot |
-| `BE8Fh–BE90h` | 2 | `ROVEC` | the read-only vector | cold and warm boot |
-| `BE91h–BE92h` | 2 | `CURDMA` | the DMA address | cold and warm boot; warm boot then writes `0080h` |
-| `BE93h–BE9Ch` | 10 | `DPHPTR` to `XLTPTR` | the bound drive's DPH, DPB, directory buffer, vector and translation table | cold and warm boot |
-| `BE9Dh–BEC9h` | 45 | `CURTRK` to `DIRSEC` | the directory search, the scan and the file position | cold and warm boot |
-| `BECAh–BEFFh` | 54 | `STKBASE` | the BDOS's stack, up to `STKTOP` | cold and warm boot |
+| `BE76h–BE7Ah` | 5 | `OLDSP`, `ERRMODE`, `PARAM` | the caller's stack pointer, function 45's error mode and the caller's `DE` | cold boot and warm boot |
+| `BE7Bh–BE7Eh` | 4 | `COLUMN`, `LISTEN`, `PENDING`, `PENDCHR` | the console column, the `^P` copy and the kept character | cold boot and warm boot |
+| `BE7Fh–BE84h` | 6 | `LINPTR` to `HPOS` | function 10's state, `HFLAG` and the history line shown | cold boot and warm boot |
+| `BE85h–BE8Ah` | 6 | `CURDRV` to `DEFALV` | the bound drive and the default drive with its DPB and vector | cold boot and warm boot |
+| `BE8Bh` | 1 | `USERNO` | the user number | cold boot and warm boot |
+| `BE8Ch` | 1 | `WRFLAG` | set by the CCP for its reset | cold boot and warm boot |
+| `BE8Dh–BE8Eh` | 2 | `WARMV` | the drives to rebuild to their mark | cold boot and warm boot |
+| `BE8Fh–BE90h` | 2 | `ROVEC` | the read-only vector | cold boot and warm boot |
+| `BE91h–BE92h` | 2 | `CURDMA` | the DMA address | cold boot and warm boot; warm boot then writes `0080h` |
+| `BE93h–BE9Ch` | 10 | `DPHPTR` to `XLTPTR` | the bound drive's DPH, DPB, directory buffer, vector and translation table | cold boot and warm boot |
+| `BE9Dh–BEC9h` | 45 | `CURTRK` to `DIRSEC` | the directory search, the scan and the file position | cold boot and warm boot |
+| `BECAh–BEFFh` | 54 | `STKBASE` | the BDOS's stack, up to `STKTOP` | cold boot and warm boot |
 
 ### Above the RAM BIOS table
 
@@ -269,7 +269,9 @@ explains what happens to a program that ends with EXPAND 1 in view.
 The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:64-73`. A
 loaded service runs on its caller's stack, and `SVCLIM` gives what the services
 together may add: 8 bytes to the BDOS's, 12 to the BIOS's and 6 to the CCP's
-(`src/tables.asm:96`). Chapter 24 gives each stack's measured base.
+(`src/tables.asm:96`). [Chapter 14](14-memory-map.md#the-four-stacks) gives
+each stack's measured base, and Chapter 24 what the loader does with
+`SVCLIM`.
 
 ## Reproducing the figures
 

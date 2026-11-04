@@ -12,10 +12,11 @@ nav_group: "Appendices"
 This appendix lists the ROM table at `C003h` and the sixteen numbered services
 behind its one jump: the hardware services 0 to 8, the volume services 9 to
 11, the display driver's service 12, the registry's services 13 and 14 and the
-font's service 15. Chapter 10 describes the use of the hardware services, with
-programs, and Chapter 23 the code behind them. Each service has one entry
-below, in a fixed order: what it does, its status, its stack and its cost, and
-then the detail.
+font's service 15. The record of the ROM's PICO9918 console, with its
+graphics entries, has a section of its own. Chapter 10 describes the use of
+the hardware services, with programs, and Chapter 23 the code behind them.
+Each service has one entry below, in a fixed order: what it does, its status,
+its stack and its cost, and then the detail.
 
 ## The ROM table
 
@@ -164,7 +165,16 @@ cycles plus 222 T-states:
 | `JR NZ`, taken | 12 |
 
 The last half cycle takes 5 T-states less, measured between the two writes
-that bound it.
+that bound it. At 4 MHz the half period gives these pitches:
+
+| `B` | T-states a half cycle | Frequency |
+| ---: | ---: | ---: |
+| 1 | 67 | 29,851 Hz |
+| 10 | 211 | 9,479 Hz |
+| 100 | 1,651 | 1,211 Hz |
+| 120 | 1,971 | 1,015 Hz |
+| 255 | 4,131 | 484 Hz |
+| 0 | 4,147 | 482 Hz |
 
 **5 JOY.** Returns the joystick in `B`, 1 for each active line, read from
 port `FEh` with `BC` = `F7FEh` and complemented (`src/services.asm:192-196`).
@@ -289,11 +299,13 @@ none. Stack 8.
 clear with `HL` = that record and `A` = the generation, or carry set past the
 last. Stack 8.
 
+## The PICO record
+
 The ROM's PICO9918 console publishes one record, `PICO`, version 3, in its
-block `PIBLK`. `PISTART` makes it the registry's last record at cold boot, and
-`UNLOAD`, which removes services, never removes it (`src/pico.asm:22-24`,
-`src/pico.asm:43-44`). Its table is the eight words of service 12's table,
-followed by five more:
+block `PIBLK`, with the table at `BBE3h` (Appendix C). `PISTART` makes it the
+registry's last record at cold boot, and `UNLOAD`, which removes services,
+never removes it (`src/pico.asm:22-24`, `src/pico.asm:43-44`). Its table is
+the eight words of service 12's table, followed by five more:
 
 | Offset | `abi.inc` | Takes | Effect |
 | ---: | --- | --- | --- |
@@ -310,9 +322,100 @@ entry that `CON PICO 40` calls, version 3's addition (`src/abi.inc:123-127`,
 `src/pico.asm:49-65`). While `CRT:` is in effect, the next console call after
 `PICOWID` clears the screen at the new width. `PICOWID` returns carry with
 nothing changed for any other width, or while the PICO9918 is claimed. Three
-more offsets from the table name bytes of the console's state for a debugger:
-`PICOVRB`, 36, the record's version byte, and `PICOTPD` and `PICOTPS`, 41 and
-42, the page drawn and the page shown (`src/abi.inc:131-135`).
+more offsets name bytes of the console's state, for a debugger: `PICOVRB`, 36,
+the record's version byte, and `PICOTPD` and `PICOTPS`, 41 and 42, the page
+drawn and the page shown (`src/abi.inc:131-135`).
+
+The claim is the one Chapter 10 describes, which a program writing the ports
+must hold too. `VTEST` claims the PICO9918, writes four bytes to VRAM, reads
+them back into a buffer, releases the chip and then prints what came back. `HWLIB.ASM` is Chapter 10's
+library, with `CHKHW` and `SAY`:
+
+```asm
+; VTEST: write four bytes to the PICO9918's VRAM and read them back through
+; the graphics entries of the ROM's PICO9918 console.
+BDOS	EQU	$0005
+VRAM	EQU	$3000		; an address the text modes leave alone
+%INCLUDE "ABI.INC"
+
+	ORG	$0100
+	CALL	CHKHW		; the numbers below hold only on ABI 5
+	JP	NZ,NOTHW
+	LD	DE,NAME		; the record's eight-byte name
+	LD	B,2		; version 2 has the graphics entries
+	LD	C,TNFIND	; the registry's find
+	CALL	ABICALL
+	LD	DE,NONE
+	JP	C,SAY		; carry: no such record, so print and end
+	LD	(TABLE),HL	; good until this program exits
+	LD	B,1		; claim the PICO9918
+	LD	C,TNVIDEO
+	CALL	ABICALL
+	LD	HL,VRAM		; PICOWR: BC bytes from DE to VRAM at HL
+	LD	DE,DATA		; the bytes to write
+	LD	BC,4
+	LD	A,PICOWR	; the entry's offset in the table
+	CALL	ENTRY
+	LD	HL,VRAM		; PICORD: BC bytes from VRAM at HL to DE
+	LD	DE,BACK		; where to put them
+	LD	BC,4
+	LD	A,PICORD	; the entry's offset in the table
+	CALL	ENTRY
+	LD	B,0		; give it back: the console's screen returns
+	LD	C,TNVIDEO
+	CALL	ABICALL
+	LD	DE,BACK		; the four bytes, as text
+	JP	SAY		; prints and ends the program
+
+; Run the table's entry at offset A, with its arguments in BC, DE and HL.
+; Changes what the entry changes.
+ENTRY:	PUSH	HL		; the entry's HL
+	PUSH	DE		; and its DE
+	LD	E,A		; DE = the offset
+	LD	D,0
+	LD	HL,(TABLE)
+	ADD	HL,DE		; HL = the entry's word
+	LD	E,(HL)
+	INC	HL
+	LD	D,(HL)
+	EX	DE,HL		; HL = the routine
+	POP	DE		; the entry's DE back
+	EX	(SP),HL		; the routine goes on the stack, HL comes back
+	RET			; a jump to it, with HL free
+
+TABLE:	DW	0		; the table, once found
+NAME:	DB	"PICO    "	; the record to find
+NONE:	DB	"no PICO "	; printed when there is no record
+	DB	"record"
+	DB	13,10,"$"
+DATA:	DB	"VRAM"		; the four bytes to write
+BACK:	DB	"????"		; PICORD fills these four
+	DB	13,10,"$"
+%INCLUDE "HWLIB.ASM"
+```
+
+These entries are words, where the table of Chapter 12's `COUNT` holds a
+`JP`, so `ENTRY` reads the word at the offset. `EX (SP),HL` and `RET` then
+jump to the routine with `HL` restored for it, as the hardware services'
+dispatcher does in Chapter 23. `TABLE` needs no generation test, because the
+program ends before any service can go.
+
+<!-- node tools/tecvol.mjs put svc.img B vtest.asm --text; node tools/capture.mjs --card svc.img --board pico B: "TAS VTEST" VTEST -->
+```text
+A>B:
+B>TAS VTEST
+VTEST.COM written
+
+B>VTEST
+VRAM
+
+B>
+```
+
+The record exists only where the ROM's console started, so on the serial board
+the program prints `no PICO record`. It prints the same on a board with a
+PICO9918 and no matrix keyboard, where the console doesn't start. A program on
+such a board claims the chip and writes the ports.
 
 ## The font
 

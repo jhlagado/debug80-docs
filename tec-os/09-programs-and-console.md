@@ -70,7 +70,7 @@ They keep the cursor, the escape sequence and the video attributes in fixed
 bytes of the workspace. An interrupt routine must therefore not print
 through the console. The calls run on the caller's stack. On a display the
 ROM's terminal and the display's own routines run there too. The stack a
-program starts on has 30 bytes free, as [Chapter 8](08-memory.md) says. A
+program starts on has 30 bytes free, as [Chapter 7](07-first-program.md) says. A
 program that pushes before it calls the BIOS sets up a stack of its own
 first.
 
@@ -220,7 +220,7 @@ on the screen.
 
 A program that lays out a screen, such as an editor, needs the console's
 size. TEC-OS reports it through the hardware service `INFO` of
-[Chapter 10](10-hardware-services.md#the-boards-report). The columns and
+[Chapter 10](10-hardware-services.md#the-board-s-report). The columns and
 rows are 0 for the serial terminal, whose size TEC-OS can't read. They
 change whenever the console does, so a program reads them again after a
 `CON`.

@@ -370,8 +370,9 @@ from a PC into area `N`. A number outside 0 to 15, or `USER` with no number,
 fails with a question mark.
 
 The CCP stores the drive and the user area in the byte at `0004h` each time
-it prints the prompt. Both survive a program's end, and a reset returns to
-drive A and area 0.
+it prints the prompt. Both survive a program's end. The one exception is a
+drive whose volume `MOUNT` took away while the prompt was on it: the next
+prompt is then on drive A. A reset returns to drive A and area 0.
 
 ## Running a program
 

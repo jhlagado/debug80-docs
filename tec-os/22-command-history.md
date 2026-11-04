@@ -51,7 +51,7 @@ together, and `$'\x17'` is the shell's way of writing `^W`.
 ## The ring at BD00h
 
 The history is the page at `BD00h` in EXPAND 1, `HRING` (`src/history.asm:14`).
-[Chapter 14](14-memory-map.md#expand-1) lists EXPAND 1's other pages and
+[Chapter 14](14-memory-map.md#expand-1-and-the-no-stack-rule) lists EXPAND 1's other pages and
 explains why no stack is in use while EXPAND 1 is in view. No BDOS function and
 no numbered service reaches the page, so only the ROM's own code reads it.
 
