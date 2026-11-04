@@ -111,7 +111,7 @@ below `8000h` stays in view whatever the latch holds, so it goes by one `LDIR`
 with EXPAND 1 selected (`src/cache.asm:440-480`). The part in EXPAND 0 goes a
 byte at a time, and the latch is switched between each read and its write
 (`src/cache.asm:481-499`). While EXPAND 1 is in view the copy uses no stack,
-because the caller's stack may be in EXPAND 0 (`src/cache.asm:401-412`).
+because the caller's stack may be in EXPAND 0 (`src/cache.asm:407-408`).
 `MVEND` writes `LATCHV` back to the latch, pops the alternates and enables
 interrupts only if `P/V` shows they were on (`src/cache.asm:506-517`). A hit to
 a DMA address below `8000h`, such as the CCP's loads at `0100h` and up, took
