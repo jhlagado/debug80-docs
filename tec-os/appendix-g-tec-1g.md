@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix G. The TEC-1G as TEC-OS uses it
 
-Checked against TEC-OS 5a25178.
+Checked against TEC-OS 58d4345.
 
 This appendix lists the parts of the TEC-1G that TEC-OS reads and writes: its
 ports, the bits of the system latch, the configuration switches, the RAM in
@@ -32,7 +32,7 @@ in the files that drive them.
 | `84h` | out | 20 × 4 LCD, data | The same |
 | `05h`, `06h`, `F8h`, `F9h` | out | 8 × 8 LEDs | No hardware service; Chapter 9's `DEMO` writes them |
 | `07h`, `87h` | in, out | Graphics LCD, ST7920 | `GLCD.SVC` only |
-| `BEh`, `BFh` | in, out | PICO9918, data and control | The probe at cold boot; the console and hardware service `VIDEO`'s restore, both in `PICO.SVC` |
+| `BEh`, `BFh` | in, out | PICO9918, data and control | The probe at cold boot; the ROM's PICO9918 console, and hardware service `VIDEO`'s restore through it |
 | `FCh` | in, out | DS1302 clock | The probe at cold boot and hardware service `RTC` |
 | `FDh` | in, out | SD card adaptor | The SD card driver |
 | `FEh` | in | Matrix keyboard and joystick | The keyboard scan, hardware services `KEYS` and `JOY` |
@@ -42,6 +42,12 @@ The read of port `00h` takes nothing from the keypad. It is there for the
 Debug80 runtime, whose serial input starts a queued byte at a read of that port
 (`src/layout.asm:9`, `src/console.asm:131`, `src/console.asm:185`,
 `src/console.asm:302`).
+
+At cold boot TEC-OS probes the PICO9918 through ports `BEh` and `BFh`. When the
+chip answers and the Matrix switch has enabled the keyboard, cold boot starts
+the ROM's console on it at 80 columns, before the banner (`src/video.asm:7-11`,
+`src/pico.asm:30-44`). With the switch off the chip stays unprogrammed until a
+program claims it.
 
 ## Port 01h and the serial line
 
@@ -69,8 +75,8 @@ TEC-OS reads three bits of port `03h` (`src/layout.asm:11`):
 
 - **Bit 0, the Matrix switch.** Read once, at cold boot, into `CONDEV`
   (`src/console.asm:42-44`). With the switch off the console never scans the
-  matrix keyboard, and both display drivers fail to install, since each needs
-  the keyboard.
+  matrix keyboard, the ROM's PICO9918 console doesn't start and `GLCD.SVC`
+  fails to install, since each needs the keyboard.
 - **Bit 6, a keypad key down.** Read once, at cold boot, just before the
   startup file is opened. A low bit skips the file (`src/cpm/ccp.asm:1577-1579`).
 - **Bit 7, the serial line's input.** Read by the serial routines
