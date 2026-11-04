@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 6. A first program
 
-Checked against TEC-OS 5a25178, with the ATOM assembler from the
+Checked against TEC-OS 58d4345, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, the starter card's
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. The
@@ -316,9 +316,9 @@ after them:
 
 The starter card holds no `TDB.COM`, so `^T D` gets `TDB?` from the CCP and
 `TED` comes back at its place. On the starter card `TED` holds a file of up to
-33,067 bytes on a board with only a serial terminal, where no display's driver
-installs. On a board with both displays one driver installs as it boots, and
-`TED` holds 31,510 bytes.
+33,466 bytes on a board with only a serial terminal, where no display's driver
+installs. On a board with both displays `GLCD.SVC` installs as it boots, and
+`TED` holds 32,534 bytes.
 
 The source is on drive B, and `TED.COM` and `TAS.COM` are on drive A. With
 drive B current, the CCP runs `TED` from drive A. `TED` reads the byte at
@@ -424,7 +424,7 @@ the byte. If the byte names a drive with no volume, the CCP takes drive A.
 Services stay installed, and the IOBYTE keeps its value. Chapter 14
 describes the warm boot step by step.
 
-The stack the CCP gives a program is the CCP's own, with 28 bytes free below
+The stack the CCP gives a program is the CCP's own, with 30 bytes free below
 the return address, enough for a few levels of calls and pushes. A program
 that uses more points `SP` at a stack in its own memory. A `RET` at the end
 then doesn't reach `0000h`, so such a program ends with function 0 or
