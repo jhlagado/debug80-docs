@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 10. Writing services
 
-Checked against TEC-OS 621201d. The programs were assembled by the starter
+Checked against TEC-OS 78127ec. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -385,7 +385,11 @@ bytes in the service's own memory:
 linked through their first words. `COUNT` has one, `REC`, and the loader
 writes the link when it joins the list to the older records. The loader checks
 that each record and its table's address lie in the service's pages, but it
-can't check what is in a table.
+can't check what is in a table. A find or a list walks 256 records at most, so
+one service may publish at most 255, and a service whose records would take
+the registry past 256 is refused. Every record, the `PICO` record of the last
+section among them, can then be found. A refused service's `REMOVE` undoes its
+`INIT`, and the load fails with the name and a question mark.
 
 The layout of an entry table is the service's own, and the record's name and
 version identify it. Version 1 of `COUNT`'s table is one `JP`, at offset 0, to
