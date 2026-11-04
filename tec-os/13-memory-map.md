@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 13. The memory map
 
-Checked against TEC-OS 621201d.
+Checked against TEC-OS 78127ec.
 
 TEC-OS has 16 KiB of ROM and, of RAM, the 64 KiB that a TEC-1G with U9 fitted
 has. Chapter 7 describes that memory from a program's side, and this chapter
@@ -15,7 +15,7 @@ from TEC-OS's side. It starts with the way the system latch puts RAM and ROM
 into the Z80's 64 KiB, and the byte TEC-OS keeps in page zero. It goes on to
 the resident workspace at the top of EXPAND 0 and the allocation vectors below
 it. It ends with the four stacks, the measurements that size them and TEC-OS's
-use of EXPAND 1. The addresses are those of the build at 621201d with the starter
+use of EXPAND 1. The addresses are those of the build at 78127ec with the starter
 card in the socket. `docs/memory-map.md`, which `npm run media` writes from the
 build's census, has the same figures.
 
