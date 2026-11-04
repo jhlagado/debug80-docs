@@ -262,7 +262,7 @@ Chapter 20 describes how a service claims a vector, and the unload and the faile
 
 ## Warm boot
 
-Warm boot is `WBOOTR`, `src/boot.asm:72-91`, the second entry of the BIOS jump
+Warm boot is `WBOOTR`, `src/boot.asm:72-92`, the second entry of the BIOS jump
 table, and the jump at `0000h` leads to it through the RAM BIOS table at
 `BF03h`. A program reaches it by returning from `0100h`, since the CCP pushes
 `0000h` before it jumps there (`src/cpm/ccp.asm:13`,
