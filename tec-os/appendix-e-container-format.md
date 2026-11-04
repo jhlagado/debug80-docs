@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix E. The container format
 
-Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
 
@@ -73,8 +73,9 @@ no table sum, and `tecvol` gives it at most 8 volumes. A 1.1 card may have up
 to 127, may give a number of drives and has the table sum
 (`tools/lib/container.mjs:76-80`, `tools/lib/container.mjs:140-148`).
 `tecvol create` makes a 1.1 card when it is given more than 8 volumes or
-`--drives`, and a 1.0 card otherwise. The ROM treats any minor version other
-than 0 as 1.1 (`src/vol.asm:104-106`).
+`--drives`, and a 1.0 card otherwise. The ROM refuses a 1.0 card of more than
+8 volumes with code `24h` (`src/vol.asm:68-87`), and treats any minor version
+other than 0 as 1.1 (`src/vol.asm:104-106`).
 
 ## The volume descriptor
 
@@ -128,7 +129,7 @@ as the header's checksum does.
 ## The checks and their codes
 
 The ROM's `MOUNT` checks the header first and then each descriptor in table
-order, in one pass, mounting each one as it passes (`src/vol.asm:20-249`). The
+order, in one pass, mounting each one as it passes (`src/vol.asm:32-264`). The
 first check to fail stops the mount, unmounts any drive mounted so far and
 returns its code, which cold boot prints at the diagnostic prompt (Chapter
 23). The checks, in the order the ROM makes them:
@@ -139,7 +140,7 @@ returns its code, which cold boot prints at the diagnostic prompt (Chapter
 | `21h` | The first 8 bytes are not `TECOSVOL` | `src/vol.asm:39-49` |
 | `22h` | The major version is not 1 | `src/vol.asm:51-54` |
 | `23h` | The header bytes are not 512, or the descriptor bytes not 32 | `src/vol.asm:56-67` |
-| `24h` | The number of volumes is 0, or more than 127 | `src/vol.asm:55-67` |
+| `24h` | The number of volumes is 0, more than 8 on a 1.0 card, or more than 127 | `src/vol.asm:68-87` |
 | `25h` | The checksum differs | `src/vol.asm:90-94` |
 | `23h` | 1.1: the drives field is more than 4 | `src/vol.asm:108-112` |
 | `20h` | 1.1: a block of the table can't be read | `src/vol.asm:130-135` |
@@ -249,7 +250,7 @@ allocation blocks. A G8M volume has 2,048 allocation blocks and a G1M volume
 
 The ROM's geometry table has an entry of 6 bytes for each geometry: the id, a
 0, the payload in blocks as a word and the address of the disk parameter block
-(`src/gen/geom.asm`). `GEOFIND` looks an id up in it (`src/vol.asm:706-714`),
+(`src/gen/geom.asm`). `GEOFIND` looks an id up in it (`src/volutil.asm:18-29`),
 and the length check compares the descriptor's length with that word and
 requires its two high bytes to be 0 (`src/vol.asm:171-182`).
 
@@ -258,7 +259,7 @@ requires its two high bytes to be 0 (`src/vol.asm:171-182`).
 TEC-OS's workspace has a 16-byte disk parameter header for each of the four
 drives (`src/ram.asm:34`, `src/layout.asm:77`). The allocation vectors, one
 bit for each allocation block of a volume, go below the workspace. `ALVINIT`
-sizes the vectors at cold boot (`src/boot.asm:356-410`). On a 1.1 card that
+sizes the vectors at cold boot (`src/boot.asm:385-461`). On a 1.1 card that
 gives N drives, each of drives A to the Nth gets 256 bytes, enough for a G8M
 volume, whether or not a volume is on it, so that any drive can take any
 volume later. On any other card each mounted drive gets a vector sized for its
