@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix A. BDOS functions
 
-Checked against TEC-OS 58d4345.
+Checked against TEC-OS 621201d.
 
 This appendix lists the BDOS functions of TEC-OS in number order: 0 to 40,
 then 44 to 48, 99 and 108, whose meanings come from CP/M 3. Each entry gives the
@@ -36,7 +36,7 @@ the default error mode it prints the error and waits for a key, or takes the
 key already kept if one was typed during output. It then ends the program by
 warm boot, whatever the key, and does not return. Function 45 can set a mode
 in which the function returns instead, with `A` = `FFh` and the error's code in
-`H` (`src/cpm/bdos.asm:2396-2463`). The errors are:
+`H` (`src/cpm/bdoscon.asm:19-41`). The errors are:
 
 - `Bdos Err On d: Select`, code 4, for a drive with no volume, a drive past D
   or a `?` drive byte outside function 17 (`src/cpm/bdoslog.asm:575-578`).
@@ -70,11 +70,11 @@ and backspace.
 **2 Console output.** Prints the character in `E`
 (`src/cpm/bdos.asm:208-212`). A tab becomes spaces to the next multiple of 8
 columns. Before each character the BDOS checks for a key. `^S` stops the
-output until the next key, which is discarded. `^P` turns the copy of the
-output to the list device on or off. Any other key is kept for the next input
-call (`src/cpm/bdoscon.asm:107-126`, `src/cpm/bdos.asm:2553-2576`). In CP/M 2.2
-a `^C` after `^S` ends the program. In TEC-OS it resumes the output like any
-other key.
+output until the next key. A `^C` then ends the program by warm boot, as in
+CP/M 2.2, and any other key resumes the output and is discarded. `^P` turns
+the copy of the output to the list device on or off. Any other key is kept for
+the next input call (`src/cpm/bdoscon.asm:107-126`,
+`src/cpm/bdoscon.asm:199-233`).
 
 **3 Reader input.** Waits for a byte from the reader device, the serial port,
 and returns it in `A` (`src/cpm/bdos.asm:215-217`).
@@ -164,18 +164,22 @@ address and moves on, to the next extent after record 127
 
 **21 Write sequential.** Writes the record at the DMA address at the FCB's
 `CR` and moves on, taking a new allocation block and a new extent when it needs them
-(`src/cpm/bdos.asm:797-947`). Returns 0, 1 if the directory has no entry for a
-new extent, or 2 if the drive is full. After a 1 the FCB stays on its extent
-with `CR` at 128, so a write after an entry is freed makes the extent it needs
-(`src/cpm/bdos.asm:892-928`). An FCB with the read-only attribute set is the
+(`src/cpm/bdosrec.asm:5-124`). Returns 0, 1 if the directory has no entry for a
+new extent or the close of the extent it leaves finds no entry for it, or 2 if
+the drive is full. After a 1 the FCB stays on its extent with `CR` at 128, so a
+write after an entry is freed makes the extent it needs
+(`src/cpm/bdosrec.asm:59-103`). A block taken for a write that then fails
+stays in the FCB's map, and the close writes it into the entry
+(`src/cpm/bdosrec.asm:442-459`). An FCB with the read-only attribute set is the
 `File R/O` error (`src/cpm/bdosfile.asm:253-261`).
 
 **22 Make file.** Creates an empty entry for the FCB's name in the current
 user area, writes it to the directory and opens it
 (`src/cpm/bdosfile.asm:307-378`). Returns the directory code, or `FFh` if the
-directory is full. Does not test for a file of the same name. The FCB's `EX`
-and `S2` are set to 0, so the entry is always the file's first extent
-(`src/cpm/bdos.asm:746-754`). CP/M 2.2 keeps them.
+directory is full. Does not test for a file of the same name. As in CP/M 2.2,
+the FCB's `S2` is set to 0 and its `EX` kept, so the entry is the extent `EX`
+names among the file's first 32, and `S1`, `RC` and the map are cleared
+(`src/cpm/bdosfile.asm:301-314`, `src/cpm/bdosfile.asm:334-347`).
 
 **23 Rename file.** Gives every entry of the file named in the FCB's first 16
 bytes the name and type at offsets 17 to 27 (`src/cpm/bdosfile.asm:403-443`).
@@ -222,13 +226,13 @@ number (`src/cpm/ccp.asm:225-245`).
 **33 Read random.** Reads the record whose number is in the FCB's `R0` and
 `R1` into the DMA address and leaves the FCB's extent and `CR` at that record,
 so that a sequential read after it reads the same record
-(`src/cpm/bdosrec.asm:189-195`, `src/cpm/bdos.asm:1023-1124`). Returns 0, or 1 if
+(`src/cpm/bdosrec.asm:189-195`, `src/cpm/bdosrec.asm:235-335`). Returns 0, or 1 if
 the record has not been written, 3 if the current extent can't be closed, 4 if
 the extent has not been written or 6 if `R2` is not 0.
 
 **34 Write random.** Writes the record at the DMA address to the record whose
 number is in `R0` and `R1`, making its extent if needed
-(`src/cpm/bdos.asm:1006-1124`). Returns 0, or 2 if the drive is full, 3 if the
+(`src/cpm/bdosrec.asm:200-335`). Returns 0, or 2 if the drive is full, 3 if the
 current extent can't be closed, 5 if the directory has no entry for the extent
 or 6 if `R2` is not 0. An FCB with the read-only attribute set is the
 `File R/O` error.
@@ -251,7 +255,10 @@ does not define. Both return 0 and do nothing (`src/tables.asm:77`).
 
 **40 Write random with zero fill.** Function 34, with each allocation block the
 write newly allocates filled with zeros before the record is written
-(`src/cpm/bdosrec.asm:197-216`, `src/cpm/bdos.asm:1257-1306`).
+(`src/cpm/bdosrec.asm:197-216`, `src/cpm/bdosrec.asm:477-527`). The BIOS's DMA
+address is put back on the program's after each of the zero-fill's writes, so
+a failed write that function 45 returns leaves the program's DMA address in
+the BIOS.
 
 **44 Set multi-sector count.** With `E` = 1 returns 0. With any other `E`
 returns `FFh` in `A` and changes nothing (`src/cpm/bdos.asm:138-146`). TEC-OS
