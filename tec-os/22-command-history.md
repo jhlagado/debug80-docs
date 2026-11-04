@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 22. Command history
 
-Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -121,7 +121,7 @@ at least one character (`src/cpm/bdos.asm:481-494`).
 When a program calls function 10 itself, `HFLAG` is clear. `LINDONE` cleared it
 after the CCP's line (`src/cpm/bdos.asm:490-492`), and for a line the CCP
 abandoned at `^C`, every warm boot clears it too, with the rest of the RAM from
-`CCPCLR` up (`src/boot.asm:103`, `src/boot.asm:271-275`). So only the lines typed
+`CCPCLR` up (`src/boot.asm:103`, `src/boot.asm:295-300`). So only the lines typed
 at the CCP's prompt go into the history.
 
 A chained line (Chapter 11) goes in once, whole, with its `!` and `:`, so `^W`
@@ -224,7 +224,7 @@ ones.
 A warm boot leaves the history as it was. Nothing in the warm boot path writes
 to EXPAND 1's page at `BD00h`, and `HHEAD` is in the part of the workspace above
 the RAM BIOS table at `BF00h`, outside the RAM that `CPMINIT` clears
-(`src/boot.asm:92-110`, `src/boot.asm:271-275`, `src/ram.asm:216`,
+(`src/boot.asm:92-110`, `src/boot.asm:295-300`, `src/ram.asm:216`,
 `src/ram.asm:247`). A program's exit, a `^C` at the prompt and BDOS function 0
 all keep it. Here `^C` at the prompt was followed by `^W`:
 
@@ -240,7 +240,7 @@ A>
 
 A reset clears it. Cold boot clears the resident workspace, `HHEAD` with it
 (`src/boot.asm:37-41`), and `MEMINIT` fills all of EXPAND 1 with 0 before it
-marks the cache's lines empty (`src/boot.asm:156-169`). The page at `BD00h` is
+marks the cache's lines empty (`src/boot.asm:172-188`). The page at `BD00h` is
 then all zeros, `HHEAD` is 0 and the byte before it, at offset `FFh`, is 0, so
 the ring is empty and still kept as `HSTORE` and `HREC` require. This holds for
 a recognised reset too, the one that keeps the selected volumes, since only the
