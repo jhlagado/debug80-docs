@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 12. The ROM and its build
 
-Checked against TEC-OS 626ee41.
+Checked against TEC-OS 5a25178.
 
 TEC-OS is one 16 KiB image for the addresses `C000h–FFFFh`. This chapter
 describes the image's layout, from the jump at its first byte to the free
@@ -24,16 +24,16 @@ The ROM has five parts, in this order:
 | --- | ---: | --- |
 | `C000h–C002h` | 3 | the reset jump |
 | `C003h–C00Ah` | 8 | the ROM table |
-| `C00Bh–C350h` | 838 | the data |
-| `C351h–F934h` | 13,796 | the code |
-| `F935h–FFFFh` | 1,739 | free |
+| `C00Bh–C346h` | 828 | the data |
+| `C347h–F85Ch` | 13,590 | the code |
+| `F85Dh–FFFFh` | 1,955 | free |
 
-The figures are those of the build at commit 626ee41. The build writes them to
+The figures are those of the build at commit 5a25178. The build writes them to
 `build/tecos/census.json` and, through `npm run media`, to the table of the
 ROM's regions in `docs/memory-map.md`. The used part, from `C000h` to the end
-of the code, is 14,645 of the 16,384 bytes.
+of the code, is 14,429 of the 16,384 bytes.
 
-The first three bytes are a jump, `JP RSTENT` (`src/reset.asm:7`), to `C351h`,
+The first three bytes are a jump, `JP RSTENT` (`src/reset.asm:7`), to `C347h`,
 the first byte of the code. Chapter 14 describes how the Z80 reaches it at
 reset.
 
@@ -122,7 +122,7 @@ the banner and the LCD's top row print from (`src/text.asm:6`,
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,
-`tools/build.mjs:36-58`). At 626ee41 they are 49, 105, 50, 70 and 77, and the
+`tools/build.mjs:36-58`). At 5a25178 they are 49, 105, 50, 70 and 77, and the
 build stops with an error if a count would not fit in a byte
 (`tools/build.mjs:45-47`). Chapter 15 explains the loops and the arithmetic
 behind the counts.
@@ -165,8 +165,8 @@ the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
 therefore `BF00h` less the workspace's size, and the size is known only after
 an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
 build reads the address of `BDOSRME`, the label at the workspace's end, and
-takes `8000h` from it (`tools/build.mjs:228-232`). At 626ee41 that part is
-1,448 bytes, so the second assembly has `WSBASE` at `B958h`
+takes `8000h` from it (`tools/build.mjs:228-232`). At 5a25178 that part is
+970 bytes, so the second assembly has `WSBASE` at `BB36h`
 (`tools/build.mjs:233-235`).
 
 The second assembly's output is the ROM. `materializeAtomGeneration` turns it
@@ -225,7 +225,7 @@ the arithmetic of cold boot's `ALVINIT`, which Chapter 13 describes: the
 allocation vectors packed down from `WSBASE`, and the BDOS entry jump below
 them (`tools/build.mjs:216-220`). The starter card has two volumes, a G1M
 whose last allocation block, `DSM`, is 511 and a G8M whose `DSM` is 2047. Their
-vectors take 320 bytes and the entry is at `B815h`, which leaves 46,869 bytes
+vectors take 320 bytes and the entry is at `B9F3h`, which leaves 47,347 bytes
 from `0100h`.
 
 ## One image
@@ -242,7 +242,7 @@ with an error when it is given any other name (`tools/build.mjs:28-31`,
 `tools/build.mjs:323`). `npm run build` prints one line:
 
 ```text
-tecos: ROM 14645/16384 bytes, TPA $0100-$B814 (46869 bytes), sha256 9eebcf3a0fbe15e2
+tecos: ROM 14429/16384 bytes, TPA $0100-$B9F2 (47347 bytes), sha256 3bcf5d24c78445fd
 ```
 
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
@@ -257,4 +257,4 @@ dist: 1 ROM profiles, 7 starter files, starter.img
 ```
 
 The ROM in `dist/` has the SHA-256
-`9eebcf3a0fbe15e2a74bb01a036ac8c4b514710bfaa744fb9ca6a77eb2c5bd5a`.
+`3bcf5d24c78445fdf965c85c42447cae9192c4dd2818d2d116bbbab775564e4f`.
