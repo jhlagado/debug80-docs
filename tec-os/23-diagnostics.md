@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 23. Diagnostics
 
-Checked against TEC-OS 621201d. The diagnostics ROM in this chapter is version
+Checked against TEC-OS 78127ec. The diagnostics ROM in this chapter is version
 0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit.
 
 Two parts of the repository report what is wrong with a board. The TEC-OS ROM
@@ -78,7 +78,7 @@ cold boot clears anything (`src/boot.asm:28`). `RSLBUF` is at `0100h`, in the
 fixed RAM (`src/layout.asm:84`), and nothing on the path from there to the
 prompt writes it: `MEMINIT` clears EXPAND 1 alone, and the mount reads the
 table into a line in EXPAND 1 (`src/boot.asm:54`, `src/boot.asm:169-188`,
-`src/vol.asm:278-310`).
+`src/vol.asm:278-309`).
 
 ## The diagnostics ROM
 
