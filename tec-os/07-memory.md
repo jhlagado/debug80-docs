@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 7. Memory for programs
 
-Checked against TEC-OS 621201d, with the ATOM assembler from the
+Checked against TEC-OS 78127ec, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7.
 
 A program on TEC-OS has most of the Z80's memory to itself, and the rest is
