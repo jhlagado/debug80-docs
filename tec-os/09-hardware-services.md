@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 9. The hardware services
 
-Checked against TEC-OS 58d4345. The programs were assembled by the starter
+Checked against TEC-OS 621201d. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. `DEMO`
 was assembled on the PC by ATOM from the repository's `atom-z80` 0.3.7.
@@ -362,8 +362,10 @@ B>
 ```
 
 With the starter card on a board with both displays, where the ROM's console
-is on the PICO9918 and `GLCD.SVC` is in, bits 0, 1 and 2 are set as well, and the console has a size, 50h columns
-and 18h rows:
+is on the PICO9918, bits 0 and 1 are set as well, and the console has a size,
+50h columns and 18h rows. Bit 2 stays clear, because the startup file's
+`GLCD.SVC` line passes over the driver while the PICO9918 is the console, as
+Chapter 7 describes:
 
 <!-- node tools/capture.mjs --card hw.img --board pico B: "TAS BOARD" BOARD -->
 ```text
@@ -372,7 +374,7 @@ B>TAS BOARD
 BOARD.COM written
 
 B>BOARD
-Devices  B = 0F
+Devices  B = 0B
 Version DE = 0001
 Columns  L = 50
 Rows     H = 18
@@ -381,8 +383,9 @@ Number 16: status 01, carry set
 B>
 ```
 
-With only the graphics LCD, the same program gives `0D` for the devices, `15`
-for the columns and `08` for the rows.
+With only the graphics LCD, where `GLCD.SVC` installs and is the console, the
+same program gives `0D` for the devices, `15` for the columns and `08` for the
+rows.
 
 ## The 7-segment digits
 
@@ -479,7 +482,8 @@ clear the digits at its end, since they are dark as soon as the calls stop.
 
 `RTC`, number 8, reads or sets a DS1302 clock. `HL` points at seven bytes in
 BCD: seconds, minutes, hours, date, month, weekday and year. `B = 0` reads
-them into memory, and `B = 1` sets the clock from them. Any other `B` returns
+them into memory, and `B = 1` sets the clock from them and leaves the clock's
+write protect on. Any other `B` returns
 status 1 and leaves the clock alone. With no clock the service returns status 2, and bit 3 of `INFO` records whether a clock
 answered at cold boot. `NOW` reads the clock and prints the date and time:
 
@@ -710,7 +714,7 @@ node tools/tecvol.mjs put hw.img B demo.com
 A>B:DEMO
 
 TEC-OS hardware services demo
-PICO9918: yes   GLCD: yes   clock: yes
+PICO9918: yes   GLCD: no   clock: yes
 Watch the LCD, the digits, the LEDs and the screen.
 Press any key to stop.
 
@@ -719,8 +723,10 @@ Demo stopped.
 A>
 ```
 
-The transcript is everything the console was sent. The PICO9918 showed the
-first lines until the claim, and what it shows after the release is this:
+`GLCD: no` is `INFO`'s bit 2, clear on this board because the startup file
+leaves `GLCD.SVC` out. The transcript is everything the console was sent. The
+PICO9918 showed the first lines until the claim, and what it shows after the
+release is this:
 
 <!-- the same run's --screen output -->
 ```text
@@ -735,7 +741,8 @@ A>
 `PUTAT`, number 7, writes `B` characters from `HL` at row `D`, column `E`,
 counted from 0, on a video console. It leaves the cursor's position as it was
 and doesn't pass through the escape-sequence parser, so a full-screen program
-can use it to redraw part of the screen. The text is clipped at the right
+can use it to redraw part of the screen. It removes the cursor's image first,
+and the next wait for a key draws it again, as after any output. The text is clipped at the right
 edge. A row below the screen writes nothing and a count of 0 does nothing, and
 both return status 0.
 
@@ -833,9 +840,9 @@ and to each string in the first row.
 
 | Path | PICO9918 | Graphics LCD |
 | --- | ---: | ---: |
-| `PUTAT`, the whole string in one call | 517 | 35,600 |
-| BIOS `CONOUT` | 808 | 35,800 |
-| BDOS function 2 | 4,007 | 38,900 |
+| `PUTAT`, the whole string in one call | 517 | 35,800 |
+| BIOS `CONOUT` | 808 | 36,000 |
+| BDOS function 2 | 4,037 | 39,100 |
 
 On the PICO9918 `PUTAT` is about eight times faster than the BDOS. The graphics
 LCD draws each cell pixel by pixel, so nearly all the time goes on the drawing
