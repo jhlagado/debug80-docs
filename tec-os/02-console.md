@@ -11,8 +11,8 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 The console is the device you type on and the one TEC-OS answers on. A
 TEC-1G can carry a serial terminal, a PICO9918 video card and a graphics LCD
-at once. TEC-OS uses one of them at a time. The board decides which one it
-starts on, and the `CON` command moves it.
+at once. TEC-OS uses one of them at a time. Which one it starts on depends on
+the board, and the `CON` command moves it.
 
 ## The four console devices
 
@@ -83,8 +83,8 @@ the terminal program, or typed ahead of a busy program, can lose characters.
 ## A display as the console
 
 The PICO9918's console is in the ROM, and it takes no memory from programs.
-Cold boot starts it when the PICO9918 answers and the matrix keyboard is
-there. With either missing it stays unstarted.
+Cold boot starts it on a board with the PICO9918 and the matrix keyboard, as
+above, and on any other board the serial terminal stays the console.
 
 The graphics LCD's console is a driver, `GLCD.SVC`, a file on the card. TEC-OS
 loads it into memory below the BDOS. On a board with the graphics LCD and no
@@ -376,8 +376,7 @@ Ten
 ```
 
 `^C`, Esc or `Q` at `[more]`, in capitals or not, rubs out `[more]` and ends
-the listing there. The test clears one bit of the key before comparing it, so
-`#` reads as `^C` and `;` as Esc. A line can hold several commands, as
+the listing there. A line can hold several commands, as
 [Chapter 3](03-command-line.md#several-commands-on-one-line) describes, and
 `^C` here drops the rest of such a line. Esc and `Q` end only the listing.
 After `q` at the first pause the CCP starts a new line for the prompt, below

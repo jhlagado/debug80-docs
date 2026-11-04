@@ -34,8 +34,8 @@ runs with the latch at `LATCLAS`, `01h`: the overlay off and EXPAND 0 in view
 The latch can be written but not read, so TEC-OS keeps what it last wrote in a
 byte of page zero, `LATCHV` at `0040h` (`src/layout.asm:39`). A routine that
 changes the bank for a moment reads `LATCHV`, sets `LATEXP` in it and writes
-the result to the port. When it is done it writes `LATCHV` to the port
-unchanged. The block cache's lookup is the pattern. It puts EXPAND 1 in view to
+the result to the port. It writes `LATCHV` to the port unchanged when it is
+done. The block cache's lookup is the pattern. It puts EXPAND 1 in view to
 search the table of cache lines there, and ends with `LD A,(LATCHV)` and
 `OUT (SYSLAT),A` (`src/cache.asm:24-26`, `src/cache.asm:56-57`). Because each
 routine starts from `LATCHV`, a bank change leaves the latch's other bits as
@@ -43,9 +43,9 @@ they were. The matrix keyboard's Caps key toggles bit 7, which lights the Caps
 LED, in `LATCHV` and in the latch together (`src/keyboard.asm:110-115`).
 
 The latch moves `8000h–BFFFh` from one half to the other, so anything TEC-OS
-reads while EXPAND 1 is in view has to be outside the window. `LATCHV` is the
-one byte of TEC-OS's own state that is, and it is the one byte TEC-OS keeps in
-page zero (`src/layout.asm:36-39`). The cache's copy routine `MVCOPY` also
+reads while EXPAND 1 is in view has to be outside the window. `LATCHV` is that
+byte, and it is the only state TEC-OS keeps in page zero
+(`src/layout.asm:36-39`). The cache's copy routine `MVCOPY` also
 reads and writes the part of a program's buffer that lies below `8000h` with
 EXPAND 1 in view (`src/cache.asm:401-412`).
 
@@ -73,7 +73,7 @@ writes the parts TEC-OS sets (`src/boot.asm:221-283`):
 `PZINIT` leaves the IOBYTE and the drive and user byte as they are
 (`src/boot.asm:221-224`). The word it writes at `0006h` is `PZTOP`, the entry
 of the lowest service or, with none, the BDOS entry jump itself
-(`src/boot.asm:230-231`). It then rewrites the restart vectors. A vector that
+(`src/boot.asm:230-231`). It then rewrites the restart vectors, and one that
 jumps above the top of the TPA, into a service, the workspace or the ROM,
 keeps its jump (`src/boot.asm:238-283`). Chapter 15 explains the rule.
 
@@ -111,22 +111,21 @@ workspace, from `WSBASE` at `BAE7h` to `WSEND` at `C000h`, in one `LDIR`
 at `BDB7h` to `BDOSRME` at `BF00h`. The CCP and the BDOS then start each
 program as a fresh load of them from disk would (`src/boot.asm:288-300`).
 Everything else in the table outlives a warm boot, and the chapters that rest
-on that fact point here. They are the drive table (Chapter 17) and the logged-in
-drives (Chapter 19). They are also the command line of a chained line
-(Chapter 21), the width `CON` gave the PICO9918's console (Chapter 16), the
-services and their registry (Chapter 24) and the startup file's record
-(Chapter 25).
+on that fact point here: the drive table (Chapter 17), the logged-in drives
+(Chapter 19), a chained line's command buffer (Chapter 21), the width `CON`
+gave the PICO9918's console (Chapter 16), the services and their registry
+(Chapter 24) and the startup file's record (Chapter 25).
 
 Within the parts it keeps, warm boot sets a few bytes. It writes `LATCHV`
 and the latch (`src/boot.asm:93-95`). It gives back the PICO9918 if a program
 claimed it (`src/boot.asm:97-99`). It clears the flag that marks a service's
-`INIT` or `REMOVE` as running (`src/boot.asm:101-102`), and it puts the scroll
+`INIT` or `REMOVE` as running (`src/boot.asm:101-102`) and puts the scroll
 region and the display's mode back (`src/boot.asm:104-107`). `CPMINIT` also
-sets the command buffer's maximum length to 127 and clears `BUFOK`. That key
-lets a write skip the read of its block, so the first write after a warm boot
-reads its block (`src/boot.asm:301-311`). A flush that loses a write
-drops the rest of a chained line (`src/cache.asm:392-395`). Chapter 15 lists
-warm boot's steps in order.
+sets the command buffer's maximum length to 127 and clears `BUFOK`, the key
+that lets a write skip the read of its block, so the first write after a warm
+boot reads its block (`src/boot.asm:301-311`). The flush at the end of warm
+boot clears `CHPOS`, a chained line's position, when a write is lost
+(`src/cache.asm:392-395`). Chapter 15 lists warm boot's steps in order.
 
 The two regions marked neither are placed, not cleared. Cold boot places the
 jump and the vectors after it has read the card, as the next section
@@ -243,8 +242,8 @@ loaded, and the most the services may add to it, with a quarter of it still
 free. The base of the BIOS's stack is warm boot's, 18 bytes, and the CCP's is
 also 18 (`src/layout.asm:64-70`).
 
-The measurement is `test/stacks.test.mjs`. The test boots the model under the
-heaviest workloads of the test suite. It runs them on each console, on a
+The sizes rest on a measurement, `test/stacks.test.mjs`. The test boots the
+model under the heaviest workloads of the test suite. It runs them on each console, on a
 volume written behind, without a card, on chained lines and on the CCP's
 deepest paths. It records every write to memory, the clearing `LDIR`s
 excepted, and the lowest address written in each stack gives its depth. It
@@ -303,5 +302,5 @@ cache's routines, the history's and `DETECT`, which the RAM check calls to find
 EXPAND 1, state the rule at their heads (`src/cache.asm:10-13`,
 `src/history.asm:16-19`, `src/boot.asm:190-194`). The SD card driver's block
 loops keep to it when a cache line is the buffer (`src/sd.asm:321-325`). The
-same rule reaches a program. One that switches EXPAND 1 in has lost its stack
+same rule reaches a program: one that switches EXPAND 1 in has lost its stack
 and the BDOS before it writes a byte, as Chapter 8 says.

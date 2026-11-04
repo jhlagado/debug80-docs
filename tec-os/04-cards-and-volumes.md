@@ -85,8 +85,10 @@ G8M volume has 8,372,224 bytes free, 16 KiB less than 8 MiB. Both geometries
 have 128-byte records, the unit in which CP/M reads and writes. Four records
 fit a 512-byte block of the card.
 
-A volume's contents are an ordinary CP/M 2.2 directory and data area.
-[Appendix E](appendix-e-container-format.md) lists each geometry's parameters.
+A volume's contents are an ordinary CP/M 2.2 directory and data area. A PC
+tool that reads CP/M disks, such as cpmtools, therefore reads a volume copied
+out of the image, given the geometry's parameters.
+[Appendix E](appendix-e-container-format.md) lists them.
 
 ## Building a card with tecvol
 

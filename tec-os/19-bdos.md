@@ -14,7 +14,7 @@ A program puts a function number in `C` and an argument in `DE`, then calls
 directory in step with the files a program opens, writes and closes. It reaches
 the card through the BIOS of Chapter 17 and the cache of Chapter 18.
 This chapter follows a file through its life, from `0005h` to the card block
-that holds its record. It ends with the ways TEC-OS's BDOS differs from the one
+that holds its record, and ends where TEC-OS's BDOS differs from the one
 Digital Research shipped. Appendix A gives each function's registers and return
 codes.
 
@@ -72,7 +72,7 @@ every BIOS call it makes runs on that stack. The caller's stack holds only the
 return address of its `CALL`. `BENTRY` then tests for seven numbers above 40
 that have the meanings CP/M 3 gave them: 44, 45, 46, 47, 48, 99 and 108
 (`src/cpm/bdos.asm:93-107`). Appendix A lists them. Chapter 21 describes 47 and
-108, and the error mode, function 45, comes at the end of this chapter. Any
+108, and the section on errors below describes function 45, the error mode. Any
 other number above 40 returns 0 at once (`src/cpm/bdos.asm:108-109`).
 
 A function from 0 to 40 has a routine in `FNTAB`, a table of 41 words

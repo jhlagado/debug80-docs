@@ -14,11 +14,11 @@ nav_group: "Part I: Using and programming TEC-OS"
      `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and
      the ATOM assembler from the repository's `atom-z80` 0.3.7 on the PC. -->
 
-In Chapter 1 you typed `TAS SAMPLE` and ran the program it built. This chapter
-is about writing a program of your own. `HELLO` prints a line, and `SHOW`
-prints the file named on its command line. You type, build and run both on
-the TEC-1G itself, with the starter card's `TED` and `TAS`. A PC is needed
-only for the second route, a program assembled there.
+In Chapter 1 you typed `TAS SAMPLE` and ran the program it built. Now you
+write one of your own. `HELLO` prints a line. You type, build and run it on
+the TEC-1G itself, with the starter card's `TED` and `TAS`. Then you build
+the same program on a PC, the route later chapters use. `SHOW`, the second
+program, prints the file named on its command line.
 
 ## A program and the BDOS
 
@@ -75,13 +75,14 @@ explains. Assembled, the program is 33 bytes.
 ## Building and running it on the TEC-1G
 
 `TED` is the starter card's editor and `TAS` its assembler. Both are on drive
-A, and the program goes on drive B, so first make drive B current. `TED
-HELLO.ASM` then opens an empty file of that name, since there is no
-`HELLO.ASM` on the drive yet. Type the program in. The arrow keys move the
-cursor and `^H` removes the character before it. `^S` saves the file and `^Q`
-quits. The status row is the last row of the screen. It starts with `TED` and the
-file's name, then a `*` while the file has unsaved changes, then the cursor's
-line and column, as `L7 C1`.
+A, and the program goes on drive B, so first type `B:`. At `B>`, `TED
+HELLO.ASM` opens an empty file of that name, since there is no `HELLO.ASM`
+on the drive yet. A line number after the name, as `TED HELLO.ASM 7`, opens
+the file with the cursor at line 7. Type the program in. The arrow keys move
+the cursor and `^H` removes the character before it. `^S` saves the file and
+`^Q` quits. The status row is the last row of the screen. It starts with
+`TED` and the file's name, then a `*` while the file has unsaved changes,
+then the cursor's line and column, as `L7 C1`.
 
 `^T` followed by a letter hands a command to the CCP. `TED` ends and the command
 runs. Then the CCP starts `TED` again at the same place, by the chaining that
@@ -100,10 +101,11 @@ reads it and names that drive in each command it chains. Run from drive A with d
 current, it chains `A:TAS` and `A:TED`. The source stays on drive B and the
 tools on drive A.
 
-A mistake shows the whole round. With `HELLO.ASM` typed in and saved, type a
-`1` at the start of line 7, the `CALL BDOS`, and press `^T B`. `TED` saves
-the file and chains `A:TAS HELLO.ASM` and then `A:TED`. On the PICO9918 the
-screen shows this before `TED` draws its own again:
+A mistake shows the whole round. With `HELLO.ASM` typed in and saved, `TED
+HELLO.ASM 7` opens it at line 7, the `CALL BDOS`. Type a `1` at the start of
+the line and press `^T B`. `TED` saves the file and chains `A:TAS HELLO.ASM`
+and then `A:TED`. On the PICO9918 the screen shows this before `TED` draws
+its own again:
 
 <!-- a run on the host model with work.img, driven as test/ted.test.mjs at 7458352 drives TED: B:, TED HELLO.ASM 7, 1, ^T B, Right, ^H, ^T R, a space, ^Q, DIR -->
 ```text
@@ -132,9 +134,10 @@ MESSAGE:DB      "Hello from the TEC-1G",13,10,"$"
 TED  HELLO.ASM    expected a label, instruction or directive  ^S Save  ^Q Quit
 ```
 
-The Right arrow moves the cursor past the `1`, and `^H` removes it. `^T R`
-then saves the file, builds the program and runs it. `TED` waits for a key
-before it draws its screen again:
+The matrix keyboard has no Delete key. So the fix is the Right arrow, which
+moves the cursor past the `1`, and then `^H`, which removes it. `^T R` then
+saves the file, builds the program and runs it. `TED` waits for a key before
+it draws its screen again:
 
 <!-- the same run -->
 ```text
@@ -369,9 +372,9 @@ unless the program changed the byte. If the byte names a drive
 with no volume, the CCP takes drive A. Chapter 15 describes the warm boot
 step by step.
 
-The stack the CCP gives a program is the CCP's own, with room below the
-return address for a few levels of calls and pushes. Chapter 8 gives the
-figure. A program that uses more points `SP` at a stack in its own memory. A
+The stack the CCP gives a program is the CCP's own. It has 30 bytes free
+below the return address, room for a few levels of calls and pushes. A program
+that uses more points `SP` at a stack in its own memory. A
 `RET` at the end then doesn't reach `0000h`, so such a program ends with
 function 0 or `JP 0000h`.
 

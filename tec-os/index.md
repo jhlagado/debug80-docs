@@ -11,11 +11,11 @@ TEC-OS is an operating system for the TEC-1G, held entirely in the board's 16
 KiB ROM. It runs CP/M 2.2 programs from volumes on an SD card, and it gives
 programs the board's displays, keyboards, LEDs and clock through numbered
 services in the ROM. This book answers one question: how do you use a TEC-1G
-running TEC-OS, write programs for it, and understand how it works inside?
+running TEC-OS, write programs for it and understand how it works inside?
 
 ## The reader
 
-The book is written for someone who knows the TEC-1G, or a Z80 board like it,
+This book is for someone who knows the TEC-1G, or a Z80 board like it,
 and wants to use the board as a small disk computer. Chapters 1 to 6 begin at
 the first prompt, and a reader of them needs no programming. Chapters 7 to 12
 are for readers of Z80 assembly, and they explain each part of CP/M where a
@@ -111,7 +111,7 @@ it does it?
 16. **[The BIOS and the console path](16-bios-and-console.md).** What does a
     character go through between a key and the screen?
 17. **[The SD card and the volumes](17-sd-card-and-volumes.md).** How does a
-    record the BDOS asks for become a block on the card?
+    128-byte record become a block on the card?
 18. **[The block cache](18-block-cache.md).** Why is a second read fast, and
     when does the card actually hold what a program wrote?
 19. **[The BDOS](19-bdos.md).** What does a BDOS call do to the directory and

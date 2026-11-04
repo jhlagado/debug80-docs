@@ -45,7 +45,7 @@ their handlers in `web/src/main.mjs`.
 
 The page's recipe has the starter card's files and `DEMO.COM`, the program
 Chapter 10 describes (`tools/media.mjs:227-240`). The file list under "Drive"
-shows each file's user area, name and size, and it is read again every 5
+shows each file's user area, name and size. It is read again every 5
 seconds and after a reset (`web/src/main.mjs:569-582`,
 `web/src/main.mjs:656-662`). The width and the display chosen are kept in the
 browser's local storage, so a reload keeps them (`web/src/main.mjs:17-19`).
@@ -76,11 +76,11 @@ The page keeps its card in the browser's IndexedDB, in the database `tecos`,
 the store `cards`, under the key `current` (`web/src/store.mjs:6-8`). At
 start it loads the card stored last time, or builds the starter card from the
 recipe and stores it (`web/src/main.mjs:684-698`). Each write TEC-OS makes to
-the card marks it changed, and every 2 seconds a changed card is stored again,
-so files written on the card are still there after a reload
+the card marks it changed, and every 2 seconds a changed card is stored again.
+Files written on the card are therefore still there after a reload
 (`web/src/main.mjs:92-94`, `web/src/main.mjs:106-110`). One save runs at a
-time: a save asked for during another marks the card changed, and the next
-tick saves the newest copy (`web/src/main.mjs:118-124`).
+time. A save due during another marks the card changed, and the next tick
+saves the newest copy (`web/src/main.mjs:118-124`).
 
 The line under the heading "SD card" names each drive's volume, and after it
 reports a save that failed (`web/src/main.mjs:112-147`,
@@ -95,6 +95,13 @@ reports a save that failed (`web/src/main.mjs:112-147`,
 A reload before a save succeeds brings back the card as it was last saved, so
 "Download image" is the way to keep a copy you can't afford to lose.
 
+The page's card is a high-capacity card (`host/machine.mjs:49`), and "Open
+image" rejects an image shorter than the length its header gives, with
+`Not opened: image is truncated` (`web/src/main.mjs:598`,
+`tools/lib/container.mjs:150-152`). Two failures of Appendix D therefore
+never appear on the page: the diagnostic prompt's code `27h` and the
+`Bad Sector` of a volume that runs past the end of the card.
+
 ## Copying files to the card
 
 "Copy file to drive" pauses the machine and reads the PC's files. It then
@@ -106,15 +113,15 @@ started while one runs is rejected with `Not copied: file import in
 progress`. An "Open image" at that time is rejected with `Not opened: file
 import in progress`.
 
-The reset is a cold boot, so TEC-OS rebuilds its map of each drive's free
-space from the changed card and its block cache from nothing. A change still
+The reset is a cold boot. TEC-OS rebuilds its map of each drive's free
+space from the changed card, and its block cache from nothing. A change still
 in that cache, on the work volume written behind, is lost by the reset, as it
 would be on a board. A `^C` at the prompt before the copy puts it on the card
 first.
 
 The page makes one change to the card at a time. A power-on's rewrite of the
-startup file and a copy of files take turns, so a width chosen while files are
-copied is the one the card in the machine and the stored card both keep
+startup file and a copy of files take turns. A width chosen while files are
+copied therefore reaches both the card in the machine and the stored card
 (`web/src/main.mjs:67-80`).
 
 ## The card's startup file
@@ -124,8 +131,8 @@ for the display and width chosen, with `prepareCard` from `host/card.mjs`
 (`web/src/main.mjs:82-84`, `host/card.mjs:58-73`). The page writes no driver:
 the PICO9918's console is the ROM's, and the graphics LCD's driver must be on
 the card already. The change is made on a copy of the card, which goes over
-the card only once the change is made. The page reads user 0 of drive A, the
-files the ROM loads at boot, and opens the drive read-only when the card's
+the card only once the change is made. The page reads user 0 of drive A, where
+the ROM loads files at boot. It opens the drive read-only when the card's
 descriptor says so (`host/card.mjs:18-24`).
 
 The first line the page writes:
@@ -159,14 +166,14 @@ piece:
 
 Lines left blank are dropped. Nothing is written when the new text equals the
 old. The starter card's `STARTUP.CMD`, `GLCD.SVC` alone, stays as it is for
-the graphics LCD, and for the PICO9918 it holds a `CON PICO` line, or nothing
+the graphics LCD. For the PICO9918 it holds a `CON PICO` line, or nothing
 but its `^Z` at 80 columns (`test/pico.test.mjs:832-844`).
 
 ## Cards left as they are
 
 Before it writes, the page checks that the card can show the display chosen
 (`host/card.mjs:26-50`). A card that fails the check gets no new
-`STARTUP.CMD`, and the reason goes to the serial terminal in brackets after
+`STARTUP.CMD`. The reason goes to the serial terminal in brackets after
 `[power on]` (`web/src/main.mjs:97-98`). A change that can't be made is
 reported the same way, and the card stays as it was (`host/card.mjs:67-72`):
 
@@ -182,5 +189,5 @@ reported the same way, and the card stays as it was (`host/card.mjs:67-72`):
 `NAME.DRV` is the chosen display's `.DRV` file if the card has it, and
 otherwise the first `.DRV` display file in the directory
 (`host/card.mjs:41-44`). The page doesn't force a write over a read-only
-`STARTUP.CMD`. A card whose startup file has to stay as it is is best copied
-to the PC before the page opens it.
+`STARTUP.CMD`. A card whose startup file must not change is best copied to the PC
+before the page opens it.

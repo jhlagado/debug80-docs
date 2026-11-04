@@ -60,9 +60,9 @@ reads up to 16 bytes, waiting for the response byte R1, whose bit 7 is 0.
    initialisation goes on.
 3. `CMD55` and `ACMD41` with the high-capacity bit set, repeated up to 256
    times with a short pause between, until R1 is 0, the card ready. Error 2,
-   `SDEINIT`, if it never is. When `CMD55`'s R1 has any bit set but bit 0,
-   the idle state, the same error comes at once and no `ACMD41` is sent
-   (`src/sd.asm:186-187`, `src/sd.asm:200-202`).
+   `SDEINIT`, if it never is. The same error comes at once, with no `ACMD41`
+   sent, when `CMD55`'s R1 has an error bit set, any bit but bit 0, the idle
+   state (`src/sd.asm:186-187`, `src/sd.asm:200-202`).
 4. `CMD58`, which returns the operating conditions register. Bit 6 of its
    first byte, CCS, is set on a high-capacity card, which takes block numbers
    as addresses. Error 3, `SDEOCR`, if the command fails.
@@ -78,7 +78,7 @@ A standard one gets it shifted left by 9, the block times 512
 can't be given a block number of `800000h` or more, 4 GiB into the card. The
 shift would lose its top bits and name a lower block. For such a block
 `LBAARG` returns with carry set and `SDARG` unchanged. `SDREAD` and
-`SDWRITE` then send no command and fail with error 9, `SDERNG`
+`SDWRITE` then fail with error 9, `SDERNG`, before any command is sent
 (`src/sd.asm:18`, `src/sd.asm:273-274`, `src/sd.asm:313-315`,
 `src/sd.asm:500-501`).
 
@@ -88,7 +88,10 @@ before it. The driver polls for that token up to 65,536 times before it gives
 error 6, `SDETOK`. A card that can't read the block sends a data error token,
 a byte of the form `000xxxxx`, in place of `FEh`. Any byte but `FFh` and `FEh`
 ends the read at once with error `0Ah`, `SDEDTOK` (`src/sd.asm:285-298`). The
-512 bytes follow the token, then a two-byte CRC that the driver reads and
+test of each byte of the wait for that token costs 11 T-states a poll
+(`src/sd.asm:282-292`), against the 678 a poll that `docs/diagnostics.md`
+gives for the diagnostics ROM's copy of the driver, which makes no such test.
+The 512 bytes follow the token, then a two-byte CRC that the driver reads and
 doesn't check.
 
 `SDWRITE` writes a block with `CMD24` (`src/sd.asm:498-545`). R1 must be 0,
@@ -108,9 +111,10 @@ passes in the Z80's `I` register, which is free in interrupt mode 1
 219,144 T-states for one block, about 55 milliseconds, and `SDWRITE` 216,164.
 Nearly all of it is the 4,096 bits of the block moved one at a time.
 
-When `SDXB` holds `LATEXP` the buffer is a line of the block cache in
-EXPAND 1. Each loop then puts EXPAND 1 in view around itself and uses no stack
-while it is, as [Chapter 14](14-memory-map.md#expand-1) requires
+The buffer is a line of the block cache in EXPAND 1 when `SDXB` holds
+`LATEXP`. Each loop then puts EXPAND 1 in view around itself and uses no stack
+while it is, as [Chapter 14](14-memory-map.md#expand-1-and-the-no-stack-rule)
+requires
 (`src/sd.asm:321-325`, `src/sd.asm:419-422`, `src/sd.asm:427-431`,
 `src/sd.asm:490-491`).
 
@@ -140,7 +144,7 @@ descriptor are read (`src/vol.asm:325-337`, `src/ram.asm:58`).
 
 `MOUNT` makes the checks in a fixed order and stops at the first failure with
 that check's code (`src/vol.asm:13-24`, `src/vol.asm:32-145`). The header's
-checks come first. Block 0 must read and start with `TECOSVOL`. The major
+checks come first: block 0 must read and start with `TECOSVOL`. The major
 version must be 1, the header and descriptor sizes 512 and 32, and the volume
 count in range. The checksum must be the 16-bit sum of the header's other 510
 bytes. Appendix E lists each check with its code.
@@ -263,8 +267,8 @@ and 512 directory entries. G1M has 512 blocks of 2 KiB and 256 entries.
 `CKS` is 0 in both: CP/M 2.2 uses the check vector to detect a changed floppy,
 and the card is treated as fixed media. The BDOS uses the three scratch words
 to keep a drive logged in across a warm boot, as [Chapter 19](19-bdos.md)
-describes. [Chapter 15](15-reset-and-boot.md) describes how `ALVINIT` places
-the vectors at cold boot.
+describes. [Chapter 14](14-memory-map.md#the-allocation-vectors-and-the-bdos-entry)
+describes how `ALVINIT` places the vectors at cold boot.
 
 ## Deblocking and the write decision
 
@@ -358,8 +362,9 @@ in four cases. The index is past the table, the drive is past D, the volume
 is on a drive already, or the drive's vector slot is too small for the
 volume. An unmount fails for drive A, which is never left empty, and for a
 drive past D (`src/vol.asm:607-616`, `src/vol.asm:653-657`). The slot rule
-is `VSLOT`'s. A volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
-and any other needs a slot of either size (`src/vol.asm:637-647`). Chapter 15
+is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
+and any other needs a slot of either size (`src/vol.asm:637-647`).
+[Chapter 14](14-memory-map.md#the-allocation-vectors-and-the-bdos-entry)
 describes how cold boot gives out the slots.
 [Appendix B](appendix-b-rom-services.md) gives the three services' register
 contract. Each may take 24 bytes of stack below its return address. On the

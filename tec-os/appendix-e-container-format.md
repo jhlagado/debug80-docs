@@ -19,7 +19,7 @@ describes the container from the user's side and Chapter 17 the ROM's mount.
 
 The format is defined once, in `format/format.json`. The build generates the
 ROM's field offsets and its geometry table from that file, as
-`src/gen/format.asm` and `src/gen/geom.asm` (`tools/build.mjs:80-135`), and
+`src/gen/format.asm` and `src/gen/geom.asm` (`tools/build.mjs:80-135`).
 `tools/lib/container.mjs` and `tecvol` read the same file through
 `tools/lib/format.mjs`. All numbers of more than one byte are little-endian. A
 block is 512 bytes, and block numbers count from the start of the container,
@@ -113,7 +113,7 @@ of 8 in place of 2,048 (`tools/lib/container.mjs:14`,
 
 Block 0 holds the header and descriptors 0 to 14, at offsets 32 to 511. A 1.1
 card with more than 15 volumes goes on in blocks 1 to 7, 16 descriptors to a
-block, which with block 0's 15 gives the limit of 127
+block. With block 0's 15 that gives the limit of 127
 (`tools/lib/container.mjs:33-42`, `format/format.json`). Descriptor `i`, for
 `i` of 15 or more, is in block `1 + (i − 15) / 16`, at `32 × ((i − 15) mod
 16)` within it. No volume can start below block 8, so blocks 1 to 7 are free
@@ -130,9 +130,8 @@ as the header's checksum does.
 
 The ROM's `MOUNT` checks the header first and then each descriptor in table
 order, in one pass, mounting each one as it passes (`src/vol.asm:32-264`). The
-first check to fail stops the mount, unmounts any drive mounted so far and
-returns its code, which cold boot prints at the diagnostic prompt (Chapter
-26). The checks, in the order the ROM makes them:
+first check to fail stops the mount and unmounts any drive mounted so far.
+Cold boot prints its code at the diagnostic prompt (Chapter 26). The checks, in the order the ROM makes them:
 
 | Code | Check | Source |
 | --- | --- | --- |
@@ -155,7 +154,7 @@ The ascending order behind `28h` is checked on every card, 1.0 and 1.1 alike.
 It keeps two volumes from overlapping: each must start at or after the end of
 the one before it in the table. `tecvol` makes the same check on every card
 (`tools/lib/container.mjs:174`). A card whose two descriptors were swapped,
-with its checksum made good, fails `tecvol verify`, and the ROM stops at the
+with its checksum made good, fails `tecvol verify`. The ROM stops at the
 diagnostic prompt with code `28h`. One Node.js command makes such a card,
 `build/swapped.img`, from the starter card:
 
@@ -196,7 +195,7 @@ The drives field limits the drive bytes. On a 1.1 card that gives N drives, a
 volume may name only drives A to the Nth. With N of 0, or on a 1.0 card, a
 volume may name any of the four (`src/vol.asm:243-247`). The ROM stops a card
 that breaks this at the diagnostic prompt with code `29h`. `tecvol` makes the
-same check (`tools/lib/container.mjs:178`), so `tecvol verify` rejects such a
+same check (`tools/lib/container.mjs:178`). `tecvol verify` rejects such a
 card, and `tecvol create` rejects a volume on drive C with `--drives 2`:
 
 ```sh
@@ -220,14 +219,14 @@ tecvol: volume 1: drive C is past the card's 2 drive(s)
 | At most one volume written behind |
 | An image as long as the header's container length |
 
-The ROM checks none of the cache byte, the label, the reserved bytes or
-whether two volumes share an id, and it can't check the card's size.
+The ROM checks none of the cache byte, the label, the reserved bytes or a
+shared id. It can't check the card's size.
 
 ## The geometries
 
-Both geometries have 128-byte records, 64 records to a track, no reserved
-tracks, no sector skew and no check vector, since the card is not removable
-media in CP/M's sense (`format/format.json`, `geometries`). Record `r` of a
+Both geometries have 128-byte records and 64 records to a track
+(`format/format.json`, `geometries`). Neither has reserved tracks, sector skew
+or a check vector, since the card is not removable media in CP/M's sense. Record `r` of a
 volume is the 128 bytes at `128 × r` in its payload, so four records share a
 block.
 
@@ -255,13 +254,12 @@ Their disk parameter blocks, as `src/gen/geom.asm` holds them:
 | CKS | 0 | 0 | No check vector |
 | OFF | 0 | 0 | No reserved tracks |
 
-The directory takes four allocation blocks in each: 512 entries of 32 bytes
-are 16 KiB, four G8M allocation blocks, and 256 entries are 8 KiB, four G1M
-allocation blocks. A G8M volume has 2,048 allocation blocks and a G1M volume
+The directory takes four allocation blocks in each. 512 entries of 32 bytes
+are 16 KiB, four G8M blocks, and 256 entries are 8 KiB, four G1M blocks. A G8M volume has 2,048 allocation blocks and a G1M volume
 512, of which four are the directory's.
 
-The ROM's geometry table has an entry of 6 bytes for each geometry: the id, a
-0, the payload in blocks as a word and the address of the disk parameter block
-(`src/gen/geom.asm`). `GEOFIND` looks an id up in it (`src/volutil.asm:18-29`),
-and the length check compares the descriptor's length with that word and
-requires its two high bytes to be 0 (`src/vol.asm:171-182`).
+The ROM's geometry table has 6 bytes for each geometry (`src/gen/geom.asm`):
+the id, a 0, the payload in blocks as a word and the disk parameter block's
+address. `GEOFIND` finds an id in it (`src/volutil.asm:18-29`). The length
+check compares the descriptor's length with that word and requires its two
+high bytes to be 0 (`src/vol.asm:171-182`).

@@ -275,7 +275,7 @@ the second drive byte, so the new name follows it at offset 17, where function
 that reaches the page of the word at `0006h`. A count past 255 is a bad
 command too, since each step of the decimal conversion tests for a carry
 (`src/cpm/ccpcmd.asm:183-213`). On the starter card that page is `B9h`, so the
-largest `SAVE` is 184 pages, `0100h` to `B8FFh`. 185 is refused as 320 is:
+largest `SAVE` is 184 pages, `0100h` to `B8FFh`. 185 is rejected as 320 is:
 
 <!-- node tools/capture.mjs "SAVE 320 B:X.COM" "SAVE 185 B:X.COM" -->
 ```text

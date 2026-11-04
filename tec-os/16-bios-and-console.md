@@ -113,9 +113,13 @@ itself all went to the PICO9918's screen.
 
 `GLCD.SVC` takes the console when it loads: `SVCGO` calls `CONSW` with `UC1:`
 once the driver's table is in. While the PICO9918's console is in effect the
-driver stays loaded and the console stays as it is. `CON UC1` then switches
-with nothing to load (`src/loader.asm:538-550`). [Chapter 25](25-startup.md)
-explains what that means for a line of `STARTUP.CMD`.
+driver stays loaded and the console stays as it is. On a board with both
+displays, `GLCD.SVC` typed at the prompt therefore loads and the screen stays
+the PICO9918's, and `CON UC1` then switches with nothing to load
+(`src/loader.asm:538-550`). The same line in `STARTUP.CMD` loads nothing on
+such a board, because the driver's table is rejected, as the section on the
+displays explains. [Chapter 25](25-startup.md) explains why the line says
+nothing.
 
 ## Console input
 
@@ -128,11 +132,11 @@ table. The serial receiver and the keyboard scan both put a character in
 `BCONST` reports a character ready when `RXFULL` is set. Otherwise it checks
 the input once. On a video console it scans the whole keyboard. On the serial
 terminal it reads the serial input up to `RXPOLL` times, 77, and receives a
-byte whose start bit arrives in that time. At 38 T-states a poll that is three
-and a half bit times (`src/console.asm:137-167`). The table's `CONST` entry is
-`BCONSTC`. It also draws the cursor on a video console when nothing is ready,
-since a program that polls is waiting for a key. The BDOS's own check for `^S`
-while it prints calls `BCONST` directly and draws nothing
+byte whose start bit arrives in that time. At 38 T-states a poll, that is
+three and a half bit times (`src/console.asm:137-167`). The table's `CONST`
+entry is `BCONSTC`, which also draws the cursor on a video console when
+nothing is ready, since a program that polls is waiting for a key. The BDOS's
+own check for `^S` while it prints calls `BCONST` directly and draws nothing
 (`src/console.asm:123-131`).
 
 `BCONIN` waits for a character (`src/console.asm:172-187`). On a video console
@@ -170,19 +174,27 @@ a poll has read the start bit, and it turns interrupts off for the whole byte
 as `TXBYTE` does. It waits `RXHALF` passes, 70, to reach the middle of the
 first data bit. It then samples the line eight times with `RXDLY` passes, 50,
 between samples. A pass of that loop takes 38 + 16 × `RXDLY` T-states, 838.
-The polling loops that test for the start bit also take 38 T-states a pass, so
-the edge can be up to 38 T-states old when it is read. `RXHALF` allows for
-half of that, and for the 65 or 52 T-states `RXBITS` spends on the interrupt
-state (`src/console.asm:23-24`, `src/console.asm:225-226`). The counts come
-from the build, as [Chapter 13](13-rom-and-build.md) describes, and they hold
-only for a 4 MHz clock (`tools/build.mjs:37-45`). On a board the CPU clock
-switch has to be on FAST.
 
-The serial input has no hardware buffer. A byte is received only if a routine
-is polling for its start bit when it comes (`src/console.asm:17-19`), and a
-byte that arrives while TEC-OS is doing something else is lost. Text sent from
-a PC therefore reaches TEC-OS whole only as fast as the program reading it
-calls `CONIN` or `READER`.
+The five counts come from the build, which counts T-states against the bit
+time, 4,000,000 divided by 4800, about 833 (`tools/build.mjs:37-55`).
+`TXDLY` is the bit time less the 49 T-states of a `TXB` pass, divided by 16
+and rounded, and `RXDLY` is the same with the 38 of an `RXB` pass. `TXSTOP`
+is two bit times in 16-T-state passes, plus one. `RXPOLL` is three and a half
+bit times in 38-T-state polls, rounded up. `RXHALF` has to reach the middle of
+the first data bit from the start bit's edge, one and a half bit times on.
+The polling loops read the line every 38 T-states, so the edge can be up to
+38 T-states old when it is seen, and `RXHALF` allows for half of that. It also
+allows for the 65 or 52 T-states `RXBITS` spends on the interrupt state and
+for the fixed 51 T-states around its loop (`src/console.asm:23-24`,
+`src/console.asm:225-226`). The counts hold only for a 4 MHz clock, so on a
+board the CPU clock switch has to be on FAST. [Chapter 13](13-rom-and-build.md)
+describes the file the build writes them to.
+
+The serial input has no hardware buffer. A byte is received only while a
+routine is polling for its start bit (`src/console.asm:17-19`), and a byte
+that arrives while TEC-OS is doing something else is lost. Text sent from a PC
+therefore reaches TEC-OS whole only as fast as the program reading it calls
+`CONIN` or `READER`.
 
 CP/M 2.2 gives a program three more character devices through the BIOS. The
 list device, a printer, and the punch are for output, and the reader is for
@@ -223,8 +235,8 @@ boot. `CONINIT` copies bit 0 of port `03h` into `CONDEV`'s bit `CDMTX`
 (`src/keyboard.asm:13-15`).
 
 `KBSTEP` reads one row each time it is called (`src/keyboard.asm:28-58`).
-`CONIN` calls it in a loop. `CONST` calls `KBPOLL`, which runs the eight steps
-of one full scan (`src/console.asm:181-182`, `src/keyboard.asm:9-23`).
+`CONIN` calls it in a loop, and `CONST` calls `KBPOLL`, which runs the eight
+steps of one full scan (`src/console.asm:181-182`, `src/keyboard.asm:9-23`).
 `KBMASK` holds the row's select byte, rotated left after each row, and
 `KBBASE` the number of the row's first key. For each key down, `KBSTEP` moves
 the last key seen, `KBE`, into `KBD` and records the new one in `KBE`. After a
@@ -344,24 +356,29 @@ program finds the table with `TNFIND` as it would a driver's
 table's `PICOWID` entry, as [Chapter 20](20-ccp.md) describes.
 
 `GLCD.SVC` gives the ROM its table through `DRVR`, service 12. The service's
-routine `VIDHOOK` keeps the address in `GLVEC` (`src/services.asm:362-385`,
-`src/video.asm:79-102`). The driver calls the service with `CMUC1`, 3, in `B`
-and the table's address in `HL`. Any other value in `B` returns `TNEBAD` with
-carry set and changes nothing, since the PICO9918's table is the ROM's
-(`src/services.asm:362-367`). A table offered from a line of `STARTUP.CMD`
-while the `CON:` field is `CRT:` is rejected with `TNENODV`, the status of an
-absent device. Such a driver could only stand behind the PICO9918's console, so
-the startup file does not install it (`src/services.asm:368-380`). `VIDHOOK`
-returns `HL` pointing at `LINEBUF`, the buffer the driver's row routines use.
-When there is no matrix keyboard, or the display already has a table, it
-changes nothing and the service returns `TNEBAD` with carry set.
+routine `SVDRV` tests the mode and the caller and passes the table to
+`VIDHOOK`, which keeps its address in `GLVEC` (`src/services.asm:362-385`, `src/video.asm:79-102`). The
+driver calls the service with `CMUC1`, 3, in `B` and the table's address in
+`HL`. `SVDRV` rejects any other value in `B` with `TNEBAD` and carry set and
+changes nothing, since the PICO9918's table is the ROM's own
+(`src/services.asm:362-367`). An older card's `PICO.SVC` offered its table
+with `B` at 1, so on this ROM its `INIT` fails. A table offered from a line of
+`STARTUP.CMD` while the `CON:` field is `CRT:` is rejected with `TNENODV`,
+the status of an absent device. Such a driver could only stand behind the
+PICO9918's console, so the startup file does not install it
+(`src/services.asm:368-380`). `VIDHOOK` then rejects the table with `TNEBAD`
+when there is no matrix keyboard or the display already has a table.
+Otherwise it keeps the table and returns `HL` pointing at `LINEBUF`, the
+buffer the driver's row routines use.
 
-The driver's `REMOVE` calls the service with `HL` at 0, and `VIDHOOK` then
-drops the table. When `UC1:` is the mode in effect, it puts the serial terminal
-in `CONMOD`. The field still names `UC1:`, so the next console call acts on it
-and, with no table now, takes the serial terminal. When the mode in effect is
-`CRT:`, `VIDHOOK` leaves it as it is, so the PICO9918's screen and its text
-stay (`src/video.asm:103-118`).
+The driver's `REMOVE` calls the service with `HL` at 0, a drop, which is never
+rejected: `SVDRV` skips the startup test for it, and `VIDHOOK` clears `GLVEC`
+whatever it held (`src/services.asm:368-370`, `src/video.asm:103-107`). When
+`UC1:` is the mode in effect, `VIDHOOK` puts the serial terminal in `CONMOD`.
+The field still names `UC1:`, so the next console call acts on it and, with no
+table now, takes the serial terminal. When the mode in effect is `CRT:`,
+`VIDHOOK` leaves it as it is, so the PICO9918's screen and its text stay
+(`src/video.asm:108-118`).
 
 The seventh vector carries three functions that only the PICO9918's console
 needs (`src/video.asm:43-65`). That console has two name tables in VRAM, its
@@ -376,9 +393,9 @@ insert or delete (`src/term.asm:504`, `src/term.asm:531`,
 PICO9918 and no program has claimed it.
 
 A program claims the PICO9918 through the hardware service `VIDEO`, number 3,
-to draw on it directly (`src/services.asm:120-136`). While it is claimed and is
-the console, `VTOWN` reports that and the terminal leaves the display alone.
-`BCONOUT` drops output, and there is no cursor and no page flip
+to draw on it directly (`src/services.asm:120-136`). `VTOWN` reports a claim
+on the display that is the console, and the terminal then leaves the display
+alone: `BCONOUT` drops output, and there is no cursor and no page flip
 (`src/term.asm:574-585`). The claim ends with the service's release or at warm
 boot. `HWVREL` then puts the display's registers, font and page back and gives
 it to the console again, before page zero is rebuilt

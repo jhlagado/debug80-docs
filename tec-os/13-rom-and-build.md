@@ -10,9 +10,9 @@ nav_group: "Part II: Inside TEC-OS"
 <!-- Checked against TEC-OS 78127ec. -->
 
 Part I showed what TEC-OS does at the prompt and for a program. Part II opens
-the 16 KiB ROM and shows how it does those things, and what it keeps where
-while it does them. The map starts with the image itself: its parts and the
-source order that produces them. The build then fixes every address the later
+the 16 KiB ROM and shows how it does those things and what it keeps where
+while it does them. This chapter is the image itself: its parts, the source
+order that produces them and the build that fixes every address the later
 chapters cite.
 
 ## The image's parts
@@ -43,12 +43,12 @@ and Chapter 23 the services behind it. The table ends at `C00Bh`, where the
 data begins.
 
 The data block runs from the label `ROMDATA` (`src/tables.asm:8`) to `ROMCODE`
-(`src/text.asm:71`). It holds every table and message the code reads. The
+(`src/text.asm:71`). It holds every table and message the code reads: the
 BIOS jump table `BIOSBAS`, the keyboard's tables, the built-in commands' words
-with their handlers, the BDOS's function table and the table of the numbered
-services are here (`src/tables.asm:11-28`, `src/tables.asm:45-65`,
-`src/tables.asm:70-77`, `src/tables.asm:82-89`). So are the container's name
-and disk parameters, the console's font and the messages. Each group is headed by the
+with their handlers, the BDOS's function table, the table of the numbered
+services, the container's name and disk parameters, the console's font and
+the messages (`src/tables.asm:11-28`, `src/tables.asm:45-65`,
+`src/tables.asm:70-77`, `src/tables.asm:82-89`). Each group is headed by the
 name of the source file whose code uses it, so `CWMSG`, the text `Write lost`,
 sits under `cache.asm` (`src/text.asm:68-69`). Nothing in the block runs where
 it is. `BIOSBAS` is a table of jumps, but only the copy that cold boot makes at
@@ -105,24 +105,25 @@ assembler takes in the order listed (`src/rom.asm:1-3`):
 	%INCLUDE	"end.asm"
 ```
 
-The first five files emit no bytes. `abi.inc`, `gen/config.asm` and
-`gen/format.asm` are equates. So is `layout.asm`, which names the ports, the
-system latch's values, TEC-OS's one byte in page zero and the fixed addresses
-in RAM (`src/layout.asm:8-86`). `abi.inc` is the file a program or a service
-assembles with. The ROM takes the table's addresses and the services' numbers
-from the same equates as the program that calls them (`src/abi.asm:2-4`). `ram.asm` names the resident workspace. It sets the
-origin to `WSBASE` and reserves each variable with `DS`, which defines a label
-and moves the address on without emitting anything (`src/ram.asm:6-9`). A
-second origin, at `RAMBIOS+BIOSLEN`, places the state above the RAM BIOS table
-(`src/ram.asm:218`). Chapter 14 describes that memory.
+The first five files emit no bytes. `abi.inc`, `gen/config.asm`,
+`gen/format.asm` and `layout.asm` are equates. `layout.asm` names the ports,
+the system latch's values, TEC-OS's one byte in page zero and the fixed
+addresses in RAM (`src/layout.asm:8-86`). `abi.inc` is the file a program or
+a service assembles with, so the ROM takes the table's addresses and the
+services' numbers from the same equates as the program that calls them
+(`src/abi.asm:2-4`). `ram.asm` names the resident workspace, which Chapter 14
+describes. It sets the origin to `WSBASE` and reserves each variable with
+`DS`, which defines a label and moves the address on without emitting
+anything (`src/ram.asm:6-9`). A second origin, at `RAMBIOS+BIOSLEN`, places
+the state above the RAM BIOS table (`src/ram.asm:218`).
 
 Bytes start with `reset.asm` and its `ORG $C000` (`src/reset.asm:1`), and from
 there each file's bytes follow the last file's. The table follows the reset
 jump because `abi.asm` follows `reset.asm`. The data follows the table because
-the four data files come next, and the code follows the data because every file
-after `text.asm` is code. So a code file's routines are in the code block. Its
-strings and tables are in the data block, under a heading with the file's name
-(`src/tables.asm:1-4`, `src/text.asm:1-4`). The CCP, the BDOS and the
+the four data files come next. The code follows the data because every file
+after `text.asm` is code. So a code file's routines are in the code block, and
+its strings and tables are in the data block under a heading with the file's
+name (`src/tables.asm:1-4`, `src/text.asm:1-4`). The CCP, the BDOS and the
 volume code are each split across files that follow one another, so their
 bytes lie together as one file's would.
 
@@ -252,11 +253,11 @@ from `0100h`.
 
 ## One image for every board
 
-When the checks pass, the build writes three files into `build/tecos/`.
-`tecos.rom` is the image. `tecos.d8.json` is the symbol map in Debug80's D8
-format, which `tools/capture.mjs` reads to find TEC-OS's labels. `census.json`
-holds the figures for the ROM's parts, the RAM's regions and the stacks
-(`tools/build.mjs:267-315`). When `dist/` exists, from an earlier `npm run
+When the checks pass, the build writes three files into `build/tecos/`:
+`tecos.rom`, the image, `tecos.d8.json`, the symbol map in Debug80's D8
+format, which `tools/capture.mjs` reads to find TEC-OS's labels, and
+`census.json`, the figures for the ROM's parts, the RAM's regions and the
+stacks (`tools/build.mjs:267-315`). When `dist/` exists, from an earlier `npm run
 media`, the build copies the three files there too, as `tecos.rom`,
 `tecos.d8.json` and `tecos.census.json`. A built `dist/` therefore holds the
 same ROM as `build/tecos/` (`tools/build.mjs:320-334`). `npm run media` then builds the
@@ -264,10 +265,10 @@ starter card from it, as Chapter 27 describes.
 
 The build has one profile, `tecos`, and stops with an error when it is given
 any other name (`tools/build.mjs:29-32`, `tools/build.mjs:343`). One image
-serves every board because the consoles that differ between boards are not in
-the image's layout. The PICO9918's console is in the ROM at each of its three
-widths: 80 columns from reset, and 40 or 32 through `CON`. The graphics LCD's
-console is a driver on the card. `npm run build` prints one line:
+serves every TEC-1G because nothing that differs between boards is in the
+image's layout. The PICO9918's console is in the ROM at each of its three
+widths, 80 columns from reset and 40 or 32 through `CON`, and the graphics
+LCD's console is a driver on the card. `npm run build` prints one line:
 
 ```text
 tecos: ROM 16018/16384 bytes, TPA $0100-$B9A3 (47268 bytes), sha256 8cad40923ce1c3c6

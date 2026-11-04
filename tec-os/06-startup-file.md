@@ -27,6 +27,10 @@ GLCD.SVC
 A>
 ```
 
+`GLCD.SVC` installs the graphics LCD's driver, a *service*: code that TEC-OS
+reads from the card and keeps in memory until a reset. The last sections
+describe services and the commands that list and remove them.
+
 Any command you can type can be a line of the file. The card below is a copy
 of the starter card with a startup file of six lines. `tecvol put`, from
 Chapter 4, replaces the file of the same name. `--text` writes it as a CP/M
@@ -165,16 +169,17 @@ Typed at the prompt, `GLCD.SVC` with no graphics LCD fails with `GLCD.SVC?`.
 
 ## When the file runs
 
-Chapter 5 gave the three ways TEC-OS comes back to a prompt, and the file runs
-on two of them:
+TEC-OS comes back to a prompt in three ways, and the file runs on two of
+them:
 
 - An *ordinary exit* is a program's return, a `^C`, or a jump to `0000h`. It
   is a warm boot: services stay, the drives hold the volumes they held and the
   startup file doesn't run.
 - A *recognised reset* is a press of the reset button that finds a running
   TEC-OS's marks in RAM. The drives keep the volumes that were on them, if the
-  card still has those volumes, and everything else TEC-OS holds in memory is
-  rebuilt.
+  card still has those volumes, as
+  [Chapter 5](05-drives-and-cache.md#the-drives-after-a-reset) describes.
+  Everything else TEC-OS holds in memory is rebuilt.
 - An *unrecognised reset* is a reset that finds no such marks, as at power-on.
   The drives take the volumes the card's header names, and everything else is
   rebuilt.
@@ -321,10 +326,9 @@ as [Appendix I](appendix-i-web-page.md) describes.
 
 ## Services at the prompt
 
-A *service* is what a `.SVC` file installs. It is code that TEC-OS reads from
-the card into memory just below the BDOS. It stays there until a reset or
-until the `UNLOAD` command removes it, and a program's end leaves it in
-place. The
+A service is what a `.SVC` file installs. TEC-OS reads its code from the card
+into memory just below the BDOS. It stays there until a reset or until the
+`UNLOAD` command removes it, and a program's end leaves it in place. The
 graphics LCD's driver is the starter card's one service. The PICO9918's
 console is in the ROM, so nothing is installed for it. A service takes whole
 pages of 256 bytes from the memory programs have, and Chapter 8 gives the
@@ -402,7 +406,8 @@ and prints `GLCD.DRV?`. Renaming the file to `GLCD.SVC`, and changing
 `STARTUP.CMD` to match, works when the file's second byte is 4. That byte is
 the file's format, and 4 is the format this ROM loads. An older `PICO.SVC`
 doesn't install under any name, since the PICO9918's console is now in the
-ROM.
+ROM. [Appendix D](appendix-d-error-messages.md#a-card-from-an-older-tec-os)
+shows the renaming on such a card.
 
 ## When the file goes wrong
 
@@ -416,9 +421,9 @@ G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi) describes the jumper.
 
 After a skip there are no services, and the console stays where cold boot put
 it. A board with the PICO9918 and the matrix keyboard has its console on the
-PICO9918 as always. Any other board has the 20 × 4 LCD and the serial terminal
-and nothing else, because the matrix keyboard is read only once the graphics
-LCD's driver is in. On such a board you recover at the serial terminal:
+PICO9918 as always. Any other board has only the 20 × 4 LCD and the serial
+terminal, since the matrix keyboard is read only once the graphics LCD's
+driver is in. On such a board you recover at the serial terminal:
 `ERA STARTUP.CMD` or a corrected file, and then a reset. Otherwise you take
 the card to a PC and use `tecvol`. A recognised reset with a skip keeps the drives'
 volumes as one without a skip does. The web page has no keypad, so a bad file

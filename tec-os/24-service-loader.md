@@ -15,9 +15,10 @@ A `.SVC` file is read to `0100h` like a program and then moved to whole pages
 just under the top of the TPA. There it stays through every warm boot. The
 loader in `src/loader.asm` makes that move in seven steps. It keeps a registry
 of what the resident services publish and takes the lowest service out again
-at `UNLOAD`. This chapter follows one file through the steps, then through the
-ways a load fails and the way a service leaves. It ends on what the loader can
-check about a service and what it has to take on trust.
+at `UNLOAD`. This chapter gives the place a service takes and the relocation
+that puts it there. It then follows one file through the steps, through the
+ways a load fails and the way a service leaves, and ends on what the loader can
+check about a service and what it can't.
 
 ## A service's entry
 
@@ -395,7 +396,7 @@ record goes while a program runs. A program can therefore keep a record's
 address until it exits. A service that keeps one for longer compares the
 generation `FIND` returned with the one `LIST` or `FIND` returns now, or names
 the record as a dependency so that its own load fails without it, as
-[Chapter 12](12-writing-services.md#keeping-a-pointer) describes.
+[Chapter 12](12-writing-services.md#depending-on-another-service) describes.
 
 A warm boot keeps all of this, since `REGHEAD`, `SVCHEAD` and `PZTOP` lie past
 `BDOSRME`, the end of the range `CPMINIT` clears (`src/ram.asm:216-218`,

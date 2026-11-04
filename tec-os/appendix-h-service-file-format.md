@@ -30,9 +30,10 @@ A `.SVC` file has four parts, in this order:
 | Relocation data | The size at offset 10 | The gap list |
 
 The header and the image are one assembly made for page 0, with the header at
-its start, so an address in the image counts from the header's first byte. The
+its start. An address in the image therefore counts from the header's first
+byte. The
 loader moves the header and the image together to a page boundary. A file's
-end is rounded up to a whole record of 128 bytes on the card, and the loader
+end is rounded up to a whole record of 128 bytes on the card. The loader
 reads nothing after the relocation data (`src/loader.asm:177-181`).
 
 ## The header
@@ -59,7 +60,7 @@ The loader compares the first two bytes, as a word, with `DMAGIC`, which is
 and a file of any other format fails the load (`src/abi.inc:103-105`).
 
 Two writers fill the header. The source writes the fields the programmer
-decides, and the tool that makes the file, `TAS` on the card or `makeSvc` on a
+decides. The tool that makes the file, `TAS` on the card or `makeSvc` on a
 PC, writes the ones it measures (`tools/lib/svc.mjs:111-120`):
 
 | Field | Written by |
@@ -80,8 +81,8 @@ The source leaves the tool's fields 0.
 
 Each dependency is 9 bytes: the least version of the record, then its 8-byte
 name, padded with spaces (`tools/lib/svc.mjs:106`). The entries follow the
-image and are no part of it, so the loader relocates none of their bytes. It
-looks each one up in the registry, and a name that isn't there, or is there at
+image and are no part of it, so the loader relocates none of their bytes. The
+loader finds each one in the registry. A name that isn't there, or is there at
 a lower version, fails the load (`src/loader.asm:128-147`). `makeSvc` takes
 them from its `deps` option and rejects a name of more than 8 bytes
 (`tools/lib/svc.mjs:105`). `TAS` takes them from what follows a label named
@@ -105,19 +106,18 @@ therefore written as bytes of 255 and then the rest:
 
 Image byte 600 is 601 bytes from header byte 24, which is 255 and 255 and 91
 more (`test/svc.test.mjs:376-378`). When the rest is 0, as for image byte 509,
-the last byte for that fixup is a gap of 0, which fixes the byte the 255s
-reached.
+the last byte is a gap of 0. That fixes the byte the 255s reached.
 
-Every position the list reaches, a gap of 255 included, must lie inside the
-header and image, below the size at offset 6, or the load fails
+Every position the list reaches, a gap of 255 included, must lie below the
+size at offset 6, inside the header and image. Otherwise the load fails
 (`src/loader.asm:174-203`). The loader doesn't test for a first gap of 0,
 which fixes header byte 24, the name's last. `makeSvc` never writes one, since
-every fixup it finds lies in the image, and the example below shows what such
-a list does.
+every fixup it finds lies in the image. The example below shows what such a
+list does.
 
 The repository's encoders also write a bitmap and a list of 16-bit offsets, for
-comparison (`tools/lib/svc.mjs:28-36`). `makeSvc` writes the gap list unless it
-is asked for another, and the loader reads only the gap list
+comparison (`tools/lib/svc.mjs:28-36`). `makeSvc` writes the gap list unless its
+options name another, and the loader reads only the gap list
 (`tools/lib/svc.mjs:83`).
 
 ### A first gap of 0
@@ -146,7 +146,7 @@ COUNTX 1
 B>
 ```
 
-The service loads. The space at byte 24 has become `20h` + `B8h`, `D8h`, and
+The service loads. The space at byte 24 has become `20h` + `B8h`, `D8h`.
 `PUTTRIM` masks bit 7 (`src/cpm/ccpfile.asm:325-327`), so the name prints
 with an `X`.
 
@@ -188,10 +188,10 @@ The header's fields are:
 
 With no dependencies the relocation data starts at offset 767, `2FFh`, right
 after the image. The image starts at offset 25, `19h`. Its first bytes are the
-table of words the driver passes to the ROM's terminal through service 12:
-`00F2h`, `014Dh`, `0152h` and so on, addresses in an image made for page 0.
-The list's first gap, 2, counts from offset 24 to offset 26, the high byte of
-`00F2h`, and each of the next five 2s reaches the next word's high byte. The
+table of words the driver passes to the ROM's terminal through service 12.
+They are `00F2h`, `014Dh`, `0152h` and so on, addresses in an image made for
+page 0. The list's first gap, 2, counts from offset 24 to offset 26, the high
+byte of `00F2h`. Each of the next five 2s reaches the next word's high byte. The
 69 bytes hold no 255, so they mark 69 fixups, and the last is at file offset
 563. The driver holds no font: its `INIT` reads the font's address from the
 ROM through service 15 and stores it (`drivers/glcd.asm:38-41`). A bitmap
