@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 626ee41, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
 128edb7 and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and
 `TAS.COM`'s is
@@ -34,7 +34,7 @@ games and BASIC interpreters. TEC-OS implements the interface as CP/M 2.2
 defined it, so a CP/M 2.2 program runs on the TEC-1G unchanged if it uses only
 the documented interface, sizes its memory from the word at `0006h` and fits
 in the memory left for programs. The starter card, the card image built with
-TEC-OS, leaves 46,869 bytes.
+TEC-OS, leaves 47,347 bytes.
 
 A CP/M system has three parts. The BDOS provides the functions at `0005h`, and
 the CCP, the Console Command Processor, prints the prompt, reads a command and
@@ -353,10 +353,10 @@ A display driver takes 1,536 bytes of memory below the BDOS, which leaves less
 for programs. CP/M calls the memory a program may use the TPA, the Transient
 Program Area. It starts at `0100h` and ends below the address in the word at
 `0006h`, which is the BDOS's entry or, with a service installed, the lowest
-service's jump to it. On the starter card with no service the word is `B815h`,
-and programs have 46,869 bytes. With `PICO.SVC` installed it is `B200h`, and
-programs have 45,312: the driver's pages end at `B7FFh`, so the 21 bytes from
-`B800h` to `B814h` go too. Chapter 7 explains a program's memory.
+service's jump to it. On the starter card with no service the word is `B9F3h`,
+and programs have 47,347 bytes. With `PICO.SVC` installed it is `B300h`, and
+programs have 45,568: the driver's pages end at `B8FFh`, so the 243 bytes from
+`B900h` to `B9F2h` go too. Chapter 7 explains a program's memory.
 
 A board with a PICO9918 and the matrix keyboard has a dark screen if no display
 driver was installed by the time of the first prompt, and the 20 × 4 LCD's last
@@ -514,18 +514,13 @@ at the prompt, and press reset after putting a changed card back.
 
 When the card doesn't answer, or its contents don't pass the checks, cold boot
 stops after the banner and prints the diagnostic prompt. Here the socket is
-empty, and `H` was typed at the prompt:
+empty:
 
-<!-- node tools/capture.mjs --card none --lcd H -->
+<!-- node tools/capture.mjs --card none --lcd -->
 ```text
 TEC-OS 0.1 for TEC-1G
 No volume mounted, error 01
-R retry, H header> H
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-R retry, H header> 
+R retry> 
 ```
 
 The number after `error` is a code in hexadecimal. Codes `01` to `04` come from
@@ -535,11 +530,9 @@ socket gives. Codes `20` to `2A` come from the checks on the container: `21` is
 a block 0 that doesn't start with the container's name, `TECOSVOL`, and `2A` is
 a card with no volume for drive A. Appendix D lists them all.
 
-`H` prints the first 64 bytes of the last block read from the card, in
-hexadecimal, and they show whether the card holds a TEC-OS container at all.
-With no card no block was read, so the bytes are zeros. `R` starts cold boot
-again from the point where it sets up the LCD and the card, so after you fix
-or insert the card `R` reaches the prompt without a reset. While TEC-OS waits
+`R` starts cold boot again from the point where it sets up the LCD and the
+card, so after you fix or insert the card `R` reaches the prompt without a
+reset. Any other key prints the prompt again. While TEC-OS waits
 at the diagnostic prompt, the LCD's last row shows `CARD?`, for a board with
 no terminal attached:
 
