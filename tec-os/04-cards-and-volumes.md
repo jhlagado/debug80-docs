@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 626ee41, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -308,7 +308,7 @@ gives out the space in one of two ways.
 A card in format 1.0, or one in format 1.1 whose header gives no number of
 drives, gets a vector for each drive cold boot puts a volume on, sized for its
 volume. The starter card's two drives take 64 and 256 bytes, the word at
-`0006h` is `B815h`, and programs have 46,869 bytes. Drives C and D get no
+`0006h` is `B9F3h`, and programs have 47,347 bytes. Drives C and D get no
 vector, so on the starter card no volume can be mounted on them. A drive keeps
 its vector when `MOUNT` empties it, and drive B's, of 256 bytes, can take a
 G1M or a G8M volume:
@@ -333,8 +333,8 @@ A card in format 1.1 whose header gives N drives, as
 `tecvol create --drives N` makes it, gets a 256-byte vector for each of drives
 A to the Nth. Each gets one whether a volume is on it at cold boot or not, so
 any of those drives can take any volume later. `my.img`'s header gives four,
-so its vectors take 1,024 bytes, the word at `0006h` is `B555h` and programs
-have 46,165 bytes. That is 704 fewer than on the starter card, the difference
+so its vectors take 1,024 bytes, the word at `0006h` is `B733h` and programs
+have 46,643 bytes. That is 704 fewer than on the starter card, the difference
 between the two cards' vectors. A drive past the Nth gets no vector, and a card whose header puts a volume on such a drive
 fails the checks at cold boot. Chapter 7 describes the TPA, and Chapter 13 the
 rest of the map.
@@ -354,6 +354,8 @@ second time. Chapter 19 gives the method.
 A volume is *written through* by default: a write reaches the card before
 TEC-OS reports it done. When a program writes a record, TEC-OS writes the
 record's whole block to the card and waits until the card reports it accepted.
+If that write fails, the cache drops its copy of the block, so the next read
+of the block comes from the card.
 The exception is a volume whose descriptor marks it written behind, and
 `tecvol` marks one at most. On the starter card that is `WORK`. The volume's
 writes go into the cache and stay there, and TEC-OS writes them to the card later:
@@ -366,12 +368,13 @@ writes go into the cache and stay there, and TEC-OS writes them to the card late
 - At every warm boot, so `^C` at the prompt or the end of any program writes
   everything.
 - When `MOUNT` changes a drive.
+- When a program calls BDOS function 48.
 
 Writing behind saves card writes when a program writes a file a record at a
 time, because the four records of a block reach the card in one write of the
 block. A *flush* writes all the cache's changes to the card, and a block written
 many times between two flushes reaches the card once, unless the cache fills
-between them. On the model, `SAVE 64`, which writes 16 KiB, took 7.71 seconds on
+between them. On the model, `SAVE 64`, which writes 16 KiB, took 7.65 seconds on
 a G8M volume written through and 2.48 seconds, about a third of that, on one
 written behind.
 
@@ -379,14 +382,17 @@ The order of the writes keeps the card's directory true to its data. TEC-OS
 writes a directory block only after every changed data block the cache holds,
 so the directory never names a block whose data isn't on the card.
 
-When a changed data block can't be written, it stays in the cache, and each
-warm boot repeats the write and prints `Write lost` while the write still
-fails. A directory block that can't be written is dropped from the cache, and
-the directory is read from the card again. A reset or a power cut discards a
-data block held in this way. When a card comes out with changed data blocks in the cache,
-they stay held in this way even if the same card goes back: only cold boot
-starts a card, so each warm boot prints `Write lost` again, and the reset that
-starts the card discards them.
+A block that can't be written while a program runs gives the program the BDOS
+error `Bad Sector`. In a flush TEC-OS tries every changed block and drops from
+the cache each one it can't write, so the card keeps its old copy and the
+change is lost. A warm boot whose flush
+dropped a block prints `Write lost` once, and the next warm boot has nothing
+more to report. A directory block that can't be written is dropped from the
+cache in the same way, and the directory is read from the card again. When a
+card comes out with changed blocks in the cache, they are lost even if the same
+card goes back: only cold boot starts a card, so the first warm boot after the
+card comes out prints `Write lost` and drops them, and a reset discards any
+written behind since.
 
 ## The drives after a reset
 
@@ -494,12 +500,12 @@ A power cut or a reset then leaves the file in one of these ways:
   holds the new records with the old ones the program hadn't reached. Nothing
   on the card keeps the old file.
 - On the volume written behind, a change since the last directory write, warm
-  boot or `MOUNT` is lost if it is still in the cache. A block TEC-OS has
-  already written to make room in a full cache is on the card, and so are the
-  blocks a flush finished before the cut. Any new data block among them has no
-  directory entry naming it, as above, and a block the file already had holds
-  the new records in place of the old. A cut never leaves an entry naming a
-  block whose data isn't there.
+  boot, `MOUNT` or call of function 48 is lost if it is still in the cache. A
+  block TEC-OS has already written to make room in a full cache is on the card,
+  and so are the blocks a flush finished before the cut. Any new data block
+  among them has no directory entry naming it, as above, and a block the file
+  already had holds the new records in place of the old. A cut never leaves an
+  entry naming a block whose data isn't there.
 - A cut during the write of one block can leave that block with old, new or
   mixed contents. If the block is part of a directory, it holds 16 directory
   entries, and any of them can be damaged.
