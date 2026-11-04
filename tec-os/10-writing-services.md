@@ -282,6 +282,13 @@ memory. A call of function 47 from `INIT` or `REMOVE` is a warm boot there: its
 line runs, from `INIT` the load rolls back, and from `REMOVE` the service stays
 listed.
 
+A display driver's `INIT` hands the ROM its table through service 12,
+`TNDRVR`, with `B = 3` for `UC1:`, as `GLCD.SVC` does. `TNDRVR` refuses
+`B = 1`, since the table for `CRT:` is the ROM's own PICO9918 console, so the
+`PICO.SVC` of an older card fails its `INIT` and leaves nothing loaded. A
+driver draws its characters from the ROM's font, whose address service 15,
+`TNFONT`, returns, and carries no font of its own.
+
 After a failed `INIT` the loader reads the 17 entries of the BIOS jump table for
 one that points into the service. If it finds one it keeps the pages, marks
 them as not removable and publishes no record. The scan covers the BIOS jump table
