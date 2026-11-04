@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. The host model and the web page
 
-Checked against TEC-OS 621201d, with `@jhlagado/debug80-runtime` 0.3.3, the
+Checked against TEC-OS 78127ec, with `@jhlagado/debug80-runtime` 0.3.3, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -221,7 +221,12 @@ the source and every file it includes, so that a changed include assembles again
 (`test/lib/fixtures.mjs:75-76`). `standardCard` is a new container with the
 starter card's two volumes, `SYSTEM` on A and `WORK` on B, both empty
 (`test/lib/fixtures.mjs:57-64`), and `volume` opens a drive of it as a CP/M
-file system for a test to write files into.
+file system for a test to write files into. That file system is `CpmVolume`,
+from `tools/lib/cpmfs.mjs`, which `tecvol` and the page use too. Its `read`
+throws for an entry that names a block past `DSM`. Its `write` over a file with
+the read-only attribute, and its `erase` of one, are refused, as the BDOS
+refuses them, unless the call sets `force` (`tools/lib/cpmfs.mjs:123-128`,
+`tools/lib/cpmfs.mjs:152-160`, `tools/lib/cpmfs.mjs:175-191`).
 
 Two inputs the tests use come from outside the repository: the starter card's
 assembler, `TAS.COM`, and its editor, `TED.COM`. `test/inputs.json` records the
@@ -341,7 +346,7 @@ The page writes no driver. The PICO9918's console is the ROM's, and the
 graphics LCD's driver must be on the card already. `prepareCard` works on a copy
 of the card, which goes over the card only once the change is made, and it reads
 user 0 of drive A, read-only when the card says so (`host/card.mjs:18-24`,
-`host/card.mjs:58-70`). It checks that the card can show the display chosen: a
+`host/card.mjs:58-73`). It checks that the card can show the display chosen: a
 drive A, and for the graphics LCD a `GLCD.SVC` in the format this ROM loads
 (`host/card.mjs:26-50`). If it can, the first line of `STARTUP.CMD` becomes the
 display's line, `GLCD.SVC` for the graphics LCD and `CON PICO 40` or `CON PICO
@@ -359,7 +364,9 @@ for an older card names the display's own `.DRV` file if the card has it, and
 otherwise the first `.DRV` display file in the directory (`host/card.mjs:41-44`).
 A change that can't be made, to a read-only drive A or in a full directory,
 leaves the card as it was, and the serial terminal says that it couldn't be
-prepared and boots as it is. Chapter 21 describes the preparation in full.
+prepared and boots as it is. A `STARTUP.CMD` with the read-only attribute is
+not forced: the card stays as it was, and the terminal says that the file is
+read-only and the card boots as it is (`host/card.mjs:68-70`). Chapter 21 describes the preparation in full.
 
 "Copy file to drive" pauses the machine and reads the PC's files. Then, in its
 turn, it writes them to a copy of the card as the card is then, and saves it. Only when the save succeeds does it copy it into the card the
