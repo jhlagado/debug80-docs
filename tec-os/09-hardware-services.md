@@ -7,10 +7,10 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 9. The hardware services
 
-Checked against TEC-OS 78127ec. The programs were assembled by the starter
-card's `TAS.COM`, from Thorium dbee66a, SHA-256
-`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. `DEMO`
-was assembled on the PC by ATOM from the repository's `atom-z80` 0.3.7.
+<!-- Checked against TEC-OS 78127ec. The programs were assembled by the starter
+     card's `TAS.COM`, from Thorium dbee66a, SHA-256
+     `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. `DEMO`
+     was assembled on the PC by ATOM from the repository's `atom-z80` 0.3.7. -->
 
 A CP/M program has the BDOS for files and the console, and nothing for a
 7-segment digit or a speaker. This chapter describes the calls TEC-OS has for

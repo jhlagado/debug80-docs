@@ -7,8 +7,8 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. The host model and the web page
 
-Checked against TEC-OS 78127ec, with `@jhlagado/debug80-runtime` 0.3.3, the
-version `package.json` names.
+<!-- Checked against TEC-OS 78127ec, with `@jhlagado/debug80-runtime` 0.3.3, the
+     version `package.json` names. -->
 
 Every transcript in this book came from a TEC-1G that exists only as software.
 The repository runs TEC-OS on the Debug80 TEC-1G runtime, a model of the board's
