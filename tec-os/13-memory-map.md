@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 13. The memory map
 
-Checked against TEC-OS 58d4345.
+Checked against TEC-OS 621201d.
 
 TEC-OS has 16 KiB of ROM and, of RAM, the 64 KiB that a TEC-1G with U9 fitted
 has. Chapter 7 describes that memory from a program's side, and this chapter
@@ -15,7 +15,7 @@ from TEC-OS's side. It starts with the way the system latch puts RAM and ROM
 into the Z80's 64 KiB, and the byte TEC-OS keeps in page zero. It goes on to
 the resident workspace at the top of EXPAND 0 and the allocation vectors below
 it. It ends with the four stacks, the measurements that size them and TEC-OS's
-use of EXPAND 1. The addresses are those of the build at 58d4345 with the starter
+use of EXPAND 1. The addresses are those of the build at 621201d with the starter
 card in the socket. `docs/memory-map.md`, which `npm run media` writes from the
 build's census, has the same figures.
 
@@ -23,7 +23,7 @@ build's census, has the same figures.
 
 The Z80's address space has three regions. `0000h–7FFFh` is the board's fixed
 RAM, `8000h–BFFFh` is a window onto one half of the RAM chip in U9, and
-`C000h–FFFFh` is the ROM (`src/layout.asm:8`). The window's two halves are
+`C000h–FFFFh` is the ROM (`src/layout.asm:3-4`). The window's two halves are
 EXPAND 0 and EXPAND 1, each 16 KiB.
 
 The system latch at port `FFh` (`src/layout.asm:14`) selects what is in view.
@@ -61,7 +61,7 @@ lies below `8000h` then (`src/cache.asm:388-399`).
 CP/M puts its fixed addresses in the first 256 bytes of memory, and TEC-OS
 writes them as CP/M 2.2 does. Cold boot clears all of page zero
 (`src/boot.asm:29-35`), and `PZINIT`, at cold boot and at every warm boot, writes
-the parts TEC-OS sets (`src/boot.asm:207-263`):
+the parts TEC-OS sets (`src/boot.asm:221-283`):
 
 | Address | Contents |
 | --- | --- |
@@ -83,7 +83,7 @@ of the lowest service or, with none, the BDOS entry jump itself
 (`src/boot.asm:230-231`). At each warm boot `PZINIT` also rewrites the restart
 vectors, as Chapter 14 describes. A vector that jumps above the top of the TPA,
 into a service, the workspace or the ROM, keeps its jump
-(`src/boot.asm:220-263`).
+(`src/boot.asm:238-283`).
 
 `PZINIT` doesn't write `0050h`. The CCP stores there the drive byte of the
 command's FCB just before it starts a program, as CP/M 3 does. A program that
@@ -138,7 +138,7 @@ scratch areas follow, which the volume services also use: the count `MNTCNT`
 and `MNBUF`, 32 bytes of the container's table copied from the cache line that
 holds it (`src/ram.asm:56-58`). The video terminal's state follows: an 80-byte
 row buffer for scrolling, the seven vectors into the display's table, the scroll
-region, the PICO9918's claim and the console mode (`src/ram.asm:55-67`).
+region, the PICO9918's claim and the console mode (`src/ram.asm:60-73`).
 
 The second block is the CCP's, from `CCPRAM` at `BCEDh` (`src/ram.asm:79-80`).
 It holds the CCP's two FCBs, the command buffer with its 128 characters, the
@@ -208,14 +208,14 @@ needs 64 bytes, and a G8M volume, with `DSM` 2047, needs 256.
 Cold boot places the vectors after it has read the card, because the space
 each drive gets depends on the card. `ALVINIT` starts at `WSBASE` and works
 down, giving each drive its vector in drive order and putting each one's
-address in the drive's DPH (`src/boot.asm:350-423`).
+address in the drive's DPH (`src/boot.asm:385-461`).
 
 A card of container format 1.1 whose drives field is N gets a 256-byte slot for
 each of drives A to the Nth, mounted or not, so any of those drives can later
 take any volume. Any other card, including every format 1.0 card, gets a slot
 for each drive it mounts, of the size its volume needs (`src/boot.asm:402-430`).
 `DRVSLOT` records each drive's slot: 0 for none, 1 for 64 bytes and 2 for 256
-(`src/ram.asm:29`, `src/boot.asm:431-436`). The starter card is format 1.0 with
+(`src/ram.asm:31-33`, `src/boot.asm:431-436`). The starter card is format 1.0 with
 a G1M volume on A and a G8M volume on B. Its vectors take 64 and 256 bytes, 320
 in all, from `B9A7h` to `BAE6h`.
 
@@ -270,11 +270,12 @@ The BDOS's stack, `STKBASE` to `STKTOP`, is 54 bytes at `BECAh–BEFFh`
 (`src/ram.asm:213-215`). The BDOS moves to it on entry, keeping the caller's
 stack pointer in `OLDSP`. It runs every function on this stack, the BIOS calls
 from the BDOS included. Cold boot uses it too, because nothing calls the BDOS
-before the CCP runs. Cold boot sets it after the workspace's clear, again at
-`COLDRT`, where a retry from the diagnostic console comes back, and again at
-`DIAG` (`src/boot.asm:42`, `src/boot.asm:63-64`, `src/boot.asm:429-431`).
-The console's start, the banner, the mount, the drive listing and the
-diagnostic console all run on it.
+before the CCP runs. Cold boot sets it after the workspace's clear and again
+at `COLDRT`, where a retry from the diagnostic console comes back
+(`src/boot.asm:42`, `src/boot.asm:63`). The console's start, the banner, the
+mount, the drive listing and the diagnostic console all run on it. `DIAG` is
+entered only by `COLDRT`'s jumps, with the stack at its top, and runs on it
+as it finds it (`src/boot.asm:463-470`).
 
 The three sizes in the workspace are equates in `layout.asm`: 54 for the BDOS,
 32 for the CCP and 40 for the BIOS (`src/layout.asm:71-73`). The comment above
