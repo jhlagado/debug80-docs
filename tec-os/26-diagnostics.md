@@ -10,53 +10,47 @@ nav_group: "Part II: Inside TEC-OS"
 <!-- Checked against TEC-OS 78127ec. The diagnostics ROM in this chapter is version
      0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit. -->
 
-Two parts of the repository report what is wrong with a board. The TEC-OS ROM
-itself stops at a diagnostic prompt when cold boot can't mount the card, and the
-diagnostics ROM, built from `diag/`, is a separate image that tests each part of
-the board TEC-OS uses and prints a report. This chapter describes the prompt,
-then follows the diagnostics ROM from its build to a report from a board.
-Chapter 1 shows the prompt from the user's side, and Chapter 17 shows the
-container's checks. Appendix D gives every error code
-with its remedy.
+Cold boot stops in one place. When the card won't start or its container
+won't mount, TEC-OS waits at a diagnostic prompt with a code. Everything else
+that can be wrong with a board is tested by a second image, the diagnostics
+ROM. It is burned in place of TEC-OS and prints a report over the serial port.
+The prompt comes first, then the ROM, its run on the model, and the comparison
+of a board's report with the model's.
 
 ## The diagnostic prompt
 
-Cold boot sets up the LCD and the card at `COLDRT`, on the BDOS's stack, which
-nothing else uses before the CCP runs (`src/boot.asm:63-64`). It starts the card with `SDINIT` and checks the container with `MOUNT`, and a
+Cold boot sets up the 20 × 4 LCD and the card at `COLDRT`, on the BDOS's
+stack, which nothing else uses before the CCP runs (`src/boot.asm:63-64`). It
+starts the card with `SDINIT` and checks the container with `MOUNT`. A
 failure of either jumps to `DIAG` with an error code in `A`
 (`src/boot.asm:67-70`). The code is one of `SDINIT`'s, `01h` to `04h` and
-`0Bh`, or one of `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`,
-`src/sd.asm:20`, `src/vol.asm:13-24`). The banner is
-printed before the card is touched (`src/boot.asm:52-53`), so it appears
-whatever the card holds. Only the RAM check, `CONINIT`, which starts the PICO9918's console, and the
-clock's test come before it (`src/boot.asm:36-51`). `RAMCHK` writes
-and reads back the bytes at `8000h` and `BFFFh` and looks for EXPAND 1 behind
-the window, and a board that lacks either prints `TEC-OS needs 64K RAM` on the
-serial port and stops there (`src/boot.asm:36`, `src/boot.asm:323-358`,
-`src/text.asm:5`). After the banner `MEMINIT` empties the block cache's lines,
-before the first mount reads the container's table through a line
-(`src/boot.asm:54`).
+`0Bh`, or one of `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-20`,
+`src/vol.asm:13-24`). The banner is printed before the card is touched
+(`src/boot.asm:52-53`), so it appears whatever the card holds. Only the RAM
+check, the console's start and the clock's test come before the banner
+(`src/boot.asm:36-51`). A board with less than 64 KiB stops in the RAM check
+with `TEC-OS needs 64K RAM` on the serial port, as [Chapter
+15](15-reset-and-boot.md#the-ram-check) describes.
 
 `DIAG` runs on the BDOS's stack as `COLDRT` set it. Both jumps to `DIAG` are
-`COLDRT`'s, made after its calls have returned, so the stack is at its top, and
-`DIAG` keeps the code on it (`src/boot.asm:463-471`). The BIOS's stack then holds only warm boot's use, as
-Chapter 23's stack figures assume. It writes
-`CARD?` on the LCD's last row (`src/boot.asm:472-473`, `src/text.asm:10`,
-`src/lcd.asm:45`) and then prints `No volume mounted, error ` and the code as
-two hexadecimal digits (`src/boot.asm:474-478`, `src/text.asm:8`).
+`COLDRT`'s, made after its calls have returned, so the stack is at its top
+(`src/boot.asm:463-471`). `DIAG` writes `CARD?` on the LCD's last row
+(`src/boot.asm:472-473`, `src/text.asm:10`) and then prints `No volume
+mounted, error ` and the code as two hexadecimal digits
+(`src/boot.asm:474-478`, `src/text.asm:8`).
 
 At the prompt `R retry> ` (`src/text.asm:9`), `DIAG` reads one key with
-`BCONIN`, echoes it as typed and ends the line, and only then turns a small
-letter into a capital for the test, so `r` retries too and a digit echoes as
+`BCONIN`, echoes it as typed and ends the line. Only then does it turn a small
+letter into a capital for the test. So `r` retries too, and a digit echoes as
 the digit (`src/boot.asm:479-487`). Any key but `R` gives the prompt again
 (`src/boot.asm:489`). On a board with the PICO9918 and the matrix keyboard the
-console at this point is the ROM's PICO9918 console, which cold boot starts
-before the banner, so the prompt is on that screen and the key comes from the
-matrix keyboard (`src/video.asm:8-10`, `src/pico.asm:27-47`). On any other board
-it is the serial terminal, since the graphics LCD's driver is on the card. So on
-a board with no PICO9918 and no terminal attached, the LCD's `CARD?` is the only
-sign. Here the model has a PICO9918 and an empty socket, and `H` was typed at
-the prompt. The serial terminal shows nothing, and the screen shows:
+console is the ROM's PICO9918 console, which cold boot starts before the
+banner (`src/video.asm:8-15`, `src/pico.asm:27-47`). The prompt is then on
+that screen, and the key comes from the matrix keyboard. On any other board
+the console is the serial terminal, since the graphics LCD's driver is on the
+card. A board with no PICO9918 and no terminal attached shows only the LCD's
+`CARD?`. Here the model has a PICO9918 and an empty socket, and `H` was typed
+at the prompt. The serial terminal shows nothing, and the screen shows:
 
 <!-- node tools/capture.mjs --card none --board pico --screen H -->
 ```text
@@ -66,19 +60,20 @@ R retry> H
 R retry>
 ```
 
-`R` jumps back to `COLDRT` (`src/boot.asm:487-488`). That starts the LCD again,
-which clears `CARD?`, and then repeats the card's start and the mount, so a card
-fixed or put in while the prompt waits is mounted without a reset. `MOUNT`
-reads each block of the table from the card again, whatever a line holds
-(`src/vol.asm:33-36`).
+`R` jumps back to `COLDRT` (`src/boot.asm:487-488`). That starts the LCD
+again, which clears `CARD?`, and then repeats the card's start and the mount.
+A card fixed or put in while the prompt waits is mounted without a reset.
+`MOUNT` reads each block of the table from the card again, whatever a cache
+line holds (`src/vol.asm:32-36`).
 
 The retry keeps a selection of volumes carried over from a recognised reset,
-which Chapter 15 explains. `RSLCAP` copies the drive table to `RSLBUF` before
-cold boot clears anything (`src/boot.asm:28`). `RSLBUF` is at `0100h`, in the
-fixed RAM (`src/layout.asm:84`), and nothing on the path from there to the
-prompt writes it: `MEMINIT` clears EXPAND 1 alone, and the mount reads the
-table into a line in EXPAND 1 (`src/boot.asm:54`, `src/boot.asm:169-188`,
-`src/vol.asm:278-309`).
+which [Chapter 15](15-reset-and-boot.md#the-reset-test) explains. `RSLCAP`
+copies the drive table to `RSLBUF` before cold boot clears anything
+(`src/boot.asm:28`). `RSLBUF` is at `0100h`, in the fixed RAM
+(`src/layout.asm:84`), and nothing on the path from there to the prompt
+writes it. `MEMINIT` clears EXPAND 1 alone, and the mount reads the table into
+a line in EXPAND 1 (`src/boot.asm:54`, `src/boot.asm:172-188`). [Appendix
+D](appendix-d-error-messages.md) gives each code's cause and remedy.
 
 ## The diagnostics ROM
 
@@ -94,60 +89,80 @@ npm run diag
 diag: ROM 16318/16384 bytes, 56 free, image D90143609F53FAAB, checksum $47C0
 ```
 
-`tools/diag.mjs` generates two files (`tools/diag.mjs:51-77`).
+`tools/diag.mjs` generates two files first (`tools/diag.mjs:51-77`).
 `diag/gen/config.asm` holds the version, the serial delay counts and the
 stopwatch constants, and `diag/gen/font.asm` comes from `format/font5x7.txt`,
-the same font file the TEC-OS ROM's own font is built from. The serial delays are worked
-out from 4 MHz and 4800 baud as for TEC-OS (`tools/diag.mjs:37-49`). The script
-then assembles `diag/diag.asm` with ATOM, fills the unused bytes with `FFh` and
-writes `build/diag/diag.rom`, its symbol map and `build/diag/diag.json`
-(`tools/diag.mjs:90-133`).
+the file the TEC-OS ROM's own font is built from. The serial delays are worked
+out from 4 MHz and 4800 baud as for TEC-OS (`tools/diag.mjs:37-49`). The
+script then assembles `diag/diag.asm` with ATOM, fills the unused bytes with
+`FFh` and writes `build/diag/diag.rom`, its symbol map and
+`build/diag/diag.json` (`tools/diag.mjs:90-133`).
 
 Two values in the image identify it, so that a report names the image that
-produced it and a test can check the ROM on the board. The image ID is the first
-8 bytes of the SHA-256 of the image with its last 10 bytes, `FFF6h–FFFFh`, set
-to `FFh` (`tools/diag.mjs:25-28`, `tools/diag.mjs:83-88`). The build stores it
-at `FFF6h` (`tools/diag.mjs:115`), and the banner and the report both print it.
-The last two bytes, at `FFFEh`, hold the 16-bit sum of `C000h–FFFDh`
-(`tools/diag.mjs:116-119`), which test T05 checks on the board.
+produced it and a test can check the ROM on the board. The image ID is the
+first 8 bytes of the SHA-256 of the image with its last 10 bytes,
+`FFF6h–FFFFh`, set to `FFh` (`tools/diag.mjs:25-28`, `tools/diag.mjs:83-88`).
+The build stores it at `FFF6h` (`tools/diag.mjs:115`), and the banner and the
+report both print it. The last two bytes, at `FFFEh`, hold the 16-bit sum of
+`C000h–FFFDh` (`tools/diag.mjs:116-119`), which test T05 checks on the board.
 
-The build checks the image before writing it (`tools/diag.mjs:104-108`). The
+The build checks the image before writing it (`tools/diag.mjs:104-112`). The
 reset entry must be at `C000h` and the interrupt entries at `C038h` and
 `C066h`. Cold boot and the first RAM check must lie in the first 2 KiB, which
-is all the board shows at `0000h` after a reset.
+is all the board shows at `0000h` after a reset. The code must end below the
+image ID, the variables below the stack's page, and the NMI handler must fit
+below `0038h`.
 
-The ROM starts as TEC-OS does. At reset the board's boot overlay shows the first
-2 KiB of the ROM at `0000h`, and the code there jumps to `COLD` at its `C000h`
-address and turns the overlay off (`diag/boot.asm:8-27`). `COLD` first puts a
-`RETN` at `0066h`, so that an NMI returns at once, and then turns off the
-digits, the speaker, the 8 × 8 LEDs and the SD card (`diag/boot.asm:29-40`).
-
-The ROM's own variables are at `7E00h–7EFFh` and its stack at `7F00h–7FFFh`,
-in the fixed RAM (`diag/defs.asm:43-44`). Every later test depends on
-`7E00h–7FFFh`, so test T01 checks those two pages first, with no stack and
-using registers alone. It makes four passes that fill them with a pattern from
-each address and read them back (`diag/boot.asm:43-73`).
-
-On a failure the ROM sends one line to the serial port, again without a stack,
-from the pattern `HCTEXT` (`diag/boot.asm:127-128`). The line is
-`T01 HOME    FAIL  RAM 7E00-7FFF at `, the failing address in four hexadecimal
-digits, ` wrote ` and the byte written, then ` read ` and the byte read. The ROM
-then waits and sends the line again, for ever (`diag/boot.asm:118-125`). The
-wait is 16 passes of a 65,536-pass loop of 26 T-states, 27,262,976 T-states in
-all, about 6.8 seconds at 4 MHz, so on a board the line comes back about every 7
-seconds.
+The ROM starts as TEC-OS does. At reset the board's boot overlay shows the
+first 2 KiB of the ROM at `0000h`. The code there jumps to `COLD` at its
+`C000h` address and turns the overlay off (`diag/boot.asm:8-27`). `COLD` first
+puts a `RETN` at `0066h`, so that an NMI returns at once, and then turns off
+the digits, the speaker, the 8 × 8 LEDs and the SD card
+(`diag/boot.asm:29-40`). The ROM's own variables are at `7E00h–7EFFh` and its
+stack at `7F00h–7FFFh`, in the fixed RAM (`diag/defs.asm:43-44`).
 
 ## The run
+
+Every later test depends on `7E00h–7FFFh`, so test T01 checks those two pages
+first, with no stack and registers alone. It makes four passes, each filling
+them with a pattern derived from the address and reading it back
+(`diag/boot.asm:43-73`). On a failure the ROM sends one line to the serial
+port, again without a stack, from the pattern `HCTEXT`
+(`diag/boot.asm:127-128`). The line is `T01 HOME    FAIL  RAM 7E00-7FFF at `,
+the failing address in four hexadecimal digits, ` wrote ` and the byte
+written, then ` read ` and the byte read. The ROM then waits and sends the
+line again, for ever (`diag/boot.asm:118-125`). The wait is 16 passes of a
+65,536-pass loop of 26 T-states, 27,262,976 T-states in all. On a board the
+line therefore comes back about every 7 seconds.
 
 With those pages proved, the ROM clears its variables, installs an NMI handler
 at `0066h` that counts NMIs, reads the Matrix switch and prints its banner
 (`diag/main.asm:4-28`). It then waits about 5 seconds for a key
-(`diag/main.asm:29-35`). `I` or `Y` selects the interactive tests as well as the
-automatic ones, and anything else, or nothing, runs the automatic tests alone.
+(`diag/main.asm:29-35`). `I` or `Y` selects the interactive tests as well as
+the automatic ones. Anything else, or nothing, runs the automatic tests alone.
 `GETKEY` takes a key from the serial port, from the hex keypad, or from the
-matrix keyboard when the Matrix switch is on, with a time-out counted in half
-seconds (`diag/out.asm:240-275`). On the keypad `+` reads as `Y`, `-` as `N`,
+matrix keyboard when the Matrix switch is on (`diag/out.asm:241-273`). Its
+time-out is counted in half seconds. On the keypad `+` reads as `Y`, `-` as `N`,
 `GO` as Return and `AD` as Esc (`diag/out.asm:326`).
+
+Each test starts with `TBEGIN`, which prints `-- T`, the test's number and
+its title (`diag/out.asm:637-658`). The LCD's second row shows the number and
+the test's seven-character name. Each test ends with one result line from
+`RESULT`: `T`, the number, the name, one of six results and the details
+(`diag/out.asm:663-711`). While a result line is printed, every character is
+also kept in the report buffer at `1000h` (`diag/out.asm:49-62`,
+`diag/defs.asm:41`). The LCD's third row shows the result and its fourth the
+running totals (`diag/out.asm:592-615`). The six results are these
+(`diag/defs.asm:50-56`, `diag/out.asm:706-711`):
+
+| Result | Meaning |
+| --- | --- |
+| `PASS` | The board did what the test checks |
+| `FAIL` | It didn't. The line gives what was expected and what was read |
+| `INFO` | A value measured, with no verdict |
+| `SKIP` | The test wasn't run |
+| `LOOK` | A check by eye or ear in an automatic run, for the person at the board |
+| `NONE` | The device isn't fitted or doesn't answer |
 
 `tools/diag-check.mjs` runs the ROM on the host model of Chapter 27 and keeps
 what the serial port printed in `build/diag` beside the image. The model has
@@ -181,33 +196,14 @@ T01 HOME    PASS  4 passes, registers only
 T02 RAMLO   PASS  all bits both ways, no aliasing
 ```
 
-Each test starts with `TBEGIN`, which prints `-- T`, the test's number and its
-title, and shows the number and its seven-character name on the LCD's second row
-(`diag/out.asm:634-657`). Each ends with one result line from `RESULT`: `T`, the
-number, the name, one of six results and the details (`diag/out.asm:659-711`).
-While a result line is printed, every character is also kept in the report
-buffer at `1000h` (`diag/out.asm:48-62`, `diag/defs.asm:41`). The LCD's third
-row shows the result and its fourth the running totals (`diag/out.asm:592-615`).
-
-The six results are these (`diag/defs.asm:49-56`, `diag/out.asm:706-711`):
-
-| Result | Meaning |
-| --- | --- |
-| `PASS` | The board did what the test checks |
-| `FAIL` | It didn't; the line gives what was expected and what was read |
-| `INFO` | A value measured, with no verdict |
-| `SKIP` | The test wasn't run |
-| `LOOK` | A check by eye or ear in an automatic run, for the person at the board |
-| `NONE` | The device isn't fitted or doesn't answer |
-
 ## The tests
 
-The automatic tests run in the order `diag/main.asm:56-87` calls them, which is
-not the order of their numbers: T35 and T36 follow T18, and T37 follows T20. The
-RAM tests T02 to T04 run before T01's line is printed, and their lines come
-after it. The interactive tests run after T26 when they were chosen at the
-start, or later from the report's prompt (`diag/main.asm:88-119`). Each test's
-title is the text its `TBEGIN` prints:
+The automatic tests run in the order `diag/main.asm:56-87` calls them. T35
+and T36 follow T18, and T37 follows T20. The RAM tests T02 to T04 run before
+T01's line is printed, and their lines come after it. The interactive tests
+run after T26 when they were chosen at the start, or later from the report's
+prompt (`diag/main.asm:88-119`). Each test's title is the text its `TBEGIN`
+prints:
 
 | Test | Name | Title |
 | --- | --- | --- |
@@ -249,30 +245,30 @@ title is the text its `TBEGIN` prints:
 | T33 | `CLOCK` | CPU clock by stopwatch, about 60 s |
 | T34 | `SDTIME` | SD read rate by stopwatch: 256 blocks, 128 KiB |
 
-The tests use TEC-OS's own ways of reaching the hardware where TEC-OS has them.
-The serial output is bit-banged as TEC-OS's is (`diag/out.asm:1-5`), and T19's
-card start is TEC-OS's SD card driver, recording each answer the card gives
+The tests reach the hardware as TEC-OS does, where TEC-OS has a way. The
+serial output is bit-banged as TEC-OS's is (`diag/out.asm:1-5`). T19's card
+start is TEC-OS's SD card driver, recording each answer the card gives
 (`diag/sd.asm:1-2`). T17 detects the PICO9918 as TEC-OS does and sets the
-registers of TEC-OS's 80-column console (`diag/display.asm:334`,
-`diag/display.asm:353`), and T35 checks the page flip that console uses
-(`diag/display.asm:751`). The others measure what TEC-OS requires of the board.
-T03 measures the RAM in socket U9 that holds EXPAND 0, T12 and T13 the bank
-behind EXPAND 1, T07 the boot overlay that cold boot starts through and T11 the
-bits of port `03h`.
+registers of TEC-OS's 80-column console (`diag/display.asm:334-336`,
+`diag/display.asm:353`). T35 checks the page flip that console uses
+(`diag/display.asm:751-753`). The others measure what TEC-OS requires of the
+board. T03 measures the RAM in socket U9 that holds EXPAND 0, and T12 and T13
+the bank behind EXPAND 1. T07 measures the boot overlay that cold boot starts
+through, and T11 the bits of port `03h`.
 
 Only T37 writes to the card. It writes block 7, and only on a card whose block
-0 holds `TECOSVOL` (`diag/sd.asm:619-631`). No volume can use that block,
+0 holds `TECOSVOL` (`diag/sd.asm:616-634`). No volume can use that block,
 since every volume starts at a nonzero multiple of 8 blocks. T37 puts the
 block back afterwards.
 
 ## The report
 
-After the last test, `PRREP` prints the report (`diag/out.asm:737-789`), which
-has a heading, a line with the version and the image ID, every result line kept
-in the buffer, the totals and an end line. The ROM then prints
-`R prints the report again; I runs the interactive tests.` and waits for one of
-those keys (`diag/main.asm:91-106`). The model's run, from the same file, ends
-with this report:
+After the last test, `PRREP` prints the report (`diag/out.asm:737-789`). It
+has a heading, a line with the version and the image ID, every result line
+kept in the buffer, the totals and an end line. The ROM then prints `R prints
+the report again; I runs the interactive tests.` and waits for one of those
+keys (`diag/main.asm:91-106`). The model's run, from the same file, ends with
+this report:
 
 ```text
 ==== TEC-1G DIAGNOSTICS REPORT ====
@@ -310,18 +306,20 @@ TOTAL PASS 14 FAIL 0 INFO 6 SKIP 0 LOOK 8 NONE 1
 ==== END ====
 ```
 
-These answers show what the model does, not what a board does, and on several
-lines they say nothing about a board. T08 says a write under the overlay reaches
-the RAM underneath, T10 says port `FFh` reads back what was written to it, and
-T12 says that the latch's bits 3 to 6 select nine banks. `docs/diagnostics.md`
-compares each test with the TEC-1G's own documents, which describe the latch as
-write-only and bits 3 to 6 as unconnected to U9, so a board can be expected to
-answer T10 and T12 differently. TEC-OS uses neither. It keeps a copy of the
-latch at `0040h` and never reads port `FFh` (`src/layout.asm:14`,
-`src/layout.asm:39`), and it selects EXPAND 1 with bit 2 alone
-(`src/layout.asm:20`).
+These answers show what the model does, and on three lines they say nothing
+about a board. T08 says a write under the overlay reaches the RAM underneath.
+T10 says port `FFh` reads back what was written to it. T12 says that the
+latch's bits 3 to 6 select nine banks. `docs/diagnostics.md` compares each
+test with the TEC-1G's own documents. The documents describe the latch as
+write-only and bits 3 to 6 as unconnected to U9, and they select the ROM, not
+the RAM, for a write under the overlay. A board can therefore answer all three
+differently. TEC-OS depends on none of them. It keeps a copy of the latch at
+`0040h` and never reads port `FFh` (`src/layout.asm:14`,
+`src/layout.asm:39`). It selects EXPAND 1 with bit 2 alone
+(`src/layout.asm:20`), and it never writes below `0800h` while the overlay is
+on.
 
-## Running it on a board
+## Comparing a board's report with the model's
 
 `docs/board-run.md` lists the board's settings for a run, which are the ones
 TEC-OS needs:
@@ -336,43 +334,45 @@ TEC-OS needs:
 4. Connect a terminal program to the FTDI port at 4800 baud, 8 data bits, no
    parity and 2 stop bits, with its session log on.
 5. Write the starter card's image to an SD card and put it in the adaptor, so
-   that T19, T20 and T37 have a TEC-OS card to read. T37 writes only to a card
-   whose block 0 starts with `TECOSVOL`.
+   that T19, T20 and T37 have a TEC-OS card to read.
 6. Press reset. Press `I` on the terminal or `+` on the keypad within 5
    seconds for the interactive tests.
 7. Keep off the hex keypad during the RAM tests, T09 and T25, except to answer
    a question.
 
-The keypad's warning has the same cause as TEC-OS's. With the keypad NMI jumper
-fitted, a key press makes an NMI, and the Z80 pushes its return address and
-jumps to `0066h`. During the RAM tests the patterns under test overwrite the NMI
-handler at `0066h`. In T09 and T25 the latch's PROTECT bit makes the stack's
-page read-only, so the pushed return address is lost (`docs/diagnostics.md`, T02
-and T25). TEC-OS has no NMI handler and runs with that jumper off.
+The keypad's warning has the same cause as TEC-OS's. With the keypad NMI
+jumper fitted, a key press makes an NMI, and the Z80 pushes its return address
+and jumps to `0066h`. During the RAM tests the patterns under test overwrite
+the NMI handler at `0066h`. In T09 and T25 the latch's PROTECT bit makes the
+stack's page read-only, so the pushed return address is lost. TEC-OS has no
+NMI handler and runs with that jumper off, as [Appendix
+G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi) describes.
 
 The terminal's session log holds the whole run, from the banner to the last
-`==== END ====`, and the report in it is the one `tools/diag-check.mjs` reads.
-
-## Comparing a board's report
-
-`tools/diag-check.mjs` compares the last report in a terminal's session log
-with the model's run of the same image:
+`==== END ====`, and the report in it is the one `tools/diag-check.mjs` reads:
 
 ```sh
 node tools/diag-check.mjs board-log.txt
 ```
 
-It first checks that the report's image ID is the one in `build/diag/diag.rom`,
-and stops with exit status 2 if it isn't (`tools/diag-check.mjs:149-153`). It
-then compares each result line with the model's (`tools/diag-check.mjs:79-110`).
-A line whose result and details both match is passed over, and a visual check
-answered `PASS` on the board matches the model's `LOOK`.
-
-Lines that carry measured values are compared by the form of their details,
-and the board's numbers are printed beside the model's
-(`tools/diag-check.mjs:31-46`). These lines include T14's bit times, T15's and
-T16's busy polls, T18's frame, T19's card answers, T20's and T37's polls and
-T21's clock. Every other difference is printed with the TEC-OS behaviour it
+It first checks that the report's image ID is the one in
+`build/diag/diag.rom`. If it isn't, it stops with exit status 2
+(`tools/diag-check.mjs:148-152`). It then compares each result line with the
+model's (`tools/diag-check.mjs:82-107`). A line whose result and details both
+match is passed over. A visual check answered `PASS` on the board matches the
+model's `LOOK`. Lines that carry measured values are compared by the form of
+their details, and the board's numbers are printed beside the model's
+(`tools/diag-check.mjs:36-47`). These are T14's bit times, T15's and T16's
+busy polls, T18's frame, T19's card answers, T20's and T37's polls and T21's
+clock. Every other difference is printed with the TEC-OS behaviour it
 affects, taken from the last table in `docs/board-run.md`
-(`tools/diag-check.mjs:64-72`). The exit status is 0 with no differences and 1
+(`tools/diag-check.mjs:65-73`). The exit status is 0 with no differences and 1
 with some.
+
+A board built as its documents describe differs from the model on T08, T10
+and T12. The printed lines say what each affects: nothing for T08 and T10,
+and EXPAND 1 for T12, which T13's pattern passes then settle. Every other line
+that matches says the board did what the model did on a point TEC-OS depends
+on. Those points are the RAM at every address it uses, the overlay it boots
+through, the bank behind EXPAND 1, the serial rate, the card's answers to its
+own driver and each device it drives.

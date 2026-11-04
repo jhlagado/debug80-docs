@@ -10,142 +10,40 @@ nav_group: "Part I: Using and programming TEC-OS"
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the
      repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
      128edb7, and its copy in `dist/files` has the SHA-256
-     `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. Its
-     `TAS.COM` is from Thorium dbee66a, with the SHA-256
-     `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. -->
+     `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. -->
 
-A command line in TEC-OS can hold more than one command, with `!` between them.
-The CCP runs them in turn, each after the one before has ended, whether that was
-a built-in or a program. A command written with `:` in front runs only if the
-one before it succeeded, and a program reports success or failure through a
-return code that it sets with BDOS function 108. A program can also end by
-handing the CCP a new command line, with BDOS function 47. CP/M 2.2 runs one
-command per line, but TEC-OS takes these rules from CP/M 3's CCP. Chapter 21
-describes the code behind them.
+`SHOW NOSUCH.TXT` in [Chapter 7](07-first-program.md) printed `No such file`
+and, as far as the CCP could tell, succeeded. A program reports failure
+through a *return code*, which the CCP tests for a `:` command on the same
+line. A program can also end by handing the CCP its next command. Both come
+from CP/M 3, and [Chapter 21](21-chaining-inside.md) describes the code
+behind them.
 
-## Several commands on one line
-
-`!` between two commands runs the first and then the second. Each command
-after the first is echoed after its own prompt, so the screen reads as if you
-had typed the commands one at a time:
-
-<!-- node tools/capture.mjs "DIR *.CMD!TYPE STARTUP.CMD" "mount!!  ! dir b:!" -->
-```text
-A>DIR *.CMD!TYPE STARTUP.CMD
-STARTUP.CMD 
-1 file, 980K free
-A>TYPE STARTUP.CMD
-GLCD.SVC
-
-A>mount!!  ! dir b:!
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
-
-A>dir b:
-NO FILE
-A>
-```
-
-The part of a line between two `!`, or between a `!` and an end of the line,
-is a *piece*. The second line shows the CCP passing over an empty piece, a
-piece of spaces and a `!` at the end, so `mount!!  ! dir b:!` is two commands. A
-line of nothing but spaces and `!` runs nothing. The CCP turns each piece into
-capitals as it takes it to run, but the echo of a piece is as you typed it, so
-`dir b:` stays in lower case on the screen.
-
-A piece is a whole command, and whatever it changes holds for the pieces
-after it, so a drive change or a `USER` command in one piece is the drive or
-user area of the next:
-
-<!-- node tools/capture.mjs "B:!COPY A:STARTUP.CMD NOTES.TXT!DIR" -->
-```text
-A>B:!COPY A:STARTUP.CMD NOTES.TXT!DIR
-B>COPY A:STARTUP.CMD NOTES.TXT
-COPIED 0001
-
-B>DIR
-NOTES.TXT   
-1 file, 8172K free
-B>
-```
-
-`NOTES.TXT`, with no drive, was made on drive B, because the first piece had
-made B the current drive. A program in a piece starts as it would from a line
-of its own: the CCP gives it the command tail and the two FCBs of Chapter 7
-from its own piece. The tail ends at the `!` after the piece, so the pieces
-that follow aren't in the tail, and no command or argument can hold a `!`.
-
-The whole line holds up to 127 characters, as a typed line does, so a line of
-32 commands of three letters each, with 31 `!`, fits. The history of Chapter 3
-stores the line once, whole and as typed, and `^W` brings it back to run again.
-
-A line of `STARTUP.CMD` may hold `!` as well, and its pieces all run before the
-startup file's next line. A startup line's characters after the 127th are
-passed over, as a typed line can't hold more.
-
-## A command that depends on the one before
-
-A piece that starts with `:` runs only if the command before it succeeded. If
-that command failed, the `:` piece is echoed and nothing runs, and the rest of
-the line is dropped, the pieces without `:` after it included:
-
-<!-- node tools/capture.mjs "NOSUCH!:DIR *.CMD!DIR *.SVC" "DIR *.SVC!:DIR *.CMD" ":DIR *.CMD" -->
-```text
-A>NOSUCH!:DIR *.CMD!DIR *.SVC
-NOSUCH?
-
-A>:DIR *.CMD
-A>DIR *.SVC!:DIR *.CMD
-GLCD.SVC    
-1 file, 980K free
-A>:DIR *.CMD
-STARTUP.CMD 
-1 file, 980K free
-A>:DIR *.CMD
-STARTUP.CMD 
-1 file, 980K free
-A>
-```
-
-`NOSUCH` isn't a command, so `:DIR *.CMD` didn't run and `DIR *.SVC` after it
-was dropped with the rest of the line. In the second line `DIR *.SVC`
-succeeded and `:DIR *.CMD` ran. The third line starts with `:`, and the
-command it tests is the last one of the line before, the `DIR *.CMD` that
-succeeded. A `:` at the start of a line typed after a failure runs nothing.
-
-On the serial board the starter card's startup line `GLCD.SVC` finds no
-graphics LCD. A startup line whose service finds its device absent fails
-quietly: it prints nothing and leaves the return code at 0. A `:` that starts
-the first line typed therefore runs there, as it does on the board with both
-displays, where the line passes quietly, and on the board with only the
-graphics LCD, where it installs. A board with the graphics LCD and no matrix keyboard
-refuses the line with `GLCD.SVC?`, a failure, and there such a `:` runs
-nothing.
-
-## Return codes
+## The return code
 
 Success and failure are one 16-bit number, the program return code of CP/M 3.
-BDOS function 108 sets and reads it, and the CCP tests it for `:`. The code is
-a failure when it is from `FF00h` to `FFFEh`, and any other value is a
-success. A call with `DE` set to `FFFFh` returns the code in `HL`, and a call
-with any other `DE` sets the code to it, so `FFFFh` itself can't be set, and it
-counts as a success.
+BDOS function 108 sets and reads it, and the CCP tests it for a `:` piece,
+as [Chapter 3](03-command-line.md) describes. The code is a failure when it
+is from `FF00h` to `FFFEh`, and any other value is a success. A call with
+`DE` set to `FFFFh` returns the code in `HL`, and a call with any other `DE`
+sets the code to it. `FFFFh` itself can't be set, and it counts as a success.
 
 The CCP sets the code to 0 as it takes each piece, after testing a `:` and
-before it looks for the command. A program that reads the code when it starts
-always finds 0, since the CCP cleared it before loading the program. A built-in
-that succeeds leaves the code at 0, and so does a program that never calls
-function 108, so an ordinary CP/M 2.2 program always succeeds. The code is also
-0 after a reset.
+before it searches for the command. A program that reads the code when it
+starts therefore always finds 0. A built-in that succeeds leaves the code at
+0, and so does a program that never calls function 108. An ordinary CP/M 2.2
+program therefore always succeeds.
 
-The CCP sets the code to `FF00h` when a command fails at the CCP. That covers a
-command that isn't found, a program that won't load and a service that won't
-install, but not a startup line whose service finds its device absent. It also covers every built-in that prints `NAME?`, `NO FILE`,
+The CCP sets the code to `FF00h` when a command fails at the CCP. That covers
+a command that isn't found, a program that won't load and a service that
+won't install. It also covers every built-in that prints `NAME?`, `NO FILE`,
 `FILE EXISTS`, `NO SPACE` or one of `COPY`'s messages. An `ERA *.*` answered
 with `N` erases nothing and is a success.
 
-A program sets the code to report on its own work. This one, `EXISTS`, fails
-when the file named on its command line isn't there and succeeds when it is:
+## A program that sets the code
+
+A program sets the code to report on its own work. `EXISTS` fails when the
+file named on its command line isn't there:
 
 ```asm
 ; EXISTS: a failure, return code FF00h, when the file named on the command
@@ -164,11 +62,11 @@ BDOS    EQU     $0005
         RET
 ```
 
-Function 15 opens the file whose FCB is at `DE` and returns `FFh` in `A` when
-there is no such file, as Chapter 7 describes. `EXISTS` prints nothing, and
-its result is the code. This program goes in the clone as `exists.asm`, beside
-the next section's `run.asm`. These commands assemble both and put them on
-drive B of a copy of the starter card:
+Function 15 opens the file whose FCB is at `DE`, as Chapter 7 describes. It
+returns `FFh` in `A` when there is no such file. `EXISTS` prints nothing,
+and its result is the code. These commands assemble it and `RUN`, the
+program of a later section. They put both on drive B of a copy of the
+starter card:
 
 ```sh
 npx atom exists.asm exists.com
@@ -202,8 +100,8 @@ B>
 ```
 
 The blank line after each `EXISTS` is the CCP's, which starts a new line
-after every program. The first time, `EXISTS` failed, and `:TYPE NOTES.TXT`
-and the `DIR` after it were dropped. The second time both ran.
+after every program. The first time, `EXISTS` failed. `:TYPE NOTES.TXT` and
+the `DIR` after it were dropped. The second time both ran.
 
 A piece without `:` runs whatever the command before it returned, so a
 failure stops the line only at a piece that starts with `:`:
@@ -226,21 +124,37 @@ EXISTS.COM   RUN.COM
 B>
 ```
 
-`USER 0`, a built-in that succeeded, set the code back to 0, and the second
-`:DIR` ran.
+The `:DIR` typed after the failure ran nothing, because the code was still
+`FF00h` from `EXISTS`. `USER 0`, a built-in that succeeded, set the code back
+to 0, and the second `:DIR` ran.
+
+## The rule a program follows
+
+The CCP can't read a program's messages. A program that prints its own error
+message and returns has therefore succeeded, unless it set the code. `SHOW`
+is such a program, and a `:` piece after `SHOW NOSUCH.TXT` runs. A program
+that reports a failure in words sets the code to `FF00h` as well. A `:`
+piece after it then matches what it said.
+
+A BDOS error ends a program with the rest of its line, as Chapter 3 shows.
+A program that asked for errors back with BDOS function 45 gets each as a
+return value instead. The line then goes on. Such a program sets the code
+itself when the error is a failure of its work.
 
 ## A program that starts another
 
 A program can end by giving the CCP a command line to run next, with BDOS
-function 47, which CP/M 3 calls *chain to program*. The program puts the line
-in memory, ended by a 0 byte, sets the DMA address (Chapter 7) to it with
-function 26 and calls function 47. When the line is accepted the call doesn't
-return: TEC-OS copies the line and ends the program with a warm boot, and the
-CCP then runs the line next, in place of whatever was left of the line the
-program came from. The warm boot writes the cache's changes to the card first,
-so what the program wrote is on the card before the chained command runs. This
-program, `RUN`, ends by running the rest of its own
-command line as a command:
+function 47. CP/M 3 calls this *chain to program*. The program puts the
+line in memory, ended by a 0 byte. It sets the DMA address (Chapter 7) to
+the line with function 26 and calls function 47. When the line is accepted
+the call doesn't return. TEC-OS copies the line and ends the program with a
+warm boot. The CCP then runs the line next, in place of whatever was left of
+the line the program came from. The warm boot writes the cache's changes to
+the card first, so what the program wrote is on the card before the chained
+command runs. `TED`'s `^T` keys end this way. That is how `^T B` saves the
+file and then runs `TAS` on it.
+
+`RUN` ends by running the rest of its own command line as a command:
 
 ```asm
 ; RUN: end by running the rest of the command line as a command.
@@ -259,10 +173,11 @@ BDOS    EQU     $0005
 NOTRUN: DB      "Not run",13,10,"$"
 ```
 
-The CCP puts a 0 after the command tail at `0081h`, so the tail is a line ready
-for function 47, with the space before its first word, which the CCP passes
-over. `RUN DIR` therefore runs `DIR`. A line from function 47 takes the place
-of what was left of the line, so in `RUN A:MOUNT!DIR` the `DIR` never runs:
+The CCP puts a 0 after the command tail at `0081h`, so the tail is a line
+ready for function 47. The tail starts with the space before its first word,
+which the CCP passes over, and `RUN DIR` runs `DIR`. A line from function 47
+takes the place of what was left of the line. In `RUN A:MOUNT!DIR` the `DIR`
+therefore never runs:
 
 <!-- node tools/capture.mjs --card chain.img B: "RUN DIR" "RUN A:MOUNT!DIR" "RUN NOSUCH!DIR" "RUN" -->
 ```text
@@ -290,57 +205,68 @@ B>
 
 The chained command is echoed after the prompt, as a piece is. A command
 from function 47 that isn't found, or doesn't load, fails as a typed one
-does, with its name and a question mark. `RUN` alone chains an empty line,
-which ends the program and runs nothing, and the prompt comes back.
+does, with its name and a question mark. `RUN` alone chains an empty line.
+That ends the program, runs nothing, and the prompt comes back.
 
-The line may be up to 127 characters, and it may hold `!` and `:`, which the
-CCP treats as in a typed line. A `:` at its start tests the code the program
-set before the call. The line is copied as soon as the function is called, so
-it may be anywhere in memory, even where the next program loads. CP/M 3's
-function 47 also reads register `E`, but TEC-OS doesn't read it. The chained
-command runs on the drive and in the user area held in the byte at `0004h`, as
-any command after a program's end does.
+The line may be up to 127 characters. It may hold `!` and `:`, which the CCP
+treats as in a typed line, and a `:` at its start tests the code the program
+set before the call. The line is copied as soon as the function is called.
+It may therefore be anywhere in memory, even where the next program loads.
+CP/M 3's function 47 also takes register `E`, which TEC-OS ignores. The
+chained command runs on the drive and in the user area held in the byte at
+`0004h`, as any command after a program's end does.
 
-Function 47 rejects a line with no 0 in its first 128 bytes, or with a carriage
-return or a line feed before the 0. It then returns with `A = FFh`, the program
-goes on and the line it came from is unchanged. In `RUN`, the message `Not run`
-would follow, but a tail can hold neither character, so `RUN` itself never
-prints it.
+Function 47 rejects a line with no 0 in its first 128 bytes, or with a
+carriage return or a line feed before the 0. It then returns with `A = FFh`,
+the program goes on and the line it came from is unchanged. In `RUN` the
+message `Not run` would follow, but a tail can hold neither character, so
+`RUN` itself never prints it.
 
-A program started from a line of `STARTUP.CMD` may chain too, and the
-chained line runs before the startup file's next line.
+A call of function 47 is a warm boot wherever it is made. A service's `INIT`
+or `REMOVE` may call it too, and [Chapter 12](12-writing-services.md) says
+what that does to the service.
 
-## The end of a chained line
+## Chaining from the startup file
 
-These events drop what is left of a line:
+A line of `STARTUP.CMD` can hold `!` and `:`, as [Chapter 6](06-startup-file.md)
+describes, and a program started from such a line can chain. The chained
+line runs before the file's next line. The file's order therefore holds,
+whatever a program chains.
 
-- a `:` piece after a failure
-- a call to function 47, whose line replaces the rest
-- `^C` typed while a line that a program reads with BDOS function 10 is
-  empty
-- `^C` typed after `^S` has stopped a program's output (Chapter 9)
-- `^C` at the `[more]` of a `TYPE` or `DIR` listing
-- the key that ends a BDOS error, such as `Bdos Err On C: Select`
-- a `Write lost` message at a warm boot, which Chapter 4 describes
-- a reset
+The code is left where the file's last command left it. A `:` at the start
+of the first line you type therefore tests the file's last command. On this
+card the file ends in a command that isn't there:
 
-After function 47 its own line runs in place of the rest. After a reset TEC-OS
-starts again from the startup file. After the others the CCP prints the prompt
-and waits for a new line. Here the BDOS error for a drive with no volume,
-ended by the key `x`, drops the `MOUNT` after it:
+```sh
+printf 'B:RUN A:MOUNT\nNOSUCH\n' > startup.cmd
+cp chain.img chain2.img
+node tools/tecvol.mjs put chain2.img A startup.cmd --text
+```
 
-<!-- node tools/capture.mjs "@start DIR C:!MOUNT" "@key x" -->
+<!-- node tools/capture.mjs --card chain2.img ":DIR A:*.CMD" "DIR A:*.CMD" -->
 ```text
-A>DIR C:!MOUNT
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM     
+B: WORK       
 
-Bdos Err On C: Select
+A>B:RUN A:MOUNT
+
+A>A:MOUNT
+00 SYSTEM      G1M A:
+01 WORK        G8M B:
+
+A>NOSUCH
+NOSUCH?
+
+A>:DIR A:*.CMD
+A>DIR A:*.CMD
+STARTUP.CMD 
+1 file, 980K free
 A>
 ```
 
-Other ways a command can end leave the rest of the line to run. A program that
-prints its own error message and returns has succeeded unless it set the code.
-A BDOS error returned to a program that asked for that with function 45 leaves
-the line alone too.
-Esc or `Q` at `[more]` ends a `TYPE` or `DIR` listing and lets the line's next
-piece run, as it does after a listing that ran to its end. The key test clears
-one bit of the key, so `#` at `[more]` reads as `^C` and `;` reads as Esc.
+`A:MOUNT` ran before `NOSUCH`, the file's second line. The `:DIR` typed at
+the first prompt ran nothing, because `NOSUCH` had left the code at `FF00h`.
+The `DIR` without `:` ran. One failure leaves the code at 0: a startup line
+whose service finds its device absent, as Chapter 6 explains. A `:` after
+that line runs.

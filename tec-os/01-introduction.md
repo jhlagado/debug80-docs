@@ -170,7 +170,7 @@ moment the card can be behind what you have just saved.
 `^C`, Ctrl and C together, typed at the prompt brings the card up to date.
 TEC-OS writes every change it is holding and gives you a fresh prompt. Type
 `^C` before you switch the board off, press reset or take the card out, and
-nothing is lost. Chapter 4 explains when TEC-OS writes to the card by itself.
+nothing is lost. Chapter 5 explains when TEC-OS writes to the card by itself.
 
 Don't change a card on a PC while the TEC-1G is using it. TEC-OS keeps a map of
 each drive's free space in memory, and a change made elsewhere leaves that map

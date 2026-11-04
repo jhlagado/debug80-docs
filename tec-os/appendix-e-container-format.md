@@ -13,10 +13,9 @@ nav_group: "Appendices"
 
 This appendix lists the container format: the header's fields, the volume
 descriptors, the table's blocks beyond block 0, the ROM's checks with their
-error codes, the two geometries and their cost in memory. A TEC-OS card holds
-one container: block 0 is its header, and its volumes follow, each an ordinary
-CP/M disk. Chapter 4 describes the container from the user's side and Chapter
-17 the ROM's mount.
+error codes and the two geometries. A TEC-OS card holds one container: block
+0 is its header, and its volumes follow, each an ordinary CP/M disk. Chapter 4
+describes the container from the user's side and Chapter 17 the ROM's mount.
 
 The format is defined once, in `format/format.json`. The build generates the
 ROM's field offsets and its geometry table from that file, as
@@ -65,15 +64,16 @@ The header's fields (`format/format.json`, `header`):
 The checksum is the 16-bit sum of all 512 bytes of block 0 except the two
 bytes of the checksum itself (`tools/lib/container.mjs:51-59`). The ROM sums
 all 512, 32 at a time from the block's cache line, and then takes the two
-checksum bytes back out (`src/vol.asm:339-358`, `src/volutil.asm:53-84`). The sum covers the descriptors in block 0 as well as
-the header's fields, so a change to any byte of block 0 needs a new checksum.
+checksum bytes back out (`src/vol.asm:339-358`, `src/volutil.asm:53-84`). The
+sum covers the descriptors in block 0 as well as the header's fields, so a
+change to any byte of block 0 needs a new checksum.
 
 A card's minor version sets three things. A 1.0 card has no drives field and
 no table sum, and `tecvol` gives it at most 8 volumes. A 1.1 card may have up
 to 127, may give a number of drives and has the table sum
 (`tools/lib/container.mjs:76-80`, `tools/lib/container.mjs:140-148`).
 `tecvol create` makes a 1.1 card when it is given more than 8 volumes or
-`--drives`, and a 1.0 card otherwise. The ROM refuses a 1.0 card of more than
+`--drives`, and a 1.0 card otherwise. The ROM rejects a 1.0 card of more than
 8 volumes with code `24h` (`src/vol.asm:68-87`), and treats any minor version
 other than 0 as 1.1 (`src/vol.asm:104-106`).
 
@@ -103,11 +103,11 @@ The drive byte is the drive the volume takes at cold boot. The volume id is
 the name that stays with the volume. At most one volume is written behind, and
 never a read-only one (`tools/lib/container.mjs:85-86`,
 `tools/lib/container.mjs:187-188`). `tecvol create` starts the first volume at
-block 2,048, 1 MiB into the card, and each next one at the next multiple of
-2,048 blocks after the one before, unless `--align` gives another multiple of
-8 (`tools/lib/container.mjs:14`, `tools/lib/container.mjs:89-99`). It fills
-each payload with `E5h`, an empty CP/M directory
-(`tools/lib/container.mjs:121`).
+block 2,048, 1 MiB into the card. Each later volume starts at the next
+multiple of 2,048 blocks after the one before. `--align` puts another multiple
+of 8 in place of 2,048 (`tools/lib/container.mjs:14`,
+`tools/lib/container.mjs:89-99`). `tecvol create` fills each payload with
+`E5h`, an empty CP/M directory (`tools/lib/container.mjs:121`).
 
 ## The table beyond block 0
 
@@ -208,12 +208,20 @@ tecvol: volume 1: drive C is past the card's 2 drive(s)
 ```
 
 `tecvol` makes all the ROM's checks and more
-(`tools/lib/container.mjs:130-194`). It also requires at most 8 volumes on a
-1.0 card, a known cache flag, volume ids different from each other, unique
-labels on a 1.1 card, no volume both read-only and written behind, at most one
-written behind and an image as long as the header's container length. The ROM
-checks none of the cache byte, the label, the reserved bytes or whether two
-volumes share an id, and it can't check the card's size.
+(`tools/lib/container.mjs:130-194`). Its further requirements:
+
+| `tecvol` also requires |
+| --- |
+| At most 8 volumes on a 1.0 card |
+| A known cache flag |
+| Volume ids different from each other |
+| Unique labels on a 1.1 card |
+| No volume both read-only and written behind |
+| At most one volume written behind |
+| An image as long as the header's container length |
+
+The ROM checks none of the cache byte, the label, the reserved bytes or
+whether two volumes share an id, and it can't check the card's size.
 
 ## The geometries
 
@@ -223,10 +231,14 @@ media in CP/M's sense (`format/format.json`, `geometries`). Record `r` of a
 volume is the 128 bytes at `128 × r` in its payload, so four records share a
 block.
 
-| Id | Name | Payload | Blocks | Allocation block | Directory entries |
-| ---: | --- | ---: | ---: | ---: | ---: |
-| 1 | G8M | 8 MiB | 16,384 | 4 KiB | 512 |
-| 2 | G1M | 1 MiB | 2,048 | 2 KiB | 256 |
+| Id | Name | Payload | Blocks | Allocation block | Directory entries | Allocation vector |
+| ---: | --- | ---: | ---: | ---: | ---: | ---: |
+| 1 | G8M | 8 MiB | 16,384 | 4 KiB | 512 | 256 bytes |
+| 2 | G1M | 1 MiB | 2,048 | 2 KiB | 256 | 64 bytes |
+
+The allocation vector is the drive's map of free space in TEC-OS's memory,
+one bit for each allocation block, `DSM / 8 + 1` bytes. Chapter 14 explains
+how cold boot sizes the vectors for a card.
 
 Their disk parameter blocks, as `src/gen/geom.asm` holds them:
 
@@ -253,16 +265,3 @@ The ROM's geometry table has an entry of 6 bytes for each geometry: the id, a
 (`src/gen/geom.asm`). `GEOFIND` looks an id up in it (`src/volutil.asm:18-29`),
 and the length check compares the descriptor's length with that word and
 requires its two high bytes to be 0 (`src/vol.asm:171-182`).
-
-## The cost in memory
-
-TEC-OS's workspace has a 16-byte disk parameter header for each of the four
-drives (`src/ram.asm:34`, `src/layout.asm:77`). The allocation vectors, one
-bit for each allocation block of a volume, go below the workspace. `ALVINIT`
-sizes the vectors at cold boot (`src/boot.asm:385-461`). On a 1.1 card that
-gives N drives, each of drives A to the Nth gets 256 bytes, enough for a G8M
-volume, whether or not a volume is on it, so that any drive can take any
-volume later. On any other card each mounted drive gets a vector sized for its
-volume, `DSM / 8 + 1` bytes: 256 for G8M and 64 for G1M, and a drive with no
-volume gets none. The starter card, 1.0 with a G1M and a G8M volume, takes 320
-bytes of vectors.
