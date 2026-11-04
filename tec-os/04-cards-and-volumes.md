@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -44,7 +44,7 @@ node tools/tecvol.mjs info dist/starter.img
 
 ```text
 container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
-  A: SYSTEM      id 1 G1M start 2048 rw 7 file(s), 1001472 bytes free
+  A: SYSTEM      id 1 G1M start 2048 rw 6 file(s), 1003520 bytes free
   B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
 ```
 
@@ -308,7 +308,7 @@ gives out the space in one of two ways.
 A card in format 1.0, or one in format 1.1 whose header gives no number of
 drives, gets a vector for each drive cold boot puts a volume on, sized for its
 volume. The starter card's two drives take 64 and 256 bytes, the word at
-`0006h` is `B9F3h`, and programs have 47,347 bytes. Drives C and D get no
+`0006h` is `B9A4h`, and programs have 47,268 bytes. Drives C and D get no
 vector, so on the starter card no volume can be mounted on them. A drive keeps
 its vector when `MOUNT` empties it, and drive B's, of 256 bytes, can take a
 G1M or a G8M volume:
@@ -333,8 +333,8 @@ A card in format 1.1 whose header gives N drives, as
 `tecvol create --drives N` makes it, gets a 256-byte vector for each of drives
 A to the Nth. Each gets one whether a volume is on it at cold boot or not, so
 any of those drives can take any volume later. `my.img`'s header gives four,
-so its vectors take 1,024 bytes, the word at `0006h` is `B733h` and programs
-have 46,643 bytes. That is 704 fewer than on the starter card, the difference
+so its vectors take 1,024 bytes, the word at `0006h` is `B6E4h` and programs
+have 46,564 bytes. That is 704 fewer than on the starter card, the difference
 between the two cards' vectors. A drive past the Nth gets no vector, and a card whose header puts a volume on such a drive
 fails the checks at cold boot. Chapter 7 describes the TPA, and Chapter 13 the
 rest of the map.
