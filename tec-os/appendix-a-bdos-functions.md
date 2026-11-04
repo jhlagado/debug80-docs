@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix A. BDOS functions
 
-Checked against TEC-OS 621201d.
+Checked against TEC-OS 78127ec.
 
 This appendix lists the BDOS functions of TEC-OS in number order: 0 to 40,
 then 44 to 48, 99 and 108, whose meanings come from CP/M 3. Each entry gives the
@@ -154,9 +154,12 @@ returns every directory entry of the default drive, in use or not.
 found (`src/cpm/bdosfile.asm:245-247`). `DE` is not used.
 
 **19 Delete file.** Erases every entry that matches the FCB, `?` allowed, and
-frees its allocation blocks (`src/cpm/bdosfile.asm:267-299`). Returns 0, or `FFh`
+frees its allocation blocks (`src/cpm/bdosfile.asm:263-303`). Returns 0, or `FFh`
 if no file matched. A matching file with its read-only attribute set is the
-`File R/O` error. The entries erased before it stay erased.
+`File R/O` error. The entries erased before it stay erased. Each entry's blocks
+are freed only once its directory write has returned, so a write that fails
+in a mode of function 45 that returns the error leaves that entry's blocks in
+use, as the card has them.
 
 **20 Read sequential.** Reads the record at the FCB's `CR` into the DMA
 address and moves on, to the next extent after record 127
@@ -197,7 +200,9 @@ bit 0 for A (`src/cpm/bdosfn.asm:9-11`).
 (`src/cpm/bdosfn.asm:23-29`).
 
 **27 Get allocation vector address.** Returns in `HL` the address of the
-default drive's allocation vector (`src/cpm/bdosfn.asm:34-36`).
+default drive's allocation vector (`src/cpm/bdosfn.asm:34-36`). A `MOUNT`
+onto the default drive selects it again, so this is the new volume's vector at
+once (`src/vol.asm:679-691`).
 
 **28 Write protect disk.** Sets the default drive's bit in the read-only
 vector, so that a later change to the drive is the `R/O` error, until the next
@@ -215,7 +220,8 @@ attributes, into every entry of the file (`src/cpm/bdosfile.asm:398-402`,
 system attribute, which `DIR` hides.
 
 **31 Get disk parameter block address.** Returns in `HL` the address of the
-default drive's DPB (`src/cpm/bdosfn.asm:109-111`).
+default drive's DPB (`src/cpm/bdosfn.asm:109-111`), the new volume's at once
+after a `MOUNT` onto that drive, as for function 27.
 
 **32 Set or get user code.** With `E` = `FFh`, returns the user number in `A`.
 With any other `E`, sets the user number to the low five bits of `E` and
@@ -226,15 +232,19 @@ number (`src/cpm/ccp.asm:225-245`).
 **33 Read random.** Reads the record whose number is in the FCB's `R0` and
 `R1` into the DMA address and leaves the FCB's extent and `CR` at that record,
 so that a sequential read after it reads the same record
-(`src/cpm/bdosrec.asm:189-195`, `src/cpm/bdosrec.asm:235-335`). Returns 0, or 1 if
+(`src/cpm/bdosrec.asm:189-195`, `src/cpm/bdosrec.asm:235-353`). Returns 0, or 1 if
 the record has not been written, 3 if the current extent can't be closed, 4 if
-the extent has not been written or 6 if `R2` is not 0.
+the extent has not been written or 6 if `R2` is not 0. After a 4 the FCB's `EX`
+and `S2` are its own again, naming the extent its record count and map
+describe, so a second read of that record is 4 again and a write to it makes
+the extent.
 
 **34 Write random.** Writes the record at the DMA address to the record whose
 number is in `R0` and `R1`, making its extent if needed
-(`src/cpm/bdosrec.asm:200-335`). Returns 0, or 2 if the drive is full, 3 if the
+(`src/cpm/bdosrec.asm:200-353`). Returns 0, or 2 if the drive is full, 3 if the
 current extent can't be closed, 5 if the directory has no entry for the extent
-or 6 if `R2` is not 0. An FCB with the read-only attribute set is the
+or 6 if `R2` is not 0. After a 5 the FCB is back on its own extent, as after
+function 33's 4, so a write once an entry is freed makes the extent. An FCB with the read-only attribute set is the
 `File R/O` error.
 
 **35 Compute file size.** Sets `R0` to `R2` to the file's size in records,
