@@ -56,7 +56,7 @@ it.
 
 ## The CON command
 
-`CON` with no argument names the console in use, as Chapter 1 showed. Its four
+`CON` with no argument names the console in use. Its four
 replies are `CON: TTY:`, `CON: CRT:`, `CON: BAT:` and `CON: UC1:`.
 
 `CON` followed by a device name sets the IOBYTE's console field, its low two
@@ -216,7 +216,7 @@ The serial port runs at 4800 baud with 8 data bits, no parity and 2 stop bits,
 and the terminal program on the PC is set the same way. TEC-OS sends and
 receives each bit itself, through bit 6 of port `01h` for output and bit 7 of
 port `03h` for input. It times each bit by counting the Z80's clock cycles:
-one bit is 833 T-states at 4 MHz. That is why, as Chapter 1 says, the serial
+one bit is 833 T-states at 4 MHz. That is why, as Appendix G says, the serial
 link works only with the CPU clock switch on FAST and the 4 MHz oscillator.
 
 TEC-OS passes every byte to the serial terminal unchanged, and the terminal
@@ -249,7 +249,7 @@ board that has the graphics LCD and the matrix keyboard. When it installs it
 makes the graphics LCD the console, unless the PICO9918 is the console, which
 then keeps it until `CON UC1`. A `GLCD.SVC` line in the startup file installs
 nothing while the PICO9918 is the console. The driver takes 932 bytes from programs, as
-Chapter 1 explained. Chapter 5 gives the rules for the startup file and for
+Chapter 5 shows. Chapter 5 gives the rules for the startup file and for
 installing and removing services.
 
 A console on a display is a *video console*, and there TEC-OS is the terminal.

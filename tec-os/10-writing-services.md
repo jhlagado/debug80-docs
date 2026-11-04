@@ -385,9 +385,9 @@ bytes in the service's own memory:
 linked through their first words. `COUNT` has one, `REC`, and the loader
 writes the link when it joins the list to the older records. The loader checks
 that each record and its table's address lie in the service's pages, but it
-can't check what is in a table. A find or a list walks 256 records at most, so
-one service may publish at most 255, and a service whose records would take
-the registry past 256 is refused. Every record, the `PICO` record of the last
+can't check what is in a table. A find or a list walks 256 records at most. The
+loader allows one service 255 records at most, and refuses a service whose
+records would take the registry past 256 (`src/loader.asm:250-267`). Every record, the `PICO` record of the last
 section among them, can then be found. A refused service's `REMOVE` undoes its
 `INIT`, and the load fails with the name and a question mark.
 

@@ -53,7 +53,7 @@ A>
 
 The first line names TEC-OS and its version. The next two list the disks on
 the card, which TEC-OS calls volumes. `SYSTEM` is on drive A and `WORK` is on
-drive B. The same lines appear on the 20 × 4 LCD.
+drive B. The 20 × 4 LCD shows the name and the first two drives too.
 
 `A>` is the prompt. The letter is the current drive, the one TEC-OS uses when
 you name a file without a drive. You didn't type the `GLCD.SVC` after the first
@@ -64,7 +64,9 @@ the startup file.
 
 Where you type depends on the board. With a PICO9918 video card and the matrix
 keyboard, TEC-OS shows everything on the video screen and reads the matrix
-keyboard, and you need no terminal at all. Otherwise it uses a terminal program
+keyboard, and you need no terminal at all. With the graphics LCD and the matrix
+keyboard and no PICO9918, the startup file's driver makes the graphics LCD
+the console. Otherwise it uses a terminal program
 on a PC connected to the board's serial port. Chapter 2 describes each console
 and how to switch between them.
 
@@ -109,7 +111,7 @@ and its volumes.
 You run a program by typing its name. `SAMPLE.ASM` becomes a program in two
 steps: `TAS SAMPLE` assembles it into `SAMPLE.COM`, and `SAMPLE` runs it.
 
-<!-- node tools/capture.mjs --lcd "TAS SAMPLE" SAMPLE -->
+<!-- node tools/capture.mjs "TAS SAMPLE" SAMPLE -->
 ```text
 A>TAS SAMPLE
 SAMPLE.COM written

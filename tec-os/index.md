@@ -38,8 +38,8 @@ Every example was run on the host model, a software TEC-1G on the Debug80
 TEC-1G runtime. TEC-OS has not yet run on a physical board, so what the book
 says about a board is what the code requires of one.
 
-Each chapter names, at its top, the TEC-OS commit its claims were checked
-against. The code is the authority: where a chapter's statement differs from
+Each chapter was checked against a TEC-OS commit, which its source names in
+a comment under the title. The code is the authority: where a chapter's statement differs from
 the source at that commit, the source is right and the statement is a fault to
 correct.
 

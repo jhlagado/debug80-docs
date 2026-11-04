@@ -121,7 +121,7 @@ The CCP's built-in commands are these:
 | `COPY SOURCE DEST` | Copies a file |
 | `REN NEW=OLD` | Renames a file |
 | `ERA NAME` | Erases a file, or every file a name with wildcards matches |
-| `SAVE N NAME` | Writes the first `N` pages of the TPA (Chapter 1) to a file |
+| `SAVE N NAME` | Writes the first `N` pages of the TPA (Chapter 7) to a file |
 | `USER N` | Selects user area `N` |
 | `B:` | Selects drive B, and so on for the other drives |
 | `CON` | Names or changes the console (Chapter 2) |
@@ -397,7 +397,7 @@ reset returns to area 0.
 
 A command that names a file of type `.SVC` installs the service it holds. A
 service is code that TEC-OS keeps in memory below the BDOS until a reset or
-`UNLOAD`, as Chapter 1 explained for the graphics LCD's driver. `SERVICES` lists the
+`UNLOAD`, as Chapter 5 describes. `SERVICES` lists the
 services installed, the newest first, each with the number of 256-byte pages it
 takes. `UNLOAD` removes the newest one if that service can be removed, and
 otherwise it changes nothing and prints `UNLOAD?`. It prints the same with no
@@ -515,9 +515,10 @@ command, or the program that made the call, with a warm boot. A program can
 instead have the error returned to it, with BDOS function 45, which Appendix A
 describes. On the volume written behind, the warm boot after the key tries
 the cache's changes again and prints `Write lost` if one still can't be
-written, as Chapter 4 describes. An `ERA` that ends in `Bad Sector` leaves on
-the card the file whose entry couldn't be written, and with a wildcard the
-files erased before it stay erased.
+written, as Chapter 4 describes. An `ERA` that ends in `Bad Sector` keeps the
+file's entries from the one that couldn't be written on, a file with several
+entries loses those erased before it, and with a wildcard the files erased
+before it stay erased.
 
 A write to a read-only volume, such as one made with `tecvol create`'s `:ro`
 in Chapter 4, gives `R/O`. These commands make a card with the starter card's

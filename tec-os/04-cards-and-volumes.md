@@ -72,7 +72,7 @@ header and the descriptor byte by byte.
 Before it mounts anything, cold boot checks the header: its name, its version,
 its checksum and each descriptor. A card that fails any check mounts nothing,
 and cold boot stops at the diagnostic prompt with the code of the check, as
-Chapter 1 showed. Appendix D lists the codes.
+Chapter 23 shows. Appendix D lists the codes.
 
 ## The two geometries
 
@@ -446,7 +446,7 @@ Chapter 1 says.
 
 ## Putting an image on a card
 
-`tecvol install`, which Chapter 1 used for the starter card, writes any image
+`tecvol install`, which Appendix F describes, writes any image
 to a card in the same way:
 
 ```sh
@@ -454,7 +454,7 @@ node tools/tecvol.mjs install my.img /dev/rdiskN --yes
 ```
 
 `/dev/rdiskN` stands for the card's device, which on a Mac is a name of that
-form and on Linux one such as `/dev/sdb`. As Chapter 1 says, `install`
+form and on Linux one such as `/dev/sdb`. As Appendix F says, `install`
 overwrites the device from block 0, and it does nothing without `--yes`. The
 card must be at least as large as the container. TEC-OS can't read the card's
 size, so on a smaller card a volume that runs past the card's end gives the
@@ -496,8 +496,8 @@ X.COM
 A>
 ```
 
-`SAVE` made `X.COM`'s directory entry as it opened the file, and the record
-went into the cache. The close's flush couldn't write the record's block, so
+`SAVE` made `X.COM`'s directory entry as it opened the file, and its two
+records went into the cache. The close's flush couldn't write their block, so
 the close failed with `Bad Sector`. The warm boot after the key tried the block
 again, dropped it and printed `Write lost`, and `X.COM` is on the card with no
 records.

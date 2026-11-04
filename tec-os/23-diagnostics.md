@@ -15,8 +15,7 @@ itself stops at a diagnostic prompt when cold boot can't mount the card, and the
 diagnostics ROM, built from `diag/`, is a separate image that tests each part of
 the board TEC-OS uses and prints a report. This chapter describes the prompt,
 then follows the diagnostics ROM from its build to a report from a board.
-Chapter 1 shows the prompt from the user's side, and Chapter 18 shows the
-container's checks. Appendix D gives every error code
+Chapter 18 shows the container's checks. Appendix D gives every error code
 with its remedy.
 
 ## The diagnostic prompt

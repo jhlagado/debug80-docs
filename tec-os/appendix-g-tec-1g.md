@@ -127,7 +127,7 @@ and EXPAND 1. The board's recommended build leaves U9 empty, and
 EXPAND jumpers set for a 32 KiB chip. Before it prints anything, cold boot
 tests `8000h–BFFFh` and then EXPAND 1 behind it, and stops with `TEC-OS needs
 64K RAM` on the serial terminal if either is missing (`src/boot.asm:36`,
-`src/boot.asm:323-358`). Chapter 1 describes the check, and Chapter 13 what
+`src/boot.asm:323-358`). Chapter 13 describes what
 TEC-OS keeps in each half.
 
 ## The hex keypad and its NMI
