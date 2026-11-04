@@ -252,18 +252,18 @@ erased the file from user area 3 and printed nothing.
 `recipe RECIPE.json IMAGE` builds a card from a recipe, a JSON file that lists
 the volumes and the files to put on them (`tools/tecvol.mjs:165-171`).
 `npm run media` writes the starter card's recipe as `dist/starter.recipe.json`
-and builds `dist/starter.img` from it (`tools/media.mjs:212-232`). It also
+and builds `dist/starter.img` from it (`tools/media.mjs:205-224`). It also
 writes the web page's recipe, `dist/page.recipe.json`, which has the
 starter card's volumes and components with one more, `DEMO.COM` on drive A,
 and its own `id`, `name` and `instruction`
-(`tools/media.mjs:234-247`). A recipe has the schema `tecos-file-recipe-v1`, a
+(`tools/media.mjs:227-240`). A recipe has the schema `tecos-file-recipe-v1`, a
 list of `volumes` and a list of `components`, each with `files`. Each volume is
 in `create`'s terms: a geometry, a label, a drive and `readOnly` or
 `writeBehind`. Each file has a name, a `url`, a drive, a size in `bytes`, a
 `sha256` and optionally a user area (`tools/lib/recipe.mjs:13-26`). Both of
 `npm run media`'s recipes also have `widths`, which gives the `url` and
 `sha256` of the PICO9918's driver built for each width, under the keys `80`,
-`40` and `32` (`tools/media.mjs:195-201`, `tools/media.mjs:219`). `tecvol`
+`40` and `32` (`tools/media.mjs:195-195`, `tools/media.mjs:212`). `tecvol`
 doesn't read it. The web page fetches those drivers at power-on, as
 [Chapter 21](21-startup.md#the-web-page-s-rewrite) describes.
 
