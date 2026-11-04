@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 58d4345, with the ATOM assembler from the repository's
+Checked against TEC-OS 621201d, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
@@ -20,9 +20,14 @@ program with its page zero, and the CCP's RAM and stack.
 
 ## The CCP in the ROM
 
-The CCP's code is `src/cpm/ccp.asm`. In the ROM that Chapter 12 describes it
-runs from `CCPBAS`, `DCE2h`, to `E6A0h`, 2,495 bytes, followed directly by the
-BDOS. Its messages are in the ROM's data block (`src/text.asm:12-50`,
+The CCP's code is in three files, assembled in this order
+(`src/rom.asm:27-29`). `src/cpm/ccp.asm` holds the entry, the main loop, the
+command word and the loading of a program. `ccpfile.asm` holds the file
+commands, `DIR` with its pager, `TYPE`, `ERA`, `REN` and `COPY`. `ccpcmd.asm`
+holds `UNLOAD`, `CON`, `USER` and `SAVE`, the parsing of file names, page zero
+for a program, `SERVICES` and the startup file. In the ROM that Chapter 12
+describes the CCP runs from `CCPBAS`, `DD0Ah`, to `E6E2h`, 2,521 bytes,
+followed directly by the BDOS. Its messages are in the ROM's data block (`src/text.asm:12-50`,
 `src/text.asm:64-66`), and so is `KEYTAB`, the table of its built-in commands'
 names (`src/tables.asm:43-65`). What the CCP changes has to be
 in RAM, so its variables, buffers and stack are there, from `CCPRAM`, `BCEDh`,
@@ -32,7 +37,7 @@ In most of what it does the CCP is an ordinary CP/M program: it reads and
 writes files and the console through `CALL 0005h`, as a program in the TPA
 does. `DIR` lists with functions 17 and 18, `TYPE` reads with function 20 and
 `ERA` erases with function 19 (`src/cpm/ccpfile.asm:61-62`,
-`src/cpm/ccpfile.asm:144-145`, `src/cpm/ccp.asm:477-478`,
+`src/cpm/ccpfile.asm:144-145`, `src/cpm/ccpfile.asm:379-380`,
 `src/cpm/ccpfile.asm:458-459`). Most of the calls that name one of the CCP's two
 FCBs, 22 of them, go through `DOSSEQ`. Each `CALL DOSSEQ` is followed by one
 byte, the function's number times 2, plus 1 for `RENFCB` or 0 for `CMDFCB`.
@@ -56,8 +61,8 @@ hexadecimal and the BDOS's division, `DIV16` (`src/cpm/ccp.asm:288`,
 `src/cpm/ccpcmd.asm:8`, `src/cpm/ccpcmd.asm:119`, `src/cpm/ccpcmd.asm:116`,
 `src/cpm/ccpcmd.asm:97-111`, `src/cpm/ccpcmd.asm:541`,
 `src/cpm/ccpfile.asm:668-669`, `src/cpm/ccpfile.asm:343`). Startup's `STBOOT` and
-`STLINE` and the `SERVICES` command's `CMDSVC` are in `ccp.asm` itself
-(`src/cpm/ccpcmd.asm:526-639`).
+`STLINE` and the `SERVICES` command's `CMDSVC` are in `ccpcmd.asm`, with the
+CCP's other commands (`src/cpm/ccpcmd.asm:526-639`).
 
 ## The entry from boot
 
@@ -211,18 +216,18 @@ name and any `?` (`src/cpm/ccpcmd.asm:411-426`, `src/cpm/ccpcmd.asm:439-446`).
 
 ## The built-in commands
 
-Each built-in is a routine in `ccp.asm`, and the one for `UNLOAD` calls
-`SVCUNL` in `loader.asm`:
+Each built-in is a routine in `ccpfile.asm` or `ccpcmd.asm`, and the one for
+`UNLOAD` calls `SVCUNL` in `loader.asm`:
 
 | Command | Routine | Source |
 | --- | --- | --- |
-| `DIR` | `CMDDIR` | `src/cpm/ccp.asm:455-615` |
+| `DIR` | `CMDDIR` | `src/cpm/ccpfile.asm:5-189` |
 | `TYPE` | `CMDTYPE` | `src/cpm/ccpfile.asm:358-407` |
 | `ERA` | `CMDERA` | `src/cpm/ccpfile.asm:414-465` |
 | `REN` | `CMDREN` | `src/cpm/ccpfile.asm:467-531` |
 | `SAVE` | `CMDSAVE` | `src/cpm/ccpcmd.asm:176-278` |
 | `USER` | `CMDUSER` | `src/cpm/ccpcmd.asm:139-170` |
-| `CON` | `CMDCON` | `src/cpm/ccp.asm:1065-1180` |
+| `CON` | `CMDCON` | `src/cpm/ccpcmd.asm:12-137` |
 | `COPY` | `CMDCOPY` | `src/cpm/ccpfile.asm:538-671` |
 | `UNLOAD` | `CMDUNL` | `src/cpm/ccpcmd.asm:6-10`, `src/loader.asm:53-89` |
 | `SERVICES` | `CMDSVC` | `src/cpm/ccpcmd.asm:526-551` |
@@ -239,7 +244,7 @@ is taken as 80 (`src/cpm/ccpfile.asm:42-59`). Each name is printed as
 (`src/cpm/ccpfile.asm:108-140`).
 
 `DIR`'s last line gives the number of files and the free space on the drive it
-listed (`src/cpm/ccp.asm:583-615`). For the free space it calls function 46
+listed (`src/cpm/ccpfile.asm:148-189`). For the free space it calls function 46
 for that drive, the one the listing named or the current one, with the DMA
 address still at `LOADBUF`. The function returns the free records in three
 bytes there, and `DIR` divides them by 8 to give KiB. Function 46 leaves the
@@ -281,11 +286,28 @@ reads it. The rename gives `NO FILE` if the old name is not there
 (`src/cpm/ccpfile.asm:518-531`).
 
 `SAVE N NAME` reads a decimal count of 256-byte pages and rejects any count
-that reaches the page of the word at `0006h`. It erases the file, makes it
-again and writes the pages from `0100h` on, two records each
-(`src/cpm/ccpcmd.asm:176-278`). On the starter card that page is `B9h`, so the
-largest `SAVE` is 184 pages, `0100h` to `B8FFh`. A failed make, write or close
-gives `NO SPACE`.
+that reaches the page of the word at `0006h`. A count past 255 is a bad
+command too, since each step of the decimal conversion tests for a carry
+(`src/cpm/ccpcmd.asm:183-213`). On the starter card that page is `B9h`, so
+the largest `SAVE` is 184 pages, `0100h` to `B8FFh`, and 185 is refused as 320
+is:
+
+<!-- node tools/capture.mjs "SAVE 320 B:X.COM" "SAVE 185 B:X.COM" -->
+```text
+A>SAVE 320 B:X.COM
+320?
+
+A>SAVE 185 B:X.COM
+185?
+
+A>
+```
+
+`SAVE` then erases the file, makes it again and writes the pages from `0100h`
+on, two records each (`src/cpm/ccpcmd.asm:176-278`). A failed make, write or
+close gives `NO SPACE`. After a failed write `SAVE` closes the file first, so
+the records it wrote stay in the file's entry, where CP/M 2.2's `SAVE` leaves
+the file unclosed (`src/cpm/ccpcmd.asm:261-278`).
 
 `USER N` takes 0 to 15 and calls function 32 (`src/cpm/ccpcmd.asm:139-170`).
 
@@ -303,7 +325,11 @@ finds the PICO9918 console's record with `TNFIND`, under the name `PICO` at
 version 3, and calls the table's `PICOWID` entry with the width, which accepts
 80, 40 or 32. A name run into its width, a width after any other name, any
 other width and a board with no PICO9918 console are bad commands. The
-error names the width, or the whole word for a name run into its width (`src/cpm/ccpcmd.asm:68-115`). On the web page's board:
+error names the width, or the whole word for a name run into its width. A
+line of `STARTUP.CMD` with a width, on a board with no PICO9918 console, is
+the exception: it passes with nothing said and the return code 0, as a line
+for an absent device does (`src/cpm/ccpcmd.asm:68-115`). On the web page's
+board:
 
 <!-- node tools/capture.mjs --board pico "CON PICO 40" "CON CRT80" "CON PICO 50" "CON TTY 80" "CON CRT: 32" -->
 ```text
@@ -331,10 +357,14 @@ console at 80 columns again (`src/ram.asm:41-44`, `src/pico.asm:49-65`, Chapter 
 (`src/cpm/ccpfile.asm:538-671`). Both names are parsed with the current drive put
 in a 0 drive byte, so that they can be compared. A destination with no name
 takes the source's whole name, and a destination equal to the source, all 12
-bytes, is a bad command, with nothing opened (`src/cpm/ccpfile.asm:571-598`). The
+bytes, is a bad command, with nothing opened. So is any text after the
+destination (`src/cpm/ccpfile.asm:571-598`). The
 copy goes a record at a time through the default DMA buffer at `0080h`, so it
 uses none of the TPA. The count of records is kept in `DIRNUM` and printed in
-hexadecimal after `COPIED` (`src/cpm/ccpfile.asm:599-643`).
+hexadecimal after `COPIED` (`src/cpm/ccpfile.asm:599-643`). On a write error,
+a full disk or directory, `COPY` closes the destination before it prints
+`WRITE ERROR`, so the records it wrote stay in the destination's entry
+(`src/cpm/ccpfile.asm:644-649`).
 
 `SERVICES` prints each service's name and its pages from the list of services,
 and `UNLOAD` removes the lowest. `NAME.SVC` as a command installs one. Chapter
@@ -557,8 +587,8 @@ boot clears the CCP's block of RAM only from `CCPCLR` (`src/ram.asm:82-139`).
 Below that label is the command line, and before it the two FCBs, which need no
 clearing because each use parses them in full (`src/ram.asm:82-85`). From
 `CCPCLR` on, warm boot clears the CCP's bytes along with the BDOS's
-(`src/boot.asm:268-275`). Before the CCP first runs, cold boot's `SHOWVOL`
-builds each drive's letter and label in `CMDTXT` (`src/boot.asm:328-336`).
+(`src/boot.asm:288-300`). Before the CCP first runs, cold boot's `SHOWVOL`
+builds each drive's letter and label in `CMDTXT` (`src/boot.asm:363-371`).
 
 | Addresses | Bytes | Name | Contents |
 | --- | ---: | --- | --- |
@@ -573,7 +603,7 @@ builds each drive's letter and label in `CMDTXT` (`src/boot.asm:328-336`).
 | `BE4Bh–BE55h` | 11 | `STKGUARD` | the stack guard, `A5h` in each byte |
 | `BE56h–BE75h` | 32 | `CSTKBAS` | the CCP's stack, up to `CSTKTOP` at `BE76h` |
 
-The addresses are those of the build at 58d4345. The guard is 43 bytes less the
+The addresses are those of the build at 621201d. The guard is 43 bytes less the
 stack's 32 (`src/ram.asm:130-135`), and warm boot fills it with `A5h`
 (`src/boot.asm:305-309`), so a guard byte that is no longer `A5h` shows that
 the stack has run past its bottom. `test/stacks.test.mjs` checks the guard
@@ -590,6 +620,6 @@ of the program's stack.
 
 The CCP keeps nothing in the TPA: it leaves the TPA from `0100h` untouched
 until it loads a program or a service there, a service for `NAME.SVC` or
-`CON UC1` (`src/loader.asm:515-520`, `src/loader.asm:74`). Only `SAVE` reads that area,
+`CON UC1` (`src/loader.asm:515-520`, `src/loader.asm:91-96`). Only `SAVE` reads that area,
 which is how `SAVE` writes what a program or a loaded service file left in
 memory.
