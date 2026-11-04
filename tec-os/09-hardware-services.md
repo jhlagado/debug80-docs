@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 9. The hardware services
 
-Checked against TEC-OS 5a25178. The programs were assembled by the starter
+Checked against TEC-OS 58d4345. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. `DEMO`
 was assembled on the PC by ATOM from the repository's `atom-z80` 0.3.7.
@@ -16,7 +16,7 @@ A CP/M program has the BDOS for files and the console, and nothing for a
 7-segment digit or a speaker. This chapter describes the calls TEC-OS has for
 the board's own devices. It starts with the ROM table at `C003h`, the test a
 program makes before using it and the calling convention. The table leads to
-15 numbered services, and the nine hardware services among them follow, most
+16 numbered services, and the nine hardware services among them follow, most
 with a program of their own. `DEMO` at the end uses them together.
 
 ## The ROM table
@@ -39,16 +39,17 @@ Chapter 8 used the table to read the console's size.
 | --- | --- | --- |
 | `C003h` | `ABITAB` | the letters `TNA` |
 | `C006h` | `ABIMAJ` | the major version, 5 |
-| `C007h` | `ABIMIN` | the minor version, 0 |
+| `C007h` | `ABIMIN` | the minor version, 1 |
 | `C008h` | `ABICALL` | a jump: the numbered services |
 
 `ABIEND`, `C00Bh`, is the first address after the table's 8 bytes. The
-version is the table's ABI, its application binary interface, here 5.0. The
-jump at `ABICALL` leads to 15 services, numbered from 0 to 14. Numbers 0 to 8
+version is the table's ABI, its application binary interface, here 5.1. The
+jump at `ABICALL` leads to 16 services, numbered from 0 to 15. Numbers 0 to 8
 are the hardware services this chapter describes. `MOUNT` uses 9 to 11, which
-mount, unmount and describe volumes, and a display driver hands the ROM its
-table through 12. Chapter 10 describes 13 and 14, the registry of services,
-and Appendix B lists every number.
+mount, unmount and describe volumes, and `GLCD.SVC` hands the ROM its table
+through 12. Chapter 10 describes 13 and 14, the registry of services. Number
+15 returns in `HL` the address of the console's font in the ROM, which
+`GLCD.SVC` draws from. Appendix B lists every number.
 
 The names of the table's addresses, the service numbers and the status codes
 are in `abi.inc`. The ROM is assembled from that file, and a build publishes
@@ -61,7 +62,7 @@ A CP/M program may run on a machine with no ROM table at `C003h`, so it tests
 before it calls. The test has two parts: the three letters, and a major
 version of exactly 5. A later major version may renumber the services, and a
 later minor version only adds numbers at the end, so a program written for 5.0
-runs on a 5.1 but can't use a 6 or a 4. `SIZE` in Chapter 8 tests the same
+runs on this ROM's 5.1 but can't use a 6 or a 4. `SIZE` in Chapter 8 tests the same
 four bytes.
 
 A program that finds something else is on another system and leaves the
@@ -148,13 +149,13 @@ after the registry's two services, which Chapter 10 describes:
 from service to service. `IX`, `IY` and the alternate registers keep their
 values, except that the volume services, 9 to 11, may change `IX` and the
 alternates. A program treats `BC`, `DE` and `HL` as changed unless a service
-returns something there. Any number from 15 up returns status 1 with `B`, `DE`
+returns something there. Any number from 16 up returns status 1 with `B`, `DE`
 and `HL` as they were.
 
 The services run on the caller's stack. `abi.inc` gives a bound for each, the
 most it takes on top of the `CALL`'s return address, the dispatcher's included.
 The deepest hardware service is `PUTAT`, whose bound is 22 bytes, and that fits
-the 28 bytes of the CCP's stack in a program that has pushed nothing. No hardware service calls the
+the 30 bytes of the CCP's stack in a program that has pushed nothing. No hardware service calls the
 BDOS, so a program can call one from code that runs inside a BDOS call, such
 as a routine reached through its own jump in the BIOS jump table. The mount
 and unmount services reset the drive through BDOS function 37, so a program
@@ -238,9 +239,8 @@ The row stays after the program ends. On a ROM whose major version isn't 5,
 the same program prints `not TEC-OS with ABI 5` and leaves the LCD alone.
 
 A program may write row 3 as freely as the others, and that row has one rule of
-its own. TEC-OS puts the words `PICO?` and `GLCD?` there, as Chapter 5
-describes, and it blanks the word when a display driver takes the console, but
-only while the word is there. `LCD` on row 3 clears the mark that records the
+its own. TEC-OS puts the word `GLCD?` there, as Chapter 5 describes, and it
+blanks the word when `GLCD.SVC` installs, but only while the word is there. `LCD` on row 3 clears the mark that records the
 word, so a program's text there isn't blanked.
 
 ## The speaker
@@ -283,10 +283,10 @@ and rows are 0 for the serial terminal. The bits of `B` are these:
 | 2 | `04h` | `GLCD.SVC` is in |
 | 3 | `08h` | a DS1302 clock answered at cold boot |
 | 4 | `10h` | the PICO9918 is claimed |
-| 7 | `80h` | a word of the ROM's, `PICO?` or `GLCD?`, is on LCD row 3 |
+| 7 | `80h` | the ROM's word `GLCD?` is on LCD row 3 |
 
 `DE` holds the major version in `D` and the minor in `E`, so `0001h` is
-version 0.1. This program prints all of it, then calls number 15, one past the
+version 0.1. This program prints all of it, then calls number 16, one past the
 last service, to show a failure:
 
 ```asm
@@ -336,7 +336,7 @@ MSGVER:	DB	13,10,"Version DE = $"
 MSGCOL:	DB	13,10,"Columns  L = $"
 MSGROW:	DB	13,10,"Rows     H = $"
 ; The last line: the status, then its carry.
-MSGBAD:	DB	13,10,"Number 15: status $"
+MSGBAD:	DB	13,10,"Number 16: status $"
 MSGC:	DB	", carry set",13,10,"$"
 MSGNC:	DB	", carry clear",13,10,"$"
 %INCLUDE "HWLIB.ASM"
@@ -356,13 +356,14 @@ Devices  B = 08
 Version DE = 0001
 Columns  L = 00
 Rows     H = 00
-Number 15: status 01, carry set
+Number 16: status 01, carry set
 
 B>
 ```
 
-On the web page's board, with `PICO.SVC` in, bits 0 and 1 are set as well, and
-the console has a size, 50h columns and 18h rows:
+On the web page's board, with the ROM's console on the PICO9918 and `GLCD.SVC`
+in, bits 0, 1 and 2 are set as well, and the console has a size, 50h columns
+and 18h rows:
 
 <!-- node tools/capture.mjs --card hw.img --board pico B: "TAS BOARD" BOARD -->
 ```text
@@ -371,11 +372,11 @@ B>TAS BOARD
 BOARD.COM written
 
 B>BOARD
-Devices  B = 0B
+Devices  B = 0F
 Version DE = 0001
 Columns  L = 50
 Rows     H = 18
-Number 15: status 01, carry set
+Number 16: status 01, carry set
 
 B>
 ```
@@ -467,10 +468,10 @@ TIME:	DS	7
 %INCLUDE "HWLIB.ASM"
 ```
 
-On the model's serial board the loop goes round every 24,435 T-states, 164
-times a second, and every 32nd round takes 32,093 for the clock. A video
+On the model's serial board the loop goes round every 24,511 T-states, 163
+times a second, and every 32nd round takes 32,169 for the clock. A video
 console saves 640 to 760 a round. The digits are dark for the time the program
-spends outside `DIGIT`, about 15 percent of the loop here, so a loop's other
+spends outside `DIGIT`, about 16 percent of the loop here, so a loop's other
 work costs brightness and, if it runs long, flicker. `DIGCLK` has no code to
 clear the digits at its end, since they are dark as soon as the calls stop.
 
@@ -678,15 +679,16 @@ While the chip is claimed, the terminal code leaves it alone: output to it is
 dropped, no cursor is drawn and no pages flip. The program may therefore set
 any mode and use all of the VRAM, the chip's video memory. It reaches the chip
 by its ports, `BEh` for data and `BFh` for control, or through the graphics
-entries of `PICO.SVC`, which Appendix B lists. Nothing the program prints
+entries of the ROM's PICO9918 console, which Appendix B lists. Nothing the program prints
 reaches the PICO9918 until the release, so its messages go on the LCD or are
 printed before the claim.
 
-A release with `PICO.SVC` in restores the driver's text mode, font and page,
-and if the PICO9918 is the console it also clears the screen and puts the
-cursor at the top left. That took 216,051 T-states on the model, about 54 ms,
-at 80 columns. With `PICO.SVC` out, nothing is restored and the chip stays as
-the program left it. The claim records no owner and a warm boot releases it in
+Where the ROM's PICO9918 console started at cold boot, a release restores the
+console's text mode, font and page, and if the PICO9918 is the console it also
+clears the screen and puts the cursor at the top left. That took 217,252
+T-states on the model, about 54 ms, at 80 columns. On a board with no matrix
+keyboard the console doesn't start, so a release restores nothing and the chip
+stays as the program left it. The claim records no owner and a warm boot releases it in
 the same way, so a program that ends without a release still gets the console
 back. A release with no claim does nothing and returns status 0.
 
@@ -708,7 +710,7 @@ node tools/tecvol.mjs put hw.img B demo.com
 A>B:DEMO
 
 TEC-OS hardware services demo
-PICO9918: yes   GLCD: no   clock: yes
+PICO9918: yes   GLCD: yes   clock: yes
 Watch the LCD, the digits, the LEDs and the screen.
 Press any key to stop.
 
@@ -773,8 +775,9 @@ CRLF:	DB	13,10,"$"
 %INCLUDE "HWLIB.ASM"
 ```
 
-`PUTAT` passes each byte to the driver, and both display drivers draw bytes
-`80h` to `FFh` as the reverse images of `00h` to `7Fh`. `CONOUT` drops those
+`PUTAT` passes each byte to the display's routines, and both the ROM's PICO9918
+console and `GLCD.SVC` draw bytes `80h` to `FFh` as the reverse images of `00h`
+to `7Fh`. `CONOUT` drops those
 bytes, as Chapter 8 says, so `PUTAT` is how a program draws reverse characters
 with no escape sequence. On the PICO9918 the screen ends like this, with the
 second copy in reverse, though a text capture shows the two the same:
@@ -782,21 +785,25 @@ second copy in reverse, though a text capture shows the two the same:
 <!-- node tools/capture.mjs --card hw.img --board pico --screen B: "TAS PLACE" PLACE -->
 ```text
 
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+
 A>GLCD.SVC
-GLCD.SVC?
 
 A>B:
 B>TAS PLACE
 PLACE.COM written
-
-B>PLACE
-PUTAT status 00
                               TEC-OS
-B>                            TEC-OS
+B>PLACE                       TEC-OS
+PUTAT status 00
+
+B>
 ```
 
-The cursor stayed in the flow of the console's text, and the next prompt
-reached row 11 and left the word in place. On the graphics LCD, whose screen
+The cursor stayed where it was, at the start of row 12, so the program's own
+line and the next prompt went below the word and left it in place. The second
+copy shares row 11 with the command that ran the program. On the graphics LCD, whose screen
 has 8 rows, row 10 is below the screen, so `PLACE` writes nothing and reports
 status 0. On the serial terminal it reports status 2:
 
@@ -826,9 +833,9 @@ and to each string in the first row.
 
 | Path | PICO9918 | Graphics LCD |
 | --- | ---: | ---: |
-| `PUTAT`, the whole string in one call | 495 | 35,100 |
-| BIOS `CONOUT` | 786 | 35,400 |
-| BDOS function 2 | 3,908 | 38,400 |
+| `PUTAT`, the whole string in one call | 517 | 35,600 |
+| BIOS `CONOUT` | 808 | 35,800 |
+| BDOS function 2 | 4,007 | 38,900 |
 
 On the PICO9918 `PUTAT` is about eight times faster than the BDOS. The graphics
 LCD draws each cell pixel by pixel, so nearly all the time goes on the drawing
