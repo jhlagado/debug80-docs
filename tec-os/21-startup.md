@@ -11,7 +11,7 @@ Checked against TEC-OS 621201d.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and two
-routines in `src/cpm/ccp.asm`: `STBOOT` reads the file, and `STLINE` gives the
+routines in `src/cpm/ccpcmd.asm`: `STBOOT` reads the file, and `STLINE` gives the
 CCP one line at a time. This chapter describes them in that order, then the
 path a display line takes, the rule that keeps some of the file's failures
 quiet, the flag bit behind the LCD's words and the web page's rewrite of the
@@ -231,8 +231,8 @@ some other service, and the console stays. A match sets `CDGLC`
 (`src/loader.asm:525-526`). If `CRT:`, the ROM's PICO9918 console, is the mode
 in effect, the GLCD gives way: `SVCGO` goes to `WRDCLR` alone, and the console
 stays where it is, with `GLCD.SVC` in for a later `CON UC1`
-(`src/loader.asm:527-530`, `test/pico.test.mjs:579-586`). A line from the file
-doesn't get that far on such a board, because `SVDRV` has refused its table,
+(`src/loader.asm:527-530`, `test/pico.test.mjs:579-586`). A `GLCD.SVC` line from the
+file doesn't get that far on such a board, because `SVDRV` has refused its table,
 so the starter card's `GLCD.SVC` line leaves nothing in memory there
 (`test/pico.test.mjs:92-109`). The give-way follows a `GLCD.SVC` typed at the
 prompt. An `UNLOAD` of a `GLCD.SVC` that gave way drops `UC1:`'s table and
