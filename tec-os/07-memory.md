@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 7. Memory for programs
 
-Checked against TEC-OS 5a25178, with the ATOM assembler from the
+Checked against TEC-OS 58d4345, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7.
 
 A program on TEC-OS has most of the Z80's memory to itself, and the rest is
@@ -104,40 +104,42 @@ node tools/tecvol.mjs put mem.img B top.com
 <!-- node tools/capture.mjs --card mem.img B:TOP -->
 ```text
 A>B:TOP
-B9F3h
+B9A4h
 
 A>
 ```
 
-On the web page's board the startup file installs `PICO.SVC` and `CON UC1`
-then installs `GLCD.SVC`, so the word falls twice. `B:TOP`, its reply and the
+On the web page's board the PICO9918's console is in the ROM and takes no
+memory below the word. The startup file's `GLCD.SVC` loads and leaves the
+console on the PICO9918, so the word falls once, and `CON UC1` then makes the
+graphics LCD the console with nothing more to load. `B:TOP`, its reply and the
 echo of `CON UC1` appeared on the PICO9918, and the rest on the graphics LCD:
 
 <!-- node tools/capture.mjs --board pico --card mem.img B:TOP "CON UC1" B:TOP -->
 ```text
 A>B:TOP
-B300h
+B600h
 
 A>CON UC1
-CON: UC1: GLCD
+CON: UC1:
 A>B:TOP
-AD00h
+B600h
 
 A>
 ```
 
-Each display driver takes 1,536 bytes, six pages of 256. A service starts on a
-page boundary, so the first one installed also takes the bytes of the page
-below the BDOS's entry, which are `B900h–B9F2h` on the starter card. The TPA
-is therefore 47,347 bytes on the starter card with no service, 45,568 with one
-display driver and 44,032 with both. A card whose header gives four
-drives, such as `my.img` from Chapter 4, has `B733h` in the word with no
-service, and its TPA is then 46,643 bytes.
+`GLCD.SVC` takes 768 bytes, three pages of 256. A service starts on a page
+boundary, so the first one installed also takes the bytes of the page below
+the BDOS's entry, which are `B900h–B9A3h` on the starter card. The TPA is
+therefore 47,268 bytes on the starter card with no service and 46,336 with
+`GLCD.SVC`. A card whose header gives four drives, such as `my.img` from
+Chapter 4, has `B6E4h` in the word with no service, and its TPA is then 46,564
+bytes.
 
 Cold boot sets up at most four drives, A to D, each with a vector of at most
-256 bytes, so every card gives at least 46,643 bytes with no service, 45,056
-with one display driver and 43,520 with both, when the word is `AB00h`. Any
-other service takes its own pages from those figures.
+256 bytes, so every card gives at least 46,564 bytes with no service and
+45,568 with `GLCD.SVC`, when the word is `B300h`. Any other service takes its
+own pages from those figures.
 
 A program that sizes its buffers works from the TPA's size, the word less
 `0100h`. This program finds it and prints it in decimal:
@@ -199,7 +201,7 @@ node tools/tecvol.mjs put mem.img B area.com
 <!-- node tools/capture.mjs --card mem.img B:AREA -->
 ```text
 A>B:AREA
-47347 bytes
+47268 bytes
 
 A>
 ```
@@ -207,16 +209,16 @@ A>
 The CCP loads a `.COM` file from `0100h`, a record of 128 bytes at a time, and
 stops at the 256-byte page that holds the address in the word at `0006h`. On
 the starter card with no service the last record ends at `B8FFh`, so the
-largest program file that loads is 47,104 bytes, 243 bytes short of the TPA. A
+largest program file that loads is 47,104 bytes, 164 bytes short of the TPA. A
 file one record longer fails like a missing one, with its name and a question
 mark. By the same rule, the largest file that loads on a four-drive card with
-both display drivers is 43,520 bytes. The limit applies to the file alone, and
+`GLCD.SVC` is 45,568 bytes, the whole TPA. The limit applies to the file alone, and
 a program's data may go on to the byte below the word at `0006h`.
 
 The memory above the word is TEC-OS's. A program that writes there corrupts
 the drives' allocation vectors or the BDOS's state, and what follows is a
 damaged card or a crash. The stack a program starts on is up there too: it is
-the CCP's, in the workspace, with 28 bytes free below the return address, as
+the CCP's, in the workspace, with 30 bytes free below the return address, as
 Chapter 6 says. A program that uses more sets `SP` to a stack of its own below
 the word at `0006h`.
 
@@ -237,7 +239,8 @@ CP/M fixes the use of the first 256 bytes, and TEC-OS follows it:
 | `0005h–0007h` | the jump to the BDOS, whose address is the end of the TPA |
 | `0008h–0037h` | the restart vectors of `RST 08h` to `RST 30h` |
 | `0038h–003Ah` | `EI` and `RETI`, the return from an interrupt in mode 1 |
-| `0040h–004Fh` | TEC-OS's own bytes, below |
+| `0040h` | TEC-OS's copy of the system latch, below |
+| `0041h–004Fh` | unused |
 | `0050h` | the drive the CCP loaded the program from, 0 for the current drive (Chapter 6) |
 | `005Ch–007Fh` | the FCB the CCP fills from the first word of the command tail |
 | `006Ch–007Bh` | the second word's name, inside the first FCB |
@@ -266,26 +269,16 @@ at `005Ch`. On a board with the keypad NMI jumper fitted, a key on the hex
 keypad lands there, so Chapter 1 says to keep off the keypad while a program
 runs.
 
-## TEC-OS's bytes at 0040h
+## TEC-OS's byte at 0040h
 
-CP/M 2.2 leaves `0040h–004Fh` to the BIOS, and TEC-OS keeps there the state
-that must stay in view whichever half of the expansion RAM is in the window:
-
-| Address | Contents |
-| --- | --- |
-| `0040h` | the value last written to the system latch |
-| `0042h` | nonzero while a console byte is waiting at `0043h` |
-| `0043h` | the waiting byte |
-| `0045h` | bits for the matrix keyboard, the displays, the clock and the LCD's word |
-| `0046h`, `0047h` | the video console's cursor row and column |
-| `0048h`, `0049h` | the console's columns and rows, 0 on the serial terminal |
-| `004Ah–004Ch` | the state of the escape sequence being read, and its two numbers |
-| `004Dh` | the matrix key down at the last scan, FFh for none |
-| `004Eh` | 80h while reverse video is on |
-| `004Fh` | 1 while the cursor's cell is drawn as its reverse image |
+CP/M 2.2 leaves `0040h–004Fh` to the BIOS. TEC-OS keeps one byte there,
+`0040h`, the value last written to the system latch, which TEC-OS reads while
+EXPAND 1 is in the window. Cold boot clears all of page zero, and nothing in
+TEC-OS uses `0041h–004Fh` after that. The console's state, its size included,
+is in the workspace.
 
 A program reads the console's size through the ROM table, as Chapter 8
-describes, and leaves these bytes alone unless it writes the latch itself. The latch at port
+describes, and leaves `0040h` alone unless it writes the latch itself. The latch at port
 `FFh` can only be written, so `0040h` is TEC-OS's record of what it holds. A
 program that writes the latch writes the same value to `0040h`, because
 otherwise TEC-OS's next change to the latch puts back the bits as `0040h`
