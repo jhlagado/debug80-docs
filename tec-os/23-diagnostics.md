@@ -27,7 +27,8 @@ failure of either jumps to `DIAG` with an error code in `A`
 (`src/boot.asm:60-63`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
 `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:8-18`). The banner is
 printed before the card is touched (`src/boot.asm:49-50`), so it appears
-whatever the card holds. Only the RAM check comes before it. `RAMCHK` writes
+whatever the card holds. Only the RAM check, `CONINIT`, which starts the PICO9918's console, and the
+clock's test come before it (`src/boot.asm:33-48`). `RAMCHK` writes
 and reads back the bytes at `8000h` and `BFFFh` and looks for EXPAND 1 behind
 the window, and a board that lacks either prints `TEC-OS needs 64K RAM` on the
 serial port and stops there (`src/boot.asm:33`, `src/boot.asm:296-326`,
@@ -53,7 +54,7 @@ matrix keyboard (`src/video.asm:7-11`, `src/pico.asm:27-44`). On any other board
 it is the serial terminal, since the graphics LCD's driver is on the card. So on
 a board with no PICO9918 and no terminal attached, the LCD's `CARD?` is the only
 sign. Here the model has a PICO9918 and an empty socket, and `H` was typed at
-the prompt. The screen shows what the serial terminal shows:
+the prompt. The serial terminal shows nothing, and the screen shows:
 
 <!-- node tools/capture.mjs --card none --board pico --screen H -->
 ```text

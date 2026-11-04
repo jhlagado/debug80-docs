@@ -347,7 +347,7 @@ own. Every drive's reads go through this block cache: a block TEC-OS read
 before and still holds is copied from memory, and only a block it doesn't hold
 is read from the card. A block written to the card is also brought up to date
 in the cache, so the cache never holds a stale copy. On the model, a program
-took 1.66 seconds to read a 12 KiB file the first time and 0.33 seconds the
+took 1.66 seconds to read a 12 KiB file the first time and 0.34 seconds the
 second time, a fifth of that. A file too large for the cache took as long the
 second time. Chapter 19 gives the method.
 
@@ -375,7 +375,7 @@ time, because the four records of a block reach the card in one write of the
 block. A *flush* writes all the cache's changes to the card, and a block written
 many times between two flushes reaches the card once, unless the cache fills
 between them. On the model, `SAVE 64`, which writes 16 KiB, took 7.65 seconds on
-a G8M volume written through and 2.48 seconds, about a third of that, on one
+a G8M volume written through and 2.49 seconds, about a third of that, on one
 written behind.
 
 The order of the writes keeps the card's directory true to its data. TEC-OS

@@ -482,8 +482,8 @@ other vector into the pages, and the result is 1 (`src/loader.asm:260-266`,
 0 over the flags, so `UNLOAD` will reject the service, and it goes to
 `SVCKEEP` (`src/loader.asm:267-272`). A hook left in the table then points at
 pages the service still holds, and `test/svc.test.mjs:382-394` shows them
-surviving a warm boot. The scan reads only that table, so the tables that `DRVR`
-records for the display modes are beyond it (`test/svc.test.mjs:531`).
+surviving a warm boot. The scan reads only that table, so the table that `DRVR`
+records for `UC1:` is beyond it (`test/svc.test.mjs:531`).
 
 A service kept this way appears in `SERVICES`, because `CMDSVC` walks the owner
 list from `SVCHEAD`, not the registry (`src/cpm/ccp.asm:1545-1567`). Each header's
@@ -514,8 +514,8 @@ A program can make the list into a cycle, so the walk has a limit. `B` is 0 at
 bytes of the caller's stack, three `PUSH`es and the return address
 (`src/loader.asm:390-392`). `abi.inc` gives 8 bytes as the bound for each of the
 two, the dispatcher's included (`src/abi.inc:80-88`). The registry has no service for
-removal. Number 15, one past `LIST`, returns carry from the dispatcher, and the
-service stays found (`test/svc.test.mjs:342`).
+removal. Number 16, one past `FONT`, returns carry from the dispatcher, and the
+service stays found (`test/svc.test.mjs:345`).
 
 A record is visible to a client only once `SVCLK` has linked it, so a service
 can't find its own record during `INIT` (`test/svc.test.mjs:420`).
