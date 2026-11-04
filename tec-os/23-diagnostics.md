@@ -60,7 +60,7 @@ which Chapter 14 explains. `RSLCAP` copies the drive table to `RSLBUF` before
 cold boot clears anything (`src/boot.asm:25`). `RSLBUF` is at `0100h`, in the
 fixed RAM (`src/layout.asm:92`), and nothing on the path from there to the
 prompt writes it: `MEMINIT` clears EXPAND 1 alone, and the mount reads the
-table into a line in EXPAND 1 (`src/boot.asm:101-102`, `src/boot.asm:150-166`,
+table into a line in EXPAND 1 (`src/boot.asm:48`, `src/boot.asm:150-166`,
 `src/vol.asm:251-281`).
 
 ## The diagnostics ROM
