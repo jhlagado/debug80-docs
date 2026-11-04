@@ -8,22 +8,18 @@ nav_group: "Part I: Using and programming TEC-OS"
 # 9. Programs and the console
 
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the
-     repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
-     128edb7, and its copy in `dist/files` has the SHA-256
-     `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. -->
+     repository's `atom-z80` 0.3.7. -->
 
-Chapter 2 described the console as you use it at the prompt. This chapter
-describes it as a program uses it, starting with the BDOS's console functions
-and the BIOS's own console calls beneath them. It then explains the control
-characters and escape sequences TEC-OS acts on when the console is a display,
-and how the cursor is drawn. It ends with the console's size and where a
-program reads it, then the IOBYTE's other devices: the list device, the punch
-and the reader.
+A program reaches the console at two levels. The BDOS's functions edit and
+check what passes through them. The BIOS's calls beneath them move each byte
+as it is. [Chapter 2](02-console.md) described the console from the
+keyboard. This chapter describes it from a program, down to what a display
+does with each byte it is sent.
 
 ## The BDOS's console functions
 
 A program usually reaches the console through the BDOS, with the functions
-of Chapter 7 and a few more:
+of [Chapter 7](07-first-program.md) and a few more:
 
 | Function | Name | Takes | Returns |
 | --- | --- | --- | --- |
@@ -32,32 +28,33 @@ of Chapter 7 and a few more:
 | 6 | Direct console I/O | `E`: FFh to read, or a character to print | for FFh, `A`: the key, or 0 if none is waiting |
 | 9 | Print string | `DE`: the string, ended by `$` | nothing |
 | 10 | Read console buffer | `DE`: the buffer | the line in the buffer |
-| 11 | Console status | nothing | `A`: nonzero if a key is waiting |
+| 11 | Console status | nothing | `A`: 1 if a key is waiting, else 0 |
 
 Functions 1, 2, 9 and 10 do more than move a byte. They expand a tab into
-spaces up to the next multiple of 8 columns, counting columns from the last
-carriage return, and they copy what they print to the list device while `^P`
-has turned the copy on. Functions 2 and 9 also check for a key before each
-character they print: `^S` stops the output until the next key, `^P` turns the
-copy on or off, and any other key is held for the program's next console read,
-as Chapter 2 describes. The key that ends a `^S` pause is taken and dropped,
-except a `^C`, which ends the program with a warm boot. Function 10 gives the line the editing keys of Chapter
-2, and a `^C` as its first key ends the program with a warm boot.
+spaces up to the next multiple of 8 columns, counted from the last carriage
+return. While `^P` has turned the copy on, they copy what they print to the
+list device. Functions 2 and 9 also check for a key before each character
+they print. `^S` stops the output until the next key, and `^P` turns the copy
+on or off. Any other key is held for the program's next console read, as
+Chapter 2 describes. The key that ends a `^S` pause is taken and dropped,
+except a `^C`, which ends the program with a warm boot. Function 10 gives
+the line the editing keys of Chapter 2. A `^C` as its first key ends the
+program with a warm boot.
 
 Function 6 does none of this. With a character in `E` it passes the byte
-straight to the BIOS, and with FFh it returns a waiting key, or 0, without
-waiting and without printing it. A full-screen program uses function 6, or the
-BIOS directly, so that its keys reach it as they are typed and its output
+straight to the BIOS. With FFh it returns a waiting key, or 0, without
+waiting and without printing it. A full-screen program uses function 6, or
+the BIOS directly. Its keys then reach it as they are typed and its output
 reaches the screen unchanged.
 
 ## The BIOS's console calls
 
-The BDOS reaches the console through three entries of the BIOS jump table, and
-a program can call them too. The table is in RAM at `BF00h`, with a jump of
-three bytes for each of the BIOS's functions, numbered from 0 for cold boot
-and 1 for warm boot. The word at `0001h` is the address of function 1's jump,
-so a program works out each entry's address from that word and doesn't depend
-on `BF00h`:
+The BDOS reaches the console through three entries of the BIOS jump table,
+and a program can call them too. The table is in RAM at `BF00h`. It has a
+jump of three bytes for each of the BIOS's functions, numbered from 0 for
+cold boot and 1 for warm boot. The word at `0001h` is the address of
+function 1's jump. A program works out each entry's address from that word
+and doesn't depend on `BF00h`:
 
 | BIOS function | Address | Name | Effect |
 | --- | --- | --- | --- |
@@ -65,26 +62,17 @@ on `BF00h`:
 | 3 | `BF09h` | `CONIN` | waits for a key and returns it in `A`, with bit 7 clear |
 | 4 | `BF0Ch` | `CONOUT` | prints the character in `C` |
 
-The BIOS acts on no key: `^C`, `^S` and `^P` from `CONIN` are bytes like any
-other, and `CONOUT` expands no tab and checks for no key.
+The BIOS acts on no key. `^C`, `^S` and `^P` from `CONIN` are bytes like any
+other. `CONOUT` expands no tab and checks for no key.
 
-The routines behind these calls leave the interrupt state as they found it. The
-serial port's routines hold interrupts off while a byte goes out or comes in,
-and the ROM's PICO9918 console holds them off for each pair of writes to the
-video chip's control port. The routines keep the cursor at `BFE8h–BFE9h`, the
-escape sequence at `BFECh–BFEEh` and the video attributes at `BFF0h` and
-`BFF1h`, all fixed bytes in the workspace, so an interrupt routine must not
-print through the console.
-
-The calls also run on the caller's stack, and on a display so do the ROM's
-terminal and the routines of its PICO9918 console or of `GLCD.SVC` beneath
-them. On the model, a direct call with nothing pushed used at most 22 of the
-CCP's 30 bytes.
-That figure is the lowest `SP` below its value at the program's entry, and it
-counts the call's return word. It came from a call that cleared a display after
-a change to the IOBYTE. That is the deepest path measured and not a proved worst
-case. A program that pushes before it calls the BIOS therefore sets up a stack
-of its own first.
+The routines behind these calls leave the interrupt state as they found it.
+They keep the cursor, the escape sequence and the video attributes in fixed
+bytes of the workspace. An interrupt routine must therefore not print
+through the console. The calls run on the caller's stack. On a display the
+ROM's terminal and the display's own routines run there too. The stack a
+program starts on has 30 bytes free, as [Chapter 8](08-memory.md) says. A
+program that pushes before it calls the BIOS sets up a stack of its own
+first.
 
 This program reads keys through `CONIN` and prints each one's code through
 `CONOUT` until Return. It pushes before it calls the BIOS, so it starts by
@@ -137,21 +125,16 @@ DIGIT1: LD      C,A
 STACK:
 ```
 
-The program writes each entry's address into a `JP` of its own, at `CONIN` and
-`CONOUT`, so that a `CALL` to the label reaches the BIOS. Its stack holds no
-return word, so it ends with `JP $0000`, as Chapter 7 describes. These
-commands assemble it, `size.asm` from the section on the console's size and
-the repository's `TERM` from the next section, and copy all three to drive B
-of a copy of the starter card:
+The program writes each entry's address into a `JP` of its own, at `CONIN`
+and `CONOUT`. A `CALL` to the label then reaches the BIOS. Its stack holds
+no return word, so it ends with `JP $0000`, as Chapter 7 describes. These
+commands assemble it on the PC and put it on drive B of a copy of the
+starter card:
 
 ```sh
 cp dist/starter.img con.img
-npx atom size.asm size.com
 npx atom key.asm key.com
-npx atom test/programs/term.asm term.com
-node tools/tecvol.mjs put con.img B size.com
 node tools/tecvol.mjs put con.img B key.com
-node tools/tecvol.mjs put con.img B term.com
 ```
 
 Here `a`, `Z`, `^C`, Esc and Return were typed at the serial terminal:
@@ -167,27 +150,29 @@ A>
 The `^C` arrives as `03`, and the program goes on. Through the BDOS, the
 same `^C` as the first key of function 10's line would have ended it.
 
-A program that mixes the two levels can lose a key. Functions 2, 9 and 11 read
-a key that is waiting and hold it inside the BDOS for the next BDOS read, but
-`CONIN` doesn't return a key the BDOS holds. A program that prints with
-function 2 and reads with `CONIN` therefore loses a key typed while it was
-printing, so a program uses one level or the other for both.
+## One level or the other
 
-The BDOS calls the BIOS through the same table in RAM, so a program that
-writes its own jump into an entry receives the BDOS's console calls as well as
-its own. An entry at `CONOUT` gets every character the BDOS prints. The BDOS's
-check for a key during output is the exception: it calls the ROM's `CONST`
-directly, not through the table. Warm boot leaves the table in EXPAND 0 as it
-is, as in CP/M 2.2, so a program that replaces an entry, the warm boot entry included,
-puts the old jump back before it ends.
+A program that mixes the two levels can lose a key. Functions 2, 9 and 11
+read a key that is waiting and keep it inside the BDOS for the next BDOS
+read. `CONIN` doesn't return a key the BDOS keeps. A program that prints
+with function 2 and reads with `CONIN` therefore loses a key typed during
+the printing. A program uses one level or the other for both.
+
+The BDOS calls the BIOS through the same table in RAM. A program that
+writes its own jump into an entry therefore receives the BDOS's console
+calls as well as its own. An entry at `CONOUT` gets every character the
+BDOS prints. The BDOS's check for a key during output is the exception: it
+calls the ROM's `CONST` directly, not through the table. Warm boot leaves
+the table as it is, as in CP/M 2.2. A program that replaces an entry puts
+the old jump back before it ends, and that includes the warm boot entry.
 
 ## The video terminal
 
 On the serial terminal, TEC-OS sends every byte unchanged and the terminal
 program on the PC interprets it. On the PICO9918 or the graphics LCD there is
 no terminal program, so TEC-OS interprets the bytes itself. It draws each
-character from `20h` to `7Eh` at the cursor and moves the cursor one column
-right, and it acts on six control characters:
+byte from `20h` to `7Eh` at the cursor and moves the cursor one column
+right. It acts on six control characters:
 
 | Byte | Name | Effect |
 | --- | --- | --- |
@@ -199,10 +184,10 @@ right, and it acts on six control characters:
 | `1Bh` | ESC | starts an escape sequence |
 
 Other control characters, `7Fh` and the bytes from `80h` to `FFh` are not
-drawn and leave the cursor where it was.
+drawn. The cursor stays where it was.
 
-A character written in the last column leaves the cursor past the right edge,
-and the line wraps only when another printable character follows, as on a
+A character written in the last column leaves the cursor past the right
+edge. The line wraps only when another printable character follows, as on a
 VT100 terminal. A line exactly as wide as the screen, followed by a carriage
 return and a line feed, therefore leaves no blank row.
 
@@ -223,23 +208,38 @@ separated by `;`, then a letter that names the action. In the table, `n`,
 | `ESC [ r` | makes the whole screen the scroll region and puts the cursor at the top left |
 | `ESC [ n L`, `ESC [ n M` | inserts or deletes `n` lines at the cursor's row, within the scroll region; the rows below move, and the cursor goes to column 1 |
 
-A line feed at the bottom of the scroll region scrolls the region up one row
-and leaves the rows outside it as they are. Below the region, a line feed
-stops at the last row. The region goes back to the whole screen when the
-console changes and at every warm boot.
+A line feed at the bottom of the scroll region moves its rows up one
+and leaves the rows outside it as they are. Outside the region a line feed
+moves the cursor down one row and stops at the last. The region goes back to
+the whole screen when the console changes and at every warm boot.
 
-TEC-OS reads any other sequence to its final letter and ignores it. An
-`ESC` followed by anything but `[` ends there, and that byte isn't drawn. A program written for a larger
-terminal therefore leaves no stray characters on the screen.
+TEC-OS reads any other sequence to its final letter and ignores it. An `ESC`
+followed by anything but `[` ends there, and that byte isn't drawn. A
+program written for a larger terminal therefore leaves no stray characters
+on the screen.
 
-`TERM` uses several of these. It clears the screen, writes `ABCDEFG` at the
-top left, moves to row 1, column 3 and clears to the end of the line, which
-leaves `AB`. It then writes `X` at row 5, column 10 and a reverse `R` after
-it. It isn't on the starter card. Its source is `test/programs/term.asm`, and
-the commands under "The BIOS's console calls" assemble it on the PC and put it
-on drive B of `con.img`. On the PICO9918 the screen shows this after it ends.
-The screen text that `capture.mjs` prints leaves out reverse video, so the
-`R` appears as an ordinary letter:
+A program that lays out a screen, such as an editor, needs the console's
+size. TEC-OS reports it through the hardware service `INFO` of
+[Chapter 10](10-hardware-services.md#the-boards-report). The columns and
+rows are 0 for the serial terminal, whose size TEC-OS can't read. They
+change whenever the console does, so a program reads them again after a
+`CON`.
+
+`TERM` uses several of the sequences. It clears the screen and writes
+`ABCDEFG` at the top left. It then moves to row 1, column 3 and clears to the
+end of the line, which leaves `AB`. Last it writes `X` at row 5, column 10
+and a reverse `R` after it. `TERM` isn't on the starter card. Its source is
+`test/programs/term.asm` in the repository. These commands assemble it on
+the PC and put it on drive B of `con.img`:
+
+```sh
+npx atom test/programs/term.asm term.com
+node tools/tecvol.mjs put con.img B term.com
+```
+
+On the PICO9918 the screen shows this after it ends. The screen text that
+`capture.mjs` prints leaves out reverse video, so the `R` appears as an
+ordinary letter:
 
 <!-- node tools/capture.mjs --board pico --screen --card con.img B:TERM -->
 ```text
@@ -258,130 +258,20 @@ numbered lines, `L00` to `L29`, which scroll the screen.
 ## The cursor
 
 On a display, TEC-OS shows the cursor by drawing the cell at the cursor
-position as its reverse image. It draws the cursor only while a program waits
-for a key, which means during `CONIN` and when a program polls with `CONST`
-and no key is waiting, as BDOS functions 6 and 11 do. The next character
-printed removes it, so a program that prints a screenful never spends time
-drawing the cursor between characters. The BDOS's own check for `^S` during
-output draws no cursor. No cursor is drawn either while the cursor's position
-is past the right edge, waiting for a wrap.
+position as its reverse image. It draws the cursor only while a program
+waits for a key. That means during `CONIN`, and during `CONST` when no key
+is waiting, as BDOS functions 6 and 11 poll it. The next byte printed
+removes the cursor. A program that prints a screenful therefore never spends
+time drawing the cursor between characters. The BDOS's own check for `^S`
+during output draws no cursor. No cursor is drawn either while the cursor's
+position is past the right edge, waiting for a wrap.
 
-## The console's size
+## The other devices
 
-A program that lays out a screen, such as an editor, uses the console's size.
-TEC-OS gives both the columns and the rows as 0 while the console is the
-serial terminal, whose size TEC-OS can't read, so a program then uses 80 by
-24, as the CCP does for `[more]`.
-
-A program reads the size through the ROM table at `C003h`, which Chapter 10
-describes. The table starts with the letters `TNA` and its major version, 5,
-the version of its ABI, its application binary interface. At `C008h` is a jump
-to TEC-OS's numbered services, and service 0, `INFO`, returns the columns in
-`L` and the rows in `H`. A program that checks the letters and the version
-and then calls `INFO` works on every TEC-OS with this version of the table,
-wherever a later ROM keeps the size:
-
-```asm
-; SIZE: print the console's size, read through TEC-OS's table.
-BDOS    EQU     $0005
-ABITAB  EQU     $C003           ; "TNA", then the major version
-ABICALL EQU     $C008           ; a jump to the service numbered in C
-TNINFO  EQU     0               ; INFO: L = the columns, H = the rows
-
-        ORG     $0100
-        LD      HL,ABITAB       ; is this TEC-OS with ABI 5?
-        LD      DE,TAG
-        LD      B,4
-CHECK:  LD      A,(DE)
-        CP      (HL)
-        JR      NZ,OTHER
-        INC     HL
-        INC     DE
-        DJNZ    CHECK
-        LD      C,TNINFO
-        CALL    ABICALL
-        LD      A,L             ; the columns
-        OR      A
-        JR      Z,SERIAL        ; 0: the serial terminal
-        LD      B,H             ; the rows
-        PUSH    BC
-        CALL    DEC
-        LD      DE,BY
-        LD      C,9
-        CALL    BDOS
-        POP     BC
-        LD      A,B
-        CALL    DEC
-        LD      DE,ROWS
-        JR      SAY
-SERIAL: LD      DE,SERMSG
-        JR      SAY
-OTHER:  LD      DE,NOTMSG
-SAY:    LD      C,9
-        JP      BDOS
-
-DEC:    LD      B,'0'-1         ; print A, 0 to 99, in decimal
-TENS:   INC     B
-        SUB     10
-        JR      NC,TENS
-        ADD     A,10+'0'
-        PUSH    AF
-        LD      A,B
-        CP      '0'
-        JR      Z,UNITS         ; no leading zero
-        LD      E,A
-        LD      C,2
-        CALL    BDOS
-UNITS:  POP     AF
-        LD      E,A
-        LD      C,2
-        JP      BDOS
-
-TAG:    DB      "TNA",5
-BY:     DB      " columns, $"
-ROWS:   DB      " rows",13,10,"$"
-SERMSG: DB      "serial terminal",13,10,"$"
-NOTMSG: DB      "not TEC-OS with ABI 5",13,10,"$"
-```
-
-`DEC` counts tens in `B` by subtracting 10 until the subtraction borrows. The
-borrow leaves `A` 10 below the units, so adding `10+'0'` gives the units
-digit. On a board with only a serial terminal the program prints this:
-
-<!-- node tools/capture.mjs --card con.img B:SIZE -->
-```text
-A>B:SIZE
-serial terminal
-
-A>
-```
-
-On the web page's board the PICO9918 is the console at 80 columns, and after
-`CON UC1` the graphics LCD is. The lines up to the echo of `CON UC1` were on
-the PICO9918, and the rest on the graphics LCD:
-
-<!-- node tools/capture.mjs --board pico --card con.img B:SIZE "CON UC1" B:SIZE -->
-```text
-A>B:SIZE
-80 columns, 24 rows
-
-A>CON UC1
-CON: UC1:
-A>B:SIZE
-21 columns, 8 rows
-
-A>
-```
-
-The size changes whenever the console does, so a program reads it again
-after it changes the console, and a later run reads it afresh.
-
-## The IOBYTE's other devices
-
-CP/M's IOBYTE at `0003h` has four fields of two bits: the console in bits 0–1,
-the reader in bits 2–3, the punch in bits 4–5 and the list device in bits 6–7.
-TEC-OS reads only the console field, so each of the other devices has one
-fixed meaning, whatever its field holds:
+CP/M's IOBYTE at `0003h` has four fields of two bits. The console is in bits
+0–1 and the reader in bits 2–3. The punch is in bits 4–5 and the list device
+in bits 6–7. TEC-OS reads only the console field. Each of the other devices
+has one fixed meaning, whatever its field holds:
 
 - The list device, BDOS function 5 and the BIOS's `LIST`, is the printer in
   CP/M. The TEC-1G has none, so TEC-OS discards each byte sent to it. Its
@@ -397,7 +287,7 @@ fixed meaning, whatever its field holds:
 
 The punch and the reader make the serial port a byte channel for a program
 whose console is a display. Such a program sends bytes to the PC through the
-punch and reads bytes from it through the reader, while the console stays on
-the screen. Nothing holds a byte that arrives between two calls of the reader,
-so a program that reads a stream of bytes calls the reader again before the
-next byte starts.
+punch and reads bytes from it through the reader. The console stays on the
+screen throughout. Nothing holds a byte that arrives between two calls of
+the reader. A program that reads a stream of bytes therefore calls the
+reader again before the next byte starts.

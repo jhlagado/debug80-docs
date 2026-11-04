@@ -10,15 +10,14 @@ nav_group: "Part I: Using and programming TEC-OS"
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the
      repository's `atom-z80` 0.3.7. -->
 
-A program on TEC-OS has most of the Z80's memory to itself, and the rest is
-TEC-OS's. This chapter starts with the Z80's 64 KiB as TEC-OS lays it out on a
-TEC-1G. It then describes the TPA and the word at `0006h` that marks
-its end, then page zero and the bytes TEC-OS keeps there. It ends with the
-second half of the expansion RAM, which TEC-OS keeps for itself.
+A program on TEC-OS loads at `0100h` and has most of the Z80's 64 KiB to
+itself. The rest is TEC-OS's. A program that writes there crashes the board
+or damages the card. The line between the two moves with the card and the
+services installed, so a program reads it from page zero when it runs.
 
-## The Z80's 64 KiB
+## The 64 KiB on a TEC-1G
 
-The Z80 addresses 64 KiB, and on a TEC-1G running TEC-OS they fall into
+TEC-OS needs a TEC-1G with 64 KiB of RAM. The Z80's addresses then fall into
 three parts:
 
 | Addresses | Size | Contents |
@@ -27,34 +26,29 @@ three parts:
 | `8000h–BFFFh` | 16 KiB | EXPAND 0 or EXPAND 1, the two halves of the RAM in socket U9 |
 | `C000h–FFFFh` | 16 KiB | the TEC-OS ROM |
 
-The window at `8000h–BFFFh` shows one half of the RAM chip in U9 at a time,
-and bit 2 of the board's system latch, at port `FFh`, selects which. EXPAND 0
-is in view when TEC-OS starts a program, so a program has 48 KiB of RAM from
-`0000h` to `BFFFh`, with the ROM above it.
+The window at `8000h–BFFFh` shows one half of the chip in U9 at a time. Bit 2
+of the board's system latch, at port `FFh`, selects the half. EXPAND 0 is in
+view when TEC-OS starts a program. A program therefore has 48 KiB of RAM,
+from `0000h` to `BFFFh`, with the ROM above it. EXPAND 1 is TEC-OS's own,
+and the last section describes it.
 
-TEC-OS uses the top of that RAM, and programs have the rest. Page zero,
+TEC-OS keeps the top of that RAM and programs have the rest. Page zero,
 `0000h–00FFh`, holds the jumps and buffers through which a program reaches
-TEC-OS. The TPA, CP/M's Transient Program Area, runs from `0100h` up to the
-BDOS's entry or, with a service installed, up to the lowest service's jump on to
-that entry. The drives' allocation vectors are above the BDOS's entry. Above
-them, at the top of EXPAND 0, is TEC-OS's resident workspace. The workspace
-holds the stacks and state of the BIOS, the CCP and the BDOS, and at `BF00h`
-the BIOS jump table.
+TEC-OS. The TPA, CP/M's transient program area, starts at `0100h`. Above it
+are the drives' allocation vectors. Above them is TEC-OS's resident
+workspace, which holds the state and stacks of the BIOS, the CCP and the
+BDOS. The BIOS jump table is in the workspace at `BF00h`.
 
-## The TPA and the word at 0006h
+## The limit a program reads
 
-The memory a program has varies with the card and the services, so a program that
-sizes its buffers reads its limit when it runs. The limit is the word at
-`0006h`, the address in page zero's jump at `0005h`, through which every call to
-the BDOS goes. CP/M also defines that word as the end of the TPA, so a program
-may use memory from `0100h` up to the byte below that address. A program that
-sizes its buffers from the word runs on any card and with any services.
+The TPA ends at the BDOS's entry, the address in the jump at `0005h`. Every
+call to the BDOS goes through that jump. CP/M also defines the word at
+`0006h`, the jump's address, as the end of the TPA. A program may use memory
+from `0100h` up to the byte below that address. The address depends on the
+card's drives and on the services installed. A program that sizes its
+buffers therefore reads the word when it runs, and such a program runs on
+any card and with any services.
 
-Cold boot puts the BDOS's entry just below the allocation vectors, so the word
-depends on the card's drives, as Chapter 4 explains. Each service installed
-lowers it again, because TEC-OS loads the service on a page boundary below the
-old address and the service's own jump on to the BDOS becomes the target of
-the jump at `0005h`.
 This program prints the word:
 
 ```asm
@@ -91,15 +85,17 @@ CRLF:   DB      "h",13,10,"$"
 `DIGIT` turns the low four bits of `A` into a character from `0` to `F` and
 prints it with function 2. `HEX` calls it for the high four bits and then
 falls into it for the low four. `DIGIT` ends with `JP BDOS`, so the BDOS's
-return is the return of both. The program is assembled as Chapter 7 describes
-and copied to drive B of a copy of the starter card, and here it runs on a
-board with only a serial terminal:
+return is the return of both. The program is assembled on the PC as
+[Chapter 7](07-first-program.md) describes. It then goes on drive B of a
+copy of the starter card:
 
 ```sh
 cp dist/starter.img mem.img
 npx atom top.asm top.com
 node tools/tecvol.mjs put mem.img B top.com
 ```
+
+On a board with only a serial terminal it prints the starter card's figure:
 
 <!-- node tools/capture.mjs --card mem.img B:TOP -->
 ```text
@@ -109,12 +105,12 @@ B9A4h
 A>
 ```
 
-With the starter card on a board with both displays, the PICO9918's console is in the ROM and takes no
-memory below the word. The startup file's `GLCD.SVC` line passes over the
-driver quietly while the PICO9918 is the console, so the word is as on the
-serial board. `CON UC1` then loads `GLCD.SVC` from the card and makes the
-graphics LCD the console, and the word falls once. `B:TOP`, its reply and the
-echo of `CON UC1` appeared on the PICO9918, and the rest on the graphics LCD:
+On a board with both displays the PICO9918's console is in the ROM and takes
+nothing below the word. The startup file's `GLCD.SVC` line passes over the
+driver while the PICO9918 is the console, so the word is the same. `CON UC1`
+then loads `GLCD.SVC` from the card and makes the graphics LCD the console,
+and the word falls. The first `B:TOP`, its reply and the echo of `CON UC1`
+appeared on the PICO9918, and the rest on the graphics LCD:
 
 <!-- node tools/capture.mjs --board pico --card mem.img B:TOP "CON UC1" B:TOP -->
 ```text
@@ -129,21 +125,52 @@ B600h
 A>
 ```
 
-`GLCD.SVC` takes 768 bytes, three pages of 256. A service starts on a page
-boundary, so the first one installed also takes the bytes of the page below
-the BDOS's entry, which are `B900h–B9A3h` on the starter card. The TPA is
-therefore 47,268 bytes on the starter card with no service and 46,336 with
-`GLCD.SVC`. A card whose header gives four drives, such as `my.img` from
-Chapter 4, has `B6E4h` in the word with no service, and its TPA is then 46,564
-bytes.
+## The drives, the services and the word
 
-Cold boot sets up at most four drives, A to D, each with a vector of at most
-256 bytes, so every card gives at least 46,564 bytes with no service and
-45,568 with `GLCD.SVC`, when the word is `B300h`. Any other service takes its
-own pages from those figures.
+Two things set the word: the card's drives and the services installed. The
+table gives the word and the TPA for the starter card and for a card with
+four drives, with and without `GLCD.SVC`. The last column is the largest
+`.COM` file the CCP loads, which the next section explains.
+
+| Card | Service | Word at `0006h` | TPA in bytes | Largest `.COM` that loads |
+| --- | --- | --- | ---: | ---: |
+| starter card | none | `B9A4h` | 47,268 | 47,104 |
+| starter card | `GLCD.SVC` | `B600h` | 46,336 | 46,336 |
+| four drives | none | `B6E4h` | 46,564 | 46,336 |
+| four drives | `GLCD.SVC` | `B300h` | 45,568 | 45,568 |
+
+Each drive that cold boot sets up costs memory, because the BDOS keeps an
+allocation vector for it. The vector has one bit for each allocation block
+of the drive's volume, set when a file uses the block. With it the BDOS
+finds a free block without reading the directory. A G1M volume's vector is
+64 bytes and a G8M volume's is 256. The vectors are directly below the
+workspace. The BDOS's entry jump is directly below them, so they come out
+of the TPA.
+
+Cold boot gives out the vectors in one of two ways. A card whose header
+gives no number of drives gets a vector for each drive with a volume, sized
+for that volume. The starter card's two drives take 64 and 256 bytes, and
+the word is `B9A4h`. A card whose header gives N drives, as
+`tecvol create --drives N` makes it, gets a 256-byte vector for each of
+drives A to the Nth. The drive gets its vector with or without a volume at
+cold boot. `my.img` from [Chapter 4](04-cards-and-volumes.md) gives four, so
+its vectors take 1,024 bytes and the word is `B6E4h`, 704 lower. Cold boot
+sets up at most four drives, so no card takes the word below `B6E4h`.
+[Chapter 5](05-drives-and-cache.md) explains what a drive's vector lets
+`MOUNT` put on it.
+
+A service lowers the word again. TEC-OS loads a service in whole pages of
+256 bytes, and its last page is the page below the one that holds the word.
+The service's own jump on to the BDOS becomes the target of the jump at
+`0005h`, so the word falls to the service's first byte. `GLCD.SVC` takes
+three pages. On the starter card it occupies `B600h–B8FFh`, and the bytes
+above it up to the old word, `B900h–B9A3h`, go with it. That is why the
+driver costs programs 932 bytes and not 768. A second service ends at the
+page below the first. Each service takes its own pages from the figures in
+the table.
 
 A program that sizes its buffers works from the TPA's size, the word less
-`0100h`. This program finds it and prints it in decimal:
+`0100h`. This program finds that size and prints it in decimal:
 
 ```asm
 ; AREA: print the size of the program area in bytes, in decimal.
@@ -189,10 +216,10 @@ DLOOP:	INC	A		; the next digit
 BYTES:	DB	" bytes",13,10,"$"
 ```
 
-`PUTDEC` finds each digit by adding a negative power of ten to `HL` and
-counting until the total falls below zero, which clears the carry. `SBC HL,BC`
-then adds that power back. Assembled and copied to `mem.img`, the program
-gives the figure for the starter card with no service:
+`PUTDEC` finds each digit by adding a negative power of ten to `HL`. It
+counts until the total falls below zero, which clears the carry, and
+`SBC HL,BC` then adds that power back. Assembled and copied to `mem.img`,
+the program gives the starter card's figure with no service:
 
 ```sh
 npx atom area.asm area.com
@@ -207,26 +234,28 @@ A>B:AREA
 A>
 ```
 
-The CCP loads a `.COM` file from `0100h`, a record of 128 bytes at a time, and
-stops at the 256-byte page that holds the address in the word at `0006h`. On
-the starter card with no service the last record ends at `B8FFh`, so the
-largest program file that loads is 47,104 bytes, 164 bytes short of the TPA. A
-file one record longer fails like a missing one, with its name and a question
-mark. By the same rule, the largest file that loads on a four-drive card with
-`GLCD.SVC` is 45,568 bytes, the whole TPA. The limit applies to the file alone, and
-a program's data may go on to the byte below the word at `0006h`.
+## The largest program that loads
+
+The CCP loads a `.COM` file from `0100h`, a record of 128 bytes at a time.
+It stops at the 256-byte page that holds the word's address. On the starter
+card with no service the last record ends at `B8FFh`. The largest file that
+loads is therefore 47,104 bytes, 164 short of the TPA. A file one record
+longer fails like a missing file, with its name and a question mark. With a
+service installed the word is on a page boundary, and the largest file is
+then the whole TPA. The limit is on the file alone. A program's data may go
+on to the byte below the word.
 
 The memory above the word is TEC-OS's. A program that writes there corrupts
-the drives' allocation vectors or the BDOS's state, and what follows is a
-damaged card or a crash. The stack a program starts on is up there too: it is
-the CCP's, in the workspace, with 30 bytes free below the return address, as
-Chapter 7 says. A program that uses more sets `SP` to a stack of its own below
-the word at `0006h`.
+the drives' allocation vectors or the BDOS's state. What follows is a
+damaged card or a crash. The stack a program starts on is up there too. It
+is the CCP's, with 30 bytes free below the return address, as
+[Chapter 7](07-first-program.md) says. A program that uses more sets `SP` to
+a stack of its own below the word.
 
-On CP/M 2.2 the CCP is in RAM below the BDOS, and a program may overwrite it,
-since warm boot reads the CCP back from disk. On TEC-OS that gains a program
-nothing, because the CCP and the BDOS are in the ROM and the TPA already runs
-up to the word at `0006h`.
+On CP/M 2.2 the CCP is in RAM below the BDOS. A program may overwrite it,
+because warm boot reads the CCP back from disk. On TEC-OS the CCP and the
+BDOS are in the ROM. Nothing below the word is TEC-OS's, so a program gains
+nothing by the same trick.
 
 ## Page zero
 
@@ -240,7 +269,7 @@ CP/M fixes the use of the first 256 bytes, and TEC-OS follows it:
 | `0005h–0007h` | the jump to the BDOS, whose address is the end of the TPA |
 | `0008h–0037h` | the restart vectors of `RST 08h` to `RST 30h` |
 | `0038h–003Ah` | `EI` and `RETI`, the return from an interrupt in mode 1 |
-| `0040h` | TEC-OS's copy of the system latch, below |
+| `0040h` | TEC-OS's copy of the system latch, in the next section |
 | `0041h–004Fh` | unused |
 | `0050h` | the drive the CCP loaded the program from, 0 for the current drive (Chapter 7) |
 | `005Ch–007Fh` | the FCB the CCP fills from the first word of the command tail |
@@ -248,42 +277,44 @@ CP/M fixes the use of the first 256 bytes, and TEC-OS follows it:
 | `0080h–00FFh` | the command tail, then the default DMA buffer |
 
 The word at `0001h`, `BF03h`, is the address of the warm boot entry in the
-BIOS jump table, the table's second entry, so a program finds the table by
-subtracting 3 from it. Chapter 9 describes the console's entries there.
+BIOS jump table, the table's second entry. A program finds the table by
+subtracting 3 from it. [Chapter 9](09-programs-and-console.md) describes the
+console's entries there.
 
 The restart vectors are free for a program, and for a debugger, while the
-program runs. At each warm boot TEC-OS writes seven zeros and a `RET` into
-each one that doesn't hold a jump above the word at `0006h`, into a service,
-the workspace or the ROM. It then puts `EI` and `RETI` back at `0038h` unless
-a jump there was kept. An `RST` through a vector a finished program set therefore
-returns at once.
+program runs. At each warm boot TEC-OS sweeps them. A vector keeps a jump
+whose target is above the word at `0006h`: into a service, the workspace or
+the ROM. Every other vector gets seven zeros and a `RET`. TEC-OS then puts
+`EI` and `RETI` back at `0038h` unless a jump there was kept. An `RST`
+through a vector a finished program set therefore returns at once.
 
-The Z80 enters `0038h` on an interrupt in mode 1, the mode cold boot sets, and
-TEC-OS has nothing there but the return. Warm boot disables interrupts and
-nothing in TEC-OS enables them, so a program starts with them off. A program
-that enables them keeps them on, except while TEC-OS reads or writes a card
-block, sends or receives a serial byte or reads the command history, when
-TEC-OS holds them off and then restores them.
+The Z80 enters `0038h` on an interrupt in mode 1, the mode cold boot sets,
+and TEC-OS has nothing there but the return. Warm boot disables interrupts
+and nothing in TEC-OS enables them, so a program starts with them off. A
+program that enables them keeps them on, with four exceptions. TEC-OS holds
+them off while it reads or writes a card block, and while it sends or
+receives a serial byte. It also holds them off while it writes a pair of
+bytes to the PICO9918's control port, and while it reads the command
+history. In each case it then restores them.
 
 `0066h`, where the Z80 goes on a non-maskable interrupt, lies inside the FCB
 at `005Ch`. On a board with the keypad NMI jumper fitted, a key on the hex
-keypad lands there, so Chapter 1 says to keep off the keypad while a program
-runs.
+keypad runs whatever the FCB holds. TEC-OS runs with the jumper off, and
+[Appendix G](appendix-g-tec-1g.md) has the detail.
 
-## TEC-OS's byte at 0040h
+## The latch byte
 
 CP/M 2.2 leaves `0040h–004Fh` to the BIOS. TEC-OS keeps one byte there,
-`0040h`, the value last written to the system latch, which TEC-OS reads while
-EXPAND 1 is in the window. Cold boot clears all of page zero, and nothing in
-TEC-OS uses `0041h–004Fh` after that. The console's state, its size included,
-is in the workspace.
+`0040h`, the value last written to the system latch. The latch at port `FFh`
+can only be written, so `0040h` is TEC-OS's record of what it holds. It is
+also the one byte TEC-OS reads while EXPAND 1 is in the window. Cold boot
+clears all of page zero, and nothing in TEC-OS uses `0041h–004Fh` after
+that.
 
-A program reads the console's size through the ROM table, as Chapter 9
-describes, and leaves `0040h` alone unless it writes the latch itself. The latch at port
-`FFh` can only be written, so `0040h` is TEC-OS's record of what it holds. A
-program that writes the latch writes the same value to `0040h`, because
-otherwise TEC-OS's next change to the latch puts back the bits as `0040h`
-recorded them.
+A program that writes the latch itself writes the same value to `0040h`.
+Otherwise TEC-OS's next change to the latch puts back the bits as `0040h`
+recorded them. A program that leaves the latch alone leaves `0040h` alone
+too.
 
 ## EXPAND 1
 
@@ -297,20 +328,18 @@ clears it, and TEC-OS keeps in it:
 | `BD00h–BDFFh` | the history of command lines |
 | `BE00h–BFFFh` | free |
 
-EXPAND 1 in the window takes EXPAND 0 out of it, and the BDOS's entry, the
-BIOS jump table, the workspace and any of the program above `7FFFh` go with
-it. The jump at `0005h` then leads into a cache line, and the return word on
-the CCP's stack is out of view. A program on that stack has lost its stack and
-the BDOS before it writes a byte. A write to the window then damages the
-cache, and the next flush can write wrong data to the card. TEC-OS has no
-call that gives a program space there.
+EXPAND 1 in the window takes EXPAND 0 out of it. With EXPAND 0 go the BDOS's
+entry, the BIOS jump table, the workspace and any part of the program above
+`7FFFh`. The jump at `0005h` then leads into a cache line, and the return
+word on the CCP's stack is out of view. A program on that stack has lost its
+stack and the BDOS before it writes a byte. A write to the window then
+damages the cache, and the next flush can write wrong data to the card.
+TEC-OS has no call that gives a program space there.
 
-A program that ends with `JP 0000h` while EXPAND 1 is in view still reaches a
-warm boot. The jump at `0000h` leads to `BF03h`, which in EXPAND 1 holds zeros
-unless a program wrote there, and the Z80 runs on through them into the ROM at
-`C000h`. The ROM's reset entry tells this from a reset by the byte at `0002h`
-and goes to the warm boot, which puts EXPAND 0 back and writes the cache's
-changes to the card as at any program's end (`src/boot.asm:20-22`,
-`src/boot.asm:92-108`). A reset
-and BIOS function 0 run cold boot.
-
+A program that ends with `JP 0000h` while EXPAND 1 is in view still reaches
+a warm boot. The jump at `0000h` leads to `BF03h`. In EXPAND 1 that address
+holds zeros unless a program wrote there, and the Z80 runs on through them
+into the ROM at `C000h`. The ROM's reset entry tells this from a reset by
+the byte at `0002h` and goes to the warm boot. The warm boot puts EXPAND 0
+back and writes the cache's changes to the card, as at any program's end. A
+reset and BIOS function 0 run cold boot instead.

@@ -14,7 +14,9 @@ nav_group: "Appendices"
 This appendix lists the `.SVC` file's format: the header's fields and the
 loader's check of each, the dependencies and the relocation data, with
 `GLCD.SVC` from the starter card as an example. Chapter 12 describes writing a
-service, and Chapter 23 describes the load and the relocation.
+service, and Chapter 24 describes the load and the relocation. Chapter 24
+also gives the header as it stands in memory, after the loader has written
+its own fields over some of these.
 
 ## The file
 
@@ -29,47 +31,50 @@ A `.SVC` file has four parts, in this order:
 
 The header and the image are one assembly made for page 0, with the header at
 its start, so an address in the image counts from the header's first byte. The
-loader moves the header and the image together to a page boundary and writes
-its own fields over some of the header's, as Chapter 23's table shows. A file's
+loader moves the header and the image together to a page boundary. A file's
 end is rounded up to a whole record of 128 bytes on the card, and the loader
 reads nothing after the relocation data (`src/loader.asm:177-181`).
 
 ## The header
 
-The loader names the fields at `src/loader.asm:18-32`.
+The loader names the fields at `src/loader.asm:18-32`. The last column gives
+the loader's check of each field, and a field that fails it fails the load.
 
 | Offset | Bytes | Contents | The loader's check |
 | ---: | ---: | --- | --- |
-| 0 | 1 | The letter `D`, `44h` | With offset 1, the word `0444h` |
-| 1 | 1 | The format, 4 | The same word |
-| 2 | 1 | The number of dependencies | Each entry lies within the records read |
-| 3 | 1 | Flags: bit 0, removable; bits 1 to 7, `RST 1` to `RST 7` claimed | A claimed vector holding a `JP` fails the load |
-| 4 | 2 | `REMOVE`, from the header's start | From 25 to below the size at offset 6 |
-| 6 | 2 | The size of the header and image | Within the records read |
-| 8 | 2 | Extra memory after the image, not cleared | With the size, a page at `80h` or above |
-| 10 | 2 | The size of the relocation data | Within the records read |
-| 12 | 3 | Stack bytes added: BDOS, BIOS, CCP | Each within the room left |
-| 15 | 2 | `INIT`, from the header's start | As `REMOVE` |
+| 0 | 1 | The letter `D`, `44h` | Offsets 0 and 1 together are the word `0444h` (`src/loader.asm:103-106`) |
+| 1 | 1 | The format, 4 | See offset 0 |
+| 2 | 1 | The number of dependencies | The entries, 9 bytes each after the image, end within the records read (`src/loader.asm:128-147`) |
+| 3 | 1 | Flags: bit 0, removable; bits 1 to 7, `RST 1` to `RST 7` claimed | No claimed vector holds a `JP` already (`src/loader.asm:205-218`) |
+| 4 | 2 | `REMOVE`, from the header's start | From 25 to below the size at offset 6 (`src/loader.asm:114-116`, `src/loader.asm:423-429`) |
+| 6 | 2 | The size of the header and image | The header and image end within the records read (`src/loader.asm:107-110`, `src/loader.asm:412-418`) |
+| 8 | 2 | Extra memory after the image, not cleared | The pages for the image and the extra memory start at a page from `80h` up and below the page of the TPA's top (`src/loader.asm:117-127`) |
+| 10 | 2 | The size of the relocation data | The data ends within the records read (`src/loader.asm:151-154`) |
+| 12 | 3 | Stack bytes added: BDOS, BIOS, CCP | Each is at most the room left on that stack, `SVCLIM`'s figure less what the services in have taken (`src/loader.asm:155-171`) |
+| 15 | 2 | `INIT`, from the header's start | As `REMOVE` (`src/loader.asm:111-113`) |
 | 17 | 8 | The name, padded with spaces | None |
 
 The loader compares the first two bytes, as a word, with `DMAGIC`, which is
-`SVCFMT * 256 + 'D'` (`src/loader.asm:18`, `src/loader.asm:103-106`). `SVCFMT` is 4,
-from `abi.inc`, and a file of any other format fails the load
-(`src/abi.inc:103-105`). A source writes the byte by that name, as
-`DB 'D',SVCFMT,0,1` with `abi.inc` included, which is how `GLCD.SVC` writes it
-(`drivers/glcd.asm:17`). `makeSvc`
-writes its own figure for the format over the source's byte
-(`tools/lib/svc-format.mjs:3`, `tools/lib/svc.mjs:111`), and that figure is 4
-as well.
+`SVCFMT * 256 + 'D'` (`src/loader.asm:18`). `SVCFMT` is 4, from `abi.inc`,
+and a file of any other format fails the load (`src/abi.inc:103-105`).
 
-The source writes the letter, the format, the flags, the extra memory, the stack
-figures and the name, and it leaves the other fields 0. The tool that makes the
-file, `TAS` on the card or `makeSvc` on a PC, writes the number of
-dependencies, the two entry offsets and the two sizes
-(`tools/lib/svc.mjs:111-120`).
-The loader's checks of the entry offsets, the sizes and the page are at
-`src/loader.asm:107-127`, `src/loader.asm:412-429`, and of the stack figures at
-`src/loader.asm:155-171`.
+Two writers fill the header. The source writes the fields the programmer
+decides, and the tool that makes the file, `TAS` on the card or `makeSvc` on a
+PC, writes the ones it measures (`tools/lib/svc.mjs:111-120`):
+
+| Field | Written by |
+| --- | --- |
+| The letter `D` | The source, as `DB 'D',SVCFMT,0,1` with `abi.inc` included (`drivers/glcd.asm:17`) |
+| The format | The source, and then the tool writes its own figure, 4, over it (`tools/lib/svc-format.mjs:3`, `tools/lib/svc.mjs:111`) |
+| The number of dependencies | The tool |
+| The flags | The source |
+| `REMOVE` and `INIT` | The tool |
+| The two sizes | The tool |
+| The extra memory | The source |
+| The stack bytes | The source |
+| The name | The source |
+
+The source leaves the tool's fields 0.
 
 ## The dependencies
 
@@ -77,8 +82,8 @@ Each dependency is 9 bytes: the least version of the record, then its 8-byte
 name, padded with spaces (`tools/lib/svc.mjs:106`). The entries follow the
 image and are no part of it, so the loader relocates none of their bytes. It
 looks each one up in the registry, and a name that isn't there, or is there at
-a lower version, fails the load (`src/loader.asm:128-147`). `makeSvc` takes them
-from its `deps` option and rejects a name of more than 8 bytes
+a lower version, fails the load (`src/loader.asm:128-147`). `makeSvc` takes
+them from its `deps` option and rejects a name of more than 8 bytes
 (`tools/lib/svc.mjs:105`). `TAS` takes them from what follows a label named
 `DEPS` in the source, as whole 9-byte entries in `DB`.
 
@@ -88,9 +93,9 @@ The relocation data is a list of gaps, one byte each. Each fixup is a byte of
 the image that holds the high byte of an address, and the loader adds the
 service's page to it. The first gap counts from header byte 24, the byte before
 the image, and each later gap from the previous fixup
-(`tools/lib/svc.mjs:37-49`). A gap of 255 moves on 255 bytes with nothing fixed,
-and the next byte carries on from there. A distance of 255 or more is therefore
-written as bytes of 255 and then the rest:
+(`tools/lib/svc.mjs:37-49`). A gap of 255 moves on 255 bytes with nothing
+fixed, and the next byte carries on from there. A distance of 255 or more is
+therefore written as bytes of 255 and then the rest:
 
 | Fixups, as image bytes | Gap list |
 | --- | --- |
@@ -105,14 +110,45 @@ reached.
 
 Every position the list reaches, a gap of 255 included, must lie inside the
 header and image, below the size at offset 6, or the load fails
-(`src/loader.asm:174-203`). A first gap of 0 fixes header byte 24, the name's last.
-`makeSvc` never writes one, since every fixup it finds lies in the image. The
-loader doesn't test for one, and Chapter 23 shows what such a list does.
+(`src/loader.asm:174-203`). The loader doesn't test for a first gap of 0,
+which fixes header byte 24, the name's last. `makeSvc` never writes one, since
+every fixup it finds lies in the image, and the example below shows what such
+a list does.
 
 The repository's encoders also write a bitmap and a list of 16-bit offsets, for
 comparison (`tools/lib/svc.mjs:28-36`). `makeSvc` writes the gap list unless it
 is asked for another, and the loader reads only the gap list
 (`tools/lib/svc.mjs:83`).
+
+### A first gap of 0
+
+This file is `COUNT.SVC` from Chapter 12 with a 0 put at the front of its
+list, and the size at offset 10 raised by one:
+
+```sh
+node -e '
+const { readFileSync, writeFileSync } = require("node:fs");
+const f = readFileSync("COUNT.SVC");
+const out = Buffer.concat([f.subarray(0, 100), Buffer.from([0]), f.subarray(100)]);
+out[10] += 1;
+writeFileSync("GAPZERO.SVC", out);
+'
+node tools/tecvol.mjs put svc.img B GAPZERO.SVC
+```
+
+<!-- node tools/capture.mjs --card svc.img B: GAPZERO.SVC SERVICES -->
+```text
+A>B:
+B>GAPZERO.SVC
+
+B>SERVICES
+COUNTX 1
+B>
+```
+
+The service loads. The space at byte 24 has become `20h` + `B8h`, `D8h`, and
+`PUTTRIM` masks bit 7 (`src/cpm/ccpfile.asm:325-327`), so the name prints
+with an `X`.
 
 ## GLCD.SVC
 
@@ -151,12 +187,12 @@ The header's fields are:
 | 17 | `47 4c 43 44 20 20 20 20` | The name, `GLCD` |
 
 With no dependencies the relocation data starts at offset 767, `2FFh`, right
-after the image. The image starts at offset 25, `19h`, with the table of words
-the driver passes to the ROM's terminal through service 12: `00F2h`, `014Dh`,
-`0152h` and so on, addresses in an image made for page 0. The list's first gap,
-2, counts from offset 24 to offset 26, the high byte of `00F2h`, and each of the
-next five 2s reaches the next word's high byte. The 69 bytes hold no 255, so
-they mark 69 fixups, and the last is at file offset 563. The driver holds no
-font: its `INIT` asks the ROM for the console's font through service 15 and
-keeps the address (`drivers/glcd.asm:38-41`). A bitmap with a bit for each of
-the 742 bytes of image would take 93 bytes.
+after the image. The image starts at offset 25, `19h`. Its first bytes are the
+table of words the driver passes to the ROM's terminal through service 12:
+`00F2h`, `014Dh`, `0152h` and so on, addresses in an image made for page 0.
+The list's first gap, 2, counts from offset 24 to offset 26, the high byte of
+`00F2h`, and each of the next five 2s reaches the next word's high byte. The
+69 bytes hold no 255, so they mark 69 fixups, and the last is at file offset
+563. The driver holds no font: its `INIT` reads the font's address from the
+ROM through service 15 and stores it (`drivers/glcd.asm:38-41`). A bitmap
+with a bit for each of the 742 bytes of image would take 93 bytes.

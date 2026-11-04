@@ -53,13 +53,16 @@ label or by its id, tried in that order (`tools/lib/container.mjs:201-209`). A
 volume on no drive is reached by its label or id. `--user N` selects user area
 `N`, a whole number from 0 to 15 in one or two digits. Any other `N` is a
 mistake in the command line, found before the image is opened
-(`tools/tecvol.mjs:47-51`). Without it `put`, `get` and `era` use user area 0, and `dir`
-lists every user area (`tools/tecvol.mjs:107`, `tools/tecvol.mjs:136`).
+(`tools/tecvol.mjs:47-51`). Without it `put`, `get` and `era` use user area
+0, and `dir` lists every user area (`tools/tecvol.mjs:107`,
+`tools/tecvol.mjs:136`).
 
-For a mistake in the command line, `tecvol` prints the reason and a line of
-usage and ends with exit status 2. For any other failure, such as a bad
-container, a full volume or a missing file, it prints `tecvol: ` and the
-reason and ends with exit status 1 (`tools/tecvol.mjs:29-33`,
+`tecvol` ends with one of two exit statuses. For a mistake in the command
+line, it prints the reason and a line of usage and ends with exit status 2. A
+name that `era` can't find counts as such a mistake. For any other failure,
+such as a bad container, a full volume or a PC file that can't be read, it
+prints `tecvol: ` and the reason and ends with exit status 1
+(`tools/tecvol.mjs:29-33`, `tools/tecvol.mjs:164`,
 `tools/tecvol.mjs:192-197`).
 
 `tecvol` and TEC-OS must never change the same card at the same time
@@ -75,22 +78,24 @@ or the card out, and press reset after putting it back.
 `--volume` adds one volume, in the order given, from a spec of the form
 `GEOMETRY:LABEL:DRIVE[:ro][:wb]` (`tools/tecvol.mjs:85-89`):
 
-- `GEOMETRY` is `G1M` or `G8M`.
-- `LABEL` is up to 11 characters, put in capitals, and labels must differ.
-- `DRIVE` is `A` to `D`, or empty for a volume on no drive.
-- `:ro` makes the volume read-only, and `:wb` makes it written behind, for at
-  most one volume and never with `:ro`.
+| Part | Meaning |
+| --- | --- |
+| `GEOMETRY` | `G1M` or `G8M` |
+| `LABEL` | Up to 11 characters, put in capitals; labels must differ |
+| `DRIVE` | `A` to `D`, or empty for a volume on no drive |
+| `:ro` | The volume is read-only |
+| `:wb` | The volume is written behind, for at most one volume and never with `:ro` |
 
-`--align N` places each volume at a multiple of `N` blocks, which must be a
-multiple of 8. The default is 2,048, 1 MiB (`tools/lib/container.mjs:14`,
-`tools/lib/container.mjs:89-99`). `--drives N`, 1 to 4, records in the header
-the number of drives TEC-OS is to set up at cold boot. Each `N` is a whole
-number in decimal, from 1 to 16,777,215 for `--align`, which must also be a multiple of 8, and from 1 to 4 for
-`--drives`. Any other `N` is a mistake in the command line, found before the
-image is made (`tools/tecvol.mjs:35-39`, `tools/tecvol.mjs:52-53`). With `--drives`, or
-with more than 8 volumes, the card is format 1.1, and otherwise 1.0
-(`tools/lib/container.mjs:79-80`). Every payload is filled with `E5h`, so each
-volume starts as an empty CP/M disk. One volume must be on drive A.
+`--align N` places each volume at a multiple of `N` blocks. `N` is a whole
+number in decimal from 1 to 16,777,215 and a multiple of 8. The default is
+2,048, 1 MiB (`tools/lib/container.mjs:14`, `tools/lib/container.mjs:89-99`).
+`--drives N`, 1 to 4, records in the header the number of drives TEC-OS is to
+set up at cold boot. Any other `N` for either option is a mistake in the
+command line, found before the image is made (`tools/tecvol.mjs:35-39`,
+`tools/tecvol.mjs:52-53`). With `--drives`, or with more than 8 volumes, the
+card is format 1.1, and otherwise 1.0 (`tools/lib/container.mjs:79-80`).
+Every payload is filled with `E5h`, so each volume starts as an empty CP/M
+disk. One volume must be on drive A.
 
 This card has a system volume on A, a work volume written behind on B and a
 read-only volume on no drive:
@@ -103,17 +108,8 @@ node tools/tecvol.mjs create build/my.img --volume G1M:SYSTEM:A --volume G8M:WOR
 
 ## info and verify
 
-`info IMAGE` prints the container's format, its length and its number of
-volumes, with the number of drives a 1.1 card gives, and then one line for
-each volume: its drive or `-`, its label, its id, its geometry, its start
-block, `rw` or `ro`, `wb` for a volume written behind, its number of files and
-its free bytes (`tools/tecvol.mjs:115-132`). Under a volume whose CP/M
-directory has a fault, such as two directory entries for one part of a file,
-it prints a line for each fault, starting `problem:`
-(`tools/lib/cpmfs.mjs:240-267`). A block given to two files, or a block
-number above the volume's last, DSM, stops the command instead, with exit
-status 1 and a message naming the file and the block, before the volume's line
-is printed (`tools/lib/cpmfs.mjs:78-89`, `tools/tecvol.mjs:124-127`).
+`info IMAGE` prints one line for the container and one for each volume
+(`tools/tecvol.mjs:115-132`):
 
 ```sh
 node tools/tecvol.mjs info build/my.img
@@ -126,9 +122,21 @@ container: format 1.0, 22528 blocks (11534336 bytes), 3 volume(s)
   -: ARCHIVE     id 3 G1M start 20480 ro 0 file(s), 1040384 bytes free
 ```
 
-`WORK` ends at block 20,480, a multiple of 2,048, so the third volume starts
-there. A G1M volume's free bytes are its 512 allocation blocks less the
-directory's four, at 2 KiB each.
+The container's line is its format, its length and its number of volumes,
+with the number of drives a 1.1 card gives. A volume's line is its drive or
+`-`, its label, its id, its geometry, its start block, `rw` or `ro`, `wb` if
+it is written behind, its number of files and its free bytes. `WORK` ends at
+block 20,480, a multiple of 2,048, so the third volume starts there. A G1M
+volume's free bytes are its 512 allocation blocks less the directory's four,
+at 2 KiB each.
+
+Under a volume whose CP/M directory has a fault, such as two directory
+entries for one part of a file, `info` prints a line for each fault, starting
+`problem:` (`tools/lib/cpmfs.mjs:240-267`). A block given to two files, or a
+block number above the volume's last, DSM, stops the command instead, with
+exit status 1 and a message naming the file and the block, before the
+volume's line is printed (`tools/lib/cpmfs.mjs:78-89`,
+`tools/tecvol.mjs:124-127`).
 
 `verify IMAGE` prints the same lines and ends with exit status 1 if any volume
 has a fault. A container that fails its own checks fails both commands before
@@ -149,9 +157,9 @@ tecvol: header checksum mismatch
 
 `dir IMAGE [DRIVE]` lists a volume's files, drive A's by default, one line
 each: the user area, the name and the size (`tools/tecvol.mjs:133-140`). The
-size is in whole records, 128 bytes each, since CP/M records no size more
-exact. `R/O` and `SYS` follow a file with those attributes. The starter card's
-drive A:
+size is in whole records, 128 bytes each, since CP/M stores a file's size
+only in records. `R/O` and `SYS` follow a file with those attributes. The
+starter card's drive A:
 
 ```sh
 node tools/tecvol.mjs dir dist/starter.img A
@@ -175,7 +183,7 @@ node tools/tecvol.mjs dir dist/starter.img A
 file's own name in capitals. It must be a CP/M name: up to 8 characters, then
 optionally a full stop and up to 3 (`tools/lib/cpmfs.mjs:15-20`). A file of
 the same name in the same user area is replaced, unless it has the read-only
-attribute: TEC-OS refuses to write over such a file, and so does `put` unless
+attribute: TEC-OS rejects a write over such a file, and so does `put` unless
 `--force` is given. The copy fails if the volume is read-only, if the file
 there is read-only or if its blocks or its directory entries run out, and then
 the image is left as it was (`tools/lib/cpmfs.mjs:180-206`).
@@ -244,7 +252,7 @@ world
 `era IMAGE DRIVE CPMNAME` erases a file from one user area, 0 or the one
 `--user` gives (`tools/tecvol.mjs:160-167`). A name not found there is a
 mistake in the command line, with exit status 2. A file with the read-only
-attribute is refused, as TEC-OS refuses it, unless `--force` is given
+attribute is rejected, as TEC-OS rejects it, unless `--force` is given
 (`tools/lib/cpmfs.mjs:157-169`).
 
 ```sh
@@ -261,7 +269,7 @@ The first command searched user area 0, which has no `TAS.COM`. The second
 erased the file from user area 3 and printed nothing.
 
 Here a file is put on drive B with its read-only attribute. A second `put` over
-it and an `era` of it are both refused with exit status 1, and the image stays
+it and an `era` of it are both rejected with exit status 1, and the image stays
 as it was. The last command erases it:
 
 ```sh
@@ -282,14 +290,13 @@ tecvol: 0/NOTE.TXT is read-only
 the volumes and the files to put on them (`tools/tecvol.mjs:168-174`).
 `npm run media` writes the starter card's recipe as `dist/starter.recipe.json`
 and builds `dist/starter.img` from it (`tools/media.mjs:206-225`). It also
-writes the web page's recipe, `dist/page.recipe.json`, which has the
-starter card's volumes and components with one more, `DEMO.COM` on drive A,
-and its own `id`, `name` and `instruction`
-(`tools/media.mjs:227-240`). A recipe has the schema `tecos-file-recipe-v1`, a
-list of `volumes` and a list of `components`, each with `files`. Each volume is
-in `create`'s terms: a geometry, a label, a drive and `readOnly` or
-`writeBehind`. Each file has a name, a `url`, a drive, a size in `bytes`, a
-`sha256` and optionally a user area (`tools/lib/recipe.mjs:13-26`).
+writes the web page's recipe, `dist/page.recipe.json`, which adds `DEMO.COM`
+to the starter card's files (`tools/media.mjs:227-240`). A recipe has the
+schema `tecos-file-recipe-v1`, a list of `volumes` and a list of
+`components`, each with `files`. Each volume is in `create`'s terms: a
+geometry, a label, a drive and `readOnly` or `writeBehind`. Each file has a
+name, a `url`, a drive, a size in `bytes`, a `sha256` and optionally a user
+area (`tools/lib/recipe.mjs:13-26`).
 
 `tecvol` reads a file's `url` as a web address if it starts `http://` or
 `https://`, and otherwise as a path from the recipe's own folder
