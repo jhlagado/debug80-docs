@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 626ee41, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -301,14 +301,14 @@ file.
 
 The pages must stay below the address in the word at `0006h`, so the number
 must be less than the high byte of that word. On the starter card with no
-service installed the word is `B815h`, and `SAVE` takes up to 183 pages:
+service installed the word is `B9F3h`, and `SAVE` takes up to 184 pages:
 
-<!-- node tools/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 184 BIG.COM" DIR -->
+<!-- node tools/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 185 BIG.COM" DIR -->
 ```text
 A>B:
 B>SAVE 2 TWO.COM
-B>SAVE 184 BIG.COM
-184?
+B>SAVE 185 BIG.COM
+185?
 
 B>DIR
 TWO.COM     
@@ -501,7 +501,9 @@ The message is `Bdos Err On`, the drive and one of four causes:
 | `Bdos Err On C: R/O` | the volume is read-only, or the drive was made read-only by BDOS function 28 |
 
 After printing the message, the BDOS waits for a key, and any key ends the
-command, or the program that made the call, with a warm boot.
+command, or the program that made the call, with a warm boot. A program can
+instead have the error returned to it, with BDOS function 45, which Appendix A
+describes.
 
 A write to a read-only volume, such as one made with `tecvol create`'s `:ro`
 in Chapter 4, gives `R/O`. These commands make a card with the starter card's
