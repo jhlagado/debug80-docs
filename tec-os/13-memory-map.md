@@ -329,6 +329,6 @@ All three resident stacks are in the window, so the routines that put EXPAND 1
 in view use no stack until EXPAND 0 is back. A `PUSH` with EXPAND 1 in view
 would write into EXPAND 1, and the `POP` after it would read EXPAND 0. The
 cache's routines, the history's and `DETECT`, which the RAM check calls to
-find EXPAND 1, state the rule at their heads (`src/cache.asm:17-19`,
+find EXPAND 1, state the rule at their heads (`src/cache.asm:10-13`,
 `src/history.asm:16-19`, `src/boot.asm:190-194`). The SD card driver's block
 loops keep to it when a cache line is the buffer (`src/sd.asm:321-323`).

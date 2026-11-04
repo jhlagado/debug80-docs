@@ -39,7 +39,7 @@ does. `DIR` lists with functions 17 and 18, `TYPE` reads with function 20 and
 `ERA` erases with function 19 (`src/cpm/ccpfile.asm:61-62`,
 `src/cpm/ccpfile.asm:144-145`, `src/cpm/ccpfile.asm:379-380`,
 `src/cpm/ccpfile.asm:458-459`). Most of the calls that name one of the CCP's two
-FCBs, 22 of them, go through `DOSSEQ`. Each `CALL DOSSEQ` is followed by one
+FCBs, 24 of them, go through `DOSSEQ`. Each `CALL DOSSEQ` is followed by one
 byte, the function's number times 2, plus 1 for `RENFCB` or 0 for `CMDFCB`.
 `DOSSEQ` reads the byte at its return address and moves that address past it,
 puts the function in `C` and the FCB's address in `DE`, and jumps to `0005h`,

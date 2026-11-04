@@ -127,7 +127,7 @@ driver stays loaded, the console stays as it is and `CON UC1` later switches
 with nothing to load (`src/loader.asm:510-533`). A line of `STARTUP.CMD` that
 names `GLCD.SVC` while the field is `CRT:` installs nothing, as the section on
 the displays' tables below explains, so on a board with both displays the GLCD
-takes the console only through `CON UC1` or a load typed after `CON TTY`. The
+takes the console only through `CON UC1` or a load after `CON TTY`. The
 PICO9918's console needs no load, since `PISTART` puts `CRT:` in the field at
 cold boot.
 
@@ -235,7 +235,7 @@ with `C` at `FEh` puts `B` on the high half of the address bus, and the low bit
 in `B` selects one of eight rows. The byte read has a low bit for each key down
 in that row. Key number k is row k / 8, bit k mod 8. Keys 0, 1 and 2 are Shift,
 Ctrl and Fn, keys 3 to 6 are the arrows and key 7 is Caps Lock
-(`src/keyboard.asm:9-12`, `src/keyboard.asm:80-82`).
+(`src/keyboard.asm:4-7`, `src/keyboard.asm:80-82`).
 
 TEC-OS reads the keyboard only when the board's Matrix switch was on at cold
 boot. `CONINIT` copies bit 0 of port `03h` into `CONDEV`'s bit `CDMTX`
@@ -251,7 +251,7 @@ down, `KBSTEP` moves the last key seen, `KBE`, into `KBD` and records the new
 one in `KBE`, so after a scan `KBE` holds the highest-numbered key down and `KBD`
 the one below it.
 
-After the eighth row `KBEVAL` evaluates the scan (`src/keyboard.asm:55-108`).
+After the eighth row `KBEVAL` evaluates the scan (`src/keyboard.asm:59-115`).
 A key that is still the one held at the last scan, `KBLAST`, gives nothing, so
 a key is delivered once when it goes down and holding it does not repeat. A
 second key down must be a modifier, since modifiers have the lowest numbers, and
@@ -261,7 +261,7 @@ The first is delivered at once, and the other two are kept in `KBT1` and `KBT2`
 for the next two calls of `CONIN`.
 
 Any other key goes through `KBASCII`, which looks it up
-(`src/keyboard.asm:117-180`). Return, Esc, space, quote and backslash come from a
+(`src/keyboard.asm:117-179`). Return, Esc, space, quote and backslash come from a
 table of plain and shifted values. Digits and punctuation come with their
 shifted forms from `KBSHIFT`. Letters come in lower case, in upper case with
 Shift or Caps Lock, and as control codes 01h to 1Ah with Ctrl.
