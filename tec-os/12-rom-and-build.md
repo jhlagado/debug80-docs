@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 12. The ROM and its build
 
-Checked against TEC-OS 58d4345.
+Checked against TEC-OS 621201d.
 
 TEC-OS is one 16 KiB image for the addresses `C000h–FFFFh`. This chapter
 describes the image's layout, from the jump at its first byte to the free
@@ -25,13 +25,13 @@ The ROM has five parts, in this order:
 | `C000h–C002h` | 3 | the reset jump |
 | `C003h–C00Ah` | 8 | the ROM table |
 | `C00Bh–C609h` | 1,535 | the data |
-| `C60Ah–FE04h` | 14,331 | the code |
-| `FE05h–FFFFh` | 507 | free |
+| `C60Ah–FE45h` | 14,396 | the code |
+| `FE46h–FFFFh` | 442 | free |
 
-The figures are those of the build at commit 58d4345. The build writes them to
+The figures are those of the build at commit 621201d. The build writes them to
 `build/tecos/census.json` and, through `npm run media`, to the table of the
 ROM's regions in `docs/memory-map.md`. The used part, from `C000h` to the end
-of the code, is 15,877 of the 16,384 bytes.
+of the code, is 15,942 of the 16,384 bytes.
 
 The first three bytes are a jump, `JP RSTENT` (`src/reset.asm:6`), to `C60Ah`,
 the first byte of the code. Chapter 14 describes how the Z80 reaches it at
@@ -50,11 +50,11 @@ it up: `tables.asm`, the generated `gen/geom.asm` and `gen/font.asm`, and
 `text.asm` (`src/rom.asm:11-14`). They hold the messages, the table of the
 built-in commands' words and their handlers, the keyboard's tables, the
 container's name and disk parameters, the console's font, the BDOS's function
-table and the table of the numbered services (`src/tables.asm:29-31`,
+table and the table of the numbered services (`src/tables.asm:31-35`,
 `src/tables.asm:45-65`, `src/tables.asm:70`, `src/tables.asm:82-89`). Each group is headed by the name of the source file
 whose code uses it, so `CWMSG`, the text `Write lost`, sits under `cache.asm`
 (`src/text.asm:68-69`). Nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
-(`src/tables.asm:10-26`) is in the block as the source of the copy that programs
+(`src/tables.asm:11-28`) is in the block as the source of the copy that programs
 and the BDOS call, which Chapter 15 describes.
 
 The code starts at `RSTENT` (`src/boot.asm:20`) and runs through every routine of TEC-OS to the label
@@ -84,9 +84,14 @@ assembled in the order they are listed (`src/rom.asm:1-3`):
 ```
 
 The list goes on through `bios.asm`, `console.asm`, `keyboard.asm`, `term.asm`,
-`video.asm`, `tms.asm`, `pico.asm`, `lcd.asm`, `sd.asm`, `vol.asm`, `cpm/ccp.asm`,
-`cpm/bdos.asm`, `services.asm`, `cache.asm`, `history.asm` and `loader.asm`,
-and ends with `end.asm` (`src/rom.asm:16-40`).
+`video.asm`, `tms.asm`, `pico.asm`, `lcd.asm`, `sd.asm`, the volume code in
+`vol.asm` and `volutil.asm`, the CCP in `cpm/ccp.asm`, `cpm/ccpfile.asm` and
+`cpm/ccpcmd.asm`, the BDOS in `cpm/bdos.asm`, `cpm/bdosfile.asm`,
+`cpm/bdosrec.asm`, `cpm/bdosfn.asm`, `cpm/bdoslog.asm` and `cpm/bdoscon.asm`,
+then `services.asm`, `cache.asm`, `history.asm` and `loader.asm`, and ends with
+`end.asm` (`src/rom.asm:16-40`). The CCP, the BDOS and the volume code are
+each split by groups of routines across files that follow one another in the
+assembly, so their bytes lie together as one file's would.
 
 The first five files emit no bytes. `abi.inc`, `gen/config.asm` and
 `gen/format.asm` are equates. So is `layout.asm`, which names the ports, the
@@ -124,7 +129,7 @@ the banner and the LCD's top row print from (`src/text.asm:6`,
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:25-26`,
-`tools/build.mjs:37-59`). At 58d4345 they are 49, 105, 50, 70 and 77, and the
+`tools/build.mjs:37-59`). At 621201d they are 49, 105, 50, 70 and 77, and the
 build stops with an error if a count would not fit in a byte
 (`tools/build.mjs:46-48`). Chapter 15 explains the loops and the arithmetic
 behind the counts.
@@ -175,7 +180,7 @@ the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
 therefore `BF00h` less the workspace's size, and the size is known only after
 an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
 build reads the address of `BDOSRME`, the label at the workspace's end, and
-takes `8000h` from it (`tools/build.mjs:228-232`). At 58d4345 that part is
+takes `8000h` from it (`tools/build.mjs:228-232`). At 621201d that part is
 1,049 bytes, so the second assembly has `WSBASE` at `BAE7h`
 (`tools/build.mjs:233-235`).
 
@@ -245,7 +250,10 @@ When the checks pass, the build writes three files into `build/tecos/`.
 `tecos.rom` is the image. `tecos.d8.json` is the symbol map in Debug80's D8
 format, which `tools/capture.mjs` reads to find TEC-OS's labels. `census.json`
 holds the figures for the ROM's parts, the RAM's regions and the stacks
-(`tools/build.mjs:263-311`).
+(`tools/build.mjs:263-311`). When `dist/` exists, from an earlier `npm run
+media`, the build also copies the three files there, under the names below,
+and after a build `dist/` holds the same ROM as `build/tecos/`
+(`tools/build.mjs:316-330`).
 
 The PICO9918's console is in the ROM at each of its three widths, 80 columns
 from reset and 40 or 32 through `CON` (Chapter 17), and the GLCD's is a driver
@@ -254,7 +262,7 @@ with an error when it is given any other name (`tools/build.mjs:29-32`,
 `tools/build.mjs:339`). `npm run build` prints one line:
 
 ```text
-tecos: ROM 15877/16384 bytes, TPA $0100-$B9A3 (47268 bytes), sha256 8bb1637d52039f3c
+tecos: ROM 15942/16384 bytes, TPA $0100-$B9A3 (47268 bytes), sha256 bee18e1ecf501170
 ```
 
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
@@ -269,4 +277,4 @@ dist: 1 ROM profiles, 6 starter files, starter.img
 ```
 
 The ROM in `dist/` has the SHA-256
-`8bb1637d52039f3c864d18a7b48819998f2315f0b5ad28fe2ea22e7150499e45`.
+`bee18e1ecf501170e80a30cfa1fd2b53d14e26238d90ad2ee6a6096c8e9f3ea8`.
