@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 10. Writing services
 
-Checked against TEC-OS 5a25178. The programs were assembled by the starter
+Checked against TEC-OS 58d4345. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -163,8 +163,7 @@ the old `CONOUT` returns straight to the caller.
 ### REMOVE
 
 `REMOVE` undoes `INIT`, and `UNLOAD` calls it. A return with carry clear lets
-the removal go ahead, and carry set stops it with nothing changed, which is
-how `PICO.SVC` stays while the PICO9918 is the console.
+the removal go ahead, and carry set stops it with nothing changed.
 
 ## Assembling and installing
 
@@ -210,7 +209,7 @@ COUNT.SVC written
 <!-- the same run, continued -->
 ```text
 B>AREA
-47347 bytes
+47268 bytes
 
 B>COUNT.SVC
 
@@ -229,7 +228,7 @@ B>UNLOAD
 
 B>SERVICES
 B>AREA
-47347 bytes
+47268 bytes
 
 B>CHARS
 no COUNT record
@@ -238,8 +237,8 @@ B>
 ```
 
 The file is 100 bytes of header and image and 11 of relocation data. It takes
-a whole page, so `SERVICES` shows 1 page. The TPA falls by 499 bytes, that page
-and the 243 bytes from `B900h` to `B9F2h`, and `UNLOAD` gives them back.
+a whole page, so `SERVICES` shows 1 page. The TPA falls by 420 bytes, that page
+and the 164 bytes from `B900h` to `B9A3h`, and `UNLOAD` gives them back.
 The count rose by 18h, 24, between the two
 `CHARS` commands, the characters the console printed in between, because the
 hook stayed through each program's warm boot.
@@ -272,8 +271,11 @@ The rules for `INIT` and `REMOVE` come from what the loader can and can't put
 right. Chapter 20 describes the code.
 
 `INIT` returns carry set only after undoing everything it did, and the load
-then fails with the name and a question mark. `GLCD.SVC` and `PICO.SVC` fail
-this way on a board without their display. `INIT` makes its hooks last, as
+then fails with the name and a question mark. `GLCD.SVC` fails this way on a
+board without the graphics LCD or the matrix keyboard. An `INIT` that returns
+status 2 in `A` with the carry reports its device absent, and in a line of
+`STARTUP.CMD` that failure prints nothing and counts as a success for a `:`
+after it. `GLCD.SVC` returns status 2 when no graphics LCD answers. `INIT` makes its hooks last, as
 `COUNT` does, because a warm boot during `INIT` takes the pages back with no
 call to the service, and a hook already made would then point into free
 memory. A call of function 47 from `INIT` or `REMOVE` is a warm boot there: its
@@ -491,20 +493,24 @@ CRLF:	DB	13,10,"$"
 %INCLUDE "HWLIB.ASM"
 ```
 
-`recs.asm` goes on the card as the others did. On the web page's board, with
-`COUNT.SVC` from `makeSvc` on the card, it finds two records:
+`recs.asm` goes on the card as the others did. On the web page's board
+`GLCD.SVC` is in from the startup file, and it and `COUNT.SVC` can't both be
+in, so `UNLOAD` takes it out first. With `COUNT.SVC` from `makeSvc` on the
+card, `RECS` then finds two records:
 
-<!-- node tools/capture.mjs --card svc.img --board pico B: "TAS RECS" COUNT.SVC RECS -->
+<!-- node tools/capture.mjs --card svc.img --board pico B: "TAS RECS" UNLOAD COUNT.SVC RECS -->
 ```text
 A>B:
 B>TAS RECS
 RECS.COM written
 
+B>UNLOAD
+
 B>COUNT.SVC
 
 B>RECS
-COUNT    version 01 table B25F
-PICO     version 02 table B319
+COUNT    version 01 table B85F
+PICO     version 03 table BBE3
 
 B>
 ```
@@ -604,12 +610,16 @@ B>
 
 ## The PICO record
 
-`PICO.SVC`, at each width, publishes the record `PICO`, version 2, which is
-how another service or a program finds the driver. Its table starts with the
-eight words it hands to the ROM through `TNDRVR`, and four words follow them,
-at offsets 16 to 22. `abi.inc` names them `PICOREG`, `PICOFIL`, `PICOWR` and
-`PICORD`, and [Appendix B](appendix-b-rom-services.md) lists their registers. They write a
-register of the PICO9918's video chip, fill VRAM and copy between RAM and VRAM.
+The ROM's PICO9918 console publishes the record `PICO`, version 3, which is
+how a service or a program finds it. Cold boot registers the record when the
+console starts, and it is the registry's last record, which no `UNLOAD` takes.
+The record and its table are in the workspace, with the table at `BBE3h`. The
+table starts with the eight words the ROM's terminal calls, and five words
+follow them, at offsets 16 to 24. `abi.inc` names them `PICOREG`, `PICOFIL`,
+`PICOWR`, `PICORD` and `PICOWID`, and [Appendix B](appendix-b-rom-services.md)
+lists their registers. The first four write a register of the PICO9918's video
+chip, fill VRAM and copy between RAM and VRAM. `PICOWID`, which version 3 adds,
+sets the console's width, as `CON PICO 40` does.
 
 A caller of these entries must hold the claim of Chapter 9, as a program
 writing the ports must, and the entries check nothing. `VTEST` claims the
@@ -618,7 +628,7 @@ the chip and then prints what came back:
 
 ```asm
 ; VTEST: write four bytes to the PICO9918's VRAM and read them back through
-; PICO.SVC's graphics entries.
+; the graphics entries of the ROM's PICO9918 console.
 BDOS	EQU	$0005
 VRAM	EQU	$3000		; an address the text modes leave alone
 %INCLUDE "ABI.INC"
@@ -697,7 +707,7 @@ VRAM
 B>
 ```
 
-The record exists only while the driver is in, so on the serial board the
-program prints `no PICO record`. It prints the same on a board with a PICO9918
-and no matrix keyboard, where the driver's load fails. A program on such a
-board claims the chip and writes the ports.
+The record exists only where the ROM's console started, so on the serial board
+the program prints `no PICO record`. It prints the same on a board with a
+PICO9918 and no matrix keyboard, where the console doesn't start. A program on
+such a board claims the chip and writes the ports.
