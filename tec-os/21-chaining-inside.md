@@ -1,11 +1,11 @@
 ---
 title: Chaining inside
 parent: TEC-OS
-nav_order: 24
+nav_order: 21
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 24. Chaining inside
+# 21. Chaining inside
 
 <!-- Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from Thorium
      128edb7, whose copy in `dist/files` has the SHA-256
@@ -24,15 +24,15 @@ rest of the line and function 47's checks and copy.
 
 The code is in `src/cpm/ccp.asm`, `src/cpm/ccpcmd.asm` and
 `src/cpm/ccpfile.asm`, with function 47 and function 108 in
-`src/cpm/bdos.asm` and the line's storage in `src/ram.asm`. Chapter 17
-describes the CCP's other routines named here, and Chapter 16 the BDOS's
+`src/cpm/bdos.asm` and the line's storage in `src/ram.asm`. Chapter 20
+describes the CCP's other routines named here, and Chapter 19 the BDOS's
 entry. `test/chain.test.mjs` checks these rules on the host model of Chapter
-25.
+27.
 
 ## The line kept across a warm boot
 
 A program in a piece of a line ends with a warm boot, which clears the CCP's and
-the BDOS's state as a fresh load of them from disk would leave it (Chapter 14).
+the BDOS's state as a fresh load of them from disk would leave it (Chapter 15).
 The rest of the line survives because the CCP's RAM is in two parts. Its first
 202 bytes run from `CMDFCB` at `BCEDh` to `CCPCLR` at `BDB7h`, and they hold the
 two FCBs the built-ins parse names into and the command buffer that BDOS
@@ -63,10 +63,10 @@ too (`src/cpm/bdos.asm:53-66`).
 
 With that limit a piece's command tail fits the page-zero buffer at `0080h`. A
 program's name has at least one character, so its tail has at most 126.
-`PREPPAGE` (Chapter 17) copies the tail to `0081h` with a 0 after it, and the 0
+`PREPPAGE` (Chapter 20) copies the tail to `0081h` with a 0 after it, and the 0
 lands at `00FFh` at the latest (`src/cpm/ccpcmd.asm:294-309`). A tail one
 character longer would put its 0 at `0100h`, the first byte of the program,
-which `LOADCOM` (Chapter 17) has already loaded by then
+which `LOADCOM` (Chapter 20) has already loaded by then
 (`src/cpm/ccp.asm:304-317`). The byte at `0050h`, where the CCP stores the
 drive the program came from, is below the tail's buffer, so no tail reaches it
 (`src/cpm/ccp.asm:318-319`).
@@ -74,7 +74,7 @@ drive the program came from, is below the tail's buffer, so no tail reaches it
 ## The main loop
 
 The CCP's loop starts at `MAINLOOP`, after any command and after the entry
-from a warm boot. Chapter 17 describes the prompt and the line it reads.
+from a warm boot. Chapter 20 describes the prompt and the line it reads.
 `SAVEDU` stores the drive and user area at `0004h` and returns the drive
 (`src/cpm/ccp.asm:225-245`), and the loop prints the prompt with it
 (`src/cpm/ccp.asm:77-96`). It then takes a line from one of three places, in
@@ -124,7 +124,7 @@ later pieces after their own prompts. The card has no `NOSUCH.SVC`, so the
 service fails, `:MOUNT` is dropped, and the loop goes on to the startup file's
 third line. A `GLCD.SVC` in its place would fail quietly on this board, which
 has no graphics LCD, and leave the code at 0, so `:MOUNT` would run, as Chapter
-21 describes.
+25 describes.
 
 `CHSKIP` reads `CHPOS` and returns at once with `Z` when it is 0. Otherwise it
 points `HL` at `CMDTXT - 1` plus `CHPOS` and steps past spaces and `!`, and it
@@ -162,7 +162,7 @@ typed line and `STLINE` a startup line, so neither goes through `MLECHO`.
 
 The CCP then tests what the piece is. A drive letter and a colon alone select
 the drive (`src/cpm/ccp.asm:182-203`), and anything else goes to `NOTDRIVE`
-(Chapter 17), which compares the command with the built-ins' names and otherwise
+(Chapter 20), which compares the command with the built-ins' names and otherwise
 loads a program or installs a service (`src/cpm/ccp.asm:251-325`). A program is
 looked for on the drive named, or the current drive, in the current user and
 then in that drive's user 0. One not found there is looked for on A:, in the
@@ -179,7 +179,7 @@ leaves the tail at `0080h` ending at the `!` (`src/cpm/ccpcmd.asm:284-309`).
 by a jump to `0000h` or by BDOS function 0 (`src/cpm/bdos.asm:163-164`), reaches
 the warm boot, then the CCP's entry and `MAINLOOP`, and `CHSKIP` finds the next
 piece where `MLTAKE` left it. A built-in ends with a jump to `MAINLOOP` or to
-`STARTED`, which Chapter 17 describes, and reaches `CHSKIP` the same way.
+`STARTED`, which Chapter 20 describes, and reaches `CHSKIP` the same way.
 
 The offset arithmetic at `MLTK2` uses only the low bytes of the addresses: `L`
 less the low byte of `CMDTXT - 1` (`src/cpm/ccp.asm:171-175`). The difference
@@ -212,7 +212,7 @@ The code is cleared at step 5, after the test, so the test reads the code of the
 command before and the command about to run starts from 0. A program that calls
 function 108 with `DE = FFFFh` at its start reads that 0.
 
-The CCP sets the code to a failure in one place, `ERRGO`, which Chapter 17
+The CCP sets the code to a failure in one place, `ERRGO`, which Chapter 20
 describes with `BADCMD`. `ERRGO` stores `RCFAIL`, `FF00h`, and prints the
 message at `DE` before it goes to `STARTED` (`src/cpm/ccp.asm:20`,
 `src/cpm/ccp.asm:374-381`). `BADCMD`, which prints a command or argument with

@@ -1,11 +1,11 @@
 ---
 title: The CCP
 parent: TEC-OS
-nav_order: 17
+nav_order: 20
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 17. The CCP
+# 20. The CCP
 
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the repository's
      `atom-z80` 0.3.7 and the starter card's `TED.COM` from Thorium
@@ -25,7 +25,7 @@ The CCP's code is in three files, assembled in this order
 command word and the loading of a program. `ccpfile.asm` holds the file
 commands, `DIR` with its pager, `TYPE`, `ERA`, `REN` and `COPY`. `ccpcmd.asm`
 holds `UNLOAD`, `CON`, `USER` and `SAVE`, the parsing of file names, page zero
-for a program, `SERVICES` and the startup file. In the ROM that Chapter 12
+for a program, `SERVICES` and the startup file. In the ROM that Chapter 13
 describes the CCP runs from `CCPBAS`, `DD2Ah`, to `E702h`, 2,521 bytes,
 followed directly by the BDOS. Its messages are in the ROM's data block (`src/text.asm:12-50`,
 `src/text.asm:64-66`), and so is `KEYTAB`, the table of its built-in commands'
@@ -77,11 +77,11 @@ leaves it as the CCP last wrote it (`src/boot.asm:221-224`).
 `CCPENT` sets its stack and keeps the drive in `BOOTDRV`
 (`src/cpm/ccp.asm:30-44`). It then sets `WRFLAG` and calls function 13, the
 disk reset, which with that flag keeps the drives whose allocation vectors are
-unchanged, as Chapter 16 describes. Warm boot has cleared the user number with
+unchanged, as Chapter 19 describes. Warm boot has cleared the user number with
 the rest of the BDOS's variables, so `CCPENT` calls function 32 with the user
 number from the byte (`src/cpm/ccp.asm:45-59`). `STBOOT` comes next: it reads `A:STARTUP.CMD` the
 first time it is called after a cold boot and does nothing later
-(`src/cpm/ccp.asm:60`, `src/cpm/ccpcmd.asm:553-584`). Chapter 21 describes startup.
+(`src/cpm/ccp.asm:60`, `src/cpm/ccpcmd.asm:553-584`). Chapter 25 describes startup.
 Last, if the drive is not A, the CCP selects it with function 14
 (`src/cpm/ccp.asm:61-66`), then prints a new line and starts its loop at
 `STARTED` (`src/cpm/ccp.asm:70-72`).
@@ -111,7 +111,7 @@ A>
 ```
 
 The reset finds the card's volumes again with drive B left empty, because the
-selection a reset keeps is the one that was in RAM, as Chapter 14 describes.
+selection a reset keeps is the one that was in RAM, as Chapter 15 describes.
 
 ## The prompt and the line
 
@@ -135,9 +135,9 @@ to 127 (`src/boot.asm:303-304`).
 
 `MLTAKE` takes one piece of the line up to its `!`, turns its letters to
 capitals and sets `PRGCODE`, the return code, to 0
-(`src/cpm/ccp.asm:137-181`). Chapter 24 describes the chained line, the `:`
+(`src/cpm/ccp.asm:137-181`). Chapter 21 describes the chained line, the `:`
 test, the return code and the ways the rest of a line is dropped, and Chapter
-21 the startup file.
+25 the startup file.
 
 ## Drive changes and the command word
 
@@ -169,7 +169,7 @@ built-in. The first is the program `DIR` on drive A and the second the program
 A word that is none of the built-ins names a program, and must be a single
 file name with no wildcard (`src/cpm/ccp.asm:278-280`). The type selects what
 follows. A type of `SVC` installs a service through `SVCGO`
-(`src/cpm/ccp.asm:281-297`, `src/loader.asm:527-550`), which Chapter 20 describes.
+(`src/cpm/ccp.asm:281-297`, `src/loader.asm:527-550`), which Chapter 23 describes.
 A service that fails to install is a bad command, with one exception. When the
 line came from the startup file and the service's `INIT` refused because its
 device isn't there, `TNENODV`, the CCP says nothing and leaves the return code
@@ -185,7 +185,7 @@ A command that fails ends at `BADCMD`, which prints the word from `CMDSTRT` up
 to its first space with a question mark after it, then a new line
 (`src/cpm/ccp.asm:358-373`). `BADCMD` and the built-ins' messages of failure
 go through `ERRGO`, which sets the return code to `FF00h` first
-(`src/cpm/ccp.asm:374-381`). Chapter 24 lists them. `ERRGO` and the built-ins
+(`src/cpm/ccp.asm:374-381`). Chapter 21 lists them. `ERRGO` and the built-ins
 end at one of two labels: `STARTED` starts a new line and prints the prompt,
 and `MAINLOOP` prints the prompt on the line the command left.
 
@@ -318,7 +318,7 @@ also loads `GLCD.SVC` if it is not in (`src/cpm/ccpcmd.asm:16-119`,
 `src/text.asm:37-40`). Its reply is `CON:` and the name of the mode the BIOS
 took, read from `CONMOD` after the BIOS has acted on the field, so a display
 or keyboard that isn't there gives `CON: TTY:` (`src/cpm/ccpcmd.asm:120-137`).
-Chapter 15 describes the BIOS's side.
+Chapter 16 describes the BIOS's side.
 
 After `CRT` or `PICO`, and a space, `CON` takes a width of two digits. It
 finds the PICO9918 console's record with `TNFIND`, under the name `PICO` at
@@ -351,7 +351,7 @@ A>
 
 The new width clears the screen at the next console call. It is kept in
 `PIBLK`, which a warm boot leaves, so it lasts until a reset, which starts the
-console at 80 columns again (`src/ram.asm:41-44`, `src/pico.asm:49-65`, Chapter 14).
+console at 80 columns again (`src/ram.asm:41-44`, `src/pico.asm:49-65`, Chapter 15).
 
 `COPY SOURCE DEST` copies a file within the user area
 (`src/cpm/ccpfile.asm:538-671`). Both names are parsed with the current drive put
@@ -368,7 +368,7 @@ a full disk or directory, `COPY` closes the destination before it prints
 
 `SERVICES` prints each service's name and its pages from the list of services,
 and `UNLOAD` removes the lowest. `NAME.SVC` as a command installs one. Chapter
-20 describes the three.
+23 describes the three.
 
 ## Loading a program
 
@@ -607,7 +607,7 @@ The addresses are those of the build at 78127ec. The guard is 43 bytes less the
 stack's 32 (`src/ram.asm:130-135`), and warm boot fills it with `A5h`
 (`src/boot.asm:305-309`), so a guard byte that is no longer `A5h` shows that
 the stack has run past its bottom. `test/stacks.test.mjs` checks the guard
-after the CCP's deepest paths, and Chapter 13 describes the measurement behind
+after the CCP's deepest paths, and Chapter 14 describes the measurement behind
 the stack's size.
 
 The stack is the CCP's and, from the jump to `0100h`, the program's. With

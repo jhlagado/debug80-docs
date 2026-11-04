@@ -39,12 +39,12 @@ which TEC-OS draws 21 columns and 8 rows of characters.
 `BAT:` is CP/M's batch device. In CP/M it takes its input from the reader
 device and sends its output to the list device, CP/M's printer. TEC-OS's
 reader is the serial port and its list device discards what it is given, so on
-`BAT:` TEC-OS reads the serial port and prints nothing. Chapter 8 describes
+`BAT:` TEC-OS reads the serial port and prints nothing. Chapter 9 describes
 the reader and the list device.
 
 The 20 × 4 LCD is never the console. TEC-OS writes its version and the drives
 there at cold boot, and programs write to it through the hardware services in
-Chapter 9.
+Chapter 10.
 
 Cold boot, after power-on or a reset, clears page zero, the first 256 bytes of
 memory, and that sets the IOBYTE to 0, `TTY:`. On a board with the PICO9918 and
@@ -91,7 +91,7 @@ first line is the reply to `CON TTY`. The PICO9918 goes on showing what was on
 it, but TEC-OS writes nothing more there and stops reading the matrix keyboard. `CON CRT` typed on the PC moves
 the console back. Whenever a display becomes the console, the BIOS clears its
 screen and puts the cursor at the top left, unless the display is the PICO9918
-and a program has claimed it, as Chapter 9 describes. So after `CON CRT` the
+and a program has claimed it, as Chapter 10 describes. So after `CON CRT` the
 PICO9918 shows only the reply and the prompt:
 
 <!-- node tools/capture.mjs --board pico --screen "CON TTY" "CON CRT" -->
@@ -207,7 +207,7 @@ A>
 ```
 
 A width typed at the prompt is refused in the same way on a board where cold
-boot didn't start the PICO9918's console. Chapter 5 describes the same line in
+boot didn't start the PICO9918's console. Chapter 6 describes the same line in
 the startup file, where it passes quietly.
 
 ## The serial terminal
@@ -244,17 +244,17 @@ start. It takes no memory from programs.
 The graphics LCD's console is a driver, `GLCD.SVC`, a file on the card that
 TEC-OS loads into memory below the BDOS. The starter card's startup file installs
 it before the first prompt on a board with the graphics LCD and no PICO9918
-console (Chapter 5). It installs only on a
+console (Chapter 6). It installs only on a
 board that has the graphics LCD and the matrix keyboard. When it installs it
 makes the graphics LCD the console, unless the PICO9918 is the console, which
 then keeps it until `CON UC1`. A `GLCD.SVC` line in the startup file installs
 nothing while the PICO9918 is the console. The driver takes 932 bytes from programs, as
-Chapter 1 explained. Chapter 5 gives the rules for the startup file and for
+Chapter 1 explained. Chapter 6 gives the rules for the startup file and for
 installing and removing services.
 
 A console on a display is a *video console*, and there TEC-OS is the terminal.
 It draws each character at the cursor and moves the cursor on, and it acts on
-the control characters and the ANSI escape sequences that Chapter 8 lists.
+the control characters and the ANSI escape sequences that Chapter 9 lists.
 While TEC-OS waits for a key on a display, the cursor is drawn as the reverse
 image of the character under it, and the next character printed removes it.
 

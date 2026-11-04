@@ -1,11 +1,11 @@
 ---
 title: The BIOS and the console path
 parent: TEC-OS
-nav_order: 15
+nav_order: 16
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 15. The BIOS and the console path
+# 16. The BIOS and the console path
 
 <!-- Checked against TEC-OS 78127ec. -->
 
@@ -19,7 +19,7 @@ the card.
 This chapter starts with the BIOS jump table and the IOBYTE that selects the
 console, and then follows a character in from a key and out to a screen. It also
 covers the list, punch and reader, and the 20 × 4 LCD, which the BIOS writes to
-but which is never the console. Chapter 18 describes the disk entries of the
+but which is never the console. Chapter 17 describes the disk entries of the
 table.
 
 ## The jump table
@@ -170,7 +170,7 @@ settings are 4800 baud, 8 data bits, no parity and 2 stop bits
 (`src/console.asm:16-17`).
 
 `TXBYTE` sends a byte (`src/console.asm:259-285`). It reads the interrupt state
-with `IFFGET`, which Chapter 19 describes, turns interrupts off so that none can
+with `IFFGET`, which Chapter 18 describes, turns interrupts off so that none can
 stretch a bit, and puts them back as they were after the stop bits. Its loop runs
 nine times,
 for the start bit and the eight data bits from the lowest. Each pass turns the
@@ -194,7 +194,7 @@ The polling loops that test for the start bit take 38 T-states a pass, so the
 edge can be up to 38 T-states old when it is read. `RXHALF` is reduced by half
 of that, and by 58.5 for the 65 or 52 T-states `RXBITS` spends on the interrupt
 state, to centre the samples on the bits (`src/console.asm:23-24`,
-`src/console.asm:225-226`, `tools/build.mjs:37-45`). The counts come from the build, as Chapter 12
+`src/console.asm:225-226`, `tools/build.mjs:37-45`). The counts come from the build, as Chapter 13
 describes, and they hold only for a 4 MHz clock, so on a board the CPU clock
 switch has to be on FAST.
 
@@ -359,7 +359,7 @@ each row's address to match (`src/pico.asm:67-110`). `PIBLK` also holds the
 console's record, the last in the registry, named `PICO` at version 3, so a
 program finds the table with `TNFIND` as it would a driver's
 (`src/pico.asm:22-24`, `src/pico.asm:43-44`). `CON` sets the width through the
-table's `PICOWID` entry, as Chapter 17 describes.
+table's `PICOWID` entry, as Chapter 20 describes.
 
 `GLCD.SVC` gives the ROM its table through `DRVR`, service 12, which goes to
 `SVDRV` and from there to `VIDHOOK` (`src/tables.asm:88`,
@@ -434,4 +434,4 @@ Writing `GLCD?` sets `CDWRD` in `CONDEV` (`src/lcd.asm:36-41`), and `WRDCLR`
 writes blanks over the row only while that bit is set. The word is therefore
 cleared when `GLCD.SVC` is installed, and a row a program wrote is left alone
 (`src/loader.asm:552-564`). Programs reach the LCD
-through the hardware service `LCD`, number 2, as Chapter 9 describes.
+through the hardware service `LCD`, number 2, as Chapter 10 describes.

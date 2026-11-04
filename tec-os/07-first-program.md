@@ -1,11 +1,11 @@
 ---
 title: A first program
 parent: TEC-OS
-nav_order: 6
+nav_order: 7
 nav_group: "Part I: Using and programming TEC-OS"
 ---
 
-# 6. A first program
+# 7. A first program
 
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the
      repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, the starter card's
@@ -36,7 +36,7 @@ in its own memory, or on its stack, every value it uses after the call.
 
 The word at `0006h`, inside the jump at `0005h`, is the address that jump
 leads to: the BDOS's entry or a service's jump on to it. It is also the end of
-the memory a program may use, as Chapter 7 explains. A program may read that
+the memory a program may use, as Chapter 8 explains. A program may read that
 word, but it makes its calls at `0005h`.
 
 The functions this chapter uses are in the table below. An FCB, which two of
@@ -294,7 +294,7 @@ B>
 The starter card's `SAMPLE.ASM`, which Chapter 1 assembled with `TAS SAMPLE`
 and ran, is a longer program in the same language. It prints through the BDOS
 as `HELLO` does, and it reaches the LCD, the digits and the speaker through
-the hardware services that Chapter 9 describes.
+the hardware services that Chapter 10 describes.
 
 ## Editing on the TEC-1G
 
@@ -412,19 +412,19 @@ is a warm boot:
 - a `^C` typed as the first key of a line that the program reads with BDOS
   function 10
 - a `^C` typed after a `^S` has stopped the program's output through BDOS
-  function 2 or 9 (Chapter 8)
+  function 2 or 9 (Chapter 9)
 - a key pressed after a BDOS error such as `Bdos Err On B: Bad Sector`
 
 The warm boot writes the block cache's changes to the card and puts back the
 jumps in page zero. The restart vectors at `0008h–003Fh` are the addresses
-that `RST` instructions call (Chapter 7), and the warm boot gives each one a
+that `RST` instructions call (Chapter 8), and the warm boot gives each one a
 program set its default, keeping only a `JP` whose target is above the address
 in the word at `0006h`. The warm boot then starts the
 CCP again and prints the prompt on the drive and in the user area held in the
 byte at `0004h`. The CCP writes that byte before it starts a program, so the
 prompt is on the drive and user area current then, unless the program changed
 the byte. If the byte names a drive with no volume, the CCP takes drive A.
-Services stay installed, and the IOBYTE keeps its value. Chapter 14
+Services stay installed, and the IOBYTE keeps its value. Chapter 15
 describes the warm boot step by step.
 
 The stack the CCP gives a program is the CCP's own, with 30 bytes free below

@@ -62,8 +62,8 @@ line numbers.
 
 ## The reader and the route
 
-The reader knows the TEC-1G or a similar Z80 board. In Chapters 1 to 5 they
-may never have used CP/M; from Chapter 6 they read Z80 assembly. Each term is
+The reader knows the TEC-1G or a similar Z80 board. In Chapters 1 to 6 they
+may never have used CP/M; from Chapter 7 they read Z80 assembly. Each term is
 explained where it is first used, in the sentence that uses it or the one
 before: *warm boot*, *TPA*, *IOBYTE*, *FCB*, *volume*, *driver*. A later
 chapter may use a term without explaining it again, and it names the chapter

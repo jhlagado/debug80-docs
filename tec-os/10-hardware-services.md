@@ -1,11 +1,11 @@
 ---
 title: The hardware services
 parent: TEC-OS
-nav_order: 9
+nav_order: 10
 nav_group: "Part I: Using and programming TEC-OS"
 ---
 
-# 9. The hardware services
+# 10. The hardware services
 
 <!-- Checked against TEC-OS 78127ec. The programs were assembled by the starter
      card's `TAS.COM`, from Thorium dbee66a, SHA-256
@@ -33,7 +33,7 @@ right.
 A program finds the services through the *ROM table*, which starts at `C003h`,
 after the reset jump. The table is the only part of the ROM at a fixed
 address, and everything else can move from one build to the next.
-Chapter 8 used the table to read the console's size.
+Chapter 9 used the table to read the console's size.
 
 | Address | Name | Contents |
 | --- | --- | --- |
@@ -47,7 +47,7 @@ version is the table's ABI, its application binary interface, here 5.1. The
 jump at `ABICALL` leads to 16 services, numbered from 0 to 15. Numbers 0 to 8
 are the hardware services this chapter describes. `MOUNT` uses 9 to 11, which
 mount, unmount and describe volumes, and `GLCD.SVC` hands the ROM its table
-through 12. Chapter 10 describes 13 and 14, the registry of services. Number
+through 12. Chapter 12 describes 13 and 14, the registry of services. Number
 15 returns in `HL` the address of the console's font in the ROM, which
 `GLCD.SVC` draws from. Appendix B lists every number.
 
@@ -62,7 +62,7 @@ A CP/M program may run on a machine with no ROM table at `C003h`, so it tests
 before it calls. The test has two parts: the three letters, and a major
 version of exactly 5. A later major version may renumber the services, and a
 later minor version only adds numbers at the end, so a program written for 5.0
-runs on this ROM's 5.1 but can't use a 6 or a 4. `SIZE` in Chapter 8 tests the same
+runs on this ROM's 5.1 but can't use a 6 or a 4. `SIZE` in Chapter 9 tests the same
 four bytes.
 
 A program that finds something else is on another system and leaves the
@@ -137,7 +137,7 @@ The call has one form for every numbered service. The program puts the
 service's number in `C` and the arguments in `B`, `DE` and `HL`, and calls
 `ABICALL`. `A` takes no argument, because the dispatcher uses it to look the
 number up. On return `A` holds a status, with the flags set to match, except
-after the registry's two services, which Chapter 10 describes:
+after the registry's two services, which Chapter 12 describes:
 
 | Status | Flags | Meaning |
 | ---: | --- | --- |
@@ -241,7 +241,7 @@ The row stays after the program ends. On a ROM whose major version isn't 5,
 the same program prints `not TEC-OS with ABI 5` and leaves the LCD alone.
 
 A program may write row 3 as freely as the others, and that row has one rule of
-its own. TEC-OS puts the word `GLCD?` there, as Chapter 5 describes, and it
+its own. TEC-OS puts the word `GLCD?` there, as Chapter 6 describes, and it
 blanks the word when `GLCD.SVC` installs, but only while the word is there. `LCD` on row 3 clears the mark that records the
 word, so a program's text there isn't blanked.
 
@@ -367,7 +367,7 @@ With the starter card on a board with both displays, where the ROM's console
 is on the PICO9918, bits 0 and 1 are set as well, and the console has a size,
 50h columns and 18h rows. Bit 2 stays clear, because the startup file's
 `GLCD.SVC` line passes over the driver while the PICO9918 is the console, as
-Chapter 7 describes:
+Chapter 8 describes:
 
 <!-- node tools/capture.mjs --card hw.img --board pico B: "TAS BOARD" BOARD -->
 ```text
@@ -787,7 +787,7 @@ CRLF:	DB	13,10,"$"
 `PUTAT` passes each byte to the display's routines, and both the ROM's PICO9918
 console and `GLCD.SVC` draw bytes `80h` to `FFh` as the reverse images of `00h`
 to `7Fh`. `CONOUT` drops those
-bytes, as Chapter 8 says, so `PUTAT` is how a program draws reverse characters
+bytes, as Chapter 9 says, so `PUTAT` is how a program draws reverse characters
 with no escape sequence. On the PICO9918 the screen ends like this, with the
 second copy in reverse, though a text capture shows the two the same:
 

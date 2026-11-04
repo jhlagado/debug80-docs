@@ -13,8 +13,8 @@ nav_group: "Appendices"
 
 This appendix lists the `.SVC` file's format: the header's fields and the
 loader's check of each, the dependencies and the relocation data, with
-`GLCD.SVC` from the starter card as an example. Chapter 10 describes writing a
-service, and Chapter 20 describes the load and the relocation.
+`GLCD.SVC` from the starter card as an example. Chapter 12 describes writing a
+service, and Chapter 23 describes the load and the relocation.
 
 ## The file
 
@@ -30,7 +30,7 @@ A `.SVC` file has four parts, in this order:
 The header and the image are one assembly made for page 0, with the header at
 its start, so an address in the image counts from the header's first byte. The
 loader moves the header and the image together to a page boundary and writes
-its own fields over some of the header's, as Chapter 20's table shows. A file's
+its own fields over some of the header's, as Chapter 23's table shows. A file's
 end is rounded up to a whole record of 128 bytes on the card, and the loader
 reads nothing after the relocation data (`src/loader.asm:177-181`).
 
@@ -107,7 +107,7 @@ Every position the list reaches, a gap of 255 included, must lie inside the
 header and image, below the size at offset 6, or the load fails
 (`src/loader.asm:174-203`). A first gap of 0 fixes header byte 24, the name's last.
 `makeSvc` never writes one, since every fixup it finds lies in the image. The
-loader doesn't test for one, and Chapter 20 shows what such a list does.
+loader doesn't test for one, and Chapter 23 shows what such a list does.
 
 The repository's encoders also write a bitmap and a list of 16-bit offsets, for
 comparison (`tools/lib/svc.mjs:28-36`). `makeSvc` writes the gap list unless it

@@ -1,11 +1,11 @@
 ---
 title: Writing services
 parent: TEC-OS
-nav_order: 10
+nav_order: 12
 nav_group: "Part I: Using and programming TEC-OS"
 ---
 
-# 10. Writing services
+# 12. Writing services
 
 <!-- Checked against TEC-OS 78127ec. The programs were assembled by the starter
      card's `TAS.COM`, from Thorium dbee66a, SHA-256
@@ -15,7 +15,7 @@ Every program written so far has been a `.COM` file, which runs at `0100h` and
 is gone when it ends. A `.SVC` file stays in memory after its command ends. In
 this chapter you write a service that counts the console's characters, install
 it, measure what it costs and publish the count for a program to find. Chapter
-20 describes the loader, and Appendix H the file's format, with its relocation
+23 describes the loader, and Appendix H the file's format, with its relocation
 data.
 
 ## Code that stays
@@ -23,13 +23,13 @@ data.
 A program's memory is reused as soon as it ends, so nothing of it runs after
 that. A *service* stays. TEC-OS reads a `.SVC` file into pages below the BDOS,
 in the service resident memory, and lowers the word at `0006h` below them, as
-Chapter 5 describes. The code stays there through every warm boot until a
+Chapter 6 describes. The code stays there through every warm boot until a
 reset or `UNLOAD`, and from there it can change the BIOS jump table, so that
 its own code runs under whatever program comes next. A service can also be a
 *library*, with routines for programs to share, and the example here does
 both.
 
-The BIOS jump table is in RAM, at `BF00h`, and Chapter 15 lists its entries. The
+The BIOS jump table is in RAM, at `BF00h`, and Chapter 16 lists its entries. The
 word at `0001h` holds the address of its `WBOOT` entry. Each entry is a 3-byte
 `JP`, and warm boot leaves the table in EXPAND 0 as it is, so a changed entry
 lasts through every warm boot. The BDOS reaches the console and the disk
@@ -167,7 +167,7 @@ the removal go ahead, and carry set stops it with nothing changed.
 
 ## Assembling and installing
 
-Assembling a service follows Chapter 9's route, with the output named.
+Assembling a service follows Chapter 10's route, with the output named.
 `TAS NAME OUT.TYP` writes the output file named. For the output type `.SVC` it
 fills in the header's fields and the relocation data, and for any other type it
 writes a flat image, except that it refuses `.DBG` and a type that starts with
@@ -175,8 +175,8 @@ writes a flat image, except that it refuses `.DBG` and a type that starts with
 service, in place of any `COUNT.SVC` already on the drive.
 
 These commands put `count.asm` on a copy of the starter card, with
-`abi.inc` and `HWLIB.ASM` from Chapter 9 and `area.asm`, the `AREA` program
-of Chapter 7. `chars.asm` reads the count that `COUNT.SVC` publishes, and it
+`abi.inc` and `HWLIB.ASM` from Chapter 10 and `area.asm`, the `AREA` program
+of Chapter 8. `chars.asm` reads the count that `COUNT.SVC` publishes, and it
 is listed under "Publishing a record":
 
 ```sh
@@ -268,7 +268,7 @@ node tools/tecvol.mjs put svc.img B COUNT.SVC
 ## The rules for INIT and REMOVE
 
 The rules for `INIT` and `REMOVE` come from what the loader can and can't put
-right. Chapter 20 describes the code.
+right. Chapter 23 describes the code.
 
 `INIT` returns carry set only after undoing everything it did, and the load
 then fails with the name and a question mark. `GLCD.SVC` fails this way on a
@@ -634,7 +634,7 @@ lists their registers. The first four write a register of the PICO9918's video
 chip, fill VRAM and copy between RAM and VRAM. `PICOWID`, which version 3 adds,
 sets the console's width, as `CON PICO 40` does.
 
-A caller of these entries must hold the claim of Chapter 9, as a program
+A caller of these entries must hold the claim of Chapter 10, as a program
 writing the ports must, and the entries check nothing. `VTEST` claims the
 PICO9918, writes four bytes to VRAM, reads them back into a buffer, releases
 the chip and then prints what came back:
@@ -704,7 +704,7 @@ BACK:	DB	"????"		; PICORD fills these four
 
 These entries are words, where `COUNT`'s table holds a `JP`, so `ENTRY` reads
 the word at the offset. `EX (SP),HL` and `RET` then jump to the routine with
-`HL` restored for it, as the hardware services' dispatcher does in Chapter 20.
+`HL` restored for it, as the hardware services' dispatcher does in Chapter 23.
 `TABLE` needs no generation test, because the program ends before any service
 can go.
 

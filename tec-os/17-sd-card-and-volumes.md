@@ -1,11 +1,11 @@
 ---
 title: The SD card and the volumes
 parent: TEC-OS
-nav_order: 18
+nav_order: 17
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 18. The SD card and the volumes
+# 17. The SD card and the volumes
 
 <!-- Checked against TEC-OS 78127ec. -->
 
@@ -19,7 +19,7 @@ into a block of the card and a quarter of that block.
 
 This chapter takes the layers from the bottom up, and ends with the volume
 services, through which `MOUNT` changes and lists the drives. Chapter
-19 describes the block cache, which every read and write passes through.
+18 describes the block cache, which every read and write passes through.
 
 ## The SD card driver
 
@@ -122,7 +122,7 @@ the rest of the table. The volume descriptors follow, 32 bytes each, fifteen
 in block 0 and sixteen in each of blocks 1 to 7. Chapter 4 describes the
 container from the user's side and Appendix E lists its fields. The offsets
 the ROM uses come from `format/format.json` through the generated
-`gen/format.asm`, as Chapter 12 describes.
+`gen/format.asm`, as Chapter 13 describes.
 
 A card can hold anything, so the ROM's `MOUNT` routine checks block 0 before it
 uses any of it (`src/vol.asm:3-6`). `MNBLK` reads each block of the table into
@@ -270,8 +270,8 @@ fixed media.
 To keep a drive logged in across a warm boot, TEC-OS's BDOS uses the three
 scratch words for a sum of its allocation vector, a flag set when it has
 changed and a mark, the number of directory entries to read when the vector is
-rebuilt (`src/cpm/bdosfile.asm:41-75`). Chapter 16 describes that, and Chapter
-13 how `ALVINIT` places the vectors at cold boot.
+rebuilt (`src/cpm/bdosfile.asm:41-75`). Chapter 19 describes that, and Chapter
+14 how `ALVINIT` places the vectors at cold boot.
 
 ## Deblocking
 
@@ -293,7 +293,7 @@ the block of the card. A G8M volume's 16,384 blocks are 65,536 records, 1,024
 tracks, and a G1M volume has 128 tracks.
 
 `READ` maps the record and copies it to the DMA address through the block
-cache, as Chapter 19 describes. `WRITE` has more to do
+cache, as Chapter 18 describes. `WRITE` has more to do
 (`src/bios.asm:171-271`). After mapping it rejects a write to a read-only
 volume before anything changes, with error 1 (`src/bios.asm:191-195`). A change
 made through the BDOS doesn't get this far, since the BDOS's own `R/O` error
@@ -332,7 +332,7 @@ On a volume written through, `WRITE` sets bit 7 of `CWTYPE` before it goes to
 `CWRBH`, and the line goes to the card before the call returns. If that write
 fails, the line is dropped, so the next read of the block comes from the card
 (`src/bios.asm:264-271`, `src/cache.asm:362-386`). On the volume written
-behind the line stays dirty, as Chapter 19 describes.
+behind the line stays dirty, as Chapter 18 describes.
 
 A program that writes a new file sequentially on a volume written through
 therefore causes no card reads for its data, but it causes four card writes
@@ -345,7 +345,7 @@ a line.
 
 `MOUNT` on the starter card is a program, so it changes and lists the drives
 through three of the ROM's numbered services, called through `ABICALL` with the
-number in `C`, as Chapter 20 describes (`src/abi.asm:10`, `src/abi.inc:58-70`):
+number in `C`, as Chapter 23 describes (`src/abi.asm:10`, `src/abi.inc:58-70`):
 
 - `MOUNT`, 9, mounts the volume at container index `E` on the drive in `B`, 0
   to 3 for A to D.
@@ -363,7 +363,7 @@ past the table, a drive past D, a volume already on a drive and a drive whose
 vector slot is too small for the volume. An unmount fails for drive A, which is
 never left empty, and for a drive past D (`src/vol.asm:603-659`). The slot rule
 is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
-and any other needs a slot of either size (`src/vol.asm:634-647`). Chapter 13
+and any other needs a slot of either size (`src/vol.asm:634-647`). Chapter 14
 describes how cold boot gives out the slots. The three services may change `IX`
 and the alternate registers, and `abi.inc` gives 24 bytes as a bound on the
 stack each takes (`src/abi.inc:18-25`, `src/abi.inc:58-70`). On the model

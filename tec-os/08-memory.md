@@ -1,11 +1,11 @@
 ---
 title: Memory for programs
 parent: TEC-OS
-nav_order: 7
+nav_order: 8
 nav_group: "Part I: Using and programming TEC-OS"
 ---
 
-# 7. Memory for programs
+# 8. Memory for programs
 
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the
      repository's `atom-z80` 0.3.7. -->
@@ -91,7 +91,7 @@ CRLF:   DB      "h",13,10,"$"
 `DIGIT` turns the low four bits of `A` into a character from `0` to `F` and
 prints it with function 2. `HEX` calls it for the high four bits and then
 falls into it for the low four. `DIGIT` ends with `JP BDOS`, so the BDOS's
-return is the return of both. The program is assembled as Chapter 6 describes
+return is the return of both. The program is assembled as Chapter 7 describes
 and copied to drive B of a copy of the starter card, and here it runs on a
 board with only a serial terminal:
 
@@ -220,7 +220,7 @@ The memory above the word is TEC-OS's. A program that writes there corrupts
 the drives' allocation vectors or the BDOS's state, and what follows is a
 damaged card or a crash. The stack a program starts on is up there too: it is
 the CCP's, in the workspace, with 30 bytes free below the return address, as
-Chapter 6 says. A program that uses more sets `SP` to a stack of its own below
+Chapter 7 says. A program that uses more sets `SP` to a stack of its own below
 the word at `0006h`.
 
 On CP/M 2.2 the CCP is in RAM below the BDOS, and a program may overwrite it,
@@ -242,14 +242,14 @@ CP/M fixes the use of the first 256 bytes, and TEC-OS follows it:
 | `0038h–003Ah` | `EI` and `RETI`, the return from an interrupt in mode 1 |
 | `0040h` | TEC-OS's copy of the system latch, below |
 | `0041h–004Fh` | unused |
-| `0050h` | the drive the CCP loaded the program from, 0 for the current drive (Chapter 6) |
+| `0050h` | the drive the CCP loaded the program from, 0 for the current drive (Chapter 7) |
 | `005Ch–007Fh` | the FCB the CCP fills from the first word of the command tail |
 | `006Ch–007Bh` | the second word's name, inside the first FCB |
 | `0080h–00FFh` | the command tail, then the default DMA buffer |
 
 The word at `0001h`, `BF03h`, is the address of the warm boot entry in the
 BIOS jump table, the table's second entry, so a program finds the table by
-subtracting 3 from it. Chapter 8 describes the console's entries there.
+subtracting 3 from it. Chapter 9 describes the console's entries there.
 
 The restart vectors are free for a program, and for a debugger, while the
 program runs. At each warm boot TEC-OS writes seven zeros and a `RET` into
@@ -278,7 +278,7 @@ EXPAND 1 is in the window. Cold boot clears all of page zero, and nothing in
 TEC-OS uses `0041h–004Fh` after that. The console's state, its size included,
 is in the workspace.
 
-A program reads the console's size through the ROM table, as Chapter 8
+A program reads the console's size through the ROM table, as Chapter 9
 describes, and leaves `0040h` alone unless it writes the latch itself. The latch at port
 `FFh` can only be written, so `0040h` is TEC-OS's record of what it holds. A
 program that writes the latch writes the same value to `0040h`, because

@@ -59,7 +59,7 @@ drive B. The same lines appear on the 20 × 4 LCD.
 you name a file without a drive. You didn't type the `GLCD.SVC` after the first
 prompt. It comes from a startup file on the card, which loads the graphics
 LCD's console on boards that have one. This board doesn't, so the line does
-nothing, and the second prompt is where you start typing. Chapter 5 explains
+nothing, and the second prompt is where you start typing. Chapter 6 explains
 the startup file.
 
 Where you type depends on the board. With a PICO9918 video card and the matrix
@@ -126,7 +126,7 @@ A>
 `Hello from SAMPLE` on the 20 × 4 LCD, shows `123456` on the 7-segment digits
 and beeps. It also reads the size of the screen from TEC-OS, which is 0 by 0 on
 a serial terminal and 80 by 24 on the PICO9918. When a program ends, TEC-OS
-prints the prompt again. Chapter 6 shows how to write a program like this one
+prints the prompt again. Chapter 7 shows how to write a program like this one
 on the TEC-1G itself, with `TED` and `TAS`.
 
 A name that is neither a command nor a program comes back with a question mark:
@@ -158,7 +158,7 @@ same program fits whatever room is left.
 The second RAM chip has two 16 KiB halves that share the addresses
 `8000h–BFFFh`. Your program uses one of them. TEC-OS keeps its disk cache and
 your command history in the other, so they take no room from your program.
-Chapter 7 explains a program's memory in detail.
+Chapter 8 explains a program's memory in detail.
 
 ## Keeping your work
 

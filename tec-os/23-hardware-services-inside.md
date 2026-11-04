@@ -1,22 +1,22 @@
 ---
-title: The hardware services and the service loader
+title: The hardware services in the ROM
 parent: TEC-OS
-nav_order: 20
+nav_order: 23
 nav_group: "Part II: Inside TEC-OS"
 ---
 
-# 20. The hardware services and the service loader
+# 23. The hardware services in the ROM
 
 <!-- Checked against TEC-OS 78127ec, with the starter card's `TAS.COM` from Thorium
      dbee66a, SHA-256
      `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. -->
 
-Chapters 9 and 10 use the ROM's numbered services and its service loader from a
+Chapters 10 and 12 use the ROM's numbered services and its service loader from a
 program's side. This chapter describes the code behind them: the dispatcher at
 `ABICALL`, each of the nine hardware services and the font, a service's entry, the
 relocation of its addresses, the seven steps of its load, the registry, removal,
 the restart vectors and the stack figures the loader enforces. Appendix H lists
-the `.SVC` file's format, and Chapter 21 describes the path of a display line
+the `.SVC` file's format, and Chapter 25 describes the path of a display line
 after the load.
 
 ## The dispatcher
@@ -53,13 +53,13 @@ alternates (`src/abi.inc:18-21`).
 ## The routines
 
 Services 0 to 8 are the hardware services, in `src/services.asm`. The volume
-services, 9 to 11, are in `src/vol.asm` and Chapter 18 describes them. `DRVR`,
+services, 9 to 11, are in `src/vol.asm` and Chapter 17 describes them. `DRVR`,
 12, is `SVDRV`, also in `src/services.asm`. It takes `UC1:` alone, `B` = 3,
 and refuses `B` = 1 with `TNEBAD`, since `CRT:`'s table is the ROM's own. A
 table offered by a line of `STARTUP.CMD` while the IOBYTE's `CON:` field is
 `CRT:` is refused with `TNENODV`, status 2, and nothing changes. A drop, `HL` =
 0, is never refused. For any other `UC1:` call it calls `VIDHOOK`, the display
-driver's hook in `src/video.asm`, which Chapter 21 describes. `FIND` and
+driver's hook in `src/video.asm`, which Chapter 25 describes. `FIND` and
 `LIST`, 13 and 14, are the registry's, described below (`src/services.asm:4-6`,
 `src/services.asm:356-386`, `src/tables.asm:82-89`).
 `FONT`, 15, is `HWSFONT`, also in `src/services.asm`. It loads `HL` with the
@@ -103,7 +103,7 @@ the select bit with `TXIDLE` to `DIGPORT`. It then waits through 256 rounds of
 `01h` carries bit 6, so the serial line stays high.
 
 `LCD` tests the row before it does anything, then clears `CDWRD` for row 3, as
-Chapter 21 explains (`src/services.asm:87-96`). `LCDROWS` gives the row's
+Chapter 25 explains (`src/services.asm:87-96`). `LCDROWS` gives the row's
 display address, and then 20 characters go out, each after `LCDWAIT`
 (`src/services.asm:97-109`, `src/tables.asm:40`).
 
@@ -132,7 +132,7 @@ interrupt, an NMI on the board, is off by then (`src/boot.asm:97-100`).
 `01h` (`src/services.asm:173-175`). The inner loop counts `B` with `C`, and `A`
 then holds the output while `C` is borrowed to test `DE` for zero
 (`src/services.asm:176-184`). Counted from the instructions, a half cycle is 16 ×
-`B` + 51 T-states, as Chapter 9's measurements show (`src/services.asm:166-169`).
+`B` + 51 T-states, as Chapter 10's measurements show (`src/services.asm:166-169`).
 `B` = 0 reaches `DEC C` with 0 and goes round 256 times. The routine ends with
 `TXIDLE`, so the speaker stops low
 (`src/services.asm:185-186`).
@@ -174,21 +174,21 @@ is in the workspace (`src/abi.inc:21-23`, `src/services.asm:6-7`).
 
 ## From the command to the loader
 
-A command whose type is `SVC` calls `SVCGO`, as Chapter 17 explains
+A command whose type is `SVC` calls `SVCGO`, as Chapter 20 explains
 (`src/cpm/ccp.asm:281-289`). `SVCGO` clears `SVCRC` and calls `LOADCOM`, the
 routine that reads a `.COM` file to `0100h`. The file is then in the TPA, up to
 the page of the word at `0006h`, and `LOADTOP` gives its end (`src/loader.asm:532-535`,
 `src/cpm/ccp.asm:412-427`, `src/ram.asm:256`). `SVCGO` then calls `SVCLOAD`
-(`src/loader.asm:536`). Chapter 21 describes what the console does after a good
+(`src/loader.asm:536`). Chapter 25 describes what the console does after a good
 load.
 
 `SVCLOAD` works on the file at `DF`, `0100h`, where the header's fields have
-the offsets in Chapter 10's table and Appendix H (`src/loader.asm:18-32`). It reports through
+the offsets in Chapter 12's table and Appendix H (`src/loader.asm:18-32`). It reports through
 carry and `SVCRC` (`src/loader.asm:91-96`), and it keeps the `A` that `INIT`
 returns in `SVCRA`, beside `SVCRC`, setting it to 0 if a record is then
 refused (`src/loader.asm:243-246`, `src/loader.asm:289-291`,
 `src/ram.asm:266-267`). The CCP treats a carry as a name with a question mark,
-except for one case in a line from `STARTUP.CMD`, which Chapter 21 describes.
+except for one case in a line from `STARTUP.CMD`, which Chapter 25 describes.
 
 ## A service's entry
 
@@ -225,7 +225,7 @@ the stub. On the starter card those are the 164 bytes from `B900h` to `B9A3h`, a
 `COUNT.SVC`'s one page lowers the TPA by 420 bytes. A later service's top is a
 page's start, so it costs its pages and nothing more.
 
-The file's header has the layout in Chapter 10's table and Appendix H. In memory the loader has
+The file's header has the layout in Chapter 12's table and Appendix H. In memory the loader has
 written over some of its fields, and a loaded service's header holds:
 
 | Offset | Bytes | In memory |
@@ -283,7 +283,7 @@ the dependencies (`tools/lib/svc.mjs:39-49`, `tools/lib/svc.mjs:107-110`).
 Each byte of the list is the distance from one fixup to the next, the first
 counted from the byte before the image, and 255 moves on with nothing fixed.
 Appendix H lists the file's header, its dependencies and the gap list byte by
-byte. `TAS` writes a `.SVC` file on the card with the same fields, as Chapter 10
+byte. `TAS` writes a `.SVC` file on the card with the same fields, as Chapter 12
 shows.
 
 ## The seven steps
@@ -365,7 +365,7 @@ from 47,268 bytes to 46,336. On a board with the PICO9918 as well, the ROM's
 console is `CRT:` when the startup line runs, so `DRVR` refuses `INIT`'s
 table with `TNENODV`. `INIT` returns that status and the load fails with
 `SVCRC` at 1. The pages go back, and the line passes over quietly, as
-Chapter 21 describes. `SERVICES` lists nothing, and the TPA stays at 47,268:
+Chapter 25 describes. `SERVICES` lists nothing, and the TPA stays at 47,268:
 
 <!-- node tools/capture.mjs --board pico SERVICES -->
 ```text
@@ -376,7 +376,7 @@ A>
 A list whose first gap is 0 adds the page to header byte 24, the name's last. `makeSvc` never writes such a list, since
 its first gap counts from the byte before the image to a fixup at offset 0 or
 later (`tools/lib/svc.mjs:39-46`), and the loader doesn't test for one. This
-file is `COUNT.SVC` from Chapter 10 with a 0 put at the front of its list:
+file is `COUNT.SVC` from Chapter 12 with a 0 put at the front of its list:
 
 ```sh
 node -e '
@@ -567,14 +567,14 @@ success (`src/loader.asm:89`).
 
 A warm boot keeps all of this, since `REGHEAD`, `SVCHEAD` and `PZTOP` lie past
 `BDOSRME`, the end of the range `CPMINIT` clears (`src/ram.asm:216-218`).
-Chapter 21 describes that boundary. Cold boot clears the workspace, so a reset
+Chapter 25 describes that boundary. Cold boot clears the workspace, so a reset
 empties both lists (`src/boot.asm:37-41`, `test/svc.test.mjs:390`).
 
 ## Restart vectors
 
 A service that takes an interrupt or an `RST` needs its `JP` in page zero to last
 through warm boots and to go when its pages go. A program's vector into the TPA
-must go when the program ends, as Chapter 14 explains. One test separates the
+must go when the program ends, as Chapter 15 explains. One test separates the
 cases, where the jump lands.
 
 `PZSWP` walks the vectors from `0008h` to `003Fh`. A vector holding a `JP` whose
@@ -605,7 +605,7 @@ also turns off any source of interrupts it started, because an interrupt left on
 the default `EI` and `RETI` repeats for ever. A warm boot inside `INIT` leaves that source
 on.
 
-Nothing in the ROM enables interrupts, as Chapter 14 describes. `WBOOTR` starts with
+Nothing in the ROM enables interrupts, as Chapter 15 describes. `WBOOTR` starts with
 `DI`, so a kept `0038h` runs after a warm boot only once a program or a service sets
 `EI` (`src/boot.asm:92`). A warm-boot hook can't do it, since a hook chains into
 `WBOOTR`, whose first instruction is `DI`. Only code that runs later, such as a

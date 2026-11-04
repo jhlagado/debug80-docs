@@ -17,7 +17,7 @@ only adds, in chapters 3 and 8. Nothing was dropped along the way.
 
 Summary of the result: the new book already holds almost all of old chapters
 0 to 6. Eleven facts are missing from existing chapters. Fifteen more belong
-in the unwritten Chapters 9 and 10, nearly all from old chapters 7 and 8.
+in the unwritten Chapters 10 and 12, nearly all from old chapters 7 and 8.
 
 ---
 
@@ -82,7 +82,7 @@ in the unwritten Chapters 9 and 10, nearly all from old chapters 7 and 8.
   both. The largest `.COM` file on the last is 43,008 bytes, by the rule in
   `07-memory.md`.
 - **Destination:** `07-memory.md`, after the figures for the starter card and
-  `my.img`. Chapter 7 gives each case and never the floor.
+  `my.img`. Chapter 8 gives each case and never the floor.
 
 ### A6. What the cache and writing behind buy, in figures
 
@@ -101,7 +101,7 @@ in the unwritten Chapters 9 and 10, nearly all from old chapters 7 and 8.
   That is 5.0 times and 3.1 times. The read program was a small `.COM` that
   reads records to `0080h`, and the figures include loading it from drive A.
 - **Destination:** `04-cards-and-volumes.md`, "The block cache and the volume
-  written behind", with the method in `19-block-cache.md`. Chapter 19 gives
+  written behind", with the method in `19-block-cache.md`. Chapter 18 gives
   per-record costs, and neither chapter gives a whole-command gain.
 
 ### A7. Any assembler will do
@@ -122,7 +122,7 @@ in the unwritten Chapters 9 and 10, nearly all from old chapters 7 and 8.
   `Program area: 46854 bytes`. The word it reads is `0006h`
   (`src/boot.asm:218`, `PZINIT`).
 - **Destination:** `07-memory.md`, "The program area and the word at 0006h",
-  beside `TOP`. The new book's only decimal routine, `DEC` in Chapter 8, stops
+  beside `TOP`. The new book's only decimal routine, `DEC` in Chapter 9, stops
   at 99, and a reader who wants the size in bytes must otherwise convert `TOP`'s
   hex. Its leading zeros are a known wart: `PUTDEC` always prints five digits.
 
@@ -147,7 +147,7 @@ in the unwritten Chapters 9 and 10, nearly all from old chapters 7 and 8.
   not only the GLCD.
 - **Destination:** `08-programs-and-console.md`, "The BIOS's console calls".
   `17-ccp.md`, `15-bios-and-console.md` and `07-memory.md` do not state it.
-  See also item G3: Chapter 8's own `KEY` breaks the second rule.
+  See also item G3: Chapter 9's own `KEY` breaks the second rule.
 
 ### A11. Where the PRL format comes from
 
@@ -169,7 +169,7 @@ in the unwritten Chapters 9 and 10, nearly all from old chapters 7 and 8.
 All of these are true of the code in the form given, which often differs from
 the old text. The old numbers and names must not be copied across.
 
-### Chapter 9, The hardware services (and Appendix B)
+### Chapter 10, The hardware services (and Appendix B)
 
 **B1. Calling convention.** Old 07, "Calling a service". Service number in `C`,
 status back in `A`, zero set and carry clear on success, `IX`, `IY` and the
@@ -184,7 +184,7 @@ argument out of range, 2 device not fitted or not the console. **Codes 3, 4 and
 program checks the signature and version, and one that finds no signature is on
 another system and carries on without the board's devices. **Changed:** the
 major must be 4 exactly. Code: `src/abi.asm:7-8`, `docs/rom-services.md:32-33`,
-`:91-96`, `test/programs/demo.asm:29`. `SIZE` in Chapter 8 is a model.
+`:91-96`, `test/programs/demo.asm:29`. `SIZE` in Chapter 9 is a model.
 
 **B4. Safe inside a BDOS call.** Old 07, "Calling a service". "No service calls
 the BDOS, so a program can call one from code that runs inside a BDOS call,
@@ -247,7 +247,7 @@ about 445 T-states a cell against 4,500 on `PICO.DRV` at 80 columns, and within
 4 percent on the GLCD. The old "much faster" is true only of the PICO9918.
 **Also the true half of a stale claim:** old 02 says `80h–FFh` are the reverse
 images of `00h–7Fh`. Through `CONOUT` those bytes are dropped
-(`src/term.asm:31-32`, as Chapter 8 says), but `PUTAT` passes bytes straight to
+(`src/term.asm:31-32`, as Chapter 9 says), but `PUTAT` passes bytes straight to
 `VPUT` (`src/hwsvc.asm:243-249`), and the drivers draw them reversed
 (`drivers/pico.asm:16`, `drivers/glcd.asm:336`). `PUTAT` is therefore how a
 program draws reverse characters with no escape sequence.
@@ -256,7 +256,7 @@ program draws reverse characters with no escape sequence.
 minutes, hours, date, month, weekday, year; status 2 with no clock; `INFO` bit 3
 reports it. Code: `src/hwsvc.asm:258-289`. Appendix G gives the hardware only.
 
-### Chapter 10, PRL programs and drivers
+### Chapter 12, PRL programs and drivers
 
 **B12. What resident code is for, and the console-counting hook.** Old 08,
 "Residents". Code that stays after its command ends can watch the console or
@@ -267,7 +267,7 @@ exists in that form as `test/programs/res.asm`, used by
 `test/commands.test.mjs:17`, and is the natural worked example for "writing and
 installing a small driver". `INIT` must now return `HL = 0` and carry clear
 (`test/programs/res.asm:24-26`, `docs/drivers.md:143-146`). The old text's
-explanation of the `+ 9 + 1` arithmetic is worth keeping. Chapter 8 gives the
+explanation of the `+ 9 + 1` arithmetic is worth keeping. Chapter 9 gives the
 entries' addresses but not the offset of the jump's target.
 
 **B13. Before and after a resident.** Old 08, "Residents". A transcript in which
@@ -287,11 +287,11 @@ the line `ORG $0100` exactly once." Code: `tools/lib/prl.mjs:15-16`. More
 exactly: it must exist, indented, in that spelling, or `assembleAt` throws; the
 pattern replaces only the first match, so a second one is left at `0100h` and
 the two assemblies then disagree. `makeDrv` goes through the same path. Chapter
-21 mentions the line and not the requirement.
+25 mentions the line and not the requirement.
 
 ### Other planned parts
 
-Nothing unique in the old book is left for Chapters 5, 20 and 22 or Appendix D.
+Nothing unique in the old book is left for Chapters 6, 20 and 22 or Appendix D.
 Old statements on startup, the LCD's words and the driver loader are stale
 (section C), and the old book's error messages are all in Chapters 1, 3 and 4.
 Those parts are to be written from `docs/drivers.md` and the source.
@@ -304,16 +304,16 @@ Those parts are to be written from `docs/drivers.md` and the source.
 | ---: | --- | --- | --- |
 | C1 | 02, 05, 07, 08, index | Table at `FF00h`: every `FFxxh` address, major 2, minor 7 | Table is at `C003h`, ABI 4.0, with other offsets (`src/abi.asm:7-19`). The build refuses `FF00h` addresses (`docs/rom-services.md:25-26`) |
 | C2 | 07 | Entries only added at the end, so a program runs on every later version | A new major may move entries and renumber services, and 4 isn't frozen (`docs/rom-services.md:32-35`) |
-| C3 | 00, 07 | Services `HEXSEG`, `LEDS`, `SERIAL`, `BLOCK`, `DELAY`, `VREG`, `VFILL`, `VWRITE`, `VREAD`, `RANDOM` | Removed; numbers 0 to 18 return status 1 (`src/hwsvc.asm:52-56`, `docs/rom-services.md:159`). The LEDs, segment patterns and random numbers are the program's own (`docs/rom-services.md:200-202`); `SERIAL`'s job is the punch and reader (Chapter 8) |
+| C3 | 00, 07 | Services `HEXSEG`, `LEDS`, `SERIAL`, `BLOCK`, `DELAY`, `VREG`, `VFILL`, `VWRITE`, `VREAD`, `RANDOM` | Removed; numbers 0 to 18 return status 1 (`src/hwsvc.asm:52-56`, `docs/rom-services.md:159`). The LEDs, segment patterns and random numbers are the program's own (`docs/rom-services.md:200-202`); `SERIAL`'s job is the punch and reader (Chapter 9) |
 | C4 | 07 | Arguments in `A`; status 3, 4, 5; 16 bytes of stack | See B1, B2, B4 |
-| C5 | 05, 07 | `XMOVE` at `FF12h`, `MOVE` at `FF15h`, the low-mark word at `FF18h` | Reached by BDOS function 50; the mark has no public word (`docs/rom-services.md:57-62`; Chapter 7 has it right) |
+| C5 | 05, 07 | `XMOVE` at `FF12h`, `MOVE` at `FF15h`, the low-mark word at `FF18h` | Reached by BDOS function 50; the mark has no public word (`docs/rom-services.md:57-62`; Chapter 8 has it right) |
 | C6 | 01, 02, 05, 08 | `GLCD.PRL`, a resident of 3 pages, 768 bytes; 46,086 with it; `B506h` | `GLCD.DRV`, 6 pages, 1,536 bytes (`docs/console.md:101-103`). The font is the driver's own, so `FF23h` has no successor |
 | C7 | 01, 02 | Cold boot picks the console: PICO9918, then GLCD, then serial | The console starts on serial, and `STARTUP.CMD`'s lines move it (`docs/drivers.md:68-80`) |
 | C8 | 02 | The burned ROM image sets the PICO9918's width | One image; the width is a startup line, `PICO40.DRV` or `PICO32.DRV` (`README.md:46-49`) |
 | C9 | 02 | On a GLCD-only board a missing file shows `GLCD?` | `GLCD?` comes only from `CON UC1` (`src/glcd.asm:50-63`). `STDONE` shows `PICO?`, and only with a PICO9918 (`src/drv.asm:420-431`). Run: nothing on the LCD |
-| C10 | 03, 04, 05, 08, index | `CCP`, `EXIT`, nested command processors, shelling out, `FF1Ah`, `FF1Dh`, `UNLOAD` refused when nested, saved state at `BE00h` | No such commands (`src/cpm/ccp.asm:234-262`, `src/data3.asm:22-39`). `BE00h` is free (Chapter 7) |
+| C10 | 03, 04, 05, 08, index | `CCP`, `EXIT`, nested command processors, shelling out, `FF1Ah`, `FF1Dh`, `UNLOAD` refused when nested, saved state at `BE00h` | No such commands (`src/cpm/ccp.asm:234-262`, `src/data3.asm:22-39`). `BE00h` is free (Chapter 8) |
 | C11 | 08 | `TNM` module header, kinds, residents from `.PRL` | Not read (`docs/compatibility.md:120-121`); a `.PRL` is a program and residents are drivers (`src/prl.asm:6`) |
-| C12 | 08 | `GLCD.PRL`'s `REMOVE` puts the console on serial; one `FF25h` table | Each mode has its own table, and `GLCD.DRV`'s `REMOVE` returns the console to `CRT:` if `PICO.DRV` is in (`docs/drivers.md:63-65`). Chapter 15 has it right |
+| C12 | 08 | `GLCD.PRL`'s `REMOVE` puts the console on serial; one `FF25h` table | Each mode has its own table, and `GLCD.DRV`'s `REMOVE` returns the console to `CRT:` if `PICO.DRV` is in (`docs/drivers.md:63-65`). Chapter 16 has it right |
 | C13 | 01 | SD errors `01h–0Fh`, container checks `20h–2Fh` | The codes in use are `01–08` (`src/sd.asm:10-17`) and `20–2A` (Chapter 1) |
 | C14 | 01, 03 | Starter card of 8 files, 994K free | 11 or 12 files now (Chapter 1) |
 | C15 | 03 | Built-ins' names "can't be used for programs" | `A:DIR` runs `DIR.COM` (Chapter 3) |
@@ -340,9 +340,9 @@ one trial before adding.
 
 ## E. Superseded by an equal example
 
-- **E1. `LINES.COM`**, old 06. Teaches what `SHOW` in Chapter 6 teaches: the FCB
+- **E1. `LINES.COM`**, old 06. Teaches what `SHOW` in Chapter 7 teaches: the FCB
   at `005Ch`, the current record, functions 15 and 20, `^Z`, a blank name.
-- **E2. `mkprl.mjs`**, old 08. Chapter 21 gives the same call to `makePrl` as a
+- **E2. `mkprl.mjs`**, old 08. Chapter 25 gives the same call to `makePrl` as a
   one-line `node` command.
 
 ---
@@ -373,17 +373,17 @@ These are outside the salvage, and none is acted on.
   half cycles took 1,652.7 each, not 1,659. The test at
   `test/hwsvc.test.mjs:119-120` divides a whole call by 20 half cycles, so the
   dispatcher's cost falls into its figure, and its bounds pass either way.
-  Chapter 9 should use the corrected constant, after a check.
+  Chapter 10 should use the corrected constant, after a check.
 - **G2. `dist/` is behind.** The clone's `dist/` predates 62d47ed and its ROM
   differs. The book's transcripts should be recaptured after a rebuild.
-- **G3. `KEY` in Chapter 8.** It pushes `AF`, calls `HEX`, pushes again and calls
+- **G3. `KEY` in Chapter 9.** It pushes `AF`, calls `HEX`, pushes again and calls
   `DIGIT` before reaching `CONOUT` directly, on the CCP's stack, which breaks
   the rule at `docs/rom-services.md:128-129` that item A10 would state. The
   transcript was taken on serial. Either `KEY` sets a stack of its own or the
   rule needs narrowing.
 - **G4. The header comment at `src/term.asm:15-16`** says characters `80h–FFh`
-  are reverse images, without saying that `VTOUT` drops them. Chapter 8 and
+  are reverse images, without saying that `VTOUT` drops them. Chapter 9 and
   `15-bios-and-console.md:257` agree with the code.
-- **G5. Chapters' line citations.** Those in Chapter 21 and others name 98c6416
+- **G5. Chapters' line citations.** Those in Chapter 25 and others name 98c6416
   and no longer match: `LOADCOM` is cited at `src/cpm/ccp.asm:271` and is at
   `:359`, and the call of `PRLGO` at `:208` is at `:292`.

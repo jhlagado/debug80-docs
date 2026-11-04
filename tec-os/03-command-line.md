@@ -425,8 +425,8 @@ The PICO9918 stays the console, and its screen keeps what it showed. The second
 `SERVICES` prints nothing, and the second `UNLOAD` has nothing to
 remove. The PICO9918's console is in the ROM, so `SERVICES` doesn't list it and
 `UNLOAD` never removes it. A `.SVC` file that isn't there, or that doesn't
-install, gives the command's name with a question mark. Chapter 5 gives the rules for installing and removing services, and
-Chapter 10 describes how a service is made.
+install, gives the command's name with a question mark. Chapter 6 gives the rules for installing and removing services, and
+Chapter 12 describes how a service is made.
 
 ## Running a program
 
@@ -473,7 +473,7 @@ passed over for one on drive A. A read that fails on the card gives the BDOS's
 The rest of the line after the program's name is the command tail. The CCP
 copies it to `0080h` for the program and fills the two file control blocks at
 `005Ch` and `006Ch` from the tail's first two words, so a file name is ready
-for a program that takes one. Chapter 6 describes both. The CCP also stores
+for a program that takes one. Chapter 7 describes both. The CCP also stores
 the drive it loaded the program from in the byte at `0050h`, as CP/M 3 does.
 The byte is 0 for a program found on the current drive and 1 for one found by
 the search of drive A. A drive named in the command gives its number, 1 for A,

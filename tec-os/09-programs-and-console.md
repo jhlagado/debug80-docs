@@ -1,11 +1,11 @@
 ---
 title: Programs and the console
 parent: TEC-OS
-nav_order: 8
+nav_order: 9
 nav_group: "Part I: Using and programming TEC-OS"
 ---
 
-# 8. Programs and the console
+# 9. Programs and the console
 
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the
      repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
@@ -23,7 +23,7 @@ and the reader.
 ## The BDOS's console functions
 
 A program usually reaches the console through the BDOS, with the functions
-of Chapter 6 and a few more:
+of Chapter 7 and a few more:
 
 | Function | Name | Takes | Returns |
 | --- | --- | --- | --- |
@@ -139,7 +139,7 @@ STACK:
 
 The program writes each entry's address into a `JP` of its own, at `CONIN` and
 `CONOUT`, so that a `CALL` to the label reaches the BIOS. Its stack holds no
-return word, so it ends with `JP $0000`, as Chapter 6 describes. These
+return word, so it ends with `JP $0000`, as Chapter 7 describes. These
 commands assemble it, `size.asm` from the section on the console's size and
 the repository's `TERM` from the next section, and copy all three to drive B
 of a copy of the starter card:
@@ -273,7 +273,7 @@ TEC-OS gives both the columns and the rows as 0 while the console is the
 serial terminal, whose size TEC-OS can't read, so a program then uses 80 by
 24, as the CCP does for `[more]`.
 
-A program reads the size through the ROM table at `C003h`, which Chapter 9
+A program reads the size through the ROM table at `C003h`, which Chapter 10
 describes. The table starts with the letters `TNA` and its major version, 5,
 the version of its ABI, its application binary interface. At `C008h` is a jump
 to TEC-OS's numbered services, and service 0, `INFO`, returns the columns in

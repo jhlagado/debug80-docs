@@ -1,11 +1,11 @@
 ---
-title: Chaining commands
+title: Return codes and chaining
 parent: TEC-OS
 nav_order: 11
 nav_group: "Part I: Using and programming TEC-OS"
 ---
 
-# 11. Chaining commands
+# 11. Return codes and chaining
 
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the
      repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
@@ -20,7 +20,7 @@ a built-in or a program. A command written with `:` in front runs only if the
 one before it succeeded, and a program reports success or failure through a
 return code that it sets with BDOS function 108. A program can also end by
 handing the CCP a new command line, with BDOS function 47. CP/M 2.2 runs one
-command per line, but TEC-OS takes these rules from CP/M 3's CCP. Chapter 24
+command per line, but TEC-OS takes these rules from CP/M 3's CCP. Chapter 21
 describes the code behind them.
 
 ## Several commands on one line
@@ -71,7 +71,7 @@ B>
 
 `NOTES.TXT`, with no drive, was made on drive B, because the first piece had
 made B the current drive. A program in a piece starts as it would from a line
-of its own: the CCP gives it the command tail and the two FCBs of Chapter 6
+of its own: the CCP gives it the command tail and the two FCBs of Chapter 7
 from its own piece. The tail ends at the `!` after the piece, so the pieces
 that follow aren't in the tail, and no command or argument can hold a `!`.
 
@@ -165,7 +165,7 @@ BDOS    EQU     $0005
 ```
 
 Function 15 opens the file whose FCB is at `DE` and returns `FFh` in `A` when
-there is no such file, as Chapter 6 describes. `EXISTS` prints nothing, and
+there is no such file, as Chapter 7 describes. `EXISTS` prints nothing, and
 its result is the code. This program goes in the clone as `exists.asm`, beside
 the next section's `run.asm`. These commands assemble both and put them on
 drive B of a copy of the starter card:
@@ -233,7 +233,7 @@ B>
 
 A program can end by giving the CCP a command line to run next, with BDOS
 function 47, which CP/M 3 calls *chain to program*. The program puts the line
-in memory, ended by a 0 byte, sets the DMA address (Chapter 6) to it with
+in memory, ended by a 0 byte, sets the DMA address (Chapter 7) to it with
 function 26 and calls function 47. When the line is accepted the call doesn't
 return: TEC-OS copies the line and ends the program with a warm boot, and the
 CCP then runs the line next, in place of whatever was left of the line the
@@ -318,7 +318,7 @@ These events drop what is left of a line:
 - a call to function 47, whose line replaces the rest
 - `^C` typed while a line that a program reads with BDOS function 10 is
   empty
-- `^C` typed after `^S` has stopped a program's output (Chapter 8)
+- `^C` typed after `^S` has stopped a program's output (Chapter 9)
 - `^C` at the `[more]` of a `TYPE` or `DIR` listing
 - the key that ends a BDOS error, such as `Bdos Err On C: Select`
 - a `Write lost` message at a warm boot, which Chapter 4 describes
