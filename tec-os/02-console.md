@@ -7,14 +7,14 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 2. The console
 
-Checked against TEC-OS 5a25178.
+Checked against TEC-OS 58d4345.
 
 The console is the device you type commands on and read TEC-OS's replies from.
 A TEC-1G can carry a serial terminal, a PICO9918 video card and a graphics LCD
 at once, but TEC-OS uses one of them at a time as the console. This chapter
 describes the four console devices and the `CON` command that moves the
-console between them. It then describes the serial terminal, the display
-drivers, the matrix keyboard, the keys that edit a line and the `[more]` pause
+console between them and sets the PICO9918's width. It then describes the
+serial terminal, the displays as the console, the matrix keyboard, the keys that edit a line and the `[more]` pause
 in a long listing.
 
 ## The four devices
@@ -47,22 +47,24 @@ there at cold boot, and programs write to it through the hardware services in
 Chapter 9.
 
 Cold boot, after power-on or a reset, clears page zero, the first 256 bytes of
-memory. That sets the IOBYTE to 0, so the console always starts on `TTY:`. A
-warm boot, the restart of the CCP when a program ends, leaves the IOBYTE as it
-was, and the console with it.
+memory, and that sets the IOBYTE to 0, `TTY:`. On a board with the PICO9918 and
+the matrix keyboard, cold boot then starts the PICO9918's console and sets the
+console field to 1, `CRT:`, before it prints the banner. So the console starts
+on `CRT:` on that board and on `TTY:` on any other. A warm boot, the restart of
+the CCP when a program ends, leaves the IOBYTE as it was, and the console with
+it.
 
 ## The CON command
 
 `CON` with no argument names the console in use, as Chapter 1 showed. Its four
-replies are `CON: TTY: serial terminal`, `CON: CRT: PICO9918`,
-`CON: BAT: reader and list` and `CON: UC1: GLCD`.
+replies are `CON: TTY:`, `CON: CRT:`, `CON: BAT:` and `CON: UC1:`.
 
 `CON` followed by a device name sets the IOBYTE's console field, its low two
 bits, to that device. The names are `TTY`, `CRT`, `BAT` and `UC1`, and a colon
-may follow them. The BIOS acts on the new bits at its next console call. That
-is the call that prints `CON`'s reply, so the reply appears on the new
-console. A name that isn't one of the four is printed back with a question
-mark:
+may follow them. `PICO` is another name for `CRT` and `GLCD` another for `UC1`.
+The BIOS acts on the new bits at its next console call. That is the call that
+prints `CON`'s reply, so the reply appears on the new console. A name that
+isn't one of these is printed back with a question mark:
 
 <!-- node tools/capture.mjs "CON XYZ" -->
 ```text
@@ -72,27 +74,21 @@ XYZ?
 A>
 ```
 
-On a board with a PICO9918 and the matrix keyboard, where `PICO.SVC` has made
-the PICO9918 the console, `CON TTY` typed on the matrix keyboard moves the
+On a board with a PICO9918 and the matrix keyboard, where the PICO9918 is the
+console from cold boot, `CON TTY` typed on the matrix keyboard moves the
 console to the serial terminal. The command's echo appears on the PICO9918,
 and the reply and the next prompt appear on the serial terminal, which shows
 this:
 
 <!-- node tools/capture.mjs --board pico --serial "CON TTY" -->
 ```text
-TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
-B: WORK       
-
-A>PICO.SVC
-CON: TTY: serial terminal
+CON: TTY:
 A>
 ```
 
-The terminal shows the boot as far as `PICO.SVC`, the line that moved the
-console to the PICO9918, and then nothing more until the reply to `CON TTY`.
-The PICO9918 goes on showing what was on it, but TEC-OS writes nothing more
-there and stops reading the matrix keyboard. `CON CRT` typed on the PC moves
+The terminal shows nothing of the boot, which went to the PICO9918, and its
+first line is the reply to `CON TTY`. The PICO9918 goes on showing what was on
+it, but TEC-OS writes nothing more there and stops reading the matrix keyboard. `CON CRT` typed on the PC moves
 the console back. Whenever a display becomes the console, the BIOS clears its
 screen and puts the cursor at the top left, unless the display is the PICO9918
 and a program has claimed it, as Chapter 9 describes. So after `CON CRT` the
@@ -100,45 +96,46 @@ PICO9918 shows only the reply and the prompt:
 
 <!-- node tools/capture.mjs --board pico --screen "CON TTY" "CON CRT" -->
 ```text
-CON: CRT: PICO9918
+CON: CRT:
 A>
 ```
 
-`CRT:` and `UC1:` need their display, its driver and the matrix keyboard. If
-any of them is missing, the BIOS uses the serial terminal, so there is always
-a console. On a board with only a serial terminal, `CON CRT` sets the console
-field to 1 but the console stays on the serial terminal, and `CON` reports
-that:
+`CRT:` needs the PICO9918's console, which cold boot starts only on a board
+with the PICO9918 and the matrix keyboard. `UC1:` needs the graphics LCD, its
+driver and the matrix keyboard. If any of them is missing, the BIOS uses the
+serial terminal and puts `TTY:` back in the console field, so there is always
+a console, and `CON` reports the device that took it. On a board with only a
+serial terminal, `CON CRT` and `CON UC1` leave the console on the serial
+terminal:
 
 <!-- node tools/capture.mjs CON "CON CRT" "CON UC1" CON -->
 ```text
 A>CON
-CON: TTY: serial terminal
+CON: TTY:
 A>CON CRT
-CON: TTY: serial terminal
+CON: TTY:
 A>CON UC1
-CON: TTY: serial terminal
+CON: TTY:
 A>CON
-CON: TTY: serial terminal
+CON: TTY:
 A>
 ```
 
 If `GLCD.SVC`, the graphics LCD's driver, isn't installed, `CON UC1` first loads
-it from drive A. On a board with both displays and the starter card's startup
-file, `CON UC1` is how the console reaches the graphics LCD, because that file's
-`GLCD.SVC` line installs nothing while the PICO9918 is the console. The web
-page's board is one, and its graphics LCD shows this after `CON UC1`:
+it from drive A. On a board with both displays, the starter card's `GLCD.SVC`
+line installs the driver but leaves the console on the PICO9918, and `CON UC1`
+moves the console to the graphics LCD. The web page's board is one, and its
+graphics LCD shows this after `CON UC1`:
 
 <!-- node tools/capture.mjs --board pico --screen "CON UC1" CON -->
 ```text
-CON: UC1: GLCD
+CON: UC1:
 A>CON
-CON: UC1: GLCD
+CON: UC1:
 A>
 ```
 
-`CON CRT` has no such load: the PICO9918's driver must be installed already,
-by the startup file or by typing its name.
+`CON CRT` has no such load, because the PICO9918's console is in the ROM.
 
 `BAT:` sends the console's output nowhere, so after `CON BAT` the serial
 terminal shows nothing at all. TEC-OS still reads the commands typed there,
@@ -152,14 +149,10 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.SVC
-PICO.SVC?
-
 A>GLCD.SVC
-GLCD.SVC?
 
 A>CON BAT
-CON: TTY: serial terminal
+CON: TTY:
 A>
 ```
 
@@ -167,6 +160,72 @@ A program changes the console in the same way, by writing the IOBYTE's console
 field, and TEC-OS acts on the change at the program's next console call.
 Digital Research's `STAT CON:=CRT:` works like this, so a copy of `STAT` from
 another CP/M system changes the console too.
+
+## The PICO9918's width
+
+The PICO9918's console has three widths, each of 24 rows: 80 columns and 40
+columns of text, and 32 columns in the PICO9918's Graphics I mode. Cold boot
+starts it at 80. A width after `CRT` or `PICO`, with a space before it, sets the
+width and makes the PICO9918 the console, so `CON PICO 40` and `CON CRT 32` both
+work. The BIOS clears the screen at the new width at its next console call. A
+warm boot keeps the width, and a reset sets 80 again. `SAMPLE`, the program
+Chapter 1 built, prints the screen's size, and here it runs at each width on
+the web page's board:
+
+<!-- node tools/capture.mjs --board pico "TAS SAMPLE" "CON PICO 32" SAMPLE "CON CRT 40" SAMPLE "@reset" SAMPLE -->
+```text
+A>CON PICO 32
+CON: CRT:
+A>SAMPLE
+Hello from TEC-OS.
+Screen: 32 by 24
+Back to the prompt.
+
+A>CON CRT 40
+CON: CRT:
+A>SAMPLE
+Hello from TEC-OS.
+Screen: 40 by 24
+Back to the prompt.
+
+A>
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM     
+B: WORK       
+
+A>GLCD.SVC
+
+A>SAMPLE
+Hello from TEC-OS.
+Screen: 80 by 24
+Back to the prompt.
+
+A>
+```
+
+The transcript starts after `TAS SAMPLE`, which assembled the program. Each
+`SAMPLE` ended in a warm boot, which kept the width, and the reset brought back
+80 columns. Any other width, a width after another name, or a width with no
+space before it is printed back with a question mark, and the console stays as
+it was:
+
+<!-- node tools/capture.mjs --board pico "CON CRT80" "CON TTY 40" "CON PICO 50" -->
+```text
+A>CON CRT80
+CRT80?
+
+A>CON TTY 40
+40?
+
+A>CON PICO 50
+50?
+
+A>
+```
+
+A width is refused in the same way on a board where cold boot didn't start the
+PICO9918's console, and while a program has claimed the PICO9918, as Chapter 9
+describes.
 
 ## The serial terminal
 
@@ -194,25 +253,19 @@ characters.
 
 ## A display as the console
 
-The ROM has no code for drawing on the PICO9918 or the graphics LCD, so each
-display's console is a driver, a file on the card that TEC-OS loads into
-memory below the BDOS. Chapter 1 showed the starter card's startup file
-installing these drivers before the first prompt. Installing a display driver
-can move the console:
+The PICO9918's console is in the ROM. Cold boot starts it when the PICO9918
+answers and the board's Matrix configuration switch is on, so the matrix
+keyboard is there, and with either missing the PICO9918's console doesn't
+start. It takes no memory from programs.
 
-- `PICO.SVC` makes the PICO9918 the console, at 80 columns on the starter
-  card, or at 40 or 32 on a card made for that width, as Chapter 5 describes.
-- `GLCD.SVC` makes the graphics LCD the console unless a PICO9918 driver is
-  already installed, in which case the console stays where it was. While a
-  display is the console, `GLCD.SVC` installs only for `CON UC1`.
-
-Each driver installs only on a board that has its display and the matrix
-keyboard, with the board's Matrix configuration switch on. Otherwise the
-installation fails and the console stays where it was, which on a board with
-only a serial terminal is that terminal. A display driver takes 1,536 bytes of
-memory, as Chapter 1 explained, so with both displays' drivers installed
-programs have 3,093 bytes less than with none. Chapter 5 gives the rules for the startup file
-and for installing and removing services.
+The graphics LCD's console is a driver, `GLCD.SVC`, a file on the card that
+TEC-OS loads into memory below the BDOS. Chapter 1 showed the starter card's
+startup file installing it before the first prompt. It installs only on a
+board that has the graphics LCD and the matrix keyboard. When it installs it
+makes the graphics LCD the console, unless the PICO9918 is the console, which
+then keeps it until `CON UC1`. The driver takes 932 bytes from programs, as
+Chapter 1 explained. Chapter 5 gives the rules for the startup file and for
+installing and removing services.
 
 A console on a display is a *video console*, and there TEC-OS is the terminal.
 It draws each character at the cursor and moves the cursor on, and it acts on
