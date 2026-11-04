@@ -40,8 +40,8 @@ in the files that drive them.
 
 The read of port `00h` takes nothing from the keypad. It is there for the
 Debug80 runtime, whose serial input starts a queued byte at a read of that port
-(`src/layout.asm:9`, `src/console.asm:130`, `src/console.asm:184`,
-`src/console.asm:301`).
+(`src/layout.asm:9`, `src/console.asm:131`, `src/console.asm:185`,
+`src/console.asm:302`).
 
 ## Port 01h and the serial line
 
@@ -51,7 +51,7 @@ Every write to it has to keep bit 6 high when the serial line is idle, or the
 terminal receives a start bit. The ROM's own writes do: the hardware service
 `DIGIT` lights each digit with bit 6 set, and `TONE` toggles bit 7 with bit 6
 set (`src/services.asm:17`, `src/services.asm:58-72`,
-`src/services.asm:146-165`). That shared port is why programs reach the digits
+`src/services.asm:147-166`). That shared port is why programs reach the digits
 and the speaker through the hardware services of Chapter 9 and not by writing
 the port.
 
@@ -59,7 +59,7 @@ The serial line is bit-banged: TEC-OS sends each bit by writing bit 6 of port
 `01h` and receives by sampling bit 7 of port `03h`, at 4800 baud, 8 data bits,
 no parity and 2 stop bits. The bit times are counted in T-states for a 4 MHz
 clock (`tools/build.mjs:25`, `tools/build.mjs:36-54`,
-`src/console.asm:194-204`), so the board's CPU clock switch has to be on FAST
+`src/console.asm:195-205`), so the board's CPU clock switch has to be on FAST
 with the 4 MHz oscillator. There is no receive buffer in hardware: a byte
 reaches TEC-OS only while it is polling bit 7 for a start bit.
 
@@ -72,13 +72,13 @@ TEC-OS reads three bits of port `03h` (`src/layout.asm:11`):
   matrix keyboard, and both display drivers fail to install, since each needs
   the keyboard.
 - **Bit 6, a keypad key down.** Read once, at cold boot, just before the
-  startup file is opened. A low bit skips the file (`src/cpm/ccp.asm:1537-1539`).
+  startup file is opened. A low bit skips the file (`src/cpm/ccp.asm:1577-1579`).
 - **Bit 7, the serial line's input.** Read by the serial routines
-  (`src/console.asm:132`, `src/console.asm:185`, `src/console.asm:202`).
+  (`src/console.asm:133`, `src/console.asm:186`, `src/console.asm:203`).
 
 The TEC-1G's documents and the Debug80 runtime describe the other bits of port
 `03h` differently. On bit 6 the two agree: it is low while a keypad key is
-down, which is how TEC-OS reads it (`src/cpm/ccp.asm:1537-1539`).
+down, which is how TEC-OS reads it (`src/cpm/ccp.asm:1577-1579`).
 `docs/diagnostics.md` records the comparison, and test T11 reads the port on a
 board. The Protect and Expand switches are not read.
 
@@ -87,7 +87,7 @@ board. The Protect and Expand switches are not read.
 The system latch at port `FFh` can be written but, on the board's documents,
 not read, so TEC-OS keeps a copy of the last value written at `0040h`,
 `LATCHV`, and builds each new value from the copy (`src/layout.asm:13`,
-`src/layout.asm:36`). Its bits:
+`src/layout.asm:37`). Its bits:
 
 | Bit | Value | Name | TEC-OS's use |
 | ---: | ---: | --- | --- |
@@ -121,7 +121,7 @@ and EXPAND 1. The board's recommended build leaves U9 empty, and
 EXPAND jumpers set for a 32 KiB chip. Before it prints anything, cold boot
 tests `8000h–BFFFh` and then EXPAND 1 behind it, and stops with `TEC-OS needs
 64K RAM` on the serial terminal if either is missing (`src/boot.asm:33`,
-`src/boot.asm:290-320`). Chapter 1 describes the check, and Chapter 13 what
+`src/boot.asm:296-326`). Chapter 1 describes the check, and Chapter 13 what
 TEC-OS keeps in each half.
 
 ## The hex keypad and its NMI
@@ -153,11 +153,11 @@ shows.
 The DS1302 is an add-on on port `FCh`, with bit 4 the chip's enable, bit 6 its
 clock, bit 7 the data sent to it, bit 5 set to read and the data read on bit 0
 (`src/services.asm:13-14`). Each register is reached by a command byte sent least
-significant bit first (`src/services.asm:284-290`). TEC-OS counts the clock as
+significant bit first (`src/services.asm:285-291`). TEC-OS counts the clock as
 present when a read of the seconds register gives a value below `60h`, which a
 clock that answers gives and an empty port's `FFh` doesn't
-(`src/services.asm:264-276`). Cold boot makes that test once and keeps the result
-in bit 3 of `CONDEV` (`src/boot.asm:41-44`). The hardware service `INFO`
+(`src/services.asm:265-277`). Cold boot makes that test once and keeps the result
+in bit 3 of `CONDEV` (`src/boot.asm:44-47`). The hardware service `INFO`
 reports that bit in bit 3 of `B` without reading the port. `RTC` makes the
 test again at each call, and reads and sets the clock's seven BCD registers
 (Chapter 9).

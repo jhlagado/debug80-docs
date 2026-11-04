@@ -55,31 +55,31 @@ The loader names the fields at `src/loader.asm:11-24`.
 The loader compares the first two bytes, as a word, with `DMAGIC`, which is
 `SVCFMT * 256 + 'D'` (`src/loader.asm:11`, `src/loader.asm:82-85`). `SVCFMT` is 4,
 from `abi.inc`, and a file of any other format fails the load
-(`src/abi.inc:96-98`). A source writes the byte by that name, as
+(`src/abi.inc:101-103`). A source writes the byte by that name, as
 `DB 'D',SVCFMT,0,1` with `abi.inc` included, which is how `PICO.SVC` and
-`GLCD.SVC` write it (`drivers/pico.asm:27`, `drivers/glcd.asm:16`). `makeSvc`
+`GLCD.SVC` write it (`drivers/glcd.asm:16`, `drivers/glcd.asm:16`). `makeSvc`
 writes its own figure for the format over the source's byte
-(`tools/lib/svc-format.mjs:3`, `tools/lib/svc.mjs:117`), and that figure is 4
+(`tools/lib/svc-format.mjs:3`, `tools/lib/svc.mjs:111`), and that figure is 4
 as well.
 
 The source writes the letter, the format, the flags, the extra memory, the stack
 figures and the name, and it leaves the other fields 0. The tool that makes the
 file, `TAS` on the card or `makeSvc` on a PC, writes the number of
 dependencies, the two entry offsets and the two sizes
-(`tools/lib/svc.mjs:117-126`).
+(`tools/lib/svc.mjs:111-120`).
 The loader's checks of the entry offsets, the sizes and the page are at
-`src/loader.asm:86-106`, `src/loader.asm:345-360`, and of the stack figures at
+`src/loader.asm:86-106`, `src/loader.asm:346-361`, and of the stack figures at
 `src/loader.asm:134-150`.
 
 ## The dependencies
 
 Each dependency is 9 bytes: the least version of the record, then its 8-byte
-name, padded with spaces (`tools/lib/svc.mjs:112`). The entries follow the
+name, padded with spaces (`tools/lib/svc.mjs:106`). The entries follow the
 image and are no part of it, so the loader relocates none of their bytes. It
 looks each one up in the registry, and a name that isn't there, or is there at
 a lower version, fails the load (`src/loader.asm:107-126`). `makeSvc` takes them
 from its `deps` option and rejects a name of more than 8 bytes
-(`tools/lib/svc.mjs:111`). `TAS` takes them from what follows a label named
+(`tools/lib/svc.mjs:105`). `TAS` takes them from what follows a label named
 `DEPS` in the source, as whole 9-byte entries in `DB`.
 
 ## The relocation data
@@ -112,7 +112,7 @@ loader doesn't test for one, and Chapter 20 shows what such a list does.
 The repository's encoders also write a bitmap and a list of 16-bit offsets, for
 comparison (`tools/lib/svc.mjs:28-36`). `makeSvc` writes the gap list unless it
 is asked for another, and the loader reads only the gap list
-(`tools/lib/svc.mjs:89`).
+(`tools/lib/svc.mjs:83`).
 
 ## PICO.SVC
 

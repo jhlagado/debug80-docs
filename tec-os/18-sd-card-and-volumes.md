@@ -122,7 +122,7 @@ a line of the block cache, from the card whenever the mount asks for a table
 block other than the last one it read, and the same path serves cold boot and the volume services. `MNCP` copies 32
 bytes of the line into `MNBUF`, a buffer in the workspace, where the header's
 fields and each descriptor are read (`src/vol.asm:22-29`,
-`src/vol.asm:251-298`, `src/ram.asm:44`). `MOUNT` makes the checks in a fixed
+`src/vol.asm:251-298`, `src/ram.asm:53`). `MOUNT` makes the checks in a fixed
 order, stopping at the first failure with that check's code
 (`src/vol.asm:8-18`, `src/vol.asm:20-120`):
 
@@ -198,7 +198,7 @@ A>
 ```
 
 Cold boot sends any failure, of the card or of the container, to the
-diagnostic prompt (`src/boot.asm:54-57`). For the run below, the starter
+diagnostic prompt (`src/boot.asm:60-63`). For the run below, the starter
 card's first byte was changed from `T` to `X` with
 `printf X | dd of=build/bad.img bs=1 seek=0 conv=notrunc` on a copy of
 `dist/starter.img`. `H` was then typed at the prompt:
@@ -212,7 +212,7 @@ R retry>
 ```
 
 Error 21 is `MEMAGIC`, the check of the name (`src/vol.asm:9`). Any key but
-`R` gives the prompt again (`src/boot.asm:432-442`), and the header's bytes can
+`R` gives the prompt again (`src/boot.asm:440-450`), and the header's bytes can
 be read on a PC, as Appendix E shows.
 
 ## The drive table and the DPHs
@@ -225,8 +225,8 @@ bytes, the length in blocks in two, the geometry and a flags byte with
 read-only in bit 0 and written-behind in bit 1. The start and the length's low
 half lie together in the descriptor, so one `LDIR` copies those six bytes
 (`src/vol.asm:373-394`,
-`src/ram.asm:21`). `DRVIDX` records which volume each drive holds, as its
-index in the container plus 1, 0 for none (`src/ram.asm:27`). The geometry
+`src/ram.asm:22`). `DRVIDX` records which volume each drive holds, as its
+index in the container plus 1, 0 for none (`src/ram.asm:28`). The geometry
 byte is 0 for a drive with no volume, and for such a drive the BIOS's `SELDSK`
 returns 0, no such drive (`src/bios.asm:23-44`).
 
@@ -254,7 +254,7 @@ fixed media.
 To keep a drive logged in across a warm boot, TEC-OS's BDOS uses the three
 scratch words for a sum of its allocation vector, a flag set when it has
 changed and a mark, the number of directory entries to read when the vector is
-rebuilt (`src/cpm/bdos.asm:472-511`). Chapter 16 describes that, and Chapter
+rebuilt (`src/cpm/bdos.asm:486-525`). Chapter 16 describes that, and Chapter
 13 how `ALVINIT` places the vectors at cold boot.
 
 ## Deblocking
@@ -281,11 +281,11 @@ cache, as Chapter 19 describes. `WRITE` has more to do
 (`src/bios.asm:149-246`). After mapping it rejects a write to a read-only
 volume before anything changes, with error 1 (`src/bios.asm:166-170`). A change
 made through the BDOS doesn't get this far, since the BDOS's own `R/O` error
-comes first (`src/cpm/bdos.asm:2332-2336`). Function 16 tests the drive too,
+comes first (`src/cpm/bdos.asm:2390-2394`). Function 16 tests the drive too,
 before it writes the directory entry, and on a read-only drive it writes
 nothing and returns success, as CP/M 2.2's close does. Closing an FCB that was
 never opened on such a drive returns 0 with the card unchanged
-(`src/cpm/bdos.asm:589-592`, `test/cpm22.test.mjs:174`). Only a program that
+(`src/cpm/bdos.asm:603-606`, `test/cpm22.test.mjs:174`). Only a program that
 calls the BIOS itself receives the error.
 
 A write to the directory can change which blocks are in use, so `WRITE` then

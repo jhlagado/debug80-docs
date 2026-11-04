@@ -39,7 +39,7 @@ bytes holding the number of the card block it holds, `FFFFFFFFh` while it is
 empty. From `CDIRTY`, `BC80h`, each line has a byte that is nonzero while the
 line holds changes the card lacks. Every line starts empty and clean, since
 cold boot clears EXPAND 1 and marks each line empty before it mounts the card,
-as Chapter 14 describes (`src/boot.asm:48`). The mount then reads the
+as Chapter 14 describes (`src/boot.asm:51`). The mount then reads the
 container's table into a line, an ordinary clean one that `CTAKE` gives out
 again in turn (Chapter 18).
 
@@ -49,7 +49,7 @@ reaches it, so it can be in at most one line.
 
 All of the cache is in EXPAND 1, but all of its state outside the table is in
 the workspace above the RAM BIOS table, at fixed addresses
-(`src/ram.asm:203-205`):
+(`src/ram.asm:207-209`):
 
 - `CNEXT`, the next line to give out
 - `CWTYPE`, the write type of the current BIOS `WRITE`, with bit 7 set for a
@@ -276,17 +276,17 @@ A flush has five occasions:
 
 - a directory write on the volume written behind, as above
 - `CTAKE` with every line dirty, which writes one line
-- every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:89`,
+- every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:95`,
   `src/cache.asm:351-359`)
 - every call of the services `MOUNT` and `UNMNT`, whose `VFLUSH` calls
   `CFLALL` before any drive changes, and fails if a line failed
   (`src/vol.asm:634-646`)
 - BDOS function 48, which calls `VFLUSH` and returns `A` = 0, or `FFh` if a
-  line failed and was dropped (`src/cpm/bdos.asm:145-150`)
+  line failed and was dropped (`src/cpm/bdos.asm:159-164`)
 
 The warm boot's flush is the one you can cause. A `^C` at the prompt is a warm
 boot, and after it every change is on the card. A reset writes nothing, since
-cold boot clears EXPAND 1 (`src/boot.asm:150-158`), and the changes the cache
+cold boot clears EXPAND 1 (`src/boot.asm:156-164`), and the changes the cache
 still holds unwritten at the time of a reset are lost. Some changes since the
 last directory write may already be on the card, written by `CTAKE` when their
 lines were given out for other blocks (`src/cache.asm:221-229`), so the card
@@ -299,7 +299,7 @@ unchanged, so a failure when its line goes to the card later needs a report of
 its own. That report is `Write lost`. `CWBOOT` calls `CFLALL`, which tries
 every dirty line and drops each whose write fails. If any failed, `CWBOOT`
 drops the rest of a chained line and prints `Write lost` on its own line
-(`src/cache.asm:351-359`, `src/text.asm:76`). The dropped lines' changes are
+(`src/cache.asm:351-359`, `src/text.asm:67`). The dropped lines' changes are
 gone and the card keeps its old copy of each block, so the message comes once:
 the next warm boot has nothing more to write. A directory write whose flush
 fails during a program's run is the BDOS's `Bad Sector` instead, and the warm
@@ -307,7 +307,7 @@ boot after it says nothing, since the failed lines were dropped then.
 
 A card taken out while TEC-OS runs gives that: every write fails, and the
 first warm boot after it says `Write lost` and drops the lines, even with the
-same card put back, since only cold boot starts a card (`src/boot.asm:54`).
+same card put back, since only cold boot starts a card (`src/boot.asm:60`).
 A later change written behind that reaches a line meets the same failure at
 the next warm boot, which says `Write lost` again, and a reset discards it. While
 dirty lines stay dirty, fewer lines are free for reads, and once all 30 are

@@ -100,7 +100,7 @@ interrupts on again if they were on before.
 The offset into the page is `L` alone, so `INC L` from offset `FFh` reaches
 offset `00h` and the page is a ring with no end. Each line is stored as its
 characters followed by a byte of 0, written forward from the offset in `HHEAD`,
-a byte of the workspace in EXPAND 0 (`src/ram.asm:220-221`). After a line's 0,
+a byte of the workspace in EXPAND 0 (`src/ram.asm:224-225`). After a line's 0,
 `HHEAD` holds the offset of the byte that follows it.
 
 A walk back through a ring needs a place to stop, so the ring is kept with the
@@ -114,26 +114,26 @@ A walk back from the newest line stops when it reaches an empty entry.
 The CCP and programs both read lines through BDOS function 10, so the CCP marks
 its own call. With no chained piece and no startup line left, the CCP reads a
 command line, and before the call of function 10 it sets the byte `HFLAG` to
-`FFh` (`src/cpm/ccp.asm:79-88`, `src/ram.asm:143`). Function 10 ends at
+`FFh` (`src/cpm/ccp.asm:91-103`, `src/ram.asm:147`). Function 10 ends at
 `LINDONE`, after Return, after a line feed or when the buffer is full. There it
 reads `HFLAG`, clears it and calls `HSTORE` if the flag was set and the line has
-at least one character (`src/cpm/bdos.asm:410-423`).
+at least one character (`src/cpm/bdos.asm:424-437`).
 
 When a program calls function 10 itself, `HFLAG` is clear. `LINDONE` cleared it
-after the CCP's line (`src/cpm/bdos.asm:419-421`), and for a line the CCP
+after the CCP's line (`src/cpm/bdos.asm:433-435`), and for a line the CCP
 abandoned at `^C`, every warm boot clears it too, with the rest of the RAM from
-`CCPCLR` up (`src/boot.asm:84`, `src/boot.asm:265-269`). So only the lines typed
+`CCPCLR` up (`src/boot.asm:90`, `src/boot.asm:271-275`). So only the lines typed
 at the CCP's prompt go into the history.
 
 A chained line (Chapter 11) goes in once, whole, with its `!` and `:`, so `^W`
 brings all of it back. The CCP takes the line's pieces, and a command from
 function 47, from `CMDTXT` with no call of function 10, and they add no entry
-(`src/cpm/ccp.asm:79-80`). The lines of `STARTUP.CMD` don't go in either, because
+(`src/cpm/ccp.asm:91-92`). The lines of `STARTUP.CMD` don't go in either, because
 the CCP takes each of them from `STLINE` in place of function 10
-(`src/cpm/ccp.asm:82-83`). After cold boot the history is therefore empty.
+(`src/cpm/ccp.asm:94-95`). After cold boot the history is therefore empty.
 
 `HSTORE` stores the line as function 10 returns it. The CCP turns small letters
-into capitals later, a piece at a time (`src/cpm/ccp.asm:136-148`), so a recalled
+into capitals later, a piece at a time (`src/cpm/ccp.asm:151-163`), so a recalled
 line comes back as it was typed:
 
 <!-- node tools/capture.mjs --board pico --screen con "@start "$'\x17' -->
@@ -183,21 +183,21 @@ only whole lines. When nothing was overwritten, the byte at `HHEAD` was already
 0, and the loop clears that one byte.
 
 Each line takes its length and one byte more. The CCP's buffer holds up to 127
-characters (`src/boot.asm:272-273`), so a line of that length takes 128 bytes of
+characters (`src/boot.asm:278-279`), so a line of that length takes 128 bytes of
 the ring, half of it, and short commands such as `DIR` take four bytes each.
 
 ## ^W and ^N in function 10
 
 Function 10 passes `^W` and `^N`, codes 23 and 14 (`src/cpm/bdos.asm:41-42`), to
-`LINHIST` (`src/cpm/bdos.asm:270-273`). With `HFLAG` clear, in a program's call,
+`LINHIST` (`src/cpm/bdos.asm:284-287`). With `HFLAG` clear, in a program's call,
 `LINHIST` sends the code on as an ordinary character into the buffer, as CP/M
-2.2's function 10 does (`src/cpm/bdos.asm:301-304`). With `HFLAG` set, it calls
-`HREC` (`src/cpm/bdos.asm:305`).
+2.2's function 10 does (`src/cpm/bdos.asm:315-318`). With `HFLAG` set, it calls
+`HREC` (`src/cpm/bdos.asm:319`).
 
 `HPOS` records the line shown, as the offset of its terminator
-(`src/ram.asm:144`). Each call of function 10 starts with `HPOS` equal to
+(`src/ram.asm:148`). Each call of function 10 starts with `HPOS` equal to
 `HHEAD`, the empty entry, which means no line is shown yet
-(`src/cpm/bdos.asm:235-236`). `HREC` works from `HPOS`
+(`src/cpm/bdos.asm:249-250`). `HREC` works from `HPOS`
 (`src/history.asm:53-102`):
 
 - For `^W` it steps back to the first byte of the shown entry with `HSTART`.
@@ -214,7 +214,7 @@ Function 10 passes `^W` and `^N`, codes 23 and 14 (`src/cpm/bdos.asm:41-42`), to
 
 To show the entry, `HREC` erases what is in the buffer with `LINERASE`, the
 routine behind `^X`, which takes the characters off one at a time and erases
-each on the console (`src/cpm/bdos.asm:397-408`). `HREC` then copies the entry's
+each on the console (`src/cpm/bdos.asm:411-422`). `HREC` then copies the entry's
 bytes into the buffer with `HGET`, counting and echoing each one, as if it had
 been typed, up to the buffer's maximum (`src/history.asm:83-102`). Function 10
 then goes on reading keys, and the recalled characters are edited like typed
@@ -225,8 +225,8 @@ ones.
 A warm boot leaves the history as it was. Nothing in the warm boot path writes
 to EXPAND 1's page at `BD00h`, and `HHEAD` is in the part of the workspace above
 the RAM BIOS table at `BF00h`, outside the RAM that `CPMINIT` clears
-(`src/boot.asm:75-91`, `src/boot.asm:265-269`, `src/ram.asm:192`,
-`src/ram.asm:221`). A program's exit, a `^C` at the prompt and BDOS function 0
+(`src/boot.asm:81-97`, `src/boot.asm:271-275`, `src/ram.asm:196`,
+`src/ram.asm:225`). A program's exit, a `^C` at the prompt and BDOS function 0
 all keep it. Here `^C` at the prompt was followed by `^W`:
 
 <!-- node tools/capture.mjs CON "^C" "@start "$'\x17' -->
@@ -241,11 +241,11 @@ A>
 
 A reset clears it. Cold boot clears the resident workspace, `HHEAD` with it
 (`src/boot.asm:34-38`), and `MEMINIT` fills all of EXPAND 1 with 0 before it
-marks the cache's lines empty (`src/boot.asm:150-163`). The page at `BD00h` is
+marks the cache's lines empty (`src/boot.asm:156-169`). The page at `BD00h` is
 then all zeros, `HHEAD` is 0 and the byte before it, at offset `FFh`, is 0, so
 the ring is empty and still kept as `HSTORE` and `HREC` require. This holds for
 a recognised reset too, the one that keeps the selected volumes, since only the
-drive table is carried across it (`src/boot.asm:141-145`). After the reset in
+drive table is carried across it (`src/boot.asm:147-151`). After the reset in
 this run, `^W` and Return gave an empty line:
 
 <!-- node tools/capture.mjs CON "@reset" "@start "$'\x17' -->
