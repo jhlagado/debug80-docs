@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 15. The BIOS and the console path
 
-Checked against TEC-OS 626ee41.
+Checked against TEC-OS 5a25178.
 
 The BIOS is the part of a CP/M system written for one machine, and on the TEC-1G
 most of it is the console. That console has a serial port made of two port bits
@@ -374,7 +374,8 @@ to draw on it directly (`src/services.asm:99-119`). While it is claimed and is t
 `VTOWN` reports it and the terminal leaves the display alone: `BCONOUT` drops
 output, and there is no cursor and no page flip (`src/term.asm:533-544`). The
 claim ends with the hardware service's release or at warm boot, when `HWVREL`
-gives the display back to the driver (`src/boot.asm:84`).
+gives the display back to the driver before it rebuilds page zero
+(`src/boot.asm:80-82`).
 
 The ROM's own part of the PICO9918 is the probe at cold boot. `TMSINIT` writes
 `5Ah` to VRAM address `3FFFh` through ports `BFh` and `BEh` and reads it
