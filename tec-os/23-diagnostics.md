@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 23. Diagnostics
 
-Checked against TEC-OS 58d4345. The diagnostics ROM in this chapter is version
+Checked against TEC-OS 621201d. The diagnostics ROM in this chapter is version
 0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit.
 
 Two parts of the repository report what is wrong with a board. The TEC-OS ROM
@@ -24,33 +24,35 @@ with its remedy.
 Cold boot sets up the LCD and the card at `COLDRT`, on the BDOS's stack, which
 nothing else uses before the CCP runs (`src/boot.asm:63-64`). It starts the card with `SDINIT` and checks the container with `MOUNT`, and a
 failure of either jumps to `DIAG` with an error code in `A`
-(`src/boot.asm:67-70`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
-`MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:13-24`). The banner is
+(`src/boot.asm:67-70`). The code is one of `SDINIT`'s, `01h` to `04h` and
+`0Bh`, or one of `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`,
+`src/sd.asm:20`, `src/vol.asm:13-24`). The banner is
 printed before the card is touched (`src/boot.asm:52-53`), so it appears
 whatever the card holds. Only the RAM check, `CONINIT`, which starts the PICO9918's console, and the
 clock's test come before it (`src/boot.asm:36-51`). `RAMCHK` writes
 and reads back the bytes at `8000h` and `BFFFh` and looks for EXPAND 1 behind
 the window, and a board that lacks either prints `TEC-OS needs 64K RAM` on the
-serial port and stops there (`src/boot.asm:36`, `src/boot.asm:296-326`,
+serial port and stops there (`src/boot.asm:36`, `src/boot.asm:323-358`,
 `src/text.asm:5`). After the banner `MEMINIT` empties the block cache's lines,
 before the first mount reads the container's table through a line
 (`src/boot.asm:54`).
 
-`DIAG` resets the stack to the BDOS's, as `COLDRT` does, since a mount that
-failed part way may have left it deep, and keeps the code on it
-(`src/boot.asm:429-432`). The BIOS's stack then holds only warm boot's use, as
+`DIAG` runs on the BDOS's stack as `COLDRT` set it. Both jumps to `DIAG` are
+`COLDRT`'s, made after its calls have returned, so the stack is at its top, and
+`DIAG` keeps the code on it (`src/boot.asm:463-471`). The BIOS's stack then holds only warm boot's use, as
 Chapter 20's stack figures assume. It writes
 `CARD?` on the LCD's last row (`src/boot.asm:472-473`, `src/text.asm:10`,
 `src/lcd.asm:45`) and then prints `No volume mounted, error ` and the code as
 two hexadecimal digits (`src/boot.asm:474-478`, `src/text.asm:8`).
 
 At the prompt `R retry> ` (`src/text.asm:9`), `DIAG` reads one key with
-`BCONIN`, turns a small letter into a capital, echoes it and ends the line
-(`src/boot.asm:479-485`). Any key but `R` gives the prompt again
+`BCONIN`, echoes it as typed and ends the line, and only then turns a small
+letter into a capital for the test, so `r` retries too and a digit echoes as
+the digit (`src/boot.asm:479-487`). Any key but `R` gives the prompt again
 (`src/boot.asm:489`). On a board with the PICO9918 and the matrix keyboard the
 console at this point is the ROM's PICO9918 console, which cold boot starts
 before the banner, so the prompt is on that screen and the key comes from the
-matrix keyboard (`src/video.asm:7-11`, `src/pico.asm:27-44`). On any other board
+matrix keyboard (`src/video.asm:8-10`, `src/pico.asm:27-47`). On any other board
 it is the serial terminal, since the graphics LCD's driver is on the card. So on
 a board with no PICO9918 and no terminal attached, the LCD's `CARD?` is the only
 sign. Here the model has a PICO9918 and an empty socket, and `H` was typed at
@@ -75,7 +77,7 @@ which Chapter 14 explains. `RSLCAP` copies the drive table to `RSLBUF` before
 cold boot clears anything (`src/boot.asm:28`). `RSLBUF` is at `0100h`, in the
 fixed RAM (`src/layout.asm:84`), and nothing on the path from there to the
 prompt writes it: `MEMINIT` clears EXPAND 1 alone, and the mount reads the
-table into a line in EXPAND 1 (`src/boot.asm:54`, `src/boot.asm:156-172`,
+table into a line in EXPAND 1 (`src/boot.asm:54`, `src/boot.asm:169-188`,
 `src/vol.asm:278-310`).
 
 ## The diagnostics ROM
