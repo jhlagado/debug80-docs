@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 20. The hardware services and the service loader
 
-Checked against TEC-OS 621201d, with the starter card's `TAS.COM` from Thorium
+Checked against TEC-OS 78127ec, with the starter card's `TAS.COM` from Thorium
 dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -445,9 +445,16 @@ and carry from `INIT` goes to the failure path (`src/loader.asm:247-248`,
 record's first byte, then its last, then the high byte of its table address.
 Each check uses `SVCCK` against `D` and `E` (`src/loader.asm:268-287`,
 `src/loader.asm:403-408`). Since `SVCCK` compares pages, a record can't cross out
-of the service and a link can't leave it. `B` starts at 0, so `DJNZ` allows 255
-records, and a list of 256, or one that loops, ends the walk (`src/loader.asm:254`,
-`src/loader.asm:288`, `test/svc.test.mjs:256`).
+of the service and a link can't leave it. Before the walk, `SVCNT` follows the
+links from `REGHEAD` to count the N records already in the registry, and `B`
+starts at 1 − N, or at 0 with the registry empty (`src/loader.asm:250-267`). `DJNZ`
+then allows 256 − N records, or 255 with the registry empty, so the registry
+never holds more than the 256 records that `FIND` and `LIST` walk. A list
+longer than that, or one that loops, ends the walk and the load fails
+(`src/loader.asm:288`, `test/svc.test.mjs:256`, `test/svc.test.mjs:267-306`). On
+a board whose PICO9918 console started, a service of 128 records and then one
+of 127 load, with the console's record the 256th and still found, and a
+second service of 128 is refused.
 
 With the walk done, `SVCLK` writes the first record's address to `REGHEAD`, the
 head of the registry. It writes the old head into the last record's link, which
@@ -520,7 +527,10 @@ A program can make the list into a cycle, so the walk has a limit. `B` is 0 at
 (`src/loader.asm:500-502`, `test/svc.test.mjs:580`). That walk uses at most 8
 bytes of the caller's stack, three `PUSH`es and the return address
 (`src/loader.asm:466-468`). `abi.inc` gives 8 bytes as the bound for each of the
-two, the dispatcher's included (`src/abi.inc:82-90`). The registry has no service for
+two, the dispatcher's included (`src/abi.inc:82-90`). The loader's count of the
+registry before a load has no limit of rounds: `SVCNT` stops only at a link of 0, so after a
+program has made the list a cycle the next service load doesn't return, and
+only a reset ends it (`src/loader.asm:258-265`). The registry has no service for
 removal. Number 16, one past `FONT`, returns carry from the dispatcher, and the
 service stays found (`test/svc.test.mjs:386`).
 
