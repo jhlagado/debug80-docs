@@ -723,8 +723,8 @@ Demo stopped.
 A>
 ```
 
-`GLCD: no` is `INFO`'s bit 2, clear on this board because the startup file
-leaves `GLCD.SVC` out. The transcript is everything the console was sent. The
+`GLCD: no` is `INFO`'s bit 2, clear on this board because the startup file's
+`GLCD.SVC` line installs nothing while the PICO9918 is the console. The transcript is everything the console was sent. The
 PICO9918 showed the first lines until the claim, and what it shows after the
 release is this:
 

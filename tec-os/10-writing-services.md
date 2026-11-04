@@ -285,7 +285,9 @@ listed.
 A display driver's `INIT` hands the ROM its table through service 12,
 `TNDRVR`, with `B = 3` for `UC1:`, as `GLCD.SVC` does. `TNDRVR` refuses
 `B = 1`, since the table for `CRT:` is the ROM's own PICO9918 console, so the
-`PICO.SVC` of an older card fails its `INIT` and leaves nothing loaded. A
+`PICO.SVC` of an older card fails its `INIT` and leaves nothing loaded. In a
+line of `STARTUP.CMD` while `CON:` is `CRT:` it refuses with status 2, so a
+driver that returns that status passes quietly and stays out. A
 driver draws its characters from the ROM's font, whose address service 15,
 `TNFONT`, returns, and carries no font of its own.
 
@@ -503,8 +505,8 @@ CRLF:	DB	13,10,"$"
 ```
 
 `recs.asm` goes on the card as the others did. With the starter card on a board with both
-displays, the startup file leaves `GLCD.SVC` out while the PICO9918 is the
-console, so `COUNT.SVC` loads. With `COUNT.SVC` from `makeSvc` on the card,
+displays, the startup file's `GLCD.SVC` line installs nothing while the
+PICO9918 is the console, so `COUNT.SVC` loads. With `COUNT.SVC` from `makeSvc` on the card,
 `RECS` then finds two records:
 
 <!-- node tools/capture.mjs --card svc.img --board pico B: "TAS RECS" COUNT.SVC RECS -->

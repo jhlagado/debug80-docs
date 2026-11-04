@@ -242,8 +242,9 @@ keyboard is there, and with either missing the PICO9918's console doesn't
 start. It takes no memory from programs.
 
 The graphics LCD's console is a driver, `GLCD.SVC`, a file on the card that
-TEC-OS loads into memory below the BDOS. Chapter 1 showed the starter card's
-startup file installing it before the first prompt. It installs only on a
+TEC-OS loads into memory below the BDOS. The starter card's startup file installs
+it before the first prompt on a board with the graphics LCD and no PICO9918
+console (Chapter 5). It installs only on a
 board that has the graphics LCD and the matrix keyboard. When it installs it
 makes the graphics LCD the console, unless the PICO9918 is the console, which
 then keeps it until `CON UC1`. A `GLCD.SVC` line in the startup file installs

@@ -319,10 +319,12 @@ B>
 ```
 
 A number above 255 is refused in the same way, as `SAVE 320 X.COM` gives
-`320?`. A file of the same name is erased first. When the drive or its
-directory is full, `SAVE` closes the file and prints `NO SPACE`, so the file
-keeps the pages written before the drive filled. CP/M 2.2's `SAVE` leaves the
-file open there, and those pages in no directory entry.
+`320?`. A file of the same name is erased first. When the directory has
+no room for the file, `SAVE` prints `NO SPACE` and makes none. When the drive
+or the directory fills during the writes, `SAVE` closes the file and then
+prints `NO SPACE`, so the file keeps the pages written. CP/M 2.2's `SAVE`
+leaves the file open there, and the pages of its last extent in no directory
+entry.
 
 ## Drives
 
@@ -399,7 +401,7 @@ service is code that TEC-OS keeps in memory below the BDOS until a reset or
 services installed, the newest first, each with the number of 256-byte pages it
 takes. `UNLOAD` removes the newest one if that service can be removed, and
 otherwise it changes nothing and prints `UNLOAD?`. It prints the same with no
-service installed. On the web page's board the startup file's `GLCD.SVC` line
+service installed. On the web page's board with the starter card, the startup file's `GLCD.SVC` line
 installs nothing, as Chapter 1 showed, but typed at the prompt `GLCD.SVC`
 installs the driver and leaves the console on the PICO9918:
 

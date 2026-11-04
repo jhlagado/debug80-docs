@@ -523,8 +523,8 @@ a card with no volume for drive A. Appendix D lists them all.
 
 `R` or `r` starts cold boot again from the point where it sets up the LCD and the
 card, so after you fix or insert the card `R` reaches the prompt without a
-reset. Each key typed there is echoed on a line of its own, and any key but
-`R` or `r` then prints the prompt again. While TEC-OS waits
+reset. Each key typed there is echoed after the prompt, and any key but `R` or
+`r` then prints the prompt again on the next line. While TEC-OS waits
 at the diagnostic prompt, the LCD's last row shows `CARD?`, for a board with
 no terminal attached:
 

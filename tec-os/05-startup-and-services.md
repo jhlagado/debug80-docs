@@ -162,7 +162,7 @@ Chapter 11's `!` and `:` work in a startup line too. A `.SVC` file that
 doesn't install counts as a failed command, so a command after it that starts
 with `:` is dropped. The exception is a startup line whose driver finds its
 device missing, or one of the display lines described below that has nothing
-to do on its board. It fails quietly, as `GLCD.SVC` did in Chapter 1, and doesn't
+to do on its board. Each is quiet, as `GLCD.SVC` was in Chapter 1, and doesn't
 count as a failure, so a `:` command after it runs. Here the file's two lines
 are `GLCD.SVC!:MOUNT` and `NOSUCH.SVC!:MOUNT`, on the board with only a serial
 terminal:
@@ -331,7 +331,7 @@ A>
 ```
 
 On a board where the PICO9918's console didn't start, the width line passes
-quietly at each boot, as a driver's line for a missing device does, so a `:`
+quietly at each boot, as a driver's line for a missing device is, so a `:`
 command after it runs. Typed at the prompt there, the same command fails with
 `32?`. On the serial board the card boots like this:
 
