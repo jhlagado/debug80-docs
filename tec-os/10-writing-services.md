@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 10. Writing services
 
-Checked against TEC-OS 626ee41. The programs were assembled by the starter
+Checked against TEC-OS 5a25178. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -210,14 +210,14 @@ COUNT.SVC written
 <!-- the same run, continued -->
 ```text
 B>AREA
-46869 bytes
+47347 bytes
 
 B>COUNT.SVC
 
 B>SERVICES
 COUNT 1
 B>AREA
-46592 bytes
+46848 bytes
 
 B>CHARS
 count 003A
@@ -229,7 +229,7 @@ B>UNLOAD
 
 B>SERVICES
 B>AREA
-46869 bytes
+47347 bytes
 
 B>CHARS
 no COUNT record
@@ -238,8 +238,8 @@ B>
 ```
 
 The file is 100 bytes of header and image and 11 of relocation data. It takes
-a whole page, so `SERVICES` shows 1 page. The TPA falls by 277 bytes, that page
-and the 21 bytes from `B800h` to `B814h`, and `UNLOAD` gives them back.
+a whole page, so `SERVICES` shows 1 page. The TPA falls by 499 bytes, that page
+and the 243 bytes from `B900h` to `B9F2h`, and `UNLOAD` gives them back.
 The count rose by 18h, 24, between the two
 `CHARS` commands, the characters the console printed in between, because the
 hook stayed through each program's warm boot.
@@ -503,8 +503,8 @@ RECS.COM written
 B>COUNT.SVC
 
 B>RECS
-COUNT    version 01 table B15F
-PICO     version 02 table B219
+COUNT    version 01 table B25F
+PICO     version 02 table B319
 
 B>
 ```
