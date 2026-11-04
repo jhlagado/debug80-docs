@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. The SD card and the volumes
 
-Checked against TEC-OS 5a25178.
+Checked against TEC-OS 58d4345.
 
 The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
@@ -193,7 +193,7 @@ A>DIR B:
 Bdos Err On B: Bad Sector
 A>DIR A:*.CMD
 STARTUP.CMD 
-1 file, 978K free
+1 file, 980K free
 A>
 ```
 
@@ -398,5 +398,5 @@ A>
 
 A card of format 1.1 with a drives field of 4 gives each of A to D a 256-byte
 slot at cold boot, so on such a card `MOUNT C:` with a volume that is on no
-other drive succeeds. The slots cost TPA: with four of them the TPA is 46,643
+other drive succeeds. The slots cost TPA: with four of them the TPA is 46,564
 bytes, 704 fewer than the starter card gives.
