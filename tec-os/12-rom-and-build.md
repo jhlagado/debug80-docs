@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 12. The ROM and its build
 
-Checked against TEC-OS 5a25178.
+Checked against TEC-OS 58d4345.
 
 TEC-OS is one 16 KiB image for the addresses `C000h–FFFFh`. This chapter
 describes the image's layout, from the jump at its first byte to the free
@@ -24,34 +24,34 @@ The ROM has five parts, in this order:
 | --- | ---: | --- |
 | `C000h–C002h` | 3 | the reset jump |
 | `C003h–C00Ah` | 8 | the ROM table |
-| `C00Bh–C346h` | 828 | the data |
-| `C347h–F85Ch` | 13,590 | the code |
-| `F85Dh–FFFFh` | 1,955 | free |
+| `C00Bh–C609h` | 1,535 | the data |
+| `C60Ah–FE04h` | 14,331 | the code |
+| `FE05h–FFFFh` | 507 | free |
 
-The figures are those of the build at commit 5a25178. The build writes them to
+The figures are those of the build at commit 58d4345. The build writes them to
 `build/tecos/census.json` and, through `npm run media`, to the table of the
 ROM's regions in `docs/memory-map.md`. The used part, from `C000h` to the end
-of the code, is 14,429 of the 16,384 bytes.
+of the code, is 15,877 of the 16,384 bytes.
 
-The first three bytes are a jump, `JP RSTENT` (`src/reset.asm:7`), to `C347h`,
+The first three bytes are a jump, `JP RSTENT` (`src/reset.asm:7`), to `C60Ah`,
 the first byte of the code. Chapter 14 describes how the Z80 reaches it at
 reset.
 
 The ROM table at `C003h` is the fixed interface for programs and services
 (`src/abi.asm:7-10`). It is 8 bytes long. It starts with the signature `TNA`
-and the ABI's major and minor version, 5 and 0. At `C008h` is its one jump, to
+and the ABI's major and minor version, 5 and 1. At `C008h` is its one jump, to
 `SVCDSP`, the dispatcher of the numbered services. Chapter 9 describes the
 table from a program's side and Chapter 20 the services behind it. The table
 ends at `C00Bh`, where the data begins.
 
 The data block runs from the label `ROMDATA` (`src/tables.asm:7`) to `ROMCODE`
-(`src/text.asm:69`). Three files that follow one another in the assembly make
-it up: `tables.asm`, the generated `gen/geom.asm` and `text.asm`
-(`src/rom.asm:11-14`). They hold the messages, the table of the built-in
-commands' words and their handlers, the keyboard's tables, the container's name
-and disk parameters, the BDOS's function table and the table of the numbered
-services (`src/tables.asm:29-31`, `src/tables.asm:40-60`, `src/tables.asm:65`,
-`src/tables.asm:77`). Each group is headed by the name of the source file
+(`src/text.asm:69`). Four files that follow one another in the assembly make
+it up: `tables.asm`, the generated `gen/geom.asm` and `gen/font.asm`, and
+`text.asm` (`src/rom.asm:11-14`). They hold the messages, the table of the
+built-in commands' words and their handlers, the keyboard's tables, the
+container's name and disk parameters, the console's font, the BDOS's function
+table and the table of the numbered services (`src/tables.asm:29-31`,
+`src/tables.asm:40-60`, `src/tables.asm:65`, `src/tables.asm:77-84`). Each group is headed by the name of the source file
 whose code uses it, so `CWMSG`, the text `Write lost`, sits under `cache.asm`
 (`src/text.asm:66-67`). Nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
 (`src/tables.asm:10-26`) is in the block as the source of the copy that programs
@@ -78,30 +78,31 @@ assembled in the order they are listed (`src/rom.asm:1-3`):
 %INCLUDE "abi.asm"
 %INCLUDE "tables.asm"
 %INCLUDE "gen/geom.asm"
+%INCLUDE "gen/font.asm"
 %INCLUDE "text.asm"
 %INCLUDE "boot.asm"
 ```
 
 The list goes on through `bios.asm`, `console.asm`, `keyboard.asm`, `term.asm`,
-`video.asm`, `tms.asm`, `lcd.asm`, `sd.asm`, `vol.asm`, `cpm/ccp.asm`,
+`video.asm`, `tms.asm`, `pico.asm`, `lcd.asm`, `sd.asm`, `vol.asm`, `cpm/ccp.asm`,
 `cpm/bdos.asm`, `services.asm`, `cache.asm`, `history.asm` and `loader.asm`,
 and ends with `end.asm` (`src/rom.asm:16-32`).
 
 The first five files emit no bytes. `abi.inc`, `gen/config.asm` and
 `gen/format.asm` are equates. So is `layout.asm`, which names the ports, the
-system latch's values, TEC-OS's bytes in page zero and the fixed addresses in
-RAM (`src/layout.asm:8-84`). `abi.inc` is the file that programs and services
+system latch's values, TEC-OS's one byte in page zero and the fixed addresses
+in RAM (`src/layout.asm:8-84`). `abi.inc` is the file that programs and services
 assemble with, so the ROM takes the table's addresses and the services' numbers
 from the same equates as a program does (`src/rom.asm:4`). `ram.asm` names the resident workspace: it sets the
 origin to `WSBASE` and reserves each variable with `DS`, which defines a label
 and moves the address on without emitting anything (`src/ram.asm:6`,
-`src/ram.asm:9-195`). A second origin, at `RAMBIOS+BIOSLEN`, places the state
-that sits above the RAM BIOS table (`src/ram.asm:197-272`). Chapter 13
+`src/ram.asm:9-196`). A second origin, at `RAMBIOS+BIOSLEN`, places the state
+that sits above the RAM BIOS table (`src/ram.asm:198-272`). Chapter 13
 describes that memory. Bytes start with `reset.asm` and its `ORG $C000`
 (`src/reset.asm:6`), and from there each file's bytes follow the last's.
 
 The table follows the reset jump because `abi.asm` follows `reset.asm`. The
-data follows the table because the three data files come next, and the code
+data follows the table because the four data files come next, and the code
 follows the data because every file after `text.asm` is code. So a code
 file's routines are in the code block, and its strings and tables are in the
 data block, under a heading with the file's name (`src/rom.asm:9-15`,
@@ -110,8 +111,9 @@ data block, under a heading with the file's name (`src/rom.asm:9-15`,
 ## The generated files
 
 The source needs settings that depend on the build, and a container layout it
-shares with the tools on the PC. So before assembling, the build writes three
-files into `src/gen/`, each headed with a line saying it is generated and not
+shares with the tools on the PC, and the font it shares with the diagnostics
+ROM and the tests. So before assembling, the build writes four files into
+`src/gen/`, each headed with a line saying it is generated and not
 to be edited (`tools/build.mjs:60-138`).
 
 `gen/config.asm` holds the settings that depend on the build. `WSBASE` is the
@@ -122,7 +124,7 @@ the banner and the LCD's top row print from (`src/text.asm:6`,
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,
-`tools/build.mjs:36-58`). At 5a25178 they are 49, 105, 50, 70 and 77, and the
+`tools/build.mjs:36-58`). At 58d4345 they are 49, 105, 50, 70 and 77, and the
 build stops with an error if a count would not fit in a byte
 (`tools/build.mjs:45-47`). Chapter 15 explains the loops and the arithmetic
 behind the counts.
@@ -136,11 +138,19 @@ drives, and the two geometries with their disk parameter blocks.
 `gen/format.asm` turns the field offsets and limits into equates, such as
 `HCOUNT EQU 14` for the volume count's offset in the header and `DMOUNT EQU 14`
 for the drive byte's offset in a descriptor (`tools/build.mjs:79-113`).
-`gen/geom.asm` holds bytes, and it is the one generated file included in the
-data block (`src/rom.asm:12`). It has the container's name as `FMTMAG` and the two disk parameter
+`gen/geom.asm` holds bytes, and it is one of the two generated files included
+in the data block (`src/rom.asm:12`). It has the container's name as `FMTMAG` and the two disk parameter
 blocks, `DPB1` and `DPB2`. Its table `GEOTAB` gives each geometry's id, its
 payload in blocks and the address of its disk parameter block
 (`tools/build.mjs:114-134`).
+
+`gen/font.asm`, the other, holds the console's 5×7 font as `FONT`, 8 bytes a
+character from `20h` to `7Fh`, 768 bytes in all. The build writes it from
+`format/font5x7.txt` through `tools/lib/font.mjs` (`tools/build.mjs:135-136`,
+`tools/lib/font.mjs:9-44`). Both consoles draw from this one copy: the ROM's
+PICO console by its label (`src/pico.asm:170`) and `GLCD.SVC` through service
+15, which returns its address (`src/services.asm:315-317`,
+`drivers/glcd.asm:34-37`).
 
 `tools/lib/format.mjs` reads the same `format.json`, and `tecvol` and the other
 tools on the PC use that module, so the ROM and the tools take the container's
@@ -165,8 +175,8 @@ the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
 therefore `BF00h` less the workspace's size, and the size is known only after
 an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
 build reads the address of `BDOSRME`, the label at the workspace's end, and
-takes `8000h` from it (`tools/build.mjs:227-231`). At 5a25178 that part is
-970 bytes, so the second assembly has `WSBASE` at `BB36h`
+takes `8000h` from it (`tools/build.mjs:227-231`). At 58d4345 that part is
+1,049 bytes, so the second assembly has `WSBASE` at `BAE7h`
 (`tools/build.mjs:232-234`).
 
 The second assembly's output is the ROM. `materializeAtomGeneration` turns it
@@ -177,8 +187,8 @@ them into a 16,384-byte array that is `FFh` everywhere else
 A separate module, `tools/lib/assemble.mjs`, assembles stand-alone programs
 with the same assembler, at `0100h` for a `.COM` file
 (`tools/lib/assemble.mjs:10-20`). `npm run media` uses it to build the starter
-card's `MOUNT.COM` and, through `makeSvc`, its two drivers
-(`tools/lib/svc.mjs:100`), and the web page's `DEMO.COM`
+card's `MOUNT.COM` and, through `makeSvc`, its one driver, `GLCD.SVC`
+(`tools/lib/starter.mjs:9-11`), and the web page's `DEMO.COM`
 (`tools/media.mjs:228`). `npm run media` also copies `programs/SAMPLE.ASM` to the card as a
 CP/M text file, with CR LF line ends and a `^Z` at the end
 (`tools/media.mjs:198-201`). The ROM's build does not use the module. The card's `TAS.COM` and
@@ -201,17 +211,18 @@ with `placement check failed:` and the rule's text
   the table ends (`tools/build.mjs:245-247`).
 - The table, the data and the code are in that order, and the code ends
   within the ROM (`tools/build.mjs:248-249`).
-- The table holds `TNA` and the version 5.0, its jump is `JP SVCDSP`, and it is
+- The table holds `TNA` and the version 5.1, its jump is `JP SVCDSP`, and it is
   8 bytes long. `SVCFMT` in `abi.inc` is the service format that the tools on
   the PC write. Every entry in the service table `SVTAB` is in the code, and the
   device bits in `abi.inc` are the `CD` bits of `layout.asm`
   (`tools/build.mjs:145-156`, `tools/build.mjs:250`).
-- The PICO driver's table offsets in `abi.inc` name the right entries in each
-  width of `PICO.SVC`, which the check builds (`tools/build.mjs:158-175`).
-- `drivers/font.asm` is the font that
-  `format/font5x7.txt` gives (`tools/build.mjs:176-176`).
-- Each service's source reaches the ROM only through the
-  names in `abi.inc` (`tools/build.mjs:178-189`).
+- The offsets of the PICO console's table in `abi.inc` name the right entries
+  in `PITPL`, the ROM's template that `PIBLK` is filled from, and the places a
+  debugger reads lie at their offsets in `PIBLK` (`tools/build.mjs:158-175`,
+  `tools/build.mjs:251`).
+- Each service's source, `drivers/glcd.asm` among them, reaches the ROM only
+  through the names in `abi.inc` (`tools/build.mjs:177-189`,
+  `tools/build.mjs:252`).
 - The RAM BIOS table is at `BF00h`, and the fixed workspace ends exactly there. The
   state above the table starts 51 bytes after it, at `SDBYTE`, and all of it
   ends by `C000h` (`tools/build.mjs:253-256`).
@@ -225,7 +236,7 @@ the arithmetic of cold boot's `ALVINIT`, which Chapter 13 describes: the
 allocation vectors packed down from `WSBASE`, and the BDOS entry jump below
 them (`tools/build.mjs:215-219`). The starter card has two volumes, a G1M
 whose last allocation block, `DSM`, is 511 and a G8M whose `DSM` is 2047. Their
-vectors take 320 bytes and the entry is at `B9F3h`, which leaves 47,347 bytes
+vectors take 320 bytes and the entry is at `B9A4h`, which leaves 47,268 bytes
 from `0100h`.
 
 ## One image
@@ -236,13 +247,14 @@ format, which `tools/capture.mjs` reads to find TEC-OS's labels. `census.json`
 holds the figures for the ROM's parts, the RAM's regions and the stacks
 (`tools/build.mjs:262-310`).
 
-The PICO9918's width is set by the driver loaded at startup (Chapter 5), so
-every board takes the same image. The build has one profile, `tecos`, and stops
+The PICO9918's console is in the ROM at each of its three widths, 80 columns
+from reset and 40 or 32 through `CON` (Chapter 15), and the GLCD's is a driver
+on the card, so every board takes the same image. The build has one profile, `tecos`, and stops
 with an error when it is given any other name (`tools/build.mjs:28-31`,
 `tools/build.mjs:321`). `npm run build` prints one line:
 
 ```text
-tecos: ROM 14429/16384 bytes, TPA $0100-$B9F2 (47347 bytes), sha256 3bcf5d24c78445fd
+tecos: ROM 15877/16384 bytes, TPA $0100-$B9A3 (47268 bytes), sha256 8bb1637d52039f3c
 ```
 
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
@@ -253,8 +265,8 @@ and `tecos.census.json` (`tools/media.mjs:179-185`). It builds the starter card
 prints a line of its own:
 
 ```text
-dist: 1 ROM profiles, 7 starter files, starter.img
+dist: 1 ROM profiles, 6 starter files, starter.img
 ```
 
 The ROM in `dist/` has the SHA-256
-`3bcf5d24c78445fdf965c85c42447cae9192c4dd2818d2d116bbbab775564e4f`.
+`8bb1637d52039f3c864d18a7b48819998f2315f0b5ad28fe2ea22e7150499e45`.
