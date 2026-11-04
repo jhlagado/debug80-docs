@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 23. Diagnostics
 
-Checked against TEC-OS 5a25178. The diagnostics ROM in this chapter is version
+Checked against TEC-OS 58d4345. The diagnostics ROM in this chapter is version
 0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit.
 
 Two parts of the repository report what is wrong with a board. The TEC-OS ROM
@@ -21,8 +21,8 @@ with its remedy.
 
 ## The diagnostic prompt
 
-Cold boot sets up the LCD and the card at `COLDRT` (`src/boot.asm:54`). It
-starts the card with `SDINIT` and checks the container with `MOUNT`, and a
+Cold boot sets up the LCD and the card at `COLDRT`, on the BDOS's stack, which
+nothing else uses before the CCP runs (`src/boot.asm:54-57`). It starts the card with `SDINIT` and checks the container with `MOUNT`, and a
 failure of either jumps to `DIAG` with an error code in `A`
 (`src/boot.asm:60-63`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
 `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:8-18`). The banner is
@@ -33,10 +33,12 @@ the window, and a board that lacks either prints `TEC-OS needs 64K RAM` on the
 serial port and stops there (`src/boot.asm:33`, `src/boot.asm:296-326`,
 `src/text.asm:5`). After the banner `MEMINIT` empties the block cache's lines,
 before the first mount reads the container's table through a line
-(`src/boot.asm:54`).
+(`src/boot.asm:51`).
 
-`DIAG` resets the stack to the BIOS's, since a mount that failed part way may
-have left it deep, and keeps the code on it (`src/boot.asm:429-432`). It writes
+`DIAG` resets the stack to the BDOS's, as `COLDRT` does, since a mount that
+failed part way may have left it deep, and keeps the code on it
+(`src/boot.asm:429-432`). The BIOS's stack then holds only warm boot's use, as
+Chapter 20's stack figures assume. It writes
 `CARD?` on the LCD's last row (`src/boot.asm:433-434`, `src/text.asm:10`,
 `src/lcd.asm:43`) and then prints `No volume mounted, error ` and the code as
 two hexadecimal digits (`src/boot.asm:435-439`, `src/text.asm:8`).
@@ -44,10 +46,22 @@ two hexadecimal digits (`src/boot.asm:435-439`, `src/text.asm:8`).
 At the prompt `R retry> ` (`src/text.asm:9`), `DIAG` reads one key with
 `BCONIN`, turns a small letter into a capital, echoes it and ends the line
 (`src/boot.asm:440-447`). Any key but `R` gives the prompt again
-(`src/boot.asm:450`). The console at this point is always the serial terminal.
-Cold boot starts it there, and no display driver has been installed, since the
-startup file is on the card. So on a board with no terminal attached, the LCD's
-`CARD?` is the only sign.
+(`src/boot.asm:450`). On a board with the PICO9918 and the matrix keyboard the
+console at this point is the ROM's PICO9918 console, which cold boot starts
+before the banner, so the prompt is on that screen and the key comes from the
+matrix keyboard (`src/video.asm:7-11`, `src/pico.asm:27-44`). On any other board
+it is the serial terminal, since the graphics LCD's driver is on the card. So on
+a board with no PICO9918 and no terminal attached, the LCD's `CARD?` is the only
+sign. Here the model has a PICO9918 and an empty socket, and `H` was typed at
+the prompt. The screen shows what the serial terminal shows:
+
+<!-- node tools/capture.mjs --card none --board pico --screen H -->
+```text
+TEC-OS 0.1 for TEC-1G
+No volume mounted, error 01
+R retry> H
+R retry>
+```
 
 `R` jumps back to `COLDRT` (`src/boot.asm:448-449`). That starts the LCD again,
 which clears `CARD?`, and then repeats the card's start and the mount, so a card
@@ -60,7 +74,7 @@ which Chapter 14 explains. `RSLCAP` copies the drive table to `RSLBUF` before
 cold boot clears anything (`src/boot.asm:25`). `RSLBUF` is at `0100h`, in the
 fixed RAM (`src/layout.asm:82`), and nothing on the path from there to the
 prompt writes it: `MEMINIT` clears EXPAND 1 alone, and the mount reads the
-table into a line in EXPAND 1 (`src/boot.asm:54`, `src/boot.asm:156-172`,
+table into a line in EXPAND 1 (`src/boot.asm:51`, `src/boot.asm:156-172`,
 `src/vol.asm:251-281`).
 
 ## The diagnostics ROM
@@ -80,7 +94,7 @@ diag: ROM 16318/16384 bytes, 56 free, image D90143609F53FAAB, checksum $47C0
 `tools/diag.mjs` generates two files (`tools/diag.mjs:51-77`).
 `diag/gen/config.asm` holds the version, the serial delay counts and the
 stopwatch constants, and `diag/gen/font.asm` comes from `format/font5x7.txt`,
-the same font file TEC-OS's display drivers use. The serial delays are worked
+the same font file the TEC-OS ROM's own font is built from. The serial delays are worked
 out from 4 MHz and 4800 baud as for TEC-OS (`tools/diag.mjs:37-49`). The script
 then assembles `diag/diag.asm` with ATOM, fills the unused bytes with `FFh` and
 writes `build/diag/diag.rom`, its symbol map and `build/diag/diag.json`
