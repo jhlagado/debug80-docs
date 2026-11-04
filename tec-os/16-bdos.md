@@ -36,8 +36,8 @@ the ROM assembles in this order (`src/rom.asm:30-35`):
 | `bdoslog.asm` | the reads and writes of directory records, the login and the allocation vectors |
 | `bdoscon.asm` | the errors and the console's output |
 
-In the ROM that Chapter 12 describes the BDOS runs from `E6E3h`, `BDOSBAS`, to
-`F5E0h`, 3,838 bytes. Its table of functions and its error messages are in the
+In the ROM that Chapter 12 describes the BDOS runs from `E703h`, `BDOSBAS`, to
+`F608h`, 3,846 bytes. Its table of functions and its error messages are in the
 ROM's data block (`src/tables.asm:67-78`, `src/text.asm:55-62`). None of it can
 be patched.
 
