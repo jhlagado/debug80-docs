@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 11. Chaining commands
 
-Checked against TEC-OS 626ee41, with the ATOM assembler from the
+Checked against TEC-OS 5a25178, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
 128edb7, and its copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. Its
@@ -234,7 +234,9 @@ in memory, ended by a 0 byte, sets the DMA address (Chapter 6) to it with
 function 26 and calls function 47. When the line is accepted the call doesn't
 return: TEC-OS copies the line and ends the program with a warm boot, and the
 CCP then runs the line next, in place of whatever was left of the line the
-program came from. This program, `RUN`, ends by running the rest of its own
+program came from. The warm boot writes the cache's changes to the card first,
+so what the program wrote is on the card before the chained command runs. This
+program, `RUN`, ends by running the rest of its own
 command line as a command:
 
 ```asm
@@ -333,6 +335,8 @@ A>
 
 Other ways a command can end leave the rest of the line to run. A program that
 prints its own error message and returns has succeeded unless it set the code.
+A BDOS error returned to a program that asked for that with function 45 leaves
+the line alone too.
 Esc or `Q` at `[more]` ends a `TYPE` or `DIR` listing and lets the line's next
 piece run, as it does after a listing that ran to its end. The key test clears
 one bit of the key, so `#` at `[more]` reads as `^C` and `;` reads as Esc.
