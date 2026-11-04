@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix F. `tecvol`
 
-Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -154,9 +154,8 @@ node tools/tecvol.mjs dir dist/starter.img A
 ```
 
 ```text
- 0 GLCD.SVC         1664
+ 0 GLCD.SVC          896
  0 MOUNT.COM         768
- 0 PICO.SVC         1408
  0 SAMPLE.ASM       4480
  0 STARTUP.CMD       128
  0 TAS.COM         10368
@@ -252,7 +251,7 @@ erased the file from user area 3 and printed nothing.
 `recipe RECIPE.json IMAGE` builds a card from a recipe, a JSON file that lists
 the volumes and the files to put on them (`tools/tecvol.mjs:165-171`).
 `npm run media` writes the starter card's recipe as `dist/starter.recipe.json`
-and builds `dist/starter.img` from it (`tools/media.mjs:205-224`). It also
+and builds `dist/starter.img` from it (`tools/media.mjs:206-225`). It also
 writes the web page's recipe, `dist/page.recipe.json`, which has the
 starter card's volumes and components with one more, `DEMO.COM` on drive A,
 and its own `id`, `name` and `instruction`
@@ -260,12 +259,7 @@ and its own `id`, `name` and `instruction`
 list of `volumes` and a list of `components`, each with `files`. Each volume is
 in `create`'s terms: a geometry, a label, a drive and `readOnly` or
 `writeBehind`. Each file has a name, a `url`, a drive, a size in `bytes`, a
-`sha256` and optionally a user area (`tools/lib/recipe.mjs:13-26`). Both of
-`npm run media`'s recipes also have `widths`, which gives the `url` and
-`sha256` of the PICO9918's driver built for each width, under the keys `80`,
-`40` and `32` (`tools/media.mjs:195-195`, `tools/media.mjs:212`). `tecvol`
-doesn't read it. The web page fetches those drivers at power-on, as
-[Chapter 21](21-startup.md#the-web-page-s-rewrite) describes.
+`sha256` and optionally a user area (`tools/lib/recipe.mjs:13-26`).
 
 `tecvol` reads a file's `url` as a web address if it starts `http://` or
 `https://`, and otherwise as a path from the recipe's own folder
@@ -280,8 +274,8 @@ sha256sum build/fresh.img dist/starter.img
 ```
 
 ```text
-0764d1b722d506362a547b3da58fe15eed4ca9551a5e5de1d9938ba8ad4fd1b9  build/fresh.img
-0764d1b722d506362a547b3da58fe15eed4ca9551a5e5de1d9938ba8ad4fd1b9  dist/starter.img
+f828071db005cb5ae422306dd9165fc2ed2fb4047e15055df3970ac71ecfd442  build/fresh.img
+f828071db005cb5ae422306dd9165fc2ed2fb4047e15055df3970ac71ecfd442  dist/starter.img
 ```
 
 The two images are the same to the byte: the volumes' places, the `E5h` fill,
