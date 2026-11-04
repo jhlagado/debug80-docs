@@ -618,7 +618,7 @@ reserves three stacks, of the sizes at `src/layout.asm:71-73`:
 
 | Stack | Reserved | Base | Census | `SVCLIM` |
 | --- | ---: | ---: | ---: | ---: |
-| BDOS | 54 | 32 | 32 | 8 |
+| BDOS | 54 | 30 | 30 | 8 |
 | BIOS | 40 | 18 | 18 | 12 |
 | CCP | 32 | 18 | 18 | 6 |
 
@@ -628,7 +628,7 @@ passes only with a quarter of each stack free (`test/stacks.test.mjs:246-247`).
 Base is the same figure from the runs with no service in, on the serial
 terminal, the PICO9918 and a volume written behind, at the diagnostic console,
 through `CON PICO 40`, `32` and `80`, at a recognised reset and with chained
-lines: 32, 18 and 18 (`test/stacks.test.mjs:253-255`). The BIOS's 18 is warm
+lines: 30, 18 and 18 (`test/stacks.test.mjs:253-255`). The BIOS's 18 is warm
 boot's write of the lines written behind. Cold boot mounts and lists the drives
 on the BDOS's stack, which nothing uses before the CCP runs, and the diagnostic
 console runs there too (`src/boot.asm:63-64`, `src/boot.asm:467-469`). No run
@@ -636,7 +636,7 @@ goes deeper than the base, the runs with `GLCD.SVC` included, so the census and
 the base are the same.
 
 `SVCLIM` holds the limits, 8, 12 and 6 (`src/tables.asm:96`), and they are
-counted from the base. Added to the base they give 40 of 54, 30 of 40 and 24 of
+counted from the base. Added to the base they give 38 of 54, 30 of 40 and 24 of
 32, so each stack keeps at least a quarter free with its limit taken, as the
 test checks (`test/stacks.test.mjs:254-258`). At this commit `GLCD.SVC` declares
 2, 0 and 6 (`drivers/glcd.asm:19`), more than the runs show it using on the BDOS's
