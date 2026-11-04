@@ -2402,7 +2402,7 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
-          "text": "Introduction and first boot",
+          "text": "Introduction",
           "link": "/tec-os/01-introduction.html"
         },
         {
