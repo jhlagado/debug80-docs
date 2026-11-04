@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 11. Chaining commands
 
-Checked against TEC-OS 58d4345, with the ATOM assembler from the
+Checked against TEC-OS 621201d, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
 128edb7, and its copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. Its
@@ -317,6 +317,7 @@ These events drop what is left of a line:
 - a call to function 47, whose line replaces the rest
 - `^C` typed while a line that a program reads with BDOS function 10 is
   empty
+- `^C` typed after `^S` has stopped a program's output (Chapter 8)
 - `^C` at the `[more]` of a `TYPE` or `DIR` listing
 - the key that ends a BDOS error, such as `Bdos Err On C: Select`
 - a `Write lost` message at a warm boot, which Chapter 4 describes
