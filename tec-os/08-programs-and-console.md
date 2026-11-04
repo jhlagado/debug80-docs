@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 8. Programs and the console
 
-Checked against TEC-OS 5a25178, with the ATOM assembler from the
+Checked against TEC-OS 58d4345, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
 128edb7, and its copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
@@ -69,14 +69,16 @@ other, and `CONOUT` expands no tab and checks for no key.
 
 The routines behind these calls leave the interrupt state as they found it. The
 serial port's routines hold interrupts off while a byte goes out or comes in,
-and `PICO.SVC` holds them off for each pair of writes to the video chip's
-control port. The routines keep the cursor at `0046h–0047h`, the escape sequence at `004Ah–004Ch` and the
-video attributes at `004Eh` and `004Fh`, all fixed bytes, so an interrupt
-routine must not print through the console.
+and the ROM's PICO9918 console holds them off for each pair of writes to the
+video chip's control port. The routines keep the cursor at `BFE8h–BFE9h`, the
+escape sequence at `BFECh–BFEEh` and the video attributes at `BFF0h` and
+`BFF1h`, all fixed bytes in the workspace, so an interrupt routine must not
+print through the console.
 
 The calls also run on the caller's stack, and on a display so do the ROM's
-terminal and the routines of `PICO.SVC` or `GLCD.SVC` beneath them. On the
-model, a direct call with nothing pushed used at most 24 of the CCP's 28 bytes.
+terminal and the routines of its PICO9918 console or of `GLCD.SVC` beneath
+them. On the model, a direct call with nothing pushed used at most 22 of the
+CCP's 30 bytes.
 That figure is the lowest `SP` below its value at the program's entry, and it
 counts the call's return word. It came from a call that cleared a display after
 a change to the IOBYTE. That is the deepest path measured and not a proved worst
@@ -363,7 +365,7 @@ A>B:SIZE
 80 columns, 24 rows
 
 A>CON UC1
-CON: UC1: GLCD
+CON: UC1:
 A>B:SIZE
 21 columns, 8 rows
 
