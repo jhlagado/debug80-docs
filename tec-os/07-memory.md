@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 7. Memory for programs
 
-Checked against TEC-OS 58d4345, with the ATOM assembler from the
+Checked against TEC-OS 621201d, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7.
 
 A program on TEC-OS has most of the Z80's memory to itself, and the rest is
@@ -110,15 +110,16 @@ A>
 ```
 
 With the starter card on a board with both displays, the PICO9918's console is in the ROM and takes no
-memory below the word. The startup file's `GLCD.SVC` loads and leaves the
-console on the PICO9918, so the word falls once, and `CON UC1` then makes the
-graphics LCD the console with nothing more to load. `B:TOP`, its reply and the
+memory below the word. The startup file's `GLCD.SVC` line passes over the
+driver quietly while the PICO9918 is the console, so the word is as on the
+serial board. `CON UC1` then loads `GLCD.SVC` from the card and makes the
+graphics LCD the console, and the word falls once. `B:TOP`, its reply and the
 echo of `CON UC1` appeared on the PICO9918, and the rest on the graphics LCD:
 
 <!-- node tools/capture.mjs --board pico --card mem.img B:TOP "CON UC1" B:TOP -->
 ```text
 A>B:TOP
-B600h
+B9A4h
 
 A>CON UC1
 CON: UC1:
