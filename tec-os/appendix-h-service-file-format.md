@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix H. The service file format
 
-Checked against TEC-OS 58d4345, with the starter card's `TAS.COM` from Thorium
+Checked against TEC-OS 621201d, with the starter card's `TAS.COM` from Thorium
 dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -117,22 +117,22 @@ is asked for another, and the loader reads only the gap list
 ## GLCD.SVC
 
 `GLCD.SVC` on the starter card is the graphics LCD's driver. Its header and the
-first part of its image, and then its relocation data from offset 765:
+first part of its image, and then its relocation data from offset 767:
 
 ```sh
 xxd -g 1 -l 48 dist/files/GLCD.SVC
-xxd -g 1 -s 765 dist/files/GLCD.SVC
+xxd -g 1 -s 767 dist/files/GLCD.SVC
 ```
 
 ```text
-00000000: 44 04 00 01 4e 00 fd 02 00 00 45 00 02 00 06 2b  D...N.....E....+
-00000010: 00 47 4c 43 44 20 20 20 20 f0 00 4b 01 50 01 c7  .GLCD    ..K.P..
-00000020: 00 a5 00 b4 00 00 00 15 08 00 00 0e 0f cd 08 c0  ................
-000002fd: 02 02 02 02 02 02 0f 03 09 09 08 29 08 04 0a 03  ...........)....
-0000030d: 03 06 03 03 08 04 0c 04 09 03 04 06 0d 13 08 04  ................
-0000031d: 22 06 05 03 04 04 05 09 08 09 10 03 07 06 04 03  "...............
-0000032d: 04 04 03 0a 08 0f 03 06 03 04 11 0a 07 0a 06 06  ................
-0000033d: 18 05 17 07 05                                   .....
+00000000: 44 04 00 01 4e 00 ff 02 00 00 45 00 02 00 06 2b  D...N.....E....+
+00000010: 00 47 4c 43 44 20 20 20 20 f2 00 4d 01 52 01 c9  .GLCD    ..M.R..
+00000020: 00 a7 00 b6 00 00 00 15 08 00 00 0e 0f cd 08 c0  ................
+000002ff: 02 02 02 02 02 02 0f 03 09 09 08 29 08 04 0a 03  ...........)....
+0000030f: 03 07 03 03 09 04 0c 04 09 03 04 06 0d 13 08 04  ................
+0000031f: 22 06 05 03 04 04 05 09 08 09 10 03 07 06 04 03  "...............
+0000032f: 04 04 03 0a 08 0f 03 06 03 04 11 0a 07 0a 06 06  ................
+0000033f: 18 05 17 07 05                                   .....
 ```
 
 The header's fields are:
@@ -143,20 +143,20 @@ The header's fields are:
 | 2 | `00` | No dependencies |
 | 3 | `01` | Removable, no restart vector claimed |
 | 4 | `4e 00` | `REMOVE` at offset `004Eh` |
-| 6 | `fd 02` | Header and image, `02FDh` or 765 bytes |
+| 6 | `ff 02` | Header and image, `02FFh` or 767 bytes |
 | 8 | `00 00` | No extra memory |
 | 10 | `45 00` | Relocation data, `0045h` or 69 bytes |
 | 12 | `02 00 06` | Stack bytes over the base: 2 on the BDOS's, none on the BIOS's, 6 on the CCP's |
 | 15 | `2b 00` | `INIT` at offset `002Bh` |
 | 17 | `47 4c 43 44 20 20 20 20` | The name, `GLCD` |
 
-With no dependencies the relocation data starts at offset 765, `2FDh`, right
+With no dependencies the relocation data starts at offset 767, `2FFh`, right
 after the image. The image starts at offset 25, `19h`, with the table of words
-the driver passes to the ROM's terminal through service 12: `00F0h`, `014Bh`,
-`0150h` and so on, addresses in an image made for page 0. The list's first gap,
-2, counts from offset 24 to offset 26, the high byte of `00F0h`, and each of the
+the driver passes to the ROM's terminal through service 12: `00F2h`, `014Dh`,
+`0152h` and so on, addresses in an image made for page 0. The list's first gap,
+2, counts from offset 24 to offset 26, the high byte of `00F2h`, and each of the
 next five 2s reaches the next word's high byte. The 69 bytes hold no 255, so
-they mark 69 fixups, and the last is at file offset 561. The driver holds no
+they mark 69 fixups, and the last is at file offset 563. The driver holds no
 font: its `INIT` asks the ROM for the console's font through service 15 and
 keeps the address (`drivers/glcd.asm:38-41`). A bitmap with a bit for each of
-the 740 bytes of image would take 93 bytes.
+the 742 bytes of image would take 93 bytes.
