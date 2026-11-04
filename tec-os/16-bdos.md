@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 16. The BDOS
 
-Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -360,11 +360,14 @@ Functions 33 and 34 read and write a record by number, from `R0` and `R1`
 (`src/cpm/bdosrec.asm:189-233`). `RANDPREP` splits the number into the record
 within the extent and the extent, `EX` and `S2`, and if the extent is not the
 FCB's it closes the FCB and opens the one wanted
-(`src/cpm/bdosrec.asm:241-317`). A number with `R2` not 0 is error 6 before
+(`src/cpm/bdosrec.asm:241-308`). A number with `R2` not 0 is error 6 before
 anything changes. A read of a record the extent doesn't hold returns 1, and a
 read of an extent that has no entry is error 4. A write makes the extent, and
-is error 5 if the directory is full (`src/cpm/bdosrec.asm:315-323`). A failed
-close of the old extent is error 3. Function 40 is function 34 with each newly
+is error 5 if the directory is full (`src/cpm/bdosrec.asm:315-327`). Either
+error puts the FCB's `EX` and `S2` back, so the FCB names the extent its `RC`
+and map describe, and the next read or write opens the record's extent again
+(`src/cpm/bdosrec.asm:334-353`). A read there is error 4 again, and a write
+makes the extent. A failed close of the old extent is error 3. Function 40 is function 34 with each newly
 allocated block filled with zeros first (`src/cpm/bdosrec.asm:197-211`).
 `ZEROBLK` writes the zeros from the directory buffer, one record at a time, and
 after each write puts the BIOS's DMA address back on the program's, so a
@@ -386,8 +389,11 @@ extents. `S1`, `RC` and the map are cleared in the FCB too
 a next extent and the random write make their entries through the same
 `MAKEFCB`, with the FCB's `S2` kept (`src/cpm/bdosfile.asm:320-327`).
 
-Function 19 erases every entry that matches, frees its blocks and writes each
-changed directory record (`src/cpm/bdosfile.asm:267-299`). Function 23 renames
+Function 19 marks every entry that matches `E5h`, writes its directory record
+and only then frees its blocks (`src/cpm/bdosfile.asm:263-303`). If a
+directory write fails in a mode of function 45 that returns the error to the
+program, that entry's blocks stay in use, as the card still has them, and the
+entries before it stay deleted and freed. Function 23 renames
 every entry of the file to the name at offset 17 of the FCB. Function 30
 copies the FCB's name and its attribute bits into every entry
 (`src/cpm/bdosfile.asm:398-447`).
@@ -492,7 +498,10 @@ and `WARMV`. Every drive is then scanned in full at its next selection, as in
 CP/M 2.2 (`src/cpm/bdosfile.asm:16-19`). Function 37 takes the drives named by
 the bits of `DE` out of `LOGINV`, the read-only vector and `WARMV`
 (`src/cpm/bdosfn.asm:268-282`). The volume services `MOUNT` and `UNMNT` call
-it for a drive whose volume they have changed (`src/vol.asm:662-673`).
+it for a drive whose volume they have changed (`src/vol.asm:662-673`). A
+`MOUNT` onto the default drive then selects it again with function 14, which
+logs the new volume in, so functions 27 and 31 answer for that volume at once
+(`src/vol.asm:679-691`).
 
 ## BDOS errors
 
