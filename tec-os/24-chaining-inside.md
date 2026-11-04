@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 24. Chaining inside
 
-Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -39,7 +39,7 @@ function 10 fills. The buffer is a byte for its maximum length, `CMDBUF`, a byte
 for the length read, `CMDLEN`, and 128 bytes of characters, `CMDTXT`, at `BD37h`
 (`src/ram.asm:82-96`). `CPMINIT`, which warm boot calls, clears from `CCPCLR` to
 `BDOSRME`, the end of the BDOS's RAM, 329 bytes, so the command buffer and the
-two FCBs before it are kept (`src/boot.asm:268-275`, `src/boot.asm:103`). The
+two FCBs before it are kept (`src/boot.asm:295-300`, `src/boot.asm:103`). The
 FCBs need no clearing, since each use of them parses a name into them in full
 and clears the rest (`src/cpm/ccpcmd.asm:319-342`).
 
@@ -48,13 +48,13 @@ the workspace above the RAM BIOS table, which `CPMINIT` doesn't clear
 (`src/ram.asm:218`, `src/ram.asm:272`). It holds the piece's offset in `CMDTXT`
 plus one, and 0 when no piece is left, so one byte covers the 128 offsets with 0
 to spare. The return code, `PRGCODE` at `BF54h`, is in the same block
-(`src/ram.asm:232`). Cold boot clears the whole resident workspace, from
+(`src/ram.asm:254-255`). Cold boot clears the whole resident workspace, from
 `WSBASE` to `WSEND`, which ends after `CHPOS` (`src/boot.asm:37-41`,
 `src/ram.asm:301-302`), so after a reset no piece is left and the code is 0.
 
 `CPMINIT` sets the buffer's maximum length, 127, at every warm boot and so at
 every cold boot, which runs on into warm boot (`src/boot.asm:302-304`,
-`src/boot.asm:76-81`). A startup line is cut to the same length, because
+`src/boot.asm:81-83`). A startup line is cut to the same length, because
 `STLINE` copies at most 127 characters of a line of `STARTUP.CMD` into `CMDTXT`
 and passes over the rest of the line (`src/cpm/ccpcmd.asm:601`, `src/cpm/ccpcmd.asm:615-617`).
 Function 47 takes a line whose 0 is within 128 bytes, so at most 127 characters
@@ -256,8 +256,8 @@ With `ERRMODE` at `FFh` the error returns to the program with `A` = `FFh` and
 printed first and the error returns the same way. Neither touches `CHPOS`, so a
 program that takes its own errors leaves the chained line to run on
 (`src/cpm/bdoscon.asm:30-38`). `ERRMODE` is in the BDOS's RAM, which every warm
-boot clears, so each piece starts in the default mode (`src/ram.asm:138`,
-`src/boot.asm:268-275`).
+boot clears, so each piece starts in the default mode (`src/ram.asm:144-146`,
+`src/boot.asm:295-300`).
 
 A reset drops the line by clearing `CHPOS` with the rest of the workspace
 (`src/boot.asm:37-41`).
@@ -268,7 +268,7 @@ bit 5 with `AND DFh` and compares it with `03h`, `1Bh` and `Q`, so `^C`, Esc,
 and Esc. `^C` and `#` go to `PGDROP`, which clears `CHPOS`. The other keys leave
 `CHPOS` as it was, and the line runs on. A key that stops the listing sets carry
 in `PGNEWL`, and `DIR` and `TYPE` then end through `STARTED` like a listing that
-ran to its end (`src/cpm/ccpfile.asm:290-320`, `src/cpm/ccpfile.asm:158`,
+ran to its end (`src/cpm/ccpfile.asm:290-320`, `src/cpm/ccpfile.asm:106`,
 `src/cpm/ccpfile.asm:158`, `src/cpm/ccpfile.asm:398-407`).
 
 `Write lost` drops the line too. `CWBOOT` prints that message at a warm boot when
