@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix F. `tecvol`
 
-Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -25,27 +25,27 @@ container the commands work on.
 ## Common rules
 
 The commands and their arguments, as the comment at the top of
-`tools/tecvol.mjs` gives them (`tools/tecvol.mjs:4-15`):
+`tools/tecvol.mjs` gives them (`tools/tecvol.mjs:4-17`):
 
 ```text
 tecvol create IMAGE --volume G1M:SYSTEM:A [--volume G8M:WORK:B:ro] [--align N] [--drives N]
 tecvol info IMAGE
 tecvol verify IMAGE
 tecvol dir IMAGE [DRIVE] [--user N]
-tecvol put IMAGE DRIVE FILE [CPMNAME] [--user N] [--text] [--ro] [--sys]
+tecvol put IMAGE DRIVE FILE [CPMNAME] [--user N] [--text] [--ro] [--sys] [--force]
 tecvol get IMAGE DRIVE CPMNAME [OUTFILE] [--user N] [--text]
-tecvol era IMAGE DRIVE CPMNAME [--user N]
+tecvol era IMAGE DRIVE CPMNAME [--user N] [--force]
 tecvol recipe RECIPE.json IMAGE
 tecvol install IMAGE DEVICE --yes
 ```
 
 The options may come anywhere after the command, and an unknown option is an
-error (`tools/tecvol.mjs:39-60`). Every command but `create` and `recipe`
+error (`tools/tecvol.mjs:41-63`). Every command but `create` and `recipe`
 opens an existing image and checks it as a container first, with the checks
 Appendix E lists. An image that fails is not used (`tools/tecvol.mjs:73-76`).
 A command that changes an image checks the result as a container, writes it to
 a temporary file beside the image and renames that file over the image,
-so a failure leaves the image as it was (`tools/tecvol.mjs:17-19`,
+so a failure leaves the image as it was (`tools/tecvol.mjs:19-21`,
 `tools/tecvol.mjs:65-71`).
 
 `DRIVE` names a volume by its drive letter, with or without a colon, by its
@@ -63,7 +63,7 @@ reason and ends with exit status 1 (`tools/tecvol.mjs:29-33`,
 `tools/tecvol.mjs:192-197`).
 
 `tecvol` and TEC-OS must never change the same card at the same time
-(`tools/tecvol.mjs:18-19`). TEC-OS holds each drive's map of free space in
+(`tools/tecvol.mjs:20-21`). TEC-OS holds each drive's map of free space in
 memory, and a card changed on the PC is no longer the card the map describes.
 Change a card on the PC only after a `^C` at the prompt and with the board off
 or the card out, and press reset after putting it back.
@@ -108,8 +108,12 @@ volumes, with the number of drives a 1.1 card gives, and then one line for
 each volume: its drive or `-`, its label, its id, its geometry, its start
 block, `rw` or `ro`, `wb` for a volume written behind, its number of files and
 its free bytes (`tools/tecvol.mjs:115-132`). Under a volume whose CP/M
-directory has a fault, such as a block given to two files, it prints a line
-for each fault, starting `problem:` (`tools/lib/cpmfs.mjs:240-267`).
+directory has a fault, such as two directory entries for one part of a file,
+it prints a line for each fault, starting `problem:`
+(`tools/lib/cpmfs.mjs:240-267`). A block given to two files, or a block
+number above the volume's last, DSM, stops the command instead, with exit
+status 1 and a message naming the file and the block, before the volume's line
+is printed (`tools/lib/cpmfs.mjs:78-89`, `tools/tecvol.mjs:124-127`).
 
 ```sh
 node tools/tecvol.mjs info build/my.img
@@ -167,17 +171,19 @@ node tools/tecvol.mjs dir dist/starter.img A
 ## put
 
 `put IMAGE DRIVE FILE [CPMNAME]` copies a file from the PC to a volume
-(`tools/tecvol.mjs:138-146`). The name on the card is `CPMNAME`, or the PC
+(`tools/tecvol.mjs:141-149`). The name on the card is `CPMNAME`, or the PC
 file's own name in capitals. It must be a CP/M name: up to 8 characters, then
 optionally a full stop and up to 3 (`tools/lib/cpmfs.mjs:15-20`). A file of
-the same name in the same user area is replaced. The copy fails if the volume
-is read-only, or if its blocks or its directory entries run out, and then the
-image is left as it was (`tools/lib/cpmfs.mjs:157-190`).
+the same name in the same user area is replaced, unless it has the read-only
+attribute: TEC-OS refuses to write over such a file, and so does `put` unless
+`--force` is given. The copy fails if the volume is read-only, if the file
+there is read-only or if its blocks or its directory entries run out, and then
+the image is left as it was (`tools/lib/cpmfs.mjs:180-206`).
 
 The file is stored in whole records of 128 bytes. A binary file's last record
 is padded with zeros. With `--text`, each line end becomes CR LF, a `^Z` is
 added at the end and the last record is padded with `^Z`, as CP/M text files
-are kept (`tools/lib/cpmfs.mjs:161-173`). `--ro` sets the file's read-only
+are kept (`tools/lib/cpmfs.mjs:184-188`). `--ro` sets the file's read-only
 attribute and `--sys` its system attribute. `--user N` puts it in user area
 `N`.
 
@@ -216,7 +222,13 @@ usage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/t
 into `OUTFILE`, or to the standard output with none
 (`tools/tecvol.mjs:150-159`). Without `--text` the copy is every record,
 padding included. With `--text` it stops at the first `^Z` and turns each CR
-LF into a line feed (`tools/lib/cpmfs.mjs:123-142`).
+LF into a line feed (`tools/lib/cpmfs.mjs:123-150`). Each directory entry gives
+the records up to its own record count and no further, so the records of a
+sparse file that no entry holds, the gaps a program's random writes can leave,
+come back as zeros (`tools/lib/cpmfs.mjs:133-146`). An entry that names a block
+above DSM is damage, and `get` stops with exit status 1, naming the file, the
+extent, the directory entry and the block, and writes no file
+(`tools/lib/cpmfs.mjs:140`).
 
 ```sh
 node tools/tecvol.mjs get build/my.img A HELLO.TXT --text
@@ -230,8 +242,10 @@ world
 ## era
 
 `era IMAGE DRIVE CPMNAME` erases a file from one user area, 0 or the one
-`--user` gives (`tools/tecvol.mjs:157-164`). A name not found there is a
-mistake in the command line, with exit status 2.
+`--user` gives (`tools/tecvol.mjs:160-167`). A name not found there is a
+mistake in the command line, with exit status 2. A file with the read-only
+attribute is refused, as TEC-OS refuses it, unless `--force` is given
+(`tools/lib/cpmfs.mjs:157-169`).
 
 ```sh
 node tools/tecvol.mjs era build/my.img B TAS.COM
@@ -245,6 +259,22 @@ usage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/t
 
 The first command searched user area 0, which has no `TAS.COM`. The second
 erased the file from user area 3 and printed nothing.
+
+Here a file is put on drive B with its read-only attribute. A second `put` over
+it and an `era` of it are both refused with exit status 1, and the image stays
+as it was. The last command erases it:
+
+```sh
+node tools/tecvol.mjs put build/my.img B build/hello.txt NOTE.TXT --ro
+node tools/tecvol.mjs put build/my.img B build/hello.txt NOTE.TXT
+node tools/tecvol.mjs era build/my.img B NOTE.TXT
+node tools/tecvol.mjs era build/my.img B NOTE.TXT --force
+```
+
+```text
+tecvol: 0/NOTE.TXT is read-only
+tecvol: 0/NOTE.TXT is read-only
+```
 
 ## recipe
 
