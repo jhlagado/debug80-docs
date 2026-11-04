@@ -158,7 +158,7 @@ shows.
 
 The DS1302 is an add-on on port `FCh`, with bit 4 the chip's enable, bit 6 its
 clock, bit 7 the data sent to it, bit 5 set to read and the data read on bit 0
-(`src/services.asm:13`). Each register is reached by a command byte sent least
+(`src/services.asm:13-14`). Each register is reached by a command byte sent least
 significant bit first (`src/services.asm:318-326`). TEC-OS counts the clock as
 present when a read of the seconds register gives a value below `60h`, which a
 clock that answers gives and an empty port's `FFh` doesn't

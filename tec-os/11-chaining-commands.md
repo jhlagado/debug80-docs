@@ -116,8 +116,9 @@ succeeded. A `:` at the start of a line typed after a failure runs nothing.
 On the serial board the starter card's startup line `GLCD.SVC` finds no
 graphics LCD. A startup line whose service finds its device absent fails
 quietly: it prints nothing and leaves the return code at 0. A `:` that starts
-the first line typed therefore runs there, as it does on the boards where
-`GLCD.SVC` installs. A board with the graphics LCD and no matrix keyboard
+the first line typed therefore runs there, as it does on the board with both
+displays, where the line passes quietly, and on the board with only the
+graphics LCD, where it installs. A board with the graphics LCD and no matrix keyboard
 refuses the line with `GLCD.SVC?`, a failure, and there such a `:` runs
 nothing.
 
