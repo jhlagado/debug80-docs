@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 20. The hardware services and the service loader
 
-Checked against TEC-OS 626ee41, with the starter card's `TAS.COM` from Thorium
+Checked against TEC-OS 5a25178, with the starter card's `TAS.COM` from Thorium
 dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -112,7 +112,8 @@ table's fourth entry, `VREST`, and calls it through `VHLJP`
 (`src/services.asm:129-135`, `src/video.asm:20`). If the PICO9918 is the console,
 it also clears the screen and homes the cursor (`src/services.asm:136-143`). Warm
 boot calls `HWVREL` directly, which is why a program's claim doesn't outlive
-it (`src/boot.asm:84`).
+it. The call comes first, before `PZINIT` rebuilds page zero, so the chip's
+interrupt, an NMI on the board, is off by then (`src/boot.asm:80-81`).
 
 `TONE` toggles bit 7 of `A`, which starts as `TXIDLE`, and writes it to port
 `01h` (`src/services.asm:151-153`). The inner loop counts `B` with `C`, and `A`
@@ -196,15 +197,15 @@ two services in (`test/svc.test.mjs:866`).
 With no service in, the word holds the address of the BDOS entry jump, the *stub*,
 and `STUBAD` keeps that address. `ALVINIT` puts the stub directly below the lowest
 allocation vector, so the TPA keeps every byte up to the vectors
-(`src/boot.asm:412-416`). On the starter card the vectors start at `B818h` and the
-stub is at `B815h`. Its low byte varies with the card, so a program assumes
+(`src/boot.asm:412-416`). On the starter card the vectors start at `B9F6h` and the
+stub is at `B9F3h`. Its low byte varies with the card, so a program assumes
 nothing of it. `PZINIT` writes the stub's three bytes at every
 warm boot (`src/boot.asm:208-213`).
 
 The loader takes its pages below the page of the top (`src/loader.asm:100-102`), so
 the first service also costs the bytes from the start of the stub's page up to
-the stub. On the starter card those are the 21 bytes from `B800h` to `B814h`, and
-`COUNT.SVC`'s one page lowers the TPA by 277 bytes. A later service's top is a
+the stub. On the starter card those are the 243 bytes from `B900h` to `B9F2h`, and
+`COUNT.SVC`'s one page lowers the TPA by 499 bytes. A later service's top is a
 page's start, so it costs its pages and nothing more.
 
 The file's header has the layout in Chapter 10's table and Appendix H. In memory the loader has
@@ -291,8 +292,8 @@ size of the header and image, subtracts one and takes the high byte, which is
 the number of pages less one. The service's page is the page of `PZTOP`, less
 one, less that number. An overflow, a borrow or a page below `80h` fails the
 load, and the page goes in `SLDL` (`src/loader.asm:96-106`, `src/ram.asm:231`).
-For `COUNT.SVC` on the serial board, with the top at `B815h` and 100 bytes, the
-page is `B7h`.
+For `COUNT.SVC` on the serial board, with the top at `B9F3h` and 100 bytes, the
+page is `B8h`.
 
 ### 2. The dependencies
 
@@ -315,7 +316,7 @@ figure in the new header from that room and fails on a borrow, and it stores
 the difference over the figure in the new header (`src/loader.asm:140-150`). The
 header in memory then holds the room left below this service, and the loader
 keeps no other total. On the serial board, with limits 8, 12 and 6,
-`COUNT.SVC`'s figures of 2 each leave `06h`, `0Ah` and `04h` at `B70Ch`.
+`COUNT.SVC`'s figures of 2 each leave `06h`, `0Ah` and `04h` at `B80Ch`.
 
 ### 4. The relocation
 
@@ -335,15 +336,15 @@ The check in step 2 is made for a gap of 255 too, so a list can't step past the
 image even with nothing fixed. A failure here leaves the file at `0100h` partly
 relocated and the rest of memory as it was.
 
-On the web page's board the startup file installs `PICO.SVC` at `B200h`. Its
+On the web page's board the startup file installs `PICO.SVC` at `B300h`. Its
 image starts with the table of words the driver passes to the ROM's terminal,
 `0187h`, `0192h`, `019Bh` and so on in the file. After the load they read
-`B387h`, `B392h` and `B39Bh` at `B219h`, each high byte raised by `B2h`.
+`B487h`, `B492h` and `B49Bh` at `B319h`, each high byte raised by `B3h`.
 `SERVICES` prints each page count as the page above the service less the
 service's own page (`src/cpm/ccp.asm:1513-1520`), so the count includes the part of
 the last page the service doesn't fill. `PICO.SVC`'s 1,315 bytes of header and
-image take six pages, and with the 21 bytes below the stub they lower the TPA
-from 46,869 bytes to 45,312:
+image take six pages, and with the 243 bytes below the stub they lower the TPA
+from 47,347 bytes to 45,568:
 
 <!-- node tools/capture.mjs --board pico SERVICES -->
 ```text
@@ -374,12 +375,12 @@ A>B:
 B>GAPZERO.SVC
 
 B>SERVICES
-COUNTW 1
+COUNTX 1
 B>
 ```
 
-The space at byte 24 has become `20h` + `B7h`, `D7h`, and `PUTTRIM` masks bit
-7 (`src/cpm/ccp.asm:756-758`), so the name prints with a `W`.
+The space at byte 24 has become `20h` + `B8h`, `D8h`, and `PUTTRIM` masks bit
+7 (`src/cpm/ccp.asm:756-758`), so the name prints with an `X`.
 
 ### 5. The claims and the move
 
@@ -406,7 +407,7 @@ instruction after the call, on the CCP's stack (`src/cpm/ccp.asm:260`).
 
 A warm boot during `INIT` leaves the word at `0006h` correct, because `PZTOP` is
 untouched. `PZINIT` writes `PZTOP` to `0006h` (`src/boot.asm:206-207`), and warm
-boot clears `SVCBSY` (`src/boot.asm:80-80`). The pages go back as if the load
+boot clears `SVCBSY` (`src/boot.asm:82-83`). The pages go back as if the load
 had never started, and `test/svc.test.mjs:428-441` checks that a later load
 works. Function 47 from `INIT` is a warm boot at the same point
 (`test/svc.test.mjs:890`). The sweep in `PZINIT` takes any restart vector `INIT`
@@ -584,25 +585,27 @@ reserves three stacks, of the sizes at `src/layout.asm:79-81`:
 | Stack | Reserved | Base | Census | `SVCLIM` |
 | --- | ---: | ---: | ---: | ---: |
 | BDOS | 54 | 32 | 32 | 8 |
-| BIOS | 38 | 16 | 16 | 12 |
-| CCP | 30 | 16 | 22 | 6 |
+| BIOS | 38 | 22 | 22 | 12 |
+| CCP | 30 | 18 | 22 | 6 |
 
 The census column is the deepest use of each stack in `test/stacks.test.mjs`,
 which records every write to memory under the heaviest workloads. The test
 passes only with a quarter of each stack free (`test/stacks.test.mjs:244-245`).
 Base is the same figure from its runs on the serial terminal and the PICO9918
-alone, with the run on a volume written behind: 32, 16 and 16
-(`test/stacks.test.mjs:212-223`). The census is higher for the CCP alone, because
-of the run of `CON UC1` on a board with the graphics LCD, which gives 22
-(`test/stacks.test.mjs:219`).
+alone, with the run on a volume written behind: 32, 22 and 18
+(`test/stacks.test.mjs:212-223`). The BIOS's 22 is the same in every run with
+a card. The census is
+higher for the CCP alone, because of the run of `CON UC1` on a board with the
+graphics LCD, which gives 22 (`test/stacks.test.mjs:219`).
 
-`SVCLIM` holds the limits (`src/tables.asm:91`), and they are counted from the
-base. Each limit is the largest even figure that, added to the base, leaves a
-quarter of the stack free: 40 of 54, 28 of 38 and 22 of 30. At this commit
-`GLCD.SVC` declares 2, 0 and 6 (`drivers/glcd.asm:18`). Its 6 is the difference
-between the CCP's base and census, and its 2 is more than the BDOS's difference,
-which is 0. It takes the whole of the CCP's allowance,
-and `COUNT.SVC` with its 2 can't then load. `PICO.SVC` declares 0, 0 and 0,
+`SVCLIM` holds the limits, 8, 12 and 6 (`src/tables.asm:91`), and they are
+counted from the base. Added to the base they give 40 of 54, 34 of 38 and 24 of
+30. The BDOS's sum leaves a quarter of its stack free, and the BIOS's and the
+CCP's leave less. At this commit `GLCD.SVC` declares 2, 0 and 6
+(`drivers/glcd.asm:18`). Its 6 is more than the difference between the CCP's
+base and census, 4, and its 2 is more than the BDOS's difference, which is 0.
+It takes the whole of the CCP's allowance, and `COUNT.SVC` with its 2 can't
+then load. `PICO.SVC` declares 0, 0 and 0,
 since its figures are in the base (`drivers/pico.asm:29`).
 
 The loader can check only the sum of what the headers state.
