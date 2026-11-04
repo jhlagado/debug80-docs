@@ -7,13 +7,13 @@ nav_group: "Appendices"
 
 # Appendix H. The service file format
 
-Checked against TEC-OS 5a25178, with the starter card's `TAS.COM` from Thorium
+Checked against TEC-OS 58d4345, with the starter card's `TAS.COM` from Thorium
 dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
 This appendix lists the `.SVC` file's format: the header's fields and the
 loader's check of each, the dependencies and the relocation data, with
-`PICO.SVC` from the starter card as an example. Chapter 10 describes writing a
+`GLCD.SVC` from the starter card as an example. Chapter 10 describes writing a
 service, and Chapter 20 describes the load and the relocation.
 
 ## The file
@@ -56,8 +56,8 @@ The loader compares the first two bytes, as a word, with `DMAGIC`, which is
 `SVCFMT * 256 + 'D'` (`src/loader.asm:11`, `src/loader.asm:82-85`). `SVCFMT` is 4,
 from `abi.inc`, and a file of any other format fails the load
 (`src/abi.inc:101-103`). A source writes the byte by that name, as
-`DB 'D',SVCFMT,0,1` with `abi.inc` included, which is how `PICO.SVC` and
-`GLCD.SVC` write it (`drivers/glcd.asm:16`, `drivers/glcd.asm:16`). `makeSvc`
+`DB 'D',SVCFMT,0,1` with `abi.inc` included, which is how `GLCD.SVC` writes it
+(`drivers/glcd.asm:16`). `makeSvc`
 writes its own figure for the format over the source's byte
 (`tools/lib/svc-format.mjs:3`, `tools/lib/svc.mjs:111`), and that figure is 4
 as well.
@@ -114,24 +114,25 @@ comparison (`tools/lib/svc.mjs:28-36`). `makeSvc` writes the gap list unless it
 is asked for another, and the loader reads only the gap list
 (`tools/lib/svc.mjs:83`).
 
-## PICO.SVC
+## GLCD.SVC
 
-`PICO.SVC` on the starter card is the PICO9918's driver. Its header and the
-first part of its image, and then its relocation data from offset 1,315:
+`GLCD.SVC` on the starter card is the graphics LCD's driver. Its header and the
+first part of its image, and then its relocation data from offset 765:
 
 ```sh
-xxd -g 1 -l 48 dist/files/PICO.SVC
-xxd -g 1 -s 1315 dist/files/PICO.SVC
+xxd -g 1 -l 48 dist/files/GLCD.SVC
+xxd -g 1 -s 765 dist/files/GLCD.SVC
 ```
 
 ```text
-00000000: 44 04 00 01 5f 00 23 05 00 00 40 00 00 00 00 43  D..._.#...@....C
-00000010: 00 50 49 43 4f 20 20 20 20 87 01 92 01 9b 01 9c  .PICO    .......
-00000020: 00 4d 01 76 01 78 00 50 18 e7 00 ef 00 fc 00 0a  .M.v.x.P........
-00000523: 02 02 02 02 02 02 02 04 02 02 02 0d 13 09 03 22  ..............."
-00000533: 04 04 03 06 05 07 03 0b 09 03 03 03 06 13 1a 04  ................
-00000543: 0c 0e 14 09 16 08 08 06 04 03 03 04 06 03 03 0b  ................
-00000553: 03 03 0a 03 07 03 0a 03 0e 03 07 04 05 05 11 06  ................
+00000000: 44 04 00 01 4e 00 fd 02 00 00 45 00 02 00 06 2b  D...N.....E....+
+00000010: 00 47 4c 43 44 20 20 20 20 f0 00 4b 01 50 01 c7  .GLCD    ..K.P..
+00000020: 00 a5 00 b4 00 00 00 15 08 00 00 0e 0f cd 08 c0  ................
+000002fd: 02 02 02 02 02 02 0f 03 09 09 08 29 08 04 0a 03  ...........)....
+0000030d: 03 06 03 03 08 04 0c 04 09 03 04 06 0d 13 08 04  ................
+0000031d: 22 06 05 03 04 04 05 09 08 09 10 03 07 06 04 03  "...............
+0000032d: 04 04 03 0a 08 0f 03 06 03 04 11 0a 07 0a 06 06  ................
+0000033d: 18 05 17 07 05                                   .....
 ```
 
 The header's fields are:
@@ -141,20 +142,21 @@ The header's fields are:
 | 0 | `44 04` | `D` and format 4 |
 | 2 | `00` | No dependencies |
 | 3 | `01` | Removable, no restart vector claimed |
-| 4 | `5f 00` | `REMOVE` at offset `005Fh` |
-| 6 | `23 05` | Header and image, `0523h` or 1,315 bytes |
+| 4 | `4e 00` | `REMOVE` at offset `004Eh` |
+| 6 | `fd 02` | Header and image, `02FDh` or 765 bytes |
 | 8 | `00 00` | No extra memory |
-| 10 | `40 00` | Relocation data, `0040h` or 64 bytes |
-| 12 | `00 00 00` | No stack bytes over the base |
-| 15 | `43 00` | `INIT` at offset `0043h` |
-| 17 | `50 49 43 4f 20 20 20 20` | The name, `PICO` |
+| 10 | `45 00` | Relocation data, `0045h` or 69 bytes |
+| 12 | `02 00 06` | Stack bytes over the base: 2 on the BDOS's, none on the BIOS's, 6 on the CCP's |
+| 15 | `2b 00` | `INIT` at offset `002Bh` |
+| 17 | `47 4c 43 44 20 20 20 20` | The name, `GLCD` |
 
-With no dependencies the relocation data starts at offset 1,315, `523h`, right
+With no dependencies the relocation data starts at offset 765, `2FDh`, right
 after the image. The image starts at offset 25, `19h`, with the table of words
-the driver passes to the ROM's terminal: `0187h`, `0192h`, `019Bh` and so on,
-addresses in an image made for page 0. The list's first gap, 2, counts from
-offset 24 to offset 26, the high byte of `0187h`, and each of the next six 2s
-reaches the next word's high byte. The 64 bytes hold no 255, so they mark 64
-fixups, and the last is at file offset 481. The driver's font comes last in the
-image and holds no addresses (`drivers/pico.asm:379-380`). A bitmap with a bit
-for each of the 1,290 bytes of image would take 162 bytes.
+the driver passes to the ROM's terminal through service 12: `00F0h`, `014Bh`,
+`0150h` and so on, addresses in an image made for page 0. The list's first gap,
+2, counts from offset 24 to offset 26, the high byte of `00F0h`, and each of the
+next five 2s reaches the next word's high byte. The 69 bytes hold no 255, so
+they mark 69 fixups, and the last is at file offset 561. The driver holds no
+font: its `INIT` asks the ROM for the console's font through service 15 and
+keeps the address (`drivers/glcd.asm:34-37`). A bitmap with a bit for each of
+the 740 bytes of image would take 93 bytes.
