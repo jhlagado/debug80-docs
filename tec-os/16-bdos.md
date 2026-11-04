@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 16. The BDOS
 
-Checked against TEC-OS 626ee41, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -17,7 +17,7 @@ A CP/M program puts a function number in `C` and an argument in `E` or `DE`,
 then calls `0005h`, as Chapter 6 describes. This chapter describes the BDOS
 from that entry: the function table, the console functions, the way a file's
 records are found and the allocation vectors with the scan at warm boot. It
-then covers the BDOS errors, the two functions whose meanings come from CP/M 3
+then covers the BDOS errors, the four functions whose meanings come from CP/M 3
 and the differences from Digital Research's BDOS.
 
 ## The BDOS in the ROM
@@ -25,12 +25,12 @@ and the differences from Digital Research's BDOS.
 TEC-OS's BDOS comes from Portable CP/M, an implementation of the documented
 CP/M 2.2 interface that uses no Digital Research source
 (`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the ROM
-that Chapter 12 describes it runs from `E1D9h`, `BDOSBAS`, to `F0E6h`, 3,854
+that Chapter 12 describes it runs from `E145h`, `BDOSBAS`, to `F011h`, 3,789
 bytes. Its table of functions and its error messages are in the
 ROM's data block (`src/tables.asm:62-73`, `src/text.asm:63-68`). None of it can be patched.
 
 The BDOS's variables and its 54-byte stack are in RAM, in the block from
-`BDOSRAM` to `BDOSRME`, `BE77h` to `BEFFh` (`src/ram.asm:131-192`,
+`BDOSRAM` to `BDOSRME`, `BE76h` to `BEFFh` (`src/ram.asm:131-192`,
 `src/layout.asm:79`). Warm boot clears that block, as a fresh load of the BDOS
 from disk would leave it, and sets the DMA address to `0080h`
 (`src/boot.asm:262-281`).
@@ -64,8 +64,8 @@ to `BENTRY` (`src/cpm/bdos.asm:79-119`).
 `BENTRY` saves the caller's stack pointer in `OLDSP`, moves to the BDOS's own
 stack and keeps `DE` in `PARAM` (`src/cpm/bdos.asm:80-82`). Every function, and
 every BIOS call it makes, runs on that stack, so the caller's stack holds only
-the return address of its `CALL`. `BENTRY` then tests for two functions by
-number, 108 and 47 (`src/cpm/bdos.asm:83-87`). Any other number of 41 or more
+the return address of its `CALL`. `BENTRY` then tests for four functions by
+number, 108, 47, 45 and 48 (`src/cpm/bdos.asm:83-91`). Any other number of 41 or more
 returns 0 at once (`src/cpm/bdos.asm:92-93`).
 
 A function from 0 to 40 is found in `FNTAB`, a table of 41 words, one routine
@@ -379,7 +379,7 @@ puts the block's number in the FCB's map (`src/cpm/bdos.asm:1186-1241`). A
 delete clears the bits of each block the entry lists
 (`src/cpm/bdos.asm:2187-2231`). The blocks the directory itself occupies are
 set from `AL0` and `AL1` when the vector is built, and are never given out
-(`src/cpm/bdos.asm:2084-2128`). The vector changes as soon as a block is
+(`src/cpm/bdos.asm:2103-2128`). The vector changes as soon as a block is
 taken, before the file is closed, so a block that a program has written but not
 yet closed is already in use for every other file.
 
@@ -437,8 +437,10 @@ binds the drive's pointers and reads nothing, and tests the drive's DPH:
   At its next selection `LOGIN` builds the allocation vector again, but reads
   the directory only up to the mark (`src/cpm/bdos.asm:1978-1992`). No entry
   beyond the mark is in use, so none of them can hold a block.
-- If the flag is clear, `ALVSUM` adds up the vector's bytes
-  (`src/cpm/bdos.asm:2070-2076`). If the sum is what `LOGDONE` stored, the
+- If the flag is clear, `ALVSUM` adds up the vector's bytes with `SUMDE`, the
+  routine that also sums the container's table, over the length that `ALVLEN`
+  gives `INITALV` too (`src/cpm/bdos.asm:2070-2076`,
+  `src/cpm/bdos.asm:2084-2101`, `src/vol.asm:754-767`). If the sum is what `LOGDONE` stored, the
   drive stays logged in with its vector as it is. Any other sum means the
   vector has changed in a way that neither an allocation nor a directory write
   recorded, such as a stray write by a program. The drive is then taken out of
@@ -469,23 +471,26 @@ drive letter (`src/text.asm:64-68`):
 
 - `Select`, for a drive past D, which the BIOS doesn't have, a drive with no
   volume or a `?` drive byte outside function 17
-  (`src/cpm/bdos.asm:2338-2343`).
+  (`src/cpm/bdos.asm:2341-2344`).
 - `R/O`, for a change to a drive that function 28 has made read-only or to a
-  volume the card marks read-only (`src/cpm/bdos.asm:2329-2335`).
+  volume the card marks read-only (`src/cpm/bdos.asm:2329-2336`).
 - `File R/O`, for function 19 or 23 on a directory entry with the read-only
   attribute, and for function 21, 34 or 40 through an FCB that has it
-  (`src/cpm/bdos.asm:655-665`).
+  (`src/cpm/bdos.asm:655-666`).
 - `Bad Sector`, for a BIOS `READ` or `WRITE` of a file's record that fails, a
   directory record that won't read, a failed directory write and a block
   number past the end of the volume (`src/cpm/bdos.asm:1841`,
   `src/cpm/bdos.asm:2357-2359`).
 
-`DISKERR` prints the message and waits for a key with `GETCHAR`, or takes the
-key already kept, if one was typed during output
-(`src/cpm/bdos.asm:2395-2414`). `CHDROP` then ends the program by warm boot,
-whatever the key (`src/cpm/bdos.asm:73-77`), so the function never returns to the
-program. `CHDROP` also drops the rest of a chained line, which Chapter 24
-describes.
+Each of the four goes to `BDERR` with its message and a code: 1 for
+`Bad Sector`, a disk I/O error, 2 for `R/O`, 3 for `File R/O` and 4 for
+`Select`. What `BDERR` does is set by the error mode, which function 45 changes
+(`src/cpm/bdos.asm:2361-2376`). In the default mode `DISKMSG` prints the
+message, and `BDERR` waits for a key with `GETCHAR`, or takes the key already
+kept, if one was typed during output (`src/cpm/bdos.asm:2395-2414`). `CHDROP`
+then ends the program by warm boot, whatever the key
+(`src/cpm/bdos.asm:73-77`), so the function never returns to the program.
+`CHDROP` also drops the rest of a chained line, which Chapter 24 describes.
 
 Chapter 3 shows `R/O` from a read-only volume and `File R/O` from `ERA`. The
 volume's read-only flag is in the drive table, and `LOGIN` sets the drive's bit
@@ -496,7 +501,7 @@ success, with nothing written, as CP/M 2.2's close does
 (`src/cpm/bdos.asm:585-592`). A warm boot clears the vector, and the drive's
 next selection sets the bit again.
 
-## Functions 108 and 47
+## Functions 108, 47, 45 and 48
 
 Function 108 is CP/M 3's program return code (`src/cpm/bdos.asm:152-164`).
 With `DE` = `FFFFh` it returns the code in `HL`, and with any other `DE` it sets
@@ -511,10 +516,34 @@ Function 47 is TEC-OS's chain to another command, from CP/M 3's
 goes on if the command holds a CR or an LF before the 0, or has no 0 there.
 Otherwise the function copies 128 bytes over the CCP's command line, `CMDTXT`,
 which warm boot keeps, and ends the program by warm boot. It does not return.
-`E` is ignored.
+`E` is ignored. Warm boot's flush puts the records the program wrote behind on
+the card before the CCP loads the chained command (Chapter 14).
 
 Chapter 24 describes the CCP's side of both, the `:` that tests the code and
 the pieces of a chained line. Chapter 11 shows both in use.
+
+Function 45 is CP/M 3's error mode. It puts `E` in `ERRMODE` and returns 0
+(`src/cpm/bdos.asm:137-143`). The mode sets what `BDERR` does with each of the
+four BDOS errors (`src/cpm/bdos.asm:2361-2376`):
+
+- `FFh` returns to the program with `A` = `FFh` and the error's code in `H`.
+  Nothing is printed, and the rest of a chained line is kept.
+- `FEh` prints the message first and then returns in the same way.
+- Any other value is the default: the message, a key and the end of the
+  program, with the rest of a chained line dropped.
+
+Warm boot clears `ERRMODE` with the rest of the BDOS's state, so each program
+starts in the default mode (`src/ram.asm:134`). A sequential read or write
+that returns an error leaves the FCB on the record it didn't read or write, as
+CP/M 3's does, because `CR` moves on only once the BIOS call has succeeded
+(`src/cpm/bdos.asm:864-873`, `src/cpm/bdos.asm:971-978`).
+
+Function 48 is CP/M 3's flush. `VFLUSH` writes every changed line of the block
+cache to the card, and the function returns `A` = 0, or `FFh` if a write failed
+and its line was dropped (`src/cpm/bdos.asm:145-150`, `src/vol.asm:634-646`).
+CP/M 3's `E` = `FFh`, which also purges the buffers, gives the same flush,
+since a clean line holds nothing that the card lacks. Chapter 19
+describes the flush.
 
 ## Differences from Digital Research's BDOS
 
@@ -524,8 +553,8 @@ Research shipped are these:
 
 - It is in ROM (`src/rom.asm:24-25`). A write to the BDOS's code changes
   nothing, and a hook goes in the RAM BIOS table.
-- Functions 47 and 108 have meanings that come from CP/M 3, and every other
-  function above 40 returns 0.
+- Functions 45, 47, 48 and 108 have meanings that come from CP/M 3, and every
+  other function above 40 returns 0.
 - A key after `^S` resumes the output and is discarded, `^C` included. In
   Digital Research's BDOS a `^C` there ends the program.
 - The CCP's disk reset at warm boot keeps each drive whose vector is
