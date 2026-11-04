@@ -124,7 +124,7 @@ the line `CON TTY` itself went to the PICO9918's screen.
 the service installed has the GLCD's table in its page, `SVCGO` calls `CONSW`
 with `UC1:`. While the PICO9918's console is in effect the GLCD gives way: the
 driver stays loaded, the console stays as it is and `CON UC1` later switches
-with nothing to load (`src/loader.asm:510-533`). A line of `STARTUP.CMD` that
+with nothing to load (`src/loader.asm:527-550`). A line of `STARTUP.CMD` that
 names `GLCD.SVC` while the field is `CRT:` installs nothing, as the section on
 the displays' tables below explains, so on a board with both displays the GLCD
 takes the console only through `CON UC1` or a load after `CON TTY`. The
@@ -428,10 +428,10 @@ drives A and B on rows 1 and 2. Drives C and D have no row
 Row 3 is for one of two words that TEC-OS shows when a board may have no
 terminal to show a message on. `CARD?` appears at the diagnostic prompt
 (`src/boot.asm:472-473`). `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`
-(`src/cpm/ccpcmd.asm:119`, `src/loader.asm:490-508`).
+(`src/cpm/ccpcmd.asm:119`, `src/loader.asm:507-525`).
 
 Writing `GLCD?` sets `CDWRD` in `CONDEV` (`src/lcd.asm:36-41`), and `WRDCLR`
 writes blanks over the row only while that bit is set. The word is therefore
 cleared when `GLCD.SVC` is installed, and a row a program wrote is left alone
-(`src/loader.asm:535-547`). Programs reach the LCD
+(`src/loader.asm:552-564`). Programs reach the LCD
 through the hardware service `LCD`, number 2, as Chapter 9 describes.

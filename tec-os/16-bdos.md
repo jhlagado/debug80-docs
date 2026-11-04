@@ -238,7 +238,7 @@ A directory entry has the same first 32 bytes, with the user number in place
 of the drive. The allocation map holds 16 one-byte block numbers when the
 volume has 256 blocks or fewer, and 8 two-byte numbers otherwise. `FCBLOCK`
 and `BLOCKIDX` test the high byte of the disk's last block number, `DSM`, to
-choose (`src/cpm/bdosrec.asm:337-351`, `src/cpm/bdosrec.asm:395-412`). Both of
+choose (`src/cpm/bdosrec.asm:355-369`, `src/cpm/bdosrec.asm:413-430`). Both of
 TEC-OS's geometries have more than 256 blocks, so every map on a TEC-OS card
 holds eight two-byte numbers.
 
@@ -264,22 +264,22 @@ block is 4 KiB, so an entry holds 32 KiB, two extents, and `EXM` is 1.
 To read or write a record the BDOS needs the record's place on the volume.
 `FCBADDR` takes the extent's place within its entry, `EX` AND `EXM`,
 times 128. It adds `CR` and shifts right by `BSH` to give the index of the
-block in the map (`src/cpm/bdosrec.asm:370-394`). `POSREC` then turns the block
+block in the map (`src/cpm/bdosrec.asm:388-412`). `POSREC` then turns the block
 and record into the record's number on the volume: the block shifted left by
-`BSH`, plus `CR` AND `BLM` (`src/cpm/bdosrec.asm:529-558`).
+`BSH`, plus `CR` AND `BLM` (`src/cpm/bdosrec.asm:547-576`).
 
 The BIOS's interface takes a track and a sector, so `POSREC` divides that number
 by `SPT` with `DIV16`, which gives the track as the quotient and the sector as
 the remainder. It adds the reserved tracks and passes both to the BIOS through
-`SETTRK`, `SECTRAN` and `SETSEC` (`src/cpm/bdosrec.asm:560-581`). `DIV16` is a
+`SETTRK`, `SECTRAN` and `SETSEC` (`src/cpm/bdosrec.asm:578-599`). `DIV16` is a
 16-bit division by shifts and trial subtractions, 16 steps whatever the number
-(`src/cpm/bdosrec.asm:583-603`). The BIOS turns track and sector back into one
+(`src/cpm/bdosrec.asm:601-621`). The BIOS turns track and sector back into one
 record number, and four records into one 512-byte card block, as Chapter 18
 describes.
 
 `POSREC` checks the block number first. `CHKBLK` compares it with `DSM`, and a
 number past the end of the volume, which only a damaged directory holds, is a
-`Bad Sector` error (`src/cpm/bdosrec.asm:534`, `src/cpm/bdoscon.asm:46-59`).
+`Bad Sector` error (`src/cpm/bdosrec.asm:552`, `src/cpm/bdoscon.asm:46-59`).
 
 ### The directory search
 
@@ -310,7 +310,7 @@ the drive's directory mark, `DIRUSED`, the number of entries up to the last one
 in use. Modes 3 and 5 are the exceptions, and go to the end of the directory
 (`src/cpm/bdosfn.asm:315-327`). The starter card's drive B has 512 entries, 32
 card blocks of them, and with no files a search there reads none. `MAKEFCB`
-raises the mark when it uses an entry beyond it (`src/cpm/bdosfile.asm:366-373`).
+raises the mark when it uses an entry beyond it (`src/cpm/bdosfile.asm:370-377`).
 
 ### Open, read, write and close
 
@@ -325,7 +325,7 @@ A file that was only read has nothing to write back at its close, so the open
 sets bit 7 of `S2`, which records that nothing has been written through this FCB
 since. `ADVWRITE` clears it at each write that succeeds, and `ALLOCBLK` as soon
 as it puts a new block in the FCB's map (`src/cpm/bdosrec.asm:105-124`,
-`src/cpm/bdosrec.asm:442-459`).
+`src/cpm/bdosrec.asm:460-477`).
 Function 16, close, returns at once when the bit is still set, with nothing
 written (`src/cpm/bdosfile.asm:157-163`). On a read-only drive it also returns
 success with nothing written (`src/cpm/bdosfile.asm:169-172`). Otherwise it finds
@@ -363,13 +363,13 @@ FCB's it closes the FCB and opens the one wanted
 (`src/cpm/bdosrec.asm:241-317`). A number with `R2` not 0 is error 6 before
 anything changes. A read of a record the extent doesn't hold returns 1, and a
 read of an extent that has no entry is error 4. A write makes the extent, and
-is error 5 if the directory is full (`src/cpm/bdosrec.asm:322-330`). A failed
+is error 5 if the directory is full (`src/cpm/bdosrec.asm:315-323`). A failed
 close of the old extent is error 3. Function 40 is function 34 with each newly
 allocated block filled with zeros first (`src/cpm/bdosrec.asm:197-211`).
 `ZEROBLK` writes the zeros from the directory buffer, one record at a time, and
 after each write puts the BIOS's DMA address back on the program's, so a
 failed write that function 45 returns to the program leaves the BIOS on the
-program's DMA buffer (`src/cpm/bdosrec.asm:477-527`,
+program's DMA buffer (`src/cpm/bdosrec.asm:495-545`,
 `src/cpm/bdoslog.asm:64-78`).
 
 Function 35 puts the file's size in records in `R0` to `R2`: the end of the
@@ -379,18 +379,18 @@ sequential position (`src/cpm/bdosfn.asm:197-215`).
 
 Function 22, make, takes the first empty entry and fills in the FCB's name,
 the current user number and an empty map. It writes the entry to the directory
-at once (`src/cpm/bdosfile.asm:307-378`). As in CP/M 2.2, it clears `S2` and
+at once (`src/cpm/bdosfile.asm:311-382`). As in CP/M 2.2, it clears `S2` and
 keeps `EX`, so the entry is the extent `EX` names in the file's first 32
 extents. `S1`, `RC` and the map are cleared in the FCB too
-(`src/cpm/bdosfile.asm:301-314`, `src/cpm/bdosfile.asm:334-347`). The move to
+(`src/cpm/bdosfile.asm:305-318`, `src/cpm/bdosfile.asm:338-351`). The move to
 a next extent and the random write make their entries through the same
-`MAKEFCB`, with the FCB's `S2` kept (`src/cpm/bdosfile.asm:316-323`).
+`MAKEFCB`, with the FCB's `S2` kept (`src/cpm/bdosfile.asm:320-327`).
 
 Function 19 erases every entry that matches, frees its blocks and writes each
 changed directory record (`src/cpm/bdosfile.asm:267-299`). Function 23 renames
 every entry of the file to the name at offset 17 of the FCB. Function 30
 copies the FCB's name and its attribute bits into every entry
-(`src/cpm/bdosfile.asm:394-443`).
+(`src/cpm/bdosfile.asm:398-447`).
 
 ## Allocation vectors
 
@@ -402,7 +402,7 @@ Chapter 13 describes. The DPH holds its address, and `LOGIN` copies it into
 `ALVPTR` (`src/cpm/bdoslog.asm:154-157`).
 
 `ALLOCBLK` scans the vector from block 0 for the first clear bit, sets it and
-puts the block's number in the FCB's map (`src/cpm/bdosrec.asm:414-475`). A
+puts the block's number in the FCB's map (`src/cpm/bdosrec.asm:432-493`). A
 delete clears the bits of each block the entry lists
 (`src/cpm/bdoslog.asm:410-461`). The blocks the directory itself occupies are
 set from `AL0` and `AL1` when the vector is built, and are never given out
@@ -411,7 +411,7 @@ taken, before the file is closed, so a block that a program has written but not
 yet closed is already in use for every other file. Since `ALLOCBLK` also marks
 the FCB as changed, a close after a write that failed still writes the entry
 that holds the block, and the block doesn't stay in use with no entry holding
-it (`src/cpm/bdosrec.asm:442-459`).
+it (`src/cpm/bdosrec.asm:460-477`).
 
 A vector is built when a drive is logged in, the first time it is selected
 after a disk reset (`src/cpm/bdoslog.asm:109-221`). `LOGIN` calls
@@ -433,13 +433,13 @@ already in `LOGINV`, `LOGIN` reads nothing: `LOGFAST` takes the drive's mark
 from its DPH (`src/cpm/bdoslog.asm:223-242`).
 
 The DPH has three words for the BDOS's own use, at offsets 2, 4 and 6, which
-`MNDPH` clears when it builds the DPH (`src/vol.asm:431-434`). TEC-OS's BDOS
+`MNDPH` clears when it builds the DPH (`src/vol.asm:440-443`). TEC-OS's BDOS
 puts in them what the scan at warm boot needs:
 
 | Offset | Contents | Written by |
 | ---: | --- | --- |
 | 2 | the sum of the vector's bytes at the end of the last scan | `LOGDONE` (`src/cpm/bdoslog.asm:244-260`) |
-| 4 | the changed flag: 1 once the vector may differ from the directory | `ALFOUND` (`src/cpm/bdosrec.asm:450-455`) and BIOS `WRITE` of a directory card block (`src/bios.asm:197-214`) set it, and `LOGDONE` clears it |
+| 4 | the changed flag: 1 once the vector may differ from the directory | `ALFOUND` (`src/cpm/bdosrec.asm:468-473`) and BIOS `WRITE` of a directory card block (`src/bios.asm:197-214`) set it, and `LOGDONE` clears it |
 | 6 | the directory mark, `DIRUSED` | `DUSAVE` (`src/cpm/bdoslog.asm:262-281`), BIOS `WRITE` of a directory card block (`src/bios.asm:215-235`) |
 
 The BIOS's part is in its `WRITE`. It tests whether the card block being written
@@ -492,7 +492,7 @@ and `WARMV`. Every drive is then scanned in full at its next selection, as in
 CP/M 2.2 (`src/cpm/bdosfile.asm:16-19`). Function 37 takes the drives named by
 the bits of `DE` out of `LOGINV`, the read-only vector and `WARMV`
 (`src/cpm/bdosfn.asm:268-282`). The volume services `MOUNT` and `UNMNT` call
-it for a drive whose volume they have changed (`src/vol.asm:651-662`).
+it for a drive whose volume they have changed (`src/vol.asm:662-673`).
 
 ## BDOS errors
 
@@ -570,7 +570,7 @@ CP/M 3's does, because `CR` moves on only once the BIOS call has succeeded
 
 Function 48 is CP/M 3's flush. `VFLUSH` writes every changed line of the block
 cache to the card, and the function returns `A` = 0, or `FFh` if a write failed
-and its line was dropped (`src/cpm/bdos.asm:175-180`, `src/vol.asm:675-688`).
+and its line was dropped (`src/cpm/bdos.asm:175-180`, `src/vol.asm:700-713`).
 CP/M 3's `E` = `FFh`, which also purges the buffers, gives the same flush,
 since a clean line holds nothing that the card lacks. Chapter 19
 describes the flush.

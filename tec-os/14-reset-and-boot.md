@@ -45,7 +45,7 @@ the ROM does. The Z80 comes out of reset
 with interrupts off, and the ROM executes `EI` only to restore a state it saved:
 the routines that must run with interrupts off put them back as they were at
 entry (`src/bios.asm:298`, `src/console.asm:242`, `src/console.asm:284`,
-`src/history.asm:40`, `src/cache.asm:502`). `VPAIR`, the PICO9918 console's
+`src/history.asm:40`, `src/cache.asm:515`). `VPAIR`, the PICO9918 console's
 routine that writes each pair to the VDP's control port, does the same
 (`src/pico.asm:262-276`). The one
 other `EI` is in page zero. Each boot writes it at `0038h` unless a jump is kept
@@ -195,7 +195,7 @@ geometry byte in `RSLBUF`, which means no selection (`src/boot.asm:165-167`).
 
 `RESEL` applies the selection after `MOUNT` has accepted the card in the socket
 and `ALVINIT` has given its drives their vectors in the usual way, so neither
-the slots nor the TPA varies with the selection (`src/vol.asm:459-550`). The card
+the slots nor the TPA varies with the selection (`src/vol.asm:468-559`). The card
 in the socket may no longer hold the kept volumes, so `RESEL` works in two steps
 and changes the drives only if the first step succeeds. The first step changes
 no drive. It walks the card's descriptors and compares each with every kept
@@ -208,7 +208,7 @@ volume would not fit its slot, or a kept drive is left with no match.
 The second step runs only when every kept drive has matched. It copies `RSLBUF`
 over the drive table and the drives' indexes and builds each drive's DPH. That
 step reads nothing and can't fail. A drive that was empty before the reset stays
-empty, even if the card names a volume for it (`src/vol.asm:459-473`).
+empty, even if the card names a volume for it (`src/vol.asm:468-482`).
 
 The run below unmounts drive B with `MOUNT B:`, then presses reset. The kept
 selection has no volume on B and the starter card's two volumes still match, so
@@ -326,7 +326,7 @@ Warm boot's steps are:
    whose write fails is dropped, so the card's copy stands, and the flush goes
    on to the next. If any failed, `CWBOOT` prints `Write lost` once and drops
    the rest of a chained line (`src/boot.asm:108`, `src/cache.asm:182-208`,
-   `src/cache.asm:375-384`). After function 47 this flush puts the records
+   `src/cache.asm:388-397`). After function 47 this flush puts the records
    written behind on the card before the CCP loads the chained program.
 8. A jump to the CCP's entry, `CCPENT`, with `C` holding the drive and user
    byte from `0004h` (`src/boot.asm:109-111`).

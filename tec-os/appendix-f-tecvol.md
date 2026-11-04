@@ -42,25 +42,25 @@ tecvol install IMAGE DEVICE --yes
 The options may come anywhere after the command, and an unknown option is an
 error (`tools/tecvol.mjs:39-60`). Every command but `create` and `recipe`
 opens an existing image and checks it as a container first, with the checks
-Appendix E lists. An image that fails is not used (`tools/tecvol.mjs:70-73`).
+Appendix E lists. An image that fails is not used (`tools/tecvol.mjs:73-76`).
 A command that changes an image checks the result as a container, writes it to
 a temporary file beside the image and renames that file over the image,
 so a failure leaves the image as it was (`tools/tecvol.mjs:17-19`,
-`tools/tecvol.mjs:62-68`).
+`tools/tecvol.mjs:65-71`).
 
 `DRIVE` names a volume by its drive letter, with or without a colon, by its
 label or by its id, tried in that order (`tools/lib/container.mjs:201-209`). A
 volume on no drive is reached by its label or id. `--user N` selects user area
 `N`, a whole number from 0 to 15 in one or two digits. Any other `N` is a
 mistake in the command line, found before the image is opened
-(`tools/tecvol.mjs:45-49`). Without it `put`, `get` and `era` use user area 0, and `dir`
-lists every user area (`tools/tecvol.mjs:104`, `tools/tecvol.mjs:133`).
+(`tools/tecvol.mjs:47-51`). Without it `put`, `get` and `era` use user area 0, and `dir`
+lists every user area (`tools/tecvol.mjs:107`, `tools/tecvol.mjs:136`).
 
 For a mistake in the command line, `tecvol` prints the reason and a line of
 usage and ends with exit status 2. For any other failure, such as a bad
 container, a full volume or a missing file, it prints `tecvol: ` and the
-reason and ends with exit status 1 (`tools/tecvol.mjs:27-31`,
-`tools/tecvol.mjs:189-194`).
+reason and ends with exit status 1 (`tools/tecvol.mjs:29-33`,
+`tools/tecvol.mjs:192-197`).
 
 `tecvol` and TEC-OS must never change the same card at the same time
 (`tools/tecvol.mjs:18-19`). TEC-OS holds each drive's map of free space in
@@ -71,9 +71,9 @@ or the card out, and press reset after putting it back.
 ## create
 
 `create IMAGE --volume SPEC ...` makes a new image
-(`tools/tecvol.mjs:106-111`). It fails if the image already exists. Each
+(`tools/tecvol.mjs:109-114`). It fails if the image already exists. Each
 `--volume` adds one volume, in the order given, from a spec of the form
-`GEOMETRY:LABEL:DRIVE[:ro][:wb]` (`tools/tecvol.mjs:82-86`):
+`GEOMETRY:LABEL:DRIVE[:ro][:wb]` (`tools/tecvol.mjs:85-89`):
 
 - `GEOMETRY` is `G1M` or `G8M`.
 - `LABEL` is up to 11 characters, put in capitals, and labels must differ.
@@ -87,7 +87,7 @@ multiple of 8. The default is 2,048, 1 MiB (`tools/lib/container.mjs:14`,
 the number of drives TEC-OS is to set up at cold boot. Each `N` is a whole
 number in decimal, from 1 to 16,777,215 for `--align`, which must also be a multiple of 8, and from 1 to 4 for
 `--drives`. Any other `N` is a mistake in the command line, found before the
-image is made (`tools/tecvol.mjs:33-37`, `tools/tecvol.mjs:50-51`). With `--drives`, or
+image is made (`tools/tecvol.mjs:35-39`, `tools/tecvol.mjs:52-53`). With `--drives`, or
 with more than 8 volumes, the card is format 1.1, and otherwise 1.0
 (`tools/lib/container.mjs:79-80`). Every payload is filled with `E5h`, so each
 volume starts as an empty CP/M disk. One volume must be on drive A.
@@ -107,9 +107,9 @@ node tools/tecvol.mjs create build/my.img --volume G1M:SYSTEM:A --volume G8M:WOR
 volumes, with the number of drives a 1.1 card gives, and then one line for
 each volume: its drive or `-`, its label, its id, its geometry, its start
 block, `rw` or `ro`, `wb` for a volume written behind, its number of files and
-its free bytes (`tools/tecvol.mjs:112-129`). Under a volume whose CP/M
+its free bytes (`tools/tecvol.mjs:115-132`). Under a volume whose CP/M
 directory has a fault, such as a block given to two files, it prints a line
-for each fault, starting `problem:` (`tools/lib/cpmfs.mjs:224-251`).
+for each fault, starting `problem:` (`tools/lib/cpmfs.mjs:240-267`).
 
 ```sh
 node tools/tecvol.mjs info build/my.img
@@ -144,7 +144,7 @@ tecvol: header checksum mismatch
 ## dir
 
 `dir IMAGE [DRIVE]` lists a volume's files, drive A's by default, one line
-each: the user area, the name and the size (`tools/tecvol.mjs:130-137`). The
+each: the user area, the name and the size (`tools/tecvol.mjs:133-140`). The
 size is in whole records, 128 bytes each, since CP/M records no size more
 exact. `R/O` and `SYS` follow a file with those attributes. The starter card's
 drive A:
@@ -214,7 +214,7 @@ usage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/t
 
 `get IMAGE DRIVE CPMNAME [OUTFILE]` copies a file from a volume to the PC,
 into `OUTFILE`, or to the standard output with none
-(`tools/tecvol.mjs:147-156`). Without `--text` the copy is every record,
+(`tools/tecvol.mjs:150-159`). Without `--text` the copy is every record,
 padding included. With `--text` it stops at the first `^Z` and turns each CR
 LF into a line feed (`tools/lib/cpmfs.mjs:123-142`).
 
@@ -249,7 +249,7 @@ erased the file from user area 3 and printed nothing.
 ## recipe
 
 `recipe RECIPE.json IMAGE` builds a card from a recipe, a JSON file that lists
-the volumes and the files to put on them (`tools/tecvol.mjs:165-171`).
+the volumes and the files to put on them (`tools/tecvol.mjs:168-174`).
 `npm run media` writes the starter card's recipe as `dist/starter.recipe.json`
 and builds `dist/starter.img` from it (`tools/media.mjs:206-225`). It also
 writes the web page's recipe, `dist/page.recipe.json`, which has the
@@ -263,7 +263,7 @@ in `create`'s terms: a geometry, a label, a drive and `readOnly` or
 
 `tecvol` reads a file's `url` as a web address if it starts `http://` or
 `https://`, and otherwise as a path from the recipe's own folder
-(`tools/tecvol.mjs:88-98`). It checks each file's size and SHA-256 against the
+(`tools/tecvol.mjs:91-101`). It checks each file's size and SHA-256 against the
 recipe and stops at the first that differs. The read-only flags go on last,
 after every file is written (`tools/lib/recipe.mjs:27-34`). The web page
 builds its "New starter card" from its own recipe with the same function.
@@ -285,7 +285,7 @@ PC.
 ## install
 
 `install IMAGE DEVICE --yes` writes the image to a device, from its first
-block (`tools/tecvol.mjs:172-183`). It checks the image as a container and
+block (`tools/tecvol.mjs:175-186`). It checks the image as a container and
 writes it whole, over whatever the device held. Without `--yes` it stops with
 a usage error.
 

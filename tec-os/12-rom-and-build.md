@@ -60,7 +60,7 @@ and the BDOS call, which Chapter 15 describes.
 The code starts at `RSTENT` (`src/boot.asm:20`) and runs through every routine of TEC-OS to the label
 `CODEEND`, which `src/end.asm:2` defines after the last file. The free space is
 the rest of the ROM, in one gap, and the build fills it with
-`FFh` (`tools/build.mjs:240-243`).
+`FFh` (`tools/build.mjs:244-247`).
 
 ## The source files and their order
 
@@ -180,14 +180,14 @@ the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
 therefore `BF00h` less the workspace's size, and the size is known only after
 an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
 build reads the address of `BDOSRME`, the label at the workspace's end, and
-takes `8000h` from it (`tools/build.mjs:228-232`). At 621201d that part is
+takes `8000h` from it (`tools/build.mjs:232-236`). At 621201d that part is
 1,049 bytes, so the second assembly has `WSBASE` at `BAE7h`
-(`tools/build.mjs:233-235`).
+(`tools/build.mjs:237-239`).
 
 The second assembly's output is the ROM. `materializeAtomGeneration` turns it
 into bytes from `C000h`, filling every gap with `FFh`, and the build copies
 them into a 16,384-byte array that is `FFh` everywhere else
-(`tools/build.mjs:240-243`).
+(`tools/build.mjs:244-247`).
 
 A separate module, `tools/lib/assemble.mjs`, assembles stand-alone programs
 with the same assembler, at `0100h` for a `.COM` file
@@ -207,39 +207,39 @@ from its pinned build and refuses one whose SHA-256 differs
 Between the second assembly and writing the image, the build checks the result
 against the rules the layout depends on. When a rule fails, the build stops
 with `placement check failed:` and the rule's text
-(`tools/build.mjs:206-208`). The checks are:
+(`tools/build.mjs:210-212`). The checks are:
 
 - Every byte the assembly emitted is at `C000h` or above, so that no part of
   the source puts bytes in RAM, and the image is at most 16 KiB
-  (`tools/build.mjs:237-241`).
+  (`tools/build.mjs:241-245`).
 - `RESET` is at `C000h` and the ROM table at `C003h`. The data block starts where
-  the table ends (`tools/build.mjs:246-248`).
+  the table ends (`tools/build.mjs:250-252`).
 - The table, the data and the code are in that order, and the code ends
-  within the ROM (`tools/build.mjs:249-250`).
+  within the ROM (`tools/build.mjs:253-254`).
 - The table holds `TNA` and the version 5.1, its jump is `JP SVCDSP`, and it is
   8 bytes long. `SVCFMT` in `abi.inc` is the service format that the tools on
   the PC write. Every entry in the service table `SVTAB` is in the code, and the
   device bits in `abi.inc` are the `CD` bits of `layout.asm`
-  (`tools/build.mjs:146-157`, `tools/build.mjs:251`).
+  (`tools/build.mjs:146-157`, `tools/build.mjs:255`).
 - The offsets of the PICO console's table in `abi.inc` name the right entries
   in `PITPL`, the ROM's template that `PIBLK` is filled from, and the places a
   debugger reads lie at their offsets in `PIBLK` (`tools/build.mjs:159-176`,
-  `tools/build.mjs:252`).
+  `tools/build.mjs:256`).
 - Each service's source, `drivers/glcd.asm` among them, reaches the ROM only
   through the names in `abi.inc` (`tools/build.mjs:178-190`,
-  `tools/build.mjs:253`).
+  `tools/build.mjs:257`).
 - The RAM BIOS table is at `BF00h`, and the fixed workspace ends exactly there. The
   state above the table starts 51 bytes after it, at `SDBYTE`, and all of it
-  ends by `C000h` (`tools/build.mjs:254-257`).
+  ends by `C000h` (`tools/build.mjs:258-261`).
 - The BIOS stack ends at or below the start of the
-  CCP's workspace (`tools/build.mjs:258`).
+  CCP's workspace (`tools/build.mjs:262`).
 - On the starter card the TPA is at
-  least 45,830 bytes (`tools/build.mjs:260-261`).
+  least 45,830 bytes (`tools/build.mjs:264-265`).
 
 The last check works out the TPA without running the ROM. `cardLayout` follows
 the arithmetic of cold boot's `ALVINIT`, which Chapter 13 describes: the
 allocation vectors packed down from `WSBASE`, and the BDOS entry jump below
-them (`tools/build.mjs:216-220`). The starter card has two volumes, a G1M
+them (`tools/build.mjs:220-224`). The starter card has two volumes, a G1M
 whose last allocation block, `DSM`, is 511 and a G8M whose `DSM` is 2047. Their
 vectors take 320 bytes and the entry is at `B9A4h`, which leaves 47,268 bytes
 from `0100h`.
@@ -250,16 +250,16 @@ When the checks pass, the build writes three files into `build/tecos/`.
 `tecos.rom` is the image. `tecos.d8.json` is the symbol map in Debug80's D8
 format, which `tools/capture.mjs` reads to find TEC-OS's labels. `census.json`
 holds the figures for the ROM's parts, the RAM's regions and the stacks
-(`tools/build.mjs:263-311`). When `dist/` exists, from an earlier `npm run
+(`tools/build.mjs:267-315`). When `dist/` exists, from an earlier `npm run
 media`, the build also copies the three files there, under the names below,
 and after a build `dist/` holds the same ROM as `build/tecos/`
-(`tools/build.mjs:316-330`).
+(`tools/build.mjs:320-334`).
 
 The PICO9918's console is in the ROM at each of its three widths, 80 columns
 from reset and 40 or 32 through `CON` (Chapter 17), and the GLCD's is a driver
 on the card, so every board takes the same image. The build has one profile, `tecos`, and stops
 with an error when it is given any other name (`tools/build.mjs:29-32`,
-`tools/build.mjs:339`). `npm run build` prints one line:
+`tools/build.mjs:343`). `npm run build` prints one line:
 
 ```text
 tecos: ROM 15942/16384 bytes, TPA $0100-$B9A3 (47268 bytes), sha256 bee18e1ecf501170
