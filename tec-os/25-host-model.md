@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. The host model and the web page
 
-Checked against TEC-OS 5a25178, with `@jhlagado/debug80-runtime` 0.3.3, the
+Checked against TEC-OS 58d4345, with `@jhlagado/debug80-runtime` 0.3.3, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -137,13 +137,10 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.SVC
-PICO.SVC?
-
 A>GLCD.SVC
 
 A>CON
-CON: UC1: GLCD
+CON: UC1:
 A>
 ```
 
@@ -155,9 +152,6 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.SVC
-PICO.SVC?
-
 A>GLCD.SVC
 
 ```
@@ -168,7 +162,7 @@ The graphics LCD shows what came after, since the driver cleared it:
 ```text
 
 A>CON
-CON: UC1: GLCD
+CON: UC1:
 A>
 ```
 
@@ -197,7 +191,7 @@ The rest reads or sets the board's state. `screen` turns the PICO9918's name
 table into rows of text, from the layout its registers select
 (`host/machine.mjs:380-405`). `glcdScreen` matches each 6 × 8 cell of the
 graphics LCD's memory against the font, which the caller supplies in
-`Machine.font` since the ROM holds none (`host/machine.mjs:409-449`).
+`Machine.font` (`host/machine.mjs:409-449`).
 `ramImage` and `loadRam` copy all of RAM, EXPAND 1 included, out and in.
 `reset` resets the CPU and the latches and leaves RAM and the card as they
 were, as the board's reset button does (`host/machine.mjs:526-586`).
@@ -205,14 +199,16 @@ were, as the board's reset button does (`host/machine.mjs:526-586`).
 ## The tests
 
 `npm test` runs every file in `test/` that ends `.test.mjs`, one at a time, with
-Node.js's own test runner (`package.json:17`). There are 49 such files, from
+Node.js's own test runner (`package.json:17`). There are 53 such files, from
 `arith.test.mjs` to `write.test.mjs`, each on one part of TEC-OS. Most build
 their machines with `boot` in `test/lib/fixtures.mjs`, which reads the one ROM,
-`build/tecos/tecos.rom`, and, when the board has a matrix keyboard, puts a
-display driver and a startup file on the card. The driver for the PICO9918 is
-80 columns wide unless the test asks for another width. It then runs to the
-first prompt with the clock at the tests' starting time (`test/lib/fixtures.mjs:21-27`,
-`test/lib/fixtures.mjs:99-111`, `test/lib/fixtures.mjs:114-121`).
+`build/tecos/tecos.rom`, and, when the board has a matrix keyboard, readies the
+card for its display. With the graphics LCD alone that is `GLCD.SVC` and a
+startup file naming it. With the PICO9918 the console is the ROM's, so the card
+gets a startup file only for a width other than 80, a `CON PICO` line. It then
+runs to the first prompt with the clock at the tests' starting time
+(`test/lib/fixtures.mjs:21-27`, `test/lib/fixtures.mjs:93-111`,
+`test/lib/fixtures.mjs:114-121`).
 
 `test/lib/fixtures.mjs` also makes the files the tests load. `program` assembles
 a source in `test/programs/` with ATOM and keeps the result in
@@ -261,11 +257,10 @@ recipe and the files in `dist/files` (`web/build.mjs:32-45`). The page's recipe,
 and the build copies it under the name the page fetches, `starter.recipe.json`.
 `npm run media` writes it, and it assembles `DEMO.COM` from
 `test/programs/demo.asm` into `dist/files` (`tools/media.mjs:227-240`). The files
-are the starter card's, `DEMO.COM` and the PICO9918's driver built at 40 and 32
-columns. The recipe's `widths` pins each of the three drivers by its URL and
-SHA-256 (`tools/media.mjs:195-195`, `tools/media.mjs:212`). The page uses one
-ROM for every display, since the PICO9918's width is the build of the card's
-`PICO.SVC` (`web/build.mjs:14`).
+are the starter card's and `DEMO.COM`. The page uses one ROM for every display
+and every width (`web/build.mjs:14`), since the PICO9918's console is the ROM's
+and a `CON PICO` line in the startup file sets its width
+(`host/card.mjs:1-4`).
 
 At start the page loads the card it stored last time. If there is none, it
 builds the starter card from the recipe and stores it. A stored record that
@@ -339,32 +334,25 @@ prepares the card with `prepareCard` from `host/card.mjs`
 (`web/src/main.mjs:67-99`). The preparation and a copy of files onto the card
 take turns, one at a time, so a width chosen while files are copied is the one
 the card in the machine and the stored card both keep (`web/src/main.mjs:67-80`).
-For the PICO9918 the page fetches the recipe and the
-three drivers its `widths` pins, each checked by its SHA-256
-(`host/card.mjs:71-71`). When one can't be had, `prepareCard` changes nothing.
-Otherwise it works on a copy of the card, which goes over the card only once
-every change is made, and it reads user 0 of drive A, read-only when the card
-says so (`host/card.mjs:18-24`, `host/card.mjs:58-70`). `prepareCard` writes the
-driver at the chosen width to drive A as `PICO.SVC` when the card has no
-`PICO.SVC`, has one of those three builds or has one of an older format. A file
-is one of the builds only if the whole file matches, the build and then the
-zeros to the end of its last record (`host/card.mjs:52-58`). Any other
-`PICO.SVC`, one that differs from each build anywhere, is kept, with a note
-that it is the card's own, and a card with no drive A or from an older TEC-OS
-gets no driver (`host/card.mjs:58-71`). `prepareCard` checks that drive A has
-the display's driver file, in the format this ROM loads. If it does, the first
-line of `STARTUP.CMD` becomes that file's name, with no line for the other
-display. `STARTUP.CMD`'s other lines stay, less their display pieces. A removed
-piece passes its own `:` to the piece after it on its line, a `:` first on the
-next line stays if the removed piece had its own, and otherwise a `:` that
-waited on a removed piece goes, on its line or first on the next
-(`host/card.mjs:71-114`). A card that fails the check gets no new `STARTUP.CMD`,
-and the reason goes to the serial terminal after the words `[power on]`, as do a
-failed fetch and the note (`web/src/main.mjs:97-98`). The reason is no drive A
-or a `.DRV` display file from an older TEC-OS, and with the graphics LCD chosen
-also no such driver or a driver of another format, since with the PICO9918
-chosen the page writes `PICO.SVC` (`host/card.mjs:71-71`). The message for an
-older card names the display's own `.DRV` file if the card has it, and
+The page writes no driver. The PICO9918's console is the ROM's, and the
+graphics LCD's driver must be on the card already. `prepareCard` works on a copy
+of the card, which goes over the card only once the change is made, and it reads
+user 0 of drive A, read-only when the card says so (`host/card.mjs:18-24`,
+`host/card.mjs:58-70`). It checks that the card can show the display chosen: a
+drive A, and for the graphics LCD a `GLCD.SVC` in the format this ROM loads
+(`host/card.mjs:26-50`). If it can, the first line of `STARTUP.CMD` becomes the
+display's line, `GLCD.SVC` for the graphics LCD and `CON PICO 40` or `CON PICO
+32` for the PICO9918 at those widths, with none at 80 and no line for the other
+display. `STARTUP.CMD`'s other lines stay, less their display pieces, a width
+line of the card's own among them. A removed piece passes its own `:` to the
+piece after it on its line, a `:` first on the next line stays if the removed
+piece had its own, and otherwise a `:` that waited on a removed piece goes, on
+its line or first on the next (`host/card.mjs:72-114`). A card that fails the
+check gets no new `STARTUP.CMD`, and the reason goes to the serial terminal
+after the words `[power on]` (`web/src/main.mjs:97-98`). The reason is no drive
+A, or with the graphics LCD chosen no `GLCD.SVC`, a `.DRV` display file from an
+older TEC-OS or a driver of another format (`host/card.mjs:30-50`). The message
+for an older card names the display's own `.DRV` file if the card has it, and
 otherwise the first `.DRV` display file in the directory (`host/card.mjs:41-44`).
 A change that can't be made, to a read-only drive A or in a full directory,
 leaves the card as it was, and the serial terminal says that it couldn't be
