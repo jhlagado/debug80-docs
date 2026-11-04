@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 7. Memory for programs
 
-Checked against TEC-OS 626ee41, with the ATOM assembler from the
+Checked against TEC-OS 5a25178, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7.
 
 A program on TEC-OS has most of the Z80's memory to itself, and the rest is
@@ -38,8 +38,8 @@ TEC-OS. The TPA, CP/M's Transient Program Area, runs from `0100h` up to the
 BDOS's entry or, with a service installed, up to the lowest service's jump on to
 that entry. The drives' allocation vectors are above the BDOS's entry. Above
 them, at the top of EXPAND 0, is TEC-OS's resident workspace. The workspace
-holds the buffer for card blocks, the stacks and state of the BIOS, the CCP and
-the BDOS, and at `BF00h` the BIOS jump table.
+holds the stacks and state of the BIOS, the CCP and the BDOS, and at `BF00h`
+the BIOS jump table.
 
 ## The TPA and the word at 0006h
 
@@ -104,7 +104,7 @@ node tools/tecvol.mjs put mem.img B top.com
 <!-- node tools/capture.mjs --card mem.img B:TOP -->
 ```text
 A>B:TOP
-B815h
+B9F3h
 
 A>
 ```
@@ -116,27 +116,27 @@ echo of `CON UC1` appeared on the PICO9918, and the rest on the graphics LCD:
 <!-- node tools/capture.mjs --board pico --card mem.img B:TOP "CON UC1" B:TOP -->
 ```text
 A>B:TOP
-B200h
+B300h
 
 A>CON UC1
 CON: UC1: GLCD
 A>B:TOP
-AC00h
+AD00h
 
 A>
 ```
 
 Each display driver takes 1,536 bytes, six pages of 256. A service starts on a
 page boundary, so the first one installed also takes the bytes of the page
-below the BDOS's entry, which are `B800h–B814h` on the starter card. The TPA
-is therefore 46,869 bytes on the starter card with no service, 45,312 with one
-display driver and 43,776 with both. A card whose header gives four
-drives, such as `my.img` from Chapter 4, has `B555h` in the word with no
-service, and its TPA is then 46,165 bytes.
+below the BDOS's entry, which are `B900h–B9F2h` on the starter card. The TPA
+is therefore 47,347 bytes on the starter card with no service, 45,568 with one
+display driver and 44,032 with both. A card whose header gives four
+drives, such as `my.img` from Chapter 4, has `B733h` in the word with no
+service, and its TPA is then 46,643 bytes.
 
 Cold boot sets up at most four drives, A to D, each with a vector of at most
-256 bytes, so every card gives at least 46,165 bytes with no service, 44,544
-with one display driver and 43,008 with both, when the word is `A900h`. Any
+256 bytes, so every card gives at least 46,643 bytes with no service, 45,056
+with one display driver and 43,520 with both, when the word is `AB00h`. Any
 other service takes its own pages from those figures.
 
 A program that sizes its buffers works from the TPA's size, the word less
@@ -199,18 +199,18 @@ node tools/tecvol.mjs put mem.img B area.com
 <!-- node tools/capture.mjs --card mem.img B:AREA -->
 ```text
 A>B:AREA
-46869 bytes
+47347 bytes
 
 A>
 ```
 
 The CCP loads a `.COM` file from `0100h`, a record of 128 bytes at a time, and
 stops at the 256-byte page that holds the address in the word at `0006h`. On
-the starter card with no service the last record ends at `B7FFh`, so the
-largest program file that loads is 46,848 bytes, 21 bytes short of the TPA. A
+the starter card with no service the last record ends at `B8FFh`, so the
+largest program file that loads is 47,104 bytes, 243 bytes short of the TPA. A
 file one record longer fails like a missing one, with its name and a question
 mark. By the same rule, the largest file that loads on a four-drive card with
-both display drivers is 43,008 bytes. The limit applies to the file alone, and
+both display drivers is 43,520 bytes. The limit applies to the file alone, and
 a program's data may go on to the byte below the word at `0006h`.
 
 The memory above the word is TEC-OS's. A program that writes there corrupts
@@ -317,6 +317,6 @@ unless a program wrote there, and the Z80 runs on through them into the ROM at
 `C000h`. The ROM's reset entry tells this from a reset by the byte at `0002h`
 and goes to the warm boot, which puts EXPAND 0 back and writes the cache's
 changes to the card as at any program's end (`src/boot.asm:17-19`,
-`src/boot.asm:75-88`). A reset
+`src/boot.asm:75-89`). A reset
 and BIOS function 0 run cold boot.
 
