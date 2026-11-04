@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -28,17 +28,17 @@ the editing keys that Chapter 2 lists. Return ends the line, which holds up to
 searches for the command, the CCP turns every lower-case letter into a
 capital, so `dir *.com` and `DIR *.COM` are the same command:
 
-<!-- node tools/capture.mjs "dir *.com" "DIR ????.COM" "DIR A:P*.*" "DIR B:" -->
+<!-- node tools/capture.mjs "dir *.com" "DIR ????.COM" "DIR A:G*.*" "DIR B:" -->
 ```text
 A>dir *.com
 MOUNT.COM    TED.COM      TAS.COM     
-3 files, 978K free
+3 files, 980K free
 A>DIR ????.COM
 TED.COM      TAS.COM     
-2 files, 978K free
-A>DIR A:P*.*
-PICO.SVC    
-1 file, 978K free
+2 files, 980K free
+A>DIR A:G*.*
+GLCD.SVC    
+1 file, 980K free
 A>DIR B:
 NO FILE
 A>
@@ -56,7 +56,7 @@ with `:` runs only if the one before it succeeded. Chapter 11 describes both.
 ## File names
 
 A CP/M file name has up to eight characters, then a full stop and a type of up
-to three: `STARTUP.CMD`, `PICO.SVC`. The type may be left out, with its full
+to three: `STARTUP.CMD`, `GLCD.SVC`. The type may be left out, with its full
 stop, and then it is three spaces. A drive letter and a colon in front of the
 name, as in `B:NOTES.TXT`, name a file on another drive. Without one, the name
 is on the current drive, the one the prompt shows.
@@ -97,8 +97,8 @@ and so do an unknown command and a program that won't load.
 Two characters in a name match a group of files. `?` matches any one character
 in its place, and `*` matches the rest of the part it is in: in the name, up
 to eight characters, or in the type, up to three. The CCP turns a `*` into `?`
-characters to the end of its part, so `P*.*` is `P???????.???` and matches
-every file whose name starts with `P`, whatever its type. Characters after a
+characters to the end of its part, so `G*.*` is `G???????.???` and matches
+every file whose name starts with `G`, whatever its type. Characters after a
 `*` in the same part are passed over, so `D*X` is the same as `D*`.
 
 A `?` also matches a space, and a name shorter than eight characters is padded
@@ -163,13 +163,12 @@ the end of the file's last record:
 <!-- node tools/capture.mjs "TYPE STARTUP.CMD" -->
 ```text
 A>TYPE STARTUP.CMD
-PICO.SVC
 GLCD.SVC
 
 A>
 ```
 
-`STARTUP.CMD` ends its last line with a carriage return and a line feed, and
+`STARTUP.CMD` ends its line with a carriage return and a line feed, and
 the blank line after it is the one the CCP prints before the prompt. A file
 that isn't there gives `NO FILE`, and so does `TYPE` with no name. Like `DIR`,
 `TYPE` stops at `[more]` when the screen fills.
@@ -301,7 +300,7 @@ file.
 
 The pages must stay below the address in the word at `0006h`, so the number
 must be less than the high byte of that word. On the starter card with no
-service installed the word is `B9F3h`, and `SAVE` takes up to 184 pages:
+service installed the word is `B9A4h`, and `SAVE` takes up to 184 pages:
 
 <!-- node tools/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 185 BIG.COM" DIR -->
 ```text
@@ -356,21 +355,21 @@ those of the current user area, on every drive. The one exception is the search
 for a program, which also looks in area 0, as the section on running a program
 describes. TEC-OS starts in user area 0,
 where the starter card's files all are, and `USER` and a number select another
-area. The prompt doesn't show the area, so the files of area 0 disappear from
-view after `USER 3`:
+area. In an area other than 0 the prompt shows the area's number before the
+drive, as CP/M 3's does, and the files of area 0 disappear from view:
 
 <!-- node tools/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" MOUNT "USER 0" "DIR B:" -->
 ```text
 A>USER 3
-A>SAVE 1 B:MINE.COM
-A>DIR B:
+3A>SAVE 1 B:MINE.COM
+3A>DIR B:
 MINE.COM    
 1 file, 8172K free
-A>MOUNT
+3A>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
-A>USER 0
+3A>USER 0
 A>DIR B:
 NO FILE
 A>
@@ -390,32 +389,31 @@ reset returns to area 0.
 
 A command that names a file of type `.SVC` installs the service it holds. A
 service is code that TEC-OS keeps in memory below the BDOS until a reset or
-`UNLOAD`, as Chapter 1 explained for the display drivers. `SERVICES` lists the
+`UNLOAD`, as Chapter 1 explained for the graphics LCD's driver. `SERVICES` lists the
 services installed, the newest first, each with the number of 256-byte pages it
 takes. `UNLOAD` removes the newest one if that service can be removed, and
 otherwise it changes nothing and prints `UNLOAD?`. It prints the same with no
 service installed. With the starter card on the web page's board, where
-`PICO.SVC` is installed at startup, the PICO9918's screen shows this, from the
-startup file's second line on:
+`GLCD.SVC` is installed at startup, the console shows this:
 
-<!-- node tools/capture.mjs --board pico --screen SERVICES UNLOAD -->
+<!-- node tools/capture.mjs --board pico SERVICES UNLOAD SERVICES UNLOAD -->
 ```text
-
-A>GLCD.SVC
-GLCD.SVC?
+A>SERVICES
+GLCD 3
+A>UNLOAD
 
 A>SERVICES
-PICO 6
 A>UNLOAD
 UNLOAD?
 
 A>
 ```
 
-`PICO.SVC` takes six pages, 1,536 bytes, and its removal fails while the
-PICO9918 is the console. A `.SVC` file that isn't there, or that doesn't
-install, gives the command's name with a question mark, as `GLCD.SVC?` shows
-here. Chapter 5 gives the rules for installing and removing services, and
+`GLCD.SVC` takes three pages, 768 bytes, and the first `UNLOAD` removes it.
+The second `SERVICES` prints nothing, and the second `UNLOAD` has nothing to
+remove. The PICO9918's console is in the ROM, so `SERVICES` doesn't list it and
+`UNLOAD` never removes it. A `.SVC` file that isn't there, or that doesn't
+install, gives the command's name with a question mark. Chapter 5 gives the rules for installing and removing services, and
 Chapter 10 describes how a service is made.
 
 ## Running a program
@@ -548,17 +546,20 @@ brought back and run again:
 <!-- node tools/capture.mjs --board pico --screen "DIR *.SVC" CON "@start "$'\x17\x17' -->
 ```text
 
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+
 A>GLCD.SVC
-GLCD.SVC?
 
 A>DIR *.SVC
-PICO.SVC     GLCD.SVC
-2 files, 978K free
+GLCD.SVC
+1 file, 980K free
 A>CON
-CON: CRT: PICO9918
+CON: CRT:
 A>DIR *.SVC
-PICO.SVC     GLCD.SVC
-2 files, 978K free
+GLCD.SVC
+1 file, 980K free
 A>
 ```
 
