@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -62,8 +62,9 @@ reads them from the volume's directory.
 
 A container holds up to 127 volumes, and up to four of them are on drives at a
 time, as drives A to D. The header's format number, 1.0 or 1.1, sets how many
-volumes the container can hold. A 1.0 container holds up to 8, so a container
-of more than 8 is format 1.1, which continues the table of descriptors into
+volumes the container can hold. A 1.0 container holds up to 8, and cold boot
+refuses a 1.0 header that counts more with error 24. A container of more than
+8 is therefore format 1.1, which continues the table of descriptors into
 blocks 1 to 7. Format 1.1 also has a drives field, the number of drives the
 card is to have, which the section on memory explains. Appendix E gives the
 header and the descriptor byte by byte.
