@@ -105,7 +105,7 @@ The mount reads every block of the table from the card again
 (`src/vol.asm:22-26`).
 
 On the starter card with the serial board, cold boot takes 1,371,228 T-states,
-about 0.32 seconds, from the first instruction to the CCP's entry, measured on
+about 0.34 seconds, from the first instruction to the CCP's entry, measured on
 the host model. Three steps take most of it. The banner is 25 characters at
 9,448 T-states each through `CONOUT`, the read of the container's block 0 takes
 219,144 T-states and `MEMINIT` takes about 347,000, most of it the clearing of
@@ -311,8 +311,8 @@ Warm boot's steps are:
    It keeps the command buffer below `CCPCLR` for a chained
    line's next piece. It puts the DMA address back at `0080h`, sets the command
    buffer's maximum length to 127 and fills the CCP stack's guard with `A5h`.
-   It clears the key that lets a write skip reading its block, so that a
-   changed card is read again (`src/boot.asm:262-281`, `src/ram.asm:69-82`).
+   It clears the key that lets a write skip reading its block, so that the
+   first write after the warm boot reads its block before changing it (`src/boot.asm:262-281`, `src/ram.asm:69-82`).
 6. The console put right. `VREST` restores the display's mode if the console
    is on one, and `VTREGR` resets the scroll region to the whole screen
    (`src/boot.asm:85-88`).
