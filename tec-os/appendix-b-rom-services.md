@@ -207,7 +207,9 @@ Drives count from 0 for A. Appendix E gives the descriptor's fields. Each
 service returns `A` = 0 with carry clear, or `TNEBAD` with carry and nothing
 changed. It refuses an index past the table, a drive past D, a volume already
 on a drive, a drive with no slot or a slot too small for the volume, an
-attempt to leave drive A empty and a failed write of the cache. A format 1.0
+attempt to leave drive A empty and a failed write of the cache. After a failed
+write of the cache the drives are as they were, but each changed block that
+couldn't be written has been dropped from the cache and its change lost. A format 1.0
 card gives a slot only to the drives mounted at cold boot.
 
 A mount or an unmount writes the cache's changes for the card first and resets

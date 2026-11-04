@@ -144,8 +144,8 @@ three blocks, one after the other (`src/ram.asm:1-3`).
 The first block is the BIOS's, from `DSKCUR` to the BIOS stack
 (`src/ram.asm:8-63`). It begins with the disk state: the drive, track, sector
 and DMA address the BDOS last set, and the block and record they map to. Next
-is a 4-byte key, the drive and block of the last block that a write cleared
-rather than read (`src/ram.asm:17-19`, `src/bios.asm:128-138`). After it come
+is a 4-byte key, a flag with the drive and block of the last block that a
+write cleared rather than read (`src/ram.asm:17-19`, `src/bios.asm:128-138`). After it come
 the drive table, the drives' disk parameter headers, the DPHs, and the 128-byte
 directory buffer `DIRBUF` that every drive shares. Chapter 18 describes the key
 and these tables. Then come the word `STUBAD`, which holds the BDOS entry
