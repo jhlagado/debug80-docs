@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from
-Thorium 128edb7, whose copy in `dist/files` has the SHA-256
-`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`; the
-timings below were measured on that card.
+<!-- Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from
+     Thorium 128edb7, whose copy in `dist/files` has the SHA-256
+     `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`; the
+     timings below were measured on that card. -->
 
 TEC-OS starts in two ways. Cold boot runs after power-on, after the reset
 button and when a program calls the RAM BIOS table's first entry

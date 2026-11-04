@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS 78127ec.
+<!-- Checked against TEC-OS 78127ec. -->
 
 Chapter 1's first boot ran a command that nobody typed, `GLCD.SVC`, which on a
 board with only a serial terminal failed without a word. This chapter explains

@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 12. The ROM and its build
 
-Checked against TEC-OS 78127ec.
+<!-- Checked against TEC-OS 78127ec. -->
 
 TEC-OS is one 16 KiB image for the addresses `C000h–FFFFh`. This chapter
 describes the image's layout, from the jump at its first byte to the free

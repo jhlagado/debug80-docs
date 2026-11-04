@@ -7,9 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 10. Writing services
 
-Checked against TEC-OS 78127ec. The programs were assembled by the starter
-card's `TAS.COM`, from Thorium dbee66a, SHA-256
-`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
+<!-- Checked against TEC-OS 78127ec. The programs were assembled by the starter
+     card's `TAS.COM`, from Thorium dbee66a, SHA-256
+     `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. -->
 
 Every program written so far has been a `.COM` file, which runs at `0100h` and
 is gone when it ends. A `.SVC` file stays in memory after its command ends. In

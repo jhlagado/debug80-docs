@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 20. The hardware services and the service loader
 
-Checked against TEC-OS 78127ec, with the starter card's `TAS.COM` from Thorium
-dbee66a, SHA-256
-`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
+<!-- Checked against TEC-OS 78127ec, with the starter card's `TAS.COM` from Thorium
+     dbee66a, SHA-256
+     `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. -->
 
 Chapters 9 and 10 use the ROM's numbered services and its service loader from a
 program's side. This chapter describes the code behind them: the dispatcher at

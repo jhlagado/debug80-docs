@@ -7,11 +7,11 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from Thorium
-128edb7, with the SHA-256
-`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
-`TAS.COM` from Thorium dbee66a, with the SHA-256
-`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
+<!-- Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from Thorium
+     128edb7, with the SHA-256
+     `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
+     `TAS.COM` from Thorium dbee66a, with the SHA-256
+     `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. -->
 
 TEC-OS reads everything but its own code from one SD card: the programs it
 runs, its services, its startup file and your own files. This chapter describes

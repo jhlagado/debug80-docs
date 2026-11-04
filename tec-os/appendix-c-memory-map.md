@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix C. Memory map
 
-Checked against TEC-OS 78127ec.
+<!-- Checked against TEC-OS 78127ec. -->
 
 This appendix gives the addresses TEC-OS uses: the CPU's address space, the
 ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and

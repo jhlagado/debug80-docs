@@ -7,9 +7,9 @@ nav_group: "Appendices"
 
 # Appendix H. The service file format
 
-Checked against TEC-OS 78127ec, with the starter card's `TAS.COM` from Thorium
-dbee66a, SHA-256
-`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
+<!-- Checked against TEC-OS 78127ec, with the starter card's `TAS.COM` from Thorium
+     dbee66a, SHA-256
+     `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. -->
 
 This appendix lists the `.SVC` file's format: the header's fields and the
 loader's check of each, the dependencies and the relocation data, with

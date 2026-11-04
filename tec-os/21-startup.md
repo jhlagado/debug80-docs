@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 21. Startup
 
-Checked against TEC-OS 78127ec.
+<!-- Checked against TEC-OS 78127ec. -->
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and two

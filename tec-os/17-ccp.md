@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 78127ec, with the ATOM assembler from the repository's
-`atom-z80` 0.3.7 and the starter card's `TED.COM` from Thorium
-128edb7, whose copy in `dist/files` has the SHA-256
-`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
+<!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the repository's
+     `atom-z80` 0.3.7 and the starter card's `TED.COM` from Thorium
+     128edb7, whose copy in `dist/files` has the SHA-256
+     `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. -->
 
 The CCP prints the prompt, reads a command line and carries it out, as Chapter
 3 describes from the keyboard's side. This chapter describes the CCP's code:
