@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 21. Startup
 
-Checked against TEC-OS 58d4345.
+Checked against TEC-OS 621201d.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and two
@@ -34,7 +34,7 @@ The byte holds three kinds of value (`src/cpm/ccpcmd.asm:553-556`):
 
 The byte's place in memory separates an ordinary exit from a reset. The block
 that holds it starts above the RAM BIOS table (`src/ram.asm:218`), past
-`BDOSRME`, the end of the range `CPMINIT` clears (`src/boot.asm:271-275`,
+`BDOSRME`, the end of the range `CPMINIT` clears (`src/boot.asm:295-300`,
 `src/ram.asm:216`). An ordinary exit is a warm boot, which calls `CPMINIT` and
 never comes to `COLD` (`src/boot.asm:4-8`, `src/boot.asm:92-110`), so `STPOS` and
 `STREC` keep their values through every program in the file.
@@ -52,7 +52,7 @@ after that clear, with `STPOS` still 0, because the CCP hasn't run yet
 
 Every entry to the CCP sets the user number and then calls `STBOOT`
 (`src/cpm/ccp.asm:54-60`). Cold boot sets the drive and user byte to 0 and then
-runs on into warm boot, which passes that byte to the CCP (`src/boot.asm:81-100`,
+runs on into warm boot, which passes that byte to the CCP (`src/boot.asm:81-83`,
 `src/boot.asm:109-111`), so at the first call the user area is 0. `STBOOT` returns
 at once if `STPOS` isn't 0 (`src/cpm/ccpcmd.asm:557-560`), which is the case at every
 other entry.
@@ -67,12 +67,12 @@ and reaches a prompt with nothing from the file run.
 The keypad test comes next, and it gives a way past a file that keeps the board
 from reaching a prompt (`src/cpm/ccpcmd.asm:562-564`). `test/startup.test.mjs:46-58`
 holds a key through reset to get past a service whose `INIT` never returns, and
-`:221-234` does the same for a file that resets the board at every boot.
+`:246-259` does the same for a file that resets the board at every boot.
 `STSPORT` is port `03h` (`src/layout.asm:11`), and bit 6 is low while a keypad
 key is down, as Appendix G describes. A low bit returns from `STBOOT` with
 `STPOS` at `80h`, so a skip is the same state as a file that wasn't there. Bit 6
 is tested this one time, so the key has to be down when `STBOOT` starts, which
-on the model, with the web page's board and the starter card, is 5,825,597
+on the model, with the web page's board and the starter card, is 5,824,547
 T-states after reset, about 1.46 seconds.
 
 `STBOOT` then makes the read in the CCP's own FCB. It copies 12 bytes of
@@ -205,7 +205,7 @@ and Appendix H the file.
 
 Only the GLCD has a display line. The PICO9918's console is the ROM's, started
 at cold boot when the PICO9918 and the matrix keyboard answer, so no line in the
-file loads it (`src/video.asm:7-11`, `src/pico.asm:27-44`).
+file loads it (`src/video.asm:8-10`, `src/pico.asm:27-47`).
 
 `GLCD.SVC`'s load fails from inside, in the driver's own `INIT`. It asks first
 for the ROM's font with service `FONT`, 15, a number past the table on a ROM
@@ -215,9 +215,12 @@ controller that doesn't answer returns `TNENODV` with carry
 `DRVR`, 12, with the console mode in `B`, 3 for `UC1:`
 (`drivers/glcd.asm:46-50`). `SVDRV` refuses any other mode with `TNEBAD` and
 carry, nothing changed, and that includes 1 for `CRT:`, whose table is the
-ROM's own. It passes 3 to `VIDHOOK`, which returns carry if `CDMTX` is clear or
-if `UC1:`'s slot already holds a table, and `SVDRV` then returns `TNEBAD` with
-carry (`src/services.asm:320-331`, `src/video.asm:86-95`). So the driver needs
+ROM's own. In a line from the file while the IOBYTE's `CON:` field is `CRT:`
+it refuses the table with `TNENODV`, as for an absent device
+(`src/services.asm:368-380`). Otherwise it passes 3 to `VIDHOOK`, which returns
+carry if `CDMTX` is clear or if `UC1:`'s slot already holds a table, and `SVDRV`
+then returns `TNEBAD` with carry (`src/services.asm:381-386`,
+`src/video.asm:86-95`). So the driver needs
 the matrix keyboard, and a second load of `GLCD.SVC` fails while the first is
 in. An old card's `PICO.SVC` asks for `CRT:` and fails at the same refusal,
 with nothing left (`test/ks39.test.mjs:124-135`).
@@ -228,7 +231,14 @@ some other service, and the console stays. A match sets `CDGLC`
 (`src/loader.asm:525-526`). If `CRT:`, the ROM's PICO9918 console, is the mode
 in effect, the GLCD gives way: `SVCGO` goes to `WRDCLR` alone, and the console
 stays where it is, with `GLCD.SVC` in for a later `CON UC1`
-(`src/loader.asm:527-530`, `test/pico.test.mjs:91`). Otherwise `CONSET` clears
+(`src/loader.asm:527-530`, `test/pico.test.mjs:579-586`). A line from the file
+doesn't get that far on such a board, because `SVDRV` has refused its table,
+so the starter card's `GLCD.SVC` line leaves nothing in memory there
+(`test/pico.test.mjs:92-109`). The give-way follows a `GLCD.SVC` typed at the
+prompt. An `UNLOAD` of a `GLCD.SVC` that gave way drops `UC1:`'s table and
+leaves `CRT:` and its screen as they were, since `VIDHOFF` resets the console
+mode only when the mode it drops is the one in effect
+(`src/video.asm:103-118`). Otherwise `CONSET` clears
 the LCD's word and passes `CMUC1` to `CONSW`, which moves the console and
 writes the mode it takes into the console field of the IOBYTE
 (`src/loader.asm:531-533`, `src/console.asm:53-55`). `CMDCON` writes the field
@@ -248,7 +258,10 @@ before `STLINE` is called, so it keeps the mark of the line it came from
 
 The mark matters at one place, a service's failed load. `SVCLOAD` keeps the
 `A` that `INIT` returned in `SVCRA`, beside `SVCRC`, which says why the load
-failed (`src/loader.asm:243-246`, `src/ram.asm:266-267`). The CCP reads the two
+failed (`src/loader.asm:243-246`, `src/ram.asm:266-267`). A record refused
+after a good `INIT` sets `SVCRA` to 0, so that failure is never taken for an
+absent device (`src/loader.asm:272-274`, `test/startup.test.mjs:107-122`).
+The CCP reads the two
 bytes as one word, `SVCRC` in `L` and `SVCRA` in `H`, and combines them with the
 mark (`src/cpm/ccp.asm:290-296`). `AND H` keeps `INIT`'s status only for a line
 from the file. `XOR TNENODV` makes the result zero only for status 2, the device
@@ -261,7 +274,14 @@ So a line `GLCD.SVC` in the file says nothing on a board with no GLCD, where
 `INIT` finds no controller. Typed at the prompt, the same line gives
 `GLCD.SVC?`. A missing or damaged file fails before `INIT` runs, with `SVCRC`
 0, and a board with no matrix keyboard fails at `TNDRVR` with `TNEBAD`, so both
-print the name from the file too (`test/startup.test.mjs:60-93`).
+print the name from the file too (`test/startup.test.mjs:60-69`,
+`test/startup.test.mjs:94-105`).
+
+A width line follows the same rule. `CON PICO` or `CON CRT` with a width finds
+the ROM's PICO9918 console with `FIND` before it passes the width. With no such
+console, as on a serial board, a line from the file goes to `STARTED` with no
+message and the code still 0, and the same line typed prints the width with a
+question mark (`src/cpm/ccpcmd.asm:95-103`, `test/startup.test.mjs:82-93`).
 
 `BADCMD` stores the failure code `RCFAIL` in `PRGCODE`, and a piece that starts
 with `:` runs only when the code shows no failure (`src/cpm/ccp.asm:143-155`,
@@ -284,7 +304,7 @@ It comes from `GLCLD`, the path of `CON UC1`, when `SVCGO` returns carry
 (`src/loader.asm:495-508`). `GLCLD` first puts the mode from `CONMOD` back in
 the console field through `CONFLD`, since the console hasn't moved
 (`src/loader.asm:504-506`, `src/console.asm:355-359`). `GLCLD` returns with
-`GLCD.SVC` already in at `src/loader.asm:380`, so that case writes nothing.
+`GLCD.SVC` already in at `src/loader.asm:497`, so that case writes nothing.
 
 `CDWRD` is bit 7 of `CONDEV`, the byte at `BFE7h`, at the workspace's end, that
 records the console devices (`src/ram.asm:278`, `src/layout.asm:41-46`):
@@ -371,8 +391,8 @@ nothing is written if that equals the old text (`host/card.mjs:101-114`). For
 the GLCD the line is `GLCD.SVC`. For the PICO9918 it is `CON PICO 40` or `CON
 PICO 32`, and at 80 columns there is none, since the ROM's console starts at 80
 (`host/card.mjs:109`). The file has no line for the other display. On the page's
-board with the PICO9918, which has the GLCD as well, a `GLCD.SVC` line would only
-load and give way, and `CON UC1` loads `GLCD.SVC` itself when it is wanted
+board with the PICO9918, which has the GLCD as well, a `GLCD.SVC` line would pass
+over quietly and load nothing, and `CON UC1` loads `GLCD.SVC` itself when it is wanted
 (`src/cpm/ccpcmd.asm:117-119`).
 
 A card that passes `cardProblem` has its startup file rewritten to that form
