@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from
+Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from
 Thorium 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`; the
 timings below were measured on that card.
@@ -45,9 +45,9 @@ the ROM does. The Z80 comes out of reset
 with interrupts off, and the ROM executes `EI` only to restore a state it saved:
 the routines that must run with interrupts off put them back as they were at
 entry (`src/bios.asm:270`, `src/console.asm:213`, `src/console.asm:249`,
-`src/history.asm:39`, `src/cache.asm:474`). `VPAIR`, the routine in `PICO.SVC`
-that writes each pair to the VDP's control port, does the same
-(`drivers/pico.asm:226-238`). The one
+`src/history.asm:39`, `src/cache.asm:474`). `VPAIR`, the PICO9918 console's
+routine that writes each pair to the VDP's control port, does the same
+(`src/pico.asm:253-266`). The one
 other `EI` is in page zero. Each boot writes it at `0038h` unless a jump is kept
 there (`src/boot.asm:254-263`). It runs on an interrupt, which needs interrupts on
 already, and on a program's `RST 38h`, which turns them on. Chapter 19
@@ -68,13 +68,19 @@ its lines in order:
 4. `RAMCHK`, which returns only if there is RAM at `8000h–BFFFh` and EXPAND 1
    behind it (`src/boot.asm:33`).
 5. The resident workspace cleared, from `WSBASE` to `WSEND`, and the stack
-   moved to the BIOS stack inside it (`src/boot.asm:34-39`).
+   moved to the BDOS's stack inside it, which nothing else uses before the CCP
+   runs (`src/boot.asm:34-42`).
 6. `CONINIT`, which starts the serial terminal, reads the Matrix switch and
-   probes for the PICO9918. Then `RTCHAS`, which probes for the clock and sets
+   probes for the PICO9918. When the PICO9918 answers and the Matrix switch
+   enables the keyboard, `VIDINIT` runs on into `PISTART`, which starts the
+   ROM's PICO9918 console at 80 columns and puts `CRT:` in the IOBYTE, so the
+   banner goes to the screen (`src/console.asm:42-45`, `src/video.asm:7-11`,
+   `src/pico.asm:27-44`). Then `RTCHAS`, which probes for the clock and sets
    bit 3 of `CONDEV` when one answers, and the banner (`src/boot.asm:43-50`).
 7. `MEMINIT`, which clears EXPAND 1 and marks every cache line empty
    (`src/boot.asm:51`).
-8. `LCDINIT` and the LCD's top row (`src/boot.asm:54-59`).
+8. At `COLDRT`, the BDOS's stack set again, then `LCDINIT` and the LCD's top
+   row (`src/boot.asm:54-59`).
 9. `SDINIT`, which starts the card, and `MOUNT`, which reads the container's
    table through a cache line, checks it and fills the drive table. Either
    failure goes to the diagnostic prompt, `DIAG` (`src/boot.asm:60-63`).
@@ -99,18 +105,18 @@ gives. Chapter 18 describes steps 9 and 10, and the rest of this chapter steps 2
 4 and 7.
 
 The diagnostic prompt's `R` jumps back to `COLDRT`, step 8 (`src/boot.asm:448-449`,
-`src/boot.asm:52-54`), so a retry clears the LCD, starts the card again and
+`src/boot.asm:52-57`), so a retry resets the stack, clears the LCD, starts the card again and
 mounts it, without clearing the memory or printing the banner a second time.
 The mount reads every block of the table from the card again
 (`src/vol.asm:22-26`).
 
-On the starter card with the serial board, cold boot takes 1,371,228 T-states,
+On the starter card with the serial board, cold boot takes 1,373,385 T-states,
 about 0.34 seconds, from the first instruction to the CCP's entry, measured on
 the host model. Three steps take most of it. The banner is 25 characters at
 9,448 T-states each through `CONOUT`, the read of the container's block 0 takes
 219,144 T-states and `MEMINIT` takes about 347,000, most of it the clearing of
 EXPAND 1. The startup file's commands then run before the first prompt, so the
-CCP's first call of `CONIN` at that prompt comes 8,938,578 T-states after reset.
+CCP's first call of `CONIN` at that prompt comes 7,068,146 T-states after reset.
 
 ## The RAM check
 
@@ -216,19 +222,16 @@ A>
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 
-A>PICO.SVC
-PICO.SVC?
-
 A>GLCD.SVC
-GLCD.SVC?
 
 A>
 ```
 
 The selection is all that a reset keeps. Cold boot clears page zero, the
 workspace and EXPAND 1 as on any cold boot, so services, the registry, the cache,
-open files and the history are gone and the console is the serial terminal again
-(`src/boot.asm:26-39`, `src/boot.asm:158-164`). A change the cache held for the
+open files and the history are gone. The console is the one cold boot starts,
+the PICO9918's at 80 columns on a board with it and the matrix keyboard and the
+serial terminal on any other (`src/boot.asm:26-50`, `src/boot.asm:158-164`). A change the cache held for the
 card is lost, and one the cache had already written stays on the card, since
 nothing is rolled back. Once a recognised reset has applied a selection, the next reset
 passes the test and applies it again while the card still holds those volumes.
@@ -306,7 +309,7 @@ Warm boot's steps are:
 4. `SVCBSY` cleared, so that a service's `INIT` or `REMOVE` that a program's
    end interrupted is not taken to be still running (`src/boot.asm:88-89`).
 5. `CPMINIT`, which clears the CCP's state and the BDOS's,
-   332 bytes from `CCPCLR` to `BDOSRME`, as a fresh load of them from disk
+   329 bytes from `CCPCLR` to `BDOSRME`, as a fresh load of them from disk
    would leave it. That puts function 45's error mode back to the default.
    It keeps the command buffer below `CCPCLR` for a chained
    line's next piece. It puts the DMA address back at `0080h`, sets the command
@@ -334,7 +337,9 @@ bytes of the CCP's RAM below `CCPCLR`, and `CHPOS`, the byte above the RAM BIOS
 table that marks a chained line's next piece. The rest of the line therefore
 outlives `CPMINIT` (`src/ram.asm:77-90`, `src/ram.asm:245`), as Chapter 24
 describes. The services below the BDOS entry are kept too, and so are the
-registry's head and the display drivers' tables above the RAM BIOS table. The
+registry's head and the two consoles' table addresses above the RAM BIOS
+table. `PIBLK`, the PICO9918 console's state, is in the BIOS's part of the
+workspace, so the width `CON` gave it outlives a warm boot (`src/ram.asm:36-39`). The
 cache's lines and the history in EXPAND 1 stay as well.
 
 The CCP's entry does the rest (`src/cpm/ccp.asm:28-65`). It sets its stack and
@@ -358,21 +363,21 @@ and before the console (`src/cpm/ccp.asm:91-95`).
 
 ## The cost of a warm boot
 
-On the starter card with the serial board, warm boot takes 32,507 T-states,
+On the starter card with the serial board, warm boot takes 32,482 T-states,
 about 8 milliseconds, from the first instruction of `WBOOTR` to the CCP's label
 `STARTED`, where it starts printing the prompt. The figure was measured on the
 host model with nothing changed since the last warm boot, and in that case warm
-boot reads no block. Of it, `CPMINIT` takes 7,448 T-states, the cache's flush in
+boot reads no block. Of it, `CPMINIT` takes 7,327 T-states, the cache's flush in
 `CWBOOT`, with no line to write, takes 8,437 and the CCP's entry with its disk
-reset 14,176.
+reset 14,272.
 
-A warm boot after `SAVE 8 X.COM` on drive A takes 117,862 T-states on the same
-measure. The extra 85,000 or so are the rebuild of A's vector from its directory
+A warm boot after `SAVE 8 X.COM` on drive A takes 115,826 T-states on the same
+measure. The extra 83,000 or so are the rebuild of A's vector from its directory
 up to the last entry in use, and the directory is read from the block cache with
 no card access. For comparison, a disk reset of the kind a program makes drops
-drive A and scans its whole directory again, which takes 1,037,455 T-states on
+drive A and scans its whole directory again, which takes 1,035,509 T-states on
 the starter card even with the directory in the cache. The first scan of drive
 B's 512 entries, with the card read for each of its 32 directory blocks, takes
-9,166,907. The test `test/warmboot.test.mjs` checks the unchanged case on its
+9,165,367. The test `test/warmboot.test.mjs` checks the unchanged case on its
 own card: a warm boot that reads no block and takes at most 386,604 T-states
 (`test/warmboot.test.mjs:11-17`).
