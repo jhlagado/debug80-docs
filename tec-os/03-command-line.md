@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -252,12 +252,15 @@ COPY?
 A>
 ```
 
-The same rule makes `COPY A:STARTUP.CMD` on drive B a copy to drive B.
+The same rule makes `COPY A:STARTUP.CMD` on drive B a copy to drive B. A word
+after the destination, as in `COPY STARTUP.CMD B:X.TXT JUNK`, also gives
+`COPY?` before any file is opened.
 
 `COPY` has four messages of its own. `NO SOURCE` means the source isn't there,
 and `CANNOT MAKE DEST` means the destination's directory is full.
-`WRITE ERROR` means a record can't be written, as on a full drive, and
-`CLOSE ERROR` means the finished copy can't be closed.
+`WRITE ERROR` means a record can't be written, as on a full drive. The
+destination is then closed before the message, so it keeps the records copied
+before the error. `CLOSE ERROR` means the finished copy can't be closed.
 
 Before it erases with a name that matches every file, such as `*.*` or
 `B:*.*`, `ERA` prints `ALL (Y/N)?` and reads a line. A `Y` as the line's first
@@ -315,8 +318,11 @@ TWO.COM
 B>
 ```
 
-A file of the same name is erased first. When the drive or its directory is
-full, `SAVE` prints `NO SPACE`.
+A number above 255 is refused in the same way, as `SAVE 320 X.COM` gives
+`320?`. A file of the same name is erased first. When the drive or its
+directory is full, `SAVE` closes the file and prints `NO SPACE`, so the file
+keeps the pages written before the drive filled. CP/M 2.2's `SAVE` leaves the
+file open there, and those pages in no directory entry.
 
 ## Drives
 
@@ -393,11 +399,14 @@ service is code that TEC-OS keeps in memory below the BDOS until a reset or
 services installed, the newest first, each with the number of 256-byte pages it
 takes. `UNLOAD` removes the newest one if that service can be removed, and
 otherwise it changes nothing and prints `UNLOAD?`. It prints the same with no
-service installed. With the starter card on the web page's board, where
-`GLCD.SVC` is installed at startup, the console shows this:
+service installed. On the web page's board the startup file's `GLCD.SVC` line
+installs nothing, as Chapter 1 showed, but typed at the prompt `GLCD.SVC`
+installs the driver and leaves the console on the PICO9918:
 
-<!-- node tools/capture.mjs --board pico SERVICES UNLOAD SERVICES UNLOAD -->
+<!-- node tools/capture.mjs --board pico GLCD.SVC SERVICES UNLOAD SERVICES UNLOAD -->
 ```text
+A>GLCD.SVC
+
 A>SERVICES
 GLCD 3
 A>UNLOAD
@@ -410,7 +419,8 @@ A>
 ```
 
 `GLCD.SVC` takes three pages, 768 bytes, and the first `UNLOAD` removes it.
-The second `SERVICES` prints nothing, and the second `UNLOAD` has nothing to
+The PICO9918 stays the console, and its screen keeps what it showed. The second
+`SERVICES` prints nothing, and the second `UNLOAD` has nothing to
 remove. The PICO9918's console is in the ROM, so `SERVICES` doesn't list it and
 `UNLOAD` never removes it. A `.SVC` file that isn't there, or that doesn't
 install, gives the command's name with a question mark. Chapter 5 gives the rules for installing and removing services, and
