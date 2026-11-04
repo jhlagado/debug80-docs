@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. The SD card and the volumes
 
-Checked against TEC-OS 58d4345.
+Checked against TEC-OS 621201d.
 
 The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
@@ -46,18 +46,23 @@ the arguments TEC-OS uses, and `01h`, the end bit alone, for the rest. It then
 reads up to 16 bytes, waiting for the response byte R1, whose bit 7 is 0.
 
 `SDINIT` starts the card at cold boot, and each step has its own error code
-(`src/sd.asm:115-205`):
+(`src/sd.asm:137-230`):
 
 1. Chip select high and 80 clocks, more than the 74 the card needs after
    power-up, then `CMD0`, which puts the card in SPI mode and its idle state.
    The card must answer R1 = `01h`. After ten tries with no such answer the
    error is 1, `SDENOCD`, which is what an empty socket gives.
 2. `CMD8` with the argument `1AAh`, the voltage range and a check pattern. A
-   card of version 2 answers `01h` and four more bytes, which are read and
-   ignored. An older card rejects the command, and initialisation goes on.
+   card of version 2 answers `01h` and four more bytes, the last two of which
+   are its echo of the argument: the low four bits of the third must be 1, the
+   range of 2.7 to 3.6 V, and the fourth must be the pattern `AAh`. Any other
+   echo is error 11, `SDEVOLT` (`src/sd.asm:165-178`). An older card rejects
+   the command, and initialisation goes on.
 3. `CMD55` and `ACMD41` with the high-capacity bit set, repeated up to 256
    times with a short pause between, until R1 is 0, the card ready. Error 2,
-   `SDEINIT`, if it never is.
+   `SDEINIT`, if it never is. The same error comes at once, with no `ACMD41`
+   sent, when `CMD55`'s R1 has any bit set but bit 0, the idle state
+   (`src/sd.asm:186-187`, `src/sd.asm:199-202`).
 4. `CMD58`, which returns the operating conditions register. Bit 6 of its
    first byte, CCS, is set on a high-capacity card, which takes block numbers
    as addresses. Error 3, `SDEOCR`, if the command fails.
@@ -75,15 +80,18 @@ card: the shift would lose its top bits and name a lower block. For such a
 block `LBAARG` returns with carry set and `SDARG` unchanged. `SDREAD` and
 `SDWRITE` then send no command and fail with error 9, `SDERNG`
 (`src/sd.asm:18`, `src/sd.asm:272-274`, `src/sd.asm:313-315`,
-`src/sd.asm:447-449`).
+`src/sd.asm:498-501`).
 
-`SDREAD` reads a block with `CMD17` (`src/sd.asm:233-266`). A nonzero R1 is
+`SDREAD` reads a block with `CMD17` (`src/sd.asm:272-303`). A nonzero R1 is
 error 5, `SDECMD`. The card then sends `FFh` until the data is ready and `FEh`
 before it. The driver polls for that token up to 65,536 times before it gives
-error 6, `SDETOK`. The 512 bytes follow, then a two-byte CRC that the driver
-reads and doesn't check.
+error 6, `SDETOK`. A card that can't read the block sends a data error token,
+a byte of the form `000xxxxx`, in place of `FEh`. Any byte but `FFh` and `FEh`
+ends the read at once with error 10, `SDEDTOK` (`src/sd.asm:285-298`). The
+512 bytes follow the token, then a two-byte CRC that the driver reads and
+doesn't check.
 
-`SDWRITE` writes a block with `CMD24` (`src/sd.asm:445-492`). R1 must be 0, or
+`SDWRITE` writes a block with `CMD24` (`src/sd.asm:498-544`). R1 must be 0, or
 the error is 5. The driver then sends `FFh`, the token `FEh`, the 512 bytes
 and two CRC bytes. The card's data response must come within 16 bytes and have
 `05h` in its low five bits, data accepted, or the error is 7, `SDEWRSP`. The
@@ -102,7 +110,7 @@ block, about 55 milliseconds, and `SDWRITE` 216,164, nearly all of it the
 When `SDXB` holds `LATEXP` the buffer is a line of the block cache in
 EXPAND 1. Each loop then puts EXPAND 1 in view around itself and uses no stack
 while it is (`src/sd.asm:321-325`, `src/sd.asm:419-422`, `src/sd.asm:427-431`,
-`src/sd.asm:420-421`).
+`src/sd.asm:490-491`).
 
 ## The container's checks
 
@@ -124,7 +132,7 @@ bytes of the line into `MNBUF`, a buffer in the workspace, where the header's
 fields and each descriptor are read (`src/vol.asm:32-39`,
 `src/vol.asm:278-328`, `src/ram.asm:58`). `MOUNT` makes the checks in a fixed
 order, stopping at the first failure with that check's code
-(`src/vol.asm:13-24`, `src/vol.asm:20-120`):
+(`src/vol.asm:13-24`, `src/vol.asm:32-145`):
 
 | Code | Check |
 | --- | --- |
@@ -132,17 +140,21 @@ order, stopping at the first failure with that check's code
 | `21h` | the first eight bytes are `TECOSVOL` |
 | `22h` | the major version is 1 |
 | `23h` | the header is 512 bytes and a descriptor 32; in 1.1, the drives field is at most 4 |
-| `24h` | the volume count is from 1 to 127 |
+| `24h` | the volume count is from 1 to 8 on a 1.0 card, and from 1 to 127 on any other |
 | `25h` | the header's checksum, the 16-bit sum of its other 510 bytes; in 1.1, the table's sum |
 
-Any minor version other than 0 is read as 1.1 (`src/vol.asm:104-106`). For a 1.1
-card with more than fifteen volumes, `MOUNT` reads each further block of the
-table and adds up its 512 bytes, and the total must be the header's table sum
-(`src/vol.asm:116-145`). The table's blocks and the header are added up by the
-same routine, `MNSUM`, which copies the block from its line through `MNBUF`
-32 bytes at a time and adds each 32 with `SUMDE`, since no code that uses the
-stack runs with EXPAND 1 in view (`src/vol.asm:137`, `src/vol.asm:330-349`,
-`src/volutil.asm:53-84`).
+Format 1.0 allows eight volumes, `MAXVOL0` in `gen/format.asm`, so a 1.0 card
+with nine is refused with `24h` (`src/vol.asm:68-87`). `tecvol` makes a card of
+more than eight volumes in format 1.1 (`tools/lib/container.mjs:80`). Any minor
+version other than 0 is read as 1.1 (`src/vol.asm:104-106`). A 1.1 drives field
+above 4 is refused with `23h`, the size code, after the header's checksum is
+checked (`src/vol.asm:107-112`). For a 1.1 card with more than fifteen volumes,
+`MOUNT` reads each further block of the table and adds up its 512 bytes, and
+the total must be the header's table sum (`src/vol.asm:116-145`). The table's
+blocks and the header are added up by the same routine, `MNSUM`, which copies
+the block from its line through `MNBUF` 32 bytes at a time and adds each 32
+with `SUMDE`, since no code that uses the stack runs with EXPAND 1 in view
+(`src/vol.asm:137`, `src/vol.asm:330-349`, `src/volutil.asm:53-84`).
 
 Then it walks the descriptors in table order, checking each one and mounting
 it as it goes (`src/vol.asm:147-264`):
@@ -228,7 +240,7 @@ half lie together in the descriptor, so one `LDIR` copies those six bytes
 `src/ram.asm:23-27`). `DRVIDX` records which volume each drive holds, as its
 index in the container plus 1, 0 for none (`src/ram.asm:29`). The geometry
 byte is 0 for a drive with no volume, and for such a drive the BIOS's `SELDSK`
-returns 0, no such drive (`src/bios.asm:23-44`).
+returns 0, no such drive (`src/bios.asm:36-60`).
 
 `MNDPH` builds the drive's disk parameter header, the 16 bytes through
 which the BDOS reaches a drive's parameters and buffers, at the address that
@@ -265,7 +277,7 @@ BIOS numbers the volume's records straight through, record = track × 64 +
 sector. Four records share one 512-byte block of the card
 (`src/bios.asm:5-10`). `SETTRK`, `SETSEC` and `SETDMA` store their values,
 `HOME` sets track 0, and `SECTRAN` returns the sector unchanged
-(`src/bios.asm:12-21`).
+(`src/bios.asm:12-34`).
 
 `MAPREC` does the arithmetic (`src/bios.asm:74-144`). It rejects a sector of
 64 or more and a track of 1,024 or more, whose record number would not fit in
@@ -326,7 +338,7 @@ a line.
 
 `MOUNT` on the starter card is a program, so it changes and lists the drives
 through three of the ROM's numbered services, called through `ABICALL` with the
-number in `C`, as Chapter 20 describes (`src/abi.asm:10`, `src/abi.inc:58-67`):
+number in `C`, as Chapter 20 describes (`src/abi.asm:10`, `src/abi.inc:58-70`):
 
 - `MOUNT`, 9, mounts the volume at container index `E` on the drive in `B`, 0
   to 3 for A to D.
@@ -347,7 +359,7 @@ is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
 and any other needs a slot of either size (`src/vol.asm:623-636`). Chapter 13
 describes how cold boot gives out the slots. The three services may change `IX`
 and the alternate registers, and `abi.inc` gives 24 bytes as a bound on the
-stack each takes (`src/abi.inc:18-25`, `src/abi.inc:58-67`). On the model
+stack each takes (`src/abi.inc:18-25`, `src/abi.inc:58-70`). On the model
 `MOUNT` and `UNMNT` each take 24 and `DESC` 22, and with every line dirty, so
 that the line taken for the table is written first, all three take 24
 (`test/storage-boundaries.test.mjs:172-224`).
