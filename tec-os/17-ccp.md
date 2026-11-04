@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 621201d, with the ATOM assembler from the repository's
+Checked against TEC-OS 78127ec, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
@@ -26,7 +26,7 @@ command word and the loading of a program. `ccpfile.asm` holds the file
 commands, `DIR` with its pager, `TYPE`, `ERA`, `REN` and `COPY`. `ccpcmd.asm`
 holds `UNLOAD`, `CON`, `USER` and `SAVE`, the parsing of file names, page zero
 for a program, `SERVICES` and the startup file. In the ROM that Chapter 12
-describes the CCP runs from `CCPBAS`, `DD0Ah`, to `E6E2h`, 2,521 bytes,
+describes the CCP runs from `CCPBAS`, `DD2Ah`, to `E702h`, 2,521 bytes,
 followed directly by the BDOS. Its messages are in the ROM's data block (`src/text.asm:12-50`,
 `src/text.asm:64-66`), and so is `KEYTAB`, the table of its built-in commands'
 names (`src/tables.asm:43-65`). What the CCP changes has to be
@@ -603,7 +603,7 @@ builds each drive's letter and label in `CMDTXT` (`src/boot.asm:363-371`).
 | `BE4Bh–BE55h` | 11 | `STKGUARD` | the stack guard, `A5h` in each byte |
 | `BE56h–BE75h` | 32 | `CSTKBAS` | the CCP's stack, up to `CSTKTOP` at `BE76h` |
 
-The addresses are those of the build at 621201d. The guard is 43 bytes less the
+The addresses are those of the build at 78127ec. The guard is 43 bytes less the
 stack's 32 (`src/ram.asm:130-135`), and warm boot fills it with `A5h`
 (`src/boot.asm:305-309`), so a guard byte that is no longer `A5h` shows that
 the stack has run past its bottom. `test/stacks.test.mjs` checks the guard
