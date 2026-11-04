@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS 626ee41.
+Checked against TEC-OS 5a25178.
 
 Chapter 1's first boot ran two commands that nobody typed, and on the web
 page's board the first of them moved the console to the PICO9918. This chapter
@@ -42,11 +42,11 @@ pages, and a run on the model gives:
 
 | Installed | Word at `0006h` | Bytes for programs |
 | --- | --- | --- |
-| Nothing | `B815h` | 46,869 |
-| One display driver | `B200h` | 45,312 |
-| Both displays' drivers | `AC00h` | 43,776 |
+| Nothing | `B9F3h` | 47,347 |
+| One display driver | `B300h` | 45,568 |
+| Both displays' drivers | `AD00h` | 44,032 |
 
-The first service's pages end at `B7FFh`, so the 21 bytes from `B800h` to `B814h`
+The first service's pages end at `B8FFh`, so the 243 bytes from `B900h` to `B9F2h`
 go with it.
 
 ## The startup file
