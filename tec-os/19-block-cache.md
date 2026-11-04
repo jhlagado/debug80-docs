@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 621201d, with the ATOM assembler from the repository's
+Checked against TEC-OS 78127ec, with the ATOM assembler from the repository's
 `atom-z80` 0.3.7 and the starter card's `TED.COM` from
 Thorium 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. The
@@ -199,7 +199,7 @@ drive to `CWRBH` with bit 7 of `CWTYPE` clear (`src/bios.asm:264-268`). On the
 starter card the volume is `WORK` on drive B.
 
 `CWRBH`, the path of every write, puts the record into the block's line and marks the line dirty
-(`src/cache.asm:289-373`). If no line holds the block, `CTAKE` gives one out.
+(`src/cache.asm:296-386`). If no line holds the block, `CTAKE` gives one out.
 Two cases follow, decided by `WRITE`'s rule from Chapter 18: whether the block
 holds anything the card's copy has to supply. If it might, the line
 is filled from the card first, unless it already held the block.
@@ -208,7 +208,11 @@ The card has nothing to supply when the write is CP/M's type 2, the first to a
 new allocation block, or a write to the next card block of an allocation block
 whose first card block was handled that way. The line is then cleared to zeros
 instead, with no read. `GETKEY`'s key is set to record that block as cleared,
-so that the rule holds for the block after it (`src/cache.asm:317-335`).
+so that the rule holds for the block after it (`src/cache.asm:317-335`). A
+write that keeps the line's bytes, to any block but the key's own on the key's
+drive, drops the key (`src/cache.asm:338-355`). Writes into a new allocation
+block out of order, as a program's random writes can make them, therefore
+never clear a block that holds a record written earlier.
 
 Either way, the record's 128 bytes are then copied from the DMA address into
 the line with `CWRREC`, and `CDSET` marks the line dirty. On the volume
@@ -220,7 +224,11 @@ directory must never list a block whose contents are not yet on the card.
 was written, `CWRITE` writes the directory's line, so the data reaches the card
 before the directory block that names it. If any of those writes fails, the
 directory's line is dropped, leaving the card's directory as the copy that is
-read next time. The write then reports the error to the BDOS.
+read next time. A data line whose write fails stays dirty, since it holds the
+only copy of its records. The write then reports the error to the BDOS. A
+close tried again fails in the same way until the card takes the data, and
+then succeeds with every record on the card (`src/cache.asm:182-215`,
+`src/cache.asm:378-386`).
 
 The BDOS writes the directory when a file is created, when it is closed and
 when a file's extent fills, so on a volume written behind the card is brought
@@ -239,8 +247,8 @@ writes three of the first 32 data blocks early, because all 30 lines are dirty
 before the BDOS next writes the directory.
 
 On `time.img`, from the section on reads, `SAVE 64 X.COM`, 16 KiB, took
-30,609,632 T-states, 7.65 seconds, on `THROUGH`. On `BEHIND` it took
-9,946,134, 2.49 seconds, about a third of that. Each run followed a cold boot
+30,615,308 T-states, 7.65 seconds, on `THROUGH`. On `BEHIND` it took
+9,951,810, 2.49 seconds, about a third of that. Each run followed a cold boot
 and a change to the drive. The count, taken as for the reads, leaves out the
 change of drive.
 
@@ -248,7 +256,7 @@ change of drive.
 
 `CFLUSH` and `CFLALL` write dirty lines in line order, from line 0 to line 29.
 `CFLUSH` leaves out the line given in `A`, and `CFLALL` gives `FFh`, which is
-no line (`src/cache.asm:182-208`). Line order is not block order,
+no line (`src/cache.asm:182-215`). Line order is not block order,
 since `CTAKE` gives lines out in turn. The blocks of a file can therefore
 reach the card in any order.
 
@@ -265,12 +273,13 @@ describes what the user sees).
 `CWRITE` writes one line (`src/cache.asm:122-180`). It takes the block number
 from the table and sets `SDXB` so that `SDWRITE` reads its 512 bytes straight
 from the line in EXPAND 1. On success it marks the line clean, and on a
-failure it leaves the line dirty and returns `NZ`. A flush tries every line:
-`CFLUSH` and `CFLALL` drop each line whose write fails, so the card's copy of
-that block stands, go on to the next and return `NZ` if any failed
-(`src/cache.asm:182-208`). `CTAKE`'s write of one line, when every line is
-dirty, is the exception: a line that fails there stays dirty for a later
-flush to try, and `CTAKE` returns the error with `CNEXT` moved past it. The
+failure it leaves the line dirty and returns `NZ`. A flush tries every line,
+goes on past each that fails and returns `NZ` if any failed. `CFLALL` drops
+each line whose write fails, so the card's copy of that block stands.
+`CFLUSH`, the directory write's, leaves such a line dirty for a later flush to
+try (`src/cache.asm:182-215`). `CTAKE`'s write of one line, when every line is
+dirty, keeps a line that fails in the same way, and `CTAKE` returns the error
+with `CNEXT` moved past it. The
 next miss then writes the line after it, so one failing block can't fail
 every later miss (`src/cache.asm:244-254`).
 
@@ -304,8 +313,12 @@ drops the rest of a chained line and prints `Write lost` on its own line
 (`src/cache.asm:388-397`, `src/text.asm:69`). The dropped lines' changes are
 gone and the card keeps its old copy of each block, so the message comes once:
 the next warm boot has nothing more to write. A directory write whose flush
-fails during a program's run is the BDOS's `Bad Sector` instead, and the warm
-boot after it says nothing, since the failed lines were dropped then.
+fails during a program's run is the BDOS's `Bad Sector` instead. Its data
+lines that failed are still dirty, so the warm boot after it tries them again,
+and if the card still refuses them it says `Write lost` and drops them. The
+directory's line was dropped when the directory write failed, so the card's
+directory is as it was before that write, whether or not the warm boot's
+writes succeed.
 
 A card taken out while TEC-OS runs gives that: every write fails, and the
 first warm boot after it says `Write lost` and drops the lines, even with the
@@ -341,7 +354,7 @@ For a program that uses interrupts, a BIOS disk call holds them off for its
 whole length. A read that misses holds them off for about 235,000 T-states, 59
 milliseconds. A directory write on the volume written behind holds them off
 while every dirty line is written. On the model the close of a file of four
-blocks took 1,111,504 T-states. A flush of all 30 lines takes about 30 ×
+blocks took 1,111,542 T-states. A flush of all 30 lines takes about 30 ×
 217,421, some 6.5 million T-states, or 1.6 seconds. Interrupts are on only
 when a program has enabled them, as Chapter 14 describes, so this affects only
 such a program.
