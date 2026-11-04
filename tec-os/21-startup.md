@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 21. Startup
 
-Checked against TEC-OS 621201d.
+Checked against TEC-OS 78127ec.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and two
@@ -72,7 +72,7 @@ holds a key through reset to get past a service whose `INIT` never returns, and
 key is down, as Appendix G describes. A low bit returns from `STBOOT` with
 `STPOS` at `80h`, so a skip is the same state as a file that wasn't there. Bit 6
 is tested this one time, so the key has to be down when `STBOOT` starts, which
-on the model, with the web page's board and the starter card, is 5,824,547
+on the model, with the web page's board and the starter card, is 5,824,922
 T-states after reset, about 1.46 seconds.
 
 `STBOOT` then makes the read in the CCP's own FCB. It copies 12 bytes of
@@ -356,7 +356,11 @@ files, the ones the ROM loads (`host/card.mjs:18-24`). A change it can't make,
 to a read-only drive A or in a full directory, throws, and the card stays as it
 was. The serial terminal then shows `This card couldn't be prepared for the
 page`, the reason in parentheses and `so it boots as it is.`
-(`host/card.mjs:67-71`).
+(`host/card.mjs:67-72`). The write over a `STARTUP.CMD` with the read-only
+attribute is refused in the same way, and the page doesn't force it, so a
+change to the file's first line leaves the card as it was and the terminal shows
+`This card's STARTUP.CMD is read-only, so the page can't set its display line;
+it boots as it is` (`host/card.mjs:68-70`, `tools/lib/cpmfs.mjs:186-191`).
 
 `cardProblem` finds first whether the card can show the display chosen. A card
 with no drive A has a problem of its own. With a drive A, the PICO9918 needs no
