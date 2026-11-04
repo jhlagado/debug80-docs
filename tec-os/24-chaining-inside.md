@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 24. Chaining inside
 
-Checked against TEC-OS 626ee41, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -33,21 +33,21 @@ entry. `test/chain.test.mjs` checks these rules on the host model of Chapter
 A program in a piece of a line ends with a warm boot, which clears the CCP's and
 the BDOS's state as a fresh load of them from disk would leave it (Chapter 14).
 The rest of the line survives because the CCP's RAM is in two parts. Its first
-202 bytes run from `CMDFCB` at `BCEBh` to `CCPCLR` at `BDB5h`, and they hold the
+202 bytes run from `CMDFCB` at `BCEAh` to `CCPCLR` at `BDB4h`, and they hold the
 two FCBs the built-ins parse names into and the command buffer that BDOS
 function 10 fills. The buffer is a byte for its maximum length, `CMDBUF`, a byte
-for the length read, `CMDLEN`, and 128 bytes of characters, `CMDTXT`, at `BD35h`
+for the length read, `CMDLEN`, and 128 bytes of characters, `CMDTXT`, at `BD34h`
 (`src/ram.asm:69-82`). `CPMINIT`, which warm boot calls, clears from `CCPCLR` to
-`BDOSRME`, the end of the BDOS's RAM, 331 bytes, so the command buffer and the
+`BDOSRME`, the end of the BDOS's RAM, 332 bytes, so the command buffer and the
 two FCBs before it are kept (`src/boot.asm:262-269`, `src/boot.asm:84`). The
 FCBs need no clearing, since each use of them parses a name into them in full
 and clears the rest (`src/cpm/ccp.asm:1306-1329`).
 
-The position of the next piece is `CHPOS`, one byte at `BFE4h`, in the part of
+The position of the next piece is `CHPOS`, one byte at `BFE2h`, in the part of
 the workspace above the RAM BIOS table, which `CPMINIT` doesn't clear
 (`src/ram.asm:194`, `src/ram.asm:239`). It holds the piece's offset in `CMDTXT`
 plus one, and 0 when no piece is left, so one byte covers the 128 offsets with 0
-to spare. The return code, `PRGCODE` at `BF56h`, is in the same block
+to spare. The return code, `PRGCODE` at `BF54h`, is in the same block
 (`src/ram.asm:228`). Cold boot clears the whole resident workspace, from
 `WSBASE` to `WSEND`, which ends after `CHPOS` (`src/boot.asm:34-38`,
 `src/ram.asm:240-241`), so after a reset no piece is left and the code is 0.
@@ -186,7 +186,7 @@ on.
 ## The return code and the `:` test
 
 BDOS function 108 is `FNRETC` (`src/cpm/bdos.asm:152-164`), and the BDOS's entry
-sends function 108 there before its table, as it does 47
+sends function 108 there before its table, as it does 47, 45 and 48
 (`src/cpm/bdos.asm:79-92`). `FNRETC` tests `DE`: `H AND L` is `FFh` only for
 `FFFFh`. For that value it returns `PRGCODE` in `HL`, with `A` and `B` set from
 it as for every word the BDOS returns (`src/cpm/bdos.asm:128-132`). Any other
@@ -236,13 +236,23 @@ through `CHDROP`:
   jumps to `CHDROP` (`src/cpm/bdos.asm:333-343`). The CCP calls function 10 only
   with `CHPOS` at 0, so at its own prompt no piece is left, and only a line that
   a program reads has anything to drop.
-- A BDOS error. `DISKERR` prints `Bdos Err On`, the drive and the cause, and
-  waits for a key (`src/cpm/bdos.asm:2395-2405`). The routine for each cause
-  then jumps to `CHDROP`: `File R/O` from `ROTEST`, `R/O` from `CHKRO`,
-  `Select` from `SELFAIL` and `Bad Sector` from `BADSECT`
-  (`src/cpm/bdos.asm:658-665`, `src/cpm/bdos.asm:2329-2343`,
-  `src/cpm/bdos.asm:2357-2359`). A failed read of a directory record goes to
-  `BADSECT` too (`src/cpm/bdos.asm:1841`).
+- A BDOS error in the default mode. Each cause loads its message and a code
+  and goes to `BDERR`: `File R/O` from `ROTEST`, `R/O` from `CHKRO`, `Select`
+  from `SELFAIL` and `Bad Sector` from `BADSECT` (`src/cpm/bdos.asm:658-666`,
+  `src/cpm/bdos.asm:2332-2344`, `src/cpm/bdos.asm:2357-2359`). A failed read
+  of a directory record goes to `BADSECT` too (`src/cpm/bdos.asm:1841`).
+  `BDERR` reads `ERRMODE`, the mode BDOS function 45 sets. In the default
+  mode `DISKMSG` prints `Bdos Err On`, the drive and the cause, a key is
+  waited for and the routine jumps to `CHDROP` (`src/cpm/bdos.asm:2361-2376`,
+  `src/cpm/bdos.asm:2395-2405`).
+
+With `ERRMODE` at `FFh` the error returns to the program with `A` = `FFh` and
+`H` its code, 1 to 4, and nothing printed, and with `FEh` the message is
+printed first and the error returns the same way. Neither touches `CHPOS`, so a
+program that takes its own errors leaves the chained line to run on
+(`src/cpm/bdos.asm:2365-2373`). `ERRMODE` is in the BDOS's RAM, which every warm
+boot clears, so each piece starts in the default mode (`src/ram.asm:134`,
+`src/boot.asm:262-269`).
 
 A reset drops the line by clearing `CHPOS` with the rest of the workspace
 (`src/boot.asm:34-38`).
@@ -257,9 +267,9 @@ ran to its end (`src/cpm/ccp.asm:722-752`, `src/cpm/ccp.asm:516`,
 `src/cpm/ccp.asm:563`, `src/cpm/ccp.asm:820-828`).
 
 `Write lost` drops the line too. `CWBOOT` prints that message at a warm boot when
-a cache write has failed since the last one, after clearing `CFAIL` and `CHPOS`.
-`WBOOTR` then jumps to the CCP's entry with `CHPOS` at 0 (`src/ram.asm:203`,
-`src/cache.asm:171`, `src/cache.asm:351-351`, `src/boot.asm:89-92`).
+a line of the block cache fails to reach the card in its flush, after clearing
+`CHPOS`. `WBOOTR` then jumps to the CCP's entry with `CHPOS` at 0
+(`src/cache.asm:351-359`, `src/boot.asm:89-92`).
 
 ## Function 47
 
@@ -286,8 +296,11 @@ here on the line is read only up to its 0.
 `FNCHAIN` then jumps to `BIOWBT`, the warm boot entry of the RAM BIOS table at
 `BF03h` (`src/cpm/bdos.asm:14`, `src/cpm/bdos.asm:71`). A program that has
 replaced that entry gets the call, as it does for the other warm boots the BDOS
-makes. The warm boot keeps `CMDTXT`, and `CHPOS` too unless a cache write has
-failed, and at `MAINLOOP` `CHSKIP` finds the line's first piece. The loop echoes it with `MLECHO` and takes it with
+makes. The warm boot writes the block cache's dirty lines before it enters the
+CCP, so the records the program wrote behind are on the card before the
+chained program is loaded (`src/boot.asm:89-92`). It keeps `CMDTXT`, and
+`CHPOS` too unless a line failed to reach the card, and at `MAINLOOP` `CHSKIP`
+finds the line's first piece. The loop echoes it with `MLECHO` and takes it with
 `MLTAKE` as it does any chained piece, so a `:` at its start tests the code the
 calling program left.
 
