@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 6. A first program
 
-Checked against TEC-OS 58d4345, with the ATOM assembler from the
+Checked against TEC-OS 621201d, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, the starter card's
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. The
@@ -316,9 +316,10 @@ after them:
 
 The starter card holds no `TDB.COM`, so `^T D` gets `TDB?` from the CCP and
 `TED` comes back at its place. On the starter card `TED` holds a file of up to
-33,466 bytes on a board with only a serial terminal, where no display's driver
-installs. On a board with both displays `GLCD.SVC` installs as it boots, and
-`TED` holds 32,534 bytes.
+33,466 bytes on a board with only a serial terminal or with both displays,
+where no display's driver stays installed. On a board with the graphics LCD
+and no PICO9918, `GLCD.SVC` installs as it boots, and `TED` holds 32,534
+bytes.
 
 The source is on drive B, and `TED.COM` and `TAS.COM` are on drive A. With
 drive B current, the CCP runs `TED` from drive A. `TED` reads the byte at
@@ -410,6 +411,8 @@ is a warm boot:
 - BDOS function 0, which runs the warm boot itself
 - a `^C` typed as the first key of a line that the program reads with BDOS
   function 10
+- a `^C` typed after a `^S` has stopped the program's output through BDOS
+  function 2 or 9 (Chapter 8)
 - a key pressed after a BDOS error such as `Bdos Err On B: Bad Sector`
 
 The warm boot writes the block cache's changes to the card and puts back the
