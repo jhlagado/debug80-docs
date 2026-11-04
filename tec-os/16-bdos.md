@@ -30,10 +30,10 @@ the ROM assembles in this order (`src/rom.asm:30-35`):
 | File | Contents |
 | --- | --- |
 | `bdos.asm` | the entry, the dispatch and the console functions |
-| `bdosfile.asm` | the disk reset, the selection and the functions on whole entries |
+| `bdosfile.asm` | the disk reset, the selection and the functions on whole entries: open, close, search, delete, make, rename and the attributes |
 | `bdosrec.asm` | the records, the FCB's fields and the allocation of blocks |
-| `bdosfn.asm` | the functions on the table of entries, and the directory search |
-| `bdoslog.asm` | the directory's records, the login and the allocation vectors |
+| `bdosfn.asm` | the functions that read the BDOS's tables, such as the login vector, the free space and a file's size, and the directory search |
+| `bdoslog.asm` | the reads and writes of directory records, the login and the allocation vectors |
 | `bdoscon.asm` | the errors and the console's output |
 
 In the ROM that Chapter 12 describes the BDOS runs from `E6E3h`, `BDOSBAS`, to
