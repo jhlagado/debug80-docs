@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -513,7 +513,11 @@ The message is `Bdos Err On`, the drive and one of four causes:
 After printing the message, the BDOS waits for a key, and any key ends the
 command, or the program that made the call, with a warm boot. A program can
 instead have the error returned to it, with BDOS function 45, which Appendix A
-describes.
+describes. On the volume written behind, the warm boot after the key writes
+the cache's changes again and prints `Write lost` if one still can't be
+written, as Chapter 4 describes. An `ERA` that ends in `Bad Sector` leaves on
+the card the file whose entry couldn't be written, and with a wildcard the
+files erased before it stay erased.
 
 A write to a read-only volume, such as one made with `tecvol create`'s `:ro`
 in Chapter 4, gives `R/O`. These commands make a card with the starter card's
