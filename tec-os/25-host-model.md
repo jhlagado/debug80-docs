@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. The host model and the web page
 
-Checked against TEC-OS 58d4345, with `@jhlagado/debug80-runtime` 0.3.3, the
+Checked against TEC-OS 621201d, with `@jhlagado/debug80-runtime` 0.3.3, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -188,8 +188,11 @@ Either way the model paces input to TEC-OS, but a terminal on a board sends each
 character when it is typed.
 
 The rest reads or sets the board's state. `screen` turns the PICO9918's name
-table into rows of text, from the layout its registers select
-(`host/machine.mjs:380-404`). `glcdScreen` matches each 6 × 8 cell of the
+table into rows of text, from the layout its registers select or a width the
+caller gives (`host/machine.mjs:380-404`). `capture.mjs --screen` gives it the
+columns of the ROM's console at `PIWID`, which `CON CRT 40` and `32` set, so a
+40- or 32-column screen comes out in rows of that width
+(`tools/capture.mjs:147-153`, `src/ram.asm:46`). `glcdScreen` matches each 6 × 8 cell of the
 graphics LCD's memory against the font, which the caller supplies in
 `Machine.font` (`host/machine.mjs:409-450`).
 `ramImage` and `loadRam` copy all of RAM, EXPAND 1 included, out and in.
@@ -199,7 +202,7 @@ were, as the board's reset button does (`host/machine.mjs:528-587`).
 ## The tests
 
 `npm test` runs every file in `test/` that ends `.test.mjs`, one at a time, with
-Node.js's own test runner (`package.json:17`). There are 53 such files, from
+Node.js's own test runner (`package.json:17`). There are 54 such files, from
 `arith.test.mjs` to `write.test.mjs`, each on one part of TEC-OS. Most build
 their machines with `boot` in `test/lib/fixtures.mjs`, which reads the one ROM,
 `build/tecos/tecos.rom`, and, when the board has a matrix keyboard, readies the
