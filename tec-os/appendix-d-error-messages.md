@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix D. Error messages
 
-Checked against TEC-OS 626ee41.
+Checked against TEC-OS 5a25178.
 
 This appendix lists every message TEC-OS prints, with its cause and its
 remedy, in the order a run can reach them: cold boot and the diagnostic
@@ -39,14 +39,13 @@ A card that can't be started or mounted stops cold boot after the banner:
 
 ```text
 No volume mounted, error nn
-R retry, H header> 
+R retry> 
 ```
 
 The console is the serial terminal at this point, and the LCD's last row shows
 `CARD?` (`src/boot.asm:423-432`, `src/text.asm:8-9`). `R` starts the LCD, the card
 and the mount again, so a card fixed or put in while TEC-OS waits at the prompt
-mounts with no reset. `H` prints the first 64 bytes of the last block read and
-gives the prompt again, and so does any other key, with no bytes printed
+mounts with no reset. Any other key gives the prompt again
 (`src/boot.asm:439-442`). [Chapter 23](23-diagnostics.md#the-diagnostic-prompt)
 explains the prompt and [Chapter 1](01-introduction.md#a-card-that-won-t-mount)
 shows it.
@@ -159,48 +158,50 @@ The bad characters in a name are `<>,;:[]%|()/\`, from `BADCHARS`
 ## The BDOS's errors
 
 The BDOS prints these messages when a disk operation can't be done at all.
-Each starts a new line. The BDOS then waits for a key and ends the program or
-command by warm boot with the rest of a chained line dropped, whatever the key
-(`src/cpm/bdos.asm:75-77`, `src/cpm/bdos.asm:2395-2405`).
+Each starts a new line. By default the BDOS then waits for a key and ends the
+program or command by warm boot with the rest of a chained line dropped,
+whatever the key (`src/cpm/bdos.asm:75-77`, `src/cpm/bdos.asm:2361-2376`,
+`src/cpm/bdos.asm:2395-2405`). A program can take the errors itself with BDOS
+function 45. With `E` = `FFh` the error returns to the program with `A` =
+`FFh`, `H` the code in the table and no message, and with `FEh` the message is
+printed first and the error then returns the same way. Neither drops the rest
+of a chained line, and a sequential read or write that returns an error leaves
+the FCB on the record it didn't read or write. Every warm boot puts the default
+back (`src/cpm/bdos.asm:137-143`, `src/ram.asm:134`).
 [Chapter 16](16-bdos.md#bdos-errors) explains them and
 [Appendix A](appendix-a-bdos-functions.md#calling-a-function) lists them by
 function.
 
-| Message | Cause | Remedy | See |
-| --- | --- | --- | --- |
-| `Bdos Err On d: Select` | The drive has no volume or is past D, or a program's FCB has `?` in its drive byte outside function 17. The warm boot gives a prompt on drive A if the drive at `0004h` has no volume (`src/cpm/ccp.asm:32-42`). | `MOUNT` a volume on the drive, or use another drive. | [Chapter 3](03-command-line.md#drives), `src/cpm/bdos.asm:2341-2343`, `src/text.asm:65` |
-| `Bdos Err On d: R/O` | A program changed a drive that function 28 made read-only: a write, a make, delete, rename or attribute change. A close writes nothing there and gives no error. | The warm boot clears the state, as CP/M 2.2's does. Run the program again, and correct a program that writes to a drive it protected. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:2329-2335`, `src/cpm/bdos.asm:589-592`, `src/cpm/bdos.asm:476-477`, `src/text.asm:67` |
-| `Bdos Err On d: R/O` | A change to a volume the card marks read-only. `SAVE`, `ERA`, `REN` and `COPY` onto such a volume give it too. The card isn't changed. | Use a volume that takes writes. The volume's read-only flag is set when the card is built. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:1949-1954`, `src/cpm/bdos.asm:2329-2335`, `src/text.asm:67` |
-| `Bdos Err On d: File R/O` | A delete, a rename or a sequential or random write reached a file with the read-only attribute. `ERA`, `REN`, `SAVE` and `COPY` onto such a file give it too. An `ERA` with a wildcard has already erased the matching files before it in the directory. | Clear the attribute with BDOS function 30, or on a PC `tecvol get` the file and `tecvol put` it without `--ro`. The CCP has no command for it. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:658-665`, `src/cpm/bdos.asm:784`, `src/cpm/bdos.asm:819-824`, `src/cpm/bdos.asm:1004`, `src/text.asm:68` |
-| `Bdos Err On d: Bad Sector` | A record or a directory record couldn't be read from the card or written to it. | Copy the card to a PC and run `tecvol verify`. Replace a card that keeps failing. | [Chapter 16](16-bdos.md#bdos-errors), `src/cpm/bdos.asm:1277`, `src/cpm/bdos.asm:1277`, `src/cpm/bdos.asm:1841`, `src/cpm/bdos.asm:1876` |
-| `Bdos Err On d: Bad Sector` | The volume runs past the end of the card. The card rejects a block past its end, and no other block of the card changes. | Use a card that holds the whole container, or build the card again with `tecvol create` so that every volume lies on the card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:233-263`, `src/sd.asm:445-452` |
-| `Bdos Err On d: Bad Sector` | A directory entry names an allocation block past the end of the volume: the directory is damaged. The drive logs in and the rest of the volume works, and reading that block gives this. | `ERA` takes the file. Run `tecvol verify` on a copy, as in [Chapter 4](04-cards-and-volumes.md#recovery-after-a-power-cut). | [Chapter 16](16-bdos.md#files-extents-and-records), `src/cpm/bdos.asm:1296`, `src/cpm/bdos.asm:2235-2242`, `src/cpm/bdos.asm:2381-2385` |
+| Message | Code | Cause | Remedy | See |
+| --- | ---: | --- | --- | --- |
+| `Bdos Err On d: Select` | 4 | The drive has no volume or is past D, or a program's FCB has `?` in its drive byte outside function 17. The warm boot gives a prompt on drive A if the drive at `0004h` has no volume (`src/cpm/ccp.asm:32-42`). | `MOUNT` a volume on the drive, or use another drive. | [Chapter 3](03-command-line.md#drives), `src/cpm/bdos.asm:2341-2344`, `src/text.asm:65` |
+| `Bdos Err On d: R/O` | 2 | A program changed a drive that function 28 made read-only: a write, a make, delete, rename or attribute change. A close writes nothing there and gives no error. | The warm boot clears the state, as CP/M 2.2's does. Run the program again, and correct a program that writes to a drive it protected. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:2332-2336`, `src/cpm/bdos.asm:589-592`, `src/cpm/bdos.asm:476-477`, `src/text.asm:67` |
+| `Bdos Err On d: R/O` | 2 | A change to a volume the card marks read-only. `SAVE`, `ERA`, `REN` and `COPY` onto such a volume give it too. The card isn't changed. | Use a volume that takes writes. The volume's read-only flag is set when the card is built. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:1949-1954`, `src/cpm/bdos.asm:2332-2336`, `src/text.asm:67` |
+| `Bdos Err On d: File R/O` | 3 | A delete, a rename or a sequential or random write reached a file with the read-only attribute. `ERA`, `REN`, `SAVE` and `COPY` onto such a file give it too. An `ERA` with a wildcard has already erased the matching files before it in the directory. | Clear the attribute with BDOS function 30, or on a PC `tecvol get` the file and `tecvol put` it without `--ro`. The CCP has no command for it. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:658-666`, `src/cpm/bdos.asm:784`, `src/cpm/bdos.asm:819-824`, `src/cpm/bdos.asm:1004`, `src/text.asm:68` |
+| `Bdos Err On d: Bad Sector` | 1 | A record or a directory record couldn't be read from the card or written to it. | Copy the card to a PC and run `tecvol verify`. Replace a card that keeps failing. | [Chapter 16](16-bdos.md#bdos-errors), `src/cpm/bdos.asm:1277`, `src/cpm/bdos.asm:1277`, `src/cpm/bdos.asm:1841`, `src/cpm/bdos.asm:1876` |
+| `Bdos Err On d: Bad Sector` | 1 | The volume runs past the end of the card. The card rejects a block past its end, and no other block of the card changes. | Use a card that holds the whole container, or build the card again with `tecvol create` so that every volume lies on the card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:233-263`, `src/sd.asm:445-452` |
+| `Bdos Err On d: Bad Sector` | 1 | A directory entry names an allocation block past the end of the volume: the directory is damaged. The drive logs in and the rest of the volume works, and reading that block gives this. | `ERA` takes the file. Run `tecvol verify` on a copy, as in [Chapter 4](04-cards-and-volumes.md#recovery-after-a-power-cut). | [Chapter 16](16-bdos.md#files-extents-and-records), `src/cpm/bdos.asm:1296`, `src/cpm/bdos.asm:2235-2242`, `src/cpm/bdos.asm:2381-2385` |
 
 ## `Write lost`
 
 `Write lost` applies to a volume written behind, whose writes wait in the block
-cache. At each warm boot TEC-OS writes every changed block in the cache, then
-prints this message on a line of its own if any such write has failed since the
-last warm boot, including one that a later attempt got through. It also drops
-the rest of a chained line (`src/cache.asm:351-351`, `src/text.asm:76`).
+cache. At each warm boot TEC-OS tries every changed block in the cache, drops
+each one whose write fails, so that the card keeps its old copy of that block,
+and prints this message once, on a line of its own, if any failed. It also
+drops the rest of a chained line (`src/cache.asm:177-202`,
+`src/cache.asm:351-359`, `src/text.asm:76`).
 
-A flush stops at the first block that fails. That block and those after it stay
-in the cache, and each warm boot writes them again and prints the message again
-while the failure lasts (`src/cache.asm:177-177`). A directory block that can't
-be written isn't kept: its cache line is dropped, the BDOS reports `Bad Sector`,
-and the warm boot after the key prints `Write lost` too
-(`src/cache.asm:343-349`).
-
-The data stays in the cache until a reset or a loss of power, either of which
-discards it, so don't reset the board first. Put right what stopped the write
-and press `^C` at the prompt for another warm boot. A warm boot with no message
-means the flush reached the card. On the [host model](25-host-model.md), a
-write failure that cleared with the card left in place gave that result at the
-next `^C`. Changes still in the cache when a card comes out are lost, even with
-the same card put back: each `^C` gives `Write lost` again, since only cold boot
-starts a card (`src/boot.asm:54`), and the reset that starts it discards them.
-If the message keeps coming and the board has to be reset, the changes are lost
-and the file needs writing again.
+The changes in the dropped blocks are lost, and the next warm boot has nothing
+more to say. A directory block that can't be written, or whose data blocks
+can't, isn't kept either: its cache line is dropped and the BDOS reports `Bad
+Sector` during the run, and the warm boot after the key says nothing
+(`src/cache.asm:343-349`). The file that was being written needs writing
+again, once the card is put right and the board reset. Changes still in the
+cache when a card comes out are lost, even with the same card put back, since
+only cold boot starts a card (`src/boot.asm:54`), and the first warm boot after
+it gives `Write lost`. BDOS function 48 reports a failure to a program at
+once: it writes every changed block and returns `A` = `FFh` if any write failed
+(`src/cpm/bdos.asm:145-150`).
 [Chapter 19](19-block-cache.md#write-lost) explains the mechanism and
 [Chapter 4](04-cards-and-volumes.md#the-block-cache-and-the-volume-written-behind)
 the volume written behind.
