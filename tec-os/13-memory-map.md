@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 13. The memory map
 
-Checked against TEC-OS 626ee41.
+Checked against TEC-OS 5a25178.
 
 TEC-OS has 16 KiB of ROM and, of RAM, the 64 KiB that a TEC-1G with U9 fitted
 has. Chapter 7 describes that memory from a program's side, and this chapter
@@ -15,7 +15,7 @@ from TEC-OS's side. It starts with the way the system latch puts RAM and ROM
 into the Z80's 64 KiB, and the state TEC-OS keeps in page zero. It goes on to
 the resident workspace at the top of EXPAND 0 and the allocation vectors below
 it. It ends with the four stacks, the measurements that size them and TEC-OS's
-use of EXPAND 1. The addresses are those of the build at 626ee41 with the starter
+use of EXPAND 1. The addresses are those of the build at 5a25178 with the starter
 card in the socket. `docs/memory-map.md`, which `npm run media` writes from the
 build's census, has the same figures.
 
@@ -123,44 +123,45 @@ memory from that jump to `BFFFh` is laid out like this:
 
 | Addresses | Bytes | Region |
 | --- | ---: | --- |
-| `B815h–B817h` | 3 | the BDOS entry jump |
-| `B818h–B957h` | 320 | allocation vectors |
-| `B958h–BCC4h` | 877 | BIOS disk state and buffers |
-| `BCC5h–BCEAh` | 38 | BIOS stack |
-| `BCEBh–BE76h` | 396 | CCP state and stack |
-| `BE77h–BEFFh` | 137 | BDOS state and stack |
+| `B9F3h–B9F5h` | 3 | the BDOS entry jump |
+| `B9F6h–BB35h` | 320 | allocation vectors |
+| `BB36h–BCC3h` | 398 | BIOS disk state and buffers |
+| `BCC4h–BCE9h` | 38 | BIOS stack |
+| `BCEAh–BE75h` | 396 | CCP state and stack |
+| `BE76h–BEFFh` | 138 | BDOS state and stack |
 | `BF00h–BF32h` | 51 | RAM BIOS table |
-| `BF33h–BFE4h` | 178 | SD, keyboard and graphics LCD state |
-| `BFE5h–BFFFh` | 27 | unused |
+| `BF33h–BFE2h` | 176 | SD, keyboard and graphics LCD state |
+| `BFE3h–BFFFh` | 29 | unused |
 
 The image initialises none of it. `ram.asm` reserves each byte with `DS`, and
 cold boot and warm boot clear and set it (`src/ram.asm:1-4`).
 
-The fixed workspace, from `WSBASE` at `B958h` to `BEFFh`, has fixed addresses
-for a given build. Its size, 1,448 bytes, sets `WSBASE`, and Chapter 12
+The fixed workspace, from `WSBASE` at `BB36h` to `BEFFh`, has fixed addresses
+for a given build. Its size, 970 bytes, sets `WSBASE`, and Chapter 12
 describes how the build places it so that it ends at `BF00h`. This part is
 three blocks, one after the other (`src/ram.asm:1-3`).
 
 The first block is the BIOS's, from `DSKCUR` to the BIOS stack
 (`src/ram.asm:8-63`). It begins with the disk state: the drive, track, sector
 and DMA address the BDOS last set, and the block and record they map to. Next
-is the 512-byte deblocking buffer `BLKBUF` at `B966h` with its key
-(`src/ram.asm:16-19`). After it come the drive table, the drives' disk
-parameter headers, the DPHs, and the 128-byte directory buffer `DIRBUF` that
-every drive shares. Chapter 18 describes deblocking and these tables. Then come
-the word `STUBAD`, which holds the BDOS entry
+is a 4-byte key, the drive and block of the last block that a write cleared
+rather than read (`src/ram.asm:17-19`, `src/bios.asm:128-138`). After it come
+the drive table, the drives' disk parameter headers, the DPHs, and the 128-byte
+directory buffer `DIRBUF` that every drive shares. Chapter 18 describes the key
+and these tables. Then come the word `STUBAD`, which holds the BDOS entry
 jump's address, and the `MOUNT` routine's scratch bytes, which the volume
-services also use. The video terminal's
+services also use. They end with `MNBUF`, 32 bytes of the container's table
+copied from the cache line that holds it (`src/ram.asm:35-44`). The video terminal's
 state follows: an 80-byte row buffer for scrolling, the seven vectors into the
 display driver, the scroll region and the console mode (`src/ram.asm:46-59`).
 
-The second block is the CCP's, from `CCPRAM` at `BCEBh` (`src/ram.asm:65-66`).
+The second block is the CCP's, from `CCPRAM` at `BCEAh` (`src/ram.asm:65-66`).
 It holds the CCP's two FCBs, the command buffer with its 128 characters, the
 state of the directory listing and the pager, and a 128-byte scratch buffer,
 `LOADBUF`. A guard and the CCP's stack follow (`src/ram.asm:68-129`).
 
-The third block is the BDOS's, from `BDOSRAM` at `BE77h`. It starts with the
-saved stack pointer, the console column and the line editor's state. Then come
+The third block is the BDOS's, from `BDOSRAM` at `BE76h`. It starts with the
+saved stack pointer, function 45's error mode `ERRMODE`, the console column and the line editor's state. Then come
 `CURDRV`, the bound drive, `DEFDRV`, the default drive, the user number,
 the read-only vector and the drives to rebuild at warm boot. The pointers into
 the bound drive's DPH, its disk parameter block, the DPB, and its vector
@@ -173,14 +174,14 @@ of a page (`src/layout.asm:71-72`). Chapter 15 describes it.
 Above the table, from `SDBYTE` at `BF33h`, is state that the build puts at a
 fixed offset from it, 51 bytes on (`src/ram.asm:194`). It starts with the SD
 card driver's command argument, block address and last error. The block cache's
-next line, failure flag and saved interrupt state follow. Next are the matrix
+next line, the type of the BIOS write and the saved interrupt state follow. Next are the matrix
 keyboard's scan state, the two display drivers' table addresses, the history's
 head, `MVCOPY`'s banks, `PZTOP` and the program return code `PRGCODE`. After
 them come the service loader's state and the registry's head.
 The last items are the 128-byte record of `A:STARTUP.CMD` that startup reads,
 and `CHPOS`, the next command, or piece, of a chained line (Chapter 11,
-`src/ram.asm:195-238`). This state ends at
-`WSEND`, `BFE5h`, and the build checks that it ends by `C000h`
+`src/ram.asm:195-239`). This state ends at
+`WSEND`, `BFE3h`, and the build checks that it ends by `C000h`
 (`src/ram.asm:240-241`, `tools/build.mjs:258`).
 
 ## The allocation vectors and the BDOS entry
@@ -204,11 +205,11 @@ for each drive it mounts, of the size its volume needs (`src/boot.asm:358-386`).
 `DRVSLOT` records each drive's slot: 0 for none, 1 for 64 bytes and 2 for 256
 (`src/ram.asm:28`, `src/boot.asm:387-392`). The starter card is format 1.0 with
 a G1M volume on A and a G8M volume on B. Its vectors take 64 and 256 bytes, 320
-in all, from `B818h` to `B957h`.
+in all, from `B9F6h` to `BB35h`.
 
 Directly under the vectors goes the BDOS entry jump, `JP BENTRY`. `ALVINIT`
 takes the lowest vector's address and subtracts 3 (`src/boot.asm:412-417`). For
-the starter card that puts the jump at `B815h`, with no byte between it and the
+the starter card that puts the jump at `B9F3h`, with no byte between it and the
 vectors. `STUBAD` keeps the address, and `PZINIT` writes the jump there. With no
 service loaded, `PZTOP`, the word `PZINIT` puts at `0006h`, is this address
 (`src/ram.asm:33`, `src/boot.asm:206-213`).
@@ -220,9 +221,9 @@ form `xx00h` (`src/loader.asm:1-5`, `src/loader.asm:203-215`). Chapter 20 descri
 the loader.
 
 The word at `0006h` is the top of the TPA, so the card sets how much memory
-programs have. The starter card gives 46,869 bytes, from `0100h` to `B814h`.
+programs have. The starter card gives 47,347 bytes, from `0100h` to `B9F2h`.
 The largest card, four G8M volumes, takes four 256-byte vectors, puts the entry
-at `B555h` and leaves 46,165 bytes. The build works out both figures in its
+at `B733h` and leaves 46,643 bytes. The build works out both figures in its
 census and checks that the starter card's TPA is at least 45,830 bytes
 (`tools/build.mjs:210-220`, `tools/build.mjs:261-262`).
 
@@ -237,12 +238,12 @@ reset, clears page zero and runs the RAM check. After the check has passed and
 the workspace has been cleared, cold boot moves to the BIOS stack
 (`src/boot.asm:33-39`).
 
-The BIOS stack, `BSTKB` to `BSTK`, is 38 bytes at `BCC5h–BCEAh`
+The BIOS stack, `BSTKB` to `BSTK`, is 38 bytes at `BCC4h–BCE9h`
 (`src/ram.asm:61-63`). Cold boot runs on it from the end of the RAM check. Warm
 boot sets it as soon as EXPAND 0 is back in view (`src/boot.asm:76-79`), and
 the diagnostic prompt sets it again on entry (`src/boot.asm:423`).
 
-The CCP's stack, `CSTKBAS` to `CSTKTOP`, is 30 bytes at `BE59h–BE76h`
+The CCP's stack, `CSTKBAS` to `CSTKTOP`, is 30 bytes at `BE58h–BE75h`
 (`src/ram.asm:126-128`). The CCP sets it on entry and at the top of its main
 loop. It is also the stack a program starts with. The CCP sets it again, pushes
 the address of warm boot and jumps to `0100h`, which leaves the program 28
