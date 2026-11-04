@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix B. The ROM table and hardware services
 
-Checked against TEC-OS 626ee41.
+Checked against TEC-OS 5a25178.
 
 This appendix lists the ROM table at `C003h`, then the numbered services behind
 its one jump: the hardware services 0 to 8, the volume services 9 to 11, the
@@ -134,8 +134,8 @@ A release with no claim does nothing and returns status 0. Otherwise it clears
 text mode, font and page. If the PICO9918 is the console it then clears the
 screen and homes the cursor. With no `PICO.SVC`, nothing is restored. A
 release with the PICO9918 as the console takes 216,051 T-states at 80 columns
-and 146,766 with the console elsewhere. Warm boot makes the same call
-(`src/boot.asm:84`).
+and 146,766 with the console elsewhere. Warm boot makes the same call before it
+rebuilds page zero (`src/boot.asm:80-82`).
 
 **4 TONE.** Makes a square wave on port `01h` bit 7, with bit 6 held high,
 for `DE` half cycles, each of 16 × `B` + 51 T-states
