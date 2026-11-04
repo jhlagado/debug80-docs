@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 15. The BIOS and the console path
 
-Checked against TEC-OS 58d4345.
+Checked against TEC-OS 621201d.
 
 The BIOS is the part of a CP/M system written for one machine, and on the TEC-1G
 most of it is the console. That console has a serial port made of two port bits
@@ -27,7 +27,7 @@ table.
 CP/M 2.2 defines the BIOS as a table of jumps at the start of a page, one for
 each function, in a fixed order, so the BDOS and programs reach a machine's BIOS
 at the same offsets wherever its routines are. TEC-OS's table has the seventeen
-entries of CP/M 2.2 (`src/tables.asm:10-26`):
+entries of CP/M 2.2 (`src/tables.asm:11-28`):
 
 | Offset | Entry | Routine |
 | ---: | --- | --- |
@@ -124,8 +124,12 @@ the line `CON TTY` itself went to the PICO9918's screen.
 the service installed has the GLCD's table in its page, `SVCGO` calls `CONSW`
 with `UC1:`. While the PICO9918's console is in effect the GLCD gives way: the
 driver stays loaded, the console stays as it is and `CON UC1` later switches
-with nothing to load (`src/loader.asm:510-533`). The PICO9918's console needs no
-load, since `PISTART` puts `CRT:` in the field at cold boot.
+with nothing to load (`src/loader.asm:510-533`). A line of `STARTUP.CMD` that
+names `GLCD.SVC` while the field is `CRT:` installs nothing, as the section on
+the displays' tables below explains, so on a board with both displays the GLCD
+takes the console only through `CON UC1` or a load typed after `CON TTY`. The
+PICO9918's console needs no load, since `PISTART` puts `CRT:` in the field at
+cold boot.
 
 ## Console input
 
@@ -133,20 +137,20 @@ load, since `PISTART` puts `CRT:` in the field at cold boot.
 `CONST` share one byte of buffer: `RXFULL` and `RXCHAR`, at `BFE5h` and `BFE6h`.
 Whatever produces a character, the serial receiver or the keyboard scan, puts it
 in `RXCHAR` and sets `RXFULL`, and `CONIN` returns it from there
-(`src/console.asm:168-173`).
+(`src/console.asm:174-176`, `src/console.asm:189-198`).
 
 `BCONST` reports a character ready when `RXFULL` is set. Otherwise it checks
 the input once. On a video console it scans the whole keyboard, and on the
 serial terminal it reads the serial input up to `RXPOLL` times, 77. At 38
 T-states a poll, that covers three and a half bit times, and `BCONST` receives
-the byte if a start bit comes in that time (`src/console.asm:119-148`).
+the byte if a start bit comes in that time (`src/console.asm:133-167`).
 
 The table's `CONST` entry is `BCONSTC`, which also draws the cursor on a video
 console when nothing is ready, since a program that polls is waiting for a key.
 The BDOS's own check for `^S` while it prints calls `BCONST` directly and draws
-nothing (`src/console.asm:106-117`).
+nothing (`src/console.asm:119-131`).
 
-`BCONIN` waits for a character (`src/console.asm:150-192`). On a video console
+`BCONIN` waits for a character (`src/console.asm:169-220`). On a video console
 it shows the cursor and scans the keyboard one row at a time until a key is
 delivered, then takes the key and hides the cursor. On the serial terminal it
 loops reading port `03h` until bit 7 goes low, the start bit, and receives the
@@ -238,7 +242,7 @@ boot. `CONINIT` copies bit 0 of port `03h` into `CONDEV`'s bit `CDMTX`
 (`src/console.asm:48-50`), and `KBPOLL` returns at once without it
 (`src/keyboard.asm:13-15`).
 
-`KBSTEP` reads one row each time it is called (`src/keyboard.asm:23-54`).
+`KBSTEP` reads one row each time it is called (`src/keyboard.asm:25-58`).
 `CONIN` calls it in a loop, and `CONST` calls `KBPOLL`, which runs the eight
 steps of one full scan (`src/console.asm:181-182`,
 `src/keyboard.asm:9-23`). `KBMASK` holds the row's select byte, rotated left
@@ -247,7 +251,7 @@ down, `KBSTEP` moves the last key seen, `KBE`, into `KBD` and records the new
 one in `KBE`, so after a scan `KBE` holds the highest-numbered key down and `KBD`
 the one below it.
 
-After the eighth row `KBEVAL` evaluates the scan (`src/keyboard.asm:55-103`).
+After the eighth row `KBEVAL` evaluates the scan (`src/keyboard.asm:55-108`).
 A key that is still the one held at the last scan, `KBLAST`, gives nothing, so
 a key is delivered once when it goes down and holding it does not repeat. A
 second key down must be a modifier, since modifiers have the lowest numbers, and
@@ -257,7 +261,7 @@ The first is delivered at once, and the other two are kept in `KBT1` and `KBT2`
 for the next two calls of `CONIN`.
 
 Any other key goes through `KBASCII`, which looks it up
-(`src/keyboard.asm:111-166`). Return, Esc, space, quote and backslash come from a
+(`src/keyboard.asm:117-180`). Return, Esc, space, quote and backslash come from a
 table of plain and shifted values. Digits and punctuation come with their
 shifted forms from `KBSHIFT`. Letters come in lower case, in upper case with
 Shift or Caps Lock, and as control codes 01h to 1Ah with Ctrl.
@@ -269,7 +273,7 @@ sequences, and `BCONOUT` sends every byte untouched. A display has no such
 program, so on a video console every character of output goes through `VTOUT`, a
 terminal emulator of the VT100's kind (`src/term.asm:1-22`).
 
-`BCONOUT` itself is short (`src/console.asm:216-225`). After `CONSEL` it drops
+`BCONOUT` itself is short (`src/console.asm:245-257`). After `CONSEL` it drops
 the character if a program has claimed the PICO9918 and the PICO9918 is the
 console. It goes to `VTOUT` for `CRT:` and `UC1:`. For `BAT:`, whose output goes
 to the list device and so is discarded, it returns with the character dropped.
@@ -279,7 +283,7 @@ For `TTY:` it sends to the serial port.
 draws through the display's vectors. `VPUT` puts a character at a row and column, `VGET` reads one
 back and `VCLREOL` clears from a column to the end of its row. `VRDROW` and
 `VWRROW` copy a whole row to and from the 80-byte `LINEBUF`
-(`src/video.asm:1-24`).
+(`src/video.asm:1-41`).
 
 A printable character, `20h` to `7Eh`, goes at the cursor with `VATTR` added to
 it, `80h` while reverse video is on, because the display's font draws codes
@@ -301,7 +305,7 @@ A sequence reaches `VTOUT` one byte at a time, so the escape parser keeps its
 state in `ESCST` at `BFECh`. The state is 0 normally, 1 after `ESC`, 2 while
 reading the first number and 3 while reading the second, which starts at a `;`
 (`src/term.asm:145-189`). `ESC` and `[` start a sequence, and any other byte
-after `ESC` ends it. Digits build the current number in a byte. A `?` and any
+after `ESC` ends it and is dropped. Digits build the current number in a byte. A `?` and any
 other byte below `40h` are skipped, so a private or unknown sequence is read to
 its end. The byte that ends the sequence selects the action
 (`src/term.asm:190-225`):
@@ -318,14 +322,18 @@ its end. The byte that ends the sequence selects the action
 | `ESC [ n L`, `ESC [ n M` | insert or delete n lines at the cursor's row, in the scroll region |
 | `ESC [ t ; b r` | the scroll region from row t to row b, and the cursor home |
 
-Any other final byte ends the sequence with nothing done. Inserts and deletes
+The parameter of `J` is compared only with 2, so `ESC [ 1 J`, which clears to
+the start of the screen on a VT100, clears to the end of it here, as any
+parameter but 2 does. `K` ignores its parameter, so `ESC [ 1 K` and
+`ESC [ 2 K` also clear to the end of the line (`src/term.asm:323-347`). Any
+other final byte ends the sequence with nothing done. Inserts and deletes
 of characters edit the cursor's row in `LINEBUF` and write it back as one row
 (`src/term.asm:371-464`). A scroll region must cover at least two rows, or the
 sequence is ignored (`src/term.asm:227-257`).
 
 The cursor is the cell at `VROW` and `VCOL` drawn in reverse: the terminal reads
 the cell with `VGET`, flips bit 7 and writes it back with `VPUT`
-(`src/term.asm:546-576`). `VCURV` records whether it is drawn. It is shown only
+(`src/term.asm:587-622`). `VCURV` records whether it is drawn. It is shown only
 while input is awaited, by `CONIN` and by `CONST` when nothing is ready, so that
 output does not pay for drawing a cursor on every character
 (`src/term.asm:16-17`). The next character of output removes it first
@@ -345,7 +353,7 @@ The PICO9918's table is the ROM's. At cold boot `PISTART` copies the template
 columns and puts `PIBLK`'s address in `PIVEC`. It does so only when the
 PICO9918 has answered the probe and the matrix keyboard is enabled, and on any
 other board `PIVEC` stays 0, so `CRT:` falls back to the serial terminal
-(`src/pico.asm:15-44`). The table's columns byte is the width. `TMSW` sets it
+(`src/pico.asm:15-47`). The table's columns byte is the width. `TMSW` sets it
 to 80, 40 or 32 and chooses the VDP's registers, the name table and a table of
 each row's address to match (`src/pico.asm:67-110`). `PIBLK` also holds the
 console's record, the last in the registry, named `PICO` at version 3, so a
@@ -355,19 +363,25 @@ table's `PICOWID` entry, as Chapter 17 describes.
 
 `GLCD.SVC` gives the ROM its table through `DRVR`, service 12, which goes to
 `SVDRV` and from there to `VIDHOOK` (`src/tables.asm:88`,
-`src/services.asm:327`, `src/video.asm:47-57`). The driver calls the service
+`src/services.asm:362-382`, `src/video.asm:67-79`). The driver calls the service
 with `CMUC1`, 3, in `B` and the table's address in `HL`. Any other value in
 `B`, `CMCRT` among them, returns `TNEBAD` with carry set and changes nothing,
-since the PICO9918's table is the ROM's (`src/services.asm:320-331`).
+since the PICO9918's table is the ROM's (`src/services.asm:362-367`). A table
+offered while a line of `STARTUP.CMD` runs and the `CON:` field is `CRT:` is
+refused with `TNENODV`, the status of an absent device, so a driver that could
+only give way to the PICO9918's console is not installed from the startup file
+(`src/services.asm:356-380`).
 `VIDHOOK` keeps the address in `GLVEC` and returns `HL` pointing at `LINEBUF`,
-the buffer that the driver's row routines use (`src/video.asm:58-80`). When
+the buffer that the driver's row routines use (`src/video.asm:72-102`). When
 there is no matrix keyboard or the display already has a table, it changes
 nothing, and the service returns status 1, `TNEBAD`, with carry set.
 
 The driver's `REMOVE` calls the service with `HL` 0, and `VIDHOOK` then drops
-the table and puts the serial terminal in `CONMOD`. The field still names
-the console it named, `UC1:` unless the GLCD gave way, so the next console call acts on it and, with no table now, falls back
-to the serial terminal (`src/video.asm:81-90`).
+the table. When `UC1:` is the mode in effect, it puts the serial terminal in
+`CONMOD`. The field still names `UC1:`, so the next console call acts on it
+and, with no table now, falls back to the serial terminal. When the GLCD gave
+way, the mode in effect is `CRT:`, which `VIDHOOK` leaves as it is, so the
+PICO9918's screen and its text stay (`src/video.asm:103-118`).
 
 The seventh vector carries three functions that only the PICO9918's console
 needs (`src/video.asm:43-65`). That console has two name tables in VRAM, its
@@ -376,7 +390,7 @@ sight and shown with one register write (`src/pico.asm:67-71`,
 `src/pico.asm:114-141`). Function 0 shows the page the terminal has drawn.
 `CONST` and `CONIN` call it, so that by the time a program
 waits for a key the screen shows what it drew (`src/console.asm:138`,
-`src/console.asm:138`). Functions 1 and 2 begin and end a move of rows, around a
+`src/console.asm:173`). Functions 1 and 2 begin and end a move of rows, around a
 scroll or a line insert or delete (`src/term.asm:504`, `src/term.asm:565`). The
 terminal calls them only when the console is the PICO9918 and no program has
 claimed it.
@@ -392,7 +406,7 @@ gives the display back to the console before it rebuilds page zero
 The PICO9918's console starts with the probe at cold boot. `TMSINIT` writes
 `5Ah` to VRAM address `3FFFh` through ports `BFh` and `BEh` and reads it back,
 then does the same with `A5h`. If both come back, `VIDINIT` sets `CDTMS` in
-`CONDEV` and goes on to `PISTART` (`src/tms.asm:1-30`, `src/video.asm:7-11`).
+`CONDEV` and goes on to `PISTART` (`src/tms.asm:1-30`, `src/video.asm:8-16`).
 
 ## The 20 × 4 LCD
 
@@ -404,7 +418,7 @@ the last clears the display (`src/lcd.asm:8-16`, `src/tables.asm:38`). Before ea
 command or character `LCDWAIT` reads the busy flag, bit 7 of port `04h`, at most
 256 times, so a board with no LCD costs only that wait and no hang
 (`src/lcd.asm:18-27`). The rows start at display addresses `80h`, `C0h`, `94h`
-and `D4h` (`src/tables.asm:36`), and `LCDROW` writes a string from column 0 of a
+and `D4h` (`src/tables.asm:40-41`), and `LCDROW` writes a string from column 0 of a
 row (`src/lcd.asm:47-68`).
 
 Cold boot writes `TEC-OS 0.1  TEC-1G` on row 0 and the letters and labels of
