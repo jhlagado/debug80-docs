@@ -7,14 +7,14 @@ nav_group: "Appendices"
 
 # Appendix C. Memory map
 
-Checked against TEC-OS 58d4345.
+Checked against TEC-OS 621201d.
 
 This appendix gives the addresses TEC-OS uses: the CPU's address space, the
 ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
 the stacks. Chapter 13 explains the layout and Chapter 7 describes it from a
-program's side. The figures are those of the build at 58d4345, whose one
+program's side. The figures are those of the build at 621201d, whose one
 profile is `tecos` and whose ROM has the SHA-256
-`8bb1637d52039f3c864d18a7b48819998f2315f0b5ad28fe2ea22e7150499e45`. Where the
+`bee18e1ecf501170e80a30cfa1fd2b53d14e26238d90ad2ee6a6096c8e9f3ea8`. Where the
 figures depend on the card they are those of the starter card, with a G1M
 volume on drive A and a G8M volume on drive B, and no service installed.
 
@@ -93,14 +93,14 @@ card the first service's pages end at `B8FFh`, so the 164 bytes from `B900h` to
 | `C000h–C002h` | 3 | the reset jump, `JP RSTENT` |
 | `C003h–C00Ah` | 8 | the ROM table |
 | `C00Bh–C609h` | 1,535 | the read-only data, `ROMDATA` to `ROMCODE`, with the font, `FONT`, at `C179h–C478h` |
-| `C60Ah–FE04h` | 14,331 | the code |
-| `FE05h–FFFFh` | 507 | free |
+| `C60Ah–FE45h` | 14,396 | the code |
+| `FE46h–FFFFh` | 442 | free |
 
-Within the code, the CCP is at `DCE2h–E6A0h`, 2,495 bytes, and the BDOS at
-`E6A1h–F5BFh`, 3,871 bytes, in the order `src/rom.asm` includes them
-(`src/rom.asm:27-36`). The ROM's own copy of the BIOS jump table is in the
-data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
-(`src/tables.asm:10-26`, `src/boot.asm:75-78`).
+Within the code, the CCP's three files are at `DD0Ah–E6E2h`, 2,521 bytes, and
+the BDOS's six at `E6E3h–F5E0h`, 3,838 bytes, in the order `src/rom.asm`
+includes them (`src/rom.asm:27-36`). The ROM's own copy of the BIOS jump table
+is in the data, at `BIOSBAS`, and is never called: cold boot copies it to
+`BF00h` (`src/tables.asm:11-28`, `src/boot.asm:75-78`).
 
 ## Page zero
 
@@ -119,9 +119,9 @@ data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 | `006Ch` | the second FCB, overlapping the first's last 20 bytes |
 | `0080h–00FFh` | the command tail and the default DMA buffer |
 
-Cold boot clears page zero, and `PZINIT` writes it at cold boot and at every
-warm boot, leaving the IOBYTE and the drive and user byte as they are
-(`src/boot.asm:29-35`, `src/boot.asm:204-263`). An unload and a failed `INIT` clear
+Cold boot clears page zero, and `PZINIT` writes it at every warm boot, cold
+boot's end included, leaving the IOBYTE and the drive and user byte as they
+are (`src/boot.asm:29-35`, `src/boot.asm:221-283`). An unload and a failed `INIT` clear
 the first byte of each restart vector the service claimed and then run the
 same sweep of the vectors, `PZSWP` (`src/loader.asm:78-89`,
 `src/loader.asm:295-299`, `src/loader.asm:334-347`). The CCP writes the byte at
@@ -155,7 +155,7 @@ card. The build places `WSBASE` so that the part ends at `BF00h`
 starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:218`). Cold boot
 clears the workspace from `WSBASE` up to `WSEND`, `BAE7h` to `BFFFh`
 (`src/boot.asm:37-41`). Warm boot clears the part from `CCPCLR` to the end of
-the BDOS's block and leaves the rest (`src/boot.asm:268-287`).
+the BDOS's block and leaves the rest (`src/boot.asm:288-312`).
 
 ### The BIOS's block
 
@@ -235,7 +235,7 @@ clears the rest:
 | `BF52h–BF53h` | 2 | `PZTOP` | the word warm boot puts at `0006h` |
 | `BF54h–BF55h` | 2 | `PRGCODE` | function 108's return code |
 | `BF56h–BF5Ah` | 5 | `LOADTOP` to `SLDL` | the CCP's and the service loader's figures |
-| `BF5Bh–BF61h` | 7 | `SVCBSY` to `SVCRA` | the service loader's and registry's state, with the last load's failure and its `INIT`'s `A` |
+| `BF5Bh–BF61h` | 7 | `SVCBSY` to `SVCRA` | the service loader's and registry's state, with the last load's failure and its `INIT`'s `A`, or 0 when a record failed its check after `INIT` |
 | `BF62h` | 1 | `STFLAG` | `FFh` while a line from `STARTUP.CMD` runs, 0 for a typed one |
 | `BF63h` | 1 | `STPOS` | startup's position |
 | `BF64h–BFE3h` | 128 | `STREC` | the record of `A:STARTUP.CMD` |
@@ -257,7 +257,7 @@ clears the rest:
 
 ## EXPAND 1
 
-Cold boot clears all of EXPAND 1 (`src/boot.asm:156-164`). No BDOS or BIOS
+Cold boot clears all of EXPAND 1 (`src/boot.asm:169-180`). No BDOS or BIOS
 call gives a program a range in it. A program that writes the latch can still
 switch it in. If it ends with EXPAND 1 in view, the jump at `0000h` goes to
 `BF03h` in EXPAND 1. That page holds zeros, which the Z80 runs as `NOP`s up to
@@ -266,7 +266,7 @@ the reset jump at `C000h`. The jump's target, `RSTENT`, reads the byte at
 overlay is on. Here it holds the RAM BIOS table's, and the machine warm boots:
 EXPAND 0 comes back into view and the cache's dirty lines are written to the
 card, as at any exit (`src/boot.asm:11-22`, `src/boot.asm:92-108`). A reset and
-BIOS function 0 cold boot (`src/tables.asm:10`).
+BIOS function 0 cold boot (`src/tables.asm:11-12`).
 
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
@@ -289,7 +289,7 @@ The cache's addresses are in `src/layout.asm:23-25` and the history's page in
 | boot | below `8000h` | | cold boot, until the workspace is cleared (`src/layout.asm:56`, `src/boot.asm:24`) |
 | BIOS | `BCC5h–BCECh` | 40 | warm boot (`src/boot.asm:96`) |
 | CCP | `BE56h–BE75h` | 32 | the CCP, and a program from its start, with `0000h` pushed |
-| BDOS | `BECAh–BEFFh` | 54 | every BDOS function and the BIOS calls it makes, and cold boot from the workspace's clear to the CCP: the console's start, the banner, the mount, the drive listing and the diagnostic prompt (`src/boot.asm:42`, `src/boot.asm:63-64`, `src/boot.asm:429-431`) |
+| BDOS | `BECAh–BEFFh` | 54 | every BDOS function and the BIOS calls it makes, and cold boot from the workspace's clear to the CCP: the console's start, the banner, the mount, the drive listing and the diagnostic prompt (`src/boot.asm:42`, `src/boot.asm:63`, `src/boot.asm:463-470`) |
 
 The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:64-73`. A
 loaded service runs on its caller's stack, and `SVCLIM` gives what the services
