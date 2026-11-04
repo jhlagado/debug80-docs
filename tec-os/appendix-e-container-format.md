@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix E. The container format
 
-Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from Thorium
 128edb7, with the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
 
