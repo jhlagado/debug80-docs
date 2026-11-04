@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 9. The hardware services
 
-Checked against TEC-OS 621201d. The programs were assembled by the starter
+Checked against TEC-OS 78127ec. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. `DEMO`
 was assembled on the PC by ATOM from the repository's `atom-z80` 0.3.7.
@@ -159,7 +159,9 @@ the 30 bytes of the CCP's stack in a program that has pushed nothing. No hardwar
 BDOS, so a program can call one from code that runs inside a BDOS call, such
 as a routine reached through its own jump in the BIOS jump table. The mount
 and unmount services reset the drive through BDOS function 37, so a program
-calls those two from outside its own BDOS calls. The hardware services keep
+calls those two from outside its own BDOS calls. A mount onto the current
+drive then selects the drive again with function 14, so the BDOS's functions
+27 and 31 give the new volume's allocation vector and disk parameters at once. The hardware services keep
 their one byte of state, the claim on the PICO9918 described later in this
 chapter, in TEC-OS's workspace.
 
