@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix D. Error messages
 
-Checked against TEC-OS 621201d.
+Checked against TEC-OS 78127ec.
 
 This appendix lists every message TEC-OS prints, with its cause and its
 remedy, in the order a run can reach them: cold boot and the diagnostic
@@ -189,14 +189,16 @@ function.
 cache. At each warm boot TEC-OS tries every changed block in the cache, drops
 each one whose write fails, so that the card keeps its old copy of that block,
 and prints this message once, on a line of its own, if any failed. It also
-drops the rest of a chained line (`src/cache.asm:182-208`,
+drops the rest of a chained line (`src/cache.asm:182-215`,
 `src/cache.asm:388-397`, `src/text.asm:69`).
 
 The changes in the dropped blocks are lost, and the next warm boot has nothing
 more to say. A directory block that can't be written, or whose data blocks
-can't, isn't kept either: its cache line is dropped and the BDOS reports `Bad
-Sector` during the run, and the warm boot after the key says nothing
-(`src/cache.asm:378-386`). The file that was being written needs writing
+can't, isn't kept: its cache line is dropped and the BDOS reports `Bad Sector`
+during the run. The data blocks that failed stay in the cache, so a close
+tried again fails again until the card takes them. The warm boot after the key
+tries them again and gives `Write lost` if they still fail
+(`src/cache.asm:182-215`, `src/cache.asm:378-386`). The file that was being written needs writing
 again, once the card is put right and the board reset. Changes still in the
 cache when a card comes out are lost, even with the same card put back, since
 only cold boot starts a card (`src/boot.asm:67`), and the first warm boot after
