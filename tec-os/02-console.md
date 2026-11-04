@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 2. The console
 
-Checked against TEC-OS 58d4345.
+Checked against TEC-OS 621201d.
 
 The console is the device you type commands on and read TEC-OS's replies from.
 A TEC-1G can carry a serial terminal, a PICO9918 video card and a graphics LCD
@@ -123,10 +123,10 @@ A>
 ```
 
 If `GLCD.SVC`, the graphics LCD's driver, isn't installed, `CON UC1` first loads
-it from drive A. On a board with both displays, the starter card's `GLCD.SVC`
-line installs the driver but leaves the console on the PICO9918, and `CON UC1`
-moves the console to the graphics LCD. The web page's board is one, and its
-graphics LCD shows this after `CON UC1`:
+it from drive A. On a board with both displays the PICO9918 is the console
+from cold boot, so the starter card's `GLCD.SVC` line installs nothing, and
+`CON UC1` loads the driver and moves the console to the graphics LCD. The web
+page's board is one, and its graphics LCD shows this after `CON UC1`:
 
 <!-- node tools/capture.mjs --board pico --screen "CON UC1" CON -->
 ```text
@@ -169,46 +169,28 @@ columns of text, and 32 columns in the PICO9918's Graphics I mode. Cold boot
 starts it at 80. A width after `CRT` or `PICO`, with a space before it, sets the
 width and makes the PICO9918 the console, so `CON PICO 40` and `CON CRT 32` both
 work. The BIOS clears the screen at the new width at its next console call. A
-warm boot keeps the width, and a reset sets 80 again. `SAMPLE`, the program
-Chapter 1 built, prints the screen's size, and here it runs at each width on
-the web page's board:
+warm boot keeps the width, and a reset sets 80 again. Here is the web page's
+PICO9918 after `CON PICO 32`, the program `MOUNT` and `DIR`:
 
-<!-- node tools/capture.mjs --board pico "TAS SAMPLE" "CON PICO 32" SAMPLE "CON CRT 40" SAMPLE "@reset" SAMPLE -->
+<!-- node tools/capture.mjs --board pico --screen "CON PICO 32" MOUNT DIR -->
 ```text
-A>CON PICO 32
 CON: CRT:
-A>SAMPLE
-Hello from TEC-OS.
-Screen: 32 by 24
-Back to the prompt.
+A>MOUNT
+00 SYSTEM      G1M A:
+01 WORK        G8M B:
 
-A>CON CRT 40
-CON: CRT:
-A>SAMPLE
-Hello from TEC-OS.
-Screen: 40 by 24
-Back to the prompt.
-
-A>
-TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
-B: WORK       
-
-A>GLCD.SVC
-
-A>SAMPLE
-Hello from TEC-OS.
-Screen: 80 by 24
-Back to the prompt.
-
+A>DIR
+MOUNT.COM    GLCD.SVC
+STARTUP.CMD  TED.COM
+SAMPLE.ASM   TAS.COM
+6 files, 980K free
 A>
 ```
 
-The transcript starts after `TAS SAMPLE`, which assembled the program. Each
-`SAMPLE` ended in a warm boot, which kept the width, and the reset brought back
-80 columns. Any other width, a width after another name or a width with no
-space before it is printed back with a question mark, and the console stays as
-it was:
+`MOUNT` ended in a warm boot, which kept the width, and `DIR` puts two names
+on a row of 32 columns where it puts six on a row of 80. Any other width, a
+width after another name or a width with no space before it is printed back
+with a question mark, and the console stays as it was:
 
 <!-- node tools/capture.mjs --board pico "CON CRT80" "CON TTY 40" "CON PICO 50" -->
 ```text
@@ -224,8 +206,9 @@ A>CON PICO 50
 A>
 ```
 
-A width is refused in the same way on a board where cold boot didn't start the
-PICO9918's console.
+A width typed at the prompt is refused in the same way on a board where cold
+boot didn't start the PICO9918's console. Chapter 5 describes the same line in
+the startup file, where it passes quietly.
 
 ## The serial terminal
 
@@ -263,7 +246,8 @@ TEC-OS loads into memory below the BDOS. Chapter 1 showed the starter card's
 startup file installing it before the first prompt. It installs only on a
 board that has the graphics LCD and the matrix keyboard. When it installs it
 makes the graphics LCD the console, unless the PICO9918 is the console, which
-then keeps it until `CON UC1`. The driver takes 932 bytes from programs, as
+then keeps it until `CON UC1`. A `GLCD.SVC` line in the startup file installs
+nothing while the PICO9918 is the console. The driver takes 932 bytes from programs, as
 Chapter 1 explained. Chapter 5 gives the rules for the startup file and for
 installing and removing services.
 
@@ -335,8 +319,8 @@ read by a program, `^W` and `^N` are characters like any other. Chapter 3
 describes the history of command lines behind them.
 
 Two keys act while the BDOS prints. `^S` stops the output, and the next key
-starts it again. That key is used up and does nothing else, so a `^C` then
-doesn't end the program as it does in CP/M 2.2. `^P` turns the copy to the list
+starts it again. A `^C` as that key ends the program, as it does in CP/M 2.2,
+and any other key is used up and does nothing else. `^P` turns the copy to the list
 device on or off, as it does in a line, but since TEC-OS's list device discards
 what it is sent, `^P` has no effect that you can see. The first other key typed
 during output is kept for the program's next console read, and until the program
