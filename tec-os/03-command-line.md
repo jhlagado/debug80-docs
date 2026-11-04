@@ -513,7 +513,7 @@ The message is `Bdos Err On`, the drive and one of four causes:
 After printing the message, the BDOS waits for a key, and any key ends the
 command, or the program that made the call, with a warm boot. A program can
 instead have the error returned to it, with BDOS function 45, which Appendix A
-describes. On the volume written behind, the warm boot after the key writes
+describes. On the volume written behind, the warm boot after the key tries
 the cache's changes again and prints `Write lost` if one still can't be
 written, as Chapter 4 describes. An `ERA` that ends in `Bad Sector` leaves on
 the card the file whose entry couldn't be written, and with a wildcard the
