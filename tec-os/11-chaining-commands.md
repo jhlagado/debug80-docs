@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 11. Chaining commands
 
-Checked against TEC-OS 5a25178, with the ATOM assembler from the
+Checked against TEC-OS 58d4345, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
 128edb7, and its copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`. Its
@@ -33,9 +33,8 @@ had typed the commands one at a time:
 ```text
 A>DIR *.CMD!TYPE STARTUP.CMD
 STARTUP.CMD 
-1 file, 978K free
+1 file, 980K free
 A>TYPE STARTUP.CMD
-PICO.SVC
 GLCD.SVC
 
 A>mount!!  ! dir b:!
@@ -97,14 +96,14 @@ NOSUCH?
 
 A>:DIR *.CMD
 A>DIR *.SVC!:DIR *.CMD
-PICO.SVC     GLCD.SVC    
-2 files, 978K free
+GLCD.SVC    
+1 file, 980K free
 A>:DIR *.CMD
 STARTUP.CMD 
-1 file, 978K free
+1 file, 980K free
 A>:DIR *.CMD
 STARTUP.CMD 
-1 file, 978K free
+1 file, 980K free
 A>
 ```
 
@@ -112,11 +111,15 @@ A>
 was dropped with the rest of the line. In the second line `DIR *.SVC`
 succeeded and `:DIR *.CMD` ran. The third line starts with `:`, and the
 command it tests is the last one of the line before, the `DIR *.CMD` that
-succeeded. A `:` at the start of a line typed after a failure runs nothing. On
-the serial board, and on a board with both displays, the starter card's last
-startup line `GLCD.SVC` fails, so a `:` that starts the first line typed runs
-nothing there too. The web page's card has only the chosen display's line,
-which installs, so on the page such a `:` runs.
+succeeded. A `:` at the start of a line typed after a failure runs nothing.
+
+On the serial board the starter card's startup line `GLCD.SVC` finds no
+graphics LCD. A startup line whose service finds its device absent fails
+quietly: it prints nothing and leaves the return code at 0. A `:` that starts
+the first line typed therefore runs there, as it does on the boards where
+`GLCD.SVC` installs. A board with the graphics LCD and no matrix keyboard
+refuses the line with `GLCD.SVC?`, a failure, and there such a `:` runs
+nothing.
 
 ## Return codes
 
@@ -136,7 +139,7 @@ function 108, so an ordinary CP/M 2.2 program always succeeds. The code is also
 
 The CCP sets the code to `FF00h` when a command fails at the CCP. That covers a
 command that isn't found, a program that won't load and a service that won't
-install. It also covers every built-in that prints `NAME?`, `NO FILE`,
+install, but not a startup line whose service finds its device absent. It also covers every built-in that prints `NAME?`, `NO FILE`,
 `FILE EXISTS`, `NO SPACE` or one of `COPY`'s messages. An `ERA *.*` answered
 with `N` erases nothing and is a success.
 
@@ -189,7 +192,6 @@ COPIED 0001
 B>EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR
 
 B>:TYPE NOTES.TXT
-PICO.SVC
 GLCD.SVC
 
 B>DIR
