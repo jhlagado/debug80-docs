@@ -8,13 +8,13 @@ and Chapter 1 is to be fixed.
 
 ## Truth
 
-**Each chapter names its commit.** Under its title a chapter carries one line,
-`Checked against TEC-OS <commit>.`, with the short hash of the commit whose
-code the chapter's claims were checked against. When the chapter's examples
-depend on a file from outside the repository, such as the starter card's
-`TED.COM` or `TAS.COM`, the same line names that file's build, and an HTML
-comment on the next line gives its SHA-256, out of the reader's way. A
-revision that rechecks the chapter against a later commit changes the line.
+**Each chapter names its commit.** Under its title a chapter carries an HTML
+comment, `<!-- Checked against TEC-OS <commit>. -->`, with the short hash of the
+commit whose code the chapter's claims were checked against, and the build of
+any file from outside the repository that its examples depend on, such as the
+starter card's `TED.COM` or `TAS.COM`. The comment is for the people revising
+the book; a reader never sees it. A revision that rechecks the chapter against a
+later commit changes the comment.
 
 **The code is the authority.** Every number, address, message, file name and
 behaviour in a chapter is checked against the source at the named commit, not

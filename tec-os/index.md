@@ -67,11 +67,9 @@ caret, so `^C` means Ctrl and C together.
 
 ### Part I: Using and programming TEC-OS
 
-1. **[Introduction and first boot](01-introduction.md).** What TEC-OS is and
-   what it needs, then building it and running it in the web page, from
-   Node.js and on a board. The chapter follows the first boot line by line. It
-   then covers the starter card, running a program, reset and power, and the
-   diagnostic prompt for a card that won't mount.
+1. **[Introduction](01-introduction.md).** What TEC-OS is and what using it is
+   like: turning it on, drives and files, running a program, where everything
+   sits in memory and how to keep your work safe.
 2. **[The console](02-console.md).** The four console devices, `TTY:`, `CRT:`,
    `BAT:` and `UC1:`, and the `CON` command that moves the console between
    them. The chapter then describes the serial terminal, a display taking the

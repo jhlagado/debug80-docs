@@ -1,237 +1,44 @@
 ---
-title: Introduction and first boot
+title: Introduction
 parent: TEC-OS
 nav_order: 1
 nav_group: "Part I: Using and programming TEC-OS"
 ---
 
-# 1. Introduction and first boot
+# 1. Introduction
 
-Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
-128edb7 and its `TAS.COM` from Thorium dbee66a.
-<!-- TED.COM SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f
-     TAS.COM SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2 -->
+<!-- Checked against TEC-OS 621201d, with TED.COM from Thorium 128edb7 and
+     TAS.COM from Thorium dbee66a. -->
 
-The TEC-1G starts in MON-3, its monitor ROM, which you work from the hex
-keypad. With TEC-OS in the ROM socket instead, the same board is a small disk
-computer. You type commands at a prompt, keep files on an SD card and run
-programs written for CP/M 2.2. This chapter explains what TEC-OS is and what it
-needs. You then build it, start it, follow the first boot line by line and run
-a program.
+TEC-OS turns the TEC-1G into a small disk computer. In place of MON-3 and the
+hex keypad you get a prompt, a keyboard and files on an SD card. You type a
+command, and TEC-OS runs it. The programs it runs are written for CP/M 2.2,
+the operating system of many 8080 and Z80 machines of the early 1980s, so
+editors, assemblers and games from that time run on the TEC-1G unchanged.
 
-## CP/M and TEC-OS
+## TEC-OS and CP/M
 
-CP/M was the operating system of many 8080 and Z80 machines of the late 1970s
-and early 1980s. A CP/M program reaches everything outside its own memory
-through one interface. To read a key, print a character or read 128 bytes of a
-file, the program puts a function number in register `C` and calls address `0005h`. That
-address leads to the BDOS, the Basic Disk Operating System, which does the work
-and returns.
+TEC-OS is CP/M 2.2 rebuilt for the TEC-1G. All of it is in the 16 KiB ROM that
+MON-3 used to occupy, so there is nothing to load before it starts. Your files
+are on an SD card in the board's card adaptor.
 
-Editors, assemblers, compilers, games and BASIC interpreters were all written
-to that interface. TEC-OS implements it as CP/M 2.2 defined it. A CP/M 2.2
-program therefore runs on the TEC-1G unchanged, provided it uses only the
-documented interface, takes its memory size from the word at `0006h` and fits
-in the memory left for programs. On the starter card, the card
-image built with TEC-OS, that memory is 47,268 bytes.
+Like CP/M, TEC-OS has three parts. The CCP reads the commands you type. The
+BDOS gives programs their files, their keyboard and their screen. The BIOS is
+the part written for the TEC-1G itself: it drives the SD card, the displays and
+the keyboards. A CP/M program calls the BDOS for all of these and never touches
+the hardware, so it runs on any machine that has a BDOS.
 
-A CP/M system has three parts. The BDOS provides the functions at `0005h`. The
-CCP, the Console Command Processor, prints the prompt, reads a command and runs
-it. The BIOS, the Basic Input/Output System, is the part written for one
-machine: it reads the keyboard, drives the screen and reads and writes the
-disk.
+TEC-OS adds some things CP/M never had. Its SD card holds many disks at once,
+and it keeps a cache of recently read blocks in the board's second bank of RAM.
+It can show its console on a PICO9918 video card or the graphics LCD as well as
+on a serial terminal. Programs can also reach the TEC-1G's own devices, such as
+the 7-segment digits, the 20 × 4 LCD and the speaker, through a set of numbered
+services in the ROM.
 
-A typical CP/M machine loaded the BDOS and the CCP from disk into RAM when it
-started, but on the TEC-1G all three parts are in a 16 KiB ROM at
-`C000h–FFFFh`. Beside them the ROM holds the SD card driver, the serial
-terminal, the keyboard scan and the hardware services, which are calls for the
-board's own devices. The card holds everything else: the programs you run, a
-startup file of commands and the services you install, which are code added to
-TEC-OS in memory.
+## Turning it on
 
-TEC-OS has more than CP/M 2.2 had:
-
-- Volumes, each an ordinary CP/M disk, held together on one SD card in a
-  container. A container holds up to 127 of them, with four on drives at a
-  time.
-- A block cache of 15 KiB, so a block read from the card once is read again
-  from memory.
-- A work volume whose writes reach the card in batches.
-- A console on the PICO9918 video card, on the 128 × 64 graphics LCD or on a
-  serial terminal. The PICO9918's console is in the ROM. The graphics LCD's
-  console is a driver loaded from the card.
-- Hardware services, numbered calls through the ROM table at `C003h`. With them
-  a program reaches the 7-segment digits, the 20 × 4 LCD, the PICO9918's
-  graphics, the speaker, the joystick and the clock with no port numbers of its
-  own.
-- A startup file of commands run before the first prompt.
-- A history of the command lines typed at the prompt.
-
-## The board
-
-TEC-OS needs a TEC-1G with 64 KiB of RAM. The board's fixed RAM is 32 KiB at
-`0000h–7FFFh`. The other 32 KiB is a RAM chip in socket U9, which the board's
-recommended build leaves empty. The chip's two 16 KiB halves, EXPAND 0 and
-EXPAND 1, share the addresses `8000h–BFFFh`, and a bit in the board's system
-latch selects the half that is there. Programs use EXPAND 0, and so does
-TEC-OS's workspace, the memory that holds its variables, buffers and stacks.
-TEC-OS keeps its block cache and command history in EXPAND 1.
-
-Cold boot is the start after power-on or a reset. It checks the RAM once,
-before it prints anything. It tests `8000h–BFFFh` and then tests for EXPAND 1
-behind it. A board with either missing sends `TEC-OS needs 64K RAM` to the
-serial port, and TEC-OS stops there.
-
-TEC-OS also needs an SD card in the board's SD card adaptor, and a console, the
-device you type on and read from. The console is usually a terminal program on
-a PC connected to the board's FTDI serial port, but it can also be a PICO9918
-video card or the graphics LCD, each with the matrix keyboard. The 20 × 4
-character LCD is never the console, though cold boot writes the version and the
-drives there.
-
-## Building TEC-OS
-
-The TEC-OS repository holds the ROM's source, the tools that build the ROM and
-the card, the host model and the web page. The host model is a software TEC-1G.
-Building needs Node.js 20 or later. From a clone of the repository, three
-commands build everything this chapter uses:
-
-```sh
-npm ci
-npm run build
-npm run media
-```
-
-`npm ci` installs ATOM, the assembler, and the Debug80 TEC-1G runtime that the
-host model runs on. `npm run build` assembles the ROM. `npm run media` writes
-the ROM image, the starter card and its files to `dist/`. The starter card is
-`dist/starter.img`, an image of a whole SD card.
-
-The starter card holds two programs built outside the repository: `TAS.COM`, an
-assembler, and `TED.COM`, an editor. On a clone with no Thorium build beside it,
-`npm run inputs` fetches each file into `.inputs/` from its own repository, at
-the commit that `test/inputs.json` pins. `npm run media` stops if either file is
-missing or its SHA-256 differs from the one in `test/inputs.json`. Chapter 25
-lists the places the build reads them from.
-
-## Running TEC-OS in a web page
-
-You can try TEC-OS with no board at all. The web page runs the host model at
-4 MHz with TEC-OS in its ROM. It draws the board's displays: the PICO9918's
-screen, the 7-segment digits, the 20 × 4 LCD, the 8 × 8 LEDs and the graphics
-LCD. Below them is a serial terminal. Two more commands build the page and
-serve it, the second with Python 3:
-
-```sh
-npm run web
-python3 -m http.server 8765 --directory web/dist
-```
-
-The page is then at `http://localhost:8765`. A click on the PICO9918's screen
-sends your typing to the matrix keyboard. The page keeps its SD card in the
-browser's storage and saves it every two seconds while the card has changed, so
-files you write survive a reload once they are saved. A reload before a save
-brings back the card as it was last saved. When a save fails, the page says so
-under the heading "SD card" and saves again every two seconds until one
-succeeds, and "Download image" keeps a copy on the PC. Chapter 25 describes the
-page's storage in full.
-
-These are the page's controls:
-
-- "Display" selects a board with a PICO9918 or one with only the graphics LCD.
-- "ROM" selects the PICO9918's width: 80, 40 or 32 columns.
-- "Reset" is the board's reset button, which leaves the RAM as it is.
-- "Power cycle" turns the board off and on, which loses what the RAM held.
-- "Pause" stops the Z80 and starts it again.
-- "New starter card" builds a fresh card from the page's recipe, a file
-  listing the card's contents: the starter card's six files and `DEMO.COM`,
-  which Chapter 9 describes. It checks each file against the SHA-256 the
-  recipe records.
-- "Open image" loads a card image from the PC, and "Download image" saves the
-  page's card to the PC.
-- "Copy file to drive" writes files from the PC onto the volume on the drive
-  selected in "Drive", as text if "as text" is ticked. It saves the changed
-  card in the browser and then presses reset so that TEC-OS reads it. When
-  the save fails, the page shows `Not copied` under "SD card", and the card is
-  as it was.
-
-Changing the display or the width turns the board off and on. At each power-on
-the page rewrites the card's startup file for the chosen display, as Chapter 5
-describes.
-
-## Running TEC-OS from Node.js
-
-The web page and the tests run the same host model, `host/machine.mjs`. The
-script `tools/capture.mjs` runs it from a PC's command line with no browser. It
-boots the model with the starter card, types the commands it is given and
-prints everything TEC-OS sends to the console. The book's examples come from
-it:
-
-```sh
-node tools/capture.mjs DIR
-```
-
-With no options the board has a serial terminal and nothing else. `--board
-pico` adds the PICO9918, the graphics LCD and the matrix keyboard, as on the
-web page. `--lcd` prints the 20 × 4 LCD's rows at the end, `--screen` the
-display's text and `--serial` what left the serial port. `--card none` boots
-with the socket empty. The comment at the top of the script lists the rest. On
-stderr the script prints the card's SHA-256, which shows whether your card is
-the one an example was captured from. A run of a few commands takes about a
-second.
-
-## Running TEC-OS on a board
-
-TEC-OS has not yet run on a physical TEC-1G, so what follows comes from the
-code and the repository's documents.
-
-On a TEC-1G, TEC-OS replaces MON-3. Its image is `dist/tecos.rom`, 16 KiB for
-`C000h–FFFFh`. The same image runs on the board, in the host model and in the
-web page. In a 32 KiB ROM chip the image goes into both halves, at `0000h` and
-at `4000h`, so the board's ROM Lo/Hi switch runs it in either position.
-
-The repository also has a diagnostics ROM for testing a board's hardware.
-`npm run diag` builds it into `build/diag/diag.rom`. `docs/board-run.md` is the
-plan for running it. It describes the ROM chip, its jumpers and the board's
-switches, which are set the same way for TEC-OS.
-
-TEC-OS takes the whole SD card. `tecvol`, the card tool in the repository,
-writes the starter card's image to it from the PC:
-
-```sh
-node tools/tecvol.mjs install dist/starter.img /dev/rdiskN --yes
-```
-
-`/dev/rdiskN` stands for the card's device on the PC. `install` overwrites the
-device from its first block, so check the device name twice before you run the
-command.
-
-For a serial console, connect the board's FTDI port to the PC. Set the terminal
-program to 4800 baud, 8 data bits, no parity and 2 stop bits. The serial timing
-is counted in the Z80's clock cycles, so the link works only with the CPU clock
-switch on FAST and the 4 MHz oscillator.
-
-A board with the matrix keyboard has its Matrix configuration switch on. Cold
-boot reads the switch, bit 0 of port `03h`, and TEC-OS reads the matrix
-keyboard only when it is on. With the switch off the PICO9918's console doesn't
-start, the graphics LCD's driver fails to install and the console stays on the
-serial terminal.
-
-Keep off the hex keypad while a program runs. With the board's keypad NMI
-jumper fitted, a key press interrupts the Z80 at `0066h`, and TEC-OS has no
-handler there. That address is inside CP/M's default file control block at
-`005Ch`, the block of memory that names a file for a program.
-`docs/board-run.md` lists TEC-OS as running with that jumper off.
-
-## The first boot
-
-At reset the TEC-1G shows the first 2 KiB of the ROM at `0000h` as well as at
-`C000h`. The Z80 starts at `0000h`, so it runs ROM code. The first instruction
-jumps to the ROM's own address above `C000h`, and at reset the code there goes
-on to cold boot. Cold boot
-turns the copy at `0000h` off and leaves RAM there. It then checks the RAM at
-`8000h–BFFFh`, clears the workspace, starts the console and prints the banner.
-This is the whole of a first boot on a board with only a serial terminal:
+You switch the TEC-1G on and TEC-OS starts. On a board with a serial terminal
+this is what you see:
 
 <!-- node tools/capture.mjs -->
 ```text
@@ -244,88 +51,28 @@ A>GLCD.SVC
 A>
 ```
 
-The first line is the banner, with the version, 0.1. Cold boot starts the
-console on the PICO9918 when the board has one and the matrix keyboard, and on
-the serial terminal otherwise. The banner goes to that console.
+The first line names TEC-OS and its version. The next two list the disks on
+the card, which TEC-OS calls volumes. `SYSTEM` is on drive A and `WORK` is on
+drive B. The same lines appear on the 20 × 4 LCD.
 
-The next two lines are the volumes on the drives. A volume is one CP/M disk
-inside the container on the card. A drive is one of the letters `A` to `D`
-through which programs reach a volume. The starter card has two volumes:
-`SYSTEM`, of 1 MiB, on drive A and `WORK`, of 8 MiB, on drive B. Each line
-gives the drive and the volume's label, which has 11 characters padded with
-spaces. A read-only volume has ` (read-only)` after its label. Before it prints
-these lines, cold boot starts the card and checks the header of the container,
-which Chapter 4 describes.
+`A>` is the prompt. The letter is the current drive, the one TEC-OS uses when
+you name a file without a drive. You didn't type the `GLCD.SVC` after the first
+prompt. It comes from a startup file on the card, which loads the graphics
+LCD's console on boards that have one. This board doesn't, so the line does
+nothing, and the second prompt is where you start typing. Chapter 5 explains
+the startup file.
 
-The 20 × 4 LCD shows the version and the drives at the same time:
+Where you type depends on the board. With a PICO9918 video card and the matrix
+keyboard, TEC-OS shows everything on the video screen and reads the matrix
+keyboard, and you need no terminal at all. Otherwise it uses a terminal program
+on a PC connected to the board's serial port. Chapter 2 describes each console
+and how to switch between them.
 
-<!-- node tools/capture.mjs --lcd -->
-```text
-TEC-OS 0.1  TEC-1G
-A: SYSTEM
-B: WORK
-```
+## Drives and files
 
-After a blank line comes the prompt, `A>`. The letter is the current drive, the
-one a command uses when it names a file with no drive. Here the prompt is
-followed at once by `GLCD.SVC`, though nobody typed it. The CCP reads the file
-`STARTUP.CMD` from drive A, if the file is there, before it waits for the first
-line from the keyboard. It takes the file's first 128 bytes and runs each line as a command,
-echoed after the prompt as if you had typed it. The starter card's
-`STARTUP.CMD` has one line, `GLCD.SVC`.
-
-A command that names a `.SVC` file installs a service from that file. TEC-OS
-loads the service into memory below the BDOS, where it stays until a reset or
-until the `UNLOAD` command removes it. A service that drives hardware is a
-driver. `GLCD.SVC` holds the graphics LCD's console, and it makes the graphics
-LCD the console unless the PICO9918 has it.
-
-This board has no graphics LCD, so the installation fails. A command that fails
-is normally printed back with a question mark. A line from `STARTUP.CMD` whose
-driver finds no device fails quietly, so here the line is followed only by the
-blank line before the next prompt. The console stays on the serial terminal.
-The startup file is read once after cold boot, and a program's exit doesn't run
-it again.
-
-## The first boot with a PICO9918
-
-The web page's board has a PICO9918, the graphics LCD and the matrix keyboard,
-and there the boot goes differently. The PICO9918's console is in the ROM, and
-cold boot starts it before the banner, so the PICO9918 shows the whole boot:
-
-<!-- node tools/capture.mjs --board pico --screen -->
-```text
-
-TEC-OS 0.1 for TEC-1G
-A: SYSTEM
-B: WORK
-
-A>GLCD.SVC
-
-A>
-```
-
-From the banner on, TEC-OS writes to the PICO9918 and reads the matrix keyboard
-in place of the serial port. The serial terminal shows nothing at all, so a
-board with a PICO9918 and the matrix keyboard needs no terminal attached.
-
-Here the PICO9918 is already the console, so the `GLCD.SVC` line installs
-nothing and passes quietly. No driver stays in memory. The command `CON UC1`
-loads `GLCD.SVC` and moves the console to the graphics LCD. Chapter 5 gives the
-rules for display drivers. The web page's own card has no `GLCD.SVC` line
-when the PICO9918 is chosen, because the page leaves only the chosen display's
-line in its startup file. The page's screen then shows the banner, the volumes
-and the prompt and nothing else.
-
-A display driver takes memory below the BDOS, which leaves less for programs.
-CP/M calls the memory a program may use the TPA, the Transient Program Area. It
-starts at `0100h` and ends below the address in the word at `0006h`. On
-the starter card with no service it is 47,268 bytes, and with `GLCD.SVC`
-installed it is 46,336. The PICO9918's console takes no memory from programs,
-because its code is in the ROM and its state in TEC-OS's workspace. Chapter 7 explains a
-program's memory and where each byte goes.
-
-## The starter card
+TEC-OS gives you up to four drives, `A` to `D`, and each drive holds one
+volume from the card. The starter card has two. Drive A holds TEC-OS's own
+files and the programs that come with it. Drive B is empty, ready for yours.
 
 `DIR` lists the files on the current drive:
 
@@ -337,22 +84,13 @@ MOUNT.COM    GLCD.SVC     STARTUP.CMD  TED.COM      SAMPLE.ASM   TAS.COM
 A>
 ```
 
-A file name has up to eight characters, a full stop and a type of up to three.
-A file of type `.COM` is a program, and its name without the type is the
-command that runs it. The listing's last line gives the number of files and the
-space left on the drive. These are the starter card's six files:
+A file name has up to eight characters, then a full stop and a type of up to
+three. The type says what kind of file it is. A `.COM` file is a program, and
+its name without the type is the command that runs it. `TED` is a text editor,
+`TAS` is an assembler and `MOUNT` manages the volumes on the card. `SAMPLE.ASM`
+is the source of a small program.
 
-- `STARTUP.CMD` holds the command the first boot ran.
-- `GLCD.SVC` is the graphics LCD's driver. The PICO9918 needs no file, and
-  Chapter 2 describes its widths of 80, 40 and 32 columns.
-- `MOUNT.COM` lists the card's volumes and puts a volume on a drive, as
-  Chapter 4 describes.
-- `TAS.COM` is an assembler and `TED.COM` an editor. Chapter 6 describes
-  writing and building a program with them on the TEC-1G.
-- `SAMPLE.ASM` is the source of a short program, a text file that `TAS`
-  assembles, as the next section shows.
-
-A drive letter and a colon, typed alone, change the current drive:
+To change drive, type its letter and a colon:
 
 <!-- node tools/capture.mjs B: DIR A: -->
 ```text
@@ -363,39 +101,13 @@ B>A:
 A>
 ```
 
-Drive B is empty, and it is the place for your own files. Its volume is
-*written behind*: TEC-OS keeps what a program writes to it in the block cache
-and writes it to the card later, at times that Chapter 4 lists. One of them is a
-`^C`, Ctrl and C together, typed at the prompt. It writes every change the cache holds to the
-card and starts the CCP again. A `^C` at the prompt before you press reset, turn
-the board off or take the card out therefore puts every change on the card.
-Chapter 4 explains the cache and what a power cut can lose.
+Chapter 3 covers the commands you type at the prompt, and Chapter 4 the card
+and its volumes.
 
 ## Running a program
 
-`MOUNT` is a program. Typed with no argument it lists the volumes on the card,
-each with its number, its label, its size and the drive it is on. Chapter 4
-explains the list:
-
-<!-- node tools/capture.mjs MOUNT -->
-```text
-A>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
-
-A>
-```
-
-When a program ends, TEC-OS runs a warm boot. It writes the cache's changes to
-the card, starts the CCP again and prints the prompt with the same drive and
-user area as before. A user area is one of 16 groups, numbered 0 to 15, into
-which CP/M divides the files on a drive. Chapter 3 explains user areas. The
-`^C` at the prompt is a warm boot too, and so is a `^C` typed as the first key
-of a line that a program reads with BDOS function 10, CP/M's line input.
-Chapter 14 explains the warm boot.
-
-`SAMPLE.ASM` becomes a program in two commands. `TAS SAMPLE` assembles the
-source into `SAMPLE.COM` on the same drive, and `SAMPLE` runs it:
+You run a program by typing its name. `SAMPLE.ASM` becomes a program in two
+steps: `TAS SAMPLE` assembles it into `SAMPLE.COM`, and `SAMPLE` runs it.
 
 <!-- node tools/capture.mjs --lcd "TAS SAMPLE" SAMPLE -->
 ```text
@@ -410,27 +122,14 @@ Back to the prompt.
 A>
 ```
 
-`SAMPLE` prints its lines on the console. It reaches the board's own devices
-through the hardware services that Chapter 9 describes. It reads the screen's
-size, which is 0 by 0 on the serial terminal and 80 by 24 on the PICO9918. It
-writes `Hello from SAMPLE` on the second row of the 20 × 4 LCD, shows `123456`
-on the 7-segment digits for about a second and beeps. After the run the LCD
-shows this:
+`SAMPLE` prints three lines and uses some of the board's own devices. It writes
+`Hello from SAMPLE` on the 20 × 4 LCD, shows `123456` on the 7-segment digits
+and beeps. It also reads the size of the screen from TEC-OS, which is 0 by 0 on
+a serial terminal and 80 by 24 on the PICO9918. When a program ends, TEC-OS
+prints the prompt again. Chapter 6 shows how to write a program like this one
+on the TEC-1G itself, with `TED` and `TAS`.
 
-<!-- the same run's --lcd output -->
-```text
-TEC-OS 0.1  TEC-1G
-Hello from SAMPLE
-B: WORK
-```
-
-`TAS` also writes `SAMPLE.DBG`, a debug file, beside `SAMPLE.COM`, so drive A
-then holds eight files. Chapter 6 explains how a program such as this one is
-written.
-
-A command that is neither built into the CCP nor the name of a program file is
-printed back with a question mark. The CCP searches for the file on the current drive
-and then on drive A:
+A name that is neither a command nor a program comes back with a question mark:
 
 <!-- node tools/capture.mjs NOSUCH -->
 ```text
@@ -440,71 +139,40 @@ NOSUCH?
 A>
 ```
 
-`CON` names the console in use:
+## The memory
 
-<!-- node tools/capture.mjs CON -->
-```text
-A>CON
-CON: TTY:
-A>
-```
+TEC-OS needs a TEC-1G with 64 KiB of RAM: the board's own 32 KiB and a second
+32 KiB chip in the expansion socket. The address space then divides like this:
 
-`TTY:` is the serial terminal. With the PICO9918 as the console the reply is
-`CON: CRT:`, and with the graphics LCD it is `CON: UC1:`. Chapter 2 explains
-the console devices and moving the console from one to another.
+| Addresses | What is there |
+| --- | --- |
+| `0000h–00FFh` | Page zero, the small area CP/M programs expect at the bottom |
+| `0100h–B9A3h` | Your program, up to 47,268 bytes on the starter card |
+| `B9A4h–BFFFh` | TEC-OS's working memory |
+| `C000h–FFFFh` | The ROM, which holds TEC-OS itself |
 
-## Reset and power
+Every CP/M program loads at `0100h` and can use everything up to TEC-OS's
+working memory. A program reads where that memory begins from page zero, so the
+same program fits whatever room is left.
 
-Pressing reset runs cold boot again. The console starts as it did at power-on.
-The banner, the volumes and the startup file's lines appear, and the prompt is
-on drive A in user area 0. One thing survives a reset pressed after TEC-OS has
-reached a prompt: the choice of volume on each drive. A volume put on a drive
-while TEC-OS ran is on that drive again after the reset, as long as the card
-still has it. Everything else TEC-OS holds in memory is rebuilt, the cache
-included, so a change that hadn't reached the card is lost. Turning the board
-off loses the RAM, and the drives then hold the volumes the card's header
-names. Chapter 4 describes how `MOUNT` puts volumes on drives.
+The second RAM chip has two 16 KiB halves that share the addresses
+`8000h–BFFFh`. Your program uses one of them. TEC-OS keeps its disk cache and
+your command history in the other, so they take no room from your program.
+Chapter 7 explains a program's memory in detail.
 
-Never change a card on a PC while the TEC-1G is using it. TEC-OS holds a map of
-each drive's free space in memory, and a change made on the PC leaves the card
-out of step with that map. Take the card out after a `^C` at the prompt, and
-press reset after you put a changed card back.
+## Keeping your work
 
-## A card that won't mount
+Drive B is *written behind*. When a program saves a file there, TEC-OS holds
+the change in its cache for a while and writes it to the card later. Writing in
+batches is faster than writing every change as it happens, but for a
+moment the card can be behind what you have just saved.
 
-Cold boot stops after the banner when the card doesn't answer or its contents
-fail the checks. It prints the diagnostic prompt on the console, which on a
-board with the PICO9918 and the matrix keyboard is the PICO9918's screen. Here
-the socket is empty:
+`^C`, Ctrl and C together, typed at the prompt brings the card up to date.
+TEC-OS writes every change it is holding and gives you a fresh prompt. Type
+`^C` before you switch the board off, press reset or take the card out, and
+nothing is lost. Chapter 4 explains when TEC-OS writes to the card by itself.
 
-<!-- node tools/capture.mjs --card none --lcd -->
-```text
-TEC-OS 0.1 for TEC-1G
-No volume mounted, error 01
-R retry> 
-```
-
-The number after `error` is a code in hexadecimal. Codes `01` to `04` and `0B`
-come from the SD card driver, and each names the step of starting the card that
-failed. `01` is no answer to the first command sent to the card, which is what
-an empty socket gives. Codes `20` to `2A` come from the checks on the
-container. `21` is a block 0 that doesn't start with the container's name,
-`TECOSVOL`, and `2A` is a card with no volume for drive A. Appendix D lists
-them all.
-
-`R` or `r` starts cold boot again from the point where it sets up the LCD and
-the card. After you fix or insert the card, `R` reaches the prompt without a
-reset. Each key typed at the diagnostic prompt is echoed after it. Any key but `R`
-or `r` then prints the prompt again on the next line. While TEC-OS waits
-there, the LCD's last row shows `CARD?`, for a board with no terminal attached:
-
-<!-- the same run's --lcd output -->
-```text
-TEC-OS 0.1  TEC-1G
-
-
-CARD?
-```
-
-On a board with no console attached, a working card and a press of reset bring
-cold boot through to the prompt.
+Don't change a card on a PC while the TEC-1G is using it. TEC-OS keeps a map of
+each drive's free space in memory, and a change made elsewhere leaves that map
+out of step with the card. Take the card out after a `^C`, and press reset
+after you put it back.
