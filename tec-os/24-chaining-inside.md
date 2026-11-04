@@ -33,17 +33,17 @@ entry. `test/chain.test.mjs` checks these rules on the host model of Chapter
 A program in a piece of a line ends with a warm boot, which clears the CCP's and
 the BDOS's state as a fresh load of them from disk would leave it (Chapter 14).
 The rest of the line survives because the CCP's RAM is in two parts. Its first
-202 bytes run from `CMDFCB` at `BCEAh` to `CCPCLR` at `BDB4h`, and they hold the
+202 bytes run from `CMDFCB` at `BCEDh` to `CCPCLR` at `BDB7h`, and they hold the
 two FCBs the built-ins parse names into and the command buffer that BDOS
 function 10 fills. The buffer is a byte for its maximum length, `CMDBUF`, a byte
-for the length read, `CMDLEN`, and 128 bytes of characters, `CMDTXT`, at `BD34h`
+for the length read, `CMDLEN`, and 128 bytes of characters, `CMDTXT`, at `BD37h`
 (`src/ram.asm:77-90`). `CPMINIT`, which warm boot calls, clears from `CCPCLR` to
-`BDOSRME`, the end of the BDOS's RAM, 332 bytes, so the command buffer and the
+`BDOSRME`, the end of the BDOS's RAM, 329 bytes, so the command buffer and the
 two FCBs before it are kept (`src/boot.asm:268-275`, `src/boot.asm:90`). The
 FCBs need no clearing, since each use of them parses a name into them in full
 and clears the rest (`src/cpm/ccp.asm:1347-1370`).
 
-The position of the next piece is `CHPOS`, one byte at `BFE2h`, in the part of
+The position of the next piece is `CHPOS`, one byte at `BFE4h`, in the part of
 the workspace above the RAM BIOS table, which `CPMINIT` doesn't clear
 (`src/ram.asm:198`, `src/ram.asm:245`). It holds the piece's offset in `CMDTXT`
 plus one, and 0 when no piece is left, so one byte covers the 128 offsets with 0

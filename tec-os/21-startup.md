@@ -67,7 +67,7 @@ and reaches a prompt with nothing from the file run.
 The keypad test comes next, and it gives a way past a file that keeps the board
 from reaching a prompt (`src/cpm/ccp.asm:1577-1579`). `test/startup.test.mjs:46-58`
 holds a key through reset to get past a service whose `INIT` never returns, and
-`:194-207` does the same for a file that resets the board at every boot.
+`:221-234` does the same for a file that resets the board at every boot.
 `STSPORT` is port `03h` (`src/layout.asm:11`), and bit 6 is low while a keypad
 key is down, as Appendix G describes. A low bit returns from `STBOOT` with
 `STPOS` at `80h`, so a skip is the same state as a file that wasn't there. Bit 6
