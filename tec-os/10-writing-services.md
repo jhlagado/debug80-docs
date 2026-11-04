@@ -500,8 +500,8 @@ CRLF:	DB	13,10,"$"
 %INCLUDE "HWLIB.ASM"
 ```
 
-`recs.asm` goes on the card as the others did. On the web page's board
-`GLCD.SVC` is in from the startup file, and it and `COUNT.SVC` can't both be
+`recs.asm` goes on the card as the others did. With the starter card on a board with both
+displays, `GLCD.SVC` is in from the startup file, and it and `COUNT.SVC` can't both be
 in, so `UNLOAD` takes it out first. With `COUNT.SVC` from `makeSvc` on the
 card, `RECS` then finds two records:
 

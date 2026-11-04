@@ -101,10 +101,11 @@ A>
 ```
 
 `CRT:` needs the PICO9918's console, which cold boot starts only on a board
-with the PICO9918 and the matrix keyboard. `UC1:` needs the graphics LCD, its
-driver and the matrix keyboard. If any of them is missing, the BIOS uses the
+with the PICO9918 and the matrix keyboard. If they are missing, the BIOS uses the
 serial terminal and puts `TTY:` back in the console field, so there is always
-a console, and `CON` reports the device that took it. On a board with only a
+a console, and `CON` reports the device that took it. `UC1:` needs the
+graphics LCD, its driver and the matrix keyboard, and a `CON UC1` that can't
+load the driver leaves the console where it was. On a board with only a
 serial terminal, `CON CRT` and `CON UC1` leave the console on the serial
 terminal:
 
@@ -205,7 +206,7 @@ A>
 
 The transcript starts after `TAS SAMPLE`, which assembled the program. Each
 `SAMPLE` ended in a warm boot, which kept the width, and the reset brought back
-80 columns. Any other width, a width after another name, or a width with no
+80 columns. Any other width, a width after another name or a width with no
 space before it is printed back with a question mark, and the console stays as
 it was:
 
@@ -224,8 +225,7 @@ A>
 ```
 
 A width is refused in the same way on a board where cold boot didn't start the
-PICO9918's console, and while a program has claimed the PICO9918, as Chapter 9
-describes.
+PICO9918's console.
 
 ## The serial terminal
 

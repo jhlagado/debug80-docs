@@ -361,8 +361,8 @@ Number 16: status 01, carry set
 B>
 ```
 
-On the web page's board, with the ROM's console on the PICO9918 and `GLCD.SVC`
-in, bits 0, 1 and 2 are set as well, and the console has a size, 50h columns
+With the starter card on a board with both displays, where the ROM's console
+is on the PICO9918 and `GLCD.SVC` is in, bits 0, 1 and 2 are set as well, and the console has a size, 50h columns
 and 18h rows:
 
 <!-- node tools/capture.mjs --card hw.img --board pico B: "TAS BOARD" BOARD -->
