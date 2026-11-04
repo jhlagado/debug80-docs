@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from
+Checked against TEC-OS 621201d, with the starter card's `TED.COM` from
 Thorium 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`; the
 timings below were measured on that card.
@@ -44,7 +44,7 @@ Interrupts come on only if a program or a service enables them, and nothing in
 the ROM does. The Z80 comes out of reset
 with interrupts off, and the ROM executes `EI` only to restore a state it saved:
 the routines that must run with interrupts off put them back as they were at
-entry (`src/bios.asm:298`, `src/console.asm:242`, `src/console.asm:242`,
+entry (`src/bios.asm:298`, `src/console.asm:242`, `src/console.asm:284`,
 `src/history.asm:40`, `src/cache.asm:502`). `VPAIR`, the PICO9918 console's
 routine that writes each pair to the VDP's control port, does the same
 (`src/pico.asm:262-276`). The one
@@ -55,7 +55,7 @@ describes what interrupts cost a program that enables them.
 
 ## Cold boot
 
-`COLD` is one routine, `src/boot.asm:23-100`, and the steps of a cold boot are
+`COLD` is one routine, `src/boot.asm:23-83`, and the steps of a cold boot are
 its lines in order:
 
 1. `DI`, the stack at `8000h`, the latch at `LATCLAS` and interrupt mode 1
@@ -74,8 +74,9 @@ its lines in order:
    probes for the PICO9918. When the PICO9918 answers and the Matrix switch
    enables the keyboard, `VIDINIT` runs on into `PISTART`, which starts the
    ROM's PICO9918 console at 80 columns and puts `CRT:` in the IOBYTE, so the
-   banner goes to the screen (`src/console.asm:48-51`, `src/video.asm:7-11`,
-   `src/pico.asm:27-44`). Then `RTCHAS`, which probes for the clock and sets
+   banner goes to the screen. It writes the whole IOBYTE, `CRT:` with the
+   other fields 0, which they already are, since step 3 cleared page zero
+   (`src/console.asm:48-51`, `src/video.asm:8-16`, `src/pico.asm:27-47`). Then `RTCHAS`, which probes for the clock and sets
    bit 3 of `CONDEV` when one answers, and the banner (`src/boot.asm:46-53`).
 7. `MEMINIT`, which clears EXPAND 1 and marks every cache line empty
    (`src/boot.asm:54`).
@@ -91,9 +92,9 @@ its lines in order:
     is loaded yet (`src/boot.asm:73-74`).
 12. The BIOS jump table copied from the ROM to `BF00h` (`src/boot.asm:75-78`).
 13. The volumes printed on the console and on the LCD (`src/boot.asm:79-80`).
-14. Drive A and user 0 at `0004h`, and page zero built by `PZINIT`
-    (`src/boot.asm:81-100`). When it returns, cold boot runs on into warm boot,
-    the next routine in the file.
+14. Drive A and user 0 at `0004h` (`src/boot.asm:81-83`). Cold boot then runs
+    on into warm boot, the next routine in the file, whose `PZINIT` builds page
+    zero, once (`src/boot.asm:92-100`).
 
 The order follows from what each step needs. The reset test comes first because
 the steps after it clear the memory it reads. The workspace is cleared only
@@ -110,13 +111,13 @@ mounts it, without clearing the memory or printing the banner a second time.
 The mount reads every block of the table from the card again
 (`src/vol.asm:32-36`).
 
-On the starter card with the serial board, cold boot takes 1,373,385 T-states,
+On the starter card with the serial board, cold boot takes 1,371,183 T-states,
 about 0.34 seconds, from the first instruction to the CCP's entry, measured on
 the host model. Three steps take most of it. The banner is 25 characters at
 9,448 T-states each through `CONOUT`, the read of the container's block 0 takes
 219,144 T-states and `MEMINIT` takes about 347,000, most of it the clearing of
 EXPAND 1. The startup file's commands then run before the first prompt, so the
-CCP's first call of `CONIN` at that prompt comes 7,068,146 T-states after reset.
+CCP's first call of `CONIN` at that prompt comes 7,067,402 T-states after reset.
 
 ## The RAM check
 
@@ -131,7 +132,7 @@ floating data bus, and this order stops the bus returning the byte just
 written (`src/boot.asm:314-322`). It then calls `DETECT` to test for EXPAND 1
 at `8000h` with `LATEXP` (`src/boot.asm:327-332`). If either byte is wrong, or
 the count is not 2, `RAMBAD` sends `TEC-OS needs 64K RAM` to the serial port
-and stops in a loop (`src/boot.asm:317-326`). It calls the transmit routine `TXBYTE` directly,
+and stops in a loop (`src/boot.asm:346-358`). It calls the transmit routine `TXBYTE` directly,
 since the console isn't started yet and that routine uses only the port and
 the stack (`src/boot.asm:36`, `src/boot.asm:46`, `src/console.asm:259-285`).
 
@@ -149,7 +150,7 @@ replaces.
 
 `MEMINIT`, step 7 of cold boot, puts EXPAND 1 in view and clears all
 16 KiB of it. It fills the cache's 120 bytes of line addresses with `FFh`,
-which marks every line empty, and puts EXPAND 0 back (`src/boot.asm:156-172`).
+which marks every line empty, and puts EXPAND 0 back (`src/boot.asm:169-188`).
 
 ## The reset test
 
@@ -182,8 +183,8 @@ build with either one elsewhere fails it (`src/boot.asm:113-123`).
 
 A reset whose RAM passes the test is a recognised reset, and any other reset
 gives the card's own drives. Cold boot clears page zero at its start and writes
-its jumps again only at step 14, so a reset pressed during cold boot before that
-step, or at the diagnostic prompt, fails the test too.
+its jumps again only in warm boot's `PZINIT`, after step 14, so a reset pressed
+during cold boot before then, or at the diagnostic prompt, fails the test too.
 
 Cold boot is about to clear the drive table, so when the RAM passes, `RSLCAP`
 copies it, 32 bytes, to `RSLBUF` at `0100h` in the TPA (`src/boot.asm:160-164`,
@@ -243,8 +244,9 @@ what a lost change leaves on the card and how to check it.
 ## Page zero
 
 A program is free to write over page zero, so `PZINIT` writes page zero's fixed
-parts at every warm boot as well as at the end of cold boot
-(`src/boot.asm:204-263`).
+parts at every warm boot. Cold boot runs on into warm boot, so the same call
+builds page zero at cold boot, once (`src/boot.asm:81-100`,
+`src/boot.asm:221-237`).
 It puts `JP BF03h` at `0000h`, a `JP` at `0005h` to `PZTOP` and `JP BENTRY` at
 the address in `STUBAD`. It then runs on into `PZSWP`, which rewrites the restart
 vectors at `0008h–003Fh`.
@@ -276,7 +278,8 @@ by calling BDOS function 0 (`src/cpm/bdos.asm:163-164`). A call of BDOS function
 The BDOS goes there itself through `CHDROP`, which first drops the rest of a
 chained line, a line split at `!` (Chapter 11, `src/cpm/bdos.asm:77-79`). The
 BDOS takes that route after a `^C` typed as the first key of a line read with
-function 10 (`src/cpm/bdos.asm:400-404`), and after it has reported a BDOS error
+function 10 (`src/cpm/bdos.asm:400-404`), after a `^C` typed to resume output
+that `^S` paused (`src/cpm/bdoscon.asm:209-214`), and after it has reported a BDOS error
 such as `Bdos Err On B: Select` in the default error mode, which function 45
 can change (Chapter 16, `src/cpm/bdoslog.asm:575-578`,
 `src/cpm/bdoscon.asm:25-41`). A `^C` at the prompt is the first case, since
@@ -315,7 +318,7 @@ Warm boot's steps are:
    line's next piece. It puts the DMA address back at `0080h`, sets the command
    buffer's maximum length to 127 and fills the CCP stack's guard with `A5h`.
    It clears the key that lets a write skip reading its block, so that the
-   first write after the warm boot reads its block before changing it (`src/boot.asm:268-287`, `src/ram.asm:82-96`).
+   first write after the warm boot reads its block before changing it (`src/boot.asm:288-312`, `src/ram.asm:82-96`).
 6. The console put right. `VREST` restores the display's mode if the console
    is on one, and `VTREGR` resets the scroll region to the whole screen
    (`src/boot.asm:104-107`).
@@ -371,13 +374,13 @@ boot reads no block. Of it, `CPMINIT` takes 7,327 T-states, the cache's flush in
 `CWBOOT`, with no line to write, takes 8,437 and the CCP's entry with its disk
 reset 14,272.
 
-A warm boot after `SAVE 8 X.COM` on drive A takes 115,826 T-states on the same
+A warm boot after `SAVE 8 X.COM` on drive A takes 115,898 T-states on the same
 measure. The extra 83,000 or so are the rebuild of A's vector from its directory
 up to the last entry in use, and the directory is read from the block cache with
 no card access. For comparison, a disk reset of the kind a program makes drops
-drive A and scans its whole directory again, which takes 1,035,509 T-states on
+drive A and scans its whole directory again, which takes 1,036,661 T-states on
 the starter card even with the directory in the cache. The first scan of drive
 B's 512 entries, with the card read for each of its 32 directory blocks, takes
-9,165,367. The test `test/warmboot.test.mjs` checks the unchanged case on its
+9,167,671. The test `test/warmboot.test.mjs` checks the unchanged case on its
 own card: a warm boot that reads no block and takes at most 386,604 T-states
 (`test/warmboot.test.mjs:11-17`).
