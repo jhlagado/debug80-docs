@@ -143,8 +143,8 @@ caret, so `^C` means Ctrl and C together.
     their service, number 12, and the 20 × 4 LCD.
 16. **[The BDOS](16-bdos.md).** The entry, the function table and the console
     functions, then files, extents and records, and the allocation vectors
-    with the scan at warm boot. The chapter ends with BDOS errors, functions 108
-    and 47 and the differences from Digital Research's BDOS.
+    with the scan at warm boot. The chapter ends with BDOS errors, functions
+    108, 47, 45 and 48 and the differences from Digital Research's BDOS.
 17. **[The CCP](17-ccp.md).** The entry from boot, the prompt, and the parsing
     of the command word and file names. The chapter then covers the built-in
     commands, `LOADCOM`, `PREPPAGE` and the jump to `0100h`, and the CCP's RAM
@@ -189,7 +189,7 @@ caret, so `^C` means Ctrl and C together.
 ### Appendices
 
 - **[A. BDOS functions](appendix-a-bdos-functions.md).** Each function from 0
-  to 40, with 47 and 108: its registers, its result and any difference from
+  to 40, with 45, 47, 48 and 108: its registers, its result and any difference from
   CP/M 2.2.
 - **[B. The ROM table and hardware services](appendix-b-rom-services.md).**
   The ROM table at `C003h`, then the numbered services behind its jump, 0 to
