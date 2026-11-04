@@ -356,7 +356,7 @@ Function 20 reads the record at `CR` into the DMA address and moves `CR` on
 next extent and starts it at record 0. It returns 1, end of file, in three cases: no next
 extent, `CR` at `RC`, or a record whose block is 0.
 
-Function 19, delete, marks every matching entry `E5h`, writes its directory
+Function 19, delete, marks each matching entry empty, `E5h`, writes its directory
 record and only then frees its blocks (`src/cpm/bdosfile.asm:263-303`). The
 random functions 33, 34 and 40, the size and rename functions and the
 attributes work on the same entries and FCBs. Appendix A gives each with its
