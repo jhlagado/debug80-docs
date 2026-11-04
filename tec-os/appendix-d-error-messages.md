@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix D. Error messages
 
-Checked against TEC-OS 5a25178.
+Checked against TEC-OS 58d4345.
 
 This appendix lists every message TEC-OS prints, with its cause and its
 remedy, in the order a run can reach them: cold boot and the diagnostic
@@ -42,8 +42,9 @@ No volume mounted, error nn
 R retry> 
 ```
 
-The console is the serial terminal at this point, and the LCD's last row shows
-`CARD?` (`src/boot.asm:429-440`, `src/text.asm:8-9`). `R` starts the LCD, the card
+The console at this point is the ROM's PICO9918 console on a board with the
+PICO9918 and the matrix keyboard, and the serial terminal on any other. The
+LCD's last row shows `CARD?` (`src/boot.asm:429-440`, `src/text.asm:8-9`). `R` starts the LCD, the card
 and the mount again, so a card fixed or put in while TEC-OS waits at the prompt
 mounts with no reset. Any other key gives the prompt again
 (`src/boot.asm:447-450`). [Chapter 23](23-diagnostics.md#the-diagnostic-prompt)
@@ -99,7 +100,7 @@ so it reads no file from a copy that fails it. Write a new image with
 
 ## The LCD's words
 
-TEC-OS writes three words on the 20 × 4 LCD's last row, for a board that may
+TEC-OS writes two words on the 20 × 4 LCD's last row, for a board that may
 have no terminal attached.
 [Chapter 5](05-startup-and-services.md#words-on-the-lcd) explains when each is
 written and cleared.
@@ -107,8 +108,7 @@ written and cleared.
 | Word | Cause | Remedy | See |
 | --- | --- | --- | --- |
 | `CARD?` | TEC-OS is waiting at the diagnostic prompt. | As for the prompt. `R` starts the LCD again, so a retry that works clears the word. | [Chapter 21](21-startup.md#the-lcd-s-words), `src/boot.asm:433-434`, `src/text.asm:10` |
-| `PICO?` | At the first prompt after startup, a board with a PICO9918 and a matrix keyboard has no display driver in. The driver's file may be missing or bad, `STARTUP.CMD` may be missing or have no display line, or startup was skipped. | Correct the card from the serial terminal or on a PC. On a running board, a `PICO.SVC` that loads clears the word. | [Chapter 21](21-startup.md#stdone), `src/cpm/ccp.asm:1653-1653`, `src/text.asm:64` |
-| `GLCD?` | `CON UC1` couldn't load or install `A:GLCD.SVC`: the file is missing or bad, or the board has no graphics LCD or no matrix keyboard. The console stays where it was. | Put `GLCD.SVC` on drive A. The word stays until a display driver takes the console or a reset. | [Chapter 5](05-startup-and-services.md#words-on-the-lcd), `src/loader.asm:433-446`, `src/loader.asm:463-468`, `drivers/glcd.asm:29-41`, `src/text.asm:63` |
+| `GLCD?` | `CON UC1` couldn't load or install `A:GLCD.SVC`: the file is missing or bad, or the board has no graphics LCD or no matrix keyboard. The console stays where it was. | Put `GLCD.SVC` on drive A. The word stays until `GLCD.SVC` loads or a reset. | [Chapter 5](05-startup-and-services.md#words-on-the-lcd), `src/loader.asm:433-446`, `src/loader.asm:464-470`, `drivers/glcd.asm:34-46`, `src/text.asm:63` |
 
 ## The CCP's failures
 
@@ -139,17 +139,17 @@ alone when it needs an argument and has none.
 
 | Word or command | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| A program's name | No `NAME.COM` on the drive in the current user area or in user 0. When the command names no drive and the current drive isn't A, none on drive A in the current user area or in user 0 either. A type other than `.SVC` is ignored, so `PICO.DRV` looks for `PICO.COM`. The web page reports a card with no `.SVC` file for the chosen display and a `.DRV` display file when it powers on, naming the chosen display's `.DRV` file if the card has it and another of them if not. | Check the name, the drive and the user area, or name the drive, as `B:NAME`. A card from an older TEC-OS needs the steps in [Chapter 5](05-startup-and-services.md#a-card-from-an-older-tec-os). | [Chapter 3](03-command-line.md#running-a-program), `src/cpm/ccp.asm:285-303`, `src/cpm/ccp.asm:367-393`, `host/card.mjs:41-44` |
+| A program's name | No `NAME.COM` on the drive in the current user area or in user 0. When the command names no drive and the current drive isn't A, none on drive A in the current user area or in user 0 either. A type other than `.SVC` is ignored, so `PICO.DRV` looks for `PICO.COM`. With the graphics LCD chosen, the web page reports a card with no `GLCD.SVC` and a `.DRV` display file when it powers on, naming `GLCD.DRV` if the card has it and another of them if not. | Check the name, the drive and the user area, or name the drive, as `B:NAME`. A card from an older TEC-OS needs the steps in [Chapter 5](05-startup-and-services.md#a-card-from-an-older-tec-os). | [Chapter 3](03-command-line.md#running-a-program), `src/cpm/ccp.asm:285-303`, `src/cpm/ccp.asm:367-393`, `host/card.mjs:41-44` |
 | A program's name | The name is ambiguous or has no name part, is longer than 8 and 3 characters, has a bad character or names a drive past P. | Correct the name. | [Chapter 3](03-command-line.md#file-names), `src/cpm/ccp.asm:243`, `src/cpm/ccp.asm:265-267`, `src/cpm/ccp.asm:1347-1439`, `src/cpm/ccp.asm:1444-1472` |
 | A program's name | `NAME.COM` doesn't fit below the BDOS's entry, the address in the word at `0006h`. | Use `UNLOAD` to free service resident memory. | [Chapter 17](17-ccp.md#loading-a-program), `src/cpm/ccp.asm:406-408`, `src/cpm/ccp.asm:421-429` |
-| `NAME.SVC` | The file is missing or doesn't read, isn't a service of format 4, or fails while installing. A display driver also fails when its display or the matrix keyboard is missing, or when that display has a driver already. `GLCD.SVC` also fails while the PICO9918 is the console, and only `CON UC1` installs it then, so the starter card's `STARTUP.CMD` gives `GLCD.SVC?` at each boot on a board with both displays. | Check the board, the name and `SERVICES`. A card from an older TEC-OS needs the steps in Chapter 5. With the PICO9918 as the console, `GLCD.SVC?` from `STARTUP.CMD` needs no remedy. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), [Chapter 20](20-hardware-services-and-service-loader.md#a-failed-load), `src/loader.asm:448-463`, `src/loader.asm:77-105`, `drivers/pico.asm:47-60`, `drivers/glcd.asm:29-50` |
-| `UNLOAD` | No service is installed, or the newest can't be removed, as `PICO.SVC` can't be while the PICO9918 is the console. | `CON TTY` first for a console driver. Services go newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccp.asm:1061-1063`, `src/loader.asm:44-54` |
+| `NAME.SVC` | The file is missing or doesn't read, isn't a service of format 4, or fails while installing. `GLCD.SVC` also fails when the graphics LCD or the matrix keyboard is missing, when it is in already, or on a ROM before ABI 5.1. An old card's `PICO.SVC` fails too, since `CRT:`'s table is the ROM's. From `STARTUP.CMD`, a driver whose `INIT` finds its device absent prints nothing, so the starter card's `GLCD.SVC` line is quiet on a board with no graphics LCD. On a board with both displays `GLCD.SVC` loads and gives way to the PICO9918 with no message. | Check the board, the name and `SERVICES`. A card from an older TEC-OS needs the steps in Chapter 5, and its `PICO.SVC` line can go. | [Chapter 21](21-startup.md#the-quiet-rule), [Chapter 20](20-hardware-services-and-service-loader.md#a-failed-load), `src/loader.asm:452-467`, `src/loader.asm:77-105`, `src/cpm/ccp.asm:275-283`, `drivers/glcd.asm:34-46` |
+| `UNLOAD` | No service is installed, or the newest can't be removed: its flags mark it as not removable, or its `REMOVE` returned carry. | Services go newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccp.asm:1061-1063`, `src/loader.asm:44-54` |
 | `COPY` | A name is missing or has a wildcard, or the destination is the source. | Name one source and a destination that differs. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:960-986` |
 | `ERA` | No name, more than one, or a bad name. | `ERA NAME`. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:818-822` |
 | `REN` | The form isn't `NEW=OLD`, a name has a wildcard, a name is missing, or the names give two different drives. | `REN NEW=OLD`, with a drive on one name or the same drive on both. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:868-902` |
 | `SAVE` | The count isn't decimal, it reaches the page of the address at `0006h`, or the name is missing or has a wildcard. | `SAVE n NAME.COM`, with a smaller count. | [Chapter 3](03-command-line.md#save), `src/cpm/ccp.asm:1216-1259` |
 | `USER` | The argument isn't a number from 0 to 15. | `USER n`. | [Chapter 3](03-command-line.md#user-areas), `src/cpm/ccp.asm:1183-1210` |
-| `CON` | The argument isn't `TTY`, `CRT`, `BAT` or `UC1`, or something follows it. | Use one of the four names. | [Chapter 2](02-console.md#the-con-command), `src/cpm/ccp.asm:1085-1180` |
+| `CON` | The argument isn't `TTY`, `CRT`, `BAT`, `UC1`, `PICO` or `GLCD`, with or without a colon, or something follows it. A width after `CRT` or `PICO` that isn't 80, 40 or 32, a width with no space before it, as in `CON CRT80`, a width after another name, and a width while the ROM's PICO9918 console isn't running or while a program has claimed the PICO9918 are refused too. The word printed is the width when a width follows the name. | Use one of the six names, and a width of 80, 40 or 32 after `CRT` or `PICO` on a board with the PICO9918 and the matrix keyboard. | [Chapter 2](02-console.md#the-con-command), `src/cpm/ccp.asm:1078-1162`, `src/pico.asm:46-62` |
 | `DIR` or `TYPE` | `DIR` has more than one argument or a bad name. `TYPE` has more than one, a wildcard, a bad name or no name part. | Name one file for `TYPE`, one pattern for `DIR`. | [Chapter 3](03-command-line.md#file-names), `src/cpm/ccp.asm:457-459`, `src/cpm/ccp.asm:772-775` |
 
 The bad characters in a name are `<>,;:[]%|()/\`, from `BADCHARS`
@@ -236,7 +236,7 @@ These lines appear in ordinary runs and need no remedy.
 | `[more]` | `DIR` or `TYPE` has filled the screen. Any key shows the next screen. Esc, `Q`, `q` and `;` end the listing, and `^C` and `#` also drop the rest of a chained line, since the test clears bit 5 of the key before it compares. | [Chapter 2](02-console.md#pauses-in-long-listings), `src/cpm/ccp.asm:703-735`, `src/text.asm:23-24` |
 | `ALL (Y/N)?` | `ERA` was given a name that is all wildcards. A line that starts with `Y` or `y` erases every file of the current user area on the drive. Any other line erases nothing, and the command counts as a success. A Return alone is the whole answer and erases nothing. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:828-855`, `src/text.asm:47-48` |
 | `COPIED nnnn` | `COPY` finished. `nnnn` is the number of records, in hexadecimal. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1025-1031`, `src/text.asm:35-36` |
-| `CON: TTY: serial terminal`, `CON: CRT: PICO9918`, `CON: UC1: GLCD` | The console in use, after `CON`. A `CON CRT` that can't take effect reports the serial terminal, and a `CON UC1` that can't take effect reports the console in use. `CON: BAT: reader and list` goes to the list device, which discards it, so it appears nowhere. | [Chapter 2](02-console.md#the-con-command), `src/cpm/ccp.asm:1163-1179`, `src/console.asm:293`, `src/text.asm:41-42` |
+| `CON: TTY:`, `CON: CRT:`, `CON: UC1:` | The console mode in effect, after `CON`. A `CON CRT` on a board with no PICO9918 console reports `TTY:`, and a `CON UC1` that can't take effect reports the console in use. `CON: BAT:` goes to the list device, which discards it, so it appears nowhere. | [Chapter 2](02-console.md#the-con-command), `src/cpm/ccp.asm:1163-1180`, `src/console.asm:47-49`, `src/console.asm:293`, `src/text.asm:37-42` |
 | `NAME n` | `SERVICES`: a service's name and its pages, the newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccp.asm:1545-1567` |
 | `d: LABEL` from `MOUNT` | The drive and the volume now on it, also when the volume was there already. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:149-157` |
 | `Unmounted` | `MOUNT d:` has emptied the drive. | [Chapter 4](04-cards-and-volumes.md#drives-and-mount), `test/programs/mount.asm:49-57` |
