@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 621201d, with the starter card's `TED.COM` from Thorium
 128edb7 and its `TAS.COM` from Thorium dbee66a. `TED.COM`'s SHA-256 is
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and
 `TAS.COM`'s is
@@ -334,9 +334,9 @@ keyboard in place of the serial port, and the serial terminal shows nothing at
 all. A board with a PICO9918 and the matrix keyboard therefore needs no serial
 terminal attached.
 
-`GLCD.SVC` installs here, and stays in memory, but leaves the console on the
-PICO9918, as it does whenever the PICO9918 is the console. The command
-`CON UC1` then moves the console to the graphics LCD. Chapter 5 gives the rules
+Here the PICO9918 is already the console, so the `GLCD.SVC` line installs
+nothing and passes quietly, and no driver stays in memory. The command
+`CON UC1` loads `GLCD.SVC` and moves the console to the graphics LCD. Chapter 5 gives the rules
 for display drivers. The web page's own card has no `GLCD.SVC` line with the
 PICO9918 chosen, because the page leaves only the chosen display's line in its
 startup file, and so the page's screen shows the banner, the volumes and the
@@ -513,16 +513,18 @@ No volume mounted, error 01
 R retry> 
 ```
 
-The number after `error` is a code in hexadecimal. Codes `01` to `04` come from
-the SD card driver and identify the step of starting the card that failed. `01`
+The number after `error` is a code in hexadecimal. Codes `01` to `04` and `0B`
+come from the SD card driver and identify the step of starting the card that
+failed. `01`
 is no answer to the first command sent to the card, which is what an empty
 socket gives. Codes `20` to `2A` come from the checks on the container: `21` is
 a block 0 that doesn't start with the container's name, `TECOSVOL`, and `2A` is
 a card with no volume for drive A. Appendix D lists them all.
 
-`R` starts cold boot again from the point where it sets up the LCD and the
+`R` or `r` starts cold boot again from the point where it sets up the LCD and the
 card, so after you fix or insert the card `R` reaches the prompt without a
-reset. Any other key prints the prompt again. While TEC-OS waits
+reset. Each key typed there is echoed on a line of its own, and any key but
+`R` or `r` then prints the prompt again. While TEC-OS waits
 at the diagnostic prompt, the LCD's last row shows `CARD?`, for a board with
 no terminal attached:
 
