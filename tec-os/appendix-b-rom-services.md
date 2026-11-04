@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix B. The ROM table and hardware services
 
-Checked against TEC-OS 621201d.
+Checked against TEC-OS 78127ec.
 
 This appendix lists the ROM table at `C003h`, then the numbered services behind
 its one jump: the hardware services 0 to 8, the volume services 9 to 11, the
@@ -220,7 +220,9 @@ card gives a slot only to the drives mounted at cold boot.
 A mount or an unmount writes the cache's changes for the card first and resets
 the drive by BDOS function 37 on the BDOS's own stack (`src/vol.asm:617`,
 `src/vol.asm:658`, `src/vol.asm:662-672`), so that the next access logs it in
-from its directory. A program therefore calls them from outside its own BDOS
+from its directory. A mount onto the default drive then selects it again with
+function 14, which logs the new volume in, so functions 27 and 31 answer for it
+at once (`src/vol.asm:679-691`). A program therefore calls them from outside its own BDOS
 calls, unlike the other services. On the model a mount or a describe changed
 `IX`.
 
@@ -262,7 +264,9 @@ call. Any other mode in effect is left as it is, its screen kept
 A record is 13 bytes: a link word, the 8-byte name, a version byte and the
 address of its table (`src/loader.asm:33`). `FIND` takes the newest record whose
 name matches and whose version is at least `B`. Each walk stops after 256
-records. Neither makes a BDOS or BIOS call, so either can be made on any stack.
+records, and the loader refuses a service whose records would take the
+registry past 256, so every record is found (`src/loader.asm:250-267`, Chapter
+20). Neither makes a BDOS or BIOS call, so either can be made on any stack.
 
 The generation is `SVCGEN`, raised by each removal (`src/ram.asm:265`). It is
 8 bits, so after 256 removals it repeats. A program can keep a record's
