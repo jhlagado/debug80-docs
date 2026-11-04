@@ -169,7 +169,7 @@ built-in. The first is the program `DIR` on drive A and the second the program
 A word that is none of the built-ins names a program, and must be a single
 file name with no wildcard (`src/cpm/ccp.asm:278-280`). The type selects what
 follows. A type of `SVC` installs a service through `SVCGO`
-(`src/cpm/ccp.asm:281-297`, `src/loader.asm:510-533`), which Chapter 20 describes.
+(`src/cpm/ccp.asm:281-297`, `src/loader.asm:527-550`), which Chapter 20 describes.
 A service that fails to install is a bad command, with one exception. When the
 line came from the startup file and the service's `INIT` refused because its
 device isn't there, `TNENODV`, the CCP says nothing and leaves the return code
@@ -620,6 +620,6 @@ of the program's stack.
 
 The CCP keeps nothing in the TPA: it leaves the TPA from `0100h` untouched
 until it loads a program or a service there, a service for `NAME.SVC` or
-`CON UC1` (`src/loader.asm:515-520`, `src/loader.asm:91-96`). Only `SAVE` reads that area,
+`CON UC1` (`src/loader.asm:532-537`, `src/loader.asm:91-96`). Only `SAVE` reads that area,
 which is how `SAVE` writes what a program or a loaded service file left in
 memory.

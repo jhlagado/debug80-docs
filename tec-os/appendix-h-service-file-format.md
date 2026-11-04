@@ -68,7 +68,7 @@ file, `TAS` on the card or `makeSvc` on a PC, writes the number of
 dependencies, the two entry offsets and the two sizes
 (`tools/lib/svc.mjs:111-120`).
 The loader's checks of the entry offsets, the sizes and the page are at
-`src/loader.asm:107-127`, `src/loader.asm:395-412`, and of the stack figures at
+`src/loader.asm:107-127`, `src/loader.asm:412-429`, and of the stack figures at
 `src/loader.asm:155-171`.
 
 ## The dependencies
@@ -99,7 +99,7 @@ written as bytes of 255 and then the rest:
 | 509 | `255 255 0` |
 
 Image byte 600 is 601 bytes from header byte 24, which is 255 and 255 and 91
-more (`test/svc.test.mjs:335-337`). When the rest is 0, as for image byte 509,
+more (`test/svc.test.mjs:376-378`). When the rest is 0, as for image byte 509,
 the last byte for that fixup is a gap of 0, which fixes the byte the 255s
 reached.
 

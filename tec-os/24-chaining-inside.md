@@ -278,7 +278,7 @@ ran to its end (`src/cpm/ccpfile.asm:290-320`, `src/cpm/ccpfile.asm:106`,
 `Write lost` drops the line too. `CWBOOT` prints that message at a warm boot when
 a line of the block cache fails to reach the card in its flush, after clearing
 `CHPOS`. `WBOOTR` then jumps to the CCP's entry with `CHPOS` at 0
-(`src/cache.asm:375-384`, `src/boot.asm:108-111`).
+(`src/cache.asm:388-397`, `src/boot.asm:108-111`).
 
 ## Function 47
 

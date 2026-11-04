@@ -124,7 +124,7 @@ boot's end included, leaving the IOBYTE and the drive and user byte as they
 are (`src/boot.asm:29-35`, `src/boot.asm:221-283`). An unload and a failed `INIT` clear
 the first byte of each restart vector the service claimed and then run the
 same sweep of the vectors, `PZSWP` (`src/loader.asm:78-89`,
-`src/loader.asm:295-299`, `src/loader.asm:334-347`). The CCP writes the byte at
+`src/loader.asm:312-316`, `src/loader.asm:351-364`). The CCP writes the byte at
 `0004h` at each prompt, and the FCBs, the tail and the byte at `0050h` before
 it runs a program (`src/cpm/ccp.asm:225-245`, `src/cpm/ccp.asm:317-319`,
 `src/cpm/ccpcmd.asm:280-312`).
@@ -151,7 +151,7 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 
 The part from `WSBASE`, `BAE7h`, to `BEFFh` has the same addresses on every
 card. The build places `WSBASE` so that the part ends at `BF00h`
-(`tools/build.mjs:228-233`, `src/layout.asm:57-60`). The part above the table
+(`tools/build.mjs:232-237`, `src/layout.asm:57-60`). The part above the table
 starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:218`). Cold boot
 clears the workspace from `WSBASE` up to `WSEND`, `BAE7h` to `BFFFh`
 (`src/boot.asm:37-41`). Warm boot clears the part from `CCPCLR` to the end of

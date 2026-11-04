@@ -53,7 +53,7 @@ must reach while EXPAND 1 is in view has to be outside the window. `LATCHV` is
 the one such byte. While a routine has EXPAND 1 in view, as the cache's lookup
 above does, the only state of TEC-OS's own that it reads outside EXPAND 1 is
 `LATCHV`. The cache's copy routine `MVCOPY` also copies the part of a buffer that
-lies below `8000h` then (`src/cache.asm:388-399`).
+lies below `8000h` then (`src/cache.asm:401-412`).
 `LATCHV` is TEC-OS's one byte in page zero.
 
 ## Page zero
@@ -194,7 +194,7 @@ describes the console's bytes.
 The last 14 bytes, `BFF2h–BFFFh`, are the rest of the `MOUNT` routine's
 scratch, from `MNTBLK` to `MNTLN` (`src/ram.asm:290-300`). This state ends at
 `WSEND`, `C000h`, with no byte unused above the table, and the build checks
-that it ends by `C000h` (`src/ram.asm:301-302`, `tools/build.mjs:257`).
+that it ends by `C000h` (`src/ram.asm:301-302`, `tools/build.mjs:261`).
 
 ## The allocation vectors and the BDOS entry
 
@@ -237,7 +237,7 @@ programs have. The starter card gives 47,268 bytes, from `0100h` to `B9A3h`.
 The largest card, four G8M volumes, takes four 256-byte vectors, puts the entry
 at `B6E4h` and leaves 46,564 bytes. The build works out both figures in its
 census and checks that the starter card's TPA is at least 45,830 bytes
-(`tools/build.mjs:210-220`, `tools/build.mjs:260-261`).
+(`tools/build.mjs:214-224`, `tools/build.mjs:264-265`).
 
 ## The four stacks
 
@@ -323,7 +323,7 @@ history. The two pages from `BE00h` are unused.
 
 The cache's copies from its lines to the DMA buffer and back go through
 `MVCOPY`, which copies between EXPAND 0 and EXPAND 1
-(`src/cache.asm:388-399`, `src/cache.asm:263-273`).
+(`src/cache.asm:401-412`, `src/cache.asm:270-280`).
 
 All three resident stacks are in the window, so the routines that put EXPAND 1
 in view use no stack until EXPAND 0 is back. A `PUSH` with EXPAND 1 in view

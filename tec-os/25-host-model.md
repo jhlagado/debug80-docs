@@ -350,7 +350,7 @@ display. `STARTUP.CMD`'s other lines stay, less their display pieces, a width
 line of the card's own among them. A removed piece passes its own `:` to the
 piece after it on its line, a `:` first on the next line stays if the removed
 piece had its own, and otherwise a `:` that waited on a removed piece goes, on
-its line or first on the next (`host/card.mjs:72-114`). A card that fails the
+its line or first on the next (`host/card.mjs:75-117`). A card that fails the
 check gets no new `STARTUP.CMD`, and the reason goes to the serial terminal
 after the words `[power on]` (`web/src/main.mjs:97-98`). The reason is no drive
 A, or with the graphics LCD chosen no `GLCD.SVC`, a `.DRV` display file from an

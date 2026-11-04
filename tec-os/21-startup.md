@@ -199,7 +199,7 @@ isn't A:, it looks on A: in the current user and then in A:'s user 0
 no `PICO.COM` is found on drive A, the current drive at startup, and the line
 fails.
 `SVCGO` reads the file with `LOADCOM` and installs it with `SVCLOAD`, and a
-failure of either returns carry to the CCP (`src/loader.asm:515-520`,
+failure of either returns carry to the CCP (`src/loader.asm:532-537`,
 `src/cpm/ccp.asm:288-289`). Chapter 20 describes the loader and the relocation,
 and Appendix H the file.
 
@@ -226,24 +226,24 @@ in. An old card's `PICO.SVC` asks for `CRT:` and fails at the same refusal,
 with nothing left (`test/ks39.test.mjs:124-135`).
 
 After a good load `SVCGO` compares `SVCHEAD`, the new service's page, with the
-page of `GLCD.SVC`'s table in `GLVEC` (`src/loader.asm:521-524`). No match means
+page of `GLCD.SVC`'s table in `GLVEC` (`src/loader.asm:538-541`). No match means
 some other service, and the console stays. A match sets `CDGLC`
-(`src/loader.asm:525-526`). If `CRT:`, the ROM's PICO9918 console, is the mode
+(`src/loader.asm:542-543`). If `CRT:`, the ROM's PICO9918 console, is the mode
 in effect, the GLCD gives way: `SVCGO` goes to `WRDCLR` alone, and the console
 stays where it is, with `GLCD.SVC` in for a later `CON UC1`
-(`src/loader.asm:527-530`, `test/pico.test.mjs:579-586`). A `GLCD.SVC` line from the
+(`src/loader.asm:544-547`, `test/pico.test.mjs:579-586`). A `GLCD.SVC` line from the
 file doesn't get that far on such a board, because `SVDRV` has refused its table,
 so the starter card's `GLCD.SVC` line leaves nothing in memory there
-(`test/pico.test.mjs:92-109`). The give-way follows a `GLCD.SVC` typed at the
+(`test/pico.test.mjs:92-108`). The give-way follows a `GLCD.SVC` typed at the
 prompt. An `UNLOAD` of a `GLCD.SVC` that gave way drops `UC1:`'s table and
 leaves `CRT:` and its screen as they were, since `VIDHOFF` resets the console
 mode only when the mode it drops is the one in effect
 (`src/video.asm:103-118`). Otherwise `CONSET` clears
 the LCD's word and passes `CMUC1` to `CONSW`, which moves the console and
 writes the mode it takes into the console field of the IOBYTE
-(`src/loader.asm:531-533`, `src/console.asm:53-55`). `CMDCON` writes the field
+(`src/loader.asm:548-550`, `src/console.asm:53-55`). `CMDCON` writes the field
 before it calls `GLCLD`, and `GLCLD` returns at once if `CDGLC` is set
-(`src/cpm/ccpcmd.asm:115-119`, `src/loader.asm:495-497`). So `CON UC1` on a
+(`src/cpm/ccpcmd.asm:115-119`, `src/loader.asm:512-514`). So `CON UC1` on a
 board where the GLCD gave way loads nothing, and the console moves at the next
 console call, as `CONSEL` finds the field changed (`src/console.asm:56-65`).
 
@@ -260,7 +260,7 @@ The mark matters at one place, a service's failed load. `SVCLOAD` keeps the
 `A` that `INIT` returned in `SVCRA`, beside `SVCRC`, which says why the load
 failed (`src/loader.asm:243-246`, `src/ram.asm:266-267`). A record refused
 after a good `INIT` sets `SVCRA` to 0, so that failure is never taken for an
-absent device (`src/loader.asm:272-274`, `test/startup.test.mjs:107-122`).
+absent device (`src/loader.asm:289-291`, `test/startup.test.mjs:107-122`).
 The CCP reads the two
 bytes as one word, `SVCRC` in `L` and `SVCRA` in `H`, and combines them with the
 mark (`src/cpm/ccp.asm:290-296`). `AND H` keeps `INIT`'s status only for a line
@@ -301,10 +301,10 @@ and a zero, wipes either of them.
 
 `GLCD?` goes through `LCDWRD`, which sets `CDWRD` first (`src/lcd.asm:38-41`).
 It comes from `GLCLD`, the path of `CON UC1`, when `SVCGO` returns carry
-(`src/loader.asm:495-508`). `GLCLD` first puts the mode from `CONMOD` back in
+(`src/loader.asm:512-525`). `GLCLD` first puts the mode from `CONMOD` back in
 the console field through `CONFLD`, since the console hasn't moved
-(`src/loader.asm:504-506`, `src/console.asm:355-359`). `GLCLD` returns with
-`GLCD.SVC` already in at `src/loader.asm:497`, so that case writes nothing.
+(`src/loader.asm:521-523`, `src/console.asm:355-359`). `GLCLD` returns with
+`GLCD.SVC` already in at `src/loader.asm:514`, so that case writes nothing.
 
 `CDWRD` is bit 7 of `CONDEV`, the byte at `BFE7h`, at the workspace's end, that
 records the console devices (`src/ram.asm:278`, `src/layout.asm:41-46`):
@@ -319,10 +319,10 @@ records the console devices (`src/ram.asm:278`, `src/layout.asm:41-46`):
 
 A take of the console clears a word from the LCD, but by then the row may be a
 program's, and `CDWRD` separates the two cases. `WRDCLR` writes the blanks only
-if the bit is set, and clears the bit (`src/loader.asm:538-547`). `CONSET` calls
-it, so any take of the console clears a word (`src/loader.asm:531`), and
+if the bit is set, and clears the bit (`src/loader.asm:555-564`). `CONSET` calls
+it, so any take of the console clears a word (`src/loader.asm:548`), and
 `GLCD.SVC` giving way to the ROM's console clears one too
-(`src/loader.asm:527-530`). Hardware service `LCD` clears the bit, with no write
+(`src/loader.asm:544-547`). Hardware service `LCD` clears the bit, with no write
 of blanks, when a program writes row 3 (`src/services.asm:92-96`), so the row is
 then the program's and a later take leaves it alone
 (`test/pico.test.mjs:559-564`). `DEMO`, whose source is
@@ -356,7 +356,7 @@ files, the ones the ROM loads (`host/card.mjs:18-24`). A change it can't make,
 to a read-only drive A or in a full directory, throws, and the card stays as it
 was. The serial terminal then shows `This card couldn't be prepared for the
 page`, the reason in parentheses and `so it boots as it is.`
-(`host/card.mjs:67-68`).
+(`host/card.mjs:67-71`).
 
 `cardProblem` finds first whether the card can show the display chosen. A card
 with no drive A has a problem of its own. With a drive A, the PICO9918 needs no
@@ -370,27 +370,27 @@ file included (`host/card.mjs:63-65`).
 
 Otherwise `setDisplayLine` reads the file up to its `^Z` and splits it into
 lines. `withoutDisplay` splits each line at `!`, drops every display piece and
-joins the rest (`host/card.mjs:11-15`, `host/card.mjs:78-99`). A display piece is
+joins the rest (`host/card.mjs:11-15`, `host/card.mjs:81-102`). A display piece is
 one of the display drivers' names, `PICO.SVC`, `PICO40.SVC`, `PICO32.SVC` and
 `GLCD.SVC`, under either type, `.SVC` or `.DRV`. A width line, `CON PICO` or
 `CON CRT` with a width after it, is a display piece too. Either may have a
 leading `:`. A width
 line of the card's own goes too, since it would run after the page's and
-override the width chosen (`test/pico.test.mjs:687-699`). A dropped piece passes
+override the width chosen (`test/pico.test.mjs:700-712`). A dropped piece passes
 its own `:` to the piece after it on its line, so `DIR!:GLCD.SVC!MOUNT` becomes
 `DIR!:MOUNT`. A `:` first on the next line stays if the dropped piece had its
 own, so the lines `DIR`, `:GLCD.SVC` and `:MOUNT` become `DIR` and `:MOUNT`.
 Otherwise a `:` that waited on a dropped piece goes, on its line or first on the
 next, since it must not wait on what now comes before it. The line
 `GLCD.SVC!:MOUNT` becomes `MOUNT`, an ordinary line that runs after the
-display's line whatever that line did (`test/pico.test.mjs:760-771`). Lines left
+display's line whatever that line did (`test/pico.test.mjs:773-784`). Lines left
 blank are dropped.
 
 The new file is the chosen display's line, then the remaining lines, and
-nothing is written if that equals the old text (`host/card.mjs:101-114`). For
+nothing is written if that equals the old text (`host/card.mjs:104-117`). For
 the GLCD the line is `GLCD.SVC`. For the PICO9918 it is `CON PICO 40` or `CON
 PICO 32`, and at 80 columns there is none, since the ROM's console starts at 80
-(`host/card.mjs:109`). The file has no line for the other display. On the page's
+(`host/card.mjs:112`). The file has no line for the other display. On the page's
 board with the PICO9918, which has the GLCD as well, a `GLCD.SVC` line would pass
 over quietly and load nothing, and `CON UC1` loads `GLCD.SVC` itself when it is wanted
 (`src/cpm/ccpcmd.asm:117-119`).
@@ -398,5 +398,5 @@ over quietly and load nothing, and `CON UC1` loads `GLCD.SVC` itself when it is 
 A card that passes `cardProblem` has its startup file rewritten to that form
 whatever it held. The starter card's `STARTUP.CMD`, `GLCD.SVC` alone, stays as
 it is for the GLCD, and for the PICO9918 it holds a `CON PICO` line, or nothing
-but its `^Z` at 80 columns (`test/pico.test.mjs:819-831`). A card whose startup
+but its `^Z` at 80 columns (`test/pico.test.mjs:832-844`). A card whose startup
 file has to stay as it is is best copied to the PC before the page opens it.

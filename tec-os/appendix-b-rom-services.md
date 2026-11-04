@@ -56,7 +56,7 @@ nothing changed. `FIND` and `LIST` return otherwise, as their entries say
 
 A program tests carry or `A` after a failure. The hardware services and the
 dispatcher clear zero with the status, and the volume and display services
-leave it as it falls (`src/vol.asm:664-666`, `src/services.asm:362-386`).
+leave it as it falls (`src/vol.asm:675-677`, `src/services.asm:362-386`).
 
 The dispatcher reads the service's address from `SVTAB`, one word for each
 number, and jumps to it with `B`, `DE` and `HL` as they came
@@ -200,7 +200,7 @@ last, which turns the protect on again (`src/services.asm:281-291`).
 
 ## The volume services, 9 to 11
 
-The volume services are `MOUNT`, `UNMNT` and `DESC` (`src/vol.asm:566-592`):
+The volume services are `MOUNT`, `UNMNT` and `DESC` (`src/vol.asm:575-601`):
 
 | `C` | Takes | Effect |
 | ---: | --- | --- |
@@ -218,8 +218,8 @@ couldn't be written has been dropped from the cache and its change lost. A forma
 card gives a slot only to the drives mounted at cold boot.
 
 A mount or an unmount writes the cache's changes for the card first and resets
-the drive by BDOS function 37 on the BDOS's own stack (`src/vol.asm:606`,
-`src/vol.asm:647`, `src/vol.asm:651-661`), so that the next access logs it in
+the drive by BDOS function 37 on the BDOS's own stack (`src/vol.asm:617`,
+`src/vol.asm:658`, `src/vol.asm:662-672`), so that the next access logs it in
 from its directory. A program therefore calls them from outside its own BDOS
 calls, unlike the other services. On the model a mount or a describe changed
 `IX`.
@@ -252,7 +252,7 @@ call. Any other mode in effect is left as it is, its screen kept
 ## The registry, 13 and 14
 
 `FIND` and `LIST` read the records that services have published
-(`src/loader.asm:414-485`).
+(`src/loader.asm:431-502`).
 
 | `C` | Takes | Returns |
 | ---: | --- | --- |

@@ -48,7 +48,7 @@ in which the function returns instead, with `A` = `FFh` and the error's code in
   through an FCB that has it (`src/cpm/bdosfile.asm:249-261`).
 - `Bdos Err On d: Bad Sector`, code 1, for a record or a directory record that
   can't be read or written, or an allocation block number past the end of the
-  volume in a read or a write (`src/cpm/bdosrec.asm:534`,
+  volume in a read or a write (`src/cpm/bdosrec.asm:552`,
   `src/cpm/bdosrec.asm:175`, `src/cpm/bdoscon.asm:21-23`,
   `src/cpm/bdoscon.asm:46-49`).
 
@@ -170,22 +170,22 @@ the drive is full. After a 1 the FCB stays on its extent with `CR` at 128, so a
 write after an entry is freed makes the extent it needs
 (`src/cpm/bdosrec.asm:59-103`). A block taken for a write that then fails
 stays in the FCB's map, and the close writes it into the entry
-(`src/cpm/bdosrec.asm:442-459`). An FCB with the read-only attribute set is the
+(`src/cpm/bdosrec.asm:460-477`). An FCB with the read-only attribute set is the
 `File R/O` error (`src/cpm/bdosfile.asm:253-261`).
 
 **22 Make file.** Creates an empty entry for the FCB's name in the current
 user area, writes it to the directory and opens it
-(`src/cpm/bdosfile.asm:307-378`). Returns the directory code, or `FFh` if the
+(`src/cpm/bdosfile.asm:311-382`). Returns the directory code, or `FFh` if the
 directory is full. Does not test for a file of the same name. As in CP/M 2.2,
 the FCB's `S2` is set to 0 and its `EX` kept, so the entry is the extent `EX`
 names among the file's first 32, and `S1`, `RC` and the map are cleared
-(`src/cpm/bdosfile.asm:301-314`, `src/cpm/bdosfile.asm:334-347`).
+(`src/cpm/bdosfile.asm:305-318`, `src/cpm/bdosfile.asm:338-351`).
 
 **23 Rename file.** Gives every entry of the file named in the FCB's first 16
-bytes the name and type at offsets 17 to 27 (`src/cpm/bdosfile.asm:403-443`).
+bytes the name and type at offsets 17 to 27 (`src/cpm/bdosfile.asm:407-447`).
 Returns 0, or `FFh` if there is no such file. The second drive byte, at offset
 16, is not read. An entry with its read-only attribute set is the `File R/O`
-error (`src/cpm/bdosfile.asm:427-433`).
+error (`src/cpm/bdosfile.asm:431-437`).
 
 **24 Return login vector.** Returns in `HL` a bit for each logged-in drive,
 bit 0 for A (`src/cpm/bdosfn.asm:9-11`).
@@ -209,8 +209,8 @@ warm boot, disk reset or function 37 for the drive
 in it once its drive has been selected (`src/cpm/bdoslog.asm:159-164`).
 
 **30 Set file attributes.** Copies the FCB's name and type, with their bit 7
-attributes, into every entry of the file (`src/cpm/bdosfile.asm:394-398`,
-`src/cpm/bdosfile.asm:413-443`). Returns 0, or `FFh` if there is no such file. Bit
+attributes, into every entry of the file (`src/cpm/bdosfile.asm:398-402`,
+`src/cpm/bdosfile.asm:417-447`). Returns 0, or `FFh` if there is no such file. Bit
 7 of the first type byte is the read-only attribute and of the second the
 system attribute, which `DIR` hides.
 
@@ -255,7 +255,7 @@ does not define. Both return 0 and do nothing (`src/tables.asm:77`).
 
 **40 Write random with zero fill.** Function 34, with each allocation block the
 write newly allocates filled with zeros before the record is written
-(`src/cpm/bdosrec.asm:197-216`, `src/cpm/bdosrec.asm:477-527`). The BIOS's DMA
+(`src/cpm/bdosrec.asm:197-216`, `src/cpm/bdosrec.asm:495-545`). The BIOS's DMA
 address is put back on the program's after each of the zero-fill's writes, so
 a failed write that function 45 returns leaves the program's DMA address in
 the BIOS.
@@ -291,7 +291,7 @@ the chained command.
 
 **48 Flush buffers.** Writes every changed line of the block cache to the card
 and returns 0 in `A`, or `FFh` if a write failed and its line was dropped
-(`src/cpm/bdos.asm:175-180`, `src/vol.asm:675-688`). `E` = `FFh`, CP/M 3's
+(`src/cpm/bdos.asm:175-180`, `src/vol.asm:700-713`). `E` = `FFh`, CP/M 3's
 purge, gives the same flush.
 
 **99 Truncate file.** Returns `FFh` in `A` and changes nothing
