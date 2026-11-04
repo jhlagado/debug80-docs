@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS 58d4345.
+Checked against TEC-OS 621201d.
 
 Chapter 1's first boot ran a command that nobody typed, `GLCD.SVC`, which on a
 board with only a serial terminal failed without a word. This chapter explains
@@ -161,7 +161,8 @@ A line can start a program, and the next line runs when the program ends.
 Chapter 11's `!` and `:` work in a startup line too. A `.SVC` file that
 doesn't install counts as a failed command, so a command after it that starts
 with `:` is dropped. The exception is a startup line whose driver finds its
-device missing. It fails quietly, as `GLCD.SVC` did in Chapter 1, and doesn't
+device missing, or one of the display lines described below that has nothing
+to do on its board. It fails quietly, as `GLCD.SVC` did in Chapter 1, and doesn't
 count as a failure, so a `:` command after it runs. Here the file's two lines
 are `GLCD.SVC!:MOUNT` and `NOSUCH.SVC!:MOUNT`, on the board with only a serial
 terminal:
@@ -269,9 +270,10 @@ its driver:
 
 - On a board with the graphics LCD and the matrix keyboard, and no PICO9918
   console, the line makes the graphics LCD the console.
-- On a board where the PICO9918 is the console, the line installs the driver
-  and leaves the console on the PICO9918. `CON UC1` then moves the console to
-  the graphics LCD with nothing more to load.
+- On a board where the PICO9918 is the console, the line installs nothing and
+  passes quietly, and the next line runs. The console stays on the PICO9918,
+  and `CON UC1` then loads the driver and moves the console to the graphics
+  LCD.
 - On a board with no graphics LCD the line fails quietly, as Chapter 1 showed,
   and the next line runs.
 
@@ -284,15 +286,14 @@ the three boards of `tools/capture.mjs`:
 | --- | --- | --- |
 | Serial terminal only, `--board serial` | Fails quietly | `TTY:` |
 | Graphics LCD and matrix keyboard, `--board glcd` | Installs | `UC1:` |
-| Both displays and matrix keyboard, `--board pico` | Installs | `CRT:` |
+| Both displays and matrix keyboard, `--board pico` | Passes quietly | `CRT:` |
 
-On the last board the driver stays installed while the PICO9918 has the
-console, so programs have 46,336 bytes, as the table under "Services" gives:
+On the last board no driver is installed while the PICO9918 has the console,
+so programs have 47,268 bytes, as the table under "Services" gives:
 
 <!-- node tools/capture.mjs --board pico SERVICES CON -->
 ```text
 A>SERVICES
-GLCD 3
 A>CON
 CON: CRT:
 A>
@@ -312,31 +313,40 @@ cp dist/starter.img w32.img
 node tools/tecvol.mjs put w32.img A startup.cmd --text
 ```
 
-<!-- node tools/capture.mjs --card w32.img --board pico "TAS SAMPLE" SAMPLE -->
+The banner and the volumes appear at 80 columns, and the screen is cleared at
+32 columns before the reply to `CON PICO 32`. After `DIR` the web page's
+PICO9918 shows this:
+
+<!-- node tools/capture.mjs --card w32.img --board pico --screen DIR -->
+```text
+CON: CRT:
+A>GLCD.SVC
+
+A>DIR
+MOUNT.COM    GLCD.SVC
+STARTUP.CMD  TED.COM
+SAMPLE.ASM   TAS.COM
+6 files, 980K free
+A>
+```
+
+On a board where the PICO9918's console didn't start, the width line passes
+quietly at each boot, as a driver's line for a missing device does, so a `:`
+command after it runs. Typed at the prompt there, the same command fails with
+`32?`. On the serial board the card boots like this:
+
+<!-- node tools/capture.mjs --card w32.img -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
 A>CON PICO 32
-CON: CRT:
+
 A>GLCD.SVC
-
-A>TAS SAMPLE
-SAMPLE.COM written
-
-A>SAMPLE
-Hello from TEC-OS.
-Screen: 32 by 24
-Back to the prompt.
 
 A>
 ```
-
-The banner and the volumes appeared at 80 columns, and the screen was cleared
-at 32 columns before the reply to `CON PICO 32`. On a board where the
-PICO9918's console didn't start, the width line fails with `32?` at each boot,
-and the next line runs.
 
 The web page's "Display" and "ROM" controls change the card for you, through
 `host/card.mjs`. At each power-on the page takes the display lines out of the
