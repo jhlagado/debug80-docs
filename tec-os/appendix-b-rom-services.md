@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix B. The ROM table and hardware services
 
-Checked against TEC-OS 58d4345.
+Checked against TEC-OS 621201d.
 
 This appendix lists the ROM table at `C003h`, then the numbered services behind
 its one jump: the hardware services 0 to 8, the volume services 9 to 11, the
@@ -56,7 +56,7 @@ nothing changed. `FIND` and `LIST` return otherwise, as their entries say
 
 A program tests carry or `A` after a failure. The hardware services and the
 dispatcher clear zero with the status, and the volume and display services
-leave it as it falls (`src/vol.asm:664-666`, `src/services.asm:321-331`).
+leave it as it falls (`src/vol.asm:664-666`, `src/services.asm:362-386`).
 
 The dispatcher reads the service's address from `SVTAB`, one word for each
 number, and jumps to it with `B`, `DE` and `HL` as they came
@@ -176,8 +176,8 @@ whether there is a matrix keyboard.
 **7 PUTAT.** On a video console, writes `B` characters from `HL` at row `D`,
 column `E`, both from 0, through the display's cell routine
 (`src/services.asm:209-253`). The cursor's position is unchanged, though its cell
-is removed. The console draws it again when it next waits for a key
-(`src/console.asm:180`). The escape parser isn't used, and bytes `80h` to
+is removed. The next `CONST` or `CONIN` draws it again, as after any output
+(`src/console.asm:119-131`, `src/console.asm:169-187`). The escape parser isn't used, and bytes `80h` to
 `FFh` reach the display, which draws them as reverse images of `00h` to `7Fh`
 (`src/pico.asm:143-147`, `drivers/glcd.asm:374-376`).
 
@@ -187,16 +187,16 @@ alone. Status 2 means the console is the serial terminal, or the PICO9918 is
 claimed and is the console (`src/term.asm:574-585`). A claim doesn't stop
 `PUTAT` on the graphics LCD. The stack is 22 bytes on the graphics LCD and 18
 on the PICO9918 with a cursor to remove, and 18 and 14 with none. A cell along
-a row takes about 509 T-states on the PICO9918 at 80 columns and about 36,700
+a row takes about 509 T-states on the PICO9918 at 80 columns and about 36,900
 on `GLCD.SVC`.
 
 **8 RTC.** With `B` = 0, reads the DS1302 into the seven bytes at `HL`. With
-`B` = 1, sets it from them (`src/services.asm:228-263`). Any other `B` returns
+`B` = 1, sets it from them (`src/services.asm:255-294`). Any other `B` returns
 status 1 and touches no clock. The bytes are BCD: seconds, minutes, hours,
 date, month, weekday, year. Each call tests the clock again, and status 2 means
 no clock answers. A read takes 6,946 T-states and a set 7,780. A set
-turns off the chip's write protect first and writes 0 to its control byte
-last.
+turns off the chip's write protect first and writes `80h` to its control byte
+last, which turns the protect on again (`src/services.asm:281-291`).
 
 ## The volume services, 9 to 11
 
@@ -219,7 +219,7 @@ card gives a slot only to the drives mounted at cold boot.
 
 A mount or an unmount writes the cache's changes for the card first and resets
 the drive by BDOS function 37 on the BDOS's own stack (`src/vol.asm:606`,
-`src/vol.asm:606`, `src/vol.asm:651-661`), so that the next access logs it in
+`src/vol.asm:647`, `src/vol.asm:651-661`), so that the next access logs it in
 from its directory. A program therefore calls them from outside its own BDOS
 calls, unlike the other services. On the model a mount or a describe changed
 `IX`.
@@ -227,7 +227,7 @@ calls, unlike the other services. On the model a mount or a describe changed
 ## A display driver's table, 12
 
 `GLCD.SVC` calls `DRVR` from its `INIT` with `B` = 3 for `UC1:` and `HL`
-pointing at its table (`src/services.asm:320-331`, `src/video.asm:52-57`). The
+pointing at its table (`src/services.asm:356-386`, `src/video.asm:72-102`). The
 table is eight words: six routines the terminal calls, a routine for the page
 functions and a last word holding the columns and then the rows. The six, in
 order, are put, get, clear to the end of the line, restore, read a row and
@@ -237,17 +237,22 @@ write a row. Only `CRT:` calls the seventh, so a driver's may be 0
 On success `HL` returns `LINEBUF`'s address, where the row routines read and
 write a row, with `A` = 0 and carry clear. `TNEBAD` with carry means nothing
 changed: `B` is not 3, `UC1:` has a table already or there is no matrix
-keyboard (`src/services.asm:320-331`). `B` = 1 is refused because `CRT:`'s
+keyboard (`src/services.asm:362-386`). `B` = 1 is refused because `CRT:`'s
 table is the ROM's own, so a `PICO.SVC` from an older card fails at its
-`INIT`.
+`INIT`. `TNENODV` with carry, nothing changed, refuses a table offered while a
+line of `STARTUP.CMD` runs and the `CON:` field is `CRT:`, so a driver that
+would only give way to the PICO9918's console is not installed from the
+startup file (`src/services.asm:356-380`).
 
-`HL` = 0 drops the mode's table, with `A` = 0, carry clear and `HL` destroyed,
-and the console is chosen again at its next call (`src/video.asm:81-90`). Each `REMOVE` calls it that way.
+`HL` = 0 drops the mode's table, with `A` = 0, carry clear and `HL` destroyed.
+When that mode is the one in effect, the console is chosen again at its next
+call. Any other mode in effect is left as it is, its screen kept
+(`src/video.asm:103-118`). Each `REMOVE` calls it that way.
 
 ## The registry, 13 and 14
 
 `FIND` and `LIST` read the records that services have published
-(`src/loader.asm:363-425`).
+(`src/loader.asm:414-485`).
 
 | `C` | Takes | Returns |
 | ---: | --- | --- |
