@@ -56,7 +56,7 @@ reads up to 16 bytes, waiting for the response byte R1, whose bit 7 is 0.
    card of version 2 answers `01h` and four more bytes, the last two of which
    are its echo of the argument: the low four bits of the third must be 1, the
    range of 2.7 to 3.6 V, and the fourth must be the pattern `AAh`. Any other
-   echo is error 11, `SDEVOLT` (`src/sd.asm:165-178`). An older card rejects
+   echo is error 0Bh, `SDEVOLT` (`src/sd.asm:165-178`). An older card rejects
    the command, and initialisation goes on.
 3. `CMD55` and `ACMD41` with the high-capacity bit set, repeated up to 256
    times with a short pause between, until R1 is 0, the card ready. Error 2,
@@ -87,7 +87,7 @@ error 5, `SDECMD`. The card then sends `FFh` until the data is ready and `FEh`
 before it. The driver polls for that token up to 65,536 times before it gives
 error 6, `SDETOK`. A card that can't read the block sends a data error token,
 a byte of the form `000xxxxx`, in place of `FEh`. Any byte but `FFh` and `FEh`
-ends the read at once with error 10, `SDEDTOK` (`src/sd.asm:285-298`). The
+ends the read at once with error 0Ah, `SDEDTOK` (`src/sd.asm:285-298`). The
 512 bytes follow the token, then a two-byte CRC that the driver reads and
 doesn't check.
 

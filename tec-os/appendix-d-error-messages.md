@@ -64,8 +64,8 @@ Codes `01h` to `04h` and `0Bh` come from `SDINIT`, the start of the card
 
 Codes `05h` to `0Ah` are the SD card driver's codes for a block read or write:
 command rejected, no data token, write not accepted, card stayed busy, a
-data error token in place of a block's data and a standard-capacity card's
-block 4 GiB or more into it, rejected before any command
+standard-capacity card's block 4 GiB or more into it and a data error token
+in place of a block's data, rejected before any command
 (`src/sd.asm:14-19`). They never reach this prompt. The driver stores them in
 `SDERR`, which nothing reads. A failed read during the mount is code `20h`,
 and a failed read or write after it is a BDOS error or `Write lost`. The
@@ -84,7 +84,7 @@ every check in order, and
 | `21` | Block 0 doesn't start with `TECOSVOL`: the card holds no container. | `src/vol.asm:14` |
 | `22` | The container's major version isn't the one this ROM reads. | `src/vol.asm:15` |
 | `23` | The header or descriptor size is wrong, or the header's drives field is above 4. | `src/vol.asm:16` |
-| `24` | The number of volumes is 0, above 8 on a format 1.0 card, or above 127. | `src/vol.asm:17` |
+| `24` | The number of volumes is 0, above 8 on a format 1.0 card or above 127. | `src/vol.asm:17` |
 | `25` | The header's checksum differs, or on a format 1.1 card with a table past block 0 the table's sum. | `src/vol.asm:18` |
 | `26` | A descriptor is bad: its id, flags, geometry, length or start. | `src/vol.asm:19` |
 | `27` | A volume ends past the container, or on a standard-capacity card past block `7FFFFFh`, the last its byte addresses reach, 4 GiB into the card. A volume that straddles that block is refused too. | `src/vol.asm:21` |
@@ -146,7 +146,7 @@ alone when it needs an argument and has none.
 | A program's name | `NAME.COM` doesn't fit below the BDOS's entry, the address in the word at `0006h`. | Use `UNLOAD` to free service resident memory. | [Chapter 17](17-ccp.md#loading-a-program), `src/cpm/ccp.asm:425-427`, `src/cpm/ccp.asm:441-449` |
 | `NAME.SVC` | The file is missing or doesn't read, isn't a service of format 4, or fails while installing. `GLCD.SVC` also fails when the graphics LCD or the matrix keyboard is missing, when it is in already, or on a ROM before ABI 5.1. An old card's `PICO.SVC` fails too, since `CRT:`'s table is the ROM's. From `STARTUP.CMD`, a driver whose `INIT` finds its device absent prints nothing, so the starter card's `GLCD.SVC` line is quiet on a board with no graphics LCD. On a board with both displays a `GLCD.SVC` line in `STARTUP.CMD` passes over quietly and loads nothing, and a `GLCD.SVC` typed at the prompt loads and gives way to the PICO9918 with no message. A service whose record is refused after its `INIT` succeeds prints its name from `STARTUP.CMD`, whatever `INIT` returned in `A`. | Check the board, the name and `SERVICES`. A card from an older TEC-OS needs the steps in Chapter 5, and its `PICO.SVC` line can go. | [Chapter 21](21-startup.md#the-quiet-rule), [Chapter 20](20-hardware-services-and-service-loader.md#a-failed-load), `src/loader.asm:515-530`, `src/loader.asm:97-127`, `src/loader.asm:272-274`, `src/cpm/ccp.asm:288-296`, `src/services.asm:368-380`, `drivers/glcd.asm:38-50` |
 | `UNLOAD` | No service is installed, or the newest can't be removed: its flags mark it as not removable, or its `REMOVE` returned carry. | Services go newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccpcmd.asm:8-10`, `src/loader.asm:61-71` |
-| `COPY` | A name is missing or has a wildcard, the destination is the source, or something follows the destination. | Name one source and a destination that differs, and nothing after it. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccpfile.asm:571-598` |
+| `COPY` | A name is missing or has a wildcard, the destination is the source or something follows the destination. | Name one source and a destination that differs, and nothing after it. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccpfile.asm:571-598` |
 | `ERA` | No name, more than one, or a bad name. | `ERA NAME`. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccpfile.asm:420-424` |
 | `REN` | The form isn't `NEW=OLD`, a name has a wildcard, a name is missing, or the names give two different drives. | `REN NEW=OLD`, with a drive on one name or the same drive on both. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccpfile.asm:473-507` |
 | `SAVE` | The count isn't a decimal number below 256, it reaches the page of the address at `0006h`, or the name is missing or has a wildcard. | `SAVE n NAME.COM`, with a smaller count. | [Chapter 3](03-command-line.md#save), `src/cpm/ccpcmd.asm:176-219` |

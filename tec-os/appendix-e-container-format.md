@@ -140,7 +140,7 @@ returns its code, which cold boot prints at the diagnostic prompt (Chapter
 | `21h` | The first 8 bytes are not `TECOSVOL` | `src/vol.asm:39-49` |
 | `22h` | The major version is not 1 | `src/vol.asm:51-54` |
 | `23h` | The header bytes are not 512, or the descriptor bytes not 32 | `src/vol.asm:56-67` |
-| `24h` | The number of volumes is 0, more than 8 on a 1.0 card, or more than 127 | `src/vol.asm:68-87` |
+| `24h` | The number of volumes is 0, more than 8 on a 1.0 card or more than 127 | `src/vol.asm:68-87` |
 | `25h` | The checksum differs | `src/vol.asm:90-94` |
 | `23h` | 1.1: the drives field is more than 4 | `src/vol.asm:108-112` |
 | `20h` | 1.1: a block of the table can't be read | `src/vol.asm:130-135` |

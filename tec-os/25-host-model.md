@@ -131,7 +131,7 @@ Two runs of `capture.mjs` on the board with only the graphics LCD show the two
 records apart, one printing the console and one the serial port. The console
 record has the whole boot and the `CON` command:
 
-<!-- node tools/capture.mjs --board glcd --screen CON -->
+<!-- node tools/capture.mjs --board glcd CON -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     

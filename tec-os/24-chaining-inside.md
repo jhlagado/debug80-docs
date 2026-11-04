@@ -22,7 +22,8 @@ the CCP's main loop, starting with where the line is kept and how the loop takes
 a piece. It then covers the test of the code at `:`, the paths that drop the
 rest of the line and function 47's checks and copy.
 
-The code is in `src/cpm/ccp.asm`, with function 47 and function 108 in
+The code is in `src/cpm/ccp.asm`, `src/cpm/ccpcmd.asm` and
+`src/cpm/ccpfile.asm`, with function 47 and function 108 in
 `src/cpm/bdos.asm` and the line's storage in `src/ram.asm`. Chapter 17
 describes the CCP's other routines named here, and Chapter 16 the BDOS's
 entry. `test/chain.test.mjs` checks these rules on the host model of Chapter
@@ -234,18 +235,21 @@ leaves the code at 0, including `COPY`'s `COPIED` line, which is printed through
 
 A line is dropped by setting `CHPOS` to 0. Besides the failed `:` above, the
 BDOS does it in `CHDROP`, which clears `CHPOS` and jumps to the warm boot
-through the RAM BIOS table (`src/cpm/bdos.asm:75-79`). Two kinds of event go
+through the RAM BIOS table (`src/cpm/bdos.asm:75-79`). Three kinds of event go
 through `CHDROP`:
 
 - `^C` while a line read with function 10 is empty. `LINABRT` prints `^C` and
   jumps to `CHDROP` (`src/cpm/bdos.asm:394-404`). The CCP calls function 10 only
   with `CHPOS` at 0, so at its own prompt no piece is left, and only a line that
   a program reads has anything to drop.
+- `^C` as the key that ends a `^S` pause during output. `CHKKEY` takes the
+  key after `^S` and jumps to `CHDROP` for `^C`, dropping any other
+  (`src/cpm/bdoscon.asm:199-214`).
 - A BDOS error in the default mode. Each cause loads its message and a code
   and goes to `BDERR`: `File R/O` from `ROTEST`, `R/O` from `CHKRO`, `Select`
   from `SELFAIL` and `Bad Sector` from `BADSECT` (`src/cpm/bdosfile.asm:253-261`,
   `src/cpm/bdoslog.asm:567-578`, `src/cpm/bdoscon.asm:21-23`). A failed read
-  of a directory record goes to `BADSECT` too (`src/cpm/bdosrec.asm:175`).
+  of a directory record goes to `BADSECT` too (`src/cpm/bdoslog.asm:29-30`, `src/cpm/bdoslog.asm:76-78`).
   `BDERR` reads `ERRMODE`, the mode BDOS function 45 sets. In the default
   mode `DISKMSG` prints `Bdos Err On`, the drive and the cause, a key is
   waited for and the routine jumps to `CHDROP` (`src/cpm/bdoscon.asm:25-41`,
