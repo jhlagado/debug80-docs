@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 16. The BDOS
 
-Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -17,7 +17,7 @@ A CP/M program puts a function number in `C` and an argument in `E` or `DE`,
 then calls `0005h`, as Chapter 6 describes. This chapter describes the BDOS
 from that entry: the function table, the console functions, the way a file's
 records are found and the allocation vectors with the scan at warm boot. It
-then covers the BDOS errors, the four functions whose meanings come from CP/M 3
+then covers the BDOS errors, the seven functions whose meanings come from CP/M 3
 and the differences from Digital Research's BDOS.
 
 ## The BDOS in the ROM
@@ -25,7 +25,7 @@ and the differences from Digital Research's BDOS.
 TEC-OS's BDOS comes from Portable CP/M, an implementation of the documented
 CP/M 2.2 interface that uses no Digital Research source
 (`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the ROM
-that Chapter 12 describes it runs from `E145h`, `BDOSBAS`, to `F011h`, 3,789
+that Chapter 12 describes it runs from `E6A1h`, `BDOSBAS`, to `F5BFh`, 3,871
 bytes. Its table of functions and its error messages are in the
 ROM's data block (`src/tables.asm:62-73`, `src/text.asm:55-60`). None of it can be patched.
 
@@ -64,9 +64,9 @@ to `BENTRY` (`src/cpm/bdos.asm:81-127`).
 `BENTRY` saves the caller's stack pointer in `OLDSP`, moves to the BDOS's own
 stack and keeps `DE` in `PARAM` (`src/cpm/bdos.asm:82-84`). Every function, and
 every BIOS call it makes, runs on that stack, so the caller's stack holds only
-the return address of its `CALL`. `BENTRY` then tests for four functions by
-number, 108, 47, 45 and 48 (`src/cpm/bdos.asm:85-97`). Any other number of 41 or more
-returns 0 at once (`src/cpm/bdos.asm:100-101`).
+the return address of its `CALL`. `BENTRY` then tests for seven functions by
+number, 108, 47, 44, 45, 46, 48 and 99 (`src/cpm/bdos.asm:85-99`). Any other
+number of 41 or more returns 0 at once (`src/cpm/bdos.asm:100-101`).
 
 A function from 0 to 40 is found in `FNTAB`, a table of 41 words, one routine
 each (`src/tables.asm:65-72`, `src/cpm/bdos.asm:102-109`). Functions 38 and 39,
@@ -164,11 +164,11 @@ At the prompt, a `^U` partway through `TYPE X` starts the line again, and a
 A>TYPE X#
 DIR *.CMD
 STARTUP.CMD 
-1 file, 978K free
+1 file, 980K free
 A>DIR *.CMD#
 DIR *.CMD
 STARTUP.CMD 
-1 file, 978K free
+1 file, 980K free
 A>
 ```
 
@@ -180,7 +180,7 @@ typed:
 ```text
 A>TYPEEPYTDIR *.CMD
 STARTUP.CMD 
-1 file, 978K free
+1 file, 980K free
 A>
 ```
 
@@ -501,7 +501,7 @@ success, with nothing written, as CP/M 2.2's close does
 (`src/cpm/bdos.asm:599-606`). A warm boot clears the vector, and the drive's
 next selection sets the bit again.
 
-## Functions 108, 47, 45 and 48
+## Functions 108, 47, 45, 48, 44, 46 and 99
 
 Function 108 is CP/M 3's program return code (`src/cpm/bdos.asm:166-178`).
 With `DE` = `FFFFh` it returns the code in `HL`, and with any other `DE` it sets
@@ -545,6 +545,21 @@ CP/M 3's `E` = `FFh`, which also purges the buffers, gives the same flush,
 since a clean line holds nothing that the card lacks. Chapter 19
 describes the flush.
 
+Function 44 is CP/M 3's multi-sector count. TEC-OS reads and writes one
+record a call, so a count of 1 succeeds and returns 0, and any other count
+returns `A` = `FFh` with nothing changed (`src/cpm/bdos.asm:129-136`).
+Function 99 is CP/M 3's truncate, which TEC-OS doesn't have. It returns
+`A` = `FFh` at once with nothing changed, through the same exit as a refused
+chain (`src/cpm/bdos.asm:63-64`, `src/cpm/bdos.asm:98-99`).
+
+Function 46 is CP/M 3's free space. It selects drive `E`, 0 for A, as an FCB's
+drive is selected, so a drive past D or with no volume is the `Select` error
+and the default drive stays as it was. It counts the clear bits of the drive's
+allocation vector, turns the free blocks into records by shifting them left by
+`BSH` and puts the count in the three bytes at the DMA address, low byte first
+(`src/cpm/bdos.asm:1439-1481`). The CCP's `DIR` takes its free space from this
+function (Chapter 17).
+
 ## Differences from Digital Research's BDOS
 
 TEC-OS's BDOS has the interface of CP/M 2.2, and function 12 returns `22h`
@@ -553,8 +568,8 @@ Research shipped are these:
 
 - It is in ROM (`src/rom.asm:26-27`). A write to the BDOS's code changes
   nothing, and a hook goes in the RAM BIOS table.
-- Functions 45, 47, 48 and 108 have meanings that come from CP/M 3, and every
-  other function above 40 returns 0.
+- Functions 44, 45, 46, 47, 48, 99 and 108 have meanings that come from
+  CP/M 3, and every other function above 40 returns 0.
 - A key after `^S` resumes the output and is discarded, `^C` included. In
   Digital Research's BDOS a `^C` there ends the program.
 - The CCP's disk reset at warm boot keeps each drive whose vector is
