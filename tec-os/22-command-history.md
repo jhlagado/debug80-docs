@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 22. Command history
 
-Checked against TEC-OS 5a25178, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 58d4345, with the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -32,13 +32,12 @@ its reply:
 <!-- node tools/capture.mjs --board pico --screen CON "TYPE STARTUP.CMD" "@start "$'\x17\x17' -->
 ```text
 A>CON
-CON: CRT: PICO9918
+CON: CRT:
 A>TYPE STARTUP.CMD
-PICO.SVC
 GLCD.SVC
 
 A>CON
-CON: CRT: PICO9918
+CON: CRT:
 A>
 ```
 
@@ -56,11 +55,11 @@ and `CMD` was typed in their place:
 <!-- node tools/capture.mjs --board pico --screen "DIR *.SVC" "@start "$'\x17\x08\x08\x08CMD' -->
 ```text
 A>DIR *.SVC
-PICO.SVC     GLCD.SVC
-2 files, 978K free
+GLCD.SVC
+1 file, 980K free
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 978K free
+1 file, 980K free
 A>
 ```
 
@@ -72,10 +71,10 @@ printed the prompt again:
 <!-- node tools/capture.mjs --board pico --screen CON "DIR *.CMD" "@start "$'\x17\x17\x0e\x0e' -->
 ```text
 A>CON
-CON: CRT: PICO9918
+CON: CRT:
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 978K free
+1 file, 980K free
 A>
 A>
 ```
@@ -139,9 +138,9 @@ line comes back as it was typed:
 <!-- node tools/capture.mjs --board pico --screen con "@start "$'\x17' -->
 ```text
 A>con
-CON: CRT: PICO9918
+CON: CRT:
 A>con
-CON: CRT: PICO9918
+CON: CRT:
 A>
 ```
 
@@ -161,14 +160,14 @@ Here `CON` was typed twice and `DIR *.CMD` once. The ring holds two lines, so
 <!-- node tools/capture.mjs --board pico --screen CON CON "DIR *.CMD" "@start "$'\x17\x17\x17' -->
 ```text
 A>CON
-CON: CRT: PICO9918
+CON: CRT:
 A>CON
-CON: CRT: PICO9918
+CON: CRT:
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 978K free
+1 file, 980K free
 A>CON
-CON: CRT: PICO9918
+CON: CRT:
 A>
 ```
 
@@ -232,10 +231,10 @@ all keep it. Here `^C` at the prompt was followed by `^W`:
 <!-- node tools/capture.mjs CON "^C" "@start "$'\x17' -->
 ```text
 A>CON
-CON: TTY: serial terminal
+CON: TTY:
 A>^C
 A>CON
-CON: TTY: serial terminal
+CON: TTY:
 A>
 ```
 
@@ -251,17 +250,13 @@ this run, `^W` and Return gave an empty line:
 <!-- node tools/capture.mjs CON "@reset" "@start "$'\x17' -->
 ```text
 A>CON
-CON: TTY: serial terminal
+CON: TTY:
 A>
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.SVC
-PICO.SVC?
-
 A>GLCD.SVC
-GLCD.SVC?
 
 A>
 A>
