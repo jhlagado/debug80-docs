@@ -1,11 +1,15 @@
 # Terms of the TEC-OS book
 
-This list holds each term's one form, what it means, the chapter that explains
-it, and the variants that are correct because they name something else. A
-term means what the code at a chapter's commit makes it mean. A short form is the full
-form with a word left out, used once the full form has appeared in the chapter.
-Fenced blocks and captured output keep their own words, so the "program area"
-in the comments of `TOP` and `AREA` in Chapter 8 stays as it is.
+This list fixes the terms and distinctions used in the book. Source meanings
+follow the stated product revision. During KS47 the closed outline and
+movement units control teaching homes. The chapter credits below are retained
+from the earlier arrangement and still need complete reconciliation against
+the finished drafts. They are not evidence of first use in the new route.
+
+The corrections labelled here use inspected source at TEC-OS `ea3ef3d`.
+They do not qualify the future KS48 font/default source. A short form follows
+the full form within its chapter. Literal code and captured output retain
+their own words, including the historical TOP and AREA comments.
 
 ## Memory
 
@@ -37,7 +41,7 @@ in the comments of `TOP` and `AREA` in Chapter 8 stays as it is.
 | Form | Short form | Meaning | Explained in | Correct and distinct |
 | --- | --- | --- | --- | --- |
 | SD card | the card | The card in the board's SD card adaptor | Chapter 1 | video card: the PICO9918. A "card" in `tecvol` and the page is a card or its image. |
-| starter card | | The image `npm run media` builds, and a card holding it: seven files on drive A, `STARTUP.CMD`, `PICO.SVC`, `GLCD.SVC`, `MOUNT.COM`, `TAS.COM`, `TED.COM` and `SAMPLE.ASM`, and an empty drive B | Chapter 1 | |
+| starter card | | At `ea3ef3d`, the `npm run media` image and a card holding it: six files on A, `MOUNT.COM`, `GLCD.SVC`, `STARTUP.CMD`, `TED.COM`, `SAMPLE.ASM` and `TAS.COM`, with B empty | Chapter 1 | |
 | image | | A card image, in Chapters 1, 4 and F | Chapter 4 | ROM image (Chapter 1). A service's bytes after the header are its image (Chapter 12). |
 | container | | The header and the volumes on a card | Chapter 4 | |
 | volume | | One CP/M disk in the container | Chapter 1 | CP/M's word *disk* stays where CP/M is the subject: disk parameters, disk reset, the BIOS's disk entries |
@@ -77,7 +81,7 @@ in the comments of `TOP` and `AREA` in Chapter 8 stays as it is.
 | serial port | | The bit-banged port | Chapter 1 | serial line: the wire or signal |
 | display | | The PICO9918 or the graphics LCD | Chapter 1 | |
 | video console | | The console on a display | Chapter 2 | |
-| display driver | | The file that holds a display's console | Chapter 1 | |
+| display driver | | Code that handles a display's console. At `ea3ef3d` the PICO9918 console is in ROM and `GLCD.SVC` is loaded from the card | Chapter 1 | |
 | PICO9918 | the chip, in sections about claiming it | The video card | Chapter 1 | |
 | VRAM | | The PICO9918's video memory | Chapter 10 | |
 | graphics LCD | | The 128 × 64 LCD | Chapter 1 | `GLCD` in file names, symbols and messages |
@@ -110,13 +114,13 @@ in the comments of `TOP` and `AREA` in Chapter 8 stays as it is.
 
 | Form | Short form | Meaning | Explained in | Correct and distinct |
 | --- | --- | --- | --- | --- |
-| service | | What a `.SVC` file installs: code in pages below the BDOS, kept until a reset or `UNLOAD` | Chapter 6, in full 10 and 20 | numbered service, a call in the ROM. `SERVICES`, the built-in that lists loaded services. |
+| service | | What a `.SVC` file installs: code in allocated resident RAM pages, kept until a reset or successful removal | Chapter 6, in full 10 and 20 | numbered service, a call in the ROM. `SERVICES`, the built-in that lists loaded services. |
 | library | | A service that provides routines for programs | Chapter 6, again in 10 | |
 | driver | | A service that drives hardware | Chapter 6 | display driver, one that holds a display's console. The SD card driver and the hardware drivers of Chapter 16 are code in the ROM. |
 | record, of a service | | What a service publishes in the registry | Chapter 6, in full 10 | CP/M's record of 128 bytes |
-| numbered service | | A call in the ROM through `ABICALL`, by its number in `C`, 0 to 14 | Chapter 10, in full B | a service, which is loaded from the card |
-| hardware service | | Numbered services 0 to 8, in `src/services.asm` | Chapter 1 by name, in full 9, 20 and B | the volume services, 9 to 11, the display drivers' service, 12, and the registry's, 13 and 14 |
-| volume services | | Numbered services 9 to 11, `MOUNT`, `UNMNT` and `DESC`, in `src/vol.asm` | Chapter 17 | `MOUNT`, the program and the ROM routine |
+| numbered service | | A call in the ROM through `ABICALL`, selected by `C`, 0 to 15 at `ea3ef3d` | Chapter 10, in full B | a service, which is loaded from the card |
+| hardware service | | Numbered services 0 to 8, in `src/services.asm` | Chapter 1 by name, in full 9, 20 and B | volume services 9 to 11, display-driver service 12, registry services 13 and 14 and font service 15 |
+| volume services | | Numbered services 9 to 11, `MOUNT`, `UNMNT` and `DESC`, in `src/volsvc.asm` | Chapter 17 | `MOUNT`, the program and the ROM routine |
 | ROM table | | The ROM's table at `C003h`: `TNA`, the version and the jump `ABICALL` | Chapter 1 by name, in full 9 | RAM BIOS table, the copy at `BF00h` |
 | stub | | The BDOS entry jump directly below the allocation vectors, at `STUBAD`, which `(0006h)` addresses when no service is in | Chapter 23 | a service's entry at `xx00h`, which `(0006h)` addresses when a service is in |
 
@@ -180,7 +184,7 @@ A *service* is what a `.SVC` file installs. A *library* is a service that
 provides routines for programs, and a *driver* is a service that drives
 hardware. What a service publishes in the registry is a *record*. The calls
 through `ABICALL` are *numbered services*. Numbers 0 to 8 are the *hardware
-services*, and 9 to 11 are the *volume services*. The table at `C003h`
+services* and 9 to 11 are the *volume services*. Number 15 is the font service. The table at `C003h`
 is the *ROM table*. *Service resident memory* is the pages services hold.
 
 `.DRV` names appear only where the text is about an old card, as in Chapters
@@ -189,3 +193,17 @@ disk drives. The SD card driver
 and the hardware drivers of Chapter 16 are code in the ROM, so *driver* there
 has its older sense. "Registry's records" and "service's records" are in use,
 and every 128-byte record is CP/M's. A JavaScript module is a module.
+
+## KS47 source corrections and remaining glossary work
+
+At `ea3ef3d`, `tools/media.mjs:27-29,193-203` and
+`tools/lib/starter.mjs:10-17` give the six starter files. There is no
+PICO.SVC component. The console definition therefore distinguishes the ROM
+PICO driver from the loaded GLCD driver. `src/abi.inc:163-170` names FONT
+as15 and TNCOUNT as16. The volume-service code is in volsvc.asm, separate
+from the container mount in vol.asm. These corrections change no product.
+
+Reconcile every teaching credit and distinct-use chapter reference after the
+assigned drafts exist. In particular, do not use the old memory/FCB chapter
+credits to reintroduce implementation in the opening. Recheck every term
+against the adopted source and finished reader route before glossary closure.
