@@ -11,8 +11,8 @@ book971ce6c. Its LF fence body is 589 bytes with SHA-256
 `3fdb415da9cceb855a30e187291cf3976ab62811f36d311c847bab248cd9fcda`. It is the retained historical
 READ example, not a newly measured binary.
 
-The LF candidate below is 552 bytes with SHA-256
-`6bf3122cd1e5856a566c40875e7a7af4091dcb6ba2e2bd1a11e6101eb8082e03`.
+The LF candidate below is 581 bytes with SHA-256
+`87a5f62a21ee3c54e4a2ba72b9188587bc5252c324ef11be2481aac04e98b6e3`.
 
 ```asm
 ; READ: open the file named on the
@@ -31,7 +31,7 @@ FCB equ $005C    ; command-line name
   ld c,15        ; open the file
   call BDOS
   inc a          ; FFh becomes zero
-  ret z
+  ret z          ; No matching file.
 
 NEXT:
   ld de,FCB
@@ -74,3 +74,13 @@ agency and punctuation. No product import, assembler, build, emulator, test
 or capture tool ran. Only inert text extraction and hashing prepared this
 candidate. Independent static review and a separately reviewed allocated
 execution packet remain required before reader insertion.
+
+## Independent static review correction
+
+The full independent review confirmed statement, comment and identity
+preservation, layout, include closure and the unperformed-proof boundary.
+It found comment density below the inherited40-percent floor. Added a
+meaningful ret-z branch comment identifying the missing-file result and
+recomputed the candidate text identity above. Five of11 executable lines
+and six of14 statements now have inline comments. No code changes.
+Bounded confirmation remains pending. No assembly or execution occurred.
