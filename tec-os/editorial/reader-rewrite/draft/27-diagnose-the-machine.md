@@ -15,10 +15,10 @@ nav_group: "Part II: Inside TEC-OS"
      captures and model report remain evidence from 78127ec, not new results.
      The earlier C16 partial citation pass used fe2097f; it did not rerun them. -->
 
-A card failure can stop TEC-OS before the first prompt. The error code and
+A card failure can stop TEC-OS before the first command prompt. The error code and
 `R retry>` let you correct the card and try mounting it again. A separate
 diagnostics ROM tests the board's memory and devices and prints a serial
-report. Each check covers a particular behaviour. Model results remain separate
+report. Each check covers a particular behaviour. Host model results remain separate
 from observations on a physical board.
 
 ## The diagnostic prompt
@@ -76,7 +76,7 @@ and retry. `RSLCAP` copies the drive table before the cold clears.
 `RSLBUF`, its scratch buffer, is at `0100h` in fixed RAM
 (`src/boot.asm:59-69`, `296-303`, `src/layout.asm:166-174`). That buffer
 survives the route to `DIAG`: `MEMINIT` clears EXPAND 1 and the mount uses a
-cache line there for table reads (`src/boot.asm:100-102`, `321-346`,
+line in the block cache there for table reads (`src/boot.asm:100-102`, `321-346`,
 `src/vol.asm:44-65`). [Chapter 15](15-reset-and-boot.md#retained-drive-selection)
 explains recognition and reselection.
 
@@ -126,9 +126,9 @@ and compares it with the stored word (`tools/diag.mjs:127-130`,
 
 Before writing the image, the build checks its entry points and reserved
 areas. RESET must be at `C000h`, INT38 at `C038h` and NMIROM at `C066h`.
-COLD and START must be within the first 2 KiB, visible through the reset
+COLD and START must be within the first 2 KiB, visible through the boot
 overlay. CODEEND may reach the image ID's address but must not exceed it.
-Variables must end by `7F00h`. The NMI handler copied to `0066h` must fit
+Variables must end by `7F00h`. The non-maskable interrupt (NMI) handler copied to `0066h` must fit
 within `38h` bytes (`tools/diag.mjs:115-123`).
 
 At reset, the board maps the first 2 KiB of ROM at `0000h`. The reset code
@@ -405,7 +405,7 @@ return address there (`diag/memory.asm:99-107`, `347-372`,
 `diag/misc.asm:587-607`). The counter handler normally preserves registers
 and uses RETN
 (`diag/main.asm:125-145`). Overwritten code or a lost return address
-prevents that normal path. TEC-OS itself installs no NMI handler and uses `0066h` within its default FCB area. Its normal setup
+prevents that normal path. TEC-OS itself installs no NMI handler and uses `0066h` within its default file control block (FCB) area. Its normal setup
 has the keypad NMI jumper off (`src/boot.asm:62-69`, `454-509`,
 `src/cpm/ccp.asm:22-23`), as [Appendix
 G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi) explains.

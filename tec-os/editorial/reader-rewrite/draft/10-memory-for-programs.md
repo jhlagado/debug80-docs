@@ -30,9 +30,9 @@ socket U9. Only half of U9 appears in the Z80's address space at once:
 | `8000h–BFFFh` | 16 KiB | EXPAND 0 or EXPAND 1, the two halves of the RAM in socket U9 |
 | `C000h–FFFFh` | 16 KiB | the TEC-OS ROM |
 
-Bit 2 of the system latch at port `FFh` selects the half in that window. EXPAND
+Bit 2 of the system latch at port `FFh` selects the half in that bank window. EXPAND
 0 is selected when a program starts. That gives 48 KiB of addressable RAM below
-the ROM. EXPAND 1 holds the cache and command history. Switching it into view
+the ROM. EXPAND 1 holds the block cache and command history. Switching it into view
 removes EXPAND 0's contents from the same addresses.
 
 Page zero occupies `0000h–00FFh` and contains the CP/M jumps and buffers. The
@@ -41,7 +41,7 @@ address stored in the jump at `0005h`, read as a word at `0006h`. That address
 is the first byte outside the TPA. Your final usable byte is one below it.
 
 Above the TPA are resident services, if any, the BDOS entry stub, the drives'
-allocation vectors and TEC-OS's workspace. That workspace holds state and stacks
+allocation vectors and TEC-OS's resident workspace. That workspace holds state and stacks
 for the BIOS, CCP and BDOS. The RAM BIOS jump table is at `BF00h`. A write into
 resident memory can corrupt file allocation or crash the machine.
 
@@ -180,7 +180,7 @@ in Chapter 5:
 A drive's allocation vector holds one bit per allocation block. A set bit marks
 allocated storage. The BDOS can locate free blocks through it without reading
 the directory. A G1M vector occupies 64 bytes and a G8M vector 256 bytes. The
-vectors lie directly below the workspace, with the BDOS stub below them.
+vectors lie directly below the workspace, with the stub below them.
 Reserving vectors therefore reduces program space. Chapter 17 explains how the
 card's drive count controls those reservations.
 
@@ -273,7 +273,7 @@ below the word at `0006h`.
 
 ## Page zero and the program's arguments
 
-Chapter 9 used page zero's default FCB and command-tail buffer. Page zero also
+Chapter 9 used page zero's default file control block (FCB) and command-tail buffer. Page zero also
 holds the return vectors, console selection and BIOS scratch:
 
 | Addresses | Contents |
@@ -292,8 +292,8 @@ holds the return vectors, console selection and BIOS scratch:
 | `0080h–00FFh` | Command tail, then the default DMA buffer |
 
 The CCP stores the current drive and user area at `0004h` before program
-entry. Warm boot uses that byte to restore the selection, so a program that
-changes it changes the drive and user area used on exit. An unavailable drive
+entry. Warm boot uses that byte to restore the selection, so changing that
+byte changes the selection used on exit. An unavailable drive
 falls back to A (`src/cpm/ccp.asm:363-384`, `src/cpm/ccp.asm:32-102`).
 
 The tail's first byte is its length and the characters follow it. They are in
@@ -372,7 +372,7 @@ enable them. TEC-OS temporarily disables them for card-block I/O, serial-byte
 transfers, PICO9918 control-port byte pairs and command-history access. It then
 restores the previous state.
 
-The NMI entry at `0066h` lies inside the default FCB. With the keypad NMI jumper
+The non-maskable interrupt (NMI) entry at `0066h` lies inside the default FCB. With the keypad NMI jumper
 fitted, a hex-keypad press can execute the FCB's bytes as instructions. The
 supported setup keeps that jumper off. Appendix G explains the wiring and the
 difference between maskable interrupts and NMI.

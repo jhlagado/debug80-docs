@@ -704,7 +704,7 @@ claim. When no PICO9918 answered at cold boot, both valid modes return status 2.
 
 While the PICO is claimed, console output to it is discarded. The terminal also
 suppresses its cursor and page flips. The program can set a graphics mode and
-use the chip's VRAM, its video memory, through data port `BEh` and control port
+use the chip's video memory (VRAM) through data port `BEh` and control port
 `BFh`. Messages intended for the PICO must be printed before the claim or after
 release. The separate character LCD remains available during the graphics work.
 

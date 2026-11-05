@@ -16,7 +16,7 @@ and failure results in the numbered entry. TEC-OS implements the CP/M 2.2
 interface with selected additions numbered 44 to 48, 99 and 108. Those
 additions do not establish general CP/M 3 compatibility. Unsupported calls
 are listed at the end. [Chapter 19](19-a-file-through-the-bdos.md) explains
-the file machinery behind these contracts.
+the file machinery behind these contracts and the file control block (FCB).
 
 | `C` | Name | In | Out |
 | ---: | --- | --- | --- |

@@ -21,7 +21,7 @@ pairs the historical `78127ec` map with the source contracts for each region.
 The address tables retain the `tecos` build at `78127ec`, whose ROM SHA-256 is
 `8cad40923ce1c3c6079d3201a1a8cc294dbe501838ed54505ca12287672f8b9f`.
 Its single profile was `tecos`. The starter card mounted G1M on A and G8M on B
-with no service installed unless a row says otherwise. The workspace addresses
+with no service installed unless a row says otherwise. The resident workspace addresses
 came from `build/tecos/tecos.d8.json`.
 
 Current field meanings and code contracts below use `ea3ef3d`. Later builds
@@ -46,7 +46,7 @@ The historical `78127ec` starter layout with EXPAND 0 selected was:
 | Addresses | Contents |
 | --- | --- |
 | `0000h–00FFh` | Page zero |
-| `0100h–B9A3h` | TPA, 47,268 bytes |
+| `0100h–B9A3h` | Transient program area (TPA), 47,268 bytes |
 | `B9A4h–BFFFh` | BDOS entry jump and resident workspace in EXPAND 0 |
 | `C000h–FFFFh` | ROM |
 
@@ -59,7 +59,7 @@ value afterwards (`ea3ef3d:src/layout.asm:26-45`,
 its resident stack (`ea3ef3d:src/boot.asm:178-185`).
 
 The word at `0006h` is the exclusive top of the TPA. Without a resident
-service it points to a three-byte BDOS entry jump below the allocation
+service it points to a three-byte BDOS entry stub below the allocation
 vectors. `ALVINIT` packs those vectors down from `WSBASE` and reserves the
 jump below the lowest vector (`ea3ef3d:src/boot.asm:695-800`). A format 1.1
 card with a nonzero drive count reserves 256 bytes for each requested drive.
@@ -115,11 +115,11 @@ These fixed addresses identify the current page-zero contracts
 | `0040h` | `LATCHV`, the system latch shadow |
 | `0041h–004Fh` | Unused |
 | `0050h` | Load-drive byte. 0 means current drive, 1 means A and so on |
-| `005Ch` | First default FCB |
+| `005Ch` | First default file control block (FCB) |
 | `006Ch` | Second FCB, overlapping the first FCB's last 20 bytes |
 | `0080h–00FFh` | Command tail and default DMA buffer |
 
-Cold boot clears page zero. `PZINIT` writes the entry jumps and BDOS stub
+Cold boot clears page zero. `PZINIT` writes the entry jumps and stub
 at cold boot's end and on each warm boot. It leaves `0003h` and `0004h`
 unchanged (`ea3ef3d:src/boot.asm:62-70`, `ea3ef3d:src/boot.asm:157-199`,
 `ea3ef3d:src/boot.asm:412-434`). The restart sweep preserves the three
@@ -135,7 +135,7 @@ hook still targets them, so failure alone does not imply slot release
 (`ea3ef3d:src/loader.asm:128-173`, `ea3ef3d:src/loader.asm:536-580`,
 `ea3ef3d:src/loader.asm:634-662`).
 
-The CCP records the drive/user byte for its prompt. Before program launch it
+The CCP records the drive/user byte for its command prompt. Before program launch it
 writes both FCBs, then the command tail and default DMA address, then the
 load-drive byte (`ea3ef3d:src/cpm/ccp.asm:363-384`,
 `ea3ef3d:src/cpm/ccpcmd.asm:447-497`, `ea3ef3d:src/cpm/ccp.asm:519-536`).

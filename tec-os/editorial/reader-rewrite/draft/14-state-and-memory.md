@@ -11,7 +11,7 @@ nav_group: "Part II: Inside TEC-OS"
      This is not final artifact qualification. Address examples and measured stack
      figures explicitly labelled 78127ec retain that historical provenance. -->
 
-A program ends and the prompt returns. The next program has a fresh BDOS
+A program ends and the command prompt returns. The next program has a fresh BDOS
 workspace while your command history and installed services remain in RAM.
 A reset clears much more RAM. The difference comes from the addresses the
 boot routines clear and the state they rebuild afterwards.
@@ -21,15 +21,15 @@ The BIOS operates the board for them. Their code is in ROM while their changing
 state is in RAM. The numbered ROM services also provide access to the board's
 own devices, including the digits, 20 × 4 character LCD and speaker. Console output
 can go to serial, the PICO9918 or the graphics LCD. The SD container holds several volumes. The separate expansion
-bank holds the disk cache and command history so those buffers occupy none
-of the program area (`ea3ef3d:src/rom.asm:17-44`,
+bank holds the block cache and command history so those buffers occupy none
+of the transient program area (TPA) (`ea3ef3d:src/rom.asm:17-44`,
 `ea3ef3d:src/layout.asm:104-115`, `ea3ef3d:format/format.json:20-25`, `ea3ef3d:src/services.asm:1-25`, `ea3ef3d:src/abi.inc:64-88`).
 
 ## Two banks at the same addresses
 
 The Z80 can address 64 KiB at once. The TEC-1G's fixed RAM occupies
 `0000h–7FFFh` and the ROM occupies `C000h–FFFFh`. Between them
-`8000h–BFFFh` is a 16 KiB window onto either half of the RAM in U9.
+`8000h–BFFFh` is a 16 KiB bank window onto either half of the RAM in U9.
 The two halves are EXPAND 0 and EXPAND 1. Selecting a bank changes the
 bytes visible at those addresses (`ea3ef3d:src/layout.asm:3-9`,
 `ea3ef3d:src/layout.asm:39-40`).
@@ -75,7 +75,7 @@ the boot code rather than bytes loaded from the ROM image
 
 Cold boot clears the workspace from `WSBASE` to `WSEND`. Warm boot clears
 a shorter span, from `CCPCLR` through the end of the BDOS block.
-The CCP's two FCBs and command buffer lie below that span.
+The CCP's two file control blocks (FCBs) and command buffer lie below that span.
 Its parser scratch and stack lie inside it, as does the whole BDOS block.
 The unexecuted command text therefore remains available across an ordinary exit
 while the next program starts with fresh BDOS state
@@ -166,11 +166,11 @@ receive slots. Each slot is sized from its volume's `DSM`.
 `DRVSLOT` records 0 for no slot, 1 for 64 bytes and 2 for 256.
 A later mount must fit the slot allocated at cold boot.
 The starter card's G1M on A and G8M on B therefore need 320 bytes.
-Four G8M-sized slots need 1,024 bytes and reduce the program area by
+Four G8M-sized slots need 1,024 bytes and reduce the TPA by
 another 704 bytes (`ea3ef3d:src/boot.asm:727-799`,
 `ea3ef3d:src/volsvc.asm:295-315`).
 
-`ALVINIT` reserves three more bytes directly below the lowest vector.
+`ALVINIT` reserves three more bytes for the BDOS entry stub directly below the lowest vector.
 `STUBAD` stores that address and `PZINIT` writes `JP BENTRY` there.
 With no resident service, `PZTOP` is the stub address.
 The word at `0006h` contains that same top-of-TPA value.
@@ -281,7 +281,7 @@ establishes the test's scope, not a fresh passing result
 `ea3ef3d:test/stacks.test.mjs:43-78`,
 `ea3ef3d:test/stacks.test.mjs:212-264`).
 
-The test presses a keypad NMI only at a new stack depth where `0066h`
+The test triggers a keypad non-maskable interrupt (NMI) only at a new stack depth where `0066h`
 contains `RETN`. The quoted depths exclude an NMI frame because TEC-OS installs
 no handler there. A keypad interrupt normally enters inside the
 default FCB at `005Ch`. The required disabled keypad NMI jumper prevents

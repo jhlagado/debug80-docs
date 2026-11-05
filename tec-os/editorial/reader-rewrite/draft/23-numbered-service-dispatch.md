@@ -23,7 +23,7 @@ buffer.
 
 `ABICALL` is the jump at `C008h` to `SVCDSP`. It is the last three bytes
 of the eight-byte ROM table. The preceding bytes are the signature `TNA`
-and ABI major and minor versions 5 and 1 (`src/abi.asm:12-20`,
+and application binary interface (ABI) major and minor versions 5 and 1 (`src/abi.asm:12-20`,
 `src/abi.inc:17-33`). You supply the service number in `C` and arguments
 in `B`, `DE` and `HL`. `A` is never an argument so the dispatcher can use
 it and the flags before saving a register (`src/abi.inc:35-58`).
@@ -98,7 +98,7 @@ These are retained build figures, separate from the source checks at
 with `VCLAIM` for the result in `B`, loads `ROMVER` into `DE` and reads
 the adjacent `VWID` and `VHGT` bytes into `L` and `H`
 (`src/services.asm:95-105`, `src/ram.asm:438-439`). In the historical
-`78127ec` workspace those dimensions were at `BFEAh` and `BFEBh`, near its
+`78127ec` resident workspace those dimensions were at `BFEAh` and `BFEBh`, near its
 upper end (`78127ec:src/ram.asm:281-282`).
 
 The device bits and claim bit have different lifetimes. Cold boot calls
@@ -196,7 +196,7 @@ at cold boot.
 
 ## Display claims and positioned text
 
-A program can change the PICO9918's mode and VRAM while the console is
+A program can change the PICO9918's mode and video memory (VRAM) while the console is
 configured to use it. `VIDEO` records the claim that prevents console
 drawing during that interval. It validates `B` as 0 or 1 before changing
 anything, then requires `CDTMS` in `CONDEV`. Invalid modes return status 1
@@ -222,7 +222,7 @@ The restore routine reinstates the mode, font and displayed page. Release
 also clears the screen and homes the cursor when the PICO9918 is the
 console (`src/pico.asm:247-331`, `src/services.asm:269-279`). Warm boot
 calls `HWVREL` before `PZINIT`. With the ROM console's table present,
-that restore disables the chip's interrupt, wired as an NMI on the board,
+that restore disables the chip's interrupt, wired as a non-maskable interrupt (NMI) on the board,
 before page zero is rebuilt (`src/boot.asm:185-195`,
 `src/pico.asm:258-278`, `src/pico.asm:677-679`).
 A program's claim ends with its exit.

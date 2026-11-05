@@ -62,7 +62,7 @@ for pagination regardless of the terminal window size.
 There is no hardware receive buffer on the board. Input is caught only while
 TEC-OS polls the serial line. It polls while waiting for a key and briefly
 during ordinary text output. Keys typed by hand at the prompt are caught.
-Pasting text or typing ahead of a busy program can lose characters. A model's
+Pasting text or typing ahead of a busy program can lose characters. A host model's
 queued input does not establish that the physical board can receive a paste.
 
 ## Moving between displays

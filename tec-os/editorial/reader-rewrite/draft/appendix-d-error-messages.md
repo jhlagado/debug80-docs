@@ -15,7 +15,7 @@ nav_group: "Appendices"
 
 An error message identifies the operation that stopped and the recovery still
 available. The tables follow cold boot, the diagnostic prompt, the LCD,
-the command processor and the BDOS, then cache failures and `MOUNT`.
+the command processor and the BDOS, then failures in the block cache and `MOUNT`.
 Ordinary status lines have a separate table at the end.
 
 In a message `d` stands for a drive letter, `n` for a decimal number, `NAME`
@@ -32,7 +32,7 @@ display or on the LCD.
 
 | Message | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| `TEC-OS needs 64K RAM` | The window at `8000h–BFFFh` failed the RAM patterns, or the bank probe did not find EXPAND 1 behind it. | Fit the required 32 KiB RAM chip in U9 and check the configuration, then reset. | [Appendix G](appendix-g-tec-1g.md), `src/boot.asm:579-632`, `src/text.asm:10` |
+| `TEC-OS needs 64K RAM` | The bank window at `8000h–BFFFh` failed the RAM patterns, or the bank probe did not find EXPAND 1 behind it. | Fit the required 32 KiB RAM chip in U9 and check the configuration, then reset. | [Appendix G](appendix-g-tec-1g.md), `src/boot.asm:579-632`, `src/text.asm:10` |
 
 ## The diagnostic prompt
 
@@ -150,7 +150,7 @@ explains the code.
 | `NO SOURCE` | `COPY` did not find its source in the current user area on the specified drive. No destination has changed. | Check the name, drive and user area. | [Chapter 3](03-work-with-files.md), `src/cpm/ccpmut.asm:296-306`, `src/text.asm:34-35` |
 | `CANNOT MAKE DEST` | `COPY` could not allocate the destination's directory entry. An old destination has already been erased. | Free directory space or copy to another drive. | `src/cpm/ccpmut.asm:307-317`, `src/text.asm:36-37` |
 | `WRITE ERROR` | `COPY` received a nonzero sequential-write result, such as no free block or no entry for the next extent. It attempts to close the destination before printing this message. That close can also fail. A successful close preserves the records already copied. | Inspect or erase the partial destination, free space and copy again. | `src/cpm/ccpmut.asm:324-338`, `370-381`, `src/cpm/bdosrec.asm:119-175`, `src/text.asm:38-39` |
-| `CLOSE ERROR` | After reading the source, `COPY` received `FFh` from close because no directory entry matched the destination FCB. A fatal disk error aborts through the BDOS instead. | Inspect the destination and repeat the copy after correcting the cause. | `src/cpm/ccpmut.asm:347-353`, `src/cpm/bdosfile.asm:289-339`, `src/text.asm:40-41` |
+| `CLOSE ERROR` | After reading the source, `COPY` received `FFh` from close because no directory entry matched the destination file control block (FCB). A fatal disk error aborts through the BDOS instead. | Inspect the destination and repeat the copy after correcting the cause. | `src/cpm/ccpmut.asm:347-353`, `src/cpm/bdosfile.asm:289-339`, `src/text.asm:40-41` |
 
 The retained `bd15528` account records `CLOSE ERROR` from a host-model run
 that altered the destination's name in the FCB. It is not a newly reproduced
@@ -177,7 +177,7 @@ service gives a distinct cause.
 | `NAME.SVC` | The file is missing or its load returns a failure before installation. A default-mode BDOS disk error instead prints its disk message and aborts through `CHDROP`. | Check the name, drive and card. Services have no area-0 or drive-A lookup fallback. | [Chapter 24](24-loading-and-removing-services.md), `src/loader.asm:925-933`, `src/cpm/ccp.asm:451-481`, `src/cpm/bdoscon.asm:47-72` |
 | `NAME.SVC` | The file lacks the service magic or format 4 or fails another loader check before `INIT`, such as size, entry, space, dependency, relocation or stack checks. A format-4 file is not rejected merely for its former `.DRV` type. | Use a matching service file. See the old-card procedure before replacing a whole card. | `src/loader.asm:189-322`, `324-390`, `src/abi.inc:190` |
 | `NAME.SVC` | `INIT` returned carry. Failed cleanup can retain reserved pages without published records. | Check the board and `SERVICES` before retrying. | `src/loader.asm:445-455`, `536-587` |
-| `GLCD.SVC` | Its controller did not respond, the Matrix switch disabled the keyboard, the UC1 table is occupied or the ROM predates ABI 5.1. These are INIT failures, not an exhaustive list of load failures. | Check the configuration and `SERVICES`. | `drivers/glcd.asm:66-88`, `src/services.asm:618-658`, `src/video.asm:150-182` |
+| `GLCD.SVC` | Its controller did not respond, the Matrix switch disabled the keyboard, the UC1 table is occupied or the ROM predates application binary interface (ABI) 5.1. These are INIT failures, not an exhaustive list of load failures. | Check the configuration and `SERVICES`. | `drivers/glcd.asm:66-88`, `src/services.asm:618-658`, `src/video.asm:150-182` |
 | `PICO.SVC` | An old driver passed a CRT table to `DRVR`, which accepts only UC1. | Remove its startup line. The ROM supplies the PICO console. | `src/services.asm:618-627` |
 | `NAME.SVC` | Record validation failed after successful `INIT`. The status is cleared so startup also prints the name regardless of INIT's returned `A`. | Check `SERVICES`. The cleanup outcome determines whether pages remain reserved. | `src/loader.asm:458-587` |
 | `UNLOAD` | The newest service cannot be removed or none exists. Reasons include an active INIT/REMOVE, a mismatched top, a non-removable flag or carry from REMOVE. | Remove services newest first and investigate the retained service. | [Chapter 4](04-drives-and-user-areas.md), `src/cpm/ccpcmd.asm:14-18`, `src/loader.asm:128-153` |

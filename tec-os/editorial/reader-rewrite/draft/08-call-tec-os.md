@@ -118,7 +118,7 @@ followed by the space for input. The returned count defines the text's
 length so it is not automatically a function-9 string.
 
 Save this program as `B:LINE.ASM`. It reads a line, prints a fixed
-acknowledgement and returns to the prompt:
+acknowledgement and returns to the command prompt:
 
 ```asm
 BDOS equ $0005
@@ -261,6 +261,6 @@ disk errors and returned error modes alongside file calls.
 Warm boot rebuilds the jumps at the bottom of memory and restarts the CCP.
 Services remain installed and the selected console stays in use. Pending
 card writes are flushed before the next load. A successful flush puts them
-on the card while a failure drops the failed cache lines and reports
+on the card while a failure drops the failed lines in the block cache and reports
 `Write lost`. Chapter 15 explains the full warm-boot sequence.
 

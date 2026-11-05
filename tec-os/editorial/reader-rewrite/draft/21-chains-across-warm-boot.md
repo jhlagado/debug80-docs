@@ -21,7 +21,7 @@ use.
 
 Warm boot calls `CPMINIT` to clear the CCP's scratch space and the BDOS's
 state. The clear begins at `CCPCLR` and stops before `BDOSRME`. The command
-buffer lies below that range, together with the two FCBs used by built-in
+buffer lies below that range, together with the two file control blocks (FCBs) used by built-in
 commands (`src/boot.asm:194-200`, `src/boot.asm:530-536`,
 `src/ram.asm:153-173`).
 
@@ -77,7 +77,7 @@ byte at `0050h` lies below the tail and is written separately before entry
 
 After a command or warm boot, `MAINLOOP` restores the CCP stack and calls
 `SAVEDU`. That routine records the current drive and user area at `0004h`.
-The prompt uses those values (`src/cpm/ccp.asm:119-147`,
+The command prompt uses those values (`src/cpm/ccp.asm:119-147`,
 `src/cpm/ccp.asm:363-384`). The next input then comes from the first
 available source in this order (`src/cpm/ccp.asm:148-166`):
 

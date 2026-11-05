@@ -19,7 +19,7 @@ nav_group: "Part II: Inside TEC-OS"
      No current font/default, KS48 workflow or hardware result is qualified. -->
 
 A program can finish writing a record while its newest bytes are still only
-in RAM. The cache makes that possible by collecting records into card
+in RAM. The block cache makes that possible by collecting records into card
 blocks. Its write policy determines when a successful call also means that
 the block has reached the card.
 
@@ -61,7 +61,7 @@ prevents two lines from holding separate copies of the same block
 (`src/cache.asm:59-116`).
 
 The cache's lines and table are in EXPAND 1. Its four other bytes of state
-are in the workspace above the RAM BIOS table (`src/ram.asm:332-337`):
+are in the resident workspace above the RAM BIOS table (`src/ram.asm:332-337`):
 
 - `CNEXT`, the next line to give out
 - `CWTYPE`, the write type of the current BIOS `WRITE`, with bit 7 set for a
@@ -245,7 +245,7 @@ those writes and the directory write succeed, the close succeeds
 (`src/cache.asm:307-350`, `src/cache.asm:632-651`).
 
 The BDOS writes the directory when it creates a file and when it closes a
-changed FCB, including at an extent transition
+changed file control block (FCB), including at an extent transition
 (`src/cpm/bdosfile.asm:270-339`, `src/cpm/bdosfile.asm:637-643`,
 `src/cpm/bdosrec.asm:119-126`). On a volume written behind a successful
 directory write brings pending cache data to the card first
@@ -392,7 +392,7 @@ saved state. The places are `CEI`, `RXBITS`, `TXBYTE`, the history's access,
 `src/history.asm:47-76`, `src/cache.asm:853-858`, `src/pico.asm:456-472`).
 The boot also writes `EI` followed by `RETI` at `0038h` when no resident
 jump is retained there. That code runs on an interrupt or a program's `RST 38h`
-(`src/boot.asm:499-509`). DI does not block a non-maskable interrupt.
+(`src/boot.asm:499-509`). DI does not block a non-maskable interrupt (NMI).
 These routines therefore require the NMI conditions described in Chapter 14 as well as their
 maskable-interrupt protection.
 

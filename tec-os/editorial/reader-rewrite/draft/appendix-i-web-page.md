@@ -14,7 +14,7 @@ nav_group: "Appendices"
 The web page has controls for the emulated board, a serial terminal and a
 card you can save or exchange with the PC. This appendix describes those
 controls, file transfers and the startup changes made for the selected display.
-[Chapter 28](28-the-host-model-as-evidence.md) explains the model and its
+[Chapter 28](28-the-host-model-as-evidence.md) explains the host model and its
 evidence limits. [Chapter 7](07-commands-at-startup.md) explains using
 STARTUP.CMD and [Chapter 25](25-startup-inside-the-ccp.md) follows its ROM path.
 
@@ -153,7 +153,7 @@ those errors and recovery actions.
 
 ## Importing a file safely
 
-Before copying PC files into the running card, type `^C` at the prompt and
+Before copying PC files into the running card, type `^C` at the command prompt and
 check that the flush succeeds. A normal return without `Write lost` preserves
 pending writes on the model card. Import itself does not flush them.
 Its later reset clears the block cache. TEC-OS rebuilds free-space maps from

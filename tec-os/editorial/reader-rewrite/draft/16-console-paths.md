@@ -58,7 +58,7 @@ The BDOS's `BIOCST`, `BIOCIN` and `BIOCOT` names address entries in that
 RAM copy (`src/boot.asm:144-152`, `src/boot.asm:412-420`,
 `src/cpm/bdos.asm:22-36`). A program can replace a jump to receive the
 BDOS's calls as well as direct BIOS calls. Warm boot leaves the table in
-place. A hook into a program's TPA must be restored before that program
+place. A hook into a program's transient program area (TPA) must be restored before that program
 ends, including a replacement warm-boot jump.
 
 The output-time status check is an exception to the BDOS's table route.
@@ -157,7 +157,7 @@ clears bit 7 and skips a resulting `NUL`. The source documents a leading
 (`src/console.asm:288-320`, `src/console.asm:361-421`).
 
 Before waiting for serial input, the ROM reads port `00h`. In Debug80
-that read starts queued model input. On the board it reads the hex-keypad
+that read starts queued host model input. On the board it reads the hex-keypad
 encoder and has no effect on the serial line. This is a model input
 trigger, not a hardware receive buffer (`src/console.asm:28-45`,
 `src/console.asm:253-279`, `src/console.asm:361-377`).
@@ -525,7 +525,7 @@ hold the PICO and GLCD table addresses. The six routines are `VPUT`,
 (`src/video.asm:134-148`, `src/console.asm:165-177`,
 `src/ram.asm:359-365`).
 
-The PICO console has two VRAM name tables. Page function 0 shows the page
+The PICO console has two name tables in video memory (VRAM). Page function 0 shows the page
 already drawn. Functions 1 and 2 begin and end a row move. At the beginning,
 `TMSMBEG` selects the hidden destination page and copies across the rows
 outside the move. The move reads the shown page and writes the hidden one.

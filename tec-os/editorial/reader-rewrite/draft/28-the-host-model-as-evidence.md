@@ -23,8 +23,8 @@ The observation you choose determines what a result can establish.
 
 ## A shared machine
 
-Tests, the browser page and the book's capture tool all use
-`host/machine.mjs`. That module imports the Debug80 runtime and a byte-string
+Tests, the web page and the book's capture tool all use
+`host/machine.mjs`. That module imports the Debug80 TEC-1G runtime and a byte-string
 helper without depending on Node.js. Node supplies file access through the
 test wrapper, while the browser supplies its own storage and controls
 (`host/machine.mjs:10-16`, `test/lib/machine.mjs:3-12`,
@@ -54,7 +54,7 @@ The constructor exposes the board choices explicitly
 | `ram96`, `mains`, `expands` | Optional documented MAIN/EXPAND decoding with one or two regions of each kind |
 | `onSdWrite` | A callback for card writes |
 
-The runtime supplies the CPU, latch decoding, overlay, expansion banks,
+The runtime supplies the CPU, latch decoding, boot overlay, expansion banks,
 keypad, serial timing, LCDs and PICO display. Machine configures RAM at
 `0000h–BFFFh`, ROM at `C000h–FFFFh` and entry at zero, then places the
 16 KiB ROM at `C000h`. Its `ram96` option supplies a separate MAIN/EXPAND

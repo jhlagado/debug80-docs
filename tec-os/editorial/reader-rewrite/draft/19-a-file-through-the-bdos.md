@@ -21,7 +21,7 @@ while a file is open (`src/cpm/bdosfile.asm:558-643`,
 Chapter 9 established the calls a program uses: make, write, close, open and
 read. Here the same lifecycle uses the BDOS's entry, directory searches,
 allocation map and record arithmetic. The card operations use the BIOS of
-Chapter 17 and the cache of Chapter 18. [Chapter 8](08-call-tec-os.md)
+Chapter 17 and the block cache of Chapter 18. [Chapter 8](08-call-tec-os.md)
 explains the console-call contracts and [Chapter 16](16-console-paths.md)
 their implementation. [Appendix A](appendix-a-bdos-functions.md) gives the
 complete function reference.
@@ -65,7 +65,7 @@ The selection, `SELDRV`, rejects a drive of 16 or more
 one already bound and still logged in. An FCB can name a drive other than
 the default, so two variables distinguish them. `CURDRV` is the bound drive,
 the one the function in hand works on. `DEFDRV` is the default drive, the
-one the prompt shows, and only function 14 and the disk reset change it
+one the command prompt shows, and only function 14 and the disk reset change it
 (`src/cpm/bdosfile.asm:157-171`). The FCB's drive byte is read and never
 rewritten.
 
@@ -434,7 +434,7 @@ block (`src/layout.asm:152`). Warm boot clears the block, as a fresh load of
 the BDOS from disk would leave it, and sets the DMA address to `0080h`
 (`src/boot.asm:530-539`). Two of the BDOS's variables are outside the block
 because a warm boot must not clear them. `LOGINV`, in the BIOS's part of the
-workspace, has a bit for each drive whose allocation vector the BDOS has
+resident workspace, has a bit for each drive whose allocation vector the BDOS has
 built (`src/ram.asm:62-65`). `PRGCODE`, the return code of function 108, is
 above the RAM BIOS table, where only cold boot clears it
 (`src/ram.asm:386-388`, `src/boot.asm:73-79`). Per-drive pointers and scan

@@ -24,7 +24,7 @@ return to the editor.
 ## Several commands on one line
 
 `!` separates commands. Each command after the first is echoed at its own
-prompt before it runs. This is TEC-OS's form of CP/M 3 command chaining.
+command prompt before it runs. This is TEC-OS's form of CP/M 3 command chaining.
 CP/M 2.2 runs one command per line.
 
 The following historical capture shows two commands on the first line.
@@ -139,7 +139,7 @@ rule described below.
 ## A program that reports failure
 
 `EXISTS` reports whether its named file is present. It opens the default
-FCB at `005Ch`, using the file-call conventions from Chapter 9:
+file control block (FCB) at `005Ch`, using the file-call conventions from Chapter 9:
 
 ```asm
 ; EXISTS: a failure, return code FF00h, when the file named on the command
