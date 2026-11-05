@@ -9,13 +9,13 @@ nav_exclude: true
 
 With TEC-OS in its ROM, the TEC-1G starts at a command prompt. You can list
 files on an SD card and run a supplied program before using the editor and
-assembler to make one of your own. TEC-OS provides
-the CP/M 2.2 programming interface and calls for the board's devices.
+assembler to make one of your own. TEC-OS provides the CP/M 2.2 programming
+interface and calls for the board's devices.
 
 ## Starting with a prepared machine
 
 The first session uses an 80-column PICO9918 display and the matrix keyboard,
-with the Matrix switch enabled. The board needs a 32 KiB RAM chip in U9, the
+with the Matrix switch enabled. The board needs a 32,768-byte RAM chip in U9, the
 4 MHz FAST setting, the TEC-OS ROM and a prepared starter card. The keypad
 NMI jumper is off. SYSTEM is on drive A and WORK is on drive B. Hardware
 preparation is described in [Appendix G](appendix-g-tec-1g.md).
@@ -41,7 +41,7 @@ machine, with its controls and card-saving rules in
 
 The demonstrations and measurements are from the Debug80 TEC-1G host model,
 a software implementation of the machine. They are not physical-board runs.
-Hardware requirements describe the setup TEC-OS needs. The diagnostics chapter
+The diagnostics chapter
 separates what a test establishes in software from what a board report can
 establish about that board.
 
@@ -49,12 +49,17 @@ Each chapter records the source revision used to check its claims. A retained
 historical capture also records the revision and inputs that produced it.
 Source references name the file and lines for the stated revision. A source
 change may move those lines even when the assembled program is unchanged.
+When the prose and its stated source disagree, the source is the authority
+and the prose needs correction.
 
 A transcript includes the prompt and the command typed after it, followed by
 the output. It may begin at an already-running prompt. Any other omitted output
-is identified with the example. Control keys are written with a caret: `^C` means Ctrl
-and C together. Reproducing the runs on a PC requires the setup and tools in
+is identified with the example. Control keys are written with a caret: `^C`
+means Ctrl and C together. Reproducing the runs on a PC requires the setup and tools in
 [Reproduce the evidence](28-reproduce-the-evidence.md).
+
+Addresses and bytes use hexadecimal with a trailing `h`, as in `0100h`.
+Sizes in bytes are decimal. A KiB is 1,024 bytes and a MiB is 1,024 KiB.
 
 ## Using the machine
 
