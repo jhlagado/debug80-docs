@@ -58,6 +58,17 @@ The palette offer changes four ROM bytes to `31h`: `TMSCOL+1` and byte 7 of
 The previous image's address layout remains unchanged. This identity is
 recorded from qualification evidence, not a local build.
 
+The qualification source is Origo
+`893d1de0d9c5075d0c8d9b1d73aa14f7e6e71722`,
+`studies/p3-tec-os/evidence/console-compact-style/qualification.md`:
+lines 3-28 give the incumbent `78127ec` and SAMPLE comparison;
+lines 37-43 identify the four absolute palette addresses; lines 62-72 give
+the published hashes and palette offer
+`a6e7ba1811c1e5e7fe3b72872a8fccefd4c3728b`.
+The TAS migration comparison is recorded in that same Origo revision's
+`studies/p3-tec-os/reports/tas-toolchain-migration.md`, against source offer
+`fe2097f`. These are recorded qualification results, not reruns in this pass.
+
 ## Deferred guarded validation
 
 P6 holds compute. No builds, sample/TED workflows or deployment run here.
@@ -79,3 +90,23 @@ After allocation and the final source offer:
 6. Only after acceptance, build the book under the guard, check links and
    editorial exclusion, and obtain the publication allocation. Publication
    remains pending; pushing this branch does not publish it.
+
+Run each allocated validation separately from the exported source directory;
+never put one guard inside another:
+
+```sh
+node "$HOME/projects/origo/tools/mem-guard.mjs" --limit 850 \
+  --name tec-os-c16-build --log "$validation_log" -- npm run build
+node "$HOME/projects/origo/tools/mem-guard.mjs" --limit 850 \
+  --name tec-os-c16-diag --log "$validation_log" -- npm run diag
+node "$HOME/projects/origo/tools/mem-guard.mjs" --limit 850 \
+  --name tec-os-c16-media --log "$validation_log" -- npm run media
+node "$HOME/projects/origo/tools/mem-guard.mjs" --limit 850 \
+  --name tec-os-c16-web --log "$validation_log" -- npm run web
+```
+
+Set `validation_log` to a scratch log outside the repository first. Preserve
+TAS artifacts before a separate reference export runs these same four
+commands with `TECOS_ROM_ASSEMBLER=atom`. Setup installation and the capture
+and TED drivers also need their own allocation and guard; their exact pins
+and driver paths must come from the final offer, not a guessed future path.
