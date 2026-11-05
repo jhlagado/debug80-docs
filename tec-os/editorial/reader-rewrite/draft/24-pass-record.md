@@ -232,3 +232,21 @@ are separate. Relative chapter paths use the revision ledger, with final anchors
 subject to integration. No outline, ledger, format reference, published chapter,
 source, font or default policy was changed. The commit must use --only with the
 two exact owned paths and be pushed to origin tec-os-reader-rewrite.
+
+## Independent review: historical GLCD provenance
+
+Accepted the provenance finding. The765-byte image and00F0h/014Bh/0150h
+table are explicitly recorded at58d4345 in book41:154–161. Book42:159–163
+records the later767-byte image/dump at621201d. The draft now gives the
+765-byte walkthrough its supported58d4345 attribution rather than a blanket
+78127ec label. No numbers were silently replaced and no older pin was guessed.
+Both image sizes still occupy three pages, so the46336-byte TPA result is
+not in conflict on that basis. Current offered bytes are separate evidence
+and do not establish a historical run.
+
+Changed TAS writes the same fields to produces the same file format, with
+Appendix H's distinct writer responsibilities. The full review otherwise
+cleared installation, registry bounds/cycles, rollback/partial retention,
+generation, claims, stack bounds and checks-versus-trust. No additional
+craft finding. Historical capture provenance still needs the specific audit
+requested after this discrepancy. No execution was performed.
