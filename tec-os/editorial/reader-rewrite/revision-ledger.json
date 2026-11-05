@@ -2888,7 +2888,7 @@
     },
     {
       "unit": "chapter-08",
-      "status": "bounded independent editorial/factual review closed; final navigation and qualification pending",
+      "status": "source/craft draft reviewed; new interactive example held outside reader prose pending positive workflow proof",
       "passes": {
         "full_passage_read": "completed for bounded draft; 08-pass-record.md records scope",
         "draft": "completed for bounded draft; 08-pass-record.md records scope",
@@ -2897,7 +2897,7 @@
         "agency": "completed for bounded draft; 08-pass-record.md records scope",
         "every_comma_punctuation": "completed for bounded draft; 08-pass-record.md records scope",
         "technical_claims": "completed for bounded draft; 08-pass-record.md records scope",
-        "examples_before_explanation": "historical literals preserved with actual provenance; no current or KS48 result inferred",
+        "examples_before_explanation": "verified SHOW excerpt retained; newly added LINE moved to held candidate, positive workflow unqualified",
         "journey_readback": "completed for bounded draft; 08-pass-record.md records scope",
         "mechanical_gate": "completed for bounded draft; 08-pass-record.md records scope",
         "independent_editorial_review": "closed after full independent review and accepted corrections/confirmation",
@@ -3078,7 +3078,16 @@
       "evidence": [],
       "findings": [],
       "proposed_path": "tec-os/08-call-tec-os.md",
-      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass."
+      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass.",
+      "qualification_holds": [
+        {
+          "issue": "New LINE positive workflow not proved",
+          "candidate": "draft/08-line-example-candidate.md",
+          "existing_evidence": "qualified chain tests abort/reset while input waits; no normal GOT completion found",
+          "required": "explicitly allocated positive assembly/input/output/ordinary-return proof before explanatory insertion",
+          "status": "held, no runtime allocated"
+        }
+      ]
     },
     {
       "unit": "chapter-09",

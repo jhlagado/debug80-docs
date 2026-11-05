@@ -9,7 +9,6 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 <!-- Source-only semantic check against TEC-OS
      ea3ef3de9133931e925a0220d51c0e971c1fd8dd. No current runtime check claimed.
-     LINE source is retained unchanged from TEC-OS 78127ec:test/programs/line.asm.
      The register-preservation fragment is unchanged from the historical SHOW
      listing in old07. Historical PC assembly provenance is atom-z80 0.3.7.
      No new build, capture or application result is supplied here. -->
@@ -117,34 +116,9 @@ follow it. A maximum of 20 needs a 22-byte buffer: two control bytes
 followed by the space for input. The returned count defines the text's
 length, so it is not automatically a function-9 string.
 
-The existing LINE source shows the complete sequence of reading a line then
-making another BDOS call. It is retained unchanged from `78127ec`. Its
-behaviour is explained from the source, with no new captured run:
-
-```asm
-; LINE: reads a line from the console by BDOS function 10, then prints GOT
-; and returns.
-
-BDOS    EQU     $0005
-
-        ORG     $0100
-        LD      DE,BUF
-        LD      C,10
-        CALL    BDOS
-        LD      DE,GOT
-        LD      C,9
-        CALL    BDOS
-        RET
-GOT:    DB      13,10,"GOT",13,10,"$"
-BUF:    DB      20,0
-        DS      20
-```
-
-`BUF` begins with `20,0`, followed by 20 reserved bytes. `LINE` passes its
-address to function 10. The next call loads `DE` and `C` again before
-function 9 uses `GOT`. It does not depend on either register retaining its
-value from input. The final `RET` uses the inherited return word. `GOT` is a
-fixed acknowledgement, not a copy of the text in `BUF`.
+<!-- Interactive LINE example held outside reader prose in
+     08-line-example-candidate.md. Positive build/read-line/print/return
+     verification must precede its explanatory insertion. -->
 
 The line ends at Return, line feed or the buffer's maximum length. The
 editing keys operate as at the command prompt: backspace removes the last
