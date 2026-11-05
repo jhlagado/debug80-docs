@@ -141,3 +141,20 @@ byte-identical. Literal spans and links were kept whole while choosing line
 breaks. Every rewrapped paragraph fits 80 columns with no overwidth token
 exception. The reader-text changes are wrapping only, with no semantic or
 provenance change. No product execution or evidence refresh occurred.
+
+## Independent bounded review
+
+Separate independent reviews of93b0c41 againstb8c5c28 clear Chapters4–16
+and17–28 after every changed containing passage and neighbours were read.
+The lead independently read all changed A–J/index passages and their
+neighbours. FCB/ABI/TPA/NMI/VRAM expansions and prompt, cache, window,
+workspace, stub and command-tail distinctions preserve their local meaning.
+No new source contract, actual output, first-session proof or factual result
+is implied. No further bounded form finding was found.
+
+The lead's inert comparison of93b0c41 to9e1a695 confirms the same word and
+punctuation sequence across all34 rewrapped reader files, with every fence,
+comment and inline-code span unchanged. Those files contain190 fences and
+138 comments; the counts describe only the compared subset. The complete
+form pass remains distinct from the glossary's independent source audit and
+the future opening/whole-book first-use reconciliation. No runtime occurred.

@@ -15799,5 +15799,13 @@
     "runtime": "BANNER40 unrun; exact opening workflow allocation still pending; preserved offer17 80-column packet remains UNRUN",
     "scope": "first-session and authored-banner route; preserve explicit80 and narrow evidence",
     "modelling": "independently closed; KG53 registered on Origo main cbdfd466; production implementation and full qualification allocated separately"
+  },
+  "local_form_pass": {
+    "change": "93b0c41",
+    "rewrap": "9e1a695",
+    "scope": "36 existing reader texts: chapters4–28, appendicesA–J and index; opening1–3 excluded",
+    "independent_review": "chapters4–16 clear by independent reviewer; chapters17–28 clear by separate independent reviewer; appendicesA–J/index changed passages and neighbours read by lead, no finding",
+    "preservation": "rewrap independently checked in34 changed reader files: whitespace-only prose movement; fence/comment/inline-code spans exact",
+    "status": "bounded local form pass closed; glossary source audit, opening first-use credits and final whole-book acceptance remain open"
   }
 }
