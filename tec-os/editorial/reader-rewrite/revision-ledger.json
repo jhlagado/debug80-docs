@@ -15875,5 +15875,23 @@
     "destinations": "Existing8 exit mechanism,11 LCD service,25 row ownership andH format header; full facts/source proof retained without destination edits",
     "unchanged_evidence": "15 fences and10 HTML comments byte-identical",
     "parent_recheck": "Closed at5063451; full-book acceptance remains separate"
+  },
+  "opening_preparation_checkpoint": {
+    "commit": "Origo f459df495b72b79c05cd06e59bbd34606ebb5f82",
+    "path": "studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-preparation",
+    "remote": "Actual origin main ref confirmed by git ls-remote, then origin tracking refreshed to same commit",
+    "status": "UNRUN / NOT YET CHECKED / incomplete preparation checkpoint",
+    "root_status": "PREPARATION_ONLY",
+    "child_status": "SEALED_FOR_REVIEW labels are intended only; neither seal.json nor preparation-seal.json existed at checkpoint",
+    "remaining": [
+      "Reconcile direct-opening TAS/SAMPLE addition between root and child",
+      "Final code/case/manifest synchronisation and complete byte verification",
+      "Final full punctuation/readback pass and gate record",
+      "Create and independently review exact final seals",
+      "Exact command approval and compute allocation"
+    ],
+    "cases": "Latest53555e9 Chapter5 seven-case held file/shell sequence retained; directopening source addition remains to synchronise",
+    "source_boundary": "Exact retained tested8b qualified archive. Canonical cleanup separately reported sourcec1857b47/result7f65e73c does not silently replace packet inputs.",
+    "limits": "No product import, syntax check, assembly, build, test, model step, CLI case or capture executed. No reader insertion or publication authorised."
   }
 }
