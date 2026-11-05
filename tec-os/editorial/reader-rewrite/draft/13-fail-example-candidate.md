@@ -51,3 +51,14 @@ FAIL left no BIOS hook, so its pages were released and AREA reported the
 original TPA size in this run. A failed INIT runs no REMOVE. An INIT that
 started an interrupt source must turn it off before reporting failure.
 
+
+## Bounded original-record search
+
+A further read-only search found no matching original invocation and result.
+Book5006e2c introduces the source, command and printed result without an
+execution record. The retained chapter10 rerun JSON records COUNT and RECS,
+its setup omits FAIL and its combined output contains no FAIL.SVC. An older
+FAIL script and binary use a different vector-installing fixture, not this
+no-setup SCF/RET example. Targeted retained text-log searches found no match.
+Binary images and compressed archives were not exhaustively examined.
+No qualifying payload was archived and nothing executed. The hold remains.
