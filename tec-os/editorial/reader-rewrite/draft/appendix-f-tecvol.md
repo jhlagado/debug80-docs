@@ -136,7 +136,7 @@ container: format 1.0, 22528 blocks (11534336 bytes), 3 volume(s)
 ```
 
 The container line gives format, block/byte length and volume count. A
-format-1.1 card also gives its requested drive count. Each volume line gives
+format-1.1 card gives its requested drive count when that field is nonzero. Each volume line gives
 drive or `-`, label, id, geometry, start block, protection, optional `wb`,
 file count and free space. WORK ends at exclusive block 20,480, where ARCHIVE
 starts. G1M's free space is its 512 allocation blocks less four directory
@@ -297,9 +297,10 @@ NOTE.TXT with `--force`.
 ## recipe
 
 `recipe RECIPE.json IMAGE` constructs an image from the
-`tecos-file-recipe-v1` JSON schema. A recipe lists volumes and components,
-each containing files. Volumes name geometry, label, drive and optional
-`readOnly` or `writeBehind`. File entries give name, URL/path, drive,
+`tecos-file-recipe-v1` JSON schema. A recipe lists volumes and components
+separately. Volume entries give geometry, label, `mount` and optional
+`readOnly` or `writeBehind`. Components contain files. File entries give
+name, URL/path, `drive`,
 byte size, SHA-256 and optional user area (`tools/lib/recipe.mjs:14-26`).
 Unlike `create`, this command can replace an existing output image
 (`tools/tecvol.mjs:177-182`).
