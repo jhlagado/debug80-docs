@@ -79,3 +79,24 @@ The repeated ROM/no-driver sentence and front-door result certification were
 removed. The two optional introductory commas were removed. Historical fences
 and capture commands are unchanged. Independent correction confirmation is
 pending. No runtime, build, import or new capture accompanied these edits.
+
+## Accepted opening workflow scope
+
+Origo review4b5b5a50 closes the completed public workflows from retained
+attempt02 at e77c7ef0. I read the complete frozen receipt before releasing
+Chapters1–3 and the Chapter5 extraction insertion. The evidence covers the raw
+cold40 first session, direct SAMPLE assembly/run and separate TED/SAMPLE route.
+It also covers whole-file BANNER rejection/repair, both saved variants and fresh
+persistence. All seven host extraction cases and three pager cases are accepted. The later carry-observer
+failure leaves the whole batch FAILED. No advanced-service, physical, audible,
+browser or publication acceptance follows.
+
+The front-door metadata now records that scoped result. Its reader prose and
+contents are unchanged. Final opening review, source adoption and navigation
+remain pending. Historical source/capture pins retain their original authority.
+
+The metadata amendment passed the mandatory prose gate with no hard findings.
+Its sole review flag is the older noun “offer” in the historical profile note.
+The new text has no such flag. Complexity prompts on the new passage reflect
+chapter labels rather than an inflection echo. I reread each changed paragraph
+and its punctuation. No reader example, fence or quotation changed.
