@@ -759,7 +759,9 @@
       "section": "The rules of a line",
       "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
       "destinations": [
-        7
+        7,
+        25,
+        12
       ],
       "paragraph_detail": "reverse-outline-03-06.md",
       "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
@@ -798,7 +800,8 @@
       "section": "Services at the prompt",
       "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
       "destinations": [
-        7
+        7,
+        4
       ],
       "paragraph_detail": "reverse-outline-03-06.md",
       "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
@@ -1005,7 +1008,8 @@
       "section": "The drives, the services and the word",
       "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
       "destinations": [
-        10
+        10,
+        14
       ],
       "paragraph_detail": "reverse-outline-07-09.md",
       "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
