@@ -1,0 +1,602 @@
+{
+  "schema_version": 1,
+  "status": "reading_prepared_result_based_drafting_held",
+  "book_snapshot": "10986d93ebe95b11f2268cc5fa4e6faa6d4dd8ce",
+  "owned_path": "tec-os/editorial/reader-rewrite/chapter-02-readiness.json",
+  "future_reader_path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+  "future_reader_path_created": false,
+  "authority": {
+    "outline_closure": "0e4feea",
+    "profile_amendment": "KD-243 / KS48: planned 40-column TEC Compact opening",
+    "frozen_material_base": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+    "existing_mechanism_pin": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+    "attempt_source_record_only": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+    "source_adoption": "No pin is changed. The tested next-source preparation basis and reader adoption remain separate.",
+    "drafting_hold": "Wait for the actual scoped-positive-review receipt supplied by the lead before reader prose or output claims."
+  },
+  "completed_reading": {
+    "standards_and_assignment_identities": [
+      {
+        "path": "tec-os/editorial/STYLE.md",
+        "bytes": 15611,
+        "sha256": "b13d95cdbfd9188c2051cc966d9a9973eadbcdcc2e90a8dc99296ce3490be482"
+      },
+      {
+        "path": "tec-os/editorial/terms.md",
+        "bytes": 31926,
+        "sha256": "717692e470da1316a02c45daafabad678511e6a37cce68810b114967528907e8"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/replacement-outline.md",
+        "bytes": 18656,
+        "sha256": "a7de903ce27c75f0b0344547b76a3210b07d10674e5f63d2c77ee575f1303ec0"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/revision-ledger.json",
+        "bytes": 504334,
+        "sha256": "33745d8593b87a0731d7125a90b74f1f9adc569049c9cfee12064dd157cb88c0"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/movement-units.json",
+        "bytes": 869064,
+        "sha256": "0f594d09a5aa4dfd2c170b9e069f23a8a5b987cfbc3a99c7884c36b2210a06ff"
+      },
+      {
+        "path": "/Users/johnhardy/.agents/skills/human-writing/SKILL.md",
+        "bytes": 33063,
+        "sha256": "b8d0e3172cb337af79d9d45b7984483b0d35f83dd03d08ae1854ea483a0e54d3"
+      },
+      {
+        "path": "/Users/johnhardy/.agents/skills/human-writing/references/revision-playbook.md",
+        "bytes": 9145,
+        "sha256": "82070c2dd5e1bafc6455a97aba0019990b426e5c811284d823c04a3ab3f6e547"
+      },
+      {
+        "path": "/Users/johnhardy/.codex/skills/teaching-prose-review/SKILL.md",
+        "bytes": 8703,
+        "sha256": "ecf0e8475098ccbc61d1a6f57a2d98d854c7b32f24f76156ad0b7690c5dba9d1"
+      },
+      {
+        "path": "/Users/johnhardy/.codex/skills/teaching-prose-review/references/teaching.md",
+        "bytes": 3261,
+        "sha256": "ea28fc736bd990fc0459c4d60648c4e1c555c145882a0c8062616c6411599cab"
+      },
+      {
+        "path": "/Users/johnhardy/.codex/skills/teaching-prose-review/references/craft.md",
+        "bytes": 2434,
+        "sha256": "09e5414ce5b8820d4626e2e30024c82f548fb334d782a3550d7cc1d2acb05bfa"
+      }
+    ],
+    "source": {
+      "path": "tec-os/07-first-program.md",
+      "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+      "git_blob": "13b74c46171d0aed308f0461bd340286ea46a8ca",
+      "sha256": "45455f83f2e957be34ec9d1bc8d87b20d6da966418c9d5a309c18c90c47ceaab",
+      "containing_passages_read": [
+        [
+          1,
+          166
+        ]
+      ],
+      "assigned_whole_units": 11,
+      "assigned_fragments": 2,
+      "assigned_source_material": [
+        {
+          "lines": [
+            1,
+            6
+          ],
+          "subsection": "Opening",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            8,
+            8
+          ],
+          "subsection": "7. A first program",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            10,
+            15
+          ],
+          "subsection": "7. A first program",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            17,
+            21
+          ],
+          "subsection": "From supplied to authored program",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            23,
+            23
+          ],
+          "subsection": "A program and the BDOS",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            53,
+            53
+          ],
+          "subsection": "A program that prints",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            55,
+            55
+          ],
+          "subsection": "The short banner listing",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            57,
+            67
+          ],
+          "subsection": "The short banner listing",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            69,
+            73
+          ],
+          "subsection": "The short banner listing",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            75,
+            75
+          ],
+          "subsection": "Building and running it on the TEC-1G",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            77,
+            85
+          ],
+          "subsection": "Enter, save and reopen in TED",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            91,
+            94
+          ],
+          "subsection": "TED build/run keys",
+          "fragment_selection": "Table rows for B/R only; header reconstructed.",
+          "read_complete": true
+        },
+        {
+          "lines": [
+            157,
+            158
+          ],
+          "subsection": "Return to source and standalone program",
+          "fragment_selection": "Actual observed key/quit and COM location in verified round.",
+          "read_complete": true
+        }
+      ]
+    },
+    "movement_qualifications": [
+      "Remove the old survey of later PC/file work from this authored-banner route.",
+      "Replace the old HELLO listing/explanation only with the reviewed BANNER exercise. Do not transfer the historical 33-byte result.",
+      "Keep ordinary TED editing/save/quit and B/R build/run keys. The line-number option and other editor commands have separate destinations.",
+      "The B/R rows are the explicit fragment of old87–98. Chaining implementation is not assigned to Chapter 2.",
+      "The old157–158 fragment contributes observed key/quit and COM location only. Do not import THOR project/session implementation into the small exercise."
+    ],
+    "current_boundaries": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+        "exists": false,
+        "disposition": "Absent. No current ending can be read. The closed outline supplies the predecessor contract only."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+        "exists": false,
+        "disposition": "Absent. No current opening can be read. The closed outline assigns file operations and pager teaching there."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "bytes": 16915,
+        "sha256": "22106877815aa329d5c1affe54eb4c234fc82d9ac206fdba7c4766ce46d10cc2",
+        "read_ranges": [
+          [
+            1,
+            44
+          ]
+        ],
+        "boundary": "Existing operator text assumes supplied SAMPLE and the authored banner are already familiar."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "bytes": 11513,
+        "sha256": "8f323d975b7b2be1c46613237c332fabbcea2f0a2a712054cdf8f3fbf2544764",
+        "read_ranges": [
+          [
+            1,
+            95
+          ]
+        ],
+        "boundary": "General BDOS registers/calls, PUSH/POP and stack explanations belong here, after the small authored exercise."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md",
+        "bytes": 21318,
+        "sha256": "dbd7970be746d13856d490d2e3ff8ed8aba6a03783a4cb25efc39df9b18e03b8",
+        "read_ranges": [
+          [
+            10,
+            44
+          ],
+          [
+            350,
+            431
+          ]
+        ],
+        "boundary": "The original HELLO listing and historical editor error/repair round remain here with their actual provenance."
+      }
+    ]
+  },
+  "evidence_inventory": {
+    "directory": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02",
+    "record_commit": "e77c7ef0f81c42d94f12391b099f4cf8c4acd9a6",
+    "read_complete_loose_records": [
+      {
+        "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02/README.md",
+        "bytes": 1560,
+        "sha256": "ef687727af36c6abe7547621f70db49728bc66fdcbcbb816e37713f66d15bb74"
+      },
+      {
+        "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02/exit.json",
+        "bytes": 505,
+        "sha256": "afd8095716ebd5647ab2229144c4b7fb4292cfdf1f1851c1fa7a0f262301b3d6"
+      },
+      {
+        "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02/preflight.json",
+        "bytes": 4342,
+        "sha256": "6529a923456e406dcb4838cfe3f066f5b6742818a1494eb6048164ee3d5b89ce"
+      },
+      {
+        "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02/evidence-hashes.json",
+        "bytes": 762,
+        "sha256": "5ae972abb643efc4a508d50ab935ca351b24cbbab473875536d389512a27ce23"
+      },
+      {
+        "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02/command.log",
+        "bytes": 253,
+        "sha256": "63bc227feafef2d9d68c99815ad96fdf5bf5eeffbe02d3855c3de6a1e800ecc3"
+      },
+      {
+        "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02/guard.jsonl",
+        "bytes": 707,
+        "sha256": "e6d849b2328c51e819aafd2a806bf865642d5dc187f7147d32b8e6e3fdb815d9"
+      }
+    ],
+    "result": {
+      "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02/result.json",
+      "bytes": 223068,
+      "sha256": "e4b5ff29b5b8ab7dc0c44a3f1d807dbd08974776665c5cc965cf8c3e15bf9350",
+      "read_scope": "Complete failure/error/lastMachine, binding and dependency contexts. Complete BANNER phase objects at zero-based phases[42:96], with adjacent phase41 and phase96. All phase/input names inventoried. Other positive families are separate reviews, not accepted here.",
+      "banner_input_scope": "inputs[39:91] identified as the recorded BANNER matrix-input blocks; not exhaustively independently decoded in this readiness pass."
+    },
+    "archive": {
+      "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02/complete-attempt.tar.gz",
+      "bytes": 3523541,
+      "sha256": "af08c7ff36ff5ed5cdaaed1a8e1ec20cec938487b22f3ab11e7b7387b23c2afa",
+      "method": "Inert tar-member reads and hashes only. No filesystem extraction, imports or execution."
+    },
+    "packet_members_read": [
+      {
+        "member": "packet/BANNER.initial.asm",
+        "bytes": 285,
+        "sha256": "45b9e8a8c6a21e7070fe178134d41d695214c13c968ee9ce5f35a7dbf08c13e8"
+      },
+      {
+        "member": "packet/BANNER.edited.asm",
+        "bytes": 286,
+        "sha256": "8323e30d39266ee3d0dace3a7cc2c7c973cd79403e6d91b0269839ec013baeb0"
+      },
+      {
+        "member": "packet/BANNER.invalid.asm",
+        "bytes": 293,
+        "sha256": "d9b1f8cbfbeac0a0dcb220fb0f906f2a54d1339e82df67a9756f23405214dcc5"
+      },
+      {
+        "member": "packet/banner-final.asm",
+        "bytes": 273,
+        "sha256": "401af169f51ef50b5ee5fd2dba5679df3fb7e4816670e330f503e038ad06f986"
+      },
+      {
+        "member": "packet/case-inputs.json",
+        "bytes": 5716,
+        "sha256": "c7bfb4ea809a724d0acbbe39c5b9b7c1113df00d62fa9acaeb57e6f436380b67"
+      },
+      {
+        "member": "packet/batch.mjs",
+        "bytes": 51641,
+        "sha256": "de52e3a340b711975b0ace15463a6c5acb59a86e67c44b2b86f9ef6ea238f66e"
+      },
+      {
+        "member": "packet/binding.json",
+        "bytes": 5896,
+        "sha256": "c7ab4a642d44edfa22342dec763cf29566f7c56c6000377c24d60a0409b6775e"
+      },
+      {
+        "member": "packet/README.md",
+        "bytes": 2854,
+        "sha256": "b9d605145462dc1871ffd8da806eed7896c328bce29a0b85309eba956c46f80d"
+      }
+    ],
+    "BANNER_result_members": [
+      {
+        "member": "stage/results/BANNER-console.bin",
+        "bytes": 742,
+        "sha256": "bf69f1567bd403c9488906ec43cc791fd4981203c0cc2ef6cc6653651f0d3744"
+      },
+      {
+        "member": "stage/results/BANNER-edited-built-card.img",
+        "bytes": 10485760,
+        "sha256": "d95330a06c61a1ecfcb18d4a73be06b9a13ed2e5cf7995f7d5656c94aeb0cd80"
+      },
+      {
+        "member": "stage/results/BANNER-edited-built-com.bin",
+        "bytes": 128,
+        "sha256": "4ab6f22f966fbdb6c9dc4b626310fc203bc22165bd3e2472ad0cb365ffe69973"
+      },
+      {
+        "member": "stage/results/BANNER-edited-built-dbg.bin",
+        "bytes": 384,
+        "sha256": "8d66e1c11a250057c909b86c08a24b89f272bacf947b7101abbe230110f77704"
+      },
+      {
+        "member": "stage/results/BANNER-edited-built-inventory.json",
+        "bytes": 2321,
+        "sha256": "b3559ef950a16b99fbcc31270af59ccfebb8ac5d97ca3fac1055c8595e7e57c6"
+      },
+      {
+        "member": "stage/results/BANNER-edited-program-observations.json",
+        "bytes": 149,
+        "sha256": "e8bffafa19aa1631fc4fa3559b433b25a1ab1166f2dcfc0c6ffdf334d944859a"
+      },
+      {
+        "member": "stage/results/BANNER-edited-run-console.bin",
+        "bytes": 125,
+        "sha256": "34339011b41a4aa7b950dad3615ae055338651f7b6125e004766af09b5f54c76"
+      },
+      {
+        "member": "stage/results/BANNER-final-card.img",
+        "bytes": 10485760,
+        "sha256": "d7919f72163cfab99761b08d45c029abce6361c349adae8037c1798eb3822c0a"
+      },
+      {
+        "member": "stage/results/BANNER-final-com.bin",
+        "bytes": 128,
+        "sha256": "4ab6f22f966fbdb6c9dc4b626310fc203bc22165bd3e2472ad0cb365ffe69973"
+      },
+      {
+        "member": "stage/results/BANNER-final-dbg.bin",
+        "bytes": 384,
+        "sha256": "8d66e1c11a250057c909b86c08a24b89f272bacf947b7101abbe230110f77704"
+      },
+      {
+        "member": "stage/results/BANNER-final-inventory.json",
+        "bytes": 2321,
+        "sha256": "b1eebcbff1e4fd77437941b5c79b42cd8a4b3e051a05a35325b38e409f0642f2"
+      },
+      {
+        "member": "stage/results/BANNER-first-machine-console.bin",
+        "bytes": 10483,
+        "sha256": "01e550dbe1e29144690ab28b653ae73b1f0e01546f1a499c2c67671f3dae916c"
+      },
+      {
+        "member": "stage/results/BANNER-initial-built-card.img",
+        "bytes": 10485760,
+        "sha256": "4f60be6150f66879e9cde1005b8f0ea71bf63784d28a819faf96e5634b7f8ccb"
+      },
+      {
+        "member": "stage/results/BANNER-initial-built-com.bin",
+        "bytes": 128,
+        "sha256": "c58ccb7b2477a4cc895a7b959a206f8d1d4f567d4d69559218d910512e260909"
+      },
+      {
+        "member": "stage/results/BANNER-initial-built-dbg.bin",
+        "bytes": 384,
+        "sha256": "86a1c382c928fa756eb226afe3ea7f036ff855583889908a81b9ccf581f9e107"
+      },
+      {
+        "member": "stage/results/BANNER-initial-built-inventory.json",
+        "bytes": 2321,
+        "sha256": "f5008ed9d71a66e98a0c65bf3792eca2efdbcdca1fd23321afecbf7c82af09a0"
+      },
+      {
+        "member": "stage/results/BANNER-initial-program-observations.json",
+        "bytes": 149,
+        "sha256": "e8bffafa19aa1631fc4fa3559b433b25a1ab1166f2dcfc0c6ffdf334d944859a"
+      },
+      {
+        "member": "stage/results/BANNER-initial-run-console.bin",
+        "bytes": 124,
+        "sha256": "7cd11bd4a8b9b90b5957bdb5627cea4c8a7b6cc3b2ee62e977fc447deb3b1da1"
+      },
+      {
+        "member": "stage/results/BANNER-persisted-card.img",
+        "bytes": 10485760,
+        "sha256": "30af241154514d0b5631fcbf0ef8dcb2d47bb792e3663d5b8d9bdd453ec9c721"
+      },
+      {
+        "member": "stage/results/BANNER-persisted-com.bin",
+        "bytes": 128,
+        "sha256": "4ab6f22f966fbdb6c9dc4b626310fc203bc22165bd3e2472ad0cb365ffe69973"
+      },
+      {
+        "member": "stage/results/BANNER-persisted-dbg.bin",
+        "bytes": 384,
+        "sha256": "8d66e1c11a250057c909b86c08a24b89f272bacf947b7101abbe230110f77704"
+      },
+      {
+        "member": "stage/results/BANNER-persisted-inventory.json",
+        "bytes": 2321,
+        "sha256": "b3559ef950a16b99fbcc31270af59ccfebb8ac5d97ca3fac1055c8595e7e57c6"
+      },
+      {
+        "member": "stage/results/BANNER-saved-card.img",
+        "bytes": 10485760,
+        "sha256": "9d1e5c4d2dee9f338caad5b26c412ca9a2441c122078a05654615cd14476a78e"
+      },
+      {
+        "member": "stage/results/BANNER-saved-inventory.json",
+        "bytes": 1696,
+        "sha256": "e87d0919daec04eab3c5463528db008fe2d8a255275509e73979d752e7fa7f84"
+      },
+      {
+        "member": "stage/results/BANNER-standalone-program-observations.json",
+        "bytes": 149,
+        "sha256": "e8bffafa19aa1631fc4fa3559b433b25a1ab1166f2dcfc0c6ffdf334d944859a"
+      },
+      {
+        "member": "stage/results/banner-rejected-card.img",
+        "bytes": 10485760,
+        "sha256": "e5083c7ee9b20c86abc765a5dc7953d09f3660921458edbbffa15eb5c39e6f3a"
+      },
+      {
+        "member": "stage/results/banner-rejected-console.bin",
+        "bytes": 504,
+        "sha256": "50a717f1bcf505e53e3613099e552245ccc338dd471dc0b58c0f9875669f7e24"
+      },
+      {
+        "member": "stage/results/banner-rejected-program-observations.json",
+        "bytes": 149,
+        "sha256": "f544a4f6dc19e7fca0be7b3271ee9a61cea66d5deec7b87c4d493c811009e78a"
+      }
+    ],
+    "BANNER_phase_raw_artifacts": {
+      "result_indices_zero_based": [
+        42,
+        95
+      ],
+      "first": "043-BANNER-cold",
+      "last": "096-BANNER-final-flush",
+      "member_count": 216,
+      "suffixes": [
+        ".json",
+        "-vram.bin",
+        "-registers.bin",
+        "-foreground.pgm"
+      ],
+      "ordered_member_manifest_sha256": "0f447b90508d7892705ff2df84dee1b8546f5a85a5ff567ae13101928633ac7b",
+      "reading_limit": "Complete journal phase objects read. Raw VRAM/register/mask members inventoried and hashed, not visually or independently qualified here."
+    },
+    "whole_evidence_contexts_read": [
+      "Four exact BANNER source files, complete packet README and case-inputs.json.",
+      "packet/batch.mjs:45–97,98–135,135–240,242–324,425–440,600–655 as text: snapshots, keys, navigation, save/build/run/error/repair/fresh-machine controls and later failure boundary.",
+      "Complete rejected/initial/edited/standalone program-observation JSON records; complete saved/persisted/final inventories.",
+      "Complete rejected, initial-run, edited-run and fresh-machine BANNER console byte contexts."
+    ],
+    "raw_input_and_pixel_review": "Available to the separate scoped reviewer. This dossier does not substitute journal milestones or hashes for input, source/card, COM/DBG, screen/VRAM/mask and persistence review."
+  },
+  "provenance_and_limits": {
+    "batch_status": "FAILED",
+    "exit_code": 1,
+    "approval_id": "KS47-OFFER03-a41c4275",
+    "allocation_id": "KS47-BATCH02-20261106",
+    "full_batch_qualified": false,
+    "failure": "Later FAIL.SVC observer asserts m.cpu.cpu.f & 1. README identifies KE-259: the pinned runtime exposes carry at cpu.flags.C. The batch has no COMPLETE result. This is not a new finding against the ROM.",
+    "positive_subset_status": "Earlier assertions and artifacts exist but scoped result acceptance is pending. No chapter result is accepted by this preparation.",
+    "tool_identities": {
+      "MOUNT.COM": {
+        "sourcePin": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+        "bytes": 671,
+        "sha256": "5273f0ba443817f9168a1909fe7c934a5ad186ba1480d35b7ab169c27ead83cc"
+      },
+      "GLCD.SVC": {
+        "sourcePin": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+        "bytes": 836,
+        "sha256": "ac040f75f8d91226fd80ff9be1764673dec0ec5cde606769425bd815fb75e736"
+      },
+      "TED.COM": {
+        "sourcePin": "128edb7cbb27de17a9d3a7a747706a5b227b30c4",
+        "bytes": 11923,
+        "sha256": "2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f"
+      },
+      "TAS.COM": {
+        "sourcePin": "dbee66a90816df9a5884a08754ebc2d458a38325",
+        "bytes": 10295,
+        "sha256": "45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2"
+      }
+    },
+    "profile_record": {
+      "tms": true,
+      "matrix": true,
+      "glcd": true,
+      "coldColumns": 40,
+      "rows": 24,
+      "highCapacity": true,
+      "ramFill": 0,
+      "windowRam": true,
+      "rtc": true,
+      "ram96": false,
+      "mains": 2,
+      "expands": 2,
+      "clockISO": "2026-11-01T12:00:00Z",
+      "startupPolicy": "unchanged"
+    },
+    "historical": "Frozen old07 carries 78127ec/TED128edb7/TASdbee66a/ATOM0.3.7 identities. Its actual HELLO editor round is explicitly at7458352. Retain those pins at the historical destination, never treat its prompts, line7 diagnostic or Right/Backspace repair as a 40-column BANNER run.",
+    "actual_new_route_boundary": "The BANNER evidence opens A:TED B:BANNER.ASM from A>. It uses a BROKEN line14 rejection, public status-clear/navigation and removal of that added line, not the historical HELLO line7 repair. Do not rewrite those observations into an assumed B> session.",
+    "host_model_only": "The records are host-model evidence. No browser, physical-board, colour-display or later-default qualification follows."
+  },
+  "intended_route_within_closed_outline": [
+    "Continue from the supplied SAMPLE experience in Chapter 1 to entering a genuinely new BANNER source in TED on B with the prepared tools on A.",
+    "Explain only the short listing locally: ORG placement, registers, LD values/addresses, C=9/DE for this print call, CALL/RET and DB text with CR/LF/dollar termination.",
+    "Use the actual reviewed save, build rejection, status/position recovery and repair sequence without inventing key bytes or borrowing the HELLO capture.",
+    "Preserve save/quit/successful-flush/reopen, actual TAS build and TED build/run return behaviour. Explain tool/source drive separation only as needed.",
+    "Change the banner text, save, rebuild/run, return to source and preserve it. Reopen from the persisted card in fresh RAM and run the actual standalone COM as supported by the scoped receipt.",
+    "Leave TYPE/COPY/REN/ERA/pager teaching to Chapter 3, PC extraction to Chapter 5, general BDOS/register/stack teaching to Chapter 8 and chains to Chapters 12/21."
+  ],
+  "acceptance_gaps": [
+    {
+      "gap": "Actual scoped-positive-review receipt has not been supplied in this task.",
+      "effect": "No reader draft or result-based explanation may start. The full-batch failure remains recorded."
+    },
+    {
+      "gap": "BANNER rejection/repair, exact source/card and COM/DBG identity, input transport, screen/mask and fresh-machine persistence require their separate independent review.",
+      "effect": "Existing milestone records are inventory, not acceptance. Use only the exact accepted subset after receipt."
+    },
+    {
+      "gap": "First-session/SAMPLE, PC7 and pager are under separate review.",
+      "effect": "No acceptance or prose claims for those families are inferred from the BANNER preparation."
+    },
+    {
+      "gap": "Chapter 1 and Chapter 3 current draft boundaries do not yet exist.",
+      "effect": "Reread their actual final boundary paragraphs before drafting/integration rather than inventing prerequisites or an ending."
+    },
+    {
+      "gap": "Next-source preparation is not final reader source adoption.",
+      "effect": "Keep historical capture pins and existing ea3ef3d mechanism authority separate until the lead adopts the reviewed source. No global 40-column replacement."
+    }
+  ],
+  "work_performed": "Read-only Git/text/JSON/tar inspection and inert hashing. Only this data dossier is authored. No new planning scheme, source pin, shared ledger/nav/root change, reader prose, prompt/output fence, product execution, imports, tests, builds or captures.",
+  "next_action": "Wait for the actual scoped-review receipt. Do not draft automatically from journal completion or a newly appearing evidence file."
+}
