@@ -208,11 +208,12 @@ remove, and 18 and 14 with none. A cell along a row takes about 509 T-states
 on the PICO9918 at 80 columns and about 36,900 on `GLCD.SVC`.
 
 Text is clipped at the right edge. The cursor's position is unchanged, though
-its cell is removed. The next `CONST` or `CONIN` draws it again, as after any
-output (`src/console.asm:119-131`, `src/console.asm:169-187`). The escape
-parser isn't used, and bytes `80h` to `FFh` reach the display, which draws
-them as reverse images of `00h` to `7Fh` (`src/pico.asm:143-147`,
-`drivers/glcd.asm:374-376`). A claim doesn't stop `PUTAT` on the graphics LCD.
+its cell is removed. `CONST` draws it again when no character is ready, and
+`CONIN` draws it while waiting for input, as after ordinary output
+(`src/console.asm:198-217`, `src/console.asm:283-314`). The escape parser isn't
+used, and bytes `80h` to `FFh` reach the display, which draws them as reverse
+images of `00h` to `7Fh` (`src/pico.asm:270-315`, `src/pico.asm:523-533`,
+`drivers/glcd.asm:568-610`). A claim doesn't stop `PUTAT` on the graphics LCD.
 
 **8 RTC.** With `B` = 0, reads the DS1302 into the seven bytes at `HL`. With
 `B` = 1, sets it from them (`src/services.asm:419-482`). Any other `B` returns
@@ -323,7 +324,7 @@ the eight words of service 12's table, followed by five more:
 
 For the first four the caller must hold the claim. Each checks nothing and
 changes `AF`, `BC`, `DE` and `HL` (`src/abi.inc:167-179`), and a count of 0
-moves nothing (`src/pico.asm:209-249`). `PICOWID` takes no claim and is the
+moves nothing (`src/pico.asm:335-404`). `PICOWID` takes no claim and is the
 entry that `CON PICO 40` calls, version 3's addition (`src/abi.inc:181-192`,
 `src/pico.asm:84-112`). While `CRT:` is in effect, the next console call after
 `PICOWID` clears the screen at the new width. `PICOWID` returns carry with

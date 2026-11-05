@@ -73,6 +73,8 @@ The TAS migration comparison is recorded in that same Origo revision's
 
 The original 393 pending ranges (492 occurrences) are resolved in
 `c16-citation-resolutions.json`, with claim-level reasons and corrections.
+The supplementary review resolves every initially mapped occurrence too:
+all 1,785 original occurrences have semantic dispositions.
 The frozen textual map is retained for reproducibility. A later source offer
 still needs the source-identity recheck and substantive review of changed
 files; this does not reopen the original list without identifying a change.

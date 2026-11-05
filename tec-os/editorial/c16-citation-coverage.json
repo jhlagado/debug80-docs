@@ -1,0 +1,14 @@
+{
+  "source_revision": "fe2097f4bad3f7578aa41b8bce8aa571c451dbc7",
+  "pending_occurrences_in_frozen_inventory": 492,
+  "resolved_occurrences_by_disposition": {
+    "accepted": 386,
+    "corrected": 101,
+    "local-example": 1,
+    "superseded": 4
+  },
+  "additional_reviewed_mapped_pairs": 1266,
+  "unreviewed_mapped_pairs": 0,
+  "missing_resolutions": [],
+  "qualification": "Coverage and source bounds only; semantic reasons require independent reading."
+}

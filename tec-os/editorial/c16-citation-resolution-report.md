@@ -8,8 +8,11 @@ All 393 originally pending ranges have dispositions for all 492 occurrences:
 386 accepted source references, 101 corrected source references, four
 superseded passages and one literal local diagnostic. There is no missing
 pending disposition. The frozen discovery map is retained; it is not an open
-queue. The ledger also records reviewed textual matches, with the remaining
-supplementary matches being completed separately before this pass closes.
+queue. The supplementary review also covers every originally mapped occurrence.
+All 1,785 original occurrences (1,737 file/citation pairs) now have semantic
+dispositions: 1,611 accepted, 167 corrected, six superseded and one local
+example. No textual-only match remains. `c16-citation-coverage.json` records
+the complete coverage check.
 
 ## Factual corrections
 
@@ -25,6 +28,15 @@ supplementary matches being completed separately before this pass closes.
   authoritative override, prepared local input, then legacy sibling.
 - Incidental matches in a diagnostic heading and demo program are rejected
   as support for the main ROM's layout and RTC service.
+- `CMD0`'s retry requires the idle reply, and `R` or `r` retries the diagnostic
+  prompt. BAT output returns directly instead of calling the list-device entry.
+- The diagnostic SD test follows the production command sequence without
+  being an identical driver. Its 80-column mode need not use identical
+  register bytes. `HCWAIT`'s total is corrected by static instruction counting,
+  not presented as a new measurement.
+- The console-settling interval and browser frame budget retain their bounds;
+  cursor redrawing retains the no-input condition. The target tree contains
+  56 top-level test files; no suite was run to establish that count.
 - Card-reinsertion consequences are conditional on writes still failing;
   source inspection alone is no physical-board observation. Stack-test prose
   states the checked bound rather than inventing a fresh depth measurement.
@@ -45,10 +57,12 @@ Independent read-only review covered each assigned passage and source owner.
 Applied chapter diffs were checked against those dispositions. The coverage
 tool checks exact tokens, original occurrence provenance, source bounds and
 reconstruction of the complete reviewed edit from the frozen book base,
-including required prose edits and supersession anchors. This is a check of
+including required prose edits and supersession anchors. Fenced bytes and
+literal spaces are compared exactly; prose may be reflowed. This is a check of
 application, not a substitute for the semantic review.
 
-The source manifest is bound to the ledger's SHA-256 and reviewed source pin.
+The source manifest records 90 source blobs, including the preparation inputs,
+compact SAMPLE source and dependency lock. It is bound to the ledger's SHA-256 and reviewed source pin.
 It cannot be recorded against a different offer. A later source offer is
 compared with the recorded source blobs, and every changed file needs renewed
 claim review. Matching source does not certify runtime results.
@@ -60,7 +74,7 @@ From the book checkout, with `tecos_source` naming the source repository:
 ```sh
 python3 tec-os/editorial/check-citation-resolutions.py \
   --source-repo "$tecos_source" \
-  --ledger tec-os/editorial/c16-citation-resolutions.json
+  --ledger tec-os/editorial/c16-citation-resolutions.json --require-all
 python3 tec-os/editorial/recheck-reviewed-citations.py \
   --source-repo "$tecos_source" --revision "$source_offer" \
   --ledger tec-os/editorial/c16-citation-resolutions.json \

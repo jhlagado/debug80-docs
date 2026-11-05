@@ -94,12 +94,11 @@ or the card out, and press reset after putting it back.
 number in decimal from 1 to 16,777,215 and a multiple of 8. The default is
 2,048, 1 MiB (`tools/lib/container.mjs:14`, `tools/lib/container.mjs:89-99`).
 `--drives N`, 1 to 4, records in the header the number of drives TEC-OS is to
-set up at cold boot. Any other `N` for either option is a mistake in the
-command line, found before the image is made (`tools/tecvol.mjs:35-39`,
-`tools/tecvol.mjs:52-53`). With `--drives`, or with more than 8 volumes, the
-card is format 1.1, and otherwise 1.0 (`tools/lib/container.mjs:79-80`).
-Every payload is filled with `E5h`, so each volume starts as an empty CP/M
-disk. One volume must be on drive A.
+set up at cold boot. The decimal range of each option is checked before the
+image is made (`tools/tecvol.mjs:35-39`, `tools/tecvol.mjs:52-53`). With
+`--drives`, or with more than 8 volumes, the card is format 1.1, and otherwise
+1.0 (`tools/lib/container.mjs:79-80`). Every payload is filled with `E5h`, so
+each volume starts as an empty CP/M disk. One volume must be on drive A.
 
 This card has a system volume on A, a work volume written behind on B and a
 read-only volume on no drive:
