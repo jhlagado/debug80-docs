@@ -202,3 +202,28 @@ review, final source/profile adoption, integrated navigation/anchor checks and
 whole-book reader-order acceptance remain open. Existing captures retain their
 historical provenance. New font/default and authored-workflow qualification
 remain held. I made no publication or product change.
+
+## Independent review corrections
+
+I accepted the four confirmed review concerns. The opening now says CON sends
+its reply through the selected console, with BAT discarding it. The command
+paragraph describes four generated reports without implying all four can be
+seen. I identified the dual-display example as the historical host-model
+`--board pico` configuration, not a browser capture or a web-page result.
+
+I replaced the zero-program-memory claim with the bounded fact that selecting
+the ROM PICO console loads no service file. The ROM console still uses base
+RAM: `src/ram.asm:75-107` reserves PIBLK, its record and row/state storage,
+and `src/pico.asm:57-87` initialises that state and installs its pointers.
+Those facts belong to the base memory account, not an extra operator
+prerequisite. No amount of workspace or new measurement is inferred here.
+The capture configuration is declared in `tools/capture.mjs:63-73` and the
+machine's GLCD default is in `host/machine.mjs:49`. These are ea3ef3d source
+coordinates, not a new run.
+
+I reread the changed paragraphs and their neighbours for continuity, agency
+and punctuation. All eight complete capture-command/fence pairs remain
+identical to the original. The historical checked comment and source-only
+qualification remain separate. No runtime work, import, build or new result
+was performed. The earlier full-draft prose metrics above are the recorded
+craft-pass results, not a fresh report for this bounded correction.

@@ -15,7 +15,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 The console is the keyboard you type on and the display TEC-OS answers on. `CON`
 moves that connection between a serial terminal, the PICO9918 and the graphics
-LCD. Its reply appears on the console you select.
+LCD. Its reply is sent through the selected console. `BAT:` discards it.
 
 ## Devices and their names
 
@@ -66,9 +66,11 @@ queued input does not establish that the physical board can receive a paste.
 
 ## Moving between displays
 
-`CON` alone reports the console in use. Its four replies are `CON: TTY:`, `CON: CRT:`, `CON: UC1:` and `CON: BAT:`. A name after the command selects that
-console. `CON TTY` and `CON TTY:` are equivalent. An invalid name is printed
-back with a question mark and leaves the console as it was.
+`CON` alone generates a report naming the selected console: `CON: TTY:`,
+`CON: CRT:`, `CON: UC1:` or `CON: BAT:`. The report is discarded in
+`BAT:`. A name after the command selects that console. `CON TTY` and `CON TTY:`
+are equivalent. An invalid name is printed back with a question mark and leaves
+the console as it was.
 
 The transcripts in this chapter are retained host-model captures from `78127ec`.
 They show their original configurations and output, including the historical
@@ -118,8 +120,9 @@ selects the serial terminal and reports `CON: TTY:`.
 
 `UC1:` requires the graphics LCD, the matrix keyboard and the console driver
 `GLCD.SVC`. A driver is a resident service that handles a device. The PICO9918's
-console is in ROM and takes no program memory. The graphics-LCD driver is a file
-on drive A. It loads into RAM and reduces the space left for programs. Chapter
+console code is in ROM so selecting it loads no service file. The graphics-LCD
+driver is a file on drive A. It loads into RAM and reduces the space left for
+programs. Chapter
 10 explains that memory boundary.
 
 `CON UC1` loads `GLCD.SVC` from drive A if it is not installed. A failed load
@@ -141,8 +144,9 @@ A>
 
 On a board with both displays cold boot selects the PICO9918. The starter
 card's `GLCD.SVC` startup line then installs nothing. `CON UC1` loads the driver
-and selects the graphics LCD. The web page's board has both displays. Its
-graphics LCD showed this after the command:
+and selects the graphics LCD. This historical host-model capture used
+`--board pico`, which includes both displays and the matrix keyboard. Its
+graphics-LCD text capture showed this after the command:
 
 <!-- node tools/capture.mjs --board pico --screen "CON UC1" CON -->
 ```text
