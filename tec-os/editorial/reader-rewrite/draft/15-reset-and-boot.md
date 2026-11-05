@@ -374,6 +374,10 @@ source checks. Subsequent warm boots retain its position
 
 ## Historical boot costs
 
+<!-- Qualification hold: this section preserves the old chapter's numbers.
+     Its first-CONIN and warm-boot figures conflict with retained run evidence.
+     Do not treat it as accepted measurement evidence. See 15-pass-record.md. -->
+
 These historical measurements were made at `78127ec` on the host model
 with the starter card and serial board.
 At 4 MHz, 4,000,000 T-states take one second.

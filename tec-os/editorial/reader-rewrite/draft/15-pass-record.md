@@ -199,3 +199,23 @@ selection. Final-root appendix links are normalised at1d7eb58. Historical
 timings, including the recorded unresolved first-CONIN discrepancy, are
 preserved evidence rather than newly recertified runs. Current qualification
 and whole-book integration remain pending.
+
+## Reopened historical measurement acceptance
+
+Further evidence review supersedes the earlier bounded factual closure for
+the cost section. The retained b14p2-t/m781.json records first/last BCONIN
+7067777 with one call. Its measure.mjs samples before stepping the named
+instruction on dist/starter.img with glcd:false. Book46 records the same
+first-CONIN figure. Commit5006e2c replaces it with7200316 while retaining
+the same stated endpoint, with no supporting run found.
+
+The same rewrite changes warm boot32482 to32502 and warm-after-SAVE115898
+to115918. The retained JSON and pre-rewrite prose support the former pair.
+The20-cycle difference is not explained by evidence yet. Do not infer a
+method correction. The JSON's broad banner/MEMINIT marks are not the same
+measure as a complete routine duration, so they cannot replace9448/346677.
+An independent full cost-provenance audit is in progress without execution.
+
+Historical costs remain a held transcription in the draft, not accepted
+measured claims. Final source qualification and any changed measurements
+need an explicit allocated run. No unsupported figure is silently substituted.
