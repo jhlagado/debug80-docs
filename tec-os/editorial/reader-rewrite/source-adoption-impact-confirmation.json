@@ -1,0 +1,739 @@
+{
+  "status": "bounded confirmation clear; no adoption or runtime",
+  "reviewed_record_sha256": "df276b238d6014d98580b26f690bf1bbb1798d197ef3a495653a1cfc3c0a0bc0",
+  "reading": "Read all 35 complete impact contexts and action holds, all nine historical exemptions and all 29 complete proof spans. Initial overlarge output was truncated; complete bounded rereads covered every item.",
+  "source_checks": [
+    {
+      "kind": "source_span",
+      "group": "cold40",
+      "id": null,
+      "path": "src/pico.asm",
+      "start_line": 31,
+      "end_line": 87,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "cold40",
+      "id": null,
+      "path": "src/pico.asm",
+      "start_line": 36,
+      "end_line": 91,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "bare_selector_and_claim",
+      "id": null,
+      "path": "src/cpm/ccpcmd.asm",
+      "start_line": 113,
+      "end_line": 208,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "bare_selector_and_claim",
+      "id": null,
+      "path": "src/console.asm",
+      "start_line": 165,
+      "end_line": 199,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "bare_selector_and_claim",
+      "id": null,
+      "path": "src/services.asm",
+      "start_line": 245,
+      "end_line": 279,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "explicit_widths",
+      "id": null,
+      "path": "src/pico.asm",
+      "start_line": 94,
+      "end_line": 159,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "explicit_widths",
+      "id": null,
+      "path": "src/abi.inc",
+      "start_line": 219,
+      "end_line": 243,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "host_explicit_80",
+      "id": null,
+      "path": "host/card.mjs",
+      "start_line": 58,
+      "end_line": 73,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "host_explicit_80",
+      "id": null,
+      "path": "host/card.mjs",
+      "start_line": 104,
+      "end_line": 117,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "host_explicit_80",
+      "id": null,
+      "path": "host/card.mjs",
+      "start_line": 104,
+      "end_line": 117,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "host_ui_default80",
+      "id": null,
+      "path": "web/src/main.mjs",
+      "start_line": 17,
+      "end_line": 43,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "host_ui_default80",
+      "id": null,
+      "path": "web/src/main.mjs",
+      "start_line": 82,
+      "end_line": 95,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "font_shape_and_identity",
+      "id": null,
+      "path": "tools/lib/font.mjs",
+      "start_line": 9,
+      "end_line": 43,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "font_shape_and_identity",
+      "id": null,
+      "path": "tools/lib/font-package.mjs",
+      "start_line": 8,
+      "end_line": 21,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "font_shape_and_identity",
+      "id": null,
+      "path": "src/abi.inc",
+      "start_line": 163,
+      "end_line": 168,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "font_shape_and_identity",
+      "id": null,
+      "path": "src/pico.asm",
+      "start_line": 291,
+      "end_line": 336,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "record_v3",
+      "id": null,
+      "path": "src/abi.inc",
+      "start_line": 205,
+      "end_line": 243,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "record_v3",
+      "id": null,
+      "path": "src/pico.asm",
+      "start_line": 31,
+      "end_line": 57,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "build_font_validation_notices",
+      "id": null,
+      "path": "tools/build.mjs",
+      "start_line": 342,
+      "end_line": 351,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "build_font_validation_notices",
+      "id": null,
+      "path": "tools/media.mjs",
+      "start_line": 169,
+      "end_line": 176,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "build_font_validation_notices",
+      "id": null,
+      "path": "tools/media.mjs",
+      "start_line": 252,
+      "end_line": 262,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "build_font_validation_notices",
+      "id": null,
+      "path": "tools/lib/font-package.mjs",
+      "start_line": 8,
+      "end_line": 21,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "diag_font_validation_notices",
+      "id": null,
+      "path": "tools/diag.mjs",
+      "start_line": 103,
+      "end_line": 145,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "diag_font_validation_notices",
+      "id": null,
+      "path": "tools/lib/font-package.mjs",
+      "start_line": 8,
+      "end_line": 21,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "native_binding",
+      "id": null,
+      "path": "docs/memory-map.md",
+      "start_line": 1,
+      "end_line": 33,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "native_binding",
+      "id": null,
+      "path": "docs/memory-map.md",
+      "start_line": 1,
+      "end_line": 33,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "serial_width_unchanged",
+      "id": null,
+      "path": "src/cpm/ccpfile.asm",
+      "start_line": 70,
+      "end_line": 110,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "decoder_boundary",
+      "id": null,
+      "path": "tools/capture.mjs",
+      "start_line": 145,
+      "end_line": 153,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "source_span",
+      "group": "decoder_boundary",
+      "id": null,
+      "path": "host/machine.mjs",
+      "start_line": 412,
+      "end_line": 450,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM001",
+      "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
+      "start_line": 204,
+      "end_line": 207,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM002",
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "start_line": 158,
+      "end_line": 162,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM003",
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "start_line": 259,
+      "end_line": 262,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM004",
+      "path": "tec-os/editorial/reader-rewrite/draft/15-reset-and-boot.md",
+      "start_line": 85,
+      "end_line": 89,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM005",
+      "path": "tec-os/editorial/reader-rewrite/draft/16-console-paths.md",
+      "start_line": 545,
+      "end_line": 551,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM006",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "start_line": 345,
+      "end_line": 348,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM007",
+      "path": "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md",
+      "start_line": 331,
+      "end_line": 337,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM008",
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+      "start_line": 56,
+      "end_line": 62,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM009",
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "start_line": 305,
+      "end_line": 310,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM010",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "start_line": 399,
+      "end_line": 405,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM011",
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "start_line": 218,
+      "end_line": 226,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM012",
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "start_line": 260,
+      "end_line": 263,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM013",
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "start_line": 39,
+      "end_line": 42,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM014",
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "start_line": 252,
+      "end_line": 258,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM015",
+      "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
+      "start_line": 198,
+      "end_line": 202,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM016",
+      "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
+      "start_line": 106,
+      "end_line": 109,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM017",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "start_line": 319,
+      "end_line": 325,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM018",
+      "path": "tec-os/editorial/reader-rewrite/draft/16-console-paths.md",
+      "start_line": 553,
+      "end_line": 559,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM019",
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "start_line": 719,
+      "end_line": 724,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM020",
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+      "start_line": 423,
+      "end_line": 442,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM021",
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+      "start_line": 444,
+      "end_line": 448,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM022",
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "start_line": 726,
+      "end_line": 729,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM023",
+      "path": "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md",
+      "start_line": 249,
+      "end_line": 254,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM024",
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+      "start_line": 558,
+      "end_line": 566,
+      "source_content_exact": true,
+      "range_rendering": "IM024 retains actual final source-line LF; no content difference"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM025",
+      "path": "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md",
+      "start_line": 222,
+      "end_line": 230,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM026",
+      "path": "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md",
+      "start_line": 192,
+      "end_line": 195,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM027",
+      "path": "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md",
+      "start_line": 323,
+      "end_line": 329,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM028",
+      "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+      "start_line": 107,
+      "end_line": 116,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM029",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "start_line": 204,
+      "end_line": 210,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM030",
+      "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
+      "start_line": 56,
+      "end_line": 60,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM031",
+      "path": "tec-os/editorial/reader-rewrite/draft/index.md",
+      "start_line": 10,
+      "end_line": 11,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM032",
+      "path": "tec-os/editorial/reader-rewrite/draft/index.md",
+      "start_line": 20,
+      "end_line": 25,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM033",
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "start_line": 10,
+      "end_line": 15,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM034",
+      "path": "tec-os/editorial/reader-rewrite/draft/16-console-paths.md",
+      "start_line": 10,
+      "end_line": 13,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "reader_context",
+      "group": "reader",
+      "id": "IM035",
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+      "start_line": 10,
+      "end_line": 15,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "historical_exemption",
+      "group": "history",
+      "id": null,
+      "path": "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md",
+      "start_line": 83,
+      "end_line": 100,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "historical_exemption",
+      "group": "history",
+      "id": null,
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+      "start_line": 80,
+      "end_line": 93,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "historical_exemption",
+      "group": "history",
+      "id": null,
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "start_line": 418,
+      "end_line": 422,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "historical_exemption",
+      "group": "history",
+      "id": null,
+      "path": "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md",
+      "start_line": 75,
+      "end_line": 79,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "historical_exemption",
+      "group": "history",
+      "id": null,
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+      "start_line": 554,
+      "end_line": 556,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "historical_exemption",
+      "group": "history",
+      "id": null,
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "start_line": 270,
+      "end_line": 272,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "historical_exemption",
+      "group": "history",
+      "id": null,
+      "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
+      "start_line": 224,
+      "end_line": 225,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "historical_exemption",
+      "group": "history",
+      "id": null,
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "start_line": 811,
+      "end_line": 813,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    },
+    {
+      "kind": "historical_exemption",
+      "group": "history",
+      "id": null,
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "start_line": 199,
+      "end_line": 202,
+      "source_content_exact": true,
+      "range_rendering": "line-joined range"
+    }
+  ],
+  "interpretation": "Raw cold 40 differs from unchanged host/UI 80 and explicit 32/40/80. Font remains 96 times 8 with five pixels in bits 7–3. Current PICO record is v3. Native 16020/364 already exists at baseline ea3 and is not font-stage growth over historical 78127ec 16018/366. Historical maps, screens and costs retain actual pins.",
+  "limits": "No complete byte-by-byte review of all changed font/binary asset contents is asserted. Their identities stay bound to upstream qualified native evidence. This confirms source-adoption preparation only, without a receiver pin decision, new capture, source execution or reader edit."
+}
