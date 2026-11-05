@@ -22,10 +22,10 @@ nav_group: "Part II: Inside TEC-OS"
      2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f.
      Historical PC assembly used atom-z80 0.3.7. No BANNER40 proof is implied. -->
 
-A ROM file needs more than machine-code bytes. Its symbol map must describe
-the same addresses and its card must contain programs built for the same
-interfaces. TEC-OS produces the image, map and memory census together, then
-checks their identity before preparing the distribution media
+A ROM and its symbol map must describe the same addresses. Card programs
+must use the interfaces supplied by that ROM. TEC-OS produces the image,
+map and memory census together. Media preparation checks the selected map
+generator and the ROM size/hash against the census
 (`tools/build.mjs:272-322`, `tools/media.mjs:168-182`).
 
 The host setup in [Chapter 5](05-cards-on-the-pc.md) is the starting point.
@@ -53,8 +53,8 @@ existing host. The checks cover the runner, lock file, locked Z80 runtime
 and the 10,295-byte TAS executable (`tools/lib/tas-rom.mjs:10-11`,
 `tools/lib/tas-rom.mjs:77-98`, `test/inputs.json:4-13`).
 
-The input selection order is an explicit `TAS_COM` or `TED_COM`, then
-`.inputs/NAME`, then the legacy sibling file under `../thorium/dist/`.
+The input selection order is an explicit `TAS_COM` or `TED_COM` then
+`.inputs/NAME` then the legacy sibling file under `../thorium/dist/`.
 The selected file must match its size and SHA-256. An empty override,
 invalid local file or wrong selected binary stops the operation. Selection
 does not fall through to another candidate after a mismatch
@@ -66,7 +66,9 @@ temporary download before replacing the local input
 `TECOS_TAS_HOST` selects the prepared host, otherwise `.inputs/tas-host`
 is used. An empty host override is an error. Assembly reads local prepared
 files and does not download them (`tools/lib/tas-rom.mjs:77-107`).
-The explicit ATOM reference selection is:
+After preparation, `npm run build` constructs the main ROM, `npm run diag`
+constructs the separate diagnostic ROM and `npm run media` prepares the
+distribution (`package.json:14-22`). The explicit ATOM reference selection is:
 
 ```sh
 TECOS_ROM_ASSEMBLER=atom npm run build
@@ -74,9 +76,7 @@ TECOS_ROM_ASSEMBLER=atom npm run build
 
 The default value of `TECOS_ROM_ASSEMBLER` is `tas`. Any value other than
 `tas` or `atom` is rejected. The ATOM reference path needs no TAS host
-(`tools/lib/tas-rom.mjs:120-124`, `tools/build.mjs:341-347`). A source-level
-backend selection is separate from qualifying a new artifact or console
-profile.
+(`tools/lib/tas-rom.mjs:120-124`, `tools/build.mjs:341-347`).
 
 ## Image regions and their addresses
 
@@ -96,7 +96,7 @@ code follow, with a single free gap at the end (`src/reset.asm:1-14`,
 
 Its used extent was 16,018 of 16,384 bytes. These figures describe that
 historical image, not newly measured positions at `ea3ef3d`. The census
-stores each region's start and exclusive end, while the table above prints
+stores each region's start and exclusive end while the table above prints
 the last occupied address (`tools/build.mjs:272-287`).
 
 At `C000h`, `JP RSTENT` transfers control into the code. The historical
@@ -118,7 +118,7 @@ Code extends from `RSTENT` to the label `CODEEND` after the last included
 file. The build fills the remaining image bytes with `FFh`
 (`src/boot.asm:38-49`, `src/end.asm:1-4`, `tools/build.mjs:249-252`).
 A map from a different ROM can assign valid-looking labels to the wrong
-instructions, so the ROM, map and census belong to the same build.
+instructions so the ROM, map and census belong to the same build.
 
 ## Source order and reserved RAM
 
@@ -183,11 +183,9 @@ selected backend and extracts the ROM extent after them
 (`tools/build.mjs:196-205`, `tools/lib/tas-d8.mjs:183-188`,
 `tools/lib/tas-d8.mjs:239-279`).
 
-`reset.asm` then sets `ORG $C000`. `abi.asm` follows its jump, then the
+`reset.asm` then sets `ORG $C000`. `abi.asm` follows its jump then the
 four data files and finally the routine files. The CCP, BDOS and volume
-routines each occupy consecutive included files. A source split therefore
-keeps those subsystem extents together while making individual routines
-easier to locate (`src/rom.asm:12-45`). [Chapter 14](14-state-and-memory.md)
+routines each occupy consecutive included files. Their bytes remain together in the image (`src/rom.asm:12-45`). [Chapter 14](14-state-and-memory.md)
 explains the workspace lifetimes separately from these address declarations.
 
 ## Generated configuration, geometry and font
@@ -200,9 +198,8 @@ heading (`tools/build.mjs:61-138`).
 `config.asm` defines `WSBASE`, version values `VERHI`, `VERLO`, `ROMVER`
 and serial delay counts. The inspected version is 0.1, printed in the boot
 banner and LCD top row (`src/text.asm:11-11`, `src/text.asm:67-67`).
-The serial calculation
-uses 4,000,000 Hz and 4,800 baud with the instruction costs of the transmit,
-receive and polling loops. It produces `TXDLY`, `TXSTOP`, `RXDLY`,
+The serial calculation uses 4,000,000 Hz and 4,800 baud with the instruction
+costs of the transmit, receive and polling loops. It produces `TXDLY`, `TXSTOP`, `RXDLY`,
 `RXHALF` and `RXPOLL`. The historical values are 49, 105, 50, 70 and 77.
 A count outside 1–255 raises an error (`tools/build.mjs:25-27`,
 `tools/build.mjs:37-75`). [Chapter 16](16-console-paths.md) explains their
@@ -231,13 +228,12 @@ the font occupied `C179h–C478h`. PICO accesses `FONT` by label and GLCD
 obtains its address through numbered service 15
 (`src/pico.asm:303-311`, `src/services.asm:597-603`,
 `drivers/glcd.asm:66-72`). The diagnostic ROM and tests use the same font
-parser (`tools/diag.mjs:75-75`). This describes the existing source font,
-not adoption of the planned TEC Compact opening profile.
+parser (`tools/diag.mjs:75-75`, `test/lib/machine.mjs:8-10`).
 
 ## Two passes to place the workspace
 
 The workspace must end immediately below the RAM BIOS table at `BF00h`.
-Its size depends on the declarations and stack sizes, so the build obtains
+Its size depends on the declarations and stack sizes so the build obtains
 that size from an assembled label (`tools/build.mjs:234-249`).
 
 The probe assembly uses `WSBASE = 8000h`. Its map must contain a real label
@@ -248,14 +244,14 @@ An absent marker, an equate substituted for the marker or an invalid extent
 stops this placement (`tools/build.mjs:236-249`).
 
 The TAS path stages the included sources under unambiguous CP/M names.
-It rejects an include escaping the source root, repeated or unsupported
-source forms and a missing real workspace marker. Its conversion checks
+It rejects an include escaping the source root, repeated includes,
+unsupported statements and a missing real workspace marker. Its conversion checks
 TDBG origin, extent, checksum, padding, source definitions and emission
 positions before extracting ROM bytes. It also validates RAM reservations
 against their allowed extent (`tools/lib/tas-rom.mjs:15-69`,
 `tools/lib/tas-d8.mjs:13-45`, `tools/lib/tas-d8.mjs:119-162`,
 `tools/lib/tas-d8.mjs:183-255`). The resulting D8 map records source files,
-labels and segments rather than replacing the probe with a fixed size
+labels and segments
 (`tools/lib/tas-d8.mjs:257-279`).
 
 The ATOM path checks that each emitted image starts at or above `C000h`
@@ -272,7 +268,8 @@ Before writing the outputs, the build checks these properties:
 
 - The ROM byte extent fits within 16 KiB. `RESET` is at `C000h` and the
   interface is at `C003h`. The data starts exactly at the interface's end.
-  Data, code and `CODEEND` have valid order and fit below `10000h`
+  Data and code have valid order, with exclusive `CODEEND` at or below
+  `10000h`
   (`tools/build.mjs:249-259`).
 - The interface contains `TNA`, version 5.1 and `JP SVCDSP`, with an
   eight-byte extent. `SVCFMT` equals the PC writer's format constant.
@@ -293,9 +290,9 @@ Before writing the outputs, the build checks these properties:
 - The starter TPA has at least 45,830 bytes (`tools/build.mjs:269-270`).
 
 The last check is arithmetic, not a boot. `cardLayout` packs allocation
-vectors down from `WSBASE` using `floor(DSM / 8) + 1` bytes each, then
+vectors down from `WSBASE` using `floor(DSM / 8) + 1` bytes each then
 subtracts three bytes for the BDOS entry. The starter's `DSM` values 511
-and 2047 give 64 and 256 bytes, or 320 together
+and 2047 give 64 and 256 bytes for 320 together
 (`tools/build.mjs:222-231`). In the historical `78127ec` layout the entry
 was `B9A4h`, leaving 47,268 bytes from `0100h`. A current build must supply
 its own census instead of copying that historical ceiling.
@@ -315,7 +312,7 @@ point (`tools/build.mjs:325-338`). `npm run media` prepares those outputs
 from the selected build (`tools/media.mjs:168-205`).
 
 The media preparation checks the map's generator against the selected
-backend, then checks ROM length and SHA-256 against the census. It assembles
+backend then checks ROM length and SHA-256 against the census. It assembles
 MOUNT, GLCD and DEMO through that selection and validates pinned TED and
 TAS before preparing the recipes (`tools/media.mjs:168-205`). The TAS
 GLCD writer compares flat assemblies at `0100h` and `0200h`, checks their
@@ -328,15 +325,15 @@ G8M on B. A holds MOUNT, GLCD, STARTUP, TED, SAMPLE source and TAS.
 `STARTUP.CMD` contains the GLCD installation line. The page recipe adds
 DEMO. Component entries record each file's size and SHA-256. Assemblies
 and recipe construction finish before the output replacement begins
-(`tools/media.mjs:193-254`, `tools/lib/starter.mjs:10-16`). This ordering
-is not a promise that every distribution file is replaced atomically.
+(`tools/media.mjs:193-254`, `tools/lib/starter.mjs:10-16`). Output files
+are replaced individually after those preparation checks.
 
 Media also writes `docs/memory-map.md` and refreshes the ROM-space spans
 in `docs/rom-services.md` from the census (`tools/media.mjs:45-64`,
 `tools/media.mjs:255-259`). The image profile is `tecos`. Any other command-line
 profile name is rejected (`tools/build.mjs:29-32`, `tools/build.mjs:350-363`).
 The same image supports the detected board devices. At `ea3ef3d` PICO
-starts at 80 columns and supports 40 and 32-column selections, while GLCD
+starts at 80 columns and supports 40 and 32-column selections while GLCD
 uses its card driver (`src/pico.asm:64-90`, `tools/lib/starter.mjs:10-16`).
 
 The retained `78127ec` build line is actual historical output:
@@ -348,9 +345,7 @@ tecos: ROM 16018/16384 bytes, TPA $0100-$B9A3 (47268 bytes), sha256 8cad40923ce1
 Its printed hash is the first sixteen hexadecimal digits of the full
 SHA-256. That historical ROM's full digest is
 `8cad40923ce1c3c6079d3201a1a8cc294dbe501838ed54505ca12287672f8b9f`
-(`tools/build.mjs:275-275`, `tools/build.mjs:355-358`). Current mechanisms
-need the offered source, while historical addresses need that particular
-image's identity.
+(`tools/build.mjs:275-275`, `tools/build.mjs:355-358`).
 
 ## HELLO as a historical tool round
 
@@ -391,9 +386,8 @@ HELLO.ASM:7:1: expected a label, instruction or directive
 B>A:TED
 ```
 
-The diagnostic gives the source filename, line and column. It is a local
-HELLO diagnostic, not a product-source citation. TED reopened at that
-position and displayed the message on its status row. Fourteen blank rows
+The diagnostic gives the source filename, line and column. TED reopened
+at that position and displayed the message on its status row. Fourteen blank rows
 between the source and status row are omitted from this retained screen:
 
 <!-- the same run -->
@@ -432,17 +426,14 @@ Press a key
 A key restored TED at line 7 and `^Q` ended the editor. TAS wrote
 `HELLO.COM` and the debug file `HELLO.DBG` beside the source. TED's
 `THOR.PRJ` names the source for the build keys after the first good build.
-`THOR.SES` stores the work file and saved editing position. These are the
-historical tools' files, separate from the ROM's D8 map.
-
-This round establishes the recorded interaction on that prepared
-configuration. It does not qualify an unrun font or width change.
+`THOR.SES` stores the work file and saved editing position. These files belong to
+the editor/assembler round, separate from the ROM's D8 map.
 
 ## HELLO assembled on the PC
 
-The PC route recorded at `7458352` used ATOM 0.3.7 installed with the repository's
-`npm ci`. With the same source saved as `hello.asm`, this command wrote
-`hello.com`:
+The PC route recorded at `7458352` used ATOM 0.3.7 installed with the
+repository's `npm ci`. With the same source saved as `hello.asm`, this
+command wrote `hello.com`:
 
 ```sh
 npx atom hello.asm hello.com
@@ -461,7 +452,8 @@ cp dist/starter.img work.img
 node tools/tecvol.mjs put work.img B hello.com
 ```
 
-`put` names it `HELLO.COM` on B. On a board, `tecvol install` writes
+`put` names it `HELLO.COM` on B (`tools/tecvol.mjs:149-156`). On a board,
+`tecvol install` writes
 `work.img` to the card as described in Chapter 5. The retained host-model
 capture boots that image and enters `B:`, `DIR` and `HELLO`:
 
@@ -477,4 +469,5 @@ Hello from the TEC-1G
 B>
 ```
 
-The blank line before the prompt comes from the CCP's program-return path.
+The blank line before the prompt comes from the CCP's program-return path
+(`src/cpm/ccp.asm:104-111`).

@@ -160,3 +160,62 @@ The full draft precedes the reduction passes. AllassignedbuildfactsandHELLO
 literals have homes above. The normalbuildpreparation is described fromsource,
 notexecuted. Historicalcommandsaretext,notanallocation. Onlythetwoownedpaths
 willbecommittedwith --only. Independentreviewandruntimequalificationremainopen.
+
+## Completed authorial passes
+
+The generous draft and full material/source record were committed asd2d609e
+before reduction. A simultaneous shared-branch push advanced the remote to that
+same commit while my push was in flight. A retry reportedEverythingup-to-date
+and ls-remote confirmedd2d609e. No force push or history rewrite was used.
+
+| Pass | Actual finding and disposition |
+| --- | --- |
+| Mechanical gate | Manual pattern/heading/punctuation searches found optional then/so/while commas and no editable semicolon or em dash. Removed optional conjunction commas. Literal assembly comments and the shell-independent historical capture comments remain exact. No prose-analysis script or complexity score was run or invented. |
+| Thematic/teaching | Tools precede region interpretation, include order precedes generated inputs, the probe's problem precedes its two passes and placement guards precede media publication. Added the normal build/diag/media command roles from package.json without creating a new transcript. The HELLO source precedes its deliberate error, error location precedes repair and repaired execution precedes its PC reproduction. |
+| Paragraph deletion | Removed the full assurance paragraph after the editor round because it repeated provenance already beside the actual7458352 capture. Removed the closing offered-source/historical-identity certification after the hash. The historical pin and artifact hash remain. Kept the map-mismatch consequence because it explains why the output set must agree. |
+| Sentence deletion | Read every sentence in order and across paragraph boundaries. Deleted the source-level backend qualification after the explicitATOM command and the planned-font disclaimer afterFONT because metadata already defines those scopes. Removed the reader-facing “local diagnostic, not source citation” aside and recorded that editorial classification only here. Kept the mismatch/no-fallback and exclusive-end qualifications because their removal changes the operational contract. |
+| Agency and exact relations | Routines/scripts generate, compare, validate, copy and write. Files contain bytes or declarations. No artifact thinks, remembers, decides or wants. Changed the opening from a ROM's abstract need to the actual ROM/map/interface agreement. Described output replacement as individual file writes after checks instead of an artifact's atomicity promise. |
+| Every comma | Read every comma-bearing paragraph/table row. Removed then/so/while commas that added only a pause and left true list separators, appositions and numbers. Kept the introductory condition boundary where it separates an operation from its prerequisite. Historical literals remain untouched. No authorial Oxford comma, semicolon or em dash remains. |
+| Technical/source recheck | Corrected the guard's wording from below10000h to exclusiveCODEEND at or below10000h, matchingbuild.mjs:259. The TAS source gate rejects repeated includes, not all repeated source forms. Narrowed opening identity language to the actual mapgenerator andROM/censussize/hash tests. Clarified currentDSreservations across backend extraction rather than claimingTAS emits no reservation bytes. Read source callers forFONT in test/lib/machine.mjs:8–10 and HELLO's newline atccp.asm:104–111. No new addresses/sizes are derived from an unbuilt offer. |
+| Preservation | All58 assigned units plus the explicitly requested fullHELLOsource are accounted for. Ten complete fences compare byte-identically with frozen10821b6: include order, explicitATOMselection, actualhistoricalbuildline, completeHELLOsource, threeerror/repairtextfences, twoPCshellrecipes andthePCtextcapture. The original7458352roundcomment, both same-runcomments andPCcapturecomment remain exact. PreservedHELLO.DBG/THOR.PRJ/THOR.SES facts that were easy to lose when combining the old paragraph. |
+| Journey/navigation | Read from the output-set agreement through the last prompt newline. The chapter's reproducible host/implementation route remains distinct from Chapter2's prepared opening exercise. Final sibling links target5,14,15,16and17. Their existing draft headings/files resolve. No reader link points to a review, shared ledger or ../../../appendix path. The last sentence teaches the actual blank line mechanism rather than recapping or forecasting. |
+
+### Corrected source and evidence boundaries
+
+The former first-five-files-emit-nothing explanation is expressed as four
+sets of equates plus RAM address reservations. The TAS conversion explicitly
+validates zero reservation bytes before extractingROM, so a blanket no-bytes
+claim would hide a backend distinction. The placement bound remains45,830,
+not a substitute measured TPA. Historical47,268/B9A4 and the78127ecROM/table/font
+extents retain their actual artifact scope. No blanket assertion that every
+book address belongs to that old image survives.
+
+The font's five-pixel row parser is the existingfont5x7source at ea3, not a
+newTECCompact/default. Source selection, a later proposed profile and actual
+qualified output remain distinct. Original startupGLCDline and existing80column
+source/default are preserved. The build's two passes are construction stages,
+not new observed results. Media's per-file replacement sequence does not imply
+all-output atomicity.
+
+HELLO's complete source and diagnostics retain exactspacing and the deliberately
+invalid1. The diagnostic location islocal-example provenance. It has not been
+converted into a new-pin citation or a corrected listing. The retained code
+was historically assembled and run as recorded bybook31, not newly verified
+under compact-format rules. That later proof and BANNER40 qualification are
+outside this unit. The source-only source checks do not manufacture a new33byte
+result or substitute test/ted.test.mjs's different BAD input for this capture.
+
+No product code, assembler, build, import, test, capture or prose-analysis
+program was executed. Static text comparisons and source-object/range/link
+reads supply literal evidence only. Full thematic/deletion/agency/punctuation/
+journey/gate passes were manual under the explicit instruction. Independent
+result review and final runtime/media qualification remain open.
+
+## Final static comparison
+
+All58 unit rows are present. Allten fences andfour HELLOrecipe/continuation
+comments compare exactly with frozen10821b6. The final draft has88
+current file/range occurrences across32 files, all within their actual
+ea3ef3d source extents. Each was read semantically as recorded above. All
+5 final sibling destinations exist. The owned-path diff has no
+whitespace errors. No runtime or automated craft result is claimed.
