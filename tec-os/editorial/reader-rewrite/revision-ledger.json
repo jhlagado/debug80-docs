@@ -16161,5 +16161,27 @@
     "accepted_scope": "Covered cold40 opening/directSAMPLE, TED/SAMPLE, BANNER save/reopen/build/run/edit/rebuild/persistence, PC7 and three pager cases. Both FAIL cases retain INIT1/carry-return1/REMOVE0/scan1 and complete rollback. PASS registry/RST targetB82B, exact000F padding normalization, repeated-load refusal without INIT, FAIL-with-control preservation, unload with generation0to1, restored AREA47268/SERVICES, empty-unload refusal and final flush are independently accepted.",
     "evidence_scope": "All525 earlier accepted basic/pager artifacts byte-identical; seven entry/return/zero/warm-return sets and four SAMPLE device-write sequences;138 screen/mask reconstructions from raw VRAM/registers and pinned font; four parsed service cards and original files/header/reference padding exact; wrong-ROM/profile controls retained.",
     "limits": "Earlier three failures remain failures. Physical hardware/audio, browser, debugger, complete book quality, stage closure and publication are outside acceptance. Final reader-order and source/navigation checks continue."
+  },
+  "reader_facing_integration": {
+    "candidate": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+    "integration_commit": "9e227055c63f8d47773c53f6421cec3a6ebf7b67",
+    "wording_correction": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+    "independent_confirmation": "0aecb61",
+    "readers": 39,
+    "chapter_count": 28,
+    "appendices": 10,
+    "root_matches_final_draft": true,
+    "navigation_groups": [
+      "Using the machine",
+      "Writing programs",
+      "Inside TEC-OS",
+      "Reference"
+    ],
+    "historical_body_and_capture_pins_preserved": true,
+    "source_checks": "integration-source-checks.json",
+    "build_request": "site-verification-request.md",
+    "status": "Source integration complete, independently clear. Parent final acceptance and allocated site/render verification pending.",
+    "execution": "Only source/text/hash/link/sidebar-generator utilities. No new product runtime, assembly, site/native build, preview or publication.",
+    "scope_precedence": "This dated integration checkpoint supersedes earlier preparation/navigation-pending summaries for the same receiver scope without rewriting their historical facts or failed attempts."
   }
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "independent_whole_reader_order_complete_with_bounded_corrections; integrated_candidate_frozen; integration_confirmation_pending",
+  "status": "independent_whole_reader_order_and_integration_confirmation_complete; candidate_frozen",
   "start_snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
   "final_candidate_commit": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
   "source_selection": "962853f499f05faf281f6cdff1deca8959f58c2b",
@@ -570,5 +570,7 @@
       "sha256": "81cdf91fa07128f76f90873eaadb61ac58e76e43f596fe338f646ee3e3deea0c"
     }
   ],
-  "integration_boundary": "All39rootpages byte-identical to finaldrafts. nav_group-only metadata normalization createsfourgroups. No unread lead page is claimed personally read. Final source/link/body reviews and exact rootidentity complement parentindependentwhole39coverage."
+  "integration_boundary": "All39rootpages byte-identical to finaldrafts. nav_group-only metadata normalization createsfourgroups. No unread lead page is claimed personally read. Final source/link/body reviews and exact rootidentity complement parentindependentwhole39coverage.",
+  "independent_integration_confirmation": "0aecb61",
+  "parent_acceptance_boundary": "P3 final source/navigation acceptance and any separately allocated build/render remain pending. No publication authority inferred."
 }

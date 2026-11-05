@@ -638,5 +638,12 @@
       }
     ],
     "boundary": "Preserved capture padding and two unchanged draft file endings. None trimmed to silence the check."
+  },
+  "prepared_build_request_syntax": {
+    "shell_blocks": 3,
+    "shell_parser": "sh -n",
+    "embedded_python": "ast.parse",
+    "result": "pass",
+    "execution": "No prepared command executed"
   }
 }
