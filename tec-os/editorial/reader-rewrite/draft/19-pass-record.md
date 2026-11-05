@@ -127,7 +127,7 @@ or random-access routine in full.
 | Mount reset | `src/volsvc.asm:310-402`; VRESET calls37 for the changed drive and VMNTRS calls14 again if that drive is default. |
 | Error modes | `src/cpm/bdoscon.asm:1-175`, bdos.asm's FNERRM/CHDROP and bdosfile.asm's ROFCB/ROTEST, bdoslog.asm's CHKRO/SELFAIL. FEh prints then returns, FFh returns silently, default prints/waits/CHDROP. Returned errors use A=L=FFh and B=H=code. READ/WRITE leaves the failed record current. |
 | State/provenance/layout | `src/cpm/PROVENANCE.md` full; `src/rom.asm:1-45`; `src/ram.asm:1-20`, `:45-65`, `:205-325`, `:350-400`; `src/layout.asm:120-160`; `src/boot.asm:68-82`, `:400-445`, `:490-540`, `:740-807`; `src/loader.asm:390-434`; `src/vol.asm:765-802`; `src/text.asm:62-83`; `format/format.json:38-62`. These establish include ownership, writable state, stack allocation, page-zero entry, DPH construction, messages and both geometries. |
-| Console exception | `src/cpm/bdoscon.asm:155-168`, `src/console.asm:200-235`; CONSTQ calls ROM BCONST while the RAM-table CONST wrapper draws the cursor. Only the exception is retained here. `src/cpm/ccpcmd.asm:138-147` independently confirms the system attribute at byte10. |
+| Console exception | `src/cpm/bdoscon.asm:155-168`, `src/console.asm:200-235`; CONSTQ calls ROM BCONST while the RAM-table CONST wrapper draws the cursor. Only the exception is retained here. `src/cpm/ccpfile.asm:138-147` independently confirms the system attribute at byte10. |
 
 ## Historical map evidence
 
@@ -199,3 +199,21 @@ list items. Word sequence, inline literals and all table lines were compared
 before and after and are unchanged. No factual rewrite, product execution,
 import, build or test occurred. Full independent Chapter19 review remains
 pending. Only the Chapter19 draft and this record were changed.
+
+## Full independent review corrections
+
+Accepted four findings from the complete independent59-unit review. The
+SYS-visibility citation now names ccpfile rather than ccpcmd. DIRUSED is
+a retained upper bound, including a whole containing card block after a BIOS
+directory write, not necessarily the exact last-live-entry count. Functions
+27/31 return the new default volume's allocation-vector/DPB pointers. An
+ordinary retained message-output key satisfies the error wait, with console
+controls separately qualified. The lead read the owning instructions in
+ccpfile138–147, bdosfn58–64/178–189, bdoslog362–385/420–439 and bdoscon's
+GETCHAR/CHKKEY paths before correction.
+
+Reread the changed passages and neighbours for agency, every comma and
+continuity. Removed the two optional conjunction commas that added no clarity.
+The earlier complete reader/source pass and historical artifact boundary
+remain distinct. All assigned tables and numerical examples remain. Bounded
+independent correction confirmation is pending. No execution occurred.
