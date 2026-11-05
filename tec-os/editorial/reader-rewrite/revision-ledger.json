@@ -15358,7 +15358,7 @@
     },
     {
       "unit": "appendix-I",
-      "status": "bounded draft pushed at85ff289; full independent review in progress",
+      "status": "complete independent review and6e45bb7 queued-validation/craft corrections confirmed; final profile and integration pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -15370,8 +15370,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed after full independent review and bounded6e45bb7 confirmation; final source/workflow integration remains open",
+        "independent_factual_review": "closed after full independent review and bounded6e45bb7 confirmation; final source/workflow integration remains open",
         "navigation": "pending",
         "final_source_pin": "pending"
       },

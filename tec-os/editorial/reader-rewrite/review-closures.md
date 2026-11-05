@@ -57,3 +57,12 @@ not a rendered-site check. Opening1–3 destinations and root integration
 remain unaccepted. The lead read all82 meaning and40 form rows of the revised
 glossary at8593c93; its independent review and local-form follow-ups are
 still open. No execution or publication occurred.
+
+## Web-reference correction confirmation
+
+AppendixI6e45bb7 is independently confirmed: filename uppercasing precedes
+the queue, validation belongs inside staged writes, dirty-card wording is
+clear and three optional commas are removed. Historical shell fence and
+inspected80-column policy remain unchanged. Chapter28 naming was separately
+reconciled and confirmed at22de85e. This closes the bounded reference review,
+not KS48/default, browser execution, physical evidence or root integration.
