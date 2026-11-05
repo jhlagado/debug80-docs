@@ -113,7 +113,7 @@ passing results.
 | Timing scopes | sd.asm:470-472 contains INC A and untakenJR NZ, 4+7=11T for extra FF classification only. 78127ec:docs/diagnostics.md:285-291 gives678T for a diagnostics fullpoll. Historical original17:111-116 supplies219144/216164 and4MHz55ms. No current fullpoll or timing run is claimed. |
 | Transfer and no-stack scope | sd.asm:517-724 contains unrolledbits, I256 two-byte readpasses, DE two256-byte writepasses and latch restoration beforeRET. cache.asm:222-275 sets/clearsSDXB. boot.asm:49-58 setsIM1. bios.asm:247-252,284-291 plusCDI/CEI:441-478 and vol.asm:668-678 supply callers' interrupt guards. Maskable interrupts only, no arbitrary NMI guarantee. |
 | Header format and generator | format/format.json:2-43 defines sizes/counts/fields, tools/build.mjs:78-135 emitsformat/geom. vol.asm:56-186 implements ordered header checks and minor0 versus nonzero. container.mjs:79-87 chooses minor1 for>8 ordrives. Header checksum uses volutil.asm:92-136 and vol.asm:592-622 modulo16bit. |
-| Zero-extra-table exception | vol.asm:197-206 branches straight toMNV2 forcount/16=0, bypassing comparison234-239 even whenstoredMNTSUMnonzero. container.mjs:130-148 still compares tableSum; its helper:39-48 computes empty0. Read the corrected AppendixE draft and e-pass-record, including independent closure751e8b2. E's exception is preserved without implying universal hostsuperset. |
+| Zero-extra-table exception | vol.asm:197-206 branches straight toMNV2 forcount/16=0, bypassing comparison234-239 even whenstoredMNTSUMnonzero. container.mjs:130-148 still compares tableSum; its helper:41-49 computes empty0. Read the corrected AppendixE draft and e-pass-record, including independent closure751e8b2. E's exception is preserved without implying universal hostsuperset. |
 | Table/cache ownership | vol.asm:477-545 invalidates/refills based onMNTCB, resetsLBA afterCTAKE; cache.asm:247-290 remapsBIOSrecord aftervictimwrite. vol.asm:548-622 copies32 throughMNBUF/MVCOPY, sums512 without stack underEXP1. MNBUF ram.asm:114-116. Actual eviction failure returns beforeCFILL. |
 | Descriptor fields and publication | vol.asm:262-315 checksnonzeroid, flags, geometry,exactlength andalignednonzerostart.316-385 checksorderedstart,32bitexclusiveend/container/stdmodebound.389-445 checksdrive/defaultslots/duplicates/A.413-428 installs aswalkproceeds.453-461 rollsbackallmounts onanyfailure. The opening comment atvol.asm:4-8 is inaccurate about prevalidating everydescriptor beforeanyinstall, so the draft follows instructions, not that comment. |
 | Host comparison | container.mjs:130-193 checksbydefaultphysicalimageextent,cachebits,uniqueids,nonzerominoruniquelabels andotherfields. NoSDBYTE input, so noROMstandardmodecheck. Neitherpathchecksallreservedbytes. ROMignoresuppercachebits atvol.asm:750-752 anddoesnotcheckiduniqueness. No claimhostchecksareuniversalsuperset. |
@@ -140,3 +140,58 @@ and authority comparisons belong in this record.
 Manual craft and literal checks continue after this checkpoint. No automated
 prose gate, complexity report, build, assembler, emulator, test, product import
 or capture has been run under the explicit no-execution instruction.
+
+## Completed authorial passes
+
+The generous draft and material/source proof were committed and pushed as
+427ebcc before these final reductions. I read the complete chapter in reader
+order, then the complete changed passages after the corrections below.
+
+| Pass | Actual finding and disposition |
+| --- | --- |
+| Mechanical gate | Manual searches located optional commas before then/so/and, no prose semicolon or em dash and no question-shaped heading. Removed the optional conjunction commas and reader-process wording. The source instruction JR NZ,SDRERR retains its literal comma. No automated prose score or script pass is claimed. |
+| Thematic/teaching order | Kept byte/command layout before SDINIT, addressing before transfer errors, container validation before DPH/DPB and the record map before merging. Preserved both failure demonstrations beside declared/physical capacity. Added a worked arithmetic mapping after MAPREC: track2,sector5 givesrecord133,offset33,slot1; start2048 givescard2081,bytes128–255. This is arithmetic from instructions, not an invented run/output. |
+| Paragraph deletion | Removed the reader-facing paragraph's source-comment dispute from the mount explanation. The actual walk/install/rollback mechanism remains and the stale comment is documented only in semantic proof above. Removed the redundant record-map certification after READ. Replaced the final source-offer/navigation qualification with the concrete TPA cost. |
+| Sentence deletion | Read every sentence in order with its paragraph and neighbouring paragraph. Removed the extra assurance that the worked example is arithmetic rather than data evidence, since the calculation itself supplies that distinction. Short definitions and error results remain because deleting them loses exact codes or bounds. Kept the separate extra11T/full678T distinction because combining them recreates the original scope error. Kept the uncached-directory caveat because SAVE's zero-read count is fixture-specific. |
+| Agency and plain relations | SPI sampling is the actual input operation, not perception. Routines read, compare, select, transfer and return. The descriptor defines a range and the DPH points to memory. No card/ROM/file has thought, memory, intention or social agency. Replaced generic contract praise with exact protected drive-assignment state and explicit side effects. |
+| Every comma | Read every comma-bearing sentence and table row. Removed optional then/so/and commas, mode-condition pauses and the DPH/DPB appositions. Retained numeric separators, genuine list boundaries, error-code/name appositions and clarifying subordinate boundaries. No Oxford comma, authorial semicolon or em dash remains. Immutable historical punctuation and trailing spaces remain. |
+| Technical recheck | Qualified the512-byte receive onFEh rather than allowing then to imply continuation after an error token. Corrected SPIW to the actual label. Replaced copied stale line coordinates with the actual ea3 instruction ranges for LBAARG/SDRNG, transfer loops, latch returns and BRET/CEI. Read the split BDOS error caller: bdoslog:112-136 reaches bdoscon:26-72. RONZ/CHKRO is bdoslog:874-891, not the earlier login range. Read bdosrec's actual write-type/BIOS caller and random-write ROFCB path with bdosfile:421-445. No name-only mapping is accepted. |
+| Exact condition review | CMD8 skips echo foranyR1otherthan1. Standard limit compares exclusiveend<=800000 while lastblock<=7FFFFF. Hostzeroextrasum differs from ROMskip. Directory marking tests mappedaddress; warm rebuilding is deferred to nextselection for a logged-in changed drive. RO blocks data/marks afterworkspaceupdates. Key correctness assumes propertype2. Flushfailure protectsassignment but notcache/media rollback. Defaultreselections arepostpublication. |
+| Preservation | All55 assigned units have a disposition. Three complete output fences and allthree capture recipes compare byte-identically with10821b6. The short/bad image preparations, retry keys, historical timings, SAVE count and historical TPA figures remain at78127ec. No capture was replaced by a link or repinned. |
+| Journey/navigation | Read the entire chapter from128-versus512 through the final704-byte slot cost. Each section uses the preceding address/state vocabulary. The closing result is a concrete capacity cost, not a recap or roadmap. Both Chapter14 anchors exist in its current draft. AppendixB/D/E links use final-root sibling filenames present in tec-os/, not ../../../ paths or excluded editorial review links. Root integration is a later task. |
+
+### Final evidence boundaries
+
+The geometry derivation was also read at tools/lib/format.mjs:9-40. It uses
+the JSON DPB unchanged, checks64records/OFF0/CKS0 and derives allocation/vector
+sizes and tracks. No generated artifact was built or imported. The shared
+128-byte DIRBUF declaration is ram.asm:67. Read-only file writes call ROFCB
+at bdosrec.asm:350-359 and CHKRO at bdosfile.asm:430-445 before BIOS output.
+The directory mark's next-selection scope follows bdosfile.asm:72-133 rather
+than an assertion that every changed drive is rebuilt immediately at warmboot.
+
+The three historical fences, including trailing spaces, and three capture
+recipes are preserved literally. Current source mechanisms and historical
+measured results remain separate. No newly passing test, stack observation,
+card behaviour or cycle measurement is claimed. The worked record mapping
+adds arithmetic explanation only. No currentKS48font/default is asserted.
+
+No build, execution, product import, assembly, emulator, capture or runtime
+verification was performed. Full craft passes were manual under the explicit
+no-execution constraint, which overrides running the skills' prose-analysis
+scripts. Static text comparisons, source-object reads and range/link checks
+supply literal evidence. Independent result review remains open.
+
+## Final static comparison
+
+All three fences and three capture recipes compare byte-identically with
+frozen10821b6 after the final edits. All five final-destination links exist,
+including the two Chapter14 anchors. The final chapter has132 current source
+range occurrences across24 files, plus the explicitly historical diagnostics
+range. Each range was checked against its pin and read in mechanism/caller
+context as recorded above. FNWRITE at bdosfile.asm:645-664 callsROFCB before
+WRITESEQ, completing the sequential as well as random read-only caller proof.
+The written-through sentence explicitly conditions reported success on a
+successful card write. The owned-path whitespace check is clean. Other
+writers' staged, modified and untracked paths are excluded from both commits
+with git commit --only and exact Chapter17 paths.

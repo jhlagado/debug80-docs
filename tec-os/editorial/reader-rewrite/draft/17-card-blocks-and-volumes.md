@@ -37,19 +37,19 @@ data with the clock low and supplies a rising edge for the card to sample
 it (`src/layout.asm:21-24`, `src/sd.asm:1-11`, `src/sd.asm:40-82`).
 
 `SPIW` sends a byte from its top bit down. Each pass shifts the next bit
-from `C` into carry and writes it with the clock low, then high. `SPIR`
+from `C` into carry and writes it with the clock low then high. `SPIR`
 receives a byte with MOSI held high. It clocks each bit and shifts the
 sampled input bit into the result. `SPIEND` raises chip select and supplies
 eight more clocks while preserving the result of the preceding operation
 (`src/sd.asm:40-106`).
 
-`SDCMD` first sends an idle `FFh`, then a six-byte command. The first byte
+`SDCMD` first sends an idle `FFh` then a six-byte command. The first byte
 is the command number with bit 6 set. Four argument bytes follow from
-`SDARG`, most significant first, then a CRC byte. The driver supplies `95h`
-for `CMD0`, `87h` for `CMD8` with argument `1AAh` and `01h` for other
-commands. The last value supplies the end bit under the usual SPI-mode CRC
-contract. `SDCMD` reads at most sixteen bytes for R1, the response whose
-bit 7 is clear (`src/sd.asm:119-172`).
+`SDARG` most significant first. A CRC byte ends the command. The driver
+supplies `95h` for `CMD0`, `87h` for `CMD8` with argument `1AAh` and `01h` for other
+commands. In the default SPI CRC mode only `CMD0` and `CMD8` need valid
+CRC bytes. The other commands get the end bit alone. `SDCMD` reads at
+most sixteen bytes for R1, the response whose bit 7 is clear (`src/sd.asm:119-172`).
 
 The high-level operations `SDINIT`, `SDREAD` and `SDWRITE` return Z with
 `A` and `SDERR` zero on success. Failure returns NZ with the error code in
@@ -82,7 +82,7 @@ It starts with `SDBYTE` clear and performs these steps
 4. Send `CMD58` and require R1 = 0, otherwise return error 3, `SDEOCR`.
    Read the four-byte operating conditions register. CCS, bit 6 of its
    first byte, selects block addressing when set.
-5. With CCS clear, set `SDBYTE` to 1 and send `CMD16` to set a 512-byte
+5. With CCS clear set `SDBYTE` to 1 and send `CMD16` to set a 512-byte
    block length. Failure returns error 4, `SDEBLEN`.
 
 Every subsequent access supplies a four-byte block number in `SDLBA`, least
@@ -107,20 +107,21 @@ successful response it polls for the data token. `FFh` means continue
 waiting and `FEh` starts the block. The wait permits 65,536 polls before
 error 6, `SDETOK`. Every other byte ends the read immediately with error
 `0Ah`, `SDEDTOK`. This includes the card's `000xxxxx` data-error tokens.
-The driver then receives 512 data bytes and reads the two CRC bytes without
-checking them (`src/sd.asm:447-515`).
+After `FEh` the driver receives 512 data bytes and reads the two CRC bytes
+without checking them (`src/sd.asm:447-515`).
 
 The extra error-token classification costs 11 T-states on a normal `FFh`
 wait: `INC A` followed by the untaken `JR NZ,SDRERR`. That is only the
 additional check, not the entire token poll (`src/sd.asm:470-472`). The
 historical diagnostics account at `78127ec:docs/diagnostics.md:285-291`
-gives 678 T-states for a full poll in that diagnostics ROM. The two figures
-have different scopes and do not measure this offered source's full poll.
+gives 678 T-states for a full poll in that diagnostics ROM. The 11-T-state addition
+therefore cannot be compared directly with that full-poll cost.
 
 `SDWRITE` sends `CMD24` and also requires R1 = 0 or returns error 5. It
 sends an idle byte, `FEh`, the 512-byte block and two `FFh` CRC bytes. It
 reads up to sixteen bytes for a non-`FFh` response. The low five bits must
-be `05h`, data accepted, otherwise error 7, `SDEWRSP`, ends the operation.
+be `05h` for data accepted. Any other response or no response returns
+error 7, `SDEWRSP`.
 The busy wait then permits 65,536 reads of `00h`. Any nonzero byte ends
 that wait successfully. Exhaustion returns error 8, `SDEBUSY`. Success
 therefore follows the end of reported busy, not merely acceptance of the
@@ -129,10 +130,10 @@ data token (`src/sd.asm:735-806`).
 Both block-transfer loops have the eight bit operations written out for
 each byte. `SDRBLK` counts 256 two-byte passes in the Z80's `I` register.
 That register supplies no interrupt-vector address in this ROM's interrupt
-mode 1. `SDWBLK` uses two passes of 256 bytes. These routines clobber their
-declared registers, including `I` on the read path
+mode 1 (`src/boot.asm:49-58`). `SDWBLK` uses two passes of 256 bytes.
+These routines clobber their declared registers, including `I` on the read path
 (`src/sd.asm:517-724`). In the historical `78127ec` model measurements,
-`SDREAD` took 219,144 T-states per block, about 55 ms at 4 MHz, and
+`SDREAD` took 219,144 T-states per block (about 55 ms at 4 MHz) and
 `SDWRITE` took 216,164. Most of that work transferred the block's 4,096
 bits individually.
 
@@ -141,8 +142,8 @@ EXPAND 1 for the buffer and restores `LATCHV` before returning. It uses no
 stack while EXPAND 1 is visible (`src/cache.asm:222-238`,
 `src/cache.asm:247-275`, `src/sd.asm:525-541`, `src/sd.asm:632-659`,
 `src/sd.asm:715-724`). The BIOS transfer paths and descriptor-service cache
-walks mask interrupts around their work. The SD transfer itself does not
-supply a general interrupt guard. The reason for this boundary is the
+walks disable maskable interrupts around their work. The SD transfer itself
+does not supply a general interrupt guard. The reason for this boundary is the
 [EXPAND 1 stack rule](14-state-and-memory.md#expand-1-and-the-stack-boundary)
 (`src/bios.asm:247-252`, `src/bios.asm:284-291`, `src/vol.asm:668-678`).
 [Appendix D](appendix-d-error-messages.md) relates the SD error codes to
@@ -150,20 +151,20 @@ likely causes and recovery.
 
 ## Container blocks and validation
 
-The container describes which ranges of the card are volumes. Block 0
+TEC-OS uses a single container on the card. It describes which ranges are
+volumes. Block 0
 starts with `TECOSVOL`, the major and minor versions, header and descriptor
 sizes, volume count, container length in blocks and a checksum. Format 1.1
 adds a drives field and an extra-table sum. The descriptors are 32 bytes
-each. Fifteen fit after the header fields in block 0, then sixteen fit in
+each. Fifteen fit after the header fields in block 0 and sixteen fit in
 each of blocks 1–7, for a maximum of 127
 (`format/format.json:2-43`).
 
 The ROM's field offsets and geometry definitions are generated from
 `format/format.json` into `gen/format.asm` and `gen/geom.asm`
-(`tools/build.mjs:90-138`). [Appendix E](appendix-e-container-format.md)
-contains the byte layout and the host/ROM validation comparison. The
-mechanism here starts with a fresh read of the table, since an existing
-cache line may contain bytes from an earlier mount.
+(`tools/build.mjs:78-135`). [Appendix E](appendix-e-container-format.md)
+contains the byte layout and the host/ROM validation comparison. A fresh
+table read avoids using bytes cached during an earlier mount.
 
 `MNBLK` obtains a cache line for the requested table block. `MNTCB` records
 the table block last read for this operation. A different block forces a
@@ -206,14 +207,15 @@ blocks, including unused descriptor bytes, modulo 65,536. An unreadable
 block returns `20h` and a mismatched sum returns `25h`. There is an exact
 exception: with fifteen or fewer descriptors, the zero-block branch skips
 the comparison altogether. The ROM accepts a nonzero stored `tableSum`
-there if the other checks pass. The host parser compares the empty sum to
-zero and rejects that value (`src/vol.asm:188-239`,
-`src/vol.asm:592-622`, `tools/lib/container.mjs:130-148`). `HDRSUM` uses
+there if the other checks pass. The host parser computes an empty sum of
+zero and rejects a nonzero stored value (`src/vol.asm:188-239`,
+`src/vol.asm:592-622`, `tools/lib/container.mjs:41-49`,
+`tools/lib/container.mjs:130-148`). `HDRSUM` uses
 the same byte-summing path for block 0 and subtracts its two checksum bytes
 before comparison (`src/volutil.asm:92-136`).
 
-The descriptor walk validates each descriptor, then installs its assigned
-drive before advancing. A later failure calls `UNMOUNT`, so the returned
+The descriptor walk validates each descriptor then installs its assigned
+drive before advancing. A later failure calls `UNMOUNT` so the returned
 result is all mounted or all empty (`src/vol.asm:241-260`, `src/vol.asm:413-461`).
 
 A descriptor check returns `26h` for a zero volume id, unsupported flag
@@ -228,8 +230,8 @@ A lower start returns `28h`. It then computes `end = start + length` in
 32 bits. Carry out or an end above `containerBlocks` returns `27h`.
 Ascending descriptor order therefore prevents overlapping payloads. The
 exclusive end is the first block after the volume. On a standard-capacity
-card it may equal `00800000h`, giving last block `007FFFFFh`, but may not
-exceed it. High-capacity addressing has no such byte-address limit
+card it may equal `00800000h`, giving last block `007FFFFFh`. An end above
+`00800000h` is rejected. High-capacity addressing has no such byte-address limit
 (`src/vol.asm:316-385`).
 
 The drive field is `FFh` for unmounted or 0–3 for A–D. A nonzero header
@@ -242,8 +244,8 @@ byte as written-behind and ignores its upper bits
 
 The host validator also checks cache flags and duplicate ids. For nonzero
 minor versions it checks duplicate labels too. By default it compares the
-declared extent against the image's byte length. Its checks
-and the ROM's checks are not universally nested. The host parser has no
+declared extent against the image's byte length. Its checks and the ROM's
+checks are not universally nested. The host parser has no
 `SDBYTE` card-mode input for the standard-capacity limit. Neither path
 validates every reserved byte. Appendix E gives the field-by-field boundary
 (`tools/lib/container.mjs:130-193`, `src/vol.asm:262-445`).
@@ -313,22 +315,22 @@ index plus one, with zero for an empty drive
 
 An empty entry has geometry zero. `SELDSK` returns `HL` = 0 for that drive
 or a number past D and leaves `DSKCUR` unchanged. For a valid drive it sets
-`DSKCUR` and returns its disk parameter header, or DPH.
+`DSKCUR` and returns its disk parameter header (DPH).
 `DPHADR` computes `DPHTAB + 16 × drive` (`src/bios.asm:56-96`).
-`MNDPH` fills the sixteen bytes as follows (`src/vol.asm:760-802`):
+`MNDPH` fills the sixteen bytes as follows (`src/vol.asm:760-802`, `src/ram.asm:67-67`):
 
 | Offset | Contents |
 | ---: | --- |
 | 0 | Zero sector-translation pointer, meaning no skew |
 | 2–7 | Three BDOS scratch words, initially zero |
 | 8 | Shared 128-byte `DIRBUF` |
-| 10 | Pointer to the geometry's disk parameter block, or DPB |
+| 10 | Pointer to the geometry's disk parameter block (DPB) |
 | 12 | `CSVDUM`, unused because `CKS` is zero |
 | 14 | Allocation-vector pointer set by `ALVINIT`, left intact by `MNDPH` |
 
 The two geometries use 64 records per track, no reserved tracks and four
 allocation blocks for the directory. Their sizes are
-(`format/format.json:47-59`):
+(`format/format.json:47-59`, `tools/lib/format.mjs:9-40`):
 
 | Parameter | G8M (`DPB1`) | G1M (`DPB2`) |
 | --- | ---: | ---: |
@@ -365,12 +367,16 @@ produces `SDLBA`. A rejected mapping leaves `SDLBA` unchanged, though
 intermediate `BLKSLOT` or `BLKOFF` values may have been stored
 (`src/bios.asm:124-221`).
 
+Track 2 and sector 5 give record 133. Division by four gives
+block offset 33 and slot 1. On a volume starting at block 2,048, this is
+card block 2,081. Slot 1 occupies bytes 128–255 of that block
+(`src/bios.asm:141-163`, `src/cache.asm:433-444`).
+
 `READ` masks interrupts, maps the record and calls `CREAD` to copy its
 128 bytes from a cache line to the DMA address. It restores the preceding
 interrupt state and returns `A` = 0 for success or 1 for error
 (`src/bios.asm:241-252`, `src/bios.asm:441-478`,
-`src/cache.asm:425-491`). The DMA copy uses the bounded card address and the quarter-block offset
-from this mapping.
+`src/cache.asm:425-491`).
 
 ## Merging a write
 
@@ -382,10 +388,12 @@ and maps the record. A read-only drive then returns BIOS error 1 before
 changing directory marks or cached data. Mapping and type workspace may
 already have changed (`src/bios.asm:284-306`).
 
-Ordinary BDOS writes reach its own `R/O` check first. Close, function 16,
+The BDOS applies its own `R/O` check before a file write. Close, function 16,
 has a separate read-only return: it succeeds without writing. This also
 holds for an FCB that was never opened, as the source test asserts
 (`src/cpm/bdoslog.asm:874-891`, `src/cpm/bdosfile.asm:250-298`,
+`src/cpm/bdosfile.asm:421-445`, `src/cpm/bdosfile.asm:645-664`,
+`src/cpm/bdosrec.asm:77-90`, `src/cpm/bdosrec.asm:344-359`,
 `test/cpm22.test.mjs:174-185`). A caller using the BIOS directly can
 instead receive the BIOS read-only error.
 
@@ -393,14 +401,15 @@ Directory marking depends on the mapped block address, not merely write
 type 1. The first thirty-two SD blocks of G8M or sixteen of G1M are the
 directory. A write there sets the DPH word at offset 4 to 1. It raises
 the word at offset 6 to at least `(BLKOFF + 1) × 16`, covering all sixteen
-directory entries in that block. The next warm boot can rebuild the
-allocation vector through that mark (`src/bios.asm:309-366`,
+directory entries in that block. The next warm reset marks a logged-in
+changed drive for rebuilding through that mark at its next selection
+(`src/bios.asm:309-366`,
 `src/cpm/bdosfile.asm:72-133`).
 
 Every write merges through `CWRBH` into the block's cache line. A normal
 miss first reads the card block so its other records survive. For type 2,
 `WRITE` selects no pre-read. `CWRBH` clears the whole line to zero even
-if it was already a cache hit, then copies the record into it
+if it was already a cache hit then copies the record into it
 (`src/bios.asm:368-426`, `src/cache.asm:493-559`).
 
 The following SD block can also be cleared without reading when it is in
@@ -417,8 +426,9 @@ stale sequential key to clear an already filled block
 (`src/cache.asm:557-605`). This protection relies on the type-2 contract.
 A direct BIOS caller must not label existing data as newly allocated.
 
-On a written-through volume, `WRITE` sets bit 7 of `CWTYPE`. The merged
-line goes to the card before the call returns. On a written-behind volume,
+On a written-through volume `WRITE` sets bit 7 of `CWTYPE`. The merged
+line must be written successfully before `WRITE` reports success.
+On a written-behind volume
 data may remain dirty in the cache. A directory write orders the pending
 data before its own block (`src/bios.asm:413-426`,
 `src/cache.asm:607-651`). Chapter 18 explains that persistence boundary
@@ -428,9 +438,9 @@ Sequential writes to a new file can therefore avoid data pre-reads while
 still writing each SD block after each of its four records. The historical
 `78127ec` example `SAVE 8 X.COM` wrote sixteen records in four data blocks
 on written-through A. It caused sixteen data-block writes plus two
-directory-block writes, eighteen in total, and no reads. The directory
-block was already cached in that fixture. This count does not promise
-zero metadata reads for every new file.
+directory-block writes for eighteen writes in total. No reads were needed
+because the directory block was already cached in that fixture. An
+uncached directory can add metadata reads to a new-file operation.
 
 ## Volume services and publication
 
@@ -443,10 +453,10 @@ in `C` (`src/abi.asm:12-20`, `src/abi.inc:27-29`,
 | --- | --- |
 | 9, `MOUNT` | `B` = drive 0–3, `E` = container index. Mount that volume on the drive. |
 | 10, `UNMNT` | `B` = drive 1–3. Empty B, C or D. |
-| 11, `DESC` | `E` = index, `HL` = 32-byte destination. Copy the descriptor and substitute the current drive byte, or `FFh` for unmounted. |
+| 11, `DESC` | `E` = index, `HL` = 32-byte destination. Copy the descriptor and substitute the current drive byte or `FFh` for unmounted. |
 
 `VSMNT`, `VSUNM` and `VSDSC` begin with `VSIN`. It copies the drive
-argument into `C` and invalidates `MNTCB`, so a table read starts afresh.
+argument into `C` and invalidates `MNTCB` so a table read starts afresh.
 Normal service completion returns `A` = 0 with carry clear. Rejection
 returns `TNEBAD`, 1, with carry set (`src/volsvc.asm:204-236`,
 `src/volsvc.asm:360-403`).
@@ -472,7 +482,7 @@ Before a mount or unmount publishes a different drive assignment,
 `VFLUSH` calls `CFLALL` with interrupts masked and restores their preceding
 state afterwards. It preserves the requested drive, index and descriptor
 across that call. `CFLALL` attempts every dirty line. It drops a failed
-line and continues with the rest, then returns failure if any write failed
+line and continues with the rest then returns failure if any write failed
 (`src/volsvc.asm:413-429`, `src/cache.asm:292-350`).
 
 Validation or this flush failure leaves the drive assignment unchanged.
@@ -492,7 +502,7 @@ to reset that drive. Its next use then logs it in from its directory
 
 Mounting onto the default drive also calls function 14 to select it again.
 Functions 27 and 31 then refer to the new volume's allocation vector and
-DPB. This reselection follows publication, so a subsequent directory-read
+DPB. This reselection follows publication so a subsequent directory-read
 error uses ordinary BDOS error handling rather than the earlier validation
 rollback boundary (`src/volsvc.asm:377-391`,
 `src/cpm/bdosfile.asm:135-174`, `src/cpm/bdoscon.asm:26-76`). These
@@ -535,11 +545,9 @@ A>
 ```
 
 A format 1.1 card with drives = 4 allocates four 256-byte slots at cold
-boot. C can then hold an otherwise unmounted supported volume after the
-service checks and flush succeed. The historical `78127ec` four-slot
+boot (`src/boot.asm:679-799`). C can then hold an otherwise unmounted
+supported volume after the service checks and flush succeed
+(`src/volsvc.asm:246-315`). The historical `78127ec` four-slot
 configuration had a 46,564-byte TPA, 704 bytes less than its 47,268-byte
 starter configuration. Four slots use 1,024 bytes where the starter used
-320. The extra mounting capacity comes directly from transient-program
-space, while the offered source's vector-placement rules remain those
-explained in Chapter 14 (`src/boot.asm:679-799`,
-`src/volsvc.asm:295-315`).
+320. The extra slots reduce transient-program space by the same amount.
