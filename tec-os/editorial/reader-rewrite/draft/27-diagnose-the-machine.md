@@ -32,7 +32,7 @@ code. The character LCD shows `CARD?` on its last row. Both come from
 
 At `R retry> ` you can type a single key. The routine echoes its original
 case and ends the line. Either `R` or `r` restarts the card operations. Every other key produces
-another prompt, so a digit appears unchanged even though the comparison uses a
+another prompt so a digit appears unchanged even though the comparison uses a
 masked value (`src/boot.asm:831-847`, `src/text.asm:14`).
 
 Your available console determines where you can answer. Cold boot selects the
@@ -67,7 +67,7 @@ initialisation and clock probe precede it (`src/boot.asm:71-102`). A board
 without the required RAM stops at `TEC-OS needs 64K RAM` on serial
 (`src/boot.asm:579-632`, `src/text.asm:10`). [Chapter 15](15-reset-and-boot.md#ram-before-the-workspace) explains that check.
 `COLDRT` and `DIAG` use the BDOS stack before the CCP runs. Both failure
-jumps follow completed calls, so `DIAG` starts at that stack's top
+jumps follow completed calls so `DIAG` starts at that stack's top
 (`src/boot.asm:80-86`, `119-132`, `802-829`).
 
 A recognised reset can retain the selected volumes through a failed mount
@@ -153,7 +153,7 @@ passes of a 65,536-iteration loop. Each iteration costs 26 T-states except
 the final iteration, which costs 21. Counting the surrounding instructions
 from HCWAIT through `JR HCMSG` gives 27,263,278 T-states
 (`diag/boot.asm:118-125`). This is static instruction counting. At the
-nominal 4 MHz it gives about 6.8 seconds of delay, so the line repeats about
+nominal 4 MHz it gives about 6.8 seconds of delay so the line repeats about
 every seven seconds. It is not a new board timing measurement.
 
 After T01 passes the ROM clears its variables, installs an NMI counter at
@@ -303,7 +303,7 @@ overlay and T11 records status-port bits (`diag/memory.asm:99-114`,
 
 Only T37 writes the SD card. It requires the `TECOSVOL` magic in block 0,
 saves block 7 and tests a pattern there. Volume payloads begin at nonzero
-multiples of eight blocks, so block 7 is outside every volume
+multiples of eight blocks so block 7 is outside every volume
 (`diag/sd.asm:616-683`, `src/vol.asm:303-316`,
 `format/format.json:43`). That does not mean it is always unused: a large format-1.1 descriptor table can extend through
 blocks 1–7 (`tools/lib/container.mjs:33-42`).
@@ -399,7 +399,7 @@ chapter's model results were observed on hardware.
 The keypad restriction concerns the return from an NMI. With its jumper
 fitted, a keypad press makes the Z80 push a return address and jump to
 `0066h`. The diagnostics RAM tests overwrite that handler. T09 and T25
-instead enable PROTECT over the stack page, so an NMI cannot store its
+instead enable PROTECT over the stack page so an NMI cannot store its
 return address there (`diag/memory.asm:99-107`, `347-372`,
 `diag/misc.asm:587-607`). The counter handler normally preserves registers
 and uses RETN

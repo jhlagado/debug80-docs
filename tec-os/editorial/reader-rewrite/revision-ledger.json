@@ -2888,7 +2888,7 @@
     },
     {
       "unit": "chapter-08",
-      "status": "bounded draft in progress; source-only work, no execution authorised",
+      "status": "draft and own passes pushed atf53d8f3; independent review pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -9405,7 +9405,7 @@
     },
     {
       "unit": "chapter-22",
-      "status": "full factual review clear; corrections pushed, reader-journey ordering confirmation pending",
+      "status": "bounded independent factual and reader-journey reviews closed atc19e799; final qualification pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -9417,8 +9417,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed after full source/craft review and independent order confirmation",
+        "independent_factual_review": "closed after full source/craft review and independent order confirmation",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -11250,20 +11250,20 @@
     },
     {
       "unit": "chapter-27",
-      "status": "bounded draft pushed; independent editorial/factual review pending",
+      "status": "bounded independent editorial/factual review closed after punctuation correction; final qualification pending",
       "passes": {
-        "full_passage_read": "pending",
-        "draft": "pending",
-        "thematic_order": "pending",
-        "sentence_deletion": "pending",
-        "agency": "pending",
-        "every_comma_punctuation": "pending",
-        "technical_claims": "pending",
-        "examples_before_explanation": "pending",
-        "journey_readback": "pending",
-        "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "full_passage_read": "completed for bounded draft;27-pass-record.md records scope",
+        "draft": "completed for bounded draft;27-pass-record.md records scope",
+        "thematic_order": "completed for bounded draft;27-pass-record.md records scope",
+        "sentence_deletion": "completed for bounded draft;27-pass-record.md records scope",
+        "agency": "completed for bounded draft;27-pass-record.md records scope",
+        "every_comma_punctuation": "completed for bounded draft;27-pass-record.md records scope",
+        "technical_claims": "completed for bounded draft;27-pass-record.md records scope",
+        "examples_before_explanation": "seven historical fences preserved; no current or physical result inferred",
+        "journey_readback": "completed for bounded draft;27-pass-record.md records scope",
+        "mechanical_gate": "completed for bounded draft;27-pass-record.md records scope",
+        "independent_editorial_review": "full review clear, five editable punctuation findings applied",
+        "independent_factual_review": "full review clear, five editable punctuation findings applied",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
