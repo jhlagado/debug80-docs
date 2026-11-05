@@ -160,6 +160,26 @@ CON: UC1:
 A>
 ```
 
+Removing the graphics-LCD driver while it is the console selects the
+PICO9918 if its ROM console started. Otherwise output returns to serial.
+This separate historical run on a board with both displays selected UC1,
+listed the driver, removed it and reported the resulting console:
+
+<!-- node tools/capture.mjs --board pico "CON UC1" SERVICES UNLOAD CON -->
+```text
+A>CON UC1
+CON: UC1:
+A>SERVICES
+GLCD 3
+A>UNLOAD
+
+A>CON
+CON: CRT:
+A>
+```
+
+`CRT:` in the final report names the PICO9918 console after removal.
+
 A board with the graphics LCD and matrix keyboard can also start without a
 terminal. Where no
 PICO9918 console started, the starter card's startup file installs `GLCD.SVC`

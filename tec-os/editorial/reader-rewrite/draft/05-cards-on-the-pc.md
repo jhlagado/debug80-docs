@@ -475,7 +475,7 @@ A>
 `SAVE` made no file on C and `ERA` left B's file in place. In the default
 BDOS error mode each message waits for a key before ending the command.
 Here the capture supplies `x`. A program can also make a drive temporarily
-read-only with BDOS function 28. Warm boot clears that temporary protection
+read-only. Warm boot clears that temporary protection
 but preserves a volume's read-only flag. Chapter 4 explains the operator
 effects and [Appendix D](appendix-d-error-messages.md) gives the messages.
 

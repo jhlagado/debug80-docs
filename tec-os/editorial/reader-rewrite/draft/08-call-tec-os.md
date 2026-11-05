@@ -176,9 +176,7 @@ B>
 
 Function 10 echoed `HELLO` while reading it. The recorded buffer contains
 count 5 followed by those five characters. Function 9 printed `GOT`.
-The program's final `RET` reached warm boot through `0000h`. The run ended
-at a ready B prompt. The logical program is 47 bytes. TAS wrote it in one
-128-byte record with zero padding, matching the ATOM assembly.
+The program's final `RET` reached warm boot through `0000h`.
 
 Function 10 ends the line at Return, line feed or the buffer's maximum length. The
 editing keys operate as at the command prompt: backspace removes the last

@@ -325,18 +325,20 @@ so that a sequential read after it reads the same record
 (`src/cpm/bdosrec.asm:307-316`, `src/cpm/bdosrec.asm:393-531`). Returns 0 on
 success. Returns 1 when the record has not been written. Returns 3 when the
 current extent can't be closed. Returns 4 when the extent has not been
-written. Returns 6 when `R2` is not 0. After a 4 the FCB's `EX` and `S2` are
-its own again, naming the extent its record count and map describe, so a
-second read of that record is 4 again and a write to it makes the extent.
+written. Returns 6 when `R2` is not 0. After a 4 the FCB's `EX` and `S2`
+are restored to name the extent described by its record count and allocation
+map. A second read of that record returns 4 again and a write can make the
+requested extent.
 
 **34 Write random.** Writes the record at the DMA address to the record whose
 number is in `R0` and `R1`. It makes the extent when the record falls in one
 the file lacks (`src/cpm/bdosrec.asm:328-531`). Returns 0 on success. Returns
 2 when the drive is full. Returns 3 when the current extent can't be closed.
 Returns 5 when the directory has no entry for the extent. Returns 6 when `R2`
-is not 0. After a 5 the FCB is back on its own extent, as after function 33's
-4, so a write once an entry is freed makes the extent. An FCB with the
-read-only attribute set gives the `File R/O` error.
+is not 0. After a 5 the FCB's `EX` and `S2` are restored to name the extent
+described by its record count and allocation map, as after function 33's 4.
+A later write can make the requested extent once a directory entry is free.
+An FCB with the read-only attribute set gives the `File R/O` error.
 
 **35 Compute file size.** Sets `R0` to `R2` to the file's size in records,
 from whichever of its entries ends highest or to 0 if there is no such file
@@ -356,10 +358,11 @@ does not define. Both do nothing and return 0 (`src/tables.asm:96`).
 
 **40 Write random with zero fill.** Function 34, with each allocation block the
 write newly allocates filled with zeros before the record is written
-(`src/cpm/bdosrec.asm:328-359`, `src/cpm/bdosrec.asm:794-860`). The BIOS's DMA
-address is put back on the program's after each of the zero-fill's writes so
-a failed write that function 45 returns leaves the program's DMA address in
-the BIOS (`src/cpm/bdoslog.asm:122-136`). Returns as function 34 does.
+(`src/cpm/bdosrec.asm:328-359`, `src/cpm/bdosrec.asm:794-860`). After each
+zero-fill write the BIOS DMA address is restored to the program's DMA buffer
+before error handling (`src/cpm/bdoslog.asm:122-136`). It is already restored
+if the BDOS returns a write error in the mode set by function 45. Returns as
+function 34 does.
 
 **44 Set multi-sector count.** With `E` = 1 returns 0. With any other `E`
 changes nothing and returns `FFh` in `A` (`src/cpm/bdos.asm:221-237`). TEC-OS

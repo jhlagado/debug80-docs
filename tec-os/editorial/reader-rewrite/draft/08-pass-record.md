@@ -272,7 +272,7 @@ guard/log, artifact hashes, result and both case records. Read all retained
 console bytes and source-on-card bytes, the compact source and the complete
 sealed harness. Rechecked function10's count/characters/end/abort paths at
 ea3ef3d src/cpm/bdos.asm435–575,606–621,730–752 and the earlier call/return
-source proofs. The harness observes the function10 return address, DE/C at
+source proofs. The harness checks the function10 return address, DE/C at
 function9, the final RET's inherited0000h word, entry to zero and WBOOTR,
 then the ready user-zero B prompt. It uses the actual TAS-built card on fresh
 machines rather than injecting a generated COM. No new execution occurred.
@@ -343,7 +343,7 @@ open. No new execution accompanied the confirmation.
 ## Additional Chapter8 sequence review
 
 Accepted the independent full review at521c4fc6. Removed the duplicate0006h
-boundary from8 because10 already teaches the complete limit. Moved the0004h
+boundary from8 because the complete limit is already in10. Moved the0004h
 mutation/exit-selection contract into10 after its page-zero table. Chapter8
 now leads its ending with the normal return to the starting drive/user area
 and fallbackA. Deleted the retrospective printing-call line and unused file
@@ -371,3 +371,30 @@ results, source fixtures and dependency pins retain their original scope.
 The reader’s fences and capture comments are unchanged. Editorial gate
 results and context dispositions are recorded in the application JSON.
 Independent application review remains open. No product code ran.
+
+## Complete reader-order review correction
+
+The reader ending after LINE now retains the useful final RET through0000h
+and warm-boot meaning without repeating the displayed ready B prompt. Proof
+figures remain here: the accepted serial ea3 run has a 47-byte logical program,
+TAS output in one128-byte record with zero padding and equality to its pinned
+ATOM reference. The actual qualified attempt remains Origo71696f2e,
+line-ea3-attempt01. No current962 or40-column proof is inferred. All code,
+input and output fences remain exact.
+
+The complete changed paragraphs and their immediate boundaries were read before
+and after editing. Separate sentence-purpose, agency and every-comma passes
+retain the operational distinctions. Mandatory prose/complexity checks precede
+the correction commit. Existing runtime evidence is moved or quoted with its
+actual pin, not rerun. No product import, assembly, build, model, test, capture,
+publication or physical observation accompanies this correction.
+
+The mandatory gate has no hard findings. The initial review candidates were
+checked in full context. The Chapter 6 URL contains a flagged verb. Four older
+provenance phrases contain a noun matching the agency rule. Two older Chapter 8
+record phrases were corrected. These are metadata dispositions, not exceptions
+for reader prose. Complexity flags retain exact fields, source coordinates and
+error-mode conditions. The long function 34 restoration sentence explicitly
+names the fields, their extent and the corresponding function 33 result.
+Literal fences and capture comments are unchanged in place or moved together
+from Chapter 4 to Chapter 6. Combined before/after inventories match exactly.

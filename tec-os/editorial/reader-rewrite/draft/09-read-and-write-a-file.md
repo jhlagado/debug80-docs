@@ -327,8 +327,3 @@ command chain. Explicit function 48 also reports failure and drops failed
 lines. A later successful flush cannot restore bytes from a line already
 dropped. A reset discards pending cached changes rather than finishing
 unclosed work.
-
-After an ordinary exit, the CCP starts a new line and displays its prompt.
-The console stays selected. The drive and user normally return to those
-from which the program started, as explained in Chapter 8. A program can
-change that saved selection at `0004h`. An unavailable drive falls back to A.
