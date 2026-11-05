@@ -221,9 +221,10 @@ explains the operators and
 
 ## Display loading and console selection
 
-The PICO9918 console starts from ROM when the display and matrix
-keyboard answer at cold boot. It needs no service line in the file
-(`src/video.asm:22-29`, `src/pico.asm:64-86`). The supplied display line
+The PICO9918 console starts from ROM when the display answers and the
+Matrix switch enables the matrix keyboard at cold boot. It needs no
+service line in the file (`src/console.asm:82-88`,
+`src/video.asm:22-29`, `src/pico.asm:64-86`). The supplied display line
 loads `GLCD.SVC`. The CCP compares all three type bytes in `CMDFCB`:
 `SVC` calls `SVCGO`, while another type goes to the `.COM` search
 (`src/cpm/ccp.asm:451-495`).
@@ -241,9 +242,10 @@ other checks and rollback.
 `SVDRV` uses both the startup mark and the console field. A nonzero
 table supplied from startup while that field is `CRT:` is rejected with
 `TNENODV`, as for an absent device (`src/services.asm:629-647`). A
-controller that answers still needs a matrix keyboard and a free UC1
-table slot. `VIDHOOK` returns carry for either missing keyboard or an
-occupied slot, which `SVDRV` returns as `TNEBAD`
+controller that answers still needs the matrix keyboard enabled by the
+Matrix switch and a free UC1 table slot. `VIDHOOK` returns carry for
+either a disabled keyboard or an occupied slot, which `SVDRV` returns
+as `TNEBAD`
 (`src/video.asm:150-182`, `src/services.asm:649-658`). A second
 `GLCD.SVC` therefore fails while the first is installed. An older card's
 `PICO.SVC` also fails when it passes a table for `CRT:` because `DRVR`
@@ -261,12 +263,13 @@ It tests `VTOWN` before restoring or clearing the screen so a selected
 PICO9918 with an active claim is left alone (`src/console.asm:184-199`).
 
 The startup and typed cases therefore have different results on a board
-with both displays. Startup rejects GLCD registration while `CRT:` is
-selected. A typed `GLCD.SVC` can install the service while leaving the
+with both displays and the matrix keyboard enabled. Startup rejects
+GLCD registration while `CRT:` is selected. A typed `GLCD.SVC` can
+install the service while leaving the
 PICO9918 console in use, ready for a later `CON UC1`. With the matrix
-keyboard and controller present but no selected PICO9918 console, the
-startup line can select the graphics LCD. Successful web-page card
-preparation sets the line for the chosen display
+keyboard enabled by the Matrix switch and the controller answering but
+no selected PICO9918 console, the startup line can select the graphics
+LCD. Successful web-page card preparation sets the line for the chosen display
 (`host/card.mjs:58-72`, `104-116`), as
 [Appendix I](appendix-i-web-page.md) explains.
 
@@ -339,18 +342,24 @@ in `L` and `SVCRA` in `H`. `AND H` keeps the status only for startup.
 `XOR TNENODV` gives zero only for status 2. `DEC L` and `OR L` keep
 zero only for `SVCRC` 1, a failed installation with nothing left
 resident. Only that combined result reaches `SVCOK` without a message.
-Other failures reach `BADCMD` and print the name with `?`
+Other failures returned to this check reach `BADCMD` and print the name with `?`
 (`src/cpm/ccp.asm:465-484`, `588-612`, `src/loader.asm:536-587`).
 
 An absent graphics controller and startup registration blocked by an
 active PICO9918 console both return `TNENODV`. They can take that quiet
-path. A file that cannot be read or is rejected before `INIT` leaves
-`SVCRC` zero and prints its name with `?`.
-A controller that answers but has no matrix keyboard fails with
-`TNEBAD`. Those cases still print the name from startup. Typed on a
-board without the graphics controller, `GLCD.SVC` prints `GLCD.SVC?`.
-Typed with both displays it can install while leaving the PICO9918
-selected (`src/loader.asm:925-958`, `drivers/glcd.asm:66-88`,
+path. A load failure that returns before `INIT` leaves `SVCRC` zero
+and prints the file's name with `?`. A disk error under the default
+BDOS error mode instead prints its disk message, waits for a key and
+warm boots through `CHDROP`, discarding the remaining chain. It does
+not return to that name-reporting path (`src/cpm/bdoscon.asm:26-72`,
+`src/cpm/bdos.asm:110-119`).
+
+A controller that answers while the Matrix switch disables the matrix
+keyboard fails with `TNEBAD`. That failure still prints the name from
+startup. Typed on a board without the graphics controller, `GLCD.SVC`
+prints `GLCD.SVC?`. Typed with both displays and the matrix keyboard
+enabled it can install while leaving the PICO9918 selected
+(`src/loader.asm:925-958`, `drivers/glcd.asm:66-88`,
 `src/services.asm:618-658`).
 
 The width path first uses `FIND` to locate the ROM PICO9918 console
