@@ -8,9 +8,10 @@ nav_group: "Part II: Inside TEC-OS"
 # 23. Numbered-service dispatch
 
 <!-- Source mechanisms checked by text inspection against TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. Unprefixed source ranges use
+     962853f499f05faf281f6cdff1deca8959f58c2b. Unprefixed source ranges use
      that pin. Historical byte accounting and workspace addresses retain
-     78127ec. No build, capture or measurement was performed. -->
+     78127ec. Receiver selection: book 9ba1f59, P3 proposal 18 / 43d5f328.
+     No build, capture or measurement was performed. -->
 
 A call to `ABICALL` selects a routine while keeping its arguments in the
 registers. The lookup needs register pairs too. TEC-OS saves those pairs on
@@ -76,7 +77,7 @@ The historical `78127ec` code account below totals 480 bytes for the
 dispatcher, its exits, the nine hardware services and the font's access
 routine. It excludes the font data and the other numbered routines.
 These are retained build figures, separate from the source checks at
-`ea3ef3d`.
+`962853f`.
 
 | Number | Name | Routine | Bytes at `78127ec` |
 | ---: | --- | --- | ---: |
@@ -213,18 +214,18 @@ Release returns at once if there is no claim. Otherwise `HWVREL` clears
 `VCLAIM` and reads `PIVEC`. Cold boot sets that pointer to `PIBLK` when
 the PICO9918 responds and the Matrix switch enables the keyboard
 (`src/services.asm:245-258`,
-`src/video.asm:22-29`, `src/pico.asm:64-86`). A zero pointer leaves the
+`src/video.asm:22-29`, `src/pico.asm:69-92`). A zero pointer leaves the
 chip as the program set it. With a table present, release reads the
 fourth word at offset 6 and calls the restore routine through `VHLJP`
 (`src/services.asm:259-268`, `src/video.asm:64-68`).
 
 The restore routine reinstates the mode, font and displayed page. Release also
 clears the screen and homes the cursor when the PICO9918 is the console
-(`src/pico.asm:247-331`, `src/services.asm:269-279`). Warm boot calls `HWVREL`
+(`src/pico.asm:252-336`, `src/services.asm:269-279`). Warm boot calls `HWVREL`
 before `PZINIT`. With the ROM console's table present, that restore disables the
 chip's interrupt, wired as a non-maskable interrupt (NMI) on the board, before
-page zero is rebuilt (`src/boot.asm:185-195`, `src/pico.asm:258-278`,
-`src/pico.asm:677-679`). A program's claim ends with its exit.
+page zero is rebuilt (`src/boot.asm:185-195`, `src/pico.asm:263-283`,
+`src/pico.asm:682-684`). A program's claim ends with its exit.
 
 `PUTAT` writes through the selected video driver while leaving the console
 cursor position unchanged. Its first test is `VTOWN`, followed by the low
@@ -246,12 +247,17 @@ expires or the right edge is reached (`src/services.asm:388-428`).
 
 ## The ROM font
 
-The display drivers use the ROM's font (`src/pico.asm:303-329`,
+The display drivers use the ROM's font (`src/pico.asm:308-334`,
 `drivers/glcd.asm:604-635`). `FONT`, service 15, loads its address into
 `HL` and jumps to `HWOK` (`src/services.asm:597-603`). The font has 96
 characters from code `20h`, each eight bytes in top-to-bottom row order
 (`src/abi.inc:163-168`). Its 768 data bytes are separate from the
 six-byte access routine in the historical code table.
+
+The selected data is TEC Compact from `format/font5x7.txt`. Its parser puts
+each row's five pixels in bits 7–3 and requires eight rows per character
+(`tools/lib/font.mjs:9-35`). The source package checks the selected font
+identity (`tools/lib/font-package.mjs:8-16`).
 
 `GLCD.SVC` calls `FONT` first in `INIT` and stores the returned pointer.
 On a ROM before ABI 5.1, number 15 is beyond the dispatch table. The

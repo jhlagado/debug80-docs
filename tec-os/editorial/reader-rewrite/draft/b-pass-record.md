@@ -12,7 +12,8 @@ resident services/registry use and Chapter 23 supplies dispatcher internals.
 I applied the amended STYLE guide, human-writing and teaching-prose-review
 standards to a reference appendix. I kept direct lookup entries rather than
 turning sixteen service contracts into a tutorial or adding a recap.
-Mechanism authority is TEC-OS `ea3ef3de9133931e925a0220d51c0e971c1fd8dd`,
+The initial mechanism inspection used TEC-OS
+`ea3ef3de9133931e925a0220d51c0e971c1fd8dd`,
 read through git object text. I reused the full hardware-routine/caller read
 from Chapter 11 and read the volume, registry, driver, PICO-record and font
 paths relevant to this complete appendix. I checked every source reference
@@ -200,3 +201,145 @@ which records the Matrix enable switch rather than a physical keyboard probe.
 The VIDEO restoration, DRVR installation and no-PICO-record explanations now
 name the disabled switch. No literal listing, historical output or timing
 changed. Bounded independent confirmation is pending. No execution occurred.
+
+## Receiver source adoption selected at 9ba1f59
+
+Current mechanism authority is TEC-OS
+`962853f499f05faf281f6cdff1deca8959f58c2b`. The tested source remains
+`8b8664a7d93c6dc2e8bce509b9770585e106eedc`. P3 proposal 18 and the closed
+result review at Origo `43d5f328` bind that offer. The receiver selected it at
+book `9ba1f59` after scoped workflow receipt `4b5b5a50` and the opening chapter
+reviews closed at `d9d57d2` and `b911e84`.
+
+This section supersedes the earlier source-adoption and opening-workflow
+holds. Earlier sections retain the actual initial ea3ef3d inspection and its
+coordinates as an editorial record. Their historical costs, addresses and
+program results are not reassigned to the current source. Compact-example
+assembly proof and uncovered hardware workflows remain separate.
+
+The complete current reader and pass record were read before editing. Both
+source-adoption impact records were read, including all 35 claim contexts,
+29 proof spans and nine historical exceptions. The report SHA-256 is
+`df276b238d6014d98580b26f690bf1bbb1798d197ef3a495653a1cfc3c0a0bc0`, matching
+its confirmation. The actual ea3ef3d-to-962853f source diff was read for the
+owned mechanisms, parser and publication paths. The tested-to-landed diff
+changes only the two qualification records.
+
+Complete owning routines and relevant callers were reread at the selected
+source. All current citation claims were checked in their containing passages,
+including unchanged spans. Same-blob comparisons establish unchanged source
+identity after that semantic read. They do not establish a runtime result.
+
+The selected font is TEC Compact. `tools/lib/font.mjs:9-35` parses 96 glyphs
+from 20h through 7Fh, eight top-first rows per glyph, with five pixels in bits
+7–3. `tools/lib/font-package.mjs:8-21` checks selected/original identities and
+the complete notices. The retained source/export manifest and
+`format/FONT-NOTICES.txt:33-47` were read. Legacy bitmap upstream authorship
+remains unresolved. No new attribution or licence conclusion is supplied.
+
+The qualified offer binds ROM SHA-256
+`fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d` and D8
+SHA-256 `9a87dec39a63efc8fdf38ae13d6ec6299763c833fc891de121e2b30f4a1a36ac`.
+Their authority is the retained P3 native artifact inventory and result review,
+not this text inspection. Native 16,020 used and 364 free already appear at
+ea3ef3d. They do not indicate font growth from the historical 16,018/366
+account. No new address or byte measurement is introduced.
+
+Raw PICO cold setup is now 40 columns, conditional on a responding PICO and
+the enabled Matrix switch (`src/pico.asm:36-92`, `src/video.asm:22-29`,
+`src/console.asm:82-88`). Explicit 32/40/80, bare selection preserving width
+and claim, host/UI fallback 80 and serial pagination 80 remain distinct.
+The current record is PICO v3 with entry offsets 16/18/20/22/24 and state
+positions 36/41/42. The first four graphics entries require a claim and the
+width entry rejects an active claim. None of these contracts is changed by
+the font selection.
+
+### Complete Appendix B citation coverage
+
+All 73 pre-adoption reader citation groups, containing 88 ranges, were checked
+semantically against 962853f. Two new font-package/notice references bring the
+reader to 75 groups and 90 current ranges. No unprefixed current citation is
+outside this coverage. The original pass record's 33 groups and 40 ranges were
+also revisited. Those earlier proof tables retain their explicitly stated
+initial ea3ef3d coordinates.
+
+| Earlier reader citation | Current citation and support |
+| --- | --- |
+| `tools/build.mjs:143-157` | `tools/build.mjs:144-158`: complete ABI validation routine. |
+| `tools/build.mjs:27-27,63-70` | `tools/build.mjs:28-28,64-71`: version and generated ROMVER. |
+| `tools/media.mjs:251-257` | `tools/media.mjs:253-260`: actual include and companion publication. |
+| `src/pico.asm:54-87` | `src/pico.asm:59-92`: conditional console setup and PIVEC. |
+| `src/pico.asm:277-331`, twice | `src/pico.asm:282-336`, twice: FONT reads and reverse pattern writes. |
+| `src/pico.asm:31-87` | `src/pico.asm:31-92`: table layout, record v3 and cold publication. |
+| `src/pico.asm:353-445` | `src/pico.asm:358-450`: graphics entries, counts and address setup. |
+| `src/pico.asm:89-174` | `src/pico.asm:94-179`: unclaimed-width contract, validation and stored width. |
+| `tools/lib/font.mjs:9-31` | `tools/lib/font.mjs:9-35`: strict glyph/row validation and five-pixel shift. |
+
+The record's broader original pico 31–174 proof corresponds to 31–179 at the
+selected source. The parser's new checks reject duplicate/out-of-range glyphs
+and rows outside an eight-row glyph. The five-column encoding remains intact.
+`tools/lib/font-package.mjs:8-21` binds selected data, original data and notices.
+The current FONT paragraph names that provenance without a new licence claim.
+
+All other originally cited product files have identical Git blobs at the two
+mechanism pins. Their relevant source contexts and callers were reread for
+all sixteen services, flags/results, bounds, failed-flush consequences, slot
+reservation, descriptor copying, driver admission/drop, registry limits,
+claim-dependent text and the PICO graphics entries. Historical labels remain
+explicitly historical: BBE3h at 78127ec and C179h at 58d4345. None is adopted as
+a current address because the offered map happens to agree.
+
+All tables retain their exact rows and figures. Historical timing/depth pins
+and their conditions are unchanged. Both VTEST fences, their preparation/
+capture comment and the two original provenance comments are byte-identical.
+The VTEST result still belongs to the loaded PICO.SVC provider at 60e0768,
+not the current ROM provider. Source adoption supplies no new round trip.
+
+### Bounded editorial readback
+
+The font/provenance paragraphs were drafted before the gate and separate
+reference/thematic, deletion, agency, every-comma and journey passes. The
+provenance qualification stays with FONT while its pre-5.1 INIT failure remains
+the final substantive point. Repeated per-entry status and stack statements
+remain useful for lookup. Changed citation paragraphs and all table neighbours
+were read in full. Rewrapping affects prose only.
+
+The mandatory prose gate and sentence-complexity report were run on both
+owned files. SHORT prompts retain independently usable status/bound/result
+sentences and metadata limits. LONG prompts keep exact historical conditions,
+joystick labels, depth comparisons and debugger-offset lists. CLAUSES/ECHO
+prompts retain register-preservation exceptions, cursor and write-protect paths,
+record fields and the distinct BDOS function numbers. FRONT prompts preserve
+MOUNT's default-drive condition and the ROM-console publication condition.
+The VTEST NEG prompt retains the absence of removal/generation recheck. These
+were read in full context without converting them into shortened contracts.
+
+Current adoption is ready for independent confirmation. Historical evidence,
+compact candidates and physical-board qualification are separate. No product
+execution, import, syntax check, assembly, build, test, model or capture occurred.
+No shared record, root navigation or publication was changed.
+
+### Final literal and reading checks
+
+The before/after reader comparison uses book `8ed3f3713ec8c68d9b520e777357df4790ca4180` as its
+input. All 2 fences, 9 tables and 3 protected historical/capture comments
+compare byte-identically and in order. Only the separate current-mechanism
+comment is excluded from that comment comparison. Fixed entry offsets,
+historical table values, map coordinates, hashes, recipes and screen text
+remain unchanged. The final changed paragraphs were read with their neighbours
+for meaning, agency, every comma and the reader's next step.
+
+Input reader SHA-256:
+`689cce510d87965dba704be178f65196db1c3031429bd2c016c220574c1b8ec0`.
+Output reader SHA-256:
+`f865198d530c1b0eb762408a8a644c2add21633cc439c8492ffc5cec1b64f3a8`.
+
+The actual mandatory prose gate reports zero findings across all six owned
+files. Complexity prompts in this record retain explicit source identities,
+coverage counts, original movement inventories and evidence limitations.
+Repeated glyph/row terms name the same encoding. Short source-pin, font and
+origin-limit statements carry distinct audit facts. Longer coverage sentences
+list the exact contracts checked. Earlier record flags remain historical
+process facts, not grounds for unrelated reader edits. No unresolved current
+citation or source-adoption finding remains in this owned slice. Independent
+confirmation of this application remains separate.
