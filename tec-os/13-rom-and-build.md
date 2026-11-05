@@ -208,7 +208,8 @@ file first, then `.inputs/NAME`, then the legacy copy in
 `../thorium/dist/NAME`. A selected file with the wrong size or hash stops the
 operation; it does not fall through to another copy. An empty override also
 stops it. `npm run inputs` prepares a pinned local copy when the legacy copy
-is stale (`tools/lib/pins.mjs:10-48`, at `fe2097f`). The host is selected by
+is stale (`tools/lib/pins.mjs:10-48`, `tools/inputs.mjs:37-65`, at
+`fe2097f`). The host is selected by
 `TECOS_TAS_HOST`, or otherwise `.inputs/tas-host`.
 
 The build still assembles the ROM twice to place its fixed workspace below
