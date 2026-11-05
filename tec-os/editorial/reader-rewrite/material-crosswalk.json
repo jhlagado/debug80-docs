@@ -1,0 +1,4194 @@
+{
+  "book_base": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+  "status": "proposed; section destinations refined during independent review",
+  "coverage": "Every original heading and file front matter; paragraph and example detail in linked reverse outlines. No technical removal authorised by this inventory.",
+  "sections": [
+    {
+      "source": "tec-os/index.md",
+      "line_at_base": 8,
+      "section": "TEC-OS: CP/M in ROM for the TEC-1G",
+      "disposition": "retain and restructure",
+      "destinations": [
+        "Front door"
+      ],
+      "paragraph_detail": "reverse-outline-index.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "Front door"
+    },
+    {
+      "source": "tec-os/index.md",
+      "line_at_base": 16,
+      "section": "The reader",
+      "disposition": "retain and restructure",
+      "destinations": [
+        "Front door"
+      ],
+      "paragraph_detail": "reverse-outline-index.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "Front door"
+    },
+    {
+      "source": "tec-os/index.md",
+      "line_at_base": 26,
+      "section": "Examples and sources",
+      "disposition": "retain and restructure",
+      "destinations": [
+        "Front door"
+      ],
+      "paragraph_detail": "reverse-outline-index.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "Front door"
+    },
+    {
+      "source": "tec-os/index.md",
+      "line_at_base": 45,
+      "section": "Conventions",
+      "disposition": "retain and restructure",
+      "destinations": [
+        "Front door"
+      ],
+      "paragraph_detail": "reverse-outline-index.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "Front door"
+    },
+    {
+      "source": "tec-os/index.md",
+      "line_at_base": 65,
+      "section": "Contents",
+      "disposition": "retain and restructure",
+      "destinations": [
+        "Front door"
+      ],
+      "paragraph_detail": "reverse-outline-index.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "Front door"
+    },
+    {
+      "source": "tec-os/index.md",
+      "line_at_base": 67,
+      "section": "Part I: Using and programming TEC-OS",
+      "disposition": "retain and restructure",
+      "destinations": [
+        "Front door"
+      ],
+      "paragraph_detail": "reverse-outline-index.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "Front door"
+    },
+    {
+      "source": "tec-os/index.md",
+      "line_at_base": 98,
+      "section": "Part II: Inside TEC-OS",
+      "disposition": "retain and restructure",
+      "destinations": [
+        "Front door"
+      ],
+      "paragraph_detail": "reverse-outline-index.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "Front door"
+    },
+    {
+      "source": "tec-os/index.md",
+      "line_at_base": 135,
+      "section": "Appendices",
+      "disposition": "retain and restructure",
+      "destinations": [
+        "Front door"
+      ],
+      "paragraph_detail": "reverse-outline-index.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "Front door"
+    },
+    {
+      "source": "tec-os/index.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        "Front door"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": "Front door"
+    },
+    {
+      "source": "tec-os/01-introduction.md",
+      "line_at_base": 8,
+      "section": "1. Introduction",
+      "disposition": "retain and revise",
+      "destinations": [
+        1
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/01-introduction.md",
+      "line_at_base": 19,
+      "section": "TEC-OS and CP/M",
+      "disposition": "retain and revise",
+      "destinations": [
+        1
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/01-introduction.md",
+      "line_at_base": 38,
+      "section": "Turning it on",
+      "disposition": "retain and revise",
+      "destinations": [
+        1
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/01-introduction.md",
+      "line_at_base": 73,
+      "section": "Drives and files",
+      "disposition": "retain and revise",
+      "destinations": [
+        1
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/01-introduction.md",
+      "line_at_base": 109,
+      "section": "Running a program",
+      "disposition": "retain and revise",
+      "destinations": [
+        1
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/01-introduction.md",
+      "line_at_base": 144,
+      "section": "The memory",
+      "disposition": "retain and revise",
+      "destinations": [
+        1
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/01-introduction.md",
+      "line_at_base": 165,
+      "section": "Keeping your work",
+      "disposition": "retain and revise",
+      "destinations": [
+        1
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/01-introduction.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        1
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "line_at_base": 8,
+      "section": "2. The console",
+      "disposition": "retain and restructure",
+      "destinations": [
+        1,
+        3,
+        6,
+        8,
+        16
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "line_at_base": 17,
+      "section": "The four console devices",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        6,
+        16
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 6
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "line_at_base": 46,
+      "section": "The console at cold boot",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        1,
+        6,
+        15
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "line_at_base": 60,
+      "section": "The serial terminal",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        6,
+        16
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 6
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "line_at_base": 83,
+      "section": "A display as the console",
+      "disposition": "retain and revise",
+      "destinations": [
+        6
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 6
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "line_at_base": 103,
+      "section": "Moving the console with CON",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        6,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 6
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "line_at_base": 259,
+      "section": "The keyboard and the line",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        1,
+        3,
+        6,
+        16
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "line_at_base": 326,
+      "section": "Pausing output",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        3,
+        20
+      ],
+      "paragraph_detail": "reverse-outline-01-02.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 3
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        1,
+        3,
+        6,
+        8,
+        16
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 8,
+      "section": "3. The command line",
+      "disposition": "retain and restructure",
+      "destinations": [
+        1,
+        3,
+        4,
+        10,
+        12,
+        20,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 21,
+      "section": "The line",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        1,
+        3,
+        20
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 56,
+      "section": "File names and wildcards",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        3,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 3
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 100,
+      "section": "The built-in commands",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        3,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 3
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 129,
+      "section": "DIR",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        1,
+        3,
+        4,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 150,
+      "section": "TYPE",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        3,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 3
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 169,
+      "section": "COPY, REN and ERA",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        3,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 3
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 279,
+      "section": "SAVE",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        10,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 10
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 312,
+      "section": "Drives and user areas",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        4,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 4
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 377,
+      "section": "Running a program",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        1,
+        4,
+        10,
+        20
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 429,
+      "section": "Several commands on one line",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        12,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 12
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 553,
+      "section": "Failure messages",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        3,
+        4,
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 3
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "line_at_base": 621,
+      "section": "Command history",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        1,
+        3,
+        22
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        1,
+        3,
+        4,
+        10,
+        12,
+        20,
+        "J"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/04-cards-and-volumes.md",
+      "line_at_base": 8,
+      "section": "4. Cards and volumes",
+      "disposition": "retain and restructure",
+      "destinations": [
+        5,
+        "E",
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 5
+    },
+    {
+      "source": "tec-os/04-cards-and-volumes.md",
+      "line_at_base": 22,
+      "section": "The container and its volumes",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        5,
+        "E"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 5
+    },
+    {
+      "source": "tec-os/04-cards-and-volumes.md",
+      "line_at_base": 69,
+      "section": "The two disk sizes",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        5,
+        "E"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 5
+    },
+    {
+      "source": "tec-os/04-cards-and-volumes.md",
+      "line_at_base": 93,
+      "section": "Building a card with tecvol",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        5,
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 5
+    },
+    {
+      "source": "tec-os/04-cards-and-volumes.md",
+      "line_at_base": 177,
+      "section": "Recipes and the starter card",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        5,
+        26,
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 5
+    },
+    {
+      "source": "tec-os/04-cards-and-volumes.md",
+      "line_at_base": 219,
+      "section": "Putting an image on a card",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        5,
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 5
+    },
+    {
+      "source": "tec-os/04-cards-and-volumes.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        5,
+        "E",
+        "F"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 5
+    },
+    {
+      "source": "tec-os/05-drives-and-cache.md",
+      "line_at_base": 8,
+      "section": "5. Drives, the cache and your work",
+      "disposition": "retain and restructure",
+      "destinations": [
+        1,
+        4,
+        5,
+        18
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/05-drives-and-cache.md",
+      "line_at_base": 22,
+      "section": "Drives and MOUNT",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        4,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 4
+    },
+    {
+      "source": "tec-os/05-drives-and-cache.md",
+      "line_at_base": 123,
+      "section": "The block cache and the volume written behind",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        1,
+        5,
+        18
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/05-drives-and-cache.md",
+      "line_at_base": 212,
+      "section": "The drives after a reset",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        4,
+        15
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 4
+    },
+    {
+      "source": "tec-os/05-drives-and-cache.md",
+      "line_at_base": 257,
+      "section": "Recovering after a power cut",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        5,
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 5
+    },
+    {
+      "source": "tec-os/05-drives-and-cache.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        1,
+        4,
+        5,
+        18
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 1
+    },
+    {
+      "source": "tec-os/06-startup-file.md",
+      "line_at_base": 8,
+      "section": "6. The startup file",
+      "disposition": "retain and restructure",
+      "destinations": [
+        7,
+        13,
+        25
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 7
+    },
+    {
+      "source": "tec-os/06-startup-file.md",
+      "line_at_base": 17,
+      "section": "The startup file",
+      "disposition": "retain and revise",
+      "destinations": [
+        7
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 7
+    },
+    {
+      "source": "tec-os/06-startup-file.md",
+      "line_at_base": 76,
+      "section": "The rules of a line",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        7,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 7
+    },
+    {
+      "source": "tec-os/06-startup-file.md",
+      "line_at_base": 170,
+      "section": "When the file runs",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        7,
+        25
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 7
+    },
+    {
+      "source": "tec-os/06-startup-file.md",
+      "line_at_base": 237,
+      "section": "Display lines",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        7,
+        25
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 7
+    },
+    {
+      "source": "tec-os/06-startup-file.md",
+      "line_at_base": 327,
+      "section": "Services at the prompt",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        7,
+        13
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 7
+    },
+    {
+      "source": "tec-os/06-startup-file.md",
+      "line_at_base": 412,
+      "section": "When the file goes wrong",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        7,
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-03-06.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 7
+    },
+    {
+      "source": "tec-os/06-startup-file.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        7,
+        13,
+        25
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 7
+    },
+    {
+      "source": "tec-os/07-first-program.md",
+      "line_at_base": 8,
+      "section": "7. A first program",
+      "disposition": "retain and restructure",
+      "destinations": [
+        2,
+        8,
+        9,
+        10,
+        12
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 2
+    },
+    {
+      "source": "tec-os/07-first-program.md",
+      "line_at_base": 23,
+      "section": "A program and the BDOS",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        2,
+        8
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 2
+    },
+    {
+      "source": "tec-os/07-first-program.md",
+      "line_at_base": 53,
+      "section": "A program that prints",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        2,
+        8
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 2
+    },
+    {
+      "source": "tec-os/07-first-program.md",
+      "line_at_base": 75,
+      "section": "Building and running it on the TEC-1G",
+      "disposition": "retain and revise",
+      "destinations": [
+        2
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 2
+    },
+    {
+      "source": "tec-os/07-first-program.md",
+      "line_at_base": 167,
+      "section": "The same program from a PC",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        5,
+        26
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 5
+    },
+    {
+      "source": "tec-os/07-first-program.md",
+      "line_at_base": 216,
+      "section": "The command line a program receives",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        10,
+        20
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 10
+    },
+    {
+      "source": "tec-os/07-first-program.md",
+      "line_at_base": 251,
+      "section": "A program that reads a file",
+      "disposition": "retain and revise",
+      "destinations": [
+        9
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 9
+    },
+    {
+      "source": "tec-os/07-first-program.md",
+      "line_at_base": 351,
+      "section": "The ways a program ends",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        8,
+        12,
+        15
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 8
+    },
+    {
+      "source": "tec-os/07-first-program.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        2,
+        8,
+        9,
+        10,
+        12
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 2
+    },
+    {
+      "source": "tec-os/08-memory.md",
+      "line_at_base": 8,
+      "section": "8. Memory for programs",
+      "disposition": "retain and restructure",
+      "destinations": [
+        10,
+        14
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 10
+    },
+    {
+      "source": "tec-os/08-memory.md",
+      "line_at_base": 18,
+      "section": "The 64 KiB on a TEC-1G",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        10,
+        14
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 10
+    },
+    {
+      "source": "tec-os/08-memory.md",
+      "line_at_base": 42,
+      "section": "The limit a program reads",
+      "disposition": "retain and revise",
+      "destinations": [
+        10
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 10
+    },
+    {
+      "source": "tec-os/08-memory.md",
+      "line_at_base": 128,
+      "section": "The drives, the services and the word",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        10,
+        14
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 10
+    },
+    {
+      "source": "tec-os/08-memory.md",
+      "line_at_base": 237,
+      "section": "The largest program that loads",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        10,
+        20
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 10
+    },
+    {
+      "source": "tec-os/08-memory.md",
+      "line_at_base": 260,
+      "section": "Page zero",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        10,
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 10
+    },
+    {
+      "source": "tec-os/08-memory.md",
+      "line_at_base": 305,
+      "section": "The latch byte",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        10,
+        14
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 10
+    },
+    {
+      "source": "tec-os/08-memory.md",
+      "line_at_base": 319,
+      "section": "EXPAND 1",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        10,
+        14
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 10
+    },
+    {
+      "source": "tec-os/08-memory.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        10,
+        14
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 10
+    },
+    {
+      "source": "tec-os/09-programs-and-console.md",
+      "line_at_base": 8,
+      "section": "9. Programs and the console",
+      "disposition": "retain and restructure",
+      "destinations": [
+        8,
+        16
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 8
+    },
+    {
+      "source": "tec-os/09-programs-and-console.md",
+      "line_at_base": 19,
+      "section": "The BDOS's console functions",
+      "disposition": "retain and revise",
+      "destinations": [
+        8
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 8
+    },
+    {
+      "source": "tec-os/09-programs-and-console.md",
+      "line_at_base": 50,
+      "section": "The BIOS's console calls",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        8,
+        16
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 8
+    },
+    {
+      "source": "tec-os/09-programs-and-console.md",
+      "line_at_base": 153,
+      "section": "One level or the other",
+      "disposition": "retain and revise",
+      "destinations": [
+        8
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 8
+    },
+    {
+      "source": "tec-os/09-programs-and-console.md",
+      "line_at_base": 169,
+      "section": "The video terminal",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        6,
+        8,
+        16
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 6
+    },
+    {
+      "source": "tec-os/09-programs-and-console.md",
+      "line_at_base": 258,
+      "section": "The cursor",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        8,
+        16
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 8
+    },
+    {
+      "source": "tec-os/09-programs-and-console.md",
+      "line_at_base": 269,
+      "section": "The other devices",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        8,
+        16
+      ],
+      "paragraph_detail": "reverse-outline-07-09.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 8
+    },
+    {
+      "source": "tec-os/09-programs-and-console.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        8,
+        16
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 8
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 8,
+      "section": "10. The hardware services",
+      "disposition": "retain and restructure",
+      "destinations": [
+        11,
+        23,
+        "B"
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 21,
+      "section": "The shared ports",
+      "disposition": "retain and revise",
+      "destinations": [
+        11
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 32,
+      "section": "The ROM table",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        11,
+        "B"
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 57,
+      "section": "The check for TEC-OS",
+      "disposition": "retain and revise",
+      "destinations": [
+        11
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 133,
+      "section": "The call",
+      "disposition": "retain and revise",
+      "destinations": [
+        11
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 172,
+      "section": "The board's report",
+      "disposition": "retain and revise",
+      "destinations": [
+        11
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 311,
+      "section": "The LCD and the speaker",
+      "disposition": "retain and revise",
+      "destinations": [
+        11
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 390,
+      "section": "The digits and the clock",
+      "disposition": "retain and revise",
+      "destinations": [
+        11
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 560,
+      "section": "The keys and the joystick",
+      "disposition": "retain and revise",
+      "destinations": [
+        11
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 660,
+      "section": "Claiming the PICO9918",
+      "disposition": "retain and revise",
+      "destinations": [
+        11
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 687,
+      "section": "Text at a screen position",
+      "disposition": "retain and revise",
+      "destinations": [
+        11
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "line_at_base": 778,
+      "section": "DEMO",
+      "disposition": "retain and revise",
+      "destinations": [
+        11
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/10-hardware-services.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        11,
+        23,
+        "B"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 11
+    },
+    {
+      "source": "tec-os/11-return-codes-and-chaining.md",
+      "line_at_base": 8,
+      "section": "11. Return codes and chaining",
+      "disposition": "retain and restructure",
+      "destinations": [
+        12,
+        21
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 12
+    },
+    {
+      "source": "tec-os/11-return-codes-and-chaining.md",
+      "line_at_base": 22,
+      "section": "The return code",
+      "disposition": "retain and revise",
+      "destinations": [
+        12
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 12
+    },
+    {
+      "source": "tec-os/11-return-codes-and-chaining.md",
+      "line_at_base": 43,
+      "section": "A program that sets the code",
+      "disposition": "retain and revise",
+      "destinations": [
+        12
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 12
+    },
+    {
+      "source": "tec-os/11-return-codes-and-chaining.md",
+      "line_at_base": 131,
+      "section": "The rule a program follows",
+      "disposition": "retain and revise",
+      "destinations": [
+        12
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 12
+    },
+    {
+      "source": "tec-os/11-return-codes-and-chaining.md",
+      "line_at_base": 144,
+      "section": "A program that starts another",
+      "disposition": "retain and revise",
+      "destinations": [
+        12
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 12
+    },
+    {
+      "source": "tec-os/11-return-codes-and-chaining.md",
+      "line_at_base": 229,
+      "section": "Chaining from the startup file",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        12,
+        7
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 12
+    },
+    {
+      "source": "tec-os/11-return-codes-and-chaining.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        12,
+        21
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 12
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 8,
+      "section": "12. Writing services",
+      "disposition": "retain and restructure",
+      "destinations": [
+        13,
+        24,
+        "H"
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 21,
+      "section": "Code that stays",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 51,
+      "section": "COUNT.SVC",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 120,
+      "section": "The header",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        13,
+        "H"
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 153,
+      "section": "INIT",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 168,
+      "section": "The hook",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 177,
+      "section": "REMOVE",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 183,
+      "section": "Assembling, installing and measuring",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 278,
+      "section": "Beyond the loader's checks",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        13,
+        24
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 285,
+      "section": "The hook as INIT's last act",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 303,
+      "section": "A failed INIT",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 355,
+      "section": "REMOVE and a hook on a hook",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 370,
+      "section": "Restart vectors",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        13,
+        24
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 392,
+      "section": "The ROM's addresses",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 404,
+      "section": "Stacks",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        13,
+        24
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 435,
+      "section": "Publishing a record",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "line_at_base": 603,
+      "section": "Depending on another service",
+      "disposition": "retain and revise",
+      "destinations": [
+        13
+      ],
+      "paragraph_detail": "reverse-outline-10-12.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/12-writing-services.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        13,
+        24,
+        "H"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 13
+    },
+    {
+      "source": "tec-os/13-rom-and-build.md",
+      "line_at_base": 8,
+      "section": "13. The ROM and its build",
+      "disposition": "retain and revise",
+      "destinations": [
+        26
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 26
+    },
+    {
+      "source": "tec-os/13-rom-and-build.md",
+      "line_at_base": 22,
+      "section": "The image's parts",
+      "disposition": "retain and revise",
+      "destinations": [
+        26
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 26
+    },
+    {
+      "source": "tec-os/13-rom-and-build.md",
+      "line_at_base": 66,
+      "section": "The source order",
+      "disposition": "retain and revise",
+      "destinations": [
+        26
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 26
+    },
+    {
+      "source": "tec-os/13-rom-and-build.md",
+      "line_at_base": 136,
+      "section": "The generated files",
+      "disposition": "retain and revise",
+      "destinations": [
+        26
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 26
+    },
+    {
+      "source": "tec-os/13-rom-and-build.md",
+      "line_at_base": 188,
+      "section": "The two assemblies",
+      "disposition": "retain and revise",
+      "destinations": [
+        26
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 26
+    },
+    {
+      "source": "tec-os/13-rom-and-build.md",
+      "line_at_base": 234,
+      "section": "The build's checks",
+      "disposition": "retain and revise",
+      "destinations": [
+        26
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 26
+    },
+    {
+      "source": "tec-os/13-rom-and-build.md",
+      "line_at_base": 278,
+      "section": "One image for every board",
+      "disposition": "retain and revise",
+      "destinations": [
+        26
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 26
+    },
+    {
+      "source": "tec-os/13-rom-and-build.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        26
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 26
+    },
+    {
+      "source": "tec-os/14-memory-map.md",
+      "line_at_base": 8,
+      "section": "14. The memory map",
+      "disposition": "retain and restructure",
+      "destinations": [
+        14,
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 14
+    },
+    {
+      "source": "tec-os/14-memory-map.md",
+      "line_at_base": 23,
+      "section": "The window and the latch",
+      "disposition": "retain and revise",
+      "destinations": [
+        14
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 14
+    },
+    {
+      "source": "tec-os/14-memory-map.md",
+      "line_at_base": 56,
+      "section": "Page zero as TEC-OS writes it",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        14,
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 14
+    },
+    {
+      "source": "tec-os/14-memory-map.md",
+      "line_at_base": 92,
+      "section": "The workspace and what clears it",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        14,
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 14
+    },
+    {
+      "source": "tec-os/14-memory-map.md",
+      "line_at_base": 159,
+      "section": "The allocation vectors and the BDOS entry",
+      "disposition": "retain and revise",
+      "destinations": [
+        14
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 14
+    },
+    {
+      "source": "tec-os/14-memory-map.md",
+      "line_at_base": 204,
+      "section": "The four stacks",
+      "disposition": "retain and revise",
+      "destinations": [
+        14
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 14
+    },
+    {
+      "source": "tec-os/14-memory-map.md",
+      "line_at_base": 280,
+      "section": "EXPAND 1 and the no-stack rule",
+      "disposition": "retain and revise",
+      "destinations": [
+        14
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 14
+    },
+    {
+      "source": "tec-os/14-memory-map.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        14,
+        "C"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 14
+    },
+    {
+      "source": "tec-os/15-reset-and-boot.md",
+      "line_at_base": 8,
+      "section": "15. Reset, cold boot and warm boot",
+      "disposition": "retain and revise",
+      "destinations": [
+        15
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 15
+    },
+    {
+      "source": "tec-os/15-reset-and-boot.md",
+      "line_at_base": 26,
+      "section": "The first instruction",
+      "disposition": "retain and revise",
+      "destinations": [
+        15
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 15
+    },
+    {
+      "source": "tec-os/15-reset-and-boot.md",
+      "line_at_base": 58,
+      "section": "Cold boot's steps",
+      "disposition": "retain and revise",
+      "destinations": [
+        15
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 15
+    },
+    {
+      "source": "tec-os/15-reset-and-boot.md",
+      "line_at_base": 127,
+      "section": "The RAM check",
+      "disposition": "retain and revise",
+      "destinations": [
+        15
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 15
+    },
+    {
+      "source": "tec-os/15-reset-and-boot.md",
+      "line_at_base": 160,
+      "section": "The reset test",
+      "disposition": "retain and revise",
+      "destinations": [
+        15
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 15
+    },
+    {
+      "source": "tec-os/15-reset-and-boot.md",
+      "line_at_base": 252,
+      "section": "Page zero",
+      "disposition": "retain and revise",
+      "destinations": [
+        15
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 15
+    },
+    {
+      "source": "tec-os/15-reset-and-boot.md",
+      "line_at_base": 278,
+      "section": "Warm boot",
+      "disposition": "retain and revise",
+      "destinations": [
+        15
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 15
+    },
+    {
+      "source": "tec-os/15-reset-and-boot.md",
+      "line_at_base": 351,
+      "section": "The cost of each boot",
+      "disposition": "retain and revise",
+      "destinations": [
+        15
+      ],
+      "paragraph_detail": "reverse-outline-13-15.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 15
+    },
+    {
+      "source": "tec-os/15-reset-and-boot.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        15
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 15
+    },
+    {
+      "source": "tec-os/16-bios-and-console.md",
+      "line_at_base": 8,
+      "section": "16. The BIOS and the console path",
+      "disposition": "retain and revise",
+      "destinations": [
+        16
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 16
+    },
+    {
+      "source": "tec-os/16-bios-and-console.md",
+      "line_at_base": 24,
+      "section": "The jump table in RAM",
+      "disposition": "retain and revise",
+      "destinations": [
+        16
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 16
+    },
+    {
+      "source": "tec-os/16-bios-and-console.md",
+      "line_at_base": 66,
+      "section": "The IOBYTE and the console mode",
+      "disposition": "retain and revise",
+      "destinations": [
+        16
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 16
+    },
+    {
+      "source": "tec-os/16-bios-and-console.md",
+      "line_at_base": 128,
+      "section": "Console input",
+      "disposition": "retain and revise",
+      "destinations": [
+        16
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 16
+    },
+    {
+      "source": "tec-os/16-bios-and-console.md",
+      "line_at_base": 157,
+      "section": "The serial port, the punch and the reader",
+      "disposition": "retain and revise",
+      "destinations": [
+        16
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 16
+    },
+    {
+      "source": "tec-os/16-bios-and-console.md",
+      "line_at_base": 226,
+      "section": "The matrix keyboard",
+      "disposition": "retain and revise",
+      "destinations": [
+        16
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 16
+    },
+    {
+      "source": "tec-os/16-bios-and-console.md",
+      "line_at_base": 264,
+      "section": "The video terminal",
+      "disposition": "retain and revise",
+      "destinations": [
+        16
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 16
+    },
+    {
+      "source": "tec-os/16-bios-and-console.md",
+      "line_at_base": 337,
+      "section": "The displays and the claim",
+      "disposition": "retain and revise",
+      "destinations": [
+        16
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 16
+    },
+    {
+      "source": "tec-os/16-bios-and-console.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        16
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 16
+    },
+    {
+      "source": "tec-os/17-sd-card-and-volumes.md",
+      "line_at_base": 8,
+      "section": "17. The SD card and the volumes",
+      "disposition": "retain and revise",
+      "destinations": [
+        17
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 17
+    },
+    {
+      "source": "tec-os/17-sd-card-and-volumes.md",
+      "line_at_base": 28,
+      "section": "The SD card driver",
+      "disposition": "retain and revise",
+      "destinations": [
+        17
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 17
+    },
+    {
+      "source": "tec-os/17-sd-card-and-volumes.md",
+      "line_at_base": 125,
+      "section": "The container's checks",
+      "disposition": "retain and revise",
+      "destinations": [
+        17
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 17
+    },
+    {
+      "source": "tec-os/17-sd-card-and-volumes.md",
+      "line_at_base": 238,
+      "section": "The drive table and the DPHs",
+      "disposition": "retain and revise",
+      "destinations": [
+        17
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 17
+    },
+    {
+      "source": "tec-os/17-sd-card-and-volumes.md",
+      "line_at_base": 278,
+      "section": "Deblocking and the write decision",
+      "disposition": "retain and revise",
+      "destinations": [
+        17
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 17
+    },
+    {
+      "source": "tec-os/17-sd-card-and-volumes.md",
+      "line_at_base": 347,
+      "section": "The volume services",
+      "disposition": "retain and revise",
+      "destinations": [
+        17
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 17
+    },
+    {
+      "source": "tec-os/17-sd-card-and-volumes.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        17
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 17
+    },
+    {
+      "source": "tec-os/18-block-cache.md",
+      "line_at_base": 8,
+      "section": "18. The block cache",
+      "disposition": "retain and revise",
+      "destinations": [
+        18
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 18
+    },
+    {
+      "source": "tec-os/18-block-cache.md",
+      "line_at_base": 29,
+      "section": "Thirty lines and their table",
+      "disposition": "retain and revise",
+      "destinations": [
+        18
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 18
+    },
+    {
+      "source": "tec-os/18-block-cache.md",
+      "line_at_base": 67,
+      "section": "Reads through the cache",
+      "disposition": "retain and revise",
+      "destinations": [
+        18
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 18
+    },
+    {
+      "source": "tec-os/18-block-cache.md",
+      "line_at_base": 163,
+      "section": "Writes through",
+      "disposition": "retain and revise",
+      "destinations": [
+        18
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 18
+    },
+    {
+      "source": "tec-os/18-block-cache.md",
+      "line_at_base": 182,
+      "section": "Writes behind and the directory rule",
+      "disposition": "retain and revise",
+      "destinations": [
+        18
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 18
+    },
+    {
+      "source": "tec-os/18-block-cache.md",
+      "line_at_base": 239,
+      "section": "The order of a flush and its five occasions",
+      "disposition": "retain and revise",
+      "destinations": [
+        18
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 18
+    },
+    {
+      "source": "tec-os/18-block-cache.md",
+      "line_at_base": 290,
+      "section": "Write lost",
+      "disposition": "retain and revise",
+      "destinations": [
+        18
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 18
+    },
+    {
+      "source": "tec-os/18-block-cache.md",
+      "line_at_base": 317,
+      "section": "Interrupts held off",
+      "disposition": "retain and revise",
+      "destinations": [
+        18
+      ],
+      "paragraph_detail": "reverse-outline-16-18.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 18
+    },
+    {
+      "source": "tec-os/18-block-cache.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        18
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 18
+    },
+    {
+      "source": "tec-os/19-bdos.md",
+      "line_at_base": 8,
+      "section": "19. The BDOS",
+      "disposition": "retain and restructure",
+      "destinations": [
+        19,
+        16,
+        "A"
+      ],
+      "paragraph_detail": "reverse-outline-19.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 19
+    },
+    {
+      "source": "tec-os/19-bdos.md",
+      "line_at_base": 25,
+      "section": "The BDOS in the ROM and in RAM",
+      "disposition": "retain and revise",
+      "destinations": [
+        19
+      ],
+      "paragraph_detail": "reverse-outline-19.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 19
+    },
+    {
+      "source": "tec-os/19-bdos.md",
+      "line_at_base": 66,
+      "section": "The entry",
+      "disposition": "retain and revise",
+      "destinations": [
+        19
+      ],
+      "paragraph_detail": "reverse-outline-19.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 19
+    },
+    {
+      "source": "tec-os/19-bdos.md",
+      "line_at_base": 111,
+      "section": "The console functions",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        16,
+        8
+      ],
+      "paragraph_detail": "reverse-outline-19.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 16
+    },
+    {
+      "source": "tec-os/19-bdos.md",
+      "line_at_base": 193,
+      "section": "Files, extents and records",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        19,
+        "A"
+      ],
+      "paragraph_detail": "reverse-outline-19.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 19
+    },
+    {
+      "source": "tec-os/19-bdos.md",
+      "line_at_base": 301,
+      "section": "One file's life",
+      "disposition": "retain and revise",
+      "destinations": [
+        19
+      ],
+      "paragraph_detail": "reverse-outline-19.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 19
+    },
+    {
+      "source": "tec-os/19-bdos.md",
+      "line_at_base": 369,
+      "section": "The allocation vectors and the scan at warm boot",
+      "disposition": "retain and revise",
+      "destinations": [
+        19
+      ],
+      "paragraph_detail": "reverse-outline-19.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 19
+    },
+    {
+      "source": "tec-os/19-bdos.md",
+      "line_at_base": 469,
+      "section": "BDOS errors and the error mode",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        19,
+        "A"
+      ],
+      "paragraph_detail": "reverse-outline-19.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 19
+    },
+    {
+      "source": "tec-os/19-bdos.md",
+      "line_at_base": 508,
+      "section": "Differences from Digital Research's BDOS",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        "A",
+        19
+      ],
+      "paragraph_detail": "reverse-outline-19.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": "A"
+    },
+    {
+      "source": "tec-os/19-bdos.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        19,
+        16,
+        "A"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 19
+    },
+    {
+      "source": "tec-os/20-ccp.md",
+      "line_at_base": 8,
+      "section": "20. The CCP",
+      "disposition": "retain and restructure",
+      "destinations": [
+        20,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-20.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 20
+    },
+    {
+      "source": "tec-os/20-ccp.md",
+      "line_at_base": 26,
+      "section": "The CCP as a program in the ROM",
+      "disposition": "retain and revise",
+      "destinations": [
+        20
+      ],
+      "paragraph_detail": "reverse-outline-20.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 20
+    },
+    {
+      "source": "tec-os/20-ccp.md",
+      "line_at_base": 62,
+      "section": "The entry from boot",
+      "disposition": "retain and revise",
+      "destinations": [
+        20
+      ],
+      "paragraph_detail": "reverse-outline-20.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 20
+    },
+    {
+      "source": "tec-os/20-ccp.md",
+      "line_at_base": 111,
+      "section": "The prompt and the line's sources",
+      "disposition": "retain and revise",
+      "destinations": [
+        20
+      ],
+      "paragraph_detail": "reverse-outline-20.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 20
+    },
+    {
+      "source": "tec-os/20-ccp.md",
+      "line_at_base": 137,
+      "section": "The command word and file names",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        20,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-20.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 20
+    },
+    {
+      "source": "tec-os/20-ccp.md",
+      "line_at_base": 206,
+      "section": "The built-in commands",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        20,
+        "J"
+      ],
+      "paragraph_detail": "reverse-outline-20.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 20
+    },
+    {
+      "source": "tec-os/20-ccp.md",
+      "line_at_base": 368,
+      "section": "Loading a program",
+      "disposition": "retain and revise",
+      "destinations": [
+        20
+      ],
+      "paragraph_detail": "reverse-outline-20.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 20
+    },
+    {
+      "source": "tec-os/20-ccp.md",
+      "line_at_base": 425,
+      "section": "The search order",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        20,
+        4
+      ],
+      "paragraph_detail": "reverse-outline-20.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 20
+    },
+    {
+      "source": "tec-os/20-ccp.md",
+      "line_at_base": 484,
+      "section": "Page zero and the jump",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        20,
+        10
+      ],
+      "paragraph_detail": "reverse-outline-20.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 20
+    },
+    {
+      "source": "tec-os/20-ccp.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        20,
+        "J"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 20
+    },
+    {
+      "source": "tec-os/21-chaining-inside.md",
+      "line_at_base": 8,
+      "section": "21. Chaining inside",
+      "disposition": "retain and revise",
+      "destinations": [
+        21
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 21
+    },
+    {
+      "source": "tec-os/21-chaining-inside.md",
+      "line_at_base": 26,
+      "section": "The line kept across a warm boot",
+      "disposition": "retain and revise",
+      "destinations": [
+        21
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 21
+    },
+    {
+      "source": "tec-os/21-chaining-inside.md",
+      "line_at_base": 65,
+      "section": "The main loop",
+      "disposition": "retain and revise",
+      "destinations": [
+        21
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 21
+    },
+    {
+      "source": "tec-os/21-chaining-inside.md",
+      "line_at_base": 138,
+      "section": "Taking a piece",
+      "disposition": "retain and revise",
+      "destinations": [
+        21
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 21
+    },
+    {
+      "source": "tec-os/21-chaining-inside.md",
+      "line_at_base": 176,
+      "section": "The return code and the `:` test",
+      "disposition": "retain and revise",
+      "destinations": [
+        21
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 21
+    },
+    {
+      "source": "tec-os/21-chaining-inside.md",
+      "line_at_base": 221,
+      "section": "The paths that drop the rest",
+      "disposition": "retain and revise",
+      "destinations": [
+        21
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 21
+    },
+    {
+      "source": "tec-os/21-chaining-inside.md",
+      "line_at_base": 268,
+      "section": "Function 47",
+      "disposition": "retain and revise",
+      "destinations": [
+        21
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 21
+    },
+    {
+      "source": "tec-os/21-chaining-inside.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        21
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 21
+    },
+    {
+      "source": "tec-os/22-command-history.md",
+      "line_at_base": 8,
+      "section": "22. Command history",
+      "disposition": "retain and revise",
+      "destinations": [
+        22
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 22
+    },
+    {
+      "source": "tec-os/22-command-history.md",
+      "line_at_base": 26,
+      "section": "Recalling a line",
+      "disposition": "retain and revise",
+      "destinations": [
+        22
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 22
+    },
+    {
+      "source": "tec-os/22-command-history.md",
+      "line_at_base": 55,
+      "section": "The ring at BD00h",
+      "disposition": "retain and revise",
+      "destinations": [
+        22
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 22
+    },
+    {
+      "source": "tec-os/22-command-history.md",
+      "line_at_base": 82,
+      "section": "Storing a line",
+      "disposition": "retain and revise",
+      "destinations": [
+        22
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 22
+    },
+    {
+      "source": "tec-os/22-command-history.md",
+      "line_at_base": 158,
+      "section": "^W and ^N in function 10",
+      "disposition": "retain and revise",
+      "destinations": [
+        22
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 22
+    },
+    {
+      "source": "tec-os/22-command-history.md",
+      "line_at_base": 191,
+      "section": "Warm boot and reset",
+      "disposition": "retain and revise",
+      "destinations": [
+        22
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 22
+    },
+    {
+      "source": "tec-os/22-command-history.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        22
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 22
+    },
+    {
+      "source": "tec-os/23-hardware-services-inside.md",
+      "line_at_base": 8,
+      "section": "23. The hardware services in the ROM",
+      "disposition": "retain and revise",
+      "destinations": [
+        23
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 23
+    },
+    {
+      "source": "tec-os/23-hardware-services-inside.md",
+      "line_at_base": 22,
+      "section": "The table and the dispatcher",
+      "disposition": "retain and revise",
+      "destinations": [
+        23
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 23
+    },
+    {
+      "source": "tec-os/23-hardware-services-inside.md",
+      "line_at_base": 52,
+      "section": "The routines",
+      "disposition": "retain and revise",
+      "destinations": [
+        23
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 23
+    },
+    {
+      "source": "tec-os/23-hardware-services-inside.md",
+      "line_at_base": 170,
+      "section": "The shared rules",
+      "disposition": "retain and revise",
+      "destinations": [
+        23
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 23
+    },
+    {
+      "source": "tec-os/23-hardware-services-inside.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        23
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 23
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 8,
+      "section": "24. The service loader",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 27,
+      "section": "A service's entry",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 94,
+      "section": "Relocation by pages",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 135,
+      "section": "The seven steps",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 154,
+      "section": "1. The file's checks",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 174,
+      "section": "2. The dependencies",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 183,
+      "section": "3. The stacks",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 196,
+      "section": "4. The relocation",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 236,
+      "section": "5. The claims and the move",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 252,
+      "section": "6. INIT",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 271,
+      "section": "7. The records and the commit",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 300,
+      "section": "A failed load",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 338,
+      "section": "The registry and removal",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "line_at_base": 410,
+      "section": "The limits of the loader's checks",
+      "disposition": "retain and revise",
+      "destinations": [
+        24
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/24-service-loader.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        24
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 24
+    },
+    {
+      "source": "tec-os/25-startup.md",
+      "line_at_base": 8,
+      "section": "25. Startup",
+      "disposition": "retain and revise",
+      "destinations": [
+        25
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 25
+    },
+    {
+      "source": "tec-os/25-startup.md",
+      "line_at_base": 24,
+      "section": "One record of state",
+      "disposition": "retain and revise",
+      "destinations": [
+        25
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 25
+    },
+    {
+      "source": "tec-os/25-startup.md",
+      "line_at_base": 50,
+      "section": "Starting the file",
+      "disposition": "retain and revise",
+      "destinations": [
+        25
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 25
+    },
+    {
+      "source": "tec-os/25-startup.md",
+      "line_at_base": 104,
+      "section": "Taking a line",
+      "disposition": "retain and revise",
+      "destinations": [
+        25
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 25
+    },
+    {
+      "source": "tec-os/25-startup.md",
+      "line_at_base": 190,
+      "section": "The display line's two outcomes",
+      "disposition": "retain and revise",
+      "destinations": [
+        25
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 25
+    },
+    {
+      "source": "tec-os/25-startup.md",
+      "line_at_base": 237,
+      "section": "The LCD's words",
+      "disposition": "retain and revise",
+      "destinations": [
+        25
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 25
+    },
+    {
+      "source": "tec-os/25-startup.md",
+      "line_at_base": 285,
+      "section": "The quiet rule",
+      "disposition": "retain and revise",
+      "destinations": [
+        25
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 25
+    },
+    {
+      "source": "tec-os/25-startup.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        25
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 25
+    },
+    {
+      "source": "tec-os/26-diagnostics.md",
+      "line_at_base": 8,
+      "section": "26. Diagnostics",
+      "disposition": "retain and revise",
+      "destinations": [
+        27
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 27
+    },
+    {
+      "source": "tec-os/26-diagnostics.md",
+      "line_at_base": 24,
+      "section": "The diagnostic prompt",
+      "disposition": "retain and revise",
+      "destinations": [
+        27
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 27
+    },
+    {
+      "source": "tec-os/26-diagnostics.md",
+      "line_at_base": 82,
+      "section": "The diagnostics ROM",
+      "disposition": "retain and revise",
+      "destinations": [
+        27
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 27
+    },
+    {
+      "source": "tec-os/26-diagnostics.md",
+      "line_at_base": 129,
+      "section": "The run",
+      "disposition": "retain and revise",
+      "destinations": [
+        27
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 27
+    },
+    {
+      "source": "tec-os/26-diagnostics.md",
+      "line_at_base": 205,
+      "section": "The tests",
+      "disposition": "retain and revise",
+      "destinations": [
+        27
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 27
+    },
+    {
+      "source": "tec-os/26-diagnostics.md",
+      "line_at_base": 270,
+      "section": "The report",
+      "disposition": "retain and revise",
+      "destinations": [
+        27
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 27
+    },
+    {
+      "source": "tec-os/26-diagnostics.md",
+      "line_at_base": 328,
+      "section": "Comparing a board's report with the model's",
+      "disposition": "retain and revise",
+      "destinations": [
+        27
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 27
+    },
+    {
+      "source": "tec-os/26-diagnostics.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        27
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 27
+    },
+    {
+      "source": "tec-os/27-host-model.md",
+      "line_at_base": 8,
+      "section": "27. The host model",
+      "disposition": "retain and restructure",
+      "destinations": [
+        28,
+        "I"
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": 28
+    },
+    {
+      "source": "tec-os/27-host-model.md",
+      "line_at_base": 24,
+      "section": "One machine for the tests, the page and the book",
+      "disposition": "retain and revise",
+      "destinations": [
+        28
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 28
+    },
+    {
+      "source": "tec-os/27-host-model.md",
+      "line_at_base": 63,
+      "section": "The card and the clock",
+      "disposition": "retain and revise",
+      "destinations": [
+        28
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 28
+    },
+    {
+      "source": "tec-os/27-host-model.md",
+      "line_at_base": 97,
+      "section": "Checks on every write",
+      "disposition": "retain and revise",
+      "destinations": [
+        28
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 28
+    },
+    {
+      "source": "tec-os/27-host-model.md",
+      "line_at_base": 127,
+      "section": "Driving the machine",
+      "disposition": "retain and revise",
+      "destinations": [
+        28
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 28
+    },
+    {
+      "source": "tec-os/27-host-model.md",
+      "line_at_base": 208,
+      "section": "The tests",
+      "disposition": "retain and revise",
+      "destinations": [
+        28
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 28
+    },
+    {
+      "source": "tec-os/27-host-model.md",
+      "line_at_base": 254,
+      "section": "The web page",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        28,
+        "I"
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 28
+    },
+    {
+      "source": "tec-os/27-host-model.md",
+      "line_at_base": 308,
+      "section": "The model's evidence and its limit",
+      "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
+      "destinations": [
+        28,
+        "Front door"
+      ],
+      "paragraph_detail": "reverse-outline-21-27.md",
+      "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
+      "primary_home": 28
+    },
+    {
+      "source": "tec-os/27-host-model.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        28,
+        "I"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": 28
+    },
+    {
+      "source": "tec-os/appendix-a-bdos-functions.md",
+      "line_at_base": 8,
+      "section": "Appendix A. BDOS functions",
+      "disposition": "retain and revise",
+      "destinations": [
+        "A"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "A"
+    },
+    {
+      "source": "tec-os/appendix-a-bdos-functions.md",
+      "line_at_base": 73,
+      "section": "Calling a function",
+      "disposition": "retain and revise",
+      "destinations": [
+        "A"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "A"
+    },
+    {
+      "source": "tec-os/appendix-a-bdos-functions.md",
+      "line_at_base": 94,
+      "section": "The errors",
+      "disposition": "retain and revise",
+      "destinations": [
+        "A"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "A"
+    },
+    {
+      "source": "tec-os/appendix-a-bdos-functions.md",
+      "line_at_base": 112,
+      "section": "The functions",
+      "disposition": "retain and revise",
+      "destinations": [
+        "A"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "A"
+    },
+    {
+      "source": "tec-os/appendix-a-bdos-functions.md",
+      "line_at_base": 374,
+      "section": "Other numbers",
+      "disposition": "retain and revise",
+      "destinations": [
+        "A"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "A"
+    },
+    {
+      "source": "tec-os/appendix-a-bdos-functions.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        "A"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": "A"
+    },
+    {
+      "source": "tec-os/appendix-b-rom-services.md",
+      "line_at_base": 8,
+      "section": "Appendix B. The ROM table and hardware services",
+      "disposition": "retain and revise",
+      "destinations": [
+        "B"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "B"
+    },
+    {
+      "source": "tec-os/appendix-b-rom-services.md",
+      "line_at_base": 25,
+      "section": "The ROM table",
+      "disposition": "retain and revise",
+      "destinations": [
+        "B"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "B"
+    },
+    {
+      "source": "tec-os/appendix-b-rom-services.md",
+      "line_at_base": 43,
+      "section": "Calling a service",
+      "disposition": "retain and revise",
+      "destinations": [
+        "B"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "B"
+    },
+    {
+      "source": "tec-os/appendix-b-rom-services.md",
+      "line_at_base": 101,
+      "section": "The hardware services",
+      "disposition": "retain and revise",
+      "destinations": [
+        "B"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "B"
+    },
+    {
+      "source": "tec-os/appendix-b-rom-services.md",
+      "line_at_base": 226,
+      "section": "The volume services",
+      "disposition": "retain and revise",
+      "destinations": [
+        "B"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "B"
+    },
+    {
+      "source": "tec-os/appendix-b-rom-services.md",
+      "line_at_base": 265,
+      "section": "A display driver's table",
+      "disposition": "retain and revise",
+      "destinations": [
+        "B"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "B"
+    },
+    {
+      "source": "tec-os/appendix-b-rom-services.md",
+      "line_at_base": 288,
+      "section": "The registry",
+      "disposition": "retain and revise",
+      "destinations": [
+        "B"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "B"
+    },
+    {
+      "source": "tec-os/appendix-b-rom-services.md",
+      "line_at_base": 309,
+      "section": "The PICO record",
+      "disposition": "retain and revise",
+      "destinations": [
+        "B"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "B"
+    },
+    {
+      "source": "tec-os/appendix-b-rom-services.md",
+      "line_at_base": 427,
+      "section": "The font",
+      "disposition": "retain and revise",
+      "destinations": [
+        "B"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "B"
+    },
+    {
+      "source": "tec-os/appendix-b-rom-services.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        "B"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": "B"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 8,
+      "section": "Appendix C. Memory map",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 27,
+      "section": "The CPU's address space",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 65,
+      "section": "The ROM",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 83,
+      "section": "Page zero",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 115,
+      "section": "The resident workspace",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 142,
+      "section": "The BIOS's block",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 168,
+      "section": "The CCP's block",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 187,
+      "section": "The BDOS's block",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 207,
+      "section": "Above the RAM BIOS table",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 247,
+      "section": "EXPAND 1",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 266,
+      "section": "The stacks",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "line_at_base": 282,
+      "section": "Reproducing the figures",
+      "disposition": "retain and revise",
+      "destinations": [
+        "C"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-c-memory-map.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        "C"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": "C"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "line_at_base": 8,
+      "section": "Appendix D. Error messages",
+      "disposition": "retain and revise",
+      "destinations": [
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "line_at_base": 29,
+      "section": "Cold boot",
+      "disposition": "retain and revise",
+      "destinations": [
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "line_at_base": 39,
+      "section": "The diagnostic prompt",
+      "disposition": "retain and revise",
+      "destinations": [
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "line_at_base": 112,
+      "section": "The LCD's words",
+      "disposition": "retain and revise",
+      "destinations": [
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "line_at_base": 124,
+      "section": "The CCP's failures",
+      "disposition": "retain and revise",
+      "destinations": [
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "line_at_base": 145,
+      "section": "`NAME?`",
+      "disposition": "retain and revise",
+      "destinations": [
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "line_at_base": 192,
+      "section": "A card from an older TEC-OS",
+      "disposition": "retain and revise",
+      "destinations": [
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "line_at_base": 254,
+      "section": "The BDOS's errors",
+      "disposition": "retain and revise",
+      "destinations": [
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "line_at_base": 280,
+      "section": "`Write lost`",
+      "disposition": "retain and revise",
+      "destinations": [
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "line_at_base": 311,
+      "section": "`MOUNT`",
+      "disposition": "retain and revise",
+      "destinations": [
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "line_at_base": 329,
+      "section": "Lines that report no fault",
+      "disposition": "retain and revise",
+      "destinations": [
+        "D"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-d-error-messages.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        "D"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": "D"
+    },
+    {
+      "source": "tec-os/appendix-e-container-format.md",
+      "line_at_base": 8,
+      "section": "Appendix E. The container format",
+      "disposition": "retain and revise",
+      "destinations": [
+        "E"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "E"
+    },
+    {
+      "source": "tec-os/appendix-e-container-format.md",
+      "line_at_base": 32,
+      "section": "The header",
+      "disposition": "retain and revise",
+      "destinations": [
+        "E"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "E"
+    },
+    {
+      "source": "tec-os/appendix-e-container-format.md",
+      "line_at_base": 84,
+      "section": "The volume descriptor",
+      "disposition": "retain and revise",
+      "destinations": [
+        "E"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "E"
+    },
+    {
+      "source": "tec-os/appendix-e-container-format.md",
+      "line_at_base": 116,
+      "section": "The table beyond block 0",
+      "disposition": "retain and revise",
+      "destinations": [
+        "E"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "E"
+    },
+    {
+      "source": "tec-os/appendix-e-container-format.md",
+      "line_at_base": 133,
+      "section": "The checks and their codes",
+      "disposition": "retain and revise",
+      "destinations": [
+        "E"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "E"
+    },
+    {
+      "source": "tec-os/appendix-e-container-format.md",
+      "line_at_base": 229,
+      "section": "The geometries",
+      "disposition": "retain and revise",
+      "destinations": [
+        "E"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "E"
+    },
+    {
+      "source": "tec-os/appendix-e-container-format.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        "E"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": "E"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "line_at_base": 8,
+      "section": "Appendix F. `tecvol`",
+      "disposition": "retain and revise",
+      "destinations": [
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "line_at_base": 29,
+      "section": "Common rules",
+      "disposition": "retain and revise",
+      "destinations": [
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "line_at_base": 78,
+      "section": "create",
+      "disposition": "retain and revise",
+      "destinations": [
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "line_at_base": 112,
+      "section": "info and verify",
+      "disposition": "retain and revise",
+      "destinations": [
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "line_at_base": 159,
+      "section": "dir",
+      "disposition": "retain and revise",
+      "destinations": [
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "line_at_base": 182,
+      "section": "put",
+      "disposition": "retain and revise",
+      "destinations": [
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "line_at_base": 230,
+      "section": "get",
+      "disposition": "retain and revise",
+      "destinations": [
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "line_at_base": 253,
+      "section": "era",
+      "disposition": "retain and revise",
+      "destinations": [
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "line_at_base": 290,
+      "section": "recipe",
+      "disposition": "retain and revise",
+      "destinations": [
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "line_at_base": 324,
+      "section": "install",
+      "disposition": "retain and revise",
+      "destinations": [
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "line_at_base": 341,
+      "section": "A worked example",
+      "disposition": "retain and revise",
+      "destinations": [
+        "F"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-f-tecvol.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        "F"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": "F"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "line_at_base": 8,
+      "section": "Appendix G. The TEC-1G as TEC-OS uses it",
+      "disposition": "retain and revise",
+      "destinations": [
+        "G"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "line_at_base": 25,
+      "section": "The ports",
+      "disposition": "retain and revise",
+      "destinations": [
+        "G"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "line_at_base": 57,
+      "section": "Port 01h and the serial line",
+      "disposition": "retain and revise",
+      "destinations": [
+        "G"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "line_at_base": 78,
+      "section": "Port 03h and the switches",
+      "disposition": "retain and revise",
+      "destinations": [
+        "G"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "line_at_base": 94,
+      "section": "The system latch",
+      "disposition": "retain and revise",
+      "destinations": [
+        "G"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "line_at_base": 124,
+      "section": "U9 and the RAM",
+      "disposition": "retain and revise",
+      "destinations": [
+        "G"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "line_at_base": 136,
+      "section": "The hex keypad and its NMI",
+      "disposition": "retain and revise",
+      "destinations": [
+        "G"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "line_at_base": 149,
+      "section": "The 20 \u00d7 4 LCD",
+      "disposition": "retain and revise",
+      "destinations": [
+        "G"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "line_at_base": 170,
+      "section": "The 8 \u00d7 8 LEDs",
+      "disposition": "retain and revise",
+      "destinations": [
+        "G"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "line_at_base": 181,
+      "section": "The DS1302 clock",
+      "disposition": "retain and revise",
+      "destinations": [
+        "G"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "line_at_base": 202,
+      "section": "The SD card adaptor",
+      "disposition": "retain and revise",
+      "destinations": [
+        "G"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-g-tec-1g.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        "G"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": "G"
+    },
+    {
+      "source": "tec-os/appendix-h-service-file-format.md",
+      "line_at_base": 8,
+      "section": "Appendix H. The service file format",
+      "disposition": "retain and revise",
+      "destinations": [
+        "H"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "H"
+    },
+    {
+      "source": "tec-os/appendix-h-service-file-format.md",
+      "line_at_base": 25,
+      "section": "The file",
+      "disposition": "retain and revise",
+      "destinations": [
+        "H"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "H"
+    },
+    {
+      "source": "tec-os/appendix-h-service-file-format.md",
+      "line_at_base": 43,
+      "section": "The header",
+      "disposition": "retain and revise",
+      "destinations": [
+        "H"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "H"
+    },
+    {
+      "source": "tec-os/appendix-h-service-file-format.md",
+      "line_at_base": 84,
+      "section": "The dependencies",
+      "disposition": "retain and revise",
+      "destinations": [
+        "H"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "H"
+    },
+    {
+      "source": "tec-os/appendix-h-service-file-format.md",
+      "line_at_base": 95,
+      "section": "The relocation data",
+      "disposition": "retain and revise",
+      "destinations": [
+        "H"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "H"
+    },
+    {
+      "source": "tec-os/appendix-h-service-file-format.md",
+      "line_at_base": 127,
+      "section": "A first gap of 0",
+      "disposition": "retain and revise",
+      "destinations": [
+        "H"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "H"
+    },
+    {
+      "source": "tec-os/appendix-h-service-file-format.md",
+      "line_at_base": 157,
+      "section": "GLCD.SVC",
+      "disposition": "retain and revise",
+      "destinations": [
+        "H"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "H"
+    },
+    {
+      "source": "tec-os/appendix-h-service-file-format.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        "H"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": "H"
+    },
+    {
+      "source": "tec-os/appendix-i-web-page.md",
+      "line_at_base": 8,
+      "section": "Appendix I. The web page",
+      "disposition": "retain and revise",
+      "destinations": [
+        "I"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "I"
+    },
+    {
+      "source": "tec-os/appendix-i-web-page.md",
+      "line_at_base": 30,
+      "section": "The controls",
+      "disposition": "retain and revise",
+      "destinations": [
+        "I"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "I"
+    },
+    {
+      "source": "tec-os/appendix-i-web-page.md",
+      "line_at_base": 58,
+      "section": "Typing",
+      "disposition": "retain and revise",
+      "destinations": [
+        "I"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "I"
+    },
+    {
+      "source": "tec-os/appendix-i-web-page.md",
+      "line_at_base": 77,
+      "section": "The card in the browser",
+      "disposition": "retain and revise",
+      "destinations": [
+        "I"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "I"
+    },
+    {
+      "source": "tec-os/appendix-i-web-page.md",
+      "line_at_base": 109,
+      "section": "Copying files to the card",
+      "disposition": "retain and revise",
+      "destinations": [
+        "I"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "I"
+    },
+    {
+      "source": "tec-os/appendix-i-web-page.md",
+      "line_at_base": 131,
+      "section": "The card's startup file",
+      "disposition": "retain and revise",
+      "destinations": [
+        "I"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "I"
+    },
+    {
+      "source": "tec-os/appendix-i-web-page.md",
+      "line_at_base": 176,
+      "section": "Cards left as they are",
+      "disposition": "retain and revise",
+      "destinations": [
+        "I"
+      ],
+      "paragraph_detail": "reverse-outline-appendices.md",
+      "reason": "Separate action, contract and implementation at their established prerequisites; preserve facts, examples and exceptions.",
+      "primary_home": "I"
+    },
+    {
+      "source": "tec-os/appendix-i-web-page.md",
+      "section": "front matter and provenance",
+      "disposition": "revise navigation; preserve evidence scope",
+      "destinations": [
+        "I"
+      ],
+      "reason": "Move titles/order/links with content; retain actual historical evidence until newly qualified.",
+      "primary_home": "I"
+    }
+  ]
+}
