@@ -1,0 +1,33 @@
+{
+  "status": "pre-integration source check; root integration and rendered verification pending",
+  "inventory": {
+    "reader_pages": 39,
+    "relative_links": 247,
+    "anchor_links": 45
+  },
+  "anchor_algorithm": "Installed VitePress1.6 bundled slugify, NFKD with combining/control removal and punctuation runs replaced by hyphens. Source-level audit, no renderer executed.",
+  "corrections": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "before_target": "changing-a-drives-volume",
+      "after_target": "changing-a-drive-s-volume",
+      "occurrences": 2,
+      "scope": "link fragment only, visible prose/source/captures unchanged"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+      "before_target": "the-bdoss-errors",
+      "after_target": "the-bdos-s-errors",
+      "occurrences": 1,
+      "scope": "link fragment only, visible prose/source/captures unchanged"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md",
+      "before_target": "the-cpus-address-space",
+      "after_target": "the-cpu-s-address-space",
+      "occurrences": 1,
+      "scope": "link fragment only, visible prose/source/captures unchanged"
+    }
+  ],
+  "execution": "No product import, assembly, test, runtime, site build, rendering or publication."
+}

@@ -116,7 +116,7 @@ or full-directory result listed under a function.
 | 3 | `Bdos Err On d: File R/O` | Function 19 or 23 reached a read-only directory entry or function 21, 34 or 40 received an FCB with that attribute (`src/cpm/bdosfile.asm:430-445`, `477-485`, `653-664`, `733-745`, `src/cpm/bdosrec.asm:350-355`) |
 | 4 | `Bdos Err On d: Select` | An unmounted drive, a drive past D or an FCB's `?` drive outside function 17 (`src/bios.asm:63-96`, `src/cpm/bdosfile.asm:211-234`, `src/cpm/bdoslog.asm:897-900`) |
 
-[Appendix D](appendix-d-error-messages.md#the-bdoss-errors) gives recovery
+[Appendix D](appendix-d-error-messages.md#the-bdos-s-errors) gives recovery
 procedures. Earlier or partial physical writes are not rolled back when a
 transfer fails.
 

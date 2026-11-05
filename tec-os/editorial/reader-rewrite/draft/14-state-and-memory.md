@@ -183,7 +183,7 @@ Its workspace began at `BAE7h`, above the starter vectors at `B9A7h–BAE6h`
 and the stub at `B9A4h–B9A6h`. Programs had 47,268 bytes from
 `0100h` to `B9A3h`. With four full-sized slots the stub was at `B6E4h`
 and the TPA was 46,564 bytes. These are the historical figures in
-[Appendix C](appendix-c-memory-map.md#the-cpus-address-space),
+[Appendix C](appendix-c-memory-map.md#the-cpu-s-address-space),
 with their original build provenance. The workspace below `BF00h` occupied
 1,049 bytes in that build. The warm-boot sweep cleared 329 of them, from
 `BDB7h` through `BEFFh`. The 205 bytes above the RAM BIOS table extended
