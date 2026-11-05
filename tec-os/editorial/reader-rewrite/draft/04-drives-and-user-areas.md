@@ -152,16 +152,17 @@ messages and the returned-error option for programs.
 
 ## User areas
 
-Each drive has sixteen user areas, numbered 0 to 15. Every file belongs
-to one area. `USER 3` selects area 3 on all drives, not a separate area
-for each drive. The prompt includes a nonzero area number before the
+At the command prompt `USER` selects an area from 0 to 15. Every file
+belongs to one area. `USER 3` selects area 3 on all drives, not a separate
+area for each drive. The prompt includes a nonzero area number before the
 drive letter, as in CP/M 3. Thus `3A>` means area 3 with A current.
 TEC-OS starts in area 0, where all starter-card files are stored.
 
 File commands use the current area. A file made in area 3 remains out
-of area 0's listing even on the same volume. This historical run saved
-one page of program memory as `B:MINE.COM` in area 3. It did not create
-or move a file in area 0:
+of area 0's listing even on the same volume. For this historical comparison,
+`SAVE 1 B:MINE.COM` prepared a demonstration file by saving one page of
+existing program memory in area 3. It did not create or move a file in
+area 0:
 
 <!-- node tools/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" MOUNT "USER 0" "DIR B:" -->
 ```text
@@ -189,7 +190,7 @@ with a number outside 0 to 15 fails with a question mark.
 
 The system attribute is a separate property of a file. `DIR` omits system
 files as well as files outside the current area. A system file remains
-available to `TYPE` and other file commands in its area, and a program
+available to `TYPE` and other file commands in its area and a program
 command can run it. The attribute does not make the file available in
 every user area or protect it against modification.
 
@@ -424,10 +425,10 @@ A>
 
 No saved drive assignment is applied if a required volume no longer matches
 or a required slot cannot hold it. The card's header assignments then stand.
-The same defaults apply when RAM fails recognition, including a reset during
-the incomplete cold boot after page zero has been cleared. A normal power
-cycle also loses the RAM selection. [Chapter 15](15-reset-and-boot.md#retained-drive-selection)
-explains the exact recognition test and its recovery from an interrupted
+The same defaults apply when TEC-OS cannot recover its previous state.
+A normal power cycle also loses the previous assignments.
+[Chapter 15](15-reset-and-boot.md#retained-drive-selection) explains the
+recognition test, interrupted cold boot and recovery from an interrupted
 service installation.
 
 A card changed on a PC needs a reset when returned to the board. Warm boot

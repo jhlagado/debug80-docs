@@ -259,3 +259,20 @@ Unsupported238122 is excluded from reader results. MEMINIT346677 remains
 attributed to58d4345 and serial9448 to60cfbdc rather than a blanket78127ec
 measurement claim. The durable audit remains the explanation of the former
 conflict. No new runtime acceptance follows. Final KS48 measurements are held.
+
+## Parent review: existing home for Chapter 4 reset mechanism
+
+Chapter 4 now leaves the interrupted-cold-boot mechanism to the complete
+existing paragraph in “Retained drive selection” beginning “Cold boot
+clears page zero early”. That paragraph explains clearing, reconstruction
+only on entry to warm boot and failed recognition during the incomplete
+interval, including at the diagnostic prompt. Source at ea3ef3d confirms
+the sequence (`src/boot.asm:62-70`, `src/boot.asm:127-158`,
+`src/boot.asm:194-195`). The preceding recognition conditions and following
+reselection explanation supply its context.
+
+This is removal of a premature duplicate from Chapter 4, formerly
+lines 427–428 at9507995, with the technical explanation retained in its
+existing Chapter 15 home. No Chapter 15 reader prose or historical evidence
+changed. The lead owns the corresponding shared movement-record update.
+No new measurement or product execution follows from this source review.
