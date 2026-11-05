@@ -303,3 +303,44 @@ Reconciled only the draft nav_group with Chapters3–7 as Part I: Using TEC-OS,
 accepting opening-integration-01. The independent craft review has no body-prose
 finding for this chapter. Its instructions, six fences and result provenance
 are unchanged. No root navigation or runtime change is included.
+
+## Additional independent reader-order correction
+
+The complete external opening review at55807ed identified repeated cursor
+actions that only restore a status display. I reread the full reader chapter,
+its record and actual BANNER status sequence before the bounded edit. The
+comment/blank-line explanation now precedes the listing. It distinguishes
+annotations from instructions before the reference comments name routines
+and registers. No source comment or assembly byte changes.
+
+Status restoration is explained once beside the greeting-edit location. The
+reader no longer performs repeated no-op Left or Left/Right pairs between
+builds and runs. Text-changing repair still requires Left, Down, six Backspaces
+and Ctrl-G. The twelve-Down/twenty-six-Right message edit remains. The actual
+observed status-navigation trace is retained below and in immutable attempt02.
+No newly executed shortened key sequence or substituted capture is claimed.
+
+| Actual phase | Recorded status-only action and resulting position |
+| --- | --- |
+| 069 BANNER-initial-before-clear-message | Left at L1 C1 leaves L1 C1. |
+| 071 BANNER-initial-built-clear-message | Left clears the project message and leaves L1 C1. |
+| 074 BANNER-initial-returned-clear-message | Left at L1 C1 leaves L1 C1. |
+| 079 BANNER-edited-before-clear-message | Left clears Saved and moves L13 C28 to L13 C27. |
+| 081 BANNER-edited-built-clear-message | Left moves L13 C27 to L13 C26. |
+| 082 BANNER-edited-built-restore-place-column | Right returns to L13 C27. |
+| 085 BANNER-edited-returned-clear-message | Left moves L13 C27 to L13 C26. |
+| 086 BANNER-edited-returned-restore-place-column | Right returns to L13 C27. |
+
+The original trace and source-backed arrow/message behaviour remain evidence
+for the explanation. These movements change cursor/status rather than source
+text. The accepted source, builds and six console/source fences remain exact.
+I read the changed sections in sequence for teaching order, sentence purpose,
+agency and every comma, then checked their paragraph boundaries. The correction
+removes repeated navigation rather than shortening the error/repair lesson.
+
+The mandatory two-file prose gate reports zero findings. Complexity prompts
+were reread in their complete contexts. Remaining short key/status sentences
+state actual actions or boundaries, and long metadata tokens retain evidence
+identities. None of the changed paragraphs adds an unresolved prompt. All six
+fences and seven provenance comments compare exactly with the input chapter.
+The external receipt is Origo0e07f18d, reviews/book-opening-reader.md.
