@@ -178,4 +178,3 @@ The source offer is not repinned. Startup and GLCD policy are unchanged.
 Only draft/15-reset-and-boot.md and draft/15-pass-record.md are written for
 this unit. Commits use --only with those exact owned paths. No root chapter,
 shared ledger or another writer's staged file is part of this unit.
-
