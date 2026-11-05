@@ -218,3 +218,46 @@ distinction and all four output fences remain unchanged. The complete historical
 all-files fixture now has its reader home in J at4c7674e. The complete current
 pager evidence has its accounting home in28-pass-record at4a76238. No case,
 source pin, captured prompt or historical output is altered.
+
+## Additional independent reader-order correction
+
+Accepted the remaining external findings from Origo0e07f18d,
+reviews/book-opening-reader.md. The copying section now supplies a usable
+COPY A:SAMPLE.ASM B:SAMPLE.ASM action before the separate historical REN/ERA
+demonstration. The known fresh starting state and existing-file preservation instruction
+are explicit because COPY replaces an existing destination. The actual recorded copy used Machine2's fresh starter
+card with empty B, not a continued BANNER mutation session. That starting state
+is explicit beside the output. No new combined-card count or REN/ERA result
+is inferred.
+
+The complete accepted copy screen was read from attempt02. The new fence is
+exactly rows8–11 of stage/results/009-copy-sample.json, with earlier boot rows
+and unused following rows omitted explicitly. Its raw member SHA-256 is
+81c2255369291d6b958cb52795ef50fe8f69b80845d2742cc19045c8725df0c8.
+The full command, COPIED0028, blank row and A> remain exact. This is part of
+the accepted separate TED/SAMPLE workflow under4b5b5a50, not a new execution.
+
+The name paragraph now says directly that both the full stop and type can be
+omitted. The prompt-input transition, copied-record allocation reference and
+Chapter1 conjunction-comma correction requested by the same external review
+were already applied atfa3a042. Their actual full contexts remain unchanged.
+
+I read the complete current Chapter3 and the new copy's actual starting-state
+and output context before editing. The new prose has a single practical action,
+its overwrite guard and its observed result. Separate deletion, agency and
+every-comma readings preserve the current/historical boundary. The full section
+was read back through the historical mutation example and copied-record count.
+All four older output fences remain exact. No source or result is relabelled.
+
+The reader does not use DIR's NO FILE as universal absence proof because DIR
+can omit a system file. That later attribute lesson stays in4. The example's
+actual known fresh-card state establishes its empty destination. The copy
+instruction explicitly preserves any existing SAMPLE file on a different
+working card. No extra DIR result or mutating run is invented.
+
+The mandatory gate reports zero findings for both files. New short sentences
+define the observed record count and its notation. Existing complexity prompts
+retain their earlier context dispositions. The four previous output fences and
+all their capture comments are byte-exact. The added fifth fence is the single
+accepted current COPY screen slice, not a stitched continuation. The count0028
+is hexadecimal40; no new file count or free-space total is invented.
