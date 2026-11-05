@@ -245,3 +245,130 @@ pending. No runtime, build, import or new capture accompanied these edits.
 Full independent corrections confirmed at6483ddf, including additional complete front-door/console lead-read findings. All prior source/craft findings closed.
 Historical evidence remains historical. Final navigation, source/profile and
 runtime qualification remain open. No execution accompanied the review.
+
+## Receiver source adoption at book 9ba1f59
+
+This section supersedes the earlier current-source and pending-default
+statements in this record. Earlier readings and measurements retain their
+original provenance. The reader now uses TEC-OS
+`962853f499f05faf281f6cdff1deca8959f58c2b` for current mechanisms. All six owned
+chapters and their existing records were read completely before editing. The
+impact inventory and confirmation cover 35 contexts, 29 proof spans and nine
+historical exceptions. Their source and reader scopes were read alongside the
+actual ea3ef3d-to-962853f code changes.
+
+Console selection, reply routing and BAT direct discard were checked through
+CMDCON, CONFLD, CONSEL and CONSW. Width commands use the version-3 record and
+TMSWID. Keyboard scans, queued arrows, terminal wrapping and serial pagination
+retain their existing contracts.
+
+Current source proof: `src/console.asm:57-88` samples the Matrix switch.
+`src/tms.asm:17-48` and `src/video.asm:22-29` gate PISTART on the VRAM probe.
+`src/pico.asm:36-92` sets PIDEFLT to 40 and installs the console only with CDMTX
+set. `src/pico.asm:94-196` accepts explicit 80/40/32 widths and rejects a claim.
+`src/cpm/ccpcmd.asm:120-208` bypasses that entry for bare selectors.
+`src/console.asm:165-199` preserves a claimed PICO display during selection.
+`src/boot.asm:178-215` and `src/ram.asm:359-365` preserve the width over warm
+boot.
+
+PICO remains record version 3 (`src/abi.inc:219-243`). The selected font retains
+96 glyphs of eight rows with five pixel bits at 7–3 (`tools/lib/font.mjs:9-43`).
+Six-pixel display cells do not change that encoding. Native 16020 used/364 free
+already appears at ea3ef3d in `docs/memory-map.md:22-30`. No font-growth or
+historical-map equality claim follows. The accepted offer retains these exact
+artifact identities:
+
+- ROM SHA-256: `fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d`.
+- D8 SHA-256: `9a87dec39a63efc8fdf38ae13d6ec6299763c833fc891de121e2b30f4a1a36ac`.
+
+Selection authority is P3 proposal 18 / Origo 43d5f328, mechanism source 962853f
+and tested source 8b8664a. Opening workflow receipt 4b5b5a50 and the closed
+d9d57d2/b911e84 reviews remain scoped acceptance. No local execution supplies a
+new artifact or example result.
+
+Citation coverage: 0 incoming unprefixed file/range occurrences; 0 final
+occurrences. Every incoming occurrence was checked in its complete reader
+passage against the owning source and relevant callers. The table lists all
+final range identities and the operator-level support ranges. Identical bytes
+establish source identity only. Historical examples remain historical even when
+their program source is unchanged.
+
+| Source at 962853f | Inspected ranges | Complete file SHA-256 |
+| --- | --- | --- |
+| `drivers/glcd.asm` | 39–129 | `d668178e52432b1ab9e84e17daa9cb45dc24bad4e829690ab8549669b1a7522d` |
+| `src/console.asm` | 57–199, 230–492, 559–620 | `988297527d3be3859f389b0cbdb48ada68d85487d18e65bd12f1df4524ac4ab2` |
+| `src/cpm/ccpcmd.asm` | 66–232 | `6c16f68385d13cb371f397fa48b0b868e1cfe627d70a412ffed85ac53e0ca86d` |
+| `src/cpm/ccpfile.asm` | 78–110, 315–520 | `770facd38522ea0e48537e761bf475c5536c726bd27983c968a7522f59db0358` |
+| `src/keyboard.asm` | 1–220 | `133d25f87d2b388e47ee9f09a4225ccd1960e4727a38af207ba467e3d2d570f2` |
+| `src/lcd.asm` | 17–58, 122–155 | `99b63f5d153e2e052cbd2e445a97d9f3bda641e2d37c32d3b7083efee2c79c77` |
+| `src/loader.asm` | 895–958 | `933985f18c5d3eb2c776c182769708dfffc245a387bb26e7aa684db5f1635f36` |
+| `src/pico.asm` | 1–196 | `c72090deca38228a1fa94b9dce912b97cf50b7b90c179e3ac8a2a2741f9131a4` |
+| `src/services.asm` | 211–279, 618–658 | `ef737171462184d5716bbb2a1d3dd879ce8c0d46cd609974a9effdfc70ae8a5b` |
+| `src/tables.asm` | 40–44 | `a2a326ed74a01f28bd0b6a25a15c48847de786d02dc2b434c23aa28e8cc1e3da` |
+| `src/term.asm` | 49–200 | `5a7f3f13acb4c5c3a7a875d4219f530661115eaf889484ab1c45156005014b95` |
+| `src/video.asm` | 22–29, 150–212 | `984df3e6d1fdb7f865586c9e4a9c4690cf9300fe7df226c0450c71fbab8ef560` |
+
+Protected readback: 8 complete fences and 8 command comments match the
+pre-adoption reader byte for byte. All explicit historical pins, 64-digit hashes
+and link destinations are unchanged. Historical measurements, map addresses and
+output were not repinned or regenerated.
+
+The thematic pass keeps the existing operator/reference route. The deletion pass
+removes the obsolete current-80 premise while retaining historical-80
+explanations. The agency pass uses the actual switch, probe and handler
+conditions. Each changed paragraph and its neighbours were read again after
+editing. Every comma in those paragraphs was checked for its grammatical job.
+The width enumeration commas separate values. The host-default comma, where
+present, separates its explanatory qualification. No optional conjunction comma
+was introduced. No listing, recipe or screen was rewritten.
+
+Editorial input SHA-256:
+`99fe60faa54ce55f3eee8e590c118e59aa903fd760da8c25a9804f87e14494ec`. Final
+reader SHA-256:
+`e0feb3100ad88f719a47e02adc98533c52fabb1932b456cbb4e0b154c938c5b3`. Pre-append
+record SHA-256:
+`e028a9d043993ccbee43f0cf6b315a9e224b10a1c1b279b57ce5958e887a11a5`. Actual
+prose gate: zero findings in all six readers. The existing record findings are
+Chapter 15 lines 104 and 176, HW008: both quoted uses of `source offer` name the
+proposed source revision rather than an intentional actor. Retain the historical
+wording with this disposition. No hard finding occurred.
+
+Sentence-complexity prompts below were read in their containing paragraphs.
+Short mechanism statements and navigation sentences remain connected to their
+explanations. Numbered-list fragments are parser segmentation, not new prose
+fragments. Repeated defined terms preserve exact relations. Longer sentences
+retain their required conditions or ordered operations. Each prompt is retained
+for the case recorded here rather than automatically shortened.
+
+| Reader input line | Prompt | Sentence readback | Disposition |
+| ---: | --- | --- | --- |
+| 16 | SHORT(3) | CODE discards it. | Retain direct fact in its explanatory paragraph. |
+| 43 | SHORT(6) | Otherwise the console starts on CODE. | Retain direct fact in its explanatory paragraph. |
+| 57 | SHORT(6) | TEC-OS cannot read the terminal's dimensions. | Retain direct fact in its explanatory paragraph. |
+| 72 | SHORT(6) | The report is discarded in CODE. | Retain direct fact in its explanatory paragraph. |
+| 72 | SHORT(5) | CODE and CODE are equivalent. | Retain direct fact in its explanatory paragraph. |
+| 125 | SHORT(6) | Chapter 10 explains that memory boundary. | Retain direct fact in its explanatory paragraph. |
+| 163 | SHORT(6) | Chapter 7 explains the startup conditions. | Retain direct fact in its explanatory paragraph. |
+| 171 | SHORT(6) | CODE is CP/M's batch-device name. | Retain direct fact in its explanatory paragraph. |
+| 171 | SHORT(6) | After CODE even the reply disappears. | Retain direct fact in its explanatory paragraph. |
+| 230 | SHORT(6) | The console remains as it was: | Retain direct fact in its explanatory paragraph. |
+| 253 | SHORT(6) | A modifier pressed alone sends nothing. | Retain direct fact in its explanatory paragraph. |
+| 263 | SHORT(6) | It also has no Delete key. | Retain direct fact in its explanatory paragraph. |
+| 273 | SHORT(6) | Holding it does not repeat it. | Retain direct fact in its explanatory paragraph. |
+
+These are editorial checks only. The full attempt02 batch remains failed at a
+later CPU-flag observer. The closed opening workflow receipt and chapter reviews
+do not qualify advanced services, a physical board, browser operation, audio or
+publication. No product import, syntax check, assembly, build, test, model
+session or capture was performed for this adoption.
+
+Editorial utility identities and stable reader run:
+
+- prose gate script SHA-256: `0fb52353cf22dc3a1a079c819f9d7df174a1961084689b946857747b5862ee66`.
+- complexity script SHA-256: `59ef44ca92c947b97c8f73a6e425cb3c3b321190f0f892590c25190300d286a8`.
+- six-reader gate output SHA-256: `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`.
+- six-reader complexity output SHA-256: `8644f5011f76f6362b414753452a28f7a6ad2f8b0d826850666fda7d5833a08e`.
+
+Record-only complexity prompts retain historical identifiers, unit accounting
+and audit scope. They do not require shortening the reader text. The earlier
+record sections remain evidence of their dated editorial work.

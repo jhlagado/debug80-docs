@@ -7,7 +7,8 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 20. From prompt to program
 
-<!-- Source-only semantic check: TEC-OS ea3ef3d.
+<!-- Source-only semantic check: TEC-OS
+     962853f499f05faf281f6cdff1deca8959f58c2b.
      Current source citations below use that revision. Historical output,
      addresses and size figures retain TEC-OS 78127ec, not a current build.
      The retained PC fixture used atom-z80 0.3.7. The historical starter's
@@ -204,7 +205,7 @@ entry. They finish at `MAINLOOP` or at `STARTED`, which adds a new line first
 ## The built-in handlers
 
 The handlers use the same FCB and DMA interfaces as a disk program. This
-table locates their implementations at `ea3ef3d`. Appendix J gives syntax
+table locates their implementations at `962853f`. Appendix J gives syntax
 and [Appendix D](appendix-d-error-messages.md) gives recovery from messages.
 
 | Command | Routine | Source |
@@ -344,8 +345,13 @@ A>
 
 `PICOWID` also rejects a change while the display is claimed. An accepted
 width change clears the screen at the next console call. Its state in
-`PIBLK` survives warm boot. Reset initialises the PICO console to 80 columns
-(`src/pico.asm:57-77`, `src/pico.asm:89-117`).
+`PIBLK` survives warm boot. Reset initialises the PICO console to 40 columns
+when the display probe succeeds and the Matrix switch is enabled. Otherwise
+serial remains selected. Bare `CON CRT` and `CON PICO` retain the chosen
+width and any active claim
+(`src/console.asm:57-88`, `src/video.asm:22-29`,
+`src/pico.asm:59-92`, `src/pico.asm:94-122`,
+`src/cpm/ccpcmd.asm:120-208`, `src/console.asm:165-199`).
 
 ### Copies and resident services
 

@@ -8,11 +8,11 @@ nav_group: "Part I: Using TEC-OS"
 # 7. Commands at startup
 
 <!-- Source mechanisms inspected by git text at TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. Source-only draft.
+     962853f499f05faf281f6cdff1deca8959f58c2b. Source-only draft.
      All nine retained captures, their recipes and the six shell fences
      retain TEC-OS 78127ec. No capture or workflow was rerun.
-     The 80-column cold start described here belongs to that inspected
-     source and the historical examples, not a newly qualified default. -->
+     Historical 80-column starts remain evidence of their original runs.
+     Current cold-default and host-preparation claims use the source above. -->
 
 `A:STARTUP.CMD` holds commands you want to repeat after reset. TEC-OS runs
 them before accepting a command from the keyboard. You can use it to select
@@ -157,8 +157,8 @@ to a prompt have different effects:
 
 Either kind of reset is a cold boot. It removes installed services,
 selects drive A and user area 0 and runs the startup file once. At the
-inspected `ea3ef3d` source, a responding PICO9918 with the Matrix switch
-enabled starts as the 80-column console. Otherwise the console starts on
+current source, a responding PICO9918 with the Matrix switch enabled
+starts as the 40-column console. Otherwise the console starts on
 serial. A startup width or GLCD line can then select the intended display.
 
 The file is always taken from user area 0 of the volume assigned to A at
@@ -256,10 +256,11 @@ On the serial and GLCD configurations, the banner and volume names first
 go to serial and the 20 × 4 character LCD. The GLCD can become the console
 only after its startup service loads.
 
-A width command makes a PICO preference repeat at each reset. At the
-inspected source, `CON PICO 40` and `CON PICO 32` select a session width
-but cold boot starts at 80 again. This retained recipe puts a 32-column
-command before the supplied GLCD line:
+A startup width command selects the intended PICO width after each reset.
+Cold boot starts at 40 columns before the startup file runs. An explicit
+width command can select 80, 40 or 32 columns. Bare `CON CRT` and `CON PICO`
+retain the current width and any program claim. This historical recipe puts
+a 32-column command before the supplied GLCD line:
 
 ```sh
 printf 'CON PICO 32\nGLCD.SVC\n' > startup.cmd
@@ -303,10 +304,12 @@ A>
 ```
 
 The web page's Display control prepares the startup file at power-on.
-For GLCD or a narrow PICO width, successful preparation places the
-corresponding display command first. At this source, the 80-column PICO
-choice needs no display command. Other commands are kept. If preparation
-fails, the page reports the problem and boots the card unchanged.
+Successful preparation places the selected display command first. Every
+PICO width has an explicit line: `CON PICO 80`, `CON PICO 40` or `CON PICO 32`.
+The page's default remains 80 columns, selected through that startup line
+after the ROM's 40-column cold start. GLCD selection puts `GLCD.SVC` first.
+Other commands are kept. If preparation fails, the page reports the problem
+and boots the card unchanged.
 [Appendix I](appendix-i-web-page.md) gives the exact rewrite and failure rules.
 
 ## An older card's display file

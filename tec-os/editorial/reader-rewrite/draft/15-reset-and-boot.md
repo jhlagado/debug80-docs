@@ -7,8 +7,8 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 15. Reset and boot
 
-<!-- Source mechanisms read at offered TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. All unprefixed source ranges
+<!-- Source mechanisms read at adopted TEC-OS
+     962853f499f05faf281f6cdff1deca8959f58c2b. All unprefixed source ranges
      below use that revision. This is source inspection, not artifact qualification. -->
 
 <!-- Historical evidence: both retained captures and all measured timings
@@ -84,9 +84,10 @@ The calls in `COLD` establish those dependencies in this order
    (`src/boot.asm:73-86`).
 6. `CONINIT` starts serial input/output, reads the Matrix switch and probes
    the PICO9918. A responding PICO9918 with that switch on becomes the
-   80-column console. `RTCHAS` probes the clock and records its presence.
+   40-column console. Otherwise serial remains selected. `RTCHAS` probes
+   the clock and records its presence.
    The banner goes to the selected console (`src/boot.asm:88-99`,
-   `src/console.asm:60-88`, `src/video.asm:22-29`, `src/pico.asm:64-85`).
+   `src/console.asm:60-88`, `src/video.asm:22-29`, `src/pico.asm:69-90`).
 7. `MEMINIT` clears EXPAND 1 and marks every cache line empty before
    mounting needs a cache line (`src/boot.asm:100-102`,
    `src/boot.asm:321-346`).
@@ -119,7 +120,7 @@ responds and the Matrix switch enables the keyboard. It does so before the banne
 first console call. With the Matrix switch off the console stays serial
 and `PISTART` leaves its console uninitialised even if the PICO9918 answers
 (`src/boot.asm:62-70`,
-`src/console.asm:82-88`, `src/video.asm:22-29`, `src/pico.asm:54-85`).
+`src/console.asm:82-88`, `src/video.asm:22-29`, `src/pico.asm:59-90`).
 
 The status LCD has bounded waits so its absence cannot stop boot.
 `LCDWAIT` polls the busy flag at most 256 times before each command or
@@ -330,7 +331,7 @@ Warm boot rebuilds the environment in this order:
 2. `HWVREL` releases any program claim on the PICO9918 and restores its driver
    state. Its non-maskable interrupt (NMI) is turned off before page zero is
    rebuilt (`src/boot.asm:187-192`, `src/services.asm:245-279`,
-   `src/pico.asm:247-278`).
+   `src/pico.asm:252-283`).
 3. `PZINIT` rebuilds the entry jumps, stub and restart vectors
    (`src/boot.asm:194-195`).
 4. Bit 7 of `SVCBSY` is cleared. An interrupted service `INIT` or `REMOVE`

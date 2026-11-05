@@ -327,3 +327,168 @@ now retain that actual run provenance. The full independent source/craft
 review and this separate evidence correction are closed for the bounded draft.
 Final source/profile qualification, navigation and runtime acceptance remain
 open. No execution accompanied this confirmation.
+
+## Receiver source adoption at book 9ba1f59
+
+This section supersedes the earlier current-source and pending-default
+statements in this record. Earlier readings and measurements retain their
+original provenance. The reader now uses TEC-OS
+`962853f499f05faf281f6cdff1deca8959f58c2b` for current mechanisms. All six owned
+chapters and their existing records were read completely before editing. The
+impact inventory and confirmation cover 35 contexts, 29 proof spans and nine
+historical exceptions. Their source and reader scopes were read alongside the
+actual ea3ef3d-to-962853f code changes.
+
+The BDOS and BIOS input reserves remain distinct. OUTCHAR, CHKKEY and ECHORAW
+preserve pause, printer-copy and returned-byte ordering. BAT returns directly
+from BCONOUT. Serial interrupt restoration and delay derivations remain
+unchanged. Parser clipping, row-copy directions, page flips and VTOWN were read
+with their console and driver callers. VIDHOOK checks the recorded Matrix switch
+bit rather than physically detecting a keyboard.
+
+Current source proof: `src/console.asm:57-88` samples the Matrix switch.
+`src/tms.asm:17-48` and `src/video.asm:22-29` gate PISTART on the VRAM probe.
+`src/pico.asm:36-92` sets PIDEFLT to 40 and installs the console only with CDMTX
+set. `src/pico.asm:94-196` accepts explicit 80/40/32 widths and rejects a claim.
+`src/cpm/ccpcmd.asm:120-208` bypasses that entry for bare selectors.
+`src/console.asm:165-199` preserves a claimed PICO display during selection.
+`src/boot.asm:178-215` and `src/ram.asm:359-365` preserve the width over warm
+boot.
+
+PICO remains record version 3 (`src/abi.inc:219-243`). The selected font retains
+96 glyphs of eight rows with five pixel bits at 7–3 (`tools/lib/font.mjs:9-43`).
+Six-pixel display cells do not change that encoding. Native 16020 used/364 free
+already appears at ea3ef3d in `docs/memory-map.md:22-30`. No font-growth or
+historical-map equality claim follows. The accepted offer retains these exact
+artifact identities:
+
+- ROM SHA-256: `fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d`.
+- D8 SHA-256: `9a87dec39a63efc8fdf38ae13d6ec6299763c833fc891de121e2b30f4a1a36ac`.
+
+Selection authority is P3 proposal 18 / Origo 43d5f328, mechanism source 962853f
+and tested source 8b8664a. Opening workflow receipt 4b5b5a50 and the closed
+d9d57d2/b911e84 reviews remain scoped acceptance. No local execution supplies a
+new artifact or example result.
+
+Citation coverage: 158 incoming unprefixed file/range occurrences; 159 final
+occurrences. Every incoming occurrence was checked in its complete reader
+passage against the owning source and relevant callers. The table lists all
+final range identities. Identical bytes establish source identity only.
+Historical examples remain historical even when their program source is
+unchanged.
+
+| Source at 962853f | Inspected ranges | Complete file SHA-256 |
+| --- | --- | --- |
+| `drivers/glcd.asm` | 1–23, 39–46, 39–93, 104–129 | `d668178e52432b1ab9e84e17daa9cb45dc24bad4e829690ab8549669b1a7522d` |
+| `src/abi.inc` | 219–231 | `092ccf072bb559ba8efc5e55f576d303f2f98a3ea13ed2e821bbd102856a9357` |
+| `src/boot.asm` | 144–152, 187–195, 201–209, 412–420, 530–536 | `babbd9b2137a60c0fa0fec1cb461d7cd311d7e785413fcd88500c9cb6b9e5428` |
+| `src/console.asm` | 1–26, 28–39, 28–45, 82–88, 98–111, 127–163, 127–199, 165–177, 165–199, 177–179, 210–220, 210–286, 230–233, 230–241, 253–279, 274–286, 288–320, 295–298, 295–305, 295–320, 309–320, 329–354, 361–377, 361–378, 361–421, 387–399, 387–421, 429–430, 429–437, 429–440, 429–492, 452–492, 498–522, 559–571, 566–599, 573–599, 585–599, 606–620 | `988297527d3be3859f389b0cbdb48ada68d85487d18e65bd12f1df4524ac4ab2` |
+| `src/cpm/bdos.asm` | 22–36, 115–119, 321–330, 337–341, 343–369, 376–397, 399–412, 419–433, 454–531, 545–553, 559–729, 740–765, 772–792 | `0b491acfc4924be7bb78e2a76600ec666875f4aa293a2543aedcb397e7070af6` |
+| `src/cpm/bdoscon.asm` | 126–153, 126–168, 160–168, 178–204, 178–243, 229–243, 229–264, 273–286, 290–305, 318–330, 318–350, 318–360, 368–376 | `80846394bf1e858a48f0e2d9bf56539243cbcaf3b7efc0a19bd0837e0b9526a1` |
+| `src/cpm/ccp.asm` | 148–166, 465–485 | `7d5a640a6957ade5167493aba0ca0077f79b05dddedbb0844092112aeabe3cb1` |
+| `src/cpm/ccpcmd.asm` | 120–208, 161–194, 200–232 | `6c16f68385d13cb371f397fa48b0b868e1cfe627d70a412ffed85ac53e0ca86d` |
+| `src/keyboard.asm` | 1–7, 15–28, 36–70, 36–97, 88–117, 88–142, 98–129, 109–129, 150–220 | `133d25f87d2b388e47ee9f09a4225ccd1960e4727a38af207ba467e3d2d570f2` |
+| `src/layout.asm` | 14–20, 63–66 | `10aa9ee6cc80be14363ca61aa71eac4ac90839ea3c62147199eb201188a542fa` |
+| `src/loader.asm` | 895–958 | `933985f18c5d3eb2c776c182769708dfffc245a387bb26e7aa684db5f1635f36` |
+| `src/pico.asm` | 1–21, 31–57, 69–92, 103–122, 103–196, 198–250, 291–336, 347–350, 506–553, 605–666, 668–684 | `c72090deca38228a1fa94b9dce912b97cf50b7b90c179e3ac8a2a2741f9131a4` |
+| `src/ram.asm` | 121–134, 242–245, 314–319, 359–365, 430–432, 435–439 | `4e2be7c58cde2b4b6a5b3a26f6501150ac0b5d1905e2d99355590016c3ac1153` |
+| `src/services.asm` | 95–105, 211–237, 245–279, 618–627, 629–647, 649–658 | `ef737171462184d5716bbb2a1d3dd879ce8c0d46cd609974a9effdfc70ae8a5b` |
+| `src/tables.asm` | 19–35, 40–42, 40–44 | `a2a326ed74a01f28bd0b6a25a15c48847de786d02dc2b434c23aa28e8cc1e3da` |
+| `src/term.asm` | 49–50, 49–98, 106–200, 180–234, 236–266, 268–351, 361–516, 523–590, 576–590, 602–745, 755–897, 804–897, 844–897, 915–929, 939–979 | `5a7f3f13acb4c5c3a7a875d4219f530661115eaf889484ab1c45156005014b95` |
+| `src/tms.asm` | 17–48 | `e3f4eec122f4ae9fb378d9f26c6996280793f474345fef2d504202990b51ec50` |
+| `src/video.asm` | 22–29, 37–80, 91–123, 110–123, 134–148, 150–188, 184–212 | `984df3e6d1fdb7f865586c9e4a9c4690cf9300fe7df226c0450c71fbab8ef560` |
+| `test/programs/term.asm` | 1–35, 12–36 | `ed9c6d38abfebe03a985c886c8bf721bf5a4ebe0ed9065d0df44ae3cf5ec9c05` |
+| `tools/build.mjs` | 26–27, 38–59, 38–77 | `fccb013b93d4f6bff359cb7302aed1b027e6fd88983b9f44463ae3f5292887a9` |
+
+Protected readback: 4 complete fences and 3 command comments match the
+pre-adoption reader byte for byte. All explicit historical pins, 64-digit hashes
+and link destinations are unchanged. Historical measurements, map addresses and
+output were not repinned or regenerated.
+
+The thematic pass keeps the existing operator/reference route. The deletion pass
+removes the obsolete current-80 premise while retaining historical-80
+explanations. The agency pass uses the actual switch, probe and handler
+conditions. Each changed paragraph and its neighbours were read again after
+editing. Every comma in those paragraphs was checked for its grammatical job.
+The width enumeration commas separate values. The host-default comma, where
+present, separates its explanatory qualification. No optional conjunction comma
+was introduced. No listing, recipe or screen was rewritten.
+
+Editorial input SHA-256:
+`594d3e65943207ebfe22dc1eaf66e422a4f6b1cf92d30d493598200057134ca4`. Final
+reader SHA-256:
+`b7b853b8f2b2ae3f80d1567c10d94453d9562b37841a109cb390a793205ace7e`. Pre-append
+record SHA-256:
+`b32f5ea1c1e4588e33fdf47a09c4d293583df07af9098f904b69bef92e605ccb`. Actual
+prose gate: zero findings in all six readers. The existing record findings are
+Chapter 15 lines 104 and 176, HW008: both quoted uses of `source offer` name the
+proposed source revision rather than an intentional actor. Retain the historical
+wording with this disposition. No hard finding occurred.
+
+Sentence-complexity prompts below were read in their containing paragraphs.
+Short mechanism statements and navigation sentences remain connected to their
+explanations. Numbered-list fragments are parser segmentation, not new prose
+fragments. Repeated defined terms preserve exact relations. Longer sentences
+retain their required conditions or ordered operations. Each prompt is retained
+for the case recorded here rather than automatically shortened.
+
+| Reader input line | Prompt | Sentence readback | Disposition |
+| ---: | --- | --- | --- |
+| 16 | SHORT(6) | assembly recipe retain TEC-OS 78127ec. | Retain direct fact in its explanatory paragraph. |
+| 31 | SHORT(6) | Each is a three-byte jump (CODE): | Retain direct fact in its explanatory paragraph. |
+| 74 | SHORT(5) | CODE is the logical console. | Retain direct fact in its explanatory paragraph. |
+| 92 | SHORT(6) | Function 7 reads the byte back. | Retain direct fact in its explanatory paragraph. |
+| 101 | SHORT(6) | A zero pointer selects serial instead. | Retain direct fact in its explanatory paragraph. |
+| 135 | CLAUSES(1+2) | CODE returns the character and clears the flag or advances a queued arrow sequence while leaving the flag set (CODE, CODE, CODE, CODE, CODE). | Retain necessary condition or ordered operations. |
+| 151 | FRONT(12) | Once that wait delivers a key it hides the cursor before returning. | Retain necessary condition or ordered operations. |
+| 189 | SHORT(6) | Any other resume key is consumed. | Retain direct fact in its explanatory paragraph. |
+| 196 | SHORT(5) | It then jumps to CODE. | Retain direct fact in its explanatory paragraph. |
+| 204 | SHORT(5) | Tabs are echoed as spaces. | Retain direct fact in its explanatory paragraph. |
+| 270 | ECHO(interrupt/interrupts) | CODE saves the interrupt state and disables maskable interrupts for the byte. | Retain exact defined-term relation. |
+| 270 | SHORT(5) | A pass costs CODE T-states. | Retain direct fact in its explanatory paragraph. |
+| 278 | SHORT(6) | Eight samples enter CODE through carry. | Retain direct fact in its explanatory paragraph. |
+| 278 | SHORT(6) | A sampling pass costs CODE T-states. | Retain direct fact in its explanatory paragraph. |
+| 295 | LONG(30) ECHO(t-states/t-state) | The CODE deductions cover the fixed 51 T-states around its loop, the mean of the interrupt-state paths at 65 and 52 T-states and half the maximum 38-T-state polling delay. | Retain exact defined-term relation. |
+| 308 | SHORT(5) | Reception has no hardware buffer. | Retain direct fact in its explanatory paragraph. |
+| 325 | SHORT(5) | CODE always returns CODE, ready. | Retain direct fact in its explanatory paragraph. |
+| 331 | SHORT(6) | Its output returns directly from CODE. | Retain direct fact in its explanatory paragraph. |
+| 340 | SHORT(5) | The keyboard uses port CODE. | Retain direct fact in its explanatory paragraph. |
+| 347 | SHORT(5) | Without CODE, CODE returns immediately. | Retain direct fact in its explanatory paragraph. |
+| 362 | SHORT(6) | Two ordinary keys produce no character. | Retain direct fact in its explanatory paragraph. |
+| 362 | SHORT(5) | Digits and punctuation use CODE. | Retain direct fact in its explanatory paragraph. |
+| 371 | SHORT(5) | The arrows produce three-byte sequences: | Retain direct fact in its explanatory paragraph. |
+| 403 | SHORT(6) | Ordinary output bytes CODE are dropped. | Retain direct fact in its explanatory paragraph. |
+| 457 | SHORT(5) | Positioning clips to the dimensions. | Retain direct fact in its explanatory paragraph. |
+| 470 | SHORT(6) | It does nothing outside the region. | Retain direct fact in its explanatory paragraph. |
+| 470 | CLAUSES(1+2) | Insertions copy from the bottom upwards and deletions from the top down so the source rows survive until copied (CODE, CODE). | Retain necessary condition or ordered operations. |
+| 521 | ECHO(routines/routine) | The display table contains eight words: six drawing/row routines, the page-operation routine and a final columns/rows pair. | Retain exact defined-term relation. |
+| 545 | CLAUSES(0+3) | At cold boot CODE writes CODE and CODE to VRAM address CODE through ports CODE and CODE and reads each back. | Retain necessary condition or ordered operations. |
+| 545 | SHORT(3) | Both must match. | Retain direct fact in its explanatory paragraph. |
+| 553 | SHORT(6) | A program finds it with CODE. | Retain direct fact in its explanatory paragraph. |
+| 561 | CLAUSES(0+3) | Bare CODE and CODE bypass the width entry and preserve the selected width and any claim (CODE, CODE, CODE, CODE). | Retain both bare aliases and both preserved states. |
+| 576 | LONG(26) | CODE obtains the ROM font, probes the controller and registers its table through CODE, service 12, with CODE and CODE pointing to the table (CODE, CODE). | Retain necessary condition or ordered operations. |
+| 585 | ECHO(loaded/loading) | A later CODE can select the loaded table without loading it again (CODE, CODE, CODE). | Retain exact defined-term relation. |
+| 600 | SHORT(4) | Removal has two parts. | Retain direct fact in its explanatory paragraph. |
+| 600 | SHORT(6) | CODE first finds the PICO record. | Retain direct fact in its explanatory paragraph. |
+| 600 | ECHO(requested/request) | If it exists and the requested console is UC1, CODE changes that request to CRT. | Retain exact defined-term relation. |
+
+These are editorial checks only. The full attempt02 batch remains failed at a
+later CPU-flag observer. The closed opening workflow receipt and chapter reviews
+do not qualify advanced services, a physical board, browser operation, audio or
+publication. No product import, syntax check, assembly, build, test, model
+session or capture was performed for this adoption.
+
+The complexity-table quotation of the RXHALF deductions also triggers HW008.
+Its “mean” is the arithmetic average of 65 and 52 T-states. Retain the cost
+derivation.
+
+Editorial utility identities and stable reader run:
+
+- prose gate script SHA-256: `0fb52353cf22dc3a1a079c819f9d7df174a1961084689b946857747b5862ee66`.
+- complexity script SHA-256: `59ef44ca92c947b97c8f73a6e425cb3c3b321190f0f892590c25190300d286a8`.
+- six-reader gate output SHA-256: `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`.
+- six-reader complexity output SHA-256: `8644f5011f76f6362b414753452a28f7a6ad2f8b0d826850666fda7d5833a08e`.
+
+Record-only complexity prompts retain historical identifiers, unit accounting
+and audit scope. They do not require shortening the reader text. The earlier
+record sections remain evidence of their dated editorial work.

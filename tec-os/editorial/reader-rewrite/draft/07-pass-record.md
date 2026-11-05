@@ -264,3 +264,154 @@ prompt introduces the retained screen capture. Those complete passages were
 read and retained. Other prompts are unchanged material outside this bounded
 correction, not authority for automatic shortening or whole-book acceptance.
 No product import, assembly, build, test, emulator or capture was run.
+
+## Receiver source adoption at book 9ba1f59
+
+This section supersedes the earlier current-source and pending-default
+statements in this record. Earlier readings and measurements retain their
+original provenance. The reader now uses TEC-OS
+`962853f499f05faf281f6cdff1deca8959f58c2b` for current mechanisms. All six owned
+chapters and their existing records were read completely before editing. The
+impact inventory and confirmation cover 35 contexts, 29 proof spans and nine
+historical exceptions. Their source and reader scopes were read alongside the
+actual ea3ef3d-to-962853f code changes.
+
+STBOOT/STLINE retain the single-record limit, delimiter rules and keypad bypass.
+Warm boot retains STPOS and command text. Failed CWBOOT clears CHPOS. SVDRV and
+SVCGO preserve the requested-CRT startup exclusion and typed-GLCD behaviour.
+Host preparation stages a copy and retains the failure path.
+
+Current source proof: `src/console.asm:57-88` samples the Matrix switch.
+`src/tms.asm:17-48` and `src/video.asm:22-29` gate PISTART on the VRAM probe.
+`src/pico.asm:36-92` sets PIDEFLT to 40 and installs the console only with CDMTX
+set. `src/pico.asm:94-196` accepts explicit 80/40/32 widths and rejects a claim.
+`src/cpm/ccpcmd.asm:120-208` bypasses that entry for bare selectors.
+`src/console.asm:165-199` preserves a claimed PICO display during selection.
+`src/boot.asm:178-215` and `src/ram.asm:359-365` preserve the width over warm
+boot.
+
+`host/card.mjs:58-73,104-117` stages preparation and writes an explicit CON PICO
+line for every selected width, including 80. `web/src/main.mjs:17-43,82-95`
+retains the initial UI width of 80 and passes that selection to preparation. The
+host choice and the ROM cold default are different operations.
+
+PICO remains record version 3 (`src/abi.inc:219-243`). The selected font retains
+96 glyphs of eight rows with five pixel bits at 7–3 (`tools/lib/font.mjs:9-43`).
+Six-pixel display cells do not change that encoding. Native 16020 used/364 free
+already appears at ea3ef3d in `docs/memory-map.md:22-30`. No font-growth or
+historical-map equality claim follows. The accepted offer retains these exact
+artifact identities:
+
+- ROM SHA-256: `fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d`.
+- D8 SHA-256: `9a87dec39a63efc8fdf38ae13d6ec6299763c833fc891de121e2b30f4a1a36ac`.
+
+Selection authority is P3 proposal 18 / Origo 43d5f328, mechanism source 962853f
+and tested source 8b8664a. Opening workflow receipt 4b5b5a50 and the closed
+d9d57d2/b911e84 reviews remain scoped acceptance. No local execution supplies a
+new artifact or example result.
+
+Citation coverage: 0 incoming unprefixed file/range occurrences; 0 final
+occurrences. Every incoming occurrence was checked in its complete reader
+passage against the owning source and relevant callers. The table lists all
+final range identities and the operator-level support ranges. Identical bytes
+establish source identity only. Historical examples remain historical even when
+their program source is unchanged.
+
+| Source at 962853f | Inspected ranges | Complete file SHA-256 |
+| --- | --- | --- |
+| `host/card.mjs` | 58–117 | `80e74bc88cb5a366ac096f3b08f318838171cd5175a183f7eab199a67e651dfd` |
+| `src/boot.asm` | 49–215, 240–312 | `babbd9b2137a60c0fa0fec1cb461d7cd311d7e785413fcd88500c9cb6b9e5428` |
+| `src/cache.asm` | 292–350, 653–668 | `e97a1b16ebae2a6710d7e78972590a141708e6e5c6ebb195d25c45d409c1e09b` |
+| `src/console.asm` | 57–199 | `988297527d3be3859f389b0cbdb48ada68d85487d18e65bd12f1df4524ac4ab2` |
+| `src/cpm/ccp.asm` | 46–180, 224–284, 465–485 | `7d5a640a6957ade5167493aba0ca0077f79b05dddedbb0844092112aeabe3cb1` |
+| `src/cpm/ccpcmd.asm` | 66–232, 866–1011 | `6c16f68385d13cb371f397fa48b0b868e1cfe627d70a412ffed85ac53e0ca86d` |
+| `src/loader.asm` | 895–958 | `933985f18c5d3eb2c776c182769708dfffc245a387bb26e7aa684db5f1635f36` |
+| `src/pico.asm` | 36–196 | `c72090deca38228a1fa94b9dce912b97cf50b7b90c179e3ac8a2a2741f9131a4` |
+| `src/services.asm` | 618–658 | `ef737171462184d5716bbb2a1d3dd879ce8c0d46cd609974a9effdfc70ae8a5b` |
+| `src/video.asm` | 22–29, 150–188 | `984df3e6d1fdb7f865586c9e4a9c4690cf9300fe7df226c0450c71fbab8ef560` |
+| `web/src/main.mjs` | 17–43, 82–95 | `9bbae7f35ce855833a00f99fb62296e15ed2254327b89f296ca0cd7bb28746dd` |
+
+Protected readback: 15 complete fences and 9 command comments match the
+pre-adoption reader byte for byte. All explicit historical pins, 64-digit hashes
+and link destinations are unchanged. Historical measurements, map addresses and
+output were not repinned or regenerated.
+
+The thematic pass keeps the existing operator/reference route. The deletion pass
+removes the obsolete current-80 premise while retaining historical-80
+explanations. The agency pass uses the actual switch, probe and handler
+conditions. Each changed paragraph and its neighbours were read again after
+editing. Every comma in those paragraphs was checked for its grammatical job.
+The width enumeration commas separate values. The host-default comma, where
+present, separates its explanatory qualification. No optional conjunction comma
+was introduced. No listing, recipe or screen was rewritten.
+
+Editorial input SHA-256:
+`b4c5c605cfb11bdcecbf766e437a557e46479fe7e51d719205f9c75d7036f14f`. Final
+reader SHA-256:
+`934203fea1ff6f79b51d2299a92cb3254d244975f2c257f5ebbb6339d71b3b2b`. Pre-append
+record SHA-256:
+`a33644a5536254111f66e36708323aba971e6943294545fc50d8be922215eedb`. Actual
+prose gate: zero findings in all six readers. The existing record findings are
+Chapter 15 lines 104 and 176, HW008: both quoted uses of `source offer` name the
+proposed source revision rather than an intentional actor. Retain the historical
+wording with this disposition. No hard finding occurred.
+
+Sentence-complexity prompts below were read in their containing paragraphs.
+Short mechanism statements and navigation sentences remain connected to their
+explanations. Numbered-list fragments are parser segmentation, not new prose
+fragments. Repeated defined terms preserve exact relations. Longer sentences
+retain their required conditions or ordered operations. Each prompt is retained
+for the case recorded here rather than automatically shortened.
+
+| Reader input line | Prompt | Sentence readback | Disposition |
+| ---: | --- | --- | --- |
+| 11 | SHORT(2) | Source-only draft. | Retain direct fact in its explanatory paragraph. |
+| 11 | ECHO(retained/retain) | All nine retained captures, their recipes and the six shell fences retain TEC-OS 78127ec. | Retain exact defined-term relation. |
+| 11 | SHORT(6) | No capture or workflow was rerun. | Retain direct fact in its explanatory paragraph. |
+| 24 | SHORT(5) | Each line supplies a command. | Retain direct fact in its explanatory paragraph. |
+| 30 | SHORT(6) | Reset does not finish pending writes. | Retain direct fact in its explanatory paragraph. |
+| 99 | SHORT(6) | Nothing in a later record runs. | Retain direct fact in its explanatory paragraph. |
+| 104 | SHORT(5) | That limit includes line endings. | Retain direct fact in its explanatory paragraph. |
+| 104 | SHORT(5) | CODE lies beyond the record: | Retain direct fact in its explanatory paragraph. |
+| 123 | SHORT(5) | The shortened CODE still runs. | Retain direct fact in its explanatory paragraph. |
+| 127 | SHORT(5) | These rules determine the boundaries: | Retain direct fact in its explanatory paragraph. |
+| 133 | SHORT(1) | limit. | Retain direct fact in its explanatory paragraph. |
+| 144 | SHORT(6) | Reset begins a new startup attempt. | Retain direct fact in its explanatory paragraph. |
+| 149 | SHORT(1) | boot. | Retain direct fact in its explanatory paragraph. |
+| 149 | SHORT(6) | Chapter 8 explains the program-exit routes. | Retain direct fact in its explanatory paragraph. |
+| 153 | CLAUSES(1+2) | working state and can restore the previous drive-to-volume assignments when the card and retained selection are valid. | Retain necessary condition or ordered operations. |
+| 156 | SHORT(1) | selection. | Retain direct fact in its explanatory paragraph. |
+| 158 | CLAUSES(1+2) | It removes installed services, selects drive A and user area 0 and runs the startup file once. | Retain necessary condition or ordered operations. |
+| 158 | SHORT(6) | Otherwise the console starts on serial. | Retain direct fact in its explanatory paragraph. |
+| 170 | SHORT(6) | Its initial A file runs CODE. | Retain direct fact in its explanatory paragraph. |
+| 209 | ECHO(mount/mounted) | In this historical recipe MOUNT exists only on SYSTEM, which is no longer mounted. | Retain exact defined-term relation. |
+| 226 | SHORT(2) | passes quietly. | Retain direct fact in its explanatory paragraph. |
+| 229 | CONTRAST | It does not mean that a driver was installed. | Retain necessary condition or ordered operations. |
+| 229 | LONG(29) | Typing CODE at the prompt has a different result on a board with both displays: it can install the service while leaving PICO9918 selected, as Chapter 4 demonstrated. | Retain necessary condition or ordered operations. |
+| 255 | CLAUSES(0+3) | On the serial and GLCD configurations, the banner and volume names first go to serial and the 20 × 4 character LCD. | Retain necessary condition or ordered operations. |
+| 271 | SHORT(6) | After CODE the PICO screen contained: | Retain direct fact in its explanatory paragraph. |
+| 306 | ECHO(columns/column) | The page's default remains 80 columns, selected through that startup line after the ROM's 40-column cold start. | Retain explicit distinction between host selection and ROM cold width. |
+| 306 | SHORT(5) | GLCD selection puts CODE first. | Retain direct fact in its explanatory paragraph. |
+| 306 | SHORT(4) | Other commands are kept. | Retain direct fact in its explanatory paragraph. |
+| 330 | CLAUSES(2+1) | TEC-OS samples the keypad once just before opening the file and skips startup when a key is down. | Retain necessary condition or ordered operations. |
+| 337 | SHORT(6) | Appendix G gives the board requirement. | Retain direct fact in its explanatory paragraph. |
+| 422 | SHORT(4) | CODE is cleared differently. | Retain direct fact in its explanatory paragraph. |
+| 422 | ECHO(retrying/retry) | CODE at the diagnostic prompt reinitialises the LCD before retrying the card so a successful retry clears the word. | Retain exact defined-term relation. |
+| 422 | SHORT(6) | Another mount failure writes it again. | Retain direct fact in its explanatory paragraph. |
+
+These are editorial checks only. The full attempt02 batch remains failed at a
+later CPU-flag observer. The closed opening workflow receipt and chapter reviews
+do not qualify advanced services, a physical board, browser operation, audio or
+publication. No product import, syntax check, assembly, build, test, model
+session or capture was performed for this adoption.
+
+Editorial utility identities and stable reader run:
+
+- prose gate script SHA-256: `0fb52353cf22dc3a1a079c819f9d7df174a1961084689b946857747b5862ee66`.
+- complexity script SHA-256: `59ef44ca92c947b97c8f73a6e425cb3c3b321190f0f892590c25190300d286a8`.
+- six-reader gate output SHA-256: `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`.
+- six-reader complexity output SHA-256: `8644f5011f76f6362b414753452a28f7a6ad2f8b0d826850666fda7d5833a08e`.
+
+Record-only complexity prompts retain historical identifiers, unit accounting
+and audit scope. They do not require shortening the reader text. The earlier
+record sections remain evidence of their dated editorial work.

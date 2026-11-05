@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 16. Console paths
 
-<!-- Source mechanisms inspected at offered TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. All unprefixed source ranges
+<!-- Source mechanisms inspected at adopted TEC-OS
+     962853f499f05faf281f6cdff1deca8959f58c2b. All unprefixed source ranges
      below use that revision. No execution or current artifact result is claimed.
-     This describes that source's existing 80-column PISTART, not a later default. -->
+     Current cold-default claims are separate from historical captures. -->
 
 <!-- Historical evidence: all three captures, their recipes and the TERM host
      assembly recipe retain TEC-OS 78127ec. TERM used atom-z80 0.3.7 and a
@@ -265,7 +265,7 @@ on port `03h` bit 7. Port `01h` also selects the seven-segment digits.
 The serial setting is 4800 baud with eight data bits, no parity and two
 stop bits. The timing counts assume the 4 MHz FAST clock
 (`src/layout.asm:14-20`, `src/console.asm:28-45`,
-`tools/build.mjs:25-26`).
+`tools/build.mjs:26-27`).
 
 `TXBYTE` saves the interrupt state and disables maskable interrupts for
 the byte. Nine passes send a start bit followed by eight data bits, least
@@ -282,7 +282,7 @@ pass costs `38 + 16 × RXDLY` T-states. The routine restores the saved
 interrupt state before returning the byte (`src/console.asm:387-421`).
 
 The build derives the five counts from a bit time of
-`4,000,000 / 4800`, about 833.3 T-states (`tools/build.mjs:37-58`):
+`4,000,000 / 4800`, about 833.3 T-states (`tools/build.mjs:38-59`):
 
 | Count | Derivation | Value |
 | --- | --- | ---: |
@@ -298,7 +298,7 @@ the mean of the interrupt-state paths at 65 and 52 T-states and half
 the maximum 38-T-state polling delay. `RXPOLL` covers roughly three and
 a half bit times for one status-listening attempt. A received `NUL` starts
 another attempt rather than becoming a character. The generated counts
-are written to `src/gen/config.asm` (`tools/build.mjs:37-76`,
+are written to `src/gen/config.asm` (`tools/build.mjs:38-77`,
 `src/console.asm:253-279`, `src/console.asm:387-399`).
 
 At `60cfbdc`, the model measured 9,293 T-states for a whole `TXBYTE`
@@ -531,7 +531,7 @@ beginning, `TMSMBEG` selects the hidden destination page and copies across the
 rows outside the move. The move reads the shown page and writes the hidden one.
 A previous pending move is shown before another begins. Ending a move marks it
 complete while `CONST` or `CONIN` shows it with a register-2 update
-(`src/pico.asm:193-245`, `src/pico.asm:501-548`, `src/pico.asm:600-661`,
+(`src/pico.asm:198-250`, `src/pico.asm:506-553`, `src/pico.asm:605-666`,
 `src/console.asm:230-233`, `src/console.asm:295-298`).
 
 The terminal brackets scrolling and line insert/delete with those page
@@ -544,32 +544,34 @@ PICO page operations (`src/term.asm:804-897`, `src/video.asm:91-123`,
 
 At cold boot `TMSINIT` writes `5Ah` and `A5h` to VRAM address `3FFFh`
 through ports `BFh` and `BEh` and reads each back. Both must match.
-`VIDINIT` then sets `CDTMS` and enters `PISTART`. With the matrix keyboard
-also enabled, `PISTART` copies `PITPL` into the BIOS workspace's `PIBLK`,
-sets 80 columns and installs its address in `PIVEC`
-(`src/tms.asm:17-48`, `src/video.asm:22-29`, `src/pico.asm:64-87`).
-That 80-column start belongs to the `ea3ef3d` source inspected here.
+`VIDINIT` then sets `CDTMS` and enters `PISTART`. With the Matrix switch
+enabled, `PISTART` copies `PITPL` into the BIOS workspace's `PIBLK`,
+sets 40 columns and installs its address in `PIVEC`
+(`src/tms.asm:17-48`, `src/video.asm:22-29`, `src/pico.asm:69-92`).
+With the switch disabled or a failed probe, serial remains the console.
 
 `TMSW` supports 80, 40 and 32 columns, all with 24 rows. It selects the
 register template, name-table address and row-address table for that width.
 `PIBLK` also contains the permanent registry-tail record `PICO`, version 3.
 A program finds it with `TNFIND`. `CON` changes width through `PICOWID`
 at offset 24 in its table. Width changes are rejected while the PICO is
-claimed (`src/pico.asm:31-52`, `src/pico.asm:98-191`,
+claimed (`src/pico.asm:31-57`, `src/pico.asm:103-196`,
 `src/cpm/ccpcmd.asm:161-194`, `src/abi.inc:219-231`).
 
 For an active CRT console, `TMSWID` temporarily sets `CONMOD` to serial
 while the IOBYTE still requests CRT. The next console call then copies
 the new dimensions and clears the screen. The selected width remains in
-the BIOS workspace across warm boot (`src/pico.asm:1-21`,
-`src/pico.asm:98-117`, `src/console.asm:165-199`).
+the BIOS workspace across warm boot. Bare `CON CRT` and `CON PICO` bypass
+the width entry and preserve the selected width and any claim
+(`src/cpm/ccpcmd.asm:120-208`, `src/pico.asm:1-21`,
+`src/pico.asm:103-122`, `src/console.asm:165-199`).
 
 Normal PICO text at this source pin is light green on black at all three
 widths. Four ROM byte values select the palette: the `31h` immediate in
 `TMSCOL` and the colour byte in each register template. Colour selection
-adds no field to the display table (`src/pico.asm:342-345`,
-`src/pico.asm:663-679`). Patterns `80h–FFh` are complements of their
-`00h–7Fh` partners, built from the ROM font (`src/pico.asm:286-331`).
+adds no field to the display table (`src/pico.asm:347-350`,
+`src/pico.asm:668-684`). Patterns `80h–FFh` are complements of their
+`00h–7Fh` partners, built from the ROM font (`src/pico.asm:291-336`).
 
 The graphics LCD is a loaded service. Its table gives 21 columns and
 eight rows on the 128 × 64 display. `INIT` obtains the ROM font, probes
@@ -589,8 +591,8 @@ A later `CON UC1` can select the loaded table without loading it again
 (`src/services.asm:629-647`, `src/cpm/ccp.asm:465-485`,
 `src/loader.asm:895-958`).
 
-`VIDHOOK` rejects a nonzero table if the matrix keyboard is unavailable
-or a GLCD table is already present. On success it stores `GLVEC` and
+`VIDHOOK` rejects a nonzero table if the Matrix switch was disabled at
+cold boot or a GLCD table is already present. On success it stores `GLVEC` and
 returns `HL = LINEBUF`, the row buffer used by the driver. A zero table
 pointer removes the hook without those rejection tests
 (`src/services.asm:649-658`, `src/video.asm:150-188`).
