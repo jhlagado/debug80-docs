@@ -211,3 +211,11 @@ navigation and reader-order integration remain with the whole-book pass.
 Current-pin execution or physical-board evidence is not supplied by this
 source-only draft. Historical captures must keep their labels unless a
 separately authorised run replaces them.
+
+## Reader-order confirmation
+
+Independent confirmation atc19e799 closed the reordered byte-contract,
+insertion/cleanup and bank-implementation sequence. The full factual review
+and its citation/navigation corrections were already clear. No bounded
+editorial or factual finding remains. Historical examples and final whole-
+book acceptance retain their separate qualification requirements.

@@ -157,3 +157,17 @@ uses `15-reset-and-boot.md#retained-drive-selection`. Both were read in their
 containing Chapter 27 paragraphs. Only those two link fragments changed in the
 chapter. No source citation, prose claim, recipe or historical output changed.
 Full independent Chapter 27 review remains pending. No execution was performed.
+
+## Independent review and punctuation disposition
+
+The full independent review at6c78f45 cleared factual, preservation, agency
+and reader-journey checks across all47 assigned units. Image/checksum/report
+bounds, prompt/retry, preparation, NMI hazards and comparison limits were
+checked against offered source. Seven fences, two tables and the seven-step
+setup retain their exact historical text.
+
+Accepted the five optional commas before so in editable prose. Removed only
+those commas and reread each causal sentence. Literal procedures, tables and
+output are unchanged. No runtime work was performed. The bounded review has
+no remaining finding. Final source/runtime qualification and navigation
+remain separate.
