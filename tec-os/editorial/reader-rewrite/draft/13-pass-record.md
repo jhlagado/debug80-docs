@@ -17,8 +17,8 @@ The full current replacement outline and house style were read. The KD243
 opening-profile amendment changes no example pin or startup policy here.
 
 Mechanisms were checked from Git source text at TEC-OS
-ea3ef3de9133931e925a0220d51c0e971c1fd8dd. Historical examples retain
-TEC-OS78127ec and the original starter TAS.COM from Thoriumdbee66a,
+ea3ef3de9133931e925a0220d51c0e971c1fd8dd. Actual run provenance is now split by example below rather than inheriting
+the old78127ec checked-at header. Historical TAS.COM is Thoriumdbee66a,
 SHA-25645c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
 The PC recipe and its recorded111-byte result remain historical evidence.
 No current ATOM build, matching-byte result or workflow qualification is claimed.
@@ -49,12 +49,12 @@ not carried-forward old line numbers.
 | Removal order, refusal and generation | ea3ef3d src/loader.asm:128–173 calls only the newest owner's REMOVE, retains refusal state and increments generation only on successful removal. src/cpm/ccpcmd.asm:14–18 routes UNLOAD through that operation |
 | Restart claims and sweep | ea3ef3d src/loader.asm:387–410 rejects a claimed JP before installation. src/loader.asm:634–663 clears claimed slots on cleanup. src/boot.asm:436–509 preserves only jumps strictly above PZTOP, clears trailing bytes and supplies the default RET or EI/RETI sequence |
 | Stack declarations | ea3ef3d src/loader.asm:287–322 checks remaining capacity. src/tables.asm:141–146 supplies8/12/6. drivers/glcd.asm:29–35 declares2/0/6. COUNT's retained MYCO listing adds a PUSH HL word before its tail jump. No dynamic stack measurement is claimed |
-| GLCD failure and startup exception | ea3ef3d drivers/glcd.asm:66–98 obtains FONT, probes the LCD and registers the table. src/services.asm:618–658 distinguishes absent/startup-PICO status2 from missing-keyboard/occupied-table status1. src/cpm/ccp.asm:465–485 requires startup context, SVCRC1 and SVCRA2 for the quiet-success result |
+| GLCD failure and startup exception | ea3ef3d drivers/glcd.asm:66–98 obtains FONT, probes the LCD and registers the table. src/services.asm:618–658 distinguishes absent/startup-PICO status2 from disabled-Matrix-switch/occupied-table status1. src/cpm/ccp.asm:465–485 requires startup context, SVCRC1 and SVCRA2 for the quiet-success result |
 | Registry publication and limits | ea3ef3d src/loader.asm:458–606 checks record endpoints and table page, enforces255 per service/256 total and links proposed records only after checks. Rejected records call REMOVE. Refusal retains pages with no proposed records. A remaining BIOS target can clear flags and retain pages |
 | FIND/LIST and pointer lifetime | ea3ef3d src/loader.asm:773–876 returns the first matching sufficient version and generation. LIST accepts a byte index. src/loader.asm:128–173 increments generation on removal. The RECS INDEX wrap observation follows directly from the retained listing, not a run |
 | Permanent PICO and minor-version use | ea3ef3d src/pico.asm:64–86 registers the ROM tail record. src/abi.inc:149–190 names FIND/LIST, FONT and format4. drivers/glcd.asm:66–72 checks FONT's result. A major-compatible service does not imply that every minor-added call exists |
 
-The old measurements are interpreted only at their original pin:100 image
+The old measurements require their individual run pins, corrected below:100 image
 bytes plus11 relocation bytes,111 meaningful bytes versus128 card bytes,
 one page,420-byte first-install TPA reduction,164-byte alignment gap and
 the003A/0052 counter readings. The RECS table addresses B85F/BBE3 are retained
@@ -114,7 +114,8 @@ Front matter and headings follow the new destination structure.
 There are no omitted assigned units. The five assembly listings, two shell
 recipes and six text captures are unchanged:13 fences total. The five capture
 command comments and the same-run continuation comment also compare exactly
-with10821b6. Nothing was moved out to an unowned file. Duplicate internals
+with10821b6. The initial draft kept all material in its two owned files; the later
+lead disposition retains FAIL in a separately tracked held candidate. Duplicate internals
 teaching is linked to24 while every assigned authoring fact retains a home.
 
 ## Semantic corrections and limitations
@@ -177,3 +178,32 @@ review remains required. Final navigation, final source/media acceptance and
 whole-book reader-order review remain pending. This unit owns only the Chapter13
 draft and this pass record. No source pin, display policy, runtime allocation
 or publication state changes.
+
+## Full independent review and lead disposition
+
+Accepted all four findings in13-independent-review.md. COUNT's workflow is
+actually rerun at78127ec in Book45:1–3,78. CHEAT/RECS/NEEDS retain621201d
+from Book42:1–5,144–146. The PC111-byte result is recorded at7458352 in
+Book31:74 and its earlier TAS byte equality at60e0768 in Book27:76–83.
+The retained100/11 breakdown is a file description, not a new781measurement.
+The lead read these report passages before changing the qualifications.
+
+FAIL first entered the book at5006e2c. No original execution record was
+established by the full audit. Its entire listing, recipe, output and
+interpretation are retained unchanged in13-fail-example-candidate.md outside
+reader prose, pending an original record or a separate allocated proof.
+The remaining failure/cleanup contract stays in the chapter. No assigned
+source or result is discarded and no run pin is guessed. This supersedes
+the original all781provenance and same-chapter-only preservation statements.
+
+The GLCD registration contract now names the disabled Matrix switch and
+requested CRT field, not detected physical keyboard absence or applied mode.
+The loader is the actor rejecting claimed vectors and retaining pages after
+REMOVE returns carry. Removed repeated process certification in example
+introductions while retaining actual programming-boundary warnings.
+
+The lead reread changed passages and neighbouring paragraphs for continuity,
+agency and every comma. Complete fence/capture preservation is checked across
+the chapter and held candidate together. The full independent technical/craft
+review is otherwise clear, with bounded correction confirmation pending.
+No product import, assembly, build, test, capture or runtime occurred.
