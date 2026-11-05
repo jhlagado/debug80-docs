@@ -30,9 +30,8 @@ its code need not remain available after it ends.
 A file of type SVC installs a resident service. Its code stays in memory
 after the installation command ends, including across later program exits.
 It remains until reset or successful removal with `UNLOAD`. Services occupy
-whole pages of 256 bytes below the BDOS, the resident part of TEC-OS that
-supplies file and console operations. Those pages reduce the memory left
-for programs. [Chapter 10](10-memory-for-programs.md) explains that boundary.
+whole pages of 256 bytes. Those pages reduce the memory left for programs.
+[Chapter 10](10-memory-for-programs.md) explains the program-memory boundary.
 
 The starter card's service file is the graphics LCD driver,
 `GLCD.SVC`. The PICO9918 console is in ROM and needs no SVC installation.
@@ -120,8 +119,9 @@ card's container, the collection of CP/M disks stored on that card.
 The starter assigns SYSTEM to A and WORK to B. They are volumes with
 labels as well as drive letters.
 
-`MOUNT` with no arguments lists every volume, including those assigned to
-no drive. Each line gives the volume's container index, label, geometry
+Before changing a drive selection, enter `MOUNT` with no arguments to list
+the starter's volumes, including any assigned to no drive.
+Each line gives the volume's container index, label, geometry
 and current drive. The starter's list has SYSTEM at index 00 and WORK
 at 01. G1M is the 1 MiB geometry and G8M is the 8 MiB geometry. Their
 directory layouts are described in [Appendix E](appendix-e-container-format.md).
@@ -261,6 +261,12 @@ and loading inside the command processor.
 
 ## Changing a drive's volume
 
+The GAMES and SPARE examples use a separate historical four-volume card named
+`my.img`. [Chapter 5](05-cards-on-the-pc.md) gives its PC preparation, including
+usable slots for C and D through `--drives 4`. These examples are not steps
+required on the supplied starter. It has no GAMES or SPARE volume and no usable
+C slot.
+
 `MOUNT C: GAMES` assigns the volume labelled GAMES to C. An index can be
 used instead of the label, as in `MOUNT D: 3`. A volume can occupy at
 most one drive. A drive can be emptied with `MOUNT B:` and filled again
@@ -294,11 +300,9 @@ can then take either geometry. These slots use system memory. Their byte
 cost and placement belong to [Chapter 14](14-state-and-memory.md#allocation-vectors-below-the-workspace).
 `MOUNT` cannot add a slot to the running starter card.
 
-The next two captures retain a historical four-volume card named `my.img`.
-They are additional-card examples, not steps required on the supplied starter.
-[Chapter 5](05-cards-on-the-pc.md) gives its PC preparation: SYSTEM and WORK
-start on A and B, GAMES and SPARE start unassigned and `--drives 4` reserves
-all four slots. GAMES contains `TAS.COM` and SPARE contains `HELLO.TXT`
+On that historical `my.img` card, SYSTEM and WORK start on A and B,
+GAMES and SPARE start unassigned and all four drives have full-size slots.
+GAMES contains `TAS.COM` and SPARE contains `HELLO.TXT`
 with the line `Hello from the PC.`. This card had no startup file, so
 its initial prompt followed the mounted-drive list directly:
 

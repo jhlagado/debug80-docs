@@ -105,7 +105,7 @@ authorised by this task.
 | old05:223–242 | Reset fence unchanged |
 | old05:244–249 | B stays empty, all-or-nothing match/defaults and normal power-cycle loss |
 | old05:251–255 | PC-change/reset rule, cached/free-space state and cold-only card initialisation |
-| old06:329–335 | Resident lifetime, BDOS boundary,256-byte pages, GLCD versus ROM PICO and deeper authoring/memory links |
+| old06:329–335 | Resident lifetime,256-byte pages and program-memory cost, GLCD versus ROM PICO and deeper authoring/memory links. BDOS placement is deferred to10 |
 | old06:337–343 | Installation command/type, explicit drive, SERVICES/UNLOAD and both-display capture context |
 | old06:345–345 | First service capture comment unchanged |
 | old06:346–358 | First service fence unchanged |
@@ -173,9 +173,26 @@ The generous draft was written in full before these reduction passes.
    destination links follow the new ladder. Chapter14's allocation heading and
    Chapter15's retained-selection heading were read as actual draft anchors.
 
-## Delivery boundary
+## Independent review corrections
 
-Own passes complete. Independent editorial/factual review remains required.
+The independent review at27ddf2a identified two sequencing corrections and a
+placement detail outside this operator chapter. All three were accepted:
+
+- The drive section now explicitly directs the reader to enter `MOUNT` before
+  changing a drive selection. It adds no output or new qualification claim.
+- The separate historical `my.img` card and its usable C/D slots are qualified
+  before the first GAMES command. Its complete preparation remains in5 under
+  the closed outline. The assigned historical captures remain complete in4.
+- Resident services still occupy256-byte pages and reduce program memory.
+  The below-BDOS placement and inserted BDOS definition are deferred to10.
+
+The changed passages were read in sequence for prerequisites, sentence purpose,
+agency and punctuation. Text-only comparison confirmed all ten fences and ten
+capture comments unchanged. No runtime work was performed.
+
+## Delivery status
+
+Own passes and accepted independent review corrections are complete.
 Final navigation, current source/media acceptance, opening40-column/font proof
 and whole-book reader-order review remain pending. There is no new example run,
 application qualification, build, import, test, workflow or publication result.
