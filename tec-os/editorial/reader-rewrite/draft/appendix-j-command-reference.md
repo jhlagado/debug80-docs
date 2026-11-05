@@ -12,8 +12,10 @@ nav_group: Appendices
      for the new source offer. -->
 
 A command line contains a command and its arguments, separated by spaces.
-Return ends the line. The maximum is 127 characters and typing the last
-available character also ends it. Commands and arguments are converted to
+Return or `^J` ends the line. The maximum is 127 characters and typing the
+last available character also ends it. `^C` cancels only at the start of
+the line. Later in the line it is ignored. Recall and editing keys are in
+[The first session](01-first-session.md). Commands and arguments are converted to
 capitals before execution. The echo retains the case typed.
 [Work with files](03-work-with-files.md) explains the ordinary operations.
 This appendix gives their exact forms and boundary cases.
@@ -68,7 +70,8 @@ A>
 For built-ins other than COPY and UNLOAD, the word before `?` is the first
 argument, even when a later argument is wrong. A missing required argument
 usually produces `?` alone. TYPE with no name instead prints `NO FILE`.
-COPY and UNLOAD print their own names. An unknown or unloadable program
+CON is another exception: when a separated width is invalid, as in
+`CON PICO 50`, it prints `50?`. COPY and UNLOAD print their own names. An unknown or unloadable program
 prints its command name. [Appendix D](appendix-d-error-messages.md) lists
 the causes and recovery actions.
 
@@ -154,8 +157,9 @@ A>
 
 On B, `COPY A:STARTUP.CMD` instead has distinct source and destination drives
 and copies to B. If a copy fills the drive or directory, COPY closes its
-partial destination before printing `WRITE ERROR`. The destination retains
-the records written before that failure. Its other messages distinguish a
+partial destination before printing `WRITE ERROR`. If that close succeeds,
+the destination retains the records written before the failure. The message
+does not confirm that the close succeeded. Its other messages distinguish a
 missing source, inability to make a destination and failure to close it.
 
 ### REN
@@ -193,15 +197,17 @@ an empty file. The count must be less than the high byte of the word at
 and the complete capacity example.
 
 An existing file of the same name is erased first. A failed make, write or
-close produces `NO SPACE`. After a write failure SAVE closes the file, so
-its directory entry retains the records written. Digital Research's CP/M 2.2
+close produces `NO SPACE`. After a write failure SAVE attempts to close the
+file. If the close succeeds, its directory entry retains the records written.
+`NO SPACE` does not confirm that the close succeeded. Digital Research's CP/M 2.2
 SAVE leaves the file open in that case (`src/cpm/ccpcmd.asm:282-445`).
 
 ### Drives, USER and program lookup
 
 A drive selection is a letter and colon with no other argument. A through D
 are the available TEC-OS drives. The CP/M letters E through P parse as drives
-but selection fails. USER takes one decimal number from 0 to 15. A nonzero
+but selection fails. USER accepts a single digit from 0 to 9 or one of
+10 to 15. Leading-zero forms such as `00` and `03` are rejected. A nonzero
 user number appears before the drive in the prompt.
 
 For a program command the type is replaced by COM, except for SVC. Lookup
@@ -233,7 +239,8 @@ and recovery actions are in [Choose a console](06-choose-a-console.md).
 ### Resident services
 
 A command ending in SVC installs the named file from the current drive or
-an explicitly named drive. It does not use the COM search's fallback to A.
+an explicitly named drive, in the current user area only. It uses neither
+the COM search's retry in user 0 nor its fallback to drive A.
 SERVICES lists installed names and page counts. UNLOAD acts on the newest
 service. Removal fails if that service is not removable or its removal
 routine reports failure. The practical installation rules are in

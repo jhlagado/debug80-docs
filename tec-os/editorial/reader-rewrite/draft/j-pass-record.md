@@ -48,3 +48,13 @@ files happen to match. All are checked in the read source paths cited above.
 
 Mechanical gate is rerun after these edits. Independent editorial/factual
 review and final navigation remain pending. Historical output was not rerun.
+
+## Independent review corrections
+
+The independent full-reference review found five preservation or precision
+errors. Restored LF termination, the noninitial Ctrl-C qualification and the
+editing link. Added CON's separated-width error-pointer exception. Qualified
+COPY and SAVE partial-file retention on a successful close, since the error
+paths discard that close's result. Made the absence of user-0 fallback for
+SVC explicit and specified USER's accepted digit forms. All five findings
+are accepted. Confirmation review and final navigation remain pending.
