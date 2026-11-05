@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "chapter": "01 First session",
-  "status": "reading_prepared_drafting_held_for_actual_scoped_review_receipt",
+  "status": "scoped_workflow_receipt_received_chapter_drafted_independent_chapter_review_pending",
   "intended_reader_path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
-  "reader_draft_created": false,
+  "reader_draft_created": true,
   "authority": {
     "outline_closed_commit": "0e4feea",
     "profile_amendment": "KD243: 40 columns with TEC Compact; preserve startup/GLCD policy",
@@ -222,7 +222,7 @@
     ],
     "boundaries": {
       "front_door": "Read complete current draft/index.md, including prepared setup, first-session/banner boundary, model evidence, key notation and route tables.",
-      "next_chapters": "No current draft/01-first-session.md, 02-make-a-small-program.md or 03-work-with-files.md exists at this snapshot. Closed outline supplies the next-chapter boundary; no adjacent prose is presumed read.",
+      "next_chapters": "Chapters2/3 drafts appeared during authoring. Their complete opening/prerequisite passages were read. Chapter2 starts from A> with supplied TED/TAS on A and authored BANNER on B. Chapter3 starts with BANNER saved on B and defers pager results to its own accepted cases. No neighbouring writer file changed.",
       "later_operator_boundary": "Existing Chapters 4–8 have been read in preceding bounded work. First-session preparation introduces no MOUNT/service implementation, host setup, memory or driver lesson."
     },
     "standards": "STYLE and terms read completely. Human-writing, teaching-prose-review and course-writing standards read, including reader model, banned patterns and review checklist. House route and STYLE override course-specific chapter templates."
@@ -283,7 +283,7 @@
         "member": "packet/batch.mjs",
         "bytes": 51641,
         "sha256": "de52e3a340b711975b0ace15463a6c5acb59a86e67c44b2b86f9ef6ea238f66e",
-        "inspection": "Read complete text/context"
+        "inspection": "Complete relevant workflow/observer contexts read as listed in harness_context_read, not a whole-harness acceptance."
       },
       {
         "member": "packet/binding.json",
@@ -313,19 +313,19 @@
         "member": "stage/results/opening-direct-com.bin",
         "bytes": 384,
         "sha256": "6000fa09fa9bd74309216b1b6d827c3fd962bf04f53ad49b37669de8f452d34f",
-        "inspection": "Identity inventory only; not independently qualified"
+        "inspection": "Actual bytes identified after scoped review. COM prefix compared exactly with261-byte ATOM reference and record padding verified zero. DBG identity matches accepted inventory."
       },
       {
         "member": "stage/results/opening-direct-dbg.bin",
         "bytes": 640,
         "sha256": "7313230d8ae0bdc24d7cd46c923fabd368227785ae02a17ddcec19fcac78a85c",
-        "inspection": "Identity inventory only; not independently qualified"
+        "inspection": "Actual bytes identified after scoped review. COM prefix compared exactly with261-byte ATOM reference and record padding verified zero. DBG identity matches accepted inventory."
       },
       {
         "member": "stage/results/opening-direct-program-observations.json",
         "bytes": 10557,
         "sha256": "adeb1e919b1cd36097ecbd93db7e7b618661319933051a08547e941e800469a3",
-        "inspection": "Identity inventory only; not independently qualified"
+        "inspection": "All observation fields read; all1200 digit values compared with the supplied six-pattern sequence repeated200times. No audible-output inference."
       },
       {
         "member": "stage/results/opening-direct-card.img",
@@ -359,7 +359,7 @@
       }
     ],
     "archive_result_equals_loose_result": true,
-    "opening_phase_records": "Read complete first seven phase objects and their matching archived records, associated full console transcript and full card inventory. These are evidence for scoped review, not accepted reader output.",
+    "opening_phase_records": "Complete first seven phase objects, archived records, full console stream and inventory reread after actual scoped acceptance at4b5b5a50. The six reader excerpts use only this session.",
     "harness_context_read": "packet/batch.mjs lines 1–360, 350–448 and 620–665 read as inert text, including input delivery, observers, first-session/SAMPLE/TED/BANNER workflows, persistence boundary, PC extraction, pager control and later failure context. No import or execution.",
     "batch_status": {
       "status": "FAILED",
@@ -370,32 +370,10 @@
       "failure": "Later FAIL.SVC observer at batch.mjs:434 reads cpu.cpu.f. README identifies runtime flags.C as the actual carry field. This dossier does not adjudicate service results or repair that observer.",
       "earlier_phase_limit": "Journal milestones and earlier assertions do not alone accept any first-session, TED/BANNER, PC7 or pager case."
     },
-    "evidence_review_limit": "This readiness inventory is not the separate positive-case audit. Binary COM/DBG/card evidence is identified, not executed or independently accepted. Pixel/VRAM proof and detailed per-example result reviews remain with their scoped reviewers."
+    "evidence_review_limit": "Scoped receipt accepts covered public workflows only. Chapter1 uses the first seven Machine1 phases. Other accepted TED/BANNER/PC/pager workflows remain with their chapter owners. No advanced-service or whole-batch acceptance."
   },
   "provenance": {
     "historical_originals": "Original captures carry TEC-OS 78127ec metadata and named capture recipes. Keep those pins; checked-at headers alone do not prove a run or qualify a 40-column replacement. Original serial SAMPLE reports 0 by 0, while historical PICO material is explicitly 80 columns.",
-    "historical_tools": {
-      "MOUNT.COM": {
-        "sourcePin": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
-        "bytes": 671,
-        "sha256": "5273f0ba443817f9168a1909fe7c934a5ad186ba1480d35b7ab169c27ead83cc"
-      },
-      "GLCD.SVC": {
-        "sourcePin": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
-        "bytes": 836,
-        "sha256": "ac040f75f8d91226fd80ff9be1764673dec0ec5cde606769425bd815fb75e736"
-      },
-      "TED.COM": {
-        "sourcePin": "128edb7cbb27de17a9d3a7a747706a5b227b30c4",
-        "bytes": 11923,
-        "sha256": "2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f"
-      },
-      "TAS.COM": {
-        "sourcePin": "dbee66a90816df9a5884a08754ebc2d458a38325",
-        "bytes": 10295,
-        "sha256": "45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2"
-      }
-    },
     "attempt02_tested_source": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
     "attempt02_canonical_landing": "962853f499f05faf281f6cdff1deca8959f58c2b",
     "attempt02_artifacts": {
@@ -446,25 +424,166 @@
       "clockISO": "2026-11-01T12:00:00Z",
       "startupPolicy": "unchanged"
     },
-    "reader_source_authority": "Current reader mechanism citations remain ea3ef3d until receiver adoption. Tested 8b8664a/canonical 962853f are evidence/preparation identities only here. No source pin or checked header changed.",
-    "display_evidence_limit": "Decoded screen text, VRAM/register dumps and foreground masks are distinct records. Do not infer physical pixels, colours, keyboard timing or audible output from a journal entry."
+    "reader_source_authority": "Chapter1 uses explicitly authorised962853f source contracts and the tested8b8664a/fa639 ROM evidence. Other reader drafts and historical captures are not repinned.",
+    "display_evidence_limit": "Decoded screen text, VRAM/register dumps and foreground masks are distinct records. Do not infer physical pixels, colours, keyboard timing or audible output from a journal entry.",
+    "attempt02_tool_inputs": {
+      "MOUNT.COM": {
+        "sourcePin": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+        "bytes": 671,
+        "sha256": "5273f0ba443817f9168a1909fe7c934a5ad186ba1480d35b7ab169c27ead83cc"
+      },
+      "GLCD.SVC": {
+        "sourcePin": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+        "bytes": 836,
+        "sha256": "ac040f75f8d91226fd80ff9be1764673dec0ec5cde606769425bd815fb75e736"
+      },
+      "TED.COM": {
+        "sourcePin": "128edb7cbb27de17a9d3a7a747706a5b227b30c4",
+        "bytes": 11923,
+        "sha256": "2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f"
+      },
+      "TAS.COM": {
+        "sourcePin": "dbee66a90816df9a5884a08754ebc2d458a38325",
+        "bytes": 10295,
+        "sha256": "45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2"
+      }
+    }
   },
   "unresolved_acceptance_gaps": [
-    "Await the actual lead receipt closing the separate first-session/SAMPLE positive-case review before drafting any result-based Chapter 1 prose. No receipt was supplied for this task.",
-    "TED/BANNER rejection, repair and persistence, PC7 and pager retain their separate independent-review boundaries. This dossier neither closes them nor splices their captures into SAMPLE.",
-    "Basic command-line correction, cancellation and recall are required user actions. No named attempt02 phases demonstrate the complete historical correction/recall sequence; recheck claim support and accepted scope before selecting examples. Do not invent key or prompt bytes.",
-    "The direct opening sequence selects B and returns to A but does not run DIR on B. Do not present the old B: DIR NO FILE capture as a new 40-column run.",
-    "Historical first-key Ctrl-C wording and unconditional nothing-is-lost advice require correction to an empty current line and successful flush, with failed/drop-write consequences. No new failure capture is qualified here.",
-    "Scoped acceptance must identify the exact tested source, prepared card, SAMPLE/tool identities and allowed screen/console boundaries. Full batch FAILED remains unchanged even if bounded positives close.",
-    "Receiver source adoption, final terms first-use credits, adjacent Chapters 2/3 drafts, navigation and final book acceptance remain separate."
+    "Independent factual/editorial review of the new Chapter1 draft remains open.",
+    "Correction/cancel/recall and failure advice are verified source-backed actions, not new captured workflows.",
+    "No fresh B: DIR NO FILE capture is inserted. Existing historical literal evidence stays in01-pass-record.md.",
+    "Whole batch remains FAILED. No advanced service, physical, browser or audible-output acceptance.",
+    "Final navigation, adjacent chapter integration and whole-book acceptance remain separate."
   ],
   "constraints": {
     "owned_file_only": "chapter-01-readiness.json",
     "product_execution": false,
     "product_imports": false,
     "builds_tests_captures": false,
-    "reader_output_inserted": false,
+    "reader_output_inserted": true,
     "shared_ledger_navigation_edits": false,
-    "drafting_hold": "Wait for the actual scoped-review receipt. No automatic continuation into reader drafting."
+    "drafting_hold": "Closed for the covered Chapter1 workflow by explicit user receipt. No extra runtime authorised."
+  },
+  "scoped_review_receipt": {
+    "commit": "4b5b5a50",
+    "path": "studies/p3-tec-os/reviews/book-opening-workflows.md",
+    "sha256": "1368e77c9bc71797d40d42260110ff7fdbc8c430fb3cf46782214f041638e407",
+    "attempt_commit": "e77c7ef0f81c42d94f12391b099f4cf8c4acd9a6",
+    "read_in_full": true,
+    "scope": "Covered public workflows only. Whole batch FAILED.",
+    "chapter01_evidence": [
+      {
+        "member": "stage/results/001-SAMPLE-cold.json",
+        "sha256": "7455c39f60f9f3ce28494ee4568779e829240c70d7995ea4663f221e965926b4",
+        "rows_one_based": [
+          1,
+          8
+        ],
+        "fence_body_sha256": "79638c9f637b9b1d51b8110fc835ba0036397d29ac6ffbec78ed4b8ef06a9352"
+      },
+      {
+        "member": "stage/results/002-opening-dir.json",
+        "sha256": "a565427a4938e17a72007269cb1adfe325c154d77921b757d28b02f5c8e9787b",
+        "rows_one_based": [
+          8,
+          12
+        ],
+        "fence_body_sha256": "10ae433aaa0cde918fba4389288aea970547d05726d350aea1cf4a7de8d66403"
+      },
+      {
+        "member": "stage/results/004-opening-system.json",
+        "sha256": "dbf269a15d34a41265660c757463b106a7f43336ed32804b69fd48e29cf2421e",
+        "rows_one_based": [
+          12,
+          14
+        ],
+        "fence_body_sha256": "8df7bfb1ebe85742b6c8e2cc059a5b89178fb49cc03a5633040ae4589716316d"
+      },
+      {
+        "member": "stage/results/005-opening-direct-build.json",
+        "sha256": "8479fc544862a1311f03dd8201c83054793468d4e367809fb167dfea9ab9c10a",
+        "rows_one_based": [
+          14,
+          17
+        ],
+        "fence_body_sha256": "fce941a6fb364ffd43be12e23bfc71830ff51185099e66fc525453faf856cfe2"
+      },
+      {
+        "member": "stage/results/006-opening-direct-run.json",
+        "sha256": "c5edecdfd8e5bbdc73dca6671c8421e9296b5bde0bc830784e7baf74d770e1cc",
+        "rows_one_based": [
+          17,
+          22
+        ],
+        "fence_body_sha256": "f0d76e9e9dd23cc649655ef90ab8c1f9b9c40a527dfe1b153f332cbd2d453cd8"
+      },
+      {
+        "member": "stage/results/007-opening-direct-flush.json",
+        "sha256": "c1ec9e1e7aed7e108926e3a639a32972a82676aafbd5987d8ded4de6843aa94a",
+        "rows_one_based": [
+          22,
+          23
+        ],
+        "fence_body_sha256": "98d97713e3ff40dfe83fe1f78753a56b33698bb79cdb4337448613584276c9c4"
+      }
+    ]
+  },
+  "resolved_by_receipt": [
+    "Scoped public-workflow authoring hold for Chapter1 closed by4b5b5a50.",
+    "First seven Machine1 phases support the new six exact screen excerpts."
+  ],
+  "completed_editorial_checks": [
+    {
+      "command": [
+        "python3",
+        "/Users/johnhardy/.agents/skills/human-writing/scripts/prose_gate.py",
+        "--json",
+        "tec-os/editorial/reader-rewrite/draft/01-first-session.md"
+      ],
+      "script_sha256": "0fb52353cf22dc3a1a079c819f9d7df174a1961084689b946857747b5862ee66",
+      "input_sha256": "dc76d143773c963725b235256b3268b23f9be6068d40e07382a1eb6765e7d015",
+      "exit_code": 0,
+      "stdout": "[]\n",
+      "stderr": "",
+      "disposition": "No gate findings."
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/johnhardy/.agents/skills/human-writing/scripts/sentence_complexity.py",
+        "tec-os/editorial/reader-rewrite/draft/01-first-session.md"
+      ],
+      "script_sha256": "59ef44ca92c947b97c8f73a6e425cb3c3b321190f0f892590c25190300d286a8",
+      "input_sha256": "dc76d143773c963725b235256b3268b23f9be6068d40e07382a1eb6765e7d015",
+      "exit_code": 0,
+      "stdout": "tec-os/editorial/reader-rewrite/draft/01-first-session.md:11: LONG(42)\n  ROM SHA-256 fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d.\ntec-os/editorial/reader-rewrite/draft/01-first-session.md:11: ECHO(review/reviews)\n  Scoped result review: Origo 4b5b5a50, reviews/book-opening-workflows.md.\ntec-os/editorial/reader-rewrite/draft/01-first-session.md:11: SHORT(6)\n  No final integration or publication claim. -->\ntec-os/editorial/reader-rewrite/draft/01-first-session.md:43: SHORT(4)\n  Powering on starts TEC-OS.\ntec-os/editorial/reader-rewrite/draft/01-first-session.md:64: SHORT(5)\n  The CODE line was automatic.\ntec-os/editorial/reader-rewrite/draft/01-first-session.md:85: SHORT(6)\n  The CODE file holds source text.\ntec-os/editorial/reader-rewrite/draft/01-first-session.md:145: SHORT(5)\n  CODE is already on A.\ntec-os/editorial/reader-rewrite/draft/01-first-session.md:145: ECHO(type/types)\n  You type SAMPLE without CODE in the build command because TAS supplies the file types.\ntec-os/editorial/reader-rewrite/draft/01-first-session.md:163: SHORT(5)\n  Typing CODE now runs CODE.\ntec-os/editorial/reader-rewrite/draft/01-first-session.md:197: SHORT(3)\n  Earlier commands omitted.\ntec-os/editorial/reader-rewrite/draft/01-first-session.md: 114 sentences, mean 11.5 words, 0.50 joints/sentence, 9% flagged, grade 5.9\n",
+      "stderr": "",
+      "disposition": "Every prompt inspected. Metadata/hash/excerpt prompts retained as provenance. SHORT statements locate the next action or define source text. Type versus file types has two distinct meanings. No automatic shortening; no whole-book quality claim."
+    }
+  ],
+  "draft_sha256": "dc76d143773c963725b235256b3268b23f9be6068d40e07382a1eb6765e7d015",
+  "literal_checks": {
+    "current_screen_fences": 6,
+    "exact_phase_row_slices": true,
+    "historical_assigned_fences_held_byte_exact": 9,
+    "no_mixed_session_excerpts": true,
+    "no_invented_correction_or_recall_output": true
+  },
+  "final_combined_prose_gate": {
+    "command": [
+      "python3",
+      "/Users/johnhardy/.agents/skills/human-writing/scripts/prose_gate.py",
+      "--json",
+      "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+      "tec-os/editorial/reader-rewrite/draft/01-pass-record.md"
+    ],
+    "input_sha256": {
+      "tec-os/editorial/reader-rewrite/draft/01-first-session.md": "dc76d143773c963725b235256b3268b23f9be6068d40e07382a1eb6765e7d015",
+      "tec-os/editorial/reader-rewrite/draft/01-pass-record.md": "6e7ba31dad019a0841877d7671d8daa6622663bb8723835c01d7a0ae789f3b52"
+    },
+    "exit_code": 0,
+    "findings": [],
+    "disposition": "Reader and pass record gate clear after resolving the record-only count phrasing. Mechanical result does not close independent chapter review."
   }
 }
