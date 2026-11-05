@@ -178,3 +178,14 @@ The source offer is not repinned. Startup and GLCD policy are unchanged.
 Only draft/15-reset-and-boot.md and draft/15-pass-record.md are written for
 this unit. Commits use --only with those exact owned paths. No root chapter,
 shared ledger or another writer's staged file is part of this unit.
+
+## Final-root appendix navigation
+
+Normalised all2 appendix links in the chapter from ../../../appendix-
+targets to final-root sibling paths. The published chapter and appendices
+share the TEC-OS root. These targets intentionally do not resolve beside the
+editorial draft files. The earlier draft-directory link checks describe the
+previous navigation state and do not certify the final-root arrangement.
+All existing appendix filenames and anchors are retained. Only link prefixes
+changed, with no source claim, historical evidence or prose change. Root-book
+integration remains with the final placement pass. No execution was performed.

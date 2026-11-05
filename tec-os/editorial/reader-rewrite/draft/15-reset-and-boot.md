@@ -126,7 +126,7 @@ character. A missing display adds that bounded wait. Drives C and D have
 no LCD row. Row 3 carries `CARD?` at the diagnostic prompt or `GLCD?`
 after a failed `CON UC1` load of `GLCD.SVC` (`src/lcd.asm:29-58`,
 `src/lcd.asm:72-79`, `src/lcd.asm:122-155`, `src/boot.asm:817-829`,
-`src/loader.asm:885-913`). [Appendix G](../../../appendix-g-tec-1g.md)
+`src/loader.asm:885-913`). [Appendix G](appendix-g-tec-1g.md)
 gives the display's hardware connections.
 
 A diagnostic retry starts at step 8. `R` jumps to `COLDRT`, which resets
@@ -261,7 +261,7 @@ assignments while recognition succeeds and the card still has the volumes.
 A failed recognition or failed reselection leaves the card's defaults.
 Power cycling normally removes the recognisable RAM state and resetting
 during cold boot clears it as described above.
-[Appendix D](../../../appendix-d-error-messages.md#write-lost) gives the
+[Appendix D](appendix-d-error-messages.md#write-lost) gives the
 recovery rules for failed cache writes
 (`src/boot.asm:240-312`, `src/volsvc.asm:31-159`).
 
