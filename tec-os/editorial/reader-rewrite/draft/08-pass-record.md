@@ -236,3 +236,23 @@ Independent confirmation at8aaec1b accepted the local B/BC definition and
 PUSH AF clarification. No bounded editorial or factual finding remains.
 Current runtime qualification, linked lesson integration and the final
 reader-order pass remain pending.
+
+## Reopened new-example gate: LINE
+
+The source-backed addition was not an existing book example. Its test-file
+identity does not qualify its full positive workflow. Offered chain.test.mjs
+248–258 and441–451 use LINE for abort/reset while input waits. They do not
+prove normal line completion, GOT output and ordinary return. No positive
+qualified run has been located.
+
+Moved the entire unchanged LINE listing and proposed interpretation out of
+reader prose into08-line-example-candidate.md. No code or teaching content
+is discarded. Main8 retains the already verified SHOW save/restore excerpt
+and source-supported console API contracts. Its full interactive exercise
+remains held. This supersedes any earlier implication that static review
+closed the example-before-explanation requirement.
+
+Actual positive assembly/input/output/return proof needs its own allocated
+run at the adopted source. No new run was performed and no existing guard
+allocation was expanded. Source/craft checks remain useful but do not close
+this workflow gate.
