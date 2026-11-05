@@ -190,3 +190,13 @@ read-back remain open. The original captures retain their actual historical
 scope. Compact-style assembly proof, the KS48 chosen-font/default workflow
 and publication remain held. I have not changed a shared ledger or any file
 outside the two owned paths in the repository.
+
+## Lead whole-reference read and Matrix condition
+
+Read the complete reference in order after the independent clear review.
+Three phrases still described physical keyboard absence. Inspected
+ea3ef3d video.asm125–190 and pico.asm54–87: VIDHOOK and PISTART use CDMTX,
+which records the Matrix enable switch rather than a physical keyboard probe.
+The VIDEO restoration, DRVR installation and no-PICO-record explanations now
+name the disabled switch. No literal listing, historical output or timing
+changed. Bounded independent confirmation is pending. No execution occurred.
