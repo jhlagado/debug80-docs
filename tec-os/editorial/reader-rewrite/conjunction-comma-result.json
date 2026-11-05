@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "all315_decisions_applied_or_retained; independent slice confirmations in progress",
+  "status": "all315_decisions_applied_or_retained; six slice and aggregate independent confirmations clear",
   "reader_snapshot_commit": "50634512002c6aeb6610a0a375ae407607e22560",
   "frozen_inventory_sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326",
   "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
@@ -594,5 +594,14 @@
     "F-J": "5063451 all changed contexts, clear",
     "7_refinement": "58dcb2d all changed contexts and actual8/11/25/H destinations, clear"
   },
-  "limits": "No product execution, new runtime qualification, root integration, publication or final book acceptance."
+  "limits": "No product execution, new runtime qualification, root integration, publication or final book acceptance.",
+  "aggregate_independent_confirmation": "comma-gate-independent.json at59ddfc7",
+  "slice_confirmations": {
+    "04-10": "Lead readback atf24d701",
+    "11-17": "comma-independent-11-17.json",
+    "18-19": "comma-independent-18-19.json",
+    "20-28": "comma-independent-20-28.json",
+    "A-E": "comma-independent-A-E.json",
+    "F-J": "Lead readback at5063451"
+  }
 }
