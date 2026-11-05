@@ -77,7 +77,8 @@ SAY:
 ; Print the $-ended label at DE, then A
 ; in hex. Changes AF, BC and DE.
 ; Takes DE and A. Returns no value.
-; Restores HL after both print calls.
+; Restores HL after the label and
+; digits.
 
 LABHEX:
   push af        ; the value, across the
@@ -719,7 +720,7 @@ The byte counts below describe source text, not assembled programs.
 
 | File | Original bytes | Candidate bytes |
 | --- | ---: | ---: |
-| HWLIB.ASM | 1755 | 2600 |
+| HWLIB.ASM | 1755 | 2606 |
 | BOARD.ASM | 1340 | 1849 |
 | LCDMSG.ASM | 577 | 928 |
 | DIGCLK.ASM | 1751 | 2439 |
@@ -732,7 +733,7 @@ Full SHA-256 identities, original followed by candidate:
 
 - HWLIB:
   `f79687a437ce6a74c90c34272d93093f61731c63cd13cb8a3c9964f4cf215338`
-  `113511ae0a43a681bc177efaec14b86f9901edb354aa61e3ba2a3a768cdef6ea`
+  `4e24317cfee3bff6e7c840e41a1fa7c73fa82540faeee4f7de24f6f09d7e89b0`
 - BOARD:
   `76abc8bcb272aa567a118fef1e22320d823109b4885e64d21c8d9c3974123288`
   `bf27e8f2b4336f097a195e781fd43bb8f7ff16aa685c2f0ae3dda6cc8c3aa80d`
@@ -879,3 +880,16 @@ The final craft pass checked paragraph and sentence purpose, agency, every
 comma and the reader's route through candidates, identities, blockers and
 future observations. Original literal text and comment meaning take precedence
 over stylistic tidying. The status remains source-only and unassembled.
+
+## LABHEX header review disposition
+
+The confirmed header finding replaces the added claim “Restores HL after both
+print calls” with “Restores HL after the label and digits.” The latter is
+wrapped over two comment lines to keep the 40-column limit. LABHEX calls SAY
+for the label, then falls through to HEX, which prints two digits. The revised
+header describes the saved HL across that whole sequence without suggesting
+there are only two BDOS calls. Original comment wording and all executable
+statements remain unchanged. HWLIB's source size and SHA-256 above were
+refreshed after this single header change. Full independent review of the
+eight candidates remains open. This correction is source-only, with no
+assembly, import or runtime qualification.
