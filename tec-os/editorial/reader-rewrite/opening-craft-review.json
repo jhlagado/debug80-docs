@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "status": "incremental_independent_review",
+  "scope": {
+    "product_execution": false,
+    "source_or_reader_edits": false,
+    "runtime_reacceptance": false,
+    "chapter_5_review": false,
+    "task": "Complete teaching, craft, prerequisite and evidence-boundary review of Chapters1-3; findings only",
+    "reader": "Technically interested novice without CP/M or TEC-1G experience",
+    "authority": "Closed practical-first outline0e4feea plus KD243 and scoped workflow closure4b5b5a50. Historical material retains its actual pins."
+  },
+  "chapters": {
+    "1": {
+      "status": "review_complete_one_polish_finding",
+      "reviewed_commit": "33f3b8a4e3a568dcde7aba467046b12b85dc96df",
+      "files": [
+        {
+          "commit": "33f3b8a4e3a568dcde7aba467046b12b85dc96df",
+          "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+          "git_blob": "7b82711627034f00a1221ab0e46b3bbf5d0cea7b",
+          "sha256": "dc76d143773c963725b235256b3268b23f9be6068d40e07382a1eb6765e7d015",
+          "bytes": 9118
+        },
+        {
+          "commit": "33f3b8a4e3a568dcde7aba467046b12b85dc96df",
+          "path": "tec-os/editorial/reader-rewrite/draft/01-pass-record.md",
+          "git_blob": "371f16b051d52c1d5021eca6b4d8e377ce2edda1",
+          "sha256": "6e7ba31dad019a0841877d7671d8daa6622663bb8723835c01d7a0ae789f3b52",
+          "bytes": 27613
+        },
+        {
+          "commit": "33f3b8a4e3a568dcde7aba467046b12b85dc96df",
+          "path": "tec-os/editorial/reader-rewrite/chapter-01-readiness.json",
+          "git_blob": "11feb1b07b881209619d6d5727ac7ab6b141e109",
+          "sha256": "b5aac88589e18ed9071774b15fbcad37def78a7b9721c880feebf97027e2a75f",
+          "bytes": 26134
+        }
+      ],
+      "read_scope": "Whole reader chapter, pass record and readiness data. Entire frozen introduction; full assigned console/keyboard, command/history and cache/flush passages with containing context. All71 movement units and6 explicit fragments reconciled with the77 pass-record entries. Full outline and profile amendment read.",
+      "original_sources": [
+        {
+          "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+          "path": "tec-os/01-introduction.md",
+          "git_blob": "e51130b3c146f521b06feb3d810a2b495a7be54d",
+          "sha256": "f5f1a1d7af232676a25761dcbe15cb74991a3dc80d8f418d30ea53a56c9cd508",
+          "bytes": 6727
+        },
+        {
+          "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+          "path": "tec-os/02-console.md",
+          "git_blob": "78ec483b96e7d8cf9d88d38bc3e56bcd0eaf5dad",
+          "sha256": "a1c5c3a68ff0f8935797179b30cbd2809f285555c458604daa3916f74e98ac55",
+          "bytes": 15799
+        },
+        {
+          "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+          "path": "tec-os/03-command-line.md",
+          "git_blob": "176ae314243cae5e9c02112422b0ca81a8a49d3a",
+          "sha256": "61bf793e23c7649738414ca56b9960595191f19856b61664ceb1a0c677f96ea0",
+          "bytes": 25142
+        },
+        {
+          "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+          "path": "tec-os/05-drives-and-cache.md",
+          "git_blob": "a6b2322c9202203127cb9f6bf3aa79dc5219eab4",
+          "sha256": "2ac8954d8109d315a76f5f6926aaf67c0bd17e23262ad0eac65a5a9730cb0ebb",
+          "bytes": 12706
+        }
+      ],
+      "assigned_ranges": [
+        {
+          "path": "tec-os/01-introduction.md",
+          "assigned_ranges": [
+            "1-6",
+            "8",
+            "10-11",
+            "13-17",
+            "21-23",
+            "38",
+            "40-41",
+            "43",
+            "44-52",
+            "54-56",
+            "58-63",
+            "65-71",
+            "73",
+            "75-77",
+            "79",
+            "81",
+            "82-87",
+            "89-93",
+            "95",
+            "97",
+            "98-104",
+            "106-107",
+            "109",
+            "111-112",
+            "114",
+            "115-125",
+            "127-132",
+            "134",
+            "136",
+            "137-142",
+            "165",
+            "172-175"
+          ]
+        },
+        {
+          "path": "tec-os/02-console.md",
+          "assigned_ranges": [
+            "1-6",
+            "8",
+            "10",
+            "12-15",
+            "46",
+            "259",
+            "301-311",
+            "264-267",
+            "268-269",
+            "303",
+            "305-306",
+            "309",
+            "311"
+          ]
+        },
+        {
+          "path": "tec-os/03-command-line.md",
+          "assigned_ranges": [
+            "1-6",
+            "8",
+            "10-14",
+            "21",
+            "23-28",
+            "30",
+            "31-44",
+            "46-49",
+            "129",
+            "377",
+            "621",
+            "623-631",
+            "633",
+            "634-651"
+          ]
+        },
+        {
+          "path": "tec-os/05-drives-and-cache.md",
+          "assigned_ranges": [
+            "1-6",
+            "8",
+            "10-14",
+            "16-20",
+            "123",
+            "125-133",
+            "135-139",
+            "141-145",
+            "147-155",
+            "157-163",
+            "165-167",
+            "169-178",
+            "180-182",
+            "184-187",
+            "189",
+            "190-199",
+            "201-205",
+            "207-210"
+          ]
+        }
+      ],
+      "teaching_checks": [
+        {
+          "context": "Opening and prepared machine",
+          "result": "clear",
+          "reason": "States supplied files and the practical route before power-on. Hardware requirements are a prepared configuration with a reference, not a setup procedure. Model-screen origin is explicit."
+        },
+        {
+          "context": "First prompt",
+          "result": "clear",
+          "reason": "The screen grounds volume and current-drive definitions. Automatic startup is distinguished from reader input without loader, driver-installation or alternate-console teaching."
+        },
+        {
+          "context": "Files at the prompt",
+          "result": "clear",
+          "reason": "DIR action and Return precede the result. Names, ASM/COM and the assembler follow the visible listing. Free-space units are explained beside the count. No host preparation is needed."
+        },
+        {
+          "context": "Correction and recall",
+          "result": "clear",
+          "reason": "Keys are given before later commands. Ctrl notation precedes its table; correction, whole-line discard and recall are concrete actions. The program-input limitation and empty-prompt Ctrl-C cross-reference prevent transfer of the table to unrelated input."
+        },
+        {
+          "context": "Drive changes and SAMPLE",
+          "result": "clear",
+          "reason": "Drive letters and a concrete B-to-A round trip precede the build. Source-to-COM assembly is explained through supplied SAMPLE. An edit requires reassembly. Run output ends at a fresh prompt."
+        },
+        {
+          "context": "Ending and preservation",
+          "result": "clear",
+          "reason": "Completed application save/exit, an empty line, Ctrl-C without Return and a fresh successful prompt form the practical route. Write lost is explicitly failed preservation, dropped writes cannot be recovered by retry and a flush cannot save unsaved editor text. Card removal/reset precautions are actions rather than cache architecture."
+        }
+      ],
+      "craft_checks": {
+        "complete_sentence_and_paragraph_read": true,
+        "journey": "prepared machine -> prompt -> DIR/names -> correction/recall -> drive changes -> supplied build/run -> preservation",
+        "deletion_read": "No required structural deletion. Repeated current-drive wording links drive selection to the build. Short action introductions lead to real examples. The final removal/reset sentence adds an operation rather than recapping.",
+        "agency": "No false interior or social agency found. Subjects perform typing, reading, writing, loading, conversion or reported output.",
+        "punctuation": "All complete paragraphs and key rows read jointly. Definitions and supplementary phrases retain their boundaries; literal numeric grouping and excerpt punctuation are immutable. Three optional joins are recorded below.",
+        "mechanical_search": "Explicit vocabulary, throat-clearing, importance, copula, mind-verb and punctuation search performed; matches read in full contexts. No new gate/test/runtime was run for this review."
+      },
+      "evidence_checks": {
+        "scope": "Static comparison of already accepted artifacts only",
+        "accepted_attempt": "e77c7ef0f81c42d94f12391b099f4cf8c4acd9a6",
+        "current_excerpt_count": 6,
+        "all_exact_contiguous_screen_row_slices": true,
+        "excerpt_boundaries": [
+          {
+            "member": "stage/results/001-SAMPLE-cold.json",
+            "sha256": "7455c39f60f9f3ce28494ee4568779e829240c70d7995ea4663f221e965926b4",
+            "rows_one_based": [
+              1,
+              8
+            ],
+            "fence_body_sha256": "79638c9f637b9b1d51b8110fc835ba0036397d29ac6ffbec78ed4b8ef06a9352"
+          },
+          {
+            "member": "stage/results/002-opening-dir.json",
+            "sha256": "a565427a4938e17a72007269cb1adfe325c154d77921b757d28b02f5c8e9787b",
+            "rows_one_based": [
+              8,
+              12
+            ],
+            "fence_body_sha256": "10ae433aaa0cde918fba4389288aea970547d05726d350aea1cf4a7de8d66403"
+          },
+          {
+            "member": "stage/results/004-opening-system.json",
+            "sha256": "dbf269a15d34a41265660c757463b106a7f43336ed32804b69fd48e29cf2421e",
+            "rows_one_based": [
+              12,
+              14
+            ],
+            "fence_body_sha256": "8df7bfb1ebe85742b6c8e2cc059a5b89178fb49cc03a5633040ae4589716316d"
+          },
+          {
+            "member": "stage/results/005-opening-direct-build.json",
+            "sha256": "8479fc544862a1311f03dd8201c83054793468d4e367809fb167dfea9ab9c10a",
+            "rows_one_based": [
+              14,
+              17
+            ],
+            "fence_body_sha256": "fce941a6fb364ffd43be12e23bfc71830ff51185099e66fc525453faf856cfe2"
+          },
+          {
+            "member": "stage/results/006-opening-direct-run.json",
+            "sha256": "c5edecdfd8e5bbdc73dca6671c8421e9296b5bde0bc830784e7baf74d770e1cc",
+            "rows_one_based": [
+              17,
+              22
+            ],
+            "fence_body_sha256": "f0d76e9e9dd23cc649655ef90ab8c1f9b9c40a527dfe1b153f332cbd2d453cd8"
+          },
+          {
+            "member": "stage/results/007-opening-direct-flush.json",
+            "sha256": "c1ec9e1e7aed7e108926e3a639a32972a82676aafbd5987d8ded4de6843aa94a",
+            "rows_one_based": [
+              22,
+              23
+            ],
+            "fence_body_sha256": "98d97713e3ff40dfe83fe1f78753a56b33698bb79cdb4337448613584276c9c4"
+          }
+        ],
+        "historical_fences_in_pass_record": 9,
+        "all_equal_frozen_original_fences": true,
+        "historical_provenance": "78127ec serial/80-column/fault records remain outside the current cold40 reader route. No B-DIR NO FILE result or new correction/recall transcript is invented.",
+        "no_audio_or_physical_inference": "Speaker tone is described as source content. Screen and LCD/digit effects are bounded to model evidence.",
+        "whole_batch": "FAILED remains explicit; scoped authoring is not advanced-service, browser, physical, audio or publication acceptance."
+      },
+      "findings": [
+        {
+          "id": "OC1-P01",
+          "severity": "polish",
+          "kind": "optional_punctuation",
+          "problem": "Three commas add no necessary boundary in the new prose/table. The minimum-punctuation rule favours removing them. No literal output changes are proposed.",
+          "cases": [
+            {
+              "context": {
+                "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+                "commit": "33f3b8a4e3a568dcde7aba467046b12b85dc96df",
+                "start_line": 115,
+                "end_line": 115,
+                "full_context": "| `^N` | Moves forward through recalled commands, with an empty line past the newest |"
+              },
+              "proposal": "| `^N` | Moves forward through recalled commands with an empty line past the newest |",
+              "reason": "The with phrase describes the forward-recall end state and attaches directly without a parenthetical pause."
+            },
+            {
+              "context": {
+                "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+                "commit": "33f3b8a4e3a568dcde7aba467046b12b85dc96df",
+                "start_line": 163,
+                "end_line": 164,
+                "full_context": "Typing `SAMPLE` now runs `SAMPLE.COM`. TEC-OS loads the program and starts it.\nThe program prints its greeting and screen size, then returns to the prompt:"
+              },
+              "proposal": "Typing `SAMPLE` now runs `SAMPLE.COM`. TEC-OS loads the program and starts it.\nThe program prints its greeting and screen size then returns to the prompt:",
+              "reason": "Then joins successive predicates with one subject. Removing the comma leaves the operation order clear."
+            },
+            {
+              "context": {
+                "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+                "commit": "33f3b8a4e3a568dcde7aba467046b12b85dc96df",
+                "start_line": 208,
+                "end_line": 213,
+                "full_context": "A `Write lost` message means that some pending changes could not be written.\nThe new prompt after that message does not establish successful preservation.\nThose failed changes have been dropped so another `^C` cannot recover them.\nKeep a separate copy of valuable work. [Chapter 5](05-cards-on-the-pc.md)\nexplains card copies and recovery, and\n[Appendix D](appendix-d-error-messages.md) explains the failure messages."
+              },
+              "proposal": "Keep a separate copy of valuable work. [Chapter 5](05-cards-on-the-pc.md)\nexplains card copies and recovery and\n[Appendix D](appendix-d-error-messages.md) explains the failure messages.",
+              "reason": "Both linked subjects are explicit and the parallel explains clauses remain clear without a conjunction comma. No list or apposition boundary is needed."
+            }
+          ],
+          "applied": false
+        }
+      ],
+      "substantive_findings": 0,
+      "polish_findings": 1,
+      "remaining_limits": [
+        "Author disposition of punctuation finding",
+        "Adjacent Chapters2-3 continuity review after their completed commits",
+        "Final navigation and whole-book acceptance remain separate"
+      ]
+    },
+    "2": {
+      "status": "awaiting_completed_author_commit",
+      "review_started": false
+    },
+    "3": {
+      "status": "completed_commit_received_review_next",
+      "requested_commit": "5b69415",
+      "review_started": false
+    }
+  }
+}
