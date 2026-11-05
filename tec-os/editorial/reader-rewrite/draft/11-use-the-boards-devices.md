@@ -31,7 +31,7 @@ affect devices TEC-OS is using at the same time.
 Port `01h` selects a 7-segment digit with bits 0–5, drives the speaker with bit
 7 and carries serial transmission with bit 6. Leaving bit 6 low during a digit
 scan or tone sends noise on a possible console connection. The PICO9918 can also
-be the console, so changing its registers can disrupt terminal output. The ROM
+be the console so changing its registers can disrupt terminal output. The ROM
 calls keep the serial line idle during digit and tone output and record display
 claims before graphics access.
 
@@ -59,7 +59,7 @@ give its ABI version, 5.1. That is separate from the ROM's product version,
 which INFO reports later.
 
 A program checks the signature and major version before calling `C008h`. The
-major must be exactly 5. A new major may renumber services, while a new minor
+major must be exactly 5. A new major may renumber services while a new minor
 adds numbers at the end. Code using the 5.0 calls can therefore run on 5.1. A
 program requiring an added minor-version call must check that version too.
 
@@ -120,7 +120,7 @@ the hardware status rule. Number 15 returns the ROM font and was added in ABI
 
 The hardware services use the caller's stack. PUTAT has the largest bound: 22
 bytes below the return address supplied by CALL. That fits the inherited 30-byte
-allowance from Chapter 10, but a caller must also count its own nested calls and
+allowance from Chapter 10 but a caller must also count its own nested calls and
 saved registers. Appendix B lists the individual bounds. These are bounds, not
 newly measured peaks.
 
@@ -137,12 +137,11 @@ set only when all four match. On failure the examples branch to NOTHW, which
 prints a message through BDOS function 9 and ends without using a hardware port.
 
 The examples share this complete historical `HWLIB.ASM`. It contains both code
-and data, so each program includes it after its own entry code. SAY prints a
+and data so each program includes it after its own entry code. SAY prints a
 dollar-terminated string. A CALL to SAY returns to its caller while a top-level
 jump to it prints and ends through the inherited return word. LABHEX prints a
 label followed by A in hexadecimal. It saves A and HL across the string output.
-A *nibble* is four bits, half a byte. HEX prints the two nibbles through
-NIBBLE.
+A *nibble* is four bits, half a byte. HEX prints the two nibbles through NIBBLE.
 
 A *binary-coded decimal* byte, or BCD byte, stores one decimal digit in each
 nibble. Printing its two nibbles as hexadecimal also displays those decimal
@@ -228,7 +227,7 @@ optional device. B's defined bits are:
 | 4 | `10h` | the PICO9918 is claimed |
 | 7 | `80h` | the ROM's word `GLCD?` is on LCD row 3 |
 
-D holds the ROM version's major and E its minor, so `0001h` means version 0.1
+D holds the ROM version's major and E its minor so `0001h` means version 0.1
 rather than ABI 5.1. BOARD prints the report in hexadecimal and then calls
 number 16 to demonstrate the out-of-range status:
 
@@ -297,7 +296,7 @@ node tools/tecvol.mjs put hw.img B board.asm --text
 ```
 
 Each later example's source goes on `hw.img` in the same way. `TAS BOARD` reads
-BOARD.ASM on the current drive and writes BOARD.COM beside it. TAS.COM is on A,
+BOARD.ASM on the current drive and writes BOARD.COM beside it. TAS.COM is on A
 so the program search described in Chapter 4 finds it from B. In this historical
 serial-model configuration, the clock set INFO's bit 3 and the console size was
 zero:
@@ -320,7 +319,7 @@ B>
 
 The historical `--board pico` model configuration includes the PICO9918,
 graphics LCD and matrix keyboard. Cold boot selected the PICO console. Its
-device bits were `0Bh` and its size was `50h` by `18h`, or 80 by 24. The startup
+device bits were `0Bh` and its size was `50h` by `18h` (80 by 24). The startup
 GLCD.SVC line installed nothing while PICO was the console. This is a host-model
 run, not a browser capture:
 
@@ -348,7 +347,7 @@ A screen-layout program uses the size INFO returns. With a serial console, both
 values are zero because TEC-OS cannot read the terminal's dimensions. The
 program can use an 80-by-24 assumption, as the CCP does for pagination. A
 console change can alter the values. After CON UC1 selects the graphics LCD,
-INFO gives 21 by 8, so programs that change console must read them again.
+INFO gives 21 by 8 so programs that change console must read them again.
 
 ## The LCD and the speaker
 
@@ -426,9 +425,9 @@ about 482 Hz, while B = 1 gives about 29,851 Hz. DE = 0 returns immediately
 without sound. These are instruction-derived relationships. Appendix B
 distinguishes the final interval and call overhead.
 
-TONE blocks until its half cycles finish, so the caller does no other work
-during the sound. A nonempty tone ends with the speaker off. The routine keeps
-the serial transmit line idle while driving the speaker.
+TONE blocks until its half cycles finish so the caller does no other work during
+the sound. A nonempty tone ends with the speaker off. The routine keeps the
+serial transmit line idle while driving the speaker.
 
 ## The digits and the clock
 
@@ -526,7 +525,7 @@ does a BDOS input check each pass and a clock read every 32nd pass. When it
 exits, the final DIGIT call has already turned the digits off.
 
 NOW reads the same seven-byte clock buffer and prints its fields in date order.
-The clock stores only two year digits, so this example supplies the century text
+The clock stores only two year digits so this example supplies the century text
 `20` itself:
 
 ```asm
@@ -596,7 +595,7 @@ B>
 
 That model run began with its clock at 12:00 on 1 November 2026. The clock
 advances with emulated T-states, including those used while TAS assembles. Its
-weekdays start at 1 for Monday, so the captured Sunday is `07`.
+weekdays start at 1 for Monday so the captured Sunday is `07`.
 
 ## The keys and the joystick
 
@@ -690,11 +689,11 @@ B>
 
 <!-- the same run with "@key 5": node tools/capture.mjs --card hw.img --board pico B: "TAS ROWS" "@start ROWS" "@key 5" -->
 JOY reads port `FEh` with address line 11 low. KEYS selects row 3 in the same
-way, so those inputs share wiring. In the retained alternate `5` run, the row
-was `00 00 00 01 00 00 00 00  JOY 01`. A row-3 matrix key can therefore appear
-as a joystick bit. A joystick line also appears in row 3, including at the
-console. On the model, bit 0 types `5`. Appendix B gives the diagnostic names
-for the joystick bits.
+way so those inputs share wiring. In the retained alternate `5` run, the row was
+`00 00 00 01 00 00 00 00  JOY 01`. A row-3 matrix key can therefore appear as a
+joystick bit. A joystick line also appears in row 3, including at the console.
+On the model, bit 0 types `5`. Appendix B gives the diagnostic names for the
+joystick bits.
 
 ## Claiming the PICO9918
 
@@ -710,12 +709,11 @@ release. The separate character LCD remains available during the graphics work.
 
 A release restores the ROM PICO console's mode, font and displayed page when
 that console started at cold boot. If it is the selected console, the release
-also clears the screen and homes the cursor. With the Matrix switch disabled
-the PICO console did not start, so release leaves the chip's programmed state
-alone.
+also clears the screen and homes the cursor. With the Matrix switch disabled the
+PICO console did not start so release leaves the chip's programmed state alone.
 
 The claim records a flag rather than an owner identity. Warm boot releases it
-through the same path, so an exiting program's claim ends too. Release with no
+through the same path so an exiting program's claim ends too. Release with no
 active claim does nothing and returns status 0.
 
 When the ROM PICO console started, it also registered a named PICO record. That
@@ -814,7 +812,7 @@ In this historical 80-column run the cursor remained at the start of row 12.
 PLACE's status line and the next prompt appeared beneath the positioned text.
 The second copy shared row 11 with the command line.
 
-On the 8-row graphics LCD, PLACE's row 10 is below the display, so it writes
+On the 8-row graphics LCD, PLACE's row 10 is below the display so it writes
 nothing and reports status 0. On serial it reports status 2. It also reports 2
 while the PICO is both claimed and the console. A claim on PICO leaves PUTAT
 available on the graphics-LCD console. Portable code checks the ABI before PUTAT
@@ -841,7 +839,7 @@ active and polls for a key. On exit it sends dark digit/LED patterns and
 releases an active claim.
 
 The historical starter card did not include DEMO. The web-page recipe did
-include it on A, so DEMO ran there without adding it to that card. Its source is
+include it on A so DEMO ran there without adding it to that card. Its source is
 `test/programs/demo.asm`. Media generation exports DEMO.COM to `dist/files` and
 includes it in the page recipe. The retained explicit host route used ATOM and
 added the program to B of `hw.img`:
@@ -881,5 +879,5 @@ A>
 
 No hardware service scans the 8 × 8 LEDs. DEMO writes those ports itself, one
 pass over eight rows each loop. Appendix G gives their wiring. Those ports carry
-neither the serial transmit line nor console output, so those writes do not
+neither the serial transmit line nor console output so those writes do not
 require the shared-port state used by DIGIT or VIDEO.

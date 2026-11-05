@@ -69,9 +69,9 @@ NOTES.TXT
 B>
 ```
 
-A program receives only the command tail of its own piece. The separator
-ends that tail, so `!` cannot occur inside a command or argument. The later
-pieces remain available after the program's ordinary exit.
+A program receives only the command tail of its own piece. The separator ends
+that tail so `!` cannot occur inside a command or argument. The later pieces
+remain available after the program's ordinary exit.
 
 The complete line has the usual limit of 127 characters. For example,
 32 three-letter commands and their 31 separators fit exactly. Command
@@ -103,11 +103,11 @@ STARTUP.CMD
 A>
 ```
 
-`NOSUCH` failed, so neither directory command after it ran. The next line
-began with a successful `DIR *.SVC`, so its `:DIR *.CMD` ran. The final
-`:DIR *.CMD` was typed on a new line. It tested the last command of the
-previous line, which also succeeded. A colon at the start of a fresh line
-still tests the previous result.
+`NOSUCH` failed so neither directory command after it ran. The next line began
+with a successful `DIR *.SVC` so its `:DIR *.CMD` ran. The final `:DIR *.CMD`
+was typed on a new line. It tested the last command of the previous line, which
+also succeeded. A colon at the start of a fresh line still tests the previous
+result.
 
 A built-in command reports failure through its result as well as its
 message. A program must set its own return code to report failure.
@@ -158,10 +158,10 @@ BDOS    EQU     $0005
         RET
 ```
 
-Function 15 returns `FFh` when there is no such file. `INC A` turns that
-value into zero, so `RET NZ` returns immediately when the file exists.
-Otherwise `EXISTS` sets `FF00h` with function 108 before returning.
-It prints nothing in either case.
+Function 15 returns `FFh` when there is no such file. `INC A` turns that value
+into zero so `RET NZ` returns immediately when the file exists. Otherwise
+`EXISTS` sets `FF00h` with function 108 before returning. It prints nothing in
+either case.
 
 The historical card for this example also contains `RUN`, whose complete
 source appears below. Both sources were assembled on the PC with ATOM
@@ -224,9 +224,9 @@ B>
 ```
 
 `DIR` after `EXISTS NONE.TXT!` runs because it has no colon. The separate
-`EXISTS NONE.TXT` then leaves `FF00h`, so the first typed `:DIR` runs
-nothing. `USER 0` succeeds and clears the result to 0. The second `:DIR`
-therefore lists the files.
+`EXISTS NONE.TXT` then leaves `FF00h` so the first typed `:DIR` runs nothing.
+`USER 0` succeeds and clears the result to 0. The second `:DIR` therefore lists
+the files.
 
 Your program should set a failure code when its work fails, including when
 it prints an error message. Function 45 can select BDOS errors as return
@@ -305,13 +305,13 @@ BDOS    EQU     $0005
 NOTRUN: DB      "Not run",13,10,"$"
 ```
 
-The CCP puts a zero after the tail at `0081h`. Its initial space is
-allowed and the CCP passes over it, so `RUN DIR` supplies ` DIR`.
-Function 26 takes the tail's address, not the length byte at `0080h`.
+The CCP puts a zero after the tail at `0081h`. Its initial space is allowed and
+the CCP passes over it so `RUN DIR` supplies ` DIR`. Function 26 takes the
+tail's address, not the length byte at `0080h`.
 
-The original line's later pieces lie outside that tail. In
-`RUN A:MOUNT!DIR`, `RUN` supplies only ` A:MOUNT`. That replaces the old
-chain, so its `DIR` is gone:
+The original line's later pieces lie outside that tail. In `RUN A:MOUNT!DIR`,
+`RUN` supplies only ` A:MOUNT`. That replaces the old chain so its `DIR` is
+gone:
 
 <!-- node tools/capture.mjs --card chain.img B: "RUN DIR" "RUN A:MOUNT!DIR" "RUN NOSUCH!DIR" "RUN" -->
 ```text
@@ -349,12 +349,11 @@ will overwrite. TEC-OS ignores register `E`, which CP/M 3's function 47
 also takes. The next command uses the drive and user area in `0004h`, as
 after an ordinary program exit.
 
-Function 47 rejects a line with no zero in its first 128 bytes. It also
-rejects a carriage return or line feed before that zero. Rejection returns
-`A = FFh` and leaves the original chain unchanged, so your program can
-handle it. `RUN` would print `Not run` on that path. A CCP-prepared tail
-has the required terminator and contains neither CR nor LF. Its line
-always passes this validation.
+Function 47 rejects a line with no zero in its first 128 bytes. It also rejects
+a carriage return or line feed before that zero. Rejection returns `A = FFh` and
+leaves the original chain unchanged so your program can handle it. `RUN` would
+print `Not run` on that path. A CCP-prepared tail has the required terminator
+and contains neither CR nor LF. Its line always passes this validation.
 
 A service's `INIT` or `REMOVE` can also call function 47. An accepted call
 still causes warm boot. Chapter 13 explains the installation and removal
@@ -432,11 +431,10 @@ A>:MOUNT
 A>
 ```
 
-`GLCD.SVC` reports an absent graphics LCD and passes quietly, so its
-`:MOUNT` runs. `NOSUCH.SVC` is missing from the card, which is an ordinary
-failure. Its `:MOUNT` is echoed and dropped. Quiet absence applies to a
-startup line. Typed at the prompt on this board, `GLCD.SVC` fails with
-`GLCD.SVC?`.
+`GLCD.SVC` reports an absent graphics LCD and passes quietly so its `:MOUNT`
+runs. `NOSUCH.SVC` is missing from the card, which is an ordinary failure. Its
+`:MOUNT` is echoed and dropped. Quiet absence applies to a startup line. Typed
+at the prompt on this board, `GLCD.SVC` fails with `GLCD.SVC?`.
 
 The last startup command also leaves its result for the first line you
 type. This final historical fixture starts from the earlier EXISTS/RUN
@@ -471,8 +469,8 @@ STARTUP.CMD
 A>
 ```
 
-`A:MOUNT`, supplied by `RUN`, finishes before the next startup line,
-`NOSUCH`. That missing command leaves `FF00h`, so the first typed `:DIR`
-runs nothing. `DIR` without the colon runs. A quiet absent-device startup
-line would instead leave success and allow the conditional command.
+`A:MOUNT`, supplied by `RUN`, finishes before the next startup line, `NOSUCH`.
+That missing command leaves `FF00h` so the first typed `:DIR` runs nothing.
+`DIR` without the colon runs. A quiet absent-device startup line would instead
+leave success and allow the conditional command.
 
