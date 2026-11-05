@@ -193,3 +193,8 @@ port-write trace, separate from the60e0768 full-pass20670 measurement.
 The revised paragraphs preserve those distinctions and their approximate
 precision. Read both complete paragraphs for order, agency and punctuation.
 No execution or new measurement occurred. Bounded confirmation is pending.
+
+The matching VIDEO release paragraph now also names the Matrix switch rather
+than physical keyboard absence. The historical listing's literal message is
+unchanged. Independent confirmation of the earlier timing/nibble/video-byte
+corrections and AppendixB's corresponding switch conditions was received.
