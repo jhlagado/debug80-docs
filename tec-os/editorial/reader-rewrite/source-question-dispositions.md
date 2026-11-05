@@ -20,3 +20,11 @@ These constraints apply at every destination of the affected statement, includin
 extracted early safety instructions and reference entries. They do not close
 whole-chapter factual review or qualify the new banner. The final source/map
 references and moved navigation still need checking after the rewrite.
+
+## Matrix enablement is not a keyboard response
+
+At ea3ef3d src/console.asm82–88 reads STSPORT/CDMTX and stores the switch
+bit in CONDEV. src/pico.asm64–86 tests that enabled bit after the VDP probe.
+Describe a responding PICO and enabled Matrix switch, not two devices
+answering or an independent keyboard-presence test. Corrected drafts15,23
+and27 and flagged the same distinction for25 and remaining authors. No run.

@@ -211,7 +211,8 @@ selected console can continue.
 
 Release returns at once if there is no claim. Otherwise `HWVREL` clears
 `VCLAIM` and reads `PIVEC`. Cold boot sets that pointer to `PIBLK` when
-both the PICO9918 and matrix keyboard answer (`src/services.asm:245-258`,
+the PICO9918 responds and the Matrix switch enables the keyboard
+(`src/services.asm:245-258`,
 `src/video.asm:22-29`, `src/pico.asm:64-86`). A zero pointer leaves the
 chip as the program set it. With a table present, release reads the
 fourth word at offset 6 and calls the restore routine through `VHLJP`

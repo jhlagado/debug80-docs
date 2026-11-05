@@ -219,3 +219,12 @@ An independent full cost-provenance audit is in progress without execution.
 Historical costs remain a held transcription in the draft, not accepted
 measured claims. Final source qualification and any changed measurements
 need an explicit allocated run. No unsupported figure is silently substituted.
+
+## Matrix-switch condition correction
+
+Source cross-check at ea3ef3d console82–88 and pico64–86 distinguishes
+PICO response from keyboard enablement. Cold boot reads the Matrix switch
+bit into CONDEV. It does not probe a keyboard response. The prose now uses
+responding PICO plus Matrix switch enabled, replacing presence/answer wording.
+This is a source-backed condition correction, not physical detection evidence.
+No execution or literal-output change occurred.
