@@ -1,0 +1,1807 @@
+{
+  "schema_version": 1,
+  "scope": "Apply accepted Chapters 4–10 comma decisions only. No product execution, integration, publication or final book acceptance.",
+  "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+  "review_commit": "c04bf22",
+  "input_head": "77ef9c87457a09009d048feaf5d36f4d12f3de71",
+  "review_sha256": "8ff7f909799c9f7af77ef1b58864c933d0fc8bf2418b8b3f00090dfbd3cd5c05",
+  "inventory_sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326",
+  "applied_ids": [
+    "CC0001",
+    "CC0002",
+    "CC0003",
+    "CC0004",
+    "CC0005",
+    "CC0006",
+    "CC0007",
+    "CC0008",
+    "CC0009",
+    "CC0318",
+    "CC0011",
+    "CC0013",
+    "CC0014",
+    "CC0015",
+    "CC0017",
+    "CC0018",
+    "CC0019",
+    "CC0020",
+    "CC0021",
+    "CC0022",
+    "CC0023",
+    "CC0024",
+    "CC0027",
+    "CC0028",
+    "CC0029",
+    "CC0031",
+    "CC0032",
+    "CC0033",
+    "CC0034",
+    "CC0035",
+    "CC0036"
+  ],
+  "retained_ids": [
+    "CC0010",
+    "CC0012",
+    "CC0025",
+    "CC0026",
+    "CC0030"
+  ],
+  "sources": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "frozen_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "frozen_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "input_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "output_sha256": "22106877815aa329d5c1affe54eb4c234fc82d9ac206fdba7c4766ce46d10cc2",
+      "changed": true,
+      "immutable_comparison": {
+        "fences": {
+          "count": 10,
+          "sha256": "0ec6f6cb06c04c423bbe5d6c1d3dc0946c6e6ab77f04505162b8eae082e93f0d",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 11,
+          "sha256": "e2e72134da83f249bda1eeb8c781edfe854f8698726ad86f8310830e23e80ccd",
+          "byte_identical": true
+        },
+        "inline_code": {
+          "count": 83,
+          "sha256": "0b72744a05ebf9ec27c16f60be62e2bc70bd7355dee324cb42ae1a7f0ff20f72",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 13,
+          "sha256": "243460b718adb67f79eaf5e91188d406baf81e4c71bab463afcd90ccadbcad82",
+          "byte_identical": true
+        }
+      },
+      "only_accepted_comma_removals_and_context_rewrap": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "frozen_sha256": "19531d5b48a2539524472e633502c3b013ca4f03756fede465fa373b4edf15ee",
+      "frozen_git_blob": "a0b1f0c455f50413620f171bc1f0689fe29ffb52",
+      "input_sha256": "19531d5b48a2539524472e633502c3b013ca4f03756fede465fa373b4edf15ee",
+      "output_sha256": "5c1111af174a3a3e6c6e90438ef4a907f75f0b149eb297bb91ae3ba3888b8048",
+      "changed": true,
+      "immutable_comparison": {
+        "fences": {
+          "count": 16,
+          "sha256": "1d17df9d75f9e570130eb2a8527fc957513d91f1947780e5a8e845c549fe8dbc",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 3,
+          "sha256": "cf864b2887f1a49fdd7ce01a6b9f1aa3ab15062bd8be42e93ae4f38745e77f57",
+          "byte_identical": true
+        },
+        "inline_code": {
+          "count": 103,
+          "sha256": "1ce60352531b4de5c7b859eceab8c78e8ca23c909df5850e08105afb7e74e392",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 8,
+          "sha256": "a9e1be6ec3c1f243f4b72aead780e5096285864db89fba84a6ec02eb3b667b1c",
+          "byte_identical": true
+        }
+      },
+      "only_accepted_comma_removals_and_context_rewrap": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
+      "frozen_sha256": "99fe60faa54ce55f3eee8e590c118e59aa903fd760da8c25a9804f87e14494ec",
+      "frozen_git_blob": "fbfc25fbf01daa15fb6ecf19951f4eda11bf9d2a",
+      "input_sha256": "99fe60faa54ce55f3eee8e590c118e59aa903fd760da8c25a9804f87e14494ec",
+      "output_sha256": "99fe60faa54ce55f3eee8e590c118e59aa903fd760da8c25a9804f87e14494ec",
+      "changed": false,
+      "immutable_comparison": {
+        "fences": {
+          "count": 8,
+          "sha256": "b61b9bdb1030b502e728524be7e907d9c8cf4fbccd017b1f47dc23c2b27557b0",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 10,
+          "sha256": "0a8a5f0033843938ed48de4254628acde6862ea28d5e286f0db307fce0a53d3a",
+          "byte_identical": true
+        },
+        "inline_code": {
+          "count": 69,
+          "sha256": "2babd9f10466322b7763028de622f34040759cfb13fbabe70440bdd2e2721712",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "byte_identical": true
+        }
+      },
+      "only_accepted_comma_removals_and_context_rewrap": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "frozen_sha256": "67ba36eb613ba4ec9e7312fa0b7c4b5cfb304d292806311f69fd14add203f6dc",
+      "frozen_git_blob": "6b0fd57fa5ad9753e9bf4aa2c4386f2498f9d07b",
+      "input_sha256": "67ba36eb613ba4ec9e7312fa0b7c4b5cfb304d292806311f69fd14add203f6dc",
+      "output_sha256": "fe85dc2d0fcc9191219eeda7919e1b0f01d1bc6959c99c637d72acd76ddc9250",
+      "changed": true,
+      "immutable_comparison": {
+        "fences": {
+          "count": 15,
+          "sha256": "76cca790be4ad33fa6b3f89caa48451aa11bd941b9bb7a570cb34719d4a90e61",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 10,
+          "sha256": "f91a22b181e14b200cf6c981aa42647329ed394abdb41a23fc0a8ddacdbb51c4",
+          "byte_identical": true
+        },
+        "inline_code": {
+          "count": 69,
+          "sha256": "26831485eec063ddf842b4c6711ef31826b530df2e7870d28b759ba143eeeff5",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 8,
+          "sha256": "c96adf9e8a03c73c9a6750e2e3f2891b025c5a0db7f0734333c7f71dca27be0d",
+          "byte_identical": true
+        }
+      },
+      "only_accepted_comma_removals_and_context_rewrap": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "frozen_sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+      "frozen_git_blob": "d7f81c817f63164acb6823b4d97424d7cdfd20fd",
+      "input_sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+      "output_sha256": "8f323d975b7b2be1c46613237c332fabbcea2f0a2a712054cdf8f3fbf2544764",
+      "changed": true,
+      "immutable_comparison": {
+        "fences": {
+          "count": 4,
+          "sha256": "aa5e586a690a68f01086a0cb83978ef7e456c2da5fae4ba52559a72d88ff2778",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 3,
+          "sha256": "d30d4fb27ef239aacb32a714a0e7ed24b0321b621751c2c840392d2e15b6aff3",
+          "byte_identical": true
+        },
+        "inline_code": {
+          "count": 94,
+          "sha256": "bc01e0fe777cf86cc547fc548052ef3ccb857b8143c48f042a25c12941f9f0fa",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "byte_identical": true
+        }
+      },
+      "only_accepted_comma_removals_and_context_rewrap": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "frozen_sha256": "be8b37aa2ef86e864c3f2e9cb11b3ef8e78f644da260166c94f6bc23b00a0ae2",
+      "frozen_git_blob": "a3217b2afac0a3d10c3d5a354f8edf94f30ea533",
+      "input_sha256": "be8b37aa2ef86e864c3f2e9cb11b3ef8e78f644da260166c94f6bc23b00a0ae2",
+      "output_sha256": "193ccd41d8a6e6492ae65c96ecd4b126e1098711b28af53aa2e7ae68f7a11f2d",
+      "changed": true,
+      "immutable_comparison": {
+        "fences": {
+          "count": 3,
+          "sha256": "b89e4475a32f1be22599ff55ef2b46d6b58550e73d29e5da16172ac5de3e03e2",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 2,
+          "sha256": "e6c328e1cf582ca95962e4c64c18cf1bee473841456a57d141e2845e5e484dd3",
+          "byte_identical": true
+        },
+        "inline_code": {
+          "count": 93,
+          "sha256": "991cffa8d6970a3190b44cda88436682f88a2c82d4570c1d100fc9023b8ae0c3",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "byte_identical": true
+        }
+      },
+      "only_accepted_comma_removals_and_context_rewrap": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "frozen_sha256": "b5e3dd9e1eb6a980bcf2e4ae347330b3c2ffa75842d2145d17606e14c60e64b2",
+      "frozen_git_blob": "be3394a9707444d69fe15900bf7e561a68e4e540",
+      "input_sha256": "b5e3dd9e1eb6a980bcf2e4ae347330b3c2ffa75842d2145d17606e14c60e64b2",
+      "output_sha256": "32d5806fb11659ee611b34b65ed0fced7d6bdb88f3b69c53d0159d96a7997395",
+      "changed": true,
+      "immutable_comparison": {
+        "fences": {
+          "count": 11,
+          "sha256": "675dafe1919935430dc5857b5c781fcc8ab063fa0d0fbeb28e834c5a531ec0b0",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 7,
+          "sha256": "e918c366ba03ef1d33a5165fa07fa882428f3b4865fa06b3beb01d188a5a6ec8",
+          "byte_identical": true
+        },
+        "inline_code": {
+          "count": 137,
+          "sha256": "0605b71b93cedc17cd0ee689bb1838d5390e1a512906b88d35a93a712da80627",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 0,
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "byte_identical": true
+        }
+      },
+      "only_accepted_comma_removals_and_context_rewrap": true
+    }
+  ],
+  "contexts": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "ids": [
+        "CC0001"
+      ],
+      "old": "The default error path waits for a key, `x` in this capture, then ends\nthe command with a warm boot. The prompt stays on B. The CP/M drive\nletters E through P are accepted as names but have no TEC-OS volume and\ngive the same error. Q and later letters are outside that range, so\n`Q:` gives `Q:?`. [Appendix D](appendix-d-error-messages.md) explains these\nmessages and the returned-error option for programs.",
+      "new": "The default error path waits for a key, `x` in this capture, then ends the\ncommand with a warm boot. The prompt stays on B. The CP/M drive letters E\nthrough P are accepted as names but have no TEC-OS volume and give the same\nerror. Q and later letters are outside that range so `Q:` gives `Q:?`.\n[Appendix D](appendix-d-error-messages.md) explains these messages and the\nreturned-error option for programs.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "ids": [
+        "CC0002"
+      ],
+      "old": "The `MOUNT` program still ran in area 3 because program lookup also\nchecks area 0. Its volume list is independent of the files' user areas.\n`COPY` works within the current area, so it cannot transfer a file between\nareas. On a PC, `tecvol put --user N` places a file in a chosen area,\nas [Chapter 5](05-cards-on-the-pc.md) explains. `USER` without a number or\nwith a number outside 0 to 15 fails with a question mark.",
+      "new": "The `MOUNT` program still ran in area 3 because program lookup also checks area\n0. Its volume list is independent of the files' user areas. `COPY` works within\nthe current area so it cannot transfer a file between areas. On a PC,\n`tecvol put --user N` places a file in a chosen area, as\n[Chapter 5](05-cards-on-the-pc.md) explains. `USER` without a number or with a\nnumber outside 0 to 15 fails with a question mark.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "ids": [
+        "CC0003"
+      ],
+      "old": "A COM file starts at `0100h` in program memory. The small program from\nChapter 2 is stored on B, so its plain name works at `B>`. At `A>` its\nplain name gives a question mark unless another copy is available there.\nAn explicit `B:` before the name selects its file without changing the\ncurrent drive. [Chapter 20](20-from-prompt-to-program.md) follows lookup\nand loading inside the command processor.",
+      "new": "A COM file starts at `0100h` in program memory. The small program from Chapter 2\nis stored on B so its plain name works at `B>`. At `A>` its plain name gives a\nquestion mark unless another copy is available there. An explicit `B:` before\nthe name selects its file without changing the current drive.\n[Chapter 20](20-from-prompt-to-program.md) follows lookup and loading inside the\ncommand processor.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "ids": [
+        "CC0004"
+      ],
+      "old": "`MOUNT C: GAMES` assigns the volume labelled GAMES to C. An index can be\nused instead of the label, as in `MOUNT D: 3`. A volume can occupy at\nmost one drive. A drive can be emptied with `MOUNT B:` and filled again\nwithout changing the card's saved assignments. Drive A must keep a volume,\nso `MOUNT A:` cannot empty it. A different volume can replace A's current one.",
+      "new": "`MOUNT C: GAMES` assigns the volume labelled GAMES to C. An index can be used\ninstead of the label, as in `MOUNT D: 3`. A volume can occupy at most one drive.\nA drive can be emptied with `MOUNT B:` and filled again without changing the\ncard's saved assignments. Drive A must keep a volume so `MOUNT A:` cannot empty\nit. A different volume can replace A's current one.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "ids": [
+        "CC0005"
+      ],
+      "old": "On that historical `my.img` card, SYSTEM and WORK start on A and B,\nGAMES and SPARE start unassigned and all four drives have full-size slots.\nGAMES contains `TAS.COM` and SPARE contains `HELLO.TXT`\nwith the line `Hello from the PC.`. This card had no startup file, so\nits initial prompt followed the mounted-drive list directly:",
+      "new": "On that historical `my.img` card, SYSTEM and WORK start on A and B, GAMES and\nSPARE start unassigned and all four drives have full-size slots. GAMES contains\n`TAS.COM` and SPARE contains `HELLO.TXT` with the line `Hello from the PC.`.\nThis card had no startup file so its initial prompt followed the mounted-drive\nlist directly:",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "ids": [
+        "CC0006"
+      ],
+      "old": "`MOUNT` changes the running assignments in memory, not the drive fields\nsaved in the card's header. Before changing an assignment it flushes pending\nwrites to the card. The changed drive's directory is read afresh on its\nnext use. Mounting a volume on the current drive selects it again at once,\nso that access uses the new volume.",
+      "new": "`MOUNT` changes the running assignments in memory, not the drive fields saved in\nthe card's header. Before changing an assignment it flushes pending writes to\nthe card. The changed drive's directory is read afresh on its next use. Mounting\na volume on the current drive selects it again at once so that access uses the\nnew volume.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "ids": [
+        "CC0007",
+        "CC0008"
+      ],
+      "old": "A volume can be read-only. Its files can be read and its programs can run,\nbut creating, writing, renaming or erasing a file there gives `R/O`.\n`MOUNT` marks such a volume `R/O` in its list. This property belongs to\nthe volume, so changing its drive or warm-booting does not remove it.\nChapter 5 explains how a prepared card receives that flag.",
+      "new": "A volume can be read-only. Its files can be read and its programs can run but\ncreating, writing, renaming or erasing a file there gives `R/O`. `MOUNT` marks\nsuch a volume `R/O` in its list. This property belongs to the volume so changing\nits drive or warm-booting does not remove it. Chapter 5 explains how a prepared\ncard receives that flag.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "ids": [
+        "CC0009"
+      ],
+      "old": "A card changed on a PC needs a reset when returned to the board. Warm boot\nretains cached card blocks and the drives' free-space state, so it does not\nreinitialise the card or discard those old copies. Only cold boot starts\nthe card again. Do not let TEC-OS and a PC write the same card at the same time.",
+      "new": "A card changed on a PC needs a reset when returned to the board. Warm boot\nretains cached card blocks and the drives' free-space state so it does not\nreinitialise the card or discard those old copies. Only cold boot starts the\ncard again. Do not let TEC-OS and a PC write the same card at the same time.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "ids": [
+        "CC0318"
+      ],
+      "old": "`get` copies a named file to the PC. Its optional output-file argument gives\nthe destination. A named destination is overwritten if it already exists, so\nuse a new path for a recovered copy. Without that argument the bytes go to\nstandard output. Binary extraction includes every recorded 128-byte record,\nincluding padding in the last one. With `--text`, extraction stops before the\nfirst `^Z` and converts carriage-return/line-feed pairs to line feeds. A lone\ncarriage return is retained. Without `^Z`, all recorded bytes undergo that\nconversion, including any padding.",
+      "new": "`get` copies a named file to the PC. Its optional output-file argument gives the\ndestination. A named destination is overwritten if it already exists so use a\nnew path for a recovered copy. Without that argument the bytes go to standard\noutput. Binary extraction includes every recorded 128-byte record, including\npadding in the last one. With `--text`, extraction stops before the first `^Z`\nand converts carriage-return/line-feed pairs to line feeds. A lone carriage\nreturn is retained. Without `^Z`, all recorded bytes undergo that conversion,\nincluding any padding.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "ids": [
+        "CC0011"
+      ],
+      "old": "The card holds programs, resident services, `STARTUP.CMD` and your files.\nEach drive uses a volume, an ordinary CP/M disk of a fixed size. CP/M 2.2\naddresses at most 8 MiB on a drive. Most CP/M machines used floppy disks\nof a few hundred KiB, while an SD card can hold many volumes.",
+      "new": "The card holds programs, resident services, `STARTUP.CMD` and your files. Each\ndrive uses a volume, an ordinary CP/M disk of a fixed size. CP/M 2.2 addresses\nat most 8 MiB on a drive. Most CP/M machines used floppy disks of a few hundred\nKiB while an SD card can hold many volumes.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "ids": [
+        "CC0013"
+      ],
+      "old": "CP/M reads and writes 128-byte records. Four records fit a 512-byte card\nblock. Space is allocated to files in larger allocation blocks, so a file\nwith any data occupies at least 2 KiB on G1M or 4 KiB on G8M. The one-record\n`STARTUP.CMD` therefore occupies 4 KiB on WORK even though its recorded\nlength is only 128 bytes.",
+      "new": "CP/M reads and writes 128-byte records. Four records fit a 512-byte card block.\nSpace is allocated to files in larger allocation blocks so a file with any data\noccupies at least 2 KiB on G1M or 4 KiB on G8M. The one-record `STARTUP.CMD`\ntherefore occupies 4 KiB on WORK even though its recorded length is only 128\nbytes.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "ids": [
+        "CC0014"
+      ],
+      "old": "The browser uses a high-capacity card model, so it does not exercise the\nstandard-capacity byte-address limit. Open image also validates the whole\ncontainer and rejects an image shorter than its declared size. It therefore\ncannot reproduce the short-image capture above through that control.\nThese exclusions do not remove every cause of ROM code `27h`: the ROM\nalso rejects a volume end that overflows 32 bits or exceeds the container's\ndeclared size. Browser validation rejects those malformed descriptors\nbefore the ROM receives an opened image.",
+      "new": "The browser uses a high-capacity card model so it does not exercise the\nstandard-capacity byte-address limit. Open image also validates the whole\ncontainer and rejects an image shorter than its declared size. It therefore\ncannot reproduce the short-image capture above through that control. These\nexclusions do not remove every cause of ROM code `27h`: the ROM also rejects a\nvolume end that overflows 32 bits or exceeds the container's declared size.\nBrowser validation rejects those malformed descriptors before the ROM receives\nan opened image.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "ids": [
+        "CC0015"
+      ],
+      "old": "On a volume written behind, changes still in the cache are lost. Blocks\nwritten early to make cache space and blocks written by a completed part\nof a flush remain on the card. Newly allocated blocks may again have no\ndirectory entry. Overwritten blocks contain the new data. The directory\nwrite follows successful data writes, so an interrupted flush does not\npublish a new allocation map before those data writes succeed.",
+      "new": "On a volume written behind, changes still in the cache are lost. Blocks written\nearly to make cache space and blocks written by a completed part of a flush\nremain on the card. Newly allocated blocks may again have no directory entry.\nOverwritten blocks contain the new data. The directory write follows successful\ndata writes so an interrupted flush does not publish a new allocation map before\nthose data writes succeed.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "ids": [
+        "CC0017"
+      ],
+      "old": "The reset has kept SPARE on A, so the final prompt is `2A>`. SYSTEM is\nno longer mounted, which can remove the tools needed for recovery.",
+      "new": "The reset has kept SPARE on A so the final prompt is `2A>`. SYSTEM is no longer\nmounted, which can remove the tools needed for recovery.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "ids": [
+        "CC0018"
+      ],
+      "old": "At the serial prompt you can erase the bad file with `ERA STARTUP.CMD`\nor replace it with corrected text then reset. The startup file is in\nuser area 0 of A, so recovery must address that location. Without a usable\nterminal, the Chapter 5 card tools can replace or erase it on a PC.\nA recognised reset with a skip retains valid drive assignments just as it\ndoes without a skip.",
+      "new": "At the serial prompt you can erase the bad file with `ERA STARTUP.CMD` or\nreplace it with corrected text then reset. The startup file is in user area 0 of\nA so recovery must address that location. Without a usable terminal, the Chapter\n5 card tools can replace or erase it on a PC. A recognised reset with a skip\nretains valid drive assignments just as it does without a skip.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "ids": [
+        "CC0019"
+      ],
+      "old": "Registers hold the values passed to a call. `A`, `B`, `C` and `E` each\nhold a byte. `BC`, `DE` and `HL` are 16-bit register pairs, large enough\nfor a memory address. To select a BDOS operation, you put its function number in `C` and\ncall `0005h`. A byte parameter goes in `E`, while an address or word\nparameter goes in `DE`. A byte result is returned in `A` and a word result\nin `HL`. For example, function 2 takes the character in `E` and function 9\ntakes an address in `DE`. In source, `BDOS EQU $0005` gives that call\naddress a name.",
+      "new": "Registers hold the values passed to a call. `A`, `B`, `C` and `E` each hold a\nbyte. `BC`, `DE` and `HL` are 16-bit register pairs, large enough for a memory\naddress. To select a BDOS operation, you put its function number in `C` and call\n`0005h`. A byte parameter goes in `E` while an address or word parameter goes in\n`DE`. A byte result is returned in `A` and a word result in `HL`. For example,\nfunction 2 takes the character in `E` and function 9 takes an address in `DE`.\nIn source, `BDOS EQU $0005` gives that call address a name.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "ids": [
+        "CC0020"
+      ],
+      "old": "The CCP also supplies a return address when it starts your program. It puts\n`0000h` on the inherited stack before jumping to `0100h`. A top-level `RET`\ntherefore ends the program through the warm-boot jump at `0000h`. Calls\nwithin the program must return before that last `RET`, so it reaches the\nword supplied by the CCP.",
+      "new": "The CCP also supplies a return address when it starts your program. It puts\n`0000h` on the inherited stack before jumping to `0100h`. A top-level `RET`\ntherefore ends the program through the warm-boot jump at `0000h`. Calls within\nthe program must return before that last `RET` so it reaches the word supplied\nby the CCP.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "ids": [
+        "CC0021"
+      ],
+      "old": "Functions 1, 2, 9 and 10 expand tabs to spaces up to the next multiple of\neight columns, counted from the last carriage return. They also copy printed\noutput to the list device while `^P` has that copy enabled. In CP/M the list\ndevice is the printer. TEC-OS's normal list routine discards the bytes, so\ntoggling the copy has no visible effect on the unmodified system.",
+      "new": "Functions 1, 2, 9 and 10 expand tabs to spaces up to the next multiple of eight\ncolumns, counted from the last carriage return. They also copy printed output to\nthe list device while `^P` has that copy enabled. In CP/M the list device is the\nprinter. TEC-OS's normal list routine discards the bytes so toggling the copy\nhas no visible effect on the unmodified system.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "ids": [
+        "CC0022",
+        "CC0023"
+      ],
+      "old": "| 6 | Direct console I/O | `E`: FFh to read, or a character to print | for FFh, `A`: the key, or 0 if none is waiting |",
+      "new": "| 6 | Direct console I/O | `E`: FFh to read or a character to print | for FFh, `A`: the key or 0 if none is waiting |",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "ids": [
+        "CC0024"
+      ],
+      "old": "The *command tail* is the text after the program's name. Its length is at\n`0080h` and its characters start at `0081h`. They include the space before\nthe first argument. The CCP converts letters to capitals before entry, so\n`SHOW b:hello.asm x` gives a length of 14 and the text ` B:HELLO.ASM X`.\nA zero follows the tail's last character.",
+      "new": "The *command tail* is the text after the program's name. Its length is at\n`0080h` and its characters start at `0081h`. They include the space before the\nfirst argument. The CCP converts letters to capitals before entry so\n`SHOW b:hello.asm x` gives a length of 14 and the text ` B:HELLO.ASM X`. A zero\nfollows the tail's last character.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "ids": [
+        "CC0027"
+      ],
+      "old": "The FCB holds file state, while the bytes being read or written go through\na separate memory buffer. The BDOS calls this the *DMA address*. It is a\ntransfer address in your memory, not a request to program a hardware DMA\ncontroller. Initially it is `0080h`, with room for one 128-byte record.\nFunction 26 changes it to the address supplied in `DE`.",
+      "new": "The FCB holds file state while the bytes being read or written go through a\nseparate memory buffer. The BDOS calls this the *DMA address*. It is a transfer\naddress in your memory, not a request to program a hardware DMA controller.\nInitially it is `0080h`, with room for one 128-byte record. Function 26 changes\nit to the address supplied in `DE`.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "ids": [
+        "CC0028"
+      ],
+      "old": "SHOW only reads, so it leaves no changed file state to close. A program that\nwrites must close its updated FCB before finishing. Warm boot flushes pending\nwrites from the block cache but cannot close the program's FCBs. The write\nsequence after SHOW explains how to finish both operations and check them.",
+      "new": "SHOW only reads so it leaves no changed file state to close. A program that\nwrites must close its updated FCB before finishing. Warm boot flushes pending\nwrites from the block cache but cannot close the program's FCBs. The write\nsequence after SHOW explains how to finish both operations and check them.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "ids": [
+        "CC0029"
+      ],
+      "old": "Writing uses an FCB and a DMA buffer in the same way, but the state\nmust reach the directory before the program finishes. For a new file,\nprepare all 36 FCB bytes: the drive, the space-padded name/type and zeroed\nstate. Choose a name that is not already present. Function 22, make file,\ncreates a directory entry. It is not a replace-file command.",
+      "new": "Writing uses an FCB and a DMA buffer in the same way but the state must reach\nthe directory before the program finishes. For a new file, prepare all 36 FCB\nbytes: the drive, the space-padded name/type and zeroed state. Choose a name\nthat is not already present. Function 22, make file, creates a directory entry.\nIt is not a replace-file command.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "ids": [
+        "CC0031"
+      ],
+      "old": "`HEX` prints A's high digit through `DIGIT`, then its low digit. `DIGIT`\nconverts a nibble to `0` through `F` and ends with `JP BDOS`. For the high\ndigit, the BDOS returns to HEX after CALL DIGIT. The low digit is entered by\nfall-through, so its BDOS return goes to HEX's caller. The complete program\nprints the high byte of the boundary before the low byte and appends `h`. These\nretained commands prepared a separate copy of the starter card:",
+      "new": "`HEX` prints A's high digit through `DIGIT`, then its low digit. `DIGIT`\nconverts a nibble to `0` through `F` and ends with `JP BDOS`. For the high\ndigit, the BDOS returns to HEX after CALL DIGIT. The low digit is entered by\nfall-through so its BDOS return goes to HEX's caller. The complete program\nprints the high byte of the boundary before the low byte and appends `h`. These\nretained commands prepared a separate copy of the starter card:",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "ids": [
+        "CC0032"
+      ],
+      "old": "The following table retains the earlier starter-card address map. The boundary\nmoves with the card and residents, so these addresses are not constants for\nprograms to use:",
+      "new": "The following table retains the earlier starter-card address map. The boundary\nmoves with the card and residents so these addresses are not constants for\nprograms to use:",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "ids": [
+        "CC0033"
+      ],
+      "old": "The CCP stores the current drive and user area at `0004h` before program entry.\nWarm boot uses that byte to restore the selection, so changing that byte changes\nthe selection used on exit. An unavailable drive falls back to A\n(`src/cpm/ccp.asm:363-384`, `src/cpm/ccp.asm:32-102`).",
+      "new": "The CCP stores the current drive and user area at `0004h` before program entry.\nWarm boot uses that byte to restore the selection so changing that byte changes\nthe selection used on exit. An unavailable drive falls back to A\n(`src/cpm/ccp.asm:363-384`, `src/cpm/ccp.asm:32-102`).",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "ids": [
+        "CC0034"
+      ],
+      "old": "`0050h` is a different drive value from the current drive at `0004h`. It follows\nCP/M 3's load-drive convention. A plain command loaded from the current drive\ngives 0. A search that finds the program on A gives 1. An explicit prefix\nsupplies its drive number, so `B:SHOW` at `A>` leaves 2 there. The current drive\ncan remain A throughout that run.",
+      "new": "`0050h` is a different drive value from the current drive at `0004h`. It follows\nCP/M 3's load-drive convention. A plain command loaded from the current drive\ngives 0. A search that finds the program on A gives 1. An explicit prefix\nsupplies its drive number so `B:SHOW` at `A>` leaves 2 there. The current drive\ncan remain A throughout that run.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "ids": [
+        "CC0035"
+      ],
+      "old": "| `BC00h–BC9Dh` | the cache's table: the card block each line holds, and whether it has changes |",
+      "new": "| `BC00h–BC9Dh` | the cache's table: the card block each line holds and whether it has changes |",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "ids": [
+        "CC0036"
+      ],
+      "old": "The address in `0001h` is table + 3. Adding 6 obtains CONIN at table + 9, and\nadding another 3 obtains CONOUT at table + `0Ch`. KEY writes those addresses\ninto the operands of its own JP instructions. CALL CONIN and CALL CONOUT then\nreach the actual BIOS entries.",
+      "new": "The address in `0001h` is table + 3. Adding 6 obtains CONIN at table + 9 and\nadding another 3 obtains CONOUT at table + `0Ch`. KEY writes those addresses\ninto the operands of its own JP instructions. CALL CONIN and CALL CONOUT then\nreach the actual BIOS entries.",
+      "readback": "Read complete resulting paragraph/table row. Accepted comma-only relation and qualifications preserved; no sentence or literal deleted."
+    }
+  ],
+  "gate": {
+    "command": [
+      "python3",
+      "/Users/johnhardy/.agents/skills/human-writing/scripts/prose_gate.py",
+      "--json",
+      "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md"
+    ],
+    "script_sha256": "0fb52353cf22dc3a1a079c819f9d7df174a1961084689b946857747b5862ee66",
+    "input_hashes": {
+      "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md": "22106877815aa329d5c1affe54eb4c234fc82d9ac206fdba7c4766ce46d10cc2",
+      "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md": "5c1111af174a3a3e6c6e90438ef4a907f75f0b149eb297bb91ae3ba3888b8048",
+      "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md": "fe85dc2d0fcc9191219eeda7919e1b0f01d1bc6959c99c637d72acd76ddc9250",
+      "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md": "8f323d975b7b2be1c46613237c332fabbcea2f0a2a712054cdf8f3fbf2544764",
+      "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md": "193ccd41d8a6e6492ae65c96ecd4b126e1098711b28af53aa2e7ae68f7a11f2d",
+      "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md": "32d5806fb11659ee611b34b65ed0fced7d6bdb88f3b69c53d0159d96a7997395"
+    },
+    "exit_code": 0,
+    "stdout": "[\n  {\n    \"path\": \"tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md\",\n    \"line\": 107,\n    \"column\": 2,\n    \"severity\": \"review\",\n    \"code\": \"HW008\",\n    \"message\": \"inanimate subject is given interior or social agency\",\n    \"excerpt\": \"[Chapter 6](06-choose-a-console.md) explains console selection and\"\n  }\n]\n",
+    "stderr": "",
+    "dispositions": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 107,
+        "code": "HW008",
+        "decision": "retain",
+        "reason": "Read complete paragraph after the console capture: the Chapter 6 and 7 links locate console selection and startup explanations, followed by separate service-authoring links. Explains describes the linked explanatory content, not perception or intention by an artifact. No reader text changed for this flag."
+      }
+    ],
+    "final_rerun": {
+      "exit_code": 0,
+      "identical_findings": true,
+      "stdout_sha256": "c4a66f89a3b7cc6d705123cab6b68d6788a2493577845339105425955990fcd4"
+    }
+  },
+  "sentence_complexity": {
+    "command": [
+      "python3",
+      "/Users/johnhardy/.agents/skills/human-writing/scripts/sentence_complexity.py",
+      "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md"
+    ],
+    "script_sha256": "59ef44ca92c947b97c8f73a6e425cb3c3b321190f0f892590c25190300d286a8",
+    "input_hashes": {
+      "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md": "22106877815aa329d5c1affe54eb4c234fc82d9ac206fdba7c4766ce46d10cc2",
+      "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md": "5c1111af174a3a3e6c6e90438ef4a907f75f0b149eb297bb91ae3ba3888b8048",
+      "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md": "fe85dc2d0fcc9191219eeda7919e1b0f01d1bc6959c99c637d72acd76ddc9250",
+      "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md": "8f323d975b7b2be1c46613237c332fabbcea2f0a2a712054cdf8f3fbf2544764",
+      "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md": "193ccd41d8a6e6492ae65c96ecd4b126e1098711b28af53aa2e7ae68f7a11f2d",
+      "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md": "32d5806fb11659ee611b34b65ed0fced7d6bdb88f3b69c53d0159d96a7997395"
+    },
+    "exit_code": 0,
+    "stdout": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:11: LONG(84)\n  Original old03/05/07 supplied inputs: TED.COM Thorium 128edb7, SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f; TAS.COM Thorium dbee66a, SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:30: SHORT(6)\n  Chapter 10 explains the program-memory boundary.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:64: SHORT(4)\n  Reset empties the list.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:87: SHORT(5)\n  Otherwise output returns to serial.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:122: NEG(2)\n  Before changing a drive selection, enter CODE with no arguments to list the starter's volumes, including any assigned to no drive.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:146: SHORT(5)\n  The prompt stays on B.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:155: SHORT(6)\n  Every file belongs to one area.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:155: ECHO(drives/drive)\n  CODE selects area 3 on all drives, not a separate area for each drive.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:161: SHORT(6)\n  File commands use the current area.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:186: ECHO(area/areas)\n  the current area so it cannot transfer a file between areas.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:191: ECHO(commands/command)\n  A system file remains available to CODE and other file commands in its area and a program command can run it.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:199: FRONT(11)\n  If the file is absent and the area is not 0, it searches area 0 on the same drive.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:199: SHORT(6)\n  The selected user area remains unchanged.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:239: SHORT(5)\n  Neither drive had that program.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:244: SHORT(5)\n  The exception is type SVC.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:265: NEG(2)\n  It has no GAMES or SPARE volume and no usable C slot.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:277: SHORT(5)\n  B can take either geometry.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:277: NEG(2)\n  C and D have no slots and cannot take a volume on that card.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:298: SHORT(6)\n  Each can then take either geometry.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:298: SHORT(5)\n  These slots use system memory.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:304: CLAUSES(0+4)\n  On that historical CODE card, SYSTEM and WORK start on A and B, GAMES and SPARE start unassigned and all four drives have full-size slots.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:355: SHORT(5)\n  Invalid command syntax prints CODE.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:371: SHORT(5)\n  A volume can be read-only.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:371: CLAUSES(0+3) ECHO(files/file)\n  Its files can be read and its programs can run but creating, writing, renaming or erasing a file there gives CODE.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:377: SHORT(6)\n  A file's read-only attribute is separate.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:377: SHORT(6)\n  The system attribute controls that omission.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:401: SHORT(6)\n  The reconstructed selection kept both changes:\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:426: NEG(3)\n  No saved drive assignment is applied if a required volume no longer matches or a required slot cannot hold it.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:426: SHORT(6)\n  The card's header assignments then stand.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md:434: CLAUSES(0+3)\n  Warm boot retains cached card blocks and the drives' free-space state so it does not reinitialise the card or discard those old copies.\ntec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md: 192 sentences, mean 12.4 words, 0.62 joints/sentence, 16% flagged, grade 6.7\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:11: LONG(83)\n  Original old03/04/05 inputs: TED.COM Thorium 128edb7, SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f; TAS.COM Thorium dbee66a, SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:30: CLAUSES(1+2)\n  Chapter 26 gives the source/input preparation and build route through CODE, which writes the ROM, starter image, recipes and component files into CODE.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:46: SHORT(6)\n  Chapter 18 explains the persistence rules.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:54: ECHO(write/writing, filesystems/filesystem)\n  Unmount its filesystems before a raw write so the PC is not also writing through a mounted filesystem.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:77: ECHO(bytes/byte)\n  CODE lists drive A by default, including each file's user area and length in bytes, rounded to whole 128-byte records.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:82: ECHO(recorded/record, includes/including)\n  Binary extraction includes every recorded 128-byte record, including padding in the last one.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:82: SHORT(6)\n  A lone carriage return is retained.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:91: SHORT(6)\n  Listing and extraction leave CODE unchanged.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:134: SHORT(5)\n  Appendix E gives every field.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:149: LONG(31) ECHO(files/file)\n  Space is allocated to files in larger allocation blocks so a file with any data occupies at least 2 KiB on G1M or 4 KiB on G8M.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:155: SHORT(6)\n  A larger file needs further entries.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:160: SHORT(5)\n  Appendix E lists those parameters.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:166: SHORT(4)\n  Binary padding is zero.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:172: SHORT(5)\n  CODE erases a named file.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:189: CLAUSES(0+4)\n  Chapter 4's custom-volume examples use CODE, with SYSTEM and WORK assigned to A and B and GAMES and SPARE initially unassigned.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:194: SHORT(4)\n  CODE makes empty volumes.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:233: SHORT(6)\n  This image has no startup file.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:250: SHORT(6)\n  The CODE means no default drive.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:250: CLAUSES(1+2)\n  GAMES and SPARE stay unassigned at cold boot until a retained selection or a CODE command assigns them.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:258: SHORT(5)\n  A mismatch stops the build.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:265: SHORT(5)\n  The retained card-building command is:\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:272: SHORT(6)\n  The historical recipe's volume list is:\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:333: SHORT(5)\n  Here the capture supplies CODE.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:342: SHORT(3)\n  It requires CODE:\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:379: SHORT(5)\n  Standard-capacity cards use byte addresses.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:379: ECHO(mounting/mounts)\n  A descriptor outside that limit fails mounting with code CODE and no volume mounts.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:379: SHORT(6)\n  Validation does not write the card.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:399: LONG(28)\n  These exclusions do not remove every cause of ROM code CODE: the ROM also rejects a volume end that overflows 32 bits or exceeds the container's declared size.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:410: NEG(2)\n  A failed close is not proof of preservation and nothing automatically restores the old file.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:417: NEG(2)\n  A cut can leave new records alongside old records that the program had not reached, with no saved copy of the original file.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:424: SHORT(6)\n  Overwritten blocks contain the new data.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:424: ECHO(write/writes)\n  The directory write follows successful data writes so an interrupted flush does not publish a new allocation map before those data writes succeed.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md:444: LONG(26) CLAUSES(1+2)\n  A fresh image made with CODE and CODE or from a recipe can then replace the damaged card through CODE while the original copy remains available.\ntec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md: 225 sentences, mean 13.0 words, 0.62 joints/sentence, 15% flagged, grade 7.6\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:11: SHORT(2)\n  Source-only draft.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:11: ECHO(retained/retain)\n  All nine retained captures, their recipes and the six shell fences retain TEC-OS 78127ec.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:11: SHORT(6)\n  No capture or workflow was rerun.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:24: SHORT(5)\n  Each line supplies a command.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:30: SHORT(6)\n  Reset does not finish pending writes.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:100: SHORT(6)\n  Nothing in a later record runs.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:105: SHORT(5)\n  That limit includes line endings.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:105: SHORT(5)\n  CODE lies beyond the record:\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:124: SHORT(5)\n  The shortened CODE still runs.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:128: SHORT(5)\n  These rules determine the boundaries:\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:134: SHORT(1)\n  limit.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:145: SHORT(6)\n  Reset begins a new startup attempt.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:150: SHORT(5)\n  CODE that ends a program.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:150: SHORT(5)\n  It is a warm boot.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:153: CLAUSES(1+2)\n  working state and can restore the previous drive-to-volume assignments when the card and retained selection are valid.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:156: SHORT(1)\n  selection.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:158: CLAUSES(1+2)\n  It removes installed services, selects drive A and user area 0 and runs the startup file once.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:158: SHORT(6)\n  Otherwise the console starts on serial.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:170: SHORT(6)\n  Its initial A file runs CODE.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:209: ECHO(mount/mounted)\n  In this historical recipe MOUNT exists only on SYSTEM, which is no longer mounted.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:226: SHORT(2)\n  passes quietly.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:229: CONTRAST\n  It does not mean that a driver was installed.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:229: LONG(29)\n  Typing CODE at the prompt has a different result on a board with both displays: it can install the service while leaving PICO9918 selected, as Chapter 4 demonstrated.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:255: CLAUSES(0+3)\n  On the serial and GLCD configurations, the banner and volume names first go to serial and the 20 × 4 character LCD.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:270: SHORT(6)\n  After CODE, the PICO screen contained:\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:305: SHORT(4)\n  Other commands are kept.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:314: SHORT(6)\n  The format is its second byte.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:326: CLAUSES(2+1)\n  TEC-OS samples the keypad once just before opening the file and skips startup when a key is down.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:333: SHORT(6)\n  Appendix G gives the board requirement.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:420: SHORT(4)\n  CODE is cleared differently.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:420: ECHO(retrying/retry)\n  CODE at the diagnostic prompt reinitialises the LCD before retrying the card so a successful retry clears the word.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md:420: SHORT(6)\n  Another mount failure writes it again.\ntec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md: 174 sentences, mean 11.7 words, 0.56 joints/sentence, 18% flagged, grade 7.0\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md:11: SHORT(4)\n  See 08-pass-record.md. -->\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md:59: SHORT(6)\n  The BDOS may change the registers.\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md:72: SHORT(6)\n  Two saved pairs use another four.\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md:113: ECHO(byte/bytes)\n  A maximum of 20 needs a 22-byte buffer: two control bytes followed by the space for input.\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md:119: SHORT(5)\n  Save this program as CODE.\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md:156: SHORT(5)\n  CR/CRLF rendered as lines.\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md:156: SHORT(5)\n  No preceding prompt is captured. -->\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md:177: SHORT(4)\n  Function 9 printed CODE.\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md:177: SHORT(6)\n  The logical program is 47 bytes.\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md:254: SHORT(1)\n  CODE.\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md:256: ECHO(errors/error)\n  Chapter 9 explains disk errors and returned error modes alongside file calls.\ntec-os/editorial/reader-rewrite/draft/08-call-tec-os.md: 138 sentences, mean 12.2 words, 0.61 joints/sentence, 8% flagged, grade 6.4\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:11: SHORT(5)\n  No new runtime result claimed.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:11: LONG(43)\n  The starter card's TAS.COM was Thorium dbee66a, SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:11: LONG(39)\n  TED.COM was Thorium 128edb7, SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:55: ECHO(bytes/byte)\n  A program using both names copies the second default's first sixteen bytes into its own cleared 36-byte FCB before opening the first file.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:83: ECHO(records/record)\n  The sequential position is split between an extent, a group of 128 records, and the record within it.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:83: SHORT(6)\n  CODE and CODE identify the extent.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:90: SHORT(6)\n  The CCP clears it before entry.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:90: SHORT(6)\n  Opening an FCB leaves CODE unchanged.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:127: SHORT(5)\n  SHOW below uses that default.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:182: SHORT(6)\n  A successful open continues to CODE.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:201: SHORT(6)\n  CODE prints CODE with function 9.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:201: NEG(2)\n  SHOW with no argument has a blank name in its FCB, finds no file and prints the same message.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:252: SHORT(6)\n  It is not a replace-file command.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:278: CLAUSES(2+1) NEG(2)\n  The ordinary write results are 0 for success, 1 when the directory cannot hold the next extent and 2 when no disk block is available.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:293: ECHO(writes/writing)\n  On a volume using write-behind caching, TEC-OS writes pending dirty data before writing a directory block.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:313: ECHO(errors/error, returned/return)\n  If adapting it to returned disk errors, distinguish an error return from ordinary end of file before treating the buffer as valid or reporting success.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:323: ECHO(fails/failed)\n  If a write fails there, TEC-OS drops the failed cache lines, reports CODE and cancels the remaining command chain.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md:331: SHORT(4)\n  The console stays selected.\ntec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md: 168 sentences, mean 13.0 words, 0.57 joints/sentence, 11% flagged, grade 6.8\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:11: SHORT(3)\n  repository's CODE 0.3.7. -->\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:128: SHORT(5)\n  The serial-only model capture gave:\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:138: SHORT(6)\n  Its startup line skipped GLCD.SVC.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:180: SHORT(6)\n  A set bit marks allocated storage.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:180: SHORT(6)\n  Reserving vectors therefore reduces program space.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:187: SHORT(6)\n  The total reduction was 932 bytes.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:241: SHORT(5)\n  PUTDEC prints five decimal digits.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:268: ECHO(byte/bytes)\n  That allowed a 47,104-byte COM file, 164 bytes less than the 47,268-byte TPA.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:295: ECHO(changing/changes)\n  Warm boot uses that byte to restore the selection so changing that byte changes the selection used on exit.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:312: SHORT(6)\n  Chapter 12 explains the chaining interface.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:318: SHORT(6)\n  Zero pages makes an empty file.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:327: SHORT(5)\n  Its limit was 184 pages.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:327: SHORT(6)\n  The request for 185 was rejected:\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:371: SHORT(5)\n  A program can enable them.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:371: SHORT(6)\n  It then restores the previous state.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:383: SHORT(5)\n  The system latch is write-only.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:383: ECHO(writes/write)\n  A program that writes port CODE must also write the same value to CODE.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:383: SHORT(6)\n  TEC-OS does not use CODE afterwards.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:410: SHORT(5)\n  The page-zero jump targets CODE.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:418: SHORT(5)\n  Chapter 15 explains that check.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md:426: SHORT(6)\n  Subtracting 3 finds the table's base.\ntec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md: 222 sentences, mean 11.9 words, 0.56 joints/sentence, 9% flagged, grade 6.5\n",
+    "stderr": "",
+    "dispositions": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 11,
+        "flags": "LONG(84)",
+        "excerpt": "Original old03/05/07 supplied inputs: TED.COM Thorium 128edb7, SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f; TAS.COM Thorium dbee66a, SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 30,
+        "flags": "SHORT(6)",
+        "excerpt": "Chapter 10 explains the program-memory boundary.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 64,
+        "flags": "SHORT(4)",
+        "excerpt": "Reset empties the list.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 87,
+        "flags": "SHORT(5)",
+        "excerpt": "Otherwise output returns to serial.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 122,
+        "flags": "NEG(2)",
+        "excerpt": "Before changing a drive selection, enter CODE with no arguments to list the starter's volumes, including any assigned to no drive.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 146,
+        "flags": "SHORT(5)",
+        "excerpt": "The prompt stays on B.",
+        "changed_context_ids": [
+          "CC0001"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 155,
+        "flags": "SHORT(6)",
+        "excerpt": "Every file belongs to one area.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 155,
+        "flags": "ECHO(drives/drive)",
+        "excerpt": "CODE selects area 3 on all drives, not a separate area for each drive.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 161,
+        "flags": "SHORT(6)",
+        "excerpt": "File commands use the current area.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 186,
+        "flags": "ECHO(area/areas)",
+        "excerpt": "the current area so it cannot transfer a file between areas.",
+        "changed_context_ids": [
+          "CC0002"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 191,
+        "flags": "ECHO(commands/command)",
+        "excerpt": "A system file remains available to CODE and other file commands in its area and a program command can run it.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 199,
+        "flags": "FRONT(11)",
+        "excerpt": "If the file is absent and the area is not 0, it searches area 0 on the same drive.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 199,
+        "flags": "SHORT(6)",
+        "excerpt": "The selected user area remains unchanged.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 239,
+        "flags": "SHORT(5)",
+        "excerpt": "Neither drive had that program.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 244,
+        "flags": "SHORT(5)",
+        "excerpt": "The exception is type SVC.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 265,
+        "flags": "NEG(2)",
+        "excerpt": "It has no GAMES or SPARE volume and no usable C slot.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 277,
+        "flags": "SHORT(5)",
+        "excerpt": "B can take either geometry.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 277,
+        "flags": "NEG(2)",
+        "excerpt": "C and D have no slots and cannot take a volume on that card.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 298,
+        "flags": "SHORT(6)",
+        "excerpt": "Each can then take either geometry.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 298,
+        "flags": "SHORT(5)",
+        "excerpt": "These slots use system memory.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 304,
+        "flags": "CLAUSES(0+4)",
+        "excerpt": "On that historical CODE card, SYSTEM and WORK start on A and B, GAMES and SPARE start unassigned and all four drives have full-size slots.",
+        "changed_context_ids": [
+          "CC0005"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 355,
+        "flags": "SHORT(5)",
+        "excerpt": "Invalid command syntax prints CODE.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 371,
+        "flags": "SHORT(5)",
+        "excerpt": "A volume can be read-only.",
+        "changed_context_ids": [
+          "CC0007",
+          "CC0008"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 371,
+        "flags": "CLAUSES(0+3) ECHO(files/file)",
+        "excerpt": "Its files can be read and its programs can run but creating, writing, renaming or erasing a file there gives CODE.",
+        "changed_context_ids": [
+          "CC0007",
+          "CC0008"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 377,
+        "flags": "SHORT(6)",
+        "excerpt": "A file's read-only attribute is separate.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 377,
+        "flags": "SHORT(6)",
+        "excerpt": "The system attribute controls that omission.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 401,
+        "flags": "SHORT(6)",
+        "excerpt": "The reconstructed selection kept both changes:",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 426,
+        "flags": "NEG(3)",
+        "excerpt": "No saved drive assignment is applied if a required volume no longer matches or a required slot cannot hold it.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 426,
+        "flags": "SHORT(6)",
+        "excerpt": "The card's header assignments then stand.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 434,
+        "flags": "CLAUSES(0+3)",
+        "excerpt": "Warm boot retains cached card blocks and the drives' free-space state so it does not reinitialise the card or discard those old copies.",
+        "changed_context_ids": [
+          "CC0009"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 11,
+        "flags": "LONG(83)",
+        "excerpt": "Original old03/04/05 inputs: TED.COM Thorium 128edb7, SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f; TAS.COM Thorium dbee66a, SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 30,
+        "flags": "CLAUSES(1+2)",
+        "excerpt": "Chapter 26 gives the source/input preparation and build route through CODE, which writes the ROM, starter image, recipes and component files into CODE.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 46,
+        "flags": "SHORT(6)",
+        "excerpt": "Chapter 18 explains the persistence rules.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 54,
+        "flags": "ECHO(write/writing, filesystems/filesystem)",
+        "excerpt": "Unmount its filesystems before a raw write so the PC is not also writing through a mounted filesystem.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 77,
+        "flags": "ECHO(bytes/byte)",
+        "excerpt": "CODE lists drive A by default, including each file's user area and length in bytes, rounded to whole 128-byte records.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 82,
+        "flags": "ECHO(recorded/record, includes/including)",
+        "excerpt": "Binary extraction includes every recorded 128-byte record, including padding in the last one.",
+        "changed_context_ids": [
+          "CC0318"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 82,
+        "flags": "SHORT(6)",
+        "excerpt": "A lone carriage return is retained.",
+        "changed_context_ids": [
+          "CC0318"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 91,
+        "flags": "SHORT(6)",
+        "excerpt": "Listing and extraction leave CODE unchanged.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 134,
+        "flags": "SHORT(5)",
+        "excerpt": "Appendix E gives every field.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 149,
+        "flags": "LONG(31) ECHO(files/file)",
+        "excerpt": "Space is allocated to files in larger allocation blocks so a file with any data occupies at least 2 KiB on G1M or 4 KiB on G8M.",
+        "changed_context_ids": [
+          "CC0013"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 155,
+        "flags": "SHORT(6)",
+        "excerpt": "A larger file needs further entries.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 160,
+        "flags": "SHORT(5)",
+        "excerpt": "Appendix E lists those parameters.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 166,
+        "flags": "SHORT(4)",
+        "excerpt": "Binary padding is zero.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 172,
+        "flags": "SHORT(5)",
+        "excerpt": "CODE erases a named file.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 189,
+        "flags": "CLAUSES(0+4)",
+        "excerpt": "Chapter 4's custom-volume examples use CODE, with SYSTEM and WORK assigned to A and B and GAMES and SPARE initially unassigned.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 194,
+        "flags": "SHORT(4)",
+        "excerpt": "CODE makes empty volumes.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 233,
+        "flags": "SHORT(6)",
+        "excerpt": "This image has no startup file.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 250,
+        "flags": "SHORT(6)",
+        "excerpt": "The CODE means no default drive.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 250,
+        "flags": "CLAUSES(1+2)",
+        "excerpt": "GAMES and SPARE stay unassigned at cold boot until a retained selection or a CODE command assigns them.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 258,
+        "flags": "SHORT(5)",
+        "excerpt": "A mismatch stops the build.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 265,
+        "flags": "SHORT(5)",
+        "excerpt": "The retained card-building command is:",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 272,
+        "flags": "SHORT(6)",
+        "excerpt": "The historical recipe's volume list is:",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 333,
+        "flags": "SHORT(5)",
+        "excerpt": "Here the capture supplies CODE.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 342,
+        "flags": "SHORT(3)",
+        "excerpt": "It requires CODE:",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 379,
+        "flags": "SHORT(5)",
+        "excerpt": "Standard-capacity cards use byte addresses.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 379,
+        "flags": "ECHO(mounting/mounts)",
+        "excerpt": "A descriptor outside that limit fails mounting with code CODE and no volume mounts.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 379,
+        "flags": "SHORT(6)",
+        "excerpt": "Validation does not write the card.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 399,
+        "flags": "LONG(28)",
+        "excerpt": "These exclusions do not remove every cause of ROM code CODE: the ROM also rejects a volume end that overflows 32 bits or exceeds the container's declared size.",
+        "changed_context_ids": [
+          "CC0014"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 410,
+        "flags": "NEG(2)",
+        "excerpt": "A failed close is not proof of preservation and nothing automatically restores the old file.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 417,
+        "flags": "NEG(2)",
+        "excerpt": "A cut can leave new records alongside old records that the program had not reached, with no saved copy of the original file.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 424,
+        "flags": "SHORT(6)",
+        "excerpt": "Overwritten blocks contain the new data.",
+        "changed_context_ids": [
+          "CC0015"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 424,
+        "flags": "ECHO(write/writes)",
+        "excerpt": "The directory write follows successful data writes so an interrupted flush does not publish a new allocation map before those data writes succeed.",
+        "changed_context_ids": [
+          "CC0015"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "line": 444,
+        "flags": "LONG(26) CLAUSES(1+2)",
+        "excerpt": "A fresh image made with CODE and CODE or from a recipe can then replace the damaged card through CODE while the original copy remains available.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 11,
+        "flags": "SHORT(2)",
+        "excerpt": "Source-only draft.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 11,
+        "flags": "ECHO(retained/retain)",
+        "excerpt": "All nine retained captures, their recipes and the six shell fences retain TEC-OS 78127ec.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 11,
+        "flags": "SHORT(6)",
+        "excerpt": "No capture or workflow was rerun.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 24,
+        "flags": "SHORT(5)",
+        "excerpt": "Each line supplies a command.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 30,
+        "flags": "SHORT(6)",
+        "excerpt": "Reset does not finish pending writes.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 100,
+        "flags": "SHORT(6)",
+        "excerpt": "Nothing in a later record runs.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 105,
+        "flags": "SHORT(5)",
+        "excerpt": "That limit includes line endings.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 105,
+        "flags": "SHORT(5)",
+        "excerpt": "CODE lies beyond the record:",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 124,
+        "flags": "SHORT(5)",
+        "excerpt": "The shortened CODE still runs.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 128,
+        "flags": "SHORT(5)",
+        "excerpt": "These rules determine the boundaries:",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 134,
+        "flags": "SHORT(1)",
+        "excerpt": "limit.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 145,
+        "flags": "SHORT(6)",
+        "excerpt": "Reset begins a new startup attempt.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 150,
+        "flags": "SHORT(5)",
+        "excerpt": "CODE that ends a program.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 150,
+        "flags": "SHORT(5)",
+        "excerpt": "It is a warm boot.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 153,
+        "flags": "CLAUSES(1+2)",
+        "excerpt": "working state and can restore the previous drive-to-volume assignments when the card and retained selection are valid.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 156,
+        "flags": "SHORT(1)",
+        "excerpt": "selection.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 158,
+        "flags": "CLAUSES(1+2)",
+        "excerpt": "It removes installed services, selects drive A and user area 0 and runs the startup file once.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 158,
+        "flags": "SHORT(6)",
+        "excerpt": "Otherwise the console starts on serial.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 170,
+        "flags": "SHORT(6)",
+        "excerpt": "Its initial A file runs CODE.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 209,
+        "flags": "ECHO(mount/mounted)",
+        "excerpt": "In this historical recipe MOUNT exists only on SYSTEM, which is no longer mounted.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 226,
+        "flags": "SHORT(2)",
+        "excerpt": "passes quietly.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 229,
+        "flags": "CONTRAST",
+        "excerpt": "It does not mean that a driver was installed.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 229,
+        "flags": "LONG(29)",
+        "excerpt": "Typing CODE at the prompt has a different result on a board with both displays: it can install the service while leaving PICO9918 selected, as Chapter 4 demonstrated.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 255,
+        "flags": "CLAUSES(0+3)",
+        "excerpt": "On the serial and GLCD configurations, the banner and volume names first go to serial and the 20 × 4 character LCD.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 270,
+        "flags": "SHORT(6)",
+        "excerpt": "After CODE, the PICO screen contained:",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 305,
+        "flags": "SHORT(4)",
+        "excerpt": "Other commands are kept.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 314,
+        "flags": "SHORT(6)",
+        "excerpt": "The format is its second byte.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 326,
+        "flags": "CLAUSES(2+1)",
+        "excerpt": "TEC-OS samples the keypad once just before opening the file and skips startup when a key is down.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 333,
+        "flags": "SHORT(6)",
+        "excerpt": "Appendix G gives the board requirement.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 420,
+        "flags": "SHORT(4)",
+        "excerpt": "CODE is cleared differently.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 420,
+        "flags": "ECHO(retrying/retry)",
+        "excerpt": "CODE at the diagnostic prompt reinitialises the LCD before retrying the card so a successful retry clears the word.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+        "line": 420,
+        "flags": "SHORT(6)",
+        "excerpt": "Another mount failure writes it again.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "line": 11,
+        "flags": "SHORT(4)",
+        "excerpt": "See 08-pass-record.md. -->",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "line": 59,
+        "flags": "SHORT(6)",
+        "excerpt": "The BDOS may change the registers.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "line": 72,
+        "flags": "SHORT(6)",
+        "excerpt": "Two saved pairs use another four.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "line": 113,
+        "flags": "ECHO(byte/bytes)",
+        "excerpt": "A maximum of 20 needs a 22-byte buffer: two control bytes followed by the space for input.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "line": 119,
+        "flags": "SHORT(5)",
+        "excerpt": "Save this program as CODE.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "line": 156,
+        "flags": "SHORT(5)",
+        "excerpt": "CR/CRLF rendered as lines.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "line": 156,
+        "flags": "SHORT(5)",
+        "excerpt": "No preceding prompt is captured. -->",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "line": 177,
+        "flags": "SHORT(4)",
+        "excerpt": "Function 9 printed CODE.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "line": 177,
+        "flags": "SHORT(6)",
+        "excerpt": "The logical program is 47 bytes.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "line": 254,
+        "flags": "SHORT(1)",
+        "excerpt": "CODE.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "line": 256,
+        "flags": "ECHO(errors/error)",
+        "excerpt": "Chapter 9 explains disk errors and returned error modes alongside file calls.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 11,
+        "flags": "SHORT(5)",
+        "excerpt": "No new runtime result claimed.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 11,
+        "flags": "LONG(43)",
+        "excerpt": "The starter card's TAS.COM was Thorium dbee66a, SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 11,
+        "flags": "LONG(39)",
+        "excerpt": "TED.COM was Thorium 128edb7, SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 55,
+        "flags": "ECHO(bytes/byte)",
+        "excerpt": "A program using both names copies the second default's first sixteen bytes into its own cleared 36-byte FCB before opening the first file.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 83,
+        "flags": "ECHO(records/record)",
+        "excerpt": "The sequential position is split between an extent, a group of 128 records, and the record within it.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 83,
+        "flags": "SHORT(6)",
+        "excerpt": "CODE and CODE identify the extent.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 90,
+        "flags": "SHORT(6)",
+        "excerpt": "The CCP clears it before entry.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 90,
+        "flags": "SHORT(6)",
+        "excerpt": "Opening an FCB leaves CODE unchanged.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 127,
+        "flags": "SHORT(5)",
+        "excerpt": "SHOW below uses that default.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 182,
+        "flags": "SHORT(6)",
+        "excerpt": "A successful open continues to CODE.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 201,
+        "flags": "SHORT(6)",
+        "excerpt": "CODE prints CODE with function 9.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 201,
+        "flags": "NEG(2)",
+        "excerpt": "SHOW with no argument has a blank name in its FCB, finds no file and prints the same message.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 252,
+        "flags": "SHORT(6)",
+        "excerpt": "It is not a replace-file command.",
+        "changed_context_ids": [
+          "CC0029"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 278,
+        "flags": "CLAUSES(2+1) NEG(2)",
+        "excerpt": "The ordinary write results are 0 for success, 1 when the directory cannot hold the next extent and 2 when no disk block is available.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 293,
+        "flags": "ECHO(writes/writing)",
+        "excerpt": "On a volume using write-behind caching, TEC-OS writes pending dirty data before writing a directory block.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 313,
+        "flags": "ECHO(errors/error, returned/return)",
+        "excerpt": "If adapting it to returned disk errors, distinguish an error return from ordinary end of file before treating the buffer as valid or reporting success.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 323,
+        "flags": "ECHO(fails/failed)",
+        "excerpt": "If a write fails there, TEC-OS drops the failed cache lines, reports CODE and cancels the remaining command chain.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "line": 331,
+        "flags": "SHORT(4)",
+        "excerpt": "The console stays selected.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 11,
+        "flags": "SHORT(3)",
+        "excerpt": "repository's CODE 0.3.7. -->",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 128,
+        "flags": "SHORT(5)",
+        "excerpt": "The serial-only model capture gave:",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 138,
+        "flags": "SHORT(6)",
+        "excerpt": "Its startup line skipped GLCD.SVC.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 180,
+        "flags": "SHORT(6)",
+        "excerpt": "A set bit marks allocated storage.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 180,
+        "flags": "SHORT(6)",
+        "excerpt": "Reserving vectors therefore reduces program space.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 187,
+        "flags": "SHORT(6)",
+        "excerpt": "The total reduction was 932 bytes.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 241,
+        "flags": "SHORT(5)",
+        "excerpt": "PUTDEC prints five decimal digits.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 268,
+        "flags": "ECHO(byte/bytes)",
+        "excerpt": "That allowed a 47,104-byte COM file, 164 bytes less than the 47,268-byte TPA.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 295,
+        "flags": "ECHO(changing/changes)",
+        "excerpt": "Warm boot uses that byte to restore the selection so changing that byte changes the selection used on exit.",
+        "changed_context_ids": [
+          "CC0033"
+        ],
+        "disposition": "Read in the complete changed context. Retain accepted wording: the prompt reflects necessary repeated technical terms, enumerated state or explicit cause/result, with no new wording introduced by comma removal."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 312,
+        "flags": "SHORT(6)",
+        "excerpt": "Chapter 12 explains the chaining interface.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 318,
+        "flags": "SHORT(6)",
+        "excerpt": "Zero pages makes an empty file.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 327,
+        "flags": "SHORT(5)",
+        "excerpt": "Its limit was 184 pages.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 327,
+        "flags": "SHORT(6)",
+        "excerpt": "The request for 185 was rejected:",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 371,
+        "flags": "SHORT(5)",
+        "excerpt": "A program can enable them.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 371,
+        "flags": "SHORT(6)",
+        "excerpt": "It then restores the previous state.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 383,
+        "flags": "SHORT(5)",
+        "excerpt": "The system latch is write-only.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 383,
+        "flags": "ECHO(writes/write)",
+        "excerpt": "A program that writes port CODE must also write the same value to CODE.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 383,
+        "flags": "SHORT(6)",
+        "excerpt": "TEC-OS does not use CODE afterwards.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 410,
+        "flags": "SHORT(5)",
+        "excerpt": "The page-zero jump targets CODE.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 418,
+        "flags": "SHORT(5)",
+        "excerpt": "Chapter 15 explains that check.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+        "line": 426,
+        "flags": "SHORT(6)",
+        "excerpt": "Subtracting 3 finds the table's base.",
+        "changed_context_ids": [],
+        "disposition": "Unchanged text outside the accepted comma edits. Prompt recorded without automatic shortening or a fresh chapter-quality acceptance claim."
+      }
+    ]
+  },
+  "readback_summary": {
+    "complete_changed_contexts": 29,
+    "joint_contexts": [
+      [
+        "CC0007",
+        "CC0008"
+      ],
+      [
+        "CC0022",
+        "CC0023"
+      ]
+    ],
+    "removed_commas": 31,
+    "retained_boundaries": 5,
+    "affected_prose_width": 80,
+    "table_rows": "Kept as complete Markdown rows; no forced line breaks.",
+    "literal_changes": 0,
+    "unrelated_files_changed": 0
+  }
+}

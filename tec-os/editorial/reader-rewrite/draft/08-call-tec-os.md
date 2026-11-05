@@ -34,14 +34,13 @@ the machine's ports and display drivers. Chapter 10 explains the raw BIOS
 interface and its stack/input contract. Here both input and output use the
 BDOS.
 
-Registers hold the values passed to a call. `A`, `B`, `C` and `E` each
-hold a byte. `BC`, `DE` and `HL` are 16-bit register pairs, large enough
-for a memory address. To select a BDOS operation, you put its function number in `C` and
-call `0005h`. A byte parameter goes in `E`, while an address or word
-parameter goes in `DE`. A byte result is returned in `A` and a word result
-in `HL`. For example, function 2 takes the character in `E` and function 9
-takes an address in `DE`. In source, `BDOS EQU $0005` gives that call
-address a name.
+Registers hold the values passed to a call. `A`, `B`, `C` and `E` each hold a
+byte. `BC`, `DE` and `HL` are 16-bit register pairs, large enough for a memory
+address. To select a BDOS operation, you put its function number in `C` and call
+`0005h`. A byte parameter goes in `E` while an address or word parameter goes in
+`DE`. A byte result is returned in `A` and a word result in `HL`. For example,
+function 2 takes the character in `E` and function 9 takes an address in `DE`.
+In source, `BDOS EQU $0005` gives that call address a name.
 
 ## Calls, returns and saved values
 
@@ -53,9 +52,9 @@ routine moves it back up by two.
 
 The CCP also supplies a return address when it starts your program. It puts
 `0000h` on the inherited stack before jumping to `0100h`. A top-level `RET`
-therefore ends the program through the warm-boot jump at `0000h`. Calls
-within the program must return before that last `RET`, so it reaches the
-word supplied by the CCP.
+therefore ends the program through the warm-boot jump at `0000h`. Calls within
+the program must return before that last `RET` so it reaches the word supplied
+by the CCP.
 
 The BDOS may change the registers. A returned value is usable according to
 that function's contract but any other value you still need must be saved
@@ -190,11 +189,11 @@ input, `^W` and `^N` are input bytes rather than recall commands.
 
 ## Input while output is running
 
-Functions 1, 2, 9 and 10 expand tabs to spaces up to the next multiple of
-eight columns, counted from the last carriage return. They also copy printed
-output to the list device while `^P` has that copy enabled. In CP/M the list
-device is the printer. TEC-OS's normal list routine discards the bytes, so
-toggling the copy has no visible effect on the unmodified system.
+Functions 1, 2, 9 and 10 expand tabs to spaces up to the next multiple of eight
+columns, counted from the last carriage return. They also copy printed output to
+the list device while `^P` has that copy enabled. In CP/M the list device is the
+printer. TEC-OS's normal list routine discards the bytes so toggling the copy
+has no visible effect on the unmodified system.
 
 | Key | Effect |
 | --- | --- |
@@ -232,7 +231,7 @@ is:
 | --- | --- | --- | --- |
 | 1 | Console input | nothing | `A`: the next key, which is also printed |
 | 2 | Console output | `E`: the character | nothing |
-| 6 | Direct console I/O | `E`: FFh to read, or a character to print | for FFh, `A`: the key, or 0 if none is waiting |
+| 6 | Direct console I/O | `E`: FFh to read or a character to print | for FFh, `A`: the key or 0 if none is waiting |
 | 9 | Print string | `DE`: the string, ended by `$` | nothing |
 | 10 | Read console buffer | `DE`: the buffer | the line in the buffer |
 | 11 | Console status | nothing | `A`: 1 if a key is waiting, else 0 |

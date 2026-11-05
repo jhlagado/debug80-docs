@@ -143,12 +143,12 @@ Bdos Err On C: Select
 B>
 ```
 
-The default error path waits for a key, `x` in this capture, then ends
-the command with a warm boot. The prompt stays on B. The CP/M drive
-letters E through P are accepted as names but have no TEC-OS volume and
-give the same error. Q and later letters are outside that range, so
-`Q:` gives `Q:?`. [Appendix D](appendix-d-error-messages.md) explains these
-messages and the returned-error option for programs.
+The default error path waits for a key, `x` in this capture, then ends the
+command with a warm boot. The prompt stays on B. The CP/M drive letters E
+through P are accepted as names but have no TEC-OS volume and give the same
+error. Q and later letters are outside that range so `Q:` gives `Q:?`.
+[Appendix D](appendix-d-error-messages.md) explains these messages and the
+returned-error option for programs.
 
 ## User areas
 
@@ -181,12 +181,12 @@ NO FILE
 A>
 ```
 
-The `MOUNT` program still ran in area 3 because program lookup also
-checks area 0. Its volume list is independent of the files' user areas.
-`COPY` works within the current area, so it cannot transfer a file between
-areas. On a PC, `tecvol put --user N` places a file in a chosen area,
-as [Chapter 5](05-cards-on-the-pc.md) explains. `USER` without a number or
-with a number outside 0 to 15 fails with a question mark.
+The `MOUNT` program still ran in area 3 because program lookup also checks area
+0. Its volume list is independent of the files' user areas. `COPY` works within
+the current area so it cannot transfer a file between areas. On a PC,
+`tecvol put --user N` places a file in a chosen area, as
+[Chapter 5](05-cards-on-the-pc.md) explains. `USER` without a number or with a
+number outside 0 to 15 fails with a question mark.
 
 The system attribute is a separate property of a file. `DIR` omits system
 files as well as files outside the current area. A system file remains
@@ -253,12 +253,12 @@ file or an oversized program prints the command name with a question mark.
 A card-read failure in the default error mode gives `Bad Sector` and ends
 the command through the BDOS instead. It does not print that question mark.
 
-A COM file starts at `0100h` in program memory. The small program from
-Chapter 2 is stored on B, so its plain name works at `B>`. At `A>` its
-plain name gives a question mark unless another copy is available there.
-An explicit `B:` before the name selects its file without changing the
-current drive. [Chapter 20](20-from-prompt-to-program.md) follows lookup
-and loading inside the command processor.
+A COM file starts at `0100h` in program memory. The small program from Chapter 2
+is stored on B so its plain name works at `B>`. At `A>` its plain name gives a
+question mark unless another copy is available there. An explicit `B:` before
+the name selects its file without changing the current drive.
+[Chapter 20](20-from-prompt-to-program.md) follows lookup and loading inside the
+command processor.
 
 ## Changing a drive's volume
 
@@ -268,11 +268,11 @@ usable slots for C and D through `--drives 4`. These examples are not steps
 required on the supplied starter. It has no GAMES or SPARE volume and no usable
 C slot.
 
-`MOUNT C: GAMES` assigns the volume labelled GAMES to C. An index can be
-used instead of the label, as in `MOUNT D: 3`. A volume can occupy at
-most one drive. A drive can be emptied with `MOUNT B:` and filled again
-without changing the card's saved assignments. Drive A must keep a volume,
-so `MOUNT A:` cannot empty it. A different volume can replace A's current one.
+`MOUNT C: GAMES` assigns the volume labelled GAMES to C. An index can be used
+instead of the label, as in `MOUNT D: 3`. A volume can occupy at most one drive.
+A drive can be emptied with `MOUNT B:` and filled again without changing the
+card's saved assignments. Drive A must keep a volume so `MOUNT A:` cannot empty
+it. A different volume can replace A's current one.
 
 Mounting is also limited by the drive slots prepared at cold boot, the
 full start after reset. The starter has a G1M-sized slot for A and a
@@ -301,11 +301,11 @@ can then take either geometry. These slots use system memory. Their byte
 cost and placement belong to [Chapter 14](14-state-and-memory.md#allocation-vectors-below-the-workspace).
 `MOUNT` cannot add a slot to the running starter card.
 
-On that historical `my.img` card, SYSTEM and WORK start on A and B,
-GAMES and SPARE start unassigned and all four drives have full-size slots.
-GAMES contains `TAS.COM` and SPARE contains `HELLO.TXT`
-with the line `Hello from the PC.`. This card had no startup file, so
-its initial prompt followed the mounted-drive list directly:
+On that historical `my.img` card, SYSTEM and WORK start on A and B, GAMES and
+SPARE start unassigned and all four drives have full-size slots. GAMES contains
+`TAS.COM` and SPARE contains `HELLO.TXT` with the line `Hello from the PC.`.
+This card had no startup file so its initial prompt followed the mounted-drive
+list directly:
 
 <!-- node tools/capture.mjs --card my.img -->
 ```text
@@ -360,19 +360,19 @@ changes only after the writes succeed. A label or index not found in the table
 gives `No such volume`. Invalid command syntax prints
 `MOUNT [D: [NAME or INDEX]]`. An attempt to empty A gives `Cannot unmount`.
 
-`MOUNT` changes the running assignments in memory, not the drive fields
-saved in the card's header. Before changing an assignment it flushes pending
-writes to the card. The changed drive's directory is read afresh on its
-next use. Mounting a volume on the current drive selects it again at once,
-so that access uses the new volume.
+`MOUNT` changes the running assignments in memory, not the drive fields saved in
+the card's header. Before changing an assignment it flushes pending writes to
+the card. The changed drive's directory is read afresh on its next use. Mounting
+a volume on the current drive selects it again at once so that access uses the
+new volume.
 
 ## Volume and file protection
 
-A volume can be read-only. Its files can be read and its programs can run,
-but creating, writing, renaming or erasing a file there gives `R/O`.
-`MOUNT` marks such a volume `R/O` in its list. This property belongs to
-the volume, so changing its drive or warm-booting does not remove it.
-Chapter 5 explains how a prepared card receives that flag.
+A volume can be read-only. Its files can be read and its programs can run but
+creating, writing, renaming or erasing a file there gives `R/O`. `MOUNT` marks
+such a volume `R/O` in its list. This property belongs to the volume so changing
+its drive or warm-booting does not remove it. Chapter 5 explains how a prepared
+card receives that flag.
 
 A file's read-only attribute is separate. It prevents writing, renaming
 or erasing that file and gives `File R/O`. It does not hide the file from
@@ -432,6 +432,6 @@ recognition test, interrupted cold boot and recovery from an interrupted
 service installation.
 
 A card changed on a PC needs a reset when returned to the board. Warm boot
-retains cached card blocks and the drives' free-space state, so it does not
-reinitialise the card or discard those old copies. Only cold boot starts
-the card again. Do not let TEC-OS and a PC write the same card at the same time.
+retains cached card blocks and the drives' free-space state so it does not
+reinitialise the card or discard those old copies. Only cold boot starts the
+card again. Do not let TEC-OS and a PC write the same card at the same time.

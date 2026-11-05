@@ -32,10 +32,10 @@ Those bytes are below your code and include the BDOS call jump you already
 use at `0005h`.
 
 The *command tail* is the text after the program's name. Its length is at
-`0080h` and its characters start at `0081h`. They include the space before
-the first argument. The CCP converts letters to capitals before entry, so
-`SHOW b:hello.asm x` gives a length of 14 and the text ` B:HELLO.ASM X`.
-A zero follows the tail's last character.
+`0080h` and its characters start at `0081h`. They include the space before the
+first argument. The CCP converts letters to capitals before entry so
+`SHOW b:hello.asm x` gives a length of 14 and the text ` B:HELLO.ASM X`. A zero
+follows the tail's last character.
 
 A file call takes separate drive, name and type fields. The CCP prepares
 the first argument as a *file control block*, or FCB, at `005Ch`.
@@ -97,11 +97,11 @@ current record, not the carriage return character used in text.
 
 ## A record buffer
 
-The FCB holds file state, while the bytes being read or written go through
-a separate memory buffer. The BDOS calls this the *DMA address*. It is a
-transfer address in your memory, not a request to program a hardware DMA
-controller. Initially it is `0080h`, with room for one 128-byte record.
-Function 26 changes it to the address supplied in `DE`.
+The FCB holds file state while the bytes being read or written go through a
+separate memory buffer. The BDOS calls this the *DMA address*. It is a transfer
+address in your memory, not a request to program a hardware DMA controller.
+Initially it is `0080h`, with room for one 128-byte record. Function 26 changes
+it to the address supplied in `DE`.
 
 That default buffer occupies the same space as the command tail. The first
 record read there replaces the tail's length and characters. A program
@@ -129,7 +129,7 @@ buffer only after a successful read. Otherwise it may still hold old data.
 With the default error mode, a disk error prints a message, waits for a key
 and ends the program by warm boot. SHOW below uses that default.
 
-SHOW only reads, so it leaves no changed file state to close. A program that
+SHOW only reads so it leaves no changed file state to close. A program that
 writes must close its updated FCB before finishing. Warm boot flushes pending
 writes from the block cache but cannot close the program's FCBs. The write
 sequence after SHOW explains how to finish both operations and check them.
@@ -249,11 +249,11 @@ current build size or a newly qualified card.
 
 ## Making and writing a file
 
-Writing uses an FCB and a DMA buffer in the same way, but the state
-must reach the directory before the program finishes. For a new file,
-prepare all 36 FCB bytes: the drive, the space-padded name/type and zeroed
-state. Choose a name that is not already present. Function 22, make file,
-creates a directory entry. It is not a replace-file command.
+Writing uses an FCB and a DMA buffer in the same way but the state must reach
+the directory before the program finishes. For a new file, prepare all 36 FCB
+bytes: the drive, the space-padded name/type and zeroed state. Choose a name
+that is not already present. Function 22, make file, creates a directory entry.
+It is not a replace-file command.
 
 For example, a source-derived write sequence for a new `NOTE.TXT` can use
 drive code 0 followed by the name bytes `NOTE    TXT`. The following calls

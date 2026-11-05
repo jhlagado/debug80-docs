@@ -79,14 +79,14 @@ file's user area and length in bytes, rounded to whole 128-byte records.
 A volume argument names another volume by drive letter, label or id, tried
 in that order. A label or id also reaches a volume that is on no drive.
 
-`get` copies a named file to the PC. Its optional output-file argument gives
-the destination. A named destination is overwritten if it already exists, so
-use a new path for a recovered copy. Without that argument the bytes go to
-standard output. Binary extraction includes every recorded 128-byte record,
-including padding in the last one. With `--text`, extraction stops before the
-first `^Z` and converts carriage-return/line-feed pairs to line feeds. A lone
-carriage return is retained. Without `^Z`, all recorded bytes undergo that
-conversion, including any padding.
+`get` copies a named file to the PC. Its optional output-file argument gives the
+destination. A named destination is overwritten if it already exists so use a
+new path for a recovered copy. Without that argument the bytes go to standard
+output. Binary extraction includes every recorded 128-byte record, including
+padding in the last one. With `--text`, extraction stops before the first `^Z`
+and converts carriage-return/line-feed pairs to line feeds. A lone carriage
+return is retained. Without `^Z`, all recorded bytes undergo that conversion,
+including any padding.
 
 `get` reads user area 0 unless `--user N` selects another. `dir` lists all
 areas unless that option limits it. `N` must be a whole number from 0 to 15.
@@ -95,10 +95,10 @@ Listing and extraction leave `card.img` unchanged.
 
 ## The container and its volumes
 
-The card holds programs, resident services, `STARTUP.CMD` and your files.
-Each drive uses a volume, an ordinary CP/M disk of a fixed size. CP/M 2.2
-addresses at most 8 MiB on a drive. Most CP/M machines used floppy disks
-of a few hundred KiB, while an SD card can hold many volumes.
+The card holds programs, resident services, `STARTUP.CMD` and your files. Each
+drive uses a volume, an ordinary CP/M disk of a fixed size. CP/M 2.2 addresses
+at most 8 MiB on a drive. Most CP/M machines used floppy disks of a few hundred
+KiB while an SD card can hold many volumes.
 
 The container records where those volumes are. Its first 512-byte block
 holds a header and the first volume descriptors. A descriptor gives a
@@ -146,11 +146,11 @@ A geometry specifies the size and directory layout of a volume:
 | G1M | 1 MiB | 2 KiB | 256 |
 | G8M | 8 MiB | 4 KiB | 512 |
 
-CP/M reads and writes 128-byte records. Four records fit a 512-byte card
-block. Space is allocated to files in larger allocation blocks, so a file
-with any data occupies at least 2 KiB on G1M or 4 KiB on G8M. The one-record
-`STARTUP.CMD` therefore occupies 4 KiB on WORK even though its recorded
-length is only 128 bytes.
+CP/M reads and writes 128-byte records. Four records fit a 512-byte card block.
+Space is allocated to files in larger allocation blocks so a file with any data
+occupies at least 2 KiB on G1M or 4 KiB on G8M. The one-record `STARTUP.CMD`
+therefore occupies 4 KiB on WORK even though its recorded length is only 128
+bytes.
 
 One directory entry describes up to 16 KiB on G1M or 32 KiB on G8M.
 A larger file needs further entries. The directory occupies the first
@@ -396,14 +396,14 @@ rewrite, protection and failed-preparation rules are in
 [Appendix I](appendix-i-web-page.md). Importing a complete image differs
 from importing files into one volume.
 
-The browser uses a high-capacity card model, so it does not exercise the
+The browser uses a high-capacity card model so it does not exercise the
 standard-capacity byte-address limit. Open image also validates the whole
 container and rejects an image shorter than its declared size. It therefore
-cannot reproduce the short-image capture above through that control.
-These exclusions do not remove every cause of ROM code `27h`: the ROM
-also rejects a volume end that overflows 32 bits or exceeds the container's
-declared size. Browser validation rejects those malformed descriptors
-before the ROM receives an opened image.
+cannot reproduce the short-image capture above through that control. These
+exclusions do not remove every cause of ROM code `27h`: the ROM also rejects a
+volume end that overflows 32 bits or exceeds the container's declared size.
+Browser validation rejects those malformed descriptors before the ROM receives
+an opened image.
 
 ## Recovery after a power cut
 
@@ -421,12 +421,12 @@ rebuilds the drive's free-space map. Overwriting a record already in a file
 replaces it directly. A cut can leave new records alongside old records that
 the program had not reached, with no saved copy of the original file.
 
-On a volume written behind, changes still in the cache are lost. Blocks
-written early to make cache space and blocks written by a completed part
-of a flush remain on the card. Newly allocated blocks may again have no
-directory entry. Overwritten blocks contain the new data. The directory
-write follows successful data writes, so an interrupted flush does not
-publish a new allocation map before those data writes succeed.
+On a volume written behind, changes still in the cache are lost. Blocks written
+early to make cache space and blocks written by a completed part of a flush
+remain on the card. Newly allocated blocks may again have no directory entry.
+Overwritten blocks contain the new data. The directory write follows successful
+data writes so an interrupted flush does not publish a new allocation map before
+those data writes succeed.
 
 A cut during a single block write can leave old, new or mixed contents in
 that block. A directory block holds sixteen 32-byte entries, any of which
