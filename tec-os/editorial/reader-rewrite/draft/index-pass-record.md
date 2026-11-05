@@ -67,3 +67,15 @@ workflow remain pending. The previously closed review was at the80-column
 profile and does not qualify this change. Recheck the opening after the
 adopted source offer and actual40-column evidence. No output was changed
 or run. The original80-column packet stays unrun and recoverable.
+
+## Additional independent lead-read corrections
+
+The additional complete front-door/console read identified a device-relation
+error and bounded cuts. CON CRT now restores matrix-keyboard input and PICO
+output. The PC terminal is connected alongside the two displays rather than
+being described as a third display carried by the board. The host configuration
+remains explicit but its reproduction option stays in the capture metadata.
+The repeated ROM/no-driver sentence and front-door result certification were
+removed. The two optional introductory commas were removed. Historical fences
+and capture commands are unchanged. Independent correction confirmation is
+pending. No runtime, build, import or new capture accompanied these edits.

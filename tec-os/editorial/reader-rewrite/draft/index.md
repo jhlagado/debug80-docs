@@ -10,7 +10,7 @@ nav_exclude: true
 <!-- Planned opening profile: KD-243 / KS48, TEC Compact at 40 columns.
      Adopted source and runtime qualification remain pending. -->
 
-With TEC-OS in its ROM, the TEC-1G starts at a command prompt. You can list
+With TEC-OS in its ROM the TEC-1G starts at a command prompt. You can list
 files on an SD card and run a supplied program before using the editor and
 assembler to make one of your own. TEC-OS provides the CP/M 2.2 programming
 interface and calls for the board's devices.
@@ -24,8 +24,7 @@ NMI jumper is off. SYSTEM is on drive A and WORK is on drive B. Hardware
 preparation is described in [Appendix G](appendix-g-tec-1g.md).
 
 [First session](01-first-session.md) begins with that preparation complete.
-The commands have visible results, from the initial file listing to building
-and running the supplied SAMPLE. [Make a small program](02-make-a-small-program.md)
+[Make a small program](02-make-a-small-program.md)
 continues with a short banner entered in TED. You save it, build it with TAS,
 change its text and run it again. These two sessions introduce the keys and
 commands they use without requiring an earlier CP/M or assembly course.

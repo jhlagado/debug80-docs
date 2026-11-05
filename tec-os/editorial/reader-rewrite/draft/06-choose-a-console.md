@@ -21,7 +21,8 @@ LCD. Its reply is sent through the selected console. `BAT:` discards it.
 
 A serial terminal is a terminal program on a PC connected to the board's FTDI
 serial port. The PICO9918 and graphics LCD use the TEC-1G's matrix keyboard. A
-board can carry all three displays but TEC-OS uses one console at a time.
+serial terminal can be connected alongside both displays but TEC-OS uses one
+console at a time.
 
 | Console name | Keys from | Output to |
 | --- | --- | --- |
@@ -98,8 +99,8 @@ A>
 
 The boot text went to the PICO9918. The terminal's first line is the reply. The
 PICO9918 keeps its old picture but receives no further console output. Input now
-comes from the serial terminal too. `CON CRT` typed there moves both input and
-output back to the PICO9918.
+comes from the serial terminal too. `CON CRT` typed on the PC restores input
+from the matrix keyboard and output to the PICO9918.
 
 Selecting a different display clears it and puts the cursor at the top left. A
 program's claim on the PICO9918 prevents that clear until the claim ends, as
@@ -144,9 +145,9 @@ A>
 
 On a board with both displays cold boot selects the PICO9918. The starter
 card's `GLCD.SVC` startup line then installs nothing. `CON UC1` loads the driver
-and selects the graphics LCD. This historical host-model capture used
-`--board pico`, which includes both displays and the matrix keyboard. Its
-graphics-LCD text capture showed this after the command:
+and selects the graphics LCD. This historical host-model capture used both
+displays and the matrix keyboard. Its graphics-LCD text capture showed this
+after the command:
 
 <!-- node tools/capture.mjs --board pico --screen "CON UC1" CON -->
 ```text
@@ -156,8 +157,8 @@ CON: UC1:
 A>
 ```
 
-`CON CRT` needs no driver load because its console is in ROM. A board with the
-graphics LCD and matrix keyboard can also start without a terminal. Where no
+A board with the graphics LCD and matrix keyboard can also start without a
+terminal. Where no
 PICO9918 console started, the starter card's startup file installs `GLCD.SVC`
 before the first prompt. The graphics LCD is the console from then on. Chapter 7
 explains the startup conditions.
@@ -252,7 +253,7 @@ character as the key alone. A modifier pressed alone sends nothing. Two ordinary
 keys held together send nothing either.
 
 Caps turns Caps Lock on and off. The CAPS lamp lights while it is on. With Caps
-Lock on, letters are capitals with Shift or without it. The `{` key gives `[`
+Lock on letters are capitals with Shift or without it. The `{` key gives `[`
 and the other keys are unchanged.
 
 The arrow keys send standard ANSI sequences. Programs such as `TED` read them on
