@@ -8,11 +8,10 @@ nav_group: "Appendices"
 # Appendix G. The TEC-1G as TEC-OS uses it
 
 <!-- Source-only mechanism inspection at TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
+     962853f499f05faf281f6cdff1deca8959f58c2b.
      No build, import, test, capture or physical-board run was performed.
      The diagnostics cost below retains the historical78127ec documentation
-     account. The inspected PICO source starts at80 columns, not a newly
-     qualified KS48 default. -->
+     account. Current cold-default claims use the source above. -->
 
 TEC-OS shares several ports with the board's displays, serial line and speaker.
 The tables here give the connections its code uses. They also identify the
@@ -56,9 +55,9 @@ not a hardware serial buffer (`src/console.asm:28-45`,
 Cold boot probes the PICO9918 by writing and reading two patterns at video
 memory (VRAM) address `3FFFh`. A successful probe sets its device bit. With the
 Matrix switch enabled the ROM then installs its PICO console before printing the
-banner (`src/tms.asm:17-48`, `src/video.asm:22-29`, `src/pico.asm:64-87`). The
-inspected `ea3ef3d` source starts that console at 80 columns. With the switch
-off it performs no console setup after the probe. A program can still claim the
+banner (`src/tms.asm:17-48`, `src/video.asm:22-29`, `src/pico.asm:69-92`). The
+current source starts that console at 40 columns. With the switch off it
+performs no console setup after the probe. A program can still claim the
 responding display through `VIDEO`.
 
 ## Port 01h and the serial line
@@ -74,8 +73,8 @@ the shared port value. Chapter 11 gives their calling interface.
 The CPU generates the serial bits itself. It sends through `01h` bit 6 and
 receives through `03h` bit 7. The connection uses 4800 baud, eight data bits, no
 parity and two stop bits. The delay counts assume a 4 MHz clock so the board
-requires FAST with the 4 MHz oscillator (`tools/build.mjs:25-26`,
-`tools/build.mjs:37-76`, `src/console.asm:387-421`, `src/console.asm:452-492`).
+requires FAST with the 4 MHz oscillator (`tools/build.mjs:26-27`,
+`tools/build.mjs:38-77`, `src/console.asm:387-421`, `src/console.asm:452-492`).
 
 There is no hardware receive buffer. A byte reaches TEC-OS only while the CPU
 is polling for its start bit and sampling the following bits. A program that
@@ -96,7 +95,7 @@ TEC-OS reads these three input bits:
 `CONINIT` records bit 0 directly. It does not probe for a keyboard response
 (`src/console.asm:82-88`). With the switch off the console does not scan the
 matrix, PICO console setup returns and GLCD registration fails
-(`src/keyboard.asm:15-28`, `src/pico.asm:64-68`, `src/video.asm:150-182`).
+(`src/keyboard.asm:15-28`, `src/pico.asm:69-73`, `src/video.asm:150-182`).
 The keypad sample and serial input are separate reads
 (`src/cpm/ccpcmd.asm:883-887`, `src/console.asm:253-279`,
 `src/console.asm:361-421`).

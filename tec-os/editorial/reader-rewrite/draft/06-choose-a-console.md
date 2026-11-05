@@ -9,7 +9,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 <!-- Checked against TEC-OS 78127ec. -->
 <!-- Historical captures retained unchanged at that pin.
-     Source-only semantic check: ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
+     Source-only semantic check: 962853f499f05faf281f6cdff1deca8959f58c2b.
      No execution, new capture or physical-board result is claimed.
      The historical 80-column setup is not evidence for a new opening profile. -->
 
@@ -43,8 +43,9 @@ write to it through the ROM services described in Chapter 11.
 A warm boot restarts the command prompt when a program ends and keeps the
 selected console. Reset runs cold boot and selects the console again from the
 board's configuration. A responding PICO9918 and the enabled Matrix switch
-select `CRT:` at cold boot in `ea3ef3d`. Otherwise the console starts on `TTY:`.
-Chapter 7 explains the startup file that can then load the graphics-LCD console.
+select `CRT:` at 40 columns before the banner. Otherwise the console starts on
+`TTY:`. Chapter 7 explains the startup file that can then load the graphics-LCD
+console.
 
 ## The serial terminal
 
@@ -105,7 +106,8 @@ from the matrix keyboard and output to the PICO9918.
 
 Selecting a different display clears it and puts the cursor at the top left. A
 program's claim on the PICO9918 prevents that clear until the claim ends, as
-Chapter 11 explains. After the move back the PICO9918 capture shows only the
+Chapter 11 explains. Bare `CON CRT` and `CON PICO` retain the selected width
+and any active claim. After the move back the PICO9918 capture shows only the
 reply and prompt:
 
 <!-- node tools/capture.mjs --board pico --screen "CON TTY" "CON CRT" -->
@@ -201,10 +203,11 @@ columns and `CON CRT 32` selects 32. Both text widths, 80 and 40, have 24 rows.
 The 32-column width also has 24 rows and uses Graphics I mode. The screen clears
 when the new width takes effect.
 
-The historical captures used a cold-boot width of 80. The inspected `ea3ef3d`
-source also starts the PICO9918 at 80 columns. A warm boot keeps an explicitly
-selected width and reset restores that source revision's cold width. This
-capture selects 32 columns, runs `MOUNT` and then lists files:
+The historical captures used a cold-boot width of 80. Current cold boot starts
+the PICO9918 console at 40 columns when its probe succeeds and the Matrix switch
+is enabled. A warm boot keeps the selected width. Reset restores 40 before any
+startup width command runs. This historical capture selects 32 columns, runs
+`MOUNT` and then lists files:
 
 <!-- node tools/capture.mjs --board pico --screen "CON PICO 32" MOUNT DIR -->
 ```text
