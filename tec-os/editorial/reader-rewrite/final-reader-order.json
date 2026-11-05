@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "status": "sequential_full_reader_order_read_in_progress",
+  "status": "independent_whole_reader_order_complete_with_bounded_corrections; integrated_candidate_frozen; integration_confirmation_pending",
   "start_snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
-  "final_candidate_commit": null,
+  "final_candidate_commit": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
   "source_selection": "962853f499f05faf281f6cdff1deca8959f58c2b",
   "scope": "Complete ordered reader passages including headings/tables/fences/captions/provenance, not a search-only or punctuation pass. Source adoption application and qualified FAIL insertion can require bounded rereads before final freeze. No renderer/build/publication/runtime executed by this reading.",
   "pages": [
@@ -372,5 +372,203 @@
   ],
   "last_complete_page": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
   "reading_limit": "Lead full sequential read complete through13. Independent parent sequential opening and two slices cover all39. Parent expressly authorises integration after bounded final correction confirmation without another global lead reread. No unread lead page is represented as personally read.",
-  "independent_whole_reader_order": "P3 confirms complete independent sequential reading of all39 atf7afd42, later-slice d8 delta closed, six corrections/full revised13 bounded confirmation pending at ea49949."
+  "independent_whole_reader_order": "P3 complete sequential opening and two slices coverall39 atf7afd42. Later14–28/appendedslice d8delta clear. Six firstslice findings closeddb58db7 and P3 direct review; final PICO9918 naming phrase a3e4c29 awaits direct confirmation. No extra global reread required by P3.",
+  "integrated_readers": [
+    {
+      "path": "tec-os/01-first-session.md",
+      "git_blob": "586f2bcf2a910078f0e6e945afb402eaf4c7f071",
+      "sha256": "982101a7dcce73678472492d0fe0c2954a1a4a107f276099a9e333aa32c96480"
+    },
+    {
+      "path": "tec-os/02-make-a-small-program.md",
+      "git_blob": "2fdc1994445db10a7586ac23272eb1f9ac322d55",
+      "sha256": "ae0f232fe28f90fd6bde10f58bff7e8b1cdad461570d5b58feef6d5db5cf30f0"
+    },
+    {
+      "path": "tec-os/03-work-with-files.md",
+      "git_blob": "4f3072e2b2705ddb69fe3b3c39547d1a2fcf9b6a",
+      "sha256": "5828ff5e927bad3813e1bedb6a4324a7191bfdfe98fb0acd94c54884e7353828"
+    },
+    {
+      "path": "tec-os/04-drives-and-user-areas.md",
+      "git_blob": "644dbfaa6763c649f6566091b228effc0adb9f6f",
+      "sha256": "195afaf55f6c028a1d712ea087c6342dbbac93f0f490e09a8c848c4679ffef28"
+    },
+    {
+      "path": "tec-os/05-cards-on-the-pc.md",
+      "git_blob": "404bde0bc31fe678f1a2ca76f863e2e61dfb4202",
+      "sha256": "2147bfbc8fc69d4139810502592cb7367220965950d98fa5ca83b05c6f9b7e95"
+    },
+    {
+      "path": "tec-os/06-choose-a-console.md",
+      "git_blob": "30eb009fe084b062fd861f722422812dd1e690e0",
+      "sha256": "e48a49c798e4eedb433320728f3c24edefbea54230932701a6892b5f77a59d34"
+    },
+    {
+      "path": "tec-os/07-commands-at-startup.md",
+      "git_blob": "2c6259705a9412c5e3789790ebbdc4576300b539",
+      "sha256": "4336d1372ff50572bdfcdd5554c266ad84052e5de9421e26e7f6d743c2e3e237"
+    },
+    {
+      "path": "tec-os/08-call-tec-os.md",
+      "git_blob": "e2b8cf5e134489535341c049c1114a76084bf1c0",
+      "sha256": "8aeb33d0c2bfe88de2269c343c5686cc6cfc26792f2f1b2bd2329fd902996790"
+    },
+    {
+      "path": "tec-os/09-read-and-write-a-file.md",
+      "git_blob": "3b37361f3a154cff105c0aa0665cf15e73618f53",
+      "sha256": "0829de9ec9905c3d685aa06a72e432daa2aa1968e36a0753968a45fe392f1980"
+    },
+    {
+      "path": "tec-os/10-memory-for-programs.md",
+      "git_blob": "66d818e99c72749091cb98a8d13afd1e5e672cf7",
+      "sha256": "4c47dfaec37d5223d7d8587ee02eb75b1d9e352a7b98eb25a8ad39b8587b7d33"
+    },
+    {
+      "path": "tec-os/11-use-the-boards-devices.md",
+      "git_blob": "db0279db314da52bf3f2e1ff893ec11f8ca42193",
+      "sha256": "4f4c6891e9c1a8d63ffbdd3c6c809e876a200c45b6b0c4ffa6c8611663012672"
+    },
+    {
+      "path": "tec-os/12-results-and-command-chains.md",
+      "git_blob": "7f5828b335385ad669e6e472cb5c34fa8874fad3",
+      "sha256": "db02f131ae5284cf19d3ca63ddb2b60b91218ffdcabf21b0721ec3b930f473e6"
+    },
+    {
+      "path": "tec-os/13-write-a-resident-service.md",
+      "git_blob": "ef1afaa4a59b2fffa61076eaba9bd2c723b12001",
+      "sha256": "ce41f0d53845043fde293f184d0057d5a42ac920eca02c5e95ced6886cb1677e"
+    },
+    {
+      "path": "tec-os/14-state-and-memory.md",
+      "git_blob": "7f2d015815ab821308564702e4a69fd4bbeb779f",
+      "sha256": "fe0240e11ba2572036a54881ed76640b8e0a2a227408e6d2c79cc07bfac42b28"
+    },
+    {
+      "path": "tec-os/15-reset-and-boot.md",
+      "git_blob": "5139ff4b481345a482bf98cb833c9b435705d79b",
+      "sha256": "b670b89138ff916f97c4a3caade5fc70bfd7a9989e3211d8d40b794dc6db3cc0"
+    },
+    {
+      "path": "tec-os/16-console-paths.md",
+      "git_blob": "8c18d3cfcbde7ad9d2da7d6b26e334d07add3209",
+      "sha256": "5d37cb47445b9a30431c0900827d337f7844041ea2de50d90261a49ec85430cf"
+    },
+    {
+      "path": "tec-os/17-card-blocks-and-volumes.md",
+      "git_blob": "10035401c0a03426deda8e27d1b194a80d49032a",
+      "sha256": "906bde8f2758d75297d110d2ade6083998c8a7186d9431e103aa6da2289afa91"
+    },
+    {
+      "path": "tec-os/18-cache-and-persistence.md",
+      "git_blob": "a9c478b0abc9f9b42b2f93037c6b994a3a2bd50f",
+      "sha256": "65452579354eb5e48380a3d8653ca733a00bf9caea5bbb8336ffa4422d4dade2"
+    },
+    {
+      "path": "tec-os/19-a-file-through-the-bdos.md",
+      "git_blob": "b41c3bd5c9c16a8f84014ac475841f8c7e9b3125",
+      "sha256": "96ebc2adc830bd1aa15cc390a051a2ed9947f718021c5be860a024508d13ce0f"
+    },
+    {
+      "path": "tec-os/20-from-prompt-to-program.md",
+      "git_blob": "8b9b9b817b6266961cf3080642e87a9537955941",
+      "sha256": "f87836a373a50f2e1da343dd7b208ed01e382d33bd0688f6e8ad2306355c610a"
+    },
+    {
+      "path": "tec-os/21-chains-across-warm-boot.md",
+      "git_blob": "93392dd33520fed63ea073049b4704bc8d253122",
+      "sha256": "00dafe111d60babaf2bf318374088a39d5fae3f984548c4b9890f611a418cb23"
+    },
+    {
+      "path": "tec-os/22-the-history-ring.md",
+      "git_blob": "25e506dec3d685a02804e36e789251a98fbb6caf",
+      "sha256": "6c11896d9e867c5f248df86a6cec3f541dd90d5ef182d51cc1f5e27af1cebf79"
+    },
+    {
+      "path": "tec-os/23-numbered-service-dispatch.md",
+      "git_blob": "6e831fc8f4aca9eb006fbf98df8c0e1ac524453b",
+      "sha256": "167c2f5ddf58c9efb332f94b9a352288d10ea4dc0965200e1bb0a968a6bba81f"
+    },
+    {
+      "path": "tec-os/24-loading-and-removing-services.md",
+      "git_blob": "f204b6b7e087d67912b1962c54e56519dc303418",
+      "sha256": "9ac0c0b06961ca1da739f8141051ae2733a1a0bc0df3bc96986bbaa6def15c66"
+    },
+    {
+      "path": "tec-os/25-startup-inside-the-ccp.md",
+      "git_blob": "9574e224e3d2c27a8ea1515082736d51f72d03ff",
+      "sha256": "b29a92c2458e7820885874af39ba3a47cbed92d653a9d2743dff44ba3f787708"
+    },
+    {
+      "path": "tec-os/26-build-the-rom-and-media.md",
+      "git_blob": "27012b802b97c74c06607def179a326bfbeb4d56",
+      "sha256": "709eaddf642de42a4c86cb08f88e63e05368392904413a6f1cd962a2b07f7b40"
+    },
+    {
+      "path": "tec-os/27-diagnose-the-machine.md",
+      "git_blob": "0038c4ae2d8228958d8a161a33069f1767a4b121",
+      "sha256": "8184d5eda73009a3fd38740328dad4eb3f9ddd919410641349315f329f245e43"
+    },
+    {
+      "path": "tec-os/28-the-host-model-as-evidence.md",
+      "git_blob": "1b1941a5c24feb921dc357738b3c0760b36fbe66",
+      "sha256": "405a7d80be0ebbd310c1a89c27f233d661cb7ecc891685e4353399064ee17b6f"
+    },
+    {
+      "path": "tec-os/appendix-a-bdos-functions.md",
+      "git_blob": "972d7f0833f57224f079a5687a8ae0e803ea21be",
+      "sha256": "edc890f187aa8d1df0cf4b7081a4895fd07858092f1355ecca5da34d0754517b"
+    },
+    {
+      "path": "tec-os/appendix-b-rom-services.md",
+      "git_blob": "ada83857800e9a32d70b528e94646015da8f5a3d",
+      "sha256": "4d05aaaacad7faa9b75ea172e7461fb20e9662a02191e4b2dae3f4d44f9a23ff"
+    },
+    {
+      "path": "tec-os/appendix-c-memory-map.md",
+      "git_blob": "3f94f2ffba5c1e9c6604e3dd0689e42f4f598460",
+      "sha256": "752031f1a8b4a04640709552750ca830e617fe81e5c4d34c343333aba383adc7"
+    },
+    {
+      "path": "tec-os/appendix-d-error-messages.md",
+      "git_blob": "853770e418e2c7bac465a2f880fe485425ddafc0",
+      "sha256": "274a082339d0ade81919c71d3e25a3d8149f7ff5b186f1d4833553db8db5bf03"
+    },
+    {
+      "path": "tec-os/appendix-e-container-format.md",
+      "git_blob": "084da945e23ea936b97862ad833dc5a4508c43a7",
+      "sha256": "7b6b46e77e665076ed4c81f15da4fb6aa177c13f460bad60b3c8c87f091496e4"
+    },
+    {
+      "path": "tec-os/appendix-f-tecvol.md",
+      "git_blob": "e828cd69165e9f6044dd50f1327efe9fd9b5241e",
+      "sha256": "b5882ac03d08ab4c9afe00b529ccb35a4a05479b0a4f4885e7448d1f1cf972e4"
+    },
+    {
+      "path": "tec-os/appendix-g-tec-1g.md",
+      "git_blob": "59c14c7b646fbf2cb32e666ca8c3831619d06a6e",
+      "sha256": "1f5a0c5587e0ab0f5d7aa28fb160fad1ac97954ef678f28082845c9a17d60c45"
+    },
+    {
+      "path": "tec-os/appendix-h-service-file-format.md",
+      "git_blob": "c0d1c8892b8e4b12d02891c49cd83b0aee4971c5",
+      "sha256": "6a69cc7cb474c52f4f0bd1d5205f09297c332eb8aa08596506d19ac76512d115"
+    },
+    {
+      "path": "tec-os/appendix-i-web-page.md",
+      "git_blob": "c60ace34a09d63023900d205cdb50ca3f753d864",
+      "sha256": "e5f095e8539a2581969edb3559b8119d622c4321e5d9472fd80636edb053b947"
+    },
+    {
+      "path": "tec-os/appendix-j-command-reference.md",
+      "git_blob": "2a0dfbbf9daa7d8161c52ac02f229ff7b1c4fa37",
+      "sha256": "ea6037d89eb85834dab5cd9d5441f235f39ba5f38fdbe1ac2a76c969d471f60b"
+    },
+    {
+      "path": "tec-os/index.md",
+      "git_blob": "8e7e515825f76a2af5c9f6526fd5274a0533f22f",
+      "sha256": "81cdf91fa07128f76f90873eaadb61ac58e76e43f596fe338f646ee3e3deea0c"
+    }
+  ],
+  "integration_boundary": "All39rootpages byte-identical to finaldrafts. nav_group-only metadata normalization createsfourgroups. No unread lead page is claimed personally read. Final source/link/body reviews and exact rootidentity complement parentindependentwhole39coverage."
 }
