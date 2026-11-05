@@ -103,33 +103,42 @@
       "sha256": "45455f83f2e957be34ec9d1bc8d87b20d6da966418c9d5a309c18c90c47ceaab",
       "lines": 383,
       "words": 2856,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "The ways a program ends",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 383,
+      "outline": "reverse-outline-07-09.md",
+      "continuity_problems": "The authored banner is combined with FCBs, host assembly and chaining; later memory and raw-console contracts require separate earned prerequisites."
     },
     {
       "path": "tec-os/08-memory.md",
       "sha256": "a52d801f2e75daaec802058922b8b95a2739c8832ca74cd6b1e227e6600513c5",
       "lines": 345,
       "words": 2624,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "EXPAND 1",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 345,
+      "outline": "reverse-outline-07-09.md",
+      "continuity_problems": "The authored banner is combined with FCBs, host assembly and chaining; later memory and raw-console contracts require separate earned prerequisites."
     },
     {
       "path": "tec-os/09-programs-and-console.md",
       "sha256": "34308fc8f41a7c18630cce28dd4c21e36cef52f1e9fa35946c5e988f97bfc4c5",
       "lines": 293,
       "words": 2441,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "The other devices",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 293,
+      "outline": "reverse-outline-07-09.md",
+      "continuity_problems": "The authored banner is combined with FCBs, host assembly and chaining; later memory and raw-console contracts require separate earned prerequisites."
     },
     {
       "path": "tec-os/10-hardware-services.md",
@@ -429,6 +438,11 @@
       "verification_status": "source preparation retained; final offered source and workflows pending"
     }
   ],
-  "authority": "P3 KS47 / KD-242; acceptance checklist pending independent brief review",
-  "brief": "origo/studies/p3-tec-os/stages/book-reader-rewrite.md"
+  "authority": "P3 KS47 / KD-242; fixed checklist after brief review",
+  "brief": "origo/studies/p3-tec-os/stages/book-reader-rewrite.md",
+  "accepted_reviews": [
+    "origo/studies/p3-tec-os/reviews/book-reader-brief.md",
+    "origo/studies/p3-tec-os/reviews/book-opening.md"
+  ],
+  "review_coverage_limit": "Opening review covers full front matter and Chapters 1, 2 and 7; only headings in 3-6. It is not whole-book coverage."
 }
