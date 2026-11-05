@@ -8,10 +8,13 @@ nav_group: "Appendices"
 # Appendix H. The service file format
 
 <!-- Mechanisms checked by source inspection at TEC-OS ea3ef3d.
-     Historical examples retain TEC-OS 78127ec and TAS.COM from Thorium
-     dbee66a, SHA-256
+     The GLCD dump was reproduced at 621201d and retained in the 78127ec
+     review without rerunning its commands. The GAPZERO transcript was
+     rerun at 78127ec using COUNT.SVC prepared by makeSvc.
+     The historical starter's TAS.COM identity is Thorium dbee66a, SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     No example was rerun for this draft. -->
+     That identity does not identify GAPZERO's builder. No example was
+     rerun for this draft. -->
 
 A service file contains the bytes to install, the records it needs and the
 positions that require relocation. Its on-disk header describes that work.
@@ -133,8 +136,9 @@ name another. The loader reads only the gap list
 
 ### A first gap of 0
 
-This file is `COUNT.SVC` from Chapter 13 with a 0 put at the front of its
-list, and the size at offset 10 raised by one:
+This historical example uses `COUNT.SVC` from Chapter 13's PC `makeSvc`
+route. It inserts a zero at the front of the gap list and raises the size
+at offset 10 by one:
 
 ```sh
 node -e '
@@ -164,8 +168,8 @@ with an `X`.
 
 ## GLCD.SVC
 
-The following historical dump shows the starter card's graphics LCD driver.
-The first command prints its header and initial image bytes. The second
+This dump was reproduced from the starter card's graphics LCD driver at
+`621201d`. The first command prints its header and initial image bytes. The second
 starts at its relocation data, offset 767.
 
 ```sh

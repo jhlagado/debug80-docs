@@ -63,3 +63,18 @@ The full reference review otherwise cleared the field/check table, gap
 encodings, bounds, GLCD interpretation and historical-fence preservation.
 No bounded editorial or factual finding remains. Final runtime/input
 qualification and integration remain pending.
+
+## Specific historical run-pin correction
+
+The provenance audit distinguishes source review from execution. Book42:159
+records the GLCD xxd dump and decoded values reproduced at621201d. Book45:82
+explicitly states those two commands were not rerun at78127ec. Reports43–46
+supply no later dump run. The header and dump introduction therefore name
+621201d rather than upgrading it to the frozen book's checked-at revision.
+
+Book46:88 records GAPZERO actually rerun at78127ec using COUNT.SVC from
+makeSvc. The reviewed fcf873f recipe/fence matches the retained example.
+That separate run stays at78127ec and its source recipe is explicit. The
+historical starter TAS identity is kept separate from GAPZERO's builder.
+No blanket repin and no new execution occurred. This correction replaces
+the first draft's overbroad historical78127ec statement.
