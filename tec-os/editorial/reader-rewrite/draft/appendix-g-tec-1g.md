@@ -183,8 +183,8 @@ data (`src/lcd.asm:7-11`). Cold boot sends four initialisation commands
 | `06h` | Advance the address after each character |
 | `01h` | Clear the display |
 
-Before a command or character `LCDWAIT` reads the busy flag at most 256
-times. The write follows readiness or expiry of that limit, so a missing
+Before a command or character `LCDWAIT` reads the busy flag, bit 7 of port
+`04h`, at most 256 times. The write follows readiness or expiry of that limit, so a missing
 LCD cannot hold this wait indefinitely (`src/lcd.asm:35-61`). The four row
 address commands are `80h`, `C0h`, `94h` and `D4h`
 (`src/tables.asm:51-52`).
@@ -228,7 +228,7 @@ presence test, not validation of every BCD digit or the date
 (`src/services.asm:501-526`, `src/services.asm:533-594`).
 
 Cold boot makes the test once and records the result in `CONDEV` bit 3.
-`INFO` reports that stored bit without a port read. `RTC` tests again on
+`INFO` reports it in bit 3 of `B` without a port read. `RTC` tests again on
 each valid call and transfers seven BCD fields: seconds, minutes, hours,
 date, month, weekday and year. Chapter 11 gives the read/set contract
 (`src/boot.asm:87-94`, `src/services.asm:95-105`,

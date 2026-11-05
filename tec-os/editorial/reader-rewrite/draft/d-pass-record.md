@@ -18,8 +18,9 @@ human-writing skill and teaching standards were read and applied, with the
 house reference form taking precedence over a course-chapter template.
 
 Mechanisms use git object text at
-`ea3ef3de9133931e925a0220d51c0e971c1fd8dd`. The old-card recipe, capture and
-CLOSE ERROR account retainsbd15528, as independently corrected below. The diagnostic fence is a message template
+`ea3ef3de9133931e925a0220d51c0e971c1fd8dd`. The old-card recipe/capture retains78127ec. The CLOSE ERROR account
+retainsbd15528, as independently corrected below. The diagnostic fence is a
+message template
 with variable nn, not a captured run. No product, fixture, dependency or
 browser was executed or imported. No build, test or new capture was made.
 
