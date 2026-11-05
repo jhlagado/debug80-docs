@@ -24,3 +24,10 @@ retained as well as changed guidance. The guide's illustrative quotations
 and literal shell syntax stay distinct from captured results. Futurefont
 qualification, primary40 workflow, examples and publication remain held.
 Independent guide review is pending.
+
+Mechanical review produced12 hits before the final small corrections. The
+banned-word lists and quoted bad examples are intentional guidance, not
+authorial praise or perception. Recast the revision-that-rechecks subject
+as a direct instruction, removed the text-asks phrasing and renamed the
+question-shaped scope heading Excluded material. A reader seeing a comment
+is a human action. The remaining pattern hits retain those distinctions.
