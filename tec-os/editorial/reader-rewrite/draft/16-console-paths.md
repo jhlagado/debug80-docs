@@ -14,8 +14,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 <!-- Historical evidence: all three captures, their recipes and the TERM host
      assembly recipe retain TEC-OS 78127ec. TERM used atom-z80 0.3.7 and a
-     starter-card copy named con.img. Serial measurements retain that build and
-     its 4 MHz clock. No capture, assembly or timing run was repeated. -->
+     starter-card copy named con.img. Serial TXBYTE/BCONOUT measurements retain
+     60cfbdc and the 4 MHz clock, as recorded in Book 22:1-5,91-92.
+     No capture, assembly or timing run was repeated. -->
 
 A key can arrive while a program is printing and still be available for its
 next read. TEC-OS holds that byte while the output continues. At the other
@@ -300,9 +301,9 @@ another attempt rather than becoming a character. The generated counts
 are written to `src/gen/config.asm` (`tools/build.mjs:37-76`,
 `src/console.asm:253-279`, `src/console.asm:387-399`).
 
-The historical `78127ec` model measured 9,293 T-states for a whole
-`TXBYTE` character. The `BCONOUT` path raised that to 9,448, roughly
-420 characters a second.
+At `60cfbdc`, the model measured 9,293 T-states for a whole `TXBYTE`
+character and 9,448 through serial `BCONOUT`. At 4 MHz the latter is
+roughly 420 characters a second.
 
 Reception has no hardware buffer. A byte arriving while the CPU is not
 polling can be lost. A PC therefore cannot send an uninterrupted stream
