@@ -137,8 +137,45 @@ calls7200316 the original measurement. The complete banner-step238122 is
 kept distinct from its25 individual CONOUT costs of9448. Multiplying the
 per-character figure alone is not the complete step cost.
 
-## Remaining passes
+## Completed authorial passes
 
-Mechanical, thematic, deletion, agency, every-comma, technical/literal and
-journey passes will be recorded after the generous draft checkpoint. Independent
-result review is a separate acceptance step. No runtime evidence is supplied.
+The generous checkpoint was committed and pushed asb651fa9 before reduction.
+I read the entire draft again after the following revisions.
+
+| Pass | Actual findings and disposition |
+| --- | --- |
+| Mechanical gate | Used text searches and manual classification, without running prose-analysis or product scripts. All headings name subjects. The searches found concrete negative conditions and numeric punctuation, not false-depth frames, attention commands, mind verbs or praise. Retained no-card-read, no-stack and failed-recognition negatives because each states a tested condition. No automated gate result is asserted. |
+| Thematic order | Kept the cold sequence before its detailed RAM and selection checks. Introduced the overlay before RSTENT and the shared warm path before page-zero reconstruction. Retained the fourteen/eight-stage lists because instruction ordering is their subject. The selection capture follows both validation phases, not an unexplained promise of persistence. |
+| Paragraph deletion | Removed repeated certification of historical evidence from the timing introduction. Removed current-offer process discussion from reader-facing timing prose. Kept the short IOBYTE paragraph because it carries the assigned old02 setup condition. |
+| Sentence deletion | Read every sentence in order and across each paragraph boundary. Deleted the BUFOK paragraph's final restatement of its continuation/type2 distinction because the two preceding sentences already specify it. Retained the fixed-RAM return-path qualification because a bank-hidden RET is not established by RSTENT. Retained the two-region/one-region return definition and the 4MHz timing conversion because they establish distinct facts. |
+| Agency/plainness | Routines read, compare, clear and restore. Replaced the restore/restore echo in DETECT with putting back both bytes or only the original. Kept register and latch operations literal. No program, hardware or chapter receives intention, perception or social agency. |
+| Every comma | Read every punctuation-bearing paragraph. Removed optional commas before and, before the MEMINIT ordering clause and before the lowest-service/stub alternative. Removed the DETECT parenthetical condition and its optional since comma by rewriting the sentence. Retained list separators, apposition, hex-value apposition, condition boundaries and numeric thousands. No Oxford comma, semicolon or em dash remains in editable prose. Both fences keep literal original punctuation and spaces. |
+| Technical/literal | Rechecked the code and callers in the source-proof table. Added exact select-error, display-restore and scroll-reset ranges. Kept maskable DI separate from PICO's NMI release. Qualified0038EI by the preserved-JP branch and separated successful flush from failed-line drop/CHPOS clear. All126 citation occurrences have valid coordinates at ea3ef3d. Coordinate validation supplements the semantic reading rather than substituting for it. |
+| Timing/evidence | Kept every original timing, endpoint, directory count and the test's separate386604 bound. Moved329-byte clearing extent into the historical section. Kept the original7200316 and recorded the separate book-46 figure above rather than silently substituting it. Two recipe/fence pairs compare byte-identically with frozen old15, including SYSTEM's trailing spaces. |
+| Journey/navigation | Read from reset entry through the final test-bound distinction. Removed the obsolete old05 reset link, whose material is assigned4, and linked AppendixD's actual recovery section. The three Chapter14 links and AppendixG/AppendixD links all resolve from the draft directory. The ending distinguishes an assertion from a measurement without a recap or forecast. |
+
+The old02 statement that a PICO with the Matrix switch off stays dark is
+bounded here by what source establishes: PISTART returns without initialising
+its console. TMSINIT at src/tms.asm:17-48 probes VRAM rather than clearing or
+blanking the display. This avoids promising darkness after a BIOS cold entry
+from a program which had already programmed the VDP. Its operator-visible
+placement remains with6. Initial-console setup and IOBYTE conditions remain15.
+
+No prose-analysis script or complexity measurement was executed under the
+no-execution constraint. Sentence structure, deletion and punctuation received
+manual whole-text passes instead. No automated scores or gate pass are claimed.
+The only comparisons were static text, Git-object ranges and link targets.
+Independent result review remains open. No runtime evidence is supplied.
+
+## Profile steering and delivery boundary
+
+KD243/KS48 plans a40-column TECCompact opening. Source/default implementation
+and qualification are pending. The80-column PISTART statement in this draft
+continues to describe the offered ea3ef3d source and is not a claim about the
+future prepared profile. Historical80-column material is not globally replaced.
+The source offer is not repinned. Startup and GLCD policy are unchanged.
+
+Only draft/15-reset-and-boot.md and draft/15-pass-record.md are written for
+this unit. Commits use --only with those exact owned paths. No root chapter,
+shared ledger or another writer's staged file is part of this unit.
+

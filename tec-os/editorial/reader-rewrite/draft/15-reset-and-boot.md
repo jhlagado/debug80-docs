@@ -58,7 +58,7 @@ interrupts stay disabled unless a program or service enables them.
 Routines such as the BIOS's `CEI` restore an enabled state only if it was
 saved on entry (`src/bios.asm:445-478`). The default restart code written
 at `0038h` contains another `EI`. Writing that instruction does not execute
-it, and a qualifying resident jump there is preserved instead
+it and a qualifying resident jump there is preserved instead
 (`src/boot.asm:454-509`).
 
 ## Cold-boot order
@@ -86,7 +86,7 @@ The calls in `COLD` establish those dependencies in this order
    80-column console. `RTCHAS` probes the clock and records its presence.
    The banner goes to the selected console (`src/boot.asm:88-99`,
    `src/console.asm:60-88`, `src/video.asm:22-29`, `src/pico.asm:64-85`).
-7. `MEMINIT` clears EXPAND 1 and marks every cache line empty, before
+7. `MEMINIT` clears EXPAND 1 and marks every cache line empty before
    mounting needs a cache line (`src/boot.asm:100-102`,
    `src/boot.asm:321-346`).
 8. `COLDRT` sets the BDOS stack afresh. `LCDINIT` clears the 20 × 4 LCD
@@ -115,8 +115,9 @@ The calls in `COLD` establish those dependencies in this order
 Clearing page zero also sets its IOBYTE to zero, the serial `TTY:` choice.
 `PISTART` changes the console field to 1, `CRT:`, only when both the
 PICO9918 and matrix keyboard are available. It does so before the banner's
-first console call. With the Matrix switch off the console stays serial,
-even if the PICO9918 answers (`src/boot.asm:62-70`,
+first console call. With the Matrix switch off the console stays serial
+and `PISTART` leaves its console uninitialised even if the PICO9918 answers
+(`src/boot.asm:62-70`,
 `src/console.asm:82-88`, `src/video.asm:22-29`, `src/pico.asm:54-85`).
 
 The status LCD has bounded waits so its absence cannot stop boot.
@@ -156,9 +157,9 @@ with the bit set, then clears the bit and reads the address again
 
 A changed byte in the original view means both selections reached the same
 RAM. An unchanged byte means the write reached a different region.
-`DETECT` restores the original byte and, for two regions, restores the
-other bank's byte too. It returns 1 or 2. No stack access occurs while the
-latch bit is set, since that bit could hide the stack itself
+`DETECT` puts both bytes back for two regions or only the original byte
+for one. It returns 1 or 2. No stack access occurs while the latch bit is
+set because that bit could hide the stack itself
 (`src/boot.asm:385-401`).
 
 A wrong end-byte or a count other than 2 enters `RAMBAD`. It sends
@@ -258,9 +259,10 @@ Dirty bytes held only in the cache are lost. Bytes already written to the
 card remain there, with no rollback. Later resets can retain the same
 assignments while recognition succeeds and the card still has the volumes.
 A failed recognition or failed reselection leaves the card's defaults.
-Power cycling normally removes the recognisable RAM state, and resetting
-during cold boot clears it as described above. The operator recovery rules
-are in [the drives after a reset](../../../05-drives-and-cache.md#the-drives-after-a-reset)
+Power cycling normally removes the recognisable RAM state and resetting
+during cold boot clears it as described above.
+[Appendix D](../../../appendix-d-error-messages.md#write-lost) gives the
+recovery rules for failed cache writes
 (`src/boot.asm:240-312`, `src/volsvc.asm:31-159`).
 
 ## Page zero and vector lifetime
@@ -278,7 +280,7 @@ the other five bytes become zero. Every other vector gets seven zeros
 followed by `RET`. An `RST` through that default returns without changing
 the interrupt state (`src/boot.asm:454-498`).
 
-The equality boundary excludes the first byte of the lowest service, or
+The equality boundary excludes the first byte of the lowest service or
 of the stub when no service is loaded. A jump exactly to `PZTOP` gets the
 default. A jump one byte above it survives. At `0038h` the default instead
 starts with `EI` followed by `RETI`, with zeros after it. A preserved jump
@@ -307,7 +309,8 @@ paused with `^S` and for an error in the default error mode. Function 45
 can select returned-error modes instead. A select failure such as
 `Bdos Err On B: Select` takes the default exit after its message and a key
 (`src/cpm/bdos.asm:115-119`, `src/cpm/bdos.asm:606-621`,
-`src/cpm/bdoscon.asm:35-72`, `src/cpm/bdoscon.asm:308-331`).
+`src/cpm/bdoscon.asm:35-72`, `src/cpm/bdoscon.asm:308-331`,
+`src/cpm/bdoslog.asm:893-900`).
 
 The CCP reads its prompt line with function 10 so `^C` at an empty prompt
 uses that first route. This is the retained historical capture:
@@ -325,7 +328,8 @@ Warm boot rebuilds the environment in this order:
    first makes that stack visible (`src/boot.asm:178-186`).
 2. `HWVREL` releases any program claim on the PICO9918 and restores its
    driver state. Its interrupt, an NMI, is turned off before page zero is
-   rebuilt (`src/boot.asm:187-192`, `src/services.asm:245-279`).
+   rebuilt (`src/boot.asm:187-192`, `src/services.asm:245-279`,
+   `src/pico.asm:247-278`).
 3. `PZINIT` rebuilds the entry jumps, stub and restart vectors
    (`src/boot.asm:194-195`).
 4. Bit 7 of `SVCBSY` is cleared. An interrupted service `INIT` or `REMOVE`
@@ -337,7 +341,8 @@ Warm boot rebuilds the environment in this order:
    the old no-pre-read key (`src/boot.asm:199-200`, `src/boot.asm:530-559`,
    `src/ram.asm:153-170`, `src/ram.asm:231-237`).
 6. `VREST` restores the display mode for a video console. `VTREGR` resets
-   the scroll region to the whole screen (`src/boot.asm:201-209`).
+   the scroll region to the whole screen (`src/boot.asm:201-209`,
+   `src/term.asm:202-212`).
 7. `CWBOOT` attempts every dirty cache line. Successful writes reach the
    card before the CCP can load a chained program. Each failed line is
    dropped and flushing continues. After any failure `CWBOOT` clears
@@ -349,8 +354,7 @@ Warm boot rebuilds the environment in this order:
 
 Clearing `BUFOK` prevents a write from reusing the pre-boot key to skip
 a block read. A new type-2 allocation write can still clear its block
-without a pre-read. Warm boot therefore resets the continuation rule,
-not the type-2 exception (`src/boot.asm:556-559`, `src/bios.asm:368-426`).
+without a pre-read (`src/boot.asm:556-559`, `src/bios.asm:368-426`).
 
 An accepted function 47 supplies a new command chain but its warm boot has
 the same flush qualification. The next command proceeds after a successful
@@ -370,9 +374,8 @@ source checks. Subsequent warm boots retain its position
 
 ## Historical boot costs
 
-The following measurements belong to `78127ec` on the host model with the
-starter card and serial board. They are retained evidence from that build.
-Source inspection at `ea3ef3d` supplies no replacement timing result.
+These historical measurements were made at `78127ec` on the host model
+with the starter card and serial board.
 At 4 MHz, 4,000,000 T-states take one second.
 
 Cold boot measured 1,371,558 T-states from the first instruction to the
@@ -385,8 +388,8 @@ original first-prompt `CONIN` measurement was 7,200,316 T-states after
 reset.
 
 An unchanged warm boot measured 32,502 T-states, about 8 milliseconds,
-from entry to `WBOOTR` through to the CCP's `STARTED` label, where prompt
-printing begins. It read no card block. Within that run `CPMINIT` took
+from the first instruction of `WBOOTR` to the CCP's `STARTED` label, where
+prompt printing begins. It read no card block. Within that run `CPMINIT` took
 7,327 T-states, the empty `CWBOOT` flush took 8,437 and the CCP entry
 and disk reset took 14,272. The historical workspace sweep cleared
 329 bytes from `CCPCLR` to the byte before `BDOSRME`.
