@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 13. Write a resident service
 
-<!-- Source-only semantic check: TEC-OS ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
+<!-- Source-only semantic check: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
      Retained source/recipes are preserved from frozen10821b6, not blanket
      execution evidence. COUNT workflow:78127ec Book45. CHEAT/RECS/NEEDS:
      621201d Book42. PC writer111-byte result:7458352 Book31; byte equality

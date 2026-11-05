@@ -199,3 +199,17 @@ lookup. Authorial source/reference passes are complete. Independent factual
 and editorial result review, final profile/artifact qualification, root
 integration and whole-book reader-order acceptance remain open. No shared
 ledger or root chapter was changed. No build, import, test, run or capture.
+
+## Source adoption reconciliation
+
+I applied the current-source citation reconciliation selected at `9ba1f59`.
+The mechanism authority is now `962853f`. The original source audit and
+`source-adoption-unaffected-application.json` record the exact citation
+changes, range evidence and input/output hashes. Earlier entries above retain
+the source identities and review limits in force when I wrote them.
+
+I read the changed paragraphs and citation contexts in full. Historical
+results, source fixtures and dependency pins retain their original scope.
+The reader’s fences and capture comments are unchanged. Editorial gate
+results and context dispositions are recorded in the application JSON.
+Independent application review remains open. No product code ran.

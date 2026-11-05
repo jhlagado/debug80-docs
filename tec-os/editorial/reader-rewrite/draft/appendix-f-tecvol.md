@@ -8,7 +8,7 @@ nav_group: "Appendices"
 # Appendix F. `tecvol`
 
 <!-- Source mechanisms inspected at TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. No product import or execution.
+     962853f499f05faf281f6cdff1deca8959f58c2b. No product import or execution.
      All25 retained fences and the capture command are historical78127ec
      results/recipes, explicitly rerun in Book45:80. Historical raw binary
      inputs in dist/files: TED.COM Thorium128edb7 SHA-256
@@ -313,7 +313,7 @@ for New starter card.
 
 `npm run media` prepares `dist/starter.recipe.json` and its image. It also
 writes `dist/page.recipe.json`, which has the starter files plus DEMO and
-its own id, name and instructions (`tools/media.mjs:205-259`). Chapter 26
+its own id, name and instructions (`tools/media.mjs:206-262`). Chapter 26
 describes that preparation. The retained historical rebuild produced these
 matching hashes:
 

@@ -7,7 +7,7 @@ nav_group: Appendices
 
 # Appendix J. Command reference
 
-<!-- Draft source checks: TEC-OS ea3ef3d. The three historical captures below
+<!-- Draft source checks: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b. The three historical captures below
      retain TEC-OS 78127ec and its starter inputs. They have not been rerun
      for the new source offer. -->
 

@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 24. Loading and removing services
 
-<!-- Source-only semantic check: TEC-OS ea3ef3d.
+<!-- Source-only semantic check: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
      Unprefixed source ranges use that revision. Historical captures,
      addresses, byte counts and test examples retain their recorded sources.
      Most came from the frozen book checked at TEC-OS 78127ec. The
@@ -341,7 +341,7 @@ New records precede older ones. FIND therefore returns the newest matching
 name with a sufficient version. Removing that owner exposes an older
 match. When the ROM PICO console starts, `PISTART` puts `PIREC` at the
 registry's permanent tail before any loaded service. UNLOAD cannot remove
-that ROM record (`src/pico.asm:64-86`, `src/loader.asm:589-614`). The
+that ROM record (`src/pico.asm:69-92`, `src/loader.asm:589-614`). The
 historical duplicate-name test checks the older interface becoming visible
 again (`78127ec:test/svc.test.mjs:536-545`).
 
@@ -407,7 +407,7 @@ Warm boot preserves `REGHEAD`, `SVCHEAD` and `PZTOP` outside the range
 cleared by `CPMINIT`. Cold boot clears resident workspace and removes
 loaded owners. A ROM PICO record can be registered again during that cold
 boot (`src/ram.asm:382-410`, `src/boot.asm:73-94`,
-`src/boot.asm:530-542`, `src/pico.asm:77-80`). The historical serial-board
+`src/boot.asm:530-542`, `src/pico.asm:82-85`). The historical serial-board
 reset case leaves both heads empty (`78127ec:test/svc.test.mjs:390-402`).
 
 ## Checks and service responsibilities
@@ -450,7 +450,7 @@ counted above their no-service base use (`src/tables.asm:143-146`).
 measurements, limits and reserved quarter-stack margin. The loader sums
 header declarations rather than measuring a callback's use.
 
-At `ea3ef3d`, GLCD declares 2, 0 and 6 bytes, taking the whole CCP
+At `962853f`, GLCD declares 2, 0 and 6 bytes, taking the whole CCP
 allowance (`drivers/glcd.asm:30-37`). COUNT's additional 2 then cannot
 fit. With PICO active the startup GLCD installation fails quietly, leaving
 COUNT's allowance available. The ROM PICO console is part of the base,

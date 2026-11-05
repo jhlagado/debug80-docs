@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. A file through the BDOS
 
-<!-- Mechanisms checked by source inspection at TEC-OS ea3ef3d.
+<!-- Mechanisms checked by source inspection at TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
      Unprefixed source citations use that revision. The explicitly retained
      78127ec ROM/RAM map is historical source/artifact evidence, not a new
      build or measurement. No example was executed for this draft. -->

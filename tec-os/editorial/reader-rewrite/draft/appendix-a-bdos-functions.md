@@ -8,7 +8,7 @@ nav_group: "Appendices"
 # Appendix A. BDOS functions
 
 <!-- Contracts checked by source text at TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. Every source range below uses
+     962853f499f05faf281f6cdff1deca8959f58c2b. Every source range below uses
      that pin. No execution, measurement or new output is claimed. -->
 
 Use the function number to find its registers in the table, then its effects and

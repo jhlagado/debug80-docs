@@ -8,7 +8,7 @@ nav_group: "Part II: Inside TEC-OS"
 # 17. Card blocks and volumes
 
 <!-- Source mechanisms inspected at offered TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. All unprefixed source ranges
+     962853f499f05faf281f6cdff1deca8959f58c2b. All unprefixed source ranges
      below use that revision. No execution or current artifact result is claimed. -->
 
 <!-- Historical evidence: all three captures and their recipes, SD block timings,
@@ -161,7 +161,7 @@ each of blocks 1–7, for a maximum of 127
 
 The ROM's field offsets and geometry definitions are generated from
 `format/format.json` into `gen/format.asm` and `gen/geom.asm`
-(`tools/build.mjs:78-135`). [Appendix E](appendix-e-container-format.md)
+(`tools/build.mjs:79-136`). [Appendix E](appendix-e-container-format.md)
 contains the byte layout and the host/ROM validation comparison. A fresh
 table read avoids using bytes cached during an earlier mount.
 
