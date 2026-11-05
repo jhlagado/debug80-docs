@@ -19,7 +19,7 @@ house reference form taking precedence over a course-chapter template.
 
 Mechanisms use git object text at
 `ea3ef3de9133931e925a0220d51c0e971c1fd8dd`. The old-card recipe, capture and
-CLOSE ERROR account retain78127ec. The diagnostic fence is a message template
+CLOSE ERROR account retainsbd15528, as independently corrected below. The diagnostic fence is a message template
 with variable nn, not a captured run. No product, fixture, dependency or
 browser was executed or imported. No build, test or new capture was made.
 
@@ -103,7 +103,8 @@ passing runtime assertion.
 | MOUNT messages/result | test/programs/mount.asm:14–31 checks tag/major;33–57,98–157,241–262 supplies every failure/success path and literal. It does not set a failure result merely for printing an error. src/volsvc.asm:246–315,326–362,413–428 tests assignment/slot/flush and uses CFLALL;463–506 supplies descriptor failure. cache.asm:661–668 remains the possible warm-chain drop. |
 | Ordinary status lines | src/boot.asm:640–677 and src/lcd.asm:122–189 write labels/suffixes; ccpfile.asm:248–311 gives counts/free and464–526 gives pager/case-mask aliases; ccpmut.asm:25–84 gives confirmation/cancel and347–368 gives count; ccpcmd.asm:200–231,829–864 gives console/service reports. console.asm:429–440 discards BAT. mount.asm:159–234 prints two/three-digit decimal indexes and geometry/flags/drive. |
 
-The old CLOSE ERROR account is retained at its actual historical pin. It
+The old CLOSE ERROR account retains its actualbd15528 experiment, corrected
+from the initial blanket78127ec attribution below. It
 does not establish a new exhaustive test result. The same separation applies
 to the old PICO fixture and the displayed GLCD3 pages. Current source facts
 do not repin those bytes or constitute new application qualification.
@@ -134,3 +135,18 @@ whole-book lookup acceptance remain open. No root book, shared record or
 other writer's draft was edited. Commit scope is exactly this appendix draft
 and this record, using --only. No runtime, import, build, test, new capture,
 KS48 implementation claim or publication occurred.
+
+## Independent run-provenance correction
+
+The full independent53-unit source/reference-craft review found one required
+correction: the CLOSE ERROR experiment belongs tobd15528. The lead read
+Book12's opening source/run scope and F17 at line65, which explicitly records
+altering the destination name in RENFCB at CPDONE. Book46 does not establish
+a later execution of that experiment. Corrected the header, account and
+record tobd15528 while the separate old-card capture remains78127ec.
+
+All three complete historical fences and the capture command remain unchanged.
+Current ea3ef3d close-failure semantics were clear in the full review. The
+lead read the complete draft and this bounded correction. Independent
+correction confirmation remains pending. No new execution, source edit or
+physical-board observation occurred.

@@ -9,8 +9,8 @@ nav_group: "Appendices"
 
 <!-- Source mechanisms checked by text inspection at TEC-OS
      ea3ef3de9133931e925a0220d51c0e971c1fd8dd. Unprefixed ranges use that pin.
-     The old-card recipe/capture and CLOSE ERROR account retain 78127ec
-     provenance. The diagnostic prompt fence is a literal message template.
+     The old-card recipe/capture retains78127ec. CLOSE ERROR
+     retains its actualbd15528 experiment fromBook12:65. The diagnostic prompt fence is a literal message template.
      No execution, new capture or physical-board result is claimed. -->
 
 An error message identifies the operation that stopped and the recovery still
@@ -152,7 +152,7 @@ explains the code.
 | `WRITE ERROR` | `COPY` received a nonzero sequential-write result, such as no free block or no entry for the next extent. It attempts to close the destination before printing this message. That close can also fail. A successful close preserves the records already copied. | Inspect or erase the partial destination, free space and copy again. | `src/cpm/ccpmut.asm:324-338`, `370-381`, `src/cpm/bdosrec.asm:119-175`, `src/text.asm:38-39` |
 | `CLOSE ERROR` | After reading the source, `COPY` received `FFh` from close because no directory entry matched the destination FCB. A fatal disk error aborts through the BDOS instead. | Inspect the destination and repeat the copy after correcting the cause. | `src/cpm/ccpmut.asm:347-353`, `src/cpm/bdosfile.asm:289-339`, `src/text.asm:40-41` |
 
-The retained `78127ec` account records `CLOSE ERROR` from a host-model run
+The retained `bd15528` account records `CLOSE ERROR` from a host-model run
 that altered the destination's name in the FCB. It is not a newly reproduced
 failure or a claim that ordinary copies have been exhaustively tested.
 
