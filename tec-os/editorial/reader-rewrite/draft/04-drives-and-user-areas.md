@@ -22,10 +22,10 @@ rule for resident services.
 
 ## Programs and resident services
 
-The `SAMPLE.COM` and small banner you have used are programs. TEC-OS loads
-a COM file into program memory and starts it. When the program finishes
-the command prompt returns. A program used this way is called transient because
-its code need not remain available after it ends.
+The `SAMPLE.COM` and small banner you have used are programs. TEC-OS loads a COM
+file into program memory and starts it. When the program finishes the command
+prompt returns. A program used this way is called transient because its code
+need not remain available after it ends.
 
 A file of type SVC installs a resident service. Its code stays in memory
 after the installation command ends, including across later program exits.
@@ -351,12 +351,12 @@ Cannot mount: in use or too large
 A>
 ```
 
-The last command failed because SPARE was already on D. The same message
-can mean the destination slot is too small or absent. TEC-OS holds some
-recent writes in memory in its block cache. A cache flush writes those pending changes
+The last command failed because SPARE was already on D. The same message can
+mean the destination slot is too small or absent. TEC-OS holds some recent
+writes in memory in its block cache. A cache flush writes those pending changes
 to the card. A failed flush can also prevent the mount and the assignment
-changes only after the writes succeed. A label or index not found in the
-table gives `No such volume`. Invalid command syntax prints
+changes only after the writes succeed. A label or index not found in the table
+gives `No such volume`. Invalid command syntax prints
 `MOUNT [D: [NAME or INDEX]]`. An attempt to empty A gives `Cannot unmount`.
 
 `MOUNT` changes the running assignments in memory, not the drive fields

@@ -21,9 +21,10 @@ hardware. Source inspection establishes the operations the ROM performs, not
 what an untested physical board will return.
 
 For the prepared board, fit a 32 KiB RAM chip in U9, set the CPU clock to FAST
-with the 4 MHz oscillator and leave the hex-keypad non-maskable interrupt (NMI) jumper off. Enable the
-Matrix switch when using the matrix keyboard. Chapter 27 describes the separate diagnostics ROM and the report
-needed to compare a particular board with the model.
+with the 4 MHz oscillator and leave the hex-keypad non-maskable interrupt (NMI)
+jumper off. Enable the Matrix switch when using the matrix keyboard. Chapter 27
+describes the separate diagnostics ROM and the report needed to compare a
+particular board with the model.
 
 ## The ports
 
@@ -52,13 +53,13 @@ keypad encoder and the ROM discards the value. It is a model input trigger,
 not a hardware serial buffer (`src/console.asm:28-45`,
 `src/console.asm:253-279`, `src/console.asm:361-377`).
 
-Cold boot probes the PICO9918 by writing and reading two patterns at video memory (VRAM)
-address `3FFFh`. A successful probe sets its device bit. With the Matrix
-switch enabled the ROM then installs its PICO console before printing the
-banner (`src/tms.asm:17-48`, `src/video.asm:22-29`, `src/pico.asm:64-87`).
-The inspected `ea3ef3d` source starts that console at 80 columns. With the
-switch off it performs no console setup after the probe. A program can still
-claim the responding display through `VIDEO`.
+Cold boot probes the PICO9918 by writing and reading two patterns at video
+memory (VRAM) address `3FFFh`. A successful probe sets its device bit. With the
+Matrix switch enabled the ROM then installs its PICO console before printing the
+banner (`src/tms.asm:17-48`, `src/video.asm:22-29`, `src/pico.asm:64-87`). The
+inspected `ea3ef3d` source starts that console at 80 columns. With the switch
+off it performs no console setup after the probe. A program can still claim the
+responding display through `VIDEO`.
 
 ## Port 01h and the serial line
 
@@ -150,10 +151,10 @@ build leaves U9 empty. The prepared setup therefore adds a 62256 or similar
 and sets the EXPAND jumpers for a 32 KiB chip, as `docs/board-run.md` specifies.
 
 Before printing the banner, cold boot checks both ends of the visible window
-with complementary patterns and checks for the separate half behind it.
-Failure prints `TEC-OS needs 64K RAM` on serial and stops. The serial failure
-path uses the boot stack in fixed RAM and does not require the resident workspace in
-U9 (`src/boot.asm:69-79`, `src/boot.asm:566-636`). Chapters 10 and 14 give the
+with complementary patterns and checks for the separate half behind it. Failure
+prints `TEC-OS needs 64K RAM` on serial and stops. The serial failure path uses
+the boot stack in fixed RAM and does not require the resident workspace in U9
+(`src/boot.asm:69-79`, `src/boot.asm:566-636`). Chapters 10 and 14 give the
 program and resident layouts once this check succeeds.
 
 ## The hex keypad and its NMI
@@ -162,13 +163,13 @@ TEC-OS reads no hex-keypad key codes. It uses only the key-down bit for the
 startup bypass. Hold a key through reset with the NMI jumper off to cover
 that single sample. Chapter 7 gives the recovery procedure.
 
-With the keypad NMI jumper fitted, a press raises a non-maskable interrupt.
-The CPU pushes its return address and enters `0066h`, inside the default file control block (FCB)
-at `005Ch–007Fh`. TEC-OS installs no NMI handler there. The bytes can be file
-metadata rather than instructions, so a press can crash the machine. The
-supported TEC-OS setup leaves the jumper off. The diagnostics ROM has its
-own NMI test and different keypad instructions, which must not be applied
-to an ordinary TEC-OS session.
+With the keypad NMI jumper fitted, a press raises a non-maskable interrupt. The
+CPU pushes its return address and enters `0066h`, inside the default file
+control block (FCB) at `005Ch–007Fh`. TEC-OS installs no NMI handler there. The
+bytes can be file metadata rather than instructions, so a press can crash the
+machine. The supported TEC-OS setup leaves the jumper off. The diagnostics ROM
+has its own NMI test and different keypad instructions, which must not be
+applied to an ordinary TEC-OS session.
 
 ## The 20 × 4 LCD
 

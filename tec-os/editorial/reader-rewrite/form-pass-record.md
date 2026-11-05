@@ -118,3 +118,26 @@ finding. It does not close independent factual or integration reviews.
 Only reader draft text and this new record are owned. No existing chapter
 pass record or terms file was edited. No product execution, import, build,
 test, assembly, browser interaction, capture or runtime allocation occurred.
+
+## Bounded paragraph rewrap after 93b0c41
+
+Rewrapped whole prose paragraphs changed by 93b0c41 to an 80-column limit.
+Only those paragraphs were eligible. Tables, fenced literals, headings,
+comments and front matter were excluded. List items were treated separately
+so neighbouring unchanged items retained their original wrapping. Unrelated
+old long paragraphs were left alone.
+
+The rewrap changes 89 paragraphs in 34 reader texts. Its exact affected
+reader-file set is the 36-file list above except
+11-use-the-boards-devices.md and appendix-h-service-file-format.md. Chapter
+11's changed paragraph already fits. Appendix H's change is in a table.
+This record is the only additional affected file.
+
+Compared every reader file against 93b0c41. The complete word and punctuation
+sequence is identical after normalising whitespace. All 212 fenced blocks,
+152 HTML comments, 7,825 inline-code spans and 232 Markdown links remain
+byte-identical and in order. Tables, headings and front matter are also
+byte-identical. Literal spans and links were kept whole while choosing line
+breaks. Every rewrapped paragraph fits 80 columns with no overwidth token
+exception. The reader-text changes are wrapping only, with no semantic or
+provenance change. No product execution or evidence refresh occurred.

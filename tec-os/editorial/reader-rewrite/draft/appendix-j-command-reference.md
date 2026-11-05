@@ -204,11 +204,11 @@ SAVE leaves the file open in that case (`src/cpm/ccpcmd.asm:282-445`).
 
 ### Drives, USER and program lookup
 
-A drive selection is a letter and colon with no other argument. A through D
-are the available TEC-OS drives. The CP/M letters E through P parse as drives
-but selection fails. USER accepts a single digit from 0 to 9 or one of
-10 to 15. Leading-zero forms such as `00` and `03` are rejected. A nonzero
-user number appears before the drive in the command prompt.
+A drive selection is a letter and colon with no other argument. A through D are
+the available TEC-OS drives. The CP/M letters E through P parse as drives but
+selection fails. USER accepts a single digit from 0 to 9 or one of 10 to 15.
+Leading-zero forms such as `00` and `03` are rejected. A nonzero user number
+appears before the drive in the command prompt.
 
 For a program command the type is replaced by COM, except for SVC. Lookup
 starts on the named drive, or the current drive when none is named, in the
@@ -255,7 +255,7 @@ to the whole line. A colon at a piece's start tests the previous return code.
 Failure skips that piece and drops the remaining line. A colon at the start
 of a fresh line tests the last command's code.
 
-A program's command tail ends at its piece's separator. Neither a file name
-nor an argument can contain a literal exclamation mark.
-[Results and command chains](12-results-and-command-chains.md) gives the
-success interval, every drop path and function 47's replacement-line contract.
+A program's command tail ends at its piece's separator. Neither a file name nor
+an argument can contain a literal exclamation mark.
+[Results and command chains](12-results-and-command-chains.md) gives the success
+interval, every drop path and function 47's replacement-line contract.

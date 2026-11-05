@@ -48,9 +48,9 @@ A>
 and needs no service file. The effect of the GLCD line depends on which
 console cold boot selected.
 
-A startup line uses the same command syntax as a typed command. With an
-action on each line, its completion is followed by the next command prompt and
-command. Chapter 12 explains multiple commands and conditional execution.
+A startup line uses the same command syntax as a typed command. With an action
+on each line, its completion is followed by the next command prompt and command.
+Chapter 12 explains multiple commands and conditional execution.
 
 The following historical recipe copies the starter card and replaces its
 startup file with six lines. The `tecvol put` command replaces an existing
@@ -323,12 +323,12 @@ retains the complete old-card renaming example.
 
 ## Bypassing a bad startup file
 
-A program that hangs or resets the board can prevent startup from reaching
-an interactive prompt. With the keypad non-maskable interrupt (NMI) jumper off, hold any hex-keypad
-key from reset until the prompt appears. TEC-OS samples the keypad once
-just before opening the file and skips startup when a key
-is down. The host model run at `58d4345` placed that sample about 1.5 seconds
-after reset.
+A program that hangs or resets the board can prevent startup from reaching an
+interactive prompt. With the keypad non-maskable interrupt (NMI) jumper off,
+hold any hex-keypad key from reset until the prompt appears. TEC-OS samples the
+keypad once just before opening the file and skips startup when a key is down.
+The host model run at `58d4345` placed that sample about 1.5 seconds after
+reset.
 
 The NMI jumper must be off for this bypass. A key press with it fitted
 causes a non-maskable interrupt at an address TEC-OS uses for other data

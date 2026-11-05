@@ -19,9 +19,9 @@ pairs the historical `78127ec` map with the source contracts for each region.
 [Chapter 14](14-state-and-memory.md) explains resident state and its lifetime.
 
 The address tables retain the `tecos` build at `78127ec`, whose ROM SHA-256 is
-`8cad40923ce1c3c6079d3201a1a8cc294dbe501838ed54505ca12287672f8b9f`.
-Its single profile was `tecos`. The starter card mounted G1M on A and G8M on B
-with no service installed unless a row says otherwise. The resident workspace addresses
+`8cad40923ce1c3c6079d3201a1a8cc294dbe501838ed54505ca12287672f8b9f`. Its single
+profile was `tecos`. The starter card mounted G1M on A and G8M on B with no
+service installed unless a row says otherwise. The resident workspace addresses
 came from `build/tecos/tecos.d8.json`.
 
 Current field meanings and code contracts below use `ea3ef3d`. Later builds
@@ -58,15 +58,14 @@ value afterwards (`ea3ef3d:src/layout.asm:26-45`,
 `ea3ef3d:src/history.asm:35-74`). Warm boot writes `01h` before selecting
 its resident stack (`ea3ef3d:src/boot.asm:178-185`).
 
-The word at `0006h` is the exclusive top of the TPA. Without a resident
-service it points to a three-byte BDOS entry stub below the allocation
-vectors. `ALVINIT` packs those vectors down from `WSBASE` and reserves the
-jump below the lowest vector (`ea3ef3d:src/boot.asm:695-800`). A format 1.1
-card with a nonzero drive count reserves 256 bytes for each requested drive.
-Otherwise each mounted drive receives `(DSM >> 3) + 1` bytes. A service
-lowers `0006h` to its first page during installation. `PZTOP` is updated
-when its pages are committed (`ea3ef3d:src/loader.asm:421-441`,
-`ea3ef3d:src/loader.asm:608-614`).
+The word at `0006h` is the exclusive top of the TPA. Without a resident service
+it points to a three-byte BDOS entry stub below the allocation vectors.
+`ALVINIT` packs those vectors down from `WSBASE` and reserves the jump below the
+lowest vector (`ea3ef3d:src/boot.asm:695-800`). A format 1.1 card with a nonzero
+drive count reserves 256 bytes for each requested drive. Otherwise each mounted
+drive receives `(DSM >> 3) + 1` bytes. A service lowers `0006h` to its first
+page during installation. `PZTOP` is updated when its pages are committed
+(`ea3ef3d:src/loader.asm:421-441`, `ea3ef3d:src/loader.asm:608-614`).
 
 These card-dependent figures are historical `78127ec` values:
 
@@ -119,14 +118,13 @@ These fixed addresses identify the current page-zero contracts
 | `006Ch` | Second FCB, overlapping the first FCB's last 20 bytes |
 | `0080h–00FFh` | Command tail and default DMA buffer |
 
-Cold boot clears page zero. `PZINIT` writes the entry jumps and stub
-at cold boot's end and on each warm boot. It leaves `0003h` and `0004h`
-unchanged (`ea3ef3d:src/boot.asm:62-70`, `ea3ef3d:src/boot.asm:157-199`,
-`ea3ef3d:src/boot.asm:412-434`). The restart sweep preserves the three
-bytes of a qualifying jump and clears its remaining five bytes. A target
-equal to `PZTOP` does not qualify. The default `EI`, `RETI` sequence at
-`0038h` is written only when no qualifying jump remains there
-(`ea3ef3d:src/boot.asm:454-509`).
+Cold boot clears page zero. `PZINIT` writes the entry jumps and stub at cold
+boot's end and on each warm boot. It leaves `0003h` and `0004h` unchanged
+(`ea3ef3d:src/boot.asm:62-70`, `ea3ef3d:src/boot.asm:157-199`,
+`ea3ef3d:src/boot.asm:412-434`). The restart sweep preserves the three bytes of
+a qualifying jump and clears its remaining five bytes. A target equal to `PZTOP`
+does not qualify. The default `EI`, `RETI` sequence at `0038h` is written only
+when no qualifying jump remains there (`ea3ef3d:src/boot.asm:454-509`).
 
 Service-page release clears the first byte of each claimed restart slot
 before the sweep. Successful unload and failure cleanup that releases the
@@ -135,11 +133,11 @@ hook still targets them, so failure alone does not imply slot release
 (`ea3ef3d:src/loader.asm:128-173`, `ea3ef3d:src/loader.asm:536-580`,
 `ea3ef3d:src/loader.asm:634-662`).
 
-The CCP records the drive/user byte for its command prompt. Before program launch it
-writes both FCBs, then the command tail and default DMA address, then the
-load-drive byte (`ea3ef3d:src/cpm/ccp.asm:363-384`,
-`ea3ef3d:src/cpm/ccpcmd.asm:447-497`, `ea3ef3d:src/cpm/ccp.asm:519-536`).
-The second FCB reaches `008Fh`, so tail publication follows FCB parsing.
+The CCP records the drive/user byte for its command prompt. Before program
+launch it writes both FCBs, then the command tail and default DMA address, then
+the load-drive byte (`ea3ef3d:src/cpm/ccp.asm:363-384`,
+`ea3ef3d:src/cpm/ccpcmd.asm:447-497`, `ea3ef3d:src/cpm/ccp.asm:519-536`). The
+second FCB reaches `008Fh`, so tail publication follows FCB parsing.
 
 CP/M reserves `0040h–004Fh` for BIOS scratch. TEC-OS uses only `0040h`
 there. It is the resident state byte read while EXPAND 1 hides the upper

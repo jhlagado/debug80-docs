@@ -259,8 +259,8 @@ distinguishes their effects on a remaining command chain. Chapter 9 explains
 disk errors and returned error modes alongside file calls.
 
 Warm boot rebuilds the jumps at the bottom of memory and restarts the CCP.
-Services remain installed and the selected console stays in use. Pending
-card writes are flushed before the next load. A successful flush puts them
-on the card while a failure drops the failed lines in the block cache and reports
+Services remain installed and the selected console stays in use. Pending card
+writes are flushed before the next load. A successful flush puts them on the
+card while a failure drops the failed lines in the block cache and reports
 `Write lost`. Chapter 15 explains the full warm-boot sequence.
 

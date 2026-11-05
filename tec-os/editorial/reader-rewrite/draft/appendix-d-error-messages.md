@@ -14,8 +14,8 @@ nav_group: "Appendices"
      No execution, new capture or physical-board result is claimed. -->
 
 An error message identifies the operation that stopped and the recovery still
-available. The tables follow cold boot, the diagnostic prompt, the LCD,
-the command processor and the BDOS, then failures in the block cache and `MOUNT`.
+available. The tables follow cold boot, the diagnostic prompt, the LCD, the
+command processor and the BDOS, then failures in the block cache and `MOUNT`.
 Ordinary status lines have a separate table at the end.
 
 In a message `d` stands for a drive letter, `n` for a decimal number, `NAME`

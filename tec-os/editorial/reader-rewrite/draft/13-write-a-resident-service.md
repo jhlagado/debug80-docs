@@ -36,13 +36,13 @@ A driver is a service that operates hardware. A library provides routines
 for programs. The starter's `GLCD.SVC` is a display driver. COUNT hooks the
 console's output routine and also provides a count-reading routine to clients.
 
-The pages come from the transient program area, or TPA, below the BDOS entry jump.
-Installation lowers the word at `0006h`, the program-memory ceiling established in
-[Chapter 10](10-memory-for-programs.md). The numbered ROM calls used in
-[Chapter 11](11-use-the-boards-devices.md) occupy no service pages and do
-not appear in `SERVICES`. A resident service can publish named records in
-the registry so that programs can find its routines. ROM calls 13 and 14
-find and enumerate those records.
+The pages come from the transient program area, or TPA, below the BDOS entry
+jump. Installation lowers the word at `0006h`, the program-memory ceiling
+established in [Chapter 10](10-memory-for-programs.md). The numbered ROM calls
+used in [Chapter 11](11-use-the-boards-devices.md) occupy no service pages and
+do not appear in `SERVICES`. A resident service can publish named records in the
+registry so that programs can find its routines. ROM calls 13 and 14 find and
+enumerate those records.
 
 COUNT intercepts output through the BIOS jump table in RAM at `BF00h`.
 The word at `0001h` identifies its `WBOOT` entry and each entry is a
@@ -411,13 +411,12 @@ program or service enables them with EI.
 
 ### The ROM's addresses
 
-A resident service calls the ROM through the table at `C003h`, using the
-names in `abi.inc`. Internal routine addresses can change between builds.
-Format 4 ties a loaded service to major version 5 of the application binary
-interface (ABI), so the service does not need the major-version check that
-a transient client needs.
-Check the result of a call added in a later minor version. GLCD does this
-for FONT, added in ABI 5.1.
+A resident service calls the ROM through the table at `C003h`, using the names
+in `abi.inc`. Internal routine addresses can change between builds. Format 4
+ties a loaded service to major version 5 of the application binary interface
+(ABI), so the service does not need the major-version check that a transient
+client needs. Check the result of a call added in a later minor version. GLCD
+does this for FONT, added in ABI 5.1.
 
 `makeSvc` checks source text for ROM literals from `$C000` to `$FFFF` and
 `0C000h` to `0FFFFh`, excluding comments. Decimal, binary or differently
@@ -466,8 +465,8 @@ the output hook. CHARS prints it from outside the hook instead.
 ## Publishing a record
 
 CHARS needs COUNT's routine address even though COUNT can load at different
-pages. The registry provides that lookup. It is a linked list whose head
-is in TEC-OS's resident workspace. Each record occupies 13 bytes in its service's
+pages. The registry provides that lookup. It is a linked list whose head is in
+TEC-OS's resident workspace. Each record occupies 13 bytes in its service's
 resident pages:
 
 | Offset | Bytes | Contents |

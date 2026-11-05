@@ -138,8 +138,8 @@ rule described below.
 
 ## A program that reports failure
 
-`EXISTS` reports whether its named file is present. It opens the default
-file control block (FCB) at `005Ch`, using the file-call conventions from Chapter 9:
+`EXISTS` reports whether its named file is present. It opens the default file
+control block (FCB) at `005Ch`, using the file-call conventions from Chapter 9:
 
 ```asm
 ; EXISTS: a failure, return code FF00h, when the file named on the command

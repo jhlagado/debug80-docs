@@ -64,11 +64,11 @@ The header's fields (`format/format.json`, `header`):
 | 25 | 7 | Reserved, 0 | 0 |
 | 32 | 32 each | The first 15 volume descriptors | 2 |
 
-The header checksum covers all 512 bytes of block 0 except its own two
-bytes. It is a 16-bit sum, including the descriptors as well as the header
-fields (`tools/lib/container.mjs:51-59`). A change anywhere in block 0
-therefore needs a new checksum. The ROM reads 32 bytes at a time from a
-line in the block cache, sums the whole block and subtracts the two checksum bytes
+The header checksum covers all 512 bytes of block 0 except its own two bytes. It
+is a 16-bit sum, including the descriptors as well as the header fields
+(`tools/lib/container.mjs:51-59`). A change anywhere in block 0 therefore needs
+a new checksum. The ROM reads 32 bytes at a time from a line in the block cache,
+sums the whole block and subtracts the two checksum bytes
 (`src/vol.asm:592-619`, `src/volutil.asm:92-132`).
 
 A card's minor version sets three things. A 1.0 card has no drives field and

@@ -12,27 +12,28 @@ nav_group: "Part II: Inside TEC-OS"
      figures explicitly labelled 78127ec retain that historical provenance. -->
 
 A program ends and the command prompt returns. The next program has a fresh BDOS
-workspace while your command history and installed services remain in RAM.
-A reset clears much more RAM. The difference comes from the addresses the
-boot routines clear and the state they rebuild afterwards.
+workspace while your command history and installed services remain in RAM. A
+reset clears much more RAM. The difference comes from the addresses the boot
+routines clear and the state they rebuild afterwards.
 
-The CCP processes commands and the BDOS supplies file and console calls.
-The BIOS operates the board for them. Their code is in ROM while their changing
+The CCP processes commands and the BDOS supplies file and console calls. The
+BIOS operates the board for them. Their code is in ROM while their changing
 state is in RAM. The numbered ROM services also provide access to the board's
-own devices, including the digits, 20 × 4 character LCD and speaker. Console output
-can go to serial, the PICO9918 or the graphics LCD. The SD container holds several volumes. The separate expansion
-bank holds the block cache and command history so those buffers occupy none
-of the transient program area (TPA) (`ea3ef3d:src/rom.asm:17-44`,
-`ea3ef3d:src/layout.asm:104-115`, `ea3ef3d:format/format.json:20-25`, `ea3ef3d:src/services.asm:1-25`, `ea3ef3d:src/abi.inc:64-88`).
+own devices, including the digits, 20 × 4 character LCD and speaker. Console
+output can go to serial, the PICO9918 or the graphics LCD. The SD container
+holds several volumes. The separate expansion bank holds the block cache and
+command history so those buffers occupy none of the transient program area (TPA)
+(`ea3ef3d:src/rom.asm:17-44`, `ea3ef3d:src/layout.asm:104-115`,
+`ea3ef3d:format/format.json:20-25`, `ea3ef3d:src/services.asm:1-25`,
+`ea3ef3d:src/abi.inc:64-88`).
 
 ## Two banks at the same addresses
 
 The Z80 can address 64 KiB at once. The TEC-1G's fixed RAM occupies
-`0000h–7FFFh` and the ROM occupies `C000h–FFFFh`. Between them
-`8000h–BFFFh` is a 16 KiB bank window onto either half of the RAM in U9.
-The two halves are EXPAND 0 and EXPAND 1. Selecting a bank changes the
-bytes visible at those addresses (`ea3ef3d:src/layout.asm:3-9`,
-`ea3ef3d:src/layout.asm:39-40`).
+`0000h–7FFFh` and the ROM occupies `C000h–FFFFh`. Between them `8000h–BFFFh` is
+a 16 KiB bank window onto either half of the RAM in U9. The two halves are
+EXPAND 0 and EXPAND 1. Selecting a bank changes the bytes visible at those
+addresses (`ea3ef3d:src/layout.asm:3-9`, `ea3ef3d:src/layout.asm:39-40`).
 
 Programs normally run with EXPAND 0 selected. Their upper buffers share
 that bank with the resident workspace and stacks. EXPAND 1 contains the
@@ -73,14 +74,13 @@ the boot code rather than bytes loaded from the ROM image
 (`ea3ef3d:src/ram.asm:1-11`, `ea3ef3d:src/ram.asm:143-151`,
 `ea3ef3d:src/ram.asm:219-231`, `ea3ef3d:src/ram.asm:309-319`).
 
-Cold boot clears the workspace from `WSBASE` to `WSEND`. Warm boot clears
-a shorter span, from `CCPCLR` through the end of the BDOS block.
-The CCP's two file control blocks (FCBs) and command buffer lie below that span.
-Its parser scratch and stack lie inside it, as does the whole BDOS block.
-The unexecuted command text therefore remains available across an ordinary exit
-while the next program starts with fresh BDOS state
-(`ea3ef3d:src/boot.asm:73-80`, `ea3ef3d:src/boot.asm:530-559`,
-`ea3ef3d:src/ram.asm:153-231`).
+Cold boot clears the workspace from `WSBASE` to `WSEND`. Warm boot clears a
+shorter span, from `CCPCLR` through the end of the BDOS block. The CCP's two
+file control blocks (FCBs) and command buffer lie below that span. Its parser
+scratch and stack lie inside it, as does the whole BDOS block. The unexecuted
+command text therefore remains available across an ordinary exit while the next
+program starts with fresh BDOS state (`ea3ef3d:src/boot.asm:73-80`,
+`ea3ef3d:src/boot.asm:530-559`, `ea3ef3d:src/ram.asm:153-231`).
 
 The storage regions receive these treatments at warm boot:
 
@@ -162,23 +162,21 @@ geometry's vector
 `ea3ef3d:src/boot.asm:695-725`).
 
 With no drives field, including every format 1.0 card, only mounted drives
-receive slots. Each slot is sized from its volume's `DSM`.
-`DRVSLOT` records 0 for no slot, 1 for 64 bytes and 2 for 256.
-A later mount must fit the slot allocated at cold boot.
-The starter card's G1M on A and G8M on B therefore need 320 bytes.
-Four G8M-sized slots need 1,024 bytes and reduce the TPA by
-another 704 bytes (`ea3ef3d:src/boot.asm:727-799`,
-`ea3ef3d:src/volsvc.asm:295-315`).
+receive slots. Each slot is sized from its volume's `DSM`. `DRVSLOT` records 0
+for no slot, 1 for 64 bytes and 2 for 256. A later mount must fit the slot
+allocated at cold boot. The starter card's G1M on A and G8M on B therefore need
+320 bytes. Four G8M-sized slots need 1,024 bytes and reduce the TPA by another
+704 bytes (`ea3ef3d:src/boot.asm:727-799`, `ea3ef3d:src/volsvc.asm:295-315`).
 
-`ALVINIT` reserves three more bytes for the BDOS entry stub directly below the lowest vector.
-`STUBAD` stores that address and `PZINIT` writes `JP BENTRY` there.
-With no resident service, `PZTOP` is the stub address.
-The word at `0006h` contains that same top-of-TPA value.
-A service occupies whole pages below it. Its relocated header starts
-with another `JP BENTRY` and the word at `0006h` is lowered to the
-service's page boundary (`ea3ef3d:src/boot.asm:142-143`,
-`ea3ef3d:src/boot.asm:794-800`, `ea3ef3d:src/boot.asm:412-434`,
-`ea3ef3d:src/loader.asm:1-15`, `ea3ef3d:src/loader.asm:421-441`, `ea3ef3d:src/loader.asm:608-614`).
+`ALVINIT` reserves three more bytes for the BDOS entry stub directly below the
+lowest vector. `STUBAD` stores that address and `PZINIT` writes `JP BENTRY`
+there. With no resident service, `PZTOP` is the stub address. The word at
+`0006h` contains that same top-of-TPA value. A service occupies whole pages
+below it. Its relocated header starts with another `JP BENTRY` and the word at
+`0006h` is lowered to the service's page boundary
+(`ea3ef3d:src/boot.asm:142-143`, `ea3ef3d:src/boot.asm:794-800`,
+`ea3ef3d:src/boot.asm:412-434`, `ea3ef3d:src/loader.asm:1-15`,
+`ea3ef3d:src/loader.asm:421-441`, `ea3ef3d:src/loader.asm:608-614`).
 
 The earlier `78127ec` build gives a concrete example of that subtraction.
 Its workspace began at `BAE7h`, above the starter vectors at `B9A7h–BAE6h`
@@ -281,13 +279,12 @@ establishes the test's scope, not a fresh passing result
 `ea3ef3d:test/stacks.test.mjs:43-78`,
 `ea3ef3d:test/stacks.test.mjs:212-264`).
 
-The test triggers a keypad non-maskable interrupt (NMI) only at a new stack depth where `0066h`
-contains `RETN`. The quoted depths exclude an NMI frame because TEC-OS installs
-no handler there. A keypad interrupt normally enters inside the
-default FCB at `005Ch`. The required disabled keypad NMI jumper prevents
-that entry into FCB bytes during ordinary use
-(`ea3ef3d:test/stacks.test.mjs:1-11`,
-`ea3ef3d:test/stacks.test.mjs:59-69`).
+The test triggers a keypad non-maskable interrupt (NMI) only at a new stack
+depth where `0066h` contains `RETN`. The quoted depths exclude an NMI frame
+because TEC-OS installs no handler there. A keypad interrupt normally enters
+inside the default FCB at `005Ch`. The required disabled keypad NMI jumper
+prevents that entry into FCB bytes during ordinary use
+(`ea3ef3d:test/stacks.test.mjs:1-11`, `ea3ef3d:test/stacks.test.mjs:59-69`).
 
 ## EXPAND 1 and the stack boundary
 
