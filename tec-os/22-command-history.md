@@ -213,7 +213,7 @@ before it marks the cache's lines empty (`src/boot.asm:309-332`). The page at
 `BD00h` is all zeros, `HHEAD` is 0 and the byte before it, at offset `FFh`, is
 0. The ring is empty and still kept as `HSTORE` and `HREC` require. This holds
 for a recognised reset too, the one that keeps the selected volumes, since only
-the drive table is carried across it (`src/boot.asm:160-164`). After the reset
+the drive table is carried across it (`src/boot.asm:286-293`). After the reset
 in this run, `^W` and Return gave an empty line:
 
 <!-- node tools/capture.mjs CON "@reset" "@start "$'\x17' -->

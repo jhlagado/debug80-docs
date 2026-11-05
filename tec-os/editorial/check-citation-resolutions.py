@@ -16,6 +16,7 @@ from citation_resolution_text import CITATION, EDIT_BASE, normalize, render
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument('--source-repo', required=True, type=Path)
 p.add_argument('--ledger', required=True, type=Path)
+p.add_argument('--require-all', action='store_true', help='also require every originally mapped occurrence to have a semantic disposition')
 p.add_argument('--inventory', type=Path, default=Path(__file__).with_name('source-citation-map.json'))
 a = p.parse_args()
 book = Path(__file__).resolve().parents[2]
@@ -76,10 +77,12 @@ for path, file_rows in by_file.items():
     if normalize(reconstructed) != normalize((book / path).read_text()):
         raise SystemExit('reviewed passage/occurrence application differs from ledger: ' + path)
 missing = sorted(set(expected) - seen)
+missing_mapped = sorted(all_references - seen - set(expected))
 print(json.dumps({'source_revision': ledger['source_revision'],
                   'pending_occurrences_in_frozen_inventory': sum(expected.values()),
                   'resolved_occurrences_by_disposition': dict(counts),
-                  'additional_reviewed_mapped_ranges': len(seen - set(expected)),
+                  'additional_reviewed_mapped_pairs': len(seen - set(expected)),
+                  'unreviewed_mapped_pairs': len(missing_mapped),
                   'missing_resolutions': [dict(book_path=p, old_citation=c) for p, c in missing],
                   'qualification': 'Coverage and source bounds only; semantic reasons require independent reading.'}, indent=2))
-raise SystemExit(bool(missing))
+raise SystemExit(bool(missing or (a.require_all and missing_mapped)))

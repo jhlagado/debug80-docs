@@ -44,8 +44,8 @@ clears the whole workspace, `STPOS` included (`src/boot.asm:73-79`). [Chapter
 14](14-memory-map.md#the-workspace-and-what-clears-it) gives the two clears.
 
 A retry from the diagnostic prompt returns to `COLDRT`, after that clear, with
-`STPOS` still 0, because the CCP hasn't run yet (`src/boot.asm:63`,
-`src/boot.asm:487-488`). The file runs after a retry as after any cold boot.
+`STPOS` still 0, because the CCP hasn't run yet (`src/boot.asm:119-123`,
+`src/boot.asm:798-800`). The file runs after a retry as after any cold boot.
 
 ## Starting the file
 
@@ -65,21 +65,21 @@ printed and nothing from the file run (`test/startup.test.mjs:221-241`).
 
 The keypad test comes next. It gives a way past a file that keeps the board
 from reaching a prompt (`src/cpm/ccpcmd.asm:837-840`). `STSPORT` is port `03h`,
-and bit 6 is low while a key of the hex keypad is down (`src/layout.asm:11`).
+and bit 6 is low while a key of the hex keypad is down (`src/layout.asm:18-19`, `src/cpm/ccpcmd.asm:835-840`).
 A low bit returns from `STBOOT` with `STPOS` at `80h`, the same state as a file
 that wasn't there. The bit is read this once, so the key has to be down when
 `STBOOT` starts. On the model, with the web page's board and the starter card,
 that is 5,824,922 T-states after a reset, about 1.46 seconds.
 One test holds a key through a reset to get past a service whose `INIT` never
 returns. Another does the same for a file that resets the board at every boot
-(`test/startup.test.mjs:46-58`, `test/startup.test.mjs:246-259`).
+(`test/startup.test.mjs:46-58`, `test/startup.test.mjs:243-259`).
 
 `STBOOT` then reads the file through the CCP's own FCB. It copies the 12 bytes
 of `STFCB`, a drive byte of 1 and the name `STARTUP CMD`, to `CMDFCB`
-(`src/cpm/ccpcmd.asm:841-846`, `src/tables.asm:93`). Cold boot's clear of the
+(`src/cpm/ccpcmd.asm:841-846`, `src/tables.asm:121`). Cold boot's clear of the
 workspace has left the rest of `CMDFCB` zero. Drive byte 1 is drive A
 whichever drive is current. `RESEL` has already put back a recognised reset's
-selection (`src/boot.asm:72`), so the file comes from the volume on drive A at
+selection (`src/boot.asm:130-137`, `src/volsvc.asm:31-35`, `src/volsvc.asm:117-123`), so the file comes from the volume on drive A at
 that moment, as [Chapter 6](06-startup-file.md)'s `SPARE` example shows. Three
 BDOS calls follow (`src/cpm/ccpcmd.asm:847-860`). The
 second and third go through `DOSSEQ`, which takes the function's number from
@@ -175,7 +175,7 @@ piece's letters to capitals in place, after the echo
 (`src/cpm/ccp.asm:249-256`), which is why the echo keeps a line's small letters.
 A test compares each line run from the file with the same line typed, in its
 output and its BDOS calls. The only difference is that letter case
-(`test/startup.test.mjs:202-219`).
+(`test/startup.test.mjs:172-219`).
 
 The next line comes by whatever route the CCP takes back to `MLREAD`. A
 built-in or a failed command jumps to `STARTED` or `MAINLOOP`
@@ -191,7 +191,7 @@ the file's position alone. [Chapter 21](21-chaining-inside.md) describes what
 
 Only the graphics LCD has a display line. The PICO9918's console is the ROM's,
 started at cold boot when the PICO9918 and the matrix keyboard answer, so no
-line in the file loads it (`src/video.asm:8-15`, `src/pico.asm:50-82`). The CCP
+line in the file loads it (`src/video.asm:16-29`, `src/pico.asm:50-82`). The CCP
 separates a service from a program by the three type bytes in `CMDFCB`
 (`src/cpm/ccp.asm:431-464`). `SVC` calls `SVCGO`. Any other type goes to the
 search for a `.COM` file that [Chapter 20](20-ccp.md#loading-a-program)
@@ -247,12 +247,12 @@ and a zero, wipes either of them.
 It comes from `GLCLD`, the path of `CON UC1`, when `SVCGO` returns carry
 (`src/loader.asm:839-857`). `GLCLD` first puts the mode from `CONMOD` back in
 the console field through `CONFLD`, since the console hasn't moved
-(`src/loader.asm:851-854`, `src/console.asm:355-359`). With `GLCD.SVC` already
+(`src/loader.asm:851-854`, `src/console.asm:592-599`). With `GLCD.SVC` already
 in, `GLCLD` returns at its first test and writes nothing
 (`src/loader.asm:839-843`).
 
 `CDWRD` is bit 7 of `CONDEV`, the byte at `BFE7h` that records the console
-devices (`src/ram.asm:278`, `src/layout.asm:41-46`):
+devices (`src/ram.asm:400-401`, `src/layout.asm:72-82`):
 
 | Bit | Name | Meaning |
 | --- | --- | --- |
@@ -269,15 +269,15 @@ if the bit is set, and clears the bit (`src/loader.asm:911-924`). `CONSET`
 calls it, so any take of the console clears a word (`src/loader.asm:897-899`). A
 `GLCD.SVC` that leaves the console on the PICO9918 clears one too
 (`src/loader.asm:887-895`). Hardware service `LCD` clears the bit, with no
-write of blanks, when a program writes row 3 (`src/services.asm:92-96`). The
+write of blanks, when a program writes row 3 (`src/services.asm:149-184`). The
 row is then the program's, and a later take leaves it alone. A program that
 writes the LCD's port goes round this test. The bit then stays set, and a later
 take writes its five blanks over the start of the program's row.
 
 `CARD?` takes the other route. `DIAG` writes it with `LCD3` and leaves `CDWRD`
-clear (`src/boot.asm:472-473`), since no take can happen at the diagnostic
+clear (`src/boot.asm:775-777`), since no take can happen at the diagnostic
 prompt. `R` jumps to `COLDRT`, where `LCDINIT` clears the whole display
-(`src/boot.asm:487-488`, `src/boot.asm:63-64`), and a retry that fails writes
+(`src/boot.asm:798-800`, `src/boot.asm:119-123`), and a retry that fails writes
 the word again. `CONDEV` itself starts each cold boot at 0, with `CDMTX` then
 read from the port (`src/console.asm:62-66`, `src/console.asm:82-87`). No
 reset begins with `CDWRD` set.
@@ -320,7 +320,7 @@ A width line follows the same rule. `CON PICO` or `CON CRT` with a width finds
 the ROM's PICO9918 console with `FIND` before it passes the width. With no such
 console, as on a serial board, a line from the file goes to `STARTED` with no
 message. The same line typed prints the width with a question mark
-(`src/cpm/ccpcmd.asm:158-174`, `test/startup.test.mjs:82-93`).
+(`src/cpm/ccpcmd.asm:158-174`, `test/startup.test.mjs:82-92`).
 
 The rule reaches the next piece. `BADCMD` ends at `ERRGO`, which stores the
 failure code `RCFAIL` in `PRGCODE` (`src/cpm/ccp.asm:572-586`). A piece that

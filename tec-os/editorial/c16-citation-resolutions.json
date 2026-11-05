@@ -4288,6 +4288,17 @@
         "limits": "Source and assertions read only. No build, test, emulator or workflow execution. Historical captures/timings retain their existing provenance. Test-source acceptance establishes what the assertions check, not that they passed at this target. All replacements are exact against current chapter prose; none includes citation text. Use simultaneous citation substitution to avoid transitive replacements."
       },
       "decisions_needed": []
+    },
+    {
+      "slice": "C-extra",
+      "summary": {
+        "remaining_mapped_occurrences_resolved": 68,
+        "distinct_pairs_resolved": 66,
+        "remaining_in_assigned_filter": 0,
+        "corrected_entries": 5,
+        "prose_replacements": 4,
+        "genuine_decisions_needed": []
+      }
     }
   ],
   "resolutions": [
@@ -32326,6 +32337,2832 @@
       "inventory_status": "mapped",
       "occurrence_lines": [
         154
+      ]
+    },
+    {
+      "book_path": "tec-os/20-ccp.md",
+      "old_citation": "src/tables.asm:43-65",
+      "new_citation": "src/tables.asm:53-78",
+      "reason": "KEYTAB contains the ten command strings in the stated order, each zero followed by its handler word, then a final zero. NOTDRIVE/KEYNXT at ccp.asm:392-424 consume exactly this layout.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        33,
+        153
+      ],
+      "target_evidence": [
+        {
+          "path": "src/tables.asm",
+          "start": 53,
+          "end": 78,
+          "anchors": [
+            {
+              "line": 58,
+              "source": "KEYTAB: DB \"DIR\",0"
+            },
+            {
+              "line": 59,
+              "source": "DW CMDDIR"
+            },
+            {
+              "line": 77,
+              "source": "DW CMDSVC"
+            },
+            {
+              "line": 78,
+              "source": "DB 0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/20-ccp.md",
+      "old_citation": "src/boot.asm:221-224",
+      "new_citation": "src/boot.asm:384-410",
+      "reason": "PZINIT rewrites jumps at 0000h and 0005h plus the stub, preserving the drive/user byte at 0004h. Its fall-through PZSWP touches restart vectors from 0008h, not 0004h.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        67
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 384,
+          "end": 410,
+          "anchors": [
+            {
+              "line": 392,
+              "source": "PZINIT:"
+            },
+            {
+              "line": 393,
+              "source": "ld a,$C3       ; JP, for each of the"
+            },
+            {
+              "line": 409,
+              "source": "inc hl"
+            },
+            {
+              "line": 410,
+              "source": "ld (hl),HIGH(BENTRY)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/21-chaining-inside.md",
+      "old_citation": "src/ram.asm:301-302",
+      "new_citation": "src/ram.asm:447-449",
+      "reason": "WSEND is HIRME at the end of the resident workspace, after CHPOS at 390-392. Cold boot clears WSBASE through WSEND-1, so CHPOS and PRGCODE are included.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        42
+      ],
+      "target_evidence": [
+        {
+          "path": "src/ram.asm",
+          "start": 447,
+          "end": 449,
+          "anchors": [
+            {
+              "line": 447,
+              "source": "HIRME:"
+            },
+            {
+              "line": 448,
+              "source": "WSEND EQU HIRME  ; end of the classic"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/21-chaining-inside.md",
+      "old_citation": "src/cpm/bdoscon.asm:199-214",
+      "new_citation": "src/cpm/bdoscon.asm:283-306",
+      "reason": "CHKKEY consumes a ready key; after control-S it waits for the resume key and jumps to CHDROP only for control-C, otherwise returns. CHDROP clears CHPOS before warm boot.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        230
+      ],
+      "target_evidence": [
+        {
+          "path": "src/cpm/bdoscon.asm",
+          "start": 283,
+          "end": 306,
+          "anchors": [
+            {
+              "line": 293,
+              "source": "CHKKEY:"
+            },
+            {
+              "line": 294,
+              "source": "call CONSTQ    ; TEC-OS: the check"
+            },
+            {
+              "line": 305,
+              "source": "jp z,CHDROP    ; of a chained line"
+            },
+            {
+              "line": 306,
+              "source": "ret            ; any other: dropped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/22-command-history.md",
+      "old_citation": "src/boot.asm:160-164",
+      "new_citation": "src/boot.asm:286-293",
+      "reason": "RSLYES copies exactly the 32 drive-table bytes to RSLBUF, not history state; COLD subsequently clears the resident workspace and MEMINIT clears EXPAND 1.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        212
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 286,
+          "end": 293,
+          "anchors": [
+            {
+              "line": 286,
+              "source": "RSLYES:"
+            },
+            {
+              "line": 287,
+              "source": "ld hl,DRVTAB   ; recognised: the"
+            },
+            {
+              "line": 292,
+              "source": "ldir"
+            },
+            {
+              "line": 293,
+              "source": "ret"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/boot.asm:63",
+      "new_citation": "src/boot.asm:119-123",
+      "reason": "COLDRT resets the stack and initialises the LCD after the cold-workspace clear; DIAG retries here before the CCP/STBOOT has run.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        43
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 119,
+          "end": 123,
+          "anchors": [
+            {
+              "line": 119,
+              "source": "COLDRT:"
+            },
+            {
+              "line": 120,
+              "source": "ld sp,STKTOP   ; the BDOS's stack,"
+            },
+            {
+              "line": 122,
+              "source": "call LCDINIT   ; a blank display,"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/boot.asm:487-488",
+      "new_citation": "src/boot.asm:798-800",
+      "reason": "The R/r test jumps to COLDRT, which sets the stack and calls LCDINIT before restarting the card; it does not repeat the workspace clear or execute STBOOT first.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        44,
+        273
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 798,
+          "end": 800,
+          "anchors": [
+            {
+              "line": 798,
+              "source": "cp 'R'"
+            },
+            {
+              "line": 799,
+              "source": "jp z,COLDRT    ; retry: LCD, card and"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "test/startup.test.mjs:221-241",
+      "new_citation": "test/startup.test.mjs:221-241",
+      "reason": "The test source finds the NEVERRUN data block, redirects SDREAD at that LBA to SDRCMD and asserts Bad Sector, no NEVERRUN command and a usable DIR afterward. STBOOT sets STPOS finished before opening/reading, preventing retry after the error warm boot.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        60
+      ],
+      "target_evidence": [
+        {
+          "path": "test/startup.test.mjs",
+          "start": 221,
+          "end": 241,
+          "anchors": [
+            {
+              "line": 221,
+              "source": "test(\"an unreadable file reaches a prompt, and what it held doesn't run\", () => {"
+            },
+            {
+              "line": 222,
+              "source": "const m = start({ \"STARTUP.CMD\": startupFile(\"NEVERRUN\") });"
+            },
+            {
+              "line": 240,
+              "source": "assert.match(m.command(\"DIR HELLO.TXT\"), /HELLO\\.TXT/);"
+            },
+            {
+              "line": 241,
+              "source": "});"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/layout.asm:11",
+      "new_citation": "src/layout.asm:18-19`, `src/cpm/ccpcmd.asm:835-840",
+      "reason": "STSPORT is port 03h; STBOOT masks bit 6 and returns when it is low after setting finished state. The declaration alone describes serial bit 7, so include the actual keypad consumer.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        64
+      ],
+      "target_evidence": [
+        {
+          "path": "src/layout.asm",
+          "start": 18,
+          "end": 19,
+          "anchors": [
+            {
+              "line": 18,
+              "source": "STSPORT EQU $03  ; status input; bit 7"
+            }
+          ]
+        },
+        {
+          "path": "src/cpm/ccpcmd.asm",
+          "start": 835,
+          "end": 840,
+          "anchors": [
+            {
+              "line": 835,
+              "source": "set 7,(hl)     ; finished, whatever"
+            },
+            {
+              "line": 838,
+              "source": "in a,(STSPORT)"
+            },
+            {
+              "line": 839,
+              "source": "and $40"
+            },
+            {
+              "line": 840,
+              "source": "ret z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "test/startup.test.mjs:246-259",
+      "new_citation": "test/startup.test.mjs:243-259",
+      "reason": "The inline COLDBOOT program reaches BIOS function 0; the test counts four COLD entries without a held key, then holds the key and asserts a usable prompt and DIR. This supports reset-loop escape, distinct from the hanging-INIT test.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        71
+      ],
+      "target_evidence": [
+        {
+          "path": "test/startup.test.mjs",
+          "start": 243,
+          "end": 259,
+          "anchors": [
+            {
+              "line": 244,
+              "source": "const COLDBOOT = Uint8Array.from([0x2a, 0x01, 0x00, 0x2b, 0x2b, 0x2b, 0xe9]);"
+            },
+            {
+              "line": 246,
+              "source": "test(\"a file that cold boots the machine runs for ever, and the skip breaks it\", () => {"
+            },
+            {
+              "line": 258,
+              "source": "assert.match(held.command(\"DIR HELLO.TXT\"), /HELLO\\.TXT/);"
+            },
+            {
+              "line": 259,
+              "source": "});"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "test/startup.test.mjs:46-58",
+      "new_citation": "test/startup.test.mjs:46-58",
+      "reason": "The source constructs a hanging INIT service, holds a keypad key for one boot and asserts a usable prompt/no resident, then expects the unheld boot to remain inside the service. STBOOT's one-time keypad bit-6 branch explains this; no test was run.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        71
+      ],
+      "target_evidence": [
+        {
+          "path": "test/startup.test.mjs",
+          "start": 46,
+          "end": 58,
+          "anchors": [
+            {
+              "line": 46,
+              "source": "test(\"a key held through reset skips the file: a hanging INIT reaches a prompt, and with no key it hangs\", async () => {"
+            },
+            {
+              "line": 47,
+              "source": "const defs = { VECAT: 8, FLAGS: 1, XTRA: 0, STKB: 0, STKI: 0, STKC: 0, DEPTH: 0, HOOKAT: 10, CHAINB: 1, HDRNAME: '\"HANG    \"', RECNAME: '\"HANG    \"', RECVER: 1 };"
+            },
+            {
+              "line": 57,
+              "source": "assert.ok(free.pc < 0xc000, \"in the service\");"
+            },
+            {
+              "line": 58,
+              "source": "});"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/tables.asm:93",
+      "new_citation": "src/tables.asm:121",
+      "reason": "STFCB is drive byte 1 plus the eleven bytes STARTUP CMD. STBOOT copies those twelve bytes into CMDFCB and reads the first record via functions 15/20, so it names A:user-0 at first cold entry.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        75
+      ],
+      "target_evidence": [
+        {
+          "path": "src/tables.asm",
+          "start": 121,
+          "end": 121,
+          "anchors": [
+            {
+              "line": 121,
+              "source": "STFCB: DB 1,\"STARTUP CMD\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/boot.asm:72",
+      "new_citation": "src/boot.asm:130-137`, `src/volsvc.asm:31-35`, `src/volsvc.asm:117-123",
+      "reason": "Cold boot calls RESEL after MOUNT/ALVINIT and before STBOOT; RESEL validates retained entries then publishes DRVTAB/DRVIDX, establishing the startup file's drive selection.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        78
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 130,
+          "end": 137,
+          "anchors": [
+            {
+              "line": 130,
+              "source": "call MOUNT"
+            },
+            {
+              "line": 131,
+              "source": "jp nz,DIAG     ; a card with no volume"
+            },
+            {
+              "line": 133,
+              "source": "call ALVINIT   ; the vectors, and the"
+            },
+            {
+              "line": 135,
+              "source": "call RESEL     ; a retained selection,"
+            }
+          ]
+        },
+        {
+          "path": "src/volsvc.asm",
+          "start": 31,
+          "end": 35,
+          "anchors": [
+            {
+              "line": 31,
+              "source": "RESEL:"
+            },
+            {
+              "line": 33,
+              "source": "ld a,(RSLBUF+6)"
+            },
+            {
+              "line": 34,
+              "source": "or a"
+            },
+            {
+              "line": 35,
+              "source": "ret z"
+            }
+          ]
+        },
+        {
+          "path": "src/volsvc.asm",
+          "start": 117,
+          "end": 123,
+          "anchors": [
+            {
+              "line": 118,
+              "source": "ld hl,RSLBUF   ; over DRVTAB and the"
+            },
+            {
+              "line": 120,
+              "source": "ld de,DRVTAB"
+            },
+            {
+              "line": 121,
+              "source": "ld bc,MAXDRV*DRVESZ+MAXDRV"
+            },
+            {
+              "line": 122,
+              "source": "ldir           ; the selection is now"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "test/startup.test.mjs:123-128",
+      "new_citation": "test/startup.test.mjs:123-128",
+      "reason": "The source fills 121 bytes with CR then seven bytes USER 13, places a sentinel after STREC and expects user 13. STLINE's before-read end check and STLE/STL2 path permit the final byte without a second record read.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        137
+      ],
+      "target_evidence": [
+        {
+          "path": "test/startup.test.mjs",
+          "start": 123,
+          "end": 128,
+          "anchors": [
+            {
+              "line": 123,
+              "source": "test(\"a file of exactly 128 bytes runs its last byte, and reads no further\", () => {"
+            },
+            {
+              "line": 124,
+              "source": "const m = start({ \"STARTUP.CMD\": raw(\"\\r\".repeat(121) + \"USER 13\") });"
+            },
+            {
+              "line": 127,
+              "source": "assert.equal(user(m), 13);"
+            },
+            {
+              "line": 128,
+              "source": "});"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "test/startup.test.mjs:202-219",
+      "new_citation": "test/startup.test.mjs:172-219",
+      "reason": "trace records output/BDOS calls from MLGOT to MLREAD. Four startup-versus-typed cases compare the complete traces with output uppercased, supporting equivalence modulo echo case rather than a new execution claim.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        174
+      ],
+      "target_evidence": [
+        {
+          "path": "test/startup.test.mjs",
+          "start": 172,
+          "end": 219,
+          "anchors": [
+            {
+              "line": 172,
+              "source": "/** Each line's output and BDOS calls from MLGOT to the next MLREAD. */"
+            },
+            {
+              "line": 173,
+              "source": "function trace(m) {"
+            },
+            {
+              "line": 218,
+              "source": "});"
+            },
+            {
+              "line": 219,
+              "source": "}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/video.asm:8-15",
+      "new_citation": "src/video.asm:16-29",
+      "reason": "VIDINIT probes TMSINIT, returns on absence and otherwise sets CDTMS then jumps to PISTART. Include the final jump omitted by the textual range; PISTART at pico.asm:59-82 requires CDMTX and installs the ROM console without loading a file. Range-boundary correction includes the PISTART jump rather than accepting the truncated textual mapping.",
+      "prose_edits": [],
+      "status": "corrected",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        190
+      ],
+      "target_evidence": [
+        {
+          "path": "src/video.asm",
+          "start": 16,
+          "end": 29,
+          "anchors": [
+            {
+              "line": 22,
+              "source": "VIDINIT:"
+            },
+            {
+              "line": 23,
+              "source": "call TMSINIT   ; Z: VRAM keeps what is"
+            },
+            {
+              "line": 27,
+              "source": "set 1,(hl)     ; CDTMS"
+            },
+            {
+              "line": 28,
+              "source": "jp PISTART     ; the console, with the"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "test/ks39.test.mjs:124-135",
+      "new_citation": "test/ks39.test.mjs:124-135",
+      "reason": "The test source loads the SHA-pinned historical PICO.SVC at startup on a PICO/matrix machine and asserts the printed failure, SVCRC=1, SVCRA=TNEBAD, no resident and unchanged ROM console. SVDRV's B!=UC1 rejection at services.asm:591-600 explains it. No test was executed.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        212
+      ],
+      "target_evidence": [
+        {
+          "path": "test/ks39.test.mjs",
+          "start": 124,
+          "end": 135,
+          "anchors": [
+            {
+              "line": 124,
+              "source": "test(\"an old card's PICO.SVC line, KS36c's driver, is refused, saying so, with nothing left\", () => {"
+            },
+            {
+              "line": 125,
+              "source": "const bytes = readFileSync(resolve(ROOT, \"test/fixtures/e5154ad/PICO.SVC\"));"
+            },
+            {
+              "line": 134,
+              "source": "assert.deepEqual([word(m, m.sym(\"PIVEC\")), word(m, m.sym(\"REGHEAD\")), m.read(m.sym(\"CONMOD\"))], [m.sym(\"PIBLK\"), m.sym(\"PIREC\"), CRT], \"the ROM's console as it was\");"
+            },
+            {
+              "line": 135,
+              "source": "});"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/console.asm:355-359",
+      "new_citation": "src/console.asm:592-599",
+      "reason": "CONFLD masks only bits 0-1 of IOBYTE then ORs B into them. GLCLD at loader.asm:851-854 passes the unchanged CONMOD after a failed service load.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        243
+      ],
+      "target_evidence": [
+        {
+          "path": "src/console.asm",
+          "start": 592,
+          "end": 599,
+          "anchors": [
+            {
+              "line": 592,
+              "source": "CONFLD:"
+            },
+            {
+              "line": 593,
+              "source": "ld a,(IOBYTE)"
+            },
+            {
+              "line": 598,
+              "source": "ld (IOBYTE),a"
+            },
+            {
+              "line": 599,
+              "source": "ret"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/layout.asm:41-46",
+      "new_citation": "src/layout.asm:72-82",
+      "reason": "CDMTX, CDTMS, CDGLC, CDRTC, CDCLM and CDWRD are precisely bits 0,1,2,3,4,7 used in the accompanying CONDEV table; their writers are CONINIT, VIDINIT, SVCGO, cold RTC probe, claim state and LCD word handling.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        248
+      ],
+      "target_evidence": [
+        {
+          "path": "src/layout.asm",
+          "start": 72,
+          "end": 82,
+          "anchors": [
+            {
+              "line": 72,
+              "source": "CDMTX EQU $01    ; matrix keyboard"
+            },
+            {
+              "line": 74,
+              "source": "CDTMS EQU $02    ; PICO9918 answered at"
+            },
+            {
+              "line": 79,
+              "source": "CDCLM EQU $10    ; VCLAIM's value: the"
+            },
+            {
+              "line": 81,
+              "source": "CDWRD EQU $80    ; a word of the ROM's"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/ram.asm:278",
+      "new_citation": "src/ram.asm:400-401",
+      "reason": "CONDEV reserves one byte for CD bits. The definition and layout bit masks support the state table; the historical numeric address retains its earlier provenance and was not remeasured.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        248
+      ],
+      "target_evidence": [
+        {
+          "path": "src/ram.asm",
+          "start": 400,
+          "end": 401,
+          "anchors": [
+            {
+              "line": 400,
+              "source": "CONDEV: DS 1     ; console devices"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/services.asm:92-96",
+      "new_citation": "src/services.asm:149-184",
+      "reason": "HWSLCD validates row 0-3, clears CDWRD for row 3 and directly writes the caller's twenty bytes. It writes no preliminary blanks; WRDCLR later sees the cleared marker and leaves this row alone.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        265
+      ],
+      "target_evidence": [
+        {
+          "path": "src/services.asm",
+          "start": 149,
+          "end": 184,
+          "anchors": [
+            {
+              "line": 149,
+              "source": "HWSLCD:"
+            },
+            {
+              "line": 150,
+              "source": "ld a,b"
+            },
+            {
+              "line": 183,
+              "source": "djnz HWSLC     ; all 20, zeros and all"
+            },
+            {
+              "line": 184,
+              "source": "jp HWOK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/boot.asm:472-473",
+      "new_citation": "src/boot.asm:775-777",
+      "reason": "DIAG calls LCD3 directly for CARD?, bypassing LCDWRD's CDWRD setter; the preceding cold clear/CONINIT leaves that marker clear.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        271
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 775,
+          "end": 777,
+          "anchors": [
+            {
+              "line": 775,
+              "source": "ld hl,DGCARD   ; the LCD, for a board"
+            },
+            {
+              "line": 777,
+              "source": "call LCD3      ; CARD? on row 3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "src/boot.asm:63-64",
+      "new_citation": "src/boot.asm:119-123",
+      "reason": "COLDRT calls LCDINIT, whose clear-display command removes CARD? on retry; the failed retry returns to DIAG.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        273
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 119,
+          "end": 123,
+          "anchors": [
+            {
+              "line": 119,
+              "source": "COLDRT:"
+            },
+            {
+              "line": 120,
+              "source": "ld sp,STKTOP   ; the BDOS's stack,"
+            },
+            {
+              "line": 122,
+              "source": "call LCDINIT   ; a blank display,"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "test/startup.test.mjs:60-69",
+      "new_citation": "test/startup.test.mjs:60-69",
+      "reason": "The parameterised test distinguishes matrix/no-GLCD from no-matrix boards, checking quiet versus named rejection, failed INIT, no resident and TTY mode. The driver and SVDRV/VIDHOOK paths establish the two different status codes.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        307
+      ],
+      "target_evidence": [
+        {
+          "path": "test/startup.test.mjs",
+          "start": 60,
+          "end": 69,
+          "anchors": [
+            {
+              "line": 60,
+              "source": "for (const [name, opts, said] of [[\"no GLCD\", { matrix: true, glcd: false }, false], [\"no matrix keyboard\", {}, true]]) {"
+            },
+            {
+              "line": 61,
+              "source": "test(`a machine with ${name} refuses GLCD.SVC from the file, ${said ? \"saying so\" : \"quietly, the device absent (KD-173)\"}, and the prompt follows`, () => {"
+            },
+            {
+              "line": 68,
+              "source": "});"
+            },
+            {
+              "line": 69,
+              "source": "}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "test/startup.test.mjs:94-105",
+      "new_citation": "test/startup.test.mjs:94-105",
+      "reason": "The test source exercises an explicit non-device INIT failure and a missing file, asserting named errors and no following colon-line USER change. SVCGO/SVCRC and the CCP status predicate explain both cases.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        307
+      ],
+      "target_evidence": [
+        {
+          "path": "test/startup.test.mjs",
+          "start": 94,
+          "end": 105,
+          "anchors": [
+            {
+              "line": 94,
+              "source": "test(\"a line from the file whose service fails for another cause, or has no file, still says so, and its : line goes\", async () => {"
+            },
+            {
+              "line": 95,
+              "source": "const defs = { VECAT: 8, FLAGS: 1, XTRA: 0, STKB: 0, STKI: 0, STKC: 0, DEPTH: 0, HOOKAT: 10, CHAINB: 1, HDRNAME: '\"FAIL    \"', RECNAME: '\"FAIL    \"', RECVER: 1 };"
+            },
+            {
+              "line": 104,
+              "source": "}"
+            },
+            {
+              "line": 105,
+              "source": "});"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/25-startup.md",
+      "old_citation": "test/startup.test.mjs:82-93",
+      "new_citation": "test/startup.test.mjs:82-92",
+      "reason": "The source checks startup width commands on a serial board are quiet and preserve zero for a following colon line, while typed width commands print 32?/40? and suppress the colon piece. ccpcmd.asm:159-173 reads STFLAG on FIND failure.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        313
+      ],
+      "target_evidence": [
+        {
+          "path": "test/startup.test.mjs",
+          "start": 82,
+          "end": 92,
+          "anchors": [
+            {
+              "line": 82,
+              "source": "test(\"on a serial board, with no PICO9918 console, a width from the file is quiet and its : line runs; typed, it says the width? (KE-191)\", () => {"
+            },
+            {
+              "line": 83,
+              "source": "const m = start({ \"STARTUP.CMD\": startupFile(\"CON PICO 32\", \":USER 3\", \"CON CRT 40\") });"
+            },
+            {
+              "line": 91,
+              "source": "assert.equal(user(m), 0, \"typed: a failure, so its : piece goes\");"
+            },
+            {
+              "line": 92,
+              "source": "});"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/boot.asm:323-358",
+      "new_citation": "src/boot.asm:545-595",
+      "reason": "RAMCHK checks both window endpoints with complementary patterns then DETECT tests independent EXPAND 1 storage; RAMBAD sends RAMMSG through TXBYTE and RAMSTOP loops forever.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        33
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 545,
+          "end": 595,
+          "anchors": [
+            {
+              "line": 545,
+              "source": "RAMCHK:"
+            },
+            {
+              "line": 546,
+              "source": "ld de,$55AA    ; one pattern, then its"
+            },
+            {
+              "line": 594,
+              "source": "RAMSTOP:"
+            },
+            {
+              "line": 595,
+              "source": "jr RAMSTOP     ; nothing more runs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/boot.asm:471-478",
+      "new_citation": "src/boot.asm:772-784",
+      "reason": "DIAG writes DGCARD through LCD3 then prints DGERR, the supplied error byte and CRLF on the selected console; COLDRT reaches it on SDINIT/MOUNT failure.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        46
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 772,
+          "end": 784,
+          "anchors": [
+            {
+              "line": 772,
+              "source": "DIAG:"
+            },
+            {
+              "line": 773,
+              "source": "push af        ; the code, kept across"
+            },
+            {
+              "line": 782,
+              "source": "call PUTHEX    ; the code on the"
+            },
+            {
+              "line": 784,
+              "source": "call PUTCRLF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/boot.asm:479-489",
+      "new_citation": "src/boot.asm:786-802",
+      "reason": "DGLOOP prints the prompt, waits through BCONIN, echoes the original key then folds case for comparison; R/r retries COLDRT and any other key repeats the prompt.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        50
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 786,
+          "end": 802,
+          "anchors": [
+            {
+              "line": 786,
+              "source": "DGLOOP:"
+            },
+            {
+              "line": 787,
+              "source": "ld hl,DGPROM   ; ask until the key is"
+            },
+            {
+              "line": 799,
+              "source": "jp z,COLDRT    ; retry: LCD, card and"
+            },
+            {
+              "line": 801,
+              "source": "jr DGLOOP      ; any other key: the"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/boot.asm:67-68",
+      "new_citation": "src/boot.asm:127-131",
+      "reason": "COLDRT calls SDINIT and branches to DIAG on NZ with its SDE code; MOUNT follows only after successful initialisation.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        54
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 127,
+          "end": 131,
+          "anchors": [
+            {
+              "line": 127,
+              "source": "call SDINIT    ; the card, in SPI mode"
+            },
+            {
+              "line": 128,
+              "source": "jp nz,DIAG     ; no card, or one that"
+            },
+            {
+              "line": 130,
+              "source": "call MOUNT"
+            },
+            {
+              "line": 131,
+              "source": "jp nz,DIAG     ; a card with no volume"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/sd.asm:141-159",
+      "new_citation": "src/sd.asm:216-246",
+      "reason": "SDI0 retries ten times and accepts only R1=01h. A response other than idle, as well as no response, reaches SDENOCD after exhaustion, so the cause must not say only no answer. Semantic correction: SDI0 does not distinguish silence from a non-idle response.",
+      "prose_edits": [
+        {
+          "old": "No answer to `CMD0`, the first command, in 10 tries. An empty socket gives this code.",
+          "new": "`CMD0`, the first command, didn't return the idle reply `01h` in 10 tries. An empty socket gives this code."
+        }
+      ],
+      "status": "corrected",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        58
+      ],
+      "prose_citation_overlap": false,
+      "target_evidence": [
+        {
+          "path": "src/sd.asm",
+          "start": 216,
+          "end": 246,
+          "anchors": [
+            {
+              "line": 216,
+              "source": "ld d,10        ; CMD0 attempts"
+            },
+            {
+              "line": 218,
+              "source": "SDI0:"
+            },
+            {
+              "line": 244,
+              "source": "ld a,SDENOCD   ; no card, or one that"
+            },
+            {
+              "line": 246,
+              "source": "jp SDFAIL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/sd.asm:180-202",
+      "new_citation": "src/sd.asm:286-328",
+      "reason": "C starts at zero for 256 ACMD41 attempts. CMD55 response bits other than idle cause immediate SDI55F, and ACMD41 exhaustion reaches the same SDEINIT exit.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        59
+      ],
+      "target_evidence": [
+        {
+          "path": "src/sd.asm",
+          "start": 286,
+          "end": 328,
+          "anchors": [
+            {
+              "line": 286,
+              "source": "ld c,0         ; ACMD41 attempts, 256"
+            },
+            {
+              "line": 288,
+              "source": "SDI41:"
+            },
+            {
+              "line": 327,
+              "source": "ld a,SDEINIT   ; no initialisation"
+            },
+            {
+              "line": 328,
+              "source": "jr SDFAIL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/sd.asm:203-230",
+      "new_citation": "src/sd.asm:330-372",
+      "reason": "CMD58 must return R1=0; a nonzero response reaches SDI58F/SDEOCR. Successful OCR CCS distinguishes block from byte addressing before the separate CMD16 check.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        60
+      ],
+      "target_evidence": [
+        {
+          "path": "src/sd.asm",
+          "start": 330,
+          "end": 372,
+          "anchors": [
+            {
+              "line": 330,
+              "source": "SDI58:"
+            },
+            {
+              "line": 331,
+              "source": "ld de,0        ; CMD58, READ_OCR,"
+            },
+            {
+              "line": 369,
+              "source": "call SPIEND    ; CMD58 refused:"
+            },
+            {
+              "line": 371,
+              "source": "ld a,SDEOCR    ; and fail through"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/sd.asm:219-228",
+      "new_citation": "src/sd.asm:353-366",
+      "reason": "Only the standard-capacity path sets SDBYTE and issues CMD16 for 512 bytes; a nonzero R1 reaches SDEBLEN.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        61
+      ],
+      "target_evidence": [
+        {
+          "path": "src/sd.asm",
+          "start": 353,
+          "end": 366,
+          "anchors": [
+            {
+              "line": 353,
+              "source": "ld a,1         ; standard capacity:"
+            },
+            {
+              "line": 355,
+              "source": "ld (SDBYTE),a  ; byte addresses"
+            },
+            {
+              "line": 365,
+              "source": "ld a,SDEBLEN"
+            },
+            {
+              "line": 366,
+              "source": "jr SDFAIL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/sd.asm:160-178",
+      "new_citation": "src/sd.asm:248-281",
+      "reason": "After CMD8 returns idle, SDI8 checks the low voltage nibble equals 1 and the echoed pattern equals AAh. Either mismatch selects SDEVOLT; unsupported CMD8 skips the R7 echo check.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        62
+      ],
+      "target_evidence": [
+        {
+          "path": "src/sd.asm",
+          "start": 248,
+          "end": 281,
+          "anchors": [
+            {
+              "line": 248,
+              "source": "SDI8:"
+            },
+            {
+              "line": 249,
+              "source": "ld de,0        ; CMD8: 2.7-3.6 V,"
+            },
+            {
+              "line": 279,
+              "source": "ld a,SDEVOLT   ; power, or that"
+            },
+            {
+              "line": 281,
+              "source": "jr SDFAIL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/sd.asm:14-19",
+      "new_citation": "src/sd.asm:21-29`, `src/sd.asm:374-388",
+      "reason": "SDE codes 5-10 describe block-I/O failures; SDFAIL stores the code in SDERR and returns NZ/A. All production SDERR references are its declaration and stores, not reads. MOUNT converts failed table reads to MEIO; BIOS/BDOS handle later failures.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        65
+      ],
+      "target_evidence": [
+        {
+          "path": "src/sd.asm",
+          "start": 21,
+          "end": 29,
+          "anchors": [
+            {
+              "line": 21,
+              "source": "SDECMD EQU 5     ; read or write command"
+            },
+            {
+              "line": 23,
+              "source": "SDETOK EQU 6     ; no data token"
+            },
+            {
+              "line": 26,
+              "source": "SDERNG EQU 9     ; a standard card's"
+            },
+            {
+              "line": 28,
+              "source": "SDEDTOK EQU 10   ; a data error token in"
+            }
+          ]
+        },
+        {
+          "path": "src/sd.asm",
+          "start": 374,
+          "end": 388,
+          "anchors": [
+            {
+              "line": 378,
+              "source": "SDFAIL:"
+            },
+            {
+              "line": 379,
+              "source": "ld (SDERR),a"
+            },
+            {
+              "line": 387,
+              "source": "ld (SDERR),a"
+            },
+            {
+              "line": 388,
+              "source": "ret"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:272-276",
+      "new_citation": "src/vol.asm:407-415`, `src/volutil.asm:15-28",
+      "reason": "Every failed mount check goes to MNTERR, which preserves its error across UNMOUNT; UNMOUNT clears all drive entries/indices and BUFOK, so partial mount state is not retained.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        81
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 407,
+          "end": 415,
+          "anchors": [
+            {
+              "line": 407,
+              "source": "MNTERR:"
+            },
+            {
+              "line": 408,
+              "source": "push af        ; the code, across the"
+            },
+            {
+              "line": 413,
+              "source": "or a           ; NZ, as every code is"
+            },
+            {
+              "line": 415,
+              "source": "ret"
+            }
+          ]
+        },
+        {
+          "path": "src/volutil.asm",
+          "start": 15,
+          "end": 28,
+          "anchors": [
+            {
+              "line": 15,
+              "source": "UNMOUNT:"
+            },
+            {
+              "line": 16,
+              "source": "ld hl,DRVTAB   ; and DRVIDX, which"
+            },
+            {
+              "line": 27,
+              "source": "ld (BUFOK),a"
+            },
+            {
+              "line": 28,
+              "source": "ret"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:13",
+      "new_citation": "src/vol.asm:25-26`, `src/vol.asm:63-68`, `src/vol.asm:197-205`, `src/vol.asm:235-240",
+      "reason": "MEIO is 20h. Initial header read, later table-checksum reads and descriptor-block reads each select it on read failure, supporting the whole row rather than the header-only constant comment.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        88
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 25,
+          "end": 26,
+          "anchors": [
+            {
+              "line": 25,
+              "source": "MEIO EQU $20     ; header block"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 63,
+          "end": 68,
+          "anchors": [
+            {
+              "line": 63,
+              "source": "xor a          ; block 0, through a"
+            },
+            {
+              "line": 65,
+              "source": "call MNBLK"
+            },
+            {
+              "line": 66,
+              "source": "ld a,MEIO      ; the header block"
+            },
+            {
+              "line": 68,
+              "source": "jp nz,MNTERR"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 197,
+          "end": 205,
+          "anchors": [
+            {
+              "line": 197,
+              "source": "MNSUMB:"
+            },
+            {
+              "line": 198,
+              "source": "push bc        ; the count and block,"
+            },
+            {
+              "line": 203,
+              "source": "ld a,MEIO      ; a table block won't"
+            },
+            {
+              "line": 205,
+              "source": "jp nz,MNTERR"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 235,
+          "end": 240,
+          "anchors": [
+            {
+              "line": 235,
+              "source": "MNDESC:"
+            },
+            {
+              "line": 236,
+              "source": "ld a,(MNTI)"
+            },
+            {
+              "line": 239,
+              "source": "ld a,MEIO      ; its block won't read"
+            },
+            {
+              "line": 240,
+              "source": "jp nz,MNTERR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:14",
+      "new_citation": "src/vol.asm:27`, `src/vol.asm:71-85",
+      "reason": "MEMAGIC is 21h; MNMAG compares all eight FMTMAG bytes and stops at the first mismatch before mounting succeeds.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        89
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 27,
+          "end": 27,
+          "anchors": [
+            {
+              "line": 27,
+              "source": "MEMAGIC EQU $21"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 71,
+          "end": 85,
+          "anchors": [
+            {
+              "line": 71,
+              "source": "ld hl,MNBUF    ; magic"
+            },
+            {
+              "line": 72,
+              "source": "ld de,FMTMAG   ; against the ROM's"
+            },
+            {
+              "line": 84,
+              "source": "inc de"
+            },
+            {
+              "line": 85,
+              "source": "djnz MNMAG"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:15",
+      "new_citation": "src/vol.asm:28-29`, `src/vol.asm:86-91",
+      "reason": "MEVER is 22h; the header HMAJOR byte must equal FMTMAJ, otherwise MNTERR receives that code.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        90
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 28,
+          "end": 29,
+          "anchors": [
+            {
+              "line": 28,
+              "source": "MEVER EQU $22    ; unsupported major"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 86,
+          "end": 91,
+          "anchors": [
+            {
+              "line": 87,
+              "source": "ld a,(MNBUF+HMAJOR)"
+            },
+            {
+              "line": 88,
+              "source": "cp FMTMAJ"
+            },
+            {
+              "line": 89,
+              "source": "ld a,MEVER     ; another major"
+            },
+            {
+              "line": 91,
+              "source": "jp nz,MNTERR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:16",
+      "new_citation": "src/vol.asm:30-31`, `src/vol.asm:92-106`, `src/vol.asm:166-173",
+      "reason": "MESIZE is 23h and is used for both header/descriptor size mismatch and a drives field above MAXDRV. The latter is absent from the constant's short comment but present in the caller.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        91
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 30,
+          "end": 31,
+          "anchors": [
+            {
+              "line": 30,
+              "source": "MESIZE EQU $23   ; header or descriptor"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 92,
+          "end": 106,
+          "anchors": [
+            {
+              "line": 93,
+              "source": "ld hl,(MNBUF+HHDRSZ)"
+            },
+            {
+              "line": 94,
+              "source": "ld de,HDRSZ"
+            },
+            {
+              "line": 105,
+              "source": "sbc hl,de"
+            },
+            {
+              "line": 106,
+              "source": "jp nz,MNTERR   ; A still MESIZE"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 166,
+          "end": 173,
+          "anchors": [
+            {
+              "line": 168,
+              "source": "ld a,(MNBUF+HDRIVES)"
+            },
+            {
+              "line": 169,
+              "source": "ld (MNTDRV),a"
+            },
+            {
+              "line": 171,
+              "source": "ld a,MESIZE    ; more than there are:"
+            },
+            {
+              "line": 173,
+              "source": "jp nc,MNTERR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:17",
+      "new_citation": "src/vol.asm:32`, `src/vol.asm:107-139",
+      "reason": "MECOUNT is 24h; checks reject a nonzero high count byte, zero count, more than eight in format 1.0 or more than 127 in later minor versions.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        92
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 32,
+          "end": 32,
+          "anchors": [
+            {
+              "line": 32,
+              "source": "MECOUNT EQU $24  ; volume count"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 107,
+          "end": 139,
+          "anchors": [
+            {
+              "line": 110,
+              "source": "ld hl,(MNBUF+HCOUNT)"
+            },
+            {
+              "line": 111,
+              "source": "ld a,h         ; the word's high byte"
+            },
+            {
+              "line": 137,
+              "source": "ld a,l         ; the count, for every"
+            },
+            {
+              "line": 139,
+              "source": "ld (MNTCNT),a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:18",
+      "new_citation": "src/vol.asm:33`, `src/vol.asm:140-146`, `src/vol.asm:174-219",
+      "reason": "MESUM is 25h. HDRSUM validates the header; when format 1.1 has descriptors beyond block 0, MNSUMB compares the sum of those complete table blocks with MNTSUM.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        93
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 33,
+          "end": 33,
+          "anchors": [
+            {
+              "line": 33,
+              "source": "MESUM EQU $25    ; header checksum"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 140,
+          "end": 146,
+          "anchors": [
+            {
+              "line": 140,
+              "source": "call HDRSUM    ; HL = sum of all bytes"
+            },
+            {
+              "line": 142,
+              "source": "or a"
+            },
+            {
+              "line": 144,
+              "source": "ld a,MESUM     ; they differ: a"
+            },
+            {
+              "line": 146,
+              "source": "jp nz,MNTERR"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 174,
+          "end": 219,
+          "anchors": [
+            {
+              "line": 175,
+              "source": "ld hl,(MNBUF+HTSUM)"
+            },
+            {
+              "line": 176,
+              "source": "ld (MNTSUM),hl"
+            },
+            {
+              "line": 217,
+              "source": "ld a,MESUM     ; they differ: a"
+            },
+            {
+              "line": 219,
+              "source": "jp nz,MNTERR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:19",
+      "new_citation": "src/vol.asm:34-35`, `src/vol.asm:241-281`, `src/vol.asm:403-405",
+      "reason": "MEDESC is 26h; descriptor id, allowed flags, known geometry, exact payload length and nonzero aligned start are tested before MNDBAD selects it.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        94
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 34,
+          "end": 35,
+          "anchors": [
+            {
+              "line": 34,
+              "source": "MEDESC EQU $26   ; descriptor id, flags,"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 241,
+          "end": 281,
+          "anchors": [
+            {
+              "line": 242,
+              "source": "ld a,(ix+DVOLID)"
+            },
+            {
+              "line": 243,
+              "source": "or (ix+DVOLID+1)"
+            },
+            {
+              "line": 280,
+              "source": "or (ix+DSTART+3)"
+            },
+            {
+              "line": 281,
+              "source": "jp z,MNDBAD    ; reject sector zero"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 403,
+          "end": 405,
+          "anchors": [
+            {
+              "line": 403,
+              "source": "MNDBAD:"
+            },
+            {
+              "line": 404,
+              "source": "ld a,MEDESC    ; a descriptor check"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:21",
+      "new_citation": "src/vol.asm:37-38`, `src/vol.asm:295-347",
+      "reason": "MERANGE is 27h; addition carry, end beyond MNTBLK and a byte-addressed card's exclusive end beyond 800000h all select it. The accepted last block is 7FFFFFh.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        95
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 37,
+          "end": 38,
+          "anchors": [
+            {
+              "line": 37,
+              "source": "MERANGE EQU $27  ; payload beyond the"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 295,
+          "end": 347,
+          "anchors": [
+            {
+              "line": 296,
+              "source": "ld l,(ix+DSTART)"
+            },
+            {
+              "line": 297,
+              "source": "ld h,(ix+DSTART+1)"
+            },
+            {
+              "line": 345,
+              "source": "ld a,MERANGE   ; a block the card"
+            },
+            {
+              "line": 347,
+              "source": "jp MNTERR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:22",
+      "new_citation": "src/vol.asm:39`, `src/vol.asm:282-292",
+      "reason": "MEOVLAP is 28h; start is compared with the previous descriptor's exclusive end, and a lower start selects that code.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        96
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 39,
+          "end": 39,
+          "anchors": [
+            {
+              "line": 39,
+              "source": "MEOVLAP EQU $28  ; overlapping payloads"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 282,
+          "end": 292,
+          "anchors": [
+            {
+              "line": 282,
+              "source": "push ix        ; start >= the previous"
+            },
+            {
+              "line": 284,
+              "source": "pop hl"
+            },
+            {
+              "line": 291,
+              "source": "ld a,MEOVLAP"
+            },
+            {
+              "line": 292,
+              "source": "jp c,MNTERR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:23",
+      "new_citation": "src/vol.asm:40-41`, `src/vol.asm:349-377",
+      "reason": "MEMOUNT is 29h; assigned drives past D, beyond the header's slots or already assigned to an earlier descriptor are rejected.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        97
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 40,
+          "end": 41,
+          "anchors": [
+            {
+              "line": 40,
+              "source": "MEMOUNT EQU $29  ; invalid or duplicate"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 349,
+          "end": 377,
+          "anchors": [
+            {
+              "line": 349,
+              "source": "MNSTOK:"
+            },
+            {
+              "line": 351,
+              "source": "ld a,(ix+DMOUNT)"
+            },
+            {
+              "line": 376,
+              "source": "ld a,MEMOUNT"
+            },
+            {
+              "line": 377,
+              "source": "jr nz,MNTERR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:24",
+      "new_citation": "src/vol.asm:42-43`, `src/vol.asm:393-401",
+      "reason": "MENOA is 2Ah; after processing every descriptor MOUNT requires drive A's geometry byte to be nonzero.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        98
+      ],
+      "target_evidence": [
+        {
+          "path": "src/vol.asm",
+          "start": 42,
+          "end": 43,
+          "anchors": [
+            {
+              "line": 42,
+              "source": "MENOA EQU $2A    ; no volume mounted as"
+            }
+          ]
+        },
+        {
+          "path": "src/vol.asm",
+          "start": 393,
+          "end": 401,
+          "anchors": [
+            {
+              "line": 394,
+              "source": "ld a,(DRVTAB+6)"
+            },
+            {
+              "line": 395,
+              "source": "or a           ; (its geometry byte, 0"
+            },
+            {
+              "line": 400,
+              "source": "xor a          ; Z: mounted"
+            },
+            {
+              "line": 401,
+              "source": "ret"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/boot.asm:472-473",
+      "new_citation": "src/boot.asm:775-777",
+      "reason": "DIAG calls LCD3 directly for CARD?, bypassing LCDWRD's CDWRD setter; the preceding cold clear/CONINIT leaves that marker clear.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        117
+      ],
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 775,
+          "end": 777,
+          "anchors": [
+            {
+              "line": 775,
+              "source": "ld hl,DGCARD   ; the LCD, for a board"
+            },
+            {
+              "line": 777,
+              "source": "call LCD3      ; CARD? on row 3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/sd.asm:272-279",
+      "new_citation": "src/sd.asm:436-447`, `src/sd.asm:484-502`, `test/sd-range.test.mjs:86-107",
+      "reason": "SDREAD propagates an unaccepted CMD17 through SDRCMD; the ROM does not discover physical card length. The target test source explicitly checks past-image read/write rejection and unchanged image bytes, establishing the host-model instance without running it. The source has no physical-capacity probe; the target test at sd-range.test.mjs:86-107 checks the host-model no-change result. This wording states the rejection condition and limits that proof correctly.",
+      "prose_edits": [
+        {
+          "old": "The volume runs past the end of the card. The card rejects a block past its end, and no other block of the card changes.",
+          "new": "The volume runs past the end of the card and the card rejects the block command. The ROM reports that rejection without transferring block data. A test of the host model checks that no other block changes."
+        }
+      ],
+      "status": "corrected",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        273
+      ],
+      "prose_citation_overlap": false,
+      "target_evidence": [
+        {
+          "path": "src/sd.asm",
+          "start": 436,
+          "end": 447,
+          "anchors": [
+            {
+              "line": 436,
+              "source": "SDREAD:"
+            },
+            {
+              "line": 437,
+              "source": "push hl        ; the buffer, across"
+            },
+            {
+              "line": 446,
+              "source": "or a           ; R1 00h: accepted"
+            },
+            {
+              "line": 447,
+              "source": "jr nz,SDRCMD"
+            }
+          ]
+        },
+        {
+          "path": "src/sd.asm",
+          "start": 484,
+          "end": 502,
+          "anchors": [
+            {
+              "line": 488,
+              "source": "SDRCMD:"
+            },
+            {
+              "line": 489,
+              "source": "call SPIEND    ; /CS high: the card is"
+            },
+            {
+              "line": 500,
+              "source": "ld a,SDERNG    ; refused before any"
+            },
+            {
+              "line": 502,
+              "source": "jr SDFAIL"
+            }
+          ]
+        },
+        {
+          "path": "test/sd-range.test.mjs",
+          "start": 86,
+          "end": 107,
+          "anchors": [
+            {
+              "line": 86,
+              "source": "test(\"past the card's image, a read and a write fail and change nothing; a high block doesn't wrap to a low one (KE-155)\", () => {"
+            },
+            {
+              "line": 87,
+              "source": "const image = standardCard();"
+            },
+            {
+              "line": 106,
+              "source": "assert.deepEqual(image, before, \"the card byte for byte\");"
+            },
+            {
+              "line": 107,
+              "source": "});"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/sd.asm:498-506",
+      "new_citation": "src/sd.asm:717-727`, `src/sd.asm:484-502",
+      "reason": "SDWRITE tests LBAARG and the CMD24 response before sending any data. A range refusal or card command rejection reaches SDFAIL; this establishes rejection handling, not an independent physical-capacity probe.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        273
+      ],
+      "target_evidence": [
+        {
+          "path": "src/sd.asm",
+          "start": 717,
+          "end": 727,
+          "anchors": [
+            {
+              "line": 717,
+              "source": "SDWRITE:"
+            },
+            {
+              "line": 718,
+              "source": "push hl        ; the buffer, across"
+            },
+            {
+              "line": 726,
+              "source": "or a           ; R1 00h: accepted"
+            },
+            {
+              "line": 727,
+              "source": "jp nz,SDRCMD"
+            }
+          ]
+        },
+        {
+          "path": "src/sd.asm",
+          "start": 484,
+          "end": 502,
+          "anchors": [
+            {
+              "line": 488,
+              "source": "SDRCMD:"
+            },
+            {
+              "line": 489,
+              "source": "call SPIEND    ; /CS high: the card is"
+            },
+            {
+              "line": 500,
+              "source": "ld a,SDERNG    ; refused before any"
+            },
+            {
+              "line": 502,
+              "source": "jr SDFAIL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/cpm/bdoslog.asm:468-475",
+      "new_citation": "src/cpm/bdoslog.asm:653-672",
+      "reason": "BITPTR returns zero for block zero or a block beyond DSM, before vector indexing. MARKBLK/CLRBLK skip that result, permitting directory login and deletion despite an invalid allocation cell.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        274
+      ],
+      "target_evidence": [
+        {
+          "path": "src/cpm/bdoslog.asm",
+          "start": 653,
+          "end": 672,
+          "anchors": [
+            {
+              "line": 664,
+              "source": "BITPTR:"
+            },
+            {
+              "line": 665,
+              "source": "ld a,d"
+            },
+            {
+              "line": 671,
+              "source": "inc a          ; then 0, so Z"
+            },
+            {
+              "line": 672,
+              "source": "ret z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/cpm/bdosrec.asm:552",
+      "new_citation": "src/cpm/bdosrec.asm:808-819",
+      "reason": "POSREC calls CHKBLK before converting the allocation block to a record; CHKBLK/BLKPAST at bdoscon.asm:75-93 route past-DSM references to BADSECT, while BITPTR safely ignores them during login/freeing.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        274
+      ],
+      "target_evidence": [
+        {
+          "path": "src/cpm/bdosrec.asm",
+          "start": 808,
+          "end": 819,
+          "anchors": [
+            {
+              "line": 817,
+              "source": "POSREC:"
+            },
+            {
+              "line": 818,
+              "source": "call CHKBLK    ; a block past DSM is a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/boot.asm:67",
+      "new_citation": "src/boot.asm:119-131`, `src/boot.asm:786-802",
+      "reason": "SDINIT is reached through COLDRT at cold boot and through DIAG's retry, but not WBOOTR; the exclusive cold-boot wording needs correction. Semantic correction: DIAG also reaches COLDRT and SDINIT. Apply this prose block atomically; it already contains the new citations. The consequence after reinsertion is conditional on a write still failing, matching the cache chapter rather than asserting an untested physical-card result.",
+      "prose_edits": [
+        {
+          "old": "Changes still in the cache when a card comes out are lost, even with the same\ncard put back, since only cold boot starts a card (`src/boot.asm:67`), and the\nfirst warm boot after it gives `Write lost`.",
+          "new": "Putting the card back does not itself run `SDINIT`. The card is started at\ncold boot or a diagnostic retry, not at warm boot\n(`src/boot.asm:119-131`, `src/boot.asm:786-802`). If writes still fail at the\nnext warm boot, the changed lines are dropped and `Write lost` is printed\n(`src/cache.asm:301-342`, `src/cache.asm:646-653`)."
+        }
+      ],
+      "status": "corrected",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        296
+      ],
+      "prose_citation_overlap": true,
+      "target_evidence": [
+        {
+          "path": "src/boot.asm",
+          "start": 119,
+          "end": 131,
+          "anchors": [
+            {
+              "line": 119,
+              "source": "COLDRT:"
+            },
+            {
+              "line": 120,
+              "source": "ld sp,STKTOP   ; the BDOS's stack,"
+            },
+            {
+              "line": 130,
+              "source": "call MOUNT"
+            },
+            {
+              "line": 131,
+              "source": "jp nz,DIAG     ; a card with no volume"
+            }
+          ]
+        },
+        {
+          "path": "src/boot.asm",
+          "start": 786,
+          "end": 802,
+          "anchors": [
+            {
+              "line": 786,
+              "source": "DGLOOP:"
+            },
+            {
+              "line": 787,
+              "source": "ld hl,DGPROM   ; ask until the key is"
+            },
+            {
+              "line": 799,
+              "source": "jp z,COLDRT    ; retry: LCD, card and"
+            },
+            {
+              "line": 801,
+              "source": "jr DGLOOP      ; any other key: the"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "test/programs/mount.asm:255-262",
+      "new_citation": "test/programs/mount.asm:255-262",
+      "reason": "The message data defines mounted label, Unmounted, Cannot unmount, No such volume, Cannot mount and usage literals. All are printed by SAY via BDOS 9 and the program never sets PRGCODE.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        307
+      ],
+      "target_evidence": [
+        {
+          "path": "test/programs/mount.asm",
+          "start": 255,
+          "end": 262,
+          "anchors": [
+            {
+              "line": 255,
+              "source": "MNTD:   DB      \"A: \""
+            },
+            {
+              "line": 256,
+              "source": "MNTL:   DS      11"
+            },
+            {
+              "line": 261,
+              "source": "NOMNT:  DB      \"Cannot mount: in use or too large\",13,10,\"$\""
+            },
+            {
+              "line": 262,
+              "source": "USE:    DB      \"MOUNT [D: [NAME or INDEX]]\",13,10,\"$\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "test/programs/mount.asm:31",
+      "new_citation": "test/programs/mount.asm:27-31",
+      "reason": "NOABIM defines the ABI diagnostic and NOABI prints it via a tail jump to BDOS 9. No path sets function-108 PRGCODE, so the zero from MLTAKE survives ordinary return.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        307
+      ],
+      "target_evidence": [
+        {
+          "path": "test/programs/mount.asm",
+          "start": 27,
+          "end": 31,
+          "anchors": [
+            {
+              "line": 27,
+              "source": "NOABI:\tLD\tDE,NOABIM\t; the word, and back to the CCP"
+            },
+            {
+              "line": 28,
+              "source": "LD\tC,9\t\t; BDOS: print to $"
+            },
+            {
+              "line": 30,
+              "source": "ABITAG:\tDB\t\"TNA\""
+            },
+            {
+              "line": 31,
+              "source": "NOABIM:\tDB\t\"MOUNT needs TEC-OS with ABI 5.\",13,10,\"$\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "test/programs/mount.asm:241-242",
+      "new_citation": "test/programs/mount.asm:241-243`, `test/programs/mount.asm:262",
+      "reason": "USAGE loads USE; SAY tail-jumps to BDOS 9, and USE contains the exact usage line shown in the row.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        316
+      ],
+      "target_evidence": [
+        {
+          "path": "test/programs/mount.asm",
+          "start": 241,
+          "end": 243,
+          "anchors": [
+            {
+              "line": 241,
+              "source": "USAGE:  LD      DE,USE"
+            },
+            {
+              "line": 242,
+              "source": "SAY:    LD      C,9"
+            },
+            {
+              "line": 243,
+              "source": "JP      BDOS"
+            }
+          ]
+        },
+        {
+          "path": "test/programs/mount.asm",
+          "start": 262,
+          "end": 262,
+          "anchors": [
+            {
+              "line": 262,
+              "source": "USE:    DB      \"MOUNT [D: [NAME or INDEX]]\",13,10,\"$\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "test/programs/mount.asm:33-44",
+      "new_citation": "test/programs/mount.asm:33-44",
+      "reason": "After spaces, no argument goes to LIST; otherwise the first character must be A-D and the next a colon or control transfers to USAGE.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        316
+      ],
+      "target_evidence": [
+        {
+          "path": "test/programs/mount.asm",
+          "start": 33,
+          "end": 44,
+          "anchors": [
+            {
+              "line": 33,
+              "source": "LD      HL,TAIL"
+            },
+            {
+              "line": 34,
+              "source": "CALL    SKIP"
+            },
+            {
+              "line": 43,
+              "source": "CP      ':'"
+            },
+            {
+              "line": 44,
+              "source": "JP      NZ,USAGE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/vol.asm:732-762",
+      "new_citation": "src/volsvc.asm:435-483",
+      "reason": "VDESC refuses an index at or beyond MNTCNT and propagates DESCIX read failure as NZ. Its service wrapper returns failure to MOUNT.COM, whose label/index paths both print No such volume on that result.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        317
+      ],
+      "target_evidence": [
+        {
+          "path": "src/volsvc.asm",
+          "start": 435,
+          "end": 483,
+          "anchors": [
+            {
+              "line": 440,
+              "source": "VDESC:"
+            },
+            {
+              "line": 441,
+              "source": "ld hl,MNTCNT   ; index past the table:"
+            },
+            {
+              "line": 482,
+              "source": "or $FF         ; NZ"
+            },
+            {
+              "line": 483,
+              "source": "ret"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "test/programs/mount.asm:106-107",
+      "new_citation": "test/programs/mount.asm:98-107",
+      "reason": "The label search calls TNDESC for each index and prints NOVOL on any failure. VDESC supplies failure for index exhaustion or failed descriptor read, so both no label and table I/O failure have this message.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        317
+      ],
+      "target_evidence": [
+        {
+          "path": "test/programs/mount.asm",
+          "start": 98,
+          "end": 107,
+          "anchors": [
+            {
+              "line": 98,
+              "source": "FIND:   XOR     A               ; each index's label, until one matches"
+            },
+            {
+              "line": 99,
+              "source": "LD      (IDX),A"
+            },
+            {
+              "line": 106,
+              "source": "LD      DE,NOVOL"
+            },
+            {
+              "line": 107,
+              "source": "JP      NZ,SAY"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "test/programs/mount.asm:129-130",
+      "new_citation": "test/programs/mount.asm:123-143",
+      "reason": "The index/already-mounted check calls TNDESC and prints NOVOL on failure; only after a valid description does TNMOUNT failure select NOMNT instead.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        317
+      ],
+      "target_evidence": [
+        {
+          "path": "test/programs/mount.asm",
+          "start": 123,
+          "end": 143,
+          "anchors": [
+            {
+              "line": 123,
+              "source": "MOUNTA: LD      E,A             ; mount index A on the drive"
+            },
+            {
+              "line": 124,
+              "source": "LD      (IDX),A"
+            },
+            {
+              "line": 142,
+              "source": "LD      DE,NOMNT"
+            },
+            {
+              "line": 143,
+              "source": "JP      NZ,SAY"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "test/programs/mount.asm:14-31",
+      "new_citation": "test/programs/mount.asm:14-31",
+      "reason": "The three-byte TNA check and exact major-version comparison with 5 branch to NOABI, which prints the stated literal through BDOS 9 and returns via the CCP's warm-boot return word.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        320
+      ],
+      "target_evidence": [
+        {
+          "path": "test/programs/mount.asm",
+          "start": 14,
+          "end": 31,
+          "anchors": [
+            {
+              "line": 15,
+              "source": "LD\tHL,ABITAB\t; what is at the table's address"
+            },
+            {
+              "line": 16,
+              "source": "LD\tDE,ABITAG\t; against what should be"
+            },
+            {
+              "line": 30,
+              "source": "ABITAG:\tDB\t\"TNA\""
+            },
+            {
+              "line": 31,
+              "source": "NOABIM:\tDB\t\"MOUNT needs TEC-OS with ABI 5.\",13,10,\"$\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "src/console.asm:331",
+      "new_citation": "src/console.asm:413-429",
+      "reason": "BCONOUT handles BAT mode by RET C, directly discarding output. BLIST at 552-553 also discards output but is not called by this BAT path; the mapped BLIST range is a semantic false positive for routing. Semantic correction: the BAT branch returns directly; BLIST is a separate no-op entry, not an invoked sink.",
+      "prose_edits": [
+        {
+          "old": "`CON: BAT:` goes to the list device, which discards it, so it appears nowhere.",
+          "new": "`CON: BAT:` is discarded by the BIOS's BAT output path, so it appears nowhere."
+        }
+      ],
+      "status": "corrected",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        335
+      ],
+      "prose_citation_overlap": false,
+      "target_evidence": [
+        {
+          "path": "src/console.asm",
+          "start": 413,
+          "end": 429,
+          "anchors": [
+            {
+              "line": 418,
+              "source": "BCONOUT:"
+            },
+            {
+              "line": 419,
+              "source": "call CONSEL"
+            },
+            {
+              "line": 427,
+              "source": "rrca           ; bit 1 alone: BAT:"
+            },
+            {
+              "line": 428,
+              "source": "ret c          ; BAT: output goes to"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "test/programs/mount.asm:149-157",
+      "new_citation": "test/programs/mount.asm:149-157",
+      "reason": "SHOW formats DRIVE as a letter, copies eleven label bytes from DESC+16 to MNTL and prints MNTD. The already-there branch at 131-134 also reaches SHOW.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        337
+      ],
+      "target_evidence": [
+        {
+          "path": "test/programs/mount.asm",
+          "start": 149,
+          "end": 157,
+          "anchors": [
+            {
+              "line": 149,
+              "source": "SHOW:   LD      A,(DRIVE)"
+            },
+            {
+              "line": 150,
+              "source": "ADD     A,'A'"
+            },
+            {
+              "line": 156,
+              "source": "LD      DE,MNTD"
+            },
+            {
+              "line": 157,
+              "source": "JP      SAY"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "test/programs/mount.asm:49-57",
+      "new_citation": "test/programs/mount.asm:49-57",
+      "reason": "With no volume operand the program calls TNUNMNT for DRIVE and selects Cannot unmount or Unmounted based on its returned A, then prints through SAY.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        338
+      ],
+      "target_evidence": [
+        {
+          "path": "test/programs/mount.asm",
+          "start": 49,
+          "end": 57,
+          "anchors": [
+            {
+              "line": 49,
+              "source": "LD      A,(DRIVE)       ; no volume: unmount"
+            },
+            {
+              "line": 50,
+              "source": "LD\tB,A"
+            },
+            {
+              "line": 56,
+              "source": "LD      DE,UNMNT"
+            },
+            {
+              "line": 57,
+              "source": "JP      SAY"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-d-error-messages.md",
+      "old_citation": "test/programs/mount.asm:159-208",
+      "new_citation": "test/programs/mount.asm:159-234",
+      "reason": "LIST prints each TNDESC index, label, geometry, optional R/O and mounted-drive suffix. DEC2 emits two decimal digits below 100 and three from 100, supporting the appendix's decimal-index convention.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        339
+      ],
+      "target_evidence": [
+        {
+          "path": "test/programs/mount.asm",
+          "start": 159,
+          "end": 234,
+          "anchors": [
+            {
+              "line": 162,
+              "source": "LIST:\tLD\tA,(IDX)\t\t; the next index"
+            },
+            {
+              "line": 163,
+              "source": "LD\tE,A"
+            },
+            {
+              "line": 233,
+              "source": "LD\tE,A"
+            },
+            {
+              "line": 234,
+              "source": "JR\tPUT"
+            }
+          ]
+        }
       ]
     }
   ]
