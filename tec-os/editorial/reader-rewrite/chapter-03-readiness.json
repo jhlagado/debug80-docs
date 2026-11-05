@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "chapter": "03 Work with files",
-  "status": "reading_prepared_waiting_for_parent_scoped_review_receipt",
+  "status": "chapter_drafted_from_scoped_accepted_workflows_pending_independent_chapter_review",
   "draft_path_reserved": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
-  "reader_draft_created": false,
+  "reader_draft_created": true,
   "book_reading_snapshot": "10986d93ebe95b11f2268cc5fa4e6faa6d4dd8ce",
   "frozen_original_book": "10821b68f80c10d2037bbd1c5ab207877c897c68",
   "authorities": [
@@ -374,7 +374,7 @@
     "Recognise ordinary file-command messages and safe recovery; link complete causes/partial failures to D. No FCB/cache/CCP replay."
   ],
   "provenance": {
-    "mechanism_authority_unchanged": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+    "mechanism_authority_unchanged": "962853f499f05faf281f6cdff1deca8959f58c2b for this assigned chapter by current instruction. Global source ledgers are not edited.",
     "new_evidence_tested_source": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
     "new_evidence_landed_source": "962853f499f05faf281f6cdff1deca8959f58c2b",
     "source_adoption": "No pin change or reader adoption by this dossier. New evidence remains bound to its actual offered source and input artifacts.",
@@ -573,17 +573,20 @@
         "sha256": "189bb7445e73432f6a4caf185762703c668dd98fae5f28d9f814a235c3cfe520"
       }
     ],
-    "read_scope": "Complete attempt README/exit and relevant preflight/binding/provenance contexts, complete case-inputs, entire pager function 386–419, later failing observer 427–440, complete three pager output/console bodies and pager phase screens, PC7 records and complete persisted/final BANNER inventories. This is preparation reading, not independent positive-case acceptance or a full-batch review. Raw foreground/VRAM/register bytes inventoried, not newly rendered or physically verified.",
+    "read_scope": "Complete attempt README/exit and relevant preflight/binding/provenance contexts, complete case-inputs, entire pager function 386–419, later failing observer 427–440, complete three pager output/console bodies and pager phase screens, PC7 records and complete persisted/final BANNER inventories. This is preparation reading, not independent positive-case acceptance or a full-batch review. Raw foreground/VRAM/register bytes inventoried, not newly rendered or physically verified. The later actual receipt now closes only the named positive-case scopes, not whole-batch acceptance.",
     "batch_status": "FAILED",
     "full_batch_qualified": false,
     "failure": "Later FAIL.SVC carry observer reads nonexistent cpu.cpu.f at batch.mjs:434. Retained result/README identify numeric cpu.flags.C as the runtime field. Journal milestones do not turn earlier phases into accepted results.",
-    "pending_independent_scopes": [
-      "First-session/SAMPLE",
-      "TED/BANNER including rejection, repair and persistence",
-      "PC7 backup/list/raw/text/missing-file",
-      "Pager continue/Escape/Ctrl-C"
-    ],
-    "allocation_for_this_task": "None. Only inert text/archive reads and hashes."
+    "pending_independent_scopes": [],
+    "allocation_for_this_task": "None. Only inert text/archive reads and hashes.",
+    "scoped_review_receipt": {
+      "commit": "4b5b5a505cb38bd84a787241e09209e9ba9ce5d8",
+      "path": "studies/p3-tec-os/reviews/book-opening-workflows.md",
+      "sha256": "1368e77c9bc71797d40d42260110ff7fdbc8c430fb3cf46782214f041638e407",
+      "attempt_commit": "e77c7ef0f81c42d94f12391b099f4cf8c4acd9a6",
+      "accepted_scope": "Covered first-session/SAMPLE, TED/BANNER including rejection/repair/persistence, PC7 and three pager cases for Chapters 1–3/5 authoring. Whole batch remains FAILED.",
+      "read_scope": "Full receipt and actual first/next paused screens plus complete three-case pager records/console bodies read before prose. Historical frozen capture bodies reread and copied byte-exact."
+    }
   },
   "pager_excerpt_solution": {
     "actual_fixture_command": "TYPE A:SAMPLE.ASM!USER 1",
@@ -593,9 +596,9 @@
     "ctrl_c_key_hex": "03",
     "input_authority": "Archived packet/case-inputs.json pagination and packet/batch.mjs:393, corroborated by complete actual console bodies. USER1 without the space is not the command.",
     "material": "Existing qualified-offer starter A:SAMPLE.ASM, not generated LINES.TXT or a new file. Exact input and stored-card identities stay distinct.",
-    "safe_excerpt_after_receipt": "Use only the exact first paused screen in stage/results/098-type-continue.json, with 098 raw VRAM/register/foreground companions, and if needed the exact next page in 099-type-continue-1.json. Identify it as a screen excerpt from the actual chained fixture in its provenance; do not add a prompt or rewrite the echoed input. Do not include the later USER 1 or 1A> in Chapter 3.",
-    "full_preservation_home": "Keep the complete chained input, all three outputs and chain-state controls in the retained immutable attempt02 archive. Proposed later reader evidence home is Chapter 28, A complete pagination fixture, or Chapter 12 for chain effects. Exact insertion/home needs owner confirmation; neither file is edited here. Old GLCD LINES.TXT recipe/screens remain in Chapter 28 at their original pin.",
-    "limits": "No full plain-TYPE transcript or plain-TYPE return/prompt is established by this fixture. Escape continuation to USER 1 is not a plain-listing outcome. Foreground/font acceptance and the complete positive-case review remain separate.",
+    "safe_excerpt_after_receipt": "Applied: full 24-row 098 screen and first eight rows of 099. Both fences are exact artifact text with explicit excerpt boundaries and actual chained-fixture metadata.",
+    "full_preservation_home": "Approved lead-owned Chapter 28 handoff; complete three-case input/output and controls remain immutable in attempt02. No edit to Chapter 28 here.",
+    "limits": "Scoped review closes the actual PICO foreground-mask/model evidence. The fixture does not establish a plain-TYPE final prompt or physical/browser/audio result.",
     "extra_case_if_required": "If Chapter 3 needs a full plain TYPE A:SAMPLE.ASM invocation and stop/continue/return transcript rather than a labelled paused-screen excerpt, request an exact separate positive case. Do not synthesise it by removing !USER 1."
   },
   "file_operation_evidence_solution": {
@@ -616,14 +619,46 @@
         "sha256": "8d66e1c11a250057c909b86c08a24b89f272bacf947b7101abbe230110f77704"
       }
     ],
-    "state_limit": "These are observed pending-review BANNER workflow inventory entries, not an accepted Chapter 2 directory transcript or an assumed complete future reader-state count. A also contains TED project/session files in this retained case.",
+    "state_limit": "Accepted BANNER workflow inventories are separate from this historical mutation case. No post-BANNER DIR count or free-space figure is invented.",
     "type_short_example": "Retain frozen old03:156–162 TYPE STARTUP.CMD recipe/output unchanged as a separately labelled historical 78127ec example, not a new 40-column run.",
     "copy_rename_selective_erase": "Retain frozen old03:184–209 complete recipe/output as a self-contained historical 78127ec empty-B demonstration. Its STARTUP.CMD/COPY.TXT/NOTES.TXT names, COPIED 0001 values, FILE EXISTS/NO FILE and DIR counts/free space remain exact. Explicitly separate it from the post-BANNER session; it is not a sequence to run on that current card. Preserve the copied-result name/error interpretation from 211–217 without importing allocation arithmetic.",
     "no_invented_mutation": "No renamed BANNER sequence, new target name, new file count/free-space figure, assumed empty B, wildcard erase or reconstituted mixed transcript. COPY replaces an existing destination, so a live exercise needs known target absence and preservation evidence.",
-    "all_files_erase_preservation": "The full historical old03:258–274 ERA *.* recipe/output must be preserved as a separate historical reference at Appendix J, ERA, before it is omitted from Chapter 3. Current J has the grammar but not this complete fixture. This is a concrete owner handoff/coverage gap, not an edit or a silent move. The current selective-only instruction governs Chapter 3 over the older confirm-all destination label.",
+    "all_files_erase_preservation": "Lead explicitly owns the complete old03:258–274 historical Appendix J handoff. The complete recipe/output is also retained in 03-pass-record.md below. No all-files erase exercise is inserted into Chapter 3.",
     "extra_case_if_live_exercise_required": "A positive on-device COPY/REN/selective-ERA workflow starting with the accepted post-BANNER card would need an exact non-colliding disposable target, explicit BANNER/source/COM/DBG preservation and real error/result observations. Attempt02 contains no such complete REN/ERA case. Flag for scoped allocation only if the historical isolated demonstration is insufficient."
   },
   "coverage_gaps": [
+    {
+      "gap": "Uncovered current-card mutation workflow",
+      "effect": "No new REN/selective ERA execution on the post-BANNER card is claimed. The approved complete isolated 78127ec empty-B example supplies those results."
+    },
+    {
+      "gap": "Full plain-TYPE invocation and return",
+      "effect": "The approved paused-screen excerpts are sufficient for this chapter. The actual fixture remains TYPE A:SAMPLE.ASM!USER 1. No standalone plain-TYPE return capture is invented."
+    },
+    {
+      "gap": "Final neighbouring drafts and integration",
+      "effect": "Read accepted Chapters 1 and 2 in final reader order when available. No navigation/root changes here. Chapter 3 assumes no unobserved prompt or file count."
+    },
+    {
+      "gap": "Independent Chapter 3 editorial/factual review",
+      "effect": "Draft and pass record are ready for independent review. Scoped runtime acceptance does not accept chapter prose or the book."
+    }
+  ],
+  "drafting_hold": "Released for this chapter by actual receipt 4b5b5a50 and explicit lead dispositions. Independent chapter review and final integration remain open.",
+  "changes": "Owned chapter draft, this readiness dossier and owned pass record only. No shared ledger, navigation, root, product or captured bytes changed.",
+  "text_gate": {
+    "actual_paths": [
+      "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+      "tec-os/editorial/reader-rewrite/draft/03-pass-record.md"
+    ],
+    "exit_status": 0,
+    "flags": [],
+    "dispositions": [],
+    "earlier_flag": "Opening human learning clause produced HW008. Full context was read; later opening simplification removed the hit.",
+    "limit": "Mechanical result does not replace independent chapter review."
+  },
+  "pre_receipt_preparation_status": "reading_prepared_waiting_for_parent_scoped_review_receipt",
+  "pre_receipt_coverage_gaps": [
     {
       "gap": "Actual parent scoped-review receipt absent",
       "effect": "No result-based reader prose or output insertion. Earlier journal completion, upstream font qualification and full-batch status are distinct."
@@ -649,13 +684,137 @@
       "effect": "Do not repeat old03 WRITE ERROR as unconditional partial-file preservation: successful close is required. Use current D/J qualified wording during later source-backed drafting. Keep command-file mistakes separate from BDOS errors and preserve failure/flush exceptions."
     }
   ],
-  "drafting_hold": "Wait for the actual parent scoped-review receipt and any explicit excerpt/preservation disposition. This dossier neither grants acceptance nor allocates execution.",
-  "changes": "Only this readiness JSON is created. No chapter, ledger, navigation, root file, source pin, fixture or output is changed.",
-  "text_gate": {
-    "scope": "Inert extraction of new route, evidence-disposition and coverage-gap text. Frozen source/evidence literal contents excluded.",
+  "scoped_authoring_receipt": {
+    "commit": "4b5b5a505cb38bd84a787241e09209e9ba9ce5d8",
+    "path": "studies/p3-tec-os/reviews/book-opening-workflows.md",
+    "sha256": "1368e77c9bc71797d40d42260110ff7fdbc8c430fb3cf46782214f041638e407",
+    "attempt_commit": "e77c7ef0f81c42d94f12391b099f4cf8c4acd9a6",
+    "accepted_scope": "Covered first-session/SAMPLE, TED/BANNER including rejection/repair/persistence, PC7 and three pager cases for Chapters 1–3/5 authoring. Whole batch remains FAILED.",
+    "read_scope": "Full receipt and actual first/next paused screens plus complete three-case pager records/console bodies read before prose. Historical frozen capture bodies reread and copied byte-exact."
+  },
+  "lead_dispositions": {
+    "pager": "Exact 098 full paused screen and 099 delimited excerpt approved. Actual chained input is metadata only; no fake prompt, plain-TYPE transcript or early chain/user-area lesson.",
+    "pager_full_fixture": "Lead owns Chapter 28 evidence-home handoff. Immutable full three-case fixture stays in attempt02.",
+    "historical_copy": "Complete isolated 78127ec fresh-empty-B COPY/REN/selective ERA demonstration approved. Explicitly separate from continued BANNER card and not an instruction to repeat there.",
+    "erase_all": "Lead owns full old03:258–274 historical fixture transfer to Appendix J. Chapter 3 remains selective-only. Complete fixture also preserved in this owned pass record.",
+    "runtime": "No new execution authorised or performed."
+  },
+  "actual_passes": {
+    "generous_draft": "complete after actual receipt/artifact reads",
+    "thematic_order": "complete, with early user/chains removed",
+    "deletion": "complete sequential sentence and paragraph pass",
+    "agency": "complete with human/operation subjects",
+    "every_comma_punctuation": "complete manual pass, with literal exceptions protected",
+    "technical_source_check": "complete for changed/relied chapter claims at assigned 962853f",
+    "journey_readback": "complete whole chapter in reader order",
+    "independent_chapter_review": "pending",
+    "navigation_root_publication": "not performed"
+  },
+  "sentence_complexity": {
     "exit_status": 0,
-    "flags": [],
-    "dispositions": [],
-    "limit": "Data dossier only. Mechanical results do not qualify prose, evidence or runtime."
-  }
+    "summary": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md: 111 sentences, mean 12.2 words, 0.49 joints/sentence, 12% flagged, grade 6.2",
+    "prompts": [
+      {
+        "reported_line": 11,
+        "flags": "LONG(31)",
+        "excerpt": "New pager excerpts: tested 8b8664a7d93c6dc2e8bce509b9770585e106eedc, landed 962853f with qualification-record differences only.",
+        "disposition": "Retained immutable provenance metadata with full source/application identities. Not reader exposition."
+      },
+      {
+        "reported_line": 11,
+        "flags": "LONG(26)",
+        "excerpt": "Origo attempt02 e77c7ef0, scoped result receipt 4b5b5a50, studies/p3-tec-os/reviews/book-opening-workflows.md.",
+        "disposition": "Retained immutable provenance metadata with full source/application identities. Not reader exposition."
+      },
+      {
+        "reported_line": 11,
+        "flags": "LONG(81)",
+        "excerpt": "Old03 input pins: TED.COM Thorium 128edb7, SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f; TAS.COM Thorium dbee66a, SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.",
+        "disposition": "Retained immutable provenance metadata with full source/application identities. Not reader exposition."
+      },
+      {
+        "reported_line": 30,
+        "flags": "SHORT(5)",
+        "excerpt": "A KiB is 1,024 bytes.",
+        "disposition": "Local unit definition is required before interpreting DIR free space."
+      },
+      {
+        "reported_line": 91,
+        "flags": "SHORT(6)",
+        "excerpt": "Companions retain raw VRAM/registers/foreground.",
+        "disposition": "Metadata identifies the retained raw companions for the exact screen excerpt."
+      },
+      {
+        "reported_line": 123,
+        "flags": "SHORT(4)",
+        "excerpt": "Space continues the listing.",
+        "disposition": "The observed key and immediate listing effect introduce the continuation excerpt."
+      },
+      {
+        "reported_line": 141,
+        "flags": "SHORT(4)",
+        "excerpt": "CODE stops there too.",
+        "disposition": "Defines the additional Ctrl-C cancellation key without importing its later chain distinction."
+      },
+      {
+        "reported_line": 141,
+        "flags": "SHORT(6)",
+        "excerpt": "Each of these keys erases CODE.",
+        "disposition": "States the visible pause-erasure result needed for stop/continue use."
+      },
+      {
+        "reported_line": 145,
+        "flags": "SHORT(6)",
+        "excerpt": "Neither key changes a stored file.",
+        "disposition": "Distinguishes screen-line editing from mutation of a stored file."
+      },
+      {
+        "reported_line": 157,
+        "flags": "SHORT(5)",
+        "excerpt": "ERA removes the named file.",
+        "disposition": "Defines the destructive command before the exact historical demonstration."
+      },
+      {
+        "reported_line": 195,
+        "flags": "ECHO(byte/bytes)",
+        "excerpt": "The count is hexadecimal: CODE means ten 128-byte records (1,280 bytes).",
+        "disposition": "Byte and bytes distinguish one transfer unit from its ten-record total. The actual historical count meaning is preserved."
+      },
+      {
+        "reported_line": 195,
+        "flags": "SHORT(6)",
+        "excerpt": "The first ERA removed NOTES.TXT.",
+        "disposition": "Locates the successful deletion before the repeated absent-file result in the same capture."
+      },
+      {
+        "reported_line": 224,
+        "flags": "SHORT(4)",
+        "excerpt": "COPY instead prints CODE.",
+        "disposition": "Identifies the exact word used in COPY’s question-mark error rather than an argument."
+      }
+    ]
+  },
+  "reader_output_identities": [
+    {
+      "fence": 1,
+      "bytes": 32,
+      "sha256": "5e34601cce54d6b3ffbf6ab158396f3a609220a233839c9d4087775361703196"
+    },
+    {
+      "fence": 2,
+      "bytes": 523,
+      "sha256": "d2e14099afca326af05fec74e67f6a0ca1a3a539ffffabf873a56417bb142b96"
+    },
+    {
+      "fence": 3,
+      "bytes": 263,
+      "sha256": "50ab57b03c944aa4526d6bb30759d231cb0cf0f4990cdb1084336878b894366c"
+    },
+    {
+      "fence": 4,
+      "bytes": 333,
+      "sha256": "099d7b60c38f0128ef1c71d954d6cbaaa6481071b619dd09cc262eb96e444794"
+    }
+  ],
+  "chapter_sha256": "18db230d83aa4033ddcc3b224464b3a6c33e082acb6e5fc6ccc8968780b229df"
 }
