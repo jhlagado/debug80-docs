@@ -81,7 +81,7 @@ Ranges below use the controlling book base. An old25 range belongs to
 | old25:285 | Replace heading with “Startup origin and quiet results”. |
 | old25:287–292 | Retain CCF/SBC derivation, historical STFLAG address and inherited chain origin. |
 | old25:294–308 | Retain all three readers, adjacent result/status bytes, post-INIT record rejection clearing SVCRA, all four gate instructions and exact silent versus BADCMD branches. |
-| old25:310–317 | Retain quiet absent-controller/active-PICO cases, typed GLCD.SVC?, typed both-display retention, pre-INIT file failures and TNEBAD for a controller with no keyboard. Qualify damaged-file wording by the actual rejection stage. |
+| old25:310–317 | Retain quiet absent-controller/active-PICO cases, typed GLCD.SVC?, typed both-display retention with the matrix keyboard enabled, returned pre-INIT load failures and TNEBAD when the Matrix switch disables the keyboard. Distinguish default BDOS disk-error abort from a returned NAME? failure. |
 | old25:319–323 | Retain FIND-before-width, unavailable-console startup silence and typed width?. |
 | old25:325–333 | Retain RCFAIL/PRGCODE, conditional-test-before-reset ordering and GLCD.SVC!:MOUNT versus its typed failure. End on that consequence without recap. |
 
@@ -110,13 +110,13 @@ with the relevant callers and split files. Test files were read as text.
 | Exact-record and starter examples | test/startup.test.mjs:123–128 uses121 CR bytes plus USER13 and a sentinel just beyond STREC. The retained eleven-byte GLCD.SVC/CR/LF/^Z trace follows the same source offsets, not a new execution. |
 | Echo and temporary overlap | src/cpm/ccpcmd.asm:995–1011,798–805 appends CR/$ and prints by function9. src/ram.asm:171–175 places BOOTDRV immediately after CMDTXT. src/cpm/ccp.asm:73,95 gives its write-before-only-read order. Other BOOTDRV stores do not add a reader. NOTDRIVE:396–399 prints CRLF independently of the echo terminator. |
 | Normal dispatch and next line | src/cpm/ccp.asm:148–184,249–284 normalises the completed line after echo. Its104–123,483–484,519–536 paths and STBOOT's early return preserve the next startup position. test/startup.test.mjs:172–219 compares traces after uppercasing output for comparison. |
-| Driver INIT and rejection | drivers/glcd.asm:66–88 calls FONT, GLCWAIT and DRVR. src/services.asm:618–658 distinguishes wrong mode, startup/CRT nonzero-table rejection and VIDHOOK failure. src/video.asm:150–182 tests keyboard and existing table. These are not all loader/file/space failures. |
+| Driver INIT and rejection | drivers/glcd.asm:66–88 calls FONT, GLCWAIT and DRVR. src/services.asm:618–658 distinguishes wrong mode, startup/CRT nonzero-table rejection and VIDHOOK failure. src/console.asm:82–88 records the Matrix switch in CDMTX. src/pico.asm:64–86 and src/video.asm:150–182 test that enable bit, not a keyboard response. The latter also tests the existing table. These are not all loader/file/space failures. |
 | Loaded table and console claim | src/loader.asm:925–958 loads/installs, compares service and GLVEC pages, sets CDGLC and either retains CRT or calls CONSET. src/console.asm:127–199,606–620 installs vectors/geometry/mode field and tests VTOWN before restore/clear. A selected claimed PICO9918 is left alone. |
 | Web preparation scope | host/card.mjs:58–72,104–116 prepares a copy and publishes the selected display line only on success. The chapter preserves the policy and links AppendixI for its complete failure/rewrite rules. No new default or font is inferred. |
 | Recovery words and carry | src/lcd.asm:65–120 sets CDWRD for LCDWRD, enters row3 through LCD3 and returns carry on the zero terminator. src/text.asm:15,84–88 supplies the strings/blanks. src/loader.asm:895–913 restores the failed selection's CON field before GLCD?. |
 | Row ownership | src/loader.asm:945–980 conditionally clears CDWRD before writing five blanks. src/services.asm:157–192 clears the bit for row3 without first blanking. src/boot.asm:119–132,817–845 and src/console.asm:57–88 distinguish CARD?'s retry/cold path. |
 | Origin and its readers | src/cpm/ccp.asm:148–158 derives/preserves STFLAG. Its465–481, src/services.asm:629–647 and src/cpm/ccpcmd.asm:161–177 are the three readers. Historical STFLAG uses78127ec:src/ram.asm:268–269. |
-| Exact quiet gate | src/loader.asm:445–455 stores INIT's A;520–526 clears SVCRA on record rejection;536–587 separates nothing-left1 from retained2. src/cpm/ccp.asm:465–484 requires startup, status2 and SVCRC1 together. Pre-INIT rejection stays0 and prints NAME?. |
+| Exact quiet gate | src/loader.asm:445–455 stores INIT's A;520–526 clears SVCRA on record rejection;536–587 separates nothing-left1 from retained2. src/cpm/ccp.asm:465–484 requires startup, status2 and SVCRC1 together. A returned pre-INIT failure stays0 and prints NAME?. src/cpm/bdoscon.asm:26–72 instead routes default-mode disk errors through DISKMSG and GETCHAR to CHDROP. src/cpm/bdos.asm:110–119 clears CHPOS and warm boots without returning to NAME? reporting. |
 | Width and following conditional | src/cpm/ccpcmd.asm:161–191 gates unavailable PICO width calls by STFLAG. src/cpm/ccp.asm:224–244 tests the previous return code,280–284 clears it before execution and613–629 sets RCFAIL on error. Quiet routes preserve zero for the next colon piece. |
 
 The historical BDB6h/BDB7h, BFE7h, BF62h, BF63h and BF64h–BFE3h examples
@@ -146,12 +146,22 @@ or boundary. No numerical readability score is claimed.
 
 ## Handoff
 
-Final static checks cover104 exact source/test ranges at their named pins.
+The initial static checks covered104 exact source/test ranges at their named pins.
 All three old25 tables are unchanged. Both historical old06 fences and the
 capture command match byte for byte. The chapter has no prose semicolon
 or em dash. The only retained comma-before-so pattern is literal text in
 the original CONDEV table. Final paths and the Chapter14 anchor match the
-ledger and current draft. The diff check is clean.
+ledger and current draft. The initial diff check was clean.
+
+Independent review accepted two factual corrections. I replaced the claimed
+matrix-keyboard response with the Matrix switch's enable condition and
+propagated that condition through registration, startup and typed outcomes.
+I separated returned pre-INIT load failures from default-mode BDOS disk
+errors, which print a disk message, wait for a key and abort through CHDROP
+rather than returning to NAME? reporting. The exact additional and rechecked
+source proofs are recorded above. I reread the affected sections in journey
+order and checked their agency and every comma. Historical tables, fences,
+addresses and measurements are unchanged. No execution was used.
 
 Only `25-startup-inside-the-ccp.md` and this record are changed. The root
 book, other drafts and shared records are untouched. Links use the revision
