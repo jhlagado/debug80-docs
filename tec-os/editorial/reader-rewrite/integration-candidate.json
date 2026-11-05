@@ -1,7 +1,7 @@
 {
   "candidate_commit": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
   "branch": "tec-os-reader-rewrite",
-  "status": "actual reader-facing integration complete; independent integration confirmation and allocated build/render verification pending",
+  "status": "actual reader-facing integration and independent source/navigation confirmation complete; parent final acceptance and allocated build/render verification pending",
   "reader_count": 39,
   "source": "962853f499f05faf281f6cdff1deca8959f58c2b",
   "tested_source": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
@@ -219,5 +219,12 @@
     "No upgrade of failed attempts or historical captures"
   ],
   "request": "site-verification-request.md",
-  "legacy_urls": "26 superseded root routes removed. Tracked outside references onlygeneratedsidebarwereupdated. Unknownoldbookmarksnotredirected."
+  "legacy_urls": "26 superseded root routes removed. Tracked outside references onlygeneratedsidebarwereupdated. Unknownoldbookmarksnotredirected.",
+  "independent_confirmation": {
+    "commit": "0aecb61",
+    "path": "tec-os/editorial/reader-rewrite/integration-independent.json",
+    "sha256": "1b6a07dc00059905310e7bb13468a87f085c2e139b053b2237b65791ec3b3baa",
+    "findings": 0,
+    "candidate": "a3e4c292fee3022e432a18be36370d2d87cd4b30"
+  }
 }

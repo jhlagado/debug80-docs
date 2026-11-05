@@ -1,5 +1,5 @@
 {
-  "status": "root source integration and source checks complete; independent integration confirmation pending",
+  "status": "actual reader-facing integration and independent source/navigation confirmation complete; parent final acceptance and allocated build/render verification pending",
   "input_commit": "13c84463f23bf708ba20d95a2e44f6f86406441b",
   "source": "962853f499f05faf281f6cdff1deca8959f58c2b",
   "authority": "P3 delegated KS47 actual reader-facing integration after bounded correction closure db58db7, publication excluded",
@@ -357,5 +357,12 @@
       "reason": "PICO record interface version3 must not be used as a hardware console version",
       "scope": "One prose phrase; capture/source/evidence interface identity unchanged"
     }
-  ]
+  ],
+  "independent_confirmation": {
+    "commit": "0aecb61",
+    "path": "tec-os/editorial/reader-rewrite/integration-independent.json",
+    "sha256": "1b6a07dc00059905310e7bb13468a87f085c2e139b053b2237b65791ec3b3baa",
+    "findings": 0,
+    "candidate": "a3e4c292fee3022e432a18be36370d2d87cd4b30"
+  }
 }
