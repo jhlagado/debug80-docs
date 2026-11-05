@@ -182,3 +182,14 @@ the graphics-LCD path. Retained literals, output and recipes are unchanged.
 The changed paragraphs were read with their neighbours for teaching order,
 agency and every comma. Bounded independent correction confirmation is pending.
 No assembly, build, product import, execution, test or capture occurred.
+
+## Separate early hardware timing authorities
+
+Read Book10:21 and23 in full with their method and correction. The GLCD
+comparison is the bd15528 run of15 characters from row3, column2: PUTAT35136
+and BDOS function2 38407 per cell. It is separate from the60e0768 PICO
+comparison. The0.84ms illumination interval is bd15528's3348-T-state
+port-write trace, separate from the60e0768 full-pass20670 measurement.
+The revised paragraphs preserve those distinctions and their approximate
+precision. Read both complete paragraphs for order, agency and punctuation.
+No execution or new measurement occurred. Bounded confirmation is pending.
