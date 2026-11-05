@@ -4,18 +4,18 @@
   "units": [
     {
       "unit": "front-door",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "first draft and own craft passes pushed; independent editorial/factual review pending",
       "passes": {
-        "full_passage_read": "pending",
-        "draft": "pending",
-        "thematic_order": "pending",
-        "sentence_deletion": "pending",
-        "agency": "pending",
-        "every_comma_punctuation": "pending",
+        "full_passage_read": "completed for first draft; independent review may require another pass",
+        "draft": "completed for first draft; independent review may require another pass",
+        "thematic_order": "completed for first draft; independent review may require another pass",
+        "sentence_deletion": "completed for first draft; independent review may require another pass",
+        "agency": "completed for first draft; independent review may require another pass",
+        "every_comma_punctuation": "completed for first draft; independent review may require another pass",
         "technical_claims": "pending",
-        "examples_before_explanation": "pending",
-        "journey_readback": "pending",
-        "mechanical_gate": "pending",
+        "examples_before_explanation": "No output fence introduced. Destination workflow verification remains pending in linked chapters.",
+        "journey_readback": "completed for first draft; independent review may require another pass",
+        "mechanical_gate": "completed for first draft; independent review may require another pass",
         "independent_editorial_review": "pending",
         "independent_factual_review": "pending",
         "navigation": "pending",
@@ -194,7 +194,9 @@
       "evidence": [],
       "findings": [],
       "proposed_path": "tec-os/index.md",
-      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass."
+      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass.",
+      "draft_path": "draft/index.md",
+      "pass_record": "draft/index-pass-record.md"
     },
     {
       "unit": "chapter-01",
@@ -722,10 +724,10 @@
         },
         {
           "path": "tec-os/02-console.md",
-          "start": 269,
+          "start": 268,
           "end": 269,
           "subsection": "Control-key notation",
-          "fragment_selection": "So Ctrl and C together is ^C."
+          "fragment_selection": "So Ctrl and C\ntogether is `^C`."
         },
         {
           "path": "tec-os/02-console.md",
@@ -5695,7 +5697,7 @@
     },
     {
       "unit": "chapter-14",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded draft in progress; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -7188,10 +7190,10 @@
         },
         {
           "path": "tec-os/02-console.md",
-          "start": 268,
-          "end": 269,
+          "start": 267,
+          "end": 268,
           "subsection": "Control-code encoding",
-          "fragment_selection": "Ctrl letter codes01h\u20131Ah only."
+          "fragment_selection": "Ctrl with a letter gives that\nletter's control code, from `01h` for A to `1Ah` for Z."
         },
         {
           "path": "tec-os/02-console.md",
@@ -9403,7 +9405,7 @@
     },
     {
       "unit": "chapter-22",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded draft in progress; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -15746,7 +15748,7 @@
     }
   ],
   "movement_authority": "movement-units.json; use explicit fragment overrides before parent destinations",
-  "movement_sha256": "adc099d7e32b8abf1600af777c599640be3afef77a587dc24b6c407a5c0dbdb4",
+  "movement_sha256": "0f594d09a5aa4dfd2c170b9e069f23a8a5b987cfbc3a99c7884c36b2210a06ff",
   "offered_source": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
   "source_offer": "Origo proposals17 at92cc92c7; separate banner verification and final citation acceptance still pending"
 }
