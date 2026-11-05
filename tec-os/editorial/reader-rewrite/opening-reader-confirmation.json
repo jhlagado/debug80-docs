@@ -1,0 +1,573 @@
+{
+  "schema_version": 1,
+  "status": "all_seven_external_reader_findings_closed",
+  "external_receipt": {
+    "commit": "0e07f18d53352d583edf0e0614b2dbe1b455d290",
+    "path": "studies/p3-tec-os/reviews/book-opening-reader.md",
+    "bytes": 1519,
+    "sha256": "74332e3abbb09a9ba8cdf9f5daa428968529e37e5c5915c884934f369683060d",
+    "git_blob": "5394d247b24de630ec1f5f9f1e66628e56060a90"
+  },
+  "external_receipt_full_text": "# KS47 opening reader review\n\nA reviewer read the index, Chapters 1–3 and all four pass records completely\nat documentation `55807ed`. Literal comparisons used attempt02's retained\narchive and historical `10821b6` evidence. No demonstrated-case factual or\ncapture blocker was found. Editorial closure remains open for these accepted\nrevisions:\n\n- Chapter 2: remove repeated status-only arrow actions from the lesson. Retain\n  the complete observed trace in evidence and explain cursor positioning once\n  when an edit needs it.\n- Chapter 3: provide a practical COPY exercise with its actual starting state.\n  Preserve historical REN/ERA provenance without implying a fresh combined run.\n- Chapter 3: identify command-prompt input before introducing ^R and ^E after\n  the pager discussion.\n- Explain source comments before the Chapter 2 listing.\n- State directly that both the full stop and type may be omitted from a name.\n- Move the allocation aside beside the copied-record discussion.\n- Remove the unnecessary conjunction comma in Chapter 1's final reference.\n\nThe practical sequence and local BANNER explanations satisfy the intended\nopening scope. They do not require early loader, FCB or private-stack teaching.\nThe complete screen/source/rejection/pager literals match their named records.\nThe historical mutation transcript remains labelled historical. A reviewer\nwill read the revised passages in context before closing these findings.\nSource/navigation reconciliation and whole-book reading remain separate.\n",
+  "scope": {
+    "reviewed_reader_snapshot": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+    "baseline_before_additional_corrections": "6dc22fbe76964723845030a8a4fbc8d1f1ce5f6a",
+    "corrections": [
+      "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+      "f913ec007e156fac20a2767d488e576f9c90eb5a",
+      "2ad313ddcc3179fa6dfad2d9c2a27d13a91d743e",
+      "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e"
+    ],
+    "complete_chapters_1_to_3_read_in_order": true,
+    "changed_containing_paragraphs_and_record_additions_read": true,
+    "reader_source_or_navigation_edits": false,
+    "product_execution": false,
+    "new_runtime_or_shortened_workflow_qualification": false,
+    "unfinished_source_adoption_files_reviewed": false,
+    "earlier_reviews_changed": false,
+    "chapter5_self_review": false
+  },
+  "reader_and_record_identities": [
+    {
+      "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+      "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+      "bytes": 9099,
+      "sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf",
+      "git_blob": "0816f084171a45521e7f368fb59f1d0407df668c"
+    },
+    {
+      "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+      "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+      "bytes": 10692,
+      "sha256": "d044c76708b41a7156ec4151ff89501fe80b17708d7334c520522d365164c5e3",
+      "git_blob": "2be81bd397b0258c1561de9546816b4610422258"
+    },
+    {
+      "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+      "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+      "bytes": 11193,
+      "sha256": "e05220ccb13b0d9ab7bf5af2e33d11c96cc5599e63941eb832d2aa2f3e3da1f4",
+      "git_blob": "adf05487982811ee5db580e669a9fe5fe6f2af01"
+    },
+    {
+      "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+      "path": "tec-os/editorial/reader-rewrite/draft/01-pass-record.md",
+      "bytes": 28539,
+      "sha256": "c94d31e62dcce5c7cee7ee0a79070396a6ebc38a99ff5a3eded8af4beec502a9",
+      "git_blob": "8c617b4fcbe6f1f4eece26ca163bd4bc9954caa4"
+    },
+    {
+      "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+      "path": "tec-os/editorial/reader-rewrite/draft/02-pass-record.md",
+      "bytes": 24426,
+      "sha256": "14b806af69e3b4f56aa82f959656208f4c367243ca908461cdaf668768ffe035",
+      "git_blob": "a425bd00da810bbb6afd6fe770ee49bb7131deaf"
+    },
+    {
+      "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+      "path": "tec-os/editorial/reader-rewrite/draft/03-pass-record.md",
+      "bytes": 18262,
+      "sha256": "7b648a2c148cf26aa8f0c46049e36a62b1134cf489e5bd7bb036dbad5069a9ec",
+      "git_blob": "9e2b19ceb25b86b0cd8efefb5f99197bd55e4672"
+    }
+  ],
+  "earlier_reviews_preserved": [
+    {
+      "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+      "path": "tec-os/editorial/reader-rewrite/opening-craft-review.json",
+      "bytes": 73470,
+      "sha256": "462f7da53dddad576fc25e38c4a4f14a76067b1438ce3849e2795320ab4b85ca",
+      "git_blob": "a34ea7cc486b7fa672b8f3ad780230f7900e9f4e"
+    },
+    {
+      "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+      "path": "tec-os/editorial/reader-rewrite/opening-factual-review.json",
+      "bytes": 27910,
+      "sha256": "b68ccaaeb2591e62c1a8a3a617285e0b3d66b67c91eb3bc4473ae6ba1d8e86de",
+      "git_blob": "23f365293596378cf0d41b9ad4beeccfa6b8093c"
+    }
+  ],
+  "checks": [
+    {
+      "id": "ER01",
+      "external_finding": "Remove repeated status-only arrows; retain complete trace and explain positioning once at the edit.",
+      "status": "closed",
+      "contexts": [
+        {
+          "source": {
+            "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+            "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+            "bytes": 10692,
+            "sha256": "d044c76708b41a7156ec4151ff89501fe80b17708d7334c520522d365164c5e3",
+            "git_blob": "2be81bd397b0258c1561de9546816b4610422258"
+          },
+          "start_line": 118,
+          "end_line": 151,
+          "full_context": "## The first successful run\n\n`^T B` now builds the corrected source. TAS writes BANNER.COM and TED opens\nagain with the source.\n\n`^T R` performs a build too and then runs the resulting program. This is the\ncomplete console text from the initial run, with the initial clear-screen\ncontrols and leading blank line omitted. The editor has not yet redrawn:\n\n<!-- attempt02 stage/results/BANNER-initial-run-console.bin.\n     All text after the initial clear-screen controls and leading CRLF.\n     Final Press a key has no following newline in the raw artifact. -->\n```text\nA>A:TAS B:BANNER.ASM\nBANNER.COM written\n\nA>A:TED\n\nA>B:BANNER\nHello from TEC-OS\n\nA>A:TED\nPress a key\n```\n\n`BANNER.COM written` reports the successful assembly. The greeting is your\nprogram's output. The `A>A:TED` lines are commands used to reopen the editor,\nnot text printed by BANNER. TED waits at `Press a key` so the result remains\nvisible. Space returns to the source at `L1 C1`.\n\nTAS also writes BANNER.DBG beside the source and COM file on B. It contains\ninformation for a debugger. Keep it with the other BANNER files, though this\nexercise needs only the source to edit and the COM file to run.\n\n",
+          "sha256": "08ca4871d4a050b905f0ca03a65f821dc9d56776bb589d32893315621f3e2256"
+        },
+        {
+          "source": {
+            "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+            "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+            "bytes": 10692,
+            "sha256": "d044c76708b41a7156ec4151ff89501fe80b17708d7334c520522d365164c5e3",
+            "git_blob": "2be81bd397b0258c1561de9546816b4610422258"
+          },
+          "start_line": 186,
+          "end_line": 226,
+          "full_context": "## A changed greeting\n\nA status message can replace TED's position display. An arrow restores it\nand also moves the cursor normally. Left at the start of the file leaves\nthe cursor at `L1 C1`.\n\nFrom `L1 C1`, twelve Down presses reach `L13 C1`, the MSG line. Twenty-six\nRight presses move to `L13 C27`, just before the quote after TEC-OS. Typing\n`!` inserts it inside the quoted greeting. The cursor moves to `L13 C28`\nand the `*` returns. Only this line changes:\n\n<!-- attempt02 packet/BANNER.edited.asm, final source line only. -->\n```asm\nMSG: db \"Hello from TEC-OS!\",13,10,\"$\"\n```\n\n`^S` saves the change and `^T B` builds it.\n\n`^T R` builds and runs the changed program. This separate run has the new\ngreeting. As before, the initial clear-screen controls and leading blank\nline are omitted:\n\n<!-- attempt02 stage/results/BANNER-edited-run-console.bin.\n     All text after the initial clear-screen controls and leading CRLF.\n     This is not combined with the initial run. -->\n```text\nA>A:TAS B:BANNER.ASM\nBANNER.COM written\n\nA>A:TED\n\nA>B:BANNER\nHello from TEC-OS!\n\nA>A:TED\nPress a key\n```\n\nSpace returns to TED. The extra exclamation mark is in both the saved source\nand the rebuilt program. Saving alone would have left the earlier COM unchanged.\n\n",
+          "sha256": "12b3b2ced468c3365c683f0058a28709754b4c452b0af82b3568bfd793b020ef"
+        },
+        {
+          "source": {
+            "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+            "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+            "bytes": 10692,
+            "sha256": "d044c76708b41a7156ec4151ff89501fe80b17708d7334c520522d365164c5e3",
+            "git_blob": "2be81bd397b0258c1561de9546816b4610422258"
+          },
+          "start_line": 227,
+          "end_line": 256,
+          "full_context": "## Saved source and the standalone program\n\n`^Q` quits the editor. At `A>`, `^C` completes pending writes before a reset\nor removal. Wait for its successful return to the prompt. A write-failure\nmessage has the same consequence as in the earlier save: the prompt alone\ndoes not prove the file was preserved.\n\nIn the reviewed host-model session, the preserved card was reopened on a\nfresh machine with new RAM. `A:TED B:BANNER.ASM` reopened the edited source,\nincluding its exclamation mark. The text therefore came from the saved\nfile, not from the previous editor's memory. Twelve Down presses reached\nits MSG line at `L13 C1`.\n\nAfter `^Q` and a successful empty-prompt `^C`, `B:BANNER` runs the program\nfrom B while A remains current. It does not open TED or assemble the source.\nThe final screen excerpt omits the earlier startup and editor display,\nretaining the quit's preservation step, standalone run and final `^C`:\n\n<!-- attempt02 Machine 5, 096-BANNER-final-flush.json, screen rows 2–7.\n     Earlier boot/editor display omitted. No intervening text omitted here. -->\n```text\nA>^C\nA>B:BANNER\nHello from TEC-OS!\n\nA>^C\nA>\n```\n\nRunning the COM leaves BANNER.ASM available for your next edit.\n",
+          "sha256": "a05122e9f6890361a46795eb7d47131f6f843666414cfb429ac1f14de29d2739"
+        },
+        {
+          "source": {
+            "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+            "path": "tec-os/editorial/reader-rewrite/draft/02-pass-record.md",
+            "bytes": 24426,
+            "sha256": "14b806af69e3b4f56aa82f959656208f4c367243ca908461cdaf668768ffe035",
+            "git_blob": "a425bd00da810bbb6afd6fe770ee49bb7131deaf"
+          },
+          "start_line": 307,
+          "end_line": 352,
+          "full_context": "## Additional independent reader-order correction\n\nThe complete external opening review at55807ed identified repeated cursor\nactions that only restore a status display. I reread the full reader chapter,\nits record and actual BANNER status sequence before the bounded edit. The\ncomment/blank-line explanation now precedes the listing. It distinguishes\nannotations from instructions before the reference comments name routines\nand registers. No source comment or assembly byte changes.\n\nStatus restoration is explained once beside the greeting-edit location. The\nreader no longer performs repeated no-op Left or Left/Right pairs between\nbuilds and runs. Text-changing repair still requires Left, Down, six Backspaces\nand Ctrl-G. The twelve-Down/twenty-six-Right message edit remains. The actual\nobserved status-navigation trace is retained below and in immutable attempt02.\nNo newly executed shortened key sequence or substituted capture is claimed.\n\n| Actual phase | Recorded status-only action and resulting position |\n| --- | --- |\n| 069 BANNER-initial-before-clear-message | Left at L1 C1 leaves L1 C1. |\n| 071 BANNER-initial-built-clear-message | Left clears the project message and leaves L1 C1. |\n| 074 BANNER-initial-returned-clear-message | Left at L1 C1 leaves L1 C1. |\n| 079 BANNER-edited-before-clear-message | Left clears Saved and moves L13 C28 to L13 C27. |\n| 081 BANNER-edited-built-clear-message | Left moves L13 C27 to L13 C26. |\n| 082 BANNER-edited-built-restore-place-column | Right returns to L13 C27. |\n| 085 BANNER-edited-returned-clear-message | Left moves L13 C27 to L13 C26. |\n| 086 BANNER-edited-returned-restore-place-column | Right returns to L13 C27. |\n| 091 BANNER-fresh-status-clear-message | Left at L1 C1 leaves L1 C1 before inspecting MSG. |\n\nThe original trace and source-backed arrow/message behaviour remain evidence\nfor the explanation. These movements change cursor/status rather than source\ntext. The accepted source, builds and six console/source fences remain exact.\nI read the changed sections in sequence for teaching order, sentence purpose,\nagency and every comma, then checked their paragraph boundaries. The correction\nremoves repeated navigation rather than shortening the error/repair lesson.\n\nThe mandatory two-file prose gate reports zero findings. Complexity prompts\nwere reread in their complete contexts. Remaining short key/status sentences\nstate actual actions or boundaries, and long metadata tokens retain evidence\nidentities. None of the changed paragraphs adds an unresolved prompt. All six\nfences and seven provenance comments compare exactly with the input chapter.\nThe external receipt is Origo0e07f18d, reviews/book-opening-reader.md.\n\nThe same reduction also removes the status-only Left after reopening on the\nfresh machine. Its actual phase091 stays in the trace table. Navigation to\ninspect the saved MSG line remains, as does the separate standalone run.\nThe mandatory gate remains clear and all six fences are unchanged.\n",
+          "sha256": "59f508ccd6a279f72aa0aef7de4a74434931eb95645f671dc6c561fcfa450c96"
+        }
+      ],
+      "confirmation": "Repeated status-only Left and Left/Right instructions, including fresh reopen, are removed. Generic message/arrow movement is explained once beside the actual greeting edit. Necessary rejected-line repair and text-edit navigation remain. All9 actual status-arrow phases survive in the record and match accepted input/status artifacts. No new shortened-sequence execution is claimed."
+    },
+    {
+      "id": "ER02",
+      "external_finding": "Provide practical COPY with actual starting state; retain historical REN/ERA provenance.",
+      "status": "closed",
+      "contexts": [
+        {
+          "source": {
+            "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "bytes": 11193,
+            "sha256": "e05220ccb13b0d9ab7bf5af2e33d11c96cc5599e63941eb832d2aa2f3e3da1f4",
+            "git_blob": "adf05487982811ee5db580e669a9fe5fe6f2af01"
+          },
+          "start_line": 144,
+          "end_line": 228,
+          "full_context": "## Copy, rename and selectively erase\n\nCOPY makes another file from a source. The destination can give a new name, a\ndrive or both. With a drive alone, as in `COPY STARTUP.CMD B:`, the copy keeps\nthe source's name. An existing destination of that name is erased before the\nreplacement is made. Check the source and destination before copying over work\nyou need to keep.\n\nA working copy of SAMPLE's source on B gives you a file of your own to read\nor edit. `COPY A:SAMPLE.ASM B:SAMPLE.ASM` names both source and destination.\nKeep an existing B:SAMPLE.ASM rather than overwriting it for this exercise.\n\nThe recorded copy below started at A on a fresh starter card with B empty.\nIt is separate from the BANNER session. On your working card, BANNER's files\nhave different names. This command writes only B:SAMPLE.ASM:\n\n<!-- Accepted attempt02 Machine 2, stage/results/009-copy-sample.json,\n     screen rows 8–11. Fresh starter card, B initially empty.\n     Earlier boot rows and unused rows after the prompt omitted. -->\n```text\nA>COPY A:SAMPLE.ASM B:SAMPLE.ASM\nCOPIED 0028\n\nA>\n```\n\nThe count after `COPIED` is hexadecimal. Here `0028` means 40 records of\n128 bytes. The source on A remains in place. `TYPE B:SAMPLE.ASM` reads the\nnew copy without changing the current drive.\n\nREN changes a name on the same drive. Its form is `REN NEW=OLD`, with the new\nname first and no spaces around `=`. ERA removes the named file. A rename to an\nexisting name gives `FILE EXISTS` and changes nothing. Erasing a name that is\nabsent gives `NO FILE`.\n\nThe following complete historical example began on a separate starter card with\nB empty. It did not contain BANNER.ASM, BANNER.COM or BANNER.DBG. Read it as\nthat separate session, not as a sequence to repeat on your current card. It\ncopies A's STARTUP.CMD under two names, renames one copy and erases only\nNOTES.TXT. The listings and free-space figures belong to that card:\n\n<!-- node tools/capture.mjs \"COPY STARTUP.CMD B:\" \"COPY STARTUP.CMD B:COPY.TXT\" B: DIR \"REN NOTES.TXT=COPY.TXT\" \"REN NOTES.TXT=STARTUP.CMD\" DIR \"ERA NOTES.TXT\" \"ERA NOTES.TXT\" DIR -->\n```text\nA>COPY STARTUP.CMD B:\nCOPIED 0001\n\nA>COPY STARTUP.CMD B:COPY.TXT\nCOPIED 0001\n\nA>B:\nB>DIR\nSTARTUP.CMD  COPY.TXT    \n2 files, 8168K free\nB>REN NOTES.TXT=COPY.TXT\nB>REN NOTES.TXT=STARTUP.CMD\nFILE EXISTS\nB>DIR\nSTARTUP.CMD  NOTES.TXT   \n2 files, 8168K free\nB>ERA NOTES.TXT\nB>ERA NOTES.TXT\nNO FILE\nB>DIR\nSTARTUP.CMD \n1 file, 8172K free\nB>\n```\n\n`COPIED 0001` reports one 128-byte record copied. The count is hexadecimal:\n`000A` means ten 128-byte records (1,280 bytes). It counts copied records rather\nthan space allocated to the file. Space is allocated in larger units, explained\nin [Cards on the PC](05-cards-on-the-pc.md#record-sizes-and-allocated-space).\n\nThe first REN made NOTES.TXT from COPY.TXT. The next REN left both files alone\nbecause NOTES.TXT already existed. The first ERA removed NOTES.TXT. The repeated\nERA found no such file. STARTUP.CMD remained on B and the source on A was not\nrenamed or erased.\n\nOn your working card, retain BANNER.ASM, BANNER.COM and BANNER.DBG. Use an exact\nname when erasing a disposable copy. A selective pattern such as `*.TXT` is\nerased without a confirmation question so it can remove more than one file.\nChecking it with DIR first helps you avoid erasing a file you meant to keep. The\nall-files erase form and its confirmation grammar are in\n[Appendix J](appendix-j-command-reference.md#era).\n\n",
+          "sha256": "4e1281073dde42eb1b13fe4f5027791d37ca4f08298e539676a2db0908d3a002"
+        }
+      ],
+      "confirmation": "The usable COPY A:SAMPLE.ASM B:SAMPLE.ASM action has purpose, explicit source/destination and existing-file preservation advice. Its recorded start is A on a fresh starter with empty B, separate from BANNER. The exact phase009 slice supplies COPIED0028 and A>. The source remains on A and the optional TYPE B:SAMPLE.ASM is source-backed instruction, not an invented capture. No post-BANNER REN/ERA run, count or free-space result is fabricated."
+    },
+    {
+      "id": "ER03",
+      "external_finding": "Identify command-prompt input before ^R/^E after pager discussion.",
+      "status": "closed",
+      "contexts": [
+        {
+          "source": {
+            "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "bytes": 11193,
+            "sha256": "e05220ccb13b0d9ab7bf5af2e33d11c96cc5599e63941eb832d2aa2f3e3da1f4",
+            "git_blob": "adf05487982811ee5db580e669a9fe5fe6f2af01"
+          },
+          "start_line": 136,
+          "end_line": 143,
+          "full_context": "Space continues at each pause until the text ends. Esc, Q or q stops a listing\nbefore its unread remainder. `^C` stops there too. Each of these keys erases\n`[more]`.\n\n`^R` at the command prompt marks a hard-to-read line with `#` and reprints\nit on a new line. `^E` starts a new screen line while leaving the command\nbeing typed intact. Neither key changes a stored file.\n\n",
+          "sha256": "e0432c3a172d3e127e2762d3156f15ffa400592e349067a6fc382e4242a6db52"
+        }
+      ],
+      "confirmation": "The subject-first ^R at the command prompt phrase establishes ordinary line input after pager controls. ^E preserves typed input. Previously confirmedfa3a042 correction remains intact."
+    },
+    {
+      "id": "ER04",
+      "external_finding": "Explain source comments before the Chapter2 listing.",
+      "status": "closed",
+      "contexts": [
+        {
+          "source": {
+            "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+            "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+            "bytes": 10692,
+            "sha256": "d044c76708b41a7156ec4151ff89501fe80b17708d7334c520522d365164c5e3",
+            "git_blob": "2be81bd397b0258c1561de9546816b4610422258"
+          },
+          "start_line": 27,
+          "end_line": 70,
+          "full_context": "## A new source file\n\nThe prepared tools are on A and your new file goes on B. Starting at the\n`A>` prompt from the first session, `A:TED B:BANNER.ASM` opens TED from A\nwith BANNER.ASM on B as the file to edit. The two drive prefixes name the\ntool and the source separately. Press Return after the command.\n\nFor this new file the editing area is empty. TED's last screen row starts\nwith its name and BANNER.ASM. The `*` marks unsaved work and `L1 C1` gives\nthe cursor's line and column. The arrow keys move through the text.\nBackspace, also written `^H`, removes the character before the cursor.\nWhile TED is open these keys act on the source text.\n\nA semicolon begins a comment for you to read. Comments and blank lines do\nnot become instructions in BANNER.COM.\n\nThe following is the complete source to type. Each line ends with Return,\nincluding the blank lines and the final line. Use the two leading spaces on\nthe instruction lines and retain the comments beginning with `;`. On this\n40-column console every source line fits across the screen.\n\n<!-- attempt02 packet/BANNER.initial.asm, complete source.\n     CRLF line endings rendered as LF in this fence; all other bytes retained.\n     Matrix entry is recorded one line at a time in phases 045–057. -->\n```asm\n  org $0100\n\n; Print one line to the console.\n; Takes nothing. Returns to the CCP.\n; Changes AF, BC, DE and HL.\n\nSTART:\n  ld de,MSG      ; Text for BDOS.\n  ld c,9         ; $ ends the text.\n  call 5\n  ret            ; CCP warm boot.\n\nMSG: db \"Hello from TEC-OS\",13,10,\"$\"\n```\n\nAfter the last Return the cursor is at `L14 C1`. Blank lines count towards\nthe line number even though they contain no instructions. Keeping them as\nshown makes the error position in the next step match your file.\n\n",
+          "sha256": "f7d6a4bba3017d99b76b04e58d092744960487db50d21b6e919e55f14372e077"
+        }
+      ],
+      "confirmation": "Semicolon comments and blank lines are explained before the complete listing. The later duplicate is removed. Literal source comments and all assembly bytes remain unchanged."
+    },
+    {
+      "id": "ER05",
+      "external_finding": "State directly that both full stop and type can be omitted.",
+      "status": "closed",
+      "contexts": [
+        {
+          "source": {
+            "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "bytes": 11193,
+            "sha256": "e05220ccb13b0d9ab7bf5af2e33d11c96cc5599e63941eb832d2aa2f3e3da1f4",
+            "git_blob": "adf05487982811ee5db580e669a9fe5fe6f2af01"
+          },
+          "start_line": 28,
+          "end_line": 50,
+          "full_context": "## Names in a listing\n\n`DIR` lists files on the current drive. `DIR B:` lists B without changing the\ncurrent drive. Each entry gives a name and a type, such as `BANNER.ASM`. Names\nappear in columns fitted to the console. The final line reports the number\nlisted and the drive's free space in KiB. A KiB is 1,024 bytes.\n`NO FILE` means that no visible file matched the request.\n\nA name has up to eight characters followed by a full stop and a type of up to\nthree characters. Both the full stop and type can be omitted. A drive letter\nand colon select a file on another drive: `A:SAMPLE.ASM` names the supplied source\non A. Without that prefix a name refers to the drive in your prompt. DIR is\nbuilt into the command processor that reads each line you enter. TAS is a\nprogram stored on the card.\n\nA wildcard lets you narrow a listing without typing every complete name.\n`DIR B:*.ASM` lists B's files with type ASM. The `*` matches the rest of the\nname or type in which it occurs. `?` matches one character in its position. For\nexample, `G*.*` matches names beginning with G, whatever their type. TYPE, COPY\nand REN each require unambiguous names instead of a wildcard pattern.\n[Appendix J](appendix-j-command-reference.md) gives the complete name rules and\nwildcard forms.\n\n",
+          "sha256": "ac53afa6b391f2d77d9b1dc5e3e47353f7bdce3b5ea7bc4837b3b26cc419f1b5"
+        }
+      ],
+      "confirmation": "The name paragraph now states Both the full stop and type can be omitted. This preserves the rule without ambiguous with phrasing. Drive/name and wildcard instruction remains connected."
+    },
+    {
+      "id": "ER06",
+      "external_finding": "Move allocation aside beside copied-record discussion.",
+      "status": "closed",
+      "contexts": [
+        {
+          "source": {
+            "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "bytes": 11193,
+            "sha256": "e05220ccb13b0d9ab7bf5af2e33d11c96cc5599e63941eb832d2aa2f3e3da1f4",
+            "git_blob": "adf05487982811ee5db580e669a9fe5fe6f2af01"
+          },
+          "start_line": 212,
+          "end_line": 228,
+          "full_context": "`COPIED 0001` reports one 128-byte record copied. The count is hexadecimal:\n`000A` means ten 128-byte records (1,280 bytes). It counts copied records rather\nthan space allocated to the file. Space is allocated in larger units, explained\nin [Cards on the PC](05-cards-on-the-pc.md#record-sizes-and-allocated-space).\n\nThe first REN made NOTES.TXT from COPY.TXT. The next REN left both files alone\nbecause NOTES.TXT already existed. The first ERA removed NOTES.TXT. The repeated\nERA found no such file. STARTUP.CMD remained on B and the source on A was not\nrenamed or erased.\n\nOn your working card, retain BANNER.ASM, BANNER.COM and BANNER.DBG. Use an exact\nname when erasing a disposable copy. A selective pattern such as `*.TXT` is\nerased without a confirmation question so it can remove more than one file.\nChecking it with DIR first helps you avoid erasing a file you meant to keep. The\nall-files erase form and its confirmation grammar are in\n[Appendix J](appendix-j-command-reference.md#era).\n\n",
+          "sha256": "d1b81981e14ec3b3cd4d571b9c77996ba47f48a35300bbfb2b1925933c69b5db"
+        }
+      ],
+      "confirmation": "The complete allocation-unit reference remains beside record-count interpretation. DIR column layout remains beside DIR. The earlier correction atfa3a042 is preserved."
+    },
+    {
+      "id": "ER07",
+      "external_finding": "Remove unnecessary conjunction comma in Chapter1 final reference.",
+      "status": "closed",
+      "contexts": [
+        {
+          "source": {
+            "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+            "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+            "bytes": 9099,
+            "sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf",
+            "git_blob": "0816f084171a45521e7f368fb59f1d0407df668c"
+          },
+          "start_line": 208,
+          "end_line": 220,
+          "full_context": "A `Write lost` message means that some pending changes could not be written.\nThe new prompt after that message does not establish successful preservation.\nThose failed changes have been dropped so another `^C` cannot recover them.\nKeep a separate copy of valuable work. [Chapter 5](05-cards-on-the-pc.md)\nexplains card copies and recovery and\n[Appendix D](appendix-d-error-messages.md) explains the failure messages.\n\nOnly a successful completion brings pending saved changes up to date on the\ncard. Save the file and exit an editor normally before this step. `^C` cannot\npreserve edits that exist only inside the editor.\n\nThe card must be out of the TEC-1G before you change it on a PC. After putting\nit back, press reset before using it again.\n",
+          "sha256": "26fe46206faebcf36c2863ce6a789ed21eb9430d91fecff28553f9d88f6bc179"
+        }
+      ],
+      "confirmation": "The final Chapter5/AppendixD reference joins without the optional comma. Full failed-flush, dropped-write and normal-save qualifications remain unchanged."
+    }
+  ],
+  "new_copy_evidence": {
+    "attempt_commit": "e77c7ef0f81c42d94f12391b099f4cf8c4acd9a6",
+    "archive_sha256": "af08c7ff36ff5ed5cdaaed1a8e1ec20cec938487b22f3ab11e7b7387b23c2afa",
+    "member": "stage/results/009-copy-sample.json",
+    "member_bytes": 626,
+    "member_sha256": "81c2255369291d6b958cb52795ef50fe8f69b80845d2742cc19045c8725df0c8",
+    "machine_id": 2,
+    "rows_one_based": [
+      8,
+      11
+    ],
+    "body": "A>COPY A:SAMPLE.ASM B:SAMPLE.ASM\nCOPIED 0028\n\nA>\n",
+    "body_bytes": 49,
+    "body_sha256": "8ba54662e50c7b160e1ca5760351c88fdf4e92a8048256143989d883a5786afd",
+    "exact": true,
+    "starting_state": "Accepted separate SAMPLE/TED workflow, fresh Machine2/starter, empty B, prompt A. This is not the post-BANNER reader card.",
+    "count": "0028h =40 records of128 bytes. No byte length or free-space total beyond the actual copied-record result is invented."
+  },
+  "actual_nine_phase_status_arrow_trace": [
+    {
+      "phase": "069",
+      "member": "stage/results/069-BANNER-initial-before-clear-message.json",
+      "bytes": 849,
+      "sha256": "ced7d4fbbd6f7cc5050a94108e4b523a8fe9738101fd4fdba741c613343500af",
+      "machine_id": 4,
+      "input": {
+        "name": "BANNER-initial-before-clear-message",
+        "machineId": 4,
+        "records": [
+          {
+            "row": 0,
+            "col": 5
+          }
+        ]
+      },
+      "arrow": "Left",
+      "actual_status_row": "TED  BANNER.ASM    L1 C1",
+      "retained_in_record": true
+    },
+    {
+      "phase": "071",
+      "member": "stage/results/071-BANNER-initial-built-clear-message.json",
+      "bytes": 848,
+      "sha256": "6629003d797b9937d409dc578e4ba3b7ce556921f20bd460ee7924ce2ca527c1",
+      "machine_id": 4,
+      "input": {
+        "name": "BANNER-initial-built-clear-message",
+        "machineId": 4,
+        "records": [
+          {
+            "row": 0,
+            "col": 5
+          }
+        ]
+      },
+      "arrow": "Left",
+      "actual_status_row": "TED  BANNER.ASM    L1 C1",
+      "retained_in_record": true
+    },
+    {
+      "phase": "074",
+      "member": "stage/results/074-BANNER-initial-returned-clear-message.json",
+      "bytes": 851,
+      "sha256": "cc137930803956ceda33c1dc4f91b28da8b6b01ec3d830fdc3d41ff50863a7b5",
+      "machine_id": 4,
+      "input": {
+        "name": "BANNER-initial-returned-clear-message",
+        "machineId": 4,
+        "records": [
+          {
+            "row": 0,
+            "col": 5
+          }
+        ]
+      },
+      "arrow": "Left",
+      "actual_status_row": "TED  BANNER.ASM    L1 C1",
+      "retained_in_record": true
+    },
+    {
+      "phase": "079",
+      "member": "stage/results/079-BANNER-edited-before-clear-message.json",
+      "bytes": 851,
+      "sha256": "75ca3d27b1f2d12bbbdd3188df7257194df1941a47c86c5e4649e21b375ef9c0",
+      "machine_id": 4,
+      "input": {
+        "name": "BANNER-edited-before-clear-message",
+        "machineId": 4,
+        "records": [
+          {
+            "row": 0,
+            "col": 5
+          }
+        ]
+      },
+      "arrow": "Left",
+      "actual_status_row": "TED  BANNER.ASM    L13 C27",
+      "retained_in_record": true
+    },
+    {
+      "phase": "081",
+      "member": "stage/results/081-BANNER-edited-built-clear-message.json",
+      "bytes": 850,
+      "sha256": "fd29c51c0daf7f8682abbae9b3211e8c22edc3b27b386e86c9992be795762e70",
+      "machine_id": 4,
+      "input": {
+        "name": "BANNER-edited-built-clear-message",
+        "machineId": 4,
+        "records": [
+          {
+            "row": 0,
+            "col": 5
+          }
+        ]
+      },
+      "arrow": "Left",
+      "actual_status_row": "TED  BANNER.ASM    L13 C26",
+      "retained_in_record": true
+    },
+    {
+      "phase": "082",
+      "member": "stage/results/082-BANNER-edited-built-restore-place-column.json",
+      "bytes": 857,
+      "sha256": "0422015372f7343100c1dd7b7a40ff208f4756487ceb4ce5543513cfe4f1efb0",
+      "machine_id": 4,
+      "input": {
+        "name": "BANNER-edited-built-restore-place-column",
+        "machineId": 4,
+        "records": [
+          {
+            "row": 0,
+            "col": 6
+          }
+        ]
+      },
+      "arrow": "Right",
+      "actual_status_row": "TED  BANNER.ASM    L13 C27",
+      "retained_in_record": true
+    },
+    {
+      "phase": "085",
+      "member": "stage/results/085-BANNER-edited-returned-clear-message.json",
+      "bytes": 854,
+      "sha256": "4a48ee85bb93d74bb64f863bd8ba2f191166ed01855ae2b40a0a7d8569003de9",
+      "machine_id": 4,
+      "input": {
+        "name": "BANNER-edited-returned-clear-message",
+        "machineId": 4,
+        "records": [
+          {
+            "row": 0,
+            "col": 5
+          }
+        ]
+      },
+      "arrow": "Left",
+      "actual_status_row": "TED  BANNER.ASM    L13 C26",
+      "retained_in_record": true
+    },
+    {
+      "phase": "086",
+      "member": "stage/results/086-BANNER-edited-returned-restore-place-column.json",
+      "bytes": 861,
+      "sha256": "4cdd1a56fab6b680d9dc48e34ac016ee7a6e7688faca5e0faa819b579e710259",
+      "machine_id": 4,
+      "input": {
+        "name": "BANNER-edited-returned-restore-place-column",
+        "machineId": 4,
+        "records": [
+          {
+            "row": 0,
+            "col": 6
+          }
+        ]
+      },
+      "arrow": "Right",
+      "actual_status_row": "TED  BANNER.ASM    L13 C27",
+      "retained_in_record": true
+    },
+    {
+      "phase": "091",
+      "member": "stage/results/091-BANNER-fresh-status-clear-message.json",
+      "bytes": 846,
+      "sha256": "eda945698cbdab897a255d1da6cb0c001380a27b985da670f0c9ab1e225c7796",
+      "machine_id": 5,
+      "input": {
+        "name": "BANNER-fresh-status-clear-message",
+        "machineId": 5,
+        "records": [
+          {
+            "row": 0,
+            "col": 5
+          }
+        ]
+      },
+      "arrow": "Left",
+      "actual_status_row": "TED  BANNER.ASM    L1 C1",
+      "retained_in_record": true
+    }
+  ],
+  "literal_preservation": {
+    "old_reader_fences": 16,
+    "current_reader_fences": 17,
+    "all_old_fences_exact": true,
+    "sole_addition": "Accepted009 COPY screen slice",
+    "per_reader": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+        "before": {
+          "commit": "6dc22fbe76964723845030a8a4fbc8d1f1ce5f6a",
+          "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+          "bytes": 9099,
+          "sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf",
+          "git_blob": "0816f084171a45521e7f368fb59f1d0407df668c"
+        },
+        "after": {
+          "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+          "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+          "bytes": 9099,
+          "sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf",
+          "git_blob": "0816f084171a45521e7f368fb59f1d0407df668c"
+        },
+        "old_fences": 6,
+        "current_fences": 6,
+        "all_old_fences_exact_ordered_subsequence": true,
+        "added_fences": [],
+        "old_fence_sequence_sha256": "aa834bfffefa4373b697c150666df7696c5df856c63b3c0d0a394f60bb1c1bd8",
+        "old_comments": 7,
+        "current_comments": 7,
+        "all_preexisting_capture_comments_except_chapter3_scope_header_exact": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+        "before": {
+          "commit": "6dc22fbe76964723845030a8a4fbc8d1f1ce5f6a",
+          "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+          "bytes": 11086,
+          "sha256": "4e288ebbc6a8257055a10f467c5564954fd2b484df17d72788ac94e6a288d029",
+          "git_blob": "37707ce9add9f4d8b7a5c5a442a0e6b2e9c1ee91"
+        },
+        "after": {
+          "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+          "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+          "bytes": 10692,
+          "sha256": "d044c76708b41a7156ec4151ff89501fe80b17708d7334c520522d365164c5e3",
+          "git_blob": "2be81bd397b0258c1561de9546816b4610422258"
+        },
+        "old_fences": 6,
+        "current_fences": 6,
+        "all_old_fences_exact_ordered_subsequence": true,
+        "added_fences": [],
+        "old_fence_sequence_sha256": "529ec91e8480faa9582d4c2704f9a043d3e6141318ec0232177a709efbaa67c0",
+        "old_comments": 7,
+        "current_comments": 7,
+        "all_preexisting_capture_comments_except_chapter3_scope_header_exact": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+        "before": {
+          "commit": "6dc22fbe76964723845030a8a4fbc8d1f1ce5f6a",
+          "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+          "bytes": 10276,
+          "sha256": "c8c82bfb7bd20ee7a2d83645fe94fade43b3e4c8817633f5e91e6733a7c7b874",
+          "git_blob": "43e8334e8f87c55a68fdc19ac3be283ae1da4a13"
+        },
+        "after": {
+          "commit": "a02a4b142e60b0aac4ca8b7decfc545c6931ca0e",
+          "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+          "bytes": 11193,
+          "sha256": "e05220ccb13b0d9ab7bf5af2e33d11c96cc5599e63941eb832d2aa2f3e3da1f4",
+          "git_blob": "adf05487982811ee5db580e669a9fe5fe6f2af01"
+        },
+        "old_fences": 4,
+        "current_fences": 5,
+        "all_old_fences_exact_ordered_subsequence": true,
+        "added_fences": [
+          "```text\nA>COPY A:SAMPLE.ASM B:SAMPLE.ASM\nCOPIED 0028\n\nA>\n```"
+        ],
+        "old_fence_sequence_sha256": "2ae478c934a99f11043f79b134b55110a21e59a7558c2cc1476f99fd72573fef",
+        "old_comments": 5,
+        "current_comments": 6,
+        "all_preexisting_capture_comments_except_chapter3_scope_header_exact": true
+      }
+    ],
+    "comment_limit": "Chapter3 provenance header intentionally expands its current excerpt scope from pager to COPY and pager, with one new exact COPY provenance comment. Existing capture comments remain exact. No claim that the deliberately amended header is byte-identical."
+  },
+  "sequence_readback": {
+    "first_to_second": "Prepared files and preserved A prompt lead to explicit A:TED B:BANNER.ASM. Comment meaning now precedes copying the source. Error repair still has exact necessary movements and save/quit/flush/reopen boundaries.",
+    "second_to_third": "BANNER source/COM/DBG remain on B and A stays current after standalone execution. New COPY is a named safe action with overwrite advice and separate real fixture identity. It does not import REN/ERA results into that session.",
+    "teaching_and_punctuation": "The complete route remains practical before internals. Listing/source/call explanations stay local. Changed prose and trace table were read for agency, commas and paragraph purpose. No new bounded craft issue found.",
+    "evidence_boundary": "All existing BANNER/pager/historical literals retain their accepted boundaries. P3 raw-input/pixel/runtime acceptance is not duplicated by static artifact comparison. Whole batch remains FAILED."
+  },
+  "remaining_findings": [],
+  "remaining_count": 0,
+  "limits": "This closes the seven accepted external opening reader findings only. Source-adoption file reviews await completed commits. Source/navigation integration, whole-book reading, advanced services, physical/browser/audio and publication acceptance remain separate."
+}
