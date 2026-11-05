@@ -1,0 +1,316 @@
+{
+  "commit": "50634512002c6aeb6610a0a375ae407607e22560",
+  "inputs": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "sha256": "22106877815aa329d5c1affe54eb4c234fc82d9ac206fdba7c4766ce46d10cc2",
+      "git_blob": "93ea09daac2fd599aa08df809efca5a15887ce6d"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "sha256": "5c1111af174a3a3e6c6e90438ef4a907f75f0b149eb297bb91ae3ba3888b8048",
+      "git_blob": "e12e524da14717418446b5f815ca9c7e4de9fa40"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
+      "sha256": "99fe60faa54ce55f3eee8e590c118e59aa903fd760da8c25a9804f87e14494ec",
+      "git_blob": "fbfc25fbf01daa15fb6ecf19951f4eda11bf9d2a"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "sha256": "b4c5c605cfb11bdcecbf766e437a557e46479fe7e51d719205f9c75d7036f14f",
+      "git_blob": "8c5dbb19d5e1d48632d7ba8aeac2464db477a828"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "sha256": "8f323d975b7b2be1c46613237c332fabbcea2f0a2a712054cdf8f3fbf2544764",
+      "git_blob": "32dc7292797f40168a7a8d1a2210fc504e234d79"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "sha256": "193ccd41d8a6e6492ae65c96ecd4b126e1098711b28af53aa2e7ae68f7a11f2d",
+      "git_blob": "7d2d085cbb6dea27ecf208f950ae57c0529ae0cc"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "sha256": "32d5806fb11659ee611b34b65ed0fced7d6bdb88f3b69c53d0159d96a7997395",
+      "git_blob": "10d6d643749f4ef2511c195c4970b2ac25256f44"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "sha256": "8a5926df884d8259a0cec3e7e3fbafc0bbf8d77150a4637fcc1d2c712707c501",
+      "git_blob": "49c07c23f16855acb3c736a618d3162cfefb0402"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "sha256": "bab07f9762cbd617f55b7fe9eaf90974cae4d772c5d765f989d5ffa414909d41",
+      "git_blob": "9b095951cb1a324f8e200d615e58fd44755718be"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "sha256": "311c04f9739521b51e961d1355636d263bb0fa8270a8dbd68184bbe8b0762124",
+      "git_blob": "143f09f251a31bae416303d385213cf13a9c06c0"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md",
+      "sha256": "97a25dfb7dc2d478658d948fc3dd2a219a4f5dc2067c1e9e91fb20d75928787b",
+      "git_blob": "bd6b0072043ffe825f6ccc41bafc22fa0df8d9b8"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/15-reset-and-boot.md",
+      "sha256": "0ec7201867bfff60a4162836cc0f45730eb207adda7d3bc56ddd215fb7f75181",
+      "git_blob": "9048fc3ca8d4dbf3bb1cf36443b39e56e851305b"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/16-console-paths.md",
+      "sha256": "594d3e65943207ebfe22dc1eaf66e422a4f6b1cf92d30d493598200057134ca4",
+      "git_blob": "a9b36c0defce629f2c4204ff6385874a25f34efd"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/17-card-blocks-and-volumes.md",
+      "sha256": "fc6032cba645d297e9f771fcb4e1262333f0b9c579fdf78273fea952539d07dd",
+      "git_blob": "564789ecb04839e228e4208d6c02132a263dd664"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "sha256": "f7ffc97823da0b464f2701cc54621cfe5d536c1c059d88b639d8e38fe8a4a904",
+      "git_blob": "418c6a98352f8f7a374e8e0a95ea74b09b392574"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "sha256": "2ea12d0cac1f016654128cf31d28a404251d03fa4903285e3008425056a5daaa",
+      "git_blob": "ca5f9b1a3d8ad55b587f77263041bb19b3cd00f6"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "sha256": "6ebc76785bb0610eb43a225ac949d23cea84e96cf312119d6d0d6118101599a2",
+      "git_blob": "d9e30a89ba0aedf48b9523a36979793fa5583a88"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "sha256": "ba2c3938f348f9a44fd756438a1941e4ac49580567575a9c9c9d0bd3c182b5c4",
+      "git_blob": "50c87a9a04d581e5435d065838822fd8a3c3677e"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/22-the-history-ring.md",
+      "sha256": "4d797242269cdc224b040fadb88dd397d0632439aff422670fc9f058fbe9dffc",
+      "git_blob": "bf62c5a45f695e75ea5b470a3bf519d32b37fcf6"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md",
+      "sha256": "3320d33dcf2e9f4193bbd60b752649f4290ef6a9a389125806d76952a4b55d7b",
+      "git_blob": "855d2bdad8da41193f0b5d699837364f107f7de4"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "sha256": "4e7812ccd265937216fed51a6fd6622bb19a35fa957b30f88895450bf4071329",
+      "git_blob": "586c8549a28b513dcfb9f8f9c16fcf6e273119ce"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+      "sha256": "b0ed70be2fdf00614a6b06d8b5cee34724ee699eac9579ec3aecb4b1b5ce44e1",
+      "git_blob": "0a381abfad7604eda96f8bce250c5e38375d9234"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md",
+      "sha256": "dbd7970be746d13856d490d2e3ff8ed8aba6a03783a4cb25efc39df9b18e03b8",
+      "git_blob": "fa13e27a0f6123ea316d068c014b3a459447dc26"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+      "sha256": "5cccb106ea47bcff10d91ad9b0ef23b8873718381bbb77e2e916c2113a30e1d1",
+      "git_blob": "d7da3457a90ba2a8923d58b8fa2951e4e58be683"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "sha256": "bdcdd4237f288331dd233333bcdb0810971f5969c9cdfbeb5c147a9cb3100a97",
+      "git_blob": "6a2a8c8a2ee8f85c06c574e00313ce2ecaa254fd"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+      "sha256": "673dd46dc02d94929db46ef6cdc74426ddb38b48f54acb745dcd4d606aeebcc7",
+      "git_blob": "5100442ef89f0f2fb1313c34ecc893e492b396e2"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+      "sha256": "689cce510d87965dba704be178f65196db1c3031429bd2c016c220574c1b8ec0",
+      "git_blob": "c3203d70829a574b850f149e6ea8531e25e0081a"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+      "sha256": "18dcc7f424b36b28fd7d3d391d5a6f3ff899465e689774b2ae2010684344016a",
+      "git_blob": "f30773fa246535e57df77049e51e5494d5c10b2f"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "sha256": "3b7356adb1fa589e8f52d6a2e50afdb2a15b69b6e81fc248b1bc98f8a98f043f",
+      "git_blob": "01a29865d5d3c321c21a5fc8ef98f338e4d1d62c"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+      "sha256": "0b9d8f583084206762f438abb2a16053b4fa25e66910c800d81c69c952356db8",
+      "git_blob": "8a4a4676a776813f30670b72fe269e86d7ae6525"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+      "sha256": "0d58dc86b9d6bf11e5d888afd53d74aeda2896b0c8c453b100898e1112f728b4",
+      "git_blob": "d97972995497121ed6daba2a7d6a3998bc9dd0c0"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+      "sha256": "28addf1915720cfe8e9eb1a013c6aa3fba956e7342d4969f2116b36aaf54e290",
+      "git_blob": "7a20f41976dd3656be93dd446b194919c201f1ff"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "sha256": "00335ee619ec6d9b7b898052bca28121083847743abed74d3af196b8521dcaba",
+      "git_blob": "3ce504b2c5bcc9cbbf1a6584727b1a12b91dc261"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "sha256": "882a80a396e6840f22fd17ab72856b9e45e24dd0cf6aac5e34c6eb4b3b32aef3",
+      "git_blob": "5d5b8d6c6ad765258922f050e2a0edfdfbc20469"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "sha256": "72bcb409922aa8f6bf412bc290aace1da192a171e6db09c73c5b28a3e29dc8ae",
+      "git_blob": "6f4063cddd222106f2244d23c4633850502cb90b"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/index.md",
+      "sha256": "176423e43c9a4ae3c55a24d5a1ebd14216ddaaff27b997f2aa24bf33a63b3d47",
+      "git_blob": "46cfd062ede72ace93f1b3c04d677082c9095713"
+    }
+  ],
+  "script_sha256": "0fb52353cf22dc3a1a079c819f9d7df174a1961084689b946857747b5862ee66",
+  "exit_code": 0,
+  "status": "post_punctuation_and_startup_refinement_gate_complete",
+  "input_snapshot": "Exact committed36-file reader snapshot, not a product run.",
+  "raw_report_sha256": "4513f9c1cbae60ba9e2a82d5a4b5d8c2f69ecb4ffe60809537f7e936d1830662",
+  "hard_findings": 0,
+  "review_findings": 11,
+  "findings": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "line": 107,
+      "column": 2,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "[Chapter 6](06-choose-a-console.md) explains console selection and",
+      "disposition": "retain",
+      "reason": "Useful chapter-reference navigation to console selection and startup, not artifact intent."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "line": 212,
+      "column": 19,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "from `SERVICES`. [Chapter 6](06-choose-a-console.md) explains switching",
+      "disposition": "retain",
+      "reason": "Useful console-switching reference after the COUNT stack restriction, not artifact intent."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "line": 84,
+      "column": 1,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "chapter *block* alone means an allocation block and a *card block* is 512",
+      "disposition": "retain",
+      "reason": "Literal semantic definition of allocation block and card block, not a perception verb."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "line": 60,
+      "column": 3,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| Code | Cause | Remedy | See |",
+      "disposition": "retain",
+      "reason": "See is a navigation column label."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "line": 178,
+      "column": 258,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| `NAME.SVC` | The file lacks the service magic or format 4 or fails another loader check before `INIT`, such as size, entry, space, dependency, relocation or stack checks. A format-4 file is not rejected merely for its former `.DRV` type. | Use a matching service file. See the old-card procedure before replacing a whole card. | `src/loader.asm:189-322`, `324-390`, `src/abi.inc:190` |",
+      "disposition": "retain",
+      "reason": "See directs the reader to the old-card procedure in the remedy."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "line": 189,
+      "column": 213,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| `CON` | The device name is not TTY, CRT, BAT, UC1, PICO or GLCD, optionally followed by a colon, or the remaining text is invalid. CRT/PICO may take a separated width. | Use a supported name and width form. | [Chapter 6](06-choose-a-console.md), `src/cpm/ccpcmd.asm:66-231` |",
+      "disposition": "retain",
+      "reason": "The Chapter6 link identifies console selection instructions, not interior agency."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "line": 299,
+      "column": 13,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| Message | Code | Cause | Remedy | See |",
+      "disposition": "retain",
+      "reason": "See is a navigation column label."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "line": 371,
+      "column": 211,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| `CON: TTY:`, `CON: CRT:`, `CON: UC1:` | The effective console after CON. An unavailable CRT falls back to TTY. A returned UC1 load failure leaves the previous mode. `CON: BAT:` is generated but discarded. | [Chapter 6](06-choose-a-console.md), `src/cpm/ccpcmd.asm:200-231`, `src/loader.asm:895-913`, `src/console.asm:127-199`, `429-440` |",
+      "disposition": "retain",
+      "reason": "The Chapter6 link identifies console operation/recovery, not interior agency."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "line": 55,
+      "column": 15,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| 1 | 1 | The format, 4 | See offset 0 |",
+      "disposition": "retain",
+      "reason": "See offset0 is a cross-row pointer for the joint magic/format check."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "line": 121,
+      "column": 23,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "following strings are source-defined notices, not a new page capture",
+      "disposition": "retain",
+      "reason": "Notices is a noun for exact source-defined status strings."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "line": 12,
+      "column": 18,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "for the new source offer. -->",
+      "disposition": "retain",
+      "reason": "Offer is a qualification-packet noun in immutable provenance metadata."
+    }
+  ],
+  "reading": "Every flagged full containing paragraph/table row/metadata block was read. No new finding and no quality claim from the exit status. Whole-reader final acceptance and opening1–3 remain separate."
+}
