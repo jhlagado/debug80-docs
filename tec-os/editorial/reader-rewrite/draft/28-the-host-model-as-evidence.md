@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 28. The host model as evidence
 
-<!-- Source-only mechanisms: TEC-OS ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
+<!-- Source-only mechanisms: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
      Unprefixed source ranges belong to that revision. The six retained
      captures and all their recipes retain TEC-OS 78127ec. The original host
      chapter names @jhlagado/debug80-runtime 0.3.3 for its evidence.
@@ -113,8 +113,8 @@ not proof that a ROM byte changed.
 Ordinary TEC-OS tests assert an empty violations list. The diagnostics tests
 deliberately exercise ROM and overlay writes and check their recorded
 locations instead (`test/system.test.mjs:14`, `test/diag.test.mjs:78-90`).
-At the inspected source, 26 top-level test files contain violation checks
-outside the diagnostics file. This is a source inventory, not 26 passing
+At the inspected source, 28 top-level test files contain violation checks
+outside the diagnostics file. This is a source inventory, not 28 passing
 test files and not a guarantee about unexercised program paths.
 
 A second watch covers EXPAND 1 after cold boot's clear. Writes to
@@ -320,15 +320,16 @@ does not make them a current screen result.
 
 The package test command selects top-level `test/*.test.mjs` files with
 Node's test runner and concurrency set to one (`package.json:17`). A Git-tree
-inventory at `ea3ef3d` contains 57 matching files, from arith.test.mjs through
+inventory at `962853f` contains 61 matching files, from arith.test.mjs through
 write.test.mjs. That is a source-only file count. It does not count test cases,
 executed files or successful assertions.
 
 `romFor` reads `build/tecos/tecos.rom` and its D8 map. `boot` prepares the
 card for the requested display and waits for the first prompt with the fixed
 test clock. `withDisplay` preserves an existing STARTUP.CMD. With matrix
-input and no PICO it can add GLCD.SVC and startup. With PICO, a non-80 width
-can add a CON PICO line when startup is absent
+input and no PICO it can add GLCD.SVC and startup. With PICO and matrix
+input, a width other than the raw cold 40 can add a CON PICO line when
+startup is absent. The helper's default width argument remains 80
 (`test/lib/fixtures.mjs:21-27`, `test/lib/fixtures.mjs:93-121`).
 
 `program` uses ATOM to assemble `test/programs/NAME.asm` and caches bytes and
@@ -373,7 +374,7 @@ The build config aliases fs to a stub, clears the previous output directory
 and copies the page, style, one ROM and its symbols, recipe and distribution
 files (`web/build.mjs:1-45`). The page recipe adds DEMO.COM to the starter
 files. At the inspected source the media tool builds that program from
-test/programs/demo.asm (`tools/media.mjs:204-236`).
+test/programs/demo.asm (`tools/media.mjs:206-238`).
 
 Each animation frame targets 4 MHz for the elapsed wall time, capped at 100 ms.
 Every 1,024 instructions it checks a 30 ms execution budget and can stop the
@@ -398,11 +399,13 @@ changes that remain only in the ROM's block cache
 
 Power-on prepares a staged copy of STARTUP.CMD for the selected display and
 width, publishing the change only after successful preparation. GLCD uses
-GLCD.SVC. The offered PICO setup uses CON PICO for a non-80 width and no
-display line for 80. Other display pieces are removed under the rewrite
-rules in [Appendix I](appendix-i-web-page.md)
-(`host/card.mjs:58-72`, `host/card.mjs:104-116`). These source rules do not
-establish a new display default.
+GLCD.SVC. Every selected PICO width gets an explicit CON PICO line,
+including 80. The page's fallback preference remains 80 columns, distinct
+from the ROM's raw cold width of 40. Other display pieces are removed under
+the rewrite rules in [Appendix I](appendix-i-web-page.md)
+(`host/card.mjs:58-72`, `host/card.mjs:104-117`,
+`web/src/main.mjs:17-43`, `src/pico.asm:36-92`). This source account does not
+establish a browser run.
 
 File import stages every selected file on a copy. It waits for any older
 save, attempts to save the staged card and then copies the bytes into the

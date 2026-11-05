@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix I. The web page
 
-<!-- Mechanisms inspected in TEC-OS ea3ef3de9133931e925a0220d51c0e971c1fd8dd,
+<!-- Mechanisms inspected in TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b,
      source only. The retained shell recipe comes from the 78127ec-era appendix.
      No new browser run, screen capture or physical result is claimed. -->
 
@@ -39,7 +39,9 @@ instructions, not a new build or browser result.
 At the inspected source a page without stored preferences selects the
 PICO9918 at 80 columns. Width and display selections use the browser's local
 storage. A reload retains them when that storage is available. Otherwise
-they last only for the open page (`web/src/main.mjs:17-43`).
+they last only for the open page (`web/src/main.mjs:17-43`). Successful
+startup preparation selects that width explicitly after the ROM's raw
+40-column cold start (`host/card.mjs:104-117`, `src/pico.asm:36-92`).
 
 The controls and their handlers are defined in `web/index.html:12-30`,
 `web/index.html:68-82` and `web/src/main.mjs:593-679`:
@@ -66,7 +68,7 @@ before restarting. The safe-copy procedure below applies before either one.
 The page recipe contains the starter files plus DEMO.COM from
 [Chapter 11](11-use-the-boards-devices.md). Building a starter fetches each
 recipe file and checks its byte count and SHA-256 before returning the image
-(`tools/media.mjs:193-234`, `tools/lib/recipe.mjs:14-44`,
+(`tools/media.mjs:195-236`, `tools/lib/recipe.mjs:14-44`,
 `web/src/main.mjs:60-63`). The file list shows user area, name and size.
 It refreshes every five seconds and after the reset and power-cycle buttons
 (`web/src/main.mjs:569-582`, `web/src/main.mjs:667-680`).
@@ -220,7 +222,7 @@ The selected display determines the first line
 
 | Display | First line |
 | --- | --- |
-| PICO9918 at 80 columns | No display line |
+| PICO9918 at 80 columns | `CON PICO 80` |
 | PICO9918 at 40 columns | `CON PICO 40` |
 | PICO9918 at 32 columns | `CON PICO 32` |
 | Graphics LCD only | `GLCD.SVC` |
@@ -238,7 +240,7 @@ their .DRV forms. Width pieces are `CON PICO` or `CON CRT`, optionally with
 a colon after the device name, followed by spaces and decimal digits.
 Each recognised piece may also have a leading `:`. Removing old width
 pieces prevents them from overriding the selector
-(`host/card.mjs:11-16`, `host/card.mjs:81-114`).
+(`host/card.mjs:11-16`, `host/card.mjs:81-117`).
 
 Removal preserves conditional-chain relationships by these rules
 (`host/card.mjs:75-102`):
@@ -254,13 +256,17 @@ Identical text causes no write so a protected file or volume does not itself
 cause an error when no rewrite is needed. Replacing STARTUP.CMD can reuse its
 existing directory entries and blocks. A full directory causes failure only when
 the replacement needs more entries than are available, including reusable
-entries. Data capacity is checked separately (`host/card.mjs:105-116`,
+entries. Data capacity is checked separately (`host/card.mjs:105-117`,
 `tools/lib/cpmfs.mjs:189-205`).
 
 For the starter's original `GLCD.SVC` line, GLCD preparation leaves the text
-unchanged. PICO preparation replaces it with a width line at 40 or 32 columns
-or just `^Z` at 80 columns. The retained source assertion checks the 80-column
-case, not a newly executed browser result (`test/pico.test.mjs:834-846`).
+unchanged. PICO preparation replaces it with the selected width line at
+80, 40 or 32 columns, followed by CRLF and `^Z`. The source assertion checks
+`CON PICO 80` followed by CRLF in the startup text before its `^Z` terminator
+(`test/pico.test.mjs:834-846`). That assertion is not a newly executed browser
+result. An old startup file with no width line now requires a rewrite even
+at 80. Its read-only attribute can prevent that write and produce the notice
+below (`test/pico.test.mjs:688-700`).
 
 ## Preparation notices and protected cards
 

@@ -10,7 +10,7 @@ nav_group: "Part II: Inside TEC-OS"
 <!-- Checked against TEC-OS 78127ec. The diagnostics ROM in this chapter is version
      0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit. -->
 
-<!-- Source-only reading: TEC-OS ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
+<!-- Source-only reading: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
      Inline source coordinates refer to this revision. The retained build output,
      captures and model report remain evidence from 78127ec, not new results.
      The earlier C16 partial citation pass used fe2097f; it did not rerun them. -->
@@ -40,7 +40,7 @@ PICO9918 screen when that display responds and the Matrix switch enables
 the keyboard.
 Otherwise it selects serial. The GLCD console driver is on the card and has
 not been loaded at this point (`src/console.asm:57-88`,
-`src/video.asm:22-29`, `src/pico.asm:64-86`). A board with neither an active
+`src/video.asm:22-29`, `src/pico.asm:69-92`). A board with neither an active
 PICO9918 console nor an attached terminal shows only `CARD?` on the LCD.
 
 In this retained model capture the socket is empty and the console is the
@@ -104,24 +104,27 @@ later source revision must establish its own identity:
 diag: ROM 16318/16384 bytes, 56 free, image D90143609F53FAAB, checksum $47C0
 ```
 
-`tools/diag.mjs` first generates `diag/gen/config.asm` and
-`diag/gen/font.asm`. The configuration contains the version, serial delay
-counts and stopwatch constants. The font comes from `format/font5x7.txt`,
-also used for the TEC-OS font (`tools/diag.mjs:51-77`). The serial counts
-are derived from 4 MHz and 4800 baud (`tools/diag.mjs:37-49`). The script
+`tools/diag.mjs` validates the selected TEC Compact font, its retained
+original inputs and complete notices before generating files or assembling
+(`tools/diag.mjs:103-110`, `tools/lib/font-package.mjs:8-21`). It then generates
+`diag/gen/config.asm` and `diag/gen/font.asm`. The configuration contains
+the version, serial delay counts and stopwatch constants. The font comes
+from `format/font5x7.txt`, also used for the TEC-OS font (`tools/diag.mjs:52-78`). The serial counts
+are derived from 4 MHz and 4800 baud (`tools/diag.mjs:38-50`). The script
 assembles `diag/diag.asm` with TAS by default. Setting
 `TECOS_ROM_ASSEMBLER=atom` selects the ATOM reference backend. It fills unused
 image bytes with `FFh` and writes `build/diag/diag.rom`,
-`build/diag/diag.d8.json` and `build/diag/diag.json`
-(`tools/diag.mjs:90-143`).
+`build/diag/diag.d8.json` and `build/diag/diag.json`, with the separate
+`build/diag/FONT-NOTICES.txt` companion
+(`tools/diag.mjs:91-146`).
 
 The report's image ID identifies the ROM whose results you are comparing.
 It is the first eight bytes of a SHA-256 calculated with
 `FFF6h–FFFFh` blanked to `FFh`. The build stores that ID at `FFF6h–FFFDh`.
-Both the banner and the final report print it (`tools/diag.mjs:25-28`,
-`83-88`, `124-126`, `diag/out.asm:108-117`, `737-743`). The word at
+Both the banner and the final report print it (`tools/diag.mjs:26-29`,
+`84-89`, `126-128`, `diag/out.asm:108-117`, `737-743`). The word at
 `FFFEh` is a separate 16-bit sum of `C000h–FFFDh`. T05 recalculates that sum
-and compares it with the stored word (`tools/diag.mjs:127-130`,
+and compares it with the stored word (`tools/diag.mjs:129-132`,
 `diag/memory.asm:200-232`).
 
 Before writing the image, the build checks its entry points and reserved areas.
@@ -129,7 +132,7 @@ RESET must be at `C000h`, INT38 at `C038h` and NMIROM at `C066h`. COLD and START
 must be within the first 2 KiB, visible through the boot overlay. CODEEND may
 reach the image ID's address but must not exceed it. Variables must end by
 `7F00h`. The non-maskable interrupt (NMI) handler copied to `0066h` must fit
-within `38h` bytes (`tools/diag.mjs:115-123`).
+within `38h` bytes (`tools/diag.mjs:117-125`).
 
 At reset, the board maps the first 2 KiB of ROM at `0000h`. The reset code
 jumps to COLD at its ROM address and removes the overlay
@@ -236,7 +239,7 @@ The complete list gives each test's name and TBEGIN title. A title describes
 the operation under test, not a passing result (`diag/out.asm:635-658`).
 T01's result is emitted by the main sequence (`diag/main.asm:56-62`).
 
-<!-- Test title definitions at ea3ef3d:
+<!-- Test title definitions at 962853f:
 (`diag/memory.asm:145-155`, `200-260`, `316-351`,
 `404-454`, `501-502`, `600-601`, `diag/display.asm:5-6`, `54-55`,
 `241-242`, `349-350`, `662-663`, `756-757`, `816-817`,
@@ -294,7 +297,7 @@ CMD55 result before continuing
 (`diag/sd.asm:115-212`, `src/sd.asm:215-371`).
 
 T17 uses the same two-pattern PICO9918 probe and selects the console's
-80-column text mode (`diag/display.asm:334-372`, `src/tms.asm:17-48`).
+supported 80-column text mode (`diag/display.asm:334-372`, `src/tms.asm:17-48`).
 T35 checks the page switching that console uses
 (`diag/display.asm:751-803`). T03 checks the U9 window with EXPAND off.
 T12 maps the additional bank

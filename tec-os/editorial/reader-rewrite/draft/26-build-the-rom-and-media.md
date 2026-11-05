@@ -8,7 +8,7 @@ nav_group: "Part II: Inside TEC-OS"
 # 26. Build the ROM and media
 
 <!-- Source mechanisms inspected at offered TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. Unprefixed source ranges use
+     962853f499f05faf281f6cdff1deca8959f58c2b. Unprefixed source ranges use
      that revision. No build, import, test or capture was performed. -->
 
 <!-- Historical evidence: the ROM region figures, full SHA-256 and printed build
@@ -26,11 +26,11 @@ A ROM and its symbol map must describe the same addresses. Card programs
 must use the interfaces supplied by that ROM. TEC-OS produces the image,
 map and memory census together. Media preparation checks the selected map
 generator and the ROM size/hash against the census
-(`tools/build.mjs:272-322`, `tools/media.mjs:168-182`).
+(`tools/build.mjs:273-323`, `tools/media.mjs:169-184`).
 
 The host setup in [Chapter 5](05-cards-on-the-pc.md) is the starting point.
 The build adds the pinned assembler host described below. These procedures
-explain the source at `ea3ef3d`. The numerical image and HELLO examples
+explain the source at `962853f`. The numerical image and HELLO examples
 retain their separate historical evidence.
 
 ## Prepared tools and selected assembler
@@ -40,8 +40,8 @@ host dependencies and `npm run inputs` prepares the application inputs.
 The inspected `package.json` selects `atom-z80` 0.3.7. The normal production
 path at this source uses TAS for the main ROM, diagnostic ROM, `GLCD.SVC`,
 `MOUNT.COM` and `DEMO.COM`. The standalone ATOM examples use a separate
-assembly path (`package.json:1-30`, `tools/build.mjs:341-347`,
-`tools/diag.mjs:102-108`, `tools/media.mjs:184-205`).
+assembly path (`package.json:1-30`, `tools/build.mjs:342-351`,
+`tools/diag.mjs:103-110`, `tools/media.mjs:186-207`).
 
 `TAS.COM` is pinned to Thorium
 `dbee66a90816df9a5884a08754ebc2d458a38325`. Its prepared host is from
@@ -76,7 +76,7 @@ TECOS_ROM_ASSEMBLER=atom npm run build
 
 The default value of `TECOS_ROM_ASSEMBLER` is `tas`. Any value other than
 `tas` or `atom` is rejected. The ATOM reference path needs no TAS host
-(`tools/lib/tas-rom.mjs:120-124`, `tools/build.mjs:341-347`).
+(`tools/lib/tas-rom.mjs:120-124`, `tools/build.mjs:342-351`).
 
 ## Image regions and their addresses
 
@@ -95,9 +95,9 @@ code follow, with a single free gap at the end (`src/reset.asm:1-14`,
 | `FE92h–FFFFh` | 366 | Free |
 
 Its used extent was 16,018 of 16,384 bytes. These figures describe that
-historical image, not newly measured positions at `ea3ef3d`. The census
+historical image, not newly measured positions at `962853f`. The census
 stores each region's start and exclusive end while the table above prints
-the last occupied address (`tools/build.mjs:272-287`).
+the last occupied address (`tools/build.mjs:273-288`).
 
 At `C000h`, `JP RSTENT` transfers control into the code. The historical target
 was `C60Ah`. The interface at `C003h` contains `TNA`, major 5, minor 1 and a
@@ -116,7 +116,7 @@ The BIOS jumps in this region execute through the RAM copy made at
 
 Code extends from `RSTENT` to the label `CODEEND` after the last included
 file. The build fills the remaining image bytes with `FFh`
-(`src/boot.asm:38-49`, `src/end.asm:1-4`, `tools/build.mjs:249-252`).
+(`src/boot.asm:38-49`, `src/end.asm:1-4`, `tools/build.mjs:250-253`).
 A map from a different ROM can assign valid-looking labels to the wrong
 instructions so the ROM, map and census belong to the same build.
 
@@ -179,7 +179,7 @@ stacks. They are RAM declarations, not initial data that cold boot copies from
 the ROM. The second origin is `RAMBIOS+BIOSLEN`, placing the upper state after
 the 51-byte RAM jump table (`src/ram.asm:1-19`, `src/ram.asm:309-320`). The
 build interprets reservations according to the selected backend and extracts the
-ROM extent after them (`tools/build.mjs:196-205`,
+ROM extent after them (`tools/build.mjs:197-206`,
 `tools/lib/tas-d8.mjs:183-188`, `tools/lib/tas-d8.mjs:239-279`).
 
 `reset.asm` then sets `ORG $C000`. `abi.asm` follows its jump then the
@@ -189,19 +189,23 @@ explains the workspace lifetimes separately from these address declarations.
 
 ## Generated configuration, geometry and font
 
-The build writes four included files before assembly: `config.asm`,
+Before generating files or assembling, the build validates the selected font,
+its retained original inputs and complete notices
+(`tools/build.mjs:342-351`, `tools/lib/font-package.mjs:8-21`).
+It then writes four included files before assembly: `config.asm`,
 `format.asm`, `geom.asm` and `font.asm` under `src/gen/`. The first two
 supply equates and the last two supply ROM data. Each has a generated-file
-heading (`tools/build.mjs:61-138`).
+heading (`tools/build.mjs:62-139`).
 
 `config.asm` defines `WSBASE`, version values `VERHI`, `VERLO`, `ROMVER`
 and serial delay counts. The inspected version is 0.1, printed in the boot
 banner and LCD top row (`src/text.asm:11-11`, `src/text.asm:67-67`).
 The serial calculation uses 4,000,000 Hz and 4,800 baud with the instruction
-costs of the transmit, receive and polling loops. It produces `TXDLY`, `TXSTOP`, `RXDLY`,
-`RXHALF` and `RXPOLL`. The historical values are 49, 105, 50, 70 and 77.
-A count outside 1–255 raises an error (`tools/build.mjs:25-27`,
-`tools/build.mjs:37-75`). [Chapter 16](16-console-paths.md) explains their
+costs of the transmit, receive and polling loops. It produces `TXDLY`,
+`TXSTOP`, `RXDLY`, `RXHALF` and `RXPOLL`. The historical values are 49, 105,
+50, 70 and 77.
+A count outside 1–255 raises an error (`tools/build.mjs:26-28`,
+`tools/build.mjs:38-76`). [Chapter 16](16-console-paths.md) explains their
 bit-level timing scope.
 
 `format/format.json` defines `TECOSVOL`, the header and descriptor sizes,
@@ -209,7 +213,7 @@ field offsets, volume and drive limits and both DPBs. `gen/format.asm`
 turns these into equates. `HCOUNT EQU 14` and `DMOUNT EQU 14` refer to
 fields in different structures. `gen/geom.asm` emits `FMTMAG`, `GEOTAB`
 and `DPB1`/`DPB2`. Each geometry-table entry has an id, payload length
-and DPB address (`format/format.json:2-59`, `tools/build.mjs:78-135`).
+and DPB address (`format/format.json:2-59`, `tools/build.mjs:79-136`).
 
 The host tools read the same JSON through `tools/lib/format.mjs`.
 `geometryInfo` checks 64 records per track, zero reserved tracks and `CKS`,
@@ -219,28 +223,36 @@ and directory allocation. It also bounds payload and record counts
 offsets, though the host and ROM still perform different validation checks.
 [Chapter 17](17-card-blocks-and-volumes.md) explains those boundaries.
 
-At this source, `FONT` comes from `format/font5x7.txt`. Its 96 characters
-from `20h` through `7Fh` have eight rows each, for 768 bytes. The parser
-checks five-character pixel rows and eight rows per glyph before generating
-`DB` lines (`tools/lib/font.mjs:9-44`). In the historical `78127ec` map,
-the font occupied `C179h–C478h`. PICO accesses `FONT` by label and GLCD
-obtains its address through numbered service 15
-(`src/pico.asm:303-311`, `src/services.asm:597-603`,
+`FONT` comes from the selected TEC Compact data in `format/font5x7.txt`.
+Its 96 characters from `20h` through `7Fh` have eight rows each, for 768 bytes.
+Each row has five pixels in bits 7–3. The parser requires a unique header
+for every code from `20h` through `7Fh`. It requires eight rows per character
+and rejects malformed or misplaced pixel data before generating `DB` lines
+(`tools/lib/font.mjs:9-47`).
+The font package checks SHA-256 identities for the selected font, both
+retained original inputs and the complete `format/FONT-NOTICES.txt`
+(`tools/lib/font-package.mjs:8-21`). The notices record the derivative's
+sources, edits and limits of the original glyph attribution
+(`format/FONT-NOTICES.txt:1-47`).
+
+In the historical `78127ec` map the font occupied `C179h–C478h`. PICO accesses
+`FONT` by label and GLCD obtains its address through numbered service 15
+(`src/pico.asm:308-316`, `src/services.asm:597-603`,
 `drivers/glcd.asm:66-72`). The diagnostic ROM and tests use the same font
-parser (`tools/diag.mjs:75-75`, `test/lib/machine.mjs:8-10`).
+parser (`tools/diag.mjs:76-76`, `test/lib/machine.mjs:8-10`).
 
 ## Two passes to place the workspace
 
 The workspace must end immediately below the RAM BIOS table at `BF00h`.
 Its size depends on the declarations and stack sizes so the build obtains
-that size from an assembled label (`tools/build.mjs:234-249`).
+that size from an assembled label (`tools/build.mjs:235-250`).
 
 The probe assembly uses `WSBASE = 8000h`. Its map must contain a real label
 named `BDOSRME`. Subtracting `8000h` gives the workspace size. The final
 base is `BF00h` minus that size. The build regenerates configuration at the
 final base, assembles again and checks that the reported `WSBASE` agrees.
 An absent marker, an equate substituted for the marker or an invalid extent
-stops this placement (`tools/build.mjs:236-249`).
+stops this placement (`tools/build.mjs:237-250`).
 
 The TAS path stages the included sources under unambiguous CP/M names.
 It rejects an include escaping the source root, repeated includes,
@@ -254,7 +266,7 @@ labels and segments
 (`tools/lib/tas-d8.mjs:257-279`).
 
 The ATOM path checks that each emitted image starts at or above `C000h`
-and materialises the ROM with `FFh` fill (`tools/build.mjs:196-205`).
+and materialises the ROM with `FFh` fill (`tools/build.mjs:197-206`).
 The two backends reach the same placement checks through their respective
 image/map conversions. Those checks inspect constructed artifacts. They do
 not establish a runtime result or a board qualification.
@@ -262,38 +274,38 @@ not establish a runtime result or a board qualification.
 ## Placement and interface checks
 
 A failed placement rule raises `placement check failed:` followed by its
-reason. Missing map symbols also stop the build (`tools/build.mjs:212-220`).
+reason. Missing map symbols also stop the build (`tools/build.mjs:213-221`).
 Before writing the outputs, the build checks these properties:
 
 - The ROM byte extent fits within 16 KiB. `RESET` is at `C000h` and the
   interface is at `C003h`. The data starts exactly at the interface's end.
   Data and code have valid order, with exclusive `CODEEND` at or below
   `10000h`
-  (`tools/build.mjs:249-259`).
+  (`tools/build.mjs:250-260`).
 - The interface contains `TNA`, version 5.1 and `JP SVCDSP`, with an
   eight-byte extent. `SVCFMT` equals the PC writer's format constant.
   Every `SVTAB` target is in the code and interface device bits equal their
-  `CONDEV` definitions (`tools/build.mjs:146-157`).
+  `CONDEV` definitions (`tools/build.mjs:147-158`).
 - PICO table offsets name the intended entries in `PITPL`. Debugger-visible
   places have their declared offsets in `PIBLK`
-  (`tools/build.mjs:159-176`).
+  (`tools/build.mjs:160-177`).
 - Service sources in `drivers/` and `svc*.asm` files in `test/programs/`
   pass the ROM-literal interface check. The checked set must include
   `drivers/glcd.asm` and `test/programs/svcdemo.asm`
-  (`tools/build.mjs:178-190`). This is a check of specific hexadecimal
+  (`tools/build.mjs:179-191`). This is a check of specific hexadecimal
   spellings, not proof about every possible expression
   (`tools/lib/svc.mjs:18-25`).
 - `RAMBIOS` is `BF00h` and `BDOSRME` equals it. `SDBYTE` follows the
   51-byte BIOS table. Upper state ends by `C000h` and the BIOS stack ends
-  no higher than the CCP workspace (`tools/build.mjs:263-267`).
+  no higher than the CCP workspace (`tools/build.mjs:264-268`).
 - The starter transient program area (TPA) has at least 45,830 bytes
-  (`tools/build.mjs:269-270`).
+  (`tools/build.mjs:270-271`).
 
 The last check is arithmetic, not a boot. `cardLayout` packs allocation
 vectors down from `WSBASE` using `floor(DSM / 8) + 1` bytes each then
 subtracts three bytes for the BDOS entry. The starter's `DSM` values 511
 and 2047 give 64 and 256 bytes for 320 together
-(`tools/build.mjs:222-231`). In the historical `78127ec` layout the entry
+(`tools/build.mjs:223-232`). In the historical `78127ec` layout the entry
 was `B9A4h`, leaving 47,268 bytes from `0100h`. A current build must supply
 its own census instead of copying that historical ceiling.
 
@@ -302,19 +314,22 @@ its own census instead of copying that historical ceiling.
 The main build writes `build/tecos/tecos.rom`, `tecos.d8.json` and
 `census.json`. The census includes the ROM's SHA-256, used/free regions,
 serial counts, RAM regions, card-layout figures and stack extents
-(`tools/build.mjs:272-320`). `tools/capture.mjs` reads the D8 file beside
+(`tools/build.mjs:273-321`). `tools/capture.mjs` reads the D8 file beside
 the selected ROM to locate labels (`tools/capture.mjs:65-72`).
 
 When `dist/` exists, the build also copies the ROM, map and census there,
 renaming the last to `tecos.census.json`. It updates an existing manifest's
 profile figures. It does not rebuild the card or its program files at that
-point (`tools/build.mjs:325-338`). `npm run media` prepares those outputs
-from the selected build (`tools/media.mjs:168-205`).
+point (`tools/build.mjs:326-339`). After the build succeeds it also copies
+`FONT-NOTICES.txt` into an existing `dist/` (`tools/build.mjs:349-351`).
+`npm run media` prepares those outputs from the selected build
+(`tools/media.mjs:169-207`).
 
-The media preparation checks the map's generator against the selected
-backend then checks ROM length and SHA-256 against the census. It assembles
-MOUNT, GLCD and DEMO through that selection and validates pinned TED and
-TAS before preparing the recipes (`tools/media.mjs:168-205`). The TAS
+Media preparation validates the font package before preparing or replacing
+outputs (`tools/media.mjs:169-170`). It checks the map's generator against
+the selected backend then checks ROM length and SHA-256 against the census.
+It assembles MOUNT, GLCD and DEMO through that selection and validates pinned
+TED and TAS before preparing the recipes (`tools/media.mjs:169-207`). The TAS
 GLCD writer compares flat assemblies at `0100h` and `0200h`, checks their
 header and relative symbols and packs the relocation data. The distribution
 COM writer checks the declared zero-filled buffers of MOUNT and DEMO
@@ -325,16 +340,20 @@ G8M on B. A holds MOUNT, GLCD, STARTUP, TED, SAMPLE source and TAS.
 `STARTUP.CMD` contains the GLCD installation line. The page recipe adds
 DEMO. Component entries record each file's size and SHA-256. Assemblies
 and recipe construction finish before the output replacement begins
-(`tools/media.mjs:193-254`, `tools/lib/starter.mjs:10-16`). Output files
-are replaced individually after those preparation checks.
+(`tools/media.mjs:195-257`, `tools/lib/starter.mjs:10-16`). Output files
+are replaced individually after those preparation checks. The distribution
+also receives `FONT-NOTICES.txt` as a companion to its artifacts, separate
+from the six starter-card files (`tools/media.mjs:252-262`).
 
 Media also writes `docs/memory-map.md` and refreshes the ROM-space spans
-in `docs/rom-services.md` from the census (`tools/media.mjs:45-64`,
-`tools/media.mjs:255-259`). The image profile is `tecos`. Any other command-line
-profile name is rejected (`tools/build.mjs:29-32`, `tools/build.mjs:350-363`).
-The same image supports the detected board devices. At `ea3ef3d` PICO
-starts at 80 columns and supports 40 and 32-column selections while GLCD
-uses its card driver (`src/pico.asm:64-90`, `tools/lib/starter.mjs:10-16`).
+in `docs/rom-services.md` from the census (`tools/media.mjs:46-65`,
+`tools/media.mjs:258-262`). The image profile is `tecos`. Any other command-line
+profile name is rejected (`tools/build.mjs:30-33`, `tools/build.mjs:354-367`).
+The same image supports the detected board devices. A responding PICO9918
+with the Matrix switch enabled starts at 40 columns. Explicit 80, 40 and
+32-column selections remain available while GLCD uses its card driver
+(`src/pico.asm:36-92`, `src/pico.asm:94-159`,
+`tools/lib/starter.mjs:10-16`).
 
 The retained `78127ec` build line is actual historical output:
 
@@ -345,7 +364,7 @@ tecos: ROM 16018/16384 bytes, TPA $0100-$B9A3 (47268 bytes), sha256 8cad40923ce1
 Its printed hash is the first sixteen hexadecimal digits of the full
 SHA-256. That historical ROM's full digest is
 `8cad40923ce1c3c6079d3201a1a8cc294dbe501838ed54505ca12287672f8b9f`
-(`tools/build.mjs:275-275`, `tools/build.mjs:355-358`).
+(`tools/build.mjs:276-276`, `tools/build.mjs:359-362`).
 
 ## HELLO as a historical tool round
 
