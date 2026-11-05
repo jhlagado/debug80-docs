@@ -1,0 +1,522 @@
+{
+  "schema_version": 1,
+  "status": "clear_for_bounded_startup_refinement",
+  "reviewed_commit": "58dcb2d9b8481a35ed35854820b4873840a185a4",
+  "direct_parent_commit": "025781b0a435d00c20c6858b4c139d6c4b9beaa2",
+  "accepted_comma_baseline": "f24d7012532c3aae28787470ed4783f3c7fd365d",
+  "parent_chapter_equals_comma_baseline": true,
+  "current_book_commit_at_confirmation": "661d9e8f16551d0cce195e5d05f06e12ec1df86e",
+  "chapter_unchanged_since_reviewed_commit": true,
+  "chapter_before": {
+    "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+    "commit": "025781b0a435d00c20c6858b4c139d6c4b9beaa2",
+    "git_blob": "d812a793a5cfdae3f767630532b32ff58feea4a0",
+    "sha256": "fe85dc2d0fcc9191219eeda7919e1b0f01d1bc6959c99c637d72acd76ddc9250",
+    "bytes": 15705
+  },
+  "chapter_after": {
+    "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+    "commit": "58dcb2d9b8481a35ed35854820b4873840a185a4",
+    "git_blob": "8c5dbb19d5e1d48632d7ba8aeac2464db477a828",
+    "sha256": "b4c5c605cfb11bdcecbf766e437a557e46479fe7e51d719205f9c75d7036f14f",
+    "bytes": 15612
+  },
+  "review_request_evidence": {
+    "path": "tec-os/editorial/reader-rewrite/draft/07-pass-record.md",
+    "identity": {
+      "path": "tec-os/editorial/reader-rewrite/draft/07-pass-record.md",
+      "commit": "58dcb2d9b8481a35ed35854820b4873840a185a4",
+      "git_blob": "bb9904261cb5b0e8f0fbe0f26abd88c93e92c8d2",
+      "sha256": "a33644a5536254111f66e36708323aba971e6943294545fc50d8be922215eedb",
+      "bytes": 24554
+    },
+    "section": "Bounded P3 Chapter 7 corrections",
+    "lines": [
+      222,
+      267
+    ],
+    "scope": "I checked the P3 correction list recorded here against the actual diff, destination text and product source. The book commit c83dc06 is a review checkpoint, not itself a standalone P3 review document."
+  },
+  "chapter_ranges_read_at_reviewed_commit": [
+    [
+      1,
+      168
+    ],
+    [
+      199,
+      245
+    ],
+    [
+      258,
+      343
+    ],
+    [
+      345,
+      421
+    ]
+  ],
+  "current_destinations": [
+    {
+      "destination": "11",
+      "reviewed_commit_identity": {
+        "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+        "commit": "58dcb2d9b8481a35ed35854820b4873840a185a4",
+        "git_blob": "e16ba76e053089780ae84bedd6481eeb13f15f8f",
+        "sha256": "1c79ce224e404290c00e1c0888331031e2de1e59adafc36033959c7ba1561806",
+        "bytes": 31845
+      },
+      "current_identity": {
+        "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+        "commit": "661d9e8f16551d0cce195e5d05f06e12ec1df86e",
+        "git_blob": "49c07c23f16855acb3c736a618d3162cfefb0402",
+        "sha256": "8a5926df884d8259a0cec3e7e3fbafc0bbf8d77150a4637fcc1d2c712707c501",
+        "bytes": 31827
+      },
+      "current_read_ranges": [
+        [
+          352,
+          415
+        ]
+      ],
+      "linked_anchor": "the-lcd-and-the-speaker",
+      "target_exists": true,
+      "reviewed_commit_read_ranges": [
+        [
+          353,
+          415
+        ]
+      ]
+    },
+    {
+      "destination": "25",
+      "reviewed_commit_identity": {
+        "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+        "commit": "58dcb2d9b8481a35ed35854820b4873840a185a4",
+        "git_blob": "138b8d428d1d316ec2fcfd4ace6a00fec9013f5a",
+        "sha256": "b0ff5b03f7dad091a4dab79cfd7ebb30d407caf6057bd29657ebf31902d8d1e4",
+        "bytes": 19544
+      },
+      "current_identity": {
+        "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+        "commit": "661d9e8f16551d0cce195e5d05f06e12ec1df86e",
+        "git_blob": "0a381abfad7604eda96f8bce250c5e38375d9234",
+        "sha256": "b0ed70be2fdf00614a6b06d8b5cee34724ee699eac9579ec3aecb4b1b5ce44e1",
+        "bytes": 19542
+      },
+      "current_read_ranges": [
+        [
+          298,
+          320
+        ]
+      ],
+      "linked_anchor": "recovery-words-and-row-ownership",
+      "target_exists": true,
+      "reviewed_commit_read_ranges": [
+        [
+          33,
+          85
+        ],
+        [
+          211,
+          220
+        ],
+        [
+          222,
+          274
+        ],
+        [
+          276,
+          363
+        ]
+      ]
+    },
+    {
+      "destination": "H",
+      "reviewed_commit_identity": {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "commit": "58dcb2d9b8481a35ed35854820b4873840a185a4",
+        "git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "bytes": 10206
+      },
+      "current_identity": {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "commit": "661d9e8f16551d0cce195e5d05f06e12ec1df86e",
+        "git_blob": "3ce504b2c5bcc9cbbf1a6584727b1a12b91dc261",
+        "sha256": "00335ee619ec6d9b7b898052bca28121083847743abed74d3af196b8521dcaba",
+        "bytes": 10200
+      },
+      "current_read_ranges": [
+        [
+          46,
+          72
+        ]
+      ],
+      "linked_anchor": "the-header",
+      "target_exists": true,
+      "reviewed_commit_read_ranges": [
+        [
+          46,
+          72
+        ]
+      ]
+    },
+    {
+      "destination": "8",
+      "reviewed_commit_identity": {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "commit": "58dcb2d9b8481a35ed35854820b4873840a185a4",
+        "git_blob": "32dc7292797f40168a7a8d1a2210fc504e234d79",
+        "sha256": "8f323d975b7b2be1c46613237c332fabbcea2f0a2a712054cdf8f3fbf2544764",
+        "bytes": 11513
+      },
+      "current_identity": {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "commit": "661d9e8f16551d0cce195e5d05f06e12ec1df86e",
+        "git_blob": "32dc7292797f40168a7a8d1a2210fc504e234d79",
+        "sha256": "8f323d975b7b2be1c46613237c332fabbcea2f0a2a712054cdf8f3fbf2544764",
+        "bytes": 11513
+      },
+      "current_read_ranges": [
+        [
+          242,
+          264
+        ]
+      ],
+      "linked_anchor": null,
+      "target_exists": true,
+      "reviewed_commit_read_ranges": [
+        [
+          242,
+          264
+        ]
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "sequence",
+      "status": "clear",
+      "chapter_lines": [
+        87,
+        95
+      ],
+      "result": "The subject is now TEC-OS. Echoed commands, drive/user changes, the NOSUCH failure followed by another line and the final interactive B> remain observable in the retained capture. The next startup line is taken after program completion.",
+      "proof": [
+        "src/cpm/ccp.asm:119-166",
+        "src/cpm/ccp.asm:527-536"
+      ]
+    },
+    {
+      "id": "return-and-Ctrl-C",
+      "status": "clear",
+      "chapter_lines": [
+        142,
+        168
+      ],
+      "result": "Ordinary return and a Ctrl-C that actually ends a program remain in the practical list. Warm boot preserves the startup position/record. CHDROP clears only remaining chained pieces, not the next startup line. Chapter 8 explicitly gives top-level RET, jump 0000h, function 0 and the two Ctrl-C conditions, so the deferred jump fact is retained at its destination. No claim is made that every Ctrl-C terminates a program.",
+      "destination": [
+        "8:242-264",
+        "25:211-220"
+      ],
+      "proof": [
+        "src/cpm/ccp.asm:527-536",
+        "src/cpm/bdos.asm:110-119",
+        "src/cpm/bdos.asm:601-621",
+        "src/cpm/bdoscon.asm:318-331",
+        "src/cpm/ccpcmd.asm:874-879",
+        "src/ram.asm:416-424",
+        "src/boot.asm:194-215",
+        "src/boot.asm:530-559"
+      ]
+    },
+    {
+      "id": "format-detail-destination",
+      "status": "clear",
+      "chapter_lines": [
+        312,
+        323
+      ],
+      "result": "The format-4 condition and warning that renaming cannot convert another format remain in Chapter 7. Appendix H The header gives format 4 at offset 1 and the combined magic/format check. The removed second-byte detail therefore has an actual linked home.",
+      "destination": [
+        "H:46-72"
+      ],
+      "proof": [
+        "src/loader.asm:197-203",
+        "src/abi.inc:185-190"
+      ]
+    },
+    {
+      "id": "LCD-row-detail-destinations",
+      "status": "clear",
+      "chapter_lines": [
+        354,
+        421
+      ],
+      "result": "The five-character clearing, serial failure reply, subsequent G.SVC installation and GLCD prompt/report remain beside unchanged captures. Chapter 11 explains the exact LCD service and row-3 mark clearing. Chapter 25 explicitly preserves later console-selection/installation behaviour, raw-port bypass, retained CDWRD and the possible five-character overwrite. No technical exception was dropped when the implementation aside became links. CARD? retry remains distinct.",
+      "destination": [
+        "11:353-415",
+        "25:276-320"
+      ],
+      "proof": [
+        "src/services.asm:157-192",
+        "src/loader.asm:934-980"
+      ]
+    },
+    {
+      "id": "GLCD-conditions-and-punctuation",
+      "status": "clear",
+      "chapter_lines": [
+        217,
+        234,
+        270,
+        272,
+        305,
+        310
+      ],
+      "result": "Removing the two introductory commas does not change the enabled-Matrix/responding-PICO condition or the screen-capture sequence. The comma after For GLCD or a narrow PICO width remains and separates the display condition from successful preparation. That useful boundary and the separate no-command-at-80 case are retained. The unchanged outcomes remain explicitly conditional on the controller and Matrix switch and do not certify all loader failures or a new font/default.",
+      "proof": [
+        "drivers/glcd.asm:66-88",
+        "src/services.asm:618-658",
+        "src/video.asm:150-182",
+        "host/card.mjs:58-72",
+        "host/card.mjs:104-116"
+      ]
+    }
+  ],
+  "source_authority": {
+    "commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+    "mode": "Git object text only. Existing ea3ef3d mechanisms remain distinct from later source offers and historical output.",
+    "proofs": [
+      {
+        "path": "src/cpm/ccp.asm",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "7d5a640a6957ade5167493aba0ca0077f79b05dddedbb0844092112aeabe3cb1",
+        "ranges_read": [
+          [
+            119,
+            166
+          ],
+          [
+            445,
+            485
+          ],
+          [
+            527,
+            536
+          ]
+        ]
+      },
+      {
+        "path": "src/cpm/ccpcmd.asm",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "6c16f68385d13cb371f397fa48b0b868e1cfe627d70a412ffed85ac53e0ca86d",
+        "ranges_read": [
+          [
+            874,
+            919
+          ],
+          [
+            922,
+            946
+          ]
+        ]
+      },
+      {
+        "path": "src/cpm/bdos.asm",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "0b491acfc4924be7bb78e2a76600ec666875f4aa293a2543aedcb397e7070af6",
+        "ranges_read": [
+          [
+            110,
+            119
+          ],
+          [
+            472,
+            489
+          ],
+          [
+            601,
+            621
+          ]
+        ]
+      },
+      {
+        "path": "src/cpm/bdoscon.asm",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "80846394bf1e858a48f0e2d9bf56539243cbcaf3b7efc0a19bd0837e0b9526a1",
+        "ranges_read": [
+          [
+            26,
+            72
+          ],
+          [
+            308,
+            343
+          ]
+        ]
+      },
+      {
+        "path": "src/boot.asm",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "babbd9b2137a60c0fa0fec1cb461d7cd311d7e785413fcd88500c9cb6b9e5428",
+        "ranges_read": [
+          [
+            194,
+            215
+          ],
+          [
+            530,
+            559
+          ]
+        ]
+      },
+      {
+        "path": "src/ram.asm",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "4e2be7c58cde2b4b6a5b3a26f6501150ac0b5d1905e2d99355590016c3ac1153",
+        "ranges_read": [
+          [
+            408,
+            424
+          ]
+        ]
+      },
+      {
+        "path": "src/services.asm",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "ef737171462184d5716bbb2a1d3dd879ce8c0d46cd609974a9effdfc70ae8a5b",
+        "ranges_read": [
+          [
+            157,
+            192
+          ],
+          [
+            618,
+            658
+          ]
+        ]
+      },
+      {
+        "path": "src/loader.asm",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "933985f18c5d3eb2c776c182769708dfffc245a387bb26e7aa684db5f1635f36",
+        "ranges_read": [
+          [
+            197,
+            203
+          ],
+          [
+            934,
+            980
+          ]
+        ]
+      },
+      {
+        "path": "src/abi.inc",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "092ccf072bb559ba8efc5e55f576d303f2f98a3ea13ed2e821bbd102856a9357",
+        "ranges_read": [
+          [
+            185,
+            190
+          ]
+        ]
+      },
+      {
+        "path": "src/video.asm",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "984df3e6d1fdb7f865586c9e4a9c4690cf9300fe7df226c0450c71fbab8ef560",
+        "ranges_read": [
+          [
+            150,
+            182
+          ]
+        ]
+      },
+      {
+        "path": "drivers/glcd.asm",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "d668178e52432b1ab9e84e17daa9cb45dc24bad4e829690ab8549669b1a7522d",
+        "ranges_read": [
+          [
+            66,
+            88
+          ]
+        ]
+      },
+      {
+        "path": "host/card.mjs",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "470af6c9dbafe04d456d5d39dfcfde061a698e956ac9f13bcb9b7ca30660a301",
+        "ranges_read": [
+          [
+            58,
+            72
+          ],
+          [
+            104,
+            116
+          ]
+        ]
+      },
+      {
+        "path": "src/cache.asm",
+        "source_commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "sha256": "e97a1b16ebae2a6710d7e78972590a141708e6e5c6ebb195d25c45d409c1e09b",
+        "ranges_read": [
+          [
+            653,
+            668
+          ]
+        ]
+      }
+    ]
+  },
+  "immutable_comparison": {
+    "baseline": "025781b0a435d00c20c6858b4c139d6c4b9beaa2",
+    "also_byte_equal_to_chapter_at": "f24d7012532c3aae28787470ed4783f3c7fd365d",
+    "target": "58dcb2d9b8481a35ed35854820b4873840a185a4",
+    "fences": {
+      "count": 15,
+      "input_stream_sha256": "54829e08c6a1c19294ce54c74af29b9c1ca1faffe5eaf82faeb58fc4bac56b2a",
+      "output_stream_sha256": "54829e08c6a1c19294ce54c74af29b9c1ca1faffe5eaf82faeb58fc4bac56b2a",
+      "byte_equal_in_order": true,
+      "shell_fences": 6,
+      "text_capture_fences": 9
+    },
+    "HTML_comments": {
+      "count": 10,
+      "input_stream_sha256": "381128d6700898789d36510ad393ff994d050daa0f4f3586d9427a9d828993c6",
+      "output_stream_sha256": "381128d6700898789d36510ad393ff994d050daa0f4f3586d9427a9d828993c6",
+      "byte_equal_in_order": true
+    },
+    "inline_literals": {
+      "input_count": 69,
+      "output_count": 68,
+      "input_stream_sha256": "de4c770a0ed51c0cdaf839874f12efd5312fc8e7df1ab86a557dd28dd650425c",
+      "output_stream_sha256": "52cf2817bd18e044c45d27418b98c4c13a487b4f96baefef749c4ef433c296c6",
+      "only_deletion": "`0000h` from the expressly deferred program-jump explanation",
+      "remaining_byte_equal_in_order": true
+    },
+    "stream_hash_format": "SHA-256 of UTF-8 JSON array, ensure_ascii=False, separators comma/colon.",
+    "capture_scope": "All nine historical captures and six shell fences retain their actual 78127ec evidence. No capture, artifact, browser result, physical-board result, timing or workflow was rerun or requalified."
+  },
+  "gate_scope": {
+    "writer_record": {
+      "commit": "58dcb2d9b8481a35ed35854820b4873840a185a4",
+      "path": "tec-os/editorial/reader-rewrite/draft/07-pass-record.md",
+      "lines": [
+        256,
+        267
+      ],
+      "reported_prose_gate_findings": 0,
+      "reported_complexity_run": true
+    },
+    "independent_gate_execution": false,
+    "disposition": "I read the writer gate/complexity disposition and the actual changed passages. This read-only confirmation writes JSON only and does not claim a fresh gate or capture run. The bundled prose gate does not support JSON. No reader edits or prose commit are made by this confirmation."
+  },
+  "findings": [],
+  "acceptance_boundary": "Only the 58dcb2d Chapter 7 refinement and continued presence/meaning of its linked facts are confirmed. This is not a complete destination-chapter citation audit, whole-book acceptance, source repinning, root integration, publication or runtime allocation.",
+  "destination_reference_line_basis": "58dcb2d9b8481a35ed35854820b4873840a185a4"
+}
