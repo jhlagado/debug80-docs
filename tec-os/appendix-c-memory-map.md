@@ -9,6 +9,10 @@ nav_group: "Appendices"
 
 <!-- Checked against TEC-OS 78127ec. -->
 
+<!-- C16 source-only citation revisions: TEC-OS fe2097f.
+     Only the entries in editorial/c16-citation-resolutions.json use that pin.
+     Captures, measurements and other citations retain their earlier provenance. -->
+
 This appendix gives the addresses TEC-OS uses: the CPU's address space, the
 ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
 the stacks. Chapter 14 explains the layout and Chapter 8 describes it from a
@@ -31,7 +35,7 @@ The Z80's 64 KiB are three windows:
 | `C000h–FFFFh` | the ROM |
 
 At reset the first 2 KiB of the ROM also appear at `0000h–07FFh`, until cold
-boot sets bit 0 of the latch (`src/reset.asm:1-5`, `src/boot.asm:25-26`). With
+boot sets bit 0 of the latch (`src/reset.asm:1-9`, `src/boot.asm:54-56`). With
 EXPAND 0 in view, TEC-OS uses them in this way:
 
 | Addresses | Contents |
@@ -42,14 +46,14 @@ EXPAND 0 in view, TEC-OS uses them in this way:
 | `C000h–FFFFh` | the ROM |
 
 The latch is the system latch at port `FFh`, which TEC-OS writes from the copy
-it keeps at `0040h` (`src/layout.asm:14-22`). Its value while TEC-OS runs is
+it keeps at `0040h` (`src/layout.asm:23-39`). Its value while TEC-OS runs is
 `01h`: the boot overlay off and EXPAND 0 in view. It is `81h` while the matrix
-keyboard's Caps Lock is on, which sets bit 7 (`src/keyboard.asm:110-115`).
+keyboard's Caps Lock is on, which sets bit 7 (`src/keyboard.asm:133-140`).
 
 The TPA ends below the BDOS entry jump, whose address is in the word at
 `0006h`. Cold boot places the jump directly below the lowest allocation vector
 of the card's drives, 3 bytes under that vector's address
-(`src/boot.asm:456-460`). A loaded service lowers the word at `0006h` to the
+(`src/boot.asm:749-754`). A loaded service lowers the word at `0006h` to the
 start of its first page, as Chapter 24 explains.
 
 | Card | Vectors | BDOS entry | TPA |
@@ -68,11 +72,13 @@ start of its first page, as Chapter 24 explains.
 | `C60Ah–FE91h` | 14,472 | the code |
 | `FE92h–FFFFh` | 366 | unused |
 
-Within the code, the CCP's three files are at `DD2Ah–E702h`, 2,521 bytes, and
-the BDOS's six at `E703h–F608h`, 3,846 bytes, in the order `src/rom.asm`
-includes them (`src/rom.asm:27-36`). The ROM's own copy of the BIOS jump table
+At 78127ec the CCP's three files occupied `DD2Ah–E702h`, 2,521 bytes, and
+the BDOS's six occupied `E703h–F608h`, 3,846 bytes. At `fe2097f` the CCP
+is split across four files, including `cpm/ccpmut.asm`, followed by the six
+BDOS files (`src/rom.asm:30-39`). The address figures above remain those
+of 78127ec. The ROM's own copy of the BIOS jump table
 is in the data, at `BIOSBAS`, and is never called: cold boot copies it to
-`BF00h` (`src/tables.asm:11-28`, `src/boot.asm:75-78`).
+`BF00h` (`src/tables.asm:19-36`, `src/boot.asm:142-150`).
 
 ## Page zero
 
@@ -93,17 +99,17 @@ is in the data, at `BIOSBAS`, and is never called: cold boot copies it to
 
 Cold boot clears page zero. `PZINIT` then writes it at every warm boot, cold
 boot's end included, leaving the IOBYTE and the drive and user byte as they
-are (`src/boot.asm:29-35`, `src/boot.asm:221-283`). An unload and a failed
+are (`src/boot.asm:62-70`, `src/boot.asm:384-480`). An unload and a failed
 `INIT` clear the first byte of each restart vector the service claimed and
-then run the same sweep of the vectors, `PZSWP` (`src/loader.asm:78-89`,
-`src/loader.asm:312-316`, `src/loader.asm:351-364`). The CCP writes the byte
+then run the same sweep of the vectors, `PZSWP` (`src/loader.asm:146-165`,
+`src/loader.asm:525-532`, `src/loader.asm:588-616`). The CCP writes the byte
 at `0004h` at each prompt, and the FCBs, the tail and the byte at `0050h`
-before it runs a program (`src/cpm/ccp.asm:225-245`, `src/cpm/ccp.asm:317-319`,
-`src/cpm/ccpcmd.asm:280-312`).
+before it runs a program (`src/cpm/ccp.asm:340-367`, `src/cpm/ccp.asm:493-499`,
+`src/cpm/ccpcmd.asm:432-469`).
 
 Of the sixteen bytes that CP/M 2.2 leaves to the BIOS, TEC-OS keeps one,
 `LATCHV`, the only byte it reads while EXPAND 1 is in view. `0041h–004Fh` are
-unused, and cold boot's clear leaves them 0 (`src/layout.asm:36-39`). The
+unused, and cold boot's clear leaves them 0 (`src/layout.asm:62-70`). The
 console's state is above the RAM BIOS table.
 
 ## The resident workspace
@@ -123,19 +129,19 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 
 The part from `WSBASE`, `BAE7h`, to `BEFFh` has the same addresses on every
 card. The build places `WSBASE` so that the part ends at `BF00h`
-(`tools/build.mjs:232-237`, `src/layout.asm:57-60`). The part above the table
-starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:218`).
+(`tools/build.mjs:236-243`, `src/layout.asm:101-108`). The part above the table
+starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:294`).
 
 Two sweeps clear the workspace. Cold boot clears all of it, from `WSBASE` up
-to `WSEND`, `BAE7h` to `BFFFh` (`src/boot.asm:37-41`). Warm boot clears the
+to `WSEND`, `BAE7h` to `BFFFh` (`src/boot.asm:73-79`). Warm boot clears the
 part from `CCPCLR`, `BDB7h`, to the end of the BDOS's block at `BEFFh` and
-leaves the rest (`src/boot.asm:288-312`). The "Cleared by" column of each
+leaves the rest (`src/boot.asm:485-526`). The "Cleared by" column of each
 table below says which sweeps reach a byte. A byte cleared by cold boot alone
 survives a warm boot, though other code may write it between boots.
 
 ### The BIOS's block
 
-The BIOS's block is `src/ram.asm:9-77`:
+The BIOS's block is `src/ram.asm:15-135`:
 
 | Addresses | Bytes | Name | Contents | Cleared by |
 | --- | ---: | --- | --- | --- |
@@ -161,7 +167,7 @@ The BIOS's block is `src/ram.asm:9-77`:
 
 ### The CCP's block
 
-The CCP's block is `src/ram.asm:82-139`. Warm boot's sweep starts at
+The CCP's block is `src/ram.asm:140-208`. Warm boot's sweep starts at
 `CCPCLR`, `BDB7h`, so the command line below it survives a warm boot, for a
 chained line's next piece:
 
@@ -180,7 +186,7 @@ chained line's next piece:
 
 ### The BDOS's block
 
-The BDOS's block is `src/ram.asm:142-216`. Warm boot's sweep clears all of it
+The BDOS's block is `src/ram.asm:213-292`. Warm boot's sweep clears all of it
 and then sets the DMA address to `0080h`:
 
 | Addresses | Bytes | Name | Contents | Cleared by |
@@ -200,7 +206,7 @@ and then sets the DMA address to `0080h`:
 
 ### Above the RAM BIOS table
 
-The block above the table is `src/ram.asm:218-301`. Warm boot's sweep stops
+The block above the table is `src/ram.asm:294-449`. Warm boot's sweep stops
 at `BEFFh`, so every byte here survives a warm boot unless the code named in
 its row writes it:
 
@@ -236,7 +242,7 @@ its row writes it:
 | `BFF2h–BFFFh` | 14 | `MNTBLK` to `MNTLN` | the rest of the `MOUNT` routine's scratch | cold boot |
 
 `SVCRA` is a cause only when `SVCRC` is 1, and it is 0 when a record failed
-its check after `INIT` (`src/ram.asm:266-267`). Chapter 24 explains the two.
+its check after `INIT` (`src/ram.asm:378-381`). Chapter 24 explains the two.
 
 ## EXPAND 1
 
@@ -251,9 +257,9 @@ its check after `INIT` (`src/ram.asm:266-267`). Chapter 24 explains the two.
 | `BE00h–BEFFh` | 256 | unused |
 | `BF00h–BFFFh` | 256 | unused |
 
-The cache's addresses are in `src/layout.asm:23-25` and the history's page in
-`src/history.asm:14`. Cold boot clears all of EXPAND 1
-(`src/boot.asm:169-180`). No BDOS or BIOS call gives a program a range in it.
+The cache's addresses are in `src/layout.asm:40-45` and the history's page in
+`src/history.asm:25`. Cold boot clears all of EXPAND 1
+(`src/boot.asm:302-321`). No BDOS or BIOS call gives a program a range in it.
 A program that writes the latch can still switch it in, and Chapter 15
 explains what happens to a program that ends with EXPAND 1 in view.
 
@@ -261,23 +267,23 @@ explains what happens to a program that ends with EXPAND 1 in view.
 
 | Stack | Addresses | Bytes | Used by |
 | --- | --- | ---: | --- |
-| boot | below `8000h` | | cold boot, until the workspace is cleared (`src/layout.asm:56`, `src/boot.asm:24`) |
-| BIOS | `BCC5h–BCECh` | 40 | warm boot (`src/boot.asm:96`) |
+| boot | below `8000h` | | cold boot, until the workspace is cleared (`src/layout.asm:100`, `src/boot.asm:52-53`) |
+| BIOS | `BCC5h–BCECh` | 40 | warm boot (`src/boot.asm:182-183`) |
 | CCP | `BE56h–BE75h` | 32 | the CCP, and a program from its start, with `0000h` pushed |
-| BDOS | `BECAh–BEFFh` | 54 | every BDOS function and the BIOS calls it makes, and cold boot from the workspace's clear to the CCP: the console's start, the banner, the mount, the drive listing and the diagnostic prompt (`src/boot.asm:42`, `src/boot.asm:63`, `src/boot.asm:463-470`) |
+| BDOS | `BECAh–BEFFh` | 54 | every BDOS function and the BIOS calls it makes, and cold boot from the workspace's clear to the CCP: the console's start, the banner, the mount, the drive listing and the diagnostic prompt (`src/boot.asm:80-82`, `src/boot.asm:119-121`, `src/boot.asm:757-771`) |
 
-The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:64-73`. A
+The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:114-131`. A
 loaded service runs on its caller's stack, and `SVCLIM` gives what the services
 together may add: 8 bytes to the BDOS's, 12 to the BIOS's and 6 to the CCP's
-(`src/tables.asm:96`). [Chapter 14](14-memory-map.md#the-four-stacks) gives
+(`src/tables.asm:127`). [Chapter 14](14-memory-map.md#the-four-stacks) gives
 each stack's measured base, and Chapter 24 what the loader does with
 `SVCLIM`.
 
 ## Reproducing the figures
 
 `npm run media` writes the summary tables to `docs/memory-map.md` from the
-build's census, `build/tecos/census.json` (`tools/media.mjs:71-171`,
-`tools/media.mjs:241`). The address of any label is in the build's symbol
+build's census, `build/tecos/census.json` (`tools/media.mjs:72-171`,
+`tools/media.mjs:261`). The address of any label is in the build's symbol
 file, `build/tecos/tecos.d8.json`. This command prints the addresses of the
 labels named after it:
 

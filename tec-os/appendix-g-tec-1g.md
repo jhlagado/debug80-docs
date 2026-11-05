@@ -9,6 +9,10 @@ nav_group: "Appendices"
 
 <!-- Checked against TEC-OS 78127ec. -->
 
+<!-- C16 source-only citation revisions: TEC-OS fe2097f.
+     Only the entries in editorial/c16-citation-resolutions.json use that pin.
+     Captures, measurements and other citations retain their earlier provenance. -->
+
 This appendix lists the parts of the TEC-1G that TEC-OS reads and writes. They
 are its ports, the bits of the system latch, the configuration switches, the
 RAM in socket U9, the hex keypad, the 20 × 4 LCD, the 8 × 8 LEDs, the DS1302
@@ -20,7 +24,7 @@ with the test that settles it (Chapter 26).
 
 ## The ports
 
-The port numbers are defined in `src/layout.asm:8-14`, with the devices' own
+The port numbers are defined in `src/layout.asm:13-24`, with the devices' own
 in the files that drive them.
 
 | Port | Direction | Device | TEC-OS's use |
@@ -41,30 +45,30 @@ in the files that drive them.
 
 The read of port `00h` takes nothing from the keypad. It is there for the
 Debug80 runtime, which delivers the next queued serial byte when a program
-reads that port (`src/layout.asm:9`, `src/console.asm:149`,
-`src/console.asm:213`, `src/console.asm:343`).
+reads that port (`src/layout.asm:13-15`, `src/console.asm:250-252`,
+`src/console.asm:353-355`, `src/console.asm:571-573`).
 
 At cold boot TEC-OS probes the PICO9918 through ports `BEh` and `BFh`. When the
 chip answers and the Matrix switch has enabled the keyboard, cold boot starts
-the ROM's console on it at 80 columns, before the banner (`src/video.asm:8-16`,
-`src/pico.asm:27-47`). With the switch off the chip stays unprogrammed until a
+the ROM's console on it at 80 columns, before the banner (`src/video.asm:16-29`,
+`src/pico.asm:50-82`). With the switch off the chip stays unprogrammed until a
 program claims it.
 
 ## Port 01h and the serial line
 
 Port `01h` carries three things at once: the digit select in bits 0 to 5, the
-serial line's output in bit 6 and the speaker in bit 7 (`src/layout.asm:10`).
+serial line's output in bit 6 and the speaker in bit 7 (`src/layout.asm:16-17`).
 Every write to it has to keep bit 6 high when the serial line is idle, or the
 terminal receives a start bit. The ROM's own writes do. The hardware service
 `DIGIT` lights each digit with bit 6 set, and `TONE` toggles bit 7 with bit 6
-set (`src/services.asm:17`, `src/services.asm:65-81`,
-`src/services.asm:166-187`). That shared port is why programs reach the digits
+set (`src/services.asm:33-35`, `src/services.asm:109-138`,
+`src/services.asm:278-306`). That shared port is why programs reach the digits
 and the speaker through the hardware services of Chapter 10 and not by writing
 the port.
 
 The serial line is bit-banged. TEC-OS sends each bit by writing bit 6 of port
 `01h` and receives by sampling bit 7 of port `03h`. The line runs at 4800
-baud, 8 data bits, no parity and 2 stop bits (`src/console.asm:222-234`). The bit times are
+baud, 8 data bits, no parity and 2 stop bits (`src/console.asm:370-395`). The bit times are
 counted for a 4 MHz clock (`tools/build.mjs:26`, `tools/build.mjs:37-55`), so
 the board's CPU clock switch has to be on FAST with the 4 MHz oscillator.
 There is no receive buffer in hardware: a byte reaches TEC-OS only while it is
@@ -73,13 +77,13 @@ their timing.
 
 ## Port 03h and the switches
 
-TEC-OS reads three bits of port `03h` (`src/layout.asm:11`):
+TEC-OS reads three bits of port `03h` (`src/layout.asm:18-19`):
 
 | Bit | Name | Read | TEC-OS's use |
 | ---: | --- | --- | --- |
-| 0 | The Matrix switch | Once, at cold boot, into `CONDEV` (`src/console.asm:48-50`) | With the switch off the console never scans the matrix keyboard, the ROM's PICO9918 console doesn't start and `GLCD.SVC` fails to install, since each needs the keyboard |
-| 6 | A keypad key down | Once, at cold boot, just before the startup file is opened (`src/cpm/ccpcmd.asm:562-564`) | A low bit skips the file |
-| 7 | The serial line's input | By the serial routines (`src/console.asm:152`, `src/console.asm:214`, `src/console.asm:232`) | The received bits |
+| 0 | The Matrix switch | Once, at cold boot, into `CONDEV` (`src/console.asm:83-85`) | With the switch off the console never scans the matrix keyboard, the ROM's PICO9918 console doesn't start and `GLCD.SVC` fails to install, since each needs the keyboard |
+| 6 | A keypad key down | Once, at cold boot, just before the startup file is opened (`src/cpm/ccpcmd.asm:838-840`) | A low bit skips the file |
+| 7 | The serial line's input | By the serial routines (`src/console.asm:256`, `src/console.asm:356`, `src/console.asm:391-392`) | The received bits |
 
 The TEC-1G's documents and the Debug80 runtime describe the other bits of port
 `03h` differently. On bit 6 the two agree: it is low while a keypad key is
@@ -91,28 +95,28 @@ switches are not read.
 
 On the board's documents the system latch at port `FFh` can be written but
 not read. TEC-OS therefore keeps a copy of the last value written at `0040h`,
-`LATCHV`, and builds each new value from the copy (`src/layout.asm:14`,
-`src/layout.asm:39`). Its bits:
+`LATCHV`, and builds each new value from the copy (`src/layout.asm:23-24`,
+`src/layout.asm:70`). Its bits:
 
 | Bit | Value | Name | TEC-OS's use |
 | ---: | ---: | --- | --- |
-| 0 | `01h` | SHADOW | Set at cold boot to turn the boot overlay off, and never cleared (`src/boot.asm:25-26`) |
+| 0 | `01h` | SHADOW | Set at cold boot to turn the boot overlay off, and never cleared (`src/boot.asm:54-56`) |
 | 1 | `02h` | PROTECT | Not set; a program that sets it makes `4000h–7FFFh` read-only |
-| 2 | `04h` | EXPAND | EXPAND 1 at `8000h–BFFFh` in place of EXPAND 0, for the block cache and the history (`src/layout.asm:20`) |
+| 2 | `04h` | EXPAND | EXPAND 1 at `8000h–BFFFh` in place of EXPAND 0, for the block cache and the history (`src/layout.asm:33-34`) |
 | 3 | `08h` | MAIN | Not set |
-| 7 | `80h` | CAPS | The Caps lamp, toggled with Caps Lock on the matrix keyboard (`src/keyboard.asm:110-113`) |
+| 7 | `80h` | CAPS | The Caps lamp, toggled with Caps Lock on the matrix keyboard (`src/keyboard.asm:133-138`) |
 
 At reset the latch is `00h`, and with bit 0 low the first 2 KiB of the ROM
 also appear at `0000h–07FFh`. That is how the Z80, which starts at `0000h`,
 reaches the ROM. The jump there leads to `RSTENT` at its `C000h` address.
 At reset `RSTENT` continues to `COLD`, which writes `01h` to the latch
-(`src/reset.asm:1-6`, `src/boot.asm:11-26`). A program that writes the latch
+(`src/reset.asm:1-12`, `src/boot.asm:21-56`). A program that writes the latch
 itself has to write `0040h` to match, since TEC-OS's next write to the latch
 is made from the copy.
 
 EXPAND is set only while no stack is in use. The stacks TEC-OS uses once cold
 boot has set them up are in `8000h–BFFFh`, in EXPAND 0
-(`src/history.asm:16-43`, `src/cache.asm:10-13`). Bits 3 to 6 are a bank field
+(`src/history.asm:27-75`, `src/cache.asm:19-26`). Bits 3 to 6 are a bank field
 for the window in the Debug80 runtime, and unconnected to U9 in the board's
 documents. Of bits 2 to 6, TEC-OS uses only bit 2, for EXPAND 1. Test T12 of
 the diagnostics ROM reports what a board does with bits 3 to 6.
@@ -125,8 +129,8 @@ EXPAND 0 and EXPAND 1. The board's recommended build leaves U9 empty.
 `docs/board-run.md` gives the chip as a 62256 or similar, with the board's
 EXPAND jumpers set for a 32 KiB chip. Cold boot tests `8000h–BFFFh` and then
 EXPAND 1 behind it before it prints anything. It stops with `TEC-OS needs 64K
-RAM` on the serial terminal if either is missing (`src/boot.asm:36`,
-`src/boot.asm:323-358`). Chapter 15 describes the check, and Chapter 14 what
+RAM` on the serial terminal if either is missing (`src/boot.asm:71-72`,
+`src/boot.asm:545-595`). Chapter 15 describes the check, and Chapter 14 what
 TEC-OS keeps in each half.
 
 ## The hex keypad and its NMI
@@ -145,8 +149,8 @@ off. A press with the jumper fitted is a crash.
 ## The 20 × 4 LCD
 
 The 20 × 4 LCD is an HD44780 on port `04h` for commands and the busy flag and
-`84h` for data (`src/lcd.asm:5-6`). `LCDINIT` sends four commands at cold
-boot (`src/lcd.asm:8-16`, `src/tables.asm:38`):
+`84h` for data (`src/lcd.asm:9-11`). `LCDINIT` sends four commands at cold
+boot (`src/lcd.asm:13-28`, `src/tables.asm:48`):
 
 | Command | Effect |
 | --- | --- |
@@ -157,8 +161,8 @@ boot (`src/lcd.asm:8-16`, `src/tables.asm:38`):
 
 Before each command or character `LCDWAIT` reads the busy flag, bit 7 of port
 `04h`, at most 256 times. A board with no LCD costs only that wait and no
-hang (`src/lcd.asm:18-27`). The rows start at display addresses `80h`, `C0h`,
-`94h` and `D4h` (`src/tables.asm:40-41`). Cold boot writes the banner on row 0
+hang (`src/lcd.asm:30-47`). The rows start at display addresses `80h`, `C0h`,
+`94h` and `D4h` (`src/tables.asm:50-51`). Cold boot writes the banner on row 0
 and drives A and B on rows 1 and 2. Row 3 holds the words `CARD?` and
 `GLCD?` that Appendix D lists. The hardware service `LCD` writes a row for
 a program, and Appendix B gives its cost.
@@ -176,7 +180,7 @@ different on a board. Test T24 of the diagnostics ROM records what a board shows
 
 ## The DS1302 clock
 
-The DS1302 is an add-on on port `FCh` (`src/services.asm:13-14`):
+The DS1302 is an add-on on port `FCh` (`src/services.asm:27-29`):
 
 | Bit | Use |
 | ---: | --- |
@@ -186,11 +190,11 @@ The DS1302 is an add-on on port `FCh` (`src/services.asm:13-14`):
 | 6 | The chip's clock |
 | 7 | The data sent to the chip |
 
-Each register is reached by a command byte sent least significant bit first (`src/services.asm:318-326`). TEC-OS counts the
+Each register is reached by a command byte sent least significant bit first (`src/services.asm:520-536`). TEC-OS counts the
 clock as present when a read of the seconds register gives a value below
 `60h`. A clock that answers gives such a value and an empty port's `FFh`
-doesn't (`src/services.asm:296-309`). Cold boot makes that test once and keeps
-the result in bit 3 of `CONDEV` (`src/boot.asm:47-50`). The hardware service
+doesn't (`src/services.asm:484-505`). Cold boot makes that test once and keeps
+the result in bit 3 of `CONDEV` (`src/boot.asm:90-94`). The hardware service
 `INFO` reports that bit in bit 3 of `B` without reading the port. `RTC` makes
 the test again at each call, and reads and sets the clock's seven BCD
 registers (Chapter 10).
@@ -198,7 +202,7 @@ registers (Chapter 10).
 ## The SD card adaptor
 
 The SD card adaptor is on port `FDh`, driven in SPI mode by bit-banging
-(`src/layout.asm:12`, `src/sd.asm:3-8`):
+(`src/layout.asm:20-21`, `src/sd.asm:4-14`):
 
 | Bit | Use |
 | ---: | --- |
@@ -214,13 +218,13 @@ data high, clock low.
 A high-capacity card takes a block's number as its address. A
 standard-capacity card takes the block's byte address in 32 bits. The driver
 can therefore name no block 4 GiB or more into such a card
-(`src/sd.asm:243-274`). Every wait for the card has a limit. A card that
+(`src/sd.asm:390-428`). Every wait for the card has a limit. A card that
 doesn't answer, or answers wrongly, fails with one of the driver's codes
-(`src/sd.asm:10-20`). Appendix D lists the codes and Chapter 17 the driver.
+(`src/sd.asm:16-31`). Appendix D lists the codes and Chapter 17 the driver.
 
 When a block goes to or from the block cache, the transfer loop runs with
 EXPAND 1 in view. The driver writes the latch before the loop and its copy
-back after (`src/sd.asm:321-325`, `src/sd.asm:420-421`,
-`src/sd.asm:427-431`, `src/sd.asm:490-491`). `docs/diagnostics.md` gives the
+back after (`src/sd.asm:511-519`, `src/sd.asm:624-627`,
+`src/sd.asm:636-642`, `src/sd.asm:705-706`). `docs/diagnostics.md` gives the
 cost of a block read with the diagnostics ROM's copy of the driver as 354,216
 T-states, about 89 ms at 4 MHz. Test T20 measures it on a board.
