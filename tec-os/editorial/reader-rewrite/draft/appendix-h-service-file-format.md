@@ -2,7 +2,7 @@
 title: H. The service file format
 parent: TEC-OS
 nav_order: 108
-nav_group: "Appendices"
+nav_group: "Reference"
 ---
 
 # Appendix H. The service file format

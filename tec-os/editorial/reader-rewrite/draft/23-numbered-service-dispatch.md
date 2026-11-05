@@ -2,7 +2,7 @@
 title: Numbered-service dispatch
 parent: TEC-OS
 nav_order: 23
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 23. Numbered-service dispatch

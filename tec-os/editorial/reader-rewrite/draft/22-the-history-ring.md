@@ -2,7 +2,7 @@
 title: The history ring
 parent: TEC-OS
 nav_order: 22
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 22. The history ring

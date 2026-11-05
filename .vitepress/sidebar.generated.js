@@ -2398,127 +2398,137 @@ export const sidebars = {
   ],
   "/tec-os/": [
     {
-      "text": "Part I: Using and programming TEC-OS",
+      "text": "Using the machine",
       "collapsed": false,
       "items": [
         {
-          "text": "Introduction",
-          "link": "/tec-os/01-introduction.html"
+          "text": "First session",
+          "link": "/tec-os/01-first-session.html"
         },
         {
-          "text": "The console",
-          "link": "/tec-os/02-console.html"
+          "text": "Make a small program",
+          "link": "/tec-os/02-make-a-small-program.html"
         },
         {
-          "text": "The command line",
-          "link": "/tec-os/03-command-line.html"
+          "text": "Work with files",
+          "link": "/tec-os/03-work-with-files.html"
         },
         {
-          "text": "Cards and volumes",
-          "link": "/tec-os/04-cards-and-volumes.html"
+          "text": "Drives and user areas",
+          "link": "/tec-os/04-drives-and-user-areas.html"
         },
         {
-          "text": "Drives, the cache and your work",
-          "link": "/tec-os/05-drives-and-cache.html"
+          "text": "Cards on the PC",
+          "link": "/tec-os/05-cards-on-the-pc.html"
         },
         {
-          "text": "The startup file",
-          "link": "/tec-os/06-startup-file.html"
+          "text": "Choose a console",
+          "link": "/tec-os/06-choose-a-console.html"
         },
         {
-          "text": "A first program",
-          "link": "/tec-os/07-first-program.html"
+          "text": "Commands at startup",
+          "link": "/tec-os/07-commands-at-startup.html"
+        }
+      ]
+    },
+    {
+      "text": "Writing programs",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Call TEC-OS",
+          "link": "/tec-os/08-call-tec-os.html"
+        },
+        {
+          "text": "Read and write a file",
+          "link": "/tec-os/09-read-and-write-a-file.html"
         },
         {
           "text": "Memory for programs",
-          "link": "/tec-os/08-memory.html"
+          "link": "/tec-os/10-memory-for-programs.html"
         },
         {
-          "text": "Programs and the console",
-          "link": "/tec-os/09-programs-and-console.html"
+          "text": "Use the board's devices",
+          "link": "/tec-os/11-use-the-boards-devices.html"
         },
         {
-          "text": "The hardware services",
-          "link": "/tec-os/10-hardware-services.html"
+          "text": "Results and command chains",
+          "link": "/tec-os/12-results-and-command-chains.html"
         },
         {
-          "text": "Return codes and chaining",
-          "link": "/tec-os/11-return-codes-and-chaining.html"
-        },
-        {
-          "text": "Writing services",
-          "link": "/tec-os/12-writing-services.html"
+          "text": "Write a resident service",
+          "link": "/tec-os/13-write-a-resident-service.html"
         }
       ]
     },
     {
-      "text": "Part II: Inside TEC-OS",
+      "text": "Inside TEC-OS",
       "collapsed": false,
       "items": [
         {
-          "text": "The ROM and its build",
-          "link": "/tec-os/13-rom-and-build.html"
+          "text": "State and memory inside TEC-OS",
+          "link": "/tec-os/14-state-and-memory.html"
         },
         {
-          "text": "The memory map",
-          "link": "/tec-os/14-memory-map.html"
-        },
-        {
-          "text": "Reset, cold boot and warm boot",
+          "text": "Reset and boot",
           "link": "/tec-os/15-reset-and-boot.html"
         },
         {
-          "text": "The BIOS and the console path",
-          "link": "/tec-os/16-bios-and-console.html"
+          "text": "Console paths",
+          "link": "/tec-os/16-console-paths.html"
         },
         {
-          "text": "The SD card and the volumes",
-          "link": "/tec-os/17-sd-card-and-volumes.html"
+          "text": "Card blocks and volumes",
+          "link": "/tec-os/17-card-blocks-and-volumes.html"
         },
         {
-          "text": "The block cache",
-          "link": "/tec-os/18-block-cache.html"
+          "text": "Cache and persistence",
+          "link": "/tec-os/18-cache-and-persistence.html"
         },
         {
-          "text": "The BDOS",
-          "link": "/tec-os/19-bdos.html"
+          "text": "A file through the BDOS",
+          "link": "/tec-os/19-a-file-through-the-bdos.html"
         },
         {
-          "text": "The CCP",
-          "link": "/tec-os/20-ccp.html"
+          "text": "From prompt to program",
+          "link": "/tec-os/20-from-prompt-to-program.html"
         },
         {
-          "text": "Chaining inside",
-          "link": "/tec-os/21-chaining-inside.html"
+          "text": "Chains across a warm boot",
+          "link": "/tec-os/21-chains-across-warm-boot.html"
         },
         {
-          "text": "Command history",
-          "link": "/tec-os/22-command-history.html"
+          "text": "The history ring",
+          "link": "/tec-os/22-the-history-ring.html"
         },
         {
-          "text": "The hardware services in the ROM",
-          "link": "/tec-os/23-hardware-services-inside.html"
+          "text": "Numbered-service dispatch",
+          "link": "/tec-os/23-numbered-service-dispatch.html"
         },
         {
-          "text": "The service loader",
-          "link": "/tec-os/24-service-loader.html"
+          "text": "Loading and removing services",
+          "link": "/tec-os/24-loading-and-removing-services.html"
         },
         {
-          "text": "Startup",
-          "link": "/tec-os/25-startup.html"
+          "text": "Startup inside the CCP",
+          "link": "/tec-os/25-startup-inside-the-ccp.html"
         },
         {
-          "text": "Diagnostics",
-          "link": "/tec-os/26-diagnostics.html"
+          "text": "Build the ROM and media",
+          "link": "/tec-os/26-build-the-rom-and-media.html"
         },
         {
-          "text": "The host model",
-          "link": "/tec-os/27-host-model.html"
+          "text": "Diagnose the machine",
+          "link": "/tec-os/27-diagnose-the-machine.html"
+        },
+        {
+          "text": "The host model as evidence",
+          "link": "/tec-os/28-the-host-model-as-evidence.html"
         }
       ]
     },
     {
-      "text": "Appendices",
+      "text": "Reference",
       "collapsed": false,
       "items": [
         {
@@ -2556,6 +2566,10 @@ export const sidebars = {
         {
           "text": "I. The web page",
           "link": "/tec-os/appendix-i-web-page.html"
+        },
+        {
+          "text": "J. Command reference",
+          "link": "/tec-os/appendix-j-command-reference.html"
         }
       ]
     }

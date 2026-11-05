@@ -2,7 +2,7 @@
 title: Choose a console
 parent: TEC-OS
 nav_order: 6
-nav_group: "Part I: Using and programming TEC-OS"
+nav_group: "Using the machine"
 ---
 
 # 6. Choose a console

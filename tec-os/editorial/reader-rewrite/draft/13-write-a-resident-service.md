@@ -2,7 +2,7 @@
 title: Write a resident service
 parent: TEC-OS
 nav_order: 13
-nav_group: "Part I: Using and programming TEC-OS"
+nav_group: "Writing programs"
 ---
 
 # 13. Write a resident service

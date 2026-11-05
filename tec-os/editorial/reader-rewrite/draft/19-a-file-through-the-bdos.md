@@ -2,7 +2,7 @@
 title: A file through the BDOS
 parent: TEC-OS
 nav_order: 19
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 19. A file through the BDOS

@@ -2,7 +2,7 @@
 title: J. Command reference
 parent: TEC-OS
 nav_order: 110
-nav_group: Appendices
+nav_group: "Reference"
 ---
 
 # Appendix J. Command reference

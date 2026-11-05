@@ -2,7 +2,7 @@
 title: Memory for programs
 parent: TEC-OS
 nav_order: 10
-nav_group: "Part I: Using and programming TEC-OS"
+nav_group: "Writing programs"
 ---
 
 # 10. Memory for programs

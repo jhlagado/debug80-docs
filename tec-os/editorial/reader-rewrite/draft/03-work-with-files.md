@@ -2,7 +2,7 @@
 title: Work with files
 parent: TEC-OS
 nav_order: 3
-nav_group: "Part I: Using TEC-OS"
+nav_group: "Using the machine"
 ---
 
 # 3. Work with files

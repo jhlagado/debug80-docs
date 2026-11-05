@@ -2,7 +2,7 @@
 title: Diagnose the machine
 parent: TEC-OS
 nav_order: 27
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 27. Diagnose the machine

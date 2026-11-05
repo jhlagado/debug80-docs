@@ -5,155 +5,124 @@ has_children: true
 nav_exclude: true
 ---
 
-# TEC-OS: CP/M in ROM for the TEC-1G
+# TEC-OS on the TEC-1G
 
-TEC-OS is an operating system for the TEC-1G, held entirely in the board's 16
-KiB ROM. It runs CP/M 2.2 programs from volumes on an SD card, and it gives
-programs the board's displays, keyboards, LEDs and clock through numbered
-services in the ROM. This book answers one question: how do you use a TEC-1G
-running TEC-OS, write programs for it and understand how it works inside?
+<!-- Opening profile: KD-243 / KS48, TEC Compact at 40 columns.
+     Selected mechanism source962853f, tested8b8664a.
+     Public workflows accepted by Origo review4b5b5a50 from attempt02/e77c7ef0.
+     Bounded opening craft/factual reviews closed d9d57d2/b911e84.
+     That whole batch remains FAILED. Later service controls are separate.
+     Remaining citation reconciliation, navigation and final book review
+     are not accepted by this front-door metadata. -->
 
-## The reader
+With TEC-OS in its ROM the TEC-1G starts at a command prompt. You can list
+files on an SD card and run a supplied program before using the editor and
+assembler to make one of your own. TEC-OS provides the CP/M 2.2 programming
+interface and calls for the board's devices.
 
-This book is for someone who knows the TEC-1G, or a Z80 board like it,
-and wants to use the board as a small disk computer. Chapters 1 to 6 begin at
-the first prompt, and a reader of them needs no programming. Chapters 7 to 12
-are for readers of Z80 assembly, and they explain each part of CP/M where a
-program first uses it. Part II is for readers who want the mechanism: how an
-operating system with a CP/M interface fits in 16 KiB, and what it keeps
-where while it runs. The appendices are the reference.
+## Starting with a prepared machine
 
-## Examples and sources
+The first session uses a 40-column PICO9918 display and the matrix keyboard,
+with the Matrix switch enabled. The board needs a 32,768-byte RAM chip in U9,
+the 4 MHz FAST setting, the TEC-OS ROM and a prepared starter card. The keypad
+non-maskable interrupt (NMI) jumper is off. SYSTEM is on drive A and WORK is on
+drive B. Hardware preparation is described in
+[Appendix G](appendix-g-tec-1g.md).
 
-Part I works through transcripts. Each one is a real run of TEC-OS: what you
-type at the prompt and what TEC-OS printed in reply, copied unchanged, with the
-command that produced it. You can repeat any run on a PC with TEC-OS's script
-`tools/capture.mjs`, which runs the same host model from Node.js, or on the
-web page that the repository builds, which Appendix I describes. Part II
-explains the code itself. Each of its statements about the code gives the
-source file and line it rests on, so you can follow the explanation into the
-ROM.
+[First session](01-first-session.md) begins with that preparation complete.
+[Make a small program](02-make-a-small-program.md)
+continues with a short banner entered in TED. You save it, build it with TAS,
+change its text and run it again. These two sessions introduce the keys and
+commands they use without requiring an earlier CP/M or assembly course.
 
-Every example was run on the host model, a software TEC-1G on the Debug80
-TEC-1G runtime. TEC-OS has not yet run on a physical board, so what the book
-says about a board is what the code requires of one.
+The banner is a guided copy-and-change exercise. Its instructions and data
+are explained beside the listing. The later programming chapters assume you
+can read a short Z80 listing with labels, registers and branches. They explain
+the TEC-OS call, buffer and stack contracts before examples depend on them.
 
-Each chapter was checked against TEC-OS at commit 78127ec. The code is the
-authority: where a chapter differs from the source, the source is right and the
-chapter has a fault to correct.
+Serial terminals, the graphics LCD and other display widths have their own
+configuration chapter. The web page is an optional way to use the software
+machine, with its controls and card-saving rules in
+[Appendix I](appendix-i-web-page.md).
 
-## Conventions
+## Runs and source
 
-Addresses and bytes are hexadecimal with a trailing `h`, as in `0100h`, as the
-Z80 assemblers of CP/M's time wrote them. Sizes in bytes are decimal. A KiB is
-1,024 bytes and a MiB is 1,024 KiB. Times are in T-states, the Z80's clock
-cycles. At the TEC-1G's 4 MHz one T-state is a quarter of a microsecond.
+The demonstrations and measurements are from the Debug80 TEC-1G host model,
+a software implementation of the machine. They are not physical-board runs.
+The diagnostics chapter
+separates what a test establishes in software from what a board report can
+establish about that board.
 
-A transcript shows the prompt with what you type after it, then TEC-OS's
-reply:
+Each chapter records the source revision used to check its claims. A retained
+historical capture also records the revision and inputs that produced it.
+Source references name the file and lines for the stated revision. A source
+change may move those lines even when the assembled program is unchanged.
+When the prose and its stated source disagree, the source is the authority
+and the prose needs correction.
 
-```text
-A>CON
-CON: TTY:
-A>
-```
+A transcript includes the prompt and the command typed after it, followed by
+the output. It may begin at an already-running prompt. Any other omitted output
+is identified with the example. Control keys are written with a caret: `^C`
+means Ctrl and C together. Reproducing the runs on a PC requires the setup and tools in
+[The host model as evidence](28-the-host-model-as-evidence.md).
 
-A transcript usually starts at the prompt where its first command is typed,
-and leaves out the boot before it. A key held with Ctrl is written with a
-caret, so `^C` means Ctrl and C together.
+Addresses and bytes use hexadecimal with a trailing `h`, as in `0100h`.
+Sizes in bytes are decimal. A KiB is 1,024 bytes and a MiB is 1,024 KiB.
 
-## Contents
+## Using the machine
 
-### Part I: Using and programming TEC-OS
+| Chapter | Use |
+| --- | --- |
+| [1. First session](01-first-session.md) | Power on, find files, run supplied SAMPLE and preserve work |
+| [2. Make a small program](02-make-a-small-program.md) | Enter, save, build, change and run a banner |
+| [3. Work with files](03-work-with-files.md) | Read, copy, rename and erase files and control long listings |
+| [4. Drives and user areas](04-drives-and-user-areas.md) | Locate programs, select volumes and use resident services |
+| [5. Cards on the PC](05-cards-on-the-pc.md) | Copy, check, recover and prepare card images |
+| [6. Choose a console](06-choose-a-console.md) | Select a display or serial terminal and its settings |
+| [7. Commands at startup](07-commands-at-startup.md) | Set up a startup file and bypass it when necessary |
 
-Part I is an operator's and programmer's manual. Its question: how do I use
-TEC-OS and write programs for it?
+## Writing programs
 
-1. **[Introduction](01-introduction.md).** What is TEC-OS, and what is it
-   like to use?
-2. **[The console](02-console.md).** Where do I type, where does TEC-OS
-   answer, and how do I move between the terminal and the board's screens?
-3. **[The command line](03-command-line.md).** What can I type at the prompt,
-   and what happens when it works and when it doesn't?
-4. **[Cards and volumes](04-cards-and-volumes.md).** How do I make a card of
-   my own?
-5. **[Drives, the cache and your work](05-drives-and-cache.md).** How does
-   TEC-OS use the card, and when is my work safely on it?
-6. **[The startup file](06-startup-file.md).** What ran at boot that I didn't
-   type, and how do I make my board start the way I want?
-7. **[A first program](07-first-program.md).** How do I write a program for
-   TEC-OS and run it?
-8. **[Memory for programs](08-memory.md).** How much memory does my program
-   have, and what must it leave alone?
-9. **[Programs and the console](09-programs-and-console.md).** How does my
-   program read keys and draw on the screen?
-10. **[The hardware services](10-hardware-services.md).** How does my program
-    reach the board's own devices without breaking the console?
-11. **[Return codes and chaining](11-return-codes-and-chaining.md).** How does
-    my program report success, or hand TEC-OS its next command?
-12. **[Writing services](12-writing-services.md).** How do I write code that
-    stays in memory after its command ends, and how do other programs find
-    it?
+| Chapter | Use |
+| --- | --- |
+| [8. Call TEC-OS](08-call-tec-os.md) | Read keys and print through the BDOS |
+| [9. Read and write a file](09-read-and-write-a-file.md) | Use file control blocks and record buffers |
+| [10. Memory for programs](10-memory-for-programs.md) | Allocate program space and stacks and use raw BIOS calls |
+| [11. Use the board's devices](11-use-the-boards-devices.md) | Call hardware services and share the display |
+| [12. Results and command chains](12-results-and-command-chains.md) | Report a result and start the next command |
+| [13. Write a resident service](13-write-a-resident-service.md) | Install a hook, publish routines and remove the service |
 
-### Part II: Inside TEC-OS
+## Inside TEC-OS
 
-Part II explains the internals, one mechanism a chapter. Its question: how
-does the 16 KiB ROM do what Part I showed, and what does it keep where while
-it does it?
+| Chapter | Mechanism |
+| --- | --- |
+| [14. State and memory](14-state-and-memory.md) | Workspace, banks, stacks and state lifetimes |
+| [15. Reset and boot](15-reset-and-boot.md) | Reset recognition, cold boot and warm boot |
+| [16. Console paths](16-console-paths.md) | BIOS routing, keyboard, serial and terminal code |
+| [17. Card blocks and volumes](17-card-blocks-and-volumes.md) | Card commands, container checks and record mapping |
+| [18. Cache and persistence](18-cache-and-persistence.md) | Read reuse, write ordering and failed writes |
+| [19. A file through the BDOS](19-a-file-through-the-bdos.md) | Directory entries, allocation and file operations |
+| [20. From prompt to program](20-from-prompt-to-program.md) | Parsing, lookup and program launch |
+| [21. Chains across a warm boot](21-chains-across-warm-boot.md) | Retained command text and conditional continuation |
+| [22. The history ring](22-the-history-ring.md) | Bounded storage and recall of command lines |
+| [23. Numbered-service dispatch](23-numbered-service-dispatch.md) | Register handling and device routines |
+| [24. Loading and removing services](24-loading-and-removing-services.md) | Relocation, publication and rollback |
+| [25. Startup inside the CCP](25-startup-inside-the-ccp.md) | Reading lines and handling absent displays |
+| [26. Build the ROM and media](26-build-the-rom-and-media.md) | Source, generated data and qualified artifacts |
+| [27. Diagnose the machine](27-diagnose-the-machine.md) | Card errors and the separate diagnostics ROM |
+| [28. The host model as evidence](28-the-host-model-as-evidence.md) | Host machine, captures, tests and their limits |
 
-13. **[The ROM and its build](13-rom-and-build.md).** Where is everything in
-    the 16 KiB, and how is the image made?
-14. **[The memory map](14-memory-map.md).** Where does TEC-OS keep its own
-    state, and which of it survives a warm boot?
-15. **[Reset, cold boot and warm boot](15-reset-and-boot.md).** What happens
-    between a reset, or a program's end, and the next prompt?
-16. **[The BIOS and the console path](16-bios-and-console.md).** What does a
-    character go through between a key and the screen?
-17. **[The SD card and the volumes](17-sd-card-and-volumes.md).** How does a
-    128-byte record become a block on the card?
-18. **[The block cache](18-block-cache.md).** Why is a second read fast, and
-    when does the card actually hold what a program wrote?
-19. **[The BDOS](19-bdos.md).** What does a BDOS call do to the directory and
-    the file, and where does TEC-OS differ from CP/M 2.2?
-20. **[The CCP](20-ccp.md).** How does the CCP turn a typed line into a
-    running program?
-21. **[Chaining inside](21-chaining-inside.md).** How does the rest of a line
-    survive the program that ran its first piece?
-22. **[Command history](22-command-history.md).** Where do recalled lines
-    live, and why does a reset lose them when a program doesn't?
-23. **[The hardware services](23-hardware-services-inside.md).** What does
-    each numbered service do in the ROM?
-24. **[The service loader](24-service-loader.md).** How does a `.SVC` file
-    become resident code, and how does it leave?
-25. **[Startup](25-startup.md).** How does TEC-OS run the startup file a line
-    at a time, and why do some failures say nothing?
-26. **[Diagnostics](26-diagnostics.md).** When TEC-OS can't start, what can
-    the board tell me, and how do I test the board itself?
-27. **[The host model](27-host-model.md).** What machine did every example in
-    this book run on, and what does a passing test prove about a board?
+## Reference
 
-### Appendices
-
-The appendices are reference: tables and numbered entries for the reader who
-has one question.
-
-- **[A. BDOS functions](appendix-a-bdos-functions.md).** What does function N
-  take and return, and does it differ from CP/M 2.2?
-- **[B. The ROM table and hardware services](appendix-b-rom-services.md).**
-  What goes in the registers for service N, what comes back, and how deep is
-  the stack?
-- **[C. Memory map](appendix-c-memory-map.md).** What is at address X, where
-  is label Y, and does it survive a warm boot?
-- **[D. Error messages](appendix-d-error-messages.md).** I saw this message:
-  what caused it, and what do I do?
-- **[E. The container format](appendix-e-container-format.md).** What is byte
-  N of block 0, and which check does the ROM make on it?
-- **[F. `tecvol`](appendix-f-tecvol.md).** What is the command, its arguments
-  and its options?
-- **[G. The TEC-1G as TEC-OS uses it](appendix-g-tec-1g.md).** Which port and
-  which bit does TEC-OS use for X, and what does the board need to have?
-- **[H. The service file format](appendix-h-service-file-format.md).** What
-  is byte N of a `.SVC` header, who writes it, and what does the loader
-  check?
-- **[I. The web page](appendix-i-web-page.md).** What does each control on
-  the page do, where is my card kept, and what does the page change on it?
+| Appendix | Lookup |
+| --- | --- |
+| [A. BDOS functions](appendix-a-bdos-functions.md) | Registers, effects and errors by function number |
+| [B. ROM interfaces](appendix-b-rom-services.md) | Numbered services, the PICO record and font |
+| [C. Memory map](appendix-c-memory-map.md) | Addresses and the state cleared at each boot |
+| [D. Messages and recovery](appendix-d-error-messages.md) | Causes, partial results and next actions |
+| [E. Container format](appendix-e-container-format.md) | Header, descriptors, checks and geometries |
+| [F. tecvol](appendix-f-tecvol.md) | Host commands and options |
+| [G. Hardware preparation](appendix-g-tec-1g.md) | Required setup, ports and hardware constraints |
+| [H. Service format](appendix-h-service-file-format.md) | Header fields, dependencies and relocation data |
+| [I. Web page](appendix-i-web-page.md) | Controls, input, saved cards and imports |
+| [J. Command reference](appendix-j-command-reference.md) | Exact syntax, names, wildcards and search rules |

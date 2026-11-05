@@ -2,7 +2,7 @@
 title: Startup inside the CCP
 parent: TEC-OS
 nav_order: 25
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 25. Startup inside the CCP

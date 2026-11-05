@@ -1,5 +1,5 @@
 {
-  "status": "pre-integration source check; root integration and rendered verification pending",
+  "status": "integrated root source checks passed; rendered verification pending",
   "inventory": {
     "reader_pages": 39,
     "relative_links": 247,
@@ -29,5 +29,614 @@
       "scope": "link fragment only, visible prose/source/captures unchanged"
     }
   ],
-  "execution": "No product import, assembly, test, runtime, site build, rendering or publication."
+  "execution": "No product import, assembly, test, runtime, site build, rendering or publication.",
+  "draft_check_snapshot": "80f664d5987e7c4d7911688bbba1237192c7580a",
+  "citation_ranges": {
+    "full_path_citations": 2248,
+    "source_files": 107,
+    "range_exceptions": [],
+    "foreign_citations": [
+      {
+        "page": "24-loading-and-removing-services.md",
+        "citation": "dbee66a:src/tas/MAIN.ASM:13-14",
+        "line_count": 133,
+        "authority": "Thorium",
+        "status": "valid foreign-source citation"
+      },
+      {
+        "page": "24-loading-and-removing-services.md",
+        "citation": "dbee66a:src/tas/DRV.ASM:92-120",
+        "line_count": 264,
+        "authority": "Thorium",
+        "status": "valid foreign-source citation"
+      },
+      {
+        "page": "appendix-h-service-file-format.md",
+        "citation": "dbee66a:src/tas/DRV.ASM:92-120",
+        "line_count": 264,
+        "authority": "Thorium",
+        "status": "valid foreign-source citation"
+      },
+      {
+        "page": "appendix-h-service-file-format.md",
+        "citation": "dbee66a:src/tas/DRV.ASM:252-258",
+        "line_count": 264,
+        "authority": "Thorium",
+        "status": "valid foreign-source citation"
+      }
+    ]
+  },
+  "prose_gate": {
+    "pages": 39,
+    "hard_findings": 0,
+    "review_candidates": 11,
+    "candidates": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "line": 90,
+        "column": 2,
+        "severity": "review",
+        "code": "HW008",
+        "message": "inanimate subject is given interior or social agency",
+        "excerpt": "[Chapter 6](06-choose-a-console.md)."
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+        "line": 215,
+        "column": 19,
+        "severity": "review",
+        "code": "HW008",
+        "message": "inanimate subject is given interior or social agency",
+        "excerpt": "from `SERVICES`. [Chapter 6](06-choose-a-console.md) explains switching"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+        "line": 84,
+        "column": 1,
+        "severity": "review",
+        "code": "HW008",
+        "message": "inanimate subject is given interior or social agency",
+        "excerpt": "chapter *block* alone means an allocation block and a *card block* is 512"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "line": 60,
+        "column": 3,
+        "severity": "review",
+        "code": "HW008",
+        "message": "inanimate subject is given interior or social agency",
+        "excerpt": "| Code | Cause | Remedy | See |"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "line": 178,
+        "column": 258,
+        "severity": "review",
+        "code": "HW008",
+        "message": "inanimate subject is given interior or social agency",
+        "excerpt": "| `NAME.SVC` | The file lacks the service magic or format 4 or fails another loader check before `INIT`, such as size, entry, space, dependency, relocation or stack checks. A format-4 file is not rejected merely for its former `.DRV` type. | Use a matching service file. See the old-card procedure before replacing a whole card. | `src/loader.asm:189-322`, `324-390`, `src/abi.inc:190` |"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "line": 189,
+        "column": 213,
+        "severity": "review",
+        "code": "HW008",
+        "message": "inanimate subject is given interior or social agency",
+        "excerpt": "| `CON` | The device name is not TTY, CRT, BAT, UC1, PICO or GLCD, optionally followed by a colon, or the remaining text is invalid. CRT/PICO may take a separated width. | Use a supported name and width form. | [Chapter 6](06-choose-a-console.md), `src/cpm/ccpcmd.asm:66-231` |"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "line": 299,
+        "column": 13,
+        "severity": "review",
+        "code": "HW008",
+        "message": "inanimate subject is given interior or social agency",
+        "excerpt": "| Message | Code | Cause | Remedy | See |"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "line": 371,
+        "column": 211,
+        "severity": "review",
+        "code": "HW008",
+        "message": "inanimate subject is given interior or social agency",
+        "excerpt": "| `CON: TTY:`, `CON: CRT:`, `CON: UC1:` | The effective console after CON. An unavailable CRT falls back to TTY. A returned UC1 load failure leaves the previous mode. `CON: BAT:` is generated but discarded. | [Chapter 6](06-choose-a-console.md), `src/cpm/ccpcmd.asm:200-231`, `src/loader.asm:895-913`, `src/console.asm:127-199`, `429-440` |"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "line": 55,
+        "column": 15,
+        "severity": "review",
+        "code": "HW008",
+        "message": "inanimate subject is given interior or social agency",
+        "excerpt": "| 1 | 1 | The format, 4 | See offset 0 |"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+        "line": 123,
+        "column": 23,
+        "severity": "review",
+        "code": "HW008",
+        "message": "inanimate subject is given interior or social agency",
+        "excerpt": "following strings are source-defined notices, not a new page capture"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "line": 12,
+        "column": 18,
+        "severity": "review",
+        "code": "HW008",
+        "message": "inanimate subject is given interior or social agency",
+        "excerpt": "for the new source offer. -->"
+      }
+    ],
+    "disposition": "Full candidate context checked. Four Chapter6 URL fragments contain choose; reference-table See cells and cross-cell scans are not artifact agency; Chapter19 block is a definition; AppendixI notices is a quoted/source-defined noun; AppendixJ source offer is metadata noun. No reader-prose agency exception introduced."
+  },
+  "complexity_summary": [
+    "tec-os/editorial/reader-rewrite/draft/01-first-session.md: 114 sentences, mean 11.5 words, 0.50 joints/sentence, 9% flagged, grade 5.9",
+    "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md: 143 sentences, mean 11.0 words, 0.47 joints/sentence, 21% flagged, grade 5.9",
+    "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md: 124 sentences, mean 11.8 words, 0.47 joints/sentence, 14% flagged, grade 6.1",
+    "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md: 189 sentences, mean 12.4 words, 0.61 joints/sentence, 16% flagged, grade 6.7",
+    "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md: 262 sentences, mean 13.0 words, 0.61 joints/sentence, 16% flagged, grade 7.6",
+    "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md: 147 sentences, mean 11.5 words, 0.65 joints/sentence, 10% flagged, grade 6.5",
+    "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md: 176 sentences, mean 11.4 words, 0.56 joints/sentence, 19% flagged, grade 6.9",
+    "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md: 135 sentences, mean 12.2 words, 0.62 joints/sentence, 7% flagged, grade 6.4",
+    "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md: 163 sentences, mean 13.1 words, 0.57 joints/sentence, 10% flagged, grade 6.8",
+    "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md: 222 sentences, mean 11.9 words, 0.56 joints/sentence, 9% flagged, grade 6.5",
+    "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md: 264 sentences, mean 12.2 words, 0.59 joints/sentence, 16% flagged, grade 6.9",
+    "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md: 180 sentences, mean 11.7 words, 0.55 joints/sentence, 12% flagged, grade 6.0",
+    "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md: 305 sentences, mean 12.6 words, 0.61 joints/sentence, 19% flagged, grade 7.8",
+    "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md: 190 sentences, mean 12.9 words, 0.59 joints/sentence, 4% flagged, grade 6.5",
+    "tec-os/editorial/reader-rewrite/draft/15-reset-and-boot.md: 262 sentences, mean 11.6 words, 0.58 joints/sentence, 13% flagged, grade 6.0",
+    "tec-os/editorial/reader-rewrite/draft/16-console-paths.md: 311 sentences, mean 12.5 words, 0.68 joints/sentence, 12% flagged, grade 6.4",
+    "tec-os/editorial/reader-rewrite/draft/17-card-blocks-and-volumes.md: 310 sentences, mean 12.1 words, 0.48 joints/sentence, 17% flagged, grade 6.4",
+    "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md: 266 sentences, mean 14.3 words, 0.70 joints/sentence, 9% flagged, grade 5.9",
+    "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md: 259 sentences, mean 15.8 words, 0.89 joints/sentence, 12% flagged, grade 6.2",
+    "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md: 282 sentences, mean 12.1 words, 0.67 joints/sentence, 17% flagged, grade 6.2",
+    "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md: 198 sentences, mean 11.8 words, 0.56 joints/sentence, 13% flagged, grade 5.8",
+    "tec-os/editorial/reader-rewrite/draft/22-the-history-ring.md: 144 sentences, mean 12.7 words, 0.53 joints/sentence, 6% flagged, grade 6.7",
+    "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md: 161 sentences, mean 13.3 words, 0.71 joints/sentence, 16% flagged, grade 6.2",
+    "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md: 251 sentences, mean 13.1 words, 0.61 joints/sentence, 16% flagged, grade 7.8",
+    "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md: 204 sentences, mean 12.7 words, 0.70 joints/sentence, 15% flagged, grade 6.4",
+    "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md: 223 sentences, mean 11.7 words, 0.57 joints/sentence, 17% flagged, grade 7.0",
+    "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md: 208 sentences, mean 12.3 words, 0.59 joints/sentence, 9% flagged, grade 6.4",
+    "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md: 218 sentences, mean 13.1 words, 0.65 joints/sentence, 15% flagged, grade 8.3",
+    "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md: 317 sentences, mean 11.0 words, 0.57 joints/sentence, 38% flagged, grade 5.0",
+    "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md: 259 sentences, mean 12.1 words, 0.61 joints/sentence, 27% flagged, grade 6.5",
+    "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md: 126 sentences, mean 11.7 words, 0.48 joints/sentence, 16% flagged, grade 6.7",
+    "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md: 129 sentences, mean 13.8 words, 0.81 joints/sentence, 22% flagged, grade 6.6",
+    "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md: 87 sentences, mean 14.0 words, 0.59 joints/sentence, 26% flagged, grade 6.3",
+    "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md: 139 sentences, mean 12.1 words, 0.65 joints/sentence, 15% flagged, grade 7.5",
+    "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md: 128 sentences, mean 12.8 words, 0.62 joints/sentence, 15% flagged, grade 6.7",
+    "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md: 72 sentences, mean 13.1 words, 0.56 joints/sentence, 19% flagged, grade 6.3",
+    "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md: 136 sentences, mean 12.7 words, 0.68 joints/sentence, 12% flagged, grade 7.7",
+    "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md: 151 sentences, mean 11.3 words, 0.69 joints/sentence, 17% flagged, grade 6.8",
+    "tec-os/editorial/reader-rewrite/draft/index.md: 40 sentences, mean 13.3 words, 0.68 joints/sentence, 15% flagged, grade 7.5"
+  ],
+  "complexity_boundary": "Final summary rerun after bounded edits. Full chapter-level complexity dispositions remain in pass records and independent craft reviews. Numerical flag targets are not an acceptance claim or reason to flatten exact reference contracts.",
+  "integrated_roots": {
+    "pages": 39,
+    "relative_links": 247,
+    "anchor_links": 45,
+    "missing_files": 0,
+    "missing_anchors": 0,
+    "root_to_final_draft_bytes": "all39 exact"
+  },
+  "site_wide_source_link_check": {
+    "command": "node scripts/check-links.mjs",
+    "exit": 0,
+    "markdown_files": 436,
+    "internal_links": 1245,
+    "result": "all resolve"
+  },
+  "git_diff_check": {
+    "exit": 2,
+    "all_findings_accounted_for": true,
+    "findings": [
+      {
+        "path": "tec-os/03-work-with-files.md",
+        "line": 195,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/03-work-with-files.md",
+        "line": 201,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/03-work-with-files.md",
+        "line": 207,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/04-drives-and-user-areas.md",
+        "line": 155,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/04-drives-and-user-areas.md",
+        "line": 276,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/04-drives-and-user-areas.md",
+        "line": 296,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/04-drives-and-user-areas.md",
+        "line": 297,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/04-drives-and-user-areas.md",
+        "line": 315,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/04-drives-and-user-areas.md",
+        "line": 318,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/04-drives-and-user-areas.md",
+        "line": 327,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/04-drives-and-user-areas.md",
+        "line": 390,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/04-drives-and-user-areas.md",
+        "line": 397,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/04-drives-and-user-areas.md",
+        "line": 398,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/05-cards-on-the-pc.md",
+        "line": 470,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/06-choose-a-console.md",
+        "line": 202,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/06-choose-a-console.md",
+        "line": 203,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/07-commands-at-startup.md",
+        "line": 69,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/07-commands-at-startup.md",
+        "line": 70,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/07-commands-at-startup.md",
+        "line": 186,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/07-commands-at-startup.md",
+        "line": 187,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/07-commands-at-startup.md",
+        "line": 195,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/07-commands-at-startup.md",
+        "line": 199,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/07-commands-at-startup.md",
+        "line": 200,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/07-commands-at-startup.md",
+        "line": 296,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/07-commands-at-startup.md",
+        "line": 297,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/08-call-tec-os.md",
+        "line": 263,
+        "cause": "new blank line at EOF.",
+        "disposition": "Exact accepted file ending"
+      },
+      {
+        "path": "tec-os/10-memory-for-programs.md",
+        "line": 338,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/10-memory-for-programs.md",
+        "line": 530,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 36,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 67,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 95,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 98,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 101,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 196,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 214,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 221,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 322,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 453,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 454,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 467,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "line": 476,
+        "cause": "new blank line at EOF.",
+        "disposition": "Exact accepted file ending"
+      },
+      {
+        "path": "tec-os/16-console-paths.md",
+        "line": 243,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/16-console-paths.md",
+        "line": 247,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/17-card-blocks-and-volumes.md",
+        "line": 281,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/17-card-blocks-and-volumes.md",
+        "line": 298,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/17-card-blocks-and-volumes.md",
+        "line": 536,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/18-cache-and-persistence.md",
+        "line": 379,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/20-from-prompt-to-program.md",
+        "line": 106,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/20-from-prompt-to-program.md",
+        "line": 478,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/20-from-prompt-to-program.md",
+        "line": 479,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/20-from-prompt-to-program.md",
+        "line": 574,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/20-from-prompt-to-program.md",
+        "line": 577,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/20-from-prompt-to-program.md",
+        "line": 578,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/20-from-prompt-to-program.md",
+        "line": 581,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/20-from-prompt-to-program.md",
+        "line": 582,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/21-chains-across-warm-boot.md",
+        "line": 103,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/21-chains-across-warm-boot.md",
+        "line": 104,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/21-chains-across-warm-boot.md",
+        "line": 107,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/22-the-history-ring.md",
+        "line": 294,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/22-the-history-ring.md",
+        "line": 295,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/26-build-the-rom-and-media.md",
+        "line": 483,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/28-the-host-model-as-evidence.md",
+        "line": 160,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/28-the-host-model-as-evidence.md",
+        "line": 161,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/28-the-host-model-as-evidence.md",
+        "line": 175,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/28-the-host-model-as-evidence.md",
+        "line": 176,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/appendix-j-command-reference.md",
+        "line": 147,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      },
+      {
+        "path": "tec-os/appendix-j-command-reference.md",
+        "line": 204,
+        "cause": "trailing whitespace.",
+        "disposition": "Exact accepted literal capture whitespace"
+      }
+    ],
+    "boundary": "Preserved capture padding and two unchanged draft file endings. None trimmed to silence the check."
+  }
 }

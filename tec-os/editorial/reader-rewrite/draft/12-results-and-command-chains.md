@@ -2,7 +2,7 @@
 title: Results and command chains
 parent: TEC-OS
 nav_order: 12
-nav_group: "Part I: Using and programming TEC-OS"
+nav_group: "Writing programs"
 ---
 
 # 12. Results and command chains

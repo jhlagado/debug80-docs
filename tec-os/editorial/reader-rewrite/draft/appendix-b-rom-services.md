@@ -2,7 +2,7 @@
 title: B. The ROM table and hardware services
 parent: TEC-OS
 nav_order: 102
-nav_group: "Appendices"
+nav_group: "Reference"
 ---
 
 # Appendix B. The ROM table and hardware services

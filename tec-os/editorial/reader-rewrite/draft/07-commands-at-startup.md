@@ -2,7 +2,7 @@
 title: Commands at startup
 parent: TEC-OS
 nav_order: 7
-nav_group: "Part I: Using TEC-OS"
+nav_group: "Using the machine"
 ---
 
 # 7. Commands at startup

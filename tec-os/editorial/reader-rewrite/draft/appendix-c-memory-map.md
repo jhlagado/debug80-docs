@@ -2,7 +2,7 @@
 title: C. Memory map
 parent: TEC-OS
 nav_order: 103
-nav_group: "Appendices"
+nav_group: "Reference"
 ---
 
 # Appendix C. Memory map

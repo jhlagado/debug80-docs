@@ -2,7 +2,7 @@
 title: From prompt to program
 parent: TEC-OS
 nav_order: 20
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 20. From prompt to program

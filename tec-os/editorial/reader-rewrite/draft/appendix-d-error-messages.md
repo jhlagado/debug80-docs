@@ -2,7 +2,7 @@
 title: D. Error messages
 parent: TEC-OS
 nav_order: 104
-nav_group: "Appendices"
+nav_group: "Reference"
 ---
 
 # Appendix D. Error messages
