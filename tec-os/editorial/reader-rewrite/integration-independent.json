@@ -549,5 +549,221 @@
     "written_path": "tec-os/editorial/reader-rewrite/integration-independent.json",
     "reader_sidebar_plan_and_shared_records_edited": false,
     "commit_scope": "Only this independent JSON report."
+  },
+  "bounded_post_integration_delta": {
+    "commit": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+    "candidate_root_reader_freeze": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+    "status": "clear",
+    "findings": [],
+    "changed_root": "tec-os/13-write-a-resident-service.md",
+    "changed_draft": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+    "old_phrase": "PICO version 3 console",
+    "new_phrase": "PICO9918 console",
+    "comparison": "Exactly one phrase replaced in both copies. All other Chapter 13 bytes, all 38 other roots and generated sidebar are unchanged from 9e22705.",
+    "chapter_13_before_sha256": "19cd3f9c801aaec6a4171cc2b1feafd9535be97e011ee27ce8f404d9bac643e0",
+    "chapter_13_after_sha256": "ce41f0d53845043fde293f184d0057d5a42ac920eca02c5e95ced6886cb1677e",
+    "setup_paragraph_readback": "Qualified fa639 ROM, 40 columns, Matrix enabled, no startup GLCD installation and fresh baseline separate from COUNT remain explicit. PICO9918 names the console hardware. Registry interface version 3 remains in the unchanged evidence/header.",
+    "fences_and_comments_exact": true,
+    "refreshed_integration_manifest_sha256": "e6664f261b74d400f42ec38a28c8b5dbc356988524486d1878f116dc4832b32a",
+    "pass_record_clarification_sha256": "81e0439847e99537160e0d47d77460b97e27d42ab3fe821293596d20d67e0030",
+    "current_39_root_identities": [
+      {
+        "root": "tec-os/01-first-session.md",
+        "sha256": "982101a7dcce73678472492d0fe0c2954a1a4a107f276099a9e333aa32c96480",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/02-make-a-small-program.md",
+        "sha256": "ae0f232fe28f90fd6bde10f58bff7e8b1cdad461570d5b58feef6d5db5cf30f0",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/03-work-with-files.md",
+        "sha256": "5828ff5e927bad3813e1bedb6a4324a7191bfdfe98fb0acd94c54884e7353828",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/04-drives-and-user-areas.md",
+        "sha256": "195afaf55f6c028a1d712ea087c6342dbbac93f0f490e09a8c848c4679ffef28",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/05-cards-on-the-pc.md",
+        "sha256": "2147bfbc8fc69d4139810502592cb7367220965950d98fa5ca83b05c6f9b7e95",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/06-choose-a-console.md",
+        "sha256": "e48a49c798e4eedb433320728f3c24edefbea54230932701a6892b5f77a59d34",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/07-commands-at-startup.md",
+        "sha256": "4336d1372ff50572bdfcdd5554c266ad84052e5de9421e26e7f6d743c2e3e237",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/08-call-tec-os.md",
+        "sha256": "8aeb33d0c2bfe88de2269c343c5686cc6cfc26792f2f1b2bd2329fd902996790",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/09-read-and-write-a-file.md",
+        "sha256": "0829de9ec9905c3d685aa06a72e432daa2aa1968e36a0753968a45fe392f1980",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/10-memory-for-programs.md",
+        "sha256": "4c47dfaec37d5223d7d8587ee02eb75b1d9e352a7b98eb25a8ad39b8587b7d33",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/11-use-the-boards-devices.md",
+        "sha256": "4f4c6891e9c1a8d63ffbdd3c6c809e876a200c45b6b0c4ffa6c8611663012672",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/12-results-and-command-chains.md",
+        "sha256": "db02f131ae5284cf19d3ca63ddb2b60b91218ffdcabf21b0721ec3b930f473e6",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/13-write-a-resident-service.md",
+        "sha256": "ce41f0d53845043fde293f184d0057d5a42ac920eca02c5e95ced6886cb1677e",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/14-state-and-memory.md",
+        "sha256": "fe0240e11ba2572036a54881ed76640b8e0a2a227408e6d2c79cc07bfac42b28",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/15-reset-and-boot.md",
+        "sha256": "b670b89138ff916f97c4a3caade5fc70bfd7a9989e3211d8d40b794dc6db3cc0",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/16-console-paths.md",
+        "sha256": "5d37cb47445b9a30431c0900827d337f7844041ea2de50d90261a49ec85430cf",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/17-card-blocks-and-volumes.md",
+        "sha256": "906bde8f2758d75297d110d2ade6083998c8a7186d9431e103aa6da2289afa91",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/18-cache-and-persistence.md",
+        "sha256": "65452579354eb5e48380a3d8653ca733a00bf9caea5bbb8336ffa4422d4dade2",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/19-a-file-through-the-bdos.md",
+        "sha256": "96ebc2adc830bd1aa15cc390a051a2ed9947f718021c5be860a024508d13ce0f",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/20-from-prompt-to-program.md",
+        "sha256": "f87836a373a50f2e1da343dd7b208ed01e382d33bd0688f6e8ad2306355c610a",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/21-chains-across-warm-boot.md",
+        "sha256": "00dafe111d60babaf2bf318374088a39d5fae3f984548c4b9890f611a418cb23",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/22-the-history-ring.md",
+        "sha256": "6c11896d9e867c5f248df86a6cec3f541dd90d5ef182d51cc1f5e27af1cebf79",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/23-numbered-service-dispatch.md",
+        "sha256": "167c2f5ddf58c9efb332f94b9a352288d10ea4dc0965200e1bb0a968a6bba81f",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/24-loading-and-removing-services.md",
+        "sha256": "9ac0c0b06961ca1da739f8141051ae2733a1a0bc0df3bc96986bbaa6def15c66",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/25-startup-inside-the-ccp.md",
+        "sha256": "b29a92c2458e7820885874af39ba3a47cbed92d653a9d2743dff44ba3f787708",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/26-build-the-rom-and-media.md",
+        "sha256": "709eaddf642de42a4c86cb08f88e63e05368392904413a6f1cd962a2b07f7b40",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/27-diagnose-the-machine.md",
+        "sha256": "8184d5eda73009a3fd38740328dad4eb3f9ddd919410641349315f329f245e43",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/28-the-host-model-as-evidence.md",
+        "sha256": "405a7d80be0ebbd310c1a89c27f233d661cb7ecc891685e4353399064ee17b6f",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/appendix-a-bdos-functions.md",
+        "sha256": "edc890f187aa8d1df0cf4b7081a4895fd07858092f1355ecca5da34d0754517b",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/appendix-b-rom-services.md",
+        "sha256": "4d05aaaacad7faa9b75ea172e7461fb20e9662a02191e4b2dae3f4d44f9a23ff",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/appendix-c-memory-map.md",
+        "sha256": "752031f1a8b4a04640709552750ca830e617fe81e5c4d34c343333aba383adc7",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/appendix-d-error-messages.md",
+        "sha256": "274a082339d0ade81919c71d3e25a3d8149f7ff5b186f1d4833553db8db5bf03",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/appendix-e-container-format.md",
+        "sha256": "7b6b46e77e665076ed4c81f15da4fb6aa177c13f460bad60b3c8c87f091496e4",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/appendix-f-tecvol.md",
+        "sha256": "b5882ac03d08ab4c9afe00b529ccb35a4a05479b0a4f4885e7448d1f1cf972e4",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/appendix-g-tec-1g.md",
+        "sha256": "1f5a0c5587e0ab0f5d7aa28fb160fad1ac97954ef678f28082845c9a17d60c45",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/appendix-h-service-file-format.md",
+        "sha256": "6a69cc7cb474c52f4f0bd1d5205f09297c332eb8aa08596506d19ac76512d115",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/appendix-i-web-page.md",
+        "sha256": "e5f095e8539a2581969edb3559b8119d622c4321e5d9472fd80636edb053b947",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/appendix-j-command-reference.md",
+        "sha256": "ea6037d89eb85834dab5cd9d5441f235f39ba5f38fdbe1ac2a76c969d471f60b",
+        "matches_final_draft": true
+      },
+      {
+        "root": "tec-os/index.md",
+        "sha256": "81cdf91fa07128f76f90873eaadb61ac58e76e43f596fe338f646ee3e3deea0c",
+        "matches_final_draft": true
+      }
+    ],
+    "prior_check_inheritance": "No link, heading, route, group, exclusion, capture or source range changes. The 9e22705 static integration checks remain applicable except for the explicitly updated Chapter 13 hash.",
+    "boundary": "The earlier report remains pinned to its original integration snapshot. This additive delta confirms candidate a3e4c29 without new runtime, rendering, source repinning, publication or final parent acceptance."
   }
 }
