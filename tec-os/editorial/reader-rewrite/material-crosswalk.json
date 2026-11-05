@@ -4505,6 +4505,29 @@
         }
       ],
       "limits": "No runtime, source/output change or ladder change. USER operator scope remains0–15; wider BDOS contract stays in AppendixA."
+    },
+    {
+      "authority": "P3 complete Chapter7/pass-record review atc83dc06; applied58dcb2d",
+      "source_draft": "draft/07-commands-at-startup.md before58dcb2d",
+      "moves": [
+        {
+          "material": "Program JP0000h exit mechanism",
+          "destination": "draft/08-call-tec-os.md, Calls returns and saved values",
+          "disposition": "Existing full explanation retained.7 keeps observable ordinary return/CtrlC and startup continuation with link."
+        },
+        {
+          "material": "Second-byte service format4 field/check",
+          "destination": "draft/appendix-h-service-file-format.md, The header, offsets0/1 and magic/format check",
+          "disposition": "Existing field/check retained.7 keeps renaming incompatibility warning and migration links."
+        },
+        {
+          "material": "LCD hardware-service row3 ownership and direct-port bypass",
+          "destination": "draft/11-use-the-boards-devices.md, The LCD and the speaker; draft/25-startup-inside-the-ccp.md, Recovery words and row ownership",
+          "disposition": "Existing complete destination explanations/source proof retained.7 keeps observable five-character clearing and exact links."
+        }
+      ],
+      "readback": "Lead read the entire58dcb2d changed contexts and all three actual destination passages. No lost source fact or active destination edit was required.",
+      "limits": "Bounded ladder-preserving refinement only. No new runtime evidence. Useful GLCD/narrow-width condition boundary retained."
     }
   ]
 }
