@@ -324,7 +324,9 @@
       "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
       "destinations": [
         1,
-        6
+        6,
+        16,
+        8
       ],
       "paragraph_detail": "reverse-outline-01-02.md",
       "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
@@ -337,7 +339,8 @@
       "section": "Pausing output",
       "disposition": "split at paragraph jobs; retain complete example at primary home or named reference",
       "destinations": [
-        3
+        3,
+        28
       ],
       "paragraph_detail": "reverse-outline-01-02.md",
       "reason": "Specific teaching/lookup home assigned by this section; detailed paragraph and example boundaries are in the linked reverse outline.",
@@ -881,6 +884,7 @@
         2,
         12,
         10,
+        26,
         4
       ],
       "paragraph_detail": "reverse-outline-07-09.md",

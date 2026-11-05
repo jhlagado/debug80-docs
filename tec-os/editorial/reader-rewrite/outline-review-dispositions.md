@@ -30,3 +30,23 @@ Mechanical coverage confirms37 files,306 original headings and37 front matter
 records. Those counts prove enumeration only. Independent recheck must still
 judge the movement, qualifications and learning sequence. No craft or example
 verification pass is marked complete by those counts.
+
+## Independent recheck at ff1e5c8
+
+The recheck accepted repairs1,3,4 and5 and held finding2 on exact movement.
+The remaining corrections are now explicit in the controlling records:
+
+- Attribute extraction moved from the wrong DIR paragraph131–137 to actual
+  sentences139–145, with pagination3, user/attribute use4, host setting5 and
+  BDOS30 programming9. Ordinary DIR131–137 stays3.
+- All LINES.TXT preparation, capture commands, outputs and interpretation334–396
+  are28. New SAMPLE pagination3 is separate and unverified.
+- The dollar-echo explanation and its entire recipe/capture109–127 are25.
+- All historical HELLO error/repair units104–155 are26. New BANNER round2
+  has its own source, identity and pending verification.
+- Keyboard modifier/encoding sentences and editing table rows now have explicit
+  destinations. Backspace, cancellation and recall are1; redraw/continuation3;
+  terminal-specific keys6; encoding/scan16; list/pause input contracts8.
+
+This is a repair record, not independent acceptance. Prose remains held for
+recheck of these exact corrections. No runtime work ran.
