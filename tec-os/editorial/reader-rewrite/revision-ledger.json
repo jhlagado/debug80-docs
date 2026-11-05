@@ -16036,7 +16036,7 @@
     "seal_sha256": "b888f0af9c834bdec0e26252cec7e5ebe95c11a67672470e21ded53b60811302",
     "archive_sha256": "ea217b453b0abde866316ae75782be78462ca230e5bcbc84ba86365f0c038562",
     "manifest_sha256": "ebee9eabd486e324324c4855a4d58bc3273321b7d69bb1b7324624bb9d9dc467",
-    "status": "UNRUN as sealed. P3 owns separate final metadata review, allocation and any single attempt03 run. No case/budget expansion."
+    "status": "Executed once by P3 under05129c87. Attempt03 FAILED later at stale restart-padding snapshot; no COMPLETE. Sealed metadata remains historical."
   },
   "opening_material_preservation": {
     "all_files_erase": "Complete frozenold03:258–274 recipe/output now retained under AppendixJ ERA, exact historical78127ec pin and empty-B state. Crosswalk post-draft amendment governs over old parent placement in3.",
@@ -16046,6 +16046,31 @@
     "opening_review_paths": [
       "opening-craft-review.json",
       "opening-factual-review.json"
-    ]
+    ],
+    "failed_close_reader_home": "Required findingopening-preservation-01 appliedb8251e9 under reader18 A failed flush. Complete old05:184–199 shell/capture/output and useful containing explanation retain historical78127ec identity. Independent bounded confirmation pending.",
+    "craft_confirmation": "All four craft/grouping findings independently closed atd9d57d2 againstfa3a042; all16readerfences/19comments unchanged. Final source/navigation/whole-book acceptance separate."
+  },
+  "opening_attempt03": {
+    "status": "FAILED later; no COMPLETE or advanced-service qualification",
+    "authority": "P3 actual-run delegation following metadata/allocation05129c87",
+    "reported_milestones": 132,
+    "reported_charged_cycles": 1784689074,
+    "reported_cost": "21.4seconds/458MB; raw retention/result review owned by P3",
+    "reported_progress": "Carry observer corrected. fail-baseline completes INIT carry, no REMOVE, scan and rollback. This reported progress is not a new acceptance receipt.",
+    "failure": "Stale immediate-install restart snapshot compared across AREA warm boot. Source-defined PZSWP preserves JP3 and zeros its five padding bytes. Actual difference reported only000F C9→00. No product defect inferred.",
+    "reader_boundary": "Earlier independent4b5b5a50 opening/PC7/pager acceptance remains available. It is not held by this later failure."
+  },
+  "opening_recut05": {
+    "status": "Source checkpoint WIP / UNRUN; actual source clearance, final seal, approval and allocation absent",
+    "checkpoint_commit": "Origo9ebc28041af3f80c64b207145973c6749fbff607",
+    "batch_sha256": "41843b99b1c99a0c2ebfea96a211011aa5ec179e1da38ba1d185d0c0c41aa4b4",
+    "three_file_diff_bytes": 4350,
+    "three_file_diff_sha256": "8aa74c03adbece305de1e7a040d74553c05b94174f56c3a1cb99538385eb5fb0",
+    "scope": "Construct exact JP3/zero5 expected restart state after AREA, assert full service state and reuse canonical expected state for refusal and FAIL-with-control. All other state fields/targets/bytes remain exact. No actual-state-as-expectation or whole-RST ignore.",
+    "lead_reading": "Read complete three-file diff, complete restart-comparison audit/source-proof and complete serviceState/failCase/failWorkflow containing contexts as inert text. Cross-warm-boot comparisons are individually accounted for.",
+    "lead_inert_check": "Archive, manifest, cases, chapter05 shell, PASS, FAIL and AREA inputs byte-identical to offer04. Current batch and complete diff length/SHA independently verified. No import or execution.",
+    "fresh_stage": "/tmp/ks48-book-next-batch04",
+    "guard_log": "/tmp/ks48-book-next-batch04-guard.jsonl",
+    "preservation": "All prior packets and failed attempts retained; no case/cap change or retry authority."
   }
 }
