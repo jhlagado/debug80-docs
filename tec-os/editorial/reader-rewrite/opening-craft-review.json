@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "complete_independent_opening_craft_review_findings_for_disposition",
+  "status": "bounded_opening_craft_findings_closed",
   "scope": {
     "product_execution": false,
     "source_or_reader_edits": false,
@@ -324,7 +324,8 @@
         "Author disposition of punctuation finding",
         "Final navigation and whole-book acceptance remain separate"
       ],
-      "adjacent_chapter_review": "Completed across exact author commits33f3b8a/c384c49/5b69415. Carry-forward state is clear."
+      "adjacent_chapter_review": "Completed across exact author commits33f3b8a/c384c49/5b69415. Carry-forward state is clear.",
+      "current_confirmation_status": "closed_at_fa3a042"
     },
     "2": {
       "status": "review_complete_no_body_prose_finding",
@@ -544,7 +545,8 @@
         "Shared nav_group inconsistency recorded below for integration disposition",
         "Final book navigation/publication remain separate",
         "No advanced-service, browser, physical or audio acceptance"
-      ]
+      ],
+      "current_confirmation_status": "closed_at_fa3a042"
     },
     "3": {
       "status": "review_complete_two_polish_findings",
@@ -1010,7 +1012,8 @@
         "Author disposition of two polish findings",
         "No new post-BANNER REN/ERA case or standalone plain-TYPE return was accepted or needed for these approved excerpts"
       ],
-      "adjacent_chapter_review": "Completed across exact author commits33f3b8a/c384c49/5b69415. Carry-forward state is clear."
+      "adjacent_chapter_review": "Completed across exact author commits33f3b8a/c384c49/5b69415. Carry-forward state is clear.",
+      "current_confirmation_status": "closed_at_fa3a042"
     }
   },
   "integration_checks": {
@@ -1080,15 +1083,322 @@
     "substantive_blocking_findings": 0,
     "polish_findings": 3,
     "integration_consistency_findings": 1,
-    "unresolved_finding_ids": [
+    "unresolved_finding_ids": [],
+    "reader_or_source_changes": false,
+    "new_product_execution": false,
+    "chapter5_self_review": false,
+    "remaining_acceptance": "All four bounded review items are independently confirmed closed at fa3a042. Final book integration and broader acceptance remain separate.",
+    "confirmed_closed_finding_ids": [
       "OC1-P01",
       "OC3-P01",
       "OC3-P02",
       "OCI-01"
     ],
-    "reader_or_source_changes": false,
-    "new_product_execution": false,
-    "chapter5_self_review": false,
-    "remaining_acceptance": "Author/lead dispositions and final book integration. Runtime acceptance is not reopened or expanded."
-  }
+    "confirmation_commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+    "historical_finding_counts_preserved": true
+  },
+  "confirmations": [
+    {
+      "status": "all_bounded_opening_craft_findings_closed",
+      "correction_commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+      "parent_commit": "55807edfbfc8c31a709e582644c01c1e721b202c",
+      "scope": "Bounded confirmation of the accepted four review items. Full changed paragraphs/table rows, neighbours and added correction records read. No fresh whole-book review.",
+      "prior_report": {
+        "commit": "9ff9fdd",
+        "path": "tec-os/editorial/reader-rewrite/opening-craft-review.json",
+        "working_input_sha256": "fe2c8d5c1110c125ba49a91917b58849ba50ec7a878c6f05f80bc91171c01818",
+        "historical_findings_sha256": "dd3bcc2c1290b358ff7a9d0cb7dfb00b56fcd9a039305ebd3e5b958fb2ab0f7f"
+      },
+      "source_identities": [
+        {
+          "before": {
+            "commit": "55807edfbfc8c31a709e582644c01c1e721b202c",
+            "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+            "git_blob": "7b82711627034f00a1221ab0e46b3bbf5d0cea7b",
+            "bytes": 9118,
+            "sha256": "dc76d143773c963725b235256b3268b23f9be6068d40e07382a1eb6765e7d015"
+          },
+          "after": {
+            "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+            "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+            "git_blob": "0816f084171a45521e7f368fb59f1d0407df668c",
+            "bytes": 9099,
+            "sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf"
+          }
+        },
+        {
+          "before": {
+            "commit": "55807edfbfc8c31a709e582644c01c1e721b202c",
+            "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+            "git_blob": "69072fef88bd7256049c560c4bc6296bafae41d1",
+            "bytes": 11102,
+            "sha256": "596b3d541e9f991f7596d2f3933cd5755ce9c1c8cdb041f26207aeff40cdcc48"
+          },
+          "after": {
+            "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+            "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+            "git_blob": "37707ce9add9f4d8b7a5c5a442a0e6b2e9c1ee91",
+            "bytes": 11086,
+            "sha256": "4e288ebbc6a8257055a10f467c5564954fd2b484df17d72788ac94e6a288d029"
+          }
+        },
+        {
+          "before": {
+            "commit": "55807edfbfc8c31a709e582644c01c1e721b202c",
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "git_blob": "c16f154efdd80efdf0f8f3cdb9fb5c99ed4e70a6",
+            "bytes": 10364,
+            "sha256": "18db230d83aa4033ddcc3b224464b3a6c33e082acb6e5fc6ccc8968780b229df"
+          },
+          "after": {
+            "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "git_blob": "43e8334e8f87c55a68fdc19ac3be283ae1da4a13",
+            "bytes": 10276,
+            "sha256": "c8c82bfb7bd20ee7a2d83645fe94fade43b3e4c8817633f5e91e6733a7c7b874"
+          }
+        },
+        {
+          "before": {
+            "commit": "55807edfbfc8c31a709e582644c01c1e721b202c",
+            "path": "tec-os/editorial/reader-rewrite/draft/01-pass-record.md",
+            "git_blob": "371f16b051d52c1d5021eca6b4d8e377ce2edda1",
+            "bytes": 27613,
+            "sha256": "6e7ba31dad019a0841877d7671d8daa6622663bb8723835c01d7a0ae789f3b52"
+          },
+          "after": {
+            "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+            "path": "tec-os/editorial/reader-rewrite/draft/01-pass-record.md",
+            "git_blob": "8c617b4fcbe6f1f4eece26ca163bd4bc9954caa4",
+            "bytes": 28539,
+            "sha256": "c94d31e62dcce5c7cee7ee0a79070396a6ebc38a99ff5a3eded8af4beec502a9"
+          }
+        },
+        {
+          "before": {
+            "commit": "55807edfbfc8c31a709e582644c01c1e721b202c",
+            "path": "tec-os/editorial/reader-rewrite/draft/02-pass-record.md",
+            "git_blob": "427f455d27373527c34f0a009d765ff9cf8936b4",
+            "bytes": 21095,
+            "sha256": "71820e0279ae5f00c6870cf56bbae6d1d3d3cb3bc54987ff107ede39b99db76a"
+          },
+          "after": {
+            "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+            "path": "tec-os/editorial/reader-rewrite/draft/02-pass-record.md",
+            "git_blob": "98c7179a915e33f30eff1d772d96e30aeee98098",
+            "bytes": 21434,
+            "sha256": "74d0876fd30ec8ad9dd4e15d817165bf87384de084af2af80b8cf74edbfe7c9e"
+          }
+        },
+        {
+          "before": {
+            "commit": "55807edfbfc8c31a709e582644c01c1e721b202c",
+            "path": "tec-os/editorial/reader-rewrite/draft/03-pass-record.md",
+            "git_blob": "f1e2eeda20ed590aa5bbf104d42b67b26c909a4d",
+            "bytes": 14697,
+            "sha256": "fdd111210fdc294132624e157ae7d00573094190acb84d169a9d1d7b68b87c71"
+          },
+          "after": {
+            "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+            "path": "tec-os/editorial/reader-rewrite/draft/03-pass-record.md",
+            "git_blob": "5621d980fb37df6ac0b6141bb81095f5ceb51391",
+            "bytes": 15567,
+            "sha256": "476d3fe4b53a47bbe0c1cc8c207a07dddc912fdfbfe4c8d586bbff30dac84e54"
+          }
+        }
+      ],
+      "six_file_patch_sha256": "75255c0b8e07102d72cbfae88987964bc39348a4f53a4b01cceeaa902474a7dc",
+      "checks": [
+        {
+          "finding_id": "OC1-P01",
+          "status": "closed",
+          "full_contexts": [
+            {
+              "source": {
+                "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+                "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+                "git_blob": "0816f084171a45521e7f368fb59f1d0407df668c",
+                "bytes": 9099,
+                "sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf"
+              },
+              "start_line": 106,
+              "end_line": 124,
+              "full_context": "Control keys use Ctrl with a letter. `^X` means hold Ctrl while pressing X.\nThese command-line actions let you correct a name or start again:\n\n| Key | Action before Return |\n| --- | --- |\n| Backspace or `^H` | Removes the last character and erases it from the screen |\n| `^X` | Erases the whole line being typed |\n| `^U` | Discards the line, prints `#` and starts a new screen line |\n| `^W` | Brings back the previous command and earlier ones on further presses |\n| `^N` | Moves forward through recalled commands with an empty line past the newest |\n\nReturn runs a recalled line just as it runs a newly typed one. You can edit\nits last characters first with Backspace or discard it with `^X`. Recall is\nuseful for another `DIR` after a file has changed. It applies at the command\nprompt, not inside an arbitrary program's own input.\n\nA mistyped command can fail with a question mark after its name. The command\nhas then finished and the prompt is ready for a corrected line. `^C` has a\ndifferent use at an empty prompt, described at the end of this session.\n",
+              "sha256": "fc8222ba37579097c96ead684bc7483dcf679737072986903d11923089825c64"
+            },
+            {
+              "source": {
+                "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+                "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+                "git_blob": "0816f084171a45521e7f368fb59f1d0407df668c",
+                "bytes": 9099,
+                "sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf"
+              },
+              "start_line": 159,
+              "end_line": 179,
+              "full_context": "The source and program are separate files. An edit to the source affects the\nprogram only after another assembly. The `.ASM` file remains available to read\nor edit after the build.\n\nTyping `SAMPLE` now runs `SAMPLE.COM`. TEC-OS loads the program and starts it.\nThe program prints its greeting and screen size then returns to the prompt:\n\n<!-- attempt02 Machine 1, 006-opening-direct-run.json, screen rows 17–22.\n     Earlier commands omitted; response and blank row retained. -->\n```text\nA>SAMPLE\nHello from TEC-OS.\nScreen: 40 by 24\nBack to the prompt.\n\nA>\n```\n\nThe dimensions are 40 columns by 24 rows, matching this console. On the\nseparate 20 × 4 LCD SAMPLE writes `Hello from SAMPLE` and its digit output is\n`123456`. The source also includes a short speaker tone.\n",
+              "sha256": "0434f6fbd73a8dd3ef1f60fb5bc47e1f3220f40f60625c2d7a2036c3755289b4"
+            },
+            {
+              "source": {
+                "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+                "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+                "git_blob": "0816f084171a45521e7f368fb59f1d0407df668c",
+                "bytes": 9099,
+                "sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf"
+              },
+              "start_line": 203,
+              "end_line": 220,
+              "full_context": "If a line is partly typed or recalled, `^X` erases it first. `^C` is ignored\nwhile that line still contains characters. You do not press Return after the\nempty-prompt `^C` action. Wait for the new prompt before switching off,\npressing reset or removing the card.\n\nA `Write lost` message means that some pending changes could not be written.\nThe new prompt after that message does not establish successful preservation.\nThose failed changes have been dropped so another `^C` cannot recover them.\nKeep a separate copy of valuable work. [Chapter 5](05-cards-on-the-pc.md)\nexplains card copies and recovery and\n[Appendix D](appendix-d-error-messages.md) explains the failure messages.\n\nOnly a successful completion brings pending saved changes up to date on the\ncard. Save the file and exit an editor normally before this step. `^C` cannot\npreserve edits that exist only inside the editor.\n\nThe card must be out of the TEC-1G before you change it on a PC. After putting\nit back, press reset before using it again.\n",
+              "sha256": "f667dd5b8b8ccc7af8e50c32c6b8784c488ea5492840fabcea935b00a2d5abba"
+            }
+          ],
+          "confirmation": "All three reviewed optional commas are removed. The forward-recall end state, SAMPLE print/return sequence and parallel recovery references remain clear. The full Write lost, dropped-write, successful-save/flush and editor-buffer qualifications survive."
+        },
+        {
+          "finding_id": "OC3-P01",
+          "status": "closed",
+          "full_contexts": [
+            {
+              "source": {
+                "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+                "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+                "git_blob": "43e8334e8f87c55a68fdc19ac3be283ae1da4a13",
+                "bytes": 10276,
+                "sha256": "c8c82bfb7bd20ee7a2d83645fe94fade43b3e4c8817633f5e91e6733a7c7b874"
+              },
+              "start_line": 136,
+              "end_line": 155,
+              "full_context": "Space continues at each pause until the text ends. Esc, Q or q stops a listing\nbefore its unread remainder. `^C` stops there too. Each of these keys erases\n`[more]`.\n\n`^R` at the command prompt marks a hard-to-read line with `#` and reprints\nit on a new line. `^E` starts a new screen line while leaving the command\nbeing typed intact. Neither key changes a stored file.\n\n## Copy, rename and selectively erase\n\nCOPY makes another file from a source. The destination can give a new name, a\ndrive or both. With a drive alone, as in `COPY STARTUP.CMD B:`, the copy keeps\nthe source's name. An existing destination of that name is erased before the\nreplacement is made. Check the source and destination before copying over work\nyou need to keep.\n\nREN changes a name on the same drive. Its form is `REN NEW=OLD`, with the new\nname first and no spaces around `=`. ERA removes the named file. A rename to an\nexisting name gives `FILE EXISTS` and changes nothing. Erasing a name that is\nabsent gives `NO FILE`.\n",
+              "sha256": "23261b8b517477602709375125ef67a6b2cc466b8067635c50bac9ac104bfc59"
+            }
+          ],
+          "confirmation": "Subject-first ^R at the command prompt explicitly changes input context after pager controls. Its # mark/reprint and ^E screen-line continuation remain exact in meaning; neither is represented as a pager key or file mutation."
+        },
+        {
+          "finding_id": "OC3-P02",
+          "status": "closed",
+          "full_contexts": [
+            {
+              "source": {
+                "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+                "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+                "git_blob": "43e8334e8f87c55a68fdc19ac3be283ae1da4a13",
+                "bytes": 10276,
+                "sha256": "c8c82bfb7bd20ee7a2d83645fe94fade43b3e4c8817633f5e91e6733a7c7b874"
+              },
+              "start_line": 24,
+              "end_line": 60,
+              "full_context": "BANNER.ASM and its saved outputs stay on B while you read other text. A listing\nhelps you choose the file before a command changes it. Long text can be read\na screenful at a time.\n\n## Names in a listing\n\n`DIR` lists files on the current drive. `DIR B:` lists B without changing the\ncurrent drive. Each entry gives a name and a type, such as `BANNER.ASM`. Names\nappear in columns fitted to the console. The final line reports the number\nlisted and the drive's free space in KiB. A KiB is 1,024 bytes.\n`NO FILE` means that no visible file matched the request.\n\nA name has up to eight characters followed by a full stop and a type of up to\nthree characters. The type can be omitted with its full stop. A drive letter and\ncolon select a file on another drive: `A:SAMPLE.ASM` names the supplied source\non A. Without that prefix a name refers to the drive in your prompt. DIR is\nbuilt into the command processor that reads each line you enter. TAS is a\nprogram stored on the card.\n\nA wildcard lets you narrow a listing without typing every complete name.\n`DIR B:*.ASM` lists B's files with type ASM. The `*` matches the rest of the\nname or type in which it occurs. `?` matches one character in its position. For\nexample, `G*.*` matches names beginning with G, whatever their type. TYPE, COPY\nand REN each require unambiguous names instead of a wildcard pattern.\n[Appendix J](appendix-j-command-reference.md) gives the complete name rules and\nwildcard forms.\n\n## Read a text file\n\n`TYPE A:SAMPLE.ASM` prints the supplied source without changing it. TYPE reads\ntext until its first `^Z` end marker or the end of its recorded contents. It\ndoes not assemble the source or run commands found in a file.\n\nA short file fits before the next prompt. This retained earlier starter-card\nsession read `STARTUP.CMD`, whose one line was the automatic startup command. It\nis a historical example, separate from your BANNER session and the 40-column\nscreen below:\n",
+              "sha256": "20568e4a0fe8ffa438275b5d796ba348d04ee7336918f55db36d4f4423773b4f"
+            },
+            {
+              "source": {
+                "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+                "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+                "git_blob": "43e8334e8f87c55a68fdc19ac3be283ae1da4a13",
+                "bytes": 10276,
+                "sha256": "c8c82bfb7bd20ee7a2d83645fe94fade43b3e4c8817633f5e91e6733a7c7b874"
+              },
+              "start_line": 190,
+              "end_line": 205,
+              "full_context": "`COPIED 0001` reports one 128-byte record copied. The count is hexadecimal:\n`000A` means ten 128-byte records (1,280 bytes). It counts copied records rather\nthan space allocated to the file. Space is allocated in larger units, explained\nin [Cards on the PC](05-cards-on-the-pc.md#record-sizes-and-allocated-space).\n\nThe first REN made NOTES.TXT from COPY.TXT. The next REN left both files alone\nbecause NOTES.TXT already existed. The first ERA removed NOTES.TXT. The repeated\nERA found no such file. STARTUP.CMD remained on B and the source on A was not\nrenamed or erased.\n\nOn your working card, retain BANNER.ASM, BANNER.COM and BANNER.DBG. Use an exact\nname when erasing a disposable copy. A selective pattern such as `*.TXT` is\nerased without a confirmation question so it can remove more than one file.\nChecking it with DIR first helps you avoid erasing a file you meant to keep. The\nall-files erase form and its confirmation grammar are in\n[Appendix J](appendix-j-command-reference.md#era).\n",
+              "sha256": "0a01376a5208f83cbb7da04a3e3a277a89d1d0d4483aa4402e6bd027f961ec33"
+            }
+          ],
+          "confirmation": "Console columns now sit with DIR entry/footer interpretation. The calculation aside is gone. Copied-record quantities, hexadecimal count and allocated-space distinction remain together with the complete unchanged Chapter5 allocation link. The REN/ERA result interpretation is a separate connected paragraph. Historical BANNER/empty-B safety separation remains."
+        },
+        {
+          "finding_id": "OCI-01",
+          "status": "closed",
+          "pass_record_alias": "opening-integration-01",
+          "full_contexts": [
+            {
+              "source": {
+                "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+                "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+                "git_blob": "0816f084171a45521e7f368fb59f1d0407df668c",
+                "bytes": 9099,
+                "sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf"
+              },
+              "start_line": 1,
+              "end_line": 6,
+              "full_context": "---\ntitle: First session\nparent: TEC-OS\nnav_order: 1\nnav_group: \"Part I: Using TEC-OS\"\n---\n",
+              "sha256": "3ec34c47a264033c617b167172204d964fb2a93f50f2eac820055d44ad1aedf8"
+            },
+            {
+              "source": {
+                "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+                "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+                "git_blob": "37707ce9add9f4d8b7a5c5a442a0e6b2e9c1ee91",
+                "bytes": 11086,
+                "sha256": "4e288ebbc6a8257055a10f467c5564954fd2b484df17d72788ac94e6a288d029"
+              },
+              "start_line": 1,
+              "end_line": 6,
+              "full_context": "---\ntitle: Make a small program\nparent: TEC-OS\nnav_order: 2\nnav_group: \"Part I: Using TEC-OS\"\n---\n",
+              "sha256": "b0649ec9667d5f2cf7339d338b67671720ab29ebdea8269f05b86b45a6e4c1fd"
+            },
+            {
+              "source": {
+                "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+                "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+                "git_blob": "43e8334e8f87c55a68fdc19ac3be283ae1da4a13",
+                "bytes": 10276,
+                "sha256": "c8c82bfb7bd20ee7a2d83645fe94fade43b3e4c8817633f5e91e6733a7c7b874"
+              },
+              "start_line": 1,
+              "end_line": 6,
+              "full_context": "---\ntitle: Work with files\nparent: TEC-OS\nnav_order: 3\nnav_group: \"Part I: Using TEC-OS\"\n---\n",
+              "sha256": "0eb6b7ea72143b7cf9e6e359d615387b9eff6f25fe567fff7325fe3bcf7a0696"
+            }
+          ],
+          "confirmation": "Both corrected nav_group values equal Chapter3 and the agreed Part I: Using TEC-OS operator group. This confirms draft metadata consistency only; no root navigation, renderer or publication acceptance is implied."
+        }
+      ],
+      "literal_comparison": {
+        "method": "Ordered complete fenced blocks and HTML comment bytes extracted separately from each Git source and compared to the exact correction parent. JSON sequence hashes use UTF-8, ensure_ascii=false and compact separators.",
+        "reader_fences": 16,
+        "reader_comments": 19,
+        "all_equal": true,
+        "per_reader": [
+          {
+            "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+            "fences": 6,
+            "comments": 7,
+            "fence_sequence_sha256": "aa834bfffefa4373b697c150666df7696c5df856c63b3c0d0a394f60bb1c1bd8",
+            "comment_sequence_sha256": "2dc71b61553eb7ad562684dfdc75e00fe4a1300b192da5888d21234e6a7b76d2",
+            "equal_parent_to_corrected": true
+          },
+          {
+            "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+            "fences": 6,
+            "comments": 7,
+            "fence_sequence_sha256": "529ec91e8480faa9582d4c2704f9a043d3e6141318ec0232177a709efbaa67c0",
+            "comment_sequence_sha256": "af7c2eebd9eecba5256a9741375b5d1642f6701fee771ba9c8aea0f793c36638",
+            "equal_parent_to_corrected": true
+          },
+          {
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "fences": 4,
+            "comments": 5,
+            "fence_sequence_sha256": "2ae478c934a99f11043f79b134b55110a21e59a7558c2cc1476f99fd72573fef",
+            "comment_sequence_sha256": "1d70d675deaece19d800301a1c91fa3beb5e810ea5ebda4dd8bef9bf9d935605",
+            "equal_parent_to_corrected": true
+          }
+        ]
+      },
+      "gate_boundary": {
+        "six_file_zero_findings": "Recorded in fa3a042 Chapter1 correction record and explicitly supplied for this confirmation.",
+        "independent_gate_rerun": false,
+        "claim_limit": "This confirmation does not claim possession of an additional raw gate report or a new gate run."
+      },
+      "remaining_bounded_findings": [],
+      "remaining_bounded_count": 0,
+      "product_execution": false,
+      "reader_source_or_navigation_edits": false,
+      "chapter5_self_review": false,
+      "acceptance_limits": "No runtime acceptance is reopened or expanded. Whole batch remains FAILED. Advanced service, physical, browser, audio, final whole-book integration and publication remain outside this closure."
+    }
+  ]
 }
