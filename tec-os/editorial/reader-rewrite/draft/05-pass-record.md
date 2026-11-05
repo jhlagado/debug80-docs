@@ -2,7 +2,8 @@
 
 ## Brief and authority
 
-I own only `draft/05-cards-on-the-pc.md` and this record. The revision ledger
+I own only `draft/05-cards-on-the-pc.md`, this record and the held
+`draft/05-list-extract-candidate.md`. The revision ledger
 names `tec-os/05-cards-on-the-pc.md` as the final path. The job is to copy a
 card, extract work and prepare another card on a PC after the supplied-card
 workflow. The reader has files, drives and the successful-flush rule from
@@ -27,8 +28,8 @@ not establish new product results.
 
 ## Reader route
 
-The route is host prerequisites, a backup before changes, container/volume
-layout, record/allocation sizes, file extraction and replacement, the complete
+The revised route is host prerequisites, a backup before changes, listing
+and extraction, container/volume layout, record/allocation sizes, replacement, the complete
 custom-card preparation, recipes/protection, raw installation, browser limits
 and recovery. Host setup precedes the first shell recipe. Extraction comes
 before card construction so keeping existing work is the first useful PC
@@ -184,15 +185,17 @@ here, not assumed by the early file lesson. No root/shared ledger was edited.
 | Journey | Reread from the image/copy opening through final rebuild. Backup and device identity precede writes, tool setup precedes commands and volume/record concepts precede the recipe. Recovery ends on what can be extracted and replaced rather than claiming verify repairs data. |
 | Manual gate | Searched for agency, inflated copulas, hollow landings, staged questions, praise/importance vocabulary, semicolons/em dashes and automatic conjunction commas. Read negative statements in context. Retained prohibitions and exact protection/failure/evidence limits. Literal “drive(s) wanted” belongs to unchanged info output. |
 
-No prose-gate, complexity script or runtime checker was run under the
-no-execution instruction. Static fence comparisons show the twelve old04
+At the initial draft no prose-gate, complexity script or runtime checker was
+run under the no-execution instruction. The later authorised editorial gate
+is recorded below. Static fence comparisons show the twelve old04
 blocks unchanged with the four deliberate added/moved fences. The original
 protection output's padded STARTUP.CMD row is retained despite its trailing
 whitespace. No numerical readability or fresh runtime score is claimed.
 
 ## Handoff
 
-Only the two owned Chapter 5 paths are authored. Final links use the revision
+The initial draft authored only the two Chapter 5 paths. The later held
+candidate is accounted for below. Final links use the revision
 ledger's destinations for4/18/26/27 and Appendices D/E/F/I. Independent
 editorial/factual review, final navigation and whole-book reader-order
 acceptance remain open. The added text-input preparation has not been run
@@ -215,3 +218,93 @@ unchanged. Bounded confirmation pending. No execution or product change.
 Independent confirmation at48cd25f closes the sole mounting-order correction. All-or-empty outcome is now stated without a separate validation-before-any-mount pass. No bounded source/craft finding remains.
 Final source/profile, remaining workflow and whole-book integration remain
 open. No new execution accompanied the confirmation.
+
+## Parent Chapter 5 review and bounded revision
+
+The new instruction authorises this chapter, its record and the separate
+05-list-extract candidate. I reread the complete chapter, the old cards
+chapter, the existing preservation dispositions and the controlling outline.
+I rechecked the complete tecvol dispatcher, CP/M filesystem, container and
+recipe modules at ea3ef3d. I followed media generation and the relevant
+ROM cache, close, card-address and browser callers. Earlier independent
+corrections remain in place. There is no product execution or new capture.
+
+The first useful PC operation now follows the backup directly. The original
+listing, volume-selection, get, user-area and conversion guidance is moved
+intact in meaning to “Listing and extracting saved work”. Put/era/attributes
+remain after the record/allocation explanation. The moved text now states
+the destination-overwrite consequence, lone-CR behaviour and no-marker case
+explicitly. These are source contracts, not a claimed run of BANNER.
+
+I prepared the exact proposed BANNER commands and expected observations in
+`05-list-extract-candidate.md` before changing the reader prose. That candidate
+was committed and pushed separately at7152196. It uses the actual persisted
+Chapter 2 card as card.img, B user 0 and explicit new destinations
+recovered/BANNER.REC and recovered/BANNER.ASM. It excludes a new host-created
+substitute fixture and all fabricated output. The concrete BANNER recipe,
+its listing, byte counts and recovered source remain held for the shared batch.
+No BANNER-result explanation or new output fence is inserted into the chapter.
+
+### Case inventory for the lead and Ramanujan
+
+| Case | Required batch evidence |
+| --- | --- |
+| 05-L0 | Actual saved-card/source/input identity and successful structural verification. |
+| 05-L1 | Complete default-A and explicit-B directory output, including actual by-products. |
+| 05-L2 | User-0 BANNER entry and actual record-rounded byte count. |
+| 05-L3 | Raw extraction to recovered/BANNER.REC, listing-length equality and observed final-record bytes. |
+| 05-L4 | Text extraction to recovered/BANNER.ASM and complete equality with the final saved banner after the specified EOF/CRLF conversion. |
+| 05-L5 | Equal initial/final card hashes and retained extraction artifacts/command evidence. |
+
+The exact commands, observation conditions, stop conditions and source
+coordinates are in the candidate. The lead maps the six cases into the shared
+batch. No runtime allocation is implied. The failed or incomplete banner
+workflow cannot be repaired by silently importing an equivalent PC file.
+
+### Source and evidence dispositions
+
+| Change or relied-on boundary | Source proof at ea3ef3d |
+| --- | --- |
+| Direct CLI route | package.json:8–13 and tools/tecvol.mjs:201–205. The reader uses node tools/tecvol.mjs without an unexplained PATH installation. The formerly abbreviated dir/info invocations now use that same route. |
+| Media is generated, not shipped in Git | The actual ea3ef3d Git tree has no dist entry. .gitignore:3 excludes dist/. tools/media.mjs:170–185 checks the ROM/map/census and reads pinned inputs,193–236 constructs component bytes/recipes and241–258 writes the ROM, files, recipes and starter image. The host paragraph names matching ROM/media preparation and Chapter 26 rather than treating a clone or npm ci as artifact preparation. |
+| Historical media identity | All existing 78127ec output, MOUNT size/hash and TED/TAS identities remain unchanged. Later source and a newly prepared media set do not qualify those old totals or results. |
+| Listing and extraction | tools/tecvol.mjs:73–83,142–167 reads the source image and writes get's named destination or stdout. tools/lib/cpmfs.mjs:91–120,128–149 derives whole-record lengths and applies first-1Ah/CRLF conversion. No card replacement is called for dir/get. get's output-file write can overwrite an existing destination. |
+| Host put versus actual editor save | tools/lib/cpmfs.mjs:175–188 normalises host text, appends EOF and pads with 1Ah, or pads binary data with zeros. Those rules do not prove TED's actual tail. The held packet requires the real saved file and its recorded padding. |
+| Replacement implementation, retained here only | tools/tecvol.mjs:65–70 calls parseContainer on the changed memory bytes before writeFileSync to a temporary sibling and renameSync over the image. It does not reread the temporary file or call fsync. This supports replacement and the pre-replacement failure consequence, not a host-power-loss durability claim. The operator paragraph retains backup/replacement/power-loss consequences and the distinction from direct install without these identifiers or implementation details. |
+| Direct-device consequence | tools/tecvol.mjs:184–193 opens the target device and writes from position 0. It has no image-replacement path. The existing device identity, capacity, exclusive-use and partial-write warnings remain. |
+
+The raw-card backup still has its starter-specific count and larger-container
+qualification. Existing create/put/recipe/protection/truncation/capture fences
+and their historical outputs are retained byte for byte. No fixture homes,
+readonly distinction, recovery fault or physical/browser boundary is deleted.
+The optional comma in “copies off readable files, but” is removed. No root
+book, shared ledger, other writer's text or product source is changed.
+
+### Actual revision passes
+
+I read every retained and changed passage in order. The thematic pass moved
+keeping existing work ahead of constructing new storage. The deletion pass
+retained the record, EOF, protection and failure qualifications because each
+changes an operation or interpretation. It removed the implementation account
+from operator prose after preserving its proof here. The agency pass checked
+tool/card/file/page subjects against their actual operations. The every-comma
+pass retained list separators and necessary appositions while removing the
+accepted optional recovery comma. All literal punctuation remains unchanged.
+The complete journey read-back checks backup→extract→understand→replace→prepare
+→install→recover, with the new result-dependent BANNER example still held.
+
+The explicitly authorised human-writing prose gate was run on the candidate
+before its commit and on the revised chapter. Both reported zero findings.
+Its interface has no manual-context switch. Manual context review is recorded
+here rather than represented as an unsupported command option. The sentence
+complexity report was also read as editorial analysis, not product execution.
+Its retained flags concern literal provenance, concrete short definitions,
+necessary cross-references, paired technical terms and actual preservation
+conditions. Exact lists of files/regions and the no-rollback/partial-write
+qualifications remain because shortening them would remove assigned facts.
+The final gate is rerun on all three owned files before the prose commit.
+
+Remaining verification is the six held cases on the actual adopted saved
+banner card, independent result review and final book integration. All new
+expected observations remain expectations. No assembly, fixture import,
+product runtime, build, test, browser action, capture or new measured result.

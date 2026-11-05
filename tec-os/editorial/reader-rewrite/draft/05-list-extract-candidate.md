@@ -18,8 +18,10 @@ The backup's recorded size must cover its declared container, not merely use
 the historical starter's count for an unrelated larger container.
 
 Before the batch, fix the adopted source, matching ROM/map/card provenance,
-TED/TAS identities and exact final banner source in the shared packet. Retain
-the actual saved card's hash. The source contract inspected here is TEC-OS
+TED/TAS identities and exact final banner source in the shared packet. Supply
+that independently qualified source as `banner-final.asm` with LF endings
+and no CP/M EOF/padding. Retain its identity and the actual saved card's hash.
+The source contract inspected here is TEC-OS
 `ea3ef3de9133931e925a0220d51c0e971c1fd8dd`. It does not prove the planned
 40-column/font default or the banner round. A later adopted source needs a
 bounded recheck of the owners below.
@@ -40,7 +42,7 @@ part of this packet.
 ```sh
 (
   set -eu
-  shasum -a 256 card.img
+  shasum -a 256 card.img banner-final.asm
   node tools/tecvol.mjs verify card.img
   node tools/tecvol.mjs dir card.img
   node tools/tecvol.mjs dir card.img B
@@ -51,11 +53,13 @@ part of this packet.
   wc -c recovered/BANNER.REC recovered/BANNER.ASM
   od -An -tx1 -v recovered/BANNER.REC
   cat recovered/BANNER.ASM
+  cmp banner-final.asm recovered/BANNER.ASM
+  shasum -a 256 recovered/BANNER.REC recovered/BANNER.ASM
   shasum -a 256 card.img
 )
 ```
 
-`shasum`, `wc`, `od`, `cat` and `mkdir` are PC utilities for this proposed
+`shasum`, `wc`, `od`, `cat`, `cmp` and `mkdir` are PC utilities for this proposed
 POSIX-shell batch. Their output is evidence to collect, not invented terminal
 text. The reader insertion can omit these evidence checks after qualification.
 The actual reader recipe still needs its own exact disposition from the batch.

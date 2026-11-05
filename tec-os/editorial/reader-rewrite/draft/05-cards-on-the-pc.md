@@ -24,16 +24,18 @@ holding the card's 512-byte blocks in order.
 `tecvol` runs from a clone of the TEC-OS repository with Node.js 20 or later,
 the minimum declared by its `package.json`. The shell commands here use the
 repository root as their working directory. `node tools/tecvol.mjs` runs the
-card tool directly. The package also names it as the command `tecvol`.
+card tool directly without installing a command on your shell's search path.
 [Appendix F](appendix-f-tecvol.md) gives its complete command syntax.
 
 The examples that use `dist/starter.img` and `dist/files/` require a prepared
-media set. Those files are supplied inputs here. `npm ci` installs the locked
-host dependencies, including ATOM, but does not itself produce that media.
+media set made with the matching TEC-OS ROM. These generated files are not
+included in a Git clone. `npm ci` installs the locked host dependencies,
+including ATOM, but does not itself produce the ROM or media.
 [Chapter 26](26-build-the-rom-and-media.md) gives the source/input preparation
-and build route. A host-assembled COM program reaches a card through the same
-`put` command as any other binary. The complete historical PC HELLO recipe
-and its output remain together in Chapter 26.
+and build route through `npm run media`, which writes the ROM, starter image,
+recipes and component files into `dist/`. A host-assembled COM program reaches
+a card through the same `put` command as any other binary. The complete
+historical PC HELLO recipe and its output remain together in Chapter 26.
 
 All output below is retained from the `78127ec` examples with their original
 inputs. The sizes, hashes and free-space totals belong to those examples.
@@ -69,6 +71,27 @@ That count belongs to the starter container. A larger custom container needs
 all its blocks copied. Keep the first copy unchanged and use another image
 for edits or recovery. `verify` checks the container and directory structure,
 not whether a file still contains the text you intended to save.
+
+## Listing and extracting saved work
+
+`node tools/tecvol.mjs dir card.img` lists drive A by default, including each
+file's user area and length in bytes, rounded to whole 128-byte records.
+A volume argument names another volume by drive letter, label or id, tried
+in that order. A label or id also reaches a volume that is on no drive.
+
+`get` copies a named file to the PC. Its optional output-file argument gives
+the destination. A named destination is overwritten if it already exists, so
+use a new path for a recovered copy. Without that argument the bytes go to
+standard output. Binary extraction includes every recorded 128-byte record,
+including padding in the last one. With `--text`, extraction stops before the
+first `^Z` and converts carriage-return/line-feed pairs to line feeds. A lone
+carriage return is retained. Without `^Z`, all recorded bytes undergo that
+conversion, including any padding.
+
+`get` reads user area 0 unless `--user N` selects another. `dir` lists all
+areas unless that option limits it. `N` must be a whole number from 0 to 15.
+Values such as `oops`, `1.5` and `16` stop the command before the image changes.
+Listing and extraction leave `card.img` unchanged.
 
 ## The container and its volumes
 
@@ -138,18 +161,7 @@ The volume payload is an ordinary CP/M 2.2 directory and data area. A CP/M
 disk tool such as cpmtools can read a volume copied out of the image when
 given its geometry parameters. Appendix E lists those parameters.
 
-## Extracting and replacing files
-
-`tecvol dir card.img` lists drive A by default, including each file's user
-area and record-rounded length. A volume argument names another volume by
-drive letter, label or id, tried in that order. A label or id also reaches
-a volume that is on no drive.
-
-`get` copies a named file to the PC. Its optional output-file argument gives
-the destination. Without that argument it writes the bytes to standard
-output. Binary extraction includes every recorded 128-byte record, including
-padding in the last one. With `--text`, extraction stops at the first `^Z`
-and converts carriage-return/line-feed pairs to line feeds.
+## Replacing files
 
 `put` copies a PC file onto a volume. The PC basename becomes the CP/M name
 in capitals unless an additional name follows the PC path. `--text` converts
@@ -157,10 +169,8 @@ line endings to carriage return and line feed, appends `^Z` and pads the
 last record with `^Z`. Binary padding is zero. These are file conversions,
 not a way to preserve a PC file's original byte length in a CP/M directory.
 
-`era` erases a named file. `put`, `get` and `era` use user area 0 unless
-`--user N` selects another. `dir` lists all areas unless that option limits
-it. `N` must be a whole number from 0 to 15. Values such as `oops`, `1.5`
-and `16` stop the command before the image changes.
+`era` erases a named file. Like `get`, `put` and `era` use user area 0 unless
+`--user N` selects another.
 
 `put --ro` sets the file's read-only attribute and `put --sys` sets its
 system attribute. TEC-OS's `DIR` omits system files, though the files remain
@@ -168,12 +178,11 @@ available by name in their user area. The host `dir` lists them with `SYS`.
 `put` and `era` leave a read-only file alone unless `--force` is given.
 That override applies to the file attribute, not a read-only volume.
 
-For an image change, `saveImage` first validates the changed bytes in memory
-as a container. It writes those bytes to a temporary file beside the image
-and renames that file over the original. A failure before replacement leaves
-the original image unchanged. There is no temporary-file reread or explicit
-`fsync` so this sequence does not establish durability through a host power
-failure. It also differs from `install`, which writes a device directly.
+An image change replaces the whole image file. A failure before replacement
+leaves the original unchanged. Keep the untouched backup because replacement
+does not guarantee preservation through a PC power failure. Writing an image
+to a physical device with `install` has a different failure consequence,
+described below.
 
 ## Preparing the four-volume card
 
@@ -198,7 +207,7 @@ from 1 to 4. `--align` replaces the default 2,048-block alignment with a
 positive whole number up to 16,777,215 that is a multiple of 8. An invalid
 value stops creation before an image is written.
 
-The historical preparation used the supplied `dist/files/MOUNT.COM` and
+The historical preparation used the matching media's `dist/files/MOUNT.COM` and
 `dist/files/TAS.COM`. Its remaining input was `hello.txt`, containing the
 line `Hello from the PC.` followed by a line feed. This preparation line
 supplies that text input for the retained recipe:
@@ -228,7 +237,7 @@ without a startup command. With the exact historical inputs it is the card
 used for Chapter 4's boot, mount and retained-selection captures. That
 chapter's separate empty-slot capture uses the unchanged starter card.
 
-After those puts, the historical `tecvol info my.img` output was:
+After those puts, the historical `node tools/tecvol.mjs info my.img` output was:
 
 ```text
 container: format 1.1, 38912 blocks (19922944 bytes), 4 volume(s), 4 drive(s) wanted
@@ -434,7 +443,7 @@ Recovery starts with the copy described at the beginning of this chapter.
 
 It reports problems and exits with status 1 when it finds one. A directory
 that passes can still contain an incomplete or overwritten file. `get`
-copies off readable files, but an out-of-range allocation reference stops
+copies off readable files but an out-of-range allocation reference stops
 that file's extraction with an error. It does not recover the missing bytes.
 A fresh image made with `create` and `put` or from a recipe can then replace
 the damaged card through `install` while the original copy remains available.
