@@ -256,3 +256,14 @@ Changed the allocation heading and its movement-account references to the
 noun phrase “Allocation vectors below the workspace”. Read the affected
 paragraphs for continuity, agency and every comma. Only these two owned
 paths were changed. No product execution, build, test or import was performed.
+
+## Reader-facing provenance repair
+
+Removed the correction chronology for stale78127ec:docs/services.md and
+commits58bd349/33af845 from the chapter's teaching prose. Removed its link
+to the excluded editorial/reviews/book-46.md. The source-proof and correction
+sections above retain that complete evidence. The chapter keeps the historical
+78127ec host-model base/census30/18/18, bounds38/30/24 against54/40/32,
+quarter-free margin and Appendix C stack link. Its short scope statement
+explicitly separates those measurements from the offered build. Read the
+revised stack paragraphs in order and checked their punctuation. No execution.

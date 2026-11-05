@@ -263,18 +263,10 @@ The historical census at `78127ec` measured 30 bytes for BDOS and 18 each
 for BIOS and CCP with no loaded services. The deepest census values were
 the same. The service limits were 8, 12 and 6 respectively.
 Base plus limit therefore used 38 of 54 bytes, 30 of 40 and 24 of 32.
-Each left at least a quarter free. The recorded measurement is in
-[the historical review](../../reviews/book-46.md#chapter-20s-stack-figures-settled-and-the-book-is-right).
+Each left at least a quarter free. These are historical host-model
+measurements, not results from the offered build.
 [Appendix C](../../../appendix-c-memory-map.md#the-stacks) retains the
 historical stack addresses and reservations.
-
-The service document at `78127ec` still listed BDOS as 32 bytes and its
-base plus limit as 40 (`78127ec:docs/services.md:215-229`). Those figures
-predated the console change in `58bd349`. That change ended `ECHORAW`
-with a jump to console output and reduced the measured depth from 32 to
-30 bytes. Commit `33af845` corrected the stale table to 30 and the sum
-to 38. The offered source contains those corrected figures
-(`ea3ef3d:docs/services.md:215-229`).
 
 The offered source declares the same reservations and service limits.
 A loaded service runs on its caller's stack so its nested use adds to
