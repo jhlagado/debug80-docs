@@ -15917,5 +15917,18 @@
     "lead_check": "Read exact ATOM0.3.7 directives198–227, using-atom header rule andea3 assemble.mjs1–20 as text. Confirmed ordinaryBDOSEQU closesheader beforeABI andtrailingHWLIB also unsupported.",
     "primary_route": "Productionon-cardTAS unchanged; no runtimequalification bystaticreview",
     "limits": "No adapter, productfix, readerlistingchange, import, assembly or execution."
+  },
+  "opening_offer02": {
+    "commit": "Origo42c194c0347c11da2cad391e56b65f3bcd0a7d11",
+    "path": "studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-preparation/qualified-offer02",
+    "seal_sha256": "6eef9962e2a739d59096503ceefd9da38cd1ddfede636d00b25d230215625f25",
+    "archive_sha256": "ce256be7caddc05b8ca9a19541358de8fc66e821029a1d7c01a90f799748638a",
+    "manifest_sha256": "a794bb04e3618b4df462b86bd779408d24d5e18e2ab81dbfbdf8d3a5cb1bc8b9",
+    "lead_inert_check": "Both complete tar inventories match their manifests; all25 offer01 and28 offer02 seal entries matchactualbytes/hash. All576 originalmembers17229931bytes unchanged; soleaddition offer-export/packet-source-review.md gives577members17232437bytes. All14 executable/case/source files compared byte-identical. Only hashing/JSON/tar reading, no extraction or execution.",
+    "review_binding": "Actual4106d015 source/payload CLEAR receipt path/hash in binding; final metadata comparison, approval and allocation still separate",
+    "command_shape": "FromOrigo root: sh studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-preparation/qualified-offer02/proposed-command.sh; actualapproval/allocation environment stillabsent",
+    "staging": "/tmp/ks48-book-next-batch01",
+    "guard_log": "/tmp/ks48-book-next-batch01-guard.jsonl",
+    "status": "UNRUN; final metadata review and explicit single allocation pending"
   }
 }
