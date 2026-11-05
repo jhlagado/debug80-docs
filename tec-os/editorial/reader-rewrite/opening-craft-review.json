@@ -327,13 +327,468 @@
       ]
     },
     "2": {
-      "status": "awaiting_completed_author_commit",
+      "status": "completed_commit_received_review_next",
+      "requested_commit": "c384c49",
       "review_started": false
     },
     "3": {
-      "status": "completed_commit_received_review_next",
-      "requested_commit": "5b69415",
-      "review_started": false
+      "status": "review_complete_two_polish_findings",
+      "reviewed_commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
+      "files": [
+        {
+          "commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
+          "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+          "git_blob": "c16f154efdd80efdf0f8f3cdb9fb5c99ed4e70a6",
+          "sha256": "18db230d83aa4033ddcc3b224464b3a6c33e082acb6e5fc6ccc8968780b229df",
+          "bytes": 10364
+        },
+        {
+          "commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
+          "path": "tec-os/editorial/reader-rewrite/draft/03-pass-record.md",
+          "git_blob": "f1e2eeda20ed590aa5bbf104d42b67b26c909a4d",
+          "sha256": "fdd111210fdc294132624e157ae7d00573094190acb84d169a9d1d7b68b87c71",
+          "bytes": 14697
+        },
+        {
+          "commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
+          "path": "tec-os/editorial/reader-rewrite/chapter-03-readiness.json",
+          "git_blob": "d03d9b91bac146ea59f7edfbfca7c0c9bd86df0f",
+          "sha256": "f0a4b5c1db0c2f6f889eeb2b1a76f382e82193b9558140bdb647b757963fac46",
+          "bytes": 37371
+        }
+      ],
+      "read_scope": "Entire chapter, pass record and readiness data. Complete assigned original ranges and containing TYPE/COPY/REN/ERA, failure, keyboard-line and pagination passages. All31 movement units and4 fragments reconciled with35 source entries. Closed outline, J amendment and28 handoff read.",
+      "original_sources": [
+        {
+          "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+          "path": "tec-os/02-console.md",
+          "git_blob": "78ec483b96e7d8cf9d88d38bc3e56bcd0eaf5dad",
+          "sha256": "a1c5c3a68ff0f8935797179b30cbd2809f285555c458604daa3916f74e98ac55",
+          "bytes": 15799
+        },
+        {
+          "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+          "path": "tec-os/03-command-line.md",
+          "git_blob": "176ae314243cae5e9c02112422b0ca81a8a49d3a",
+          "sha256": "61bf793e23c7649738414ca56b9960595191f19856b61664ceb1a0c677f96ea0",
+          "bytes": 25142
+        }
+      ],
+      "assigned_ranges": [
+        {
+          "path": "tec-os/02-console.md",
+          "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+          "sha256": "a1c5c3a68ff0f8935797179b30cbd2809f285555c458604daa3916f74e98ac55",
+          "read_scope": "All assigned complete ranges plus containing contexts: old03 lines 1–278 and 545–591; old02 lines 290–384.",
+          "ranges": [
+            {
+              "lines": [
+                326,
+                326
+              ],
+              "sha256": "6d2b84cbd73e0585b77f90a9f9cab4da0e2c5fc4fbe2901ae7371d3f07998f5b",
+              "subsection": "Read a screenful"
+            },
+            {
+              "lines": [
+                328,
+                332
+              ],
+              "sha256": "d1f72b32951280b0ccc654b609295371f68409f7b84527b41011d04b0c51b13a",
+              "subsection": "Read a screenful"
+            },
+            {
+              "lines": [
+                307,
+                308
+              ],
+              "sha256": "8500ad9c4653d7e97b4310d3022e19884e2ccf181f1fbc9729bb7a70292c5b95",
+              "subsection": "Redraw and continue a line",
+              "fragment_selection": "Complete ^R/^E rows."
+            },
+            {
+              "lines": [
+                378,
+                384
+              ],
+              "sha256": "654a1147b4681c20d2fb444b248bc754c5959b0766383de9fd55673fd521c09a",
+              "subsection": "Stop or continue a listing",
+              "fragment_selection": "Only operative ^C/Esc/Q stop behaviour, without the old graphics-LCD fixture interpretation; chain-drop distinctions12."
+            }
+          ]
+        },
+        {
+          "path": "tec-os/03-command-line.md",
+          "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+          "sha256": "61bf793e23c7649738414ca56b9960595191f19856b61664ceb1a0c677f96ea0",
+          "read_scope": "All assigned complete ranges plus containing contexts: old03 lines 1–278 and 545–591; old02 lines 290–384.",
+          "ranges": [
+            {
+              "lines": [
+                16,
+                19
+              ],
+              "sha256": "2c169e80ec76b2196460157eafe8601c24175d12179e85dc29b5b1f116d98a64",
+              "subsection": "Commands and programs"
+            },
+            {
+              "lines": [
+                56,
+                56
+              ],
+              "sha256": "f9086d57a484b91c978f051ca4961b3b5d7470ec0235cbfe423c7d1f3816c702",
+              "subsection": "File names and wildcards"
+            },
+            {
+              "lines": [
+                58,
+                62
+              ],
+              "sha256": "a2e3e59a38180de2f6731d240509e7c1869688e9199080976054b6e3bcc53d82",
+              "subsection": "Usable file names"
+            },
+            {
+              "lines": [
+                88,
+                93
+              ],
+              "sha256": "15f7c46777e7a94b1a37ee2166ef290c96dd7d68ce893b37f423593895ae47d8",
+              "subsection": "Useful wildcard patterns"
+            },
+            {
+              "lines": [
+                100,
+                100
+              ],
+              "sha256": "822938768a0b3b8c36cb06f50d8347516671034f10a4b1de5f339cc51ae40303",
+              "subsection": "The built-in commands"
+            },
+            {
+              "lines": [
+                131,
+                137
+              ],
+              "sha256": "750d187a8fe34dd30bd4fa460a3dabc7bb76c7c3605884346a03b9ef37562894",
+              "subsection": "List files"
+            },
+            {
+              "lines": [
+                139,
+                145
+              ],
+              "sha256": "162a79524d96a9c368deece77ed8eb0052334ff5ee67c670ec1da1bf278ee000",
+              "subsection": "Read a screenful",
+              "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
+            },
+            {
+              "lines": [
+                150,
+                150
+              ],
+              "sha256": "e59bf463827bf3c483a592a17a925223fa2c09ffa53e40906e9a72a0d1f0852c",
+              "subsection": "TYPE"
+            },
+            {
+              "lines": [
+                152,
+                154
+              ],
+              "sha256": "d5463100805e1ddd88e27b0e6bea30535bbf5498928a278761d32e9f9fab1aac",
+              "subsection": "Read a text file"
+            },
+            {
+              "lines": [
+                156,
+                156
+              ],
+              "sha256": "fe05e3ae59d307234e1f02dbb5bdea2bd82ae386c4c71b891423fbc4ddcb99d2",
+              "subsection": "Read a text file"
+            },
+            {
+              "lines": [
+                157,
+                162
+              ],
+              "sha256": "432351702a4ad5ed97507dcd4e008888b408d332aa3cb1f978695453e6db1cb0",
+              "subsection": "Read a text file"
+            },
+            {
+              "lines": [
+                164,
+                167
+              ],
+              "sha256": "e8546324c8c2e3518cc556daa292f2d2c13e60a59b7067bb23178ebc56676751",
+              "subsection": "Read a text file"
+            },
+            {
+              "lines": [
+                169,
+                169
+              ],
+              "sha256": "4b85ee85d41f7e07307ec0333a33f55dc2c1c0c5aceb4bfcaebcfbc270820c4b",
+              "subsection": "COPY, REN and ERA"
+            },
+            {
+              "lines": [
+                171,
+                177
+              ],
+              "sha256": "f3fef888625e228d3f2e9f0038f35aeab7383b387b417f4cf95f930271a310c2",
+              "subsection": "Copy and rename files"
+            },
+            {
+              "lines": [
+                179,
+                182
+              ],
+              "sha256": "1f04c807b703de209f1bd0e5a49dbf5d719f0e939b679afe13ac812c62f14ca6",
+              "subsection": "Copy and rename files"
+            },
+            {
+              "lines": [
+                184,
+                184
+              ],
+              "sha256": "ae3d1851ff24afe70fa4201b8c57aaa857433d24eeb9040da0d36e6b3fffaf09",
+              "subsection": "Copy and rename files"
+            },
+            {
+              "lines": [
+                185,
+                209
+              ],
+              "sha256": "3e4835a8b1c314b820e60b4e66405245c65b74997189a163220a2935c3844db0",
+              "subsection": "Copy and rename files"
+            },
+            {
+              "lines": [
+                211,
+                217
+              ],
+              "sha256": "4de3a2f996eec6e2ab465eaab6522b4edb9297d1f26ec08c0ae67236aed92191",
+              "subsection": "Copy and rename files",
+              "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
+            },
+            {
+              "lines": [
+                253,
+                256
+              ],
+              "sha256": "7357ea2466ad7bda0079720911bafb50eebd6f1b81245c0a82616937c6a6e724",
+              "subsection": "Erase selected files and confirm all"
+            },
+            {
+              "lines": [
+                258,
+                258
+              ],
+              "sha256": "fff19768fbbcb22ff8dcad89cc1ea9b2a28d3fc149a775602558d83044afe4aa",
+              "subsection": "Erase selected files and confirm all"
+            },
+            {
+              "lines": [
+                259,
+                274
+              ],
+              "sha256": "f41431a9f888ea2e91cbb08f4812cabbcd7a865d959506ece5a7bcbcc9a8c7e0",
+              "subsection": "Erase selected files and confirm all"
+            },
+            {
+              "lines": [
+                276,
+                277
+              ],
+              "sha256": "b3dd7359a9cff18d5861df4a79d95428fc85850e12737ef15ea395139d0acaef",
+              "subsection": "Erase selected files and confirm all"
+            },
+            {
+              "lines": [
+                553,
+                553
+              ],
+              "sha256": "46b206212891ee2a2d07a4ca51de5e1b9e3d0c183f8b032f9948cfe4fcefbef6",
+              "subsection": "Failure messages"
+            },
+            {
+              "lines": [
+                555,
+                555
+              ],
+              "sha256": "6089c91faf41f19008300c568ec28ffec6fa677a3c39ac7b0bcc659eba389384",
+              "subsection": "Recognise a failed file command"
+            },
+            {
+              "lines": [
+                557,
+                566
+              ],
+              "sha256": "6671d51a6096125f98f0defaf7d811fb70457318aa85d7f507f8f8b4d13db356",
+              "subsection": "Recognise a failed file command"
+            },
+            {
+              "lines": [
+                568,
+                574
+              ],
+              "sha256": "f192dd9ed70c98a848e1cdaafc5940800a92ad1a048d570b4703015bcfb143f5",
+              "subsection": "Recognise a failed file command"
+            },
+            {
+              "lines": [
+                576,
+                577
+              ],
+              "sha256": "c27f4be674cd1b03b769381b2cd7be6b437bad56ee19a9252254f5521963c964",
+              "subsection": "Recognise a failed file command"
+            },
+            {
+              "lines": [
+                579,
+                584
+              ],
+              "sha256": "db80b32bddf57c51d65d82d23b8ffc970cfc1815da2639d653bf3a44f47401ef",
+              "subsection": "Recognise a failed file command"
+            },
+            {
+              "lines": [
+                586,
+                591
+              ],
+              "sha256": "c516ba06df700ce4b8fbb698f65b266d36e6fc50f911481fe2feb0f69b439df0",
+              "subsection": "Recognise a failed file command"
+            },
+            {
+              "lines": [
+                211,
+                217
+              ],
+              "sha256": "4de3a2f996eec6e2ab465eaab6522b4edb9297d1f26ec08c0ae67236aed92191",
+              "subsection": "Interpret the copied result",
+              "fragment_selection": "Retain names/result; no allocation arithmetic prerequisite."
+            },
+            {
+              "lines": [
+                139,
+                145
+              ],
+              "sha256": "162a79524d96a9c368deece77ed8eb0052334ff5ee67c670ec1da1bf278ee000",
+              "subsection": "Read a screenful",
+              "fragment_selection": "A listing longer than the screen stops with `[more]`, as\n[Chapter 2](02-console.md#pausing-output) describes."
+            }
+          ]
+        }
+      ],
+      "teaching_checks": [
+        {
+          "context": "Opening through TYPE",
+          "result": "clear",
+          "reason": "BANNER stays on B while read-only operations are introduced. Names, drive prefix and useful patterns precede the long read. Historical short TYPE is separately identified. No host-made fixture is required."
+        },
+        {
+          "context": "Paged source",
+          "result": "clear",
+          "reason": "Explains wrapping and23 listing rows before the complete paused screen. Space leads to an explicitly partial next screen. Stop keys have their immediate effects without user-area or chain instruction. One context bridge for redraw keys is proposed below."
+        },
+        {
+          "context": "COPY/REN/selective ERA",
+          "result": "clear",
+          "reason": "Replacement danger and NEW=OLD precede a complete separate empty-B demonstration. The preservation warning forbids treating it as a current BANNER-card sequence. Record count is distinguished from allocation. No unaccepted live mutation workflow is implied."
+        },
+        {
+          "context": "Failure recovery",
+          "result": "clear",
+          "reason": "Ordinary command mistakes are distinguished from card-operation errors. COPY close is attempted, not guaranteed. Default key/return and no-rollback limits remain. No FCB, cache mechanics, error-mode lesson or hidden new run is introduced."
+        }
+      ],
+      "craft_checks": {
+        "whole_sentence_paragraph_and_table_read": true,
+        "agency": "No false interior or social agency found. A listing helps a human select a file; source/device operations remain mechanical.",
+        "every_comma": "Lists, appositions, supplementary qualifications, pattern examples and historical literal commas read jointly in full paragraphs. No serial-comma, semicolon or em-dash defect requires correction. Short introductory separators are consistent with their local contrast/example roles.",
+        "deletion_and_journey": "Historical scope sentences prevent a destructive session mix and survive deletion. The recovery ending adds concrete stop/check consequences. The allocation cross-reference and redraw-key transition can be placed more closely to their operative subjects.",
+        "mechanical_search": "Explicit vocabulary, mind-verb, empty-rhetoric and punctuation search performed; all matches read in context. No gate or product test rerun claimed."
+      },
+      "evidence_checks": {
+        "accepted_attempt": "e77c7ef0f81c42d94f12391b099f4cf8c4acd9a6",
+        "pager_actual_input": "TYPE A:SAMPLE.ASM!USER 1 followed by CR",
+        "first_excerpt": {
+          "member": "stage/results/098-type-continue.json",
+          "rows": [
+            1,
+            24
+          ],
+          "exact": true
+        },
+        "second_excerpt": {
+          "member": "stage/results/099-type-continue-1.json",
+          "rows": [
+            1,
+            8
+          ],
+          "exact": true
+        },
+        "no_plain_TYPE_prompt_invented": true,
+        "historical_reader_output_fences": 2,
+        "both_equal_frozen_original": true,
+        "full_ERA_home": {
+          "commit": "4c7674e0f8db0bf012a06503f6c96c2483b19ba7",
+          "report": "erase-fixture-independent.json",
+          "result": "Complete original recipe/output preserved in J; broad erase stays outside3."
+        },
+        "full_pager_home": {
+          "commit": "4a762383634703a6b9f72abfbef0e48320dad65d",
+          "path": "tec-os/editorial/reader-rewrite/draft/28-pass-record.md",
+          "result": "Added complete current fixture identities/input/control/terminal-state account points to immutable attempt02. Historical GLCD LINES remains separate. No new reader runtime recipe or repin."
+        },
+        "whole_batch": "FAILED; no expanded acceptance."
+      },
+      "findings": [
+        {
+          "id": "OC3-P01",
+          "severity": "polish",
+          "kind": "input_context_transition",
+          "context": {
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
+            "start_line": 141,
+            "end_line": 147,
+            "full_context": "Space continues at each pause until the text ends. Esc, Q or q stops a listing\nbefore its unread remainder. `^C` stops there too. Each of these keys erases\n`[more]`.\n\nIf the line you are typing becomes hard to read, `^R` marks it with `#` and\nreprints the command on a new line. `^E` starts a new screen line while leaving\nthe command being typed intact. Neither key changes a stored file."
+          },
+          "problem": "Immediately after the pager stop keys, the paragraph switches to command-line redraw keys without naming the return to prompt input. A novice could read these as further pager controls. The mechanisms themselves are correct.",
+          "proposal": "At the command prompt, `^R` marks a hard-to-read line with `#` and reprints the command on a new line. `^E` starts a new screen line while leaving the command being typed intact. Neither key changes a stored file.",
+          "evidence": "Frozen old02:298-311 places these controls in function10 line input; current source src/cpm/bdos.asm:623-669 implements LINEOL/LINRETY. The preceding pager keys use the separate PGWAIT path at src/cpm/ccpfile.asm:474-526.",
+          "applied": false
+        },
+        {
+          "id": "OC3-P02",
+          "severity": "polish",
+          "kind": "paragraph_subject_and_placement",
+          "context": {
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
+            "start_line": 51,
+            "end_line": 54,
+            "full_context": "Names appear in columns fitted to the console. You need not use the free-space\nfigure to calculate a file's length. Space is allocated in larger units,\nexplained in\n[Cards on the PC](05-cards-on-the-pc.md#record-sizes-and-allocated-space)."
+          },
+          "related_context": {
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
+            "start_line": 195,
+            "end_line": 200,
+            "full_context": "`COPIED 0001` reports one 128-byte record copied. The count is hexadecimal:\n`000A` means ten 128-byte records (1,280 bytes). It counts copied records rather\nthan space allocated to the file. The first REN made NOTES.TXT from COPY.TXT.\nThe next REN left both files alone because NOTES.TXT already existed. The first\nERA removed NOTES.TXT. The repeated ERA found no such file. STARTUP.CMD remained\non B and the source on A was not renamed or erased."
+          },
+          "problem": "The last names paragraph jumps from display columns to advice about calculating file length and then allocation, before any copied length needs interpretation. Its second sentence corrects an unintroduced calculation. This briefly interrupts the listing-to-TYPE journey.",
+          "proposal": "Keep the console-column sentence with the initial DIR explanation. Move the Chapter5 allocation cross-reference beside “It counts copied records rather than space allocated to the file” in the later COPIED explanation. Preserve the record/allocation distinction and complete reference home.",
+          "evidence": "The closed outline makes this a practical file chapter. The controlling old03:211-217 split retains names/results in3 and allocation arithmetic in5/19. The later copied-record paragraph already supplies the concrete reason for that reference.",
+          "applied": false
+        }
+      ],
+      "substantive_findings": 0,
+      "polish_findings": 2,
+      "remaining_limits": [
+        "Author disposition of two polish findings",
+        "Final Chapter2 carry-forward comparison",
+        "No new post-BANNER REN/ERA case or standalone plain-TYPE return was accepted or needed for these approved excerpts"
+      ]
     }
   }
 }
