@@ -171,10 +171,51 @@ words,0.56 joints per sentence and14% flagged, approximate grade6.0. Its flags
 are under review, including the repeated preserve wording, short operational
 statements and multi-clause offset sentence. No runtime code was executed.
 
-The complete thematic, paragraph/sentence deletion, agency, punctuation,
-technical/literal and final journey passes will be recorded after the next
-bounded revision. The source proofs above record the inspected branches,
-not independent review acceptance.
+The first draft and movement/source record were pushed in751e8b2. That commit
+also contains the intended AppendixE and e-pass-record corrections already in
+the shared index. Its exact four paths are recorded by the commit. History is
+preserved. Subsequent commits use --only with the two Chapter21 paths.
+
+I completed the following passes on the entire chapter after that first draft:
+
+- Thematic and teaching order: retained state establishes the continuation
+  before the input-priority example. Piece extraction precedes result ordering.
+  All CHPOS-clearing paths are established before function47's accepted line
+  encounters the same flush. Function47's final empty case is the ending.
+- Paragraph and sentence deletion: read each paragraph and sentence in order,
+  removing each in thought and reading across the boundary. Removed the
+  opening's preview and the repeated conclusion after the warm-clear proof.
+  Reworded the repeated preserve/preserving statement as the practical fresh
+  FCB-position consequence. Retained short tests/results where removing them
+  loses a branch, a register value or the source of the visible echo.
+- Agency: each program subject performs a named operation. The line's survival
+  is a memory-clear boundary, not program memory or judgment. No interior or
+  social agency is assigned to code or chapters.
+- Every-comma punctuation: inspected every prose comma and semicolon. Removed
+  optional commas in the fixture introduction and paired built-in/program
+  explanation. The remaining commas delimit lists, condition boundaries or
+  apposition. Literal semicolon key aliases and shell syntax remain unchanged.
+  No prose em dash or serial comma remains.
+- Technical/literal: re-read the cited source text and checked the colon's
+  two byte tests, store ordering, each abort branch, pager key mask, fixed128
+  copy and successful/failed flush paths. Added the fixed RAMBIOS definition
+  to support BF03h. Static text comparison confirms both complete fences and
+  the capture command match the old chapter. Citation ranges are in bounds
+  at the offer:106 citation occurrences across11 source files. No product code
+  or fixture was executed.
+- Journey: read the whole chapter from opening through empty replacement.
+  The retained buffer/position precedes CHSKIP, the conditional result precedes
+  ERRGO and cancellation, and cancellation precedes the FNCHAIN flush boundary.
+  The ordinary Chapter12 usage remains a prerequisite, with no repeated
+  EXISTS/RUN listing or raw program-authoring tutorial.
+- Final gates: prose_gate.py returns zero findings. The complexity report's
+  short-sentence flags are the concrete tests, register values and branch
+  results above, plus the provenance comment. The low-byte sentence was
+  shortened without dropping the cross-page proof. The initial197-sentence
+  report above is historical draft data. The final report has195 sentences,
+  mean11.9 words,0.55 joints per sentence and13% flagged, approximate grade5.9.
+
+The source proofs record inspected branches, not independent acceptance.
 
 Independent factual/editorial review, current-offer map and capture validation,
 final navigation and the whole-book reader-order pass remain outstanding.
