@@ -330,6 +330,7 @@ No newly executed shortened key sequence or substituted capture is claimed.
 | 082 BANNER-edited-built-restore-place-column | Right returns to L13 C27. |
 | 085 BANNER-edited-returned-clear-message | Left moves L13 C27 to L13 C26. |
 | 086 BANNER-edited-returned-restore-place-column | Right returns to L13 C27. |
+| 091 BANNER-fresh-status-clear-message | Left at L1 C1 leaves L1 C1 before inspecting MSG. |
 
 The original trace and source-backed arrow/message behaviour remain evidence
 for the explanation. These movements change cursor/status rather than source
@@ -344,3 +345,8 @@ state actual actions or boundaries, and long metadata tokens retain evidence
 identities. None of the changed paragraphs adds an unresolved prompt. All six
 fences and seven provenance comments compare exactly with the input chapter.
 The external receipt is Origo0e07f18d, reviews/book-opening-reader.md.
+
+The same reduction also removes the status-only Left after reopening on the
+fresh machine. Its actual phase091 stays in the trace table. Navigation to
+inspect the saved MSG line remains, as does the separate standalone run.
+The mandatory gate remains clear and all six fences are unchanged.

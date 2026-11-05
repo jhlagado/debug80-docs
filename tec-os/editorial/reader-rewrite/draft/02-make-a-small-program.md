@@ -234,8 +234,8 @@ does not prove the file was preserved.
 In the reviewed host-model session, the preserved card was reopened on a
 fresh machine with new RAM. `A:TED B:BANNER.ASM` reopened the edited source,
 including its exclamation mark. The text therefore came from the saved
-file, not from the previous editor's memory. Left restored the position
-display and twelve Down presses reached its MSG line at `L13 C1`.
+file, not from the previous editor's memory. Twelve Down presses reached
+its MSG line at `L13 C1`.
 
 After `^Q` and a successful empty-prompt `^C`, `B:BANNER` runs the program
 from B while A remains current. It does not open TED or assemble the source.
