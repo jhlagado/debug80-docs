@@ -8,7 +8,7 @@ nav_group: "Appendices"
 # Appendix D. Error messages
 
 <!-- Source mechanisms checked by text inspection at TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. Unprefixed ranges use that pin.
+     962853f499f05faf281f6cdff1deca8959f58c2b. Unprefixed ranges use that pin.
      The old-card recipe/capture retains78127ec. CLOSE ERROR
      retains its actualbd15528 experiment fromBook12:65. The diagnostic prompt fence is a literal message template.
      No execution, new capture or physical-board result is claimed. -->
@@ -46,7 +46,7 @@ R retry>
 The prompt uses the ROM PICO9918 console when the PICO9918 responded at cold
 boot and the Matrix switch enabled the matrix keyboard. Otherwise it uses
 serial. This is a switch-enable test, not a keyboard-presence probe
-(`src/console.asm:82-88`, `src/video.asm:22-29`, `src/pico.asm:64-86`).
+(`src/console.asm:82-88`, `src/video.asm:22-29`, `src/pico.asm:69-92`).
 The LCD's last row shows `CARD?` (`src/boot.asm:817-829`, `src/text.asm:13-15`).
 `R` starts the LCD, card and mount again. A corrected or newly inserted card
 can therefore mount without reset. The key is echoed as typed and `r`
@@ -187,9 +187,9 @@ service gives a distinct cause.
 | `SAVE` | An invalid decimal count, a count of 256 or more, a count reaching the BDOS-entry page or a missing/ambiguous filename. | `SAVE n NAME.COM` with a count within the memory bound. | `src/cpm/ccpcmd.asm:290-354` |
 | `USER` | The argument is not a single number from 0 to 15. | `USER n`. | `src/cpm/ccpcmd.asm:241-280` |
 | `CON` | The device name is not TTY, CRT, BAT, UC1, PICO or GLCD, optionally followed by a colon, or the remaining text is invalid. CRT/PICO may take a separated width. | Use a supported name and width form. | [Chapter 6](06-choose-a-console.md), `src/cpm/ccpcmd.asm:66-231` |
-| `CON`, the width | An unsupported width after CRT/PICO or a width joined to the name. `CON CRT80` prints `CRT80?`, not `80?`. | Separate a width of 80, 40 or 32 with a space, as in `CON PICO 40`. | `src/cpm/ccpcmd.asm:120-191`, `src/pico.asm:131-146` |
+| `CON`, the width | An unsupported width after CRT/PICO or a width joined to the name. `CON CRT80` prints `CRT80?`, not `80?`. | Separate a width of 80, 40 or 32 with a space, as in `CON PICO 40`. | `src/cpm/ccpcmd.asm:120-191`, `src/pico.asm:136-151` |
 | `CON`, the width | A width follows another device name. | Put a width only after CRT or PICO. | `src/cpm/ccpcmd.asm:130-136` |
-| `CON`, the width | The ROM PICO console did not start or an active claim prevents the width change. | The PICO must respond and the Matrix switch must enable the keyboard at cold boot. Release a program's claim before changing width. | `src/console.asm:82-88`, `src/pico.asm:64-86`, `98-117` |
+| `CON`, the width | The ROM PICO console did not start or an active claim prevents the width change. | The PICO must respond and the Matrix switch must enable the keyboard at cold boot. Release a program's claim before changing width. | `src/console.asm:82-88`, `src/pico.asm:69-92`, `src/pico.asm:103-122` |
 | `DIR` or `TYPE` | Invalid or extra operands. TYPE also rejects a wildcard or an empty name part. With no operand TYPE gives `NO FILE`. | Use one filename for TYPE or one pattern for DIR. | [Chapter 3](03-work-with-files.md), `src/cpm/ccpfile.asm:25-30`, `593-602` |
 
 The bad characters in a name are `<>,;:[]%|()/\`, from `BADCHARS`
@@ -272,7 +272,7 @@ driver. The new file comes from `tecvol put` on a PC or "Copy file to drive"
 on the web page. A successful Power cycle preparation also removes display
 lines of either type. The page checks the chosen driver and stages the
 rewrite so missing/old drivers or protected/full storage can leave the
-startup file unchanged (`host/card.mjs:30-72`, `104-116`).
+startup file unchanged (`host/card.mjs:30-72`, `host/card.mjs:104-117`).
 A `GLCD.SVC` of an older format fails under the new name too, as
 `GLCD.SVC?`. A matching copy from a new starter card or one put on the card
 with `tecvol` replaces it.
@@ -362,7 +362,7 @@ These lines appear in ordinary runs and need no remedy. In `MOUNT`'s listing
 
 | Line | Meaning | See |
 | --- | --- | --- |
-| `TEC-OS 0.1 for TEC-1G` | The cold-boot console banner. The LCD banner is `TEC-OS 0.1  TEC-1G`. | [Chapter 1](01-first-session.md), `src/text.asm:11`, `67`, `tools/build.mjs:27` |
+| `TEC-OS 0.1 for TEC-1G` | The cold-boot console banner. The LCD banner is `TEC-OS 0.1  TEC-1G`. | [Chapter 1](01-first-session.md), `src/text.asm:11`, `67`, `tools/build.mjs:28` |
 | `d: LABEL` | A mounted drive and volume at cold boot, with ` (read-only)` for a protected volume. LCD rows 1 and 2 show A and B without that suffix. | `src/boot.asm:640-677`, `src/lcd.asm:122-189`, `src/text.asm:12` |
 | `n files, nK free` | DIR's listed-file count and free space. The singular is `1 file, nK free`. | [Chapter 3](03-work-with-files.md), `src/cpm/ccpfile.asm:248-311`, `src/text.asm:24-29` |
 | `[more]` | DIR or TYPE paused at a screenful. An ordinary key continues. Esc, Q, q and `;` stop the listing. `^C` and `#` also drop the remaining chain because the comparison clears bit 5. | `src/cpm/ccpfile.asm:464-526`, `src/text.asm:30-31` |

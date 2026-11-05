@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix H. The service file format
 
-<!-- Mechanisms checked by source inspection at TEC-OS ea3ef3d.
+<!-- Mechanisms checked by source inspection at TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
      The GLCD dump was reproduced at 621201d and retained in the 78127ec
      review without rerunning its commands. The GAPZERO transcript was
      rerun at 78127ec using COUNT.SVC prepared by makeSvc.

@@ -8,7 +8,7 @@ nav_group: "Part II: Inside TEC-OS"
 # 22. The history ring
 
 <!-- Source mechanisms checked against TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd by source inspection only.
+     962853f499f05faf281f6cdff1deca8959f58c2b by source inspection only.
      All source ranges below use that revision. No captures were rerun. -->
 
 <!-- Historical capture provenance: TEC-OS 78127ec, with the starter card's
@@ -91,7 +91,7 @@ function 10 returns to the CCP. Only afterwards does `MLTAKE` convert each
 piece's letters to capitals (`src/cpm/bdos.asm:764-765`,
 `src/cpm/ccp.asm:249-267`). The transcripts here were recorded on TEC-OS
 `78127ec`. They retain that historical build's output, separate from the
-source checks at `ea3ef3d`. In this PICO9918 screen capture, recalling `con`
+source checks at `962853f`. In this PICO9918 screen capture, recalling `con`
 preserves the small letters:
 
 <!-- node tools/capture.mjs --board pico --screen con "@start "$'\x17' -->

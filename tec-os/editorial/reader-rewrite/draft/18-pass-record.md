@@ -367,3 +367,17 @@ header line reconstructs the entire input reader file exactly. The two original
 READ fences are unchanged. Both added fence bodies and the capture comment
 match frozen old05 bytes, including the padded X.COM row. A whitespace check
 therefore retains that historical trailing-space row deliberately.
+
+## Source adoption reconciliation
+
+I applied the current-source citation reconciliation selected at `9ba1f59`.
+The mechanism authority is now `962853f`. The original source audit and
+`source-adoption-unaffected-application.json` record the exact citation
+changes, range evidence and input/output hashes. Earlier entries above retain
+the source identities and review limits in force when I wrote them.
+
+I read the changed paragraphs and citation contexts in full. Historical
+results, source fixtures and dependency pins retain their original scope.
+The reader’s fences and capture comments are unchanged. Editorial gate
+results and context dispositions are recorded in the application JSON.
+Independent application review remains open. No product code ran.

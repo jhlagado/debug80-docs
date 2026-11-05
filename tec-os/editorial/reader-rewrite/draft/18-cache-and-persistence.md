@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. Cache and persistence
 
-<!-- Mechanisms inspected by source text at TEC-OS ea3ef3d.
+<!-- Mechanisms inspected by source text at TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
      Unprefixed citations use that revision. Historical READ/SAVE timings
      retain their recorded 78127ec run. CLOOK costs retain 60cfbdc and the
      larger-file/write-order examples retain 5a25178. Specific run records
@@ -423,7 +423,7 @@ Chapter 15 states. The ROM's executable `EI` instructions restore a saved state.
 The places are `CEI`, `RXBITS`, `TXBYTE`, the history's access, `MVEND` and the
 PICO9918's `VPAIR` (`src/bios.asm:467-478`, `src/console.asm:387-421`,
 `src/console.asm:452-492`, `src/history.asm:47-76`, `src/cache.asm:853-858`,
-`src/pico.asm:456-472`). The boot also writes `EI` followed by `RETI` at `0038h`
+`src/pico.asm:461-477`). The boot also writes `EI` followed by `RETI` at `0038h`
 when no resident jump is retained there. That code runs on an interrupt or a
 program's `RST 38h` (`src/boot.asm:499-509`). DI does not block a non-maskable
 interrupt (NMI). These routines therefore require the NMI conditions described

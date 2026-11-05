@@ -8,7 +8,7 @@ nav_group: "Part II: Inside TEC-OS"
 # 21. Chains across a warm boot
 
 <!-- Source mechanisms checked by inspection against TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. Source ranges use that revision
+     962853f499f05faf281f6cdff1deca8959f58c2b. Source ranges use that revision
      unless explicitly marked otherwise. No current runtime check claimed.
      Historical recipe, output and map figures retain TEC-OS 78127ec. -->
 
@@ -39,7 +39,7 @@ BIOS table, outside the `CPMINIT` clear. The 16-bit return code `PRGCODE`
 is in that upper block too (`src/ram.asm:312-319`, `src/ram.asm:386-388`).
 
 The earlier map at `78127ec` placed these boundaries as follows. These are
-historical map figures, separate from the source inspection at `ea3ef3d`:
+historical map figures, separate from the source inspection at `962853f`:
 
 | Item | Historical location or size |
 | --- | --- |

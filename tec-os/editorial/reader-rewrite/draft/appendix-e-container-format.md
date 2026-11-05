@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix E. The container format
 
-<!-- Mechanisms checked by source inspection at TEC-OS ea3ef3d.
+<!-- Mechanisms checked by source inspection at TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
      Historical examples retain TEC-OS 78127ec and TED.COM from Thorium
      128edb7, SHA-256
      2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f.
@@ -22,7 +22,7 @@ to decode a container or diagnose a rejected one.
 
 `format/format.json` defines the fields and geometries. The build generates
 `src/gen/format.asm` and `src/gen/geom.asm` from it
-(`tools/build.mjs:78-135`). The host container module and `tecvol` read the
+(`tools/build.mjs:79-136`). The host container module and `tecvol` read the
 same definition through `tools/lib/format.mjs`. All multibyte numbers are
 little-endian. Each block is 512 bytes and its number counts from the
 container's start. `tecvol install` puts that start at the card's block 0.

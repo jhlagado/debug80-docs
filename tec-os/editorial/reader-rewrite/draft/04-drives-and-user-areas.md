@@ -7,7 +7,7 @@ nav_group: "Part I: Using TEC-OS"
 
 # 4. Drives and user areas
 
-<!-- Source mechanisms read at TEC-OS ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
+<!-- Source mechanisms read at TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
      All retained captures are historical TEC-OS 78127ec host-model evidence.
      Original old03/05/07 supplied inputs: TED.COM Thorium 128edb7,
      SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;

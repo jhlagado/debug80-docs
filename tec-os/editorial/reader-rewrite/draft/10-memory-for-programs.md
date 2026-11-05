@@ -10,7 +10,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the
      repository's `atom-z80` 0.3.7. -->
 <!-- Historical examples retain that pin and assembler.
-     Source-only mechanism check: ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
+     Source-only mechanism check: 962853f499f05faf281f6cdff1deca8959f58c2b.
      TOP, AREA, KEY, SAVE and their recipes/output are retained unchanged.
      Numerical TPA figures and service costs belong to the historical setup.
      No build, execution, import, new capture or physical-board result claimed. -->

@@ -8,7 +8,7 @@ nav_group: "Part II: Inside TEC-OS"
 # 25. Startup inside the CCP
 
 <!-- Source mechanisms checked by text inspection against TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. Unprefixed source ranges use
+     962853f499f05faf281f6cdff1deca8959f58c2b. Unprefixed source ranges use
      that revision. Historical addresses, bypass timing and the retained
      dollar-echo recipe/capture remain at 78127ec. No new execution result. -->
 
@@ -223,7 +223,7 @@ explains the operators and
 
 The PICO9918 console starts from ROM when the display answers and the Matrix
 switch enables the matrix keyboard at cold boot. It needs no service line in the
-file (`src/console.asm:82-88`, `src/video.asm:22-29`, `src/pico.asm:64-86`). The
+file (`src/console.asm:82-88`, `src/video.asm:22-29`, `src/pico.asm:69-92`). The
 supplied display line loads `GLCD.SVC`. The CCP compares all three type bytes in
 `CMDFCB`: `SVC` calls `SVCGO` while another type goes to the `.COM` search
 (`src/cpm/ccp.asm:451-495`). [Chapter 20](20-from-prompt-to-program.md) explains
@@ -269,7 +269,7 @@ PICO9918 console in use, ready for a later `CON UC1`. With the matrix
 keyboard enabled by the Matrix switch and the controller answering but
 no selected PICO9918 console, the startup line can select the graphics
 LCD. Successful web-page card preparation sets the line for the chosen display
-(`host/card.mjs:58-72`, `104-116`), as
+(`host/card.mjs:58-72`, `host/card.mjs:104-117`), as
 [Appendix I](appendix-i-web-page.md) explains.
 
 ## Recovery words and row ownership
