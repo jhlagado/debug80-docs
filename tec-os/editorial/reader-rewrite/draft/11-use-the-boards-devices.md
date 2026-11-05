@@ -438,9 +438,10 @@ repeated scans, with each digit lit only during its own turn.
 
 DIGIT, number 1, scans once through six pattern bytes at HL, leftmost first. It
 turns every digit off at the end. The `60e0768` model measurement gave
-20,670 T-states from the call target to return, about 5.2 ms at 4 MHz. Each
-digit was lit for about 0.84 ms. The caller repeats the scan
-and supplies its own number-to-segment table.
+20,670 T-states from the call target to return, about 5.2 ms at 4 MHz. A
+separate port-write trace at `bd15528` gave about 0.84 ms between selecting
+each digit and turning it off. The caller repeats the scan and supplies its
+own number-to-segment table.
 
 RTC, number 8, transfers seven BCD bytes through HL: seconds, minutes, hours,
 date, month, weekday and year. B = 0 reads and B = 1 sets them. Setting ends
@@ -821,8 +822,10 @@ and retains a BDOS path for status 2.
 The `60e0768` model comparison put a PICO PUTAT character at about an eighth
 of the cost of BDOS function 2. Its PUTAT figure came from one 60-character
 call, with the BDOS path timed separately.
-On the graphics LCD, pixel drawing dominates both paths and their costs are
-close. Appendix B retains the per-cell figures and their conditions.
+A separate graphics-LCD comparison at `bd15528` used 15 characters from row 3,
+column 2. PUTAT cost about 35,136 T-states per character against about 38,407
+for BDOS function 2. Pixel drawing dominates both paths. Appendix B retains
+the per-cell figures and their conditions.
 
 ## DEMO
 
