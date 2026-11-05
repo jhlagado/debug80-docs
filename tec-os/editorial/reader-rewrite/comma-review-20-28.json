@@ -1,0 +1,3566 @@
+{
+  "schema_version": 1,
+  "status": "review_complete_pending_lead_disposition",
+  "review_scope": "All 51 surviving inventory occurrences in Chapters 20–28, plus the two explicitly requested parent cases in Chapters 4 and 8. No other chapter or appendix punctuation is accepted by this review.",
+  "inventory_identity": {
+    "path": "tec-os/editorial/reader-rewrite/conjunction-comma-inventory.json",
+    "book_commit": "028ecdde0cd295d162cea47b6db7291b21384bf0",
+    "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+    "sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326",
+    "git_blob": "51228d051e60add154b874f9184e9aa5ec7bf0a6"
+  },
+  "method": "Read each complete containing paragraph, list or table row with the full sentence and inline wording intact. Read surrounding tables, paired appositions and adjacent historical output where needed. Multiple IDs in one paragraph were considered together. No reader prose, inventory, source, fence, capture or shared map was edited. This is punctuation data review without product execution or final reader acceptance.",
+  "offset_policy": "Original inventory records are copied unchanged under inventory_evidence, including their unreviewed status and null classification fields. The reviewed classification is the outer classification field. Additional offsets are derived from the frozen basis, not new occurrence identities. Prior snapshot IDs and line/column evidence are retained separately.",
+  "sources": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "bytes": 16924,
+      "occurrences": 9
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+      "git_blob": "d7f81c817f63164acb6823b4d97424d7cdfd20fd",
+      "bytes": 11518,
+      "occurrences": 5
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+      "git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+      "bytes": 26895,
+      "occurrences": 11
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+      "git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+      "bytes": 17752,
+      "occurrences": 9
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/22-the-history-ring.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "4d797242269cdc224b040fadb88dd397d0632439aff422670fc9f058fbe9dffc",
+      "git_blob": "bf62c5a45f695e75ea5b470a3bf519d32b37fcf6",
+      "bytes": 13827,
+      "occurrences": 0
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "3320d33dcf2e9f4193bbd60b752649f4290ef6a9a389125806d76952a4b55d7b",
+      "git_blob": "855d2bdad8da41193f0b5d699837364f107f7de4",
+      "bytes": 14887,
+      "occurrences": 1
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+      "git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+      "bytes": 24763,
+      "occurrences": 12
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "b0ff5b03f7dad091a4dab79cfd7ebb30d407caf6057bd29657ebf31902d8d1e4",
+      "git_blob": "138b8d428d1d316ec2fcfd4ace6a00fec9013f5a",
+      "bytes": 19544,
+      "occurrences": 2
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "dbd7970be746d13856d490d2e3ff8ed8aba6a03783a4cb25efc39df9b18e03b8",
+      "git_blob": "fa13e27a0f6123ea316d068c014b3a459447dc26",
+      "bytes": 21318,
+      "occurrences": 0
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "2f5cb41470bf35f3496e658d236d82a0b2e6ef038282c537e6ab35706eae48e7",
+      "git_blob": "da7a0eb501b6aca7d38f0bb2ddc6d2724a7f6acb",
+      "bytes": 23552,
+      "occurrences": 3
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+      "git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+      "bytes": 22317,
+      "occurrences": 13
+    }
+  ],
+  "zero_occurrence_chapters": [
+    22,
+    26
+  ],
+  "summary": {
+    "assigned_occurrences": 51,
+    "assigned_classifications": {
+      "remove_optional": 44,
+      "needs_rephrase": 3,
+      "retain_boundary": 4
+    },
+    "supplementary_occurrences": 2
+  },
+  "reviews": [
+    {
+      "id": "CC0178",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "classification": "remove_optional",
+      "reason": "The error-before-update clause leads directly to restoration of the previous drive. Removing this comma leaves the cause and consequence clear. It closes no insertion.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0178"
+      ],
+      "inventory_evidence": {
+        "id": "CC0178",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 149,
+        "column": 42,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 149,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The parsed command",
+          "line": 144
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "20. From prompt to program",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The parsed command",
+            "line": 144
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 146,
+        "context_end_line": 150,
+        "full_context": "A drive selection is handled before keyword dispatch. `MLTAKE` recognises\na letter A to P followed by a colon and only spaces after it. It selects\nthat drive with function 14 and updates `0004h` through `SAVEDU`. A missing\nvolume raises `Select` before that update, so the error's warm boot restores\nthe previous drive (`src/cpm/ccp.asm:285-320`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 7151,
+        "utf8_byte_offset": 7151
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0178",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 149,
+        "column": 42,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0179",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "classification": "remove_optional",
+      "reason": "The destination-name substitution directly explains why a discarded destination type can contain wildcards. The so-clause remains attached to that substitution without a comma.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0179"
+      ],
+      "inventory_evidence": {
+        "id": "CC0179",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 177,
+        "column": 58,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 177,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The parsed command",
+          "line": 144
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "20. From prompt to program",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The parsed command",
+            "line": 144
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 174,
+        "context_end_line": 179,
+        "full_context": "`UNAMBIG` checks the stored FCB through `FCBBASE`. It rejects a blank name\nor any question mark in the eleven name/type positions. TYPE, REN, SAVE\nand program dispatch use that check. COPY checks its destination after\nsubstituting the source name for a blank destination name, so a discarded\ndestination type may contain wildcards\n(`src/cpm/ccpcmd.asm:656-704`, `src/cpm/ccpmut.asm:253-277`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 8793,
+        "utf8_byte_offset": 8793
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0179",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 177,
+        "column": 58,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0180",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "classification": "remove_optional",
+      "reason": "Replacing other types with COM directly explains the MOUNT.TXT lookup example. The comma separates no apposition or literal output.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0180"
+      ],
+      "inventory_evidence": {
+        "id": "CC0180",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 191,
+        "column": 51,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 191,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The parsed command",
+          "line": 144
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "20. From prompt to program",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The parsed command",
+            "line": 144
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 189,
+        "context_end_line": 195,
+        "full_context": "A match jumps to the handler address in the table. With no match the CCP\nrequires an unambiguous file name. Type SVC calls `SVCGO` to load and\ninstall a service. Other types are replaced by COM, so `MOUNT.TXT` searches\nfor `MOUNT.COM` (`src/cpm/ccp.asm:445-499`). A startup service whose INIT\nreports `TNENODV` has the quiet-success exception. Other installation\nfailures reach `BADCMD` (`src/cpm/ccp.asm:465-485`).\n[Chapter 24](24-loading-and-removing-services.md) describes installation.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 9563,
+        "utf8_byte_offset": 9563
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0180",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 191,
+        "column": 51,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0181",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "classification": "remove_optional",
+      "reason": "CON moving CMDSTRT to the separated width directly explains which word appears in its error. The following so-clause needs no additional boundary.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0181"
+      ],
+      "inventory_evidence": {
+        "id": "CC0181",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 199,
+        "column": 22,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 199,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The parsed command",
+          "line": 144
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "20. From prompt to program",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The parsed command",
+            "line": 144
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 197,
+        "context_end_line": 203,
+        "full_context": "`BADCMD` prints the word at `CMDSTRT` up to space or zero, then `?` and a\nnew line. Built-ins can move `CMDSTRT` to an argument. CON moves it again\nfor a separated width, so its error may name that width. `ERRGO` sets\n`FF00h` before printing the error message. Successful handlers retain the\nzero set at piece entry. They finish at `MAINLOOP` or at `STARTED`, which\nadds a new line first (`src/cpm/ccp.asm:544-554`, `src/cpm/ccp.asm:588-629`,\n`src/cpm/ccpcmd.asm:120-132`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 10030,
+        "utf8_byte_offset": 10030
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0181",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 199,
+        "column": 22,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0182",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "classification": "needs_rephrase",
+      "reason": "The alternative dimensions run into “and reserves”, obscuring whether reserving a row applies only to serial. State the dimension alternatives together and give the reservation its own sentence.",
+      "rephrase_proposal": {
+        "old": "`PGINIT` takes `VHGT` and `VWID`,\nor 24 rows and 80 columns for serial and reserves a row for `[more]`.",
+        "new": "`PGINIT` takes its dimensions from `VHGT` and `VWID` or uses 24 rows and 80 columns for serial. It reserves a row for `[more]`.",
+        "application": "Proposal only. Replace this exact whole sentence; do not also apply a comma-only deletion for this ID."
+      },
+      "joint_context_ids": [
+        "CC0182"
+      ],
+      "inventory_evidence": {
+        "id": "CC0182",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 242,
+        "column": 76,
+        "conjunction": "or",
+        "matched_text": ",\nor",
+        "conjunction_line": 243,
+        "nearest_heading": {
+          "level": 3,
+          "text": "Directory listing and text output",
+          "line": 224
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "20. From prompt to program",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The built-in handlers",
+            "line": 205
+          },
+          {
+            "level": 3,
+            "text": "Directory listing and text output",
+            "line": 224
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 242,
+        "context_end_line": 252,
+        "full_context": "Both DIR and TYPE print through the pager. `PGINIT` takes `VHGT` and `VWID`,\nor 24 rows and 80 columns for serial and reserves a row for `[more]`.\n`PGPUT` resets its column at carriage return, steps back at backspace and\nadvances to the next multiple of eight at a tab. It counts\na new line at LF or before a printable character beyond the last column\n(`src/cpm/ccpfile.asm:334-470`). At a pause function 6 reads a key without\necho. `UNMORE` erases the prompt with CR, six spaces and CR (`src/text.asm:32-33`).\nThe key mask\nmakes `#` equivalent to `^C` and `;` equivalent to Esc. `^C` and `#` drop\nthe chain. Esc, `Q`, `q` and `;` stop only the listing. Other keys continue\n(`src/cpm/ccpfile.asm:475-520`). Chapter 21 explains the chain distinction.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 12192,
+        "utf8_byte_offset": 12192
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0182",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 242,
+        "column": 76,
+        "matched_text": ",\nor"
+      }
+    },
+    {
+      "id": "CC0183",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "classification": "retain_boundary",
+      "reason": "This comma closes the apposition “the first Ctrl-Z”, opened after 1Ah. The two stopping alternatives are Ctrl-Z and the file end, not three separate items. Removing only this comma would leave the apposition unclosed.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0183"
+      ],
+      "inventory_evidence": {
+        "id": "CC0183",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 255,
+        "column": 48,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 255,
+        "nearest_heading": {
+          "level": 3,
+          "text": "Directory listing and text output",
+          "line": 224
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "20. From prompt to program",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The built-in handlers",
+            "line": 205
+          },
+          {
+            "level": 3,
+            "text": "Directory listing and text output",
+            "line": 224
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 254,
+        "context_end_line": 257,
+        "full_context": "TYPE opens its file and reads 128-byte records into `LOADBUF`. It prints\nthrough the pager until `1Ah`, the first Ctrl-Z, or the file's end. It then\ncloses the file. No name or a missing file produces `NO FILE`\n(`src/cpm/ccpfile.asm:593-662`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 12988,
+        "utf8_byte_offset": 12988
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0183",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 255,
+        "column": 48,
+        "matched_text": ", or"
+      }
+    },
+    {
+      "id": "CC0184",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "classification": "remove_optional",
+      "reason": "Discarding the close result directly explains why NO SPACE does not certify the partial-file update. The short consequence remains clear without the comma. The interface message itself is untouched.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0184"
+      ],
+      "inventory_evidence": {
+        "id": "CC0184",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 296,
+        "column": 13,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 296,
+        "nearest_heading": {
+          "level": 3,
+          "text": "Erase, rename and save",
+          "line": 259
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "20. From prompt to program",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The built-in handlers",
+            "line": 205
+          },
+          {
+            "level": 3,
+            "text": "Erase, rename and save",
+            "line": 259
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 292,
+        "context_end_line": 298,
+        "full_context": "SAVE erases an existing file, makes it again and writes two 128-byte records\nper page from `0100h`. A failed make, write or close gives `NO SPACE`.\nAfter a failed write it attempts close before reporting the error. A\nsuccessful close records the partial file. The error path discards the\nclose result, so the message does not certify that update. Digital Research's\nCP/M 2.2 SAVE leaves the file open on that path\n(`src/cpm/ccpcmd.asm:356-445`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 14728,
+        "utf8_byte_offset": 14728
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0184",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 296,
+        "column": 13,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0185",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "classification": "remove_optional",
+      "reason": "The sentence contrasts forcing TTY with restoring the previous mode after a failed GLCD load. Both subjects are explicit and while marks the contrast without this comma.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0185"
+      ],
+      "inventory_evidence": {
+        "id": "CC0185",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 316,
+        "column": 68,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 316,
+        "nearest_heading": {
+          "level": 3,
+          "text": "Selection and consoles",
+          "line": 306
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "20. From prompt to program",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The built-in handlers",
+            "line": 205
+          },
+          {
+            "level": 3,
+            "text": "Selection and consoles",
+            "line": 306
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 315,
+        "context_end_line": 320,
+        "full_context": "CON's report prints `CON:` and the mode read from `CONMOD` after the BIOS\nhas acted on the field. A missing display or keyboard can force TTY, while\na failed GLCD load restores the previous mode. Output uses the selected\nconsole and BAT discards it. [Chapter 16](16-console-paths.md) explains\nthe BIOS transition (`src/cpm/ccpcmd.asm:200-232`,\n`src/console.asm:429-440`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 15823,
+        "utf8_byte_offset": 15823
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0185",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 316,
+        "column": 68,
+        "matched_text": ", while"
+      }
+    },
+    {
+      "id": "CC0186",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "classification": "remove_optional",
+      "reason": "The separated-width and joined-token forms are parallel subjects joined by while. Their different error words remain clear without a comma, and the following historical output is unchanged.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0186"
+      ],
+      "inventory_evidence": {
+        "id": "CC0186",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 327,
+        "column": 11,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 327,
+        "nearest_heading": {
+          "level": 3,
+          "text": "Selection and consoles",
+          "line": 306
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "20. From prompt to program",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The built-in handlers",
+            "line": 205
+          },
+          {
+            "level": 3,
+            "text": "Selection and consoles",
+            "line": 306
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 322,
+        "context_end_line": 328,
+        "full_context": "A width after CRT or PICO is parsed as two decimal digits. CON finds the\nPICO version-3 record with `TNFIND` and calls its `PICOWID` entry for 80,\n40 or 32 columns. A joined name and width, a width after another device,\nan unsupported width or a missing PICO interface is an error. In startup\nthe missing-interface path passes quietly. A separated width becomes the\nerror word, while a joined form names the whole token\n(`src/cpm/ccpcmd.asm:120-198`). The historical PICO capture shows both:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 16431,
+        "utf8_byte_offset": 16431
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0186",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 327,
+        "column": 11,
+        "matched_text": ", while"
+      }
+    },
+    {
+      "id": "CC0187",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "classification": "remove_optional",
+      "reason": "The tail location within the second FCB directly explains the shared bytes. The so-clause has an explicit subject and the comma closes no insertion.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0187"
+      ],
+      "inventory_evidence": {
+        "id": "CC0187",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 501,
+        "column": 32,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 501,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Page zero before entry",
+          "line": 490
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "20. From prompt to program",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Page zero before entry",
+            "line": 490
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 499,
+        "context_end_line": 504,
+        "full_context": "The two FCBs start sixteen bytes apart. Parsing the second overwrites the\nlast twenty bytes of the first. The tail begins at `0080h` within the\nsecond FCB's last sixteen bytes, so those bytes are shared with tail storage.\nEach FCB's drive and eleven name/type bytes remain intact\n(`src/cpm/ccpcmd.asm:456-497`). The complete FCB and DMA contracts are explained in\n[Chapter 9](09-read-and-write-a-file.md).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 23074,
+        "utf8_byte_offset": 23074
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0187",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 501,
+        "column": 32,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0188",
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "classification": "remove_optional",
+      "reason": "Keeping the explicit FCB drive number directly explains B:ARGS giving 2. Removing the comma preserves that example and its contrast with the following fallback-on-A case.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0188"
+      ],
+      "inventory_evidence": {
+        "id": "CC0188",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 594,
+        "column": 21,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 594,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The jump and return",
+          "line": 590
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "20. From prompt to program",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The jump and return",
+            "line": 590
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 592,
+        "context_end_line": 596,
+        "full_context": "After `PREPPAGE`, the CCP writes the load drive from `CMDFCB` to `0050h`.\nZero means a plain name loaded on the current drive. An explicit drive\nkeeps its FCB number, so `B:ARGS` gives 2. A plain command found by fallback\non A gives 1 because lookup set the FCB byte to A\n(`src/cpm/ccp.asm:503-525`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 25800,
+        "utf8_byte_offset": 25800
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0188",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+        "source_git_blob": "da47408efd92cf1936b325437533351f63a5a699",
+        "line": 594,
+        "column": 21,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0189",
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "classification": "remove_optional",
+      "reason": "The so-clause gives the result of clearing the retained buffer, CHPOS and PRGCODE. This comma follows the completed list. It is not required to delimit any list item or apposition.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0189"
+      ],
+      "inventory_evidence": {
+        "id": "CC0189",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 54,
+        "column": 14,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 54,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The retained line",
+          "line": 20
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "21. Chains across a warm boot",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The retained line",
+            "line": 20
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 52,
+        "context_end_line": 56,
+        "full_context": "Cold boot clears the entire resident workspace from `WSBASE` through the\nspan ending at `WSEND`. That includes the retained command buffer, `CHPOS`\nand `PRGCODE`, so a reset starts with no pending piece and a zero result\n(`src/boot.asm:73-79`, `src/ram.asm:483-485`). Warm boot's narrower clear\nis what permits ordinary program exits to continue a chain.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 2443,
+        "utf8_byte_offset": 2443
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0189",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 54,
+        "column": 14,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0190",
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "classification": "remove_optional",
+      "reason": "Loading before PREPPAGE directly explains why the tail limit protects already loaded code. PREPPAGE is the end of the first clause, not an appositive needing closure.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0190"
+      ],
+      "inventory_evidence": {
+        "id": "CC0190",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 72,
+        "column": 11,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 72,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The line and tail limits",
+          "line": 58
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "21. Chains across a warm boot",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The line and tail limits",
+            "line": 58
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 67,
+        "context_end_line": 74,
+        "full_context": "A program name occupies at least one character of its piece, leaving at\nmost 126 for the tail. `PREPPAGE` copies that tail to `0081h` and appends\na zero. At the maximum length, the zero lands at `00FFh`. One further\ncharacter would put it at `0100h`, over the program's first byte\n(`src/cpm/ccp.asm:19-25`, `src/cpm/ccpcmd.asm:456-497`). Loading precedes\n`PREPPAGE`, so the limit protects code already in memory. The load-drive\nbyte at `0050h` lies below the tail and is written separately before entry\n(`src/cpm/ccp.asm:498-525`, `src/layout.asm:72-79`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 3434,
+        "utf8_byte_offset": 3434
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0190",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 72,
+        "column": 11,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0191",
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "classification": "remove_optional",
+      "reason": "The successful DIR directly explains why its conditional TYPE runs. The colon in :TYPE is literal command syntax but this comma lies outside that syntax and is optional.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0191"
+      ],
+      "inventory_evidence": {
+        "id": "CC0191",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 122,
+        "column": 25,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 122,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The next command source",
+          "line": 76
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "21. Chains across a warm boot",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The next command source",
+            "line": 76
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 122,
+        "context_end_line": 127,
+        "full_context": "The first `DIR` succeeds, so its `:TYPE STARTUP.CMD` runs before the\n`NOSUCH.SVC` line. That service file is missing. Its `:MOUNT` is echoed\nbut skipped and the CCP proceeds to `USER 0`, the file's third line.\nThe path back to `STLINE` depends on `CHPOS` being zero, not on the previous\ncommand having succeeded (`src/cpm/ccp.asm:148-166`,\n`src/cpm/ccp.asm:224-241`, `src/cpm/ccp.asm:465-485`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 5026,
+        "utf8_byte_offset": 5026
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0191",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 122,
+        "column": 25,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0192",
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "classification": "remove_optional",
+      "reason": "The below-256 difference directly justifies using the 8-bit subtraction across page boundaries. The explicit subjects and so retain that relationship without punctuation.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0192"
+      ],
+      "inventory_evidence": {
+        "id": "CC0192",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 178,
+        "column": 10,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 178,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Finding and taking a piece",
+          "line": 139
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "21. Chains across a warm boot",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Finding and taking a piece",
+            "line": 139
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 176,
+        "context_end_line": 179,
+        "full_context": "The stored position uses only low-byte arithmetic. After advancing past\n`!`, `MLTK2` subtracts `LOW(CMDTXT - 1)` from `L`. The difference is\nbelow 256, so the 8-bit subtraction gives the required offset plus one\nacross page boundaries too (`src/cpm/ccp.asm:269-281`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 8100,
+        "utf8_byte_offset": 8100
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0192",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 178,
+        "column": 10,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0193",
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "classification": "retain_boundary",
+      "reason": "This comma opens the paired equivalent-value apposition “or FF00h”, closed before “before printing”. It identifies RCFAIL as FF00h rather than offering a second possible stored value. Removing only the opening comma breaks that paired explanation.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0193"
+      ],
+      "inventory_evidence": {
+        "id": "CC0193",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 226,
+        "column": 24,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 226,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The result before the next piece",
+          "line": 195
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "21. Chains across a warm boot",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The result before the next piece",
+            "line": 195
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 226,
+        "context_end_line": 239,
+        "full_context": "`ERRGO` stores `RCFAIL`, or `FF00h`, before printing the error message.\n`BADCMD` echoes the failed command or argument with a question mark and\nfalls through to that store (`src/cpm/ccp.asm:27-30`,\n`src/cpm/ccp.asm:588-629`). `NO FILE` from `FILENO`, `FILE EXISTS` from\nREN, `NO SPACE` from SAVE and COPY's four error messages all use `ERRGO`\n(`src/cpm/ccpfile.asm:660-662`, `src/cpm/ccpmut.asm:181-184`,\n`src/cpm/ccpcmd.asm:439-445`, `src/cpm/ccpmut.asm:379-381`,\n`src/text.asm:34-41`). Missing programs, failed loads and unsuccessful\nservice installations reach `BADCMD` too. Startup's quiet absent-device\nservice path instead returns through `SVCOK` with the initial zero\n(`src/cpm/ccp.asm:465-517`). Successful built-ins leave that zero.\nCOPY prints `COPIED` and its count, then sends the final newline through\n`PRTGO`. That entry bypasses `ERRGO`'s failure store so the result remains zero\n(`src/cpm/ccpmut.asm:347-368`, `src/cpm/ccp.asm:619-629`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 10795,
+        "utf8_byte_offset": 10795
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0193",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 226,
+        "column": 24,
+        "matched_text": ", or"
+      }
+    },
+    {
+      "id": "CC0194",
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "classification": "remove_optional",
+      "reason": "The zero CHPOS at the CCP prompt directly establishes that no piece is pending. This comma is in explanatory prose, not the separately quoted Bdos Err On interface text in the same list.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0194"
+      ],
+      "inventory_evidence": {
+        "id": "CC0194",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 252,
+        "column": 33,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 252,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Cancellation instead of continuation",
+          "line": 241
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "21. Chains across a warm boot",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Cancellation instead of continuation",
+            "line": 241
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 250,
+        "context_end_line": 260,
+        "full_context": "- `LINABRT` takes `^C` when function 10's input is empty. It prints `^C`\n  before jumping. Within a nonempty line, the key is ignored. At the CCP\n  prompt `CHPOS` is already zero, so there is no pending piece to cancel\n  (`src/cpm/bdos.asm:606-621`, `src/cpm/ccp.asm:148-166`).\n- `CHKKEY` reads the key after a `^S` output pause. `^C` jumps to `CHDROP`.\n  Any other resume key is consumed and output continues\n  (`src/cpm/bdoscon.asm:318-331`).\n- `BDERR` takes the default disk-error path. `DISKMSG` prints\n  `Bdos Err On`, the drive and the cause, then `GETCHAR` waits for a key.\n  The exit jumps to `CHDROP` (`src/cpm/bdoscon.asm:47-72`,\n  `src/cpm/bdoscon.asm:108-118`). Chapter 19 explains the four causes.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 12302,
+        "utf8_byte_offset": 12302
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0194",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 252,
+        "column": 33,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0195",
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "classification": "needs_rephrase",
+      "reason": "The comma before or starts a second subject alternative that is closed by a comma before branches. Removing only the inventoried comma strands that closing comma. Recast both rejection conditions together, preserving either-condition rejection.",
+      "rephrase_proposal": {
+        "old": "A CR or LF before it, or exhaustion of all 128 bytes without zero,\nbranches to `FNCHNO`.",
+        "new": "The loop branches to `FNCHNO` on a CR or LF before the first zero or on exhaustion of all 128 bytes without zero.",
+        "application": "Proposal only. Replace this exact whole sentence; do not also apply a comma-only deletion for this ID."
+      },
+      "joint_context_ids": [
+        "CC0195",
+        "CC0196"
+      ],
+      "inventory_evidence": {
+        "id": "CC0195",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 304,
+        "column": 27,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 304,
+        "nearest_heading": {
+          "level": 2,
+          "text": "A replacement line from function 47",
+          "line": 296
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "21. Chains across a warm boot",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "A replacement line from function 47",
+            "line": 296
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 303,
+        "context_end_line": 311,
+        "full_context": "The validation loop counts 128 bytes in `B`. The first zero accepts the\nline. A CR or LF before it, or exhaustion of all 128 bytes without zero,\nbranches to `FNCHNO`. That returns `A = FFh` through `RETA` and restores\nthe caller's stack through `RETWORD`. Neither the command buffer nor\n`CHPOS` has been written, so rejection leaves the original line available\n(`src/cpm/bdos.asm:71-93`, `src/cpm/bdos.asm:235-252`). Keyboard and\nstartup input end at CR or LF before building this zero-terminated line\n(`src/cpm/bdos.asm:435-440`, `src/cpm/ccpcmd.asm:958-966`,\n`src/cpm/ccp.asm:173-180`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 15186,
+        "utf8_byte_offset": 15186
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0195",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 304,
+        "column": 27,
+        "matched_text": ", or"
+      }
+    },
+    {
+      "id": "CC0196",
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "classification": "remove_optional",
+      "reason": "Neither buffer nor position having been written directly explains preservation of the original line. Read jointly with CC0195: rephrasing the earlier alternatives does not require this later so-comma.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0195",
+        "CC0196"
+      ],
+      "inventory_evidence": {
+        "id": "CC0196",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 307,
+        "column": 25,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 307,
+        "nearest_heading": {
+          "level": 2,
+          "text": "A replacement line from function 47",
+          "line": 296
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "21. Chains across a warm boot",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "A replacement line from function 47",
+            "line": 296
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 303,
+        "context_end_line": 311,
+        "full_context": "The validation loop counts 128 bytes in `B`. The first zero accepts the\nline. A CR or LF before it, or exhaustion of all 128 bytes without zero,\nbranches to `FNCHNO`. That returns `A = FFh` through `RETA` and restores\nthe caller's stack through `RETWORD`. Neither the command buffer nor\n`CHPOS` has been written, so rejection leaves the original line available\n(`src/cpm/bdos.asm:71-93`, `src/cpm/bdos.asm:235-252`). Keyboard and\nstartup input end at CR or LF before building this zero-terminated line\n(`src/cpm/bdos.asm:435-440`, `src/cpm/ccpcmd.asm:958-966`,\n`src/cpm/ccp.asm:173-180`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 15399,
+        "utf8_byte_offset": 15399
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0196",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 307,
+        "column": 25,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0197",
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "classification": "remove_optional",
+      "reason": "Replacing the old text and position directly explains why later pieces of that old line do not survive. The new empty-line behaviour in the following sentences remains distinct without this comma.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0197"
+      ],
+      "inventory_evidence": {
+        "id": "CC0197",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 343,
+        "column": 52,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 343,
+        "nearest_heading": {
+          "level": 2,
+          "text": "A replacement line from function 47",
+          "line": 296
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "21. Chains across a warm boot",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "A replacement line from function 47",
+            "line": 296
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 343,
+        "context_end_line": 347,
+        "full_context": "The copy replaces the old command text and position, so none of its later\npieces survives. An empty supplied line is valid: its first byte is zero.\n`CHSKIP` then finds no piece and the CCP proceeds to the next startup\nline or keyboard input (`src/cpm/bdos.asm:75-108`,\n`src/cpm/ccp.asm:148-166`, `src/cpm/ccp.asm:328-354`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 17479,
+        "utf8_byte_offset": 17479
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0197",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+        "source_git_blob": "2c70bb9ca316b5ec81695bd1b493ae8c16babc76",
+        "line": 343,
+        "column": 52,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0198",
+      "path": "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md",
+      "classification": "retain_boundary",
+      "reason": "This comma closes “bit 4 in the INFO result”, the apposition opened after CDCLM. The while-clause describes the duration of the held claim, not the bit-number definition. The closing boundary is necessary while the apposition remains.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0198"
+      ],
+      "inventory_evidence": {
+        "id": "CC0198",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "3320d33dcf2e9f4193bbd60b752649f4290ef6a9a389125806d76952a4b55d7b",
+        "source_git_blob": "855d2bdad8da41193f0b5d699837364f107f7de4",
+        "line": 107,
+        "column": 27,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 107,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Stored state and the status LCD",
+          "line": 95
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "23. Numbered-service dispatch",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Stored state and the status LCD",
+            "line": 95
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 104,
+        "context_end_line": 109,
+        "full_context": "The device bits and claim bit have different lifetimes. Cold boot calls\n`RTCHAS` once and sets `CDRTC`, bit 3 of `CONDEV`, if the clock answers\n(`src/boot.asm:88-94`, `src/layout.asm:97-98`). `VCLAIM` holds `CDCLM`,\nbit 4 in the `INFO` result, while a program has claimed the PICO9918\n(`src/ram.asm:138-139`, `src/layout.asm:99-100`). Reading `INFO` does not\nrepeat the clock probe or change the claim.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 5109,
+        "utf8_byte_offset": 5109
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0198",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "3320d33dcf2e9f4193bbd60b752649f4290ef6a9a389125806d76952a4b55d7b",
+        "source_git_blob": "855d2bdad8da41193f0b5d699837364f107f7de4",
+        "line": 107,
+        "column": 27,
+        "matched_text": ", while"
+      }
+    },
+    {
+      "id": "CC0199",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "remove_optional",
+      "reason": "Allocation below the stub page directly explains the additional loss of TPA bytes. Read with CC0200 in the same paragraph: the allocation consequence needs no comma, regardless of how the later arithmetic total is expressed.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0199",
+        "CC0200"
+      ],
+      "inventory_evidence": {
+        "id": "CC0199",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 53,
+        "column": 53,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 53,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The resident entry and its pages",
+          "line": 29
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The resident entry and its pages",
+            "line": 29
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 53,
+        "context_end_line": 58,
+        "full_context": "The first service is allocated below the stub's page, so the unused bytes\nbetween that page boundary and the stub also leave the transient program area\n(TPA). In the historical starter layout, vectors began at `B9A7h` and the stub\nat `B9A4h`. The first one-page COUNT service cost 256 plus 164 bytes, or 420.\nLater services cost whole pages without another alignment gap. The historical\nGLCD layout and a possible second service were:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 2675,
+        "utf8_byte_offset": 2675
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0199",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 53,
+        "column": 53,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0200",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "needs_rephrase",
+      "reason": "The final or introduces the total of 256 plus 164, not an alternative allocation cost. Express the total and its components explicitly so dropping this comma cannot turn equivalence into a choice. Read jointly with CC0199.",
+      "rephrase_proposal": {
+        "old": "The first one-page COUNT service cost 256 plus 164 bytes, or 420.",
+        "new": "The first one-page COUNT service cost 420 bytes: 256 for the page and 164 for the alignment gap.",
+        "application": "Proposal only. Replace this exact whole sentence; do not also apply a comma-only deletion for this ID."
+      },
+      "joint_context_ids": [
+        "CC0199",
+        "CC0200"
+      ],
+      "inventory_evidence": {
+        "id": "CC0200",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 56,
+        "column": 69,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 56,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The resident entry and its pages",
+          "line": 29
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The resident entry and its pages",
+            "line": 29
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 53,
+        "context_end_line": 58,
+        "full_context": "The first service is allocated below the stub's page, so the unused bytes\nbetween that page boundary and the stub also leave the transient program area\n(TPA). In the historical starter layout, vectors began at `B9A7h` and the stub\nat `B9A4h`. The first one-page COUNT service cost 256 plus 164 bytes, or 420.\nLater services cost whole pages without another alignment gap. The historical\nGLCD layout and a possible second service were:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 2922,
+        "utf8_byte_offset": 2922
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0200",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 56,
+        "column": 69,
+        "matched_text": ", or"
+      }
+    },
+    {
+      "id": "CC0201",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "remove_optional",
+      "reason": "The table cell describes flags with a conditional zero replacement if a hook kept the pages. Or and the explicit if-condition mark that alternative without a comma. This is explanatory table prose, not immutable interface bytes.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0201"
+      ],
+      "inventory_evidence": {
+        "id": "CC0201",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 77,
+        "column": 20,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 77,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The resident entry and its pages",
+          "line": 29
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The resident entry and its pages",
+            "line": 29
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 77,
+        "context_end_line": 77,
+        "full_context": "| 3 | 1 | The flags, or 0 if a hook kept the pages |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 3864,
+        "utf8_byte_offset": 3872
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0201",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 77,
+        "column": 20,
+        "matched_text": ", or"
+      }
+    },
+    {
+      "id": "CC0202",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "remove_optional",
+      "reason": "Reconstruction from SVCHEAD and restoration of the stub address are alternative SLTOP actions. The when-condition gives the second case its boundary. The comma neither closes the earlier using-phrase nor marks a literal.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0202"
+      ],
+      "inventory_evidence": {
+        "id": "CC0202",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 89,
+        "column": 15,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 89,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The resident entry and its pages",
+          "line": 29
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The resident entry and its pages",
+            "line": 29
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 86,
+        "context_end_line": 90,
+        "full_context": "The saved owner byte identifies the next older service, not a copy of the\nold ceiling. `SVCABV` converts it to the page above this service, using\nthe stub's page for owner zero. `SLTOP` reconstructs `PZTOP` and `0006h`\nfrom `SVCHEAD`, or restores the exact stub address when no owner remains\n(`src/loader.asm:77-101`, `src/loader.asm:693-719`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 4424,
+        "utf8_byte_offset": 4432
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0202",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 89,
+        "column": 15,
+        "matched_text": ", or"
+      }
+    },
+    {
+      "id": "CC0203",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "remove_optional",
+      "reason": "The unchanged absolute address being unmarked directly explains survival of its BDOS call. The so-clause remains clear without the comma. The quoted relocation diagnostic occurs in a different sentence and is unaffected.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0203"
+      ],
+      "inventory_evidence": {
+        "id": "CC0203",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 110,
+        "column": 11,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 110,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Page relocation",
+          "line": 92
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Page relocation",
+            "line": 92
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 105,
+        "context_end_line": 111,
+        "full_context": "`fixupsOf` ignores equal bytes and accepts a changed byte only when its\nsecond value is the first plus one modulo 256. A different change produces\n`byte N is not relocatable`. A changed header byte is rejected separately.\nExpressions such as half or twice a relocatable address can violate that\nrule. An absolute external address such as `0005h` remains equal and is\nnot marked, so its BDOS call survives relocation\n(`tools/lib/svc.mjs:67-75`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 5569,
+        "utf8_byte_offset": 5577
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0203",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 110,
+        "column": 11,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0204",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "remove_optional",
+      "reason": "The 255 gap and other gap bytes have explicit, contrasting actions joined by while. The earlier including-255 clause ends in its own sentence, so this comma closes no supplementary phrase.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0204"
+      ],
+      "inventory_evidence": {
+        "id": "CC0204",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 196,
+        "column": 53,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 196,
+        "nearest_heading": {
+          "level": 3,
+          "text": "4. Fixups in the loaded file",
+          "line": 191
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Installation before commit",
+            "line": 129
+          },
+          {
+            "level": 3,
+            "text": "4. Fixups in the loaded file",
+            "line": 191
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 193,
+        "context_end_line": 198,
+        "full_context": "Relocation runs in the file buffer at `0100h`. BC counts list bytes and\nHL begins at `DF+DHLEN-1`, `0118h`. Each gap advances HL. The loader\nrequires the resulting offset to remain below the header/image size,\nincluding when the gap is 255. A 255 skips the patch, while other bytes\nadd `SLDL` to the byte addressed by HL. A rejected list can leave the\nloaded file partly relocated (`src/loader.asm:324-373`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 10000,
+        "utf8_byte_offset": 10008
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0204",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 196,
+        "column": 53,
+        "matched_text": ", while"
+      }
+    },
+    {
+      "id": "CC0205",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "remove_optional",
+      "reason": "Zero also occurring on success directly explains why carry must accompany SVCRC. Removing the comma keeps the qualification attached to that success case before the separate post-move distinction.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0205"
+      ],
+      "inventory_evidence": {
+        "id": "CC0205",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 296,
+        "column": 28,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 296,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Rollback and retained pages",
+          "line": 293
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Rollback and retained pages",
+            "line": 293
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 295,
+        "context_end_line": 298,
+        "full_context": "A rejection before the move returns carry with `SVCRC` zero. Zero also\noccurs on a successful load, so carry must be read with it. After the\nmove the loader distinguishes a clean release from a reservation retained\nfor unsafe or incomplete cleanup:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 15141,
+        "utf8_byte_offset": 15149
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0205",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 296,
+        "column": 28,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0206",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "remove_optional",
+      "reason": "REMOVE failure and a detected BIOS hook are explicit parallel subjects with different flag outcomes. While supplies the contrast without a comma and no apposition spans this position.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0206"
+      ],
+      "inventory_evidence": {
+        "id": "CC0206",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 320,
+        "column": 6,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 320,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Rollback and retained pages",
+          "line": 293
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Rollback and retained pages",
+            "line": 293
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 319,
+        "context_end_line": 325,
+        "full_context": "These are two distinct retained-page paths. A REMOVE failure retains its\nflags, while a detected BIOS hook clears them. Neither path publishes the\nnew record chain. The scan covers only RAM BIOS targets, not a table\nregistered through DRVR or every pointer that INIT could have written.\nThe historical cases include retained BIOS-hook pages across warm boot,\nREMOVE failure and an unscanned GLVEC pointer after pages were released\n(`78127ec:test/svc.test.mjs:423-444`, `78127ec:test/svc.test.mjs:572-578`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 16584,
+        "utf8_byte_offset": 16592
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0206",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 320,
+        "column": 6,
+        "matched_text": ", while"
+      }
+    },
+    {
+      "id": "CC0207",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "remove_optional",
+      "reason": "Visibility only after SVCLK directly explains why INIT cannot find its own proposed record. Removing this comma preserves that temporal restriction and does not affect the historical-test citations.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0207"
+      ],
+      "inventory_evidence": {
+        "id": "CC0207",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 365,
+        "column": 14,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 365,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Registry lookup and lifetime",
+          "line": 332
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Registry lookup and lifetime",
+            "line": 332
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 363,
+        "context_end_line": 368,
+        "full_context": "There is no numbered operation to remove a record. Number 16 is beyond\nFONT and returns carry from dispatch. Proposed records become visible only\nafter `SVCLK`, so INIT cannot find its own newly proposed record through\nFIND (`src/services.asm:45-49`, `src/loader.asm:589-606`). Historical tests\ncover both boundaries (`78127ec:test/svc.test.mjs:383-388`,\n`78127ec:test/svc.test.mjs:461-467`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 19198,
+        "utf8_byte_offset": 19206
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0207",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 365,
+        "column": 14,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0208",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "remove_optional",
+      "reason": "Saving both old heads directly explains why reversing loads restores both lists. The so-clause needs no additional boundary after “before its load”.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0208"
+      ],
+      "inventory_evidence": {
+        "id": "CC0208",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 373,
+        "column": 46,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 373,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Removing the newest owner",
+          "line": 370
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Removing the newest owner",
+            "line": 370
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 372,
+        "context_end_line": 374,
+        "full_context": "Only the lowest owner can be removed. Its header saves exactly the\nregistry and owner heads from before its load, so reversing loads in\norder restores both lists without unlinking records individually.",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 19575,
+        "utf8_byte_offset": 19583
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0208",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 373,
+        "column": 46,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0209",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "remove_optional",
+      "reason": "Removal at the CCP directly explains retaining an address until program exit. This comma closes no parenthetical qualification. The later, longer-lived resident-service condition remains a separate sentence.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0209"
+      ],
+      "inventory_evidence": {
+        "id": "CC0209",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 399,
+        "column": 37,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 399,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Removing the newest owner",
+          "line": 370
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Removing the newest owner",
+            "line": 370
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 398,
+        "context_end_line": 405,
+        "full_context": "`SVCGEN` is one byte and repeats after 256 removals. Through the published\ninterface removal happens at the CCP, so a running program can retain a\nrecord address until exit. A resident service retaining it longer must\ncheck the current generation or declare the provider as a dependency.\nThe dependency prevents loading without its provider and the owner order\nprevents removing that older provider first\n(`src/ram.asm:400-410`, `src/loader.asm:128-174`, `src/loader.asm:244-279`).\nChapter 13 explains the client-side dependency contract.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 21049,
+        "utf8_byte_offset": 21057
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0209",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 399,
+        "column": 37,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0210",
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "classification": "remove_optional",
+      "reason": "No REMOVE after failed INIT directly explains INIT’s cleanup responsibility. The explicit so and subject distinguish that responsibility without a comma, while the following warm-boot interrupt warning remains intact.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0210"
+      ],
+      "inventory_evidence": {
+        "id": "CC0210",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 442,
+        "column": 71,
+        "conjunction": "so",
+        "matched_text": ",\nso",
+        "conjunction_line": 443,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Checks and service responsibilities",
+          "line": 414
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "24. Loading and removing services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Checks and service responsibilities",
+            "line": 414
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 440,
+        "context_end_line": 447,
+        "full_context": "An unclaimed vector is not reserved by that flag check. A jump to retained\nmemory may pass the sweep even though the loader has no ownership claim\nfor it. REMOVE must restore such changes. A failed INIT runs no REMOVE,\nso INIT must undo its own changes and disable any interrupt source it\nstarted. Warm boot during INIT can leave that device source enabled.\nUnder a default EI/RETI vector an active interrupt source can repeat\nwithout being serviced (`src/loader.asm:451-455`,\n`src/boot.asm:187-200`, `src/boot.asm:454-509`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 23621,
+        "utf8_byte_offset": 23629
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0210",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+        "source_git_blob": "85cc5b3fc49eb597976362f9bcc6cca6ed2fa505",
+        "line": 442,
+        "column": 71,
+        "matched_text": ",\nso"
+      }
+    },
+    {
+      "id": "CC0211",
+      "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+      "classification": "remove_optional",
+      "reason": "SVC and another type are explicit alternative dispatch cases joined by while. The backticked SVC, SVCGO and .COM identifiers retain their exact spelling. The comma is outside them and optional.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0211"
+      ],
+      "inventory_evidence": {
+        "id": "CC0211",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b0ff5b03f7dad091a4dab79cfd7ebb30d407caf6057bd29657ebf31902d8d1e4",
+        "source_git_blob": "138b8d428d1d316ec2fcfd4ace6a00fec9013f5a",
+        "line": 229,
+        "column": 20,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 229,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Display loading and console selection",
+          "line": 222
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "25. Startup inside the CCP",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Display loading and console selection",
+            "line": 222
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 224,
+        "context_end_line": 231,
+        "full_context": "The PICO9918 console starts from ROM when the display answers and the\nMatrix switch enables the matrix keyboard at cold boot. It needs no\nservice line in the file (`src/console.asm:82-88`,\n`src/video.asm:22-29`, `src/pico.asm:64-86`). The supplied display line\nloads `GLCD.SVC`. The CCP compares all three type bytes in `CMDFCB`:\n`SVC` calls `SVCGO`, while another type goes to the `.COM` search\n(`src/cpm/ccp.asm:451-495`).\n[Chapter 20](20-from-prompt-to-program.md) explains that search.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 11316,
+        "utf8_byte_offset": 11322
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0211",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "b0ff5b03f7dad091a4dab79cfd7ebb30d407caf6057bd29657ebf31902d8d1e4",
+        "source_git_blob": "138b8d428d1d316ec2fcfd4ace6a00fec9013f5a",
+        "line": 229,
+        "column": 20,
+        "matched_text": ", while"
+      }
+    },
+    {
+      "id": "CC0212",
+      "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+      "classification": "remove_optional",
+      "reason": "The enabled Matrix switch directly explains reading the matrix keyboard. The table’s meaning column is editable explanation rather than a quoted status message, and so supplies the causal connection.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0212"
+      ],
+      "inventory_evidence": {
+        "id": "CC0212",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b0ff5b03f7dad091a4dab79cfd7ebb30d407caf6057bd29657ebf31902d8d1e4",
+        "source_git_blob": "138b8d428d1d316ec2fcfd4ace6a00fec9013f5a",
+        "line": 296,
+        "column": 40,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 296,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Recovery words and row ownership",
+          "line": 276
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "25. Startup inside the CCP",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Recovery words and row ownership",
+            "line": 276
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 296,
+        "context_end_line": 296,
+        "full_context": "| 0 | `CDMTX` | The Matrix switch is on, so the matrix keyboard is read |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 14987,
+        "utf8_byte_offset": 14994
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0212",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "b0ff5b03f7dad091a4dab79cfd7ebb30d407caf6057bd29657ebf31902d8d1e4",
+        "source_git_blob": "138b8d428d1d316ec2fcfd4ace6a00fec9013f5a",
+        "line": 296,
+        "column": 40,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0213",
+      "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+      "classification": "retain_boundary",
+      "reason": "This comma closes the supplementary location phrase “at 0000h and 4000h”, opened after “chip”. It separates that completed address insertion from the purpose clause beginning so that. Removing only the closing comma would leave the paired insertion unbalanced.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0213",
+        "CC0214",
+        "CC0215"
+      ],
+      "inventory_evidence": {
+        "id": "CC0213",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2f5cb41470bf35f3496e658d236d82a0b2e6ef038282c537e6ab35706eae48e7",
+        "source_git_blob": "da7a0eb501b6aca7d38f0bb2ddc6d2724a7f6acb",
+        "line": 385,
+        "column": 11,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 385,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Comparing a board's report with the model's",
+          "line": 377
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "27. Diagnose the machine",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Comparing a board's report with the model's",
+            "line": 377
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 384,
+        "context_end_line": 398,
+        "full_context": "1. Burn `diag.rom` into both halves of a 32 KiB ROM chip, at `0000h` and\n   `4000h`, so that the ROM Lo/Hi switch runs it in either position. Fit the\n   chip in place of MON-3.\n2. Fit a 32 KiB RAM in U9, as TEC-OS needs. Without it T03 fails, and the\n   tests of EXPAND 1 have no RAM to test.\n3. Set the CPU clock switch to FAST with the 4 MHz oscillator. Set the Matrix\n   switch on if the matrix keyboard is fitted.\n4. Connect a terminal program to the FTDI port at 4800 baud, 8 data bits, no\n   parity and 2 stop bits, with its session log on.\n5. Write the starter card's image to an SD card and put it in the adaptor, so\n   that T19, T20 and T37 have a TEC-OS card to read.\n6. Press reset. Press `I` on the terminal or `+` on the keypad within 5\n   seconds for the interactive tests.\n7. Keep off the hex keypad during the RAM tests, T09 and T25, except to answer\n   a question.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 19747,
+        "utf8_byte_offset": 19769
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0213",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "2f5cb41470bf35f3496e658d236d82a0b2e6ef038282c537e6ab35706eae48e7",
+        "source_git_blob": "da7a0eb501b6aca7d38f0bb2ddc6d2724a7f6acb",
+        "line": 385,
+        "column": 11,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0214",
+      "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+      "classification": "remove_optional",
+      "reason": "T03 failing and the EXPAND 1 tests lacking RAM are coordinated consequences of “Without it”. Both explicit subjects remain distinct when joined by and without the comma. Read with the other two candidates in this procedure.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0213",
+        "CC0214",
+        "CC0215"
+      ],
+      "inventory_evidence": {
+        "id": "CC0214",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2f5cb41470bf35f3496e658d236d82a0b2e6ef038282c537e6ab35706eae48e7",
+        "source_git_blob": "da7a0eb501b6aca7d38f0bb2ddc6d2724a7f6acb",
+        "line": 387,
+        "column": 65,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 387,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Comparing a board's report with the model's",
+          "line": 377
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "27. Diagnose the machine",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Comparing a board's report with the model's",
+            "line": 377
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 384,
+        "context_end_line": 398,
+        "full_context": "1. Burn `diag.rom` into both halves of a 32 KiB ROM chip, at `0000h` and\n   `4000h`, so that the ROM Lo/Hi switch runs it in either position. Fit the\n   chip in place of MON-3.\n2. Fit a 32 KiB RAM in U9, as TEC-OS needs. Without it T03 fails, and the\n   tests of EXPAND 1 have no RAM to test.\n3. Set the CPU clock switch to FAST with the 4 MHz oscillator. Set the Matrix\n   switch on if the matrix keyboard is fitted.\n4. Connect a terminal program to the FTDI port at 4800 baud, 8 data bits, no\n   parity and 2 stop bits, with its session log on.\n5. Write the starter card's image to an SD card and put it in the adaptor, so\n   that T19, T20 and T37 have a TEC-OS card to read.\n6. Press reset. Press `I` on the terminal or `+` on the keypad within 5\n   seconds for the interactive tests.\n7. Keep off the hex keypad during the RAM tests, T09 and T25, except to answer\n   a question.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 19905,
+        "utf8_byte_offset": 19927
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0214",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "2f5cb41470bf35f3496e658d236d82a0b2e6ef038282c537e6ab35706eae48e7",
+        "source_git_blob": "da7a0eb501b6aca7d38f0bb2ddc6d2724a7f6acb",
+        "line": 387,
+        "column": 65,
+        "matched_text": ", and"
+      }
+    },
+    {
+      "id": "CC0215",
+      "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+      "classification": "remove_optional",
+      "reason": "The so-that clause gives the purpose of inserting the prepared SD card for T19, T20 and T37. It is not a supplementary apposition like the address insertion at CC0213 and needs no preceding comma.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0213",
+        "CC0214",
+        "CC0215"
+      ],
+      "inventory_evidence": {
+        "id": "CC0215",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2f5cb41470bf35f3496e658d236d82a0b2e6ef038282c537e6ab35706eae48e7",
+        "source_git_blob": "da7a0eb501b6aca7d38f0bb2ddc6d2724a7f6acb",
+        "line": 393,
+        "column": 74,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 393,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Comparing a board's report with the model's",
+          "line": 377
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "27. Diagnose the machine",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Comparing a board's report with the model's",
+            "line": 377
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 384,
+        "context_end_line": 398,
+        "full_context": "1. Burn `diag.rom` into both halves of a 32 KiB ROM chip, at `0000h` and\n   `4000h`, so that the ROM Lo/Hi switch runs it in either position. Fit the\n   chip in place of MON-3.\n2. Fit a 32 KiB RAM in U9, as TEC-OS needs. Without it T03 fails, and the\n   tests of EXPAND 1 have no RAM to test.\n3. Set the CPU clock switch to FAST with the 4 MHz oscillator. Set the Matrix\n   switch on if the matrix keyboard is fitted.\n4. Connect a terminal program to the FTDI port at 4800 baud, 8 data bits, no\n   parity and 2 stop bits, with its session log on.\n5. Write the starter card's image to an SD card and put it in the adaptor, so\n   that T19, T20 and T37 have a TEC-OS card to read.\n6. Press reset. Press `I` on the terminal or `+` on the keypad within 5\n   seconds for the interactive tests.\n7. Keep off the hex keypad during the RAM tests, T09 and T25, except to answer\n   a question.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 20284,
+        "utf8_byte_offset": 20306
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0215",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "2f5cb41470bf35f3496e658d236d82a0b2e6ef038282c537e6ab35706eae48e7",
+        "source_git_blob": "da7a0eb501b6aca7d38f0bb2ddc6d2724a7f6acb",
+        "line": 393,
+        "column": 74,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0216",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "Node and the browser are explicit parallel subjects with different host facilities. While already marks that contrast. This comma closes no insertion around the test-wrapper phrase.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0216"
+      ],
+      "inventory_evidence": {
+        "id": "CC0216",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 28,
+        "column": 73,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 28,
+        "nearest_heading": {
+          "level": 2,
+          "text": "A shared machine",
+          "line": 24
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "A shared machine",
+            "line": 24
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 26,
+        "context_end_line": 30,
+        "full_context": "Tests, the web page and the book's capture tool all use `host/machine.mjs`. That\nmodule imports the Debug80 TEC-1G runtime and a byte-string helper without\ndepending on Node.js. Node supplies file access through the test wrapper, while\nthe browser supplies its own storage and controls (`host/machine.mjs:10-16`,\n`test/lib/machine.mjs:3-12`, `web/src/main.mjs:5-12`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 1286,
+        "utf8_byte_offset": 1286
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0216",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 28,
+        "column": 73,
+        "matched_text": ", while"
+      }
+    },
+    {
+      "id": "CC0217",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "The sdImage cell gives two input alternatives: an array of card bytes or no card. The comma is explanatory table punctuation, not part of the sdImage identifier or a literal option value.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0217"
+      ],
+      "inventory_evidence": {
+        "id": "CC0217",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 46,
+        "column": 44,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 46,
+        "nearest_heading": {
+          "level": 2,
+          "text": "A shared machine",
+          "line": 24
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "A shared machine",
+            "line": 24
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 46,
+        "context_end_line": 46,
+        "full_context": "| `sdImage` | A mutable array of card bytes, or no card |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 2102,
+        "utf8_byte_offset": 2102
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0217",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 46,
+        "column": 44,
+        "matched_text": ", or"
+      }
+    },
+    {
+      "id": "CC0218",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "The separate ram96 mapping directly explains the requirement to identify the mapping used. This comma is not the comma before then in the earlier configuration sentence and closes no insertion.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0218"
+      ],
+      "inventory_evidence": {
+        "id": "CC0218",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 59,
+        "column": 75,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 59,
+        "nearest_heading": {
+          "level": 2,
+          "text": "A shared machine",
+          "line": 24
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "A shared machine",
+            "line": 24
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 56,
+        "context_end_line": 61,
+        "full_context": "The runtime supplies the CPU, latch decoding, boot overlay, expansion banks,\nkeypad, serial timing, LCDs and PICO display. Machine configures RAM at\n`0000h–BFFFh`, ROM at `C000h–FFFFh` and entry at zero, then places the 16 KiB\nROM at `C000h`. Its `ram96` option supplies a separate MAIN/EXPAND mapping, so a\nresult must identify which mapping was used (`host/machine.mjs:63-78`,\n`host/machine.mjs:143-176`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 3038,
+        "utf8_byte_offset": 3044
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0218",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 59,
+        "column": 75,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0219",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "Fixture helpers bypassing the CPU-write watch directly explains the scope qualification. The so-clause remains unambiguous without a comma. None of the cited identifiers is altered.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0219"
+      ],
+      "inventory_evidence": {
+        "id": "CC0219",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 141,
+        "column": 48,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 141,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Write watches",
+          "line": 104
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Write watches",
+            "line": 104
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 135,
+        "context_end_line": 142,
+        "full_context": "The source in `test/expand.test.mjs:67-77` deliberately writes `BF80h`\nwith EXPAND 1 visible and checks that the watch reports it. The test then\nremoves its intentional entry from the shared list. The model still\nperforms the underlying write. It adds a report that ordinary board RAM\ndoes not provide, rather than preventing the write\n(`host/machine.mjs:223-233`). Fixture writes through `Machine.write` and\nforce-write helpers bypass this CPU-write watch, so its scope must remain\nexplicit (`host/machine.mjs:175`, `host/machine.mjs:237`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 7675,
+        "utf8_byte_offset": 7689
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0219",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 141,
+        "column": 48,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0220",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "Masking bit 7 directly explains why reversed cells decode as plain characters. The short so-clause is clear without punctuation and remains distinct from the following raw-cell observation.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0220"
+      ],
+      "inventory_evidence": {
+        "id": "CC0220",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 196,
+        "column": 7,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 196,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Console bytes, serial bytes and screens",
+          "line": 144
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Console bytes, serial bytes and screens",
+            "line": 144
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 194,
+        "context_end_line": 198,
+        "full_context": "PICO `screen` decodes the name table into text rows. Its layout comes from\nthe display registers unless the caller supplies a width or base. Bit 7 is\nmasked, so reversed cells appear as plain characters. `cell` returns a raw\nname-table byte. Neither observation by itself establishes glyph pixels or\nreverse-video appearance (`host/machine.mjs:380-410`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 9123,
+        "utf8_byte_offset": 9137
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0220",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 196,
+        "column": 7,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0221",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "Supplying PIWID directly explains decoding at the offered widths. Removing the comma leaves that causal link clear without changing the following explicit limit on evidence of an actual run.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0221"
+      ],
+      "inventory_evidence": {
+        "id": "CC0221",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 200,
+        "column": 76,
+        "conjunction": "so",
+        "matched_text": ",\nso",
+        "conjunction_line": 201,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Console bytes, serial bytes and screens",
+          "line": 144
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Console bytes, serial bytes and screens",
+            "line": 144
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 200,
+        "context_end_line": 203,
+        "full_context": "The capture tool's PICO screen option supplies the console width from PIWID,\nso the offered 40- and 32-column modes decode at those widths rather than\nthe 80-column fallback (`tools/capture.mjs:147-153`). This is a decoder\nparameter, not evidence that a new width or font was run.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 9398,
+        "utf8_byte_offset": 9412
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0221",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 200,
+        "column": 76,
+        "matched_text": ",\nso"
+      }
+    },
+    {
+      "id": "CC0222",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "Prompt-like output confusing suffix waits directly motivates checking state or persistence. The explicit subject “a workflow” marks the consequence without a comma. The [more] literal is elsewhere in the paragraph.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0222"
+      ],
+      "inventory_evidence": {
+        "id": "CC0222",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 227,
+        "column": 51,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 227,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Commands and stopping conditions",
+          "line": 213
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Commands and stopping conditions",
+            "line": 213
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 222,
+        "context_end_line": 228,
+        "full_context": "`waitingForInput` recognises named console polling ranges. `ready` additionally\nchecks that startup has finished and the CCP is reading a command line.\nThe capture tool combines that state with a prompt suffix and handles\n`[more]` and the diagnostic retry prompt separately\n(`host/machine.mjs:323-342`, `tools/capture.mjs:76-96`). Program output that\nresembles a prompt can confuse a suffix-based wait, so a workflow must check\nthe state or persisted result that distinguishes real completion.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 10958,
+        "utf8_byte_offset": 10972
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0222",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 227,
+        "column": 51,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0223",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "Reserving the last GLCD row for [more] directly explains the historical pause after seven text rows. The comma is outside the prompt literal and outside the following immutable screen capture.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0223"
+      ],
+      "inventory_evidence": {
+        "id": "CC0223",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 267,
+        "column": 13,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 267,
+        "nearest_heading": {
+          "level": 2,
+          "text": "A complete pagination fixture",
+          "line": 253
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "A complete pagination fixture",
+            "line": 253
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 266,
+        "context_end_line": 267,
+        "full_context": "The GLCD has eight rows of 21 characters. TYPE's pager leaves its final row\nfor `[more]`, so this historical first pause follows seven text rows:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 13140,
+        "utf8_byte_offset": 13156
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0223",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 267,
+        "column": 13,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0224",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "Counting from the listing’s first row directly explains the command line scrolling away. The following x key and retained screen are separate evidence. No literal text or apposition requires this comma.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0224"
+      ],
+      "inventory_evidence": {
+        "id": "CC0224",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 282,
+        "column": 24,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 282,
+        "nearest_heading": {
+          "level": 2,
+          "text": "A complete pagination fixture",
+          "line": 253
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "A complete pagination fixture",
+            "line": 253
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 281,
+        "context_end_line": 283,
+        "full_context": "Each of the first two file lines occupies three rows. Counting begins with\nthe listing's first row, so the command line has scrolled away by the pause.\nThe next run supplies `x` to erase the pause prompt and continue:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 13507,
+        "utf8_byte_offset": 13523
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0224",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 282,
+        "column": 24,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0225",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "Omission of dependencies from the cache key directly explains its incomplete artifact identity. The comma before so does not delimit the preceding list or an inserted qualification.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0225"
+      ],
+      "inventory_evidence": {
+        "id": "CC0225",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 339,
+        "column": 11,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 339,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Fixtures, assertions and pinned inputs",
+          "line": 320
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Fixtures, assertions and pinned inputs",
+            "line": 320
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 335,
+        "context_end_line": 341,
+        "full_context": "`program` uses ATOM to assemble `test/programs/NAME.asm` and caches bytes\nand symbols under `build/test-programs`. Its key includes the origin and\na recursive digest of the source and included files. A changed included\nfile changes the key. That key does not include every assembler or runtime\ndependency, so it is not a complete artifact identity\n(`test/lib/fixtures.mjs:29-55`). `service` calls makeSvc for a resident image\n(`test/lib/fixtures.mjs:75-79`). Chapter 13 describes that file writer.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 15721,
+        "utf8_byte_offset": 15737
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0225",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 339,
+        "column": 11,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0226",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "No fixed clock directly explains the DS1302 following host time. This comma belongs to the final sentence, not to the earlier frame-budget or achieved-MHz qualifications.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0226"
+      ],
+      "inventory_evidence": {
+        "id": "CC0226",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 385,
+        "column": 6,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 385,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The browser as another caller",
+          "line": 369
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The browser as another caller",
+            "line": 369
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 379,
+        "context_end_line": 385,
+        "full_context": "Each animation frame targets 4 MHz for the elapsed wall time, capped at\n100 ms. Every 1,024 instructions it checks a 30 ms execution budget and can\nstop the frame early. Rendering reads the runtime's display state and shows\nthe PICO screen, digits, LEDs, LCD, GLCD, latch, window bank and Caps state.\nA once-per-second display reports achieved MHz, not an unconditional 4 MHz\nexecution rate (`web/src/main.mjs:174-233`). The page supplies no fixed\nclock, so its DS1302 follows host time (`web/src/main.mjs:82-95`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 18517,
+        "utf8_byte_offset": 18533
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0226",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 385,
+        "column": 6,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0227",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "Stripping escapes and handling backspace directly explains the display being a presentation of bytes. So already joins the mechanism and consequence. The comma closes no inserted phrase.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0227"
+      ],
+      "inventory_evidence": {
+        "id": "CC0227",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 390,
+        "column": 32,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 390,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The browser as another caller",
+          "line": 369
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The browser as another caller",
+            "line": 369
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 387,
+        "context_end_line": 392,
+        "full_context": "Focused video displays route ordinary keys to the matrix queue. The serial\nterminal routes them to serial. Unsupported multi-character sequences can\nuse serial even from a video focus. The page's serial display strips escape\nsequences and handles backspace, so its text is a presentation of serial\nbytes rather than a complete terminal implementation\n(`web/src/main.mjs:358-427`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 18836,
+        "utf8_byte_offset": 18852
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0227",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 390,
+        "column": 32,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0228",
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "classification": "remove_optional",
+      "reason": "Avoiding overlay writes and latch reads directly explains why checked ordinary paths can meet those restrictions on a permissive model. So and the explicit subject preserve that limited inference without the comma. The earlier model-mapping qualifications remain separate.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0228"
+      ],
+      "inventory_evidence": {
+        "id": "CC0228",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 435,
+        "column": 64,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 435,
+        "nearest_heading": {
+          "level": 2,
+          "text": "From a model result to a board observation",
+          "line": 419
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "28. The host model as evidence",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "From a model result to a board observation",
+            "line": 419
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 428,
+        "context_end_line": 438,
+        "full_context": "The runtime sends overlay writes to underlying RAM and permits latch readback.\nThe board documentation instead selects ROM under the overlay and describes\nthe latch as write-only. The legacy bank-field decode uses latch bits 3–6.\nThe diagnostic source asserts its nine window banks plus the base mapping,\nwhich must not be attributed to the documented board\n(`test/diag.test.mjs:121-123`). The `ram96` mapping is a separate configuration,\nnot a repair to every legacy-model result. Diagnostics T08, T10 and T12 probe\nthese differences. TEC-OS avoids overlay writes and latch reads, so checked\nordinary paths can satisfy those restrictions on a more permissive model\n(`host/machine.mjs:40-46`, `host/machine.mjs:155-172`,\n`docs/diagnostics.md:146-163`, `docs/diagnostics.md:185-195`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 21420,
+        "utf8_byte_offset": 21438
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0228",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+        "source_git_blob": "213e0f0e2baca375b648f55edc0a4b37fb37ecb6",
+        "line": 435,
+        "column": 64,
+        "matched_text": ", so"
+      }
+    }
+  ],
+  "supplementary_reviews": [
+    {
+      "id": "CC0002",
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "classification": "remove_optional",
+      "reason": "COPY staying within the current area directly explains why it cannot transfer files between areas. So carries that connection without a comma. The adjacent MOUNT and host-put explanations remain distinct. Neither imposes a boundary here.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0002"
+      ],
+      "inventory_evidence": {
+        "id": "CC0002",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+        "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+        "line": 186,
+        "column": 37,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 186,
+        "nearest_heading": {
+          "level": 2,
+          "text": "User areas",
+          "line": 153
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "4. Drives and user areas",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "User areas",
+            "line": 153
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 184,
+        "context_end_line": 189,
+        "full_context": "The `MOUNT` program still ran in area 3 because program lookup also\nchecks area 0. Its volume list is independent of the files' user areas.\n`COPY` works within the current area, so it cannot transfer a file between\nareas. On a PC, `tecvol put --user N` places a file in a chosen area,\nas [Chapter 5](05-cards-on-the-pc.md) explains. `USER` without a number or\nwith a number outside 0 to 15 fails with a question mark.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 7081,
+        "utf8_byte_offset": 7081
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0002",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+        "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+        "line": 186,
+        "column": 37,
+        "matched_text": ", so"
+      }
+    },
+    {
+      "id": "CC0019",
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "classification": "remove_optional",
+      "reason": "The byte-in-E and address-or-word-in-DE clauses are parallel parameter descriptions. While marks the contrast without a comma. The register identifiers are literal, but the comma between the clauses is authorial punctuation outside them.",
+      "rephrase_proposal": null,
+      "joint_context_ids": [
+        "CC0019"
+      ],
+      "inventory_evidence": {
+        "id": "CC0019",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+        "source_git_blob": "d7f81c817f63164acb6823b4d97424d7cdfd20fd",
+        "line": 40,
+        "column": 43,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 40,
+        "nearest_heading": {
+          "level": 2,
+          "text": "A COM program and its calls",
+          "line": 23
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "8. Call TEC-OS",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "A COM program and its calls",
+            "line": 23
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 37,
+        "context_end_line": 44,
+        "full_context": "Registers hold the values passed to a call. `A`, `B`, `C` and `E` each\nhold a byte. `BC`, `DE` and `HL` are 16-bit register pairs, large enough\nfor a memory address. To select a BDOS operation, you put its function number in `C` and\ncall `0005h`. A byte parameter goes in `E`, while an address or word\nparameter goes in `DE`. A byte result is returned in `A` and a word result\nin `HL`. For example, function 2 takes the character in `E` and function 9\ntakes an address in `DE`. In source, `BDOS EQU $0005` gives that call\naddress a name.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      },
+      "derived_offset_evidence": {
+        "indexing": "zero-based character and UTF-8 byte offsets at the inventoried comma; line and column in inventory_evidence are one-based",
+        "character_offset": 1798,
+        "utf8_byte_offset": 1798
+      },
+      "prior_snapshot_identity": {
+        "id": "CC0019",
+        "basis_commit": "b444edf53e013f0d75f601d4fb5f87d3b5072077",
+        "source_sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+        "source_git_blob": "d7f81c817f63164acb6823b4d97424d7cdfd20fd",
+        "line": 40,
+        "column": 43,
+        "matched_text": ", while"
+      }
+    }
+  ],
+  "literal_scope": "No inventoried comma in this assigned slice is itself inside immutable quoted/interface text. Table meaning cells remain authorial explanations. Inline identifiers, quoted messages, retained commands and screen fences were read in context and are preserved. This does not authorise changes to any excluded literal."
+}
