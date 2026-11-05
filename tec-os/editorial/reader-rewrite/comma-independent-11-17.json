@@ -1,0 +1,1032 @@
+{
+  "schema_version": 1,
+  "verdict": "clear_with_bounded_scope",
+  "scope": "Independent punctuation review of Chapters 11–17 at c3c42d1 against 16918fc. All 64 assigned IDs, 53 changed containing contexts, three exact rephrases and eight retained boundaries. Chapters 14 and 16 have no reader change. Supplemental Chapter 4/8 cases excluded. No new product-source qualification, runtime result or whole-book acceptance.",
+  "target_commit": "c3c42d1301a6b71a5da9a938a1b42a5374146bbb",
+  "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+  "record_identities": {
+    "review": {
+      "path": "tec-os/editorial/reader-rewrite/comma-review-11-17.json",
+      "sha256": "c09d69fd3b545431b3136bac406c99ca40b30311d0a93c4201b7b68d1d4d2442"
+    },
+    "application": {
+      "path": "tec-os/editorial/reader-rewrite/comma-application-11-17.json",
+      "sha256": "2ba5471d631a72ef1652fcc299fb131ad54ee60e8c3c7f740f01883993a01dbb"
+    },
+    "inventory": {
+      "commit": "028ecdde0cd295d162cea47b6db7291b21384bf0",
+      "sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326"
+    }
+  },
+  "findings": [],
+  "counts": {
+    "assigned_ids": 64,
+    "optional_commas_removed": 53,
+    "exact_rephrases": 3,
+    "boundary_retentions": 8,
+    "changed_contexts": 53
+  },
+  "checks": {
+    "source_hashes": "All seven basis and target source hashes verified against exact Git objects and the application record.",
+    "application_integrity": "Reconstructed every full target file from the basis using only recorded context replacements. Independently reconstructed each context from the accepted review decisions, ignoring prose line-wrap whitespace only. No unrelated text change.",
+    "joint_groups": [
+      [
+        "CC0059",
+        "CC0060"
+      ],
+      [
+        "CC0090",
+        "CC0091",
+        "CC0092"
+      ]
+    ],
+    "retentions": {
+      "ids": [
+        "CC0038",
+        "CC0040",
+        "CC0043",
+        "CC0048",
+        "CC0068",
+        "CC0095",
+        "CC0096",
+        "CC0098"
+      ],
+      "disposition": "Read each complete retained context. ABI, BCD, TPA and DPH abbreviation appositions remain paired. The generation-in-A and frequency explanations retain their closing boundaries. BOOTSTK/8000h and warm-boot-entry/BF03h address appositions remain balanced."
+    },
+    "rewrites": [
+      {
+        "id": "CC0046",
+        "disposition": "Parentheses give decimal equivalents of the same historical 50h-by-18h dimensions, preserving 80 by 24 and historical host-model scope."
+      },
+      {
+        "id": "CC0072",
+        "disposition": "The source supplies the format and makeSvc overwrites it with 4. Adjacent paragraph still distinguishes pinned TAS preservation and conditional DEPS handling. Source text ea3ef3d:tools/lib/svc.mjs:118-123 confirms input copy then format/count replacement."
+      },
+      {
+        "id": "CC0077",
+        "disposition": "Parentheses preserve 18h = 24 and the printed-between-calls qualification. No new measurement or altered historical capture."
+      }
+    ],
+    "craft": "Read all complete before/after contexts in order. Causal and contrast joins remain intelligible without optional commas. Paired appositions, conditional failure/cleanup qualifications, requested CRT wording, stack accounting, history and register contracts remain intact. No punctuation-induced agency or sentence fragment introduced.",
+    "gate": {
+      "execution": "Recorded actual editorial gate inspected; no independent rerun required for this data-only review.",
+      "exit_status": 0,
+      "hard_findings": 0,
+      "review_flags": 1,
+      "disposition": "Read the complete Chapter 13 paragraph at target lines 210–215. Chapter 6 explains switching consoles locates explanatory content rather than attributing perception to an artifact. Retain the pre-existing cross-reference. The console-replacement-before-removal constraint remains explicit.",
+      "limits": "Recorded gate result is an editorial check, not product execution or prose-quality proof. The record does not contain a gate script digest; this review does not independently certify the original execution environment."
+    },
+    "complexity": "Inspected the application record’s prompts and dispositions. No automatic shortening was applied. This review covers the changed/retained punctuation contexts rather than accepting all unchanged chapter prose."
+  },
+  "files": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "basis_sha256": "1c79ce224e404290c00e1c0888331031e2de1e59adafc36033959c7ba1561806",
+      "target_sha256": "8a5926df884d8259a0cec3e7e3fbafc0bbf8d77150a4637fcc1d2c712707c501",
+      "basis_git_blob": "e16ba76e053089780ae84bedd6481eeb13f15f8f",
+      "target_git_blob": "49c07c23f16855acb3c736a618d3162cfefb0402",
+      "whole_file_reconstruction": "exact accepted-context replacements only",
+      "protected": {
+        "fences": {
+          "count": 18,
+          "byte_identical": true,
+          "sequence_sha256": "078d6c0580954fa1d4a2977adb4e8ddd4e0ac3d2f2ea5bfa17f168600ccd54db"
+        },
+        "comments": {
+          "count": 12,
+          "byte_identical": true,
+          "sequence_sha256": "63a362257ad97d360376cc2a86d72ef757fd980b3940519de95d34b002f8ad66"
+        },
+        "inline_code": {
+          "count": 88,
+          "byte_identical": true,
+          "sequence_sha256": "331612621f10581102f373a8b7e79d32eb33bece499c299c4cd35e5e7f4a9083"
+        },
+        "links": {
+          "count": 0,
+          "byte_identical": true,
+          "sequence_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "basis_sha256": "4439e80af755940f80d40357a579b41679fe7ac95c56bb57603343e6eb74016f",
+      "target_sha256": "bab07f9762cbd617f55b7fe9eaf90974cae4d772c5d765f989d5ffa414909d41",
+      "basis_git_blob": "5c709dc626028d47f26a804f41c42be820445d14",
+      "target_git_blob": "9b095951cb1a324f8e200d615e58fd44755718be",
+      "whole_file_reconstruction": "exact accepted-context replacements only",
+      "protected": {
+        "fences": {
+          "count": 14,
+          "byte_identical": true,
+          "sequence_sha256": "4ebc344ba8f052defe2f1c73f7b403d6f088388e966ddc33f3020d0ee5b450f9"
+        },
+        "comments": {
+          "count": 10,
+          "byte_identical": true,
+          "sequence_sha256": "1a8358c85d03768ef7e6f7211123e5573f2b39a587eb094f38e5155dde8e307b"
+        },
+        "inline_code": {
+          "count": 130,
+          "byte_identical": true,
+          "sequence_sha256": "1fb9258a39d5bda788be8e916cce326625ba8ed2affbcfb11b2325a7837f6454"
+        },
+        "links": {
+          "count": 0,
+          "byte_identical": true,
+          "sequence_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "basis_sha256": "4f74919aaa74c9583c06de305c8d9f2b134082f0836a4a23cc881dcc020f1bcc",
+      "target_sha256": "311c04f9739521b51e961d1355636d263bb0fa8270a8dbd68184bbe8b0762124",
+      "basis_git_blob": "0ad91f572cc612668588a268c014369f17df5290",
+      "target_git_blob": "143f09f251a31bae416303d385213cf13a9c06c0",
+      "whole_file_reconstruction": "exact accepted-context replacements only",
+      "protected": {
+        "fences": {
+          "count": 11,
+          "byte_identical": true,
+          "sequence_sha256": "c6784e5173af638a0fa4ba3b21cf86523f209b6ba1fea06eb1bdfa6dbfc515a3"
+        },
+        "comments": {
+          "count": 7,
+          "byte_identical": true,
+          "sequence_sha256": "a1987b6267291b21bfd662a138d46a073d9a8f162a7df2e83759847df9a3cf6b"
+        },
+        "inline_code": {
+          "count": 130,
+          "byte_identical": true,
+          "sequence_sha256": "1d88d33e4fd704c463a6769ebe20ecac090264180bf903d6a945285e9de262c6"
+        },
+        "links": {
+          "count": 11,
+          "byte_identical": true,
+          "sequence_sha256": "3c062b368b274f60dbee47519db49c0e0aa1fc7ecd337b2eb1b2bdf774e59443"
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md",
+      "basis_sha256": "97a25dfb7dc2d478658d948fc3dd2a219a4f5dc2067c1e9e91fb20d75928787b",
+      "target_sha256": "97a25dfb7dc2d478658d948fc3dd2a219a4f5dc2067c1e9e91fb20d75928787b",
+      "basis_git_blob": "bd6b0072043ffe825f6ccc41bafc22fa0df8d9b8",
+      "target_git_blob": "bd6b0072043ffe825f6ccc41bafc22fa0df8d9b8",
+      "whole_file_reconstruction": "exact accepted-context replacements only",
+      "protected": {
+        "fences": {
+          "count": 0,
+          "byte_identical": true,
+          "sequence_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "comments": {
+          "count": 1,
+          "byte_identical": true,
+          "sequence_sha256": "cd804fd8cf1ba8c9e7298a9aaac229a75e1b1beec094d1c1c1caa7605ea550ef"
+        },
+        "inline_code": {
+          "count": 217,
+          "byte_identical": true,
+          "sequence_sha256": "8a2bfa72baec229d8ff077f0b7f991cc8db52e49f66a5e56e43e7eb1495e74b7"
+        },
+        "links": {
+          "count": 4,
+          "byte_identical": true,
+          "sequence_sha256": "27996c25377cf26b63840f948c36517193b32355e3a3fa8692a6d5b8aaf51c31"
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/15-reset-and-boot.md",
+      "basis_sha256": "8dd9406f1d46b250868612cf03976250dc5753d17c7d3888cf49e7df7472fed5",
+      "target_sha256": "0ec7201867bfff60a4162836cc0f45730eb207adda7d3bc56ddd215fb7f75181",
+      "basis_git_blob": "0ccd2eccec1eeb3e7c636ac34ad31eca4117ceea",
+      "target_git_blob": "9048fc3ca8d4dbf3bb1cf36443b39e56e851305b",
+      "whole_file_reconstruction": "exact accepted-context replacements only",
+      "protected": {
+        "fences": {
+          "count": 2,
+          "byte_identical": true,
+          "sequence_sha256": "13179206036733bfc7d8e6d8b87b59356f9ef67a39d445712265088b35f6508a"
+        },
+        "comments": {
+          "count": 5,
+          "byte_identical": true,
+          "sequence_sha256": "70abdd8024ac163bcb00548f9e18dea89605cc5f56fee8ecf1f82d8ebdc5d84e"
+        },
+        "inline_code": {
+          "count": 315,
+          "byte_identical": true,
+          "sequence_sha256": "d63c869d55658a00fe45bf05e30a5eda0651e85e128a4b7ae61a9e1e241bab0b"
+        },
+        "links": {
+          "count": 5,
+          "byte_identical": true,
+          "sequence_sha256": "0fd4024858e99f6c2d735a36f5ffddf87a634ab0411bfc38a95107e7af71e483"
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/16-console-paths.md",
+      "basis_sha256": "594d3e65943207ebfe22dc1eaf66e422a4f6b1cf92d30d493598200057134ca4",
+      "target_sha256": "594d3e65943207ebfe22dc1eaf66e422a4f6b1cf92d30d493598200057134ca4",
+      "basis_git_blob": "a9b36c0defce629f2c4204ff6385874a25f34efd",
+      "target_git_blob": "a9b36c0defce629f2c4204ff6385874a25f34efd",
+      "whole_file_reconstruction": "exact accepted-context replacements only",
+      "protected": {
+        "fences": {
+          "count": 4,
+          "byte_identical": true,
+          "sequence_sha256": "c3c6b0d23fe2646c871147b33c7f8b1366cbb276ec050289349e28c1e63f07e5"
+        },
+        "comments": {
+          "count": 5,
+          "byte_identical": true,
+          "sequence_sha256": "5984796398268b001317aaf9cd02310da8c95f6c7816d8686d866690f3adc08d"
+        },
+        "inline_code": {
+          "count": 548,
+          "byte_identical": true,
+          "sequence_sha256": "f8bf62db7e1982a0ba5cf6ea8579499369c78e3ae084991940ad1e6c6ccc6ec0"
+        },
+        "links": {
+          "count": 1,
+          "byte_identical": true,
+          "sequence_sha256": "ced21ff22e96e73b5614132cdd7a812d6930ba52309a4bab8a392f200dc76eb2"
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/17-card-blocks-and-volumes.md",
+      "basis_sha256": "1895eccb7c027915ca3e0e649079dad57f4d81a3e75e9d201c7a66fbf87b9e26",
+      "target_sha256": "fc6032cba645d297e9f771fcb4e1262333f0b9c579fdf78273fea952539d07dd",
+      "basis_git_blob": "edf455df07d674b583c535c79a7ba7ae9624f64b",
+      "target_git_blob": "564789ecb04839e228e4208d6c02132a263dd664",
+      "whole_file_reconstruction": "exact accepted-context replacements only",
+      "protected": {
+        "fences": {
+          "count": 3,
+          "byte_identical": true,
+          "sequence_sha256": "a0c679136ce3c177bb5555f15d7b3ce0df2614edc4c86cbe91f675cb99c791d9"
+        },
+        "comments": {
+          "count": 5,
+          "byte_identical": true,
+          "sequence_sha256": "ab6bdb9bcbef0e262f9dae7729444d0142c81efc6dff2e8b61eb0e8ad2e97d57"
+        },
+        "inline_code": {
+          "count": 392,
+          "byte_identical": true,
+          "sequence_sha256": "4ca911d6787b179a655fa32a14f6d0f530e39eea6bb17841005fca40a27ee117"
+        },
+        "links": {
+          "count": 5,
+          "byte_identical": true,
+          "sequence_sha256": "8c5d619015fc1483981fc06cca07b940067a7bab7811ee71c7d9aaa201316638"
+        }
+      }
+    }
+  ],
+  "context_readback": [
+    {
+      "ids": [
+        "CC0037"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        31,
+        36
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0038"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        45,
+        47
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0039"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        61,
+        64
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0040"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        113,
+        119
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0041"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        121,
+        125
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0042"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        139,
+        144
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0043"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        146,
+        148
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0044"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        230,
+        232
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0045"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        298,
+        302
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0046"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        320,
+        324
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0047"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        346,
+        350
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0048"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        421,
+        426
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0049"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        428,
+        430
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0050"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        527,
+        529
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0051"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        596,
+        598
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0052"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        690,
+        696
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0053"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        710,
+        713
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0054"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        715,
+        717
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0055"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        815,
+        819
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0056"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        841,
+        845
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0057"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "target_lines": [
+        880,
+        883
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0058"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "target_lines": [
+        72,
+        74
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0059",
+        "CC0060"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "target_lines": [
+        106,
+        110
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0061"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "target_lines": [
+        161,
+        164
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0062"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "target_lines": [
+        226,
+        229
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0063"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "target_lines": [
+        308,
+        310
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0064"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "target_lines": [
+        312,
+        314
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0065"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "target_lines": [
+        352,
+        356
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0066"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "target_lines": [
+        434,
+        437
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0067"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "target_lines": [
+        472,
+        475
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0068"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        39,
+        45
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0069"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        47,
+        52
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0070"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        54,
+        60
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0071"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        140,
+        144
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0072"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        149,
+        149
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0073"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        150,
+        150
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0074"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        174,
+        181
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0075"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        183,
+        185
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0076"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        189,
+        193
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0077"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        290,
+        291
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0078"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        359,
+        368
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0079"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        372,
+        377
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0080"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        404,
+        408
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0081"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        412,
+        417
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0082"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        419,
+        425
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0083"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        429,
+        432
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0084"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        434,
+        440
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0085"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        455,
+        460
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0086"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        483,
+        490
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0087"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        492,
+        496
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0088"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        635,
+        639
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0089"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        646,
+        649
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0090",
+        "CC0091",
+        "CC0092"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        656,
+        663
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0093"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        665,
+        671
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0094"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "target_lines": [
+        713,
+        717
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0095"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md",
+      "target_lines": [
+        154,
+        162
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0096"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md",
+      "target_lines": [
+        224,
+        232
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0097"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/15-reset-and-boot.md",
+      "target_lines": [
+        300,
+        305
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0098"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/16-console-paths.md",
+      "target_lines": [
+        55,
+        62
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0099"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/17-card-blocks-and-volumes.md",
+      "target_lines": [
+        18,
+        22
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    },
+    {
+      "ids": [
+        "CC0100"
+      ],
+      "path": "tec-os/editorial/reader-rewrite/draft/17-card-blocks-and-volumes.md",
+      "target_lines": [
+        518,
+        522
+      ],
+      "complete_context_read": true,
+      "accepted_decisions_match": true
+    }
+  ],
+  "reader_edits": false,
+  "product_execution": false
+}
