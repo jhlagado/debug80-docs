@@ -15892,6 +15892,14 @@
     ],
     "cases": "Latest53555e9 Chapter5 seven-case held file/shell sequence retained; directopening source addition remains to synchronise",
     "source_boundary": "Exact retained tested8b qualified archive. Canonical cleanup separately reported sourcec1857b47/result7f65e73c does not silently replace packet inputs.",
-    "limits": "No product import, syntax check, assembly, build, test, model step, CLI case or capture executed. No reader insertion or publication authorised."
+    "limits": "No product import, syntax check, assembly, build, test, model step, CLI case or capture executed. No reader insertion or publication authorised.",
+    "static_source_review": {
+      "status": "Independent P3 review in progress from frozenf459df49",
+      "scope": "Actual qualified-offer01 executables/wrappers/cases/archive/closure; known missing finalseal/receipts excluded",
+      "executable_freeze": "No code,wrapper,case,archive orclosure changes during review. Only bookkeeping/readback/seal metadata may finish.",
+      "root_child_equality": "P3 independently verified batch/launch/cases/chapter05 byte-equal. Lead reconfirmed bothbatch files SHA886232e4917721432d728a29c10abb4e4f53a42122c5cf23d1664798bd511678 and scoped clean workingtree.",
+      "checkpoint_correction": "The checkpoint note about direct-opening synchronisation is conservative and superseded by actual frozen-file equality; directTAS-inclusive code is under this review.",
+      "followup": "Final metadata/seal needs bounded independent follow-up before any single allocation. No execution."
+    }
   }
 }
