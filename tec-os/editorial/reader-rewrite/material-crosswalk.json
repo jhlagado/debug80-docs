@@ -4493,6 +4493,18 @@
         }
       ],
       "limits": "No ladder change, literal/source/output change or runtime. Controlling frozen movement map remains intact; this records bounded draft-level refinement."
+    },
+    {
+      "authority": "P3 independent Chapter4 recheck at16918fc, closed factual/prerequisite/SAVE corrections",
+      "source_draft": "draft/04-drives-and-user-areas.md before b444edf",
+      "moves": [
+        {
+          "material": "Interrupted cold boot, early page-zero clearing and drive-selection explanation",
+          "destination": "draft/15-reset-and-boot.md, Retained drive selection, paragraph beginning Cold boot clears page zero early",
+          "disposition": "Remove premature duplicate mechanism from4. The complete existing15 explanation retains the fact and source proof;4 retains observable fallback/header behaviour."
+        }
+      ],
+      "limits": "No runtime, source/output change or ladder change. USER operator scope remains0–15; wider BDOS contract stays in AppendixA."
     }
   ]
 }

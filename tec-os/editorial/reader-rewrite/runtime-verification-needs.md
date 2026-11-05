@@ -50,9 +50,14 @@ unchanged native artifacts: mainROM
 fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d,
 D8 9a87dec39a63efc8fdf38ae13d6ec6299763c833fc891de121e2b30f4a1a36ac
 and starter0f3d9e33994ac30865b8675c8f8ce7fc493b13a0a840d8e84b7d708107d4266c.
-The full offer and final review were read. Canonical landing/short refresh,
-receiver adoption and the exact execution receipt remain distinct. There is
-still no book runtime allocation. The preserved80-column packet stays unrun.
+The full offer and final review were read. Canonical main is now
+962853f499f05faf281f6cdff1deca8959f58c2b, with only two record files differing
+from tested 8b8664a. Its refresh exposed 12 stale legacy distribution outputs.
+Bind the exact qualified archive and named input hashes, never a wildcard
+canonical distribution tree. This receipt makes no claim that the distribution
+has been cleaned. Receiver adoption and execution allocation remain separate.
+There is still no book runtime allocation. The preserved 80-column packet
+stays unrun.
 
 ## Closed and retained evidence
 

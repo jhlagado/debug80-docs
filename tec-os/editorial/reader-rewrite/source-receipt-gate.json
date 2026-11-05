@@ -1,0 +1,84 @@
+{
+  "status": "gate_run_before_receipt_commit",
+  "script_sha256": "0fb52353cf22dc3a1a079c819f9d7df174a1961084689b946857747b5862ee66",
+  "inputs": {
+    "compact-proof-plan.md": "813cefbf18b66a582a320406a6e14d314a6a87332bdacde60139c7408b14b31c",
+    "runtime-verification-needs.md": "dbd4ef74f8e1a50729ac69e6b0aa574d632ed1a03c13153bea5c34da9db823e4",
+    "outline-review-dispositions.md": "52eb48b224ba199af38d25e0f7d599e34ac278ba68dcbfb99ebc651e4ad0ae47"
+  },
+  "hard": 0,
+  "review": 7,
+  "findings": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/compact-proof-plan.md",
+      "line": 11,
+      "column": 47,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "development allocation is neither a qualified source offer for this work nor",
+      "disposition": "Retained: offer is a qualification-packet noun or Observe is a procedural instruction to the future verifier. The text attributes no intention to software or a publication."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/compact-proof-plan.md",
+      "line": 12,
+      "column": 41,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "an opening-workflow allocation. A later source offer requires a new comparison",
+      "disposition": "Retained: offer is a qualification-packet noun or Observe is a procedural instruction to the future verifier. The text attributes no intention to software or a publication."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/compact-proof-plan.md",
+      "line": 192,
+      "column": 292,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| Cache reader | Separate time.img: SYSTEM/A, THROUGH/B and BEHIND/C:wb, READ and exact12,288-byte DATA.BIN | READ reaches sequential EOF and warm return, with absent-file control. Compare final file/card state where writes are involved. Do not rerun or repin cache timing tables as part of source formatting. A new timing offer must name exact endpoints and counters separately |",
+      "disposition": "Retained: offer is a qualification-packet noun or Observe is a procedural instruction to the future verifier. The text attributes no intention to software or a publication."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/compact-proof-plan.md",
+      "line": 194,
+      "column": 62,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| PICO record | VTEST with ABI.INC/HWLIB and actual ROM PICO record on ea3 | Observe record lookup, claim, four-byte VRAM write/read at3000h, release and ready prompt. Compare BACK to VRAM, not only printed VRAM. Missing PICO is the control. A new ROM-console result cannot repin the60e0768 PICO.SVC result |",
+      "disposition": "Retained: offer is a qualification-packet noun or Observe is a procedural instruction to the future verifier. The text attributes no intention to software or a publication."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/compact-proof-plan.md",
+      "line": 195,
+      "column": 216,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| HELLO editor round | Same compact HELLO text, exact TED/TAS and project/session files, separately specified display | Retain the old7458352 error/repair screens. New compact line numbers must come from its actual source. If replacing that reader workflow, observe TED save/reopen, deliberate syntax error, reported line/column, repair, build/run and return to TED through ordinary keys. This is a separate workflow offer, not implied by COM-byte equality |",
+      "disposition": "Retained: offer is a qualification-packet noun or Observe is a procedural instruction to the future verifier. The text attributes no intention to software or a publication."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/runtime-verification-needs.md",
+      "line": 19,
+      "column": 22,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "the actual qualified source offer. Bind that offer, recheck its diff and seal",
+      "disposition": "Retained: offer is a qualification-packet noun or Observe is a procedural instruction to the future verifier. The text attributes no intention to software or a publication."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/runtime-verification-needs.md",
+      "line": 27,
+      "column": 57,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| Held FAIL | Build the exact reviewed no-setup SCF/RET service through the ordinary route. Observe INIT entry, failed installation, unchanged committed top/registry and AREA before/after | Distinguish INIT failure from a bad-header rejection or an unexecuted program. Specify an independently reviewed successful-install/removal control using fresh state. Preserve the original held source/output separately |",
+      "disposition": "Retained: offer is a qualification-packet noun or Observe is a procedural instruction to the future verifier. The text attributes no intention to software or a publication."
+    }
+  ],
+  "reading": "Read each changed containing passage and every gate finding. Earlier hard not-just framing replaced by the positive full watchdog scope; no execution or source adoption inferred."
+}

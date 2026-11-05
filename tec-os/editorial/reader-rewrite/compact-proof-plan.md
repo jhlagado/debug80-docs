@@ -146,10 +146,14 @@ Generated files have build identities. Listing their names creates none.
 
 At ea3, `tools/lib/prl.mjs:32–43` uses a case-sensitive ORG_LINE expression
 for uppercase ORG. `makeSvc` in `tools/lib/svc.mjs:93–99` uses it to split
-and rewrite the source. The intended lowercase `org` therefore cannot be
-assumed to work through that writer. A separately owned, reviewed writer
-change and its qualification are needed before promising that public route.
-Do not uppercase the reader candidate only for the comparison.
+and rewrite the source. The earlier lowercase `org` candidate therefore
+cannot pass through that writer unchanged. The adopted compact conventions
+require lowercase mnemonics, registers and conditions but permit uppercase
+assembler directives. The actual COUNT and NEEDS candidates now use
+`ORG $0100`, as does the derived CHEAT source. The reference must assemble
+that same candidate rather than an uppercased comparison copy. This resolves
+the directive-case obstacle without a product change. Assembly and workflow
+qualification remain pending.
 
 The same writer documents ATOM's header-only INCLUDE handling and expands
 post-origin includes for its own copied source. The ordinary stand-alone
@@ -288,8 +292,8 @@ The proposed ordinary envelope may be insufficient for the HELLO editor round
 or a later40-column visual review. Cut those into separately specified offers
 with explicit input sequences and their own reviewed limits. Do not extend
 the ordinary envelope during execution. If a call lacks an enforceable bound,
-the packet is not ready. A watchdog must cover synchronous work and the whole
-process tree, not just asynchronous waits. An unavailable lock, failed identity,
+the packet is not ready. A watchdog must cover synchronous work, asynchronous
+waits and the whole process tree. An unavailable lock, failed identity,
 timeout or stopped job permits no automatic retry or fallback.
 
 ## Packet preparation and replacement gate
@@ -319,8 +323,10 @@ test, emulator, capture tool or runtime was executed. Only this plan is changed.
 
 The complete source-only planning review found one citation-range correction.
 At ea3ef3d the ORG split is atsvc.mjs95 and rewrite at97, within93–99.
-The range above is corrected from100–107. The uppercaseORG blocker itself
-remains supported byprl.mjs34 and the public-route limitations are unchanged.
+The range above was corrected from 100–107. That review confirmed that the
+writer rejects lowercase org. The later directive-contract review and actual
+candidate correction at book bcdf422 resolve this case as described above.
+The separate trailing-INCLUDE route remains unqualified.
 The lead read both numbered source bodies without importing them. Immutable
 shared inputs/fresh cases, separate qualification/sealing/allocation, proposed
 whole-job accounting, closedLINE and historical evidence boundaries were
