@@ -43,7 +43,7 @@ plus one, and 0 when no piece is left, so one byte covers the 128 offsets with
 0 to spare. The return code, `PRGCODE` at `BF54h`, is in the same block
 (`src/ram.asm:357-359`). Cold boot clears the whole resident workspace, from
 `WSBASE` to `WSEND`, which ends after `CHPOS` (`src/boot.asm:73-79`,
-`src/ram.asm:301-302`). After a reset no piece is left and the code is 0.
+`src/ram.asm:447-449`). After a reset no piece is left and the code is 0.
 
 `CPMINIT` sets the buffer's maximum length, 127, at every warm boot
 (`src/boot.asm:509-511`). A startup line is cut to the same length. `STLINE`
@@ -231,7 +231,7 @@ through `CHDROP`:
   that a program reads has anything to drop.
 - `^C` as the key that ends a `^S` pause during output. `CHKKEY` takes the key
   after `^S` and jumps to `CHDROP` for `^C`, dropping any other key
-  (`src/cpm/bdoscon.asm:199-214`).
+  (`src/cpm/bdoscon.asm:283-306`).
 - A BDOS error in the default mode. `BDERR` reads `ERRMODE`, the mode BDOS
   function 45 sets, and in the default mode `DISKMSG` prints `Bdos Err On`,
   the drive and the cause. A key is waited for and the routine jumps to

@@ -33,7 +33,7 @@ holds `UNLOAD`, `CON`, `USER` and `SAVE`, the parsing of file names, page zero
 for a program, `SERVICES` and the startup file. In the ROM of Chapter 13 the CCP
 runs from `CCPBAS`, `DD2Ah`, to `E702h`, 2,521 bytes, with the BDOS directly
 after it. Its messages and `KEYTAB`, the table of its built-in commands, are in
-the ROM's data block (`src/text.asm:19-59`, `src/tables.asm:43-65`).
+the ROM's data block (`src/text.asm:19-59`, `src/tables.asm:53-78`).
 
 What the CCP changes is in RAM, from `CCPRAM`, `BCEDh`, to `BE75h`
 (`src/ram.asm:138-208`). Appendix C lists the bytes. Warm boot clears them only
@@ -67,7 +67,7 @@ end with a jump to `CCPENT` with that byte in `C`. It has the user number
 in bits 4 to 7 and the drive in bits 0 to 3 (`src/boot.asm:208-211`,
 `src/cpm/ccp.asm:32-100`). Cold boot sets the byte to 0, drive A and user 0,
 before it runs on into warm boot (`src/boot.asm:155-157`). Warm boot's `PZINIT`
-leaves it as the CCP last wrote it (`src/boot.asm:221-224`).
+leaves it as the CCP last wrote it (`src/boot.asm:384-410`).
 
 `CCPENT` sets its stack and keeps the drive in `BOOTDRV`
 (`src/cpm/ccp.asm:46-71`). It then sets `WRFLAG` and calls function 13, the
@@ -153,7 +153,7 @@ A word that doesn't parse as a file name is a bad command already
 The CCP then compares the word with the names of its ten built-in commands.
 `KEYTAB` holds them in the order `DIR`, `TYPE`, `ERA`, `REN`, `SAVE`, `USER`,
 `CON`, `COPY`, `UNLOAD` and `SERVICES`, each with a 0 after it and then its
-routine's address, and a 0 ends the table (`src/tables.asm:43-65`). The loop at
+routine's address, and a 0 ends the table (`src/tables.asm:53-78`). The loop at
 `KEYNXT` calls `ISCMD` for each name and jumps to the routine of the name that
 matches (`src/cpm/ccp.asm:392-424`). `ISCMD` compares the text at
 `CMDSTRT`, not the FCB, and requires a space or the end of the piece after the
