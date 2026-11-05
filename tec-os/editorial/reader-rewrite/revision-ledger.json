@@ -8061,7 +8061,7 @@
     },
     {
       "unit": "chapter-19",
-      "status": "full independent review corrections pushed at3d32ec1; search bound/pointer/key/source-range confirmation pending",
+      "status": "complete independent review and3d32ec1 correction confirmation closed; final qualification and integration pending",
       "passes": {
         "full_passage_read": "lead read complete draft; full independent review in progress",
         "draft": "pending",
@@ -8073,8 +8073,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed within bounded draft scope; final adopted source and whole-book integration remain open",
+        "independent_factual_review": "closed within bounded draft scope; final adopted source and whole-book integration remain open",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -11641,7 +11641,7 @@
     },
     {
       "unit": "chapter-28",
-      "status": "bounded draft pushed atbbd6b10; full independent review in progress",
+      "status": "complete independent factual/editorial review clear atbbd6b10; final qualification and integration pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -11653,8 +11653,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed within bounded draft scope; final adopted source and whole-book integration remain open",
+        "independent_factual_review": "closed within bounded draft scope; final adopted source and whole-book integration remain open",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -13077,7 +13077,7 @@
     },
     {
       "unit": "appendix-C",
-      "status": "bounded draft pushed atc73665d; full independent review in progress",
+      "status": "complete independent factual/editorial review clear atc73665d and lead full reference read complete; final map qualification and integration pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -13089,8 +13089,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed within bounded draft scope; final adopted source and whole-book integration remain open",
+        "independent_factual_review": "closed within bounded draft scope; final adopted source and whole-book integration remain open",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -13446,7 +13446,7 @@
     },
     {
       "unit": "appendix-D",
-      "status": "full independent review correction pushed atfaf922b; actual CLOSEERRORbd15528 confirmation pending",
+      "status": "complete independent review andfaf922b actual-run pin correction confirmed; final qualification and integration pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -13458,8 +13458,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed within bounded draft scope; final adopted source and whole-book integration remain open",
+        "independent_factual_review": "closed within bounded draft scope; final adopted source and whole-book integration remain open",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -14730,7 +14730,7 @@
     },
     {
       "unit": "appendix-G",
-      "status": "full independent review lookup restorations pushed atbc9f76e; bounded confirmation pending",
+      "status": "complete independent review andbc9f76e lookup restoration confirmed; final qualification and integration pending",
       "passes": {
         "full_passage_read": "completed for bounded source-only draft; evidence in g-pass-record.md",
         "draft": "completed for bounded source-only draft; evidence in g-pass-record.md",
@@ -14742,8 +14742,8 @@
         "examples_before_explanation": "no executable examples or new output; historical diagnostic cost explicitly a retained documentation account",
         "journey_readback": "completed for bounded source-only draft; evidence in g-pass-record.md",
         "mechanical_gate": "completed for bounded source-only draft; evidence in g-pass-record.md",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed within bounded draft scope; final adopted source and whole-book integration remain open",
+        "independent_factual_review": "closed within bounded draft scope; final adopted source and whole-book integration remain open",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -14948,42 +14948,42 @@
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 149,
           "end": 149,
-          "subsection": "The 20 \u00d7 4 LCD",
+          "subsection": "The 20 × 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 151,
           "end": 153,
-          "subsection": "The 20 \u00d7 4 LCD",
+          "subsection": "The 20 × 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 155,
           "end": 160,
-          "subsection": "The 20 \u00d7 4 LCD",
+          "subsection": "The 20 × 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 162,
           "end": 168,
-          "subsection": "The 20 \u00d7 4 LCD",
+          "subsection": "The 20 × 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 170,
           "end": 170,
-          "subsection": "The 8 \u00d7 8 LEDs",
+          "subsection": "The 8 × 8 LEDs",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 172,
           "end": 179,
-          "subsection": "The 8 \u00d7 8 LEDs",
+          "subsection": "The 8 × 8 LEDs",
           "fragment_override": null
         },
         {
