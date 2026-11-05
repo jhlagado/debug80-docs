@@ -1,0 +1,22 @@
+{
+  "kind": "editorial mechanical text check, not product runtime or quality acceptance",
+  "script": "human-writing/scripts/prose_gate.py",
+  "script_sha256": "0fb52353cf22dc3a1a079c819f9d7df174a1961084689b946857747b5862ee66",
+  "exit_code": 0,
+  "inputs": {
+    "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md": "67ba36eb613ba4ec9e7312fa0b7c4b5cfb304d292806311f69fd14add203f6dc",
+    "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3"
+  },
+  "findings": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "line": 85,
+      "column": 1,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "chapter *block* alone means an allocation block and a *card block* is 512"
+    }
+  ],
+  "final_all_reader_run": "pending after current4/5 corrections and punctuation dispositions"
+}

@@ -232,3 +232,13 @@ The separate10 reference for the writable table remains correct and unchanged.
 The lead read all changed containing passages and the destination section.
 No root navigation, renderer or product ran. Independent bounded confirmation
 and final integrated navigation remain separate. Opening1–3 links remain held.
+
+## Concrete conjunction-comma correction
+
+Removed the optional comma before and in the block/allocation-block versus
+512-byte card-block definition. The full containing paragraph reads clearly
+without it and retains both units. The matching HW008 flag concerns the
+term-definition noun block, not perception by an artifact. The bundled gate
+was run on current7/19 and its one review flag is manually retained with
+that disposition. Final all-reader punctuation inventory and gate remain
+required after the other corrections. No product runtime occurred.
