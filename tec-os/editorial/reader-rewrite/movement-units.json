@@ -22987,24 +22987,24 @@
     },
     {
       "source": "tec-os/02-console.md",
-      "parent_start": 268,
-      "parent_end": 269,
-      "start": 268,
-      "end": 269,
+      "parent_start": 267,
+      "parent_end": 268,
+      "start": 267,
+      "end": 268,
       "destination": 16,
       "destination_subsection": "Control-code encoding",
-      "selection": "Ctrl letter codes01h\u20131Ah only.",
+      "selection": "Ctrl with a letter gives that\nletter's control code, from `01h` for A to `1Ah` for Z.",
       "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
     },
     {
       "source": "tec-os/02-console.md",
-      "parent_start": 269,
+      "parent_start": 268,
       "parent_end": 269,
-      "start": 269,
+      "start": 268,
       "end": 269,
       "destination": 1,
       "destination_subsection": "Control-key notation",
-      "selection": "So Ctrl and C together is ^C.",
+      "selection": "So Ctrl and C\ntogether is `^C`.",
       "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
     },
     {
