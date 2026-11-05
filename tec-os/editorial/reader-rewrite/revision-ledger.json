@@ -1153,7 +1153,7 @@
     },
     {
       "unit": "chapter-04",
-      "status": "bounded draft in progress; source-only, no execution authorised",
+      "status": "bounded draft and own passes pushed; full independent review in progress",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -3082,7 +3082,7 @@
     },
     {
       "unit": "chapter-09",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded source-only draft in progress; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -6445,11 +6445,23 @@
       "evidence": [],
       "findings": [],
       "proposed_path": "tec-os/15-reset-and-boot.md",
-      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass."
+      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass.",
+      "qualification_holds": [
+        {
+          "issue": "Historical first-CONIN endpoint discrepancy",
+          "values": {
+            "original_chapter": 7200316,
+            "historical_review_book46": 7067777
+          },
+          "scope": "preserved historical claims, not a current qualified measurement",
+          "required": "reconstruct actual original methods/inputs or replace with explicitly allocated adopted-source measurement; no silent substitution",
+          "status": "unresolved final qualification hold"
+        }
+      ]
     },
     {
       "unit": "chapter-16",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded source-only draft in progress; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -9926,7 +9938,7 @@
     },
     {
       "unit": "chapter-24",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded draft and own passes pushed; full independent review in progress",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -10428,7 +10440,7 @@
     },
     {
       "unit": "chapter-25",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded source-only draft in progress; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
