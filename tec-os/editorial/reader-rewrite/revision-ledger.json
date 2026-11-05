@@ -15957,5 +15957,14 @@
     "guard_log": "/tmp/ks48-book-next-batch02-guard.jsonl",
     "controls": "All cases, time/memory/heap/cycle ceilings and original576 input bytes preserved. Earlier CLEAR stays historical; current packetStaticReview null and no seal/allocation.",
     "limits": "Not a production fix or successful book workflow. Preserve earlier offers and failed attempt01; no automatic retry."
+  },
+  "source_adoption_preparation": {
+    "status": "Source-impact preparation boundedly confirmed; no receiver adoption",
+    "report": "source-adoption-impact.json at0120519",
+    "confirmation": "source-adoption-impact-confirmation.json ata15d2ce",
+    "coverage": "35 complete claim contexts across14 reader files, nine historical exemptions and29 source-proof spans. All73 source-content comparisons rechecked against exact Git blobs. IM024 retains the actual final source-line LF; that representation boundary is explicit.",
+    "current_contracts": "Raw cold40 differs from host/UI80. Bare selectors retain width/claim, explicit32/40/80 remain, current PICOrecordv3 and five-pixel/eight-row font encoding preserved.",
+    "native_boundary": "Native16020/364 already exists at baselineea3; historical78127ec16018/366 tables keep their measured identity. Equal addresses do not transfer provenance.",
+    "remaining": "Actual new workflows and receiving source/pin decision, semantic citation recheck, whole changed-passage craft/gate and independent acceptance. No historical capture, cost, map or reader header silently repinned."
   }
 }
