@@ -132,7 +132,7 @@ each byte. `SDRBLK` counts 256 two-byte passes in the Z80's `I` register.
 That register supplies no interrupt-vector address in this ROM's interrupt
 mode 1 (`src/boot.asm:49-58`). `SDWBLK` uses two passes of 256 bytes.
 These routines clobber their declared registers, including `I` on the read path
-(`src/sd.asm:517-724`). In the historical `78127ec` model measurements,
+(`src/sd.asm:517-724`). In the historical `78127ec` host model measurements,
 `SDREAD` took 219,144 T-states per block (about 55 ms at 4 MHz) and
 `SDWRITE` took 216,164. Most of that work transferred the block's 4,096
 bits individually.
@@ -177,7 +177,7 @@ Obtaining a line can first require writing a dirty victim. `CWRITE` restores
 calls `MNLBA` again before filling the line, restoring the requested table
 block's address. A failed eviction or read ends this operation with NZ
 (`src/cache.asm:247-290`, `src/vol.asm:510-545`). `MNCPH` copies 32 bytes
-through `MVCOPY` into the workspace's `MNBUF`. Field checks and sums then
+through `MVCOPY` into the resident workspace's `MNBUF`. Field checks and sums then
 use ordinary workspace memory. `MNSUM` processes a whole block in these
 32-byte pieces without stack use under the EXPAND 1 mapping
 (`src/vol.asm:548-622`, `src/ram.asm:114-116`).
@@ -390,7 +390,7 @@ already have changed (`src/bios.asm:284-306`).
 
 The BDOS applies its own `R/O` check before a file write. Close, function 16,
 has a separate read-only return: it succeeds without writing. This also
-holds for an FCB that was never opened, as the source test asserts
+holds for a file control block (FCB) that was never opened, as the source test asserts
 (`src/cpm/bdoslog.asm:874-891`, `src/cpm/bdosfile.asm:250-298`,
 `src/cpm/bdosfile.asm:421-445`, `src/cpm/bdosfile.asm:645-664`,
 `src/cpm/bdosrec.asm:77-90`, `src/cpm/bdosrec.asm:344-359`,
@@ -548,6 +548,6 @@ A format 1.1 card with drives = 4 allocates four 256-byte slots at cold
 boot (`src/boot.asm:679-799`). C can then hold an otherwise unmounted
 supported volume after the service checks and flush succeed
 (`src/volsvc.asm:246-315`). The historical `78127ec` four-slot
-configuration had a 46,564-byte TPA, 704 bytes less than its 47,268-byte
+configuration had a 46,564-byte transient program area (TPA), 704 bytes less than its 47,268-byte
 starter configuration. Four slots use 1,024 bytes where the starter used
 320. The extra slots reduce transient-program space by the same amount.

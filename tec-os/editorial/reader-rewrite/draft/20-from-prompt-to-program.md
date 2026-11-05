@@ -19,14 +19,14 @@ nav_group: "Part II: Inside TEC-OS"
 The CCP reads your command through the BDOS, parses its name and either
 runs a built-in or loads a file. A program command ends that path with
 page zero prepared and a jump to `0100h`. This chapter follows the code
-from the prompt to that jump. [Appendix J](appendix-j-command-reference.md)
+from the command prompt to that jump. [Appendix J](appendix-j-command-reference.md)
 gives the exact command grammar.
 
 ## Code and working storage
 
 The CCP uses CP/M calls for its ordinary work: function 10 reads a line,
 function 15 opens a file and function 9 prints a string through `0005h`.
-Its own code stays in ROM while program files load into the TPA.
+Its own code stays in ROM while program files load into the transient program area (TPA).
 The four source files are assembled in this order
 (`src/rom.asm:31-35`):
 
@@ -53,7 +53,7 @@ buffer below it intact (`src/boot.asm:530-542`).
 [Appendix C](appendix-c-memory-map.md) lists the memory locations.
 
 File operations share a short call helper. A `CALL DOSSEQ` has an inline
-byte containing twice the BDOS function number plus an FCB-selection bit.
+byte containing twice the BDOS function number plus a file control block (FCB) selection bit.
 Bit 0 selects `CMDFCB` when clear and `RENFCB` when set. `DOSSEQ` advances
 the stacked return address past that byte, decodes it into `C` and `DE`
 and jumps to the BDOS. The BDOS returns after the inline byte
@@ -299,7 +299,7 @@ close result, so the message does not certify that update. Digital Research's
 CP/M 2.2 SAVE leaves the file open on that path
 (`src/cpm/ccpcmd.asm:356-445`).
 
-SAVE reads the TPA. The other file-operation handlers use workspace and page-zero
+SAVE reads the TPA. The other file-operation handlers use resident workspace and page-zero
 buffers so they leave program memory available to save. Loading a COM program
 or a service overwrites that memory, including a GLCD service loaded by CON
 (`src/cpm/ccpcmd.asm:364-414`, `src/loader.asm:895-932`,
@@ -493,7 +493,7 @@ NO FILE
 
 A successful load reaches `PREPPAGE`. It parses the first two argument
 references into the FCBs at `005Ch` and `006Ch`, ignoring parse errors for
-those program arguments. It then copies the tail to `0081h`, writes its
+those program arguments. It then copies the command tail to `0081h`, writes its
 length at `0080h` and appends zero. Function 26 restores DMA to `0080h`.
 The tail includes the initial space and any spaces before the piece's
 separator. Its letters have already been converted to capitals
@@ -608,7 +608,7 @@ from historical measurements and bounds.
 
 A top-level RET reaches the warm-boot jump at `0000h`. A direct jump there
 or function 0 reaches warm boot too (`src/cpm/ccp.asm:532-536`,
-`src/cpm/bdos.asm:254-259`). Warm boot flushes the cache before re-entering
+`src/cpm/bdos.asm:254-259`). Warm boot flushes the block cache before re-entering
 the CCP. A failed flush prints `Write lost` and cancels pending pieces
 (`src/boot.asm:194-215`, `src/cache.asm:661-668`). The CCP enters at
 `STARTED` and prints a new line before its prompt. A program whose output

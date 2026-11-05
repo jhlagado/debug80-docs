@@ -41,7 +41,7 @@ Inspecting the later source does not produce a new card or refresh a result.
 
 ## A copy before a change
 
-Before removing a card from the TEC-1G, `^C` at the prompt writes the pending
+Before removing a card from the TEC-1G, `^C` at the command prompt writes the pending
 changes. A fresh prompt after a successful flush is the point to remove it.
 `Write lost` means that some writes failed, not that the card is up to date.
 Never change a card on a PC while TEC-OS is using it. Its cached blocks and

@@ -70,7 +70,7 @@ rename leaves the original image unchanged. It does not reread the temporary
 file or explicitly synchronise it to durable storage. This is distinct from
 `install` writing directly to a device (`tools/tecvol.mjs:65-71`).
 
-Never change a card on the PC while TEC-OS is using it. At the board's prompt,
+Never change a card on the PC while TEC-OS is using it. At the board's command prompt,
 a successful `^C` flush must finish before removal. `Write lost` means that
 some changes were dropped. Reset after returning a PC-changed card because
 TEC-OS's cached blocks and allocation maps otherwise describe its old contents.

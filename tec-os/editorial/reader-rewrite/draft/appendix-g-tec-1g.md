@@ -21,7 +21,7 @@ hardware. Source inspection establishes the operations the ROM performs, not
 what an untested physical board will return.
 
 For the prepared board, fit a 32 KiB RAM chip in U9, set the CPU clock to FAST
-with the 4 MHz oscillator and leave the hex-keypad NMI jumper off. Enable the
+with the 4 MHz oscillator and leave the hex-keypad non-maskable interrupt (NMI) jumper off. Enable the
 Matrix switch when using the matrix keyboard. Chapter 27 describes the separate diagnostics ROM and the report
 needed to compare a particular board with the model.
 
@@ -42,7 +42,7 @@ define their other ports.
 | `07h`, `87h` | in, out | ST7920 graphics LCD | The loaded `GLCD.SVC` driver |
 | `BEh`, `BFh` | in, out | PICO9918 data and control | Cold-boot probe, ROM console and `VIDEO` restoration |
 | `FCh` | in, out | DS1302 clock | Cold-boot probe and `RTC` |
-| `FDh` | in, out | SD card adaptor | The SD driver |
+| `FDh` | in, out | SD card adaptor | The SD card driver |
 | `FEh` | in | Matrix keyboard and joystick | Keyboard scan, `KEYS` and `JOY` |
 | `FFh` | out | System latch | Boot overlay, RAM banks and Caps lamp |
 
@@ -52,7 +52,7 @@ keypad encoder and the ROM discards the value. It is a model input trigger,
 not a hardware serial buffer (`src/console.asm:28-45`,
 `src/console.asm:253-279`, `src/console.asm:361-377`).
 
-Cold boot probes the PICO9918 by writing and reading two patterns at VRAM
+Cold boot probes the PICO9918 by writing and reading two patterns at video memory (VRAM)
 address `3FFFh`. A successful probe sets its device bit. With the Matrix
 switch enabled the ROM then installs its PICO console before printing the
 banner (`src/tms.asm:17-48`, `src/video.asm:22-29`, `src/pico.asm:64-87`).
@@ -117,7 +117,7 @@ at `0040h`, named `LATCHV`, and constructs later writes from that copy
 | ---: | ---: | --- | --- |
 | 0 | `01h` | SHADOW | Set at cold boot to remove the boot overlay and not cleared afterwards |
 | 1 | `02h` | PROTECT | Not set by TEC-OS. A program setting it protects `4000h–7FFFh` against writes |
-| 2 | `04h` | EXPAND | Selects EXPAND 1 in the `8000h–BFFFh` window for cache and history access |
+| 2 | `04h` | EXPAND | Selects EXPAND 1 in the `8000h–BFFFh` bank window for access to the block cache and history |
 | 3 | `08h` | MAIN | Not set |
 | 7 | `80h` | CAPS | Toggled by matrix Caps Lock, with the Caps lamp |
 
@@ -152,7 +152,7 @@ and sets the EXPAND jumpers for a 32 KiB chip, as `docs/board-run.md` specifies.
 Before printing the banner, cold boot checks both ends of the visible window
 with complementary patterns and checks for the separate half behind it.
 Failure prints `TEC-OS needs 64K RAM` on serial and stops. The serial failure
-path uses the boot stack in fixed RAM and does not require the workspace in
+path uses the boot stack in fixed RAM and does not require the resident workspace in
 U9 (`src/boot.asm:69-79`, `src/boot.asm:566-636`). Chapters 10 and 14 give the
 program and resident layouts once this check succeeds.
 
@@ -163,7 +163,7 @@ startup bypass. Hold a key through reset with the NMI jumper off to cover
 that single sample. Chapter 7 gives the recovery procedure.
 
 With the keypad NMI jumper fitted, a press raises a non-maskable interrupt.
-The CPU pushes its return address and enters `0066h`, inside the default FCB
+The CPU pushes its return address and enters `0066h`, inside the default file control block (FCB)
 at `005Ch–007Fh`. TEC-OS installs no NMI handler there. The bytes can be file
 metadata rather than instructions, so a press can crash the machine. The
 supported TEC-OS setup leaves the jumper off. The diagnostics ROM has its

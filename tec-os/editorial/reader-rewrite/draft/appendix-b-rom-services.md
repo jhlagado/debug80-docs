@@ -27,13 +27,13 @@ are in Chapter 11, the dispatcher explanation in Chapter 23 and the
 resident-service and registry contracts in Chapter 13.
 
 This reference gives each service's inputs, results, status and stack bound.
-Historical model costs are labelled separately from the inspected source
+Historical host model costs are labelled separately from the inspected source
 contracts. A stack bound is an allowance for a caller, not a claim that every
 path uses that many bytes.
 
 ## The ROM table
 
-The inspected ABI is 5.1. Before calling ABICALL, a program compares the three
+The inspected application binary interface (ABI) is 5.1. Before calling ABICALL, a program compares the three
 bytes at ABITAB with `TNA` and ABIMAJ with exactly 5. A new major may renumber
 services. A new minor adds service numbers at the end, so code using the 5.0
 calls can run on 5.1. A caller requiring FONT also checks for minor version 1 or
@@ -205,7 +205,7 @@ conditional model results rather than a universal release cost.
 
 A claim removes the selected PICO console's cursor and stores HWBCLM in VCLAIM.
 While claimed, PICO console output is discarded and its cursor and page-flip
-paths do not draw on the chip. The program can use its registers and VRAM
+paths do not draw on the chip. The program can use its registers and video memory (VRAM)
 through the graphics entries or ports.
 
 Release with no claim returns status 0 without restoring anything. Otherwise it

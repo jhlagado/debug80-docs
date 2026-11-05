@@ -57,7 +57,7 @@ load. A name has no content check.
 | 3 | 1 | Flags: bit 0 removable. Bits 1 to 7 claim `RST 1` to `RST 7` | No claimed vector holds a `JP` already (`src/loader.asm:387-410`) |
 | 4 | 2 | `REMOVE`, from the header's start | From 25 to below the size at offset 6 (`src/loader.asm:221-223`, `src/loader.asm:761-771`) |
 | 6 | 2 | The size of the header and image | The header and image end within the records read (`src/loader.asm:207-211`, `src/loader.asm:741-752`) |
-| 8 | 2 | Extra memory after the image, not cleared | The pages for the image and the extra memory start at a page from `80h` up and below the page of the TPA's top (`src/loader.asm:227-243`) |
+| 8 | 2 | Extra memory after the image, not cleared | The pages for the image and the extra memory start at a page from `80h` up and below the page containing the top of the transient program area (TPA) (`src/loader.asm:227-243`) |
 | 10 | 2 | The size of the relocation data | The data ends within the records read (`src/loader.asm:281-286`) |
 | 12 | 3 | Stack bytes added: BDOS, BIOS, CCP | Each is at most the room left on that stack, `SVCLIM`'s figure less what the services in have taken (`src/loader.asm:287-322`) |
 | 15 | 2 | `INIT`, from the header's start | As `REMOVE` (`src/loader.asm:215-217`) |

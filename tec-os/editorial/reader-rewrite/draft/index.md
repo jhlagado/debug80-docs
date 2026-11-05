@@ -20,7 +20,7 @@ interface and calls for the board's devices.
 The first session uses a 40-column PICO9918 display and the matrix keyboard,
 with the Matrix switch enabled. The board needs a 32,768-byte RAM chip in U9, the
 4 MHz FAST setting, the TEC-OS ROM and a prepared starter card. The keypad
-NMI jumper is off. SYSTEM is on drive A and WORK is on drive B. Hardware
+non-maskable interrupt (NMI) jumper is off. SYSTEM is on drive A and WORK is on drive B. Hardware
 preparation is described in [Appendix G](appendix-g-tec-1g.md).
 
 [First session](01-first-session.md) begins with that preparation complete.

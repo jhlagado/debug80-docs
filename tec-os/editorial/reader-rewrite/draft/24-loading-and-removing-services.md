@@ -44,7 +44,7 @@ services. It does not traverse their code
 set from `0006h` with multiple services and count two jumps with zero,
 one and two services (`78127ec:test/svc.test.mjs:870-928`).
 
-With no service installed, `STUBAD` identifies a three-byte entry stub
+With no service installed, `STUBAD` identifies a three-byte BDOS entry stub
 immediately below the allocation vectors. `PZINIT` rewrites its `JP BENTRY`
 and puts the current `PZTOP` at `0006h` on every warm boot
 (`src/boot.asm:412-434`, `src/boot.asm:794-800`). The stub's low byte depends
@@ -52,7 +52,7 @@ on the card's allocation vectors. A program must read the word rather
 than assume page alignment.
 
 The first service is allocated below the stub's page, so the unused bytes
-between that page boundary and the stub also leave the TPA. In the
+between that page boundary and the stub also leave the transient program area (TPA). In the
 historical starter layout, vectors began at `B9A7h` and the stub at
 `B9A4h`. The first one-page COUNT service cost 256 plus 164 bytes, or 420.
 Later services cost whole pages without another alignment gap. The
@@ -60,7 +60,7 @@ historical GLCD layout and a possible second service were:
 
 | Addresses | What is there |
 | --- | --- |
-| `B9A7h` up | The allocation vectors, then the workspace |
+| `B9A7h` up | The allocation vectors, then the resident workspace |
 | `B9A4h–B9A6h` | The stub, `JP BENTRY`, the top with no service in |
 | `B900h–B9A3h` | 164 bytes no service can use |
 | `B600h–B8FFh` | `GLCD.SVC`, three pages; `B600h` holds `JP BENTRY` |
@@ -350,7 +350,7 @@ again (`78127ec:test/svc.test.mjs:536-545`).
 FIND's walk is bounded at 256 records. LIST's byte index also bounds its
 traversal, even after a program corrupts links into a cycle. `REGFIND` saves
 three register pairs. An internal call adds its two-byte return word to
-those six bytes. The ABI gives FIND and LIST an eight-byte bound below
+those six bytes. The application binary interface (ABI) gives FIND and LIST an eight-byte bound below
 the public caller's return address, including dispatcher use
 (`src/loader.asm:792-880`, `src/abi.inc:149-161`).
 

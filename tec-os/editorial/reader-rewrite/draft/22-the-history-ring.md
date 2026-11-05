@@ -71,7 +71,7 @@ fills (`src/cpm/bdos.asm:477-481`, `src/cpm/bdos.asm:504-531`). At
 at least one character (`src/cpm/bdos.asm:740-765`). A program's later input
 therefore has history disabled. An empty line adds no entry.
 
-An abandoned prompt line follows a different exit. `^C` at the start of
+An abandoned line at the command prompt follows a different exit. `^C` at the start of
 function 10 jumps through `CHDROP` to warm boot before `LINDONE` runs
 (`src/cpm/bdos.asm:606-621`, `src/cpm/bdos.asm:115-119`). Warm boot clears
 `HFLAG` with the BDOS workspace so that abandoned read cannot enable

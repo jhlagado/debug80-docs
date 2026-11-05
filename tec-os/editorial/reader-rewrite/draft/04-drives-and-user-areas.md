@@ -24,7 +24,7 @@ rule for resident services.
 
 The `SAMPLE.COM` and small banner you have used are programs. TEC-OS loads
 a COM file into program memory and starts it. When the program finishes
-the prompt returns. A program used this way is called transient because
+the command prompt returns. A program used this way is called transient because
 its code need not remain available after it ends.
 
 A file of type SVC installs a resident service. Its code stays in memory
@@ -353,7 +353,7 @@ A>
 
 The last command failed because SPARE was already on D. The same message
 can mean the destination slot is too small or absent. TEC-OS holds some
-recent writes in memory in its cache. A flush writes those pending changes
+recent writes in memory in its block cache. A cache flush writes those pending changes
 to the card. A failed flush can also prevent the mount and the assignment
 changes only after the writes succeed. A label or index not found in the
 table gives `No such volume`. Invalid command syntax prints

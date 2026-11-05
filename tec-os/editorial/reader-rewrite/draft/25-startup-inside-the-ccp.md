@@ -21,7 +21,7 @@ The practical file setup is in [Chapter 7](07-commands-at-startup.md).
 ## A record across warm boot
 
 `STPOS` is a byte followed by the 128-byte buffer `STREC`
-(`src/ram.asm:416-420`). In the historical `78127ec` workspace, `STPOS`
+(`src/ram.asm:416-420`). In the historical `78127ec` resident workspace, `STPOS`
 was at `BF63h` and the record occupied `BF64h–BFE3h`
 (`78127ec:src/ram.asm:270-271`). The position encodes both progress and
 completion (`src/cpm/ccpcmd.asm:866-910`, `933-990`):
@@ -60,7 +60,7 @@ It sets bit 7 of `STPOS`, making `80h` (`src/cpm/ccpcmd.asm:880-881`).
 A BDOS error can warm boot from inside the open or read. On the next
 entry the nonzero position prevents another attempt at that file.
 The source test at `test/startup.test.mjs:221-241` injects a failure at
-the file's card block and asserts a usable prompt with `Bad Sector`
+the file's card block and asserts a usable command prompt with `Bad Sector`
 and no execution of the stored command.
 
 The keypad bypass occurs after the finished mark and before the open.
@@ -75,7 +75,7 @@ The hanging-`INIT` and repeated-cold-boot tests both exercise a held key
 as the recovery route (`test/startup.test.mjs:46-58`, `243-259`).
 
 Without the bypass, `STBOOT` copies twelve bytes from `STFCB` into
-`CMDFCB`: drive byte 1 and `STARTUP CMD`. The rest of the FCB is still
+`CMDFCB`: drive byte 1 and `STARTUP CMD`. The rest of the file control block (FCB) is still
 zero from cold boot. Drive byte 1 names A regardless of the current drive
 (`src/tables.asm:139`, `src/cpm/ccpcmd.asm:888-893`,
 `src/ram.asm:163-164`). A recognised reset has already run `RESEL` so
