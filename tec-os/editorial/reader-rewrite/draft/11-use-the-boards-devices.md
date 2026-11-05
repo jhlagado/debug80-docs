@@ -12,10 +12,12 @@ nav_group: "Part I: Using and programming TEC-OS"
      `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
      `DEMO` was assembled on the PC by ATOM from the repository's `atom-z80`
      0.3.7. -->
-<!-- Source-only mechanism check: ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
+<!-- Source-only mechanism check: 962853f499f05faf281f6cdff1deca8959f58c2b.
+     Receiver adoption selected at book 9ba1f59, P3 proposal 18 / 43d5f328.
      All historical listings, recipes and captures retain their actual pins.
-     Compact-style assembly and the new font/default workflow remain held.
-     No program, build, import, test, new capture or board result is claimed. -->
+     Opening workflow receipt 4b5b5a50 does not repin these hardware examples.
+     Compact-style assembly proof remains separate. No new program, build,
+     import, test, capture or board result is claimed. -->
 
 The BDOS handles files and console text. TEC-OS's numbered ROM calls also let
 your program light the digits, sound the speaker, read the clock or write the
@@ -724,7 +726,8 @@ describes version 3, including a width entry that instead requires an unclaimed
 display.
 
 FONT, number 15 in ABI 5.1, returns the ROM console font address in HL. It
-contains 96 characters from `20h`, each eight bytes with the top row first. Both
+contains 96 characters from `20h`, each eight bytes with the top row first.
+The selected data is TEC Compact. Each row has five pixels in bits 7–3. Both
 display drivers use this font. Its address is a result, not a fixed address for
 a program to embed.
 

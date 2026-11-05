@@ -14,7 +14,8 @@ chapter's job is to use the board's hardware calls without disrupting the
 serial line or console. I applied the amended STYLE guide, human-writing
 and teaching-prose-review standards.
 
-Mechanism authority is TEC-OS `ea3ef3de9133931e925a0220d51c0e971c1fd8dd`,
+The initial mechanism inspection used TEC-OS
+`ea3ef3de9133931e925a0220d51c0e971c1fd8dd`,
 inspected through git text. I read owning routines, dispatcher, callers,
 console/driver paths, capture configuration and media recipes. No product
 execution, import, test, assembly, build, capture, card modification or UI
@@ -198,3 +199,134 @@ The matching VIDEO release paragraph now also names the Matrix switch rather
 than physical keyboard absence. The historical listing's literal message is
 unchanged. Independent confirmation of the earlier timing/nibble/video-byte
 corrections and AppendixB's corresponding switch conditions was received.
+
+## Receiver source adoption selected at 9ba1f59
+
+Current mechanism authority is TEC-OS
+`962853f499f05faf281f6cdff1deca8959f58c2b`. The tested source remains
+`8b8664a7d93c6dc2e8bce509b9770585e106eedc`. P3 proposal 18 and the closed
+result review at Origo `43d5f328` bind that offer. The receiver selected it at
+book `9ba1f59` after scoped workflow receipt `4b5b5a50` and the opening chapter
+reviews closed at `d9d57d2` and `b911e84`.
+
+This section supersedes the earlier source-adoption and opening-workflow
+holds. Earlier sections retain the actual initial ea3ef3d inspection and its
+coordinates as an editorial record. Their historical costs, addresses and
+program results are not reassigned to the current source. Compact-example
+assembly proof and uncovered hardware workflows remain separate.
+
+The complete current reader and pass record were read before editing. Both
+source-adoption impact records were read, including all 35 claim contexts,
+29 proof spans and nine historical exceptions. The report SHA-256 is
+`df276b238d6014d98580b26f690bf1bbb1798d197ef3a495653a1cfc3c0a0bc0`, matching
+its confirmation. The actual ea3ef3d-to-962853f source diff was read for the
+owned mechanisms, parser and publication paths. The tested-to-landed diff
+changes only the two qualification records.
+
+Complete owning routines and relevant callers were reread at the selected
+source. All current citation claims were checked in their containing passages,
+including unchanged spans. Same-blob comparisons establish unchanged source
+identity after that semantic read. They do not establish a runtime result.
+
+The selected font is TEC Compact. `tools/lib/font.mjs:9-35` parses 96 glyphs
+from 20h through 7Fh, eight top-first rows per glyph, with five pixels in bits
+7–3. `tools/lib/font-package.mjs:8-21` checks selected/original identities and
+the complete notices. The retained source/export manifest and
+`format/FONT-NOTICES.txt:33-47` were read. Legacy bitmap upstream authorship
+remains unresolved. No new attribution or licence conclusion is supplied.
+
+The qualified offer binds ROM SHA-256
+`fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d` and D8
+SHA-256 `9a87dec39a63efc8fdf38ae13d6ec6299763c833fc891de121e2b30f4a1a36ac`.
+Their authority is the retained P3 native artifact inventory and result review,
+not this text inspection. Native 16,020 used and 364 free already appear at
+ea3ef3d. They do not indicate font growth from the historical 16,018/366
+account. No new address or byte measurement is introduced.
+
+Raw PICO cold setup is now 40 columns, conditional on a responding PICO and
+the enabled Matrix switch (`src/pico.asm:36-92`, `src/video.asm:22-29`,
+`src/console.asm:82-88`). Explicit 32/40/80, bare selection preserving width
+and claim, host/UI fallback 80 and serial pagination 80 remain distinct.
+The current record is PICO v3 with entry offsets 16/18/20/22/24 and state
+positions 36/41/42. The first four graphics entries require a claim and the
+width entry rejects an active claim. None of these contracts is changed by
+the font selection.
+
+### Complete Chapter 11 coverage
+
+There are no inline line-range citations in the reader. Its complete current
+mechanism account was rechecked through the original pass record's 21 citation
+groups, containing 23 ranges across 11 files, and the newly selected font paths.
+The initial source-proof table remains explicitly scoped to ea3ef3d. Current
+counterparts of its changed-file ranges are:
+
+| Initial proof | Selected-source proof and semantic result |
+| --- | --- |
+| pico 30–87 | `src/pico.asm:30-92`: table, version-3 record, Matrix gate and publication. Cold template now selects 40. |
+| pico 247–331 | `src/pico.asm:252-336`: restore loads registers, shown page, normal glyphs and reverse patterns. |
+| media 205–234,251–252 | `tools/media.mjs:207-236,253-254`: DEMO assembly, page recipe and exported DEMO/include files. Existing historical recipes remain unchanged. |
+
+All other cited files in that original proof inventory have identical Git blobs
+at ea3ef3d and 962853f. Their source was nevertheless reread for ABI dispatch,
+register/stack exceptions, shared ports, LCD ownership, clock transfer, input,
+PUTAT ordering and display claims. The complete DEMO source and its media
+callers were read. Capture source remains unchanged. Its board options and
+fixed clock do not recertify the old displays or outputs.
+
+Only the mechanism metadata and FONT explanation changed in the reader. The
+font paragraph now names TEC Compact and its five-bit rows while preserving
+96 slots, eight rows, service 15, returned-address use and both consumers.
+No cold-40 result is substituted into BOARD or PLACE. All 18 source/shell/text
+fences and all historical capture/recipe comments remain byte-identical and
+ordered. The original 78127ec/TAS/ATOM checked comment is unchanged. Historical
+60e0768 and bd15528 distinctions and their exact figures remain.
+
+### Bounded editorial readback
+
+The font addition was drafted before the mechanical and reductive passes.
+Thematic reading keeps it beside FONT and the PICO record. The deletion pass
+retains the selected-font sentence because it identifies the adopted data
+and the five-bit sentence because a six-pixel display cell is not six-bit font
+data. Neither sentence supplies a new display result. Agency and every-comma
+readback left the connected paragraph intact. The complete reader-order pass
+keeps claims before raw graphics and PUTAT before PLACE.
+
+The mandatory prose gate and sentence-complexity report were run on both
+owned files. No hard pattern finding remains. Reader SHORT prompts preserve
+exact ABI limits, named API effects, necessary cross-references and historical
+capture boundaries. ECHO prompts preserve register, nibble, call and digit
+identity. CLAUSES prompts preserve argument choices, DEMO's condition and the
+LED/shared-port boundary. NEG prompts retain no-active-claim and port-isolation
+conditions. The new short TEC Compact and both-consumer sentences carry
+separate source facts. No flag authorises a change to a literal example.
+
+This adoption is ready for independent source review. It does not rerun or
+qualify the retained hardware programs, compact candidates or physical board.
+No product execution, import, syntax check, assembly, build, test, model or
+capture occurred. Root integration, navigation and publication remain outside
+this work.
+
+### Final literal and reading checks
+
+The before/after reader comparison uses book `8ed3f3713ec8c68d9b520e777357df4790ca4180` as its
+input. All 18 fences, 4 tables and 11 protected historical/capture comments
+compare byte-identically and in order. Only the separate current-mechanism
+comment is excluded from that comment comparison. Fixed entry offsets,
+historical table values, map coordinates, hashes, recipes and screen text
+remain unchanged. The final changed paragraphs were read with their neighbours
+for meaning, agency, every comma and the reader's next step.
+
+Input reader SHA-256:
+`8a5926df884d8259a0cec3e7e3fbafc0bbf8d77150a4637fcc1d2c712707c501`.
+Output reader SHA-256:
+`3f870a5add211dff50208e6573358b1d77eb2b4385f68b077fb271bdb9061ae1`.
+
+The actual mandatory prose gate reports zero findings across all six owned
+files. Complexity prompts in this record retain explicit source identities,
+coverage counts, original movement inventories and evidence limitations.
+Repeated glyph/row terms name the same encoding. Short source-pin, font and
+origin-limit statements carry distinct audit facts. Longer coverage sentences
+list the exact contracts checked. Earlier record flags remain historical
+process facts, not grounds for unrelated reader edits. No unresolved current
+citation or source-adoption finding remains in this owned slice. Independent
+confirmation of this application remains separate.

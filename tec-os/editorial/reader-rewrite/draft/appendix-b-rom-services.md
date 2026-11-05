@@ -13,11 +13,14 @@ nav_group: "Appendices"
      Only the entries in editorial/c16-citation-resolutions.json use that pin.
      Captures, measurements and other citations retain their earlier provenance. -->
 
-<!-- Mechanism coordinates below: TEC-OS ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
+<!-- Mechanism coordinates below: TEC-OS
+     962853f499f05faf281f6cdff1deca8959f58c2b.
      The original comments above retain their historical scope. Historical
      timings, depths and VTEST output have separate pins below and in the
      pass record. No execution or new assembly proof is supplied here.
-     Compact-style assembly and the KS48 font/default workflow remain held. -->
+     Receiver selection: book 9ba1f59, P3 proposal 18 / 43d5f328.
+     Historical examples were not rerun.
+     Compact-style proof remains separate. -->
 
 The eight-byte ROM table at `C003h` has one jump for sixteen numbered services.
 Numbers 0–8 control hardware, 9–11 manage volumes, 12 registers a display
@@ -107,8 +110,8 @@ results as destroyed (`src/abi.inc:34-65`).
 The names and bounds come from `src/abi.inc:66-168`. The build's ABI check
 compares the fixed table bytes, verifies that the service entries lie in code
 and checks INFO's bits. It does not prove every routine's contract. Media
-generation publishes the include as `dist/abi.inc` (`tools/build.mjs:143-157`,
-`tools/media.mjs:251-257`).
+generation publishes the include as `dist/abi.inc` (`tools/build.mjs:144-158`,
+`tools/media.mjs:253-260`).
 
 ### Historical costs and depths
 
@@ -134,7 +137,7 @@ adds 17 T-states. Their retained model provenance is:
 
 The RTC set figure is an instruction adjustment to an earlier measurement, not a
 newly measured total. No cost was recorded here for services 9–14. None of these
-figures is a timing or stack measurement at ea3ef3d.
+figures is a timing or stack measurement at 962853f.
 
 ## The hardware services
 
@@ -150,7 +153,7 @@ Returns B = device bits, DE = ROM product version, L = console columns and H =
 console rows. Serial dimensions are both zero. Status is always 0. Stack bound:
 6 bytes. Historical cost: 244 T-states at `60e0768`, with no device read. D is
 the version's major and E its minor so `0001h` means product version 0.1 rather
-than ABI 5.1 (`src/services.asm:88-105`, `tools/build.mjs:27-27,63-70`).
+than ABI 5.1 (`src/services.asm:88-105`, `tools/build.mjs:28-28,64-71`).
 
 | Bit | Value | `abi.inc` | Set when |
 | ---: | ---: | --- | --- |
@@ -214,7 +217,7 @@ started at cold boot. Mode, font and displayed page are restored. If PICO is
 selected, release also clears its screen and homes its cursor. With the
 Matrix switch disabled the ROM console did not start so release leaves the chip's
 programmed state alone. Warm boot releases an active claim before rebuilding
-page zero (`src/boot.asm:178-215`, `src/pico.asm:54-87`).
+page zero (`src/boot.asm:178-215`, `src/pico.asm:59-92`).
 
 ### 4 TONE
 
@@ -289,7 +292,7 @@ The cursor's stored position remains unchanged. CONST redraws its image when no
 character is ready and CONIN while waiting for input
 (`src/console.asm:200-225,296-332`). Bytes `80h–FFh` reach the display as
 reverse images of `00h–7Fh` while the ordinary video-console path filters those
-high bytes (`src/pico.asm:277-331`, `drivers/glcd.asm:604-641`,
+high bytes (`src/pico.asm:282-336`, `drivers/glcd.asm:604-641`,
 `src/term.asm:49-65`).
 
 Historical measured depths at `58d4345` were 22 bytes on GLCD and 18 on PICO
@@ -422,7 +425,7 @@ address and A = generation or carry set past the end. Stack bound: 8 bytes
 
 When the ROM PICO console starts at cold boot it publishes the permanent
 registry tail `PICO`, version 3, in PIBLK. UNLOAD removes resident owners rather
-than that tail (`src/pico.asm:31-87`, `src/loader.asm:110-174`). The historical
+than that tail (`src/pico.asm:31-92`, `src/loader.asm:110-174`). The historical
 `78127ec` layout in Appendix C places the table at `BBE3h`. That is a layout
 coordinate, not a fixed ABI address. Programs obtain the table through FIND. Its
 first eight words are the display table described under DRVR, followed by five
@@ -439,13 +442,13 @@ entry words:
 The first four entries require the caller to hold VIDEO's claim. They perform no
 claim or argument validation and may change AF, BC, DE and HL. Zero count
 transfers no data bytes, though the address-setup routine still writes the
-control port (`src/abi.inc:205-218`, `src/pico.asm:353-445`).
+control port (`src/abi.inc:205-218`, `src/pico.asm:358-450`).
 
 PICOWID was added in record version 3 and is the entry used by CON PICO 40. It
 requires an unclaimed chip. Any other width or an active claim returns carry
 with no width change. Success changes the saved width and marks selected CRT:
 for reselection so the next console call clears its screen at that width
-(`src/abi.inc:220-243`, `src/pico.asm:89-174`).
+(`src/abi.inc:220-243`, `src/pico.asm:94-179`).
 
 Debugger offsets from the table are PICOVRB = 36 for the record version, PICOTPD
 = 41 for the drawn page and PICOTPS = 42 for the shown page
@@ -526,9 +529,9 @@ The retained TAS/run result is recorded at `60e0768` with starter TAS from
 Thorium `dbee66a`, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. That run
 obtained the PICO record from the then-loaded PICO.SVC rather than the later ROM
-console. It is a historical host-model VRAM round trip, not a new ea3ef3d or
-physical-board result. The recipe assumes the earlier service chapter's
-`svc.img`, ABI.INC and HWLIB.ASM preparation:
+console. It is a historical host-model VRAM round trip, not a run of the
+current 962853f source or a physical-board result. The recipe assumes the
+earlier service chapter's `svc.img`, ABI.INC and HWLIB.ASM preparation:
 
 <!-- node tools/tecvol.mjs put svc.img B vtest.asm --text; node tools/capture.mjs --card svc.img --board pico B: "TAS VTEST" VTEST -->
 ```text
@@ -555,11 +558,18 @@ Returns HL = the ROM console font address. Status is always 0. Stack bound: 4
 bytes. Historical timing/depth at `58d4345`: 194 T-states and 4 bytes
 (`src/services.asm:597-603`, `src/abi.inc:163-168`).
 
-The font contains 96 characters from `20h`, eight bytes each, top row first. In
-this source format each row's five pixels occupy bits 7–3
-(`tools/lib/font.mjs:9-31`). The historical `58d4345` layout puts FONT at
-`C179h`. Programs use the returned address rather than embedding that
-coordinate. The PICO console uses the FONT label and GLCD.SVC obtains the
-address through this call during INIT (`src/pico.asm:277-331`,
+The selected font is TEC Compact from `format/font5x7.txt`. It contains 96
+characters from `20h`, eight bytes each, top row first. Each row's five pixels
+occupy bits 7–3 (`tools/lib/font.mjs:9-35`). The source package checks the
+selected font and retained notices (`tools/lib/font-package.mjs:8-21`).
+
+The retained sources and modifications are recorded in
+`format/FONT-NOTICES.txt`. The original TEC-OS bitmap's upstream authorship
+remains unresolved (`format/FONT-NOTICES.txt:33-47`).
+
+The historical `58d4345` layout puts FONT at `C179h`. Programs use the returned
+address rather than embedding that coordinate. The PICO console uses the FONT
+label and GLCD.SVC obtains the
+address through this call during INIT (`src/pico.asm:282-336`,
 `drivers/glcd.asm:66-72`). On ABI 5.0 the number is out of range and returns
 status 1 so this GLCD driver's INIT refuses installation there.
