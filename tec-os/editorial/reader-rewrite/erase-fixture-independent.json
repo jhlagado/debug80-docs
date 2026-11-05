@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "status": "clear_within_bounded_scope",
+  "reviewed_commit": "4c7674e0f8db0bf012a06503f6c96c2483b19ba7",
+  "scope": {
+    "task": "Independent ERA fixture preservation and editorial review",
+    "reader_edits": false,
+    "product_execution": false,
+    "new_runtime_evidence": false,
+    "chapter_5_self_review": false,
+    "whole_chapters_1_to_3_review": "Await completed author commits. No review or edit of in-progress drafts is included.",
+    "not_claimed": [
+      "Fresh capture",
+      "Current-source qualification of historical output",
+      "Whole-reference factual revalidation",
+      "Chapter 3 completion",
+      "Navigation or publication acceptance"
+    ]
+  },
+  "complete_reads": [
+    {
+      "commit": "4c7674e0f8db0bf012a06503f6c96c2483b19ba7",
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "git_blob": "028c67ea5a02d2c9211d65c626ce596e52ffde30",
+      "bytes": 12447,
+      "sha256": "b217f9a83a64ac51fe7a30e2e8a6534b785f07a408ed713d8c75f7b5f2d9bff7"
+    },
+    {
+      "commit": "4c7674e0f8db0bf012a06503f6c96c2483b19ba7",
+      "path": "tec-os/editorial/reader-rewrite/draft/j-pass-record.md",
+      "git_blob": "2ed6474d7e391032cb121b7f9946a146ef4d636d",
+      "bytes": 5402,
+      "sha256": "d2ee1af3a657623fb4595510b0115b23463218b0179456181e1fa8b28f336240"
+    }
+  ],
+  "original_containing_passage": {
+    "source": {
+      "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+      "path": "tec-os/03-command-line.md",
+      "git_blob": "176ae314243cae5e9c02112422b0ca81a8a49d3a",
+      "bytes": 25142,
+      "sha256": "61bf793e23c7649738414ca56b9960595191f19856b61664ceb1a0c677f96ea0"
+    },
+    "start_line": 248,
+    "end_line": 280,
+    "full_context": "The same rule makes `COPY A:STARTUP.CMD` on drive B a copy to drive B. A word\nafter the destination, as in `COPY STARTUP.CMD B:X.TXT JUNK`, also gives\n`COPY?` before any file is opened. `COPY`'s four messages of its own are in\nthe table of failure messages below.\n\nBefore it erases with a name that matches every file, such as `*.*` or\n`B:*.*`, `ERA` prints `ALL (Y/N)?` and reads your answer up to Return. A `Y`\nas the answer's first character, in either case, erases the files. Anything\nelse leaves them, as Return alone does:\n\n<!-- node tools/capture.mjs \"COPY STARTUP.CMD B:\" B: \"@start ERA *.*\" $'@key n\\r' DIR \"@start ERA *.*\" $'@key y\\r' DIR -->\n```text\nA>COPY STARTUP.CMD B:\nCOPIED 0001\n\nA>B:\nB>ERA *.*\nALL (Y/N)?n\nB>DIR\nSTARTUP.CMD \n1 file, 8172K free\nB>ERA *.*\nALL (Y/N)?y\nB>DIR\nNO FILE\nB>\n```\n\nA name with wildcards that matches only some files, such as `ERA *.TXT`,\nerases them with no question.\n\n### SAVE\n\n",
+    "sha256": "c19734b79a8fc8478e53065d065c9f6119f7f0d42bded9605ceb2dd6bd625f49"
+  },
+  "original_provenance_header": {
+    "source": {
+      "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+      "path": "tec-os/03-command-line.md",
+      "git_blob": "176ae314243cae5e9c02112422b0ca81a8a49d3a",
+      "bytes": 25142,
+      "sha256": "61bf793e23c7649738414ca56b9960595191f19856b61664ceb1a0c677f96ea0"
+    },
+    "start_line": 10,
+    "end_line": 14,
+    "full_context": "<!-- Checked against TEC-OS 78127ec, with the starter card's `TED.COM` from Thorium\n     128edb7, with the SHA-256\n     `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its\n     `TAS.COM` from Thorium dbee66a, with the SHA-256\n     `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. -->\n",
+    "sha256": "6bf5a59570bfe158dffd39b9284001c6b3daa959e1d8ea365addfdfd21c0c302"
+  },
+  "current_era_and_boundaries": {
+    "source": {
+      "commit": "4c7674e0f8db0bf012a06503f6c96c2483b19ba7",
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "git_blob": "028c67ea5a02d2c9211d65c626ce596e52ffde30",
+      "bytes": 12447,
+      "sha256": "b217f9a83a64ac51fe7a30e2e8a6534b785f07a408ed713d8c75f7b5f2d9bff7"
+    },
+    "start_line": 166,
+    "end_line": 231,
+    "full_context": "\nREN requires `NEW=OLD` with no spaces around the equals sign. Both names must\nbe unambiguous. Either name may specify the drive. The other must omit it\nor specify the same drive. Thus `REN B:NEW.TXT=OLD.TXT` and\n`REN NEW.TXT=B:OLD.TXT` rename on B. Different drives are rejected.\n\nREN checks the new name first. If it already exists, `FILE EXISTS` is printed\nand nothing is renamed. An absent old name produces `NO FILE`\n(`src/cpm/ccpmut.asm:99-184`).\n\n### ERA\n\nERA accepts one name or pattern and no extra argument. If all eleven name\nand type positions are question marks, as with `*.*`, it prints\n`ALL (Y/N)?`. A Return alone leaves every file unchanged. Otherwise ERA\nreads through the next Return and erases only when the answer's first\ncharacter is Y or y. Other answers leave the files unchanged.\n\nA pattern whose eleven stored positions are not all question marks, such\nas `*.TXT`, is erased without confirmation. No match produces `NO FILE`\n(`src/cpm/ccpmut.asm:13-84`). Protection and write failures can stop a\nmulti-file erase after some entries have already been erased. The exact\npartial-result cases are in [Appendix D](appendix-d-error-messages.md).\n\nThe following historical run starts with an empty B drive and copies one\ndisposable file there. It records an `n` answer that leaves the file and a `y`\nanswer that erases it. This is a separate `78127ec` demonstration, not the card\nused for BANNER in Chapter 2. `ERA *.*` would erase BANNER too on that card.\n\n<!-- node tools/capture.mjs \"COPY STARTUP.CMD B:\" B: \"@start ERA *.*\" $'@key n\\r' DIR \"@start ERA *.*\" $'@key y\\r' DIR -->\n```text\nA>COPY STARTUP.CMD B:\nCOPIED 0001\n\nA>B:\nB>ERA *.*\nALL (Y/N)?n\nB>DIR\nSTARTUP.CMD \n1 file, 8172K free\nB>ERA *.*\nALL (Y/N)?y\nB>DIR\nNO FILE\nB>\n```\n\n### SAVE\n\nSAVE takes a decimal count from 0 to 255 and one unambiguous file name. It\nwrites that many 256-byte pages starting at `0100h`. A count of 0 makes an empty\nfile. The count must be less than the high byte of the word at `0006h` so the\nsaved pages stop below the resident entry's page.\n[Memory for programs](10-memory-for-programs.md) gives the memory boundary and\nthe complete capacity example.\n\nAn existing file of the same name is erased first. A failed make, write or\nclose produces `NO SPACE`. After a write failure SAVE attempts to close the\nfile. If the close succeeds, its directory entry retains the records written.\n`NO SPACE` does not confirm that the close succeeded. Digital Research's CP/M 2.2\nSAVE leaves the file open in that case (`src/cpm/ccpcmd.asm:282-445`).\n\n### Drives, USER and program lookup\n\nA drive selection is a letter and colon with no other argument. A through D are\nthe available TEC-OS drives. The CP/M letters E through P parse as drives but\n",
+    "sha256": "48fe41130f52dd29a20b29de2f7174967925d1ceb58bcd272dc16310980e7a56"
+  },
+  "literal_comparison": {
+    "original": {
+      "source": {
+        "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+        "path": "tec-os/03-command-line.md",
+        "git_blob": "176ae314243cae5e9c02112422b0ca81a8a49d3a",
+        "bytes": 25142,
+        "sha256": "61bf793e23c7649738414ca56b9960595191f19856b61664ceb1a0c677f96ea0"
+      },
+      "start_line": 258,
+      "end_line": 274,
+      "full_context": "<!-- node tools/capture.mjs \"COPY STARTUP.CMD B:\" B: \"@start ERA *.*\" $'@key n\\r' DIR \"@start ERA *.*\" $'@key y\\r' DIR -->\n```text\nA>COPY STARTUP.CMD B:\nCOPIED 0001\n\nA>B:\nB>ERA *.*\nALL (Y/N)?n\nB>DIR\nSTARTUP.CMD \n1 file, 8172K free\nB>ERA *.*\nALL (Y/N)?y\nB>DIR\nNO FILE\nB>\n```\n",
+      "sha256": "9a11e780cb8c9f9612ea25e0f1c0a761aa4a49795afa3077bbadf45b25ef357e"
+    },
+    "destination": {
+      "source": {
+        "commit": "4c7674e0f8db0bf012a06503f6c96c2483b19ba7",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "git_blob": "028c67ea5a02d2c9211d65c626ce596e52ffde30",
+        "bytes": 12447,
+        "sha256": "b217f9a83a64ac51fe7a30e2e8a6534b785f07a408ed713d8c75f7b5f2d9bff7"
+      },
+      "start_line": 195,
+      "end_line": 211,
+      "full_context": "<!-- node tools/capture.mjs \"COPY STARTUP.CMD B:\" B: \"@start ERA *.*\" $'@key n\\r' DIR \"@start ERA *.*\" $'@key y\\r' DIR -->\n```text\nA>COPY STARTUP.CMD B:\nCOPIED 0001\n\nA>B:\nB>ERA *.*\nALL (Y/N)?n\nB>DIR\nSTARTUP.CMD \n1 file, 8172K free\nB>ERA *.*\nALL (Y/N)?y\nB>DIR\nNO FILE\nB>\n```\n",
+      "sha256": "9a11e780cb8c9f9612ea25e0f1c0a761aa4a49795afa3077bbadf45b25ef357e"
+    },
+    "equal_bytes": true,
+    "capture_recipe_preserved": true,
+    "complete_output_fence_preserved": true,
+    "trailing_space_preserved": "STARTUP.CMD followed by one space and LF",
+    "all_preexisting_J_text_unchanged_except_capture_count": true
+  },
+  "source_support": [
+    {
+      "source": {
+        "commit": "ea3ef3d",
+        "path": "src/cpm/ccpmut.asm",
+        "git_blob": "50117b608cf21f258c1d875701fcee2f610cb1f8",
+        "bytes": 10489,
+        "sha256": "211eb2dea851389acf086d898b5f1bb9334d37c9882fe9d26149977acb65125f"
+      },
+      "start_line": 13,
+      "end_line": 84,
+      "full_context": "CMDERA:\n  call ARGSKIP\n  jp z,BADCMD    ; no operand\n  call CMDPARSE  ; the name into CMDFCB,\n  call ENDCHK    ; with nothing after it\n  xor a\n  ld (ERAALL),a  ; not a whole-drive\n                 ; erase unless\n                 ; confirmed\n\n; is every name and type byte ?\n\n  ld hl,CMDFCB+1\n  ld b,11\n\nERACHK:\n  ld a,(hl)\n  cp '?'\n  jr nz,ERADEL   ; one is not: delete\n                 ; without asking\n  inc hl\n  djnz ERACHK\n\n; all are: ask ALL (Y/N)?\n\n  ld de,ALLQUERY\n  call PUTSTR\n  ld c,1         ; BDOS 1, a key, echoed\n  call BDOS\n  cp CR          ; Return alone is no:\n  jp z,STARTED   ; nothing is deleted\n  and $DF        ; the answer in upper\n                 ; case, kept\n  ld (ERAANS),a  ; while the line is\n                 ; read out\n\nERADRAIN:\n  ld c,1         ; the rest of the\n                 ; answer's line,\n  call BDOS      ; read and dropped up\n                 ; to its Return\n  cp CR\n  jr nz,ERADRAIN\n\nERAGOT:\n  ld a,(ERAANS)\n  cp 'Y'         ; an answer starting\n                 ; with Y or y\n  jp nz,STARTED  ; erases; any other\n                 ; erases nothing\n  ld a,1\n  ld (ERAALL),a  ; confirmed\n\n; Delete every file CMDFCB matches; NO\n; FILE when none does. After the ALL\n; question the prompt starts on a new\n; line.\n\nERADEL:\n  call DOSSEQ    ; delete: A FFh when\n                 ; nothing matched\n  DB 19*2+0      ; BDOS 19, source FCB\n  inc a\n  jr z,FILENO    ; nothing matched: NO\n                 ; FILE\n  ld a,(ERAALL)\n  or a           ; after the question's\n                 ; answer,\n  jp nz,STARTED  ; a new line before the\n                 ; prompt\n  jp MAINLOOP    ; else the prompt at\n                 ; once\n",
+      "sha256": "b9b24f575d23c0ce96856b2509defacf22ad31061c411f52cd2708be2a6ee7f4"
+    },
+    {
+      "source": {
+        "commit": "78127ec",
+        "path": "tools/media.mjs",
+        "git_blob": "138cfd9354af762f69c8497c2e927b37cab58241",
+        "bytes": 11613,
+        "sha256": "a430985281c5361c98a2bd99e235324dceb41feb0c49b70af558da9d3412f6ed"
+      },
+      "start_line": 207,
+      "end_line": 225,
+      "full_context": "    schema: \"tecos-file-recipe-v1\",\n    id: \"starter\",\n    revision: \"4\",\n    name: \"TEC-OS starter\",\n    instruction: \"At A>, type DIR, then TAS SAMPLE and SAMPLE to build and run a first program, or TED SAMPLE.ASM to read it. B: is an empty work disk, written behind: press ^C at A> before reset or power off.\",\n    profile: \"tecos\",\n    volumes: [\n      { geometry: \"G1M\", label: \"SYSTEM\", mount: \"A\" },\n      { geometry: \"G8M\", label: \"WORK\", mount: \"B\", writeBehind: true },\n    ],\n    components: files.map((f) => ({\n      id: f.name.toLowerCase().replace(/\\W/g, \"-\"),\n      name: f.name,\n      description: f.description,\n      files: [{ name: f.name, url: `files/${f.name}`, drive: \"A\", bytes: f.bytes.length, sha256: sha(f.bytes) }],\n    })),\n  };\n  writeFileSync(resolve(DIST, \"starter.recipe.json\"), JSON.stringify(recipe, null, 2) + \"\\n\");\n  saveImage(resolve(DIST, \"starter.img\"), await buildRecipe(recipe, fileFetcher(DIST)));\n",
+      "sha256": "31bfd3be83ffa3507c5520f6676fd25e4c18c3faf0b742c0493a5515b55fa028"
+    }
+  ],
+  "disposition_identities": [
+    {
+      "commit": "4c7674e0f8db0bf012a06503f6c96c2483b19ba7",
+      "path": "tec-os/editorial/reader-rewrite/material-crosswalk.json",
+      "git_blob": "515b3587920973d5fca3867b849097265126c16a",
+      "bytes": 211078,
+      "sha256": "099602e6279fd47751dfb0d41d3ecf930028736137e94e6f252737ee3bc14fa4"
+    },
+    {
+      "commit": "4c7674e0f8db0bf012a06503f6c96c2483b19ba7",
+      "path": "tec-os/editorial/reader-rewrite/revision-ledger.json",
+      "git_blob": "6a82555bb36f42482f43af49d1d4befad6df8bb7",
+      "bytes": 507843,
+      "sha256": "f94f03c52eacb401fd0dfb924fb92d135eb384656d0c6205167a043ccbc8c846"
+    },
+    {
+      "commit": "4c7674e0f8db0bf012a06503f6c96c2483b19ba7",
+      "path": "tec-os/editorial/reader-rewrite/movement-units.json",
+      "git_blob": "fe55aca36bdb10de924682c553769455f12caa31",
+      "bytes": 869064,
+      "sha256": "0f594d09a5aa4dfd2c170b9e069f23a8a5b987cfbc3a99c7884c36b2210a06ff"
+    }
+  ],
+  "crosswalk_amendment": {
+    "authority": "Closed practical-first outline0e4feea Chapter3 selective-only rule; lead disposition of chapter-03-readiness.json preservation gap",
+    "source_draft": "Frozen10821b6 tec-os/03-command-line.md:258–274",
+    "moves": [
+      {
+        "material": "Complete ERA*.* historical capture recipe and output, including n/y answers and both DIR outcomes",
+        "destination": "draft/appendix-j-command-reference.md, ERA",
+        "disposition": "Exact original recipe/output retained together at actual78127ec provenance. Separate empty-B disposable-file demonstration, explicitly not post-BANNER reader card. Chapter3 teaches selective erasure only."
+      }
+    ],
+    "readback": "Lead read complete J and original containing passage before insertion, then whole changed ERA section and adjacent boundaries. Exact original recipe/fence bytes verified.",
+    "limits": "No new capture, profile repin, allocation or runtime. Broad erase is a reference case, not a Chapter3 action."
+  },
+  "ledger_disposition": {
+    "all_files_erase": "Complete frozenold03:258–274 recipe/output now retained under AppendixJ ERA, exact historical78127ec pin and empty-B state. Crosswalk post-draft amendment governs over old parent placement in3.",
+    "pager_excerpt": "Lead approved exact paused-screen098/099 excerpts with actual TYPE A:SAMPLE.ASM!USER 1 fixture provenance, no fake plain-TYPE full transcript or return. Full current fixture stays retainedattempt02; Chapter28 reproduction handoff pending.",
+    "file_operations": "Historical empty-B COPY/REN/selectiveERA remains isolated from post-BANNER card. No new continued-card mutation result invented."
+  },
+  "checks": [
+    {
+      "id": "ERA01",
+      "result": "clear",
+      "reason": "Original old03:258-274 and current J:195-211 are byte-equal as a complete capture recipe plus output fence. Both n and y, both DIR results, COPIED 0001, 8172K, all prompts and the padded STARTUP.CMD row survive."
+    },
+    {
+      "id": "ERA02",
+      "result": "clear",
+      "reason": "The original header names78127ec. Current J header retains78127ec for all three captures and says none was rerun. The added introduction repeats78127ec and explicitly names empty B. Historical media source assigns all component files to A, leaving WORK/B empty before the disposable copy."
+    },
+    {
+      "id": "ERA03",
+      "result": "clear",
+      "reason": "The new paragraph explicitly says this is not Chapter2’s BANNER card and warns that ERA *.* would erase BANNER there too. It imposes no new shell/fixture prerequisite on Chapter3 and makes no continued-card erase result claim."
+    },
+    {
+      "id": "ERA04",
+      "result": "clear",
+      "reason": "The complete current ERA section retains the eleven-question-mark test, first-character Y/y, Return-alone exception, no-confirmation partial patterns, NO FILE and protection/write-failure partial-result qualification. The source path tests all11 positions before prompting and drains to Return."
+    },
+    {
+      "id": "ERA05",
+      "result": "clear",
+      "reason": "The later crosswalk amendment and revision-ledger opening_material_preservation.all_files_erase explicitly override older parent placement in3 with a complete J reference home. Original confirmation explanation and selective-pattern exception retain their exact-rule home in the immediately preceding J paragraphs. No material disappears through the placement amendment."
+    },
+    {
+      "id": "ERA06",
+      "result": "clear",
+      "reason": "Each new sentence supplies setup, observed n/y outcomes, historical separation or the destructive-pattern consequence. The first comma in the setup paragraph separates the78127ec demonstration from the BANNER-card exception. It is not a serial comma. The whole ERA section and REN/SAVE transitions read continuously; literal punctuation is unchanged. No new authorial semicolon or em dash occurs."
+    }
+  ],
+  "findings": [],
+  "unresolved_bounded_findings": 0,
+  "later_review_hold": {
+    "chapters": [
+      1,
+      2,
+      3
+    ],
+    "requested_review": "Independent complete teaching and craft review after completed commits are supplied",
+    "status": "awaiting_completed_commits",
+    "no_in_progress_draft_review": true
+  }
+}
