@@ -1,0 +1,383 @@
+{
+  "status": "bounded independent confirmation clear",
+  "reader_changes_made": false,
+  "product_execution_performed": false,
+  "scope_1": {
+    "name": "Six reader-order findings across seven pages",
+    "book_commit": "ea499490982ca34257979027105d4275b57a5ffb",
+    "status": "clear",
+    "findings": [],
+    "reader_identities": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "snapshot_sha256": "7d69717feabc9d1762874c941490dea8acd98da94e66888f8aa7ef9d6fbaf3a4",
+        "working_copy_matches_snapshot": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "snapshot_sha256": "54c3d3da91b26c2f4c8fefbcade447288d583aa4ec8c56229e96bf23f99d3dec",
+        "working_copy_matches_snapshot": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
+        "snapshot_sha256": "e8774ed57692aa16d85946f19deaf805ad6b179356d2d10471975e0ba4e4df64",
+        "working_copy_matches_snapshot": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "snapshot_sha256": "ddaf1c27247b9edd39ac4f23d65a030733db3e578e0463d9e3f04dfaa5889bf0",
+        "working_copy_matches_snapshot": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+        "snapshot_sha256": "01ebdff101a5e948acd275e8293ff576b05a74d9a29194b430feaa7a349b4257",
+        "working_copy_matches_snapshot": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+        "snapshot_sha256": "de1686c5f49a2c5bf034de976c144bd69d4402982528d24208f003bb6acfed6d",
+        "working_copy_matches_snapshot": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "snapshot_sha256": "8a7a56f8a7a4089bbc17bd4e5d21ca85147a1ce900f9e2ac820cd56149433661",
+        "working_copy_matches_snapshot": true
+      }
+    ],
+    "checks": [
+      {
+        "id": "R1",
+        "result": "clear",
+        "context": "04 Programs and resident services; 06 An unavailable display",
+        "detail": "The complete CON UC1/SERVICES/UNLOAD/CON command comment and fence moved together unchanged. Chapter 4 retains removal/fallback meaning and a Chapter 6 link. Chapter 6 identifies a separate historical run, under its retained 78127ec capture provenance.",
+        "moved_pair_sha256": "7ff60fca7798f66514441ef12f76e4c49ade216aee4c23c698c4becb39629fda",
+        "pair_bytes": 153
+      },
+      {
+        "id": "R2",
+        "result": "clear",
+        "context": "04 Volume and file protection; 05 A protection example",
+        "detail": "Only the early function-28 API number is removed. Temporary drive protection, warm-boot clearing, persistent descriptor read-only protection and the unchanged R/O versus File R/O example remain."
+      },
+      {
+        "id": "R3",
+        "result": "clear",
+        "context": "08 function-10 LINE explanation and following input rules",
+        "detail": "RET/warm-boot meaning, buffer count, GOT interpretation and all literal source/output survive. Redundant ready-prompt and 47/128-byte assembly proof leave reader prose while remaining explicitly ea3/Origo71696f2e evidence in the pass record."
+      },
+      {
+        "id": "R4",
+        "result": "clear",
+        "context": "09 Close, flush and errors; 10 Page zero and the program arguments; 08 ordinary exit explanation",
+        "detail": "The removed 0004h aside is duplicated at its actual Chapter 10 destination, including nibble meanings, writable selection and unavailable-drive fallback. Chapter 9 still ends with successful flush, failed/drop-chain, irrecoverable dropped bytes and reset loss."
+      },
+      {
+        "id": "R5",
+        "result": "clear",
+        "context": "Appendix A functions 33, 34, 40 and adjacent 45",
+        "detail": "EX/S2 restoration now names the extent described by RC/map. Retry wording is conditional. BIOS DMA is restored before transfer-error handling. Function 45 is precisely a mode setter; it does not return a zero-fill transfer error itself."
+      },
+      {
+        "id": "R6",
+        "result": "clear",
+        "context": "Appendix J DIR and TYPE",
+        "detail": "A name field of 13 columns is distinct from the number of names per row. Minimum one and serial 80 remain. Grammar, pager link and historical output are preserved."
+      }
+    ],
+    "craft": "Complete changed paragraphs and neighbouring sections read. Deletions preserve prerequisites and operator consequences. Added transition follows display selection. Commas separate values or bound the separate historical sequence; no agency or punctuation correction is required.",
+    "literal_invariants": "All seven-reader fence and capture-command inventories match before/after, allowing only the exact 4-to-6 transfer. Other fences/comments remain in place.",
+    "pass_record_identities": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/04-pass-record.md",
+        "sha256": "a1722349975b85d9d363a7d7b33ea6f6a36d45222f7d2b3c92e99b0d0e9dc98e",
+        "matches_ea49949": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-pass-record.md",
+        "sha256": "b012ad885ad2207d6cd9263e2d035afd620fcf9e844637fddb679159ccea8d72",
+        "matches_ea49949": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/06-pass-record.md",
+        "sha256": "84478ebc04d84174383f7921bca3fd1af0fc7473ad52d95772a481dd70b3e268",
+        "matches_ea49949": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/08-pass-record.md",
+        "sha256": "98fa5c2f655a27eac3207433bc693057b47d3aee4012d70a25943b94c2b79fec",
+        "matches_ea49949": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/09-pass-record.md",
+        "sha256": "640e0ef6e5541ea5fa71ef06cfe74ce46c97d0ef9be3bf209ad8f2ae0b71af2a",
+        "matches_ea49949": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/a-pass-record.md",
+        "sha256": "7d188a509b3d7cc3fcaf1529072b4c29a610a005039ced630644bbf2e4e06ff2",
+        "matches_ea49949": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/j-pass-record.md",
+        "sha256": "c0e947f3a53c08d1806cb35d38627ae23fcb19bec27e296b91b0a0133df57228",
+        "matches_ea49949": true
+      }
+    ]
+  },
+  "scope_2": {
+    "name": "Qualified FAIL insertion",
+    "book_commit": "89d6ea76ee4c9484502c86d3b1a1727eb398833b",
+    "status": "clear",
+    "findings": [],
+    "reader_path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+    "reader_sha256": "1a49cc9be52c6a2bc88e71ae7ece9c5a01610aa707fe27bbcf3d9e1920dcd934",
+    "reading": "Read the whole Chapter 13, complete changed sections, following GLCD/REMOVE/restart context and the insertion pass-record section. Read full frozen acceptance receipt and complete relevant archive artifacts plus serviceState/failCase/failWorkflow source.",
+    "acceptance": {
+      "origo_commit": "c40c79df6e5399082028f2ac0ce6669efbb59b04",
+      "path": "studies/p3-tec-os/reviews/book-complete-workflows.md",
+      "sha256": "4ad1aeba6185f5ea5377281780e4faeb352a11ee49f2398c9afb2a0751de2c37",
+      "attempt_commit": "06b3e05a",
+      "archive_sha256": "f07ad35f5aee950bd0438143760e835f28e184dc59d7e6649f6264d2f70d8e9a",
+      "archive_bytes": 3602357,
+      "result_sha256": "fe7ed96287741753150b1c7475facc53e6dea85abaaaf108b414d7266e32c23d",
+      "complete_binds_result": true
+    },
+    "artifacts": [
+      {
+        "archive_member": "packet/FAIL.original.asm",
+        "bytes": 506,
+        "sha256": "2a155b29b59d4bb5058ce31b2caf89745cb815b583f8e4e9f1a64200353e1e31"
+      },
+      {
+        "archive_member": "packet/AREA.original.asm",
+        "bytes": 1269,
+        "sha256": "f3b6e61d5c194653048ec601ef0ef54cc98ebfd5c9833ae85d8ac101ef330034"
+      },
+      {
+        "archive_member": "stage/results/fail-build-console.bin",
+        "bytes": 206,
+        "sha256": "f79b35bfdd6d6cf8795b84aeac5eed9660739f976360ed705d2ab528d8746b93"
+      },
+      {
+        "archive_member": "stage/results/fail-baseline-console.bin",
+        "bytes": 170,
+        "sha256": "b6e0fa52e9e3d01ba285f9988ca1d87c4e7760ba948a8853dafb5c042e05a890"
+      },
+      {
+        "archive_member": "stage/results/fail-baseline.json",
+        "bytes": 1109,
+        "sha256": "f82cf13f90478ac93269b2f84dfc4efbd29dbc1317e06e50c81239041cabfb83"
+      },
+      {
+        "archive_member": "stage/results/fail-with-control.json",
+        "bytes": 1277,
+        "sha256": "c520ee86293a0910777df928d28470be7032c111c6b3937b4e48fab6984aa1e1"
+      },
+      {
+        "archive_member": "stage/results/COMPLETE",
+        "bytes": 65,
+        "sha256": "517a9a9dc4e570c79d0ae3b0f65a1c3116f7c7c6f0b2764276a6d0bb48025155"
+      },
+      {
+        "archive_member": "packet/batch.mjs",
+        "bytes": 52499,
+        "sha256": "41843b99b1c99a0c2ebfea96a211011aa5ec179e1da38ba1d185d0c0c41aa4b4"
+      }
+    ],
+    "excerpt_checks": [
+      {
+        "archive_member": "stage/results/fail-build-console.bin",
+        "machine": 9,
+        "contiguous_after_recorded_line_ending_rendering": true,
+        "rendered_excerpt_sha256": "ac73fbe1026ebabb9914e0f2afe3a13c13a43d1d1bced81e511b469148b0a712",
+        "scope": "Separate fresh baseline for machine 10; no splice into COUNT."
+      },
+      {
+        "archive_member": "stage/results/fail-baseline-console.bin",
+        "machine": 10,
+        "contiguous_after_recorded_line_ending_rendering": true,
+        "rendered_excerpt_sha256": "f25e62938eef0782a2cab53690c5a7ed8c58996e79824bb6919afa0604239cf5",
+        "scope": "Separate fresh baseline for machine 10; no splice into COUNT."
+      }
+    ],
+    "checks": [
+      "Inserted ASM equals all 506 original bytes, including tabs, comments and final LF.",
+      "Build excerpt is machine 9; a separate PASS control and Ctrl+C flush are disclosed. Machine 10 starts in fresh RAM from the saved card.",
+      "AREA 47268 before/after and empty service-owner baseline match accepted actual artifacts. Both failure cases record INIT 1, carryRet 1, REMOVE 0 and scan 1 with equal tracked service states.",
+      "SCF/RET observer reads actual flags.C at RET; owning loader branch and BIOS scan support the explanation.",
+      "PICO version 3, cold40/Matrix configuration and qualified fa639 ROM remain separate from historical COUNT runs and the unchanged host UI default.",
+      "All 11 pre-existing reader fences survive byte-identically in order. The held candidate retains both historical fences unchanged. Old COUNT/CHEAT/RECS/NEEDS and PC-writer provenance remains named rather than silently repinned."
+    ],
+    "rollback_boundary": "The reader introduces the direct check as service state. Complete baseline therefore means tracked ceiling/stub, registry, owner, generation, claim, restart and BIOS state, as explicitly recorded in the pass record and archive. It is not all-machine-memory equality.",
+    "craft": "The example follows cleanup responsibility, then original listing, setup, build, fresh baseline and interpretation before returning to GLCD. No actionable connection, deletion, agency or comma finding within this insertion.",
+    "limits": [
+      "Acceptance is the exact covered emulator/host workflow at tested 8b8664a, landed 962853f.",
+      "Earlier failed attempts remain failed. No new product job ran during this confirmation.",
+      "No physical-board, audio, browser, debugger, complete-book, stage-closure or publication acceptance follows."
+    ],
+    "supporting_record_identities": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/13-pass-record.md",
+        "sha256": "2c5cb8b22d31890d3830051c7806502a2a40f3f631369530c93d2086135070d0",
+        "matches_89d6ea7": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/13-fail-example-candidate.md",
+        "sha256": "dea741d571c4b1deccac4d75fdaa4f7fc3ccd30b04cd99629869ad679be207a5",
+        "matches_89d6ea7": true
+      }
+    ]
+  },
+  "source_proofs": [
+    {
+      "path": "src/cpm/bdosrec.asm",
+      "revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "ranges": [
+        [
+          393,
+          565
+        ]
+      ],
+      "file_sha256": "e02c53e089e983cbff75b1ce132392c0e1e23770488503bd524e7bbb003b4199",
+      "support": "RANDOPEN saves previous EX/S2 through EXSWAP. RANDBACK restores them on missing-extent read 4 or directory-full write 5; RC and allocation map still describe that extent."
+    },
+    {
+      "path": "src/cpm/bdosrec.asm",
+      "revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "ranges": [
+        [
+          794,
+          860
+        ]
+      ],
+      "file_sha256": "e02c53e089e983cbff75b1ce132392c0e1e23770488503bd524e7bbb003b4199",
+      "support": "ZEROLOOP calls BIOWRS then DMABACK for every zero-fill record."
+    },
+    {
+      "path": "src/cpm/bdoslog.asm",
+      "revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "ranges": [
+        [
+          110,
+          136
+        ]
+      ],
+      "file_sha256": "c6060685b4a49b6c08595fc345cae0ac7c0ab44a8e5fa9652107070af8847b6a",
+      "support": "DMABACK restores CURDMA through BIODMA before interpreting the saved BIOS result and entering BADSECT."
+    },
+    {
+      "path": "src/cpm/bdos.asm",
+      "revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "ranges": [
+        [
+          261,
+          275
+        ]
+      ],
+      "file_sha256": "0b491acfc4924be7bb78e2a76600ec666875f4aa293a2543aedcb397e7070af6",
+      "support": "Function 45 stores E in ERRMODE and returns zero. It sets policy rather than performing or returning the transfer."
+    },
+    {
+      "path": "src/cpm/bdoscon.asm",
+      "revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "ranges": [
+        [
+          26,
+          72
+        ]
+      ],
+      "file_sha256": "80846394bf1e858a48f0e2d9bf56539243cbcaf3b7efc0a19bd0837e0b9526a1",
+      "support": "BADSECT/BDERR apply the selected error mode; FE/FF return the transfer error to the program."
+    },
+    {
+      "path": "src/cpm/bdosfn.asm",
+      "revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "ranges": [
+        [
+          147,
+          178
+        ]
+      ],
+      "file_sha256": "1739ff8b2e88c60c3e1655d9ce02a1579ed3fff89c27d118f385080148ca34cb",
+      "support": "Function 28 sets the default-drive ROVEC bit. Its API number can be deferred without losing operator protection meaning."
+    },
+    {
+      "path": "src/cpm/bdosfile.asm",
+      "revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "ranges": [
+        [
+          19,
+          69
+        ]
+      ],
+      "file_sha256": "151943df2afad491bd47b18e4f4c4df41672d60e9910cb962cdcbe95c9bcf2e6",
+      "support": "Reset clears temporary ROVEC state and logs the selected drive; descriptor protection is a separate volume property."
+    },
+    {
+      "path": "src/cpm/ccpfile.asm",
+      "revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "ranges": [
+        [
+          63,
+          110
+        ],
+        [
+          150,
+          233
+        ]
+      ],
+      "file_sha256": "770facd38522ea0e48537e761bf475c5536c726bd27983c968a7522f59db0358",
+      "support": "DIR computes at least one name per row from width divided by 13; names pad to 12 with a separating space, except the last has no padding."
+    },
+    {
+      "path": "drivers/glcd.asm",
+      "revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "ranges": [
+        [
+          95,
+          129
+        ]
+      ],
+      "file_sha256": "d668178e52432b1ab9e84e17daa9cb45dc24bad4e829690ab8549669b1a7522d",
+      "support": "REMOVE changes a requested UC1 console to CRT when the ROM PICO record exists, then drops the UC1 hook."
+    },
+    {
+      "path": "src/loader.asm",
+      "revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "ranges": [
+        [
+          421,
+          455
+        ],
+        [
+          520,
+          574
+        ],
+        [
+          634,
+          663
+        ]
+      ],
+      "file_sha256": "933985f18c5d3eb2c776c182769708dfffc245a387bb26e7aa684db5f1635f36",
+      "support": "Returned carry branches directly to BIOS-target scan. No REMOVE on ordinary failed INIT. Clean scan restores ceiling and sweeps claimed slots; hooked pages have a different retained-page path."
+    },
+    {
+      "path": "src/cpm/ccp.asm",
+      "revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "ranges": [
+        [
+          444,
+          485
+        ]
+      ],
+      "file_sha256": "7d5a640a6957ade5167493aba0ca0077f79b05dddedbb0844092112aeabe3cb1",
+      "support": "Typed failed SVC installation reaches BADCMD except the expressly bounded startup absent-device case."
+    }
+  ],
+  "delivery": {
+    "owned_path": "tec-os/editorial/reader-rewrite/reader-correction-confirmation.json",
+    "correction_commit_received": "ea499490982ca34257979027105d4275b57a5ffb",
+    "reader_and_pass_records_untouched": true,
+    "commit_scope": "This JSON only; no parent working changes are staged or committed."
+  }
+}
