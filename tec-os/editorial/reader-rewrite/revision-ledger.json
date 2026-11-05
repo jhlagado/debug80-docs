@@ -1522,7 +1522,7 @@
     },
     {
       "unit": "chapter-05",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded source-only draft in progress; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -3250,7 +3250,7 @@
     },
     {
       "unit": "chapter-10",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded source-only draft in progress; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -5085,7 +5085,7 @@
     },
     {
       "unit": "chapter-13",
-      "status": "bounded source-only draft in progress; no execution authorised",
+      "status": "bounded source-only draft pushed at2232250; full independent review in progress",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -6487,7 +6487,7 @@
       "unit": "chapter-16",
       "status": "bounded draft pushed; independent review/correction cycle in progress",
       "passes": {
-        "full_passage_read": "pending",
+        "full_passage_read": "lead read complete draft; independent source/craft review clear; serial measurement provenance audit pending",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",
@@ -7253,7 +7253,7 @@
     },
     {
       "unit": "chapter-17",
-      "status": "bounded source-only draft in progress; no execution authorised",
+      "status": "bounded source-only draft pushed at7d9dafe; full independent review in progress",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -8061,7 +8061,7 @@
     },
     {
       "unit": "chapter-19",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded source-only draft in progress; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -9962,7 +9962,7 @@
     },
     {
       "unit": "chapter-24",
-      "status": "bounded draft and own passes pushed; full independent review in progress",
+      "status": "bounded independent source/craft review and specific historical run-pin correction confirmed; final qualification and navigation pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -9974,8 +9974,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed after full independent read and correction confirmation",
+        "independent_factual_review": "closed after full independent review and bd57e9b provenance correction confirmation; 765-byte58d4345 walkthrough remains distinct from621201d AppendixH dump",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -10466,7 +10466,7 @@
       "unit": "chapter-25",
       "status": "bounded draft pushed; independent review/correction cycle in progress",
       "passes": {
-        "full_passage_read": "pending",
+        "full_passage_read": "lead read complete corrected draft atc161da6; independent bounded confirmation pending",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",
@@ -14946,42 +14946,42 @@
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 149,
           "end": 149,
-          "subsection": "The 20 × 4 LCD",
+          "subsection": "The 20 \u00d7 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 151,
           "end": 153,
-          "subsection": "The 20 × 4 LCD",
+          "subsection": "The 20 \u00d7 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 155,
           "end": 160,
-          "subsection": "The 20 × 4 LCD",
+          "subsection": "The 20 \u00d7 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 162,
           "end": 168,
-          "subsection": "The 20 × 4 LCD",
+          "subsection": "The 20 \u00d7 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 170,
           "end": 170,
-          "subsection": "The 8 × 8 LEDs",
+          "subsection": "The 8 \u00d7 8 LEDs",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 172,
           "end": 179,
-          "subsection": "The 8 × 8 LEDs",
+          "subsection": "The 8 \u00d7 8 LEDs",
           "fragment_override": null
         },
         {
