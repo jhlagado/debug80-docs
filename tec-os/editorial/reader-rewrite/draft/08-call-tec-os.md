@@ -32,9 +32,9 @@ the machine's ports and display drivers. Chapter 10 explains the raw BIOS
 interface and its stack/input contract. Here both input and output use the
 BDOS.
 
-Registers hold the values passed to a call. `A`, `C` and `E` each hold a
-byte. `DE` and `HL` are 16-bit register pairs, large enough for a memory
-address. To select a BDOS operation, you put its function number in `C` and
+Registers hold the values passed to a call. `A`, `B`, `C` and `E` each
+hold a byte. `BC`, `DE` and `HL` are 16-bit register pairs, large enough
+for a memory address. To select a BDOS operation, you put its function number in `C` and
 call `0005h`. A byte parameter goes in `E`, while an address or word
 parameter goes in `DE`. A byte result is returned in `A` and a word result
 in `HL`. For example, function 2 takes the character in `E` and function 9
@@ -67,8 +67,8 @@ your registers.
 `PUSH` saves a register pair on your stack and moves `SP` down by two. `POP`
 restores a pair and moves it up by two. The most recently pushed pair comes
 off first. For example, saving `HL` then `BC` requires restoring `BC` then
-`HL` before a return. `AF` saves both the accumulator and flags when those
-are the values you need afterwards.
+`HL` before a return. `PUSH AF` saves `A` and the flags together when
+those are the values you need afterwards.
 
 The program begins with 30 bytes available below its inherited return word.
 A call uses two of those bytes until it returns. Two saved pairs use another

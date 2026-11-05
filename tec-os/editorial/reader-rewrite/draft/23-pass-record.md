@@ -137,3 +137,15 @@ is supplied. KD243/KS48's planned40-column/TECCompact opening remains
 pending elsewhere. This draft keeps ea3ef3d's source/font facts and does
 not claim that the planned font/default has landed. Startup/GLCD policy
 is unchanged.
+
+## Independent reviews and clarity correction
+
+The full factual/craft review cleared all26 assigned units, dispatcher and
+register paths, clock transfers, claim/NMI restoration, PUTAT order/bounds,
+FONT and the eleven historical byte rows totalling480. A separate complete
+preservation/editorial review found one clarity issue: the exit helpers'
+lack of B/DE/HL writes could read as whole-call preservation. The paragraph
+now states helper-entry scope and explicitly says those helpers do not undo
+the selected routine's changes. The whole call follows the service contract.
+Read ABI35–58 and services70–86 again. No execution was performed.
+Correction confirmation and final qualification remain pending.

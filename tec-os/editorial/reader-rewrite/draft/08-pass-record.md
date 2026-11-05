@@ -219,3 +219,13 @@ After that durable draft I applied the following passes to the entire chapter:
 Independent editorial/factual review, source
 and runtime acceptance, any allocated example execution and whole-book navigation
 remain open. No new banner/font/default is qualified and no publication is made.
+
+## Independent review and local register clarification
+
+The full independent review found no blocker in contracts, prerequisites,
+historical excerpts or provenance. Accepted the optional improvement of
+defining BC before the save example and included B among the byte registers.
+Recast AF saves as the actual PUSH AF instruction. The changed paragraphs
+were read for continuity and literal code remains unchanged. Full craft
+review found no further issue. No execution was performed. Confirmation
+and final qualification remain pending.
