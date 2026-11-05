@@ -87,8 +87,8 @@ attempt02 at e77c7ef0. I read the complete frozen receipt before releasing
 Chapters1–3 and the Chapter5 extraction insertion. The evidence covers the raw
 cold40 first session, direct SAMPLE assembly/run and separate TED/SAMPLE route.
 It also covers whole-file BANNER rejection/repair, both saved variants and fresh
-persistence. All seven host extraction cases and three pager cases are accepted. The later carry-observer
-failure leaves the whole batch FAILED. No advanced-service, physical, audible,
+persistence. All seven host extraction cases and three pager cases are
+accepted. The later carry-observer failure leaves the whole batch FAILED. No advanced-service, physical, audible,
 browser or publication acceptance follows.
 
 The front-door metadata now records that scoped result. Its reader prose and
@@ -100,3 +100,24 @@ Its sole review flag is the older noun “offer” in the historical profile not
 The new text has no such flag. Complexity prompts on the new passage reflect
 chapter labels rather than an inflection echo. I reread each changed paragraph
 and its punctuation. No reader example, fence or quotation changed.
+
+## Closed opening reviews and selected source
+
+The completed Chapters1–3 now have independent craft and factual/preservation
+closure at d9d57d2 and b911e84. The Chapter5 fresh-card clarification and the
+complete historical failed-close fixture in18 close the two preservation
+findings. The older pending-opening notes above are historical checkpoints.
+Final reader-order/navigation and whole-book acceptance remain separate.
+
+I selected landed962853f for current mechanism reconciliation under the
+existing book revision. It descends from tested8b8664a with only qualification
+records differing. The actual required opening and BANNER workflows were
+accepted before this choice. The prior source-impact audit and its bounded
+confirmation govern the current claim changes. Historical captures, costs,
+maps, recipes and application identities retain their actual pins.
+
+The front-door reader prose is unchanged. Its metadata now records the closed
+opening scope and the current source selection while leaving final checks
+explicitly open. I read the complete front door and pass record before the
+metadata amendment and checked the changed context and punctuation afterwards.
+No current or historical output is rewritten.
