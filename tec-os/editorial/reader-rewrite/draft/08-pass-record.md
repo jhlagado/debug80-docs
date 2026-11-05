@@ -229,3 +229,10 @@ Recast AF saves as the actual PUSH AF instruction. The changed paragraphs
 were read for continuity and literal code remains unchanged. Full craft
 review found no further issue. No execution was performed. Confirmation
 and final qualification remain pending.
+
+## Correction confirmation
+
+Independent confirmation at8aaec1b accepted the local B/BC definition and
+PUSH AF clarification. No bounded editorial or factual finding remains.
+Current runtime qualification, linked lesson integration and the final
+reader-order pass remain pending.

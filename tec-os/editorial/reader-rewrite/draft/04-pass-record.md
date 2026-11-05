@@ -197,3 +197,13 @@ Final navigation, current source/media acceptance, opening40-column/font proof
 and whole-book reader-order review remain pending. There is no new example run,
 application qualification, build, import, test, workflow or publication result.
 Only the chapter draft and this pass record are owned by this unit.
+
+## Lead correction confirmation
+
+Read the complete1592e0f correction diff. MOUNT is now the stated reader
+action before a drive-selection change. The extra-card and C/D-slot
+prerequisites precede the first GAMES/SPARE command. Those captures remain
+in their controlling Chapter4 home with the complete preparation assigned5.
+The256-byte page fact remains to explain SERVICES but early BDOS placement
+teaching is deferred. All accepted review findings close without new output.
+Final navigation and qualified current examples remain pending.
