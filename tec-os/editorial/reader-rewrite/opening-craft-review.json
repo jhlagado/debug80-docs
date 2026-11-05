@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "incremental_independent_review",
+  "status": "complete_independent_opening_craft_review_findings_for_disposition",
   "scope": {
     "product_execution": false,
     "source_or_reader_edits": false,
@@ -311,7 +311,7 @@
                 "end_line": 213,
                 "full_context": "A `Write lost` message means that some pending changes could not be written.\nThe new prompt after that message does not establish successful preservation.\nThose failed changes have been dropped so another `^C` cannot recover them.\nKeep a separate copy of valuable work. [Chapter 5](05-cards-on-the-pc.md)\nexplains card copies and recovery, and\n[Appendix D](appendix-d-error-messages.md) explains the failure messages."
               },
-              "proposal": "Keep a separate copy of valuable work. [Chapter 5](05-cards-on-the-pc.md)\nexplains card copies and recovery and\n[Appendix D](appendix-d-error-messages.md) explains the failure messages.",
+              "proposal": "A `Write lost` message means that some pending changes could not be written.\nThe new prompt after that message does not establish successful preservation.\nThose failed changes have been dropped so another `^C` cannot recover them.\nKeep a separate copy of valuable work. [Chapter 5](05-cards-on-the-pc.md)\nexplains card copies and recovery and\n[Appendix D](appendix-d-error-messages.md) explains the failure messages.",
               "reason": "Both linked subjects are explicit and the parallel explains clauses remain clear without a conjunction comma. No list or apposition boundary is needed."
             }
           ],
@@ -322,14 +322,229 @@
       "polish_findings": 1,
       "remaining_limits": [
         "Author disposition of punctuation finding",
-        "Adjacent Chapters2-3 continuity review after their completed commits",
         "Final navigation and whole-book acceptance remain separate"
-      ]
+      ],
+      "adjacent_chapter_review": "Completed across exact author commits33f3b8a/c384c49/5b69415. Carry-forward state is clear."
     },
     "2": {
-      "status": "completed_commit_received_review_next",
-      "requested_commit": "c384c49",
-      "review_started": false
+      "status": "review_complete_no_body_prose_finding",
+      "reviewed_commit": "c384c49efcb1057e248cd7e40dd7f62755e97051",
+      "files": [
+        {
+          "commit": "c384c49efcb1057e248cd7e40dd7f62755e97051",
+          "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+          "git_blob": "69072fef88bd7256049c560c4bc6296bafae41d1",
+          "sha256": "596b3d541e9f991f7596d2f3933cd5755ce9c1c8cdb041f26207aeff40cdcc48",
+          "bytes": 11102
+        },
+        {
+          "commit": "c384c49efcb1057e248cd7e40dd7f62755e97051",
+          "path": "tec-os/editorial/reader-rewrite/draft/02-pass-record.md",
+          "git_blob": "427f455d27373527c34f0a009d765ff9cf8936b4",
+          "sha256": "71820e0279ae5f00c6870cf56bbae6d1d3d3cb3bc54987ff107ede39b99db76a",
+          "bytes": 21095
+        },
+        {
+          "commit": "c384c49efcb1057e248cd7e40dd7f62755e97051",
+          "path": "tec-os/editorial/reader-rewrite/chapter-02-readiness.json",
+          "git_blob": "ab15be28a625f4bd79d9bc4f68689c710a753d97",
+          "sha256": "c244cd4a89d0640c92152ac1f1f5b27d78b01f4ec2cca2e464dc428adde68ad7",
+          "bytes": 26024
+        }
+      ],
+      "read_scope": "Entire reader chapter, pass record and readiness dossier. Entire frozen old07 (383 lines), all11 assigned whole units and2 fragments with containing contexts, the closed outline/profile amendment and historical HELLO destination in26. Complete 1-2-3 reader passages read; exact transition states reconciled.",
+      "original_sources": [
+        {
+          "commit": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+          "path": "tec-os/07-first-program.md",
+          "git_blob": "13b74c46171d0aed308f0461bd340286ea46a8ca",
+          "sha256": "45455f83f2e957be34ec9d1bc8d87b20d6da966418c9d5a309c18c90c47ceaab",
+          "bytes": 15858
+        }
+      ],
+      "assigned_ranges": [
+        {
+          "lines": [
+            1,
+            6
+          ],
+          "subsection": "Opening",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            8,
+            8
+          ],
+          "subsection": "7. A first program",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            10,
+            15
+          ],
+          "subsection": "7. A first program",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            17,
+            21
+          ],
+          "subsection": "From supplied to authored program",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            23,
+            23
+          ],
+          "subsection": "A program and the BDOS",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            53,
+            53
+          ],
+          "subsection": "A program that prints",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            55,
+            55
+          ],
+          "subsection": "The short banner listing",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            57,
+            67
+          ],
+          "subsection": "The short banner listing",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            69,
+            73
+          ],
+          "subsection": "The short banner listing",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            75,
+            75
+          ],
+          "subsection": "Building and running it on the TEC-1G",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            77,
+            85
+          ],
+          "subsection": "Enter, save and reopen in TED",
+          "fragment_selection": null,
+          "read_complete": true
+        },
+        {
+          "lines": [
+            91,
+            94
+          ],
+          "subsection": "TED build/run keys",
+          "fragment_selection": "Table rows for B/R only; header reconstructed.",
+          "read_complete": true
+        },
+        {
+          "lines": [
+            157,
+            158
+          ],
+          "subsection": "Return to source and standalone program",
+          "fragment_selection": "Actual observed key/quit and COM location in verified round.",
+          "read_complete": true
+        }
+      ],
+      "teaching_checks": [
+        {
+          "context": "Supplied SAMPLE to new BANNER",
+          "result": "clear",
+          "reason": "Begins with an already understood supplied program. Explicit A tool and B source prefixes introduce only the location needed for this edit. New-file state, status, arrows, Backspace and line-ending entry are local prerequisites."
+        },
+        {
+          "context": "Whole listing then deliberate rejection",
+          "result": "clear",
+          "reason": "A complete short listing supplies the object to edit. Blank lines/final Return are required before the deliberately positioned BROKEN line. Line/column diagnostic and exact Backspace/Delete repair are connected to visible state. It is the actual BANNER repair, not historical HELLO."
+        },
+        {
+          "context": "Save, quit, flush and reopen",
+          "result": "clear",
+          "reason": "Successful save is distinct from valid assembly and from successful preservation. Save/quit/empty-prompt Ctrl-C precede reopen. Write lost and no-recovery-by-retry remain explicit. No unsaved editor buffer is represented as persisted."
+        },
+        {
+          "context": "Initial build/run and return",
+          "result": "clear",
+          "reason": "Prefix notation is explained before B/R. Tool/source locations and the return-to-editor commands are distinguished from program output. Space and status-clearing arrow movements are named before the next edit depends on them. DBG has a simple local purpose, not a debugger lesson."
+        },
+        {
+          "context": "The printed line",
+          "result": "clear",
+          "reason": "Explains origin and hex notation, labels, C/DE, LD, number9/text address, CALL return, final RET and DB/CR/LF/dollar text. All relate directly to the listing. The dollar character is distinguished from the numeric prefix. No FCB, DMA, private-stack or chaining implementation prerequisite is introduced."
+        },
+        {
+          "context": "Changed greeting",
+          "result": "clear",
+          "reason": "Cursor positions and movement counts begin from a named anchor and locate the quoted insertion. Source punctuation remains exact. Separate save/build/run results establish the changed executable. Status-clear movements are not silently treated as stationary."
+        },
+        {
+          "context": "Fresh RAM and standalone run",
+          "result": "clear",
+          "reason": "The evidence boundary explicitly names the fresh host-model machine. Reopened text is distinguished from editor memory. Explicit B:BANNER runs the stored COM while A stays current. The ending leaves the source available without a syllabus or recap."
+        }
+      ],
+      "craft_checks": {
+        "whole_sentence_paragraph_and_example_read": true,
+        "paragraph_journey": "supplied source -> new editor buffer -> whole entered listing -> deliberate failure/repair -> save/reopen -> first run -> local listing explanation -> changed greeting -> preserved source/standalone COM",
+        "deletion_read": "The short status/cursor facts are prerequisites for exact subsequent edits and survive deletion. The register note prevents an unintended preservation contract without importing register-saving teaching. The ending carries the source-to-next-edit relationship. No padding or required structural deletion found.",
+        "agency": "No false mental or social agency found. Tools save/build/load/reopen; a human edits and supplies keys. Source text and metadata retain literal wording.",
+        "every_comma": "Read all complete prose paragraphs, code comments and examples. Paired Backspace apposition, explanatory relative clauses, data/address distinctions, coordinate prefixes and sequential action boundaries earn their commas. Source and output punctuation stays immutable. No additional punctuation finding.",
+        "mechanical_search": "Explicit banned-vocabulary, empty-rhetoric, mind-verb, connector and punctuation scan performed. Matches inspected in full contexts; no product test or fresh gate run is claimed."
+      },
+      "evidence_checks": {
+        "accepted_attempt": "e77c7ef0f81c42d94f12391b099f4cf8c4acd9a6",
+        "accepted_scope_receipt": "4b5b5a505cb38bd84a787241e09209e9ba9ce5d8",
+        "new_fences": 6,
+        "complete_source": "Exact packet/BANNER.initial.asm with CRLF rendered LF. Edited line equals the final line of packet/BANNER.edited.asm. No instruction, symbol, spacing, comment or literal change.",
+        "rejection": "Exact contiguous console substring. Initial clear controls/leading newline and subsequent editor redraw are explicitly excluded. Long logical diagnostic is disclosed as wrapping on40 columns.",
+        "run_fences": "Initial and edited console text each matches its separate artifact after the stated clear controls/leading CRLF. Final Press a key has no raw newline; the structural Markdown newline is identified in the pass record. No spliced prompts.",
+        "standalone": "Exact rows2-7 of stage/results/096-BANNER-final-flush.json, including the interior blank row.",
+        "historical_HELLO": "Old07 HELLO source, error diagnostic/repair round and33-byte quantity remain separately labelled in26, including the actual7458352 model-round provenance. No old HELLO result is repinned as BANNER.",
+        "runtime_boundary": "This review compares accepted artifacts as inert bytes/text. Matrix/pixel/runtime qualification is attributed to the already closed receipt, not rerun or reaccepted. Whole batch remains FAILED."
+      },
+      "findings": [],
+      "substantive_findings": 0,
+      "polish_findings": 0,
+      "remaining_limits": [
+        "Shared nav_group inconsistency recorded below for integration disposition",
+        "Final book navigation/publication remain separate",
+        "No advanced-service, browser, physical or audio acceptance"
+      ]
     },
     "3": {
       "status": "review_complete_two_polish_findings",
@@ -749,14 +964,21 @@
           "context": {
             "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
             "commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
-            "start_line": 141,
+            "start_line": 145,
             "end_line": 147,
-            "full_context": "Space continues at each pause until the text ends. Esc, Q or q stops a listing\nbefore its unread remainder. `^C` stops there too. Each of these keys erases\n`[more]`.\n\nIf the line you are typing becomes hard to read, `^R` marks it with `#` and\nreprints the command on a new line. `^E` starts a new screen line while leaving\nthe command being typed intact. Neither key changes a stored file."
+            "full_context": "If the line you are typing becomes hard to read, `^R` marks it with `#` and\nreprints the command on a new line. `^E` starts a new screen line while leaving\nthe command being typed intact. Neither key changes a stored file."
           },
           "problem": "Immediately after the pager stop keys, the paragraph switches to command-line redraw keys without naming the return to prompt input. A novice could read these as further pager controls. The mechanisms themselves are correct.",
           "proposal": "At the command prompt, `^R` marks a hard-to-read line with `#` and reprints the command on a new line. `^E` starts a new screen line while leaving the command being typed intact. Neither key changes a stored file.",
           "evidence": "Frozen old02:298-311 places these controls in function10 line input; current source src/cpm/bdos.asm:623-669 implements LINEOL/LINRETY. The preceding pager keys use the separate PGWAIT path at src/cpm/ccpfile.asm:474-526.",
-          "applied": false
+          "applied": false,
+          "preceding_context": {
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
+            "start_line": 141,
+            "end_line": 143,
+            "full_context": "Space continues at each pause until the text ends. Esc, Q or q stops a listing\nbefore its unread remainder. `^C` stops there too. Each of these keys erases\n`[more]`."
+          }
         },
         {
           "id": "OC3-P02",
@@ -786,9 +1008,87 @@
       "polish_findings": 2,
       "remaining_limits": [
         "Author disposition of two polish findings",
-        "Final Chapter2 carry-forward comparison",
         "No new post-BANNER REN/ERA case or standalone plain-TYPE return was accepted or needed for these approved excerpts"
-      ]
+      ],
+      "adjacent_chapter_review": "Completed across exact author commits33f3b8a/c384c49/5b69415. Carry-forward state is clear."
     }
+  },
+  "integration_checks": {
+    "reviewed_chapter_commits": {
+      "1": "33f3b8a4e3a568dcde7aba467046b12b85dc96df",
+      "2": "c384c49efcb1057e248cd7e40dd7f62755e97051",
+      "3": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5"
+    },
+    "carry_forward": [
+      {
+        "boundary": "1 -> 2",
+        "result": "clear",
+        "evidence": "Chapter1 ends at a successfully preserved A> prompt with prepared TED/TAS on A and WORK on B. Chapter2 explicitly starts at A> and opens A:TED B:BANNER.ASM. It requires no drive search lesson, host tool, generated fixture or additional console setup."
+      },
+      {
+        "boundary": "2 -> 3",
+        "result": "clear",
+        "evidence": "Chapter2 saves/reopens the edited source and executes the stored B:BANNER while A stays current. BANNER.ASM/COM/DBG are on B. Chapter3 retains them and begins with read-only listing/TYPE. Its empty-B mutation example is explicitly separate and historical, not a reset or mutation of that current card."
+      },
+      {
+        "boundary": "J/28 preservation",
+        "result": "clear",
+        "evidence": "ERA complete recipe/output is preserved by4c7674e with separate independent confirmation4d794ad. Full current pager input/key/terminal evidence is accounted for by4a76238; Chapter3 reproduces only labelled exact paused-screen slices."
+      }
+    ],
+    "findings": [
+      {
+        "id": "OCI-01",
+        "severity": "integration_consistency",
+        "kind": "front_matter_group_mismatch",
+        "origin": "Lead-identified issue independently verified in the completed drafts",
+        "contexts": [
+          {
+            "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+            "commit": "33f3b8a4e3a568dcde7aba467046b12b85dc96df",
+            "start_line": 1,
+            "end_line": 6,
+            "full_context": "---\ntitle: First session\nparent: TEC-OS\nnav_order: 1\nnav_group: \"Part I: Using and programming TEC-OS\"\n---"
+          },
+          {
+            "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+            "commit": "c384c49efcb1057e248cd7e40dd7f62755e97051",
+            "start_line": 1,
+            "end_line": 6,
+            "full_context": "---\ntitle: Make a small program\nparent: TEC-OS\nnav_order: 2\nnav_group: \"Part I: Using and programming TEC-OS\"\n---"
+          },
+          {
+            "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+            "commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
+            "start_line": 1,
+            "end_line": 6,
+            "full_context": "---\ntitle: Work with files\nparent: TEC-OS\nnav_order: 3\nnav_group: \"Part I: Using TEC-OS\"\n---"
+          }
+        ],
+        "problem": "Chapters1/2 use nav_group Part I: Using and programming TEC-OS while Chapter3 and existing operator Chapters4-7 use Part I: Using TEC-OS. Adjacent introductory chapters therefore declare different group identities.",
+        "proposal": "At the authorised integration step, align the Chapter1/2 nav_group values with the agreed Part I group. No root navigation or reader front matter is edited by this review.",
+        "applied": false
+      }
+    ]
+  },
+  "summary": {
+    "chapters_completed": [
+      1,
+      2,
+      3
+    ],
+    "substantive_blocking_findings": 0,
+    "polish_findings": 3,
+    "integration_consistency_findings": 1,
+    "unresolved_finding_ids": [
+      "OC1-P01",
+      "OC3-P01",
+      "OC3-P02",
+      "OCI-01"
+    ],
+    "reader_or_source_changes": false,
+    "new_product_execution": false,
+    "chapter5_self_review": false,
+    "remaining_acceptance": "Author/lead dispositions and final book integration. Runtime acceptance is not reopened or expanded."
   }
 }
