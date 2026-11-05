@@ -123,3 +123,19 @@ FAIL script and binary use a different vector-installing fixture, not this
 no-setup SCF/RET example. Targeted retained text-log searches found no match.
 Binary images and compressed archives were not exhaustively examined.
 No qualifying payload was archived and nothing executed. The hold remains.
+
+## Public compact-source route obstacles
+
+The source-only compact-proof-plan.md inventory records exact retained text
+identities and proposed finite proof groups. No command, budget, allocation
+or executable packet is sealed. Lead inspection confirms ea3ef3d
+tools/lib/prl.mjs32–43 uses a case-sensitive uppercase ORG_LINE expression,
+consumed by makeSvc at tools/lib/svc.mjs100–107. A lowercase compact org
+cannot be assumed to pass that writer. No product fix is authorised here.
+The ordinary ATOM route for HWLIB's trailing include also needs explicit
+qualification. Source expansion or substitution must not silently change
+the reader's public build route. No runtime was used to infer either result.
+
+Original versus compact byte equality must be proved with exact includes,
+then the claimed public workflow must be observed under a reviewed allocated
+packet. Historical captures retain their actual pins even if bytes match.
