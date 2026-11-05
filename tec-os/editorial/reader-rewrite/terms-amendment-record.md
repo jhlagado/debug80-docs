@@ -179,3 +179,19 @@ complete. Independent review, final source/media adoption, all-chapter first-use
 reconciliation, navigation integration and final reader-order acceptance remain
 open. No imports, builds, tests, assemblies, application/model runs, browser/UI
 actions, captures or publication were performed.
+
+## Complete independent confirmation and later form work
+
+The full independent8593c93 review reads every82 meaning row and40 form
+row, with source/credit dispositions retained in terms-independent-review.md.
+No required correction remains in that bounded audit. The c722ace facts,
+Matrix-switch distinction, user-number layers, dirty/mark meanings and
+current-drive TED project/session distinction are confirmed.
+
+The available-draft follow-ups listed above were subsequently completed in
+93b0c41 and rewrapped without word/literal changes at9e1a695. Independent
+chapter reviews plus lead reference review close that bounded local form
+pass. The historical list records the earlier state, not an outstanding
+claim against those revised drafts. Root terms' current footer now points
+to the form-pass record. Chapters1–3 credits and final source/reader-order
+reconciliation remain open. No runtime or publication accompanied this work.

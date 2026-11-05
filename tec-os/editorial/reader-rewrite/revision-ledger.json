@@ -15806,6 +15806,11 @@
     "scope": "36 existing reader texts: chapters4–28, appendicesA–J and index; opening1–3 excluded",
     "independent_review": "chapters4–16 clear by independent reviewer; chapters17–28 clear by separate independent reviewer; appendicesA–J/index changed passages and neighbours read by lead, no finding",
     "preservation": "rewrap independently checked in34 changed reader files: whitespace-only prose movement; fence/comment/inline-code spans exact",
-    "status": "bounded local form pass closed; glossary source audit, opening first-use credits and final whole-book acceptance remain open"
+    "status": "bounded local form pass and glossary source/available-credit review closed; opening first-use credits and final whole-book acceptance remain open"
+  },
+  "glossary_review": {
+    "source_audit": "8593c93 complete independent82-meaning/40-form review clear; full report terms-independent-review.md",
+    "local_forms": "93b0c41/9e1a695 bounded form pass closed",
+    "remaining": "opening1–3 first-use credits, adopted-source reconciliation and final whole-book order/publication acceptance"
   }
 }
