@@ -386,7 +386,7 @@ It scans the BIOS targets and releases FAIL's provisional pages because none
 points into them.
 
 The following excerpts come from a separate verified workflow on the qualified
-ROM `fa63989b`, using the PICO version 3 console at 40 columns with the Matrix
+ROM `fa63989b`, using the PICO9918 console at 40 columns with the Matrix
 switch enabled. Startup's GLCD command installed nothing. This is a fresh
 baseline, not a continuation of the historical COUNT session.
 
