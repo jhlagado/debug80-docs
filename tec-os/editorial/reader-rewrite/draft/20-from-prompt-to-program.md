@@ -143,11 +143,11 @@ result rules and Chapter 21 explains the conditional test and drop paths.
 
 ## The parsed command
 
-A drive selection is handled before keyword dispatch. `MLTAKE` recognises
-a letter A to P followed by a colon and only spaces after it. It selects
-that drive with function 14 and updates `0004h` through `SAVEDU`. A missing
-volume raises `Select` before that update, so the error's warm boot restores
-the previous drive (`src/cpm/ccp.asm:285-320`).
+A drive selection is handled before keyword dispatch. `MLTAKE` recognises a
+letter A to P followed by a colon and only spaces after it. It selects that
+drive with function 14 and updates `0004h` through `SAVEDU`. A missing volume
+raises `Select` before that update so the error's warm boot restores the
+previous drive (`src/cpm/ccp.asm:285-320`).
 
 Other pieces enter `NOTDRIVE`. It starts a new output line and calls
 `CMDSKIP` to store the word's start in `CMDSTRT`. `CMDPARSE` parses a file
@@ -171,12 +171,11 @@ field positions with question marks and skips text to the delimiter.
 `src/text.asm:61-62`). Appendix J gives
 the complete exclusion list, padding rules and accepted command forms.
 
-`UNAMBIG` checks the stored FCB through `FCBBASE`. It rejects a blank name
-or any question mark in the eleven name/type positions. TYPE, REN, SAVE
-and program dispatch use that check. COPY checks its destination after
-substituting the source name for a blank destination name, so a discarded
-destination type may contain wildcards
-(`src/cpm/ccpcmd.asm:656-704`, `src/cpm/ccpmut.asm:253-277`).
+`UNAMBIG` checks the stored FCB through `FCBBASE`. It rejects a blank name or
+any question mark in the eleven name/type positions. TYPE, REN, SAVE and program
+dispatch use that check. COPY checks its destination after substituting the
+source name for a blank destination name so a discarded destination type may
+contain wildcards (`src/cpm/ccpcmd.asm:656-704`, `src/cpm/ccpmut.asm:253-277`).
 
 The keyword loop compares the original command text at `CMDSTRT` with
 `KEYTAB`, not the parsed FCB. Its order is DIR, TYPE, ERA, REN, SAVE,
@@ -187,19 +186,19 @@ finds no `DIR.COM` (`src/cpm/ccp.asm:415-449`,
 `src/cpm/ccpcmd.asm:771-795`, `src/tables.asm:53-80`).
 
 A match jumps to the handler address in the table. With no match the CCP
-requires an unambiguous file name. Type SVC calls `SVCGO` to load and
-install a service. Other types are replaced by COM, so `MOUNT.TXT` searches
-for `MOUNT.COM` (`src/cpm/ccp.asm:445-499`). A startup service whose INIT
-reports `TNENODV` has the quiet-success exception. Other installation
-failures reach `BADCMD` (`src/cpm/ccp.asm:465-485`).
-[Chapter 24](24-loading-and-removing-services.md) describes installation.
+requires an unambiguous file name. Type SVC calls `SVCGO` to load and install a
+service. Other types are replaced by COM so `MOUNT.TXT` searches for `MOUNT.COM`
+(`src/cpm/ccp.asm:445-499`). A startup service whose INIT reports `TNENODV` has
+the quiet-success exception. Other installation failures reach `BADCMD`
+(`src/cpm/ccp.asm:465-485`). [Chapter 24](24-loading-and-removing-services.md)
+describes installation.
 
-`BADCMD` prints the word at `CMDSTRT` up to space or zero, then `?` and a
-new line. Built-ins can move `CMDSTRT` to an argument. CON moves it again
-for a separated width, so its error may name that width. `ERRGO` sets
-`FF00h` before printing the error message. Successful handlers retain the
-zero set at piece entry. They finish at `MAINLOOP` or at `STARTED`, which
-adds a new line first (`src/cpm/ccp.asm:544-554`, `src/cpm/ccp.asm:588-629`,
+`BADCMD` prints the word at `CMDSTRT` up to space or zero, then `?` and a new
+line. Built-ins can move `CMDSTRT` to an argument. CON moves it again for a
+separated width so its error may name that width. `ERRGO` sets `FF00h` before
+printing the error message. Successful handlers retain the zero set at piece
+entry. They finish at `MAINLOOP` or at `STARTED`, which adds a new line first
+(`src/cpm/ccp.asm:544-554`, `src/cpm/ccp.asm:588-629`,
 `src/cpm/ccpcmd.asm:120-132`).
 
 ## The built-in handlers
@@ -239,17 +238,17 @@ three-byte free-record count by eight to print KiB. The default drive stays
 unchanged. No listed file gives `NO FILE`
 (`src/cpm/ccpfile.asm:248-313`, `src/cpm/bdosfn.asm:66-151`).
 
-Both DIR and TYPE print through the pager. `PGINIT` takes `VHGT` and `VWID`,
-or 24 rows and 80 columns for serial and reserves a row for `[more]`.
-`PGPUT` resets its column at carriage return, steps back at backspace and
-advances to the next multiple of eight at a tab. It counts
-a new line at LF or before a printable character beyond the last column
-(`src/cpm/ccpfile.asm:334-470`). At a pause function 6 reads a key without
-echo. `UNMORE` erases the prompt with CR, six spaces and CR (`src/text.asm:32-33`).
-The key mask
-makes `#` equivalent to `^C` and `;` equivalent to Esc. `^C` and `#` drop
-the chain. Esc, `Q`, `q` and `;` stop only the listing. Other keys continue
-(`src/cpm/ccpfile.asm:475-520`). Chapter 21 explains the chain distinction.
+Both DIR and TYPE print through the pager. `PGINIT` takes its dimensions from
+`VHGT` and `VWID` or uses 24 rows and 80 columns for serial. It reserves a row
+for `[more]`. `PGPUT` resets its column at carriage return, steps back at
+backspace and advances to the next multiple of eight at a tab. It counts a new
+line at LF or before a printable character beyond the last column
+(`src/cpm/ccpfile.asm:334-470`). At a pause function 6 reads a key without echo.
+`UNMORE` erases the prompt with CR, six spaces and CR (`src/text.asm:32-33`).
+The key mask makes `#` equivalent to `^C` and `;` equivalent to Esc. `^C` and
+`#` drop the chain. Esc, `Q`, `q` and `;` stop only the listing. Other keys
+continue (`src/cpm/ccpfile.asm:475-520`). Chapter 21 explains the chain
+distinction.
 
 TYPE opens its file and reads 128-byte records into `LOADBUF`. It prints
 through the pager until `1Ah`, the first Ctrl-Z, or the file's end. It then
@@ -289,13 +288,12 @@ A>SAVE 185 B:X.COM
 A>
 ```
 
-SAVE erases an existing file, makes it again and writes two 128-byte records
-per page from `0100h`. A failed make, write or close gives `NO SPACE`.
-After a failed write it attempts close before reporting the error. A
-successful close records the partial file. The error path discards the
-close result, so the message does not certify that update. Digital Research's
-CP/M 2.2 SAVE leaves the file open on that path
-(`src/cpm/ccpcmd.asm:356-445`).
+SAVE erases an existing file, makes it again and writes two 128-byte records per
+page from `0100h`. A failed make, write or close gives `NO SPACE`. After a
+failed write it attempts close before reporting the error. A successful close
+records the partial file. The error path discards the close result so the
+message does not certify that update. Digital Research's CP/M 2.2 SAVE leaves
+the file open on that path (`src/cpm/ccpcmd.asm:356-445`).
 
 SAVE reads the TPA. The other file-operation handlers use resident workspace and
 page-zero buffers so they leave program memory available to save. Loading a COM
@@ -312,20 +310,19 @@ UC1 calls `GLCLD` to load `GLCD.SVC` from A if required. A failed load puts
 the field back to the active mode (`src/cpm/ccpcmd.asm:66-232`,
 `src/cpm/ccpcmd.asm:241-280`, `src/loader.asm:895-913`).
 
-CON's report prints `CON:` and the mode read from `CONMOD` after the BIOS
-has acted on the field. A missing display or keyboard can force TTY, while
-a failed GLCD load restores the previous mode. Output uses the selected
-console and BAT discards it. [Chapter 16](16-console-paths.md) explains
-the BIOS transition (`src/cpm/ccpcmd.asm:200-232`,
-`src/console.asm:429-440`).
+CON's report prints `CON:` and the mode read from `CONMOD` after the BIOS has
+acted on the field. A missing display or keyboard can force TTY while a failed
+GLCD load restores the previous mode. Output uses the selected console and BAT
+discards it. [Chapter 16](16-console-paths.md) explains the BIOS transition
+(`src/cpm/ccpcmd.asm:200-232`, `src/console.asm:429-440`).
 
-A width after CRT or PICO is parsed as two decimal digits. CON finds the
-PICO version-3 record with `TNFIND` and calls its `PICOWID` entry for 80,
-40 or 32 columns. A joined name and width, a width after another device,
-an unsupported width or a missing PICO interface is an error. In startup
-the missing-interface path passes quietly. A separated width becomes the
-error word, while a joined form names the whole token
-(`src/cpm/ccpcmd.asm:120-198`). The historical PICO capture shows both:
+A width after CRT or PICO is parsed as two decimal digits. CON finds the PICO
+version-3 record with `TNFIND` and calls its `PICOWID` entry for 80, 40 or 32
+columns. A joined name and width, a width after another device, an unsupported
+width or a missing PICO interface is an error. In startup the missing-interface
+path passes quietly. A separated width becomes the error word while a joined
+form names the whole token (`src/cpm/ccpcmd.asm:120-198`). The historical PICO
+capture shows both:
 
 <!-- node tools/capture.mjs --board pico "CON PICO 40" "CON CRT80" "CON PICO 50" "CON TTY 80" "CON CRT: 32" -->
 ```text
@@ -496,11 +493,11 @@ at `0080h` and appends zero. Function 26 restores DMA to `0080h`. The tail
 includes the initial space and any spaces before the piece's separator. Its
 letters have already been converted to capitals (`src/cpm/ccpcmd.asm:456-497`).
 
-The two FCBs start sixteen bytes apart. Parsing the second overwrites the
-last twenty bytes of the first. The tail begins at `0080h` within the
-second FCB's last sixteen bytes, so those bytes are shared with tail storage.
-Each FCB's drive and eleven name/type bytes remain intact
-(`src/cpm/ccpcmd.asm:456-497`). The complete FCB and DMA contracts are explained in
+The two FCBs start sixteen bytes apart. Parsing the second overwrites the last
+twenty bytes of the first. The tail begins at `0080h` within the second FCB's
+last sixteen bytes so those bytes are shared with tail storage. Each FCB's drive
+and eleven name/type bytes remain intact (`src/cpm/ccpcmd.asm:456-497`). The
+complete FCB and DMA contracts are explained in
 [Chapter 9](09-read-and-write-a-file.md).
 
 ARGS prints those drive and name fields, then the tail between brackets.
@@ -589,11 +586,10 @@ the tail length is zero (`src/cpm/ccpcmd.asm:511-599`,
 
 ## The jump and return
 
-After `PREPPAGE`, the CCP writes the load drive from `CMDFCB` to `0050h`.
-Zero means a plain name loaded on the current drive. An explicit drive
-keeps its FCB number, so `B:ARGS` gives 2. A plain command found by fallback
-on A gives 1 because lookup set the FCB byte to A
-(`src/cpm/ccp.asm:503-525`).
+After `PREPPAGE`, the CCP writes the load drive from `CMDFCB` to `0050h`. Zero
+means a plain name loaded on the current drive. An explicit drive keeps its FCB
+number so `B:ARGS` gives 2. A plain command found by fallback on A gives 1
+because lookup set the FCB byte to A (`src/cpm/ccp.asm:503-525`).
 
 `CMDRUN` resets SP to `CSTKTOP`, pushes `0000h` and jumps to `0100h`.
 The source reserves a 32-byte CCP stack, leaving thirty bytes below that

@@ -384,18 +384,18 @@ chapter's model results were observed on hardware.
 1. Burn `diag.rom` into both halves of a 32 KiB ROM chip, at `0000h` and
    `4000h`, so that the ROM Lo/Hi switch runs it in either position. Fit the
    chip in place of MON-3.
-2. Fit a 32 KiB RAM in U9, as TEC-OS needs. Without it T03 fails, and the
-   tests of EXPAND 1 have no RAM to test.
+2. Fit a 32 KiB RAM in U9, as TEC-OS needs. Without it T03 fails and the tests
+   of EXPAND 1 have no RAM to test.
 3. Set the CPU clock switch to FAST with the 4 MHz oscillator. Set the Matrix
    switch on if the matrix keyboard is fitted.
 4. Connect a terminal program to the FTDI port at 4800 baud, 8 data bits, no
    parity and 2 stop bits, with its session log on.
-5. Write the starter card's image to an SD card and put it in the adaptor, so
+5. Write the starter card's image to an SD card and put it in the adaptor so
    that T19, T20 and T37 have a TEC-OS card to read.
-6. Press reset. Press `I` on the terminal or `+` on the keypad within 5
-   seconds for the interactive tests.
-7. Keep off the hex keypad during the RAM tests, T09 and T25, except to answer
-   a question.
+6. Press reset. Press `I` on the terminal or `+` on the keypad within 5 seconds
+   for the interactive tests.
+7. Keep off the hex keypad during the RAM tests, T09 and T25, except to answer a
+   question.
 
 The keypad restriction concerns the return from an NMI. With its jumper fitted,
 a keypad press makes the Z80 push a return address and jump to `0066h`. The

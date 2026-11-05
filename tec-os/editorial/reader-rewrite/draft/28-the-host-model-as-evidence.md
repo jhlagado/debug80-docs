@@ -25,7 +25,7 @@ The observation you choose determines what a result can establish.
 
 Tests, the web page and the book's capture tool all use `host/machine.mjs`. That
 module imports the Debug80 TEC-1G runtime and a byte-string helper without
-depending on Node.js. Node supplies file access through the test wrapper, while
+depending on Node.js. Node supplies file access through the test wrapper while
 the browser supplies its own storage and controls (`host/machine.mjs:10-16`,
 `test/lib/machine.mjs:3-12`, `web/src/main.mjs:5-12`).
 
@@ -43,7 +43,7 @@ The constructor exposes the board choices explicitly
 
 | Option | Meaning |
 | --- | --- |
-| `sdImage` | A mutable array of card bytes, or no card |
+| `sdImage` | A mutable array of card bytes or no card |
 | `highCapacity` | Block addressing when true, standard-card byte addressing when false |
 | `tms`, `matrix` | A PICO9918 and an enabled matrix keyboard |
 | `glcd` | False makes graphics-LCD reads return FFh, as an absent controller whose busy flag never clears |
@@ -56,7 +56,7 @@ The constructor exposes the board choices explicitly
 The runtime supplies the CPU, latch decoding, boot overlay, expansion banks,
 keypad, serial timing, LCDs and PICO display. Machine configures RAM at
 `0000h–BFFFh`, ROM at `C000h–FFFFh` and entry at zero, then places the 16 KiB
-ROM at `C000h`. Its `ram96` option supplies a separate MAIN/EXPAND mapping, so a
+ROM at `C000h`. Its `ram96` option supplies a separate MAIN/EXPAND mapping so a
 result must identify which mapping was used (`host/machine.mjs:63-78`,
 `host/machine.mjs:143-176`).
 
@@ -132,14 +132,13 @@ an after-file assertion that this shared list is empty. Its optional
 (`test/lib/machine.mjs:14-34`). The assertion applies to test files using
 that wrapper, not automatically to every caller of Machine.
 
-The source in `test/expand.test.mjs:67-77` deliberately writes `BF80h`
-with EXPAND 1 visible and checks that the watch reports it. The test then
-removes its intentional entry from the shared list. The model still
-performs the underlying write. It adds a report that ordinary board RAM
-does not provide, rather than preventing the write
-(`host/machine.mjs:223-233`). Fixture writes through `Machine.write` and
-force-write helpers bypass this CPU-write watch, so its scope must remain
-explicit (`host/machine.mjs:175`, `host/machine.mjs:237`).
+The source in `test/expand.test.mjs:67-77` deliberately writes `BF80h` with
+EXPAND 1 visible and checks that the watch reports it. The test then removes its
+intentional entry from the shared list. The model still performs the underlying
+write. It adds a report that ordinary board RAM does not provide, rather than
+preventing the write (`host/machine.mjs:223-233`). Fixture writes through
+`Machine.write` and force-write helpers bypass this CPU-write watch so its scope
+must remain explicit (`host/machine.mjs:175`, `host/machine.mjs:237`).
 
 ## Console bytes, serial bytes and screens
 
@@ -191,16 +190,16 @@ CON: UC1:
 A>
 ```
 
-PICO `screen` decodes the name table into text rows. Its layout comes from
-the display registers unless the caller supplies a width or base. Bit 7 is
-masked, so reversed cells appear as plain characters. `cell` returns a raw
-name-table byte. Neither observation by itself establishes glyph pixels or
-reverse-video appearance (`host/machine.mjs:380-410`).
+PICO `screen` decodes the name table into text rows. Its layout comes from the
+display registers unless the caller supplies a width or base. Bit 7 is masked so
+reversed cells appear as plain characters. `cell` returns a raw name-table byte.
+Neither observation by itself establishes glyph pixels or reverse-video
+appearance (`host/machine.mjs:380-410`).
 
-The capture tool's PICO screen option supplies the console width from PIWID,
-so the offered 40- and 32-column modes decode at those widths rather than
-the 80-column fallback (`tools/capture.mjs:147-153`). This is a decoder
-parameter, not evidence that a new width or font was run.
+The capture tool's PICO screen option supplies the console width from PIWID so
+the offered 40- and 32-column modes decode at those widths rather than the
+80-column fallback (`tools/capture.mjs:147-153`). This is a decoder parameter,
+not evidence that a new width or font was run.
 
 `glcdScreen` instead matches each six-by-eight pixel cell against
 `Machine.font`, including inverted patterns. Unknown patterns become `?`.
@@ -220,12 +219,12 @@ time for the last character to reach the display
 condition, not proof of every state change a command should make.
 
 `waitingForInput` recognises named console polling ranges. `ready` additionally
-checks that startup has finished and the CCP is reading a command line.
-The capture tool combines that state with a prompt suffix and handles
-`[more]` and the diagnostic retry prompt separately
-(`host/machine.mjs:323-342`, `tools/capture.mjs:76-96`). Program output that
-resembles a prompt can confuse a suffix-based wait, so a workflow must check
-the state or persisted result that distinguishes real completion.
+checks that startup has finished and the CCP is reading a command line. The
+capture tool combines that state with a prompt suffix and handles `[more]` and
+the diagnostic retry prompt separately (`host/machine.mjs:323-342`,
+`tools/capture.mjs:76-96`). Program output that resembles a prompt can confuse a
+suffix-based wait so a workflow must check the state or persisted result that
+distinguishes real completion.
 
 `type` sends serial characters only when the ROM is waiting and waits for
 each character's reception. With a video console it uses matrix keys,
@@ -263,8 +262,8 @@ cp dist/starter.img long.img
 node tools/tecvol.mjs put long.img A lines.txt --text
 ```
 
-The GLCD has eight rows of 21 characters. TYPE's pager leaves its final row
-for `[more]`, so this historical first pause follows seven text rows:
+The GLCD has eight rows of 21 characters. TYPE's pager leaves its final row for
+`[more]` so this historical first pause follows seven text rows:
 
 <!-- node tools/capture.mjs --card long.img --board glcd --screen "TYPE LINES.TXT" -->
 ```text
@@ -278,9 +277,9 @@ Three
 [more]
 ```
 
-Each of the first two file lines occupies three rows. Counting begins with
-the listing's first row, so the command line has scrolled away by the pause.
-The next run supplies `x` to erase the pause prompt and continue:
+Each of the first two file lines occupies three rows. Counting begins with the
+listing's first row so the command line has scrolled away by the pause. The next
+run supplies `x` to erase the pause prompt and continue:
 
 <!-- node tools/capture.mjs --card long.img --board glcd --screen "TYPE LINES.TXT" "@key x" -->
 ```text
@@ -332,13 +331,13 @@ input and no PICO it can add GLCD.SVC and startup. With PICO, a non-80 width
 can add a CON PICO line when startup is absent
 (`test/lib/fixtures.mjs:21-27`, `test/lib/fixtures.mjs:93-121`).
 
-`program` uses ATOM to assemble `test/programs/NAME.asm` and caches bytes
-and symbols under `build/test-programs`. Its key includes the origin and
-a recursive digest of the source and included files. A changed included
-file changes the key. That key does not include every assembler or runtime
-dependency, so it is not a complete artifact identity
-(`test/lib/fixtures.mjs:29-55`). `service` calls makeSvc for a resident image
-(`test/lib/fixtures.mjs:75-79`). Chapter 13 describes that file writer.
+`program` uses ATOM to assemble `test/programs/NAME.asm` and caches bytes and
+symbols under `build/test-programs`. Its key includes the origin and a recursive
+digest of the source and included files. A changed included file changes the
+key. That key does not include every assembler or runtime dependency so it is
+not a complete artifact identity (`test/lib/fixtures.mjs:29-55`). `service`
+calls makeSvc for a resident image (`test/lib/fixtures.mjs:75-79`). Chapter 13
+describes that file writer.
 
 `standardCard` creates empty SYSTEM on A and WORK on B, with optional extra
 volumes. It is not the populated supplied starter. `volume` opens the payload
@@ -376,20 +375,19 @@ files (`web/build.mjs:1-45`). The page recipe adds DEMO.COM to the starter
 files. At the inspected source the media tool builds that program from
 test/programs/demo.asm (`tools/media.mjs:204-236`).
 
-Each animation frame targets 4 MHz for the elapsed wall time, capped at
-100 ms. Every 1,024 instructions it checks a 30 ms execution budget and can
-stop the frame early. Rendering reads the runtime's display state and shows
-the PICO screen, digits, LEDs, LCD, GLCD, latch, window bank and Caps state.
-A once-per-second display reports achieved MHz, not an unconditional 4 MHz
-execution rate (`web/src/main.mjs:174-233`). The page supplies no fixed
-clock, so its DS1302 follows host time (`web/src/main.mjs:82-95`).
+Each animation frame targets 4 MHz for the elapsed wall time, capped at 100 ms.
+Every 1,024 instructions it checks a 30 ms execution budget and can stop the
+frame early. Rendering reads the runtime's display state and shows the PICO
+screen, digits, LEDs, LCD, GLCD, latch, window bank and Caps state. A
+once-per-second display reports achieved MHz, not an unconditional 4 MHz
+execution rate (`web/src/main.mjs:174-233`). The page supplies no fixed clock so
+its DS1302 follows host time (`web/src/main.mjs:82-95`).
 
 Focused video displays route ordinary keys to the matrix queue. The serial
-terminal routes them to serial. Unsupported multi-character sequences can
-use serial even from a video focus. The page's serial display strips escape
-sequences and handles backspace, so its text is a presentation of serial
-bytes rather than a complete terminal implementation
-(`web/src/main.mjs:358-427`).
+terminal routes them to serial. Unsupported multi-character sequences can use
+serial even from a video focus. The page's serial display strips escape
+sequences and handles backspace so its text is a presentation of serial bytes
+rather than a complete terminal implementation (`web/src/main.mjs:358-427`).
 
 Card writes mark the in-memory card dirty. A two-second timer attempts to
 save it in IndexedDB database tecos, store cards, key current. Failed saves
@@ -426,16 +424,16 @@ A matching code range at a later pin cannot transfer that result to a new
 artifact or board.
 
 The runtime sends overlay writes to underlying RAM and permits latch readback.
-The board documentation instead selects ROM under the overlay and describes
-the latch as write-only. The legacy bank-field decode uses latch bits 3–6.
-The diagnostic source asserts its nine window banks plus the base mapping,
-which must not be attributed to the documented board
-(`test/diag.test.mjs:121-123`). The `ram96` mapping is a separate configuration,
-not a repair to every legacy-model result. Diagnostics T08, T10 and T12 probe
-these differences. TEC-OS avoids overlay writes and latch reads, so checked
-ordinary paths can satisfy those restrictions on a more permissive model
-(`host/machine.mjs:40-46`, `host/machine.mjs:155-172`,
-`docs/diagnostics.md:146-163`, `docs/diagnostics.md:185-195`).
+The board documentation instead selects ROM under the overlay and describes the
+latch as write-only. The legacy bank-field decode uses latch bits 3–6. The
+diagnostic source asserts its nine window banks plus the base mapping, which
+must not be attributed to the documented board (`test/diag.test.mjs:121-123`).
+The `ram96` mapping is a separate configuration, not a repair to every
+legacy-model result. Diagnostics T08, T10 and T12 probe these differences.
+TEC-OS avoids overlay writes and latch reads so checked ordinary paths can
+satisfy those restrictions on a more permissive model (`host/machine.mjs:40-46`,
+`host/machine.mjs:155-172`, `docs/diagnostics.md:146-163`,
+`docs/diagnostics.md:185-195`).
 
 [Chapter 27](27-diagnose-the-machine.md) describes obtaining a board's
 diagnostic report. `tools/diag-check.mjs` requires its image ID to match the

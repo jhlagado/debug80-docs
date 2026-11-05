@@ -50,12 +50,12 @@ puts the current `PZTOP` at `0006h` on every warm boot (`src/boot.asm:412-434`,
 `src/boot.asm:794-800`). The stub's low byte depends on the card's allocation
 vectors. A program must read the word rather than assume page alignment.
 
-The first service is allocated below the stub's page, so the unused bytes
-between that page boundary and the stub also leave the transient program area
-(TPA). In the historical starter layout, vectors began at `B9A7h` and the stub
-at `B9A4h`. The first one-page COUNT service cost 256 plus 164 bytes, or 420.
-Later services cost whole pages without another alignment gap. The historical
-GLCD layout and a possible second service were:
+The first service is allocated below the stub's page so the unused bytes between
+that page boundary and the stub also leave the transient program area (TPA). In
+the historical starter layout, vectors began at `B9A7h` and the stub at `B9A4h`.
+The first one-page COUNT service cost 420 bytes: 256 for the page and 164 for
+the alignment gap. Later services cost whole pages without another alignment
+gap. The historical GLCD layout and a possible second service were:
 
 | Addresses | What is there |
 | --- | --- |
@@ -74,7 +74,7 @@ file metadata with the two old list heads and the direct BDOS entry
 | Offset | Bytes | In memory |
 | ---: | ---: | --- |
 | 0 | 3 | `JP BENTRY` |
-| 3 | 1 | The flags, or 0 if a hook kept the pages |
+| 3 | 1 | The flags or 0 if a hook kept the pages |
 | 4 | 2 | `REMOVE`, from the header's start |
 | 6 | 2 | The registry's head before this service |
 | 8 | 1 | The owner before it: the next older service's page, 0 at the last |
@@ -83,11 +83,11 @@ file metadata with the two old list heads and the direct BDOS entry
 | 15 | 2 | Unused |
 | 17 | 8 | The name |
 
-The saved owner byte identifies the next older service, not a copy of the
-old ceiling. `SVCABV` converts it to the page above this service, using
-the stub's page for owner zero. `SLTOP` reconstructs `PZTOP` and `0006h`
-from `SVCHEAD`, or restores the exact stub address when no owner remains
-(`src/loader.asm:77-101`, `src/loader.asm:693-719`).
+The saved owner byte identifies the next older service, not a copy of the old
+ceiling. `SVCABV` converts it to the page above this service, using the stub's
+page for owner zero. `SLTOP` reconstructs `PZTOP` and `0006h` from `SVCHEAD` or
+restores the exact stub address when no owner remains (`src/loader.asm:77-101`,
+`src/loader.asm:693-719`).
 
 ## Page relocation
 
@@ -102,13 +102,12 @@ page-zero image with its 25-byte header. `assembleAt` rewrites an indented
 produce `INIT and REMOVE required`. Different assembly lengths also fail
 (`tools/lib/prl.mjs:33-47`, `tools/lib/svc.mjs:83-104`).
 
-`fixupsOf` ignores equal bytes and accepts a changed byte only when its
-second value is the first plus one modulo 256. A different change produces
+`fixupsOf` ignores equal bytes and accepts a changed byte only when its second
+value is the first plus one modulo 256. A different change produces
 `byte N is not relocatable`. A changed header byte is rejected separately.
-Expressions such as half or twice a relocatable address can violate that
-rule. An absolute external address such as `0005h` remains equal and is
-not marked, so its BDOS call survives relocation
-(`tools/lib/svc.mjs:67-75`).
+Expressions such as half or twice a relocatable address can violate that rule.
+An absolute external address such as `0005h` remains equal and is not marked so
+its BDOS call survives relocation (`tools/lib/svc.mjs:67-75`).
 
 The interface check rejects explicit ROM addresses written in the matched
 hexadecimal forms, such as `$C000` or `0C000h`. It requires interface names
@@ -190,12 +189,12 @@ header instead of maintaining another total.
 
 ### 4. Fixups in the loaded file
 
-Relocation runs in the file buffer at `0100h`. BC counts list bytes and
-HL begins at `DF+DHLEN-1`, `0118h`. Each gap advances HL. The loader
-requires the resulting offset to remain below the header/image size,
-including when the gap is 255. A 255 skips the patch, while other bytes
-add `SLDL` to the byte addressed by HL. A rejected list can leave the
-loaded file partly relocated (`src/loader.asm:324-373`).
+Relocation runs in the file buffer at `0100h`. BC counts list bytes and HL
+begins at `DF+DHLEN-1`, `0118h`. Each gap advances HL. The loader requires the
+resulting offset to remain below the header/image size, including when the gap
+is 255. A 255 skips the patch while other bytes add `SLDL` to the byte addressed
+by HL. A rejected list can leave the loaded file partly relocated
+(`src/loader.asm:324-373`).
 
 In the recorded `58d4345` GLCD example the driver table began with `00F0h`,
 `014Bh` and `0150h`. Installation at `B600h` changed them to `B6F0h`,
@@ -292,10 +291,10 @@ window. The final comparison and complemented carry return success for
 
 ## Rollback and retained pages
 
-A rejection before the move returns carry with `SVCRC` zero. Zero also
-occurs on a successful load, so carry must be read with it. After the
-move the loader distinguishes a clean release from a reservation retained
-for unsafe or incomplete cleanup:
+A rejection before the move returns carry with `SVCRC` zero. Zero also occurs on
+a successful load so carry must be read with it. After the move the loader
+distinguishes a clean release from a reservation retained for unsafe or
+incomplete cleanup:
 
 | SVCRC on failure | Outcome | Loader state |
 | ---: | --- | --- |
@@ -316,13 +315,13 @@ first byte of each claimed restart slot. The loader restores `0006h` from
 flags and commits outcome 2. Clearing bit 0 makes that retained service
 nonremovable (`src/loader.asm:546-587`, `src/loader.asm:640-662`).
 
-These are two distinct retained-page paths. A REMOVE failure retains its
-flags, while a detected BIOS hook clears them. Neither path publishes the
-new record chain. The scan covers only RAM BIOS targets, not a table
-registered through DRVR or every pointer that INIT could have written.
-The historical cases include retained BIOS-hook pages across warm boot,
-REMOVE failure and an unscanned GLVEC pointer after pages were released
-(`78127ec:test/svc.test.mjs:423-444`, `78127ec:test/svc.test.mjs:572-578`).
+These are two distinct retained-page paths. A REMOVE failure retains its flags
+while a detected BIOS hook clears them. Neither path publishes the new record
+chain. The scan covers only RAM BIOS targets, not a table registered through
+DRVR or every pointer that INIT could have written. The historical cases include
+retained BIOS-hook pages across warm boot, REMOVE failure and an unscanned GLVEC
+pointer after pages were released (`78127ec:test/svc.test.mjs:423-444`,
+`78127ec:test/svc.test.mjs:572-578`).
 
 SERVICES walks owners from `SVCHEAD`, not published records from `REGHEAD`.
 A retained failed service can therefore appear in SERVICES while FIND
@@ -360,18 +359,18 @@ cycle cannot keep this current loop running indefinitely
 The historical client-cycle example exercises FIND and LIST, not a new
 current load result (`78127ec:test/svc.test.mjs:580-588`).
 
-There is no numbered operation to remove a record. Number 16 is beyond
-FONT and returns carry from dispatch. Proposed records become visible only
-after `SVCLK`, so INIT cannot find its own newly proposed record through
-FIND (`src/services.asm:45-49`, `src/loader.asm:589-606`). Historical tests
-cover both boundaries (`78127ec:test/svc.test.mjs:383-388`,
+There is no numbered operation to remove a record. Number 16 is beyond FONT and
+returns carry from dispatch. Proposed records become visible only after `SVCLK`
+so INIT cannot find its own newly proposed record through FIND
+(`src/services.asm:45-49`, `src/loader.asm:589-606`). Historical tests cover
+both boundaries (`78127ec:test/svc.test.mjs:383-388`,
 `78127ec:test/svc.test.mjs:461-467`).
 
 ## Removing the newest owner
 
-Only the lowest owner can be removed. Its header saves exactly the
-registry and owner heads from before its load, so reversing loads in
-order restores both lists without unlinking records individually.
+Only the lowest owner can be removed. Its header saves exactly the registry and
+owner heads from before its load so reversing loads in order restores both lists
+without unlinking records individually.
 
 `SVCUNL` rejects a busy loader, a top page unequal to `SVCHEAD` or flags
 with bit 0 clear. With no owner, `SVCHEAD` zero cannot match the stub's
@@ -396,13 +395,13 @@ vectors into the released pages and returns carry clear
 owner only, never skipping a nonremovable newest service.
 
 `SVCGEN` is one byte and repeats after 256 removals. Through the published
-interface removal happens at the CCP, so a running program can retain a
-record address until exit. A resident service retaining it longer must
-check the current generation or declare the provider as a dependency.
-The dependency prevents loading without its provider and the owner order
-prevents removing that older provider first
-(`src/ram.asm:400-410`, `src/loader.asm:128-174`, `src/loader.asm:244-279`).
-Chapter 13 explains the client-side dependency contract.
+interface removal happens at the CCP so a running program can retain a record
+address until exit. A resident service retaining it longer must check the
+current generation or declare the provider as a dependency. The dependency
+prevents loading without its provider and the owner order prevents removing that
+older provider first (`src/ram.asm:400-410`, `src/loader.asm:128-174`,
+`src/loader.asm:244-279`). Chapter 13 explains the client-side dependency
+contract.
 
 Warm boot preserves `REGHEAD`, `SVCHEAD` and `PZTOP` outside the range
 cleared by `CPMINIT`. Cold boot clears resident workspace and removes
@@ -438,13 +437,12 @@ a second claim and clearing a claimed slot whose target was elsewhere
 (`78127ec:test/svc.test.mjs:798-808`, `78127ec:test/svc.test.mjs:825-846`).
 
 An unclaimed vector is not reserved by that flag check. A jump to retained
-memory may pass the sweep even though the loader has no ownership claim
-for it. REMOVE must restore such changes. A failed INIT runs no REMOVE,
-so INIT must undo its own changes and disable any interrupt source it
-started. Warm boot during INIT can leave that device source enabled.
-Under a default EI/RETI vector an active interrupt source can repeat
-without being serviced (`src/loader.asm:451-455`,
-`src/boot.asm:187-200`, `src/boot.asm:454-509`).
+memory may pass the sweep even though the loader has no ownership claim for it.
+REMOVE must restore such changes. A failed INIT runs no REMOVE so INIT must undo
+its own changes and disable any interrupt source it started. Warm boot during
+INIT can leave that device source enabled. Under a default EI/RETI vector an
+active interrupt source can repeat without being serviced
+(`src/loader.asm:451-455`, `src/boot.asm:187-200`, `src/boot.asm:454-509`).
 
 The three stack limits are 8, 12 and 6 bytes for BDOS, BIOS and CCP,
 counted above their no-service base use (`src/tables.asm:143-146`).
