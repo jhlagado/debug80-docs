@@ -11,7 +11,7 @@ No command, runtime allocation or execution result is sealed here.
 | EXISTS and RUN at5b6725a | Complete independent static review clear. Includes, case/spacing,40-column presentation, comment floor and proposed behavioural cases checked | Actual assembly/bytes/symbols, public workflow and display qualification |
 | SHOW/fragment at a5db04f | General BDOS clobber correction confirmed at28611de; complete source/style/identity/route review closed | All actual assembly/workflow/display proof |
 | READ atcbc42a7 | Branch comment and updated581-byte identity independently confirmed atd87a44c; complete source/style/route review closed | All actual assembly/workflow/display proof |
-| COUNT, CHARS, RECS, NEEDS/CHEAT atc46300f | Independent static review in progress | No executable proof supplied |
+| COUNT, CHARS, RECS, NEEDS/CHEAT atc46300f/2312e7b | Complete independent static review and both comment-layout corrections confirmed. COUNT/CHEAT13 of31 instructions commented; RECS maximum plain run4. Identities refreshed | Actual writer/include-route resolution and all byte/workflow/display proof |
 
 The added SHOW header is a candidate-only mistake, not a change to reader
 contracts. The original disk-reading BDOS paths can changeIX and the
@@ -38,3 +38,28 @@ new source, with actual TED save/reopen/build/error/repair/run proof. Public
 ATOM and on-cardTAS routes, include-free closure and pending source/font
 identity are explicit. No actionable static finding. No assembly, import,
 model, tool workflow, display or physical result was produced.
+
+## Further complete static reviews
+
+ARGS at5e7f1f7 is independently clear after all39 instructions, six symbols,
+literals, original comments, BC/HL saves, SHOWFCB fall-through and BDOS
+clobber scope were checked. Its40-column style, identities, include-free
+closure and future public-route/finite-case requirements are clear. Actual
+assembly and execution remain unperformed.
+
+The ROM include-order candidate ata1e0a2b is independently clear. All39
+paths/order match the originalb8c5c28 listing and complete ea3ef3d rom.asm.
+Directive/path case, two leading spaces, sub40-column width and text hashes
+are confirmed. This is a source inventory, not a standalone executable or
+rebuilt-ROM result. Final adopted-source comparison remains required.
+
+Chapter11's full eight-candidate review and both header/production-route
+corrections are confirmed through61ab82c. HWLIB is2606 bytes with SHA
+4e24317cfee3bff6e7c840e41a1fa7c73fa82540faeee4f7de24f6f09d7e89b0.
+The lead then read the complete candidate file and requested actual volume
+call names UNMNT/DESC in one explanatory paragraph. That nominal correction
+is pending confirmation. All original reader listings remain untouched.
+
+The source-only proof-plan review's one citation correction at1bff267 is
+confirmed: svc.mjs93–99 covers ORG search95 and rewrite97. This does not
+resolve the route limitation or review/allocate the private runtime harness.
