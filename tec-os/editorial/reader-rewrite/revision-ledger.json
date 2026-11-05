@@ -6066,7 +6066,7 @@
     },
     {
       "unit": "chapter-15",
-      "status": "bounded independent editorial/factual review closed; final navigation and qualification pending",
+      "status": "source/craft review closed, historical measurement acceptance reopened for evidence conflicts",
       "passes": {
         "full_passage_read": "completed for bounded draft; 15-pass-record.md records actual scope",
         "draft": "completed for bounded draft; 15-pass-record.md records actual scope",
@@ -6079,7 +6079,7 @@
         "journey_readback": "completed for bounded draft; 15-pass-record.md records actual scope",
         "mechanical_gate": "completed for bounded draft; 15-pass-record.md records actual scope",
         "independent_editorial_review": "closed after full independent review and corrections where needed",
-        "independent_factual_review": "closed after full independent review and corrections where needed",
+        "independent_factual_review": "reopened cost provenance: CONIN and warm-boot figures conflict with retained run evidence",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -6456,6 +6456,21 @@
           "scope": "preserved historical claims, not a current qualified measurement",
           "required": "reconstruct actual original methods/inputs or replace with explicitly allocated adopted-source measurement; no silent substitution",
           "status": "unresolved final qualification hold"
+        },
+        {
+          "issue": "Warm-boot cost changes without located run support",
+          "values": {
+            "retained_json_and_prior_prose": [
+              32482,
+              115898
+            ],
+            "rewritten_prose": [
+              32502,
+              115918
+            ]
+          },
+          "required": "complete method/provenance audit or explicitly allocated adopted-source measurement",
+          "status": "open, do not infer a20-cycle correction"
         }
       ]
     },
