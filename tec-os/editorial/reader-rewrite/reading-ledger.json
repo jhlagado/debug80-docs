@@ -271,11 +271,14 @@
       "sha256": "7f16af7eea35ae9233a34029069ee352f003b0addd1ea58c5f9b47d5249018f6",
       "lines": 530,
       "words": 5180,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "Differences from Digital Research's BDOS",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 530,
+      "outline": "reverse-outline-19.md",
+      "continuity_problems": "The file-life narrative is interrupted by console implementation; preserve state lifetimes, failed-operation ownership and compatibility qualifications in separate earned themes."
     },
     {
       "path": "tec-os/20-ccp.md",
