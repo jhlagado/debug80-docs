@@ -99,3 +99,13 @@ Final bounded punctuation/address correction passed the prose gate with0
 findings. The complete draft and record pass git diff whitespace checks.
 Read the serial poll/RX/TX, transfer range/error and bank-entry/exit bodies
 again after the endpoint check rather than relying on endpoints alone.
+
+## Independent preservation corrections
+
+The complete independent44-unit/one-fragment review identified two omitted
+lookup fields. Restored busyflagbit7 ofport04h in the LCD section and the
+returned RTC-presence location, INFO bit3 ofB. The lead reread LCDWAIT35–47
+and HWSINFO95–105, already in the source proofs, before restoring them. The
+first preservation claim was too broad without these fields. All remaining
+source, table, evidence and craft checks were clear in the full review.
+Bounded confirmation remains pending. No execution accompanied correction.
