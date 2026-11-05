@@ -1,0 +1,780 @@
+{
+  "schema_version": 1,
+  "status": "held_no_existing_route_for_unchanged_clients",
+  "review_kind": "Independent source-only public-route review. No imports, assembly, syntax checks, tests, builds, emulation or captures performed.",
+  "book_revision": "cf20791f2bdd4e2bea3db396400364aeeb49e7f9",
+  "tec_os_revision": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+  "atom_identity": {
+    "package": "atom-z80",
+    "version": "0.3.7",
+    "retained_location": "TEC-OS node_modules/atom-z80",
+    "lock_resolved": "https://registry.npmjs.org/atom-z80/-/atom-z80-0.3.7.tgz",
+    "lock_integrity": "sha512-TCRgubQPjXivppZX2p2BB+MTKi2KIjpPn5fp8ouGwyPW75vKaxdEyJyzsSP2VmRUnkL32OJiq3fpfmL8kSgxgA==",
+    "package_manifest_sha256": "72774d26f238303875c6402a9b1e098889a53e9901e25f4d5f94380426417581",
+    "identity_limit": "Read the retained installed package as text. File hashes identify the inspected bytes. No download, reinstall or fresh archive-integrity verification was performed.",
+    "source_preparation_dependency": "git+https://github.com/jhlagado/z80-tool-services.git#853820c3008d6ab26f709c6bb05a6a7193072c60"
+  },
+  "decision": {
+    "supported_unchanged_source_atom_call_shape": null,
+    "exact_hold": "ATOM 0.3.7 public project preparation accepts source INCLUDE only before the first ordinary assembler statement and assembles dependencies before their importer. These nine clients have BDOS EQU before ABI.INC and executable HWLIB after their bodies. No existing inspected public route preserves those source bytes and both include positions.",
+    "first_rejection": "For a valid project root and entry path, inspectAtomSource closes headerOpen at BDOS equ $0005 and predicts SourcePreparationError category preprocessing, code include-outside-header at ABI.INC. This occurs before dependency loading/native assembly. Merely being before ORG is insufficient.",
+    "independent_trailing_boundary": "The later HWLIB include is also outside the header. Even resolving the earlier ABI position would leave that unsupported include placement. Moving executable HWLIB to a header import changes dependency/emission order and is not an equivalent representation.",
+    "production_route": "The accepted primary route remains on-card TAS with the actual client, ABI.INC and HWLIB.ASM on the current drive. This review does not execute or requalify it.",
+    "proof_boundary": "This resolves the route question as a precise hold. No ATOM output, byte/symbol equivalence, workflow success or runtime acceptance is claimed. No adapter or product fix is supplied."
+  },
+  "route_assessments": [
+    {
+      "route": "Documented atom CLI or assembleAtomProject({root, entry, target})",
+      "result": "held",
+      "support": [
+        "A3:69-106",
+        "A7:20-39",
+        "A8:49-59",
+        "A10:198-227"
+      ],
+      "reason": "The CLI and high-level public API both use the fixed ATOM source profile. Neither exposes a textual-include expansion switch, ordered caller input list or alternative include mode."
+    },
+    {
+      "route": "resolveAtomProject then assembleResolvedAtomProject",
+      "result": "not_an_existing_trailing_include_route",
+      "support": [
+        "A4:74-78",
+        "A6:5-6",
+        "A6:44-50",
+        "A11:288-329",
+        "A13:255-286"
+      ],
+      "reason": "The documented preparation function has the same header restriction. The lower-level runner is a real exported API for already prepared ordered parts, with equal-length original/compiler byte arrays. It does not prepare raw INCLUDE placement. Supplying hand-masked, split or reordered parts would introduce a separate source-preparation adapter. Public runner availability does not establish that missing route."
+    },
+    {
+      "route": "TEC-OS assembleProgram(source, {base:0x100})",
+      "result": "held",
+      "support": [
+        "T1:10-20"
+      ],
+      "reason": "It resolves a source under the fixed TEC-OS root and calls assembleAtomProject directly. base controls materialization, not include preparation. It has no include expansion, source-reader override or exposed per-assembly execution limits. staging must also remain inside that root."
+    },
+    {
+      "route": "TEC-OS makeSvc(source, {work, deps})",
+      "result": "not_a_COM_route",
+      "support": [
+        "T2:83-104",
+        "T2:107-134",
+        "T3:33-47"
+      ],
+      "reason": "The existing service-specific writer copies trailing include text into a derived service input, rewrites an exact uppercase ORG, performs two-origin assembly and requires INIT/REMOVE before packing a 25-byte SVC header. That transformation is not an exported generic COM expander and does not make these lowercase-org COM clients service sources. Reusing it as a COM adapter is outside its contract."
+    },
+    {
+      "route": "TEC-OS assembleAt / makePrl / onDisk",
+      "result": "held",
+      "support": [
+        "T3:17-67"
+      ],
+      "reason": "At origin 0100h assembleAt delegates directly to assembleProgram. Other origins require the exact uppercase ORG and repoint include paths without expanding trailing code. onDisk resolves case-insensitive filenames for those wrappers, not inclusion position. PRL packaging does not add a COM include mode."
+    },
+    {
+      "route": "ATOM.COM on CP/M",
+      "result": "held_for_same_source_include_grammar",
+      "support": [
+        "A3:166-180",
+        "A16:5-54",
+        "A17:76-87"
+      ],
+      "reason": "The native preflight also closes INC_HEAD on ordinary source and rejects a later INCLUDE before opening it. Current-drive case-insensitive names do not remove the placement restriction."
+    },
+    {
+      "route": "test/lib/fixtures.mjs program helper",
+      "result": "excluded_not_a_public_reader_route",
+      "support": [
+        "T6:29-54",
+        "T6:75-79"
+      ],
+      "reason": "It fixes the entry under test/programs, can return cached assembly and otherwise calls the same standalone wrapper. The module also eagerly builds GLCD_SVC at top level. It neither resolves this include boundary nor supplies ordinary-reader proof. It was read only, never imported."
+    }
+  ],
+  "closure": {
+    "clients": [
+      {
+        "name": "BOARD.ASM",
+        "book_path": "tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md",
+        "book_fence_body_start_line": 141,
+        "bytes": 1849,
+        "sha256": "bf27e8f2b4336f097a195e781fd43bb8f7ff16aa685c2f0ae3dda6cc8c3aa80d",
+        "first_ordinary_source_line": 10,
+        "first_ordinary_text": "BDOS equ $0005",
+        "include_lines": [
+          {
+            "source_line": 11,
+            "book_line": 151,
+            "text": "%INCLUDE \"ABI.INC\""
+          },
+          {
+            "source_line": 73,
+            "book_line": 213,
+            "text": "%INCLUDE \"HWLIB.ASM\""
+          }
+        ],
+        "predicted_first_boundary": "ABI.INC is already outside the source header because BDOS EQU precedes it. This is source-derived, not an observed diagnostic.",
+        "closure": [
+          "this exact client",
+          "ea3 src/abi.inc stored as ABI.INC",
+          "identified compact HWLIB.ASM appended at the source include position"
+        ]
+      },
+      {
+        "name": "LCDMSG.ASM",
+        "book_path": "tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md",
+        "book_fence_body_start_line": 219,
+        "bytes": 928,
+        "sha256": "438daaf6298bf1a7ed2275b7047bc23aacca769e61e765f32f41ccdb4fd2b353",
+        "first_ordinary_source_line": 11,
+        "first_ordinary_text": "BDOS equ $0005",
+        "include_lines": [
+          {
+            "source_line": 12,
+            "book_line": 230,
+            "text": "%INCLUDE \"ABI.INC\""
+          },
+          {
+            "source_line": 35,
+            "book_line": 253,
+            "text": "%INCLUDE \"HWLIB.ASM\""
+          }
+        ],
+        "predicted_first_boundary": "ABI.INC is already outside the source header because BDOS EQU precedes it. This is source-derived, not an observed diagnostic.",
+        "closure": [
+          "this exact client",
+          "ea3 src/abi.inc stored as ABI.INC",
+          "identified compact HWLIB.ASM appended at the source include position"
+        ]
+      },
+      {
+        "name": "DIGCLK.ASM",
+        "book_path": "tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md",
+        "book_fence_body_start_line": 259,
+        "bytes": 2439,
+        "sha256": "ac9717fb1efb82a33d50112521dfd37fe367430a7e7b63f7ecbed581b040b97d",
+        "first_ordinary_source_line": 10,
+        "first_ordinary_text": "BDOS equ $0005",
+        "include_lines": [
+          {
+            "source_line": 11,
+            "book_line": 269,
+            "text": "%INCLUDE \"ABI.INC\""
+          },
+          {
+            "source_line": 107,
+            "book_line": 365,
+            "text": "%INCLUDE \"HWLIB.ASM\""
+          }
+        ],
+        "predicted_first_boundary": "ABI.INC is already outside the source header because BDOS EQU precedes it. This is source-derived, not an observed diagnostic.",
+        "closure": [
+          "this exact client",
+          "ea3 src/abi.inc stored as ABI.INC",
+          "identified compact HWLIB.ASM appended at the source include position"
+        ]
+      },
+      {
+        "name": "NOW.ASM",
+        "book_path": "tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md",
+        "book_fence_body_start_line": 371,
+        "bytes": 1589,
+        "sha256": "03a85f9d17b4fbf482b5032d19db42e679120369a6b3c023377aecaad9ac64e8",
+        "first_ordinary_source_line": 10,
+        "first_ordinary_text": "BDOS equ $0005",
+        "include_lines": [
+          {
+            "source_line": 11,
+            "book_line": 381,
+            "text": "%INCLUDE \"ABI.INC\""
+          },
+          {
+            "source_line": 76,
+            "book_line": 446,
+            "text": "%INCLUDE \"HWLIB.ASM\""
+          }
+        ],
+        "predicted_first_boundary": "ABI.INC is already outside the source header because BDOS EQU precedes it. This is source-derived, not an observed diagnostic.",
+        "closure": [
+          "this exact client",
+          "ea3 src/abi.inc stored as ABI.INC",
+          "identified compact HWLIB.ASM appended at the source include position"
+        ]
+      },
+      {
+        "name": "ROWS.ASM",
+        "book_path": "tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md",
+        "book_fence_body_start_line": 452,
+        "bytes": 2126,
+        "sha256": "ea445cb32db0e402f4e93800c045b073bd84bf77aa7a7d515959b2bca8733852",
+        "first_ordinary_source_line": 12,
+        "first_ordinary_text": "BDOS equ $0005",
+        "include_lines": [
+          {
+            "source_line": 13,
+            "book_line": 464,
+            "text": "%INCLUDE \"ABI.INC\""
+          },
+          {
+            "source_line": 94,
+            "book_line": 545,
+            "text": "%INCLUDE \"HWLIB.ASM\""
+          }
+        ],
+        "predicted_first_boundary": "ABI.INC is already outside the source header because BDOS EQU precedes it. This is source-derived, not an observed diagnostic.",
+        "closure": [
+          "this exact client",
+          "ea3 src/abi.inc stored as ABI.INC",
+          "identified compact HWLIB.ASM appended at the source include position"
+        ]
+      },
+      {
+        "name": "PLACE.ASM",
+        "book_path": "tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md",
+        "book_fence_body_start_line": 551,
+        "bytes": 1120,
+        "sha256": "d7a30e32b1c18c42358adb97480b0980df603bbcad0cc88f4775458a692aeed7",
+        "first_ordinary_source_line": 12,
+        "first_ordinary_text": "BDOS equ $0005",
+        "include_lines": [
+          {
+            "source_line": 13,
+            "book_line": 563,
+            "text": "%INCLUDE \"ABI.INC\""
+          },
+          {
+            "source_line": 53,
+            "book_line": 603,
+            "text": "%INCLUDE \"HWLIB.ASM\""
+          }
+        ],
+        "predicted_first_boundary": "ABI.INC is already outside the source header because BDOS EQU precedes it. This is source-derived, not an observed diagnostic.",
+        "closure": [
+          "this exact client",
+          "ea3 src/abi.inc stored as ABI.INC",
+          "identified compact HWLIB.ASM appended at the source include position"
+        ]
+      },
+      {
+        "name": "VTEST.ASM",
+        "book_path": "tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md",
+        "book_fence_body_start_line": 609,
+        "bytes": 2676,
+        "sha256": "3a47e544b11c17bb8a07e829633f7e5feaa656018d8917dd2a39b0f1b34025f3",
+        "first_ordinary_source_line": 14,
+        "first_ordinary_text": "BDOS equ $0005",
+        "include_lines": [
+          {
+            "source_line": 17,
+            "book_line": 625,
+            "text": "%INCLUDE \"ABI.INC\""
+          },
+          {
+            "source_line": 102,
+            "book_line": 710,
+            "text": "%INCLUDE \"HWLIB.ASM\""
+          }
+        ],
+        "predicted_first_boundary": "ABI.INC is already outside the source header because BDOS EQU precedes it. This is source-derived, not an observed diagnostic.",
+        "closure": [
+          "this exact client",
+          "ea3 src/abi.inc stored as ABI.INC",
+          "identified compact HWLIB.ASM appended at the source include position"
+        ]
+      },
+      {
+        "name": "CHARS.ASM",
+        "book_path": "tec-os/editorial/reader-rewrite/draft/13-compact-example-candidates.md",
+        "book_fence_body_start_line": 142,
+        "bytes": 1249,
+        "sha256": "db574fc1d36304c4008f9476e362267b81bec52f8760e4de85324c9c25a510dd",
+        "first_ordinary_source_line": 4,
+        "first_ordinary_text": "BDOS equ $0005",
+        "include_lines": [
+          {
+            "source_line": 5,
+            "book_line": 146,
+            "text": "%INCLUDE \"ABI.INC\""
+          },
+          {
+            "source_line": 64,
+            "book_line": 205,
+            "text": "%INCLUDE \"HWLIB.ASM\""
+          }
+        ],
+        "predicted_first_boundary": "ABI.INC is already outside the source header because BDOS EQU precedes it. This is source-derived, not an observed diagnostic.",
+        "closure": [
+          "this exact client",
+          "ea3 src/abi.inc stored as ABI.INC",
+          "identified compact HWLIB.ASM appended at the source include position"
+        ]
+      },
+      {
+        "name": "RECS.ASM",
+        "book_path": "tec-os/editorial/reader-rewrite/draft/13-compact-example-candidates.md",
+        "book_fence_body_start_line": 211,
+        "bytes": 1713,
+        "sha256": "b21550ff9cef040641e5d03fbb317efa8080589a1e9a8d12d714df42b5e44704",
+        "first_ordinary_source_line": 6,
+        "first_ordinary_text": "BDOS equ $0005",
+        "include_lines": [
+          {
+            "source_line": 7,
+            "book_line": 217,
+            "text": "%INCLUDE \"ABI.INC\""
+          },
+          {
+            "source_line": 85,
+            "book_line": 295,
+            "text": "%INCLUDE \"HWLIB.ASM\""
+          }
+        ],
+        "predicted_first_boundary": "ABI.INC is already outside the source header because BDOS EQU precedes it. This is source-derived, not an observed diagnostic.",
+        "closure": [
+          "this exact client",
+          "ea3 src/abi.inc stored as ABI.INC",
+          "identified compact HWLIB.ASM appended at the source include position"
+        ]
+      }
+    ],
+    "hwlib": {
+      "name": "HWLIB.ASM",
+      "book_path": "tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md",
+      "book_fence_body_start_line": 25,
+      "bytes": 2606,
+      "sha256": "4e24317cfee3bff6e7c840e41a1fa7c73fa82540faeee4f7de24f6f09d7e89b0"
+    },
+    "abi": {
+      "path": "src/abi.inc",
+      "revision": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+      "bytes": 6242,
+      "sha256": "092ccf072bb559ba8efc5e55f576d303f2f98a3ea13ed2e821bbd102856a9357",
+      "content": "Equates and comments only. No nested include.",
+      "distribution_limit": "No unstated dist/abi.inc identity is inferred. Future proof must retain the actual distribution include and demonstrate the consumed constants against this source."
+    },
+    "path_rules": "The Node public reader requires exact physical filename spelling, project-contained paths and importer-relative include resolution. Identified uppercase filenames can be staged without altering source bytes. Case-only rewriting of INCLUDE operands is not accepted as proof and would not change the header restriction.",
+    "source_order": "ABI constants before the client body, followed by the complete executable/data HWLIB at the trailing include location. The helper is not a standalone COM entry.",
+    "accepted_primary_call_shapes": [
+      "TAS BOARD",
+      "TAS LCDMSG",
+      "TAS DIGCLK",
+      "TAS NOW",
+      "TAS ROWS",
+      "TAS PLACE",
+      "TAS VTEST",
+      "TAS CHARS",
+      "TAS RECS"
+    ],
+    "calls_executed": false
+  },
+  "remaining_boundary": {
+    "reference_offer": "Keep the explicit ATOM reference held for all nine clients under these exact pins. A route change would need its own separately reviewed authority and source/inclusion-order provenance before allocation. None is proposed or implemented here.",
+    "plain_com_and_services": "No conclusion about unrelated no-include COM examples or the separate already recorded service-source ORG refinement is changed.",
+    "shared_files": "No plan, ladder, root page, reader candidate, product source or dependency changed."
+  },
+  "evidence": [
+    {
+      "id": "T1",
+      "owner": "tec-os",
+      "path": "tools/lib/assemble.mjs",
+      "sha256": "c20c75e8d5fce568183c729a56246a617c036c3139363c1093c360b233801b31",
+      "bytes": 926,
+      "read_line_ranges": [
+        [
+          1,
+          20
+        ]
+      ],
+      "revision": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+      "git_blob": "5aecdf71891fd5a726bc29505a23b99b3b029f15"
+    },
+    {
+      "id": "T2",
+      "owner": "tec-os",
+      "path": "tools/lib/svc.mjs",
+      "sha256": "acec05c4e8136917be344caaba1bffa3d49eda4e631fb32a303e0399cc57744f",
+      "bytes": 6051,
+      "read_line_ranges": [
+        [
+          1,
+          134
+        ]
+      ],
+      "revision": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+      "git_blob": "3dc7fade7cd83069d0e9e409abe156d8ea711085"
+    },
+    {
+      "id": "T3",
+      "owner": "tec-os",
+      "path": "tools/lib/prl.mjs",
+      "sha256": "ca74cbd6226753907507e90373a7668f2d671ce7219e1eb20bb8442a3b0754b8",
+      "bytes": 3166,
+      "read_line_ranges": [
+        [
+          1,
+          67
+        ]
+      ],
+      "revision": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+      "git_blob": "89ed0a14948e1db700f934c22b60e6b780a7d7f1"
+    },
+    {
+      "id": "T4",
+      "owner": "tec-os",
+      "path": "tools/media.mjs",
+      "sha256": "548ea6a00da1d4ccfad4cb9a386ceaa2fe432658de8662306d000b304ee4b42f",
+      "bytes": 12314,
+      "read_line_ranges": [
+        [
+          168,
+          198
+        ]
+      ],
+      "revision": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+      "git_blob": "60a087c609439310eca3865d0e46521b17702375"
+    },
+    {
+      "id": "T5",
+      "owner": "tec-os",
+      "path": "tools/lib/tas-rom.mjs",
+      "sha256": "5bdc57f91364858667cc84a55d960b1b1b51c2a0b4c990cf2c41bbb45264dc15",
+      "bytes": 6768,
+      "read_line_ranges": [
+        [
+          120,
+          124
+        ]
+      ],
+      "revision": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+      "git_blob": "5565f58b527771c11f21ff004b37a1d753738f56"
+    },
+    {
+      "id": "T6",
+      "owner": "tec-os",
+      "path": "test/lib/fixtures.mjs",
+      "sha256": "7fbc921bccfeafba850a912a2fe93bb7467a84057c58ad51fd2b00cdb98df1ad",
+      "bytes": 5631,
+      "read_line_ranges": [
+        [
+          1,
+          115
+        ]
+      ],
+      "revision": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+      "git_blob": "d7f6a56c017548ee7bf6b5cb629f799d8c3e5e80"
+    },
+    {
+      "id": "T7",
+      "owner": "tec-os",
+      "path": "src/abi.inc",
+      "sha256": "092ccf072bb559ba8efc5e55f576d303f2f98a3ea13ed2e821bbd102856a9357",
+      "bytes": 6242,
+      "read_line_ranges": [
+        [
+          1,
+          243
+        ]
+      ],
+      "revision": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+      "git_blob": "5882ae0b14c8b48f6f5b643e39ee20a74bb20caa"
+    },
+    {
+      "id": "T8",
+      "owner": "tec-os",
+      "path": "package-lock.json",
+      "sha256": "2615ff7b36345318ab310673f630e9b38b49dd296146e70e22bab4c90b22f69c",
+      "bytes": 17364,
+      "read_line_ranges": [
+        [
+          459,
+          483
+        ]
+      ],
+      "revision": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+      "git_blob": "f4b0f98c6a9dfbd3510386bd1b941543419d84e4"
+    },
+    {
+      "id": "A1",
+      "owner": "atom-0.3.7",
+      "path": "package.json",
+      "sha256": "72774d26f238303875c6402a9b1e098889a53e9901e25f4d5f94380426417581",
+      "bytes": 2499,
+      "read_line_ranges": [
+        [
+          1,
+          78
+        ]
+      ]
+    },
+    {
+      "id": "A2",
+      "owner": "atom-0.3.7",
+      "path": "README.md",
+      "sha256": "7afbae2b7bf7fec108f23097f216ebc8fd88dda01aea43ced1223d2a574ed9db",
+      "bytes": 1488,
+      "read_line_ranges": [
+        [
+          1,
+          43
+        ]
+      ]
+    },
+    {
+      "id": "A3",
+      "owner": "atom-0.3.7",
+      "path": "docs/using-atom.md",
+      "sha256": "3396381d6ff29b94db6d6a25965135693a80940de055c0e82d99cf177b5740ed",
+      "bytes": 7459,
+      "read_line_ranges": [
+        [
+          1,
+          227
+        ]
+      ]
+    },
+    {
+      "id": "A4",
+      "owner": "atom-0.3.7",
+      "path": "docs/programming-api.md",
+      "sha256": "25063605d352368333469458f1a39122f6bae26317edce500346b5fb8ed392c0",
+      "bytes": 4045,
+      "read_line_ranges": [
+        [
+          1,
+          99
+        ]
+      ]
+    },
+    {
+      "id": "A5",
+      "owner": "atom-0.3.7",
+      "path": "docs/language-reference.md",
+      "sha256": "d42ac6b9d549aa7e67f49e369f51386aedfb1da5ddd71397ac60a0df7bca6fe7",
+      "bytes": 6044,
+      "read_line_ranges": [
+        [
+          1,
+          183
+        ]
+      ]
+    },
+    {
+      "id": "A6",
+      "owner": "atom-0.3.7",
+      "path": "src/host/index.mjs",
+      "sha256": "4ed0976e59808df7d59421c1d1ffbcaf1d73f2a1fb97735e4d62a6d24acc3b98",
+      "bytes": 1976,
+      "read_line_ranges": [
+        [
+          1,
+          53
+        ]
+      ]
+    },
+    {
+      "id": "A7",
+      "owner": "atom-0.3.7",
+      "path": "src/host/application/assemble-atom-project.mjs",
+      "sha256": "92213e902368175a60ea27e6dde5a2708840a4b582b1b16e4f0a710421fb6f76",
+      "bytes": 1246,
+      "read_line_ranges": [
+        [
+          1,
+          41
+        ]
+      ]
+    },
+    {
+      "id": "A8",
+      "owner": "atom-0.3.7",
+      "path": "src/host/application/resolve-atom-project.mjs",
+      "sha256": "fd9267bed7ecbc5da1fc3935107248b57fd82fc20a4a09e8404022c564cda8d4",
+      "bytes": 1923,
+      "read_line_ranges": [
+        [
+          1,
+          60
+        ]
+      ]
+    },
+    {
+      "id": "A9",
+      "owner": "atom-0.3.7",
+      "path": "src/host/atom/source-profile.mjs",
+      "sha256": "0a206d2ed7921fe4f46b2b206e656da72cba01a65eba53aa63694c35f8cc19a5",
+      "bytes": 442,
+      "read_line_ranges": [
+        [
+          1,
+          14
+        ]
+      ]
+    },
+    {
+      "id": "A10",
+      "owner": "atom-0.3.7",
+      "path": "src/host/atom/directives.mjs",
+      "sha256": "cb49643aee2469c473d15d5e5300768a1710ac07db359819f70040522dfb4ded",
+      "bytes": 9818,
+      "read_line_ranges": [
+        [
+          1,
+          275
+        ]
+      ]
+    },
+    {
+      "id": "A11",
+      "owner": "atom-0.3.7",
+      "path": "src/host/harness/native-atom-runner.mjs",
+      "sha256": "3e322d623d622806ce6adb2831d6fcd597cc9fd5aaad86ca4cca8a3e3e65b6e0",
+      "bytes": 43140,
+      "read_line_ranges": [
+        [
+          288,
+          379
+        ],
+        [
+          907,
+          957
+        ],
+        [
+          1040,
+          1108
+        ]
+      ]
+    },
+    {
+      "id": "A12",
+      "owner": "atom-0.3.7",
+      "path": "bin/atom.mjs",
+      "sha256": "844623bb165c517b5a314791e9c6f79a0b5955766a1c547eef4175ed236a1a6b",
+      "bytes": 11353,
+      "read_line_ranges": [
+        [
+          1,
+          285
+        ]
+      ]
+    },
+    {
+      "id": "A13",
+      "owner": "atom-0.3.7",
+      "path": "node_modules/@jhlagado/z80-tool-services/source-preparation/resolver.mjs",
+      "sha256": "692aa82fdedc25d310453e1e0a29808e0aaa980feed48f33405a98d0fa6df58d",
+      "bytes": 9531,
+      "read_line_ranges": [
+        [
+          1,
+          285
+        ]
+      ]
+    },
+    {
+      "id": "A14",
+      "owner": "atom-0.3.7",
+      "path": "node_modules/@jhlagado/z80-tool-services/source-preparation/node-source-reader.mjs",
+      "sha256": "e4974427744dc76cfc1a68363441eaf8e2f175a390ea63d497a66ac62a21ae41",
+      "bytes": 4290,
+      "read_line_ranges": [
+        [
+          1,
+          128
+        ]
+      ]
+    },
+    {
+      "id": "A15",
+      "owner": "atom-0.3.7",
+      "path": "node_modules/@jhlagado/z80-tool-services/source-preparation/index.d.mts",
+      "sha256": "c3e32017658cb4f75606f37b3827b31e5846b21866a00f1b6c4985a66ef53597",
+      "bytes": 3491,
+      "read_line_ranges": [
+        [
+          1,
+          106
+        ]
+      ]
+    },
+    {
+      "id": "A16",
+      "owner": "atom-0.3.7",
+      "path": "src/z80/cpmread.asm",
+      "sha256": "8dbc0a6a69ed5d93f084a541c86fd7ec7f7fe66d32811141b36058f7a78923e3",
+      "bytes": 37053,
+      "read_line_ranges": [
+        [
+          1,
+          65
+        ]
+      ]
+    },
+    {
+      "id": "A17",
+      "owner": "atom-0.3.7",
+      "path": "src/z80/ppctrl.asm",
+      "sha256": "3fdc1a04f46aeb7b9658b4029d3a082927134635fe63d2c6f9133a6870f2c47e",
+      "bytes": 34409,
+      "read_line_ranges": [
+        [
+          1,
+          100
+        ]
+      ]
+    },
+    {
+      "id": "B1",
+      "owner": "book",
+      "path": "tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md",
+      "sha256": "c7002d050d3dbb56badbc49fa600642834af25ab879df8f4f181ecd493c98308",
+      "bytes": 29669,
+      "read_line_ranges": [
+        [
+          1,
+          760
+        ],
+        [
+          775,
+          888
+        ]
+      ],
+      "revision": "cf20791f2bdd4e2bea3db396400364aeeb49e7f9",
+      "git_blob": "11d46b8405563bcc25d3c3d2d1d55f8cb471b96f"
+    },
+    {
+      "id": "B2",
+      "owner": "book",
+      "path": "tec-os/editorial/reader-rewrite/draft/13-compact-example-candidates.md",
+      "sha256": "bf3af0180e2ecb446f503ca2134eddda175bd0ee4d9bb102472dd8e53914e19a",
+      "bytes": 17827,
+      "read_line_ranges": [
+        [
+          139,
+          298
+        ],
+        [
+          434,
+          482
+        ]
+      ],
+      "revision": "cf20791f2bdd4e2bea3db396400364aeeb49e7f9",
+      "git_blob": "9501f1f1bab02ee4978369753a89922d83e6a0a9"
+    },
+    {
+      "id": "B3",
+      "owner": "book",
+      "path": "tec-os/editorial/reader-rewrite/compact-proof-plan.md",
+      "sha256": "813cefbf18b66a582a320406a6e14d314a6a87332bdacde60139c7408b14b31c",
+      "bytes": 26093,
+      "read_line_ranges": [
+        [
+          105,
+          178
+        ]
+      ],
+      "revision": "cf20791f2bdd4e2bea3db396400364aeeb49e7f9",
+      "git_blob": "5bc222adcc9e14666eb9c8122c2bbe3bf2f82825"
+    }
+  ]
+}
