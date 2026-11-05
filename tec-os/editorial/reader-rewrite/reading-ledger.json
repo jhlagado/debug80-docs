@@ -285,11 +285,14 @@
       "sha256": "3a0da82c6b2e7a599e1b6686df607d763d7a572c380c4d2ed77d736f18b72f5e",
       "lines": 589,
       "words": 4530,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "Page zero and the jump",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 589,
+      "outline": "reverse-outline-20.md",
+      "continuity_problems": "Separate familiar command use from parser, dispatch, search and program-launch mechanisms; crosswalk the complete Chapter 3 driver reading without relocating its catalogue intact."
     },
     {
       "path": "tec-os/21-chaining-inside.md",
@@ -475,5 +478,6 @@
     "origo/studies/p3-tec-os/reviews/book-opening.md"
   ],
   "review_coverage_limit": "Opening review covers full front matter and Chapters 1, 2 and 7; only headings in 3-6. It is not whole-book coverage.",
-  "banner_preparation": "banner-validation-plan.md: source inspection only; execution waits for allocation and final offered source."
+  "banner_preparation": "banner-validation-plan.md: source inspection only; execution waits for allocation and final offered source.",
+  "additional_driver_reading": "Origo 377abb9a reviews/book-opening.md: complete Chapter 3 reading; dispositions recorded in reverse-outline-20.md for the replacement crosswalk."
 }
