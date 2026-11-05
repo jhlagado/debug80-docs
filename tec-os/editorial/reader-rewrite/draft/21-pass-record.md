@@ -236,3 +236,12 @@ Read the changed paragraphs for continuity, deletion, agency and punctuation.
 The success/failure ranges, result-clear order and historical fences are
 unchanged. No product execution, import, build or test was performed.
 Lead confirmation of these corrections remains separate from this disposition.
+
+## Correction confirmation
+
+Read the complete1d7eb58 correction diff and checked the actual offered
+CCP224–241/403–429 and COPY355–368 paths. The two INC A operations,
+ARGSTRT order and final-newline use of PRTGO now match those instructions.
+All three independent findings close. The full earlier chapter read and
+review remain separate from these focused confirmations. No runtime work
+was performed. Final navigation and qualification remain pending.

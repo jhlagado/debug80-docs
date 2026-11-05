@@ -189,3 +189,13 @@ previous navigation state and do not certify the final-root arrangement.
 All existing appendix filenames and anchors are retained. Only link prefixes
 changed, with no source claim, historical evidence or prose change. Root-book
 integration remains with the final placement pass. No execution was performed.
+
+## Independent review closure
+
+Full old/new and pass-record review found no factual or craft blocker.
+The review identified two incoming Chapter27 links to obsolete headings.
+Those are corrected at6c78f45 to ram-before-the-workspace and retained-drive-
+selection. Final-root appendix links are normalised at1d7eb58. Historical
+timings, including the recorded unresolved first-CONIN discrepancy, are
+preserved evidence rather than newly recertified runs. Current qualification
+and whole-book integration remain pending.
