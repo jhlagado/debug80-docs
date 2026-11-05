@@ -12,14 +12,17 @@ Private Origo directory:
 Preserved in private Origo commit `8adbc1bf`.
 The directory contains byte-for-byte copies of the retained script/output,
 book reviews 22, 40 and 46, the relevant `5006e2c` diff and `manifest.json`.
-The manifest records original paths, byte counts and SHA-256 for each payload.
+The manifest records neutral retained paths, byte counts and SHA-256 for each payload.
 These identities preserve the evidence inspected; they do not independently
 prove the historical execution environment or reproduce its results.
 
-Original retained directory:
-`/private/tmp/claude-501/-Users-johnhardy-projects-debug80-docs/04aa97d9-d3eb-44c9-afc3-74d8aa07810f/scratchpad/b14p2-t/`.
+The current evidence manifest uses neutral Origo-relative retained paths.
+Metadata correction: private Origo commit `58b98a9c`; archived payload bytes
+and their identities below are unchanged. The script and saved output were
+inspected as text and contain no prohibited attribution or branded scratch
+paths. They were not executed or imported.
 
-| Original and archived filename | Bytes | SHA-256 |
+| Retained filename | Bytes | SHA-256 |
 | --- | ---: | --- |
 | `measure.mjs` | 7027 | `9fadc5c2a60304385b39ce622c53cc2fbf0584640190774841255dc92365e351` |
 | `m781.json` | 1672 | `1921c0f65d39abe6812d6ca80888bb5e3a59a7593255ab8003df923a5be34947` |
