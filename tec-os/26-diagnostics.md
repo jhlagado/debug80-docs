@@ -10,6 +10,10 @@ nav_group: "Part II: Inside TEC-OS"
 <!-- Checked against TEC-OS 78127ec. The diagnostics ROM in this chapter is version
      0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit. -->
 
+<!-- C16 source-only citation revisions: TEC-OS fe2097f.
+     Only the entries in editorial/c16-citation-resolutions.json use that pin.
+     Captures, measurements and other citations retain their earlier provenance. -->
+
 Cold boot stops in one place. When the card won't start or its container
 won't mount, TEC-OS waits at a diagnostic prompt with a code. Everything else
 that can be wrong with a board is tested by a second image, the diagnostics
@@ -20,15 +24,15 @@ of a board's report with the model's.
 ## The diagnostic prompt
 
 Cold boot sets up the 20 × 4 LCD and the card at `COLDRT`, on the BDOS's
-stack, which nothing else uses before the CCP runs (`src/boot.asm:63-64`). It
+stack, which nothing else uses before the CCP runs (`src/boot.asm:119-123`). It
 starts the card with `SDINIT` and checks the container with `MOUNT`. A
 failure of either jumps to `DIAG` with an error code in `A`
-(`src/boot.asm:67-70`). The code is one of `SDINIT`'s, `01h` to `04h` and
+(`src/boot.asm:127-132`). The code is one of `SDINIT`'s, `01h` to `04h` and
 `0Bh`, or one of `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-20`,
-`src/vol.asm:13-24`). The banner is printed before the card is touched
-(`src/boot.asm:52-53`), so it appears whatever the card holds. Only the RAM
+`src/vol.asm:25-43`). The banner is printed before the card is touched
+(`src/boot.asm:97-99`), so it appears whatever the card holds. Only the RAM
 check, the console's start and the clock's test come before the banner
-(`src/boot.asm:36-51`). A board with less than 64 KiB stops in the RAM check
+(`src/boot.asm:71-96`). A board with less than 64 KiB stops in the RAM check
 with `TEC-OS needs 64K RAM` on the serial port, as [Chapter
 15](15-reset-and-boot.md#the-ram-check) describes.
 
@@ -45,7 +49,7 @@ letter into a capital for the test. So `r` retries too, and a digit echoes as
 the digit (`src/boot.asm:479-487`). Any key but `R` gives the prompt again
 (`src/boot.asm:489`). On a board with the PICO9918 and the matrix keyboard the
 console is the ROM's PICO9918 console, which cold boot starts before the
-banner (`src/video.asm:8-15`, `src/pico.asm:27-47`). The prompt is then on
+banner (`src/video.asm:16-27`, `src/pico.asm:50-82`). The prompt is then on
 that screen, and the key comes from the matrix keyboard. On any other board
 the console is the serial terminal, since the graphics LCD's driver is on the
 card. A board with no PICO9918 and no terminal attached shows only the LCD's
@@ -64,15 +68,15 @@ R retry>
 again, which clears `CARD?`, and then repeats the card's start and the mount.
 A card fixed or put in while the prompt waits is mounted without a reset.
 `MOUNT` reads each block of the table from the card again, whatever a cache
-line holds (`src/vol.asm:32-36`).
+line holds (`src/vol.asm:56-65`).
 
 The retry keeps a selection of volumes carried over from a recognised reset,
 which [Chapter 15](15-reset-and-boot.md#the-reset-test) explains. `RSLCAP`
 copies the drive table to `RSLBUF` before cold boot clears anything
-(`src/boot.asm:28`). `RSLBUF` is at `0100h`, in the fixed RAM
-(`src/layout.asm:84`), and nothing on the path from there to the prompt
+(`src/boot.asm:59-60`). `RSLBUF` is at `0100h`, in the fixed RAM
+(`src/layout.asm:147`), and nothing on the path from there to the prompt
 writes it. `MEMINIT` clears EXPAND 1 alone, and the mount reads the table into
-a line in EXPAND 1 (`src/boot.asm:54`, `src/boot.asm:172-188`). [Appendix
+a line in EXPAND 1 (`src/boot.asm:100-102`, `src/boot.asm:302-332`). [Appendix
 D](appendix-d-error-messages.md) gives each code's cause and remedy.
 
 ## The diagnostics ROM
@@ -93,20 +97,21 @@ diag: ROM 16318/16384 bytes, 56 free, image D90143609F53FAAB, checksum $47C0
 `diag/gen/config.asm` holds the version, the serial delay counts and the
 stopwatch constants, and `diag/gen/font.asm` comes from `format/font5x7.txt`,
 the file the TEC-OS ROM's own font is built from. The serial delays are worked
-out from 4 MHz and 4800 baud as for TEC-OS (`tools/diag.mjs:37-49`). The
-script then assembles `diag/diag.asm` with ATOM, fills the unused bytes with
-`FFh` and writes `build/diag/diag.rom`, its symbol map and
-`build/diag/diag.json` (`tools/diag.mjs:90-133`).
+out from 4 MHz and 4800 baud as for TEC-OS (`tools/diag.mjs:37-49`). The script
+then assembles `diag/diag.asm` with the selected backend, TAS by default or ATOM
+with `TECOS_ROM_ASSEMBLER=atom`, fills the unused bytes with `FFh` and writes
+`build/diag/diag.rom`, its symbol map and `build/diag/diag.json`
+(`tools/diag.mjs:90-143`).
 
 Two values in the image identify it, so that a report names the image that
 produced it and a test can check the ROM on the board. The image ID is the
 first 8 bytes of the SHA-256 of the image with its last 10 bytes,
 `FFF6h–FFFFh`, set to `FFh` (`tools/diag.mjs:25-28`, `tools/diag.mjs:83-88`).
-The build stores it at `FFF6h` (`tools/diag.mjs:115`), and the banner and the
+The build stores it at `FFF6h` (`tools/diag.mjs:126`), and the banner and the
 report both print it. The last two bytes, at `FFFEh`, hold the 16-bit sum of
-`C000h–FFFDh` (`tools/diag.mjs:116-119`), which test T05 checks on the board.
+`C000h–FFFDh` (`tools/diag.mjs:127-130`), which test T05 checks on the board.
 
-The build checks the image before writing it (`tools/diag.mjs:104-112`). The
+The build checks the image before writing it (`tools/diag.mjs:115-123`). The
 reset entry must be at `C000h` and the interrupt entries at `C038h` and
 `C066h`. Cold boot and the first RAM check must lie in the first 2 KiB, which
 is all the board shows at `0000h` after a reset. The code must end below the
@@ -314,9 +319,9 @@ test with the TEC-1G's own documents. The documents describe the latch as
 write-only and bits 3 to 6 as unconnected to U9, and they select the ROM, not
 the RAM, for a write under the overlay. A board can therefore answer all three
 differently. TEC-OS depends on none of them. It keeps a copy of the latch at
-`0040h` and never reads port `FFh` (`src/layout.asm:14`,
-`src/layout.asm:39`). It selects EXPAND 1 with bit 2 alone
-(`src/layout.asm:20`), and it never writes below `0800h` while the overlay is
+`0040h` and never reads port `FFh` (`src/layout.asm:23-24`,
+`src/layout.asm:62-70`). It selects EXPAND 1 with bit 2 alone
+(`src/layout.asm:33-34`), and it never writes below `0800h` while the overlay is
 on.
 
 ## Comparing a board's report with the model's
