@@ -383,3 +383,12 @@ LONG flag combines three separately punctuated path references under the
 parser. The deletion-pass CLAUSES flag retains the reasons for session and
 include prerequisites. Earlier record flags are unchanged historical evidence
 and list-parser fragments. No flag requires unrelated shortening.
+
+## Final interface-name clarification
+
+The qualified FAIL paragraph now names the PICO9918 console at 40 columns.
+Version 3 identifies the PICO registry interface, not the hardware console.
+That interface identity remains in the evidence and provenance comment. Only
+this wording changed, in the draft and its exact integrated root copy. The
+whole surrounding setup paragraph was read again. No listing, capture, input
+or proof boundary changed and no runtime accompanied the clarification.

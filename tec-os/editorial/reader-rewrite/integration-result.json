@@ -92,8 +92,9 @@
       "draft": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
       "root": "tec-os/13-write-a-resident-service.md",
       "accepted_input_sha256": "1a49cc9be52c6a2bc88e71ae7ece9c5a01610aa707fe27bbcf3d9e1920dcd934",
-      "integrated_sha256": "19cd3f9c801aaec6a4171cc2b1feafd9535be97e011ee27ce8f404d9bac643e0",
-      "body_unchanged_by_navigation": true
+      "integrated_sha256": "ce41f0d53845043fde293f184d0057d5a42ac920eca02c5e95ced6886cb1677e",
+      "body_unchanged_by_navigation": true,
+      "post_integration_prose_correction": "PICO9918 console name clarified"
     },
     {
       "draft": "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md",
@@ -349,5 +350,12 @@
     "prose_hard_findings": 0,
     "review_candidates": 11,
     "report": "integration-source-checks.json"
-  }
+  },
+  "post_integration_corrections": [
+    {
+      "page": "13-write-a-resident-service.md",
+      "reason": "PICO record interface version3 must not be used as a hardware console version",
+      "scope": "One prose phrase; capture/source/evidence interface identity unchanged"
+    }
+  ]
 }
