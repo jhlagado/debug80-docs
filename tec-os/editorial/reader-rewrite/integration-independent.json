@@ -1,0 +1,553 @@
+{
+  "status": "bounded independent integration confirmation clear",
+  "integration_commit": "9e227055c63f8d47773c53f6421cec3a6ebf7b67",
+  "accepted_preintegration_commit": "13c84463f23bf708ba20d95a2e44f6f86406441b",
+  "findings": [],
+  "scope": "Review of complete 107-file integration diff through exact accepted-draft identity, metadata deltas, explicit deletion manifest, generated navigation values and independent static root link/anchor resolution. This is not a new whole-book factual or rendered-quality review.",
+  "input_records": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/integration-plan.json",
+      "sha256": "218bbc606f66ef5bb10818e459037930f369b21d57ed3b37060e182b6620004f"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/integration-result.json",
+      "sha256": "287208454b0352b9ddca13d9e0a1e1a0ee54b36372f42505df964b136a1e6e30"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/integration-source-checks.json",
+      "sha256": "5db4d25120cd506fc84cdbaff49dac9a4d298521ee99d388271ceecc42c0b2ce"
+    }
+  ],
+  "checks": {
+    "root_clones": {
+      "status": "clear",
+      "files": 39,
+      "equal_to_final_drafts": 39,
+      "preintegration_comparison": "38 drafts differ solely in the single frontmatter nav_group line. The index is unchanged. No reader body, listing, transcript, recipe, comment, measurement, source pin or historical hash was altered by integration.",
+      "identities": [
+        {
+          "root": "tec-os/01-first-session.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+          "accepted_input_sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf",
+          "integrated_sha256": "982101a7dcce73678472492d0fe0c2954a1a4a107f276099a9e333aa32c96480",
+          "bytes": 9096,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/02-make-a-small-program.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+          "accepted_input_sha256": "d044c76708b41a7156ec4151ff89501fe80b17708d7334c520522d365164c5e3",
+          "integrated_sha256": "ae0f232fe28f90fd6bde10f58bff7e8b1cdad461570d5b58feef6d5db5cf30f0",
+          "bytes": 10689,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/03-work-with-files.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+          "accepted_input_sha256": "e05220ccb13b0d9ab7bf5af2e33d11c96cc5599e63941eb832d2aa2f3e3da1f4",
+          "integrated_sha256": "5828ff5e927bad3813e1bedb6a4324a7191bfdfe98fb0acd94c54884e7353828",
+          "bytes": 11190,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/04-drives-and-user-areas.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+          "accepted_input_sha256": "7d69717feabc9d1762874c941490dea8acd98da94e66888f8aa7ef9d6fbaf3a4",
+          "integrated_sha256": "195afaf55f6c028a1d712ea087c6342dbbac93f0f490e09a8c848c4679ffef28",
+          "bytes": 16524,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/05-cards-on-the-pc.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+          "accepted_input_sha256": "54c3d3da91b26c2f4c8fefbcade447288d583aa4ec8c56229e96bf23f99d3dec",
+          "integrated_sha256": "2147bfbc8fc69d4139810502592cb7367220965950d98fa5ca83b05c6f9b7e95",
+          "bytes": 25160,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/06-choose-a-console.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
+          "accepted_input_sha256": "e8774ed57692aa16d85946f19deaf805ad6b179356d2d10471975e0ba4e4df64",
+          "integrated_sha256": "e48a49c798e4eedb433320728f3c24edefbea54230932701a6892b5f77a59d34",
+          "bytes": 12038,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/07-commands-at-startup.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+          "accepted_input_sha256": "934203fea1ff6f79b51d2299a92cb3254d244975f2c257f5ebbb6339d71b3b2b",
+          "integrated_sha256": "4336d1372ff50572bdfcdd5554c266ad84052e5de9421e26e7f6d743c2e3e237",
+          "bytes": 15831,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/08-call-tec-os.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+          "accepted_input_sha256": "ddaf1c27247b9edd39ac4f23d65a030733db3e578e0463d9e3f04dfaa5889bf0",
+          "integrated_sha256": "8aeb33d0c2bfe88de2269c343c5686cc6cfc26792f2f1b2bd2329fd902996790",
+          "bytes": 11342,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/09-read-and-write-a-file.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+          "accepted_input_sha256": "01ebdff101a5e948acd275e8293ff576b05a74d9a29194b430feaa7a349b4257",
+          "integrated_sha256": "0829de9ec9905c3d685aa06a72e432daa2aa1968e36a0753968a45fe392f1980",
+          "bytes": 15781,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/10-memory-for-programs.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+          "accepted_input_sha256": "0a252eb5cdbe822dec84fbd13598a1ca0b3a05f5bf16549dc13d71ff44ccb690",
+          "integrated_sha256": "4c47dfaec37d5223d7d8587ee02eb75b1d9e352a7b98eb25a8ad39b8587b7d33",
+          "bytes": 22679,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/11-use-the-boards-devices.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+          "accepted_input_sha256": "3f870a5add211dff50208e6573358b1d77eb2b4385f68b077fb271bdb9061ae1",
+          "integrated_sha256": "4f4c6891e9c1a8d63ffbdd3c6c809e876a200c45b6b0c4ffa6c8611663012672",
+          "bytes": 32013,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/12-results-and-command-chains.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+          "accepted_input_sha256": "02ff3fbf4ab97eb82db0e4de9d4afa7f1a6a6f7c251647da836cda83c7660f84",
+          "integrated_sha256": "db02f131ae5284cf19d3ca63ddb2b60b91218ffdcabf21b0721ec3b930f473e6",
+          "bytes": 17143,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/13-write-a-resident-service.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+          "accepted_input_sha256": "1a49cc9be52c6a2bc88e71ae7ece9c5a01610aa707fe27bbcf3d9e1920dcd934",
+          "integrated_sha256": "19cd3f9c801aaec6a4171cc2b1feafd9535be97e011ee27ce8f404d9bac643e0",
+          "bytes": 33527,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/14-state-and-memory.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md",
+          "accepted_input_sha256": "451b8ea2645b8f989688a7407e8c11519c678bf7720dbaab3a3756822b5113a9",
+          "integrated_sha256": "fe0240e11ba2572036a54881ed76640b8e0a2a227408e6d2c79cc07bfac42b28",
+          "bytes": 18295,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/15-reset-and-boot.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/15-reset-and-boot.md",
+          "accepted_input_sha256": "9bca763751490d253b54de6abe66b33ec16b196f5aae393b6417d57476a306e4",
+          "integrated_sha256": "b670b89138ff916f97c4a3caade5fc70bfd7a9989e3211d8d40b794dc6db3cc0",
+          "bytes": 22051,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/16-console-paths.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/16-console-paths.md",
+          "accepted_input_sha256": "b7b853b8f2b2ae3f80d1567c10d94453d9562b37841a109cb390a793205ace7e",
+          "integrated_sha256": "5d37cb47445b9a30431c0900827d337f7844041ea2de50d90261a49ec85430cf",
+          "bytes": 31131,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/17-card-blocks-and-volumes.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/17-card-blocks-and-volumes.md",
+          "accepted_input_sha256": "99083f0eff6168cd684c3eef3d1cfad54cc604b92ca125d3f600e15a95686c17",
+          "integrated_sha256": "906bde8f2758d75297d110d2ade6083998c8a7186d9431e103aa6da2289afa91",
+          "bytes": 28539,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/18-cache-and-persistence.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "accepted_input_sha256": "96a6172931a78f8eb3a07295ca4b87dd56a2dde6e659a211c1a90e67134d9677",
+          "integrated_sha256": "65452579354eb5e48380a3d8653ca733a00bf9caea5bbb8336ffa4422d4dade2",
+          "bytes": 25126,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/19-a-file-through-the-bdos.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "accepted_input_sha256": "af25110f0117d8e6b31640ddf2462d66ce89bc2ca2d1e6e51ca0b464c6589a4d",
+          "integrated_sha256": "96ebc2adc830bd1aa15cc390a051a2ed9947f718021c5be860a024508d13ce0f",
+          "bytes": 29230,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/20-from-prompt-to-program.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+          "accepted_input_sha256": "d46b613434e539e65d69f99ee863713d1d874a221b5cdbaa5f6fe3b15741dc85",
+          "integrated_sha256": "f87836a373a50f2e1da343dd7b208ed01e382d33bd0688f6e8ad2306355c610a",
+          "bytes": 27220,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/21-chains-across-warm-boot.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+          "accepted_input_sha256": "693da4a88d3991143acbfe3185746eaf5e1dd2bfe847454514c43f28894e361a",
+          "integrated_sha256": "00dafe111d60babaf2bf318374088a39d5fae3f984548c4b9890f611a418cb23",
+          "bytes": 17761,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/22-the-history-ring.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/22-the-history-ring.md",
+          "accepted_input_sha256": "cb91643673268a8b0948298be5c1b865acd2ce63d79e73033b5333d7347c8c0d",
+          "integrated_sha256": "6c11896d9e867c5f248df86a6cec3f541dd90d5ef182d51cc1f5e27af1cebf79",
+          "bytes": 13818,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/23-numbered-service-dispatch.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md",
+          "accepted_input_sha256": "157602c7c7bd62648c8591ae23dc01f3eb1b613afd62917d79cf0720d9ef779a",
+          "integrated_sha256": "167c2f5ddf58c9efb332f94b9a352288d10ea4dc0965200e1bb0a968a6bba81f",
+          "bytes": 15215,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/24-loading-and-removing-services.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+          "accepted_input_sha256": "1ff6f8f9511888aba04ad7e76c6efde23b87b0b10c95acf5ec80440d4833f882",
+          "integrated_sha256": "9ac0c0b06961ca1da739f8141051ae2733a1a0bc0df3bc96986bbaa6def15c66",
+          "bytes": 24807,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/25-startup-inside-the-ccp.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+          "accepted_input_sha256": "7456e2a0ec80b8fac2e96caae82d845dfb0f1fb5ad7e557238be8256bcaa9b93",
+          "integrated_sha256": "b29a92c2458e7820885874af39ba3a47cbed92d653a9d2743dff44ba3f787708",
+          "bytes": 19877,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/26-build-the-rom-and-media.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md",
+          "accepted_input_sha256": "e893594bd91dc94514e38747f8576bd855aa38daa40a5104da093a8267381613",
+          "integrated_sha256": "709eaddf642de42a4c86cb08f88e63e05368392904413a6f1cd962a2b07f7b40",
+          "bytes": 22388,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/27-diagnose-the-machine.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+          "accepted_input_sha256": "6e1f9a27a0edcbedf0d36dd1c6aaed0fc9fa664051db2b8cb9e7a3986a5f96ef",
+          "integrated_sha256": "8184d5eda73009a3fd38740328dad4eb3f9ddd919410641349315f329f245e43",
+          "bytes": 23804,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/28-the-host-model-as-evidence.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+          "accepted_input_sha256": "c2f9bd746a4a13f6f58253af9adae81c11da769e8f4a593b8bdadd3349b84b63",
+          "integrated_sha256": "405a7d80be0ebbd310c1a89c27f233d661cb7ecc891685e4353399064ee17b6f",
+          "bytes": 22508,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/appendix-a-bdos-functions.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+          "accepted_input_sha256": "e7d62b8c40e49f83189d23469472aee5cdaaaa777a3fca4f538ab268ec87671a",
+          "integrated_sha256": "edc890f187aa8d1df0cf4b7081a4895fd07858092f1355ecca5da34d0754517b",
+          "bytes": 25821,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/appendix-b-rom-services.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+          "accepted_input_sha256": "f865198d530c1b0eb762408a8a644c2add21633cc439c8492ffc5cec1b64f3a8",
+          "integrated_sha256": "4d05aaaacad7faa9b75ea172e7461fb20e9662a02191e4b2dae3f4d44f9a23ff",
+          "bytes": 26984,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/appendix-c-memory-map.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+          "accepted_input_sha256": "6df8d1a44643e9fcd349e3c3535408d14c5bac01285d0fb294b51dfa16d65428",
+          "integrated_sha256": "752031f1a8b4a04640709552750ca830e617fe81e5c4d34c343333aba383adc7",
+          "bytes": 22752,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/appendix-d-error-messages.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+          "accepted_input_sha256": "1e4f146f2d2d1a58800b350837ba1c3bde83d4f0f635735bdc08a786ded48494",
+          "integrated_sha256": "274a082339d0ade81919c71d3e25a3d8149f7ff5b186f1d4833553db8db5bf03",
+          "bytes": 31723,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/appendix-e-container-format.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+          "accepted_input_sha256": "07b5fa334a598b1da3d988f52705d86510ffa0822ce347165ccb0cab416c2b4e",
+          "integrated_sha256": "7b6b46e77e665076ed4c81f15da4fb6aa177c13f460bad60b3c8c87f091496e4",
+          "bytes": 13050,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/appendix-f-tecvol.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+          "accepted_input_sha256": "ab7cd3fdfe33a24153336e2c7c23ea648bace9e0ac86669c7fe86c45882398ad",
+          "integrated_sha256": "b5882ac03d08ab4c9afe00b529ccb35a4a05479b0a4f4885e7448d1f1cf972e4",
+          "bytes": 15224,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/appendix-g-tec-1g.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+          "accepted_input_sha256": "0fa220119b5e8fe009b28f7f200db7c4c2f7aaf90959460ee4e7d72f8a11d843",
+          "integrated_sha256": "1f5a0c5587e0ab0f5d7aa28fb160fad1ac97954ef678f28082845c9a17d60c45",
+          "bytes": 13672,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/appendix-h-service-file-format.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+          "accepted_input_sha256": "a46effaf40ce57070b5c15f97897f86d3c5aa36630a01671f2dc6dbaed558261",
+          "integrated_sha256": "6a69cc7cb474c52f4f0bd1d5205f09297c332eb8aa08596506d19ac76512d115",
+          "bytes": 10232,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/appendix-i-web-page.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+          "accepted_input_sha256": "9c48a6c45cebb880400116a17fe4561fe96f12944c5f05a0977681baeffc0381",
+          "integrated_sha256": "e5f095e8539a2581969edb3559b8119d622c4321e5d9472fd80636edb053b947",
+          "bytes": 17276,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/appendix-j-command-reference.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+          "accepted_input_sha256": "8a7a56f8a7a4089bbc17bd4e5d21ca85147a1ce900f9e2ac820cd56149433661",
+          "integrated_sha256": "ea6037d89eb85834dab5cd9d5441f235f39ba5f38fdbe1ac2a76c969d471f60b",
+          "bytes": 12490,
+          "root_draft_equal": true,
+          "only_nav_group_changed": true
+        },
+        {
+          "root": "tec-os/index.md",
+          "draft": "tec-os/editorial/reader-rewrite/draft/index.md",
+          "accepted_input_sha256": "81cdf91fa07128f76f90873eaadb61ac58e76e43f596fe338f646ee3e3deea0c",
+          "integrated_sha256": "81cdf91fa07128f76f90873eaadb61ac58e76e43f596fe338f646ee3e3deea0c",
+          "bytes": 7628,
+          "root_draft_equal": true,
+          "only_nav_group_changed": false
+        }
+      ]
+    },
+    "complete_diff_accounting": {
+      "status": "clear",
+      "changed_paths": 107,
+      "root_reader_paths": 39,
+      "nav_group_only_draft_paths": 38,
+      "superseded_deletions": 26,
+      "other_paths": [
+        ".vitepress/sidebar.generated.js",
+        "tec-os/editorial/reader-rewrite/integration-result.json",
+        "tec-os/editorial/reader-rewrite/integration-source-checks.json",
+        "tec-os/editorial/reader-rewrite/reader-order-dispositions.json"
+      ],
+      "unexpected_paths": [],
+      "method": "Compared no-renames name/status inventory with the exact root/copy/delete sets. Every body delta in old-root replacement is accounted for by the byte-identical accepted final draft; no visual sampling substitutes for that comparison."
+    },
+    "deletions": {
+      "status": "clear",
+      "count": 26,
+      "exact_match_to_plan": true,
+      "paths": [
+        "tec-os/01-introduction.md",
+        "tec-os/02-console.md",
+        "tec-os/03-command-line.md",
+        "tec-os/04-cards-and-volumes.md",
+        "tec-os/05-drives-and-cache.md",
+        "tec-os/06-startup-file.md",
+        "tec-os/07-first-program.md",
+        "tec-os/08-memory.md",
+        "tec-os/09-programs-and-console.md",
+        "tec-os/10-hardware-services.md",
+        "tec-os/11-return-codes-and-chaining.md",
+        "tec-os/12-writing-services.md",
+        "tec-os/13-rom-and-build.md",
+        "tec-os/14-memory-map.md",
+        "tec-os/16-bios-and-console.md",
+        "tec-os/17-sd-card-and-volumes.md",
+        "tec-os/18-block-cache.md",
+        "tec-os/19-bdos.md",
+        "tec-os/20-ccp.md",
+        "tec-os/21-chaining-inside.md",
+        "tec-os/22-command-history.md",
+        "tec-os/23-hardware-services-inside.md",
+        "tec-os/24-service-loader.md",
+        "tec-os/25-startup.md",
+        "tec-os/26-diagnostics.md",
+        "tec-os/27-host-model.md"
+      ]
+    },
+    "sidebar": {
+      "status": "clear",
+      "groups": [
+        {
+          "label": "Using the machine",
+          "entries": 7
+        },
+        {
+          "label": "Writing programs",
+          "entries": 6
+        },
+        {
+          "label": "Inside TEC-OS",
+          "entries": 15
+        },
+        {
+          "label": "Reference",
+          "entries": 10
+        }
+      ],
+      "unique_reader_links": 38,
+      "index_has_no_sidebar_entry": true,
+      "all_links_match_exact_manifest": true,
+      "non_tec_sections_exact_values": true,
+      "non_tec_values_canonical_sha256": "715451a054473549d19778c5a5db98557617e894091573284b33fdadc75cec37",
+      "method": "Parsed only the generated module JSON text without importing or executing it. Compared every non-TEC key/value, then every TEC group and target in order."
+    },
+    "exclusions": {
+      "status": "clear",
+      "index_nav_exclude_preserved": true,
+      "index_entire_file_unchanged": true,
+      "config_entire_file_unchanged": true,
+      "editorial_srcExclude_preserved": true,
+      "public_candidate_or_pass_record_count": 0,
+      "boundary": "The root Markdown set is exactly the 39 reader manifest. Editorial/candidate/pass-record paths were not copied. The unchanged tec-os/editorial/** srcExclude remains configured."
+    },
+    "links_and_anchors": {
+      "status": "clear",
+      "relative_links": 247,
+      "fragment_links": 45,
+      "missing_files": 0,
+      "missing_fragments": 0,
+      "resolved_inventory_sha256": "e2ff576ac3277ed817d15020c864c72007a0f46747796d11d49a95072824e6e5",
+      "method": "Independently scanned all root reader active Markdown destinations after excluding frontmatter, fences, comments and inline code. Resolved paths from the actual root pages. Reimplemented the read VitePress 1.6.4 slugifier as inert text logic, including NFKD, apostrophe-to-hyphen, leading-digit prefix and duplicate suffixes. No renderer/package import ran.",
+      "possessive_fixes": [
+        {
+          "from": "tec-os/14-state-and-memory.md",
+          "target": "appendix-c-memory-map.md#the-cpu-s-address-space",
+          "resolved_path": "tec-os/appendix-c-memory-map.md",
+          "anchor_exists": true
+        },
+        {
+          "from": "tec-os/appendix-a-bdos-functions.md",
+          "target": "appendix-d-error-messages.md#the-bdos-s-errors",
+          "resolved_path": "tec-os/appendix-d-error-messages.md",
+          "anchor_exists": true
+        },
+        {
+          "from": "tec-os/appendix-d-error-messages.md",
+          "target": "04-drives-and-user-areas.md#changing-a-drive-s-volume",
+          "resolved_path": "tec-os/04-drives-and-user-areas.md",
+          "anchor_exists": true
+        },
+        {
+          "from": "tec-os/appendix-d-error-messages.md",
+          "target": "04-drives-and-user-areas.md#changing-a-drive-s-volume",
+          "resolved_path": "tec-os/04-drives-and-user-areas.md",
+          "anchor_exists": true
+        }
+      ],
+      "outside_tec_removed_route_references": 0
+    },
+    "whitespace": {
+      "status": "accepted immutable bytes",
+      "reported_items_independently_classified": 67,
+      "literal_fence_trailing_padding": 65,
+      "unchanged_blank_EOFs": 2,
+      "new_prose_whitespace_faults": 0,
+      "classification_sha256": "e310a6bb8141a096a794a1c76b87997efdee9fd841d2509b202ada9c5a127819",
+      "method": "For every recorded path/line, checked the exact root-to-accepted-draft bytes and fence state. All trailing spaces are inside literal fences. The two blank file endings are inherited unchanged. Trimming them would violate the exact-copy preservation contract."
+    },
+    "source_check_report": {
+      "status": "reviewed with bounded reliance",
+      "reported_citations": 2248,
+      "reported_source_files": 107,
+      "reported_foreign_thorium_ranges": 4,
+      "reported_gate_hard": 0,
+      "reported_gate_review_candidates": 11,
+      "reported_complexity_summaries": 39,
+      "boundary": "These are the integration owner’s recorded source-range/editorial results. Their scope and candidate dispositions were read, including checker limitations. This confirmation independently proves body/citation/provenance bytes survived integration; it does not turn range validation into semantic acceptance or rerun all 2248 citation claims. Existing chapter reviews remain the semantic authorities.",
+      "gate_dispositions": "The 11 recorded candidates are link-path tokens, table headings/cross-cell scans, a block definition, source-defined notices or the metadata noun phrase source offer. Integration changes none of those body contexts. No new prose was introduced."
+    }
+  },
+  "risks_and_remaining_gates": [
+    {
+      "kind": "known route consequence",
+      "detail": "The 26 explicitly removed old .html routes have no compatibility redirect. No tracked outside-TEC reference to those removed URLs remains; unknown external bookmarks/backlinks may break. This is the plan’s explicit route policy, not an accidental omission or newly authorized redirect task."
+    },
+    {
+      "kind": "source-only limit",
+      "detail": "The owner’s site-wide checker result of 1245 internal links is recorded, not independently rerun here. That checker omits fragment validation and its sidebar regex cannot prove double-quoted generated navigation; the independent root-fragment and JSON sidebar checks above supply this bounded coverage."
+    },
+    {
+      "kind": "rendered behaviour",
+      "detail": "No site build, preview, rendering, search-index or deployment behaviour was exercised. These remain outside this integration confirmation."
+    },
+    {
+      "kind": "parent acceptance",
+      "detail": "The parent final-candidate source/navigation acceptance still must close. This report confirms the integration snapshot and does not declare complete book quality, stage closure, product qualification or publication acceptance."
+    }
+  ],
+  "execution_boundary": {
+    "product_execution": false,
+    "product_import": false,
+    "assembly_build_tests_models_captures": false,
+    "site_build_render_preview": false,
+    "publication_deployment_main_push": false,
+    "independent_operations": "Git/text/JSON reads, hashes, byte comparisons and inert static path/anchor utilities only."
+  },
+  "ownership": {
+    "written_path": "tec-os/editorial/reader-rewrite/integration-independent.json",
+    "reader_sidebar_plan_and_shared_records_edited": false,
+    "commit_scope": "Only this independent JSON report."
+  }
+}
