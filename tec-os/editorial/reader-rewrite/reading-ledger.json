@@ -19,22 +19,28 @@
       "sha256": "f5f1a1d7af232676a25761dcbe15cb74991a3dc80d8f418d30ea53a56c9cd508",
       "lines": 180,
       "words": 1243,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "Keeping your work",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 180,
+      "outline": "reverse-outline-01-02.md",
+      "continuity_problems": "Implementation and configuration prerequisites precede ordinary command/edit/build/run use."
     },
     {
       "path": "tec-os/02-console.md",
       "sha256": "a1c5c3a68ff0f8935797179b30cbd2809f285555c458604daa3916f74e98ac55",
       "lines": 396,
       "words": 2913,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "Pausing output",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 396,
+      "outline": "reverse-outline-01-02.md",
+      "continuity_problems": "Implementation and configuration prerequisites precede ordinary command/edit/build/run use."
     },
     {
       "path": "tec-os/03-command-line.md",
