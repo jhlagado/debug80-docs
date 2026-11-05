@@ -36,7 +36,8 @@ another prompt so a digit appears unchanged even though the comparison uses a
 masked value (`src/boot.asm:831-847`, `src/text.asm:14`).
 
 Your available console determines where you can answer. Cold boot selects the
-PICO9918 screen when that display and the matrix keyboard are present.
+PICO9918 screen when that display responds and the Matrix switch enables
+the keyboard.
 Otherwise it selects serial. The GLCD console driver is on the card and has
 not been loaded at this point (`src/console.asm:57-88`,
 `src/video.asm:22-29`, `src/pico.asm:64-86`). A board with neither an active

@@ -157,3 +157,12 @@ clarification. The two full reviews found no other factual, preservation
 or craft finding. Historical480-byte accounting remains separate from
 current source inspection and future KS48 qualification. Final navigation
 and source/media acceptance remain pending.
+
+## Matrix-switch condition correction
+
+Source cross-check at ea3ef3d console82–88 and pico64–86 distinguishes
+PICO response from keyboard enablement. Cold boot reads the Matrix switch
+bit into CONDEV. It does not probe a keyboard response. The prose now uses
+responding PICO plus Matrix switch enabled, replacing presence/answer wording.
+This is a source-backed condition correction, not physical detection evidence.
+No execution or literal-output change occurred.

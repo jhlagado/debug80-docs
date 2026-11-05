@@ -171,3 +171,12 @@ those commas and reread each causal sentence. Literal procedures, tables and
 output are unchanged. No runtime work was performed. The bounded review has
 no remaining finding. Final source/runtime qualification and navigation
 remain separate.
+
+## Matrix-switch condition correction
+
+Source cross-check at ea3ef3d console82–88 and pico64–86 distinguishes
+PICO response from keyboard enablement. Cold boot reads the Matrix switch
+bit into CONDEV. It does not probe a keyboard response. The prose now uses
+responding PICO plus Matrix switch enabled, replacing presence/answer wording.
+This is a source-backed condition correction, not physical detection evidence.
+No execution or literal-output change occurred.

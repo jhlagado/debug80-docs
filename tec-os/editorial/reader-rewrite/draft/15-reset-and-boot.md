@@ -113,8 +113,8 @@ The calls in `COLD` establish those dependencies in this order
     (`src/boot.asm:157-199`).
 
 Clearing page zero also sets its IOBYTE to zero, the serial `TTY:` choice.
-`PISTART` changes the console field to 1, `CRT:`, only when both the
-PICO9918 and matrix keyboard are available. It does so before the banner's
+`PISTART` changes the console field to 1, `CRT:`, only when the PICO9918
+responds and the Matrix switch enables the keyboard. It does so before the banner's
 first console call. With the Matrix switch off the console stays serial
 and `PISTART` leaves its console uninitialised even if the PICO9918 answers
 (`src/boot.asm:62-70`,
