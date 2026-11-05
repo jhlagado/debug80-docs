@@ -221,14 +221,13 @@ explains the operators and
 
 ## Display loading and console selection
 
-The PICO9918 console starts from ROM when the display answers and the
-Matrix switch enables the matrix keyboard at cold boot. It needs no
-service line in the file (`src/console.asm:82-88`,
-`src/video.asm:22-29`, `src/pico.asm:64-86`). The supplied display line
-loads `GLCD.SVC`. The CCP compares all three type bytes in `CMDFCB`:
-`SVC` calls `SVCGO`, while another type goes to the `.COM` search
-(`src/cpm/ccp.asm:451-495`).
-[Chapter 20](20-from-prompt-to-program.md) explains that search.
+The PICO9918 console starts from ROM when the display answers and the Matrix
+switch enables the matrix keyboard at cold boot. It needs no service line in the
+file (`src/console.asm:82-88`, `src/video.asm:22-29`, `src/pico.asm:64-86`). The
+supplied display line loads `GLCD.SVC`. The CCP compares all three type bytes in
+`CMDFCB`: `SVC` calls `SVCGO` while another type goes to the `.COM` search
+(`src/cpm/ccp.asm:451-495`). [Chapter 20](20-from-prompt-to-program.md) explains
+that search.
 
 `SVCGO` calls `LOADCOM` and `SVCLOAD`, returning carry on either failure
 (`src/loader.asm:925-933`). Within `GLCD.SVC`, `INIT` first calls
@@ -293,7 +292,7 @@ bits (`src/ram.asm:433-434`, `src/layout.asm:92-102`):
 
 | Bit | Name | Meaning |
 | --- | --- | --- |
-| 0 | `CDMTX` | The Matrix switch is on, so the matrix keyboard is read |
+| 0 | `CDMTX` | The Matrix switch is on so the matrix keyboard is read |
 | 1 | `CDTMS` | The PICO9918 answered at cold boot |
 | 2 | `CDGLC` | `GLCD.SVC` is in |
 | 3 | `CDRTC` | The DS1302 clock answered at cold boot |

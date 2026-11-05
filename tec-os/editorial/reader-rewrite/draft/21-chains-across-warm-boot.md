@@ -49,11 +49,11 @@ historical map figures, separate from the source inspection at `ea3ef3d`:
 | Next-piece offset, `CHPOS` | `BFE4h` |
 | Return code, `PRGCODE` | `BF54h` |
 
-Cold boot clears the entire resident workspace from `WSBASE` through the
-span ending at `WSEND`. That includes the retained command buffer, `CHPOS`
-and `PRGCODE`, so a reset starts with no pending piece and a zero result
-(`src/boot.asm:73-79`, `src/ram.asm:483-485`). Warm boot's narrower clear
-is what permits ordinary program exits to continue a chain.
+Cold boot clears the entire resident workspace from `WSBASE` through the span
+ending at `WSEND`. That includes the retained command buffer, `CHPOS` and
+`PRGCODE` so a reset starts with no pending piece and a zero result
+(`src/boot.asm:73-79`, `src/ram.asm:483-485`). Warm boot's narrower clear is
+what permits ordinary program exits to continue a chain.
 
 ## The line and tail limits
 
@@ -64,14 +64,14 @@ Function 47 requires a zero within its first 128 bytes, giving the same
 127-character maximum (`src/boot.asm:540-542`,
 `src/cpm/ccpcmd.asm:947-975`, `src/cpm/bdos.asm:71-93`).
 
-A program name occupies at least one character of its piece, leaving at
-most 126 for the tail. `PREPPAGE` copies that tail to `0081h` and appends
-a zero. At the maximum length, the zero lands at `00FFh`. One further
-character would put it at `0100h`, over the program's first byte
-(`src/cpm/ccp.asm:19-25`, `src/cpm/ccpcmd.asm:456-497`). Loading precedes
-`PREPPAGE`, so the limit protects code already in memory. The load-drive
-byte at `0050h` lies below the tail and is written separately before entry
-(`src/cpm/ccp.asm:498-525`, `src/layout.asm:72-79`).
+A program name occupies at least one character of its piece, leaving at most 126
+for the tail. `PREPPAGE` copies that tail to `0081h` and appends a zero. At the
+maximum length, the zero lands at `00FFh`. One further character would put it at
+`0100h`, over the program's first byte (`src/cpm/ccp.asm:19-25`,
+`src/cpm/ccpcmd.asm:456-497`). Loading precedes `PREPPAGE` so the limit protects
+code already in memory. The load-drive byte at `0050h` lies below the tail and
+is written separately before entry (`src/cpm/ccp.asm:498-525`,
+`src/layout.asm:72-79`).
 
 ## The next command source
 
@@ -119,12 +119,12 @@ A>USER 0
 A>
 ```
 
-The first `DIR` succeeds, so its `:TYPE STARTUP.CMD` runs before the
-`NOSUCH.SVC` line. That service file is missing. Its `:MOUNT` is echoed
-but skipped and the CCP proceeds to `USER 0`, the file's third line.
-The path back to `STLINE` depends on `CHPOS` being zero, not on the previous
-command having succeeded (`src/cpm/ccp.asm:148-166`,
-`src/cpm/ccp.asm:224-241`, `src/cpm/ccp.asm:465-485`).
+The first `DIR` succeeds so its `:TYPE STARTUP.CMD` runs before the `NOSUCH.SVC`
+line. That service file is missing. Its `:MOUNT` is echoed but skipped and the
+CCP proceeds to `USER 0`, the file's third line. The path back to `STLINE`
+depends on `CHPOS` being zero, not on the previous command having succeeded
+(`src/cpm/ccp.asm:148-166`, `src/cpm/ccp.asm:224-241`,
+`src/cpm/ccp.asm:465-485`).
 
 `STLINE` echoes a new startup line whole through BDOS function 9. A `$`
 ends that echo but not the line's execution. Later pieces are echoed at
@@ -173,10 +173,10 @@ A built-in reads from `ARGSTRT` and a loaded program receives a copy of
 only that piece's tail. Neither includes the following pieces
 (`src/cpm/ccp.asm:247-284`, `src/cpm/ccpcmd.asm:456-497`).
 
-The stored position uses only low-byte arithmetic. After advancing past
-`!`, `MLTK2` subtracts `LOW(CMDTXT - 1)` from `L`. The difference is
-below 256, so the 8-bit subtraction gives the required offset plus one
-across page boundaries too (`src/cpm/ccp.asm:269-281`).
+The stored position uses only low-byte arithmetic. After advancing past `!`,
+`MLTK2` subtracts `LOW(CMDTXT - 1)` from `L`. The difference is below 256 so the
+8-bit subtraction gives the required offset plus one across page boundaries too
+(`src/cpm/ccp.asm:269-281`).
 
 A drive letter and colon alone select that drive. Other text reaches
 `NOTDRIVE`, which compares the built-in names and otherwise loads a COM
@@ -247,17 +247,17 @@ jumps through the RAM BIOS warm-boot entry `BIOWBT`
 (`src/cpm/ccp.asm:238-241`, `src/cpm/bdos.asm:115-119`). Three paths reach
 `CHDROP`:
 
-- `LINABRT` takes `^C` when function 10's input is empty. It prints `^C`
-  before jumping. Within a nonempty line, the key is ignored. At the CCP
-  prompt `CHPOS` is already zero, so there is no pending piece to cancel
+- `LINABRT` takes `^C` when function 10's input is empty. It prints `^C` before
+  jumping. Within a nonempty line, the key is ignored. At the CCP prompt `CHPOS`
+  is already zero so there is no pending piece to cancel
   (`src/cpm/bdos.asm:606-621`, `src/cpm/ccp.asm:148-166`).
-- `CHKKEY` reads the key after a `^S` output pause. `^C` jumps to `CHDROP`.
-  Any other resume key is consumed and output continues
+- `CHKKEY` reads the key after a `^S` output pause. `^C` jumps to `CHDROP`. Any
+  other resume key is consumed and output continues
   (`src/cpm/bdoscon.asm:318-331`).
-- `BDERR` takes the default disk-error path. `DISKMSG` prints
-  `Bdos Err On`, the drive and the cause, then `GETCHAR` waits for a key.
-  The exit jumps to `CHDROP` (`src/cpm/bdoscon.asm:47-72`,
-  `src/cpm/bdoscon.asm:108-118`). Chapter 19 explains the four causes.
+- `BDERR` takes the default disk-error path. `DISKMSG` prints `Bdos Err On`, the
+  drive and the cause, then `GETCHAR` waits for a key. The exit jumps to
+  `CHDROP` (`src/cpm/bdoscon.asm:47-72`, `src/cpm/bdoscon.asm:108-118`). Chapter
+  19 explains the four causes.
 
 Function 45 can select a returned error instead. With `ERRMODE = FFh`,
 `BDERR` returns `A = FFh` and `H` holding the error code from 1 to 4,
@@ -300,13 +300,13 @@ position. `BENTRY` dispatches directly to `FNCHAIN`, which reads from
 `CURDMA` in two passes: validation before copying
 (`src/cpm/bdos.asm:67-108`, `src/cpm/bdos.asm:148-149`).
 
-The validation loop counts 128 bytes in `B`. The first zero accepts the
-line. A CR or LF before it, or exhaustion of all 128 bytes without zero,
-branches to `FNCHNO`. That returns `A = FFh` through `RETA` and restores
-the caller's stack through `RETWORD`. Neither the command buffer nor
-`CHPOS` has been written, so rejection leaves the original line available
-(`src/cpm/bdos.asm:71-93`, `src/cpm/bdos.asm:235-252`). Keyboard and
-startup input end at CR or LF before building this zero-terminated line
+The validation loop counts 128 bytes in `B`. The first zero accepts the line.
+The loop branches to `FNCHNO` on a CR or LF before the first zero or on
+exhaustion of all 128 bytes without zero. That returns `A = FFh` through `RETA`
+and restores the caller's stack through `RETWORD`. Neither the command buffer
+nor `CHPOS` has been written so rejection leaves the original line available
+(`src/cpm/bdos.asm:71-93`, `src/cpm/bdos.asm:235-252`). Keyboard and startup
+input end at CR or LF before building this zero-terminated line
 (`src/cpm/bdos.asm:435-440`, `src/cpm/ccpcmd.asm:958-966`,
 `src/cpm/ccp.asm:173-180`).
 
@@ -340,8 +340,8 @@ the drive and user area from `0004h`, passed in `C` by warm boot
 (`src/cpm/bdos.asm:67-108`, `src/boot.asm:212-215`,
 `src/cpm/ccp.asm:46-102`).
 
-The copy replaces the old command text and position, so none of its later
-pieces survives. An empty supplied line is valid: its first byte is zero.
-`CHSKIP` then finds no piece and the CCP proceeds to the next startup
-line or keyboard input (`src/cpm/bdos.asm:75-108`,
-`src/cpm/ccp.asm:148-166`, `src/cpm/ccp.asm:328-354`).
+The copy replaces the old command text and position so none of its later pieces
+survives. An empty supplied line is valid: its first byte is zero. `CHSKIP` then
+finds no piece and the CCP proceeds to the next startup line or keyboard input
+(`src/cpm/bdos.asm:75-108`, `src/cpm/ccp.asm:148-166`,
+`src/cpm/ccp.asm:328-354`).
