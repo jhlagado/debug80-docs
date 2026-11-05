@@ -1524,7 +1524,7 @@
       "unit": "chapter-05",
       "status": "bounded draft pushed at4939c23; full independent review in progress",
       "passes": {
-        "full_passage_read": "pending",
+        "full_passage_read": "lead read complete draft; full independent review in progress; mounting-order overclaim identified",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",
@@ -3250,9 +3250,9 @@
     },
     {
       "unit": "chapter-10",
-      "status": "bounded source-only draft in progress; no execution authorised",
+      "status": "bounded source-only draft pushed at5b81ee9; full independent review queued",
       "passes": {
-        "full_passage_read": "pending",
+        "full_passage_read": "lead read complete draft; full independent review queued",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",
@@ -7664,7 +7664,7 @@
     },
     {
       "unit": "chapter-18",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded source-only authoring in progress; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -10854,7 +10854,7 @@
     },
     {
       "unit": "chapter-26",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "source-only authoring queued after current independent review; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -11641,7 +11641,7 @@
     },
     {
       "unit": "chapter-28",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "source-only authoring queued after current independent review; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -13446,7 +13446,7 @@
     },
     {
       "unit": "appendix-D",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "source-only authoring queued after current independent review; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -14728,18 +14728,18 @@
     },
     {
       "unit": "appendix-G",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded lead-authored source-only draft pushed atd65a0be; full independent review queued",
       "passes": {
-        "full_passage_read": "pending",
-        "draft": "pending",
-        "thematic_order": "pending",
-        "sentence_deletion": "pending",
-        "agency": "pending",
-        "every_comma_punctuation": "pending",
-        "technical_claims": "pending",
-        "examples_before_explanation": "pending",
-        "journey_readback": "pending",
-        "mechanical_gate": "pending",
+        "full_passage_read": "completed for bounded source-only draft; evidence in g-pass-record.md",
+        "draft": "completed for bounded source-only draft; evidence in g-pass-record.md",
+        "thematic_order": "completed for bounded source-only draft; evidence in g-pass-record.md",
+        "sentence_deletion": "completed for bounded source-only draft; evidence in g-pass-record.md",
+        "agency": "completed for bounded source-only draft; evidence in g-pass-record.md",
+        "every_comma_punctuation": "completed for bounded source-only draft; evidence in g-pass-record.md",
+        "technical_claims": "completed for bounded source-only draft; evidence in g-pass-record.md",
+        "examples_before_explanation": "no executable examples or new output; historical diagnostic cost explicitly a retained documentation account",
+        "journey_readback": "completed for bounded source-only draft; evidence in g-pass-record.md",
+        "mechanical_gate": "completed for bounded source-only draft; evidence in g-pass-record.md",
         "independent_editorial_review": "pending",
         "independent_factual_review": "pending",
         "navigation": "pending",
@@ -15065,7 +15065,9 @@
       "evidence": [],
       "findings": [],
       "proposed_path": "reference G; existing path retained unless title changes",
-      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass."
+      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass.",
+      "draft_path": "draft/appendix-g-tec-1g.md",
+      "pass_record": "draft/g-pass-record.md"
     },
     {
       "unit": "appendix-H",
