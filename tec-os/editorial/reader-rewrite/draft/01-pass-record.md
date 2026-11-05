@@ -370,3 +370,20 @@ Independent chapter factual/editorial review, final navigation, whole-book
 reading and publication remain open. The scoped workflow receipt is not
 whole-batch or physical acceptance. No product code, import, test, build,
 assembler, emulator or capture ran during this writing step.
+
+## Independent opening correction
+
+Accepted OC1-P01 from the full independent opening craft review. Removed
+three optional commas from forward recall, the SAMPLE result introduction
+and the parallel recovery references. The complete containing paragraphs
+and table row read clearly without them. Reconciled the draft nav_group with
+Chapters3–7 under the existing Using TEC-OS grouping. All six current screen
+fences and nine historical record fences remain exact. No runtime or root
+navigation changed.
+
+The correction gate reports zero findings across the three chapters and their
+pass records. Complete changed paragraphs and their boundaries were reread.
+All chapter fences and provenance comments compare byte-identical before
+and after the corrections. The Chapter3 complexity prompts are unchanged
+metadata, definitions, pause effects and literal record counts. No new prompt
+requires a factual or structural change.

@@ -203,3 +203,18 @@ unchanged historical output fences: three directory rows in the chapter and
 one in the archival ERA fixture above. These exact spaces are retained from
 frozen `10821b6` captures. They are literal-preservation dispositions, not
 authorial whitespace left unreviewed. No other whitespace finding occurred.
+
+## Independent opening correction
+
+Accepted both independent craft findings. OC3-P01 now locates redraw/continue
+keys explicitly at the command prompt after the pager controls. The subject-first
+wording avoids an optional introductory comma. OC3-P02 keeps the console-column
+sentence beside DIR and moves the complete allocation-unit reference beside
+the copied-record count. The unintroduced calculation advice is deleted.
+
+I reread the whole changed name section, pager-to-command transition and
+COPY-result paragraphs with their neighbours. The exact record/allocation
+distinction and all four output fences remain unchanged. The complete historical
+all-files fixture now has its reader home in J at4c7674e. The complete current
+pager evidence has its accounting home in28-pass-record at4a76238. No case,
+source pin, captured prompt or historical output is altered.
