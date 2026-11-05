@@ -15901,5 +15901,12 @@
       "checkpoint_correction": "The checkpoint note about direct-opening synchronisation is conservative and superseded by actual frozen-file equality; directTAS-inclusive code is under this review.",
       "followup": "Final metadata/seal needs bounded independent follow-up before any single allocation. No execution."
     }
+  },
+  "compact_include_reference": {
+    "status": "held_no_existing_public_ATOM_route_for_unchanged_nine_clients",
+    "record": "compact-include-route-review.json atbe583097",
+    "lead_check": "Read exact ATOM0.3.7 directives198–227, using-atom header rule andea3 assemble.mjs1–20 as text. Confirmed ordinaryBDOSEQU closesheader beforeABI andtrailingHWLIB also unsupported.",
+    "primary_route": "Productionon-cardTAS unchanged; no runtimequalification bystaticreview",
+    "limits": "No adapter, productfix, readerlistingchange, import, assembly or execution."
   }
 }

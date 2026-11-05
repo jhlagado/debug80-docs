@@ -155,12 +155,18 @@ that same candidate rather than an uppercased comparison copy. This resolves
 the directive-case obstacle without a product change. Assembly and workflow
 qualification remain pending.
 
-The same writer documents ATOM's header-only INCLUDE handling and expands
-post-origin includes for its own copied source. The ordinary stand-alone
-wrapper at `tools/lib/assemble.mjs` does not perform that expansion. For
-HWLIB clients, establish the supported public ATOM route with the actual
-trailing include. Any necessary source-expansion adapter needs its own
-reviewed specification, input/output identities and inclusion-order proof.
+The standalone ATOM 0.3.7 profile permits INCLUDE only before the first
+ordinary assembler statement. These nine clients put `BDOS EQU` before
+`ABI.INC`, which already closes that header. Their trailing `HWLIB.ASM`
+include is independently outside it. Being before ORG is insufficient.
+The service writer expands trailing includes for its own service input but
+is not a public COM expander. The ordinary wrapper at
+`tools/lib/assemble.mjs` calls the restricted project API directly.
+
+The complete source-only route review is in compact-include-route-review.json.
+No inspected public ATOM route accepts these unchanged clients. Their reference
+proof stays held. Production TAS remains primary. Any different reference route
+needs separate reviewed authority, source identities and inclusion-order proof.
 An undocumented concatenation cannot count as assembly of the reader source.
 
 The existing assembleProgram and makeSvc wrappers do not expose the proposed
