@@ -277,3 +277,14 @@ correction history into this record. Reader prose no longer links an excluded
 editorial review as navigation. No bounded factual or editorial finding
 remains. Historical maps/measurements still retain their actual pins and
 final navigation and qualification remain pending.
+
+## Final-root appendix navigation
+
+Normalised all4 appendix links in the chapter from ../../../appendix-
+targets to final-root sibling paths. The published chapter and appendices
+share the TEC-OS root. These targets intentionally do not resolve beside the
+editorial draft files. The earlier draft-directory link checks describe the
+previous navigation state and do not certify the final-root arrangement.
+All existing appendix filenames and anchors are retained. Only link prefixes
+changed, with no source claim, historical evidence or prose change. Root-book
+integration remains with the final placement pass. No execution was performed.

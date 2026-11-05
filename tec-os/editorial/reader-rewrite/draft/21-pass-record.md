@@ -132,10 +132,10 @@ followed the relevant branches rather than relying only on comments.
 | Startup echo and quiet result | `src/cpm/ccpcmd.asm:995–1009` appends CR/$ for the function9 echo. MLGOT later substitutes the line zero. `src/cpm/ccp.asm:465–485` tests STFLAG, SVCRA/TNENODV and SVCRC=1 for quiet service absence. Missing files use BADCMD. |
 | Piece echo and extraction | `src/cpm/ccp.asm:192–289,328–354`: echo stops at !/zero before a–z conversion. MLTK2 zeros ! and stores offset+1. An exhausted line stores0. A colon-only piece passes through the same empty-command check. |
 | Offset arithmetic | `src/cpm/ccp.asm:269–281`: L minus LOW(CMDTXT−1) is the needed difference modulo256. The127-character line bounds the true offset+1 below256, independent of the page containing CMDTXT. |
-| Dispatch and ARGSTRT | `src/cpm/ccp.asm:291–320,396–465`: a bare drive selects it. NOTDRIVE identifies a built-in or file, then advances ARGSTRT to the arguments. `src/cpm/ccpcmd.asm:456–497` copies only the current piece's zero-terminated tail. |
+| Dispatch and ARGSTRT | `src/cpm/ccp.asm:291–320,396–465`: a bare drive selects it. NOTDRIVE parses the command name, advances ARGSTRT to the arguments and then selects a built-in handler or file path. `src/cpm/ccpcmd.asm:456–497` copies only the current piece's zero-terminated tail. |
 | Normal exit | `src/cpm/ccp.asm:532–536` supplies WBOOT as the inherited return word. `src/cpm/bdos.asm:257–259` jumps BIOWBT for function0. `src/boot.asm:194–215` enters CCP only after the flush. Built-in completion rejoins STARTED/MAINLOOP. |
 | Line/tail bound | `src/boot.asm:540–542`; `src/cpm/ccpcmd.asm:947–975`; `src/cpm/bdos.asm:71–93`; `src/cpm/ccpcmd.asm:472–497`:127 characters minus at least one for the name gives at most126 tail bytes. 0081h+126=00FFh for its zero. `src/cpm/ccp.asm:498–525` loads before publishing page-zero state. `src/layout.asm:72–79` separates0050h. |
-| Colon range and clear order | `src/cpm/ccp.asm:224–289`: INC D rejects D=FFh from the below-FF00h success branch. INC E recognises FFFFh. FF00h–FFFEh clears CHPOS and exits before PRGCODE's clear. Unconditional or successful pieces reach the zero store. |
+| Colon range and clear order | `src/cpm/ccp.asm:224–289`: LD A,D followed by INC A accepts codes below FF00h when the result is nonzero. For D=FFh, LD A,E followed by INC A recognises FFFFh when the result is zero. DE is not incremented. FF00h–FFFEh clears CHPOS and exits before PRGCODE's clear. Unconditional or successful pieces reach the zero store. |
 | Function108 get/set | `src/cpm/bdos.asm:137–149,228–252,296–314`: PARAM saves DE, AND+INC selects only FFFFh, the query returns PRGCODE with A=L/B=H, and stores return0. Object-text search found explicit PRGCODE stores only in FNRETC, MLTK3 and ERRGO. The cold workspace clear is additional. |
 | CCP message paths | `src/cpm/ccp.asm:27–30,588–629`: RCFAIL=FF00h is stored by ERRGO; PRTGO skips that store. `src/cpm/ccpfile.asm:660–662`, `src/cpm/ccpmut.asm:181–184,302–337,347–381`, `src/cpm/ccpcmd.asm:439–445` and `src/text.asm:34–41` cover NO FILE, FILE EXISTS, NO SPACE, the four COPY errors and successful COPIED. |
 | BDOS cancellation | `src/cpm/bdos.asm:115–119,606–621` clears CHPOS and warm boots, including LINABRT only for empty input. `src/cpm/bdoscon.asm:318–331` jumps there for ^C after ^S and consumes other resume keys. |
@@ -220,3 +220,19 @@ The source proofs record inspected branches, not independent acceptance.
 Independent factual/editorial review, current-offer map and capture validation,
 final navigation and the whole-book reader-order pass remain outstanding.
 No new BANNER work or runtime allocation is included.
+
+## Accepted independent result-review corrections
+
+The complete review of the7df12eb draft is preserved without alteration in
+[21-independent-review.md](21-independent-review.md). Its three P3 findings
+are accepted and applied. The colon explanation and proof now name the copies
+from D/E into A and the two INC A operations. COPY's count is printed before
+its final newline passes through PRTGO, bypassing ERRGO's failure store.
+The dispatch proof now places ARGSTRT setup after command-name parsing and
+before built-in/file dispatch. Re-read ea3ef3d:src/cpm/ccp.asm:224-241,
+403-429,619-629 and src/cpm/ccpmut.asm:355-368 to confirm those corrections.
+
+Read the changed paragraphs for continuity, deletion, agency and punctuation.
+The success/failure ranges, result-clear order and historical fences are
+unchanged. No product execution, import, build or test was performed.
+Lead confirmation of these corrections remains separate from this disposition.

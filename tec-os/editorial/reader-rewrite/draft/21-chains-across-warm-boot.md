@@ -196,10 +196,10 @@ explained below because it cancels that saved position.
 
 The conditional test must read the previous command's result before the
 CCP clears it for the new command. `MLTAKE` loads `PRGCODE` into `DE`.
-Incrementing `D` produces a nonzero result for every value below `FF00h`.
-Those values succeed. With `D = FFh`, incrementing `E` recognises
-`FFFFh` as success too. The remaining values, `FF00h` through `FFFEh`,
-are failures (`src/cpm/ccp.asm:224-241`).
+The CCP copies `D` into `A` and increments `A`. A nonzero result accepts
+codes below `FF00h`. When `D` is `FFh` it repeats the test with `E`.
+A zero result then accepts `FFFFh`. The remaining values, `FF00h` through
+`FFFEh`, are failures (`src/cpm/ccp.asm:224-241`).
 
 A failed test clears `CHPOS` and jumps to `STARTED`. No later piece of
 that line remains available. `MLECHO` ran before the test, which is why
@@ -234,8 +234,8 @@ REN, `NO SPACE` from SAVE and COPY's four error messages all use `ERRGO`
 service installations reach `BADCMD` too. Startup's quiet absent-device
 service path instead returns through `SVCOK` with the initial zero
 (`src/cpm/ccp.asm:465-517`). Successful built-ins leave that zero.
-COPY prints its successful count through `PRTGO`, after the failure store,
-so its `COPIED` message does not change the result
+COPY prints `COPIED` and its count, then sends the final newline through
+`PRTGO`. That entry bypasses `ERRGO`'s failure store so the result remains zero
 (`src/cpm/ccpmut.asm:347-368`, `src/cpm/ccp.asm:619-629`).
 
 ## Cancellation instead of continuation

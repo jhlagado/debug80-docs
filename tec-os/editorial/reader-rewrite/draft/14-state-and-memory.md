@@ -132,7 +132,7 @@ Source reservations extend to `WSEND` at the end of that region and the
 build checks that they stay below the ROM. These are placement checks,
 not checks on every store a program makes. Appendix C has the individual
 variables and their historical addresses
-([resident workspace](../../../appendix-c-memory-map.md#the-resident-workspace)).
+([resident workspace](appendix-c-memory-map.md#the-resident-workspace)).
 Through `INFO` a program obtains `VWID` in `L` and `VHGT` in `H`.
 It can read the console dimensions without using variable addresses
 (`ea3ef3d:tools/build.mjs:236-266`, `ea3ef3d:src/ram.asm:314-319`,
@@ -185,7 +185,7 @@ Its workspace began at `BAE7h`, above the starter vectors at `B9A7h–BAE6h`
 and the stub at `B9A4h–B9A6h`. Programs had 47,268 bytes from
 `0100h` to `B9A3h`. With four full-sized slots the stub was at `B6E4h`
 and the TPA was 46,564 bytes. These are the historical figures in
-[Appendix C](../../../appendix-c-memory-map.md#the-cpus-address-space),
+[Appendix C](appendix-c-memory-map.md#the-cpus-address-space),
 with their original build provenance. The workspace below `BF00h` occupied
 1,049 bytes in that build. The warm-boot sweep cleared 329 of them, from
 `BDB7h` through `BEFFh`. The 205 bytes above the RAM BIOS table extended
@@ -217,7 +217,7 @@ The load-drive byte at `0050h` is written by the CCP, not `PZINIT`.
 It contains the command FCB's drive byte, with 0 for the current drive
 and 1 for A. A program found by fallback to A therefore receives 1.
 The full page-zero table is in
-[Appendix C](../../../appendix-c-memory-map.md#page-zero)
+[Appendix C](appendix-c-memory-map.md#page-zero)
 (`ea3ef3d:src/cpm/ccp.asm:505-536`,
 `ea3ef3d:src/cpm/ccpcmd.asm:447-497`, `ea3ef3d:src/layout.asm:63-90`).
 
@@ -265,7 +265,7 @@ the same. The service limits were 8, 12 and 6 respectively.
 Base plus limit therefore used 38 of 54 bytes, 30 of 40 and 24 of 32.
 Each left at least a quarter free. These are historical host-model
 measurements, not results from the offered build.
-[Appendix C](../../../appendix-c-memory-map.md#the-stacks) retains the
+[Appendix C](appendix-c-memory-map.md#the-stacks) retains the
 historical stack addresses and reservations.
 
 The offered source declares the same reservations and service limits.
