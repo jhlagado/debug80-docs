@@ -141,7 +141,8 @@ and data, so each program includes it after its own entry code. SAY prints a
 dollar-terminated string. A CALL to SAY returns to its caller while a top-level
 jump to it prints and ends through the inherited return word. LABHEX prints a
 label followed by A in hexadecimal. It saves A and HL across the string output.
-HEX then prints the two nibbles through NIBBLE.
+A *nibble* is four bits, half a byte. HEX prints the two nibbles through
+NIBBLE.
 
 A *binary-coded decimal* byte, or BCD byte, stores one decimal digit in each
 nibble. Printing its two nibbles as hexadecimal also displays those decimal
@@ -436,9 +437,9 @@ and port `01h` selects which digit lights. A steady-looking display requires
 repeated scans, with each digit lit only during its own turn.
 
 DIGIT, number 1, scans once through six pattern bytes at HL, leftmost first. It
-turns every digit off at the end. The historical model figure is about 0.84 ms
-lit per digit and 20,670 T-states for a complete pass, about 5.2 ms at 4 MHz.
-These are retained figures, not new measurements. The caller repeats the scan
+turns every digit off at the end. The `60e0768` model measurement gave
+20,670 T-states from the call target to return, about 5.2 ms at 4 MHz. Each
+digit was lit for about 0.84 ms. The caller repeats the scan
 and supplies its own number-to-segment table.
 
 RTC, number 8, transfers seven BCD bytes through HL: seconds, minutes, hours,
@@ -781,8 +782,9 @@ CRLF:	DB	13,10,"$"
 ```
 
 PUTAT sends bytes directly to the display routine. Both the ROM PICO console and
-GLCD.SVC draw `80h–FFh` as reverse images of `00h–7Fh`. The ordinary console
-path drops those high bytes, as Chapter 16 explains. This makes PUTAT a direct
+GLCD.SVC draw `80h–FFh` as reverse images of `00h–7Fh`. The ordinary
+video-console path drops those high bytes, as Chapter 16 explains. Serial
+output transmits all eight bits. This makes PUTAT a direct
 route to reverse characters without an escape sequence. The retained PICO text
 capture shows both strings alike because its decoder does not report reverse
 presentation:
@@ -816,8 +818,9 @@ while the PICO is both claimed and the console. A claim on PICO leaves PUTAT
 available on the graphics-LCD console. Portable code checks the ABI before PUTAT
 and retains a BDOS path for status 2.
 
-The historical model comparison put a PICO PUTAT character at about an eighth of
-the cost of BDOS function 2. That is a retained measurement, not a fresh timing.
+The `60e0768` model comparison put a PICO PUTAT character at about an eighth
+of the cost of BDOS function 2. Its PUTAT figure came from one 60-character
+call, with the BDOS path timed separately.
 On the graphics LCD, pixel drawing dominates both paths and their costs are
 close. Appendix B retains the per-cell figures and their conditions.
 
