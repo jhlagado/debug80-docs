@@ -58,7 +58,7 @@ A transcript includes the prompt and the command typed after it, followed by
 the output. It may begin at an already-running prompt. Any other omitted output
 is identified with the example. Control keys are written with a caret: `^C`
 means Ctrl and C together. Reproducing the runs on a PC requires the setup and tools in
-[Reproduce the evidence](28-reproduce-the-evidence.md).
+[The host model as evidence](28-the-host-model-as-evidence.md).
 
 Addresses and bytes use hexadecimal with a trailing `h`, as in `0100h`.
 Sizes in bytes are decimal. A KiB is 1,024 bytes and a MiB is 1,024 KiB.
@@ -104,7 +104,7 @@ Sizes in bytes are decimal. A KiB is 1,024 bytes and a MiB is 1,024 KiB.
 | [25. Startup inside the CCP](25-startup-inside-the-ccp.md) | Reading lines and handling absent displays |
 | [26. Build the ROM and media](26-build-the-rom-and-media.md) | Source, generated data and qualified artifacts |
 | [27. Diagnose the machine](27-diagnose-the-machine.md) | Card errors and the separate diagnostics ROM |
-| [28. Reproduce the evidence](28-reproduce-the-evidence.md) | Host machine, captures, tests and their limits |
+| [28. The host model as evidence](28-the-host-model-as-evidence.md) | Host machine, captures, tests and their limits |
 
 ## Reference
 

@@ -190,7 +190,7 @@ PICO9918 and matrix keyboard, RAM initially filled with `76h` and an empty
 SYSTEM/WORK card with the starter's two volume geometries. It has no
 DS1302 clock (`tools/diag-check.mjs:110-134`). This is a generated test card,
 not the actual starter card with its applications and startup file.
-[Chapter 28](28-reproduce-the-evidence.md) explains the host model.
+[Chapter 28](28-the-host-model-as-evidence.md) explains the host model.
 The retained reproduction recipe calls modelReport directly:
 
 ```sh
