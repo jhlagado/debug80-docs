@@ -104,9 +104,14 @@ Listing and extraction leave `card.img` unchanged.
 
 Chapter 2's saved BANNER can be recovered as raw records or editable PC text.
 This example uses `saved-banner-card.img`, the persisted image after saving the
-edited program, quitting TED and successfully flushing at the prompt. A fresh
-starter image has no BANNER. Use new destinations for the backup and extracted
-files. Neither `card.img` nor the `recovered/` directory may already exist.
+edited program, quitting TED and successfully flushing at the prompt. The
+recorded BANNER case began on a fresh starter card, separately from the SAMPLE
+run in Chapter 1. If you continued on the same card, A may also contain
+SAMPLE.COM and SAMPLE.DBG.
+
+A fresh starter image has no BANNER. Use new destinations for the backup and
+extracted files. Neither `card.img` nor the `recovered/` directory may already
+exist.
 
 First make a working copy and compare it with the saved image. The comparison
 prints nothing when the bytes match. Verification then checks that copy's

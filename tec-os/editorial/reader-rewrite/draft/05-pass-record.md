@@ -546,3 +546,18 @@ prompts inside this record's disposition text are metadata: exact coordinates,
 historical wording and the inventory of distinct status flags. Each names
 what was retained and why. They are retained as review accounting. The final
 paragraphs and full containing contexts were read back after these checks.
+
+## Independent fixture-continuity correction
+
+Accepted opening-continuity-01 from the full independent factual/preservation
+review. The recorded BANNER workflow began on a fresh starter card, separate
+from the direct SAMPLE run. The recovery introduction now states that boundary
+and notes that a continued card may also contain SAMPLE.COM and SAMPLE.DBG on A.
+The actual complete A listing and all captured totals remain unchanged.
+
+The independent review checked opening-direct-inventory.json against the
+persisted BANNER inventory at attempt02. Those identities are recorded in
+opening-factual-review.json. No combined-session count or free-space figure
+is inferred. I read the full recovery introduction and adjacent command/output
+contexts after editing. The condition needs its boundary comma. No new output,
+source, shell command or runtime execution accompanies this clarification.
