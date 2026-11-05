@@ -15,8 +15,7 @@ nav_group: "Part II: Inside TEC-OS"
 A program's ordinary exit rebuilds the CCP's working state, yet the next
 piece of its command line can still run. The line and its position survive
 in RAM outside the warm-boot clear. Chapter 12 explains their practical
-use. Here you can follow the retained text through piece extraction,
-conditional execution and the paths that cancel it.
+use.
 
 ## The retained line
 
@@ -24,15 +23,13 @@ Warm boot calls `CPMINIT` to clear the CCP's scratch space and the BDOS's
 state. The clear begins at `CCPCLR` and stops before `BDOSRME`. The command
 buffer lies below that range, together with the two FCBs used by built-in
 commands (`src/boot.asm:194-200`, `src/boot.asm:530-536`,
-`src/ram.asm:153-173`). The contents needed for another command therefore
-survive even though its previous working state is cleared.
+`src/ram.asm:153-173`).
 
 That retained span is 202 bytes: two 36-byte FCBs, the maximum-length byte
 `CMDBUF`, the input-length byte `CMDLEN` and 128 character bytes at `CMDTXT`
 (`src/ram.asm:163-173`). Each use of an FCB parses a fresh name and clears
-all 36 bytes. Preserving these two blocks across warm boot therefore does
-not preserve a previous file position into the next command
-(`src/cpm/ccpcmd.asm:511-545`).
+all 36 bytes (`src/cpm/ccpcmd.asm:511-545`). The next command therefore
+starts with a fresh file position despite the retained blocks.
 
 The line's text alone would leave the CCP with no position from which to
 resume. `CHPOS` supplies it as an offset in `CMDTXT` plus one. A zero value
@@ -91,8 +88,7 @@ available source in this order (`src/cpm/ccp.asm:148-166`):
 A startup line's pieces therefore precede the next line of the file.
 The same priority applies to a line supplied through function 47 by a
 program started during startup. The historical example below uses three
-startup lines. Its first line contains a conditional TYPE, and its second
-contains a conditional MOUNT. The complete card recipe and output remain
+startup lines. The first two contain conditional TYPE and MOUNT pieces. The complete card recipe and output remain
 from `78127ec`:
 
 ```sh
@@ -142,9 +138,9 @@ startup and display rules.
 
 ## Finding and taking a piece
 
-`CHSKIP` first reads `CHPOS`. Zero returns immediately with `Z` set.
-Otherwise it calculates `CMDTXT - 1 + CHPOS` in `HL`, then `CHSK1` passes
-over spaces and `!` until it reaches a character or the line's zero.
+A zero `CHPOS` returns immediately from `CHSKIP` with `Z` set. Otherwise
+`CHSKIP` calculates `CMDTXT - 1 + CHPOS` in `HL`. `CHSK1` then passes over
+spaces and `!` until it reaches a character or the line's zero.
 The final `OR A` sets `Z` only for that zero. Empty pieces, pieces of
 spaces and a trailing `!` therefore need no separate command cases
 (`src/cpm/ccp.asm:328-354`).
@@ -173,14 +169,14 @@ this order (`src/cpm/ccp.asm:224-289`):
    successful test, returns to the prompt.
 
 Replacing the separator gives every later parser a zero-terminated command.
-A built-in reads from `ARGSTRT`, and a loaded program receives a copy of
+A built-in reads from `ARGSTRT` and a loaded program receives a copy of
 only that piece's tail. Neither includes the following pieces
 (`src/cpm/ccp.asm:247-284`, `src/cpm/ccpcmd.asm:456-497`).
 
 The stored position uses only low-byte arithmetic. After advancing past
-`!`, `MLTK2` subtracts `LOW(CMDTXT - 1)` from `L`. The full difference is
-below 256, so the 8-bit subtraction produces the same offset plus one even
-when the buffer crosses a page boundary (`src/cpm/ccp.asm:269-281`).
+`!`, `MLTK2` subtracts `LOW(CMDTXT - 1)` from `L`. The difference is
+below 256, so the 8-bit subtraction gives the required offset plus one
+across page boundaries too (`src/cpm/ccp.asm:269-281`).
 
 A drive letter and colon alone select that drive. Other text reaches
 `NOTDRIVE`, which compares the built-in names and otherwise loads a COM
@@ -202,7 +198,7 @@ The conditional test must read the previous command's result before the
 CCP clears it for the new command. `MLTAKE` loads `PRGCODE` into `DE`.
 Incrementing `D` produces a nonzero result for every value below `FF00h`.
 Those values succeed. With `D = FFh`, incrementing `E` recognises
-`FFFFh` as success too. All remaining values, `FF00h` through `FFFEh`,
+`FFFFh` as success too. The remaining values, `FF00h` through `FFFEh`,
 are failures (`src/cpm/ccp.asm:224-241`).
 
 A failed test clears `CHPOS` and jumps to `STARTED`. No later piece of
@@ -324,7 +320,7 @@ This copy finishes during the call, before the next program can overwrite
 the caller's memory. The line can therefore occupy caller memory that the
 next load will replace. `FNCHAIN` jumps through `BIOWBT`, the RAM BIOS
 warm-boot entry at `BF03h`. A program that replaced that entry receives
-the call just as for other BDOS warm boots (`src/cpm/bdos.asm:22-23`,
+the call just as for other BDOS warm boots (`src/cpm/bdos.asm:22-23`, `src/layout.asm:134-135`,
 `src/cpm/bdos.asm:95-119`, `src/cpm/bdos.asm:257-258`).
 
 The normal warm-boot path flushes pending writes before the CCP can load
