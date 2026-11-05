@@ -228,3 +228,25 @@ bit into CONDEV. It does not probe a keyboard response. The prose now uses
 responding PICO plus Matrix switch enabled, replacing presence/answer wording.
 This is a source-backed condition correction, not physical detection evidence.
 No execution or literal-output change occurred.
+
+## Cost-provenance disposition
+
+The independent audit supports restoring first BCONIN7067777, clean warm
+boot32482 and warm-after-SAVE115898. Read the raw m781.json and measurement
+marks, book46 and the5006e2c rewrite diff. The three unsupported replacements
+are not retained as measured reader claims. Their former values remain in
+this evidence record and ledger hold history. This is explicit correction,
+not silent pin movement or a new run.
+
+Removed the unsupported238122 banner total from reader results. It was an
+added precision with no located retained measurement. The real25-character
+banner count remains source-supported at78127ec:text.asm6. Qualified
+MEMINIT346677 by its reproduced58d4345 record in book40:110–112 and serial
+BCONOUT9448 by its60cfbdc reproduction in book22:88–92. They are separate
+reference costs, not a falsely labelled781 component breakdown. No broad
+marker JSON value was substituted for a routine measurement.
+
+The restored cost section was read for connected method, agency, every comma
+and substantive ending. Final adopted-source measurements still require
+allocation and cannot be inferred from this historical correction. Independent
+confirmation of the exact revised wording remains pending.

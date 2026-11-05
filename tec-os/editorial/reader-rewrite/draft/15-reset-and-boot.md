@@ -374,31 +374,37 @@ source checks. Subsequent warm boots retain its position
 
 ## Historical boot costs
 
-<!-- Qualification hold: this section preserves the old chapter's numbers.
-     Its first-CONIN and warm-boot figures conflict with retained run evidence.
-     Do not treat it as accepted measurement evidence. See 15-pass-record.md. -->
+<!-- Historical measurement scope: starter/serial runs at 78127ec except
+     MEMINIT at 58d4345 and BCONOUT at 60cfbdc. The retained run records,
+     unsupported later substitutions and removed banner total are accounted
+     for in 15-pass-record.md and 15-cost-provenance-review.md.
+     No measurement was rerun for this draft or for KS48. -->
 
-These historical measurements were made at `78127ec` on the host model
-with the starter card and serial board.
-At 4 MHz, 4,000,000 T-states take one second.
+The following costs are historical host-model measurements. The boot runs
+used the starter card and serial board at `78127ec`. At 4 MHz,
+4,000,000 T-states take one second.
 
 Cold boot measured 1,371,558 T-states from the first instruction to the
-CCP entry, about 0.34 seconds. Three measured costs account for much of
-that interval. The banner contained 25 characters, with a `CONOUT` cost
-of 9,448 T-states per character and 238,122 for the complete banner step.
-Reading container block 0 took 219,144. `MEMINIT` took 346,677, mostly
-clearing EXPAND 1. Startup commands ran before the first prompt. The
-original first-prompt `CONIN` measurement was 7,200,316 T-states after
-reset.
+CCP entry, about 0.34 seconds. Reading container block 0 took 219,144.
+Startup commands ran before the first prompt. The first entry to `BCONIN`
+at that prompt was recorded before executing its instruction, at
+7,067,777 T-states after reset.
 
-An unchanged warm boot measured 32,502 T-states, about 8 milliseconds,
+Two earlier measurements give separate reference costs. At `58d4345`,
+`MEMINIT` took 346,677 T-states, mostly clearing EXPAND 1. Serial
+`BCONOUT` measured 9,448 T-states at `60cfbdc`. Those are measurements
+from their named builds, not a component breakdown of the `78127ec` run.
+The `78127ec` banner contains 25 output characters
+(`78127ec:src/text.asm:6`).
+
+An unchanged warm boot measured 32,482 T-states, about 8 milliseconds,
 from the first instruction of `WBOOTR` to the CCP's `STARTED` label, where
-prompt printing begins. It read no card block. Within that run `CPMINIT` took
-7,327 T-states, the empty `CWBOOT` flush took 8,437 and the CCP entry
+prompt printing begins. It read no card block. Within that run `CPMINIT`
+took 7,327 T-states, the empty `CWBOOT` flush took 8,437 and the CCP entry
 and disk reset took 14,272. The historical workspace sweep cleared
 329 bytes from `CCPCLR` to the byte before `BDOSRME`.
 
-After `SAVE 8 X.COM` on A, warm boot measured 115,918 T-states over the
+After `SAVE 8 X.COM` on A, warm boot measured 115,898 T-states over the
 same interval. The extra roughly 83,000 came from rebuilding A's vector
 through the last used directory entry. Those directory reads came from
 the cache, with no card access. An ordinary program's full disk reset
