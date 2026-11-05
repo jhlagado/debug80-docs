@@ -276,3 +276,30 @@ results, source fixtures and dependency pins retain their original scope.
 The reader’s fences and capture comments are unchanged. Editorial gate
 results and context dispositions are recorded in the application JSON.
 Independent application review remains open. No product code ran.
+
+## Complete reader-order review correction
+
+Accepted the complete reader-order review's console detour and early API
+number findings at frozenf7afd42. The complete CON UC1/SERVICES/UNLOAD/CON
+historical capture moves intact to Chapter6 after its display-selection case.
+Chapter4 retains the selected-driver removal consequence, serial fallback and
+a link to that complete example. No unique result or provenance is dropped.
+The temporary-drive protection and warm-boot/volume distinction remain but
+the function28 number is deferred to AppendixA.
+
+The complete changed paragraphs and their immediate boundaries were read before
+and after editing. Separate sentence-purpose, agency and every-comma passes
+retain the operational distinctions. Mandatory prose/complexity checks precede
+the correction commit. Existing runtime evidence is moved or quoted with its
+actual pin, not rerun. No product import, assembly, build, model, test, capture,
+publication or physical observation accompanies this correction.
+
+The mandatory gate has no hard findings. The initial review candidates were
+checked in full context. The Chapter 6 URL contains a flagged verb. Four older
+provenance phrases contain a noun matching the agency rule. Two older Chapter 8
+record phrases were corrected. These are metadata dispositions, not exceptions
+for reader prose. Complexity flags retain exact fields, source coordinates and
+error-mode conditions. The long function 34 restoration sentence explicitly
+names the fields, their extent and the corresponding function 33 result.
+Literal fences and capture comments are unchanged in place or moved together
+from Chapter 4 to Chapter 6. Combined before/after inventories match exactly.

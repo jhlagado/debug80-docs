@@ -4554,5 +4554,51 @@
       ],
       "limits": "No new run, repin, physical-card experiment or root integration. Independent bounded confirmation closedb911e84."
     }
+  ],
+  "final_reader_order_amendments": [
+    {
+      "finding": 1,
+      "pages": [
+        "04",
+        "06"
+      ],
+      "disposition": "Complete historical CON UC1/SERVICES/UNLOAD/CON recipe and output moved unchanged from 4 to 6. Removal consequence and destination link remain in 4."
+    },
+    {
+      "finding": 2,
+      "pages": [
+        "09"
+      ],
+      "disposition": "Duplicate exit-selection aside removed. Full writable 0004h contract remains in 10 and exit selection in 8."
+    },
+    {
+      "finding": 3,
+      "pages": [
+        "08"
+      ],
+      "disposition": "RET through 0000h to warm boot retained. Ready-prompt, logical-size, record-padding and ATOM equality proof retained in pass record."
+    },
+    {
+      "finding": 4,
+      "pages": [
+        "04",
+        "05"
+      ],
+      "disposition": "Operator protection and warm-boot distinctions retained. Function 28 number remains in Appendix A."
+    },
+    {
+      "finding": 5,
+      "pages": [
+        "A"
+      ],
+      "disposition": "EX/S2 restoration names RC/map extent. BIOS DMA restoration precedes error handling. Function 45 sets the mode rather than returning transfer errors. Sources read: bdosrec393-531,794-864; bdoslog108-145; bdos255-282 at 962853f."
+    },
+    {
+      "finding": 6,
+      "pages": [
+        "J"
+      ],
+      "disposition": "13-column filename field distinguished from names per row, minimum one."
+    }
   ]
 }

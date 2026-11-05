@@ -104,3 +104,27 @@ results, source fixtures and dependency pins retain their original scope.
 The reader’s fences and capture comments are unchanged. Editorial gate
 results and context dispositions are recorded in the application JSON.
 Independent application review remains open. No product code ran.
+
+## Complete reader-order review correction
+
+Accepted the DIR display-precision finding. The13-column name field is now
+separate from the count of names per row. The count follows console width with
+a minimum of one. Serial's80-column layout remains. No command grammar,
+pagination behaviour or historical output changes.
+
+The complete changed paragraphs and their immediate boundaries were read before
+and after editing. Separate sentence-purpose, agency and every-comma passes
+retain the operational distinctions. Mandatory prose/complexity checks precede
+the correction commit. Existing runtime evidence is moved or quoted with its
+actual pin, not rerun. No product import, assembly, build, model, test, capture,
+publication or physical observation accompanies this correction.
+
+The mandatory gate has no hard findings. The initial review candidates were
+checked in full context. The Chapter 6 URL contains a flagged verb. Four older
+provenance phrases contain a noun matching the agency rule. Two older Chapter 8
+record phrases were corrected. These are metadata dispositions, not exceptions
+for reader prose. Complexity flags retain exact fields, source coordinates and
+error-mode conditions. The long function 34 restoration sentence explicitly
+names the fields, their extent and the corresponding function 33 result.
+Literal fences and capture comments are unchanged in place or moved together
+from Chapter 4 to Chapter 6. Combined before/after inventories match exactly.

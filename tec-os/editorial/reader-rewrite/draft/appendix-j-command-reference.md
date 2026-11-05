@@ -110,8 +110,8 @@ the system attribute. Each file appears once. Its last line gives the number
 listed and the free KiB on that drive. No match produces `NO FILE`.
 A system file remains available to TYPE and to program lookup.
 
-A displayed name occupies 13 columns except at the end of a row. The number
-of columns follows the console width, with at least one. Serial uses the
+A displayed name has a 13-column field except at the end of a row. The number
+of names per row follows the console width and is at least one. Serial uses the
 80-column layout. This differs from Digital Research's DIR layout.
 Both DIR and TYPE pause at `[more]`. The practical continuation and stop
 keys are in [Chapter 3](03-work-with-files.md).

@@ -372,3 +372,29 @@ Editorial utility identities and stable reader run:
 Record-only complexity prompts retain historical identifiers, unit accounting
 and audit scope. They do not require shortening the reader text. The earlier
 record sections remain evidence of their dated editorial work.
+
+## Complete reader-order review correction
+
+The complete historical CON UC1/SERVICES/UNLOAD/CON capture and its explanation
+move here from4. It is a separate78127ec run on both displays, not a continuation
+of the preceding screen capture. Its exact command comment, 3-page listing,
+removal and CRT report remain together. The interpretation follows display
+selection instead of preceding the volume/user-area lesson. Current962 source
+and all existing console captures retain their own scopes.
+
+The complete changed paragraphs and their immediate boundaries were read before
+and after editing. Separate sentence-purpose, agency and every-comma passes
+retain the operational distinctions. Mandatory prose/complexity checks precede
+the correction commit. Existing runtime evidence is moved or quoted with its
+actual pin, not rerun. No product import, assembly, build, model, test, capture,
+publication or physical observation accompanies this correction.
+
+The mandatory gate has no hard findings. The initial review candidates were
+checked in full context. The Chapter 6 URL contains a flagged verb. Four older
+provenance phrases contain a noun matching the agency rule. Two older Chapter 8
+record phrases were corrected. These are metadata dispositions, not exceptions
+for reader prose. Complexity flags retain exact fields, source coordinates and
+error-mode conditions. The long function 34 restoration sentence explicitly
+names the fields, their extent and the corresponding function 33 result.
+Literal fences and capture comments are unchanged in place or moved together
+from Chapter 4 to Chapter 6. Combined before/after inventories match exactly.

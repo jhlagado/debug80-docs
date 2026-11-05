@@ -86,25 +86,8 @@ A>
 
 Removing the driver while the graphics LCD is the console selects the
 PICO9918 if TEC-OS started its console. Otherwise output returns to
-serial. `CON UC1` selects the graphics LCD and installs `A:GLCD.SVC` if
-needed. UC1 is the console name for that display. The next historical run
-shows selection and removal on a board with both displays:
-
-<!-- node tools/capture.mjs --board pico "CON UC1" SERVICES UNLOAD CON -->
-```text
-A>CON UC1
-CON: UC1:
-A>SERVICES
-GLCD 3
-A>UNLOAD
-
-A>CON
-CON: CRT:
-A>
-```
-
-`CRT:` names the PICO9918 console in that report.
-[Chapter 6](06-choose-a-console.md) explains console selection and
+serial. The complete example of console selection and driver removal is in
+[Chapter 6](06-choose-a-console.md).
 [Chapter 7](07-commands-at-startup.md) explains automatic startup commands,
 including the quiet result for an unavailable device. Service authoring and
 installation internals have their separate homes in
@@ -379,8 +362,8 @@ or erasing that file and gives `File R/O`. It does not hide the file from
 `DIR`. The system attribute controls that omission. The PC card tool can set
 file attributes and a program can change them through the BDOS.
 
-A program can also make the current drive read-only temporarily with
-BDOS function 28. The next warm boot clears that temporary state. A volume
+A program can also make the current drive read-only temporarily. The next
+warm boot clears that temporary state. A volume
 whose descriptor is read-only remains protected. In the default error mode
 the `R/O` and `File R/O` messages wait for a key before ending the command.
 [Appendix D](appendix-d-error-messages.md) gives the full error and recovery rules.
