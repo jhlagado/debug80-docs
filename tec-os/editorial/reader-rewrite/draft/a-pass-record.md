@@ -162,3 +162,12 @@ keeps numbered lookup order and the source-only authority at ea3ef3d.
 Bounded independent correction confirmation remains open. No product,
 fixture, dependency, assembly, build, test or runtime was executed or imported.
 Only these two owned paths are committed with --only and pushed.
+
+## Bounded confirmation received
+
+Independent review confirmed3a7aa77 against exact ea3ef3d source with no
+further required finding. All four corrections are closed within this
+reference: current-empty-line abort, final FCB S2 state, card-change link and
+concrete failure wording. The lead read the complete revised reference.
+Final adopted source, integrated navigation and whole-book acceptance remain
+open. No execution accompanied this confirmation.
