@@ -145,8 +145,8 @@ make/write → close/flush/error consequences. It keeps implementation replay
 out of the reader's task. The final selection paragraph preserves the assigned
 old03 return facts with their source qualifications.
 
-The final prose gate reports zero findings across both owned files. The
-sentence-complexity report for the chapter gives160 sentences, mean13.5 words,
+At37d5f02 the prose gate reported zero findings across both owned files. The
+sentence-complexity report then gave160 sentences, mean13.5 words,
 0.59 joints per sentence,10% flagged and approximate grade7.0. I read every
 flag: the two long hash/provenance statements are in the historical header;
 short statements identify specific results or preserved state. Repeated
@@ -161,3 +161,28 @@ whitespace checks are clear. These are text checks, not product tests.
 Independent review, runtime acceptance, current example execution and whole-book
 navigation remain outstanding. All runtime work remains held. This chapter
 claims no new font, default, build, capture or final checked source pin.
+
+
+## Accepted independent review corrections
+
+The accepted review found three defects in37d5f02. I corrected them in the
+owned chapter and re-read the affected paragraphs and their neighbours:
+
+- CR0 rewinds the current extent only. Whole-file rereading after extent
+  advancement requires EX/S2/CR0 before reopening. At ea3ef3d,
+  src/cpm/bdosfn.asm:621–679 preserves the requested EX on open and leaves
+  CR untouched. Its785–823 compares EX and S2 for extent selection. The
+  corrected prose distinguishes the current record from the whole position.
+- JR Z branches when the zero flag is set. The flag itself does not take
+  NOFILE. The historical instructions and comments remain unchanged.
+- Removed all authorial semicolons, including the call table cells. The
+  earlier punctuation pass missed them. Remaining semicolons are inside
+  the unchanged historical ASM/output fences.
+
+Static text comparison with37d5f02 confirms all three complete fences and
+the capture comment are unchanged. I checked the revised agency, commas
+and reader connections manually. The earlier automated reports above are
+historical draft-stage diagnostics, not rerun results for this correction.
+No prose script, product execution, import, build or capture was run.
+The accepted findings are addressed for confirmation. Runtime and final
+whole-book acceptance remain held.

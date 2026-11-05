@@ -90,9 +90,10 @@ Appendix A gives the full field contracts and random-record operations.
 For the default FCB, byte 32 is at `007Ch`. The CCP clears it before entry.
 SHOW clears it again before the first read. When constructing another FCB,
 clear its state after the drive/name/type fields and set `CR` to 0.
-Reopening an FCB does not by itself reset `CR`, so a read from the start
-needs that reset too. `CR` here means current record, not the carriage
-return character used in text.
+Opening an FCB leaves `CR` unchanged. Setting it to 0 rewinds only the
+current extent. To reread the whole file after advancing through extents,
+reset `EX`, `S2` and `CR` to 0 before reopening it. `CR` here means
+current record, not the carriage return character used in text.
 
 ## A record buffer
 
@@ -124,7 +125,7 @@ when there is no next record. These are the two file calls SHOW uses:
 | 20 | Read sequential | `DE`: the file's FCB | `A`: 0 for a record read, 1 at the end of the file |
 
 A disk I/O error has a separate path, described below. Process the DMA
-buffer only after a successful read; otherwise it may still hold old data.
+buffer only after a successful read. Otherwise it may still hold old data.
 With the default error mode, a disk error prints a message, waits for a key
 and ends the program by warm boot. SHOW below uses that default.
 
@@ -178,7 +179,8 @@ NOFILE: LD      DE,NOMSG
 NOMSG:  DB      "No such file",13,10,"$"
 ```
 
-After open, `INC A` turns `FFh` into zero and the zero flag takes `NOFILE`.
+After open, `INC A` turns `FFh` into zero and sets the zero flag.
+`JR Z` branches to `NOFILE` when that flag is set.
 A successful open continues to `NEXT`. Each iteration reloads `DE` and `C`
 for function 20 rather than depending on registers left by the previous
 call. A zero read result starts `PUT` with the buffer address in `HL` and
@@ -251,7 +253,7 @@ Writing uses an FCB and a DMA buffer in the same way, but the state
 must reach the directory before the program finishes. For a new file,
 prepare all 36 FCB bytes: the drive, the space-padded name/type and zeroed
 state. Choose a name that is not already present. Function 22, make file,
-creates a directory entry; it is not a replace-file command.
+creates a directory entry. It is not a replace-file command.
 
 For example, a source-derived write sequence for a new `NOTE.TXT` can use
 drive code 0 followed by the name bytes `NOTE    TXT`. The following calls
@@ -261,11 +263,11 @@ result before continuing:
 
 | Step | Call and required result |
 | --- | --- |
-| Make the new file | `C = 22`, `DE` = FCB address. Accept `A` from 0 to 3; `FFh` means no directory entry was available |
+| Make the new file | `C = 22`, `DE` = FCB address. Accept `A` from 0 to 3. `FFh` means no directory entry was available |
 | Select the data buffer | `C = 26`, `DE` = the 128-byte buffer's address |
 | Write a record | `C = 21`, `DE` = FCB address. Continue only for `A = 0` |
-| Finish the file state | `C = 16`, `DE` = FCB address. Close succeeds for `A` from 0 to 3; `FFh` means the extent's entry was not found |
-| Flush pending card writes | `C = 48`. `A = 0` reports success; `FFh` reports a failed flush |
+| Finish the file state | `C = 16`, `DE` = FCB address. Close succeeds for `A` from 0 to 3. `FFh` means the extent's entry was not found |
+| Flush pending card writes | `C = 48`. `A = 0` reports success. `FFh` reports a failed flush |
 
 The write transfers all 128 buffer bytes, including any unused end.
 For a text line of two letters followed by CR and LF, four bytes hold
@@ -275,7 +277,7 @@ file calls. This is a call walkthrough, not a newly captured program run.
 
 Function 21 advances `CR` after a successful write and updates the record
 count and allocation state. The next call writes the next sequential
-record. Fill the buffer again for each record; the DMA address remains
+record. Fill the buffer again for each record. The DMA address remains
 selected until changed. The ordinary write results are 0 for success,
 1 when the directory cannot hold the next extent and 2 when no disk block
 is available. A failed write is not counted as a successfully stored record.
@@ -316,7 +318,7 @@ valid or reporting success. The BDOS resets error mode at warm boot.
 A program can also set file attributes through function 30 using the
 corresponding bits in the FCB's name/type fields. That is how a program can
 set the system attribute discussed with DIR. Attribute operations still require
-checking their result; Appendix A gives their exact bit meanings.
+checking their result. Appendix A gives their exact bit meanings.
 
 At an ordinary exit, a successful warm-boot flush puts pending changes
 on the card before another program loads. If a write fails there, TEC-OS
@@ -329,4 +331,4 @@ unclosed work.
 After an ordinary exit, the CCP starts a new line and displays its prompt.
 The console stays selected. The drive and user normally return to those
 from which the program started, as explained in Chapter 8. A program can
-change that saved selection at `0004h`; an unavailable drive falls back to A.
+change that saved selection at `0004h`. An unavailable drive falls back to A.
