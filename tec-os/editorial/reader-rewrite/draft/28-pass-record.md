@@ -1,5 +1,11 @@
 # Chapter 28 pass record
 
+Current mechanism authority is TEC-OS `962853f499f05faf281f6cdff1deca8959f58c2b`.
+The selected-source adoption section at the end records the current correction
+and supersedes earlier source/profile holds. Earlier sections preserve the
+initial ea3 audit and its historical evidence accounting. Their old coordinates
+remain scoped to that initial audit rather than silently repinned.
+
 ## Contract and authority
 
 The chapter explains how to interpret and reproduce host-model evidence.
@@ -247,3 +253,141 @@ reader Chapter28 text, output fence, capture comment or old evidence changed.
 The gate reports zero findings. The sole new complexity prompt is the short
 Ctrl-C consequence, retained because it distinguishes cancellation from Escape.
 Older prompts are unchanged historical pass accounting.
+
+## Selected-source adoption at 962853f
+
+Book selection 9ba1f59 authorises current mechanisms at TEC-OS
+`962853f499f05faf281f6cdff1deca8959f58c2b`. The tested source is
+`8b8664a7d93c6dc2e8bce509b9770585e106eedc`. The latter differs from the
+adopted descendant only in the two KS48 qualification records. Proposal 18's
+qualified offer and independent result receipt remain Origo 43d5f328.
+Opening workflow receipt 4b5b5a50 and complete opening reviews d9d57d2/b911e84
+close their bounded scopes. They do not certify a browser or physical board.
+The opening batch remains FAILED globally at its later observer.
+
+I read both source-adoption impact records, all 35 contexts, 29 proof spans
+and nine historical exceptions. I read this entire reader file and its full
+existing pass record before editing. The actual ea3-to-962 executable diff
+was read with the complete owning build, media, font, startup and fixture
+functions. Unchanged cited spans were compared byte for byte with the prior
+semantic audit and read against their containing claims. Diagnostic, ROM,
+host and browser source contexts were inspected as Git text. No source
+identity comparison is a runtime result.
+
+The browser preparation account now states an explicit CON PICO line for
+every selected width. Its default preference is still 80, distinct from raw
+cold 40. The test helper has a different condition: with PICO and matrix input
+it adds a width line for a width other than 40 when startup is absent. Its
+argument default remains 80 and an existing startup file remains intact.
+The adopted Git tree has 61 top-level test files and 28 ordinary violation
+check files outside diagnostics. These are inert source inventories, not test
+outcomes. The two new ordinary-check files are compact-display.test.mjs and
+compact-transitions.test.mjs. Their complete bodies were read as assertions.
+The PIWID decoder fallback remains 80. GLCD's six-pixel cell matching remains
+distinct from five-pixel font data. All old LINES and GLCD observations retain
+their actual configuration and provenance.
+
+The owned impact dispositions are IM010 and IM029.
+
+### Citation coverage
+
+All 83 current reader range occurrences across 23 source files
+were reconciled before changing the mechanism header. The table includes
+shorthand ranges in their owning file. The earlier sections of this record
+keep the original ea3 audit coordinates under that explicit scope. This new
+table uses only 962853f. Bounds and byte correspondence supplement the
+mechanism readback, not an execution claim.
+
+| Source | Adopted ranges | Exact Git blob | Comparison with ea3 |
+| --- | --- | --- | --- |
+| `host/machine.mjs` | 10–16, 23–27, 33–78, 40–46, 51–55, 59–74, 63–78, 72–119, 77, 80–85, 122–140, 126–137, 143–176, 155–172, 175, 177–225, 186–212, 215–233, 223–233, 237, 240–243, 259–267, 269–321, 323–342, 354–371, 380–410, 412–450, 453–520, 522–526, 528–550, 579–587 | `eb1a1e5f30e1cb10750ec4a7a31486279631ac02` | same blob |
+| `test/lib/machine.mjs` | 3–12, 8–10, 14–34 | `9e618bac2d8c98dfd6dfe9cb846dc04cf098b037` | same blob |
+| `web/src/main.mjs` | 5–12, 17–43, 82–95, 92–152, 144–166, 174–233, 358–427, 617–649 | `80f5af6c81ddeb6195ad89ad15cb9415f3ffea9e` | same blob |
+| `test/sd-range.test.mjs` | 36–106 | `bbec6fc45c7f42768f5af65384091a459cbb07f3` | same blob |
+| `test/lib/fixtures.mjs` | 21–27, 29–55, 57–70, 72–73, 75–79, 93–121 | `8aca336619b9c28f79b9b264caea4933905c6ad4` | changed source read |
+| `tools/capture.mjs` | 5–39, 43–50, 67–73, 72, 76–96, 98–132, 147–153 | `aa1bf00ecbe6ac2b324bfb5a624ecd21af2a3a35` | same blob |
+| `test/system.test.mjs` | 14 | `f0af975dc16cbc76ae4b8898a9534a2ef39005fb` | same blob |
+| `test/diag.test.mjs` | 78–90, 121–123 | `cc631c853c8416ac2b59d2475295dd2279659db2` | same blob |
+| `test/expand.test.mjs` | 67–77 | `b566d5c2d641605665cdcb7d9ba60e8358ac0acd` | same blob |
+| `src/cpm/ccpfile.asm` | 335–366, 451–520 | `072affdf19ea070549d6029cdf204ed8f2b29cfd` | same blob |
+| `package.json` | 17, 18, 28 | `9c4c13a74c6137d6b108b66e7491b62ddc8398ac` | same blob |
+| `tools/lib/cpmfs.mjs` | 128–173, 175–233 | `869bcd39ce8f3735df5b0c9c7f4d6e31413f21ff` | same blob |
+| `tools/lib/pins.mjs` | 10–49 | `5288ad2d02508d29145860c01bc27107e64f89c7` | same blob |
+| `test/lib/inputs.mjs` | 24–41 | `9cb7f0a7c286f4bf5b12bd180c1f39aab61f3e69` | same blob |
+| `test/deps.test.mjs` | 14–27 | `69416fbe4daf59b4217aeb2e280dbfc9443c2fe5` | same blob |
+| `web/build.mjs` | 1–45 | `b33b5a836a20743daac110f89fa0a6a236929247` | same blob |
+| `tools/media.mjs` | 206–238 | `ff0436be705f846bbb712a5837f8757bb7d6bd30` | changed source read |
+| `web/src/store.mjs` | 6–8, 42–59 | `c1698a67efd60d5394b5d45e33b70f1041f28317` | same blob |
+| `host/card.mjs` | 58–72, 104–117 | `9cfb87a88462a12082058e611187f83d603ccaa8` | changed source read |
+| `src/pico.asm` | 36–92 | `0c49c294fc3199b619a994394d1b2b4192d17d0b` | changed source read |
+| `README.md` | 27–28 | `16388dcfa7561c14b03ab585ea33a3c2c4eb0e59` | changed source read |
+| `docs/diagnostics.md` | 146–163, 185–195 | `02f04d493514a82d74451b15f3cc4692b2e0ef41` | same blob |
+| `tools/diag-check.mjs` | 24–44, 70–106, 136–160 | `80199ab2d7dd81b12a62d34a8ba002108d96c514` | same blob |
+
+The current native offer remains ROM
+`fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d`
+and D8
+`9a87dec39a63efc8fdf38ae13d6ec6299763c833fc891de121e2b30f4a1a36ac`.
+These existing qualified identities remain the offer authority. Native 16020
+used and 364 free already occur in the ea3 memory-map account. No change
+from historical 16018/366 is attributed to font growth.
+Equal map addresses do not transfer historical provenance.
+
+### Preservation and craft
+
+All 7 reader fences and 6 capture/continuation comments match the
+input byte for byte. This includes their whitespace. Source listings,
+recipes, measurements, maps, hashes and build or screen output were not
+rewritten. Existing historical pins remain explicit. The protected digest
+below joins complete blocks with a single LF separator.
+
+| Identity | SHA-256 |
+| --- | --- |
+| Reader input | `bdcdd4237f288331dd233333bcdb0810971f5969c9cdfbeb5c147a9cb3100a97` |
+| Reader output | `c2f9bd746a4a13f6f58253af9adae81c11da769e8f4a593b8bdadd3349b84b63` |
+| Protected fence aggregate | `6999655e9d01add324b14a112a75e66386db75b623882afbae5e0be8d608697e` |
+
+The intervention is a mechanism/citation correction within the existing
+route. Separate thematic and deletion passes kept preflight before generation,
+normal operation before failure and each historical example under its own
+provenance. Each changed sentence was read within its full paragraph or table
+row and across the next boundary. Agency and every-comma passes retained
+necessary lists and exact interface punctuation. The reader-order pass kept
+the practical prerequisites and the existing ending. No example was replaced
+with a source assertion or an invented result.
+
+This adoption closes the owned current-source hold only. Independent adoption
+review, whole-book reconciliation and publication remain separate. No product
+import, syntax check, assembly, build, test, model, capture, browser action,
+physical operation or new runtime allocation occurred.
+
+### Editorial gate dispositions
+
+The actual mandatory prose gate and sentence-complexity report ran on all eight
+owned files. These are inert editorial checks. No hard gate finding remains.
+The five review flags were read in their complete contexts and retained:
+
+| Gate location | Disposition |
+| --- | --- |
+| 26 record line 183, columns 134 and 352 | Two matches in the initial agency-pass explanation. It denies interior agency and records a removed attribution. It does not assign that agency to a program. |
+| I reader line 123, column 23 | The word refers to interface messages as a plural noun, not an act of perception. |
+| I record line 29, column 24 | The same plural noun identifies source-defined interface messages in the initial audit. |
+| I record line 66, column 217 | The main script appends bracketed interface messages. This is an output operation. |
+
+The reader's count prompts distinguish source files from a passing workload.
+Both exclusions remain necessary: a file count proves neither execution nor
+unexercised paths. Time-unit repetition supplies an actual conversion. Watch,
+decoder, pacing and snapshot prompts retain their separate state/coverage limits.
+The cache-key prompts distinguish a recursive source digest from complete tool
+identity. Short pager statements separate Q, erasure and historical provenance.
+Browser-copy, serial-display and measured-line prompts name distinct operations
+and the limits of their observation. Initial-record prompts retain the original
+audit history and current pager handoff. New helper-condition wording retains
+all three prerequisites. The decoder and receipt prompts preserve their exact
+parameter and review identities.
+
+Every complexity prompt was used for a sequential reading decision. The report
+also splits code spans, metadata and list continuations into apparent short
+sentences. Those fragments were judged in their complete paragraphs or rows.
+The initial audit was preserved rather than rewritten for a score. The final
+changed-passage readback confirmed prerequisites, exceptions and provenance.

@@ -1,5 +1,11 @@
 # Appendix I pass record
 
+Current mechanism authority is TEC-OS `962853f499f05faf281f6cdff1deca8959f58c2b`.
+The selected-source adoption section at the end records the current correction
+and supersedes earlier source/profile holds. Earlier sections preserve the
+initial ea3 audit and its historical evidence accounting. Their old coordinates
+remain scoped to that initial audit rather than silently repinned.
+
 ## Contract and authority
 
 Only draft/appendix-i-web-page.md and this record are owned. The appendix is
@@ -154,3 +160,133 @@ ea3ef3d 80-column fallback, stored preferences and GLCD/startup policy remain
 unchanged. KS48 qualification remains pending. No source or result was repinned.
 Bounded independent confirmation of these corrections remains open. No
 execution, import, build, test, UI/browser action or capture was performed.
+
+## Selected-source adoption at 962853f
+
+Book selection 9ba1f59 authorises current mechanisms at TEC-OS
+`962853f499f05faf281f6cdff1deca8959f58c2b`. The tested source is
+`8b8664a7d93c6dc2e8bce509b9770585e106eedc`. The latter differs from the
+adopted descendant only in the two KS48 qualification records. Proposal 18's
+qualified offer and independent result receipt remain Origo 43d5f328.
+Opening workflow receipt 4b5b5a50 and complete opening reviews d9d57d2/b911e84
+close their bounded scopes. They do not certify a browser or physical board.
+The opening batch remains FAILED globally at its later observer.
+
+I read both source-adoption impact records, all 35 contexts, 29 proof spans
+and nine historical exceptions. I read this entire reader file and its full
+existing pass record before editing. The actual ea3-to-962 executable diff
+was read with the complete owning build, media, font, startup and fixture
+functions. Unchanged cited spans were compared byte for byte with the prior
+semantic audit and read against their containing claims. Diagnostic, ROM,
+host and browser source contexts were inspected as Git text. No source
+identity comparison is a runtime result.
+
+The page still falls back to PICO at 80 when preferences are absent.
+Successful preparation explicitly writes CON PICO 80, 40 or 32, with CRLF and
+the final EOF byte. The old no-line/EOF-only 80 description is replaced.
+The complete prepareCard, setDisplayLine and withoutDisplay functions retain
+staging, other command pieces and their conditional relationships. Existing
+read-only and capacity checks also apply to a required 80-column rewrite.
+The updated pico source assertion was read in its complete test context.
+The test assertion remains source evidence, separate from a browser result.
+All notice strings and three conditional rewrite examples remain byte-identical.
+
+The owned impact dispositions are IM011, IM012, IM013 and IM014.
+
+### Citation coverage
+
+All 73 current reader range occurrences across 20 source files
+were reconciled before changing the mechanism header. The table includes
+shorthand ranges in their owning file. The earlier sections of this record
+keep the original ea3 audit coordinates under that explicit scope. This new
+table uses only 962853f. Bounds and byte correspondence supplement the
+mechanism readback, not an execution claim.
+
+| Source | Adopted ranges | Exact Git blob | Comparison with ea3 |
+| --- | --- | --- | --- |
+| `web/build.mjs` | 16–45 | `b33b5a836a20743daac110f89fa0a6a236929247` | same blob |
+| `package.json` | 21 | `9c4c13a74c6137d6b108b66e7491b62ddc8398ac` | same blob |
+| `web/src/main.mjs` | 14, 17–43, 60–63, 67–84, 82–84, 82–104, 92–94, 97–98, 106–110, 118–147, 134–141, 149–166, 174–195, 358–427, 388–427, 429–524, 540–549, 563–578, 569–582, 593–596, 593–615, 593–679, 598, 605–606, 617–636, 617–649, 631–649, 635–636, 654–665, 667–680, 684–698 | `80f5af6c81ddeb6195ad89ad15cb9415f3ffea9e` | same blob |
+| `host/card.mjs` | 11–16, 18–24, 26–72, 41–48, 58–73, 75–102, 81–117, 104–117, 105–117 | `9cfb87a88462a12082058e611187f83d603ccaa8` | changed source read |
+| `src/pico.asm` | 36–92 | `0c49c294fc3199b619a994394d1b2b4192d17d0b` | changed source read |
+| `web/index.html` | 12–30, 35–49, 36–44, 68–82 | `a32c5fde15afa58ca1da869391348a34f64472f3` | same blob |
+| `host/machine.mjs` | 49, 578–587 | `eb1a1e5f30e1cb10750ec4a7a31486279631ac02` | same blob |
+| `tools/media.mjs` | 195–236 | `ff0436be705f846bbb712a5837f8757bb7d6bd30` | changed source read |
+| `tools/lib/recipe.mjs` | 14–44 | `660715717cf86943180cb4966ab6bf899d4fa19c` | same blob |
+| `web/src/store.mjs` | 6–8, 42–59 | `c1698a67efd60d5394b5d45e33b70f1041f28317` | same blob |
+| `tools/lib/container.mjs` | 149–152 | `5c573781df4dc4c24846aef010b5f226354d71b3` | same blob |
+| `src/vol.asm` | 330–385 | `7b3dfc3cfcfd956cf1fa6622d82074eccee89d94` | same blob |
+| `src/boot.asm` | 100–102, 210–215, 321–346 | `72ecb78d7c78eb1ceda36f3a2834dd7fcdd056cf` | same blob |
+| `src/cache.asm` | 661–668 | `93dbae343e94f2a29e675e92c5e8bae9484efa78` | same blob |
+| `src/cpm/bdoslog.asm` | 268–343 | `f4431224c452dd004225f1af6760dc9d1cc98d43` | same blob |
+| `tools/lib/cpmfs.mjs` | 15–20, 128–149, 180–191, 189–205 | `869bcd39ce8f3735df5b0c9c7f4d6e31413f21ff` | same blob |
+| `src/services.asm` | 629–647 | `4de96f7b311c538fe338f77e04d9743d4652d10f` | same blob |
+| `src/cpm/ccpcmd.asm` | 200–208 | `85069edd6be4448907e592a88586a8e484fde895` | same blob |
+| `src/loader.asm` | 885–913 | `bd2f2f6085e5a41821878dacd071c896ecc3bea0` | same blob |
+| `test/pico.test.mjs` | 688–700, 834–846 | `fb5efb828152f229434bcffa5e2f215a22d49e3e` | changed source read |
+
+The current native offer remains ROM
+`fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d`
+and D8
+`9a87dec39a63efc8fdf38ae13d6ec6299763c833fc891de121e2b30f4a1a36ac`.
+These existing qualified identities remain the offer authority. Native 16020
+used and 364 free already occur in the ea3 memory-map account. No change
+from historical 16018/366 is attributed to font growth.
+Equal map addresses do not transfer historical provenance.
+
+### Preservation and craft
+
+The reader fence and absence of capture comments match the
+input byte for byte. This includes their whitespace. Source listings,
+recipes, measurements, maps, hashes and build or screen output were not
+rewritten. Existing historical pins remain explicit. The protected digest
+below joins complete blocks with a single LF separator.
+
+| Identity | SHA-256 |
+| --- | --- |
+| Reader input | `882a80a396e6840f22fd17ab72856b9e45e24dd0cf6aac5e34c6eb4b3b32aef3` |
+| Reader output | `9c48a6c45cebb880400116a17fe4561fe96f12944c5f05a0977681baeffc0381` |
+| Protected fence aggregate | `d64619ea0e766ae1ed33a1290a91f83a0e693937ec7dad35f1517f386d734ef7` |
+
+The intervention is a mechanism/citation correction within the existing
+route. Separate thematic and deletion passes kept preflight before generation,
+normal operation before failure and each historical example under its own
+provenance. Each changed sentence was read within its full paragraph or table
+row and across the next boundary. Agency and every-comma passes retained
+necessary lists and exact interface punctuation. The reader-order pass kept
+the practical prerequisites and the existing ending. No example was replaced
+with a source assertion or an invented result.
+
+This adoption closes the owned current-source hold only. Independent adoption
+review, whole-book reconciliation and publication remain separate. No product
+import, syntax check, assembly, build, test, model, capture, browser action,
+physical operation or new runtime allocation occurred.
+
+### Editorial gate dispositions
+
+The actual mandatory prose gate and sentence-complexity report ran on all eight
+owned files. These are inert editorial checks. No hard gate finding remains.
+The five review flags were read in their complete contexts and retained:
+
+| Gate location | Disposition |
+| --- | --- |
+| 26 record line 183, columns 134 and 352 | Two matches in the initial agency-pass explanation. It denies interior agency and records a removed attribution. It does not assign that agency to a program. |
+| I reader line 123, column 23 | The word refers to interface messages as a plural noun, not an act of perception. |
+| I record line 29, column 24 | The same plural noun identifies source-defined interface messages in the initial audit. |
+| I record line 66, column 217 | The main script appends bracketed interface messages. This is an output operation. |
+
+The reader's short prompts identify the URL, clock target, focus, storage load,
+whole-image versus import path, absent flush and force, driver creation and
+recognition. Repeated file/save forms name distinct objects or operations.
+The idempotence prompt retains the precise no-write condition: protection is
+checked only for a needed rewrite. Notice interpretation stays separate from
+later ROM writes. The former protection sentence now states the required 80-column rewrite
+and its possible read-only failure. Initial-record
+prompts retain audit history. New source and whitespace statements preserve
+pin and literal boundaries. The receipt sentence retains its review IDs.
+
+Every complexity prompt was used for a sequential reading decision. The report
+also splits code spans, metadata and list continuations into apparent short
+sentences. Those fragments were judged in their complete paragraphs or rows.
+The initial audit was preserved rather than rewritten for a score. The final
+changed-passage readback confirmed prerequisites, exceptions and provenance.

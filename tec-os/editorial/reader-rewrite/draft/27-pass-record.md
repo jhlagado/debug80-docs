@@ -1,5 +1,11 @@
 # Chapter 27 pass record
 
+Current mechanism authority is TEC-OS `962853f499f05faf281f6cdff1deca8959f58c2b`.
+The selected-source adoption section at the end records the current correction
+and supersedes earlier source/profile holds. Earlier sections preserve the
+initial ea3 audit and its historical evidence accounting. Their old coordinates
+remain scoped to that initial audit rather than silently repinned.
+
 ## Scope and authority
 
 The draft is `27-diagnose-the-machine.md`. Its final path is
@@ -180,3 +186,139 @@ bit into CONDEV. It does not probe a keyboard response. The prose now uses
 responding PICO plus Matrix switch enabled, replacing presence/answer wording.
 This is a source-backed condition correction, not physical detection evidence.
 No execution or literal-output change occurred.
+
+## Selected-source adoption at 962853f
+
+Book selection 9ba1f59 authorises current mechanisms at TEC-OS
+`962853f499f05faf281f6cdff1deca8959f58c2b`. The tested source is
+`8b8664a7d93c6dc2e8bce509b9770585e106eedc`. The latter differs from the
+adopted descendant only in the two KS48 qualification records. Proposal 18's
+qualified offer and independent result receipt remain Origo 43d5f328.
+Opening workflow receipt 4b5b5a50 and complete opening reviews d9d57d2/b911e84
+close their bounded scopes. They do not certify a browser or physical board.
+The opening batch remains FAILED globally at its later observer.
+
+I read both source-adoption impact records, all 35 contexts, 29 proof spans
+and nine historical exceptions. I read this entire reader file and its full
+existing pass record before editing. The actual ea3-to-962 executable diff
+was read with the complete owning build, media, font, startup and fixture
+functions. Unchanged cited spans were compared byte for byte with the prior
+semantic audit and read against their containing claims. Diagnostic, ROM,
+host and browser source contexts were inspected as Git text. No source
+identity comparison is a runtime result.
+
+The adopted diagnostic build validates the font package before generated
+writes or assembly. Its separate FONT-NOTICES companion is now named beside
+its ROM, D8 and JSON outputs. The complete build function confirms entry,
+overlay, variable and NMI bounds before output writes. Image-ID blanking and
+the additive checksum keep their distinct ranges. T17 still selects supported
+80-column mode rather than the main ROM's raw cold 40. The title definitions,
+all test meanings, report comparison and prospective board procedure retain
+their source contracts. Historical D90143609F53FAAB and checksum 47C0 remain
+attached to the original 78127ec image and report.
+
+This correction applies the owned IM028 disposition.
+
+### Citation coverage
+
+All 142 current reader range occurrences across 27 source files
+were reconciled before changing the mechanism header. The table includes
+shorthand ranges in their owning file. The earlier sections of this record
+keep the original ea3 audit coordinates under that explicit scope. This new
+table uses only 962853f. Bounds and byte correspondence supplement the
+mechanism readback, not an execution claim.
+
+| Source | Adopted ranges | Exact Git blob | Comparison with ea3 |
+| --- | --- | --- | --- |
+| `src/boot.asm` | 49–70, 59–69, 62–69, 71–102, 80–86, 100–102, 119–132, 296–303, 321–346, 454–509, 579–632, 802–829, 817–829, 831–847, 844–845 | `72ecb78d7c78eb1ceda36f3a2834dd7fcdd056cf` | same blob |
+| `src/text.asm` | 10, 13–15, 14 | `e710401c8301070bcd349d81ed19ccb288497271` | same blob |
+| `src/lcd.asm` | 77–92 | `661881a1f37d2334b9b7c82b37f7dbdfca860246` | same blob |
+| `src/sd.asm` | 15–30, 215–371 | `c638fee15406c0a593bc4bfde4306dfbf1967c08` | same blob |
+| `src/vol.asm` | 22–42, 44–65, 56–65, 303–316, 477–529 | `7b3dfc3cfcfd956cf1fa6622d82074eccee89d94` | same blob |
+| `src/console.asm` | 28–39, 57–88 | `1ee8fe3916d2913ac86778aba5d796725ddc8ef4` | same blob |
+| `src/video.asm` | 22–29 | `a1ccc60ccc32ca0b0f35be8de70d6ae4b1ce43ee` | same blob |
+| `src/pico.asm` | 69–92 | `0c49c294fc3199b619a994394d1b2b4192d17d0b` | changed source read |
+| `src/layout.asm` | 26–39, 81–90, 166–174 | `498fc7e74fc909b06dd8a0f1dfafc76c354c955a` | same blob |
+| `diag/diag.asm` | 1–14 | `ecff05688883850cd4d9f9441119430eb3bfe2f2` | same blob |
+| `diag/boot.asm` | 8–27, 8–40, 29–40, 43–73, 75–128, 118–125 | `8b386b7efd7dd488e787ef2c96049e1c482ef01e` | same blob |
+| `diag/sd.asm` | 115–212, 310–311, 310–322, 451–452, 616–683, 622–623, 663–730 | `950e0222f14fe0a1a3ebd6f7a49394f32f3e233e` | same blob |
+| `tools/diag.mjs` | 26–29, 38–50, 52–78, 84–89, 91–146, 103–110, 117–125, 126–128, 129–132 | `3f2306ef776bc7f085f04af2e4a1ae975dd3d724` | changed source read |
+| `tools/lib/font-package.mjs` | 8–21 | `b7d6950480d5ef1f2bf7216c1b0bc637c4fd34a9` | changed source read |
+| `diag/out.asm` | 10–28, 49–62, 108–117, 241–326, 592–615, 635–658, 637–658, 663–716, 694–703, 706–711, 737–743, 737–789 | `014f2811c09b1b8ba860097effe69882f978bc42` | same blob |
+| `diag/memory.asm` | 99–107, 99–114, 99–156, 145–155, 200–232, 200–260, 259–343, 316–343, 316–351, 347–372, 404–447, 404–454, 449–484, 489–563, 489–658, 501–502, 600–601, 600–658 | `84d6039ed79de6a2beb53608e7c7cd76a576f89f` | same blob |
+| `diag/defs.asm` | 41–42, 43–44, 50–56 | `ba8dd77c684adcfd789d12a9b77b9afe9658dd0d` | same blob |
+| `diag/main.asm` | 4–28, 29–45, 43–64, 56–62, 56–87, 88–119, 91–106, 125–145 | `08b81df751c27d1dbb1ccc2f08e00476bcad3de5` | same blob |
+| `tools/diag-check.mjs` | 36–47, 49–62, 65–73, 82–107, 87–106, 96–104, 104, 110–134, 136–152, 153–159 | `80199ab2d7dd81b12a62d34a8ba002108d96c514` | same blob |
+| `diag/display.asm` | 5–6, 54–55, 241–242, 334–372, 349–350, 662–663, 751–803, 756–757, 816–817 | `575a9b291d33b3fbeeb6988019d487762155be12` | same blob |
+| `diag/misc.asm` | 45–46, 440–441, 494–495, 561–562, 587–607, 590–591, 618–619 | `45eedf9fe14b37075949949a7b3432943e4f61d5` | same blob |
+| `diag/interact.asm` | 45–46, 104–105, 213–214, 329–330, 367–368, 509–510, 626–627, 671–672 | `37533628135bf5c3b1c655d63926fdacc3e4b2f6` | same blob |
+| `src/tms.asm` | 17–48 | `01f872eb66902656bac87ba894b02f6ea2001c9a` | same blob |
+| `format/format.json` | 43 | `abf1f9c5448c2bc6b752f1e6ccc721c88d20897c` | same blob |
+| `tools/lib/container.mjs` | 33–42 | `5c573781df4dc4c24846aef010b5f226354d71b3` | same blob |
+| `docs/diagnostics.md` | 141–163, 184–198 | `02f04d493514a82d74451b15f3cc4692b2e0ef41` | same blob |
+| `src/cpm/ccp.asm` | 22–23 | `c58d5f68af74e135df58d7709c5b5794524ed33a` | same blob |
+
+The current native offer remains ROM
+`fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d`
+and D8
+`9a87dec39a63efc8fdf38ae13d6ec6299763c833fc891de121e2b30f4a1a36ac`.
+These existing qualified identities remain the offer authority. Native 16020
+used and 364 free already occur in the ea3 memory-map account. No change
+from historical 16018/366 is attributed to font growth.
+Equal map addresses do not transfer historical provenance.
+
+### Preservation and craft
+
+All 7 reader fences and the capture comment match the
+input byte for byte. This includes their whitespace. Source listings,
+recipes, measurements, maps, hashes and build or screen output were not
+rewritten. Existing historical pins remain explicit. The protected digest
+below joins complete blocks with a single LF separator.
+
+| Identity | SHA-256 |
+| --- | --- |
+| Reader input | `5cccb106ea47bcff10d91ad9b0ef23b8873718381bbb77e2e916c2113a30e1d1` |
+| Reader output | `6e1f9a27a0edcbedf0d36dd1c6aaed0fc9fa664051db2b8cb9e7a3986a5f96ef` |
+| Protected fence aggregate | `eecd590dbecd13adf2c9dcbe5171143bb9e9907e4e7dda0443175f0f4f1d6bfe` |
+
+The intervention is a mechanism/citation correction within the existing
+route. Separate thematic and deletion passes kept preflight before generation,
+normal operation before failure and each historical example under its own
+provenance. Each changed sentence was read within its full paragraph or table
+row and across the next boundary. Agency and every-comma passes retained
+necessary lists and exact interface punctuation. The reader-order pass kept
+the practical prerequisites and the existing ending. No example was replaced
+with a source assertion or an invented result.
+
+This adoption closes the owned current-source hold only. Independent adoption
+review, whole-book reconciliation and publication remain separate. No product
+import, syntax check, assembly, build, test, model, capture, browser action,
+physical operation or new runtime allocation occurred.
+
+### Editorial gate dispositions
+
+The actual mandatory prose gate and sentence-complexity report ran on all eight
+owned files. These are inert editorial checks. No hard gate finding remains.
+The five review flags were read in their complete contexts and retained:
+
+| Gate location | Disposition |
+| --- | --- |
+| 26 record line 183, columns 134 and 352 | Two matches in the initial agency-pass explanation. It denies interior agency and records a removed attribution. It does not assign that agency to a program. |
+| I reader line 123, column 23 | The word refers to interface messages as a plural noun, not an act of perception. |
+| I record line 29, column 24 | The same plural noun identifies source-defined interface messages in the initial audit. |
+| I record line 66, column 217 | The main script appends bracketed interface messages. This is an output operation. |
+
+The reader's short prompts state console fallback, actual key/serial results,
+retry, bounds and source-versus-timing scope. The buffer sentence retains the
+reason fixed RAM survives the cache clear. The long title comment is citation
+metadata. The repeated block term distinguishes card units from payload alignment.
+The procedure fragments come from the unchanged physical recipe. Initial-record
+prompts retain the original audit history. New short source and preservation
+statements identify the tested pin and the protected whitespace. The receipt
+sentence retains the specific review IDs.
+
+Every complexity prompt was used for a sequential reading decision. The report
+also splits code spans, metadata and list continuations into apparent short
+sentences. Those fragments were judged in their complete paragraphs or rows.
+The initial audit was preserved rather than rewritten for a score. The final
+changed-passage readback confirmed prerequisites, exceptions and provenance.
