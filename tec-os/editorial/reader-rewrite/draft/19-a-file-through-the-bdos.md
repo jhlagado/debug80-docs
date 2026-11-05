@@ -13,7 +13,7 @@ nav_group: "Part II: Inside TEC-OS"
      build or measurement. No example was executed for this draft. -->
 
 Making a file creates its directory entry. Writing records then changes the
-file control block (FCB) in the program's memory, and closing copies that
+file control block (FCB) in the program's memory and closing copies that
 state back to the directory. The directory and FCB can therefore differ
 while a file is open (`src/cpm/bdosfile.asm:558-643`,
 `src/cpm/bdosrec.asm:79-103`, `src/cpm/bdosfile.asm:289-339`).
@@ -88,7 +88,7 @@ bytes. The BDOS fills the FCB from the entry and changes its position, count
 and map as the program reads and writes (`src/cpm/bdosfn.asm:621-685`,
 `src/cpm/bdosrec.asm:184-207`, `src/cpm/bdosrec.asm:227-298`). The attribute
 bits are tested at byte 9 for read-only and byte 10 for system
-(`src/cpm/bdosfile.asm:430-445`, `src/cpm/ccpcmd.asm:138-147`):
+(`src/cpm/bdosfile.asm:430-445`, `src/cpm/ccpfile.asm:138-147`):
 
 | Offset | Field | Contents |
 | ---: | --- | --- |
@@ -156,8 +156,11 @@ covers, since one entry holds `EXM` + 1 extents
 | 5 | function 17 with `?` in the drive byte | every entry |
 
 On a volume with few files most of the directory is unused. A search
-therefore stops at the drive's directory mark, `DIRUSED`, the count of
-entries up to the last one in use (`src/cpm/bdosfn.asm:507-530`). Modes 3
+therefore stops at the drive's directory mark, `DIRUSED`, a retained upper
+bound on entries that may need scanning. A BIOS directory write can raise it
+to the end of the containing card block, beyond the last live entry
+(`src/cpm/bdosfn.asm:507-530`, `src/bios.asm:338-366`,
+`src/cpm/bdoslog.asm:362-385`, `src/cpm/bdoslog.asm:420-439`). Modes 3
 and 5 are the exceptions and go to the end of the directory. The starter
 card's drive B has 512 entries, 32 card blocks of them. Once an empty
 volume is logged in, an ordinary name search reads no directory record. The
@@ -397,8 +400,9 @@ drives named by the bits of `DE` out of `LOGINV`, the read-only vector and
 `UNMNT` call it for a drive whose volume they have changed
 (`src/volsvc.asm:339-358`). A `MOUNT` onto the default drive then selects
 the drive again with function 14, which logs the new volume in
-(`src/volsvc.asm:377-391`). Functions 27 and 31 answer for that volume at
-once.
+(`src/volsvc.asm:377-391`). Functions 27 and 31 return the new default
+volume's allocation-vector and DPB pointers (`src/cpm/bdosfn.asm:58-64`,
+`src/cpm/bdosfn.asm:178-189`).
 
 ## Code and writable state
 
@@ -466,8 +470,10 @@ Each goes to `BDERR` with its message and code. What `BDERR` does is set by
 the error mode, which function 45 puts in `ERRMODE`
 (`src/cpm/bdos.asm:271-275`, `src/cpm/bdoscon.asm:47-72`). In the default
 mode `DISKMSG` prints the message and `BDERR` waits for a key with `GETCHAR`
-(`src/cpm/bdoscon.asm:108-137`). A key typed during the output is the key it
-takes. `CHDROP` then ends the program by warm boot, whatever the key, so the
+(`src/cpm/bdoscon.asm:108-137`). An ordinary key retained during message
+output satisfies that wait. `^P` toggles list output and `^S` consumes a
+resume key, with `^C` at that pause aborting
+(`src/cpm/bdoscon.asm:318-350`). `CHDROP` then ends the program by warm boot, whatever the key, so the
 function never returns to the program (`src/cpm/bdos.asm:115-119`). `CHDROP`
 also drops the rest of a chained line, which Chapter 21 describes.
 
@@ -484,7 +490,7 @@ Chapter 4 explains volume protection and the read-only file attribute. They
 enter the BDOS through different state. The volume's read-only flag is in
 the drive table. `LOGIN` sets the drive's bit in the read-only vector from
 it (`src/cpm/bdoslog.asm:254-264`), so the BDOS rejects the change before
-any write reaches the card. A warm boot clears the vector, and the drive's
+any write reaches the card. A warm boot clears the vector and the drive's
 next selection sets the bit again. Function 28 protects only the default
 drive in `ROVEC`, until function 13 or 37 clears it
 (`src/cpm/bdosfn.asm:153-165`, `src/cpm/bdosfile.asm:35-41`,
