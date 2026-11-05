@@ -835,8 +835,8 @@ These programs use BDOS functions 2, 6 and 9, not disk functions. Added
 headers refer to those calls' contracts rather than promising that all BDOS
 calls destroy only AF, BC, DE and HL. In particular, this document makes no
 IX-preservation promise for a disk path. The original narrow helper comments
-remain scoped to their actual console calls. Numbered MOUNT, UNMOUNT and
-DESCRIBE have different IX/alternate-register rules and are not called here.
+remain scoped to their actual console calls. Numbered MOUNT, UNMNT and DESC
+have different IX/alternate-register rules and are not called here.
 
 The static review followed the inherited return word, tail jumps, saved values
 across printing and the HWLIB fall-throughs. It also followed DIGCLK's first
@@ -915,3 +915,10 @@ so all source sizes and hashes remain unchanged. The full independent review
 has been received, with both required findings applied. Bounded confirmation
 of this route-wording correction remains open. No assembly, import or runtime
 qualification is claimed.
+
+## ABI service-name correction
+
+The contract paragraph now uses MOUNT, UNMNT and DESC, matching TNMOUNT,
+TNUNMNT and TNDESC in ea3 `src/abi.inc:115–130`. This corrects only the names.
+The IX/alternate-register qualification is unchanged. Candidate fences, sizes
+and hashes remain unchanged. No assembly, import or runtime occurred.
