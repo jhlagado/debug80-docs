@@ -58,3 +58,10 @@ and the host-only table includes it. Restored the explicit16-bit sum
 definition that the first rewrite had dropped. Independent confirmation
 remains pending. All other reviewed semantics, preservation and craft
 checks were clear. No execution was performed.
+
+## Confirmation
+
+Independent confirmation of751e8b2 closed the table-sum finding. The full
+review otherwise cleared preservation, fields, bounds, partial mount rollback,
+checksum coverage and craft. No bounded finding remains. Final navigation
+and qualified current examples remain pending.
