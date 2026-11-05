@@ -37,7 +37,7 @@ and zero clear (`src/services.asm:75-79`).
 
 For a valid number, the dispatcher pushes `HL` and `DE`. It doubles the
 number into `DE` and adds that offset to `SVTAB`. Each entry is a routine
-address, so the 16 words occupy 32 bytes in the ROM's data block
+address so the 16 words occupy 32 bytes in the ROM's data block
 (`src/services.asm:50-59`, `src/tables.asm:104-132`). This table is separate
 from the eight-byte signature/version/jump table at `C003h`.
 
@@ -48,7 +48,7 @@ arguments are back in place and the caller's return word is next on the
 stack. Neither of the dispatcher's saved pairs remains there
 (`src/services.asm:60-68`).
 
-The ordinary exits preserve the result registers. `HWERR` uses `OR A`
+Both ordinary exits leave `B`, `DE` and `HL` unchanged. `HWERR` uses `OR A`
 and `SCF` to return a nonzero status with carry set. `HWOK` uses `XOR A`
 to return status 0 with zero set and carry clear (`src/services.asm:70-86`).
 `FIND` and `LIST` have their own result convention, including the registry
@@ -62,7 +62,7 @@ routine to change unless its contract names them as results
 
 Services 0 to 8 are the hardware routines in `src/services.asm`.
 `FONT`, 15, is there too. The volume entries 9 to 11 are in
-`src/volsvc.asm`; [Chapter 17](17-card-blocks-and-volumes.md) explains those
+`src/volsvc.asm`. [Chapter 17](17-card-blocks-and-volumes.md) explains those
 operations. `DRVR`, 12, enters `SVDRV` to install or drop a display-driver
 table. [Chapter 16](16-console-paths.md) explains that table and its
 validation. `FIND` and `LIST`, 13 and 14, enter the registry routines in
@@ -97,8 +97,7 @@ with `VCLAIM` for the result in `B`, loads `ROMVER` into `DE` and reads
 the adjacent `VWID` and `VHGT` bytes into `L` and `H`
 (`src/services.asm:95-105`, `src/ram.asm:438-439`). In the historical
 `78127ec` workspace those dimensions were at `BFEAh` and `BFEBh`, near its
-upper end (`78127ec:src/ram.asm:281-282`). The current source still uses
-their labels, not those addresses.
+upper end (`78127ec:src/ram.asm:281-282`).
 
 The device bits and claim bit have different lifetimes. Cold boot calls
 `RTCHAS` once and sets `CDRTC`, bit 3 of `CONDEV`, if the clock answers
@@ -112,15 +111,15 @@ checks that the row in `B` is below 4. An invalid row returns `TNEBAD`
 before any write. For row 3 it clears `CDWRD`, which records that the
 bottom row contains a ROM recovery word (`src/services.asm:157-171`).
 Your text can then remain there without a later recovery-word clear
-erasing it. [Chapter 25](25-startup-inside-the-ccp.md) explains that use
-of the bottom row.
+erasing it (`src/loader.asm:960-980`).
+[Chapter 25](25-startup-inside-the-ccp.md) explains that use of the bottom row.
 
 `LCDROWS` supplies the row's display address. `HWSLCD` sends that command
 and then writes exactly 20 bytes from `HL`, advancing the pointer after
 each. Every character follows a call to `LCDWAIT`
 (`src/tables.asm:51-52`, `src/services.asm:173-192`). This is fixed-width
 output, including zero bytes. `LCDWAIT` polls the busy flag at most 256
-times, so an absent display does not cause an endless wait
+times so an absent display does not cause an endless wait
 (`src/lcd.asm:29-47`).
 
 ## Digits and sound on port 01h
@@ -148,8 +147,9 @@ Between successive loop toggles the instruction cost is `16 × B + 51`
 T-states. `B` at zero makes 256 delay turns because `DEC C` wraps to
 `FFh`. Zero half cycles return immediately. After a nonempty tone the
 last port write is `TXIDLE`, leaving the speaker low and the serial line
-high (`src/services.asm:283-318`). The timing expression comes from the
-instructions; the earlier program-side measurements retain their own pin.
+high (`src/services.asm:283-318`). This instruction-derived interval is
+separate from the historical program-side measurements in
+[Chapter 11](11-use-the-boards-devices.md).
 
 ## Matrix rows and the joystick
 
@@ -180,7 +180,8 @@ full validation of every BCD digit (`src/services.asm:450-455`,
 `RTCCMD` raises the enable line and enters `RTCWR` to send the command.
 `RTCWR` shifts the byte in `D` out least significant bit first, setting
 each data bit before raising the clock (`src/services.asm:540-570`).
-The service uses burst command `BFh` to read seven time bytes into `HL`:
+The service uses burst command `BFh` to read seven time bytes into the
+buffer at `HL`:
 seconds, minutes, hours, date, month, weekday and year. Each read byte
 advances `HL` (`src/services.asm:432-439`, `src/services.asm:456-470`).
 
@@ -216,10 +217,12 @@ fourth word at offset 6 and calls the restore routine through `VHLJP`
 
 The restore routine reinstates the mode, font and displayed page. Release
 also clears the screen and homes the cursor when the PICO9918 is the
-console (`src/pico.asm:247-284`, `src/services.asm:269-279`). Warm boot
-calls `HWVREL` before `PZINIT`. That ordering turns off the chip's
-interrupt, wired as an NMI on the board, before page zero is rebuilt
-(`src/boot.asm:185-195`). A program's claim ends with its exit.
+console (`src/pico.asm:247-331`, `src/services.asm:269-279`). Warm boot
+calls `HWVREL` before `PZINIT`. With the ROM console's table present,
+that restore disables the chip's interrupt, wired as an NMI on the board,
+before page zero is rebuilt (`src/boot.asm:185-195`,
+`src/pico.asm:258-278`, `src/pico.asm:677-679`).
+A program's claim ends with its exit.
 
 `PUTAT` writes through the selected video driver while leaving the console
 cursor position unchanged. Its first test is `VTOWN`, followed by the low
@@ -241,18 +244,17 @@ expires or the right edge is reached (`src/services.asm:388-428`).
 
 ## The ROM font
 
-The display drivers use the ROM's font rather than separate character
-tables. `FONT`, service 15, loads its address into `HL` and jumps to
-`HWOK` (`src/services.asm:597-603`). The font has 96 characters from
-code `20h`, each eight bytes in top-to-bottom row order
+The display drivers use the ROM's font (`src/pico.asm:303-329`,
+`drivers/glcd.asm:604-635`). `FONT`, service 15, loads its address into
+`HL` and jumps to `HWOK` (`src/services.asm:597-603`). The font has 96
+characters from code `20h`, each eight bytes in top-to-bottom row order
 (`src/abi.inc:163-168`). Its 768 data bytes are separate from the
 six-byte access routine in the historical code table.
 
 `GLCD.SVC` calls `FONT` first in `INIT` and stores the returned pointer.
 On a ROM before ABI 5.1, number 15 is beyond the dispatch table. The
 call returns carry set and `INIT` exits with that failure before probing
-the controller (`drivers/glcd.asm:66-80`). The driver can only proceed
-with a font address supplied by the interface.
+the controller (`drivers/glcd.asm:66-80`).
 
 ## Space on the caller's stack
 
