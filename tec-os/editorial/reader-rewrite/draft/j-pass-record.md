@@ -58,3 +58,11 @@ COPY and SAVE partial-file retention on a successful close, since the error
 paths discard that close's result. Made the absence of user-0 fallback for
 SVC explicit and specified USER's accepted digit forms. All five findings
 are accepted. Confirmation review and final navigation remain pending.
+
+## Confirmation
+
+Independent confirmation at6d8d21e closed all five findings. The Chapter1
+link matches01-first-session.md in the final-path ledger. The reference has
+no remaining bounded editorial or factual finding. A mechanical rerun leaves
+only the reviewed metadata phrase source offer. Current example qualification
+and final navigation remain pending.
