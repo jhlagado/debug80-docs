@@ -50,3 +50,12 @@ inside the editorial draft folder. Validate after integration; no route is
 claimed navigable yet. No whole-chapter checked-at header is fabricated.
 Source offer17 is ea3ef3d. Final source/capture inventory, independent editorial
 and factual result review and all linked chapter drafts still need acceptance.
+
+## Independent first review and correction
+
+The full original/draft read ataa09710 found no editorial or bounded factual
+blocker but identified two lost holdings: notation conventions and source
+priority in a disagreement. Both are restored. The setup uses32,768 bytes so
+KiB does not precede its definition. The redundant sentence about hardware
+requirements is deleted. Independent confirmation of these bounded corrections
+remains pending. Draft destination links still await integration.
