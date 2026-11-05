@@ -8,12 +8,18 @@ nav_group: "Part I: Using TEC-OS"
 # 5. Cards on the PC
 
 <!-- Source mechanisms read at TEC-OS ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
-     Retained recipes and output are historical TEC-OS 78127ec evidence.
+     Inherited recipes and output are historical TEC-OS 78127ec evidence.
      Original old03/04/05 inputs: TED.COM Thorium 128edb7,
      SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;
      TAS.COM Thorium dbee66a,
      SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     No execution, new output, physical-board result or KS48 default is claimed. -->
+     BANNER host extraction only: Origo attempt02 e77c7ef0, accepted by
+     4b5b5a50:studies/p3-tec-os/reviews/book-opening-workflows.md.
+     Extraction source authority 962853f499f05faf281f6cdff1deca8959f58c2b;
+     tested source 8b8664a7d93c6dc2e8bce509b9770585e106eedc.
+     ROM SHA-256 fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d;
+     PICO record v3. Whole batch FAILED. No new execution in this revision.
+     Physical, browser, audio and advanced-service acceptance is excluded. -->
 
 A copy of the card on your PC lets you extract work and prepare another card
 without changing the original. `tecvol` reads and edits that image, a file
@@ -37,9 +43,10 @@ recipes and component files into `dist/`. A host-assembled COM program reaches
 a card through the same `put` command as any other binary. The complete
 historical PC HELLO recipe and its output remain together in Chapter 26.
 
-All output below is retained from the `78127ec` examples with their original
-inputs. The sizes, hashes and free-space totals belong to those examples.
-Inspecting the later source does not produce a new card or refresh a result.
+The BANNER recovery below uses the accepted host extraction from the saved
+Chapter 2 card. The other output retains the `78127ec` examples and their
+original inputs. Each example's sizes, hashes and free-space totals belong
+to that example.
 
 ## A copy before a change
 
@@ -92,6 +99,136 @@ including any padding.
 areas unless that option limits it. `N` must be a whole number from 0 to 15.
 Values such as `oops`, `1.5` and `16` stop the command before the image changes.
 Listing and extraction leave `card.img` unchanged.
+
+### Recovering BANNER
+
+Chapter 2's saved BANNER can be recovered as raw records or editable PC text.
+This example uses `saved-banner-card.img`, the persisted image after saving the
+edited program, quitting TED and successfully flushing at the prompt. A fresh
+starter image has no BANNER. Use new destinations for the backup and extracted
+files. Neither `card.img` nor the `recovered/` directory may already exist.
+
+First make a working copy and compare it with the saved image. The comparison
+prints nothing when the bytes match. Verification then checks that copy's
+container and directories before extraction:
+
+```sh
+cp saved-banner-card.img card.img
+cmp saved-banner-card.img card.img
+mkdir recovered
+node tools/tecvol.mjs verify card.img
+```
+
+The recorded verification succeeded:
+
+```text
+container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
+  A: SYSTEM      id 1 G1M start 2048 rw 8 file(s), 999424 bytes free
+  B: WORK        id 2 G8M start 4096 rw wb 3 file(s), 8359936 bytes free
+```
+
+Listing without a volume selects A. The next command lists B, where the
+banner was saved:
+
+```sh
+node tools/tecvol.mjs dir card.img
+node tools/tecvol.mjs dir card.img B
+```
+
+The complete A listing includes TED's project and session files:
+
+```text
+ 0 GLCD.SVC          896
+ 0 MOUNT.COM         768
+ 0 SAMPLE.ASM       5120
+ 0 STARTUP.CMD       128
+ 0 TAS.COM         10368
+ 0 TED.COM         12032
+ 0 THOR.PRJ          128
+ 0 THOR.SES          128
+```
+
+B contains the source, program and debug file:
+
+```text
+ 0 BANNER.ASM        384
+ 0 BANNER.COM        128
+ 0 BANNER.DBG        384
+```
+
+An explicit user-area filter establishes which copy will be read. These
+commands save B's user-0 listing before extracting BANNER in both forms:
+
+```sh
+node tools/tecvol.mjs dir card.img B --user 0 > recovered/B-user0.txt
+cat recovered/B-user0.txt
+node tools/tecvol.mjs get card.img B BANNER.ASM recovered/BANNER.REC --user 0
+node tools/tecvol.mjs get card.img B BANNER.ASM recovered/BANNER.ASM --user 0 --text
+wc -c recovered/BANNER.REC recovered/BANNER.ASM
+```
+
+The filtered listing repeats the three B entries above. The byte counts are:
+
+```text
+     384 recovered/BANNER.REC
+     273 recovered/BANNER.ASM
+     657 total
+```
+
+`BANNER.REC` is the raw PC copy, not another file on B. Its three records
+contain 286 bytes of source with CRLF endings followed by 98 `1Ah` bytes.
+Text extraction stops at the first `1Ah` and changes the 13 CRLF pairs to LF.
+The resulting 273-byte file matches the complete edited source:
+
+```sh
+cat recovered/BANNER.ASM
+```
+
+```asm
+  org $0100
+
+; Print one line to the console.
+; Takes nothing. Returns to the CCP.
+; Changes AF, BC, DE and HL.
+
+START:
+  ld de,MSG      ; Text for BDOS.
+  ld c,9         ; $ ends the text.
+  call 5
+  ret            ; CCP warm boot.
+
+MSG: db "Hello from TEC-OS!",13,10,"$"
+```
+
+A missing name produces an error rather than an empty recovered file. The
+saved user-0 listing contains no `MISSING.ASM`. With that name absent and
+`recovered/MISSING.ASM` still absent, the recorded check was:
+
+```sh
+missing_status=0
+node tools/tecvol.mjs get card.img B MISSING.ASM recovered/MISSING.ASM --user 0 > recovered/missing.stdout 2> recovered/missing.stderr || missing_status=$?
+printf 'missing get exit: %s\n' "$missing_status"
+cat recovered/missing.stderr
+```
+
+```text
+missing get exit: 1
+tecvol: 0/MISSING.ASM not found
+```
+
+The command produced no standard output and created no `MISSING.ASM` on the
+PC. Listing and both extractions also left the image unchanged. Comparing
+the working copy with the saved card after the missing-file check again
+completed without a difference:
+
+```sh
+cmp saved-banner-card.img card.img
+```
+
+The original image remains available alongside the working copy and both
+recovered files. This host-image example does not establish a physical-card
+read or write. The raw-device copy above and the card-construction examples
+below retain their historical inputs and results.
 
 ## The container and its volumes
 

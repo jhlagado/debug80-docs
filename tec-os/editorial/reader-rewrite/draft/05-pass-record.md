@@ -349,3 +349,200 @@ change in this refinement. The mandatory prose gate is run before commit.
 The chapter's operator prose, historical commands/output and all other
 writers' files remain unchanged. All seven cases await the shared allocation
 and independent result review.
+
+## Accepted PC extraction insertion
+
+This entry supersedes the seven-case hold above for the covered host subset
+only. The source-only candidate at53555e942cf7170c48d8c2f91cd4682c3caa7625
+remains unchanged as the preparation record. The existing reader path is
+`05-cards-on-the-pc.md`, not `05-cards-on-a-host.md`. Only that chapter and
+this pass record are changed. No navigation or root integration is included.
+
+The complete closure receipt was read at Origo4b5b5a50,
+`studies/p3-tec-os/reviews/book-opening-workflows.md`. It accepts the scoped
+public workflows from attempt02 at e77c7ef0. The entire batch remains FAILED
+at its later service observer. There is no advanced-service, physical,
+browser, audio, whole-book or publication acceptance. This revision performs
+no product execution and does not reopen the closed workflow review.
+
+The chapter, complete candidate and prior pass record were read before
+editing. The practical-first outline at0e4feeaf7f8b8063a8301e9073aa598c2cabaea1
+retains backup and extraction before construction. The Chapter 5 candidate
+and seven-case dispositions above supply the readiness inventory. No
+separate Chapter 5 readiness file exists or is created for this insertion.
+
+### Actual evidence readback
+
+All paths in this subsection are archive members under Origo's
+`studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02/` at
+e77c7ef0. The archive is `complete-attempt.tar.gz`. Its PC extraction files,
+complete shell stdout/stderr/exit record, saved BANNER inventories and exact
+source were read. These are existing artifacts, not a new reproduction.
+The archived `packet/chapter05.sh` is byte-identical to the candidate's
+1,529-byte shell fence. Its SHA-256 is
+`8de4c92a33ac4ddb5e027500a10b97e2bbc21a58a7c7a316e7524a8a075d412f`.
+
+| Case | Actual observation and reader home |
+| --- | --- |
+| 05-L0 | Persisted BANNER image, saved-banner-card.img and card.img are byte-equal, 10,485,760 bytes. The shell checks destination absence before copy. Verification succeeds with no directory problems. The new subsection gives the copy/comparison and complete verification output. This qualifies an image backup, not physical dd. |
+| 05-L1 | Complete default-A listing has eight files, including THOR.PRJ and THOR.SES. B has BANNER.ASM, BANNER.COM and BANNER.DBG. Both complete listings are inserted without dropping by-products. |
+| 05-L2 | The saved user-0 B listing has the same three entries. BANNER.ASM is 384 bytes, exactly three records. The chapter gives the explicit filtered command and states the repeated result. |
+| 05-L3 | BANNER.REC is 384 bytes. Its first 286 bytes are CRLF source and its remaining 98 bytes are all 1Ah. The chapter gives the raw get, recorded counts and exact tail interpretation. |
+| 05-L4 | BANNER.ASM is 273 bytes and byte-equal to both archived banner-final.asm copies. There are 13 CRLF pairs before the first 1Ah. Removing that marker/tail and converting those pairs yields the exact LF file. The complete source is inserted unchanged, including lowercase org, spacing, comments and the edited exclamation mark. |
+| 05-L5 | The card remains byte-equal to the persisted source after both extractions and after the negative control. Both outputs and the final comparison are accounted for in the reader sequence. |
+| 05-L6 | MISSING.ASM is absent from the saved B user-0 listing. The shell checks PC destination absence, get status1, empty stdout, exact stderr and no output file. Image equality still holds. The reader gives these prerequisites, the checked status variable, literal diagnostic and unchanged-image outcome. |
+
+The whole subshell exits0 with empty outer stderr. The missing get exits1
+inside the explicitly handled negative control. Individual successful exit
+codes were enforced by set-e, not invented as separate captured exit files.
+The reader omits the packet's evidence-only hashes, od dump and assertion
+utilities while retaining all seven operations and their observed results.
+
+| Archive member or identity | SHA-256 |
+| --- | --- |
+| stage/results/pc-extract.json | 54b2ca8ba7066bff25bd10ccf59a7c7ab48c7d1054a8c0b95e56726ddcc8494e |
+| stage/results/pc-script-stdout.bin | 919adc6bd0469aa1c14cfa41832fe1aa040146bff1610062add0c92ffa3da0f7 |
+| stage/pc-extract/recovered/B-user0.txt | 55340a4dd4301188f31221fcb7bef49a92642e9f97e54b960b7b7610bb44ef43 |
+| Saved image, backup and persisted BANNER card | 30af241154514d0b5631fcbf0ef8dcb2d47bb792e3663d5b8d9bdd453ec9c721 |
+| Raw recovered BANNER.REC | 96047514ba8c1b0d7d2f5e33f0cd5ae6f13843894ad287d1b5470b744b242725 |
+| LF recovered BANNER.ASM and exact final source | 401af169f51ef50b5ee5fd2dba5679df3fb7e4816670e330f503e038ad06f986 |
+
+### Source and provenance scope
+
+Current extraction authority is TEC-OS
+962853f499f05faf281f6cdff1deca8959f58c2b. The actual tested source was
+8b8664a7d93c6dc2e8bce509b9770585e106eedc. The landed descendant adds only
+qualification records. The archive's tecvol, cpmfs and container bytes match
+that landed source exactly. Their diffs from ea3ef3d are empty. The relevant
+owners were reread as text: tools/tecvol.mjs:65–83,142–167,201–205 and
+tools/lib/cpmfs.mjs:15–19,91–150. They establish read-only extraction,
+volume/user scope, recorded lengths, conversion and failure-before-output.
+
+The archived ROM matches SHA-256
+`fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d`.
+The binding records native D8 SHA-256
+`9a87dec39a63efc8fdf38ae13d6ec6299763c833fc891de121e2b30f4a1a36ac`
+and the current PICO v3 interface. The chapter header confines the new
+provenance to BANNER extraction. Other mechanisms retain their inspected
+ea3 authority and uncovered examples retain78127ec. Original TED/TAS pins
+and historical hashes remain. No new runtime result follows from source
+or artifact equality.
+
+### Sequential writing passes
+
+The generous insertion supplied the complete backup, verification, listings,
+raw/text extraction, recovered source and negative-control sequence. The
+first mechanical gate reported zero findings. The thematic pass kept this
+sequence inside the existing extraction section before container construction.
+The deletion pass removed the repeated repository-root instruction and a
+second untouched-starter contrast. The revised opening states the two useful
+recovery forms. The absence prerequisite now has direct sentences rather
+than stacked negatives.
+
+The agency pass checked each tool, image, command and file subject against
+its read/write/compare operation. The every-comma pass retained the saved-image
+apposition, actual sequence separators and the necessary missing-path condition
+boundary. Literal code and output punctuation is immutable. Changed prose is
+wrapped at80 without splitting code spans. The complete chapter was reread
+in order, including historical protection, physical limits and recovery.
+The new subsection now connects the saved program to usable PC source before
+storage construction. No existing fixture or recipe loses its home.
+
+The scoped workflow receipt closes the previous PC7 hold only. Independent
+review of this prose insertion and final book integration remain outstanding.
+The raw-device, custom-card, protected-volume and truncated-card examples are
+historical and have no new acceptance here. No import, assembly, build, model,
+product test, capture, browser action or publication accompanies this revision.
+
+### Editorial gate and complexity dispositions
+
+The two-file prose gate initially flagged HW008 in the new L6 disposition:
+“the shell ... observes”. That wording is corrected to the actual checks.
+The reader chapter had zero gate findings at the generous-draft checkpoint.
+Both files receive the final mandatory gate immediately before commit.
+
+The complexity reports for both affected files were read as prompts. The
+following dispositions retain the specified information rather than shorten
+sentences automatically. No product program was run for these reports.
+
+| Flagged chapter context | Disposition |
+| --- | --- |
+| Provenance comment LONG/SHORT flags | Retain exact source, application, ROM and receipt identities. FAILED and no-new-execution delimit the accepted subset. These are metadata, not reader sentence targets. |
+| Chapter26 media route CLAUSES | Retain the generated-file list and matching preparation destination. |
+| Chapter18 cross-reference SHORT | Retain the persistence reference beside the flush/removal rule. |
+| Unmount/write/filesystem ECHO | Retain the concurrent-write consequence with the physical-device instruction. |
+| Listing bytes/128-byte ECHO | Retain the distinction between reported length and record granularity. |
+| Recorded record/includes ECHO | Retain the complete padded-record contract. |
+| Lone carriage return SHORT | Retain this conversion exception. |
+| Listing/extraction unchanged SHORT | Retain the source-image consequence before the example. |
+| New-destination CLAUSES and fresh-starter NEG | Rephrased into direct prerequisite sentences during deletion. No saved-card or overwrite condition is lost. |
+| Verification succeeded SHORT | Retain as the introduction to the actual verification output. |
+| Default-A SHORT | Retain beside the contrasting explicit-B command. |
+| Byte-count introduction SHORT | Retain to distinguish measured counts from the preceding listing. |
+| Missing get NEG | Retain both independently checked outcomes: no stdout and no destination. |
+| AppendixE field/geometry references SHORT | Retain the two distinct lookup destinations for descriptor fields and disk parameters. |
+| Minimum allocation LONG/ECHO | Retain both geometry costs and their dependence on nonempty data. |
+| Larger file SHORT | Retain the reason for multiple directory entries. |
+| Binary padding SHORT | Retain the contrast with text padding. |
+| ERA definition SHORT | Retain the operation before its user/protection rules. |
+| Custom-card CLAUSES | Retain all four labels and initial assignments required by Chapter4. |
+| CREATE definition SHORT | Retain before the populated-card preparation. |
+| No startup file SHORT | Retain the reason the custom-card prompt has no startup command. |
+| Dash definition SHORT | Retain the interpretation of the literal info output. |
+| Unassigned GAMES/SPARE CLAUSES | Retain both assignment routes: retained selection or MOUNT. |
+| Recipe mismatch SHORT | Retain the stop consequence of a component identity failure. |
+| Recipe command/volume-list introductions SHORT | Retain provenance for their respective historical fences. |
+| Capture supplies x SHORT | Retain the actual key used at the BDOS error pause. |
+| INSTALL requires yes SHORT | Retain the explicit destructive-operation flag. |
+| Standard card byte-address SHORT | Retain the basis of the following block limit. |
+| Mounting/mounts ECHO | Retain the descriptor failure and resulting no-mounted-volume state. |
+| Validation no-write SHORT | Retain the source-card consequence. |
+| Browser exclusions LONG | Retain both remaining code27 causes rather than imply that the browser excludes every ROM failure. |
+| Failed close NEG | Retain failed-preservation and no-rollback boundaries. |
+| Cut during overwrite NEG | Retain the mixed old/new-file consequence and lack of original copy. |
+| Overwritten blocks SHORT | Retain the contrast with newly allocated but unnamed blocks. |
+| Directory/data writes ECHO | Retain the exact ordering condition for interrupted flush. |
+| Fresh image LONG/CLAUSES | Retain create/put and recipe alternatives plus preservation of the original recovery image. |
+
+For the pass record, all historical entries remain as dated stages of the
+work. Its LONG flags on the original reading inventory, reader route and
+source-owner list retain their complete scopes. The old mount-order LONG
+retains installation-before-next-check and later UNMOUNT together. The old
+backup LONG/CLAUSES retains initial and final comparisons. The source-proof
+LONG/CLAUSES at the end of the held-candidate entry joins file/range tokens
+in the report's sentence parser. Those exact coordinates remain evidence.
+The house-authority CLAUSES and earlier deletion-pass CLAUSES name distinct
+controlling inputs and retained exceptions. The fence/fences and remaining/
+remain ECHO flags belong to prior preservation and open-work dispositions.
+Their historical wording is unchanged.
+
+The record's SHORT flags each state a concrete status or reference: unchanged
+geometry, excluded shared-file edits, unchanged fences, the former pending
+confirmation, no execution, later bounded closure, remaining corrections,
+no allocation, preserved literal punctuation, earlier gate result and interface
+limit, held expectations, archive path and script digest. Later entries
+explicitly supersede the old holds. The new candidate/outline LONG flags are
+exact hash identities. The no-execution/no-reopening NEG defines this revision's
+scope. The new omissions CLAUSES separates packet assertion utilities from
+reader operations. Each is retained for that specific accounting job.
+
+### Final immutable comparison
+
+All sixteen inherited fences and both inherited capture comments remain
+byte-for-byte unchanged. Their ordered fence sequence has SHA-256
+`b5a3be531b0295cf7dec78e5e28610b9667b13cee5d38acff2f325c9aab6c4aa`.
+The six new output/source fences are exact substrings of the archived shell
+stdout. Every line in the six new shell fences matches the accepted packet
+with only its two-space subshell indentation removed. The candidate file
+still matches Git. No retained literal was rewritten.
+
+Chapter input SHA-256:
+`5c1111af174a3a3e6c6e90438ef4a907f75f0b149eb297bb91ae3ba3888b8048`.
+Chapter output SHA-256:
+`4a6650b16739a1e04180d42eb241921abc08c8b531da18e728ac879fd623e8dd`.
+
+The final two-file prose gate reports zero findings. Remaining complexity
+prompts inside this record's disposition text are metadata: exact coordinates,
+historical wording and the inventory of distinct status flags. Each names
+what was retained and why. They are retained as review accounting. The final
+paragraphs and full containing contexts were read back after these checks.
