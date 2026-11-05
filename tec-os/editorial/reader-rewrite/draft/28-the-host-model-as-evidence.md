@@ -2,7 +2,7 @@
 title: The host model as evidence
 parent: TEC-OS
 nav_order: 28
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 28. The host model as evidence

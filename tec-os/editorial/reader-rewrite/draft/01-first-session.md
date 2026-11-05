@@ -2,7 +2,7 @@
 title: First session
 parent: TEC-OS
 nav_order: 1
-nav_group: "Part I: Using TEC-OS"
+nav_group: "Using the machine"
 ---
 
 # 1. First session

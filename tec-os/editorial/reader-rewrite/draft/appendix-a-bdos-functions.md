@@ -2,7 +2,7 @@
 title: A. BDOS functions
 parent: TEC-OS
 nav_order: 101
-nav_group: "Appendices"
+nav_group: "Reference"
 ---
 
 # Appendix A. BDOS functions

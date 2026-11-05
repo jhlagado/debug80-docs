@@ -2,7 +2,7 @@
 title: Reset and boot
 parent: TEC-OS
 nav_order: 15
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 15. Reset and boot

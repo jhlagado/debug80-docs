@@ -2,7 +2,7 @@
 title: Chains across a warm boot
 parent: TEC-OS
 nav_order: 21
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 21. Chains across a warm boot

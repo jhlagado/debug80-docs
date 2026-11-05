@@ -2,7 +2,7 @@
 title: E. The container format
 parent: TEC-OS
 nav_order: 105
-nav_group: "Appendices"
+nav_group: "Reference"
 ---
 
 # Appendix E. The container format

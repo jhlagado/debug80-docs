@@ -2,7 +2,7 @@
 title: I. The web page
 parent: TEC-OS
 nav_order: 109
-nav_group: "Appendices"
+nav_group: "Reference"
 ---
 
 # Appendix I. The web page

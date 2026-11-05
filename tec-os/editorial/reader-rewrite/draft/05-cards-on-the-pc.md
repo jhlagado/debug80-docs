@@ -2,7 +2,7 @@
 title: Cards on the PC
 parent: TEC-OS
 nav_order: 5
-nav_group: "Part I: Using TEC-OS"
+nav_group: "Using the machine"
 ---
 
 # 5. Cards on the PC

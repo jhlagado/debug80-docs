@@ -2,7 +2,7 @@
 title: Drives and user areas
 parent: TEC-OS
 nav_order: 4
-nav_group: "Part I: Using TEC-OS"
+nav_group: "Using the machine"
 ---
 
 # 4. Drives and user areas

@@ -2,7 +2,7 @@
 title: Call TEC-OS
 parent: TEC-OS
 nav_order: 8
-nav_group: "Part I: Using and programming TEC-OS"
+nav_group: "Writing programs"
 ---
 
 # 8. Call TEC-OS

@@ -2,7 +2,7 @@
 title: Console paths
 parent: TEC-OS
 nav_order: 16
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 16. Console paths

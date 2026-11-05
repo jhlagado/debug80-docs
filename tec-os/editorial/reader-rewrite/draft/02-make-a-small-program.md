@@ -2,7 +2,7 @@
 title: Make a small program
 parent: TEC-OS
 nav_order: 2
-nav_group: "Part I: Using TEC-OS"
+nav_group: "Using the machine"
 ---
 
 # 2. Make a small program

@@ -2,7 +2,7 @@
 title: Loading and removing services
 parent: TEC-OS
 nav_order: 24
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 24. Loading and removing services

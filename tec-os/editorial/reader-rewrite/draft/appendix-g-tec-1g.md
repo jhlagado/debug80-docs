@@ -2,7 +2,7 @@
 title: G. The TEC-1G as TEC-OS uses it
 parent: TEC-OS
 nav_order: 107
-nav_group: "Appendices"
+nav_group: "Reference"
 ---
 
 # Appendix G. The TEC-1G as TEC-OS uses it

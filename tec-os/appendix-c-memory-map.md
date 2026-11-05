@@ -2,290 +2,381 @@
 title: C. Memory map
 parent: TEC-OS
 nav_order: 103
-nav_group: "Appendices"
+nav_group: "Reference"
 ---
 
 # Appendix C. Memory map
 
-<!-- Checked against TEC-OS 78127ec. -->
+<!-- Mechanism authority: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
+     All build-dependent ROM/RAM addresses, sizes and retained lookup output
+     below remain historical78127ec evidence from frozen book10821b6.
+     No new map, label command, build, import, test, run or capture occurred.
+     Source proof and historical evidence boundaries: c-pass-record.md. -->
 
-<!-- C16 source-only citation revisions: TEC-OS fe2097f.
-     Only the entries in editorial/c16-citation-resolutions.json use that pin.
-     Captures, measurements and other citations retain their earlier provenance. -->
+A memory address needs both a bank and a build identity. This reference
+pairs the historical `78127ec` map with the source contracts for each region.
+[Chapter 10](10-memory-for-programs.md) explains the program's memory limits.
+[Chapter 14](14-state-and-memory.md) explains resident state and its lifetime.
 
-This appendix gives the addresses TEC-OS uses: the CPU's address space, the
-ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
-the stacks. Chapter 14 explains the layout and Chapter 8 describes it from a
-program's side. The figures are those of the build at 78127ec, whose one
-profile is `tecos` and whose ROM has the SHA-256
-`8cad40923ce1c3c6079d3201a1a8cc294dbe501838ed54505ca12287672f8b9f`. The
-card-dependent figures are the starter card's: a G1M volume on drive A, a G8M
-volume on drive B and no service installed. Every address in the workspace
-tables comes from the build's symbol file, `build/tecos/tecos.d8.json`, and
-the last section says how to read it.
+The address tables retain the `tecos` build at `78127ec`, whose ROM SHA-256 is
+`8cad40923ce1c3c6079d3201a1a8cc294dbe501838ed54505ca12287672f8b9f`. Its single
+profile was `tecos`. The starter card mounted G1M on A and G8M on B with no
+service installed unless a row says otherwise. The resident workspace addresses
+came from `build/tecos/tecos.d8.json`.
+
+Current field meanings and code contracts below use `962853f`. Later builds
+require their own symbol files for build-dependent addresses.
 
 ## The CPU's address space
 
-The Z80's 64 KiB are three windows:
+The 64 KiB CPU address space contains fixed RAM, a bank window and ROM
+(`962853f:src/layout.asm:3-9`):
 
 | Addresses | Contents |
 | --- | --- |
-| `0000h–7FFFh` | the fixed RAM |
-| `8000h–BFFFh` | EXPAND 0, or EXPAND 1 while bit 2 of the latch is set |
-| `C000h–FFFFh` | the ROM |
+| `0000h–7FFFh` | Fixed RAM |
+| `8000h–BFFFh` | EXPAND 0, replaced by EXPAND 1 while latch bit 2 is set |
+| `C000h–FFFFh` | ROM |
 
-At reset the first 2 KiB of the ROM also appear at `0000h–07FFh`, until cold
-boot sets bit 0 of the latch (`src/reset.asm:1-9`, `src/boot.asm:54-56`). With
-EXPAND 0 in view, TEC-OS uses them in this way:
+At reset the first 2 KiB of ROM also appear at `0000h–07FFh`. The overlaid
+jump enters `RSTENT` in ROM. Cold boot then sets latch bit 0 to remove the
+overlay (`962853f:src/reset.asm:1-14`, `962853f:src/boot.asm:38-58`).
+The historical `78127ec` starter layout with EXPAND 0 selected was:
 
 | Addresses | Contents |
 | --- | --- |
-| `0000h–00FFh` | page zero |
-| `0100h–B9A3h` | the TPA, 47,268 bytes |
-| `B9A4h–BFFFh` | the BDOS entry jump and the resident workspace, in EXPAND 0 |
-| `C000h–FFFFh` | the ROM |
+| `0000h–00FFh` | Page zero |
+| `0100h–B9A3h` | Transient program area (TPA), 47,268 bytes |
+| `B9A4h–BFFFh` | BDOS entry jump and resident workspace in EXPAND 0 |
+| `C000h–FFFFh` | ROM |
 
-The latch is the system latch at port `FFh`, which TEC-OS writes from the copy
-it keeps at `0040h` (`src/layout.asm:23-39`). Its value while TEC-OS runs is
-`01h`: the boot overlay off and EXPAND 0 in view. It is `81h` while the matrix
-keyboard's Caps Lock is on, which sets bit 7 (`src/keyboard.asm:133-140`).
+TEC-OS writes the system latch at port `FFh` from its shadow at `0040h`,
+`LATCHV`. The ordinary EXPAND 0 value is `01h`. With matrix Caps Lock on bit 7
+is set, producing `81h`. Temporary EXPAND 1 accesses set bit 2 and restore the
+shadow value afterwards (`962853f:src/layout.asm:26-45`,
+`962853f:src/layout.asm:81-90`, `962853f:src/keyboard.asm:135-142`,
+`962853f:src/history.asm:35-74`). Warm boot writes `01h` before selecting its
+resident stack (`962853f:src/boot.asm:178-185`).
 
-The TPA ends below the BDOS entry jump, whose address is in the word at
-`0006h`. Cold boot places the jump directly below the lowest allocation vector
-of the card's drives, 3 bytes under that vector's address
-(`src/boot.asm:749-754`). A loaded service lowers the word at `0006h` to the
-start of its first page, as Chapter 24 explains.
+The word at `0006h` is the exclusive top of the TPA. Without a resident service
+it points to a three-byte BDOS entry stub below the allocation vectors.
+`ALVINIT` packs those vectors down from `WSBASE` and reserves the jump below the
+lowest vector (`962853f:src/boot.asm:695-800`). A format 1.1 card with a nonzero
+drive count reserves 256 bytes for each requested drive. Otherwise each mounted
+drive receives `(DSM >> 3) + 1` bytes. A service lowers `0006h` to its first
+page during installation. `PZTOP` is updated when its pages are committed
+(`962853f:src/loader.asm:421-441`, `962853f:src/loader.asm:608-614`).
+
+These card-dependent figures are historical `78127ec` values:
 
 | Card | Vectors | BDOS entry | TPA |
 | --- | ---: | --- | ---: |
-| the starter card, G1M on A and G8M on B | 320 bytes | `B9A4h` | 47,268 bytes |
-| the starter card with `GLCD.SVC` installed | 320 bytes | `B600h` | 46,336 bytes |
-| four G8M volumes | 1,024 bytes | `B6E4h` | 46,564 bytes |
+| Starter card, G1M on A and G8M on B | 320 bytes | `B9A4h` | 47,268 bytes |
+| Starter card with `GLCD.SVC` installed | 320 bytes | `B600h` | 46,336 bytes |
+| Four G8M volumes | 1,024 bytes | `B6E4h` | 46,564 bytes |
 
 ## The ROM
 
+The historical `78127ec` ROM occupied these ranges:
+
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
-| `C000h–C002h` | 3 | the reset jump, `JP RSTENT` |
-| `C003h–C00Ah` | 8 | the ROM table |
-| `C00Bh–C609h` | 1,535 | the read-only data, `ROMDATA` to `ROMCODE`, with the font, `FONT`, at `C179h–C478h` |
-| `C60Ah–FE91h` | 14,472 | the code |
-| `FE92h–FFFFh` | 366 | unused |
+| `C000h–C002h` | 3 | Reset jump, `JP RSTENT` |
+| `C003h–C00Ah` | 8 | ROM table |
+| `C00Bh–C609h` | 1,535 | Read-only data from `ROMDATA` up to `ROMCODE`, including `FONT` at `C179h–C478h` |
+| `C60Ah–FE91h` | 14,472 | Code |
+| `FE92h–FFFFh` | 366 | Unused |
 
-At 78127ec the CCP's three files occupied `DD2Ah–E702h`, 2,521 bytes, and
-the BDOS's six occupied `E703h–F608h`, 3,846 bytes. At `fe2097f` the CCP
-is split across four files, including `cpm/ccpmut.asm`, followed by the six
-BDOS files (`src/rom.asm:30-39`). The address figures above remain those
-of 78127ec. The ROM's own copy of the BIOS jump table
-is in the data, at `BIOSBAS`, and is never called: cold boot copies it to
-`BF00h` (`src/tables.asm:19-36`, `src/boot.asm:142-150`).
+In that build the CCP's three files occupied `DD2Ah–E702h`, 2,521 bytes.
+The BDOS's six files occupied `E703h–F608h`, 3,846 bytes. The source at
+`962853f` includes four CCP files, including `cpm/ccpmut.asm`, then six
+BDOS files (`962853f:src/rom.asm:31-40`).
+
+The ROM copy of the BIOS jump table is data at `BIOSBAS`. Cold boot copies
+its 17 jumps to `BF00h`. Calls use the RAM table, whose entries can be
+replaced by resident hooks. Warm boot leaves that table intact
+(`962853f:src/tables.asm:17-35`, `962853f:src/layout.asm:134-135`,
+`962853f:src/boot.asm:144-152`).
 
 ## Page zero
+
+These fixed addresses identify the current page-zero contracts
+(`962853f:src/layout.asm:63-90`, `962853f:src/console.asm:98-111`):
 
 | Address | Contents |
 | --- | --- |
 | `0000h` | `JP BF03h`, warm boot through the RAM BIOS table |
-| `0003h` | the IOBYTE; TEC-OS acts on its console field, bits 0 and 1 |
-| `0004h` | the current drive in bits 0–3 and the user number in bits 4–7 |
-| `0005h` | `JP` to the BDOS entry jump or the start of the lowest service's page; the word at `0006h` is the top of the TPA |
-| `0008h–0037h` | restart vectors 1 to 6: each a `RET` after seven zeros, unless it holds a `JP` whose target is above `PZTOP` |
-| `0038h` | `EI`, `RETI`, for restart 7 and the interrupt of mode 1, unless it holds such a `JP` |
-| `0040h` | `LATCHV`, the copy of the system latch |
-| `0041h–004Fh` | unused |
-| `0050h` | the drive the CCP loaded the running program from: 0 for the current drive, 1 for A: and so on |
-| `005Ch` | the default FCB |
-| `006Ch` | the second FCB, overlapping the first's last 20 bytes |
-| `0080h–00FFh` | the command tail and the default DMA buffer |
+| `0003h` | IOBYTE. TEC-OS applies its console field in bits 0 and 1 |
+| `0004h` | Current drive in bits 0–3 and user number in bits 4–7 |
+| `0005h` | `JP` through the word at `0006h`, to the BDOS entry jump or lowest service page |
+| `0008h–0037h` | Restart vectors 1–6. Each defaults to seven zeros followed by `RET`, unless a `JP` target is strictly above `PZTOP` |
+| `0038h` | Restart 7 and mode 1 interrupt entry. Defaults to `EI`, `RETI` unless a qualifying `JP` remains |
+| `0040h` | `LATCHV`, the system latch shadow |
+| `0041h–004Fh` | Unused |
+| `0050h` | Load-drive byte. 0 means current drive, 1 means A and so on |
+| `005Ch` | First default file control block (FCB) |
+| `006Ch` | Second FCB, overlapping the first FCB's last 20 bytes |
+| `0080h–00FFh` | Command tail and default DMA buffer |
 
-Cold boot clears page zero. `PZINIT` then writes it at every warm boot, cold
-boot's end included, leaving the IOBYTE and the drive and user byte as they
-are (`src/boot.asm:62-70`, `src/boot.asm:384-480`). An unload and a failed
-`INIT` clear the first byte of each restart vector the service claimed and
-then run the same sweep of the vectors, `PZSWP` (`src/loader.asm:146-165`,
-`src/loader.asm:525-532`, `src/loader.asm:588-616`). The CCP writes the byte
-at `0004h` at each prompt, and the FCBs, the tail and the byte at `0050h`
-before it runs a program (`src/cpm/ccp.asm:340-367`, `src/cpm/ccp.asm:493-499`,
-`src/cpm/ccpcmd.asm:432-469`).
+Cold boot clears page zero. `PZINIT` writes the entry jumps and stub at cold
+boot's end and on each warm boot. It leaves `0003h` and `0004h` unchanged
+(`962853f:src/boot.asm:62-70`, `962853f:src/boot.asm:157-199`,
+`962853f:src/boot.asm:412-434`). The restart sweep preserves the three bytes of
+a qualifying jump and clears its remaining five bytes. A target equal to `PZTOP`
+does not qualify. The default `EI`, `RETI` sequence at `0038h` is written only
+when no qualifying jump remains there (`962853f:src/boot.asm:454-509`).
 
-Of the sixteen bytes that CP/M 2.2 leaves to the BIOS, TEC-OS keeps one,
-`LATCHV`, the only byte it reads while EXPAND 1 is in view. `0041h–004Fh` are
-unused, and cold boot's clear leaves them 0 (`src/layout.asm:62-70`). The
-console's state is above the RAM BIOS table.
+Service-page release clears the first byte of each claimed restart slot
+before the sweep. Successful unload and failure cleanup that releases the
+pages both use this rule. A failed `INIT` can retain its pages when a BIOS
+hook still targets them so failure alone does not imply slot release
+(`962853f:src/loader.asm:128-173`, `962853f:src/loader.asm:536-580`,
+`962853f:src/loader.asm:634-662`).
+
+The CCP records the drive/user byte for its command prompt. Before program
+launch it writes both FCBs, then the command tail and default DMA address, then
+the load-drive byte (`962853f:src/cpm/ccp.asm:363-384`,
+`962853f:src/cpm/ccpcmd.asm:447-497`, `962853f:src/cpm/ccp.asm:519-536`). The
+second FCB reaches `008Fh` so tail publication follows FCB parsing.
+
+CP/M reserves `0040h–004Fh` for BIOS scratch. TEC-OS uses only `0040h`
+there. It is the resident state byte read while EXPAND 1 hides the upper
+workspace. Cold boot leaves the other 15 bytes zero. Console state is above
+the RAM BIOS table (`962853f:src/layout.asm:81-90`,
+`962853f:src/ram.asm:426-451`).
 
 ## The resident workspace
 
-From the BDOS entry jump to `BFFFh`, on the starter card:
+The following tables retain every address and size from the historical
+`78127ec` starter layout. Field descriptions use the `962853f` declarations
+and their clearing paths. A row's clearing column names the boot sweeps that
+reach it. Other routines can still overwrite a retained field.
 
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
-| `B9A4h–B9A6h` | 3 | the BDOS entry jump, `JP BENTRY` |
-| `B9A7h–BAE6h` | 320 | the allocation vectors: B's 256 bytes at `B9A7h`, then A's 64 at `BAA7h` |
-| `BAE7h–BCC4h` | 478 | the BIOS's disk state and buffers, the PICO9918 console's block, part of the `MOUNT` routine's scratch and the video terminal's state |
-| `BCC5h–BCECh` | 40 | the BIOS stack |
-| `BCEDh–BE75h` | 393 | the CCP's state and stack |
-| `BE76h–BEFFh` | 138 | the BDOS's state and stack |
-| `BF00h–BF32h` | 51 | the RAM BIOS table, 17 jumps |
-| `BF33h–BFFFh` | 205 | state for the SD card, cache, keyboard, displays, loader, startup, chained line and console, and the rest of the `MOUNT` routine's scratch |
+| `B9A4h–B9A6h` | 3 | BDOS entry jump, `JP BENTRY` |
+| `B9A7h–BAE6h` | 320 | Allocation vectors, B's 256 bytes at `B9A7h` then A's 64 at `BAA7h` |
+| `BAE7h–BCC4h` | 478 | BIOS disk state/buffers, PICO console block, mount scratch and terminal state |
+| `BCC5h–BCECh` | 40 | BIOS stack |
+| `BCEDh–BE75h` | 393 | CCP state and stack |
+| `BE76h–BEFFh` | 138 | BDOS state and stack |
+| `BF00h–BF32h` | 51 | RAM BIOS table, 17 jumps |
+| `BF33h–BFFFh` | 205 | SD, cache, keyboard, display, loader, startup, chain and console state plus remaining mount scratch |
 
-The part from `WSBASE`, `BAE7h`, to `BEFFh` has the same addresses on every
-card. The build places `WSBASE` so that the part ends at `BF00h`
-(`tools/build.mjs:236-243`, `src/layout.asm:101-108`). The part above the table
-starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:294`).
+The build places `WSBASE` so that the lower workspace ends immediately before
+`BF00h`. Its upper span starts after the 51-byte RAM BIOS table at `BF33h`
+(`962853f:tools/build.mjs:237-267`, `962853f:src/ram.asm:314-319`).
+Within the historical build these spans had fixed addresses across cards.
+Allocation vectors below `WSBASE` varied with the card.
 
-Two sweeps clear the workspace. Cold boot clears all of it, from `WSBASE` up
-to `WSEND`, `BAE7h` to `BFFFh` (`src/boot.asm:73-79`). Warm boot clears the
-part from `CCPCLR`, `BDB7h`, to the end of the BDOS's block at `BEFFh` and
-leaves the rest (`src/boot.asm:485-526`). The "Cleared by" column of each
-table below says which sweeps reach a byte. A byte cleared by cold boot alone
-survives a warm boot, though other code may write it between boots.
+Cold boot clears the workspace from `WSBASE` up to but excluding `WSEND`.
+Warm boot clears `CCPCLR` up to but excluding `BDOSRME`, then sets the DMA
+address, command-buffer maximum and stack guard. It separately clears `BUFOK`
+(`962853f:src/boot.asm:73-80`, `962853f:src/boot.asm:530-559`).
+In the historical map those sweeps were `BAE7h–BFFFh` and
+`BDB7h–BEFFh` respectively. Warm boot also writes retained fields outside
+its clearing span, including `LATCHV` and `SVCBSY`
+(`962853f:src/boot.asm:178-199`).
 
 ### The BIOS's block
 
-The BIOS's block is `src/ram.asm:15-135`:
+The declarations are at `962853f:src/ram.asm:16-148`. Addresses below
+remain historical `78127ec` values.
 
 | Addresses | Bytes | Name | Contents | Cleared by |
 | --- | ---: | --- | --- | --- |
-| `BAE7h` | 1 | `DSKCUR` | the drive the BIOS has selected | cold boot |
-| `BAE8h–BAEDh` | 6 | `DSKTRK`, `DSKSEC`, `DSKDMA` | the track, sector and DMA address the BDOS last set | cold boot |
-| `BAEEh–BAF0h` | 3 | `BLKOFF`, `BLKSLOT` | the block within the volume and the record within the block | cold boot |
-| `BAF1h–BAF4h` | 4 | `BUFOK`, `BUFDRV`, `BUFBLK` | the write-cleared key: a flag, and the drive and number of the last block a write cleared rather than read | cold boot; warm boot writes 0 to `BUFOK` |
-| `BAF5h–BB14h` | 32 | `DRVTAB` | the drive table, 8 bytes a drive | cold boot |
-| `BB15h–BB18h` | 4 | `DRVIDX` | each drive's volume, its index + 1 | cold boot |
-| `BB19h–BB1Ch` | 4 | `DRVSLOT` | each drive's vector slot | cold boot |
-| `BB1Dh–BB5Ch` | 64 | `DPHTAB` | the four DPHs, 16 bytes each | cold boot |
-| `BB5Dh–BB5Eh` | 2 | `LOGINV` | the BDOS's logged-in drives | cold boot |
-| `BB5Fh–BBDEh` | 128 | `DIRBUF` | the directory buffer every drive shares | cold boot |
-| `BBDFh–BBE0h` | 2 | `CSVDUM` | the unused check vector | cold boot |
-| `BBE1h–BBE2h` | 2 | `STUBAD` | the BDOS entry jump's address | cold boot |
-| `BBE3h–BC41h` | 95 | `PIBLK` to `PIROWT` | the PICO9918 console's block: its table, width, record in the registry, pages, registers and row addresses | cold boot |
-| `BC42h` | 1 | `MNTCNT` | the `MOUNT` routine's count, part of the scratch the volume services also use | cold boot |
-| `BC43h–BC62h` | 32 | `MNBUF` | 32 bytes of the container's table, copied from the cache line that holds it | cold boot |
-| `BC63h–BCB2h` | 80 | `LINEBUF` | one display row, for the terminal's row moves and the LCD's drive rows | cold boot |
-| `BCB3h–BCC0h` | 14 | `VPUTV` to `VFNV` | the seven vectors into the display's table | cold boot |
-| `BCC1h–BCC4h` | 4 | `VSTOP` to `CONMOD` | the scroll region, the PICO9918's claim and the console mode | cold boot |
-| `BCC5h–BCECh` | 40 | `BSTKB` | the BIOS stack, up to `BSTK` | cold boot |
+| `BAE7h` | 1 | `DSKCUR` | Selected BIOS drive | Cold boot |
+| `BAE8h–BAEDh` | 6 | `DSKTRK`, `DSKSEC`, `DSKDMA` | Last track, sector and DMA address set through the BIOS | Cold boot |
+| `BAEEh–BAF0h` | 3 | `BLKOFF`, `BLKSLOT` | Block within the volume and 128-byte record within that block | Cold boot |
+| `BAF1h–BAF4h` | 4 | `BUFOK`, `BUFDRV`, `BUFBLK` | Validity flag, drive and block of the write-cleared key | Cold boot. Warm boot also clears `BUFOK` |
+| `BAF5h–BB14h` | 32 | `DRVTAB` | Four drive entries, 8 bytes each | Cold boot |
+| `BB15h–BB18h` | 4 | `DRVIDX` | Volume index + 1 for each drive, 0 for none | Cold boot |
+| `BB19h–BB1Ch` | 4 | `DRVSLOT` | Vector slot per drive, 0 for none, 1 for 64 bytes or 2 for 256 | Cold boot |
+| `BB1Dh–BB5Ch` | 64 | `DPHTAB` | Four 16-byte DPHs | Cold boot |
+| `BB5Dh–BB5Eh` | 2 | `LOGINV` | BDOS logged-in drive vector | Cold boot |
+| `BB5Fh–BBDEh` | 128 | `DIRBUF` | Shared directory buffer | Cold boot |
+| `BBDFh–BBE0h` | 2 | `CSVDUM` | Unused check-vector placeholder | Cold boot |
+| `BBE1h–BBE2h` | 2 | `STUBAD` | BDOS entry jump address | Cold boot |
+| `BBE3h–BC41h` | 95 | `PIBLK` to `PIROWT` | PICO console table, width, registry record, pages, registers and row addresses | Cold boot |
+| `BC42h` | 1 | `MNTCNT` | Mount/volume-service scratch count | Cold boot |
+| `BC43h–BC62h` | 32 | `MNBUF` | Container header or descriptor copied from a cache line | Cold boot |
+| `BC63h–BCB2h` | 80 | `LINEBUF` | Display-row scratch for terminal moves and LCD drive rows | Cold boot |
+| `BCB3h–BCC0h` | 14 | `VPUTV` to `VFNV` | Seven display-table vectors | Cold boot |
+| `BCC1h–BCC4h` | 4 | `VSTOP` to `CONMOD` | Scroll-region limits, PICO claim and applied console mode | Cold boot |
+| `BCC5h–BCECh` | 40 | `BSTKB` | BIOS stack up to exclusive top `BSTK` | Cold boot |
+
+The write-cleared key identifies a block cleared for a new allocation rather
+than read from the card. Clearing `BUFOK` prevents reuse of the old key.
+A new type-2 write can still clear its block without a pre-read
+(`962853f:src/bios.asm:368-426`).
 
 ### The CCP's block
 
-The CCP's block is `src/ram.asm:140-208`. Warm boot's sweep starts at
-`CCPCLR`, `BDB7h`, so the command line below it survives a warm boot, for a
-chained line's next piece:
+The declarations are at `962853f:src/ram.asm:153-225`. The historical
+`CCPCLR` address was `BDB7h`. The FCBs and command buffer below it survive
+the warm clearing sweep for another chained piece.
 
 | Addresses | Bytes | Name | Contents | Cleared by |
 | --- | ---: | --- | --- | --- |
-| `BCEDh–BD10h` | 36 | `CMDFCB` | the command's FCB | cold boot |
-| `BD11h–BD34h` | 36 | `RENFCB` | the second FCB of `REN` and `COPY` | cold boot |
-| `BD35h` | 1 | `CMDBUF` | function 10's maximum, 127 | cold boot; warm boot writes 127 |
-| `BD36h` | 1 | `CMDLEN` | the line's length | cold boot |
-| `BD37h–BDB6h` | 128 | `CMDTXT` | the command line | cold boot |
-| `BDB7h` | 1 | `BOOTDRV` | the drive at the CCP's entry | cold boot and warm boot |
-| `BDB8h–BDCAh` | 19 | `CMDSTRT` to `ERAALL` | the parser's pointers and the state of `DIR`, the pager, `SAVE` and `ERA` | cold boot and warm boot |
-| `BDCBh–BE4Ah` | 128 | `LOADBUF` | the CCP's scratch record | cold boot and warm boot |
-| `BE4Bh–BE55h` | 11 | `STKGUARD` | the CCP stack's guard, `A5h` in each byte | cold boot and warm boot; warm boot then writes the pattern |
-| `BE56h–BE75h` | 32 | `CSTKBAS` | the CCP's stack, up to `CSTKTOP` | cold boot and warm boot |
+| `BCEDh–BD10h` | 36 | `CMDFCB` | Command FCB | Cold boot |
+| `BD11h–BD34h` | 36 | `RENFCB` | Second FCB for `REN` and `COPY` | Cold boot |
+| `BD35h` | 1 | `CMDBUF` | Function 10 maximum, 127 | Cold boot. Warm boot writes 127 |
+| `BD36h` | 1 | `CMDLEN` | Command-line length | Cold boot |
+| `BD37h–BDB6h` | 128 | `CMDTXT` | Retained command line | Cold boot |
+| `BDB7h` | 1 | `BOOTDRV` | Drive selected for CCP entry | Cold and warm boot |
+| `BDB8h–BDCAh` | 19 | `CMDSTRT` to `ERAALL` | Parser pointers and DIR, pager, SAVE and ERA state | Cold and warm boot |
+| `BDCBh–BE4Ah` | 128 | `LOADBUF` | CCP scratch record | Cold and warm boot |
+| `BE4Bh–BE55h` | 11 | `STKGUARD` | CCP stack guard, `A5h` in each byte | Cold and warm boot. Warm boot then writes `A5h` |
+| `BE56h–BE75h` | 32 | `CSTKBAS` | CCP stack up to exclusive top `CSTKTOP` | Cold and warm boot |
+
+Retention of the line does not guarantee execution of its remaining pieces. A
+failed warm-boot flush clears `CHPOS` after dropping failed cache lines
+(`962853f:src/cache.asm:307-351`, `962853f:src/cache.asm:653-668`).
+[Chapter 21](21-chains-across-warm-boot.md) explains the other cancellation
+paths.
 
 ### The BDOS's block
 
-The BDOS's block is `src/ram.asm:213-292`. Warm boot's sweep clears all of it
-and then sets the DMA address to `0080h`:
+The declarations are at `962853f:src/ram.asm:231-312`. Warm boot clears this
+whole block before setting the DMA address to `0080h`.
 
 | Addresses | Bytes | Name | Contents | Cleared by |
 | --- | ---: | --- | --- | --- |
-| `BE76h–BE7Ah` | 5 | `OLDSP`, `ERRMODE`, `PARAM` | the caller's stack pointer, function 45's error mode and the caller's `DE` | cold boot and warm boot |
-| `BE7Bh–BE7Eh` | 4 | `COLUMN`, `LISTEN`, `PENDING`, `PENDCHR` | the console column, the `^P` copy and the kept character | cold boot and warm boot |
-| `BE7Fh–BE84h` | 6 | `LINPTR` to `HPOS` | function 10's state, `HFLAG` and the history line shown | cold boot and warm boot |
-| `BE85h–BE8Ah` | 6 | `CURDRV` to `DEFALV` | the bound drive and the default drive with its DPB and vector | cold boot and warm boot |
-| `BE8Bh` | 1 | `USERNO` | the user number | cold boot and warm boot |
-| `BE8Ch` | 1 | `WRFLAG` | set by the CCP for its reset | cold boot and warm boot |
-| `BE8Dh–BE8Eh` | 2 | `WARMV` | the drives to rebuild to their mark | cold boot and warm boot |
-| `BE8Fh–BE90h` | 2 | `ROVEC` | the read-only vector | cold boot and warm boot |
-| `BE91h–BE92h` | 2 | `CURDMA` | the DMA address | cold boot and warm boot; warm boot then writes `0080h` |
-| `BE93h–BE9Ch` | 10 | `DPHPTR` to `XLTPTR` | the bound drive's DPH, DPB, directory buffer, vector and translation table | cold boot and warm boot |
-| `BE9Dh–BEC9h` | 45 | `CURTRK` to `DIRSEC` | the directory search, the scan and the file position | cold boot and warm boot |
-| `BECAh–BEFFh` | 54 | `STKBASE` | the BDOS's stack, up to `STKTOP` | cold boot and warm boot |
+| `BE76h–BE7Ah` | 5 | `OLDSP`, `ERRMODE`, `PARAM` | Caller SP, function 45 error mode and caller DE | Cold and warm boot |
+| `BE7Bh–BE7Eh` | 4 | `COLUMN`, `LISTEN`, `PENDING`, `PENDCHR` | Console column, `^P` list-copy flag and pending-character flag/byte | Cold and warm boot |
+| `BE7Fh–BE84h` | 6 | `LINPTR` to `HPOS` | Line-input pointer/counts, CCP-history flag `HFLAG` and shown history terminator offset `HPOS` | Cold and warm boot |
+| `BE85h–BE8Ah` | 6 | `CURDRV` to `DEFALV` | Bound/default drive and default DPB/vector pointers | Cold and warm boot |
+| `BE8Bh` | 1 | `USERNO` | User number | Cold and warm boot |
+| `BE8Ch` | 1 | `WRFLAG` | CCP-set flag for its disk reset | Cold and warm boot |
+| `BE8Dh–BE8Eh` | 2 | `WARMV` | Drives whose allocation vectors need rebuilding to their mark | Cold and warm boot |
+| `BE8Fh–BE90h` | 2 | `ROVEC` | Read-only drive vector | Cold and warm boot |
+| `BE91h–BE92h` | 2 | `CURDMA` | DMA address | Cold and warm boot. Warm boot then writes `0080h` |
+| `BE93h–BE9Ch` | 10 | `DPHPTR` to `XLTPTR` | Bound DPH, DPB, directory buffer, allocation vector and translation-table pointers | Cold and warm boot |
+| `BE9Dh–BEC9h` | 45 | `CURTRK` to `DIRSEC` | Directory search, allocation scan and file-position state | Cold and warm boot |
+| `BECAh–BEFFh` | 54 | `STKBASE` | BDOS stack up to exclusive top `STKTOP` | Cold and warm boot |
 
 ### Above the RAM BIOS table
 
-The block above the table is `src/ram.asm:294-449`. Warm boot's sweep stops
-at `BEFFh`, so every byte here survives a warm boot unless the code named in
-its row writes it:
+The declarations are at `962853f:src/ram.asm:314-485`. These historical
+addresses lie above the warm clearing span. Cold-only clearing therefore
+describes storage lifetime, not an assurance that its value remains unchanged.
 
 | Addresses | Bytes | Name | Contents | Cleared by |
 | --- | ---: | --- | --- | --- |
-| `BF33h–BF3Dh` | 11 | `SDBYTE` to `SDXB` | the SD card driver's state: the addressing flag, the command argument, the block address, the last error and the latch value while a block is a cache line | cold boot |
-| `BF3Eh–BF41h` | 4 | `CNEXT` to `CIFF` | the block cache's state: the next line in turn, the BIOS write's type and the saved interrupt state | cold boot |
-| `BF42h–BF48h` | 7 | `KBMASK` to `KBT2` | the matrix keyboard's scan | cold boot |
-| `BF49h–BF4Ch` | 4 | `PIVEC`, `GLVEC` | the two consoles' tables: `PIBLK`, or 0 with no PICO9918 console, and `GLCD.SVC`'s | cold boot |
-| `BF4Dh` | 1 | `HHEAD` | the history's head | cold boot |
-| `BF4Eh–BF51h` | 4 | `XMDST` to `MVREST` | the banks and count of the cache's copy, `MVCOPY` | cold boot |
-| `BF52h–BF53h` | 2 | `PZTOP` | the word warm boot puts at `0006h` | cold boot |
-| `BF54h–BF55h` | 2 | `PRGCODE` | function 108's return code | cold boot |
-| `BF56h–BF5Ah` | 5 | `LOADTOP` to `SLDL` | the CCP's and the service loader's figures: the loaded file's end, the last record and the relocation delta | cold boot |
-| `BF5Bh–BF61h` | 7 | `SVCBSY` to `SVCRA` | the service loader's and registry's state: the busy flag, the registry's head, the lowest service's page, the generation, the last load's failure code and `INIT`'s `A` | cold boot |
-| `BF62h` | 1 | `STFLAG` | `FFh` while a line from `STARTUP.CMD` runs, 0 for a typed one | cold boot |
-| `BF63h` | 1 | `STPOS` | startup's position | cold boot |
-| `BF64h–BFE3h` | 128 | `STREC` | the record of `A:STARTUP.CMD` | cold boot |
-| `BFE4h` | 1 | `CHPOS` | the chained line's next piece | cold boot |
-| `BFE5h` | 1 | `RXFULL` | nonzero while a console byte waits in `RXCHAR` | cold boot |
-| `BFE6h` | 1 | `RXCHAR` | that byte | cold boot |
-| `BFE7h` | 1 | `CONDEV` | the console devices present, a bit each | cold boot |
-| `BFE8h` | 1 | `VROW` | the video terminal's cursor row | cold boot |
-| `BFE9h` | 1 | `VCOL` | the video terminal's cursor column | cold boot |
-| `BFEAh` | 1 | `VWID` | the video console's columns, 0 on the serial terminal | cold boot |
-| `BFEBh` | 1 | `VHGT` | the video console's rows | cold boot |
-| `BFECh` | 1 | `ESCST` | the escape parser's state | cold boot |
-| `BFEDh` | 1 | `ESCP1` | the escape parser's first numeric parameter | cold boot |
-| `BFEEh` | 1 | `ESCP2` | the escape parser's second numeric parameter | cold boot |
-| `BFEFh` | 1 | `KBLAST` | the matrix key held at the last poll, `FFh` for none | cold boot |
-| `BFF0h` | 1 | `VATTR` | `80h` while reverse video is on | cold boot |
-| `BFF1h` | 1 | `VCURV` | 1 while the cursor cell is drawn as its reverse image | cold boot |
-| `BFF2h–BFFFh` | 14 | `MNTBLK` to `MNTLN` | the rest of the `MOUNT` routine's scratch | cold boot |
+| `BF33h–BF3Dh` | 11 | `SDBYTE` to `SDXB` | SD addressing flag, big-endian argument, little-endian block address, last error and cache-transfer bank selector | Cold boot |
+| `BF3Eh–BF41h` | 4 | `CNEXT` to `CIFF` | Replacement index, BIOS write type and two-byte saved interrupt state | Cold boot |
+| `BF42h–BF48h` | 7 | `KBMASK` to `KBT2` | Matrix scan and pending arrow-sequence state | Cold boot |
+| `BF49h–BF4Ch` | 4 | `PIVEC`, `GLVEC` | Console-table pointers, `PIBLK` for PICO or 0 when absent, and GLCD's table | Cold boot |
+| `BF4Dh` | 1 | `HHEAD` | Next history write offset | Cold boot |
+| `BF4Eh–BF51h` | 4 | `XMDST` to `MVREST` | MVCOPY source/destination banks and remaining byte count | Cold boot |
+| `BF52h–BF53h` | 2 | `PZTOP` | Committed top restored to `0006h` by warm boot | Cold boot |
+| `BF54h–BF55h` | 2 | `PRGCODE` | Function 108 program return code | Cold boot |
+| `BF56h–BF5Ah` | 5 | `LOADTOP` to `SLDL` | Exclusive loaded-record end, last service-loader record and relocation delta | Cold boot |
+| `BF5Bh–BF61h` | 7 | `SVCBSY` to `SVCRA` | Loader busy flag, registry head, lowest service page, generation, failure code and INIT's A | Cold boot |
+| `BF62h` | 1 | `STFLAG` | `FFh` during a startup line, 0 during a typed line | Cold boot |
+| `BF63h` | 1 | `STPOS` | Startup state and position | Cold boot |
+| `BF64h–BFE3h` | 128 | `STREC` | One record of `A:STARTUP.CMD` | Cold boot |
+| `BFE4h` | 1 | `CHPOS` | Next chained piece, offset in `CMDTXT` + 1, or 0 for none | Cold boot |
+| `BFE5h` | 1 | `RXFULL` | Nonzero while a console byte is pending in `RXCHAR` | Cold boot |
+| `BFE6h` | 1 | `RXCHAR` | Pending console byte | Cold boot |
+| `BFE7h` | 1 | `CONDEV` | Device/switch status and LCD recovery-word ownership bits | Cold boot |
+| `BFE8h` | 1 | `VROW` | Terminal cursor row | Cold boot |
+| `BFE9h` | 1 | `VCOL` | Terminal cursor column | Cold boot |
+| `BFEAh` | 1 | `VWID` | Video-console columns, 0 for serial | Cold boot |
+| `BFEBh` | 1 | `VHGT` | Video-console rows | Cold boot |
+| `BFECh` | 1 | `ESCST` | Escape-parser state | Cold boot |
+| `BFEDh` | 1 | `ESCP1` | First numeric escape parameter | Cold boot |
+| `BFEEh` | 1 | `ESCP2` | Second numeric escape parameter | Cold boot |
+| `BFEFh` | 1 | `KBLAST` | Last held matrix key, `FFh` for none | Cold boot |
+| `BFF0h` | 1 | `VATTR` | `80h` for reverse video | Cold boot |
+| `BFF1h` | 1 | `VCURV` | 1 while the cursor cell is drawn reversed | Cold boot |
+| `BFF2h–BFFFh` | 14 | `MNTBLK` to `MNTLN` | Remaining mount/volume-service scratch | Cold boot |
 
-`SVCRA` is a cause only when `SVCRC` is 1, and it is 0 when a record failed
-its check after `INIT` (`src/ram.asm:378-381`). Chapter 24 explains the two.
+`CIFF` occupies two bytes. `HFLAG` marks the CCP's line-input call with `FFh`.
+`HPOS` is a byte offset into the history page. `CONDEV` combines switch, probe
+and ownership state so its bits do not all prove device presence
+(`962853f:src/ram.asm:249-252`, `962853f:src/ram.asm:332-337`,
+`962853f:src/layout.asm:92-102`, `962853f:src/cpm/ccp.asm:161-166`). `SVCRA`
+identifies a cause only when `SVCRC` is 1. Record-validation failure after
+successful INIT sets it to 0 (`962853f:src/loader.asm:519-544`).
+[Chapter 24](24-loading-and-removing-services.md) explains those load outcomes.
 
 ## EXPAND 1
 
+These fixed bank addresses hold the cache and history at `962853f`. They
+also occur in the historical map (`962853f:src/layout.asm:49-58`,
+`962853f:src/history.asm:24`):
+
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
-| `8000h–BBFFh` | 15,360 | the block cache's 30 lines, 512 bytes each |
-| `BC00h–BC77h` | 120 | `CTAB`: each line's card block, 4 bytes, `FFFFFFFFh` while empty |
-| `BC78h–BC7Fh` | 8 | unused |
-| `BC80h–BC9Dh` | 30 | `CDIRTY`: each line's dirty byte |
-| `BC9Eh–BCFFh` | 98 | unused |
-| `BD00h–BDFFh` | 256 | `HRING`: the command history |
-| `BE00h–BEFFh` | 256 | unused |
-| `BF00h–BFFFh` | 256 | unused |
+| `8000h–BBFFh` | 15,360 | 30 cache lines of 512 bytes |
+| `BC00h–BC77h` | 120 | `CTAB`, four-byte card-block key per line, `FFFFFFFFh` when empty |
+| `BC78h–BC7Fh` | 8 | Unused |
+| `BC80h–BC9Dh` | 30 | `CDIRTY`, one dirty byte per line |
+| `BC9Eh–BCFFh` | 98 | Unused |
+| `BD00h–BDFFh` | 256 | `HRING`, command history |
+| `BE00h–BEFFh` | 256 | Unused |
+| `BF00h–BFFFh` | 256 | Unused |
 
-The cache's addresses are in `src/layout.asm:40-45` and the history's page in
-`src/history.asm:25`. Cold boot clears all of EXPAND 1
-(`src/boot.asm:302-321`). No BDOS or BIOS call gives a program a range in it.
-A program that writes the latch can still switch it in, and Chapter 15
-explains what happens to a program that ends with EXPAND 1 in view.
+Cold boot clears the whole bank and then marks every cache key empty
+(`962853f:src/boot.asm:321-346`). No BDOS or BIOS interface allocates a
+program range there. Direct latch access can expose the bank but the
+resident EXPAND 0 stacks disappear while it is selected. Cache/history
+routines exclude maskable interrupts and restore the latch before any stack
+operation (`962853f:src/history.asm:35-74`,
+`962853f:src/bios.asm:445-478`, `962853f:src/sd.asm:525-644`,
+`962853f:src/sd.asm:653-724`).
+
+A jump to `0000h` with EXPAND 1 still selected reaches `BF03h` in that bank.
+With its normally cleared unused bytes, execution continues through zeros
+into the ROM at `C000h`. `RSTENT` distinguishes that entry from reset and
+warm boot selects EXPAND 0 before setting its stack. Modified bank contents
+can break that route. A program using the inherited stack also loses access
+to its return word while EXPAND 1 is visible
+(`962853f:src/boot.asm:38-58`, `962853f:src/boot.asm:178-185`,
+`962853f:src/boot.asm:412-420`, `962853f:src/cpm/ccp.asm:527-536`).
+[Chapter 15](15-reset-and-boot.md) explains the exit paths and their limits.
 
 ## The stacks
 
-| Stack | Addresses | Bytes | Used by |
-| --- | --- | ---: | --- |
-| boot | below `8000h` | | cold boot, until the workspace is cleared (`src/layout.asm:100`, `src/boot.asm:52-53`) |
-| BIOS | `BCC5h–BCECh` | 40 | warm boot (`src/boot.asm:182-183`) |
-| CCP | `BE56h–BE75h` | 32 | the CCP, and a program from its start, with `0000h` pushed |
-| BDOS | `BECAh–BEFFh` | 54 | every BDOS function and the BIOS calls it makes, and cold boot from the workspace's clear to the CCP: the console's start, the banner, the mount, the drive listing and the diagnostic prompt (`src/boot.asm:80-82`, `src/boot.asm:119-121`, `src/boot.asm:757-771`) |
+The addresses in this table are historical `78127ec` values. Current stack
+reservations remain defined by `BOOTSTK`, `BIOSSTN`, `CCPSTN` and `BDOSSTN`
+(`962853f:src/layout.asm:122`, `962853f:src/layout.asm:152-155`).
 
-The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:114-131`. A
-loaded service runs on its caller's stack, and `SVCLIM` gives what the services
-together may add: 8 bytes to the BDOS's, 12 to the BIOS's and 6 to the CCP's
-(`src/tables.asm:127`). [Chapter 14](14-memory-map.md#the-four-stacks) gives
-each stack's measured base, and Chapter 24 what the loader does with
-`SVCLIM`.
+| Stack | Historical addresses | Bytes | Use |
+| --- | --- | ---: | --- |
+| Boot | Below `8000h` | | Cold boot until workspace clearing finishes |
+| BIOS | `BCC5h–BCECh` | 40 | Warm boot |
+| CCP | `BE56h–BE75h` | 32 | CCP and a program's inherited stack, with `0000h` pushed at launch |
+| BDOS | `BECAh–BEFFh` | 54 | BDOS functions and their BIOS calls, plus cold boot after workspace clearing |
+
+Cold boot switches from `BOOTSTK` to `STKTOP` after clearing the workspace.
+Console initialisation, banner, mount, drive listing and the diagnostic prompt
+use that BDOS stack before the CCP starts. Diagnostic retries set `STKTOP`
+again (`962853f:src/boot.asm:49-88`, `962853f:src/boot.asm:104-156`).
+A BDOS call saves caller SP in `OLDSP`, sets SP to `STKTOP` and restores
+caller SP on return (`962853f:src/cpm/bdos.asm:137-142`,
+`962853f:src/cpm/bdos.asm:245-252`).
+
+Services run on their caller's stack. `SVCLIM` limits the combined additional
+use to 8 bytes on BDOS, 12 on BIOS and 6 on CCP
+(`962853f:src/tables.asm:143-146`, `962853f:src/loader.asm:281-317`). The
+historical `78127ec` host-model census measured bases of 30, 18 and 18 bytes
+respectively. Adding the declared limits gives 38/54, 30/40 and 24/32 bytes.
+These are historical measurements and bounds, not a measurement of the inspected
+source. [Chapter 14](14-state-and-memory.md#four-stacks-for-different-stages)
+explains their scope and [Chapter 24](24-loading-and-removing-services.md)
+explains declaration checks.
 
 ## Reproducing the figures
 
-`npm run media` writes the summary tables to `docs/memory-map.md` from the
-build's census, `build/tecos/census.json` (`tools/media.mjs:72-171`,
-`tools/media.mjs:261`). The address of any label is in the build's symbol
-file, `build/tecos/tecos.d8.json`. This command prints the addresses of the
-labels named after it:
+Historically `npm run media` wrote the summary into `docs/memory-map.md` from
+`build/tecos/census.json` and the build's symbol file. The inspected media
+writer still reads those artifacts and writes the summary
+(`962853f:tools/media.mjs:66-91`, `962853f:tools/media.mjs:169-188`,
+`962853f:tools/media.mjs:259`). Chapter 26 describes ROM/media construction.
+The retained lookup below reads an existing `build/tecos/tecos.d8.json`.
+It requires the matching historical artifact to reproduce these addresses:
 
 ```sh
 node -e '
@@ -296,12 +387,17 @@ for (const n of process.argv.slice(1)) {
 }' CMDTXT PRGCODE CHPOS
 ```
 
+The retained historical lookup output is:
+
 ```text
 CMDTXT BD37h
 PRGCODE BF54h
 CHPOS BFE4h
 ```
 
-A change to the source can move any address in the workspace tables, except
-the few the code fixes: page zero, EXPAND 1's cache, cache table and history
-page, `BF00h` for the RAM BIOS table and the ROM table at `C003h`.
+A source change can move build-dependent addresses. Page zero, the cache and
+history addresses, RAM BIOS origin `BF00h` and ROM table origin `C003h` are
+fixed by the inspected contract (`962853f:src/layout.asm:49-90`,
+`962853f:src/layout.asm:134-135`, `962853f:src/history.asm:24`,
+`962853f:tools/build.mjs:256-267`). A symbol lookup is valid for the artifact
+it reads so a later map needs that build's symbols and identity.

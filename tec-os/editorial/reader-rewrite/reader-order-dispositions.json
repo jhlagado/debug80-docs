@@ -1,6 +1,6 @@
 {
   "review_snapshot": "f7afd4217e9306f1ca22a5e40856560104493439",
-  "status": "six corrections applied, independent confirmation pending",
+  "status": "six corrections independently confirmed clear at db58db7",
   "changes": [
     {
       "finding": 1,
@@ -48,5 +48,6 @@
     }
   ],
   "preservation": "4+6 combined fences and capture comments exact. All other changed readers have unchanged fences and capture comments.",
-  "execution": "No runtime, native or site build and no publication."
+  "execution": "No runtime, native or site build and no publication.",
+  "confirmation": "reader-correction-confirmation.json"
 }

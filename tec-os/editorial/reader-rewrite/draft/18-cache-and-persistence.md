@@ -2,7 +2,7 @@
 title: Cache and persistence
 parent: TEC-OS
 nav_order: 18
-nav_group: "Part II: Inside TEC-OS"
+nav_group: "Inside TEC-OS"
 ---
 
 # 18. Cache and persistence

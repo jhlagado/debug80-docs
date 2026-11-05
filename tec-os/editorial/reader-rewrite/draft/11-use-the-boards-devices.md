@@ -2,7 +2,7 @@
 title: Use the board's devices
 parent: TEC-OS
 nav_order: 11
-nav_group: "Part I: Using and programming TEC-OS"
+nav_group: "Writing programs"
 ---
 
 # 11. Use the board's devices

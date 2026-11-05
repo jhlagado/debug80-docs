@@ -2,7 +2,7 @@
 title: Read and write a file
 parent: TEC-OS
 nav_order: 9
-nav_group: "Part I: Using and programming TEC-OS"
+nav_group: "Writing programs"
 ---
 
 # 9. Read and write a file
