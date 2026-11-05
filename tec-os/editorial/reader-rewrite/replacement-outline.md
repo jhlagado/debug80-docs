@@ -32,6 +32,32 @@ acceptance. Source qualification is preparing at ea3ef3d; that is not a final
 pin or a checked claim. Retained historical evidence remains labelled by its
 actual build. No deployment or product-policy change is part of this outline.
 
+## Prepared reading material and assembly contract
+
+Pagination uses the qualified starter card's existing `A:SAMPLE.ASM`, read with
+`TYPE A:SAMPLE.ASM` at the normal 80-by-24 console. Its source is already present
+before Chapter1 and is long enough for the intended screenful demonstration;
+the exact pause/cancel/continue sequence must be verified on the offered card.
+No generated LONG.TXT, extra directory-full fixture, shell or card-tool chapter
+is a prerequisite. The original host-created pagination fixture and all its
+recipe/output stay together in28 as reproduction material. The prepared volume
+material is SYSTEM on A and empty WORK on B from the actual starter recipe.
+Chapter4 lists those with MOUNT before changing any selection. Later host-made
+read-only/extra-volume cards are explicitly prepared in5, not assumed in3/4.
+
+Chapter2 is a guided copy/change exercise, not an assembly-language prerequisite
+for ordinary use. It explains ORG as placement for this program, registers as
+small CPU storage, LD as loading a value/address, C=9 plus DE as this print call,
+CALL/RET as entering the routine and returning, DB as literal bytes and the
+CR/LF/dollar terminator. It does not promise general Z80 instruction teaching.
+From8 onwards, programming assumes the ability to read labels, numeric literals,
+register pairs, branches and a short assembly listing. Chapter8 explicitly
+establishes call/result clobbering, PUSH/POP and the inherited return word before
+examples use them. Chapter9 teaches the precise FCB/DMA/page-zero facts before
+SHOW. Chapter10 establishes memory/private stacks before raw BIOS KEY. Readers
+seeking instruction-set teaching are told that prerequisite at the route choice,
+not after encountering an unexplained listing.
+
 ## Chapter ladder
 
 Each row states a single job, established prerequisites, an observable result
@@ -44,13 +70,13 @@ review closes; old paths remain in place meanwhile.
 | 1. First session | Power on, recognise A>, list files, select B and return, assemble/run supplied SAMPLE, preserve work | Prepared configuration stated before power-on | Banner/drive/prompt, names, DIR, basic correction/cancel/recall, supplied assembly command, visible output, safe Ctrl-C before reset/removal and what failure looks like |
 | 2. Make a small program | Enter BANNER in TED, save, assemble/run, change text, repeat and reopen saved work | Chapter 1 commands, prepared TED/TAS on A | Small print listing, keys used, source versus COM, tool-drive lookup only as needed, failed-build correction and successful preservation; verification precedes prose |
 | 3. Work with files | Read, copy, rename and selectively erase files; stop/continue long output | First two sessions | TYPE/COPY/REN/ERA, basic wildcards, useful messages, pagination with prepared material, recovery from a mistyped name; full grammar in J |
-| 4. Drives and user areas | Locate a file/tool, select a volume and explain which file a command will run | Files and drive letters | MOUNT, labels/indexes/slots at user level, user areas, complete search precedence and service exception, volume/file protection; no allocation-vector implementation |
+| 4. Drives and user areas | Locate a file/tool, select a volume and explain which file a command will run | Files and drive letters | COM programs finish and return; SVC services stay installed; practical SERVICES/install/UNLOAD vocabulary first, then MOUNT, labels/indexes/slots at user level, user areas, complete search precedence and service exception, volume/file protection; no allocation-vector implementation |
 | 5. Cards on the PC | Copy a card safely, extract work and prepare a new card | Files, drives and safe session end; explicit host setup | tecvol, images/containers, read-only flags, create/recipe, physical-device identity consequence, verification/recovery and browser import distinctions |
-| 6. Choose a console | Use serial, PICO widths or GLCD and recover the intended console | Working baseline and file use | Devices and their names in the correct relationship, CON, settings/FAST/input limits, keyboard differences, terminal subset and concrete silent-output recovery; IOBYTE encoding belongs to programming/reference |
-| 7. Commands at startup | Make a short startup file, bypass it and diagnose its visible result | Files, consoles, user areas and service installation vocabulary | One-record limits, display line behaviour, quiet absence, keypad bypass and reset lifetime; implementation later |
-| 8. Call TEC-OS | Write a small interactive program through BDOS | Authored banner and assembly basics | Register/result contract, character/string/line I/O, ordinary input preservation and error conventions; BIOS/direct-console distinction when an example needs it |
-| 9. Read and write a file | Open/read then make/write/close a file without losing the caller's state | BDOS calls, files and buffers | FCB, DMA, records, sequential state, returned errors and close/flush consequences; extents as needed to explain limits, exhaustive fields in A |
-| 10. Memory for programs | Choose code/data/stack space and respect resident state | Calls, buffers and stack basics | 0100h, dynamic top at0006h, inherited/private stack, page zero/tails/load drive, SAVE debugging use, restart-vector/bank safety; detailed allocation later |
+| 6. Choose a console | Use serial, PICO widths or GLCD and recover the intended console | Working baseline, file use and operator COM/SVC distinction from4 | Devices and their names in the correct relationship, CON, settings/FAST/input limits, keyboard differences, terminal subset and concrete silent-output recovery; IOBYTE encoding belongs to programming/reference |
+| 7. Commands at startup | Make a short startup file, bypass it and diagnose its visible result | Files, consoles, user areas and operator install/list/remove vocabulary from4 | One-record limits, display line behaviour, quiet absence, keypad bypass and reset lifetime; implementation later |
+| 8. Call TEC-OS | Write a small interactive program through BDOS | Authored banner and assembly basics | Locally establish registers, CALL/RET, return word and small stack/PUSH/POP use; BDOS register/result contract, character/string/line I/O, ordinary input preservation and error conventions. Raw BIOS/KEY/private-SP waits for10 |
+| 9. Read and write a file | Open/read then make/write/close a file without losing the caller's state | BDOS calls, files and locally taught PUSH/POP from8 | Before SHOW locally teach page zero, command tail/default parsed FCB, all36 bytes, drive/name fields and CR; then DMA at0080h, records, sequential state, returned errors and close/flush consequences; extents as needed to explain limits, exhaustive fields in A |
+| 10. Memory for programs | Choose code/data/stack space and respect resident state | Calls, buffers and stack basics | 0100h, dynamic top at0006h, inherited/private stack, page zero/tails/load drive, SAVE debugging use, restart-vector/bank safety; after these contracts teach raw BIOS table lookup and the complete KEY/private-SP example; detailed allocation later |
 | 11. Use the board's devices | Read status, draw/text/beep and release a claimed display safely | Calls, memory and console distinction | ABI check, shared-port reason, chosen examples then hardware-service breadth, claim/restore, font and PICO record; API lookup in B |
 | 12. Results and command chains | Use conditional pieces and hand the next command to CCP | Commands, program exits and DMA | Return-code convention, !/:, function108/47, normal/drop paths, startup interplay only after basic chains |
 | 13. Write a resident service | Assemble/install/use/remove a small hook, then publish/depend on records | Calls, memory, stacks and hardware interfaces | SVCFMT, lifecycle, hook restoration, flags/claims, publication, dependency and stack declaration; PC route after host setup |
@@ -92,10 +118,14 @@ experience. Internal chapters explain operations already encountered.
 
 ## Material accounting rules
 
-`material-crosswalk.json` enumerates every original heading, including front
-matter and appendix subsections, with destinations. The detailed reverse
-outlines retain the paragraph/example jobs under each heading. A heading with
-several destinations is split at those recorded paragraph jobs. No technical
+`movement-units.json` controls the movement of every paragraph, table, list,
+code/output fence and capture/provenance comment by source range and destination
+subsection. Its explicit sentence-split qualifications govern mixed paragraphs.
+`material-crosswalk.json` is the section index, including front
+matter and appendix subsections, with destinations derived from the controlling movement units. The detailed reverse
+outlines retain the paragraph/example jobs under each heading. The reverse outlines are historical reading notes, not competing movement authority.
+Any contradiction must be repaired before prose. A heading with several destinations
+is split at the controlling range records and named sentence fragments. No technical
 feature is removed by omission from the short ladder table.
 
 Remove only duplicated roadmap/syllabus sentences, repeated full explanations
