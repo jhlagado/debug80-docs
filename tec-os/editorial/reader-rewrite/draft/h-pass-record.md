@@ -55,3 +55,11 @@ and always writes its supplied count. The table and source instructions now
 distinguish these paths. SVCFMT and an initially zero dependency count remain
 required source fields. Other reviewed preservation, bounds, encodings and
 craft were clear. Confirmation remains pending. No execution was performed.
+
+## Confirmation
+
+Independent confirmation atecea9c0 closed the writer-distinction finding.
+The full reference review otherwise cleared the field/check table, gap
+encodings, bounds, GLCD interpretation and historical-fence preservation.
+No bounded editorial or factual finding remains. Final runtime/input
+qualification and integration remain pending.
