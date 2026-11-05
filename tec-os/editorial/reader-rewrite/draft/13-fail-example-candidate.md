@@ -1,5 +1,11 @@
 # Held FAIL example
 
+Current disposition: the original source is now covered by attempt04 at
+Origo `06b3e05a`, closed by `c40c79df`. Chapter 13 uses that run’s separate
+build and fresh-baseline excerpts. The older recipe and output below remain
+unqualified historical material and are not inserted. Earlier hold statements
+below record the pre-attempt04 disposition. The original code is unchanged.
+
 Status: original execution not established. The full source, recipe, output
 and interpretation below are retained unchanged from the reviewed draft.
 They first entered the book at5006e2c and remain in frozen10821b6. Reports

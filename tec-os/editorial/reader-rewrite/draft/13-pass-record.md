@@ -238,3 +238,148 @@ results, source fixtures and dependency pins retain their original scope.
 The reader’s fences and capture comments are unchanged. Editorial gate
 results and context dispositions are recorded in the application JSON.
 Independent application review remains open. No product code ran.
+
+
+## Released FAIL workflow insertion
+
+This bounded insertion follows source adoption at book `b2e5496`. I read the
+complete current chapter, pass record and held candidate before drafting.
+The job is to demonstrate an ordinary returned INIT failure after the hook
+cleanup obligation. COUNT and its historical continuation remain separate.
+The full-chapter journey and every changed paragraph were reread after the
+insertion. Earlier FAIL hold entries above describe the earlier evidence state.
+
+### Actual authority and immutable inputs
+
+I read the complete frozen receipt at Origo
+`c40c79df6e5399082028f2ac0ce6669efbb59b04`,
+`studies/p3-tec-os/reviews/book-complete-workflows.md`. Its SHA-256 is
+`4ad1aeba6185f5ea5377281780e4faeb352a11ee49f2398c9afb2a0751de2c37`.
+It closes the covered attempt04 result retained at `06b3e05a`. COMPLETE binds
+result SHA `fe7ed96287741753150b1c7475facc53e6dea85abaaaf108b414d7266e32c23d`.
+The retained archive SHA is
+`f07ad35f5aee950bd0438143760e835f28e184dc59d7e6649f6264d2f70d8e9a`.
+I inspected the archive and result data inertly. No new product job ran.
+
+The tested source is `8b8664a`, landed as mechanism authority `962853f` with
+qualification-record differences only. The qualified ROM SHA is
+`fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d`.
+PICO remains version 3 with the selected 40-column profile and Matrix enabled.
+This is not acceptance of a new host UI default or physical hardware.
+The font remains 96 glyphs of eight rows with five pixels in bits 7–3.
+
+| Actual input or artifact | SHA-256 and scope |
+| --- | --- |
+| packet/FAIL.original.asm | `2a155b29b59d4bb5058ce31b2caf89745cb815b583f8e4e9f1a64200353e1e31`, 506 bytes. Complete original source copied into the reader with tabs and comments unchanged |
+| packet/AREA.original.asm | `f3b6e61d5c194653048ec601ef0ef54cc98ebfd5c9833ae85d8ac101ef330034`, 1269 bytes. Original Chapter 10 program, its own decimal printer and no HWLIB include |
+| packet/PASS.asm | `16d00ea6dec42fbffbb7578e6cf7c2c5cce56670a78b9b3d4335bad86285a482`, 863 bytes. Verification-only control, not a reader listing |
+| Source-adjacent ABI.INC | `092ccf072bb559ba8efc5e55f576d303f2f98a3ea13ed2e821bbd102856a9357`, 6242 bytes. On B with the TAS source inputs |
+| TAS.COM | `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`, 10295 bytes, Thorium dbee66a |
+| Original starter card | `0f3d9e33994ac30865b8675c8f8ce7fc493b13a0a840d8e84b7d708107d4266c` |
+| ATOM FAIL reference file | `c2e76beb4c24bf65bb94ff3bd1de29435fe43e37b19e9e083425ece5cd24d503`, 29-byte image, no fixups, INIT 25 and REMOVE 27 |
+| TAS FAIL.SVC | `7bcb66d7e41af1991a85ef36ac8c140b82e4f7daa5636a6a8d0188436ff201c2`, 128-byte padded file matching the reference plus zero padding |
+| TAS AREA.COM | `7c786de1352aab57fc874f5f25d53b1b5a3b5ec49cd524c3f80592700950692a`, 128-byte padded program matching its reference |
+| fail-build-console.bin | `f79b35bfdd6d6cf8795b84aeac5eed9660739f976360ed705d2ab528d8746b93`, machine 9 |
+| fail-baseline-console.bin | `b6e0fa52e9e3d01ba285f9988ca1d87c4e7760ba948a8853dafb5c042e05a890`, machine 10 |
+
+### Placement, sequence and controls
+
+The new material replaces only the held-example comment under A failed INIT.
+It explains SCF/RET, supplies the original listing and names Chapter 5 card
+preparation, TAS on A and the original source inputs on B. The build excerpt
+is a contiguous part of machine 9's console. The verification also built PASS
+and flushed with Ctrl+C. Machine 10 then started in fresh RAM from a copy of
+that built card. Its contiguous excerpt begins at A>B: and preserves the
+actual AREA, SERVICES, FAIL.SVC, AREA ordering. Both AREA results are exactly
+47268 bytes. The text does not join this run to COUNT or imply that SERVICES
+was run after FAIL in the baseline session. Prompt/output line endings are
+rendered as Markdown lines from the retained CR/CR/LF console stream.
+
+Both fail-baseline.json and fail-with-control.json record INIT 1, carry-return
+1, REMOVE 0 and BIOS scan 1. The observer reads actual flags.C at the RET after
+SCF. Complete before/after service-state equality covers top, PZTOP, entry stub,
+full registry records, owner, generation, claim, restart bytes and BIOS table.
+This is complete tracked service rollback, not equality of all machine memory.
+The two result SHA values are
+`f82cf13f90478ac93269b2f84dfc4efbd29dbc1317e06e50c81239041cabfb83`
+and `c520ee86293a0910777df928d28470be7032c111c6b3937b4e48fab6984aa1e1`.
+
+Machine 11 separately installed verification-only PASS at B800h. Reference
+HANDLER offset 43 gives B82Bh and the RST 1 jump is C3 2B B8. AREA's warm boot
+normalises only 000Fh from C9h to zero in that vector's padding. The JP and all
+other service fields remain exact. The repeated PASS load executes no INIT
+and leaves that canonical state unchanged. FAIL then preserves it exactly.
+UNLOAD restores the baseline apart from generation advancing from 0 to 1.
+AREA returns to 47268, SERVICES omits PASS, empty UNLOAD reports UNLOAD? and
+final Ctrl+C returns to the prompt. PASS's handler is never invoked here.
+These controls support the failure explanation without adding another reader
+exercise or interrupt claim. Full phase, screen, card and reference review is
+in the frozen receipt, not inferred from a completion journal alone.
+
+At `962853f`, src/loader.asm:421–455 lowers 0006h provisionally and branches
+from the returned carry to SVCSCAN. Lines 520–574 distinguish record-rejection
+REMOVE from failed INIT, scan the BIOS targets and restore the ceiling on
+clean failure. Lines 634–663 free claimed slots. src/boot.asm:436–509 supplies
+the strict-above-ceiling sweep and five cleared padding bytes after a kept JP.
+src/cpm/ccp.asm:444–485 routes typed SVC failures to BADCMD unless the bounded
+startup exception applies. These complete contexts were read from Git text.
+
+### Writing passes and preservation
+
+The generous insertion first connected cleanup responsibility to the smallest
+failing INIT, then card prerequisites to build and fresh-baseline observation.
+The separate thematic pass kept control internals here rather than interrupting
+the reader's failure-to-GLCD progression. The deletion pass retained the fresh
+RAM boundary, profile, include home and direct-state evidence because they
+prevent false continuity and overclaiming from AREA alone. Agency and every
+comma were checked in complete paragraphs. The comma before the profile phrase
+bounds the configuration of the qualified run. Literal source commas stay exact.
+
+The actual prose_gate found one existing HW008 at the Chapter 6 crosslink.
+I retained it: “Chapter 6 explains switching consoles” identifies the linked
+explanation and assigns no perception or intent. No new reader/candidate gate
+finding occurred. Sentence complexity was run on both files. New NEG/SHORT
+flags state the no-setup condition and concrete prerequisites. The 28-word
+profile sentence keeps its configuration together. The 28-word observation
+sentence connects the three measured outcomes without separating their scope.
+Header hash/SHORT/ECHO flags are provenance metadata. Other flags concern
+unchanged contractual prose, literal-history text or list-parser fragments.
+They were read in context and retained without unrelated revision.
+
+All pre-existing reader fences and capture comments remain byte-identical in
+order. The held candidate's original source, recipe and transcript are also
+unchanged. Its added status paragraph distinguishes newly covered original
+source from the still-unqualified older purported capture. Historical COUNT,
+CHEAT, RECS and NEEDS pins, outputs, measurements and PC writer recipes remain
+unchanged. Unrun compact candidates and the Chapter 9 ATOM include hold are
+not reopened. The accepted basic proof at `4b5b5a50` remains separate.
+
+Bounded independent recheck is still required for this insertion's exact
+listing/excerpts, profile and session boundaries, source claims and preserved
+historical literals. No runtime, source-pin change, navigation integration or
+publication accompanies this edit.
+
+### Final literal readback
+
+Static comparison against `b2e5496` retained all 11 pre-existing reader fences
+in order and both candidate fences byte for byte. All pre-existing capture
+comments remain exact. Only the obsolete held-example pointer was replaced.
+The new reader ASM body equals all 506 bytes of packet/FAIL.original.asm,
+including its final LF. Each new transcript is a contiguous excerpt after
+normalising retained CR/CR/LF and CR/LF to Markdown LF. No prompts, commands,
+results or blank logical lines were invented. Reader output SHA-256 is
+`1a49cc9be52c6a2bc88e71ae7ece9c5a01610aa707fe27bbcf3d9e1920dcd934`.
+Candidate output SHA-256 is
+`dea741d571c4b1deccac4d75fdaa4f7fc3ccd30b04cd99629869ad679be207a5`.
+All newly inserted reader prose lines fit within 80 columns. The final
+containing-section read covered the prior hook/abandonment rules, FAIL and the
+following GLCD/REMOVE transition in full.
+
+The final gate included all three owned files and retained only the existing
+Chapter 6 crosslink finding dispositioned above. Complexity also covered this
+record. New record SHORT flags identify hashes or precise control outcomes.
+The ECHO line/lines flag describes line-ending rendering. The source-coordinate
+LONG flag combines three separately punctuated path references under the
+parser. The deletion-pass CLAUSES flag retains the reasons for session and
+include prerequisites. Earlier record flags are unchanged historical evidence
+and list-parser fragments. No flag requires unrelated shortening.
