@@ -200,7 +200,7 @@
     },
     {
       "unit": "chapter-01",
-      "status": "Complete scoped draft pushed; independent full chapter factual/craft reviews in progress",
+      "status": "Bounded independent factual/preservation and craft reviews closed; final source/navigation/whole-book review pending",
       "passes": {
         "full_passage_read": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
         "draft": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
@@ -212,8 +212,8 @@
         "examples_before_explanation": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
         "journey_readback": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
         "mechanical_gate": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
-        "independent_editorial_review": "in progress; opening-craft-review.json / opening-factual-review.json",
-        "independent_factual_review": "in progress; opening-craft-review.json / opening-factual-review.json",
+        "independent_editorial_review": "Closed d9d57d2 against correctionsfa3a042; complete opening craft review9ff9fdd, all16fences/19comments exact.",
+        "independent_factual_review": "Closed b911e84 after reader18 historical preservation b8251e9, fresh-card qualification55807ed and group correctionfa3a042; complete report opening-factual-review.json.",
         "navigation": "final integrated check pending",
         "final_source_pin": "Current bounded source962853f, tested8b8664a; historical evidence remains78127ec. Final whole-book reconciliation pending."
       },
@@ -774,7 +774,7 @@
     },
     {
       "unit": "chapter-02",
-      "status": "Complete scoped draft pushed; independent full chapter factual/craft reviews in progress",
+      "status": "Bounded independent factual/preservation and craft reviews closed; final source/navigation/whole-book review pending",
       "passes": {
         "full_passage_read": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
         "draft": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
@@ -786,8 +786,8 @@
         "examples_before_explanation": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
         "journey_readback": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
         "mechanical_gate": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
-        "independent_editorial_review": "in progress; opening-craft-review.json / opening-factual-review.json",
-        "independent_factual_review": "in progress; opening-craft-review.json / opening-factual-review.json",
+        "independent_editorial_review": "Closed d9d57d2 against correctionsfa3a042; complete opening craft review9ff9fdd, all16fences/19comments exact.",
+        "independent_factual_review": "Closed b911e84 after reader18 historical preservation b8251e9, fresh-card qualification55807ed and group correctionfa3a042; complete report opening-factual-review.json.",
         "navigation": "final integrated check pending",
         "final_source_pin": "Current bounded source962853f, tested8b8664a; historical evidence remains78127ec. Final whole-book reconciliation pending."
       },
@@ -900,7 +900,7 @@
     },
     {
       "unit": "chapter-03",
-      "status": "Complete scoped draft pushed; independent full chapter factual/craft reviews in progress",
+      "status": "Bounded independent factual/preservation and craft reviews closed; final source/navigation/whole-book review pending",
       "passes": {
         "full_passage_read": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
         "draft": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
@@ -912,8 +912,8 @@
         "examples_before_explanation": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
         "journey_readback": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
         "mechanical_gate": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
-        "independent_editorial_review": "in progress; opening-craft-review.json / opening-factual-review.json",
-        "independent_factual_review": "in progress; opening-craft-review.json / opening-factual-review.json",
+        "independent_editorial_review": "Closed d9d57d2 against correctionsfa3a042; complete opening craft review9ff9fdd, all16fences/19comments exact.",
+        "independent_factual_review": "Closed b911e84 after reader18 historical preservation b8251e9, fresh-card qualification55807ed and group correctionfa3a042; complete report opening-factual-review.json.",
         "navigation": "final integrated check pending",
         "final_source_pin": "Current bounded source962853f, tested8b8664a; historical evidence remains78127ec. Final whole-book reconciliation pending."
       },
@@ -16005,7 +16005,7 @@
     "coverage": "35 complete claim contexts across14 reader files, nine historical exemptions and29 source-proof spans. All73 source-content comparisons rechecked against exact Git blobs. IM024 retains the actual final source-line LF; that representation boundary is explicit.",
     "current_contracts": "Raw cold40 differs from host/UI80. Bare selectors retain width/claim, explicit32/40/80 remain, current PICOrecordv3 and five-pixel/eight-row font encoding preserved.",
     "native_boundary": "Native16020/364 already exists at baselineea3; historical78127ec16018/366 tables keep their measured identity. Equal addresses do not transfer provenance.",
-    "remaining": "Actual new workflows and receiving source/pin decision, semantic citation recheck, whole changed-passage craft/gate and independent acceptance. No historical capture, cost, map or reader header silently repinned."
+    "remaining": "Current source selected962853f after accepted opening/BANNER proof; apply impact changes and semantically refresh citations while preserving historical scope, then independent source adoption/navigation/whole-book acceptance."
   },
   "opening_attempt02": {
     "status": "FAILED globally; completed public workflows independently accepted for scoped authoring",
@@ -16047,7 +16047,7 @@
       "opening-craft-review.json",
       "opening-factual-review.json"
     ],
-    "failed_close_reader_home": "Required findingopening-preservation-01 appliedb8251e9 under reader18 A failed flush. Complete old05:184–199 shell/capture/output and useful containing explanation retain historical78127ec identity. Independent bounded confirmation pending.",
+    "failed_close_reader_home": "Closed independentlyb911e84: complete old05:184–199 shell/capture/output and useful containing explanation now under reader18 A failed flush atb8251e9, exact historical78127ec identity.",
     "craft_confirmation": "All four craft/grouping findings independently closed atd9d57d2 againstfa3a042; all16readerfences/19comments unchanged. Final source/navigation/whole-book acceptance separate."
   },
   "opening_attempt03": {
@@ -16072,5 +16072,15 @@
     "fresh_stage": "/tmp/ks48-book-next-batch04",
     "guard_log": "/tmp/ks48-book-next-batch04-guard.jsonl",
     "preservation": "All prior packets and failed attempts retained; no case/cap change or retry authority."
+  },
+  "source_adoption_selection": {
+    "authority": "Delegated KS47/KD242 book revision and P3 source-authority instruction962853f; receiver selection under proposal18 after required opening/BANNER verification",
+    "selected_source": "962853f499f05faf281f6cdff1deca8959f58c2b",
+    "tested_source": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+    "qualified_offer": "Origo43d5f328 proposal18 / KG53 and actual artifact binding in source-adoption-impact.json",
+    "receiving_proof": "Scoped opening/BANNER/PC7/pager result4b5b5a50 plus independent complete chapter craft/factual corrections closed d9d57d2/b911e84",
+    "status": "Selected for current mechanisms. Application/citation refresh and independent final source review pending; no blanket current-header replacement performed.",
+    "invariants": "Historical78127ec/58d4345/60cfbdc/5a25178 captures, measurements, maps and recipes keep actual provenance. Explicit80/narrow/serial evidence unchanged. PICOv3, rawcold40 versus host/UI80 and five-pixel/eight-row font format remain distinct.",
+    "scope": "Existing reader mechanism/citation/provenance correction only, no product policy, new runtime allocation, root integration, publication or whole-book acceptance."
   }
 }
