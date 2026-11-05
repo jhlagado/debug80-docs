@@ -115,7 +115,7 @@ CRLF:   DB      "h",13,10,"$"
 `HEX` prints A's high digit through `DIGIT`, then its low digit. `DIGIT`
 converts a nibble to `0` through `F` and ends with `JP BDOS`. For the high
 digit, the BDOS returns to HEX after CALL DIGIT. The low digit is entered by
-fall-through, so its BDOS return goes to HEX's caller. The complete program
+fall-through so its BDOS return goes to HEX's caller. The complete program
 prints the high byte of the boundary before the low byte and appends `h`. These
 retained commands prepared a separate copy of the starter card:
 
@@ -156,7 +156,7 @@ A>
 ```
 
 The following table retains the earlier starter-card address map. The boundary
-moves with the card and residents, so these addresses are not constants for
+moves with the card and residents so these addresses are not constants for
 programs to use:
 
 | Addresses | What is there |
@@ -293,7 +293,7 @@ scratch:
 | `0080h–00FFh` | Command tail, then the default DMA buffer |
 
 The CCP stores the current drive and user area at `0004h` before program entry.
-Warm boot uses that byte to restore the selection, so changing that byte changes
+Warm boot uses that byte to restore the selection so changing that byte changes
 the selection used on exit. An unavailable drive falls back to A
 (`src/cpm/ccp.asm:363-384`, `src/cpm/ccp.asm:32-102`).
 
@@ -306,7 +306,7 @@ two parsed names.
 `0050h` is a different drive value from the current drive at `0004h`. It follows
 CP/M 3's load-drive convention. A plain command loaded from the current drive
 gives 0. A search that finds the program on A gives 1. An explicit prefix
-supplies its drive number, so `B:SHOW` at `A>` leaves 2 there. The current drive
+supplies its drive number so `B:SHOW` at `A>` leaves 2 there. The current drive
 can remain A throughout that run.
 
 TED reads `0050h` to prefix the commands it chains. When loaded from A with B
@@ -393,7 +393,7 @@ Cold boot clears EXPAND 1 for TEC-OS's cache and history:
 | Addresses | Contents |
 | --- | --- |
 | `8000h–BBFFh` | the block cache's 30 lines, each with room for one card block of 512 bytes |
-| `BC00h–BC9Dh` | the cache's table: the card block each line holds, and whether it has changes |
+| `BC00h–BC9Dh` | the cache's table: the card block each line holds and whether it has changes |
 | `BD00h–BDFFh` | the history of command lines |
 | `BE00h–BFFFh` | free |
 
@@ -503,7 +503,7 @@ DIGIT1: LD      C,A
 STACK:
 ```
 
-The address in `0001h` is table + 3. Adding 6 obtains CONIN at table + 9, and
+The address in `0001h` is table + 3. Adding 6 obtains CONIN at table + 9 and
 adding another 3 obtains CONOUT at table + `0Ch`. KEY writes those addresses
 into the operands of its own JP instructions. CALL CONIN and CALL CONOUT then
 reach the actual BIOS entries.

@@ -203,8 +203,8 @@ A>USER 2
 2A>
 ```
 
-The reset has kept SPARE on A, so the final prompt is `2A>`. SYSTEM is
-no longer mounted, which can remove the tools needed for recovery.
+The reset has kept SPARE on A so the final prompt is `2A>`. SYSTEM is no longer
+mounted, which can remove the tools needed for recovery.
 
 For example, suppose the GLCD driver is absent from the new A volume.
 A recognised reset that retains that assignment cannot load the driver.
@@ -341,12 +341,11 @@ serial and the 20 × 4 LCD until a GLCD driver is loaded. In that latter
 configuration, matrix input becomes available with the GLCD console after
 installation, provided the Matrix switch is enabled.
 
-At the serial prompt you can erase the bad file with `ERA STARTUP.CMD`
-or replace it with corrected text then reset. The startup file is in
-user area 0 of A, so recovery must address that location. Without a usable
-terminal, the Chapter 5 card tools can replace or erase it on a PC.
-A recognised reset with a skip retains valid drive assignments just as it
-does without a skip.
+At the serial prompt you can erase the bad file with `ERA STARTUP.CMD` or
+replace it with corrected text then reset. The startup file is in user area 0 of
+A so recovery must address that location. Without a usable terminal, the Chapter
+5 card tools can replace or erase it on a PC. A recognised reset with a skip
+retains valid drive assignments just as it does without a skip.
 
 The web page has no hex keypad. Its Copy file to drive and New starter card
 controls provide recovery from a bad file, as Appendix I explains.
