@@ -1,0 +1,1162 @@
+{
+  "schema_version": 1,
+  "status": "clear_bounded_independent_confirmation",
+  "application_commit": "3037425c744c07cd2273ac1464ec95423abf2595",
+  "reader_basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+  "inventory_identity": {
+    "path": "tec-os/editorial/reader-rewrite/conjunction-comma-inventory.json",
+    "book_commit": "028ecdde0cd295d162cea47b6db7291b21384bf0",
+    "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+    "sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326",
+    "git_blob": "51228d051e60add154b874f9184e9aa5ec7bf0a6"
+  },
+  "review_identity": {
+    "path": "tec-os/editorial/reader-rewrite/comma-review-20-28.json",
+    "sha256": "ecab9024234142a9552be1ad70f52011dcc351871c6650a50a78383d717376e2",
+    "commit": "7783c4e96740360076135422a008dde3dce45cef"
+  },
+  "application_record": {
+    "path": "tec-os/editorial/reader-rewrite/comma-application-20-28.json",
+    "sha256": "bb4633cd78f22bce50f58c29d6c050660bdfe3480eca398aa667ffad376ce2a6"
+  },
+  "scope": "Independent read-only bounded confirmation of Chapters 20–28 punctuation application. Supplementary Chapters 4 and 8 excluded. No reader edits or product execution.",
+  "applied_ids": [
+    "CC0178",
+    "CC0179",
+    "CC0180",
+    "CC0181",
+    "CC0182",
+    "CC0184",
+    "CC0185",
+    "CC0186",
+    "CC0187",
+    "CC0188",
+    "CC0189",
+    "CC0190",
+    "CC0191",
+    "CC0192",
+    "CC0194",
+    "CC0195",
+    "CC0196",
+    "CC0197",
+    "CC0199",
+    "CC0200",
+    "CC0201",
+    "CC0202",
+    "CC0203",
+    "CC0204",
+    "CC0205",
+    "CC0206",
+    "CC0207",
+    "CC0208",
+    "CC0209",
+    "CC0210",
+    "CC0211",
+    "CC0212",
+    "CC0214",
+    "CC0215",
+    "CC0216",
+    "CC0217",
+    "CC0218",
+    "CC0219",
+    "CC0220",
+    "CC0221",
+    "CC0222",
+    "CC0223",
+    "CC0224",
+    "CC0225",
+    "CC0226",
+    "CC0227",
+    "CC0228"
+  ],
+  "retained_ids": [
+    "CC0183",
+    "CC0193",
+    "CC0198",
+    "CC0213"
+  ],
+  "counts": {
+    "reviewed_ids": 51,
+    "optional_comma_removals": 44,
+    "accepted_rewrites": 3,
+    "retained_boundaries": 4,
+    "changed_complete_contexts_read": 44,
+    "retained_only_contexts_read": 3
+  },
+  "sources": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_sha256": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+      "output_sha256": "6ebc76785bb0610eb43a225ac949d23cea84e96cf312119d6d0d6118101599a2",
+      "exact_accepted_contexts_reconstruct_output": true,
+      "all_other_bytes_identical": true,
+      "protected": {
+        "fences": {
+          "count": 9,
+          "input_sha256": "598ed0663f0b64bc89570849fe78778a3a1de2728ffdf73d283ff0d175cf94dd",
+          "output_sha256": "598ed0663f0b64bc89570849fe78778a3a1de2728ffdf73d283ff0d175cf94dd",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 8,
+          "input_sha256": "c2e41ca56b81e6332f9dd1f4dabd89b7e47db6b955910808012ab6aa43979bf9",
+          "output_sha256": "c2e41ca56b81e6332f9dd1f4dabd89b7e47db6b955910808012ab6aa43979bf9",
+          "byte_identical": true
+        },
+        "inline": {
+          "count": 320,
+          "input_sha256": "c4e620e3da78592c063b0ea3c7655317390471bdbff75f8f84ed709f5d5b2684",
+          "output_sha256": "c4e620e3da78592c063b0ea3c7655317390471bdbff75f8f84ed709f5d5b2684",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 13,
+          "input_sha256": "4f9ec664d6252e1bd771557e4b81445ecd4867797cb819b473d8d49ae0085794",
+          "output_sha256": "4f9ec664d6252e1bd771557e4b81445ecd4867797cb819b473d8d49ae0085794",
+          "byte_identical": true
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "input_sha256": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+      "output_sha256": "ba2c3938f348f9a44fd756438a1941e4ac49580567575a9c9c9d0bd3c182b5c4",
+      "exact_accepted_contexts_reconstruct_output": true,
+      "all_other_bytes_identical": true,
+      "protected": {
+        "fences": {
+          "count": 2,
+          "input_sha256": "98f5a84c8775053d66c60b2df8a60fd52d376bba1027adbd76e5a6758e735101",
+          "output_sha256": "98f5a84c8775053d66c60b2df8a60fd52d376bba1027adbd76e5a6758e735101",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 2,
+          "input_sha256": "0cef2eed4a6eeffe334109ee87195c49aaeca6afee7911bc412f67d2cf0369ae",
+          "output_sha256": "0cef2eed4a6eeffe334109ee87195c49aaeca6afee7911bc412f67d2cf0369ae",
+          "byte_identical": true
+        },
+        "inline": {
+          "count": 335,
+          "input_sha256": "0213314ac3909444bae96283028d556eab2b8b1840f94de377371029183b4410",
+          "output_sha256": "0213314ac3909444bae96283028d556eab2b8b1840f94de377371029183b4410",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 0,
+          "input_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "output_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "byte_identical": true
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/22-the-history-ring.md",
+      "input_sha256": "4d797242269cdc224b040fadb88dd397d0632439aff422670fc9f058fbe9dffc",
+      "output_sha256": "4d797242269cdc224b040fadb88dd397d0632439aff422670fc9f058fbe9dffc",
+      "exact_accepted_contexts_reconstruct_output": true,
+      "all_other_bytes_identical": true,
+      "protected": {
+        "fences": {
+          "count": 5,
+          "input_sha256": "7e445ad4df7b26b8c45280d258e75789a06ea647ec20769cea616c944d2b4019",
+          "output_sha256": "7e445ad4df7b26b8c45280d258e75789a06ea647ec20769cea616c944d2b4019",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 7,
+          "input_sha256": "bae026688f8f3fd4978443442f2ad4e0dbe61cddf717e40b862c78f77dfb40c3",
+          "output_sha256": "bae026688f8f3fd4978443442f2ad4e0dbe61cddf717e40b862c78f77dfb40c3",
+          "byte_identical": true
+        },
+        "inline": {
+          "count": 201,
+          "input_sha256": "511bd53b8796dd828df85a780de25764d395c6015dfae7be64470aead4236b05",
+          "output_sha256": "511bd53b8796dd828df85a780de25764d395c6015dfae7be64470aead4236b05",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 1,
+          "input_sha256": "cce620e0446a2179f0f89b1d9cb44b56646e1e6b8958c89dc785a3de880645f7",
+          "output_sha256": "cce620e0446a2179f0f89b1d9cb44b56646e1e6b8958c89dc785a3de880645f7",
+          "byte_identical": true
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md",
+      "input_sha256": "3320d33dcf2e9f4193bbd60b752649f4290ef6a9a389125806d76952a4b55d7b",
+      "output_sha256": "3320d33dcf2e9f4193bbd60b752649f4290ef6a9a389125806d76952a4b55d7b",
+      "exact_accepted_contexts_reconstruct_output": true,
+      "all_other_bytes_identical": true,
+      "protected": {
+        "fences": {
+          "count": 0,
+          "input_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "output_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 1,
+          "input_sha256": "6d0b1b41de24cbf3923f3538efe1237518dfecfe082860f73b7b98f9f5be9cfd",
+          "output_sha256": "6d0b1b41de24cbf3923f3538efe1237518dfecfe082860f73b7b98f9f5be9cfd",
+          "byte_identical": true
+        },
+        "inline": {
+          "count": 300,
+          "input_sha256": "63dc72de78f35565ae4337bcf84e96dbf8966dd7d5c9c8b707dff274d5a6c892",
+          "output_sha256": "63dc72de78f35565ae4337bcf84e96dbf8966dd7d5c9c8b707dff274d5a6c892",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 5,
+          "input_sha256": "1769e1b87c6414331021e3543c3a3eb3a84dbb45cf7df410c5f0159fb5aab7a0",
+          "output_sha256": "1769e1b87c6414331021e3543c3a3eb3a84dbb45cf7df410c5f0159fb5aab7a0",
+          "byte_identical": true
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_sha256": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+      "output_sha256": "4e7812ccd265937216fed51a6fd6622bb19a35fa957b30f88895450bf4071329",
+      "exact_accepted_contexts_reconstruct_output": true,
+      "all_other_bytes_identical": true,
+      "protected": {
+        "fences": {
+          "count": 1,
+          "input_sha256": "cacbf8eccee216746ba5ec3b1f596c331b624db1082aa73f7bfd47192f2ef538",
+          "output_sha256": "cacbf8eccee216746ba5ec3b1f596c331b624db1082aa73f7bfd47192f2ef538",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 2,
+          "input_sha256": "858bd3a362ac8750a5e4dd5d9ba7fffa0aa78fda8d5ca41d6bb933e78773f363",
+          "output_sha256": "858bd3a362ac8750a5e4dd5d9ba7fffa0aa78fda8d5ca41d6bb933e78773f363",
+          "byte_identical": true
+        },
+        "inline": {
+          "count": 269,
+          "input_sha256": "a0d8f40becb6534ba76630c6bce9f1eac67b4e4643ead8c85524616f1930aa0e",
+          "output_sha256": "a0d8f40becb6534ba76630c6bce9f1eac67b4e4643ead8c85524616f1930aa0e",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 6,
+          "input_sha256": "dfbf706f997586dd3aed53e37df0edaa3c5280d415215e9f50e0c0f8d5d48503",
+          "output_sha256": "dfbf706f997586dd3aed53e37df0edaa3c5280d415215e9f50e0c0f8d5d48503",
+          "byte_identical": true
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+      "input_sha256": "b0ff5b03f7dad091a4dab79cfd7ebb30d407caf6057bd29657ebf31902d8d1e4",
+      "output_sha256": "b0ed70be2fdf00614a6b06d8b5cee34724ee699eac9579ec3aecb4b1b5ce44e1",
+      "exact_accepted_contexts_reconstruct_output": true,
+      "all_other_bytes_identical": true,
+      "protected": {
+        "fences": {
+          "count": 2,
+          "input_sha256": "f3591e340efb55abbf9325072983448cf1eb6095c23571262308e139f33b2c67",
+          "output_sha256": "f3591e340efb55abbf9325072983448cf1eb6095c23571262308e139f33b2c67",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 2,
+          "input_sha256": "c4f82d2128445fad2a1adffa617d3bf0963a0e5bec61f1503f6064344e629f38",
+          "output_sha256": "c4f82d2128445fad2a1adffa617d3bf0963a0e5bec61f1503f6064344e629f38",
+          "byte_identical": true
+        },
+        "inline": {
+          "count": 364,
+          "input_sha256": "f6021f4f7f3069f733f6f8e1e2595910237e9c6379d6840cb67c6c1550c760ff",
+          "output_sha256": "f6021f4f7f3069f733f6f8e1e2595910237e9c6379d6840cb67c6c1550c760ff",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 8,
+          "input_sha256": "9ebfc6adf139114aa48a2eea4a99974831fed1e2c3ca900a2db2aa7cec4c40c7",
+          "output_sha256": "9ebfc6adf139114aa48a2eea4a99974831fed1e2c3ca900a2db2aa7cec4c40c7",
+          "byte_identical": true
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md",
+      "input_sha256": "dbd7970be746d13856d490d2e3ff8ed8aba6a03783a4cb25efc39df9b18e03b8",
+      "output_sha256": "dbd7970be746d13856d490d2e3ff8ed8aba6a03783a4cb25efc39df9b18e03b8",
+      "exact_accepted_contexts_reconstruct_output": true,
+      "all_other_bytes_identical": true,
+      "protected": {
+        "fences": {
+          "count": 10,
+          "input_sha256": "126a381cd36c5dcf4d7e6b6dfc899a8e06331d5993409b4c14ee39fd467a3df6",
+          "output_sha256": "126a381cd36c5dcf4d7e6b6dfc899a8e06331d5993409b4c14ee39fd467a3df6",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 6,
+          "input_sha256": "5969f435f840e463ba9fc29c8c7c749bb6fe1fc0f11601dfbe2eb27a5d8f17eb",
+          "output_sha256": "5969f435f840e463ba9fc29c8c7c749bb6fe1fc0f11601dfbe2eb27a5d8f17eb",
+          "byte_identical": true
+        },
+        "inline": {
+          "count": 272,
+          "input_sha256": "0284694b3f36b191f7e59469b9cf35376e0e6cbafcb56aa3f911833e9b22062b",
+          "output_sha256": "0284694b3f36b191f7e59469b9cf35376e0e6cbafcb56aa3f911833e9b22062b",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 5,
+          "input_sha256": "efbe96af17fd47c4c632ebcca63d13f2033f7c6a0130b8668ff5afbdc2e68837",
+          "output_sha256": "efbe96af17fd47c4c632ebcca63d13f2033f7c6a0130b8668ff5afbdc2e68837",
+          "byte_identical": true
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+      "input_sha256": "2f5cb41470bf35f3496e658d236d82a0b2e6ef038282c537e6ab35706eae48e7",
+      "output_sha256": "5cccb106ea47bcff10d91ad9b0ef23b8873718381bbb77e2e916c2113a30e1d1",
+      "exact_accepted_contexts_reconstruct_output": true,
+      "all_other_bytes_identical": true,
+      "protected": {
+        "fences": {
+          "count": 7,
+          "input_sha256": "a7b77dbadbe9ecd5d01843a1a6027b6796135fa70a2189b8abc807b79f001832",
+          "output_sha256": "a7b77dbadbe9ecd5d01843a1a6027b6796135fa70a2189b8abc807b79f001832",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 4,
+          "input_sha256": "5713c3cc1c19e7546c3f3e11fc06085bdc419494ce46d4901783ac60c695462d",
+          "output_sha256": "5713c3cc1c19e7546c3f3e11fc06085bdc419494ce46d4901783ac60c695462d",
+          "byte_identical": true
+        },
+        "inline": {
+          "count": 252,
+          "input_sha256": "20f544eb2ab7703757a4dc8195ca4eed61c44868fd17ed78a1dcfeb1903863ff",
+          "output_sha256": "20f544eb2ab7703757a4dc8195ca4eed61c44868fd17ed78a1dcfeb1903863ff",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 6,
+          "input_sha256": "0f0c948fc833a3ef66f09b65e3e09fb3bc7b0d1028be0a9b703ffe9e3a498b3f",
+          "output_sha256": "0f0c948fc833a3ef66f09b65e3e09fb3bc7b0d1028be0a9b703ffe9e3a498b3f",
+          "byte_identical": true
+        }
+      }
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_sha256": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+      "output_sha256": "bdcdd4237f288331dd233333bcdb0810971f5969c9cdfbeb5c147a9cb3100a97",
+      "exact_accepted_contexts_reconstruct_output": true,
+      "all_other_bytes_identical": true,
+      "protected": {
+        "fences": {
+          "count": 7,
+          "input_sha256": "df10b574b4ab3f7dc0f04f6852c1184674fcaceb49daaf89f71268c671c9a9e5",
+          "output_sha256": "df10b574b4ab3f7dc0f04f6852c1184674fcaceb49daaf89f71268c671c9a9e5",
+          "byte_identical": true
+        },
+        "comments": {
+          "count": 7,
+          "input_sha256": "339fb9e7dccf49d55a00d0b785fe9b18a2d001f806ff03de83d9b881eabad1eb",
+          "output_sha256": "339fb9e7dccf49d55a00d0b785fe9b18a2d001f806ff03de83d9b881eabad1eb",
+          "byte_identical": true
+        },
+        "inline": {
+          "count": 172,
+          "input_sha256": "3684764d4d3c8c1773697d94937d9af37a81cbb89b29952708be068dac7a0c1d",
+          "output_sha256": "3684764d4d3c8c1773697d94937d9af37a81cbb89b29952708be068dac7a0c1d",
+          "byte_identical": true
+        },
+        "links": {
+          "count": 5,
+          "input_sha256": "61f717bf07a2be901a0397af7984f6937be9cf21fd16d25758320e595b1292cc",
+          "output_sha256": "61f717bf07a2be901a0397af7984f6937be9cf21fd16d25758320e595b1292cc",
+          "byte_identical": true
+        }
+      }
+    }
+  ],
+  "context_findings": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_lines": [
+        146,
+        150
+      ],
+      "ids": [
+        "CC0178"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_lines": [
+        174,
+        179
+      ],
+      "ids": [
+        "CC0179"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_lines": [
+        189,
+        195
+      ],
+      "ids": [
+        "CC0180"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_lines": [
+        197,
+        203
+      ],
+      "ids": [
+        "CC0181"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_lines": [
+        242,
+        252
+      ],
+      "ids": [
+        "CC0182"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_lines": [
+        254,
+        257
+      ],
+      "ids": [
+        "CC0183"
+      ],
+      "changed": false,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_lines": [
+        292,
+        298
+      ],
+      "ids": [
+        "CC0184"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_lines": [
+        315,
+        320
+      ],
+      "ids": [
+        "CC0185"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_lines": [
+        322,
+        328
+      ],
+      "ids": [
+        "CC0186"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_lines": [
+        499,
+        504
+      ],
+      "ids": [
+        "CC0187"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "input_lines": [
+        592,
+        596
+      ],
+      "ids": [
+        "CC0188"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "input_lines": [
+        52,
+        56
+      ],
+      "ids": [
+        "CC0189"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "input_lines": [
+        67,
+        74
+      ],
+      "ids": [
+        "CC0190"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "input_lines": [
+        122,
+        127
+      ],
+      "ids": [
+        "CC0191"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "input_lines": [
+        176,
+        179
+      ],
+      "ids": [
+        "CC0192"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "input_lines": [
+        226,
+        239
+      ],
+      "ids": [
+        "CC0193"
+      ],
+      "changed": false,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "input_lines": [
+        250,
+        260
+      ],
+      "ids": [
+        "CC0194"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "input_lines": [
+        303,
+        311
+      ],
+      "ids": [
+        "CC0195",
+        "CC0196"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "input_lines": [
+        343,
+        347
+      ],
+      "ids": [
+        "CC0197"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md",
+      "input_lines": [
+        104,
+        109
+      ],
+      "ids": [
+        "CC0198"
+      ],
+      "changed": false,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_lines": [
+        53,
+        58
+      ],
+      "ids": [
+        "CC0199",
+        "CC0200"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_lines": [
+        77,
+        77
+      ],
+      "ids": [
+        "CC0201"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_lines": [
+        86,
+        90
+      ],
+      "ids": [
+        "CC0202"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_lines": [
+        105,
+        111
+      ],
+      "ids": [
+        "CC0203"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_lines": [
+        193,
+        198
+      ],
+      "ids": [
+        "CC0204"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_lines": [
+        295,
+        298
+      ],
+      "ids": [
+        "CC0205"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_lines": [
+        319,
+        325
+      ],
+      "ids": [
+        "CC0206"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_lines": [
+        363,
+        368
+      ],
+      "ids": [
+        "CC0207"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_lines": [
+        372,
+        374
+      ],
+      "ids": [
+        "CC0208"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_lines": [
+        398,
+        405
+      ],
+      "ids": [
+        "CC0209"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_lines": [
+        440,
+        447
+      ],
+      "ids": [
+        "CC0210"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+      "input_lines": [
+        224,
+        231
+      ],
+      "ids": [
+        "CC0211"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+      "input_lines": [
+        296,
+        296
+      ],
+      "ids": [
+        "CC0212"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+      "input_lines": [
+        384,
+        398
+      ],
+      "ids": [
+        "CC0213",
+        "CC0214",
+        "CC0215"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        26,
+        30
+      ],
+      "ids": [
+        "CC0216"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        46,
+        46
+      ],
+      "ids": [
+        "CC0217"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        56,
+        61
+      ],
+      "ids": [
+        "CC0218"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        135,
+        142
+      ],
+      "ids": [
+        "CC0219"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        194,
+        198
+      ],
+      "ids": [
+        "CC0220"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        200,
+        203
+      ],
+      "ids": [
+        "CC0221"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        222,
+        228
+      ],
+      "ids": [
+        "CC0222"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        266,
+        267
+      ],
+      "ids": [
+        "CC0223"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        281,
+        283
+      ],
+      "ids": [
+        "CC0224"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        335,
+        341
+      ],
+      "ids": [
+        "CC0225"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        379,
+        385
+      ],
+      "ids": [
+        "CC0226"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        387,
+        392
+      ],
+      "ids": [
+        "CC0227"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "input_lines": [
+        428,
+        438
+      ],
+      "ids": [
+        "CC0228"
+      ],
+      "changed": true,
+      "full_resulting_context_read": true,
+      "accepted_decisions_match": true,
+      "verdict": "clear"
+    }
+  ],
+  "issues": [],
+  "prose_gate": {
+    "checked_script_sha256": "0fb52353cf22dc3a1a079c819f9d7df174a1961084689b946857747b5862ee66",
+    "recorded_gate_exit_status": 0,
+    "recorded_findings": [],
+    "independent_text_gate_exit_status": 0,
+    "independent_text_gate_findings": [],
+    "method": "Ran the bundled text-only prose gate against inert temporary copies of the six exact 3037425 reader files. No product imports or execution. No findings require disposition.",
+    "quality_limit": "Empty findings do not establish quality. All changed contexts were read separately."
+  },
+  "rephrase_findings": [
+    {
+      "id": "CC0182",
+      "verdict": "clear",
+      "checked_scope": "The 24/80 fallback and VHGT/VWID dimensions remain alternatives. Reserving the final row applies to both.",
+      "exact_accepted_proposal": {
+        "old": "`PGINIT` takes `VHGT` and `VWID`,\nor 24 rows and 80 columns for serial and reserves a row for `[more]`.",
+        "new": "`PGINIT` takes its dimensions from `VHGT` and `VWID` or uses 24 rows and 80 columns for serial. It reserves a row for `[more]`.",
+        "application": "Proposal only. Replace this exact whole sentence; do not also apply a comma-only deletion for this ID."
+      },
+      "primary_source": "ea3ef3d:src/cpm/ccpfile.asm:334–361, especially unconditional DEC A at PGIH."
+    },
+    {
+      "id": "CC0195",
+      "verdict": "clear",
+      "checked_scope": "Both CR/LF before the first zero and all-128-byte exhaustion reject the line. Acceptance at the first zero and rejection before any command-buffer write remain explicit.",
+      "exact_accepted_proposal": {
+        "old": "A CR or LF before it, or exhaustion of all 128 bytes without zero,\nbranches to `FNCHNO`.",
+        "new": "The loop branches to `FNCHNO` on a CR or LF before the first zero or on exhaustion of all 128 bytes without zero.",
+        "application": "Proposal only. Replace this exact whole sentence; do not also apply a comma-only deletion for this ID."
+      },
+      "primary_source": "ea3ef3d:src/cpm/bdos.asm:71–110, read as Git text only."
+    },
+    {
+      "id": "CC0200",
+      "verdict": "clear",
+      "checked_scope": "The historical 420-byte cost remains 256 bytes for the page plus the 164-byte alignment gap. Historical starter/stub addresses and later-page qualification remain in the containing paragraph.",
+      "exact_accepted_proposal": {
+        "old": "The first one-page COUNT service cost 256 plus 164 bytes, or 420.",
+        "new": "The first one-page COUNT service cost 420 bytes: 256 for the page and 164 for the alignment gap.",
+        "application": "Proposal only. Replace this exact whole sentence; do not also apply a comma-only deletion for this ID."
+      },
+      "basis": "Same historical values and addresses as the frozen 16918fc paragraph; no new run or current-map size claim."
+    }
+  ],
+  "retained_boundary_findings": [
+    {
+      "id": "CC0183",
+      "boundary": "Closing comma of the first Ctrl-Z apposition, before the alternative file end.",
+      "verdict": "clear_paired_boundary_preserved"
+    },
+    {
+      "id": "CC0193",
+      "boundary": "Opening comma for or FF00h, paired with its closing comma before before printing.",
+      "verdict": "clear_paired_boundary_preserved"
+    },
+    {
+      "id": "CC0198",
+      "boundary": "Closing comma after bit 4 in the INFO result, before the claim-duration while clause.",
+      "verdict": "clear_paired_boundary_preserved"
+    },
+    {
+      "id": "CC0213",
+      "boundary": "Closing comma for the 0000h/4000h ROM-address insertion, before the so-that purpose clause.",
+      "verdict": "clear_paired_boundary_preserved"
+    }
+  ],
+  "factual_scope_findings": [
+    {
+      "area": "Warm boot and command chains",
+      "verdict": "clear",
+      "limits_preserved": "Cold versus warm lifetime, default-error cancellation, pending command position, function-47 validation and successful-flush-dependent continuation. No new successful-run claim."
+    },
+    {
+      "area": "Resident installation and cleanup",
+      "verdict": "clear",
+      "limits_preserved": "Historical alignment cost, move/INIT/publication sequence, provisional versus retained pages, REMOVE failure versus BIOS-hook scan, and INIT interrupt cleanup obligations."
+    },
+    {
+      "area": "Startup and diagnostic procedure",
+      "verdict": "clear",
+      "limits_preserved": "Responding PICO plus Matrix switch enablement, distinct SVC/COM routes, exact ROM addresses, SD-card preparation and diagnostic key/test references."
+    },
+    {
+      "area": "Host-model evidence",
+      "verdict": "clear",
+      "limits_preserved": "Source assertions versus runs, display decoding versus glyph pixels, waiting versus ready state, fixture-key incompleteness, host clock/frame limits and permissive model versus board restrictions. Historical captures, timings and cited pins are unchanged."
+    }
+  ],
+  "record_checks": {
+    "review_hash_and_commit_verified": true,
+    "inventory_hash_and_51_exact_evidence_records_verified": true,
+    "all_nine_input_and_output_source_hashes_verified": true,
+    "whole_file_reconstruction_from_recorded_contexts_verified": true,
+    "no_edits_outside_accepted_contexts": true,
+    "all_44_changed_non_table_contexts_within_80_columns": true,
+    "immutable_record_counts_match_independent_extraction": true,
+    "unchanged_chapters": [
+      22,
+      23,
+      26
+    ],
+    "supplementary_ids_not_applied": [
+      "CC0002",
+      "CC0019"
+    ],
+    "complexity_record": {
+      "prompts": 194,
+      "changed_context_dispositions_read": true,
+      "assessment": "Text-utility prompts are reading prompts. Recorded reasons preserve necessary facts, identifiers and list continuations without authorising unrelated shortening."
+    }
+  },
+  "limits": "No reader edits, shared-inventory or ledger edits, product import, assembly, build, test, emulation, capture, runtime, integration or publication. Text-only comparison and text gate. Confirmation applies to 3037425 against the stated frozen basis, not later unreviewed changes or final whole-book acceptance."
+}
