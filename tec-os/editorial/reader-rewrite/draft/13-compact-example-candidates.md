@@ -11,7 +11,10 @@ The original layout is frozen at the book revision recorded below. Current
 mechanism authority remains TEC-OS ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
 
 Each fence below represents a separate ASCII file with LF line endings and
-one final newline. Instructions and register/condition tokens are lowercase.
+one final newline. Code instructions and register/condition tokens are lowercase.
+ORG and EQU directives are outside the instruction-case checker. The actual
+COUNT and NEEDS sources use `  ORG $0100` without a trailing comment. Derived
+CHEAT inherits that same directive. Data and EQU grammar retain KD241 forms.
 Existing labels, constants, expressions, include names and literal bytes keep
 their identity. Comments retain their original wording with new wrapping or
 placement beside the same operation. Code labels have separate lines and data
@@ -27,7 +30,7 @@ labels share their declarations. No extra entry label is introduced.
 
 %INCLUDE "ABI.INC"
 
-  org $0100
+  ORG $0100
 
 ; magic, format, no
 ; dependencies, removable
@@ -302,7 +305,7 @@ CRLF: db 13,10,"$"
 
 %INCLUDE "ABI.INC"
 
-  org $0100
+  ORG $0100
 
 ; the tool writes the dependency count
 
@@ -360,7 +363,8 @@ its existing comment and continuations. Replace the first `  db "COUNT   "`
 line with `  db "CHEAT   "`, again preserving its comment. This is the
 eight-byte service name, not the record name below REC. Every other byte of
 the compact COUNT source remains unchanged, including the original COUNT.SVC
-file comment, labels, hook, record name and declarations. Save the derived
+file comment, labels, hook, record name and declarations. Its `  ORG $0100`
+line is inherited unchanged from the actual COUNT candidate. Save the derived
 source under the separate name CHEAT.ASM when a later packet is prepared.
 
 The historical Chapter13:449 substitution makes these same two changes to
@@ -385,11 +389,11 @@ and its EOF/record padding need separate byte identities.
 
 | Source | Original bytes | Original SHA-256 | Compact bytes | Compact SHA-256 |
 | --- | ---: | --- | ---: | --- |
-| COUNT |1885|372bc013b7907fa1b4308f31054a66df925e39e8b0afeceeda739d1b00240966|2304|df9a49a74aba201a021c5002af69a1bd35aa5e2949bf94086293796255f651d2|
+| COUNT |1885|372bc013b7907fa1b4308f31054a66df925e39e8b0afeceeda739d1b00240966|2304|4f79cbe4e9e99013695c66bf9af2363ba7f09236555f1260f874359406dbe590|
 | CHARS |1048|a2e6e3bcbde00088e63918b3516246fbb2fdb2b8964ce8c86aaf68ad5169bf07|1249|db574fc1d36304c4008f9476e362267b81bec52f8760e4de85324c9c25a510dd|
 | RECS |1361|81663bfd2f8393f5bc99bc24ebde5533076c2fc068cbc022ca692f8222075c58|1713|b21550ff9cef040641e5d03fbb317efa8080589a1e9a8d12d714df42b5e44704|
-| NEEDS |944|547ed52c6a29f2f282ac4f7d3cb948acecc22f3f15290a5d8b8f8d6fde28a452|1105|b63647cc1f3f50fb5fe9a55bf16ffcbc700061892eb9e4c2fd5787ea429c184b|
-| Derived CHEAT |1885|79853814ad799d6b52bbd0e27b067851f89c62fddcac968ebc9b9173a2e1e593|2304|643997ebe7c65378df110a0266dcd4c98c0949357c571ed82c5a128a6091b98e|
+| NEEDS |944|547ed52c6a29f2f282ac4f7d3cb948acecc22f3f15290a5d8b8f8d6fde28a452|1105|2889c2b00e90ce3124ad2c363d14d20de81b5adb87f75275b839c6838a1c1898|
+| Derived CHEAT |1885|79853814ad799d6b52bbd0e27b067851f89c62fddcac968ebc9b9173a2e1e593|2304|a80c3b5681b72740c8bec163ad1e19cc0ef377d3e926de202b463db749d9384e|
 
 The original CHEAT identity covers the original COUNT fence with only the
 two historical substitutions applied as text. The compact CHEAT identity
@@ -453,12 +457,18 @@ is inferred for these candidates.
 
 At ea3, `tools/lib/prl.mjs:33–46` matches an indented uppercase ORG without
 a trailing comment. `tools/lib/svc.mjs:93–104` uses that expression while
-preparing and assembling makeSvc input. All four candidates intentionally use
-lowercase `org`, so this public PC service route remains blocked. No product
-fix is authorised and no temporary uppercasing may count as qualification of
-the actual candidate. The ordinary ATOM wrapper also needs its supported
-handling of CHARS/RECS's trailing HWLIB include established, as recorded in
-compact-proof-plan.md. These limitations do not grant an alternative route.
+preparing and assembling makeSvc input. The actual COUNT and NEEDS candidate
+sources now contain `  ORG $0100`, as does derived CHEAT. The adopted
+instruction-case rule excludes ORG and EQU directives. KD241 preserves data
+and EQU grammar, so this source refinement conforms to the authority and
+writer without a product fix or style exception. It is not a transformed
+comparison copy and does not establish successful assembly.
+
+CHARS and RECS remain ordinary COM candidates with lowercase `org`. The
+ordinary ATOM wrapper still needs its supported handling of their trailing
+HWLIB include established. That qualification remains held. NEEDS also retains
+the TAS dependency form described below. Future packets must identify the
+actual sources and writer inputs, with no inferred qualification or new route.
 
 NEEDS's displayed source is the TAS form. Its final DEPS record is version1
 followed by the eight-byte name `COUNT   `. TAS excludes that record from the
@@ -492,3 +502,18 @@ COUNT/CHARS/RECS/NEEDS workflows plus the intended CHEAT rejection still need
 separately reviewed packets and allocation. No executable packet or command
 is sealed by this document. FAIL is excluded and its audit candidate untouched.
 No product import, assembly, build, emulation, test, capture or runtime occurred.
+
+## Service ORG proposal refinement
+
+The actual COUNT and NEEDS fences now use uppercase ORG, with no trailing
+comment. Derived CHEAT inherits COUNT's directive. Their source hashes were
+refreshed, with byte counts unchanged. CHARS and RECS fences, historical
+originals and the held FAIL candidate are unchanged. This applies the adopted
+directive rule to the proposals themselves. No executable source is qualified
+by this text-only refinement. All assembly, relocation, workflow and runtime
+proof remains unrun and subject to a separate reviewed allocation.
+
+The bundled human-writing prose gate ran on this candidate document after the
+refinement and reported no flags. Manual read-back checked the changed
+passages for sentence purpose, agency, punctuation and source accuracy. A
+clean mechanical result does not establish prose quality or executable proof.
