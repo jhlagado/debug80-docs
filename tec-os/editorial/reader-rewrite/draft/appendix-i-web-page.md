@@ -112,10 +112,10 @@ snapshot. Pending changes in the ROM's block cache require a successful flush
 first, even if a browser save has succeeded.
 
 Ordinary saves use a single in-flight guard. A save requested during another
-marks the card dirty for a later timer tick. Writes after a snapshot also
-mark it dirty, so an older completed save need not contain the newest card
-bytes. A failed ordinary save retains the in-memory image and the dirty mark
-for another attempt (`web/src/main.mjs:118-147`).
+marks the card dirty for a later timer tick. Writes after a snapshot also mark
+it dirty so an older completed save need not contain the newest card bytes. A
+failed ordinary save retains the in-memory image and the dirty mark for another
+attempt (`web/src/main.mjs:118-147`).
 
 The status under "SD card" lists volume labels and save problems. The
 following strings are source-defined notices, not a new page capture
@@ -249,13 +249,13 @@ Removal preserves conditional-chain relationships by these rules
 | `DIR`, then `:GLCD.SVC`, then `:MOUNT` | `DIR`, then `:MOUNT` | A leading `:` on the next line remains when the removed piece also depended on the previous command. |
 | `GLCD.SVC!:MOUNT` | `MOUNT` | A condition that depended on the removed display piece is cleared. |
 
-Blank lines are dropped. The new text uses CRLF line endings and a final
-`^Z`. Identical text causes no write, so a protected file or volume does
-not itself cause an error when no rewrite is needed. Replacing STARTUP.CMD
-can reuse its existing directory entries and blocks. A full directory causes
-failure only when the replacement needs more entries than are available,
-including reusable entries. Data capacity is checked separately
-(`host/card.mjs:105-116`, `tools/lib/cpmfs.mjs:189-205`).
+Blank lines are dropped. The new text uses CRLF line endings and a final `^Z`.
+Identical text causes no write so a protected file or volume does not itself
+cause an error when no rewrite is needed. Replacing STARTUP.CMD can reuse its
+existing directory entries and blocks. A full directory causes failure only when
+the replacement needs more entries than are available, including reusable
+entries. Data capacity is checked separately (`host/card.mjs:105-116`,
+`tools/lib/cpmfs.mjs:189-205`).
 
 For the starter's original `GLCD.SVC` line, GLCD preparation leaves the text
 unchanged. PICO preparation replaces it with a width line at 40 or 32 columns

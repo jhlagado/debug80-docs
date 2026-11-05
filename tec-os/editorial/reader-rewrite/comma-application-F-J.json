@@ -1,0 +1,2904 @@
+{
+  "schema_version": 1,
+  "status": "applied_read_back_and_editorial_checks_dispositioned",
+  "review_path": "tec-os/editorial/reader-rewrite/comma-review-F-J.json",
+  "review_sha256": "b9759688dbb80409f36ec5eae9a602f8a7a55a20bb66b0c7254f639534ed3ef3",
+  "review_commit": "846aa70fa9dfbad3efa304186a51f4c7d4b11752",
+  "frozen_basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+  "application_input_head": "f24d7012532c3aae28787470ed4783f3c7fd365d",
+  "shared_inventory": {
+    "path": "tec-os/editorial/reader-rewrite/conjunction-comma-inventory.json",
+    "input_sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326",
+    "unchanged": true,
+    "output_sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326"
+  },
+  "scope": "Only the 27 assigned Appendix F–J decisions. The two parent-requested Chapter 4/8 checks are not applied by this writer.",
+  "matching_method": "Verified every entire source SHA-256 before any edit. Matched each complete original context uniquely and validated original line/column/raw-match evidence within it. Built joint context replacements from frozen text. Rewrapped only changed prose contexts to 80 columns with inline code and links as indivisible tokens. Table rows retain Markdown layout.",
+  "counts": {
+    "assigned": 27,
+    "remove_optional": 21,
+    "retain_boundary": 5,
+    "retain_literal": 0,
+    "needs_rephrase": 1,
+    "separate_parent_checks": 2,
+    "separate_parent_checks_applied": 0,
+    "applied": 22,
+    "retained": 5
+  },
+  "files": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+      "input_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+      "input_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+      "input_bytes": 15231,
+      "output_sha256": "0d58dc86b9d6bf11e5d888afd53d74aeda2896b0c8c453b100898e1112f728b4",
+      "output_bytes": 15225,
+      "frozen_inventory_hash_verified_before_edit": true,
+      "protected_streams": {
+        "fences": {
+          "count": 25,
+          "input_sha256": "00b4438f5855584da2186eb4500bcc9ac65e6369449f7e3b806eb39c298828ef",
+          "output_sha256": "00b4438f5855584da2186eb4500bcc9ac65e6369449f7e3b806eb39c298828ef",
+          "byte_equal_in_order": true
+        },
+        "comments": {
+          "count": 2,
+          "input_sha256": "ccd6e81851eaa55f639a60d916153a4cc323352e41ab77524ea3f20d9d61c730",
+          "output_sha256": "ccd6e81851eaa55f639a60d916153a4cc323352e41ab77524ea3f20d9d61c730",
+          "byte_equal_in_order": true
+        },
+        "inline_code": {
+          "count": 128,
+          "input_sha256": "ad8b37ba83324b912e1d249804d5096807e524f87e4dbf9db3495a1754c4a1bf",
+          "output_sha256": "ad8b37ba83324b912e1d249804d5096807e524f87e4dbf9db3495a1754c4a1bf",
+          "byte_equal_in_order": true
+        },
+        "links": {
+          "count": 0,
+          "input_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "output_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "byte_equal_in_order": true
+        },
+        "quoted_wording": {
+          "count": 2,
+          "input_sha256": "23ca91d49a4e5aaa71360f0b9e99a1299b7dda08bbc746214858fcf7451f23a0",
+          "output_sha256": "23ca91d49a4e5aaa71360f0b9e99a1299b7dda08bbc746214858fcf7451f23a0",
+          "byte_equal_in_order": true
+        },
+        "front_matter": {
+          "count": 1,
+          "input_sha256": "3d614c2f949635ec9ebbf966a1cd9f4f5be1a9483b91f727ae905d4139596935",
+          "output_sha256": "3d614c2f949635ec9ebbf966a1cd9f4f5be1a9483b91f727ae905d4139596935",
+          "byte_equal_in_order": true
+        }
+      },
+      "applied_ids": [
+        "CC0290",
+        "CC0291",
+        "CC0292",
+        "CC0293",
+        "CC0294",
+        "CC0295"
+      ],
+      "retained_ids": [],
+      "output_git_blob": "d97972995497121ed6daba2a7d6a3998bc9dd0c0",
+      "exact_context_reconstruction_matches_output": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+      "input_sha256": "5b6a7efbe36f27daa21f4e9ae0672cec5106d5e4db14a86af3aeb6170da0d996",
+      "input_git_blob": "f5f18727726523c94c43cee741d72022cdf3fa10",
+      "input_bytes": 13726,
+      "output_sha256": "28addf1915720cfe8e9eb1a013c6aa3fba956e7342d4969f2116b36aaf54e290",
+      "output_bytes": 13723,
+      "frozen_inventory_hash_verified_before_edit": true,
+      "protected_streams": {
+        "fences": {
+          "count": 0,
+          "input_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "output_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "byte_equal_in_order": true
+        },
+        "comments": {
+          "count": 1,
+          "input_sha256": "d239088b2ff31ff0eb53ab5bfb8abefe01a6a14cd2ee265edd91a18a1515332a",
+          "output_sha256": "d239088b2ff31ff0eb53ab5bfb8abefe01a6a14cd2ee265edd91a18a1515332a",
+          "byte_equal_in_order": true
+        },
+        "inline_code": {
+          "count": 147,
+          "input_sha256": "1a868b5650919ab727a9d331433a93740009c2b4cbc47478df9d9d8c86c178e0",
+          "output_sha256": "1a868b5650919ab727a9d331433a93740009c2b4cbc47478df9d9d8c86c178e0",
+          "byte_equal_in_order": true
+        },
+        "links": {
+          "count": 0,
+          "input_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "output_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "byte_equal_in_order": true
+        },
+        "quoted_wording": {
+          "count": 1,
+          "input_sha256": "6ae617ccb185e8215975e46f4c8986d98b4e2a4f2a9942df6d967745ee38c08e",
+          "output_sha256": "6ae617ccb185e8215975e46f4c8986d98b4e2a4f2a9942df6d967745ee38c08e",
+          "byte_equal_in_order": true
+        },
+        "front_matter": {
+          "count": 1,
+          "input_sha256": "d52c978c736d92f55f06ab8195f40cea9dced98601008fc6fa2776e2b9bc1076",
+          "output_sha256": "d52c978c736d92f55f06ab8195f40cea9dced98601008fc6fa2776e2b9bc1076",
+          "byte_equal_in_order": true
+        }
+      },
+      "applied_ids": [
+        "CC0296",
+        "CC0298",
+        "CC0299"
+      ],
+      "retained_ids": [
+        "CC0297"
+      ],
+      "output_git_blob": "7a20f41976dd3656be93dd446b194919c201f1ff",
+      "exact_context_reconstruction_matches_output": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "input_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+      "input_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+      "input_bytes": 10206,
+      "output_sha256": "00335ee619ec6d9b7b898052bca28121083847743abed74d3af196b8521dcaba",
+      "output_bytes": 10200,
+      "frozen_inventory_hash_verified_before_edit": true,
+      "protected_streams": {
+        "fences": {
+          "count": 4,
+          "input_sha256": "13d5207cf38e37b189db00b66f10cbd0177542a719a9766229432dce794a26f3",
+          "output_sha256": "13d5207cf38e37b189db00b66f10cbd0177542a719a9766229432dce794a26f3",
+          "byte_equal_in_order": true
+        },
+        "comments": {
+          "count": 2,
+          "input_sha256": "26359d60e112009d7d23c6b9c30be72f4acef6a205bbdf967bb15774ebfb6237",
+          "output_sha256": "26359d60e112009d7d23c6b9c30be72f4acef6a205bbdf967bb15774ebfb6237",
+          "byte_equal_in_order": true
+        },
+        "inline_code": {
+          "count": 105,
+          "input_sha256": "70f96fce59886ed118a0cf169f8dbc12fa35b2c865bb0ce18e8beb8dbb96b04c",
+          "output_sha256": "70f96fce59886ed118a0cf169f8dbc12fa35b2c865bb0ce18e8beb8dbb96b04c",
+          "byte_equal_in_order": true
+        },
+        "links": {
+          "count": 2,
+          "input_sha256": "52540453bdce8449449ab180f6a4b3d2eec54d51081db61049fe06aa0c009cd9",
+          "output_sha256": "52540453bdce8449449ab180f6a4b3d2eec54d51081db61049fe06aa0c009cd9",
+          "byte_equal_in_order": true
+        },
+        "quoted_wording": {
+          "count": 1,
+          "input_sha256": "6ae617ccb185e8215975e46f4c8986d98b4e2a4f2a9942df6d967745ee38c08e",
+          "output_sha256": "6ae617ccb185e8215975e46f4c8986d98b4e2a4f2a9942df6d967745ee38c08e",
+          "byte_equal_in_order": true
+        },
+        "front_matter": {
+          "count": 1,
+          "input_sha256": "a22a3da423ee23d99c3625a40fa2f86deb85c6175bcb7945061d7943dcde99ca",
+          "output_sha256": "a22a3da423ee23d99c3625a40fa2f86deb85c6175bcb7945061d7943dcde99ca",
+          "byte_equal_in_order": true
+        }
+      },
+      "applied_ids": [
+        "CC0300",
+        "CC0302",
+        "CC0303",
+        "CC0304",
+        "CC0305",
+        "CC0306"
+      ],
+      "retained_ids": [
+        "CC0301"
+      ],
+      "output_git_blob": "3ce504b2c5bcc9cbbf1a6584727b1a12b91dc261",
+      "exact_context_reconstruction_matches_output": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "input_sha256": "87d01edda5d68bca4a1794a6eeba992369c98465b53865e62b97f6e9f04d9d0e",
+      "input_git_blob": "e1582bd7c2a5d75115a04fbf057f7d2259e48610",
+      "input_bytes": 16865,
+      "output_sha256": "882a80a396e6840f22fd17ab72856b9e45e24dd0cf6aac5e34c6eb4b3b32aef3",
+      "output_bytes": 16863,
+      "frozen_inventory_hash_verified_before_edit": true,
+      "protected_streams": {
+        "fences": {
+          "count": 1,
+          "input_sha256": "5fd1f513faef2d3899a6e951f7cb3e70c7f0eb99eff00d04087bddcf09d77eb4",
+          "output_sha256": "5fd1f513faef2d3899a6e951f7cb3e70c7f0eb99eff00d04087bddcf09d77eb4",
+          "byte_equal_in_order": true
+        },
+        "comments": {
+          "count": 1,
+          "input_sha256": "3d9643c89ce598d6cc0f479832c7fa26bb7264cf974a5ab5ad1bb747381dbae9",
+          "output_sha256": "3d9643c89ce598d6cc0f479832c7fa26bb7264cf974a5ab5ad1bb747381dbae9",
+          "byte_equal_in_order": true
+        },
+        "inline_code": {
+          "count": 129,
+          "input_sha256": "cf2416a8173339b84e16fcdd17d7eae983e7da6169a3ce21fbfaa91e1338ea81",
+          "output_sha256": "cf2416a8173339b84e16fcdd17d7eae983e7da6169a3ce21fbfaa91e1338ea81",
+          "byte_equal_in_order": true
+        },
+        "links": {
+          "count": 8,
+          "input_sha256": "6604797baa4f7ad9da590a274068ffe348ffaeb433f55f7e199a2b3ccc27aeba",
+          "output_sha256": "6604797baa4f7ad9da590a274068ffe348ffaeb433f55f7e199a2b3ccc27aeba",
+          "byte_equal_in_order": true
+        },
+        "quoted_wording": {
+          "count": 22,
+          "input_sha256": "373a9d6d8271c1e4ed18eefeccc83d27015a519ae64977f0129ec9197e36f6ac",
+          "output_sha256": "373a9d6d8271c1e4ed18eefeccc83d27015a519ae64977f0129ec9197e36f6ac",
+          "byte_equal_in_order": true
+        },
+        "front_matter": {
+          "count": 1,
+          "input_sha256": "c66ff2406a96b0be987fcacee7e2b6b5070bb86f22717720af3136f518eae1b1",
+          "output_sha256": "c66ff2406a96b0be987fcacee7e2b6b5070bb86f22717720af3136f518eae1b1",
+          "byte_equal_in_order": true
+        }
+      },
+      "applied_ids": [
+        "CC0308",
+        "CC0310"
+      ],
+      "retained_ids": [
+        "CC0307",
+        "CC0309"
+      ],
+      "output_git_blob": "5d5b8d6c6ad765258922f050e2a0edfdfbc20469",
+      "exact_context_reconstruction_matches_output": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "input_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+      "input_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+      "input_bytes": 11842,
+      "output_sha256": "72bcb409922aa8f6bf412bc290aace1da192a171e6db09c73c5b28a3e29dc8ae",
+      "output_bytes": 11860,
+      "frozen_inventory_hash_verified_before_edit": true,
+      "protected_streams": {
+        "fences": {
+          "count": 3,
+          "input_sha256": "d6b636eb80de40cbe9cd755036ad2d44be73f2ef912c1d32b09a4d1ccf915d07",
+          "output_sha256": "d6b636eb80de40cbe9cd755036ad2d44be73f2ef912c1d32b09a4d1ccf915d07",
+          "byte_equal_in_order": true
+        },
+        "comments": {
+          "count": 3,
+          "input_sha256": "8699be311b51e8e8aece2ac876e1cf506f7b0db0291a8e13e93b944dac197aab",
+          "output_sha256": "8699be311b51e8e8aece2ac876e1cf506f7b0db0291a8e13e93b944dac197aab",
+          "byte_equal_in_order": true
+        },
+        "inline_code": {
+          "count": 68,
+          "input_sha256": "4361d7c965af4298b1c85961bf388ec7a015a6e599fdcc2adc6c746f1f898992",
+          "output_sha256": "4361d7c965af4298b1c85961bf388ec7a015a6e599fdcc2adc6c746f1f898992",
+          "byte_equal_in_order": true
+        },
+        "links": {
+          "count": 11,
+          "input_sha256": "f1860db2c10d4288551aba1ae81747e8656c1afe90f4572647e1b65aaa9ca461",
+          "output_sha256": "f1860db2c10d4288551aba1ae81747e8656c1afe90f4572647e1b65aaa9ca461",
+          "byte_equal_in_order": true
+        },
+        "quoted_wording": {
+          "count": 0,
+          "input_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "output_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "byte_equal_in_order": true
+        },
+        "front_matter": {
+          "count": 1,
+          "input_sha256": "d3d302873c1e930b17a604605528a082f4657b51963688075e62ce28ca274dfb",
+          "output_sha256": "d3d302873c1e930b17a604605528a082f4657b51963688075e62ce28ca274dfb",
+          "byte_equal_in_order": true
+        }
+      },
+      "applied_ids": [
+        "CC0311",
+        "CC0312",
+        "CC0314",
+        "CC0315",
+        "CC0316"
+      ],
+      "retained_ids": [
+        "CC0313"
+      ],
+      "output_git_blob": "6f4063cddd222106f2244d23c4633850502cb90b",
+      "exact_context_reconstruction_matches_output": true
+    }
+  ],
+  "contexts": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+      "original_lines": [
+        95,
+        95
+      ],
+      "ids": [
+        "CC0290"
+      ],
+      "changed": true,
+      "before": "| `DRIVE` | A–D, or empty for a volume on no drive |",
+      "after": "| `DRIVE` | A–D or empty for a volume on no drive |",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+      "original_lines": [
+        97,
+        97
+      ],
+      "ids": [
+        "CC0291"
+      ],
+      "changed": true,
+      "before": "| `:wb` | Written-behind volume. At most one, and never together with `:ro` |",
+      "after": "| `:wb` | Written-behind volume. At most one and never together with `:ro` |",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+      "original_lines": [
+        99,
+        105
+      ],
+      "ids": [
+        "CC0292"
+      ],
+      "changed": true,
+      "before": "`--align N` places volumes at multiples of N card blocks. The decimal value\nmust be from 1 to 16,777,215 and must also be a multiple of 8. The default is\n2,048 blocks, or 1 MiB. A value outside the decimal range gives a usage error.\nA value inside it that is not a multiple of 8 fails container creation with\n`alignment must be a multiple of 8 blocks` and status 1\n(`tools/tecvol.mjs:35-39`, `tools/tecvol.mjs:52-53`,\n`tools/lib/container.mjs:89-99`).",
+      "after": "`--align N` places volumes at multiples of N card blocks. The decimal value must\nbe from 1 to 16,777,215 and must also be a multiple of 8. The default is 2,048\nblocks or 1 MiB. A value outside the decimal range gives a usage error. A value\ninside it that is not a multiple of 8 fails container creation with\n`alignment must be a multiple of 8 blocks` and status 1\n(`tools/tecvol.mjs:35-39`, `tools/tecvol.mjs:52-53`,\n`tools/lib/container.mjs:89-99`).",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+      "original_lines": [
+        169,
+        173
+      ],
+      "ids": [
+        "CC0293"
+      ],
+      "changed": true,
+      "before": "`dir IMAGE [DRIVE]` lists A by default. Each line gives user area, filename\nand record-rounded byte length. `R/O` and `SYS` mark file attributes\n(`tools/tecvol.mjs:142-149`). CP/M records are 128 bytes, so the listing\nincludes padding rather than a PC file's original byte length. The historical\nstarter's A directory was:",
+      "after": "`dir IMAGE [DRIVE]` lists A by default. Each line gives user area, filename and\nrecord-rounded byte length. `R/O` and `SYS` mark file attributes\n(`tools/tecvol.mjs:142-149`). CP/M records are 128 bytes so the listing includes\npadding rather than a PC file's original byte length. The historical starter's A\ndirectory was:",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+      "original_lines": [
+        203,
+        208
+      ],
+      "ids": [
+        "CC0294"
+      ],
+      "changed": true,
+      "before": "Binary files are padded with zero bytes to complete their final record.\n`--text` converts LF and CR LF endings to CR LF, appends `^Z` and pads with\n`^Z`. `--ro` and `--sys` set the two file attributes, and `--user N` selects\nthe destination area (`tools/lib/cpmfs.mjs:180-188`,\n`tools/lib/cpmfs.mjs:216-218`). These retained commands make a text file and\ncopy the prepared binaries:",
+      "after": "Binary files are padded with zero bytes to complete their final record. `--text`\nconverts LF and CR LF endings to CR LF, appends `^Z` and pads with `^Z`. `--ro`\nand `--sys` set the two file attributes and `--user N` selects the destination\narea (`tools/lib/cpmfs.mjs:180-188`, `tools/lib/cpmfs.mjs:216-218`). These\nretained commands make a text file and copy the prepared binaries:",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+      "original_lines": [
+        394,
+        396
+      ],
+      "ids": [
+        "CC0295"
+      ],
+      "changed": true,
+      "before": "There is no STARTUP.CMD on this card, so the first prompt follows the volume\nlist without a startup command. MOUNT with no argument lists ARCHIVE too,\neven though it has no assigned drive.",
+      "after": "There is no STARTUP.CMD on this card so the first prompt follows the volume list\nwithout a startup command. MOUNT with no argument lists ARCHIVE too, even though\nit has no assigned drive.",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+      "original_lines": [
+        74,
+        79
+      ],
+      "ids": [
+        "CC0296"
+      ],
+      "changed": true,
+      "before": "The CPU generates the serial bits itself. It sends through `01h` bit 6 and\nreceives through `03h` bit 7. The connection uses 4800 baud, eight data bits,\nno parity and two stop bits. The delay counts assume a 4 MHz clock, so the\nboard requires FAST with the 4 MHz oscillator (`tools/build.mjs:25-26`,\n`tools/build.mjs:37-76`, `src/console.asm:387-421`,\n`src/console.asm:452-492`).",
+      "after": "The CPU generates the serial bits itself. It sends through `01h` bit 6 and\nreceives through `03h` bit 7. The connection uses 4800 baud, eight data bits, no\nparity and two stop bits. The delay counts assume a 4 MHz clock so the board\nrequires FAST with the 4 MHz oscillator (`tools/build.mjs:25-26`,\n`tools/build.mjs:37-76`, `src/console.asm:387-421`, `src/console.asm:452-492`).",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+      "original_lines": [
+        113,
+        115
+      ],
+      "ids": [
+        "CC0297"
+      ],
+      "changed": false,
+      "before": "The board documents describe `FFh` as write-only. TEC-OS keeps its last value\nat `0040h`, named `LATCHV`, and constructs later writes from that copy\n(`src/layout.asm:25-42`, `src/layout.asm:78-90`).",
+      "after": "The board documents describe `FFh` as write-only. TEC-OS keeps its last value\nat `0040h`, named `LATCHV`, and constructs later writes from that copy\n(`src/layout.asm:25-42`, `src/layout.asm:78-90`).",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+      "original_lines": [
+        166,
+        172
+      ],
+      "ids": [
+        "CC0298"
+      ],
+      "changed": true,
+      "before": "With the keypad NMI jumper fitted, a press raises a non-maskable interrupt. The\nCPU pushes its return address and enters `0066h`, inside the default file\ncontrol block (FCB) at `005Ch–007Fh`. TEC-OS installs no NMI handler there. The\nbytes can be file metadata rather than instructions, so a press can crash the\nmachine. The supported TEC-OS setup leaves the jumper off. The diagnostics ROM\nhas its own NMI test and different keypad instructions, which must not be\napplied to an ordinary TEC-OS session.",
+      "after": "With the keypad NMI jumper fitted, a press raises a non-maskable interrupt. The\nCPU pushes its return address and enters `0066h`, inside the default file\ncontrol block (FCB) at `005Ch–007Fh`. TEC-OS installs no NMI handler there. The\nbytes can be file metadata rather than instructions so a press can crash the\nmachine. The supported TEC-OS setup leaves the jumper off. The diagnostics ROM\nhas its own NMI test and different keypad instructions, which must not be\napplied to an ordinary TEC-OS session.",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+      "original_lines": [
+        187,
+        191
+      ],
+      "ids": [
+        "CC0299"
+      ],
+      "changed": true,
+      "before": "Before a command or character `LCDWAIT` reads the busy flag, bit 7 of port\n`04h`, at most 256 times. The write follows readiness or expiry of that limit, so a missing\nLCD cannot hold this wait indefinitely (`src/lcd.asm:35-61`). The four row\naddress commands are `80h`, `C0h`, `94h` and `D4h`\n(`src/tables.asm:51-52`).",
+      "after": "Before a command or character `LCDWAIT` reads the busy flag, bit 7 of port\n`04h`, at most 256 times. The write follows readiness or expiry of that limit so\na missing LCD cannot hold this wait indefinitely (`src/lcd.asm:35-61`). The four\nrow address commands are `80h`, `C0h`, `94h` and `D4h` (`src/tables.asm:51-52`).",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "original_lines": [
+        19,
+        26
+      ],
+      "ids": [
+        "CC0300"
+      ],
+      "changed": true,
+      "before": "A service file contains the bytes to install, the records it needs and the\npositions that require relocation. Its on-disk header describes that work.\nThe loader overwrites some fields after using them, so an installed header\nmust be read differently from the file header below.\n[Write a resident service](13-write-a-resident-service.md) covers authoring.\n[Loading and removing services](24-loading-and-removing-services.md) follows\ninstallation and gives the resident header. This reference retains a\nhistorical GLCD.SVC dump to show the file fields and gap encoding together.",
+      "after": "A service file contains the bytes to install, the records it needs and the\npositions that require relocation. Its on-disk header describes that work. The\nloader overwrites some fields after using them so an installed header must be\nread differently from the file header below.\n[Write a resident service](13-write-a-resident-service.md) covers authoring.\n[Loading and removing services](24-loading-and-removing-services.md) follows\ninstallation and gives the resident header. This reference retains a historical\nGLCD.SVC dump to show the file fields and gap encoding together.",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "original_lines": [
+        66,
+        68
+      ],
+      "ids": [
+        "CC0301"
+      ],
+      "changed": false,
+      "before": "The loader compares the first two bytes, as a word, with `DMAGIC`, which is\n`SVCFMT * 256 + 'D'` (`src/loader.asm:32-35`). `SVCFMT` is 4, from `abi.inc`,\nand a file of any other format fails the load (`src/abi.inc:185-190`).",
+      "after": "The loader compares the first two bytes, as a word, with `DMAGIC`, which is\n`SVCFMT * 256 + 'D'` (`src/loader.asm:32-35`). `SVCFMT` is 4, from `abi.inc`,\nand a file of any other format fails the load (`src/abi.inc:185-190`).",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "original_lines": [
+        86,
+        93
+      ],
+      "ids": [
+        "CC0302"
+      ],
+      "changed": true,
+      "before": "Leave the measured sizes, dependency count and routine-offset fields zero\nin the source. Supply `SVCFMT` in the format byte. `makeSvc` overwrites that\nbyte with its own format value (`tools/lib/svc-format.mjs:3`,\n`tools/lib/svc.mjs:122`). TAS at Thorium `dbee66a` preserves it. That TAS\nwrites the dependency count only when the source has `DEPS`, so the zero\nin a source without dependencies must already be correct\n(`Thorium dbee66a:src/tas/DRV.ASM:92-120`,\n`Thorium dbee66a:src/tas/DRV.ASM:252-258`).",
+      "after": "Leave the measured sizes, dependency count and routine-offset fields zero in the\nsource. Supply `SVCFMT` in the format byte. `makeSvc` overwrites that byte with\nits own format value (`tools/lib/svc-format.mjs:3`, `tools/lib/svc.mjs:122`).\nTAS at Thorium `dbee66a` preserves it. That TAS writes the dependency count only\nwhen the source has `DEPS` so the zero in a source without dependencies must\nalready be correct (`Thorium dbee66a:src/tas/DRV.ASM:92-120`,\n`Thorium dbee66a:src/tas/DRV.ASM:252-258`).",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "original_lines": [
+        108,
+        113
+      ],
+      "ids": [
+        "CC0303"
+      ],
+      "changed": true,
+      "before": "Relocation positions are encoded as one-byte gaps. At each fixup the\nloader adds the service's base page to an address's high byte. The first\ngap starts at header byte 24, immediately before the image. Each later gap\nstarts at the previous fixup (`tools/lib/svc.mjs:37-49`). A gap of 255 moves on 255 bytes with nothing\nfixed, and the next byte carries on from there. A distance of 255 or more is\ntherefore written as bytes of 255 and then the rest:",
+      "after": "Relocation positions are encoded as one-byte gaps. At each fixup the loader adds\nthe service's base page to an address's high byte. The first gap starts at\nheader byte 24, immediately before the image. Each later gap starts at the\nprevious fixup (`tools/lib/svc.mjs:37-49`). A gap of 255 moves on 255 bytes with\nnothing fixed and the next byte carries on from there. A distance of 255 or more\nis therefore written as bytes of 255 and then the rest:",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "original_lines": [
+        164,
+        167
+      ],
+      "ids": [
+        "CC0304"
+      ],
+      "changed": true,
+      "before": "In this historical run the service loaded at page `B8h`. The inserted\nzero gap changed header byte 24 from a space, `20h`, to `D8h`.\n`PUTTRIM` masks bit 7 (`src/cpm/ccpfile.asm:529-537`), so the name prints\nwith an `X`.",
+      "after": "In this historical run the service loaded at page `B8h`. The inserted zero gap\nchanged header byte 24 from a space, `20h`, to `D8h`. `PUTTRIM` masks bit 7\n(`src/cpm/ccpfile.asm:529-537`) so the name prints with an `X`.",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "original_lines": [
+        206,
+        209
+      ],
+      "ids": [
+        "CC0305"
+      ],
+      "changed": true,
+      "before": "The dump has no dependencies, so its relocation data follows the image\nimmediately at offset 767, `2FFh`. The image begins at offset 25, `19h`,\nwith the table of words the driver passes through service 12. Its entries\ninclude `00F2h`, `014Dh` and `0152h`, assembled for page 0.",
+      "after": "The dump has no dependencies so its relocation data follows the image\nimmediately at offset 767, `2FFh`. The image begins at offset 25, `19h`, with\nthe table of words the driver passes through service 12. Its entries include\n`00F2h`, `014Dh` and `0152h`, assembled for page 0.",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "original_lines": [
+        211,
+        214
+      ],
+      "ids": [
+        "CC0306"
+      ],
+      "changed": true,
+      "before": "The first gap, 2, advances from offset 24 to 26, the high byte of `00F2h`.\nEach of the next five 2s reaches the next word's high byte. None of the\n69 gaps is 255, so all 69 mark fixups. The last reaches file offset 563.\nA bitmap with one bit for each of the 742 image bytes would take 93 bytes.",
+      "after": "The first gap, 2, advances from offset 24 to 26, the high byte of `00F2h`. Each\nof the next five 2s reaches the next word's high byte. None of the 69 gaps is\n255 so all 69 mark fixups. The last reaches file offset 563. A bitmap with one\nbit for each of the 742 image bytes would take 93 bytes.",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "original_lines": [
+        50,
+        50
+      ],
+      "ids": [
+        "CC0307"
+      ],
+      "changed": false,
+      "before": "| \"Display\" | Selects the PICO9918 board, which also has a graphics LCD, or a board with only the graphics LCD. Changing it power-cycles the board. |",
+      "after": "| \"Display\" | Selects the PICO9918 board, which also has a graphics LCD, or a board with only the graphics LCD. Changing it power-cycles the board. |",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "original_lines": [
+        114,
+        118
+      ],
+      "ids": [
+        "CC0308"
+      ],
+      "changed": true,
+      "before": "Ordinary saves use a single in-flight guard. A save requested during another\nmarks the card dirty for a later timer tick. Writes after a snapshot also\nmark it dirty, so an older completed save need not contain the newest card\nbytes. A failed ordinary save retains the in-memory image and the dirty mark\nfor another attempt (`web/src/main.mjs:118-147`).",
+      "after": "Ordinary saves use a single in-flight guard. A save requested during another\nmarks the card dirty for a later timer tick. Writes after a snapshot also mark\nit dirty so an older completed save need not contain the newest card bytes. A\nfailed ordinary save retains the in-memory image and the dirty mark for another\nattempt (`web/src/main.mjs:118-147`).",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "original_lines": [
+        210,
+        216
+      ],
+      "ids": [
+        "CC0309"
+      ],
+      "changed": false,
+      "before": "Each power-on calls `prepareCard` for the selected display and width. It\nstages any STARTUP.CMD rewrite on a whole-card copy and publishes that copy\nonly after preparation succeeds. It reads drive A's user 0, as the ROM does\nfor startup, and passes the volume's read-only flag to file access\n(`web/src/main.mjs:82-84`, `host/card.mjs:18-24`,\n`host/card.mjs:58-73`). The page writes no display driver. The PICO9918\nconsole is in ROM and the graphics LCD requires GLCD.SVC on the card.",
+      "after": "Each power-on calls `prepareCard` for the selected display and width. It\nstages any STARTUP.CMD rewrite on a whole-card copy and publishes that copy\nonly after preparation succeeds. It reads drive A's user 0, as the ROM does\nfor startup, and passes the volume's read-only flag to file access\n(`web/src/main.mjs:82-84`, `host/card.mjs:18-24`,\n`host/card.mjs:58-73`). The page writes no display driver. The PICO9918\nconsole is in ROM and the graphics LCD requires GLCD.SVC on the card.",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "original_lines": [
+        252,
+        258
+      ],
+      "ids": [
+        "CC0310"
+      ],
+      "changed": true,
+      "before": "Blank lines are dropped. The new text uses CRLF line endings and a final\n`^Z`. Identical text causes no write, so a protected file or volume does\nnot itself cause an error when no rewrite is needed. Replacing STARTUP.CMD\ncan reuse its existing directory entries and blocks. A full directory causes\nfailure only when the replacement needs more entries than are available,\nincluding reusable entries. Data capacity is checked separately\n(`host/card.mjs:105-116`, `tools/lib/cpmfs.mjs:189-205`).",
+      "after": "Blank lines are dropped. The new text uses CRLF line endings and a final `^Z`.\nIdentical text causes no write so a protected file or volume does not itself\ncause an error when no rewrite is needed. Replacing STARTUP.CMD can reuse its\nexisting directory entries and blocks. A full directory causes failure only when\nthe replacement needs more entries than are available, including reusable\nentries. Data capacity is checked separately (`host/card.mjs:105-116`,\n`tools/lib/cpmfs.mjs:189-205`).",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "original_lines": [
+        41,
+        46
+      ],
+      "ids": [
+        "CC0311"
+      ],
+      "changed": true,
+      "before": "`?` matches one character, including a padding space. `*` fills the rest of\nits field with question marks. Thus `G*.*` is `G???????.???`. Text after a\nstar in the same field is ignored, so `D*X` and `D*` select the same pattern.\nA short field is padded with spaces. `????.COM` therefore matches names of\nup to four characters with type COM, not every name ending in COM\n(`src/cpm/ccpcmd.asm:617-645`, `src/cpm/ccpcmd.asm:706-727`).",
+      "after": "`?` matches one character, including a padding space. `*` fills the rest of its\nfield with question marks. Thus `G*.*` is `G???????.???`. Text after a star in\nthe same field is ignored so `D*X` and `D*` select the same pattern. A short\nfield is padded with spaces. `????.COM` therefore matches names of up to four\ncharacters with type COM, not every name ending in COM\n(`src/cpm/ccpcmd.asm:617-645`, `src/cpm/ccpcmd.asm:706-727`).",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "original_lines": [
+        86,
+        86
+      ],
+      "ids": [
+        "CC0312"
+      ],
+      "changed": true,
+      "before": "| `DIR [PATTERN]` | List matching files, or all visible files with no pattern |",
+      "after": "| `DIR [PATTERN]` | List matching files or all visible files with no pattern |",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "original_lines": [
+        119,
+        121
+      ],
+      "ids": [
+        "CC0313"
+      ],
+      "changed": false,
+      "before": "TYPE takes one name without wildcards and no extra argument. It prints\nthrough the pager until the first Ctrl-Z byte, `1Ah`, or the end of the\nlast record. No name or no matching file produces `NO FILE`.",
+      "after": "TYPE takes one name without wildcards and no extra argument. It prints\nthrough the pager until the first Ctrl-Z byte, `1Ah`, or the end of the\nlast record. No name or no matching file produces `NO FILE`.",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "original_lines": [
+        192,
+        197
+      ],
+      "ids": [
+        "CC0314"
+      ],
+      "changed": true,
+      "before": "SAVE takes a decimal count from 0 to 255 and one unambiguous file name.\nIt writes that many 256-byte pages starting at `0100h`. A count of 0 makes\nan empty file. The count must be less than the high byte of the word at\n`0006h`, so the saved pages stop below the resident entry's page.\n[Memory for programs](10-memory-for-programs.md) gives the memory boundary\nand the complete capacity example.",
+      "after": "SAVE takes a decimal count from 0 to 255 and one unambiguous file name. It\nwrites that many 256-byte pages starting at `0100h`. A count of 0 makes an empty\nfile. The count must be less than the high byte of the word at `0006h` so the\nsaved pages stop below the resident entry's page.\n[Memory for programs](10-memory-for-programs.md) gives the memory boundary and\nthe complete capacity example.",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "original_lines": [
+        213,
+        216
+      ],
+      "ids": [
+        "CC0315"
+      ],
+      "changed": true,
+      "before": "For a program command the type is replaced by COM, except for SVC. Lookup\nstarts on the named drive, or the current drive when none is named, in the\ncurrent user area followed by user 0. The current user is restored after\nthat search. A file in user 0 needs no system attribute.",
+      "after": "For a program command the type is replaced by COM, except for SVC. Lookup starts\non the named drive or the current drive when none is named. On that drive it\nsearches the current user area followed by user 0. The current user is restored\nafter that search. A file in user 0 needs no system attribute.",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "original_lines": [
+        233,
+        237
+      ],
+      "ids": [
+        "CC0316"
+      ],
+      "changed": true,
+      "before": "The reply goes through the selected console and is discarded in BAT mode.\nSelecting an\nunavailable console can leave or restore another mode, so the reply reports\nthe mode in effect, not merely the name typed. The practical alternatives\nand recovery actions are in [Choose a console](06-choose-a-console.md).",
+      "after": "The reply goes through the selected console and is discarded in BAT mode.\nSelecting an unavailable console can leave or restore another mode so the reply\nreports the mode in effect, not merely the name typed. The practical\nalternatives and recovery actions are in\n[Choose a console](06-choose-a-console.md).",
+      "readback_status": "complete_full_paragraph_or_table_row",
+      "readback_result": "Accepted punctuation/complete rephrase only. Conditions, pair boundaries, inline literals and source identities preserved."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "CC0290",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The cell gives two DRIVE-field alternatives: A–D or an empty field. The comma separates neither an inserted phrase nor literal syntax and the alternatives remain clear without it.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0290",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 95,
+        "column": 16,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 95,
+        "nearest_heading": {
+          "level": 2,
+          "text": "create",
+          "line": 85
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "create",
+            "line": 85
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 95,
+        "context_end_line": 95,
+        "full_context": "| `DRIVE` | A–D, or empty for a volume on no drive |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0291",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "At most one and never together with :ro are coordinated restrictions on the written-behind volume. The second restriction needs no comma boundary. The :wb and :ro tokens remain unchanged.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0291",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 97,
+        "column": 45,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 97,
+        "nearest_heading": {
+          "level": 2,
+          "text": "create",
+          "line": 85
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "create",
+            "line": 85
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 97,
+        "context_end_line": 97,
+        "full_context": "| `:wb` | Written-behind volume. At most one, and never together with `:ro` |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0292",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The sentence states the same default in blocks and MiB. Or directly links the equivalent units without a parenthetical insertion. Keep the thousands separator in 2,048 and all range/error wording.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0292",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 101,
+        "column": 13,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 101,
+        "nearest_heading": {
+          "level": 2,
+          "text": "create",
+          "line": 85
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "create",
+            "line": 85
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 99,
+        "context_end_line": 105,
+        "full_context": "`--align N` places volumes at multiples of N card blocks. The decimal value\nmust be from 1 to 16,777,215 and must also be a multiple of 8. The default is\n2,048 blocks, or 1 MiB. A value outside the decimal range gives a usage error.\nA value inside it that is not a multiple of 8 fails container creation with\n`alignment must be a multiple of 8 blocks` and status 1\n(`tools/tecvol.mjs:35-39`, `tools/tecvol.mjs:52-53`,\n`tools/lib/container.mjs:89-99`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0293",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The record size directly explains why the listing includes padding. So makes that relationship clear without a pause comma. The following historical listing and its sizes remain literal evidence.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0293",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 171,
+        "column": 57,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 171,
+        "nearest_heading": {
+          "level": 2,
+          "text": "dir",
+          "line": 167
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "dir",
+            "line": 167
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 169,
+        "context_end_line": 173,
+        "full_context": "`dir IMAGE [DRIVE]` lists A by default. Each line gives user area, filename\nand record-rounded byte length. `R/O` and `SYS` mark file attributes\n(`tools/tecvol.mjs:142-149`). CP/M records are 128 bytes, so the listing\nincludes padding rather than a PC file's original byte length. The historical\nstarter's A directory was:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0294",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The sentence coordinates the attribute options with the destination-area option. Both subjects are explicit. The conjunction keeps the option groups distinct without the comma. This punctuation is outside the option literals.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0294",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 205,
+        "column": 53,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 205,
+        "nearest_heading": {
+          "level": 2,
+          "text": "put",
+          "line": 191
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "put",
+            "line": 191
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 203,
+        "context_end_line": 208,
+        "full_context": "Binary files are padded with zero bytes to complete their final record.\n`--text` converts LF and CR LF endings to CR LF, appends `^Z` and pads with\n`^Z`. `--ro` and `--sys` set the two file attributes, and `--user N` selects\nthe destination area (`tools/lib/cpmfs.mjs:180-188`,\n`tools/lib/cpmfs.mjs:216-218`). These retained commands make a text file and\ncopy the prepared binaries:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0295",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The absent startup file explains the prompt immediately following the volume list. So is a sufficient connection. Keep the separate observation that MOUNT lists unassigned ARCHIVE.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0295",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 394,
+        "column": 37,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 394,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The worked card",
+          "line": 357
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The worked card",
+            "line": 357
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 394,
+        "context_end_line": 396,
+        "full_context": "There is no STARTUP.CMD on this card, so the first prompt follows the volume\nlist without a startup command. MOUNT with no argument lists ARCHIVE too,\neven though it has no assigned drive.",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0296",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The 4 MHz timing assumption directly explains the FAST/oscillator requirement. Removing this comma leaves that causal link clear and does not alter the preceding serial-format list or its punctuation.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0296",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "5b6a7efbe36f27daa21f4e9ae0672cec5106d5e4db14a86af3aeb6170da0d996",
+        "source_git_blob": "f5f18727726523c94c43cee741d72022cdf3fa10",
+        "line": 76,
+        "column": 67,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 76,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Port 01h and the serial line",
+          "line": 64
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix G. The TEC-1G as TEC-OS uses it",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Port 01h and the serial line",
+            "line": 64
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 74,
+        "context_end_line": 79,
+        "full_context": "The CPU generates the serial bits itself. It sends through `01h` bit 6 and\nreceives through `03h` bit 7. The connection uses 4800 baud, eight data bits,\nno parity and two stop bits. The delay counts assume a 4 MHz clock, so the\nboard requires FAST with the 4 MHz oscillator (`tools/build.mjs:25-26`,\n`tools/build.mjs:37-76`, `src/console.asm:387-421`,\n`src/console.asm:452-492`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0297",
+      "classification": "retain_boundary",
+      "action": "retained",
+      "reason": "This comma closes the inserted naming phrase named `LATCHV`, opened after `0040h`. It returns the sentence to TEC-OS keeps ... and constructs. Removing only this closer risks attaching and constructs to the naming phrase. Review the two apposition commas as a pair.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0297",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "5b6a7efbe36f27daa21f4e9ae0672cec5106d5e4db14a86af3aeb6170da0d996",
+        "source_git_blob": "f5f18727726523c94c43cee741d72022cdf3fa10",
+        "line": 114,
+        "column": 27,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 114,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The system latch",
+          "line": 111
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix G. The TEC-1G as TEC-OS uses it",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The system latch",
+            "line": 111
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 113,
+        "context_end_line": 115,
+        "full_context": "The board documents describe `FFh` as write-only. TEC-OS keeps its last value\nat `0040h`, named `LATCHV`, and constructs later writes from that copy\n(`src/layout.asm:25-42`, `src/layout.asm:78-90`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0298",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "So clearly connects possible file-metadata execution with the crash consequence. This comma is not part of the earlier address/FCB explanation. Keep the fitted-jumper condition and the separate diagnostic-ROM qualification.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0298",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "5b6a7efbe36f27daa21f4e9ae0672cec5106d5e4db14a86af3aeb6170da0d996",
+        "source_git_blob": "f5f18727726523c94c43cee741d72022cdf3fa10",
+        "line": 169,
+        "column": 52,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 169,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The hex keypad and its NMI",
+          "line": 160
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix G. The TEC-1G as TEC-OS uses it",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The hex keypad and its NMI",
+            "line": 160
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 166,
+        "context_end_line": 172,
+        "full_context": "With the keypad NMI jumper fitted, a press raises a non-maskable interrupt. The\nCPU pushes its return address and enters `0066h`, inside the default file\ncontrol block (FCB) at `005Ch–007Fh`. TEC-OS installs no NMI handler there. The\nbytes can be file metadata rather than instructions, so a press can crash the\nmachine. The supported TEC-OS setup leaves the jumper off. The diagnostics ROM\nhas its own NMI test and different keypad instructions, which must not be\napplied to an ordinary TEC-OS session.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0299",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The bounded wait explains why a missing LCD cannot hold it indefinitely. So needs no comma here. Separately retain both commas enclosing bit 7 of port `04h`: those close the busy-flag apposition before at most 256 times.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0299",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "5b6a7efbe36f27daa21f4e9ae0672cec5106d5e4db14a86af3aeb6170da0d996",
+        "source_git_blob": "f5f18727726523c94c43cee741d72022cdf3fa10",
+        "line": 188,
+        "column": 78,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 188,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The 20 × 4 LCD",
+          "line": 174
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix G. The TEC-1G as TEC-OS uses it",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The 20 × 4 LCD",
+            "line": 174
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 187,
+        "context_end_line": 191,
+        "full_context": "Before a command or character `LCDWAIT` reads the busy flag, bit 7 of port\n`04h`, at most 256 times. The write follows readiness or expiry of that limit, so a missing\nLCD cannot hold this wait indefinitely (`src/lcd.asm:35-61`). The four row\naddress commands are `80h`, `C0h`, `94h` and `D4h`\n(`src/tables.asm:51-52`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0300",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The overwrite of header fields directly explains the different interpretation of an installed header. So supplies the connection without this comma. The file/resident distinction and historical-dump scope remain intact.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0300",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 21,
+        "column": 51,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 21,
+        "nearest_heading": {
+          "level": 1,
+          "text": "Appendix H. The service file format",
+          "line": 8
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 19,
+        "context_end_line": 26,
+        "full_context": "A service file contains the bytes to install, the records it needs and the\npositions that require relocation. Its on-disk header describes that work.\nThe loader overwrites some fields after using them, so an installed header\nmust be read differently from the file header below.\n[Write a resident service](13-write-a-resident-service.md) covers authoring.\n[Loading and removing services](24-loading-and-removing-services.md) follows\ninstallation and gives the resident header. This reference retains a\nhistorical GLCD.SVC dump to show the file fields and gap encoding together.",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0301",
+      "classification": "retain_boundary",
+      "action": "retained",
+      "reason": "This comma closes from `abi.inc`, whose opener follows 4. It ends that inserted source qualification before and introduces the separate load-failure clause. The earlier as a word pair is also independent and complete. Deleting only this closer would unbalance the source qualification.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0301",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 67,
+        "column": 77,
+        "conjunction": "and",
+        "matched_text": ",\nand",
+        "conjunction_line": 68,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The header",
+          "line": 46
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The header",
+            "line": 46
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 66,
+        "context_end_line": 68,
+        "full_context": "The loader compares the first two bytes, as a word, with `DMAGIC`, which is\n`SVCFMT * 256 + 'D'` (`src/loader.asm:32-35`). `SVCFMT` is 4, from `abi.inc`,\nand a file of any other format fails the load (`src/abi.inc:185-190`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0302",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The only-when-DEPS condition directly explains why a no-dependency source must already contain zero. So keeps the implication clear without a comma. Preserve the distinction between pinned TAS and makeSvc.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0302",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 90,
+        "column": 60,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 90,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The header",
+          "line": 46
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The header",
+            "line": 46
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 86,
+        "context_end_line": 93,
+        "full_context": "Leave the measured sizes, dependency count and routine-offset fields zero\nin the source. Supply `SVCFMT` in the format byte. `makeSvc` overwrites that\nbyte with its own format value (`tools/lib/svc-format.mjs:3`,\n`tools/lib/svc.mjs:122`). TAS at Thorium `dbee66a` preserves it. That TAS\nwrites the dependency count only when the source has `DEPS`, so the zero\nin a source without dependencies must already be correct\n(`Thorium dbee66a:src/tas/DRV.ASM:92-120`,\n`Thorium dbee66a:src/tas/DRV.ASM:252-258`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0303",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The sentence joins the no-fixup 255-byte advance to continuation from that position. Both clauses have explicit subjects. The conjunction connects them without this comma. It is not the earlier comma explaining header byte 24.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0303",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 112,
+        "column": 6,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 112,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The relocation data",
+          "line": 106
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The relocation data",
+            "line": 106
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 108,
+        "context_end_line": 113,
+        "full_context": "Relocation positions are encoded as one-byte gaps. At each fixup the\nloader adds the service's base page to an address's high byte. The first\ngap starts at header byte 24, immediately before the image. Each later gap\nstarts at the previous fixup (`tools/lib/svc.mjs:37-49`). A gap of 255 moves on 255 bytes with nothing\nfixed, and the next byte carries on from there. A distance of 255 or more is\ntherefore written as bytes of 255 and then the rest:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0304",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The comma is authorial punctuation after the source citation, not part of that citation or the historical transcript. So clearly links the bit-7 mask to the printed X. The 20h/D8h values and their apposition remain unchanged.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0304",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 166,
+        "column": 54,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 166,
+        "nearest_heading": {
+          "level": 3,
+          "text": "A first gap of 0",
+          "line": 137
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The relocation data",
+            "line": 106
+          },
+          {
+            "level": 3,
+            "text": "A first gap of 0",
+            "line": 137
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 164,
+        "context_end_line": 167,
+        "full_context": "In this historical run the service loaded at page `B8h`. The inserted\nzero gap changed header byte 24 from a space, `20h`, to `D8h`.\n`PUTTRIM` masks bit 7 (`src/cpm/ccpfile.asm:529-537`), so the name prints\nwith an `X`.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0305",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "No dependencies directly explains relocation data immediately following the image. So is sufficient without a comma. Separately retain the offset/hexadecimal appositions in this paragraph. This decision does not remove them.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0305",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 206,
+        "column": 29,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 206,
+        "nearest_heading": {
+          "level": 2,
+          "text": "GLCD.SVC",
+          "line": 169
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "GLCD.SVC",
+            "line": 169
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 206,
+        "context_end_line": 209,
+        "full_context": "The dump has no dependencies, so its relocation data follows the image\nimmediately at offset 767, `2FFh`. The image begins at offset 25, `19h`,\nwith the table of words the driver passes through service 12. Its entries\ninclude `00F2h`, `014Dh` and `0152h`, assembled for page 0.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0306",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The absence of 255-valued gaps explains why all 69 entries are fixups. The implication is clear without the comma before so. The paired commas enclosing 2 in The first gap, 2, and the high-byte explanation remain separate boundaries.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0306",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 213,
+        "column": 15,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 213,
+        "nearest_heading": {
+          "level": 2,
+          "text": "GLCD.SVC",
+          "line": 169
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "GLCD.SVC",
+            "line": 169
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 211,
+        "context_end_line": 214,
+        "full_context": "The first gap, 2, advances from offset 24 to 26, the high byte of `00F2h`.\nEach of the next five 2s reaches the next word's high byte. None of the\n69 gaps is 255, so all 69 mark fixups. The last reaches file offset 563.\nA bitmap with one bit for each of the 742 image bytes would take 93 bytes.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0307",
+      "classification": "retain_boundary",
+      "action": "retained",
+      "reason": "This comma closes which also has a graphics LCD, opened after PICO9918 board. The following or returns to the two selectable board alternatives. Removing only the closer would pull the second board into the relative clause. Only Display is quoted interface wording; the target comma is retained for syntax, not as a literal.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0307",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "87d01edda5d68bca4a1794a6eeba992369c98465b53865e62b97f6e9f04d9d0e",
+        "source_git_blob": "e1582bd7c2a5d75115a04fbf057f7d2259e48610",
+        "line": 50,
+        "column": 72,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 50,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Controls and displayed state",
+          "line": 37
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix I. The web page",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Controls and displayed state",
+            "line": 37
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 50,
+        "context_end_line": 50,
+        "full_context": "| \"Display\" | Selects the PICO9918 board, which also has a graphics LCD, or a board with only the graphics LCD. Changing it power-cycles the board. |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "quotation marks in context: inspect scope and literal/interface status"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0308",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "So connects writes after the snapshot with the limitation of an older completed save. The clauses remain clear without the comma. The guard, later retry and retained dirty-mark conditions stay unchanged.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0308",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "87d01edda5d68bca4a1794a6eeba992369c98465b53865e62b97f6e9f04d9d0e",
+        "source_git_blob": "e1582bd7c2a5d75115a04fbf057f7d2259e48610",
+        "line": 116,
+        "column": 14,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 116,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Saving the card",
+          "line": 97
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix I. The web page",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Saving the card",
+            "line": 97
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 114,
+        "context_end_line": 118,
+        "full_context": "Ordinary saves use a single in-flight guard. A save requested during another\nmarks the card dirty for a later timer tick. Writes after a snapshot also\nmark it dirty, so an older completed save need not contain the newest card\nbytes. A failed ordinary save retains the in-memory image and the dirty mark\nfor another attempt (`web/src/main.mjs:118-147`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0309",
+      "classification": "retain_boundary",
+      "action": "retained",
+      "reason": "This comma closes as the ROM does for startup, opened after user 0. It restores the main coordination It reads ... and passes. Without the closer, and passes could attach to what the ROM does rather than to preparation. Keep both commas around the comparison.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0309",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "87d01edda5d68bca4a1794a6eeba992369c98465b53865e62b97f6e9f04d9d0e",
+        "source_git_blob": "e1582bd7c2a5d75115a04fbf057f7d2259e48610",
+        "line": 213,
+        "column": 12,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 213,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Startup preparation",
+          "line": 208
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix I. The web page",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Startup preparation",
+            "line": 208
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 210,
+        "context_end_line": 216,
+        "full_context": "Each power-on calls `prepareCard` for the selected display and width. It\nstages any STARTUP.CMD rewrite on a whole-card copy and publishes that copy\nonly after preparation succeeds. It reads drive A's user 0, as the ROM does\nfor startup, and passes the volume's read-only flag to file access\n(`web/src/main.mjs:82-84`, `host/card.mjs:18-24`,\n`host/card.mjs:58-73`). The page writes no display driver. The PICO9918\nconsole is in ROM and the graphics LCD requires GLCD.SVC on the card.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0310",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "Identical text causing no write directly explains why protection alone gives no error when no rewrite is needed. So carries the implication without a comma. The reusable-entry and separate data-capacity conditions remain in the same paragraph.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0310",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "87d01edda5d68bca4a1794a6eeba992369c98465b53865e62b97f6e9f04d9d0e",
+        "source_git_blob": "e1582bd7c2a5d75115a04fbf057f7d2259e48610",
+        "line": 253,
+        "column": 37,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 253,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Startup preparation",
+          "line": 208
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix I. The web page",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Startup preparation",
+            "line": 208
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 252,
+        "context_end_line": 258,
+        "full_context": "Blank lines are dropped. The new text uses CRLF line endings and a final\n`^Z`. Identical text causes no write, so a protected file or volume does\nnot itself cause an error when no rewrite is needed. Replacing STARTUP.CMD\ncan reuse its existing directory entries and blocks. A full directory causes\nfailure only when the replacement needs more entries than are available,\nincluding reusable entries. Data capacity is checked separately\n(`host/card.mjs:105-116`, `tools/lib/cpmfs.mjs:189-205`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0311",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "So clearly links ignoring text after the star with the equal D*X and D* patterns. The comma is outside those literal patterns. No exception to the padded-field matching explanation is removed.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0311",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 43,
+        "column": 34,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 43,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Names and patterns",
+          "line": 23
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Names and patterns",
+            "line": 23
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 41,
+        "context_end_line": 46,
+        "full_context": "`?` matches one character, including a padding space. `*` fills the rest of\nits field with question marks. Thus `G*.*` is `G???????.???`. Text after a\nstar in the same field is ignored, so `D*X` and `D*` select the same pattern.\nA short field is padded with spaces. `????.COM` therefore matches names of\nup to four characters with type COM, not every name ending in COM\n(`src/cpm/ccpcmd.asm:617-645`, `src/cpm/ccpcmd.asm:706-727`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0312",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The table description gives the patterned and no-pattern alternatives for DIR. Or is sufficient without this comma. The DIR command form is inline literal syntax but its explanatory Operation cell is editable prose.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0312",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 86,
+        "column": 40,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 86,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Command forms",
+          "line": 78
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Command forms",
+            "line": 78
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 86,
+        "context_end_line": 86,
+        "full_context": "| `DIR [PATTERN]` | List matching files, or all visible files with no pattern |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0313",
+      "classification": "retain_boundary",
+      "action": "retained",
+      "reason": "This comma closes the hexadecimal apposition `1Ah`, opened after Ctrl-Z byte. The following or introduces the other stopping condition, the end of the last record. Removing only the closer would leave the byte-value insertion unbalanced. The literal value stays unchanged.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0313",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 120,
+        "column": 53,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 120,
+        "nearest_heading": {
+          "level": 3,
+          "text": "DIR and TYPE",
+          "line": 105
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Command forms",
+            "line": 78
+          },
+          {
+            "level": 3,
+            "text": "DIR and TYPE",
+            "line": 105
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 119,
+        "context_end_line": 121,
+        "full_context": "TYPE takes one name without wildcards and no extra argument. It prints\nthrough the pager until the first Ctrl-Z byte, `1Ah`, or the end of the\nlast record. No name or no matching file produces `NO FILE`.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0314",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "So directly connects the strict high-byte count bound with stopping below the resident-entry page. The sentence remains unambiguous without the comma. The zero-count case and exclusive page boundary stay intact.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0314",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 195,
+        "column": 8,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 195,
+        "nearest_heading": {
+          "level": 3,
+          "text": "SAVE",
+          "line": 190
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Command forms",
+            "line": 78
+          },
+          {
+            "level": 3,
+            "text": "SAVE",
+            "line": 190
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 192,
+        "context_end_line": 197,
+        "full_context": "SAVE takes a decimal count from 0 to 255 and one unambiguous file name.\nIt writes that many 256-byte pages starting at `0100h`. A count of 0 makes\nan empty file. The count must be less than the high byte of the word at\n`0006h`, so the saved pages stop below the resident entry's page.\n[Memory for programs](10-memory-for-programs.md) gives the memory boundary\nand the complete capacity example.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0315",
+      "classification": "needs_rephrase",
+      "action": "applied",
+      "reason": "The target comma and the later comma after none is named bracket the alternative-drive wording inside the lookup sentence. Removing only the first would leave an awkward unmatched interruption before in the current user area. Separate drive choice from user-area order so the same area order clearly applies to either drive.",
+      "rephrase_proposal": {
+        "old": "Lookup\nstarts on the named drive, or the current drive when none is named, in the\ncurrent user area followed by user 0.",
+        "new": "Lookup starts on the named drive or the current drive when none is named. On that drive it searches the current user area followed by user 0.",
+        "joint_comma_scope": "Replace the complete sentence, including both the comma after named drive and the comma after none is named. Do not apply a deletion at the inventory offset alone."
+      },
+      "original_evidence": {
+        "id": "CC0315",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 214,
+        "column": 26,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 214,
+        "nearest_heading": {
+          "level": 3,
+          "text": "Drives, USER and program lookup",
+          "line": 205
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Command forms",
+            "line": 78
+          },
+          {
+            "level": 3,
+            "text": "Drives, USER and program lookup",
+            "line": 205
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 213,
+        "context_end_line": 216,
+        "full_context": "For a program command the type is replaced by COM, except for SVC. Lookup\nstarts on the named drive, or the current drive when none is named, in the\ncurrent user area followed by user 0. The current user is restored after\nthat search. A file in user 0 needs no system attribute.",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0316",
+      "classification": "remove_optional",
+      "action": "applied",
+      "reason": "The preceding mode-selection clause explains why the reply reports the applied mode. So makes that connection clear without this comma. Keep the BAT discard exception and the later not merely qualification.",
+      "rephrase_proposal": null,
+      "original_evidence": {
+        "id": "CC0316",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 235,
+        "column": 54,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 235,
+        "nearest_heading": {
+          "level": 3,
+          "text": "CON",
+          "line": 225
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Command forms",
+            "line": 78
+          },
+          {
+            "level": 3,
+            "text": "CON",
+            "line": 225
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 233,
+        "context_end_line": 237,
+        "full_context": "The reply goes through the selected console and is discarded in BAT mode.\nSelecting an\nunavailable console can leave or restore another mode, so the reply reports\nthe mode in effect, not merely the name typed. The practical alternatives\nand recovery actions are in [Choose a console](06-choose-a-console.md).",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    }
+  ],
+  "checks": {
+    "prose_gate": {
+      "command": [
+        "python3",
+        "/Users/johnhardy/.agents/skills/human-writing/scripts/prose_gate.py",
+        "--json",
+        "--fail-on",
+        "hard",
+        "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+        "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+        "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md"
+      ],
+      "exit_status": 0,
+      "findings": [
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+          "line": 55,
+          "column": 15,
+          "severity": "review",
+          "code": "HW008",
+          "message": "inanimate subject is given interior or social agency",
+          "excerpt": "| 1 | 1 | The format, 4 | See offset 0 |"
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+          "line": 121,
+          "column": 23,
+          "severity": "review",
+          "code": "HW008",
+          "message": "inanimate subject is given interior or social agency",
+          "excerpt": "following strings are source-defined notices, not a new page capture"
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+          "line": 12,
+          "column": 18,
+          "severity": "review",
+          "code": "HW008",
+          "message": "inanimate subject is given interior or social agency",
+          "excerpt": "for the new source offer. -->"
+        }
+      ],
+      "stdout": "[\n  {\n    \"path\": \"tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md\",\n    \"line\": 55,\n    \"column\": 15,\n    \"severity\": \"review\",\n    \"code\": \"HW008\",\n    \"message\": \"inanimate subject is given interior or social agency\",\n    \"excerpt\": \"| 1 | 1 | The format, 4 | See offset 0 |\"\n  },\n  {\n    \"path\": \"tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md\",\n    \"line\": 121,\n    \"column\": 23,\n    \"severity\": \"review\",\n    \"code\": \"HW008\",\n    \"message\": \"inanimate subject is given interior or social agency\",\n    \"excerpt\": \"following strings are source-defined notices, not a new page capture\"\n  },\n  {\n    \"path\": \"tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md\",\n    \"line\": 12,\n    \"column\": 18,\n    \"severity\": \"review\",\n    \"code\": \"HW008\",\n    \"message\": \"inanimate subject is given interior or social agency\",\n    \"excerpt\": \"for the new source offer. -->\"\n  }\n]\n",
+      "stderr": "",
+      "dispositions": [
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+          "line": 55,
+          "column": 15,
+          "code": "HW008",
+          "severity": "review",
+          "disposition": "retain_review_false_positive",
+          "reason": "See offset 0 is a reader cross-reference in the table Check column, not perception attributed to The format in another cell. The unmodified table row and its surrounding header explanation were read."
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+          "line": 121,
+          "column": 23,
+          "code": "HW008",
+          "severity": "review",
+          "disposition": "retain_review_false_positive",
+          "reason": "Notices is a plural noun naming interface strings. Source-defined describes their provenance and assigns no perception to source. The complete introduction and notice table were read."
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+          "line": 12,
+          "column": 18,
+          "code": "HW008",
+          "severity": "review",
+          "disposition": "retain_review_false_positive",
+          "reason": "Source offer is a noun phrase in the unchanged HTML provenance comment. It does not say the source offers anything. The complete comment was read and remains byte-identical."
+        }
+      ],
+      "hard_findings": 0
+    },
+    "sentence_complexity": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "command": [
+          "python3",
+          "/Users/johnhardy/.agents/skills/human-writing/scripts/sentence_complexity.py",
+          "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md"
+        ],
+        "exit_status": 0,
+        "stdout": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:11: SHORT(5)\n  No product import or execution.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:11: LONG(83)\n  Historical raw binary inputs in dist/files: TED.COM Thorium128edb7 SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f; TAS.COM Thoriumdbee66a SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:20: SHORT(6)\n  Appendix E defines the container format.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:49: SHORT(5)\n  The first matching form wins.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:54: ECHO(area/areas)\n  Without it CODE, CODE and CODE use area 0 while CODE lists all areas.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:60: SHORT(6)\n  Successful commands exit with status 0.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:73: SHORT(6)\n  Chapter 5 gives the copy-first procedure.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:107: SHORT(4)\n  Otherwise creation uses 1.0.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:120: SHORT(4)\n  Successful creation prints nothing.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:145: CLAUSES(1+2) FRONT(12) ECHO(volume/volumes)\n  If duplicate allocations or a block beyond DSM prevent a free-space count, the volume line says CODE and later volumes are still listed.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:169: SHORT(5)\n  CODE lists A by default.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:169: ECHO(bytes/byte)\n  CP/M records are 128 bytes so the listing includes padding rather than a PC file's original byte length.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:169: SHORT(6)\n  The historical starter's A directory was:\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:245: ECHO(records/recorded)\n  Each directory entry supplies records only through its recorded extent/count.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:298: SHORT(3)\n  Components contain files.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:314: SHORT(6)\n  CODE prepares CODE and its image.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:314: CLAUSES(1+2)\n  It also writes CODE, which has the starter files plus DEMO and its own id, name and instructions (CODE).\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:314: SHORT(5)\n  Chapter 26 describes that preparation.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:345: SHORT(6)\n  Opening it usually requires administrator rights.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:358: SHORT(4)\n  The final directory was:\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md:393: NEG(2)\n  MOUNT with no argument lists ARCHIVE too, even though it has no assigned drive.\ntec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md: 139 sentences, mean 12.1 words, 0.65 joints/sentence, 15% flagged, grade 7.5\n",
+        "stderr": "",
+        "flag_dispositions": [
+          {
+            "line": 11,
+            "flags": "SHORT(5)",
+            "sentence": "No product import or execution.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "Header scope statement excludes execution evidence and is not reader prose."
+          },
+          {
+            "line": 11,
+            "flags": "LONG(83)",
+            "sentence": "Historical raw binary inputs in dist/files: TED.COM Thorium128edb7 SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f; TAS.COM Thoriumdbee66a SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "Historical application identities and SHA-256 literals must remain complete in the unchanged provenance comment."
+          },
+          {
+            "line": 20,
+            "flags": "SHORT(6)",
+            "sentence": "Appendix E defines the container format.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The cross-reference identifies the authoritative container-format definition."
+          },
+          {
+            "line": 49,
+            "flags": "SHORT(5)",
+            "sentence": "The first matching form wins.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states lookup precedence, not a rhetorical short landing."
+          },
+          {
+            "line": 54,
+            "flags": "ECHO(area/areas)",
+            "sentence": "Without it CODE, CODE and CODE use area 0 while CODE lists all areas.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "Singular area 0 versus all areas is the necessary command-default distinction."
+          },
+          {
+            "line": 60,
+            "flags": "SHORT(6)",
+            "sentence": "Successful commands exit with status 0.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This supplies the successful CLI exit status."
+          },
+          {
+            "line": 73,
+            "flags": "SHORT(6)",
+            "sentence": "Chapter 5 gives the copy-first procedure.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This links the raw-card risk to its copy-first procedure."
+          },
+          {
+            "line": 107,
+            "flags": "SHORT(4)",
+            "sentence": "Otherwise creation uses 1.0.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This is the alternative container version when neither format-1.1 trigger applies."
+          },
+          {
+            "line": 120,
+            "flags": "SHORT(4)",
+            "sentence": "Successful creation prints nothing.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This specifies the absence of successful create output."
+          },
+          {
+            "line": 145,
+            "flags": "CLAUSES(1+2) FRONT(12) ECHO(volume/volumes)",
+            "sentence": "If duplicate allocations or a block beyond DSM prevent a free-space count, the volume line says CODE and later volumes are still listed.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The conditional preserves both causes of an unknown free count and continued reporting of later volumes. It is unchanged and not shortened during comma application."
+          },
+          {
+            "line": 169,
+            "flags": "SHORT(5)",
+            "sentence": "CODE lists A by default.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states the default drive for dir."
+          },
+          {
+            "line": 169,
+            "flags": "ECHO(bytes/byte)",
+            "sentence": "CP/M records are 128 bytes so the listing includes padding rather than a PC file's original byte length.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "Byte and bytes express the record-size and listed-length relationship. CC0293 now omits only the accepted comma."
+          },
+          {
+            "line": 169,
+            "flags": "SHORT(6)",
+            "sentence": "The historical starter's A directory was:",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This identifies the following listing as historical rather than newly measured."
+          },
+          {
+            "line": 245,
+            "flags": "ECHO(records/recorded)",
+            "sentence": "Each directory entry supplies records only through its recorded extent/count.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "Records and recorded extent/count distinguish available data from raw allocated blocks."
+          },
+          {
+            "line": 298,
+            "flags": "SHORT(3)",
+            "sentence": "Components contain files.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states the recipe nesting needed to interpret its fields."
+          },
+          {
+            "line": 314,
+            "flags": "SHORT(6)",
+            "sentence": "CODE prepares CODE and its image.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This names the recipe and image produced by media preparation."
+          },
+          {
+            "line": 314,
+            "flags": "CLAUSES(1+2)",
+            "sentence": "It also writes CODE, which has the starter files plus DEMO and its own id, name and instructions (CODE).",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The additional page recipe and its distinct identity/instructions are concrete fields, not a decorative list."
+          },
+          {
+            "line": 314,
+            "flags": "SHORT(5)",
+            "sentence": "Chapter 26 describes that preparation.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This links preparation to its complete build instructions."
+          },
+          {
+            "line": 345,
+            "flags": "SHORT(6)",
+            "sentence": "Opening it usually requires administrator rights.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The administrator-rights condition qualifies device access."
+          },
+          {
+            "line": 358,
+            "flags": "SHORT(4)",
+            "sentence": "The final directory was:",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This introduces the actual historical final-directory output."
+          },
+          {
+            "line": 393,
+            "flags": "NEG(2)",
+            "sentence": "MOUNT with no argument lists ARCHIVE too, even though it has no assigned drive.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The two negatives preserve ARCHIVE visibility despite no assigned drive. They do not negate each other."
+          }
+        ]
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+        "command": [
+          "python3",
+          "/Users/johnhardy/.agents/skills/human-writing/scripts/sentence_complexity.py",
+          "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md"
+        ],
+        "exit_status": 0,
+        "stdout": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:23: LONG(33)\n  For the prepared board, fit a 32 KiB RAM chip in U9, set the CPU clock to FAST with the 4 MHz oscillator and leave the hex-keypad non-maskable interrupt (NMI) jumper off.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:66: SHORT(6)\n  Chapter 11 gives their calling interface.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:80: SHORT(6)\n  There is no hardware receive buffer.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:88: SHORT(6)\n  TEC-OS reads these three input bits:\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:96: SHORT(5)\n  CODE records bit 0 directly.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:124: SHORT(6)\n  At reset the latch is CODE.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:132: ECHO(stack/stacks)\n  They perform no stack operation while that bank is visible because it hides the resident stacks in EXPAND 0 (CODE, CODE).\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:132: SHORT(6)\n  Chapter 14 explains the memory boundary.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:146: SHORT(6)\n  The board's fixed RAM provides CODE.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:152: CLAUSES(1+2)\n  Chapters 10 and 14 give the program and resident layouts once this check succeeds.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:161: SHORT(6)\n  TEC-OS reads no hex-keypad key codes.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:161: SHORT(6)\n  Chapter 7 gives the recovery procedure.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:165: SHORT(6)\n  TEC-OS installs no NMI handler there.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:191: CLAUSES(0+3)\n  Cold boot writes the banner on row 0 and drives A and B on rows 1 and 2.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:191: SHORT(6)\n  Chapter 25 explains that ownership boundary.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:200: NEG(2)\n  The ROM supplies no service for the 8 × 8 LEDs and does not write their ports.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:200: SHORT(4)\n  DEMO writes them itself.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:200: CLAUSES(0+3)\n  Its host-model mapping uses CODE for row selection and CODE, CODE and CODE for red, green and blue column patterns (CODE).\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md:200: SHORT(6)\n  It is not a starter-card file.\ntec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md: 128 sentences, mean 12.9 words, 0.62 joints/sentence, 15% flagged, grade 6.7\n",
+        "stderr": "",
+        "flag_dispositions": [
+          {
+            "line": 23,
+            "flags": "LONG(33)",
+            "sentence": "For the prepared board, fit a 32 KiB RAM chip in U9, set the CPU clock to FAST with the 4 MHz oscillator and leave the hex-keypad non-maskable interrupt (NMI) jumper off.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The preparation sentence retains the three exact hardware requirements and the disabled-NMI-jumper safety condition."
+          },
+          {
+            "line": 66,
+            "flags": "SHORT(6)",
+            "sentence": "Chapter 11 gives their calling interface.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The cross-reference identifies the shared-port service contracts."
+          },
+          {
+            "line": 80,
+            "flags": "SHORT(6)",
+            "sentence": "There is no hardware receive buffer.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This is the physical receive-buffer limitation, not an empty short sentence."
+          },
+          {
+            "line": 88,
+            "flags": "SHORT(6)",
+            "sentence": "TEC-OS reads these three input bits:",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This introduces the exact three-bit input table."
+          },
+          {
+            "line": 96,
+            "flags": "SHORT(5)",
+            "sentence": "CODE records bit 0 directly.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This distinguishes the diagnostic read from a higher-level interpretation."
+          },
+          {
+            "line": 124,
+            "flags": "SHORT(6)",
+            "sentence": "At reset the latch is CODE.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states the reset latch value."
+          },
+          {
+            "line": 132,
+            "flags": "ECHO(stack/stacks)",
+            "sentence": "They perform no stack operation while that bank is visible because it hides the resident stacks in EXPAND 0 (CODE, CODE).",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "Stack versus stacks identifies the forbidden operations and the bank-hidden resident storage. No shortening is authorised."
+          },
+          {
+            "line": 132,
+            "flags": "SHORT(6)",
+            "sentence": "Chapter 14 explains the memory boundary.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The reference supplies the detailed memory boundary."
+          },
+          {
+            "line": 146,
+            "flags": "SHORT(6)",
+            "sentence": "The board's fixed RAM provides CODE.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This identifies the fixed RAM address range."
+          },
+          {
+            "line": 152,
+            "flags": "CLAUSES(1+2)",
+            "sentence": "Chapters 10 and 14 give the program and resident layouts once this check succeeds.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The successful RAM-check condition is necessary to the program/resident layout reference."
+          },
+          {
+            "line": 161,
+            "flags": "SHORT(6)",
+            "sentence": "TEC-OS reads no hex-keypad key codes.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This limits keypad input to the key-down startup-bypass use."
+          },
+          {
+            "line": 161,
+            "flags": "SHORT(6)",
+            "sentence": "Chapter 7 gives the recovery procedure.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The cross-reference supplies the keypad recovery procedure."
+          },
+          {
+            "line": 165,
+            "flags": "SHORT(6)",
+            "sentence": "TEC-OS installs no NMI handler there.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The absence of a handler explains why jumping into the FCB can crash."
+          },
+          {
+            "line": 191,
+            "flags": "CLAUSES(0+3)",
+            "sentence": "Cold boot writes the banner on row 0 and drives A and B on rows 1 and 2.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The separate banner and drive rows are actual display assignments."
+          },
+          {
+            "line": 191,
+            "flags": "SHORT(6)",
+            "sentence": "Chapter 25 explains that ownership boundary.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This links the recovery-row ownership mechanism to its explanation."
+          },
+          {
+            "line": 200,
+            "flags": "NEG(2)",
+            "sentence": "The ROM supplies no service for the 8 × 8 LEDs and does not write their ports.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The two negatives distinguish the absent ROM service from the untouched LED ports."
+          },
+          {
+            "line": 200,
+            "flags": "SHORT(4)",
+            "sentence": "DEMO writes them itself.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This identifies DEMO as the direct port writer."
+          },
+          {
+            "line": 200,
+            "flags": "CLAUSES(0+3)",
+            "sentence": "Its host-model mapping uses CODE for row selection and CODE, CODE and CODE for red, green and blue column patterns (CODE).",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The row-selection and three colour ports are distinct exact mappings."
+          },
+          {
+            "line": 200,
+            "flags": "SHORT(6)",
+            "sentence": "It is not a starter-card file.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This prevents treating DEMO as one of the starter files."
+          }
+        ]
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "command": [
+          "python3",
+          "/Users/johnhardy/.agents/skills/human-writing/scripts/sentence_complexity.py",
+          "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md"
+        ],
+        "exit_status": 0,
+        "stdout": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:11: LONG(44)\n  The historical starter's TAS.COM identity is Thorium dbee66a, SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:19: SHORT(6)\n  Its on-disk header describes that work.\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:19: SHORT(6)\n  Write a resident service covers authoring.\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:48: SHORT(6)\n  Any failed check rejects the load.\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:48: SHORT(6)\n  A name has no content check.\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:86: SHORT(6)\n  Supply CODE in the format byte.\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:86: SHORT(6)\n  TAS at Thorium CODE preserves it.\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:86: LONG(26)\n  That TAS writes the dependency count only when the source has CODE so the zero in a source without dependencies must already be correct (CODE, CODE).\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:107: ECHO(bytes/byte)\n  A gap of 255 moves on 255 bytes with nothing fixed and the next byte carries on from there.\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:120: CLAUSES(1+2) ECHO(byte/bytes)\n  Image byte 600 is 601 bytes from header byte 24, which is 255 and 255 and 91 more (CODE).\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:124: SHORT(5)\n  Otherwise the load fails (CODE).\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:189: SHORT(4)\n  The header's fields are:\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:209: SHORT(6)\n  The last reaches file offset 563.\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md:214: SHORT(5)\n  The driver contains no font.\ntec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md: 72 sentences, mean 13.1 words, 0.56 joints/sentence, 19% flagged, grade 6.3\n",
+        "stderr": "",
+        "flag_dispositions": [
+          {
+            "line": 11,
+            "flags": "LONG(44)",
+            "sentence": "The historical starter's TAS.COM identity is Thorium dbee66a, SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The historical TAS identity and complete hash remain unchanged in provenance metadata."
+          },
+          {
+            "line": 19,
+            "flags": "SHORT(6)",
+            "sentence": "Its on-disk header describes that work.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The sentence connects the listed file work to the following header definition."
+          },
+          {
+            "line": 19,
+            "flags": "SHORT(6)",
+            "sentence": "Write a resident service covers authoring.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This reference supplies service authoring separately from binary-format lookup."
+          },
+          {
+            "line": 48,
+            "flags": "SHORT(6)",
+            "sentence": "Any failed check rejects the load.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states the consequence of any failed header check."
+          },
+          {
+            "line": 48,
+            "flags": "SHORT(6)",
+            "sentence": "A name has no content check.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This identifies the name field as an exception to content validation."
+          },
+          {
+            "line": 86,
+            "flags": "SHORT(6)",
+            "sentence": "Supply CODE in the format byte.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This gives the exact source format-byte requirement."
+          },
+          {
+            "line": 86,
+            "flags": "SHORT(6)",
+            "sentence": "TAS at Thorium CODE preserves it.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This distinguishes the pinned TAS treatment of the format byte from makeSvc rewriting it."
+          },
+          {
+            "line": 86,
+            "flags": "LONG(26)",
+            "sentence": "That TAS writes the dependency count only when the source has CODE so the zero in a source without dependencies must already be correct (CODE, CODE).",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The DEPS condition and required initial zero are both necessary. CC0302 removes only the accepted comma."
+          },
+          {
+            "line": 107,
+            "flags": "ECHO(bytes/byte)",
+            "sentence": "A gap of 255 moves on 255 bytes with nothing fixed and the next byte carries on from there.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "Byte/bytes describe a 255-byte non-fixup gap and the following gap byte. CC0303 retains both actions."
+          },
+          {
+            "line": 120,
+            "flags": "CLAUSES(1+2) ECHO(byte/bytes)",
+            "sentence": "Image byte 600 is 601 bytes from header byte 24, which is 255 and 255 and 91 more (CODE).",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The 600/601 origin distinction and 255+255+91 decomposition are the worked relocation arithmetic."
+          },
+          {
+            "line": 124,
+            "flags": "SHORT(5)",
+            "sentence": "Otherwise the load fails (CODE).",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This is the failed-bounds outcome, not a rhetorical ending."
+          },
+          {
+            "line": 189,
+            "flags": "SHORT(4)",
+            "sentence": "The header's fields are:",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This introduces the retained dump-decoding table."
+          },
+          {
+            "line": 209,
+            "flags": "SHORT(6)",
+            "sentence": "The last reaches file offset 563.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This gives the concrete last relocation offset in the historical example."
+          },
+          {
+            "line": 214,
+            "flags": "SHORT(5)",
+            "sentence": "The driver contains no font.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This distinguishes the driver image from the ROM-supplied font."
+          }
+        ]
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+        "command": [
+          "python3",
+          "/Users/johnhardy/.agents/skills/human-writing/scripts/sentence_complexity.py",
+          "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md"
+        ],
+        "exit_status": 0,
+        "stdout": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:11: SHORT(2)\n  source only.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:34: SHORT(6)\n  The page is then at CODE.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:74: SHORT(6)\n  The execution loop targets 4 MHz.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:81: SHORT(6)\n  Keyboard routing follows the focused element.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:99: SHORT(6)\n  Startup loads and validates that record.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:137: SHORT(6)\n  Whole-image opening differs from file import.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:156: SHORT(6)\n  Import itself does not flush them.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:156: SHORT(6)\n  Chapter 18 explains the failed-flush paths.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:168: ECHO(file/files)\n  \"Copy file to drive\" pauses the machine and reads all selected PC files.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:178: SHORT(5)\n  Import supplies no force option.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:185: ECHO(save/saves)\n  With saving enabled, import waits for any older save to finish and then saves the staged image under the same guard.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:210: SHORT(6)\n  The page writes no display driver.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:234: SHORT(6)\n  Recognition ignores case and surrounding space.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:252: SHORT(4)\n  Blank lines are dropped.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:252: CLAUSES(1+2) NEG(3) ECHO(causes/cause)\n  Identical text causes no write so a protected file or volume does not itself cause an error when no rewrite is needed.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md:284: SHORT(5)\n  These notices describe preparation's outcome.\ntec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md: 132 sentences, mean 12.6 words, 0.69 joints/sentence, 12% flagged, grade 7.7\n",
+        "stderr": "",
+        "flag_dispositions": [
+          {
+            "line": 11,
+            "flags": "SHORT(2)",
+            "sentence": "source only.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This is the unchanged source-only evidence qualification in the HTML comment."
+          },
+          {
+            "line": 34,
+            "flags": "SHORT(6)",
+            "sentence": "The page is then at CODE.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This gives the local page address after preparation."
+          },
+          {
+            "line": 74,
+            "flags": "SHORT(6)",
+            "sentence": "The execution loop targets 4 MHz.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states the execution-loop clock target without certifying physical speed."
+          },
+          {
+            "line": 81,
+            "flags": "SHORT(6)",
+            "sentence": "Keyboard routing follows the focused element.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This introduces focus-dependent input routing."
+          },
+          {
+            "line": 99,
+            "flags": "SHORT(6)",
+            "sentence": "Startup loads and validates that record.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This specifies loading and validation of the persisted card record."
+          },
+          {
+            "line": 137,
+            "flags": "SHORT(6)",
+            "sentence": "Whole-image opening differs from file import.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This separates whole-image opening from staged file import."
+          },
+          {
+            "line": 156,
+            "flags": "SHORT(6)",
+            "sentence": "Import itself does not flush them.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The absence of an import flush is a preservation consequence."
+          },
+          {
+            "line": 156,
+            "flags": "SHORT(6)",
+            "sentence": "Chapter 18 explains the failed-flush paths.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This supplies the failure-path reference for the preceding flush requirement."
+          },
+          {
+            "line": 168,
+            "flags": "ECHO(file/files)",
+            "sentence": "\"Copy file to drive\" pauses the machine and reads all selected PC files.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The quoted Copy file to drive label names the interface and files describes its multi-file input. Neither is a stylistic echo to delete."
+          },
+          {
+            "line": 178,
+            "flags": "SHORT(5)",
+            "sentence": "Import supplies no force option.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states the lack of a force override during import."
+          },
+          {
+            "line": 185,
+            "flags": "ECHO(save/saves)",
+            "sentence": "With saving enabled, import waits for any older save to finish and then saves the staged image under the same guard.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The older ordinary save and the import save are different operations whose ordering must remain explicit."
+          },
+          {
+            "line": 210,
+            "flags": "SHORT(6)",
+            "sentence": "The page writes no display driver.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This distinguishes startup-text preparation from installing a display driver."
+          },
+          {
+            "line": 234,
+            "flags": "SHORT(6)",
+            "sentence": "Recognition ignores case and surrounding space.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The recognition rule needs both case folding and whitespace handling."
+          },
+          {
+            "line": 252,
+            "flags": "SHORT(4)",
+            "sentence": "Blank lines are dropped.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states an actual startup-text transformation."
+          },
+          {
+            "line": 252,
+            "flags": "CLAUSES(1+2) NEG(3) ECHO(causes/cause)",
+            "sentence": "Identical text causes no write so a protected file or volume does not itself cause an error when no rewrite is needed.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The repeated negatives precisely preserve the no-write/no-error/no-needed-rewrite condition. CC0310 changes only its optional comma."
+          },
+          {
+            "line": 284,
+            "flags": "SHORT(5)",
+            "sentence": "These notices describe preparation's outcome.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This bounds what the literal notices establish, separate from full loader validity."
+          }
+        ]
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "command": [
+          "python3",
+          "/Users/johnhardy/.agents/skills/human-writing/scripts/sentence_complexity.py",
+          "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md"
+        ],
+        "exit_status": 0,
+        "stdout": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:14: SHORT(6)\n  Return or CODE ends the line.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:14: ECHO(characters/character)\n  The maximum is 127 characters and typing the last available character also ends it.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:14: SHORT(6)\n  The echo retains the case typed.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:29: SHORT(3)\n  Spaces separate arguments.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:41: SHORT(4)\n  Thus CODE is CODE.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:41: ECHO(names/name)\n  CODE therefore matches names of up to four characters with type COM, not every name ending in COM (CODE, CODE).\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:48: CLAUSES(2+1) ONE(2)\n  The following retained capture shows an overlong name, a pattern where TYPE requires one file and a second argument where DIR accepts only one.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:100: SHORT(5)\n  The last searches for CODE.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:107: SHORT(4)\n  Each file appears once.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:107: SHORT(4)\n  No match produces CODE.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:113: SHORT(6)\n  Serial uses the 80-column layout.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:119: NEG(2)\n  No name or no matching file produces CODE.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:167: SHORT(5)\n  Both names must be unambiguous.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:167: SHORT(6)\n  Either name may specify the drive.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:167: SHORT(4)\n  Different drives are rejected.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:172: SHORT(6)\n  REN checks the new name first.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:178: CLAUSES(1+2)\n  Otherwise ERA reads through the next Return and erases only when the answer's first character is Y or y.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:178: SHORT(6)\n  Other answers leave the files unchanged.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:184: SHORT(5)\n  No match produces CODE (CODE).\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:184: ECHO(erase/erased)\n  Protection and write failures can stop a multi-file erase after some entries have already been erased.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:192: ECHO(pages/page)\n  The count must be less than the high byte of the word at CODE so the saved pages stop below the resident entry's page.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:218: SHORT(6)\n  An explicit drive suppresses that fallback.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:227: CLAUSES(0+3)\n  A width must be separated from CRT or PICO by a space and must be 80, 40 or 32.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:227: SHORT(5)\n  Other devices take no width.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:227: SHORT(5)\n  Extra text is rejected (CODE).\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md:241: SHORT(6)\n  UNLOAD acts on the newest service.\ntec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md: 147 sentences, mean 11.2 words, 0.69 joints/sentence, 18% flagged, grade 6.8\n",
+        "stderr": "",
+        "flag_dispositions": [
+          {
+            "line": 14,
+            "flags": "SHORT(6)",
+            "sentence": "Return or CODE ends the line.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This names the two actual line-ending inputs."
+          },
+          {
+            "line": 14,
+            "flags": "ECHO(characters/character)",
+            "sentence": "The maximum is 127 characters and typing the last available character also ends it.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This preserves the 127-character maximum and automatic completion at its final character."
+          },
+          {
+            "line": 14,
+            "flags": "SHORT(6)",
+            "sentence": "The echo retains the case typed.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This distinguishes displayed echo case from uppercase execution text."
+          },
+          {
+            "line": 29,
+            "flags": "SHORT(3)",
+            "sentence": "Spaces separate arguments.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states the command argument delimiter."
+          },
+          {
+            "line": 41,
+            "flags": "SHORT(4)",
+            "sentence": "Thus CODE is CODE.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This is the exact worked wildcard expansion, not an empty short conclusion."
+          },
+          {
+            "line": 41,
+            "flags": "ECHO(names/name)",
+            "sentence": "CODE therefore matches names of up to four characters with type COM, not every name ending in COM (CODE, CODE).",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "Plural names and singular every name preserve the restricted four-character match rather than all COM files."
+          },
+          {
+            "line": 48,
+            "flags": "CLAUSES(2+1) ONE(2)",
+            "sentence": "The following retained capture shows an overlong name, a pattern where TYPE requires one file and a second argument where DIR accepts only one.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The three distinct grammar failures introduce a retained capture. The two uses of one specify arity requirements."
+          },
+          {
+            "line": 100,
+            "flags": "SHORT(5)",
+            "sentence": "The last searches for CODE.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This resolves the last listed spelling to its program filename."
+          },
+          {
+            "line": 107,
+            "flags": "SHORT(4)",
+            "sentence": "Each file appears once.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states DIR deduplication of file names."
+          },
+          {
+            "line": 107,
+            "flags": "SHORT(4)",
+            "sentence": "No match produces CODE.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This gives DIR no-match output."
+          },
+          {
+            "line": 113,
+            "flags": "SHORT(6)",
+            "sentence": "Serial uses the 80-column layout.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This fixes the serial listing width independently of display-console width."
+          },
+          {
+            "line": 119,
+            "flags": "NEG(2)",
+            "sentence": "No name or no matching file produces CODE.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The two absent-input/file conditions are distinct causes of the same literal TYPE error."
+          },
+          {
+            "line": 167,
+            "flags": "SHORT(5)",
+            "sentence": "Both names must be unambiguous.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This constrains both rename operands."
+          },
+          {
+            "line": 167,
+            "flags": "SHORT(6)",
+            "sentence": "Either name may specify the drive.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This allows either operand to carry the drive spelling."
+          },
+          {
+            "line": 167,
+            "flags": "SHORT(4)",
+            "sentence": "Different drives are rejected.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This prohibits a cross-drive rename."
+          },
+          {
+            "line": 172,
+            "flags": "SHORT(6)",
+            "sentence": "REN checks the new name first.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states collision checking order before rename."
+          },
+          {
+            "line": 178,
+            "flags": "CLAUSES(1+2)",
+            "sentence": "Otherwise ERA reads through the next Return and erases only when the answer's first character is Y or y.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The confirmation rule preserves input consumption through Return and the exact Y/y condition."
+          },
+          {
+            "line": 178,
+            "flags": "SHORT(6)",
+            "sentence": "Other answers leave the files unchanged.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states the consequence of a non-confirming answer."
+          },
+          {
+            "line": 184,
+            "flags": "SHORT(5)",
+            "sentence": "No match produces CODE (CODE).",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This records ERA no-match output."
+          },
+          {
+            "line": 184,
+            "flags": "ECHO(erase/erased)",
+            "sentence": "Protection and write failures can stop a multi-file erase after some entries have already been erased.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The already-erased entries are the necessary partial-result qualification after a later failure."
+          },
+          {
+            "line": 192,
+            "flags": "ECHO(pages/page)",
+            "sentence": "The count must be less than the high byte of the word at CODE so the saved pages stop below the resident entry's page.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "Pages/page describes the saved range versus the excluded resident-entry page. CC0314 preserves the strict bound."
+          },
+          {
+            "line": 218,
+            "flags": "SHORT(6)",
+            "sentence": "An explicit drive suppresses that fallback.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This excludes A fallback when a drive was explicit."
+          },
+          {
+            "line": 227,
+            "flags": "CLAUSES(0+3)",
+            "sentence": "A width must be separated from CRT or PICO by a space and must be 80, 40 or 32.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "The separation rule and all three permitted widths are exact CON grammar."
+          },
+          {
+            "line": 227,
+            "flags": "SHORT(5)",
+            "sentence": "Other devices take no width.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This excludes width arguments for the other device names."
+          },
+          {
+            "line": 227,
+            "flags": "SHORT(5)",
+            "sentence": "Extra text is rejected (CODE).",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This states the result of trailing unparsed text."
+          },
+          {
+            "line": 241,
+            "flags": "SHORT(6)",
+            "sentence": "UNLOAD acts on the newest service.",
+            "disposition": "retain_after_reading_prompt",
+            "reason": "This specifies newest-first removal selection."
+          }
+        ]
+      }
+    ],
+    "manual_readback": {
+      "changed_contexts": 22,
+      "retained_contexts": 5,
+      "all_resulting_changed_contexts_read_completely": true,
+      "joint_boundaries_checked": [
+        "CC0297",
+        "CC0301",
+        "CC0307",
+        "CC0309",
+        "CC0313"
+      ],
+      "rephrase_complete_sentence_read": "CC0315",
+      "result": "The lookup rephrase preserves named/current drive choice, current-area then user-0 order and restoration in the following sentence. Other changes remove only accepted commas and rewrap those contexts."
+    },
+    "approved_change_comparison": {
+      "result": "passed",
+      "method": "Reconstructed each output from frozen input using only the accepted context replacements. Each context equals the accepted comma removals or exact sentence rephrase after whitespace folding. All other file bytes match the frozen input.",
+      "applied_ids": [
+        "CC0290",
+        "CC0291",
+        "CC0292",
+        "CC0293",
+        "CC0294",
+        "CC0295",
+        "CC0296",
+        "CC0298",
+        "CC0299",
+        "CC0300",
+        "CC0302",
+        "CC0303",
+        "CC0304",
+        "CC0305",
+        "CC0306",
+        "CC0308",
+        "CC0310",
+        "CC0311",
+        "CC0312",
+        "CC0314",
+        "CC0315",
+        "CC0316"
+      ],
+      "retained_ids": [
+        "CC0297",
+        "CC0301",
+        "CC0307",
+        "CC0309",
+        "CC0313"
+      ]
+    },
+    "immutable_comparison": {
+      "result": "byte_equal_in_order",
+      "stream_serialization": "SHA-256 of UTF-8 JSON array with ensure_ascii=False and separators comma/colon. Counts and input/output stream hashes are stored per file.",
+      "totals": {
+        "fences": 33,
+        "comments": 9,
+        "inline_code": 577,
+        "links": 21,
+        "quoted_wording": 26,
+        "front_matter": 5
+      }
+    },
+    "rewrap": {
+      "scope": "Changed prose contexts only. Table rows, retained paragraphs, fences, comments, links and code spans are not blanket-wrapped.",
+      "maximum_changed_prose_line_columns": 80,
+      "limit": 80
+    }
+  },
+  "boundary": "No literal alteration, product execution, root integration, shared-ledger edit or publication. Editorial Python scripts and JSON/hash comparisons are not product runs.",
+  "rewrap_readback_correction": "Initial scoped wrap added spaces before punctuation attached to inline spans. Corrected by preserving complete whitespace-delimited units with protected spans attached to their original punctuation. No additional words or commas changed."
+}
