@@ -67,3 +67,12 @@ from a stopped job without its own decision.
 
 Final navigation, complete reader-order review and independent result
 acceptance remain separate from runtime passes. Publication stays excluded.
+
+## KS48 modelling checkpoint
+
+P3 reports independent modelling closure and KG53 registration on Origo
+main cbdfd466. Production font/cold40 implementation and full qualification
+have been allocated to development. This is not a qualified source offer
+or an opening workflow allocation. Keep BANNER40 prepared but unrun.
+The modelling supplement's initial failure and corrected positive proof
+remain distinct retained records. No physical-display result follows.
