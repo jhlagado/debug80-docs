@@ -15795,10 +15795,10 @@
     "authority": "P3 KD-243 / KS48",
     "width": 40,
     "font": "TEC Compact",
-    "source": "pending qualified adopted production source; modelling closure is not source acceptance",
-    "runtime": "BANNER40 unrun; exact opening workflow allocation still pending; preserved offer17 80-column packet remains UNRUN",
+    "source": "qualified tested8b8664a preparation basis under proposal18; receiver adoption/citation update pending",
+    "runtime": "shared opening/BANNER/pagination/FAIL/PC-extraction packet being frozen; no allocated run; prior80 packet UNRUN",
     "scope": "first-session and authored-banner route; preserve explicit80 and narrow evidence",
-    "modelling": "independently closed; KG53 registered on Origo main cbdfd466; production implementation and full qualification allocated separately"
+    "modelling": "modelling closed atcbdfd466; production qualification and final result review accepted under proposal18"
   },
   "local_form_pass": {
     "change": "93b0c41",
@@ -15812,5 +15812,13 @@
     "source_audit": "8593c93 complete independent82-meaning/40-form review clear; full report terms-independent-review.md",
     "local_forms": "93b0c41/9e1a695 bounded form pass closed",
     "remaining": "opening1–3 first-use credits, adopted-source reconciliation and final whole-book order/publication acceptance"
+  },
+  "next_source_offer": {
+    "proposal": "P3 proposal18 at Origo43d5f328",
+    "tested_source": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+    "record_only_tip": "09c057e",
+    "qualified_review": "reviews/compact-font-40-result.md; KG53/KD243 accepted, two identical741/741 strict passes",
+    "receiver_state": "accepted as preparation basis; current reader mechanism citations remain ea3ef3d until receiver adoption/source review",
+    "runtime": "no book allocation; canonical exact source refresh and sealed command/result review remain separate"
   }
 }

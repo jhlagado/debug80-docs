@@ -25,6 +25,7 @@ without substituting an assumed pin or generated artifact.
 | Authored BANNER | Ordinary TED creation, save/reopen, TAS build/run, edit/rebuild/run and persistence in a fresh machine. Compare actual TAS output with explicit ATOM reference | A finite editor/build rejection control and repaired result must be specified in the exact packet. Verify saved source, status and final output rather than an injected COM or synthetic screen |
 | Chapter3 reading | TYPE the supplied A:SAMPLE.ASM on the same qualified40-column configuration, observe actual pause, continue and return to command input | A separate cancellation case must stop before the unread remainder, erase the pause and reach a genuine ready prompt. Preserve exact keys, row contents and byte boundaries |
 | Held FAIL | Build the exact reviewed no-setup SCF/RET service through the ordinary route. Observe INIT entry, failed installation, unchanged committed top/registry and AREA before/after | Distinguish INIT failure from a bad-header rejection or an unexecuted program. Specify an independently reviewed successful-install/removal control using fresh state. Preserve the original held source/output separately |
+| Chapter5 backup and extraction | Copy and compare the actual saved BANNER card, list B and extract BANNER.ASM to explicit raw/text PC destinations with exact bytes/padding/newline observations | Check a missing-name get through the same CLI: expected failure, no destination created and unchanged image. The held53555e9 case packet supplies all seven finite observations |
 
 The exact offer must fix all payloads, commands, input bytes and finite cases.
 Inputs that do not genuinely overlap belong in a separate bounded unit rather
@@ -37,12 +38,21 @@ Retain successful, failed and stopped evidence for independent result review.
 
 ## Current source prerequisite
 
-KS48 modelling closed and KG53 was registered at Origo cbdfd466. Production
-implementation/full qualification is separately owned. The focused historical
-GLCD-input repair has passed. Parent reports production source/data unchanged
-and still requires two successful strict font runs. This is not yet a qualified
-new source offer or an opening-workflow allocation. BANNER40 remains unrun.
-No physical-display result follows from modelling or a host check.
+P3 proposal18 is recorded at Origo43d5f328 after final independent KG53/KD243
+result acceptance. The exact tested source is
+8b8664a7d93c6dc2e8bce509b9770585e106eedc;09c057e adds qualification records
+only. Two identical741/741 strict runs retain all734 baseline names and
+seven regressions. The qualified raw40/explicit80 TED/SAMPLE workflows remain
+separate from the new authored BANNER proof. No hardware result is inferred.
+
+Freeze the shared preparation against that exact tested source and the
+unchanged native artifacts: mainROM
+fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d,
+D8 9a87dec39a63efc8fdf38ae13d6ec6299763c833fc891de121e2b30f4a1a36ac
+and starter0f3d9e33994ac30865b8675c8f8ce7fc493b13a0a840d8e84b7d708107d4266c.
+The full offer and final review were read. Canonical landing/short refresh,
+receiver adoption and the exact execution receipt remain distinct. There is
+still no book runtime allocation. The preserved80-column packet stays unrun.
 
 ## Closed and retained evidence
 
@@ -70,9 +80,11 @@ checked-at header or a similar artifact never establishes a rerun.
 `compact-proof-plan.md` is the detailed inventory, public-route analysis and
 proposed proof grouping for retained compact candidates. Separate source-only
 candidates and independent static reviews do not qualify bytes or workflows.
-The ea3 PC service writer's case-sensitive uppercase ORG handling and ordinary
-ATOM trailing-INCLUDE route remain obstacles to resolve before their offers.
-No product change is authorised here. LINE is excluded from required reruns.
+The actual service candidates now use uppercase ORG, permitted by the adopted
+directive conventions and required by the existing PC writer. No directive-case
+exception or product fix follows. The ordinary ATOM trailing-INCLUDE reference
+route remains to resolve before those offers. No product change is authorised
+here. LINE is excluded from required reruns.
 
 After result review, insert only the exact qualified example through a complete
 passage/craft check. Final adopted-source citations/maps, all remaining example
