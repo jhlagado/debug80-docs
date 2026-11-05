@@ -186,7 +186,7 @@ functions and line-input paths and the registration/loader/driver callers.
 | BDOS reserve/direct functions | bdoscon.asm:126-168,318-350; bdos.asm:321-433,772-792: pending characters are served before BIOS input; function11 reads ready input intoPENDCHR; function6 output bypasses BDOS processing but still enters video-terminal interpretation in BIOS. |
 | Output order/register safety | bdoscon.asm:178-305: tab spaces useCOLUMN, ECHOCOL updates it before either hook, BIOLST precedesBIOCOT and BC is saved around the former. A replacement BIOS hook may clobberC. Old source's shorthand list/console description is expanded to actual order. |
 | Line input/history | bdos.asm:454-765 covers termination, edit actions, deletion pointers/count, default program bytes23/14 and HFLAG consumption/nonempty HSTORE. bdoscon.asm:368-376 sends erasure straight throughBIOCOT without printer copy. ccp.asm:148-166 setsHFLAG; boot.asm:530-536 clears abandoned-call state. |
-| Timing derivations | build.mjs:25-26,37-74 derives49/50/105/77/70 counts and writesconfig. console.asm:387-421,452-492 shows masking/restoration and bit loops.833/838 are code arithmetic, not new measured runtime. Whole-character9293/9448 and420/sec remain historical78127ec figures from old16. Masking refers to maskable interrupts. |
+| Timing derivations | build.mjs:25-26,37-74 derives49/50/105/77/70 counts and writesconfig. console.asm:387-421,452-492 shows masking/restoration and bit loops.833/838 are code arithmetic, not new measured runtime. Whole-character9293/9448 retain the explicit60cfbdc reproduction in editorial/reviews/book-22.md:1–5,91–92. The approximate420/sec follows at4MHz. Masking refers to maskable interrupts. |
 | Matrix mechanism | keyboard.asm:15-142 scans up to8 steps, keeps highest/prior pressed keys, testsKBLAST and modifiers and queuesarrows.150-220 and tables.asm:40-44 supply character mapping. Caps toggles bit7 ofLATCHV andport. Full scans are evaluated atrow7; KBPOLL may return early after a ready character. |
 | Cells/controls | term.asm:49-200: printable20h-7Eh, reverseattributeOR, droppedhigherbytes, delayedwrap, controls and LF region scroll. video.asm:37-80 and ram.asm:121-134 define drawing/row calls and80-byteLINEBUF. |
 | Parser and parameters | term.asm:236-590 storesESCST/ESCP1/ESCP2, decimalmod256, second-parameterFF sentinel, final>=40 dispatch, '?' skip, strict regionbounds and clip rules. Known finals can still act after'?'; unknown sequences are not universally discarded by their prefix alone. |
@@ -211,8 +211,9 @@ with onlyVIDHOOK's internal invalidation. Status listening is an initial77-poll
 attempt, not a bound on arbitrary repeatedNUL input. No arbitrary NMI safety
 or lossless serial stream is claimed.
 
-The historical captures and measured whole-character costs are retained,
-not repinned or regenerated. The externally named STAT and olderPICO.SVC
+The historical captures remain78127ec. The measured whole-character costs
+retain their actual60cfbdc run attribution, corrected below. Neither was
+regenerated. The externally named STAT and olderPICO.SVC
 comparisons retain their interface meaning; no new external program was run.
 
 ## Completed authorial passes
@@ -276,3 +277,43 @@ and all three capture recipes compare byte-identically with frozen10821b6.
 The Chapter22 sibling target exists. The final owned-path diff check reports
 no whitespace errors. Literal historical trailing spaces remain untouched.
 No automated prose score or runtime pass is claimed.
+
+
+## Bounded serial timing provenance correction
+
+The earlier source/craft review at ca11e3c did not independently establish
+the execution provenance of9293/9448. Accepting old16's broad78127ec header
+for those two measurements was insufficient. This correction is a separate
+retained-report audit, without a new execution or a claim about present timing.
+
+I read editorial/reviews/book-22.md in full. Its lines1–5 identify the product
+as60cfbdc and record the private run copy, abbreviated ROM identity61fced03
+and starter identitye2a3f041. Lines91–92 explicitly record TXBYTE9293 and
+BCONOUT9448 rerun, plus the roughly420-character/second figure and hand-counted
+IFFGET allowances. Both serial numbers therefore retain60cfbdc provenance.
+The report records execution, unlike a broad chapter header or source-only
+instruction comparison. It does not provide a self-contained hashed input and
+output bundle for independent replay here.
+
+The earlier editorial/reviews/book-16.md:169–176 distinguishes TXBYTE9217
+from BCONOUT9372 at98c6416/62d47ed by instruction counting. It is an older
+source/cost account and does not displace Book22's explicit later run record.
+The15-cost-provenance-review.md retained-evidence audit distinguishes the
+78127ec broad-marker averages from complete routine measurements. Its
+CONOUT row attributes9448 to Book22 at60cfbdc. The durable copied Book22
+report under the private Origo book-reader-rewrite/boot-cost-audit evidence
+agrees with the book repository's report. No retained script was imported
+or executed and no new ROM/card measurement was made.
+
+Corrected the hidden historical header, the serial paragraph and the timing
+proof row above. The paragraph now identifies both measured endpoints at
+60cfbdc and states4MHz for the approximate throughput. The833/838 loop costs
+and generated counts remain ea3ef3d source arithmetic, not execution evidence.
+All three complete captures, TERM's shell fence and all three capture command
+comments retain their original78127ec provenance and literal text. A static
+fence comparison confirms that this correction changed none of them.
+
+I re-read the changed sentences and punctuation in their serial-section context.
+The earlier full source/craft review remains separate. This bounded correction
+closes the false78127ec attribution of the two serial costs, not runtime/profile
+or whole-book acceptance. No product, assembler, import, test or capture ran.
