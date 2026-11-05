@@ -15823,7 +15823,7 @@
     "width": 40,
     "font": "TEC Compact",
     "source": "qualified tested8b8664a preparation basis under proposal18; receiver adoption/citation update pending",
-    "runtime": "Attempt02 executed and failed at a later carry observer. Independent review4b5b5a50 accepts completed public workflows only for Chapters1–3/5 authoring. No whole-batch COMPLETE.",
+    "runtime": "Sealed offer05 attempt04 PASSED and independently accepted at Origo c40c79df6e5399082028f2ac0ce6669efbb59b04 for the covered emulator/host workflow batch. Earlier three failures and scoped basic acceptance remain historical. No physical, browser, debugger, whole-book, stage or publication acceptance.",
     "scope": "first-session and authored-banner route; preserve explicit80 and narrow evidence",
     "modelling": "modelling closed atcbdfd466; production qualification and final result review accepted under proposal18"
   },
@@ -15846,7 +15846,7 @@
     "record_only_tip": "09c057e",
     "qualified_review": "reviews/compact-font-40-result.md; KG53/KD243 accepted, two identical741/741 strict passes",
     "receiver_state": "accepted as preparation basis; current reader mechanism citations remain ea3ef3d until receiver adoption/source review",
-    "runtime": "no book allocation; canonical exact source refresh and sealed command/result review remain separate",
+    "runtime": "Covered book emulator/host batch executed once as sealed offer05 attempt04 and independently accepted at Origo c40c79df6e5399082028f2ac0ce6669efbb59b04. Reader source adoption and final source/navigation acceptance remain separate.",
     "canonical_landing_receipt": {
       "commit": "962853f499f05faf281f6cdff1deca8959f58c2b",
       "tested_commit": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
@@ -16061,7 +16061,7 @@
     "reader_boundary": "Earlier independent4b5b5a50 opening/PC7/pager acceptance remains available. It is not held by this later failure."
   },
   "opening_recut05": {
-    "status": "Source checkpoint WIP / UNRUN; actual source clearance, final seal, approval and allocation absent",
+    "status": "Final sealed offer05 executed once as attempt04. PASSED/COMPLETE actual result independently accepted within the covered emulator/host workflow scope; earlier failures remain failures.",
     "checkpoint_commit": "Origo9ebc28041af3f80c64b207145973c6749fbff607",
     "batch_sha256": "41843b99b1c99a0c2ebfea96a211011aa5ec179e1da38ba1d185d0c0c41aa4b4",
     "three_file_diff_bytes": 4350,
@@ -16071,7 +16071,17 @@
     "lead_inert_check": "Archive, manifest, cases, chapter05 shell, PASS, FAIL and AREA inputs byte-identical to offer04. Current batch and complete diff length/SHA independently verified. No import or execution.",
     "fresh_stage": "/tmp/ks48-book-next-batch04",
     "guard_log": "/tmp/ks48-book-next-batch04-guard.jsonl",
-    "preservation": "All prior packets and failed attempts retained; no case/cap change or retry authority."
+    "preservation": "All prior packets, three failed attempts and earlier partial basic acceptance retained. Cases, caps and original inputs unchanged. Attempt04 was separately allocated and ran once without retry.",
+    "final_metadata_commit": "Origo 2fce0556ea491741431e9afa6b187a6f997905f1",
+    "source_clearance": {
+      "commit": "Origo 0e07f18d53352d583edf0e0614b2dbe1b455d290",
+      "path": "studies/p3-tec-os/reviews/book-next-batch-padding-recut.md",
+      "sha256": "2908523366f9eb6eb1e422120fab00fa9fd9444254e479f20ab854aed60a69c4"
+    },
+    "seal_sha256": "c9040128092a9d6919bc8ceb1a567bf72380e7b685e6264efe1a859890015a55",
+    "archive_sha256": "21af1c2e0ac325e7a68d8dbce3a50e8f5cc1a167133caf378eefa3f8d6727943",
+    "manifest_sha256": "4e956e0caff7e62b4604e6b68e7685f2e15dfaac21a77ef24d1360cc3e53dd29",
+    "final_inert_verification": "All28 final sealed file identities and580 payload identities verified against actual bytes and seal at2fce0556. Actual complete-review receipt and all retained attempt04 receipt/archive hashes verified. No extraction, product import or runtime."
   },
   "source_adoption_selection": {
     "authority": "Delegated KS47/KD242 book revision and P3 source-authority instruction962853f; receiver selection under proposal18 after required opening/BANNER verification",
@@ -16121,5 +16131,35 @@
       }
     ],
     "chapter5": "All seven actual extraction cases inserted379dd12; freshfixture qualification55807ed independentlyclosedb911e84. No new execution."
+  },
+  "opening_attempt04": {
+    "status": "PASSED / COMPLETE; independently accepted for the covered emulator/host workflow batch",
+    "offer_commit": "Origo 2fce0556ea491741431e9afa6b187a6f997905f1",
+    "retention_commit": "Origo 06b3e05a0ccb0f18e7f1f9f9d7c2a3f1aae2a553",
+    "independent_result_review": {
+      "commit": "Origo c40c79df6e5399082028f2ac0ce6669efbb59b04",
+      "path": "studies/p3-tec-os/reviews/book-complete-workflows.md",
+      "sha256": "4ad1aeba6185f5ea5377281780e4faeb352a11ee49f2398c9afb2a0751de2c37"
+    },
+    "result_sha256": "fe7ed96287741753150b1c7475facc53e6dea85abaaaf108b414d7266e32c23d",
+    "complete_archive": {
+      "path": "studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt04/complete-attempt.tar.gz",
+      "bytes": 3602357,
+      "sha256": "f07ad35f5aee950bd0438143760e835f28e184dc59d7e6649f6264d2f70d8e9a"
+    },
+    "approval_id": "KS47-OFFER05-2fce0556",
+    "allocation_id": "KS47-BATCH04-20261106",
+    "tested_source": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+    "landed_source": "962853f499f05faf281f6cdff1deca8959f58c2b",
+    "source_relation": "Only qualification-record differences from tested source to landed source",
+    "milestones": 138,
+    "atom_references": 9,
+    "fresh_machines": 11,
+    "charged_cycles": 1786997239,
+    "cost": "21.5 guarded seconds, outer21.775seconds, sampled peak474MB, four processes, exit0, no retry. Four attempts total64.7 guarded seconds.",
+    "caps": "120seconds whole job,600MB process tree,450MB main heap,12billion charged cycles, zero lock wait and no retry",
+    "accepted_scope": "Covered cold40 opening/directSAMPLE, TED/SAMPLE, BANNER save/reopen/build/run/edit/rebuild/persistence, PC7 and three pager cases. Both FAIL cases retain INIT1/carry-return1/REMOVE0/scan1 and complete rollback. PASS registry/RST targetB82B, exact000F padding normalization, repeated-load refusal without INIT, FAIL-with-control preservation, unload with generation0to1, restored AREA47268/SERVICES, empty-unload refusal and final flush are independently accepted.",
+    "evidence_scope": "All525 earlier accepted basic/pager artifacts byte-identical; seven entry/return/zero/warm-return sets and four SAMPLE device-write sequences;138 screen/mask reconstructions from raw VRAM/registers and pinned font; four parsed service cards and original files/header/reference padding exact; wrong-ROM/profile controls retained.",
+    "limits": "Earlier three failures remain failures. Physical hardware/audio, browser, debugger, complete book quality, stage closure and publication are outside acceptance. Final reader-order and source/navigation checks continue."
   }
 }
