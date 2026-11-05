@@ -15796,7 +15796,7 @@
     "width": 40,
     "font": "TEC Compact",
     "source": "qualified tested8b8664a preparation basis under proposal18; receiver adoption/citation update pending",
-    "runtime": "shared opening/BANNER/pagination/FAIL/PC-extraction packet being frozen; no allocated run; prior80 packet UNRUN",
+    "runtime": "Attempt02 executed and failed at a later carry observer. Independent review4b5b5a50 accepts completed public workflows only for Chapters1–3/5 authoring. No whole-batch COMPLETE.",
     "scope": "first-session and authored-banner route; preserve explicit80 and narrow evidence",
     "modelling": "modelling closed atcbdfd466; production qualification and final result review accepted under proposal18"
   },
@@ -15946,7 +15946,7 @@
     "reader_state": "Opening1–3 and worked Chapter5 extraction insertion remain held"
   },
   "opening_recut03": {
-    "status": "Source independently CLEAR, final sealed metadata UNRUN; bounded metadata comparison and fresh allocation pending",
+    "status": "Executed once under P3 allocation827ba198. Attempt02 failed late; retained ate77c7ef0. Earlier public workflows separately accepted4b5b5a50.",
     "source_commit": "Origo1443dd8501d191026fe8d17ffe5f90e5641d7c9b",
     "batch_sha256": "de52e3a340b711975b0ace15463a6c5acb59a86e67c44b2b86f9ef6ea238f66e",
     "complete_executable_diff_sha256": "0420ab31bbc63163fe66da4e12eca21cae5026e2262bbc9e7c4cd3f695e3ad5c",
@@ -15979,5 +15979,36 @@
     "current_contracts": "Raw cold40 differs from host/UI80. Bare selectors retain width/claim, explicit32/40/80 remain, current PICOrecordv3 and five-pixel/eight-row font encoding preserved.",
     "native_boundary": "Native16020/364 already exists at baselineea3; historical78127ec16018/366 tables keep their measured identity. Equal addresses do not transfer provenance.",
     "remaining": "Actual new workflows and receiving source/pin decision, semantic citation recheck, whole changed-passage craft/gate and independent acceptance. No historical capture, cost, map or reader header silently repinned."
+  },
+  "opening_attempt02": {
+    "status": "FAILED globally; completed public workflows independently accepted for scoped authoring",
+    "retention_commit": "Origo e77c7ef0",
+    "result_sha256": "e4b5ff29b5b8ab7dc0c44a3f1d807dbd08974776665c5cc965cf8c3e15bf9350",
+    "milestones": 124,
+    "charged_cycles": 1766159199,
+    "cost": "Guard21.3seconds/470MB/four processes. Charged cycles include conservative ATOM charges.",
+    "failure": "KE259: observer read nonexistent cpu.cpu.f. Actual carry is numeric cpu.cpu.flags.C. This proves no product defect or successful later service result.",
+    "scoped_review": {
+      "commit": "Origo4b5b5a50",
+      "path": "studies/p3-tec-os/reviews/book-opening-workflows.md",
+      "scope": "Cold40/directSAMPLE, separateTED/SAMPLE, whole-fileBANNER badbuild/repair/two variants/persistence, all7host cases and all3pager cases",
+      "reading": "Lead read complete actual frozen4b5b5a50 receipt. It accepts18card inventories,124screens/masks,9ATOM references and seven entry/RET-zero/warm observation sets within stated limits."
+    },
+    "reader_action": "Release Chapters1–3 drafting and Chapter5 verified extraction insertion. Preserve actual historical provenance for uncovered file cases.",
+    "limits": "No advanced service, whole-batch, physical, audible, browser, debugger, final-book, stage or publication acceptance."
+  },
+  "opening_recut04": {
+    "source_commit": "Origoa01112ed0a8a4fe91b74370d0304eac6c27d5f7c",
+    "final_metadata_commit": "Origof4d27cbf",
+    "batch_sha256": "9fa0178a6124b7abc98d3c3e4ce7eb3334787e994dbca100660ea7d6d6aee3f8",
+    "source_diff_sha256": "cdf6b546f42afdfa1ca47b30569c74bba59658cccdbcb7c0fc6aeaeafe59b3b6",
+    "actual_clearance": "Origo30ebf44a, reviews/book-next-batch-flags-recut.md",
+    "receipt_sha256": "04746dcfbb02462434c2a5e2199dad75e3cbca8b2bce9cb38f6ad62e9669ce39",
+    "lead_reading": "Read complete actual receipt, complete CPU-field audit and complete three-file diff. Only flags.C===1 observer and fresh attempt03 staging/log tokens change executables.",
+    "lead_inert_check": "All578 previous tar members retained exactly. Sole added member is actual flags-recut receipt, giving579. Both full inventories match manifests and all26 child seal bindings match actual bytes. No import, extraction or execution.",
+    "seal_sha256": "b888f0af9c834bdec0e26252cec7e5ebe95c11a67672470e21ded53b60811302",
+    "archive_sha256": "ea217b453b0abde866316ae75782be78462ca230e5bcbc84ba86365f0c038562",
+    "manifest_sha256": "ebee9eabd486e324324c4855a4d58bc3273321b7d69bb1b7324624bb9d9dc467",
+    "status": "UNRUN as sealed. P3 owns separate final metadata review, allocation and any single attempt03 run. No case/budget expansion."
   }
 }
