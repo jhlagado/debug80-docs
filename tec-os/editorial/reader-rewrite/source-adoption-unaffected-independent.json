@@ -1,0 +1,1271 @@
+{
+  "schema_version": 1,
+  "status": "clear_bounded_independent_application_review",
+  "reviewed_commits": {
+    "application": "b2e54968291a892ae335e04b598efbbc0fc3ac1f",
+    "corrective": "d8ecfa59d89e5d06c68d713a39b1415cd78ed0b9",
+    "application_parent": "208585c1b5a4ffdca6290c0e03bb05aa44a1fb0a",
+    "selected_source": "962853f499f05faf281f6cdff1deca8959f58c2b",
+    "selection": "9ba1f59bb8032623b4aac6cae63bbdcdf366410a"
+  },
+  "scope": {
+    "readers": 22,
+    "changed_full_contexts": 101,
+    "mode": "Read-only review of readers and records. Only this JSON is authored.",
+    "excluded_other_review": "Bacon coverage at baf7b75 is separate and is not duplicated.",
+    "excluded_later_editorial_commit": "ea499490982ca34257979027105d4275b57a5ffb",
+    "later_editorial_boundary": "Later changes to 4/5/6/8/9/A/J are excluded. Overlapping reviewed readers retain the selected-source authority in that later snapshot. No conflicting source header was found. This does not clear the later editorial bodies."
+  },
+  "manifest_identities": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/source-adoption-unaffected-audit.json",
+      "commit": "d8ecfa59d89e5d06c68d713a39b1415cd78ed0b9",
+      "bytes": 1381804,
+      "sha256": "083efe2b179e16c0a557ed2ec0a09f4fd679ec5ec26b562d5f8cccc372d2b717"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/source-adoption-unaffected-application.json",
+      "commit": "d8ecfa59d89e5d06c68d713a39b1415cd78ed0b9",
+      "bytes": 1165409,
+      "sha256": "0b4bb076a06dba1828369907f9062442edf596342763006e5de7a0fd2eb1f9af"
+    }
+  ],
+  "methods": {
+    "reading": "Read all 101 changed complete paragraphs, table contexts and authority comments at the corrected commit, including paired provenance paragraphs and surrounding historical scopes. Read the actual two diffs and relevant complete source routines as Git text.",
+    "static_comparisons": "Independently reconstructed each initial application from frozen input, exact edit operations and seven rewraps. Checked manifest reader/pass-record hashes and follow-on correction hashes. Compared fences, non-authority comments and links directly.",
+    "identity_records": {
+      "tracked_source_identities_verified": 131,
+      "explicit_null_artifact_or_path_records": 52,
+      "interpretation": "The 52 null entries are explicitly untracked/generated artifacts or non-file path mentions, not 52 missing source proofs. Generator-backed includes and foreign Thorium source retain their recorded classifications."
+    }
+  },
+  "source_semantic_checks": [
+    {
+      "source": "tools/build.mjs:62-139,223-232,235-271",
+      "decision": "clear",
+      "support": "JSON generation, two-pass WSBASE placement, RAM/interface bounds and minimum-TPA check support the moved ranges. The arithmetic guard is not a boot or measurement."
+    },
+    {
+      "source": "tools/media.mjs:66-91,169-188,206-262",
+      "decision": "clear",
+      "support": "Reads the matching native map/census/ROM, constructs recipes and publishes memory-map documentation. Font preflight precedes replacement. The notice companion does not change starter card membership."
+    },
+    {
+      "source": "src/pico.asm:36-159,461-477",
+      "decision": "clear",
+      "support": "Cold template is 40; PISTART requires Matrix enablement after the display probe and publishes the permanent record. Width selection accepts 80/40/32 and rejects active claims. VPAIR restores the saved interrupt state."
+    },
+    {
+      "source": "host/card.mjs:30-73,75-117",
+      "decision": "clear",
+      "support": "Complete staged preparation and display-piece rewriting preserve conditional pieces. Every selected PICO width gets an explicit line including 80. Failures leave staged edits unpublished."
+    },
+    {
+      "source": "src/ram.asm:1-485; src/boot.asm:49-215,412-559,679-800",
+      "decision": "clear",
+      "support": "Declarations and cold/warm clear boundaries support the changed lifetime and page-zero paragraphs. Allocation-vector slots and BDOS stub packing match the described rules. These sources do not reproduce historical map addresses."
+    },
+    {
+      "source": "src/loader.asm:128-173,281-317,421-441,519-662; src/tables.asm:143-146",
+      "decision": "clear",
+      "support": "Owner removal, declaration subtraction, page publication, failed-INIT cleanup and restart release support the changed references and stack limits. A retained failed installation is distinct from publication of records."
+    },
+    {
+      "source": "src/services.asm:95-105,211-279; src/ram.asm:138-139,433-434; src/layout.asm:92-102",
+      "decision": "clear",
+      "support": "VCLAIM is separate storage. VIDEO stores CDCLM there and clears it on release. INFO ORs it with CONDEV into B. The corrected table properly omits stored CONDEV bit 4."
+    },
+    {
+      "source": "src/cpm/bdos.asm:137-142,245-253,755-765; src/cpm/ccp.asm:249-267,519-536",
+      "decision": "clear",
+      "support": "Caller-stack restoration, history-before-return ordering, later uppercase conversion and inherited program return word support the changed containing paragraphs."
+    },
+    {
+      "source": "test/stacks.test.mjs:1-78,212-264; drivers/glcd.asm:30-37",
+      "decision": "clear",
+      "support": "The source asserts guarded high-water workloads, an LDIR exclusion, optional NMI triggering and quarter-stack bounds. GLCD declares 2/0/6 additional bytes. Neither reading constitutes a new passing run."
+    }
+  ],
+  "preservation": {
+    "fences_exact": 144,
+    "non_authority_comments_exact": 58,
+    "links_exact_in_all_readers": true,
+    "historical_boundary": "78127ec maps/captures, 58d4345 GLCD walkthrough, 60cfbdc and 5a25178 cache costs, 621201d GLCD dump and the independently qualified ea3 LINE evidence retain their original scopes. Chapter5 extraction keeps its separate 962/tested8b/receipt4b5b5a50 identities. No measurement or successful workflow is transferred by source equality.",
+    "corrective_table_changes": "Chapter24 changes only two authorial semicolons to full stops in the historical layout table. Addresses, sizes and inline literals remain exact. Chapter25 deliberately removes the incorrect bit4 row and adds the separate VCLAIM/INFO explanation.",
+    "native_boundary": "No historical 16018/366 map is replaced by current native 16020/364. Matching addresses are not used to transfer provenance."
+  },
+  "editorial_assessment": {
+    "changed_passages": "Changed full passages preserve grammar, references and historical/current separation. Seven rewraps preserve literal and link adjacency. The corrective sentences explain storage before the combined INFO result.",
+    "reported_gates": "Read the recorded gate findings/dispositions and changed-context complexity accounting. No new hard gate finding is reported. Existing untouched craft prompts are not reclassified as newly written reader prose. These utility records do not establish semantic or runtime correctness."
+  },
+  "findings": [],
+  "readers": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "input_sha256": "22106877815aa329d5c1affe54eb4c234fc82d9ac206fdba7c4766ce46d10cc2",
+      "application_sha256": "e71d425ea96037dce56fa272239da9239442cf947af36b8cfb80300cc5987110",
+      "corrected_sha256": "e71d425ea96037dce56fa272239da9239442cf947af36b8cfb80300cc5987110",
+      "fences": 10,
+      "changed_contexts": 1,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 10,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 4. Drives and user areas",
+          "sha256": "524fbdc9566bc3bb9e67802293a33c28ebf9e140d0842f0470f3632e17e9039c",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        }
+      ],
+      "changed_claim_assessment": "Only the source-authority comment changed. No reader-body claim or example was revised by these commits.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "input_sha256": "466243033c60a96cb0027b71a6fea50028c24ed350d1d00498c260cc8d4ffd54",
+      "application_sha256": "58170a22c1d86ae5fbc41ea1289f3bdc175da9b91c051948705c1a49fe01d9ee",
+      "corrected_sha256": "58170a22c1d86ae5fbc41ea1289f3bdc175da9b91c051948705c1a49fe01d9ee",
+      "fences": 28,
+      "changed_contexts": 1,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 39,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 5. Cards on the PC",
+          "sha256": "4e4c062e9f2135c1d8f631959119529dd202ce0194ad76248df0141aab328844",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        }
+      ],
+      "changed_claim_assessment": "Only the source-authority comment changed. No reader-body claim or example was revised by these commits.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "input_sha256": "8f323d975b7b2be1c46613237c332fabbcea2f0a2a712054cdf8f3fbf2544764",
+      "application_sha256": "78e62b2fac855a0814ab001fc4c39577a11fd1fb0bf5a203c14cf6fdbb2e15a6",
+      "corrected_sha256": "78e62b2fac855a0814ab001fc4c39577a11fd1fb0bf5a203c14cf6fdbb2e15a6",
+      "fences": 4,
+      "changed_contexts": 1,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 0,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 8. Call TEC-OS",
+          "sha256": "5d7a671fe87b803b62ea41a0fb05020b8c4d935a373aa39e9044257ed12b308c",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        }
+      ],
+      "changed_claim_assessment": "Only the source-authority comment changed. No reader-body claim or example was revised by these commits.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "input_sha256": "193ccd41d8a6e6492ae65c96ecd4b126e1098711b28af53aa2e7ae68f7a11f2d",
+      "application_sha256": "a204c119deb8f9e7e8dbe9518412d7504bd93e93a7934eab04204e3c56c03096",
+      "corrected_sha256": "a204c119deb8f9e7e8dbe9518412d7504bd93e93a7934eab04204e3c56c03096",
+      "fences": 3,
+      "changed_contexts": 1,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 3,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 9. Read and write a file",
+          "sha256": "69b0613549adb4f31c963a476f409a32f28c8008b3ed645fdb658334ccff4241",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        }
+      ],
+      "changed_claim_assessment": "Only the source-authority comment changed. No reader-body claim or example was revised by these commits.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "input_sha256": "32d5806fb11659ee611b34b65ed0fced7d6bdb88f3b69c53d0159d96a7997395",
+      "application_sha256": "0a252eb5cdbe822dec84fbd13598a1ca0b3a05f5bf16549dc13d71ff44ccb690",
+      "corrected_sha256": "0a252eb5cdbe822dec84fbd13598a1ca0b3a05f5bf16549dc13d71ff44ccb690",
+      "fences": 11,
+      "changed_contexts": 1,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 12,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 10. Memory for programs",
+          "sha256": "450bb050864a717c4a80e182fe7bab780632ca92ca90b1b0891d45292812c301",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        }
+      ],
+      "changed_claim_assessment": "Only the source-authority comment changed. No reader-body claim or example was revised by these commits.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "input_sha256": "bab07f9762cbd617f55b7fe9eaf90974cae4d772c5d765f989d5ffa414909d41",
+      "application_sha256": "02ff3fbf4ab97eb82db0e4de9d4afa7f1a6a6f7c251647da836cda83c7660f84",
+      "corrected_sha256": "02ff3fbf4ab97eb82db0e4de9d4afa7f1a6a6f7c251647da836cda83c7660f84",
+      "fences": 14,
+      "changed_contexts": 1,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 15,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 12. Results and command chains",
+          "sha256": "dd49895d019998546dbba02cb396a77e6f1e0bab785aaae9b3707b9e3cecd222",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        }
+      ],
+      "changed_claim_assessment": "Only the source-authority comment changed. No reader-body claim or example was revised by these commits.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "input_sha256": "311c04f9739521b51e961d1355636d263bb0fa8270a8dbd68184bbe8b0762124",
+      "application_sha256": "8c27d3e8047a2a2123ee5e257451f2f80632b613461784a5b589426d42654b08",
+      "corrected_sha256": "8c27d3e8047a2a2123ee5e257451f2f80632b613461784a5b589426d42654b08",
+      "fences": 11,
+      "changed_contexts": 1,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 19,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 13. Write a resident service",
+          "sha256": "7aba009c2a2e6256ee689218addabf4b2211960cd5a72db6dbedc65563109037",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        }
+      ],
+      "changed_claim_assessment": "Only the source-authority comment changed. No reader-body claim or example was revised by these commits.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md",
+      "input_sha256": "97a25dfb7dc2d478658d948fc3dd2a219a4f5dc2067c1e9e91fb20d75928787b",
+      "application_sha256": "1a16edcb750979f08204da115e698360a17efa87676d4857e354c1a201524b3c",
+      "corrected_sha256": "1a16edcb750979f08204da115e698360a17efa87676d4857e354c1a201524b3c",
+      "fences": 0,
+      "changed_contexts": 31,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 97,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 14. State and memory inside TEC-OS",
+          "sha256": "375d027a37552b8d0ce64851a149e251e50af7f16453cb8b7cbf9d38518ba831",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        },
+        {
+          "line": 19,
+          "nearest_heading": "# 14. State and memory inside TEC-OS",
+          "sha256": "f92930a0c985ac6477679aeeb50d2a68ab3bee8ebedfb8273796a3f0861770de",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 32,
+          "nearest_heading": "## Two banks at the same addresses",
+          "sha256": "1316e7028c7d27ac760ca70c6f72dac29dfc84d66e68b0bde4083cda1ad679b9",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 44,
+          "nearest_heading": "## Two banks at the same addresses",
+          "sha256": "710d77be4a30d819563842c54c1973d0c2c6b4fd1cd86b9c8effa6feb3672eab",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 51,
+          "nearest_heading": "## Two banks at the same addresses",
+          "sha256": "ac7cfdf41f3ee0d8594848c61ed37c49ae970a53a44d176a2231ac91fba076e9",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 60,
+          "nearest_heading": "## Two banks at the same addresses",
+          "sha256": "bfe64d6a6dc4a4a6a4a33011fa6b8ca6beabfc30a66dc0c37a1dc767f6d2a311",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 69,
+          "nearest_heading": "## The workspace across a program exit",
+          "sha256": "fd1dee73b0a55996d62c9380350946b4a803495bd21346a5875b265e02feacae",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 77,
+          "nearest_heading": "## The workspace across a program exit",
+          "sha256": "26cd587280ec76e4cbeb26b5b60453fca7bfa9dd6f515108887dbe17dec5dd20",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 96,
+          "nearest_heading": "## The workspace across a program exit",
+          "sha256": "e5853ca754f9d169f8a456294ab5aa1ca587b2e8109986a96aa16efb5dcc4ea6",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 103,
+          "nearest_heading": "## The workspace across a program exit",
+          "sha256": "d02687f36b7069cfa2cd39d09be9de0798005f8cd2f26c00e33c9665346e8f85",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 112,
+          "nearest_heading": "## The workspace across a program exit",
+          "sha256": "68f3ebe76d396a56a67ec1aaa1d7bbfd700311fdb1afd0aaa271e74b07b5f1b5",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 122,
+          "nearest_heading": "## The workspace across a program exit",
+          "sha256": "e90765142dccdf349e6ab93d7fe0fa37f63e6b47aedd8f1a600046cf84df889e",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 129,
+          "nearest_heading": "## The workspace across a program exit",
+          "sha256": "39b32f251a1745492d50dda3b5103a7d7b4b5c7c3a7ba39837c647da75413677",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 143,
+          "nearest_heading": "## Allocation vectors below the workspace",
+          "sha256": "546480b71271e51d3c3b0c082af19563206684675e6574acd3dfb1daa574609a",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 154,
+          "nearest_heading": "## Allocation vectors below the workspace",
+          "sha256": "41ebeb4aa034522709ac1677e6e681d80dd0c380ee83f9d1b1ab18171795a341",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 164,
+          "nearest_heading": "## Allocation vectors below the workspace",
+          "sha256": "391e78f4f2d91111535857701f2872338f9a33f7ead8adc3cea5c35cf744bf6c",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 171,
+          "nearest_heading": "## Allocation vectors below the workspace",
+          "sha256": "0fc07f270867845476b93004402b65a0c11536244f6d39032fa8c6c3f36290ae",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 181,
+          "nearest_heading": "## Allocation vectors below the workspace",
+          "sha256": "df7780cb9e463e4f7879f15fca68d63e6ee9e8720520e4f10856da7e1b6a29fa",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 196,
+          "nearest_heading": "## Page zero is rebuilt selectively",
+          "sha256": "b0ed7dab133a8fc13f2f6b08146112ce89870b655329c363888dfbd7ccae630d",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 204,
+          "nearest_heading": "## Page zero is rebuilt selectively",
+          "sha256": "880990ebc744b9c1967f9f7b249b253ad5ad85bec9c290a1f73caa9187c883c8",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 212,
+          "nearest_heading": "## Page zero is rebuilt selectively",
+          "sha256": "bf563c9180d08b9bf85a076fb58d065afbdea2930dd82fe2db35f6b8829a483d",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 224,
+          "nearest_heading": "## Four stacks for different stages",
+          "sha256": "5873614852d0ce84ef48dd571fa8873e6276459139d4ad4c1903df998bf9ae22",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 234,
+          "nearest_heading": "## Four stacks for different stages",
+          "sha256": "584c53350c6c7c8983d75987c9ab6c4b373c60eb598f07ce8c636be09c6fced2",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 244,
+          "nearest_heading": "## Four stacks for different stages",
+          "sha256": "783aa772f14ddbe8190ffe649e71c400bc0bd6e93a3c3c513c01203bd9049487",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 252,
+          "nearest_heading": "## Four stacks for different stages",
+          "sha256": "d0285c264564625c7394a746dc8f85d4851525c4899a6e044870a685a8b543ef",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 269,
+          "nearest_heading": "## Four stacks for different stages",
+          "sha256": "2dc6100b8293e6ff0facc03239b1574fad7d39cf2262136179e828ef97df7805",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 281,
+          "nearest_heading": "## Four stacks for different stages",
+          "sha256": "2e97569e2a8ea2d4bc4f4c8a92ee07971120b82c70a44e25e2153d98fbabd1d2",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 290,
+          "nearest_heading": "## EXPAND 1 and the stack boundary",
+          "sha256": "c4043297fef39c4e2f73b48c16ed02708256214435bda39e5491c05d0d789c8f",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 299,
+          "nearest_heading": "## EXPAND 1 and the stack boundary",
+          "sha256": "f130043bc8595e94a4eba7d8c172e1179ab7b65ec0547bdd84fcb7c1f334d0b0",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 306,
+          "nearest_heading": "## EXPAND 1 and the stack boundary",
+          "sha256": "b7a3788825707b1445c269bc7b875627cdf9008f445167f020720ca54e0231d6",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        },
+        {
+          "line": 317,
+          "nearest_heading": "## EXPAND 1 and the stack boundary",
+          "sha256": "2beba02e9f8a9f631e218e01f1ca0806da96d741fa4d83032ed04151ada1cac5",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths."
+        }
+      ],
+      "changed_claim_assessment": "The refreshed references support bank selection, workspace lifetimes, allocation-vector packing, page-zero publication, stack ownership and reservation rules. Build guards and stack-test assertions remain distinct from the retained historical addresses and measured depths.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/17-card-blocks-and-volumes.md",
+      "input_sha256": "fc6032cba645d297e9f771fcb4e1262333f0b9c579fdf78273fea952539d07dd",
+      "application_sha256": "99083f0eff6168cd684c3eef3d1cfad54cc604b92ca125d3f600e15a95686c17",
+      "corrected_sha256": "99083f0eff6168cd684c3eef3d1cfad54cc604b92ca125d3f600e15a95686c17",
+      "fences": 3,
+      "changed_contexts": 2,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 143,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 17. Card blocks and volumes",
+          "sha256": "8e30c1562a49629c997fb9a31818cba3f87128e3229a046088de6f0bedf1eba2",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        },
+        {
+          "line": 162,
+          "nearest_heading": "## Container blocks and validation",
+          "sha256": "9e672b33c6b018f62a2bba931da52f09f61b640f8ab6f528c57099307feab1fd",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The generation function emits format equates and geometry data from the shared JSON. The moved range does not assert a generated artifact was built here."
+        }
+      ],
+      "changed_claim_assessment": "The generation function emits format equates and geometry data from the shared JSON. The moved range does not assert a generated artifact was built here.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "input_sha256": "e4540d9bf5c529190a555a80c278c28542a9394924884b3345643dd34e71e845",
+      "application_sha256": "96a6172931a78f8eb3a07295ca4b87dd56a2dde6e659a211c1a90e67134d9677",
+      "corrected_sha256": "96a6172931a78f8eb3a07295ca4b87dd56a2dde6e659a211c1a90e67134d9677",
+      "fences": 4,
+      "changed_contexts": 2,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 89,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 18. Cache and persistence",
+          "sha256": "2f1787c3b49f5ba32277da66e5b49577f2576b9e7735c3ff4dd64edc085dfb3a",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        },
+        {
+          "line": 421,
+          "nearest_heading": "## Time with maskable interrupts off",
+          "sha256": "7af40a7acb81d5be590a5d75cae012c97a923bc010b48885b3f666c1b32e22a7",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "VPAIR saves the IFFGET flags, disables interrupts for the control-port pair and enables them only when the saved state requires it. The moved citation supports that restoration contract without repinning timing evidence."
+        }
+      ],
+      "changed_claim_assessment": "VPAIR saves the IFFGET flags, disables interrupts for the control-port pair and enables them only when the saved state requires it. The moved citation supports that restoration contract without repinning timing evidence.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "input_sha256": "2ea12d0cac1f016654128cf31d28a404251d03fa4903285e3008425056a5daaa",
+      "application_sha256": "af25110f0117d8e6b31640ddf2462d66ce89bc2ca2d1e6e51ca0b464c6589a4d",
+      "corrected_sha256": "af25110f0117d8e6b31640ddf2462d66ce89bc2ca2d1e6e51ca0b464c6589a4d",
+      "fences": 0,
+      "changed_contexts": 1,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 146,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 19. A file through the BDOS",
+          "sha256": "82979d37d2bda2aec02fcb46d82383a4fab2b761c71dbe67bd276c2f3c2739df",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        }
+      ],
+      "changed_claim_assessment": "Only the source-authority comment changed. No reader-body claim or example was revised by these commits.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "input_sha256": "ba2c3938f348f9a44fd756438a1941e4ac49580567575a9c9c9d0bd3c182b5c4",
+      "application_sha256": "693da4a88d3991143acbfe3185746eaf5e1dd2bfe847454514c43f28894e361a",
+      "corrected_sha256": "693da4a88d3991143acbfe3185746eaf5e1dd2bfe847454514c43f28894e361a",
+      "fences": 2,
+      "changed_contexts": 2,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 109,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 21. Chains across a warm boot",
+          "sha256": "dcd62b11aaf1093581548b9ff37aa73aa09b4cecb103e6e2c4c1da35330580c0",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        },
+        {
+          "line": 41,
+          "nearest_heading": "## The retained line",
+          "sha256": "82b886b7eed3490952489cb337f3a905b58e7115ade8a82b654bf80325b5de2e",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The changed sentence labels source inspection separately from the unchanged 78127ec map and table."
+        }
+      ],
+      "changed_claim_assessment": "The changed sentence labels source inspection separately from the unchanged 78127ec map and table.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/22-the-history-ring.md",
+      "input_sha256": "4d797242269cdc224b040fadb88dd397d0632439aff422670fc9f058fbe9dffc",
+      "application_sha256": "cb91643673268a8b0948298be5c1b865acd2ce63d79e73033b5333d7347c8c0d",
+      "corrected_sha256": "cb91643673268a8b0948298be5c1b865acd2ce63d79e73033b5333d7347c8c0d",
+      "fences": 5,
+      "changed_contexts": 2,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 81,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 22. The history ring",
+          "sha256": "36be24d4ac1766fb5fed223f561694c09523c265aceb860c410d1a063cdd92ea",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        },
+        {
+          "line": 89,
+          "nearest_heading": "## Lines from the prompt",
+          "sha256": "d72b8f53f6f63fcecdcbda11d0c56cd0fcfb99bae03fa3beb8f7162d8ddba462",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "HSTORE precedes return from line input and MLTK1 uppercases the later execution piece. The capture remains explicitly historical 78127ec output."
+        }
+      ],
+      "changed_claim_assessment": "HSTORE precedes return from line input and MLTK1 uppercases the later execution piece. The capture remains explicitly historical 78127ec output.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "input_sha256": "4e7812ccd265937216fed51a6fd6622bb19a35fa957b30f88895450bf4071329",
+      "application_sha256": "ed4b368614244842723d8b08281416a6ea7106c472f5b08cb2106c5e819c8403",
+      "corrected_sha256": "1ff6f8f9511888aba04ad7e76c6efde23b87b0b10c95acf5ec80440d4833f882",
+      "fences": 1,
+      "changed_contexts": 5,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": true,
+      "all_manifest_citation_and_path_entries_accounted": 103,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 24. Loading and removing services",
+          "sha256": "f324ce1a0aa672677d8a04b14ba1efe45b28054d5b3610553ae2fc63d6808619",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        },
+        {
+          "line": 60,
+          "nearest_heading": "## The resident entry and its pages",
+          "sha256": "379067a66e0a208d3c192b878895d39e45415b55b07d4e8065c4320e5458bc20",
+          "kind": "table",
+          "decision": "clear",
+          "reason": "PISTART publication, registry restoration and stack declarations support the refreshed source references. The two table full stops preserve the historical layout meaning and literals. The GLCD 2/0/6 declaration is current source, separate from the historical understated-stack example."
+        },
+        {
+          "line": 340,
+          "nearest_heading": "## Registry lookup and lifetime",
+          "sha256": "d8b98ab92135f90b7d213c1bcc651c8943806145bd65331ced9d497b917c1e1b",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "PISTART publication, registry restoration and stack declarations support the refreshed source references. The two table full stops preserve the historical layout meaning and literals. The GLCD 2/0/6 declaration is current source, separate from the historical understated-stack example."
+        },
+        {
+          "line": 406,
+          "nearest_heading": "## Removing the newest owner",
+          "sha256": "b8980f2a4e1501a2bc88743a1a6c0ad0c8074c3f21d2b0aa304e74abe2c12374",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "PISTART publication, registry restoration and stack declarations support the refreshed source references. The two table full stops preserve the historical layout meaning and literals. The GLCD 2/0/6 declaration is current source, separate from the historical understated-stack example."
+        },
+        {
+          "line": 453,
+          "nearest_heading": "## Checks and service responsibilities",
+          "sha256": "c7614c0b8d8b58a0f15af614bc2b20386edfa1ee1f5e481439b374ed199f6e6b",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "PISTART publication, registry restoration and stack declarations support the refreshed source references. The two table full stops preserve the historical layout meaning and literals. The GLCD 2/0/6 declaration is current source, separate from the historical understated-stack example."
+        }
+      ],
+      "changed_claim_assessment": "PISTART publication, registry restoration and stack declarations support the refreshed source references. The two table full stops preserve the historical layout meaning and literals. The GLCD 2/0/6 declaration is current source, separate from the historical understated-stack example.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+      "input_sha256": "b0ed70be2fdf00614a6b06d8b5cee34724ee699eac9579ec3aecb4b1b5ce44e1",
+      "application_sha256": "97299e22104783763be2919398e1de670e93d2df2808973b0996e052105016e7",
+      "corrected_sha256": "7456e2a0ec80b8fac2e96caae82d845dfb0f1fb5ad7e557238be8256bcaa9b93",
+      "fences": 2,
+      "changed_contexts": 6,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": true,
+      "all_manifest_citation_and_path_entries_accounted": 111,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# 25. Startup inside the CCP",
+          "sha256": "176602e461462cacbcb96e7827e60864da5e8edd89f99ad4e7fc3b3d300da830",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        },
+        {
+          "line": 224,
+          "nearest_heading": "## Display loading and console selection",
+          "sha256": "e1360ac69253afe543e3c8ad024d7780aaea3f7851227ba9e5d9f8e9da92abfa",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Responding PICO plus enabled Matrix switch starts the ROM console. Preparation stages and publishes an explicit selected-display line. Separate VCLAIM storage, VIDEO writes and INFO OR composition support the corrective claim. Stored CONDEV retains bits 0/1/2/3/7, including LCD row ownership."
+        },
+        {
+          "line": 264,
+          "nearest_heading": "## Display loading and console selection",
+          "sha256": "1d96014f702256ddd9b0cb7f1bf932f394ea3d34e27fb6438902097f9443f705",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Responding PICO plus enabled Matrix switch starts the ROM console. Preparation stages and publishes an explicit selected-display line. Separate VCLAIM storage, VIDEO writes and INFO OR composition support the corrective claim. Stored CONDEV retains bits 0/1/2/3/7, including LCD row ownership."
+        },
+        {
+          "line": 284,
+          "nearest_heading": "## Recovery words and row ownership",
+          "sha256": "656e59a0c9ca2b9b26808bf31ef16187542b15a13aa007b232d2ecf3417197b4",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Responding PICO plus enabled Matrix switch starts the ROM console. Preparation stages and publishes an explicit selected-display line. Separate VCLAIM storage, VIDEO writes and INFO OR composition support the corrective claim. Stored CONDEV retains bits 0/1/2/3/7, including LCD row ownership."
+        },
+        {
+          "line": 293,
+          "nearest_heading": "## Recovery words and row ownership",
+          "sha256": "42978bf24c91deacab04d437460bb1d514104df07827e663ed5078578ba50673",
+          "kind": "table",
+          "decision": "clear",
+          "reason": "Responding PICO plus enabled Matrix switch starts the ROM console. Preparation stages and publishes an explicit selected-display line. Separate VCLAIM storage, VIDEO writes and INFO OR composition support the corrective claim. Stored CONDEV retains bits 0/1/2/3/7, including LCD row ownership."
+        },
+        {
+          "line": 301,
+          "nearest_heading": "## Recovery words and row ownership",
+          "sha256": "a13c57699882bb3d3c95dd5662220e6d8e7fd5d7c0533edcbf5b564c029ceb44",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Responding PICO plus enabled Matrix switch starts the ROM console. Preparation stages and publishes an explicit selected-display line. Separate VCLAIM storage, VIDEO writes and INFO OR composition support the corrective claim. Stored CONDEV retains bits 0/1/2/3/7, including LCD row ownership."
+        }
+      ],
+      "changed_claim_assessment": "Responding PICO plus enabled Matrix switch starts the ROM console. Preparation stages and publishes an explicit selected-display line. Separate VCLAIM storage, VIDEO writes and INFO OR composition support the corrective claim. Stored CONDEV retains bits 0/1/2/3/7, including LCD row ownership.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+      "input_sha256": "673dd46dc02d94929db46ef6cdc74426ddb38b48f54acb745dcd4d606aeebcc7",
+      "application_sha256": "83b6b6cbb4a7fed2215a8c54ba3f52db1a4132087d0ac991f0b7c4624458aa80",
+      "corrected_sha256": "83b6b6cbb4a7fed2215a8c54ba3f52db1a4132087d0ac991f0b7c4624458aa80",
+      "fences": 0,
+      "changed_contexts": 1,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 135,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# Appendix A. BDOS functions",
+          "sha256": "3c5a9a2b0133d3ad76a77b2aa79fdc04cd834782e1c0577c0052bd9702dc07b8",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        }
+      ],
+      "changed_claim_assessment": "Only the source-authority comment changed. No reader-body claim or example was revised by these commits.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+      "input_sha256": "18dcc7f424b36b28fd7d3d391d5a6f3ff899465e689774b2ae2010684344016a",
+      "application_sha256": "6df8d1a44643e9fcd349e3c3535408d14c5bac01285d0fb294b51dfa16d65428",
+      "corrected_sha256": "6df8d1a44643e9fcd349e3c3535408d14c5bac01285d0fb294b51dfa16d65428",
+      "fences": 2,
+      "changed_contexts": 31,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 77,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# Appendix C. Memory map",
+          "sha256": "01aeedd851cbec871e74edac3ff278b7d8157786bd1a32ef20b5c4553da3fc3e",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        },
+        {
+          "line": 27,
+          "nearest_heading": "# Appendix C. Memory map",
+          "sha256": "0b7e0aedaf0fecf711c38de030032c188dc5ce8f124ce70a16e23b8af5a36d9a",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 32,
+          "nearest_heading": "## The CPU's address space",
+          "sha256": "be2255ac1143cdcc4cdbe88a96f327a3f73f477f1006b01a0a26188f88e4546c",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 41,
+          "nearest_heading": "## The CPU's address space",
+          "sha256": "05e930bb5411242ead35dfb097ba2a69bb446cb93d8336fb90a8dac81694d273",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 53,
+          "nearest_heading": "## The CPU's address space",
+          "sha256": "f9e876be9bee8116bf7186e1d7da3e812a5dc09c66bdfa4ce02e3b3a2c72cdd8",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 61,
+          "nearest_heading": "## The CPU's address space",
+          "sha256": "9c434ad90c6cedaad6d7298b247007ead471463b89e9f2fc772c3ab9db73e58a",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 90,
+          "nearest_heading": "## The ROM",
+          "sha256": "fd3cd54b7585b3b9697cbbdf55f8e0b4842ea48bba0c517d336a7cd8dcc07242",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 95,
+          "nearest_heading": "## The ROM",
+          "sha256": "ac77be62748eb76f7808906886adc4f0d5201f1a261ddc8f709bc124aaf72c38",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 103,
+          "nearest_heading": "## Page zero",
+          "sha256": "4dbf4667a814fbac9fbf1c261af072fcf1618007b8857f9aec9e12bed811b517",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 121,
+          "nearest_heading": "## Page zero",
+          "sha256": "b92e4c3fd72138074042eaf985af60c98804a7c24951b263e97cd50e08a7d41d",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 129,
+          "nearest_heading": "## Page zero",
+          "sha256": "1afab60b3879ad78e972a5e0de846b2fd93f5039ed50d785965ab486103bd8a3",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 136,
+          "nearest_heading": "## Page zero",
+          "sha256": "e6d1cbe07905106b329c6c9b9ece0d074e67c6ec9af383aee185e0d0c9ed7000",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 142,
+          "nearest_heading": "## Page zero",
+          "sha256": "ca900ad93c06ba4b1e7d5427008edb989f8bb8502353a58cb0cca2d1c21930cf",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 150,
+          "nearest_heading": "## The resident workspace",
+          "sha256": "7556890f60933d95048660559cb9719c139723fa2c59f2a014216c8e146fde8c",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 166,
+          "nearest_heading": "## The resident workspace",
+          "sha256": "edf28bebbd1a308847ea2835d7f741ccf49c18fd50d5603c904c75387b237689",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 172,
+          "nearest_heading": "## The resident workspace",
+          "sha256": "02389c87b4930a5c9aa32d91e1f30923b4e8d5ea6fd3eeae9e52503c916d3619",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 183,
+          "nearest_heading": "### The BIOS's block",
+          "sha256": "3fd1e4845f8c493fc0d862a1420226f4db9b190f6362dfd3ec844268fdfa79c0",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 208,
+          "nearest_heading": "### The BIOS's block",
+          "sha256": "ad3b86ebe9b45fbc73922129632a038a03a49adb7e8eb758264fc556a11b988d",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 215,
+          "nearest_heading": "### The CCP's block",
+          "sha256": "0f46e82f56492d2e8ad0ffe4ac436c75e566c4237a2b6892e395737a3742cff4",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 232,
+          "nearest_heading": "### The CCP's block",
+          "sha256": "6ba125f059958cb70a40228722a4ce370e601eec9f7bc72eda7ddb95ba070294",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 240,
+          "nearest_heading": "### The BDOS's block",
+          "sha256": "ad4a12996a2201c70539c89e14e8c3b9e0e525bf868758a906b0c5eb645861cd",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 260,
+          "nearest_heading": "### Above the RAM BIOS table",
+          "sha256": "4cca6ffee8f65580d434f5a7ec338fbaae52d6b4e19cb43e9c798de06611256d",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 295,
+          "nearest_heading": "### Above the RAM BIOS table",
+          "sha256": "dd3d25ee8cb6866c99dfa3a39c0f6813b72e24859f657e83f85a93e8e069d1eb",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 306,
+          "nearest_heading": "## EXPAND 1",
+          "sha256": "3fe9c5f2db5fe558ac3373c715756b65826d83ce51a1105b0daa5985b396d2de",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 321,
+          "nearest_heading": "## EXPAND 1",
+          "sha256": "f76cce3f4b0e645d122bb279518c7f54cd68747f3b5ce69dda3a01cd2b51d346",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 330,
+          "nearest_heading": "## EXPAND 1",
+          "sha256": "e33f1f2c53e6f2db72fd486357ce3abddae3fa2b1a0704bc752710c66972f954",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 342,
+          "nearest_heading": "## The stacks",
+          "sha256": "2495e6c65d828febd7005420328ce9670671a026dca24703cb743cba63337e67",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 353,
+          "nearest_heading": "## The stacks",
+          "sha256": "286d0b33aa1d12943a46d0e8e65099be84984275f4aa85a55be8db982c390354",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 361,
+          "nearest_heading": "## The stacks",
+          "sha256": "78c4cf91c574f240fe34dde7c17dfe3e112abba192362df773c04a6c346972c6",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 373,
+          "nearest_heading": "## Reproducing the figures",
+          "sha256": "777dcd8c74a3f2516925ea2b09bf08dbd84c3e1effc6cbfbdc7624a59fae29f1",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        },
+        {
+          "line": 398,
+          "nearest_heading": "## Reproducing the figures",
+          "sha256": "f849886b5b5957caddd643497f12a2953831c98dd2f27846fbbf45af1ad563a3",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output."
+        }
+      ],
+      "changed_claim_assessment": "Current declarations and clearing/publication routines support the field and lifetime explanations. Fixed contract addresses remain distinct from the explicitly historical build-dependent maps. The media writer supports generation, not current reproduction of the historical lookup output.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "input_sha256": "3b7356adb1fa589e8f52d6a2e50afdb2a15b69b6e81fc248b1bc98f8a98f043f",
+      "application_sha256": "d5660803a26eaf43a0d316cb2727610868c424bdf9c9fca978b94d38878a39b6",
+      "corrected_sha256": "d5660803a26eaf43a0d316cb2727610868c424bdf9c9fca978b94d38878a39b6",
+      "fences": 3,
+      "changed_contexts": 5,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 213,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# Appendix D. Error messages",
+          "sha256": "d12247aa229c8068b0278d75ea5c6c838755d48e9ef49abd39b022a74f217cba",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        },
+        {
+          "line": 46,
+          "nearest_heading": "## The diagnostic prompt",
+          "sha256": "029e3565cd97034e405f5a07f679a30739de52ba5e0abb6fe59c494cf65a5779",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The changed references support switch-enabled routing, permitted width values, claim refusal and staged startup rewriting. The version constant supports the banner version. Historical old-card and CLOSE ERROR evidence is not repinned."
+        },
+        {
+          "line": 172,
+          "nearest_heading": "### `NAME?`",
+          "sha256": "ce4036787a6ddd54b068d256aa00da8aab32fa32dce919814ed337978331a960",
+          "kind": "table",
+          "decision": "clear",
+          "reason": "The changed references support switch-enabled routing, permitted width values, claim refusal and staged startup rewriting. The version constant supports the banner version. Historical old-card and CLOSE ERROR evidence is not repinned."
+        },
+        {
+          "line": 269,
+          "nearest_heading": "### A card from an older TEC-OS",
+          "sha256": "a90bb8d625f67ed2fdf0c39bacf1bcc87020b921c88b0ea7bb8840bc9784d812",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The changed references support switch-enabled routing, permitted width values, claim refusal and staged startup rewriting. The version constant supports the banner version. Historical old-card and CLOSE ERROR evidence is not repinned."
+        },
+        {
+          "line": 363,
+          "nearest_heading": "## Lines that report no fault",
+          "sha256": "729de7d678d2986b3faa1c939716ed5ad8b0fe09a9c01ed884e812bc7ae974f1",
+          "kind": "table",
+          "decision": "clear",
+          "reason": "The changed references support switch-enabled routing, permitted width values, claim refusal and staged startup rewriting. The version constant supports the banner version. Historical old-card and CLOSE ERROR evidence is not repinned."
+        }
+      ],
+      "changed_claim_assessment": "The changed references support switch-enabled routing, permitted width values, claim refusal and staged startup rewriting. The version constant supports the banner version. Historical old-card and CLOSE ERROR evidence is not repinned.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+      "input_sha256": "0b9d8f583084206762f438abb2a16053b4fa25e66910c800d81c69c952356db8",
+      "application_sha256": "07b5fa334a598b1da3d988f52705d86510ffa0822ce347165ccb0cab416c2b4e",
+      "corrected_sha256": "07b5fa334a598b1da3d988f52705d86510ffa0822ce347165ccb0cab416c2b4e",
+      "fences": 8,
+      "changed_contexts": 2,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 62,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# Appendix E. The container format",
+          "sha256": "2d9d95747cdabb6f630be1b8894c9412f24bd04abfa10be604db59e5270f3470",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        },
+        {
+          "line": 23,
+          "nearest_heading": "# Appendix E. The container format",
+          "sha256": "996b7c07d5f43e106d86fef0edcf019498457023b4d6e42b4782e4cedf16b21d",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The moved generator range supports shared field and geometry definitions. Generated include paths remain generator-backed mentions, not tracked or newly generated artifacts."
+        }
+      ],
+      "changed_claim_assessment": "The moved generator range supports shared field and geometry definitions. Generated include paths remain generator-backed mentions, not tracked or newly generated artifacts.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+      "input_sha256": "0d58dc86b9d6bf11e5d888afd53d74aeda2896b0c8c453b100898e1112f728b4",
+      "application_sha256": "ab7cd3fdfe33a24153336e2c7c23ea648bace9e0ac86669c7fe86c45882398ad",
+      "corrected_sha256": "ab7cd3fdfe33a24153336e2c7c23ea648bace9e0ac86669c7fe86c45882398ad",
+      "fences": 25,
+      "changed_contexts": 2,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 104,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# Appendix F. `tecvol`",
+          "sha256": "1356857dffe62521f9862fe3d56e2fac058f4cba4b291f09362e8531189f9d68",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        },
+        {
+          "line": 314,
+          "nearest_heading": "## recipe",
+          "sha256": "3b6e9d90dc3c5a1418c5302e1dd5bc099a616a2ea7b20e65db92ff5a1d8d87e4",
+          "kind": "paragraph",
+          "decision": "clear",
+          "reason": "The media source constructs starter and page recipes and adds DEMO with its own metadata. FONT-NOTICES remains outside the card component list. The following historical hashes remain unchanged."
+        }
+      ],
+      "changed_claim_assessment": "The media source constructs starter and page recipes and adds DEMO with its own metadata. FONT-NOTICES remains outside the card component list. The following historical hashes remain unchanged.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "input_sha256": "00335ee619ec6d9b7b898052bca28121083847743abed74d3af196b8521dcaba",
+      "application_sha256": "a46effaf40ce57070b5c15f97897f86d3c5aa36630a01671f2dc6dbaed558261",
+      "corrected_sha256": "a46effaf40ce57070b5c15f97897f86d3c5aa36630a01671f2dc6dbaed558261",
+      "fences": 4,
+      "changed_contexts": 1,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 36,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# Appendix H. The service file format",
+          "sha256": "78bb8eea6dafae285fe7c23439f31ba5f2fdb378c083bf1325de0b075a5f3b29",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        }
+      ],
+      "changed_claim_assessment": "Only the source-authority comment changed. No reader-body claim or example was revised by these commits.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "input_sha256": "b217f9a83a64ac51fe7a30e2e8a6534b785f07a408ed713d8c75f7b5f2d9bff7",
+      "application_sha256": "f1491f6b342e81a16e38448e8c57547a471089f86285583f1ed56aeb2374cda9",
+      "corrected_sha256": "f1491f6b342e81a16e38448e8c57547a471089f86285583f1ed56aeb2374cda9",
+      "fences": 4,
+      "changed_contexts": 1,
+      "initial_manifest_output_exact": true,
+      "correction_changes_reader": false,
+      "all_manifest_citation_and_path_entries_accounted": 15,
+      "header_scope": "Current mechanism inspection only. Retained captures, measurements, dependencies and historical artifacts retain their separate pins.",
+      "changed_context_review": [
+        {
+          "line": 10,
+          "nearest_heading": "# Appendix J. Command reference",
+          "sha256": "a09d4a3ae3dddf8979d97a70c16314e423b403d1df35215a3feb62df5380f846",
+          "kind": "authority_comment",
+          "decision": "clear",
+          "reason": "Only current mechanism authority changes. The full comment preserves historical and no-new-execution scope."
+        }
+      ],
+      "changed_claim_assessment": "Only the source-authority comment changed. No reader-body claim or example was revised by these commits.",
+      "source_identity_limit": "Unchanged source correspondence does not establish correctness of every inherited claim."
+    }
+  ],
+  "conclusion": "Clear for the reviewed source-adoption application and its corrective change only. The changed claims and moved/new citations checked here are supported at 962853f. Exact reconstruction and source identity establish correspondence and preservation. They do not prove every inherited statement in all 22 readers, every table field or every historical experiment. This is not a new whole-book semantic acceptance.",
+  "remaining_limits": [
+    "Whole-book reader-order and inherited-claim acceptance remain separate.",
+    "Historical execution evidence is preserved, not rerun or independently requalified by this review.",
+    "No current build, import, assembler, test, model, capture, browser, hardware, audio or publication was executed.",
+    "No runtime allocation, root integration or shared-ledger edit occurred."
+  ]
+}
