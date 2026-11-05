@@ -58,3 +58,12 @@ priority in a disagreement. Both are restored. The setup uses32,768 bytes so
 KiB does not precede its definition. The redundant sentence about hardware
 requirements is deleted. Independent confirmation at545c9f8 closed both preservation findings and
 the redundant setup sentence. No bounded editorial or factual finding remains. Draft destination links still await integration.
+
+## KD-243 profile amendment
+
+The planned first-session width is now40columns with TEC Compact under
+KS48. The index states the amended destination profile but its source and
+workflow remain pending. The previously closed review was at the80-column
+profile and does not qualify this change. Recheck the opening after the
+adopted source offer and actual40-column evidence. No output was changed
+or run. The original80-column packet stays unrun and recoverable.

@@ -4,7 +4,7 @@
   "units": [
     {
       "unit": "front-door",
-      "status": "bounded independent editorial/factual review closed at545c9f8; final navigation and whole-book acceptance pending",
+      "status": "bounded review closed for prior profile; KD243 40-column amendment drafted, final source/runtime and amended-opening review pending",
       "passes": {
         "full_passage_read": "completed for first draft; independent review may require another pass",
         "draft": "completed for first draft; independent review may require another pass",
@@ -17,7 +17,7 @@
         "journey_readback": "completed for first draft; independent review may require another pass",
         "mechanical_gate": "completed for first draft; independent review may require another pass",
         "independent_editorial_review": "closed at545c9f8 after preservation corrections; confirmation recorded in index-pass-record.md",
-        "independent_factual_review": "closed at545c9f8 after preservation corrections; confirmation recorded in index-pass-record.md",
+        "independent_factual_review": "prior-profile bounded review closed; KD243 amendment and final source need recheck",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -15750,5 +15750,13 @@
   "movement_authority": "movement-units.json; use explicit fragment overrides before parent destinations",
   "movement_sha256": "0f594d09a5aa4dfd2c170b9e069f23a8a5b987cfbc3a99c7884c36b2210a06ff",
   "offered_source": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
-  "source_offer": "Origo proposals17 at92cc92c7; separate banner verification and final citation acceptance still pending"
+  "source_offer": "Origo proposals17 at92cc92c7; separate banner verification and final citation acceptance still pending",
+  "opening_profile": {
+    "authority": "P3 KD-243 / KS48",
+    "width": 40,
+    "font": "TEC Compact",
+    "source": "pending qualified adopted source",
+    "runtime": "no allocation; old offer17 80-column packet remains UNRUN",
+    "scope": "first-session and authored-banner route; preserve explicit80 and narrow evidence"
+  }
 }
