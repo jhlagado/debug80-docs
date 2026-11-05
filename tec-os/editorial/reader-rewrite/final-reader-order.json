@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "status": "sequential_full_reader_order_read_in_progress",
+  "start_snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+  "final_candidate_commit": null,
+  "source_selection": "962853f499f05faf281f6cdff1deca8959f58c2b",
+  "scope": "Complete ordered reader passages including headings/tables/fences/captions/provenance, not a search-only or punctuation pass. Source adoption application and qualified FAIL insertion can require bounded rereads before final freeze. No renderer/build/publication/runtime executed by this reading.",
+  "pages": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/index.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "8e7e515825f76a2af5c9f6526fd5274a0533f22f",
+      "sha256": "81cdf91fa07128f76f90873eaadb61ac58e76e43f596fe338f646ee3e3deea0c",
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence, including every table/fence/comment and surrounding paragraph.",
+      "last_heading": "Reference",
+      "reader_job": "Identify prepared-machine/task/learning/evidence routes",
+      "prerequisite_result": "Prepared machine precedes actions; programming prerequisites are explicit at route choice.",
+      "evidence_boundary": "Model versus board and actual historical pins explicit; no architecture/host setup prerequisite.",
+      "findings": []
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "0816f084171a45521e7f368fb59f1d0407df668c",
+      "sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf",
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence, including every table/fence/comment and surrounding paragraph.",
+      "last_heading": "Saved work before reset or removal",
+      "reader_job": "List files, select drives, build/run supplied SAMPLE and preserve saved changes",
+      "prerequisite_result": "Prompt/current-drive/name definitions precede DIR, correction/recall precedes later commands, supplied source/build/run precedes authored program.",
+      "evidence_boundary": "Model versus board and actual historical pins explicit; no architecture/host setup prerequisite.",
+      "findings": []
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "2be81bd397b0258c1561de9546816b4610422258",
+      "sha256": "d044c76708b41a7156ec4151ff89501fe80b17708d7334c520522d365164c5e3",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "adf05487982811ee5db580e669a9fe5fe6f2af01",
+      "sha256": "e05220ccb13b0d9ab7bf5af2e33d11c96cc5599e63941eb832d2aa2f3e3da1f4",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "93ea09daac2fd599aa08df809efca5a15887ce6d",
+      "sha256": "22106877815aa329d5c1affe54eb4c234fc82d9ac206fdba7c4766ce46d10cc2",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "63c293bde4514e80131704c8097716f34d6f4a54",
+      "sha256": "466243033c60a96cb0027b71a6fea50028c24ed350d1d00498c260cc8d4ffd54",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "560a1234c43f6c99c5e7b213bb4dcea7daeccf85",
+      "sha256": "e0feb3100ad88f719a47e02adc98533c52fabb1932b456cbb4e0b154c938c5b3",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "27ec76e18733855a989b2449340f6981e212c197",
+      "sha256": "934203fea1ff6f79b51d2299a92cb3254d244975f2c257f5ebbb6339d71b3b2b",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "32dc7292797f40168a7a8d1a2210fc504e234d79",
+      "sha256": "8f323d975b7b2be1c46613237c332fabbcea2f0a2a712054cdf8f3fbf2544764",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "7d2d085cbb6dea27ecf208f950ae57c0529ae0cc",
+      "sha256": "193ccd41d8a6e6492ae65c96ecd4b126e1098711b28af53aa2e7ae68f7a11f2d",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "10d6d643749f4ef2511c195c4970b2ac25256f44",
+      "sha256": "32d5806fb11659ee611b34b65ed0fced7d6bdb88f3b69c53d0159d96a7997395",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "f6bf68cc25594c59c0053194a4e6e01d092ff5e5",
+      "sha256": "3f870a5add211dff50208e6573358b1d77eb2b4385f68b077fb271bdb9061ae1",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "9b095951cb1a324f8e200d615e58fd44755718be",
+      "sha256": "bab07f9762cbd617f55b7fe9eaf90974cae4d772c5d765f989d5ffa414909d41",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "143f09f251a31bae416303d385213cf13a9c06c0",
+      "sha256": "311c04f9739521b51e961d1355636d263bb0fa8270a8dbd68184bbe8b0762124",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "bd6b0072043ffe825f6ccc41bafc22fa0df8d9b8",
+      "sha256": "97a25dfb7dc2d478658d948fc3dd2a219a4f5dc2067c1e9e91fb20d75928787b",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/15-reset-and-boot.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "785ee4bd72fe551b35c73ba88a690156ed5106a5",
+      "sha256": "9bca763751490d253b54de6abe66b33ec16b196f5aae393b6417d57476a306e4",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/16-console-paths.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "fead500443e198e81412eadf1debc1af1d745b8d",
+      "sha256": "b7b853b8f2b2ae3f80d1567c10d94453d9562b37841a109cb390a793205ace7e",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/17-card-blocks-and-volumes.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "564789ecb04839e228e4208d6c02132a263dd664",
+      "sha256": "fc6032cba645d297e9f771fcb4e1262333f0b9c579fdf78273fea952539d07dd",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "97427fabbfb4ca73ca6a8181fc9036cc3bc552c7",
+      "sha256": "e4540d9bf5c529190a555a80c278c28542a9394924884b3345643dd34e71e845",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "ca5f9b1a3d8ad55b587f77263041bb19b3cd00f6",
+      "sha256": "2ea12d0cac1f016654128cf31d28a404251d03fa4903285e3008425056a5daaa",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "0ad6c579715d78079cbca59c15a83a0e1383e842",
+      "sha256": "d46b613434e539e65d69f99ee863713d1d874a221b5cdbaa5f6fe3b15741dc85",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "50c87a9a04d581e5435d065838822fd8a3c3677e",
+      "sha256": "ba2c3938f348f9a44fd756438a1941e4ac49580567575a9c9c9d0bd3c182b5c4",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/22-the-history-ring.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "bf62c5a45f695e75ea5b470a3bf519d32b37fcf6",
+      "sha256": "4d797242269cdc224b040fadb88dd397d0632439aff422670fc9f058fbe9dffc",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "61af662f2ab000b83c425f4dae360a18f2cafb9e",
+      "sha256": "157602c7c7bd62648c8591ae23dc01f3eb1b613afd62917d79cf0720d9ef779a",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "586c8549a28b513dcfb9f8f9c16fcf6e273119ce",
+      "sha256": "4e7812ccd265937216fed51a6fd6622bb19a35fa957b30f88895450bf4071329",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "0a381abfad7604eda96f8bce250c5e38375d9234",
+      "sha256": "b0ed70be2fdf00614a6b06d8b5cee34724ee699eac9579ec3aecb4b1b5ce44e1",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "483a235eee8ed466cf0d6403a76c5205a69ac1e7",
+      "sha256": "e893594bd91dc94514e38747f8576bd855aa38daa40a5104da093a8267381613",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "fac353c8bc169cfed3a81e4898bec5ffa7f243f3",
+      "sha256": "6e1f9a27a0edcbedf0d36dd1c6aaed0fc9fa664051db2b8cb9e7a3986a5f96ef",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "ae6f744d47df3864d72a44190f74494d85a6b166",
+      "sha256": "c2f9bd746a4a13f6f58253af9adae81c11da769e8f4a593b8bdadd3349b84b63",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "5100442ef89f0f2fb1313c34ecc893e492b396e2",
+      "sha256": "673dd46dc02d94929db46ef6cdc74426ddb38b48f54acb745dcd4d606aeebcc7",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "d484eab4ea726b76854a9509b2c5f1594e4809a7",
+      "sha256": "f865198d530c1b0eb762408a8a644c2add21633cc439c8492ffc5cec1b64f3a8",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "f30773fa246535e57df77049e51e5494d5c10b2f",
+      "sha256": "18dcc7f424b36b28fd7d3d391d5a6f3ff899465e689774b2ae2010684344016a",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "01a29865d5d3c321c21a5fc8ef98f338e4d1d62c",
+      "sha256": "3b7356adb1fa589e8f52d6a2e50afdb2a15b69b6e81fc248b1bc98f8a98f043f",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "8a4a4676a776813f30670b72fe269e86d7ae6525",
+      "sha256": "0b9d8f583084206762f438abb2a16053b4fa25e66910c800d81c69c952356db8",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "d97972995497121ed6daba2a7d6a3998bc9dd0c0",
+      "sha256": "0d58dc86b9d6bf11e5d888afd53d74aeda2896b0c8c453b100898e1112f728b4",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "81ea5eab3f7a3f13a9f163ad956ac950de5e1fd5",
+      "sha256": "0fa220119b5e8fe009b28f7f200db7c4c2f7aaf90959460ee4e7d72f8a11d843",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "3ce504b2c5bcc9cbbf1a6584727b1a12b91dc261",
+      "sha256": "00335ee619ec6d9b7b898052bca28121083847743abed74d3af196b8521dcaba",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "6140e3522681c18bd0a2396b7ca9d9cc2efd05f8",
+      "sha256": "9c48a6c45cebb880400116a17fe4561fe96f12944c5f05a0977681baeffc0381",
+      "status": "not_yet_read_in_this_final_sequence"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "git_blob": "028c67ea5a02d2c9211d65c626ce596e52ffde30",
+      "sha256": "b217f9a83a64ac51fe7a30e2e8a6534b785f07a408ed713d8c75f7b5f2d9bff7",
+      "status": "not_yet_read_in_this_final_sequence"
+    }
+  ]
+}
