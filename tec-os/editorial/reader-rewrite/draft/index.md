@@ -7,6 +7,9 @@ nav_exclude: true
 
 # TEC-OS on the TEC-1G
 
+<!-- Planned opening profile: KD-243 / KS48, TEC Compact at 40 columns.
+     Adopted source and runtime qualification remain pending. -->
+
 With TEC-OS in its ROM, the TEC-1G starts at a command prompt. You can list
 files on an SD card and run a supplied program before using the editor and
 assembler to make one of your own. TEC-OS provides the CP/M 2.2 programming
@@ -14,7 +17,7 @@ interface and calls for the board's devices.
 
 ## Starting with a prepared machine
 
-The first session uses an 80-column PICO9918 display and the matrix keyboard,
+The first session uses a 40-column PICO9918 display and the matrix keyboard,
 with the Matrix switch enabled. The board needs a 32,768-byte RAM chip in U9, the
 4 MHz FAST setting, the TEC-OS ROM and a prepared starter card. The keypad
 NMI jumper is off. SYSTEM is on drive A and WORK is on drive B. Hardware

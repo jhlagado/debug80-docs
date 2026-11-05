@@ -7,7 +7,7 @@ outline-review-dispositions.md. New prose starts after that closed checkpoint.
 ## Reader route and evidence
 
 The opening uses a prepared TEC-1G configuration: 4 MHz FAST setting, required
-U9 RAM, 80-column PICO9918 console and enabled matrix keyboard, qualified ROM
+U9 RAM, 40-column PICO9918 console and enabled matrix keyboard, qualified ROM
 and a byte-for-byte qualified starter card with SYSTEM on A and WORK on B.
 The keypad NMI jumper is off. These are preparation requirements, not claims
 that a physical board was run. The demonstrated route will be model-verified;
@@ -28,14 +28,16 @@ prompt and a failure exception, not an introduction to cache architecture.
 
 The new banner sequence must be proven before its explanatory prose. The
 bounded allocation request and validation plan are separate from outline
-acceptance. Source qualification is preparing at ea3ef3d; that is not a final
-pin or a checked claim. Retained historical evidence remains labelled by its
+acceptance. Offer17 at ea3ef3d is qualified for its existing configuration. The opening
+now awaits the adopted KS48 TEC Compact/font-default source and a new allocated
+40-column workflow. The retained offer17 80-column packet is unrun and cannot
+qualify that new profile. Retained historical evidence remains labelled by its
 actual build. No deployment or product-policy change is part of this outline.
 
 ## Prepared reading material and assembly contract
 
 Pagination uses the qualified starter card's existing `A:SAMPLE.ASM`, read with
-`TYPE A:SAMPLE.ASM` at the normal 80-by-24 console. Its source is already present
+`TYPE A:SAMPLE.ASM` at the planned 40-column console. Its source is already present
 before Chapter1 and is long enough for the intended screenful demonstration;
 the exact pause/cancel/continue sequence must be verified on the offered card.
 No generated LONG.TXT, extra directory-full fixture, shell or card-tool chapter
@@ -156,3 +158,18 @@ New/changed examples require allocated verification before result-based prose.
 While runtime work waits, other chapters and source-only checking continue.
 Final acceptance needs the offered source pin, resolved citations/navigation,
 complete final reader-order read and closed independent result reviews. No publish.
+
+## Opening-profile amendment: KD-243
+
+P3 KS48 changes the planned primary PICO profile to40columns with the chosen
+TEC Compact font. The structural outline and material allocations remain as
+independently closed. This narrow profile amendment does not claim a new
+qualified source, font, cold default, capture or workflow. Those remain held
+until KS48 implementation, qualification and the exact run allocation.
+
+Preserve the offer17 80-column preparation packet as unrun evidence. Do not
+execute it as the new opening proof. Recheck first-prompt dimensions, SAMPLE
+output, TED layout/keys, banner edit/build/run/reopen and pagination on the
+adopted40-column source. Existing explicit80 and narrow-mode evidence retain
+their actual configurations. Serial/GLCD dimensions and startup policy are
+unchanged by this instruction. Final opening review includes this amendment.
