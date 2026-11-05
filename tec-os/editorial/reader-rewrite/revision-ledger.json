@@ -200,22 +200,22 @@
     },
     {
       "unit": "chapter-01",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "Complete scoped draft pushed; independent full chapter factual/craft reviews in progress",
       "passes": {
-        "full_passage_read": "pending",
-        "draft": "pending",
-        "thematic_order": "pending",
-        "sentence_deletion": "pending",
-        "agency": "pending",
-        "every_comma_punctuation": "pending",
-        "technical_claims": "pending",
-        "examples_before_explanation": "pending",
-        "journey_readback": "pending",
-        "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
-        "navigation": "pending",
-        "final_source_pin": "pending"
+        "full_passage_read": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
+        "draft": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
+        "thematic_order": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
+        "sentence_deletion": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
+        "agency": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
+        "every_comma_punctuation": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
+        "technical_claims": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
+        "examples_before_explanation": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
+        "journey_readback": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
+        "mechanical_gate": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
+        "independent_editorial_review": "in progress; opening-craft-review.json / opening-factual-review.json",
+        "independent_factual_review": "in progress; opening-craft-review.json / opening-factual-review.json",
+        "navigation": "final integrated check pending",
+        "final_source_pin": "Current bounded source962853f, tested8b8664a; historical evidence remains78127ec. Final whole-book reconciliation pending."
       },
       "source_material": [
         {
@@ -758,29 +758,38 @@
           "fragment_selection": "Complete ^W/^N row."
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "authority": "Origo4b5b5a50, reviews/book-opening-workflows.md",
+          "attempt": "e77c7ef0 / attempt02",
+          "scope": "Cold40 first-session/directTAS SAMPLE/SAMPLE and successful empty-prompt flush; source-backed uncaptured keyboard/failure actions labelled separately.",
+          "limit": "Whole batch FAILED; no advanced-service, physical, browser, audio, final-book or publication acceptance."
+        }
+      ],
       "findings": [],
       "proposed_path": "tec-os/01-first-session.md",
-      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass."
+      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass.",
+      "draft_path": "draft/01-first-session.md",
+      "pass_record": "draft/01-pass-record.md"
     },
     {
       "unit": "chapter-02",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "Complete scoped draft pushed; independent full chapter factual/craft reviews in progress",
       "passes": {
-        "full_passage_read": "pending",
-        "draft": "pending",
-        "thematic_order": "pending",
-        "sentence_deletion": "pending",
-        "agency": "pending",
-        "every_comma_punctuation": "pending",
-        "technical_claims": "pending",
-        "examples_before_explanation": "pending",
-        "journey_readback": "pending",
-        "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
-        "navigation": "pending",
-        "final_source_pin": "pending"
+        "full_passage_read": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
+        "draft": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
+        "thematic_order": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
+        "sentence_deletion": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
+        "agency": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
+        "every_comma_punctuation": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
+        "technical_claims": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
+        "examples_before_explanation": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
+        "journey_readback": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
+        "mechanical_gate": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
+        "independent_editorial_review": "in progress; opening-craft-review.json / opening-factual-review.json",
+        "independent_factual_review": "in progress; opening-craft-review.json / opening-factual-review.json",
+        "navigation": "final integrated check pending",
+        "final_source_pin": "Current bounded source962853f, tested8b8664a; historical evidence remains78127ec. Final whole-book reconciliation pending."
       },
       "source_material": [
         {
@@ -875,29 +884,38 @@
           "fragment_selection": "Actual observed key/quit and COM location in verified round."
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "authority": "Origo4b5b5a50, reviews/book-opening-workflows.md",
+          "attempt": "e77c7ef0 / attempt02",
+          "scope": "Full matrix BANNER entry, deliberateline14 rejection/repair, both save/build/run variants and fresh persistence/reopen/standalone.",
+          "limit": "Whole batch FAILED; no advanced-service, physical, browser, audio, final-book or publication acceptance."
+        }
+      ],
       "findings": [],
       "proposed_path": "tec-os/02-make-a-small-program.md",
-      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass."
+      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass.",
+      "draft_path": "draft/02-make-a-small-program.md",
+      "pass_record": "draft/02-pass-record.md"
     },
     {
       "unit": "chapter-03",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "Complete scoped draft pushed; independent full chapter factual/craft reviews in progress",
       "passes": {
-        "full_passage_read": "pending",
-        "draft": "pending",
-        "thematic_order": "pending",
-        "sentence_deletion": "pending",
-        "agency": "pending",
-        "every_comma_punctuation": "pending",
-        "technical_claims": "pending",
-        "examples_before_explanation": "pending",
-        "journey_readback": "pending",
-        "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
-        "navigation": "pending",
-        "final_source_pin": "pending"
+        "full_passage_read": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
+        "draft": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
+        "thematic_order": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
+        "sentence_deletion": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
+        "agency": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
+        "every_comma_punctuation": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
+        "technical_claims": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
+        "examples_before_explanation": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
+        "journey_readback": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
+        "mechanical_gate": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
+        "independent_editorial_review": "in progress; opening-craft-review.json / opening-factual-review.json",
+        "independent_factual_review": "in progress; opening-craft-review.json / opening-factual-review.json",
+        "navigation": "final integrated check pending",
+        "final_source_pin": "Current bounded source962853f, tested8b8664a; historical evidence remains78127ec. Final whole-book reconciliation pending."
       },
       "source_material": [
         {
@@ -1146,10 +1164,19 @@
           "fragment_selection": "Only operative ^C/Esc/Q stop behaviour, without the old graphics-LCD fixture interpretation; chain-drop distinctions12."
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "authority": "Origo4b5b5a50, reviews/book-opening-workflows.md",
+          "attempt": "e77c7ef0 / attempt02",
+          "scope": "Exact current paused-screen excerpts from actual TYPE A:SAMPLE.ASM!USER 1 fixture; historical TYPE/COPY/REN/selectiveERA stays separately pinned and isolated.",
+          "limit": "Whole batch FAILED; no advanced-service, physical, browser, audio, final-book or publication acceptance."
+        }
+      ],
       "findings": [],
       "proposed_path": "tec-os/03-work-with-files.md",
-      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass."
+      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass.",
+      "draft_path": "draft/03-work-with-files.md",
+      "pass_record": "draft/03-pass-record.md"
     },
     {
       "unit": "chapter-04",
@@ -16014,6 +16041,11 @@
   "opening_material_preservation": {
     "all_files_erase": "Complete frozenold03:258–274 recipe/output now retained under AppendixJ ERA, exact historical78127ec pin and empty-B state. Crosswalk post-draft amendment governs over old parent placement in3.",
     "pager_excerpt": "Exact paused-screen098/099 excerpts approved with actual TYPE A:SAMPLE.ASM!USER 1 fixture provenance. Complete three-case input/output/key/card/screen evidence remains at immutable Origo e77c7ef0 attempt02 archive, with exact member identities and scope recorded under Current40-column pagination evidence home in28-pass-record.md. No fake plain-TYPE transcript/return or early chain lesson.",
-    "file_operations": "Historical empty-B COPY/REN/selectiveERA remains isolated from post-BANNER card. No new continued-card mutation result invented."
+    "file_operations": "Historical empty-B COPY/REN/selectiveERA remains isolated from post-BANNER card. No new continued-card mutation result invented.",
+    "chapter01_historical_literals": "Nine assigned historical fences/recipes retained byte-exact in01-pass-record.md. Independent preservation review checks whether unique examples also need a reader home; no claim of blanket reader preservation closure.",
+    "opening_review_paths": [
+      "opening-craft-review.json",
+      "opening-factual-review.json"
+    ]
   }
 }
