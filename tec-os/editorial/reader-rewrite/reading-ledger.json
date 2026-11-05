@@ -229,33 +229,42 @@
       "sha256": "6f477213a2da71e50f6dedd8aaa96cd8c40be575376a5ffb47ee23e8a49bd11e",
       "lines": 412,
       "words": 3980,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "The displays and the claim",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 412,
+      "outline": "reverse-outline-16-18.md",
+      "continuity_problems": "Preserve the layer contracts, failure conditions and measurement method while separating visible use from transport, deblocking, cache and bank/interrupt implementation."
     },
     {
       "path": "tec-os/17-sd-card-and-volumes.md",
       "sha256": "3a1113d00a6dc0b094c6569554449f7f4914c992ccb784945d483cdc16811683",
       "lines": 430,
       "words": 4003,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "The volume services",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 430,
+      "outline": "reverse-outline-16-18.md",
+      "continuity_problems": "Preserve the layer contracts, failure conditions and measurement method while separating visible use from transport, deblocking, cache and bank/interrupt implementation."
     },
     {
       "path": "tec-os/18-block-cache.md",
       "sha256": "e6f46c84211a9c438892ae18066a5354128f2eb7a1e88d119ec1d2799407f5eb",
       "lines": 356,
       "words": 3346,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "Interrupts held off",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 356,
+      "outline": "reverse-outline-16-18.md",
+      "continuity_problems": "Preserve the layer contracts, failure conditions and measurement method while separating visible use from transport, deblocking, cache and bank/interrupt implementation."
     },
     {
       "path": "tec-os/19-bdos.md",
@@ -462,5 +471,6 @@
     "origo/studies/p3-tec-os/reviews/book-reader-brief.md",
     "origo/studies/p3-tec-os/reviews/book-opening.md"
   ],
-  "review_coverage_limit": "Opening review covers full front matter and Chapters 1, 2 and 7; only headings in 3-6. It is not whole-book coverage."
+  "review_coverage_limit": "Opening review covers full front matter and Chapters 1, 2 and 7; only headings in 3-6. It is not whole-book coverage.",
+  "banner_preparation": "banner-validation-plan.md: source inspection only; execution waits for allocation and final offered source."
 }
