@@ -2888,7 +2888,7 @@
     },
     {
       "unit": "chapter-08",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded draft in progress; source-only work, no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -6066,7 +6066,7 @@
     },
     {
       "unit": "chapter-15",
-      "status": "bounded draft in progress; source-only work, no execution authorised",
+      "status": "bounded draft pushed; independent editorial/factual review pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -8464,7 +8464,7 @@
     },
     {
       "unit": "chapter-20",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded draft in progress; source-only work, no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -9718,7 +9718,7 @@
     },
     {
       "unit": "chapter-23",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded draft pushed; independent editorial/factual review pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -11250,7 +11250,7 @@
     },
     {
       "unit": "chapter-27",
-      "status": "bounded draft in progress; source-only work, no execution authorised",
+      "status": "bounded draft pushed; independent editorial/factual review pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -15033,18 +15033,18 @@
     },
     {
       "unit": "appendix-H",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded draft and own passes pushed ate9e118f; independent review pending",
       "passes": {
-        "full_passage_read": "pending",
-        "draft": "pending",
-        "thematic_order": "pending",
-        "sentence_deletion": "pending",
-        "agency": "pending",
-        "every_comma_punctuation": "pending",
-        "technical_claims": "pending",
-        "examples_before_explanation": "pending",
-        "journey_readback": "pending",
-        "mechanical_gate": "pending",
+        "full_passage_read": "completed for bounded draft; h-pass-record.md records scope and retained application qualification limit",
+        "draft": "completed for bounded draft; h-pass-record.md records scope and retained application qualification limit",
+        "thematic_order": "completed for bounded draft; h-pass-record.md records scope and retained application qualification limit",
+        "sentence_deletion": "completed for bounded draft; h-pass-record.md records scope and retained application qualification limit",
+        "agency": "completed for bounded draft; h-pass-record.md records scope and retained application qualification limit",
+        "every_comma_punctuation": "completed for bounded draft; h-pass-record.md records scope and retained application qualification limit",
+        "technical_claims": "completed for bounded draft; h-pass-record.md records scope and retained application qualification limit",
+        "examples_before_explanation": "four historical fences byte-identical; no current or KS48 execution inferred",
+        "journey_readback": "completed for bounded draft; h-pass-record.md records scope and retained application qualification limit",
+        "mechanical_gate": "completed for bounded draft; h-pass-record.md records scope and retained application qualification limit",
         "independent_editorial_review": "pending",
         "independent_factual_review": "pending",
         "navigation": "pending",
