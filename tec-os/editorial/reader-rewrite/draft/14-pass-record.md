@@ -40,7 +40,7 @@ No shared ledger or appendix is edited.
 | `tec-os/01-introduction.md:19-19` (heading) | Combined into the new title/navigation and subject headings. |
 | `tec-os/01-introduction.md:31-36` (paragraph) | Combined into opening system layers and bank allocation explanation. |
 | `tec-os/01-introduction.md:160-163` (paragraph) | Combined into opening system layers and bank allocation explanation. |
-| `tec-os/08-memory.md:150-160` (paragraph) | Combined into The card sets the space below the workspace. |
+| `tec-os/08-memory.md:150-160` (paragraph) | Combined into Allocation vectors below the workspace. |
 | `tec-os/14-memory-map.md:1-6` (front matter) | Combined into the new title/navigation and subject headings. |
 | `tec-os/14-memory-map.md:8-8` (heading) | Combined into the new title/navigation and subject headings. |
 | `tec-os/14-memory-map.md:10-10` (provenance or capture recipe) | Replaced by explicit source-offer scope and separate historical provenance. |
@@ -65,11 +65,11 @@ No shared ledger or appendix is edited.
 | `tec-os/14-memory-map.md:142-153` (paragraph) | Rewritten in The workspace across a program exit; historical address table remains in Appendix C. |
 | `tec-os/14-memory-map.md:155-157` (paragraph) | Rewritten in The workspace across a program exit; historical address table remains in Appendix C. |
 | `tec-os/14-memory-map.md:159-159` (heading) | Combined into the new title/navigation and subject headings. |
-| `tec-os/14-memory-map.md:161-166` (paragraph) | Rewritten in The card sets the space below the workspace; historical values explicitly labelled. |
-| `tec-os/14-memory-map.md:168-182` (paragraph) | Rewritten in The card sets the space below the workspace; historical values explicitly labelled. |
-| `tec-os/14-memory-map.md:184-189` (paragraph) | Rewritten in The card sets the space below the workspace; historical values explicitly labelled. |
-| `tec-os/14-memory-map.md:191-195` (paragraph) | Rewritten in The card sets the space below the workspace; historical values explicitly labelled. |
-| `tec-os/14-memory-map.md:197-202` (paragraph) | Rewritten in The card sets the space below the workspace; historical values explicitly labelled. |
+| `tec-os/14-memory-map.md:161-166` (paragraph) | Rewritten in Allocation vectors below the workspace; historical values explicitly labelled. |
+| `tec-os/14-memory-map.md:168-182` (paragraph) | Rewritten in Allocation vectors below the workspace; historical values explicitly labelled. |
+| `tec-os/14-memory-map.md:184-189` (paragraph) | Rewritten in Allocation vectors below the workspace; historical values explicitly labelled. |
+| `tec-os/14-memory-map.md:191-195` (paragraph) | Rewritten in Allocation vectors below the workspace; historical values explicitly labelled. |
+| `tec-os/14-memory-map.md:197-202` (paragraph) | Rewritten in Allocation vectors below the workspace; historical values explicitly labelled. |
 | `tec-os/14-memory-map.md:204-204` (heading) | Combined into the new title/navigation and subject headings. |
 | `tec-os/14-memory-map.md:206-206` (paragraph) | Rewritten in Four stacks for different stages; measured bases separated from declarations and test assertions. |
 | `tec-os/14-memory-map.md:208-213` (paragraph) | Rewritten in Four stacks for different stages; measured bases separated from declarations and test assertions. |
@@ -171,13 +171,17 @@ Failed warm flushing drops failed lines and clears CHPOS. Maskable interrupts
 are named explicitly in the bank-access rule because DI does not block NMI.
 The guard detects a changed byte but does not identify its writer.
 
-A factual discrepancy was found while checking the historical stack claim.
-Old14:263-278 gives BDOS base/census30 and base-plus-limit38. At the explicitly
-named historical product revision, docs/services.md:215-229 instead records
-32/32 and40 of54. The draft uses32 and40 with that exact historical citation.
-BIOS18/18 and CCP18/18, reservations54/40/32 and limits8/12/6 remain unchanged.
-This is correction from source authority, not a new measurement. Appendix C
-contains addresses/reservations, not an independent proof of the old30 figure.
+The initial draft incorrectly replaced the historical measured BDOS30 and
+base-plus-limit38 with32 and40 from stale78127ec:docs/services.md:215-229.
+The confirmed correction restores30 and38. The historical review at
+editorial/reviews/book-46.md records the78127ec census as30/18/18 for
+BDOS/BIOS/CCP and the sums38/30/24 against reservations54/40/32.
+Commit58bd349 explains the reduction from32 to30: ECHORAW ends with a
+jump to console output. Commit33af845 corrects the stale service table
+and sum. The offered ea3ef3d:docs/services.md:215-229 contains30 and38.
+This correction uses recorded historical measurements and source history.
+No measurement was repeated. The offered report's measured071d6d7 result
+remains separate evidence and is not relabelled as an ea3ef3d measurement.
 No old capture is transplanted or assigned the offered revision.
 
 ### Journey read-back
@@ -208,7 +212,7 @@ explicitly marked historical.
 | Stub and service top | src/boot.asm:142-143 and412-434 publishes PZTOP/stub. src/loader.asm:421-441 writes JP BENTRY and0006h during relocation;608-614 commits the installed page as PZTOP. tools/build.mjs:222-231 and269-270 derives/checks minimum program space without claiming a new build result. |
 | Page zero | PZINIT:src/boot.asm:412-434 changes jumps and stub, preserving0003/0004. PZSWP:454-509 keeps only a qualifying JP and conditionally writes0038. PREPPAGE:src/cpm/ccpcmd.asm:447-497 publishes both FCBs then tail and DMA. CMDRUN:src/cpm/ccp.asm:519-536 publishes0050 and inherited return word. |
 | Stacks and guard | src/layout.asm:122,137-155 declares boot top and resident sizes. src/ram.asm:143-151,219-231,309-312 locates stacks/guard. src/boot.asm:49-88,104-121,178-199,547-555 gives stack transitions and guard fill. BENTRY/RETWORD:src/cpm/bdos.asm:137-142,245-252 saves/restores caller SP. |
-| Declarations versus measurements | src/tables.asm:143-146 declares limits. src/loader.asm:281-317 subtracts each declaration from remaining limits. test/stacks.test.mjs:43-78 watches writes/guard;212-264 enumerates workloads and asserts quarter headroom. No assertion was executed. Historical32/18/18 comes from78127ec:docs/services.md:209-229. |
+| Declarations versus measurements | src/tables.asm:143-146 declares limits. src/loader.asm:281-317 subtracts each declaration from remaining limits. test/stacks.test.mjs:43-78 watches writes/guard;212-264 enumerates workloads and asserts quarter headroom. No assertion was executed. Historical30/18/18 is recorded in editorial/reviews/book-46.md. The stale78127ec document has32; commits58bd349 and33af845 explain the code change and later documentation correction. Offered docs/services.md:215-229 gives30/18/18 and38/30/24. |
 | NMI scope | test/stacks.test.mjs:1-11,59-69 only injects when0066 holds RETN. This cannot qualify an arbitrary keypad NMI into a populated FCB. The disabled-jumper requirement is retained from the assigned caller-memory passage. |
 | EXPAND1 | src/layout.asm:50-58 defines30 lines and both tables; src/history.asm:1-24 fixes the ring. MEMINIT:src/boot.asm:321-346 clears the whole bank and empty keys. CLOOK, DETECT:348-401 and SDRBLK/SDWBLK:src/sd.asm:525-644,653-724 use no stack while the other bank is visible. |
 | Copy and interrupt restoration | HACC:src/history.asm:35-74 saves flags before bank selection and pops after restoration. CDI/CEI:src/bios.asm:445-478 saves/restores interrupt state. MVCOPY:src/cache.asm:695-858 splits fixed-RAM LDIR from bank-window byte copies and restores latch before saved registers. |
@@ -237,6 +241,18 @@ without repeating the unit name.
 All final citation occurrences were checked against their named Git object
 for file existence and exact valid line coordinates. Every Appendix C link
 resolves to an existing file and heading from this draft directory. The final
-reader-order read includes the source-backed32-byte historical BDOS correction.
+reader-order read now retains the measured30-byte historical BDOS result and38-byte base-plus-limit sum.
 No invented fences or outputs are present. No root-file edit is needed to
 review these two drafts.
+
+## Confirmed result-review corrections
+
+Restored the historical measured BDOS base/census30 and base-plus-limit38.
+Read both commit messages and diffs for58bd349 and33af845, the stale
+78127ec service table, the corrected offered table and the recorded historical
+census in book-46. The earlier32/40 disposition above has been replaced.
+The offered report measured071d6d7 remains separately attributed.
+Changed the allocation heading and its movement-account references to the
+noun phrase “Allocation vectors below the workspace”. Read the affected
+paragraphs for continuity, agency and every comma. Only these two owned
+paths were changed. No product execution, build, test or import was performed.
