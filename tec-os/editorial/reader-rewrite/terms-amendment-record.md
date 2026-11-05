@@ -13,3 +13,11 @@ pages and successful removal rather than ambiguous below-the-BDOS wording.
 All other term meanings and legacy variant distinctions remain to recheck
 in the complete glossary pass. No current glossary acceptance is claimed.
 No build, import, example or product execution was performed.
+
+## Bounded independent confirmation
+
+Independent changed-facts review confirmed c722ace's six-file starter, ROM
+PICO/loadedGLCD distinction, numbered0–15/FONT15 range, volsvc location and
+resident-page lifetime wording. This confirms only those source corrections.
+Full glossary meanings, chapter credits and first-use reconciliation remain
+open. No execution or qualification of the future font/default is implied.

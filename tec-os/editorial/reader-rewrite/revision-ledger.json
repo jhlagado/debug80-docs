@@ -2407,9 +2407,9 @@
     },
     {
       "unit": "chapter-07",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded source-only draft pushed atb47d642; full independent review in progress",
       "passes": {
-        "full_passage_read": "pending",
+        "full_passage_read": "lead read complete draft; full independent review in progress",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",
@@ -6075,7 +6075,7 @@
     },
     {
       "unit": "chapter-15",
-      "status": "source/craft review closed, historical measurement acceptance reopened for evidence conflicts",
+      "status": "bounded source/craft and corrected historical cost dispositions independently confirmed; final qualification pending",
       "passes": {
         "full_passage_read": "completed for bounded draft; 15-pass-record.md records actual scope",
         "draft": "completed for bounded draft; 15-pass-record.md records actual scope",
@@ -6088,7 +6088,7 @@
         "journey_readback": "completed for bounded draft; 15-pass-record.md records actual scope",
         "mechanical_gate": "completed for bounded draft; 15-pass-record.md records actual scope",
         "independent_editorial_review": "closed after full independent review and corrections where needed",
-        "independent_factual_review": "reopened cost provenance: CONIN and warm-boot figures conflict with retained run evidence",
+        "independent_factual_review": "full source review closed; retained cost audit applied atcdeb89e and independently confirmed; actual historical pins distinguished",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -8061,7 +8061,7 @@
     },
     {
       "unit": "chapter-19",
-      "status": "bounded source-only draft in progress; no execution authorised",
+      "status": "bounded source-only draft pushed atc22b609; full independent review pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
