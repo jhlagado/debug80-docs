@@ -15946,7 +15946,7 @@
     "reader_state": "Opening1–3 and worked Chapter5 extraction insertion remain held"
   },
   "opening_recut03": {
-    "status": "WIP / UNRUN; actual bounded source and metadata review pending",
+    "status": "Source independently CLEAR, final sealed metadata UNRUN; bounded metadata comparison and fresh allocation pending",
     "source_commit": "Origo1443dd8501d191026fe8d17ffe5f90e5641d7c9b",
     "batch_sha256": "de52e3a340b711975b0ace15463a6c5acb59a86e67c44b2b86f9ef6ea238f66e",
     "complete_executable_diff_sha256": "0420ab31bbc63163fe66da4e12eca21cae5026e2262bbc9e7c4cd3f695e3ad5c",
@@ -15956,7 +15956,20 @@
     "staging": "/tmp/ks48-book-next-batch02",
     "guard_log": "/tmp/ks48-book-next-batch02-guard.jsonl",
     "controls": "All cases, time/memory/heap/cycle ceilings and original576 input bytes preserved. Earlier CLEAR stays historical; current packetStaticReview null and no seal/allocation.",
-    "limits": "Not a production fix or successful book workflow. Preserve earlier offers and failed attempt01; no automatic retry."
+    "limits": "Not a production fix or successful book workflow. Preserve earlier offers and failed attempt01; no automatic retry.",
+    "actual_source_review": {
+      "commit": "Origo75e7f856",
+      "path": "studies/p3-tec-os/reviews/book-next-batch-recut.md",
+      "sha256": "6abef13de2de82f1ff6b61502ed50f47d6553773ca9ec001daf1866c70ed9a1c",
+      "reading": "Complete actual receipt read and hash verified. Earlier review missed CJS/ESM condition mismatch; current clearance covers exact narrow recut, not execution."
+    },
+    "sealed_metadata": {
+      "commit": "Origoa41c427593f858bf602f9091d91dbd2cd3f2eaf8",
+      "seal_sha256": "73c60a2a556fe58fdc8a59617fe7d465f1141a87537f5ff69a3b01d8287b8af4",
+      "archive_sha256": "ea73774258513a390159e53baafbe2a495f0610c89c0a195081b5cd47c3ddfe7",
+      "manifest_sha256": "023b044c10a2137b1efca0bfa7327e7c1979b644889046ed8895bec7331eb81e",
+      "lead_inert_check": "All577 previous members retained exactly; sole new member is actual packet-recut-review.md. Complete578-member archive17233803bytes matches manifest, all25 child-seal bindings verified, actual current review path/hash/CLEAR and de52 batch identity confirmed. No extraction/import/execution."
+    }
   },
   "source_adoption_preparation": {
     "status": "Source-impact preparation boundedly confirmed; no receiver adoption",
