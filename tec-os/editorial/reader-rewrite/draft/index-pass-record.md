@@ -1,8 +1,8 @@
 # Front door: first bounded revision
 
 Draft only, outside published pages. Outline checkpoint closed at0e4feea and
-was recorded/pushed3060e71 before this draft. Independent chapter editorial and
-factual reviews, final navigation and whole-book read remain pending.
+was recorded/pushed3060e71 before this draft. Bounded independent editorial and factual reviews are closed below. Final
+navigation and the whole-book read remain pending.
 
 ## Inputs and meaning preserved
 
@@ -48,8 +48,7 @@ runtime verification before final book acceptance.
 All relative destinations are final-location links, intentionally not resolved
 inside the editorial draft folder. Validate after integration; no route is
 claimed navigable yet. No whole-chapter checked-at header is fabricated.
-Source offer17 is ea3ef3d. Final source/capture inventory, independent editorial
-and factual result review and all linked chapter drafts still need acceptance.
+Source offer17 is ea3ef3d. Final source/capture inventory, all linked chapter drafts and their runtime evidence still need acceptance.
 
 ## Independent first review and correction
 
@@ -57,5 +56,5 @@ The full original/draft read ataa09710 found no editorial or bounded factual
 blocker but identified two lost holdings: notation conventions and source
 priority in a disagreement. Both are restored. The setup uses32,768 bytes so
 KiB does not precede its definition. The redundant sentence about hardware
-requirements is deleted. Independent confirmation of these bounded corrections
-remains pending. Draft destination links still await integration.
+requirements is deleted. Independent confirmation at545c9f8 closed both preservation findings and
+the redundant setup sentence. No bounded editorial or factual finding remains. Draft destination links still await integration.
