@@ -1,0 +1,2988 @@
+{
+  "schema_version": 1,
+  "status": "review_complete_for_assigned_occurrences",
+  "scope": "Appendices A–E, 61 occurrences CC0229–CC0289",
+  "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+  "review_book_commit": "d9f2f91a4118d14d72893b7c5e5773c4ff973062",
+  "inventory_sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326",
+  "method": "Read every full context in order and considered paired insertions and adjacent conjunction commas jointly. These are unapplied punctuation decisions, not runtime verification. Original source hashes and comma offsets were checked against current bytes.",
+  "counts": {
+    "remove_optional": 54,
+    "retain_boundary": 7
+  },
+  "reviews": [
+    {
+      "id": "CC0229",
+      "classification": "remove_optional",
+      "reason": "So directly connects the retained extent to the later write. No inserted phrase ends at this comma.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0229",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "98b1201fd33ff077890d1e02bf3a6459ff8c113dfc218626a14859980ba82281",
+        "source_git_blob": "0cccd30da02dae91117ba083e5711ec4c6ba03e2",
+        "line": 255,
+        "column": 61,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 255,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The functions",
+          "line": 123
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix A. BDOS functions",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The functions",
+            "line": 123
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 250,
+        "context_end_line": 260,
+        "full_context": "**21 Write sequential.** Writes the record at the DMA address at the FCB's\n`CR` and moves on. It takes a new allocation block or a new extent when the\nrecord falls in one (`src/cpm/bdosrec.asm:22-207`). Returns 0 on success.\nReturns 1 when the directory has no entry for a new extent or when the close\nof the extent it leaves finds no entry for it. Returns 2 when the drive is\nfull. After a 1 the FCB stays on its extent with `CR` at 128, so a later\nwrite, once an entry has been freed, makes the extent the FCB needs\n(`src/cpm/bdosrec.asm:119-175`). A block taken for a write that then fails\nstays in the FCB's map. A later successful close publishes it in the entry\n(`src/cpm/bdosrec.asm:733-767`). An FCB with the read-only attribute set gives\nthe `File R/O` error (`src/cpm/bdosfile.asm:430-445`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0230",
+      "classification": "remove_optional",
+      "reason": "So connects reselection to the new allocation vector without needing a boundary.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0230",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "98b1201fd33ff077890d1e02bf3a6459ff8c113dfc218626a14859980ba82281",
+        "source_git_blob": "0cccd30da02dae91117ba083e5711ec4c6ba03e2",
+        "line": 292,
+        "column": 40,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 292,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The functions",
+          "line": 123
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix A. BDOS functions",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The functions",
+            "line": 123
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 290,
+        "context_end_line": 293,
+        "full_context": "**27 Get allocation vector address.** Returns in `HL` the address of the\ndefault drive's allocation vector (`src/cpm/bdosfn.asm:58-64`). A `MOUNT`\nonto the default drive selects it again, so this is the new volume's vector at\nonce (`src/volsvc.asm:377-391`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0231",
+      "classification": "remove_optional",
+      "reason": "So that gives the sequential-read consequence directly after the record selection.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0231",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "98b1201fd33ff077890d1e02bf3a6459ff8c113dfc218626a14859980ba82281",
+        "source_git_blob": "0cccd30da02dae91117ba083e5711ec4c6ba03e2",
+        "line": 323,
+        "column": 78,
+        "conjunction": "so",
+        "matched_text": ",\nso",
+        "conjunction_line": 324,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The functions",
+          "line": 123
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix A. BDOS functions",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The functions",
+            "line": 123
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 322,
+        "context_end_line": 330,
+        "full_context": "**33 Read random.** Reads the record whose number is in the FCB's `R0` and\n`R1` into the DMA address and leaves the FCB's extent and `CR` at that record,\nso that a sequential read after it reads the same record\n(`src/cpm/bdosrec.asm:307-316`, `src/cpm/bdosrec.asm:393-531`). Returns 0 on\nsuccess. Returns 1 when the record has not been written. Returns 3 when the\ncurrent extent can't be closed. Returns 4 when the extent has not been\nwritten. Returns 6 when `R2` is not 0. After a 4 the FCB's `EX` and `S2` are\nits own again, naming the extent its record count and map describe, so a\nsecond read of that record is 4 again and a write to it makes the extent.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0232",
+      "classification": "retain_boundary",
+      "reason": "The comma closes the inserted naming phrase before the consequence clause. Removing only this boundary leaves the insertion unmatched.",
+      "retained_comma_reason": "The comma closes the inserted naming phrase before the consequence clause. Removing only this boundary leaves the insertion unmatched.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0232",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "98b1201fd33ff077890d1e02bf3a6459ff8c113dfc218626a14859980ba82281",
+        "source_git_blob": "0cccd30da02dae91117ba083e5711ec4c6ba03e2",
+        "line": 329,
+        "column": 67,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 329,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The functions",
+          "line": 123
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix A. BDOS functions",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The functions",
+            "line": 123
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 322,
+        "context_end_line": 330,
+        "full_context": "**33 Read random.** Reads the record whose number is in the FCB's `R0` and\n`R1` into the DMA address and leaves the FCB's extent and `CR` at that record,\nso that a sequential read after it reads the same record\n(`src/cpm/bdosrec.asm:307-316`, `src/cpm/bdosrec.asm:393-531`). Returns 0 on\nsuccess. Returns 1 when the record has not been written. Returns 3 when the\ncurrent extent can't be closed. Returns 4 when the extent has not been\nwritten. Returns 6 when `R2` is not 0. After a 4 the FCB's `EX` and `S2` are\nits own again, naming the extent its record count and map describe, so a\nsecond read of that record is 4 again and a write to it makes the extent.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0233",
+      "classification": "retain_boundary",
+      "reason": "This closes the comparison as after function 33’s 4. Keep both boundaries around that comparison.",
+      "retained_comma_reason": "This closes the comparison as after function 33’s 4. Keep both boundaries around that comparison.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0233",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "98b1201fd33ff077890d1e02bf3a6459ff8c113dfc218626a14859980ba82281",
+        "source_git_blob": "0cccd30da02dae91117ba083e5711ec4c6ba03e2",
+        "line": 338,
+        "column": 2,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 338,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The functions",
+          "line": 123
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix A. BDOS functions",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The functions",
+            "line": 123
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 332,
+        "context_end_line": 339,
+        "full_context": "**34 Write random.** Writes the record at the DMA address to the record whose\nnumber is in `R0` and `R1`. It makes the extent when the record falls in one\nthe file lacks (`src/cpm/bdosrec.asm:328-531`). Returns 0 on success. Returns\n2 when the drive is full. Returns 3 when the current extent can't be closed.\nReturns 5 when the directory has no entry for the extent. Returns 6 when `R2`\nis not 0. After a 5 the FCB is back on its own extent, as after function 33's\n4, so a write once an entry is freed makes the extent. An FCB with the\nread-only attribute set gives the `File R/O` error.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0234",
+      "classification": "retain_boundary",
+      "reason": "This closes the inserted bit 0 for A explanation before the second action. Keep the paired boundary.",
+      "retained_comma_reason": "This closes the inserted bit 0 for A explanation before the second action. Keep the paired boundary.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0234",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "98b1201fd33ff077890d1e02bf3a6459ff8c113dfc218626a14859980ba82281",
+        "source_git_blob": "0cccd30da02dae91117ba083e5711ec4c6ba03e2",
+        "line": 349,
+        "column": 78,
+        "conjunction": "and",
+        "matched_text": ",\nand",
+        "conjunction_line": 350,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The functions",
+          "line": 123
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix A. BDOS functions",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The functions",
+            "line": 123
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 349,
+        "context_end_line": 352,
+        "full_context": "**37 Reset drive.** Logs out each drive whose bit is set in `DE`, bit 0 for A,\nand clears its bit in the read-only vector (`src/cpm/bdosfn.asm:431-447`). The\ndrive's next selection logs it in again with a full directory scan.\nReturns 0.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0235",
+      "classification": "remove_optional",
+      "reason": "So introduces the consequence of restoring DMA after each write. Register and failure scope remain clear without a comma.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0235",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "98b1201fd33ff077890d1e02bf3a6459ff8c113dfc218626a14859980ba82281",
+        "source_git_blob": "0cccd30da02dae91117ba083e5711ec4c6ba03e2",
+        "line": 360,
+        "column": 74,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 360,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The functions",
+          "line": 123
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix A. BDOS functions",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The functions",
+            "line": 123
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 357,
+        "context_end_line": 362,
+        "full_context": "**40 Write random with zero fill.** Function 34, with each allocation block the\nwrite newly allocates filled with zeros before the record is written\n(`src/cpm/bdosrec.asm:328-359`, `src/cpm/bdosrec.asm:794-860`). The BIOS's DMA\naddress is put back on the program's after each of the zero-fill's writes, so\na failed write that function 45 returns leaves the program's DMA address in\nthe BIOS (`src/cpm/bdoslog.asm:122-136`). Returns as function 34 does.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0236",
+      "classification": "remove_optional",
+      "reason": "So directly explains the only supported count after the one-record-per-call statement.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0236",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "98b1201fd33ff077890d1e02bf3a6459ff8c113dfc218626a14859980ba82281",
+        "source_git_blob": "0cccd30da02dae91117ba083e5711ec4c6ba03e2",
+        "line": 366,
+        "column": 35,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 366,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The functions",
+          "line": 123
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix A. BDOS functions",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The functions",
+            "line": 123
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 364,
+        "context_end_line": 366,
+        "full_context": "**44 Set multi-sector count.** With `E` = 1 returns 0. With any other `E`\nchanges nothing and returns `FFh` in `A` (`src/cpm/bdos.asm:221-237`). TEC-OS\nreads and writes one record a call, so 1 is the only count.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0237",
+      "classification": "remove_optional",
+      "reason": "While contrasts the dirty-drive scan with the unmarked mismatch scan. Both subjects are explicit without a comma.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0237",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "98b1201fd33ff077890d1e02bf3a6459ff8c113dfc218626a14859980ba82281",
+        "source_git_blob": "0cccd30da02dae91117ba083e5711ec4c6ba03e2",
+        "line": 439,
+        "column": 21,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 439,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Differences from Digital Research's BDOS",
+          "line": 424
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix A. BDOS functions",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Differences from Digital Research's BDOS",
+            "line": 424
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 430,
+        "context_end_line": 453,
+        "full_context": "- The BDOS code is in ROM. Writing to it cannot install a hook. The BDOS\n  calls the RAM BIOS jump table, where a program can replace an entry\n  (`src/rom.asm:35-40`, `src/cpm/bdos.asm:14-35`).\n- Functions 44 to 48, 99 and 108 occupy selected CP/M 3 numbers with the\n  limited meanings above. Function 99 returns `FFh` without truncating.\n  Every other number above 40 returns 0 without doing anything\n  (`src/cpm/bdos.asm:143-165`).\n- The CCP's warm-entry disk reset retains clean drives whose allocation\n  vector sums still match. Dirty drives rebuild from the directory up to\n  the retained bound, while an unmarked sum mismatch requires a full scan.\n  A program's function 13 resets every drive\n  (`src/cpm/bdosfile.asm:19-132`).\n- `^P` during output toggles the list copy. Digital Research's BDOS retains\n  that key for input and handles the toggle in line input. TEC-OS also\n  echoes every character in function 1, including control characters,\n  rather than restricting the echo to printing characters, CR, LF, tab and\n  backspace (`src/cpm/bdos.asm:321-330`, `src/cpm/bdoscon.asm:273-286`,\n  `318-350`).\n- Function 10 uses `^W` and `^N` for history only at the CCP's prompt. A\n  program receives those keys as characters (`src/cpm/bdos.asm:545-553`).\n- Neither geometry uses the check vector: both set CKS to 0. This mechanism\n  therefore does not detect a card exchanged while TEC-OS is running\n  (`format/format.json:52`, `59`). Follow the card-change procedure in\n  [Chapter 5](05-cards-on-the-pc.md#writing-the-physical-card).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0238",
+      "classification": "remove_optional",
+      "reason": "So directly links appended service numbers with minor-version compatibility.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0238",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 39,
+        "column": 4,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 39,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The ROM table",
+          "line": 34
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The ROM table",
+            "line": 34
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 36,
+        "context_end_line": 41,
+        "full_context": "The inspected application binary interface (ABI) is 5.1. Before calling ABICALL,\na program compares the three bytes at ABITAB with `TNA` and ABIMAJ with exactly\n5. A new major may renumber services. A new minor adds service numbers at the\nend, so code using the 5.0 calls can run on 5.1. A caller requiring FONT also\nchecks for minor version 1 or later (`src/abi.inc:1-32,163-168`,\n`src/abi.asm:1-20`, `test/programs/demo.asm:19-31`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0239",
+      "classification": "remove_optional",
+      "reason": "So introduces the required caller flag test after undefined Z. No parenthesis needs closing.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0239",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 71,
+        "column": 38,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 71,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Calling a service",
+          "line": 54
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Calling a service",
+            "line": 54
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 70,
+        "context_end_line": 74,
+        "full_context": "Hardware failures and an invalid service number set NZ as well as carry. Volume\nand driver failures leave Z undefined, so their callers test carry or A.\nFIND/LIST use carry and return a generation in A on success\n(`src/services.asm:70-86,617-658`, `src/volsvc.asm:360-368`,\n`src/loader.asm:773-880`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0240",
+      "classification": "remove_optional",
+      "reason": "So connects the dispatcher pushes being gone with the stack accounting rule.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0240",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 117,
+        "column": 33,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 117,
+        "nearest_heading": {
+          "level": 3,
+          "text": "Historical costs and depths",
+          "line": 113
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Calling a service",
+            "line": 54
+          },
+          {
+            "level": 3,
+            "text": "Historical costs and depths",
+            "line": 113
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 115,
+        "context_end_line": 119,
+        "full_context": "The table's stack figures are current source bounds below the service's return\naddress, including dispatcher use. The dispatcher's temporary pushes are gone\nwhen the selected routine begins, so its depth is not added to a routine's\ndepth. The caller must allow for its own return word, saved registers and\nnesting too (`src/services.asm:45-68`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0241",
+      "classification": "remove_optional",
+      "reason": "So directly introduces the interpretation of the version word after its two component bytes.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0241",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 152,
+        "column": 36,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 152,
+        "nearest_heading": {
+          "level": 3,
+          "text": "0 INFO",
+          "line": 147
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The hardware services",
+            "line": 139
+          },
+          {
+            "level": 3,
+            "text": "0 INFO",
+            "line": 147
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 149,
+        "context_end_line": 153,
+        "full_context": "Returns B = device bits, DE = ROM product version, L = console columns and H =\nconsole rows. Serial dimensions are both zero. Status is always 0. Stack bound:\n6 bytes. Historical cost: 244 T-states at `60e0768`, with no device read. D is\nthe version's major and E its minor, so `0001h` means product version 0.1 rather\nthan ABI 5.1 (`src/services.asm:88-105`, `tools/build.mjs:27-27,63-70`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0242",
+      "classification": "retain_boundary",
+      "reason": "This closes the leftmost first insertion between the HL input and the scan action. Removing only the second comma would break its boundaries.",
+      "retained_comma_reason": "This closes the leftmost first insertion between the HL input and the scan action. Removing only the second comma would break its boundaries.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0242",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 171,
+        "column": 58,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 171,
+        "nearest_heading": {
+          "level": 3,
+          "text": "1 DIGIT",
+          "line": 169
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The hardware services",
+            "line": 139
+          },
+          {
+            "level": 3,
+            "text": "1 DIGIT",
+            "line": 169
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 171,
+        "context_end_line": 173,
+        "full_context": "Takes HL pointing to six segment patterns, leftmost first, and scans once.\nStatus is always 0. Stack bound: 4 bytes. Historical cost: 20,670 T-states at\n`60e0768` (`src/services.asm:107-150`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0243",
+      "classification": "remove_optional",
+      "reason": "Or directly introduces the alternate row-3 timing. Both costs retain their units and historical pin.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0243",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 187,
+        "column": 62,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 187,
+        "nearest_heading": {
+          "level": 3,
+          "text": "2 LCD",
+          "line": 183
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The hardware services",
+            "line": 139
+          },
+          {
+            "level": 3,
+            "text": "2 LCD",
+            "line": 183
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 185,
+        "context_end_line": 188,
+        "full_context": "Takes B = row 0–3 and HL pointing to exactly 20 characters for the 20 × 4 LCD.\nStatus is 0 on success or 1 for a row above 3, rejected before a write. Stack\nbound: 10 bytes. Historical cost at `60e0768`: 4,915 T-states, or 4,935 for row\n3 (`src/services.asm:152-193`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0244",
+      "classification": "remove_optional",
+      "reason": "So links the disabled Matrix switch with the chip state left alone. No inserted phrase ends here.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0244",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 215,
+        "column": 53,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 215,
+        "nearest_heading": {
+          "level": 3,
+          "text": "3 VIDEO",
+          "line": 194
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The hardware services",
+            "line": 139
+          },
+          {
+            "level": 3,
+            "text": "3 VIDEO",
+            "line": 194
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 211,
+        "context_end_line": 217,
+        "full_context": "Release with no claim returns status 0 without restoring anything. Otherwise it\nclears VCLAIM and calls the ROM PICO console's restore routine when that console\nstarted at cold boot. Mode, font and displayed page are restored. If PICO is\nselected, release also clears its screen and homes its cursor. With the\nMatrix switch disabled the ROM console did not start, so release leaves the chip's\nprogrammed state alone. Warm boot releases an active claim before rebuilding\npage zero (`src/boot.asm:178-215`, `src/pico.asm:54-87`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0245",
+      "classification": "remove_optional",
+      "reason": "While directly contrasts high-byte reversal and ordinary-console filtering. The two paths remain explicit.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0245",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 291,
+        "column": 28,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 291,
+        "nearest_heading": {
+          "level": 3,
+          "text": "7 PUTAT",
+          "line": 273
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The hardware services",
+            "line": 139
+          },
+          {
+            "level": 3,
+            "text": "7 PUTAT",
+            "line": 273
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 288,
+        "context_end_line": 293,
+        "full_context": "The cursor's stored position remains unchanged. CONST redraws its image when no\ncharacter is ready and CONIN while waiting for input\n(`src/console.asm:200-225,296-332`). Bytes `80h–FFh` reach the display as\nreverse images of `00h–7Fh`, while the ordinary video-console path filters those\nhigh bytes (`src/pico.asm:277-331`, `drivers/glcd.asm:604-641`,\n`src/term.asm:49-65`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0246",
+      "classification": "remove_optional",
+      "reason": "Or directly connects the two cursor-depth cases. The respective display ordering remains stated.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0246",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 296,
+        "column": 24,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 296,
+        "nearest_heading": {
+          "level": 3,
+          "text": "7 PUTAT",
+          "line": 273
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The hardware services",
+            "line": 139
+          },
+          {
+            "level": 3,
+            "text": "7 PUTAT",
+            "line": 273
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 295,
+        "context_end_line": 299,
+        "full_context": "Historical measured depths at `58d4345` were 22 bytes on GLCD and 18 on PICO\nwith a cursor to remove, or 18 and 14 respectively without one. These are\nmeasured paths, distinct from the source's 22-byte bound. A cell along a row\ncost about 509 T-states on the 80-column PICO at `58d4345` and about 36,900 on\nGLCD at `621201d`.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0247",
+      "classification": "remove_optional",
+      "reason": "So introduces the next-access login consequence of resetting the drive.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0247",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 343,
+        "column": 66,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 343,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The volume services",
+          "line": 314
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The volume services",
+            "line": 314
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 342,
+        "context_end_line": 347,
+        "full_context": "MOUNT and UNMNT flush the card's dirty cache lines before changing a drive. They\nreset that drive through BDOS function 37 on the BDOS's own stack, so its next\naccess logs it in from the directory. When MOUNT changes the default drive it\nalso selects it again through function 14, making functions 27 and 31 report the\nnew volume immediately. They must be called from outside an active BDOS call.\nDESC makes no such BDOS call (`src/volsvc.asm:246-279,326-391`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0248",
+      "classification": "remove_optional",
+      "reason": "Or directly connects the mounted-drive byte with FFh for none. No apposition is interrupted.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0248",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 365,
+        "column": 8,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 365,
+        "nearest_heading": {
+          "level": 3,
+          "text": "11 DESC",
+          "line": 361
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The volume services",
+            "line": 314
+          },
+          {
+            "level": 3,
+            "text": "11 DESC",
+            "line": 361
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 363,
+        "context_end_line": 366,
+        "full_context": "Takes E = container index and HL pointing to 32 destination bytes. It copies the\ndescriptor and sets byte 14 to the drive on which the volume is currently\nmounted, or `FFh` for none. Status is 0 or TNEBAD. Stack bound: 24 bytes\n(`src/volsvc.asm:212-236,457-506`, `format/format.json:27-38`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0249",
+      "classification": "remove_optional",
+      "reason": "So links the CRT-only page routine with the zero GLCD entry. The preceding six-routine list is separate.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0249",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 385,
+        "column": 33,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 385,
+        "nearest_heading": {
+          "level": 3,
+          "text": "12 DRVR",
+          "line": 370
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "A display driver's table",
+            "line": 368
+          },
+          {
+            "level": 3,
+            "text": "12 DRVR",
+            "line": 370
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 383,
+        "context_end_line": 387,
+        "full_context": "The table is eight words. Its first six are routines in this order: put, get,\nclear to end of line, restore, read row and write row. The seventh handles page\nfunctions and only CRT: calls it, so the GLCD table uses 0. The last word stores\ncolumns then rows as bytes (`src/video.asm:134-148`, `drivers/glcd.asm:39-46`).\nGLCD.SVC installs from INIT and drops from REMOVE (`drivers/glcd.asm:66-129`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0250",
+      "classification": "remove_optional",
+      "reason": "Or directly separates successful record/generation return from past-end carry. Neither branch needs a comma.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0250",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 418,
+        "column": 27,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 418,
+        "nearest_heading": {
+          "level": 3,
+          "text": "14 LIST",
+          "line": 415
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The registry",
+            "line": 393
+          },
+          {
+            "level": 3,
+            "text": "14 LIST",
+            "line": 415
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 417,
+        "context_end_line": 419,
+        "full_context": "Takes B = index from 0, newest first. It returns carry clear, HL = record\naddress and A = generation, or carry set past the end. Stack bound: 8 bytes\n(`src/loader.asm:786-814`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0251",
+      "classification": "remove_optional",
+      "reason": "So introduces the next-console-call consequence of marking CRT for reselection.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0251",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 447,
+        "column": 16,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 447,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The PICO record",
+          "line": 421
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The PICO record",
+            "line": 421
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 444,
+        "context_end_line": 448,
+        "full_context": "PICOWID was added in record version 3 and is the entry used by CON PICO 40. It\nrequires an unclaimed chip. Any other width or an active claim returns carry\nwith no width change. Success changes the saved width and marks selected CRT:\nfor reselection, so the next console call clears its screen at that width\n(`src/abi.inc:220-243`, `src/pico.asm:89-174`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0252",
+      "classification": "remove_optional",
+      "reason": "So connects no removal with no generation recheck. The stated dispatch technique remains separate.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0252",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 459,
+        "column": 44,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 459,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The PICO record",
+          "line": 421
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The PICO record",
+            "line": 421
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 454,
+        "context_end_line": 460,
+        "full_context": "VTEST is a retained historical program. It finds a version-2-or-later PICO\nrecord, claims the chip, writes four bytes to VRAM, reads them back, releases it\nand prints the buffer. Its ENTRY helper reads a word pointer, unlike COUNT's JP\nentry in Chapter 13. EX (SP),HL followed by RET enters that routine with HL\nrestored. Chapter 23 explains the same dispatch technique. HWLIB.ASM comes from\nChapter 11. The program performs no removal, so it does not recheck the saved\ntable's generation before these calls.",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0253",
+      "classification": "remove_optional",
+      "reason": "So introduces the failed-install consequence of calling FONT on ABI 5.0.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0253",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "source_git_blob": "2919967f32d9fa3f89d6dec5ca987180560858fb",
+        "line": 565,
+        "column": 9,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 565,
+        "nearest_heading": {
+          "level": 3,
+          "text": "15 FONT",
+          "line": 552
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix B. The ROM table and hardware services",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The font",
+            "line": 550
+          },
+          {
+            "level": 3,
+            "text": "15 FONT",
+            "line": 552
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 558,
+        "context_end_line": 565,
+        "full_context": "The font contains 96 characters from `20h`, eight bytes each, top row first. In\nthis source format each row's five pixels occupy bits 7–3\n(`tools/lib/font.mjs:9-31`). The historical `58d4345` layout puts FONT at\n`C179h`. Programs use the returned address rather than embedding that\ncoordinate. The PICO console uses the FONT label and GLCD.SVC obtains the\naddress through this call during INIT (`src/pico.asm:277-331`,\n`drivers/glcd.asm:66-72`). On ABI 5.0 the number is out of range and returns\nstatus 1, so this GLCD driver's INIT refuses installation there.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0254",
+      "classification": "remove_optional",
+      "reason": "So connects potentially retained failed-INIT pages with the qualification on slot release.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0254",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "e441a2b715c112818ccde80504f48fd68e370b2ae2b177147f6dd227eb1048d7",
+        "source_git_blob": "bdb5af003789fc1a7a94c0d0ff2e226b7ec90c45",
+        "line": 132,
+        "column": 24,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 132,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Page zero",
+          "line": 101
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix C. Memory map",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Page zero",
+            "line": 101
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 129,
+        "context_end_line": 134,
+        "full_context": "Service-page release clears the first byte of each claimed restart slot\nbefore the sweep. Successful unload and failure cleanup that releases the\npages both use this rule. A failed `INIT` can retain its pages when a BIOS\nhook still targets them, so failure alone does not imply slot release\n(`ea3ef3d:src/loader.asm:128-173`, `ea3ef3d:src/loader.asm:536-580`,\n`ea3ef3d:src/loader.asm:634-662`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0255",
+      "classification": "remove_optional",
+      "reason": "So explains why tail publication follows FCB parsing from the second FCB’s end address.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0255",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "e441a2b715c112818ccde80504f48fd68e370b2ae2b177147f6dd227eb1048d7",
+        "source_git_blob": "bdb5af003789fc1a7a94c0d0ff2e226b7ec90c45",
+        "line": 140,
+        "column": 27,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 140,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Page zero",
+          "line": 101
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix C. Memory map",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Page zero",
+            "line": 101
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 136,
+        "context_end_line": 140,
+        "full_context": "The CCP records the drive/user byte for its command prompt. Before program\nlaunch it writes both FCBs, then the command tail and default DMA address, then\nthe load-drive byte (`ea3ef3d:src/cpm/ccp.asm:363-384`,\n`ea3ef3d:src/cpm/ccpcmd.asm:447-497`, `ea3ef3d:src/cpm/ccp.asm:519-536`). The\nsecond FCB reaches `008Fh`, so tail publication follows FCB parsing.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0256",
+      "classification": "retain_boundary",
+      "reason": "This closes the inserted PIBLK for PICO or 0 when absent explanation before GLCD’s table. Keep its paired boundaries.",
+      "retained_comma_reason": "This closes the inserted PIBLK for PICO or 0 when absent explanation before GLCD’s table. Keep its paired boundaries.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0256",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "e441a2b715c112818ccde80504f48fd68e370b2ae2b177147f6dd227eb1048d7",
+        "source_git_blob": "bdb5af003789fc1a7a94c0d0ff2e226b7ec90c45",
+        "line": 268,
+        "column": 99,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 268,
+        "nearest_heading": {
+          "level": 3,
+          "text": "Above the RAM BIOS table",
+          "line": 257
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix C. Memory map",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The resident workspace",
+            "line": 148
+          },
+          {
+            "level": 3,
+            "text": "Above the RAM BIOS table",
+            "line": 257
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 268,
+        "context_end_line": 268,
+        "full_context": "| `BF49h–BF4Ch` | 4 | `PIVEC`, `GLVEC` | Console-table pointers, `PIBLK` for PICO or 0 when absent, and GLCD's table | Cold boot |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0257",
+      "classification": "retain_boundary",
+      "reason": "This closes the offset in CMDTXT plus 1 explanation before the zero alternative. Retain both appositional boundaries.",
+      "retained_comma_reason": "This closes the offset in CMDTXT plus 1 explanation before the zero alternative. Retain both appositional boundaries.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0257",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "e441a2b715c112818ccde80504f48fd68e370b2ae2b177147f6dd227eb1048d7",
+        "source_git_blob": "bdb5af003789fc1a7a94c0d0ff2e226b7ec90c45",
+        "line": 278,
+        "column": 69,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 278,
+        "nearest_heading": {
+          "level": 3,
+          "text": "Above the RAM BIOS table",
+          "line": 257
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix C. Memory map",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The resident workspace",
+            "line": 148
+          },
+          {
+            "level": 3,
+            "text": "Above the RAM BIOS table",
+            "line": 257
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 278,
+        "context_end_line": 278,
+        "full_context": "| `BFE4h` | 1 | `CHPOS` | Next chained piece, offset in `CMDTXT` + 1, or 0 for none | Cold boot |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0258",
+      "classification": "remove_optional",
+      "reason": "So connects the mixed switch/probe/ownership bits with the limitation on presence inference.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0258",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "e441a2b715c112818ccde80504f48fd68e370b2ae2b177147f6dd227eb1048d7",
+        "source_git_blob": "bdb5af003789fc1a7a94c0d0ff2e226b7ec90c45",
+        "line": 296,
+        "column": 16,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 296,
+        "nearest_heading": {
+          "level": 3,
+          "text": "Above the RAM BIOS table",
+          "line": 257
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix C. Memory map",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The resident workspace",
+            "line": 148
+          },
+          {
+            "level": 3,
+            "text": "Above the RAM BIOS table",
+            "line": 257
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 294,
+        "context_end_line": 302,
+        "full_context": "`CIFF` occupies two bytes. `HFLAG` marks the CCP's line-input call with `FFh`.\n`HPOS` is a byte offset into the history page. `CONDEV` combines switch, probe and\nownership state, so its bits do not all prove device presence\n(`ea3ef3d:src/ram.asm:249-252`, `ea3ef3d:src/ram.asm:332-337`,\n`ea3ef3d:src/layout.asm:92-102`, `ea3ef3d:src/cpm/ccp.asm:161-166`).\n`SVCRA` identifies a cause only when\n`SVCRC` is 1. Record-validation failure after successful INIT sets it to 0\n(`ea3ef3d:src/loader.asm:519-544`).\n[Chapter 24](24-loading-and-removing-services.md) explains those load outcomes.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0259",
+      "classification": "remove_optional",
+      "reason": "So connects artifact-specific symbol lookup with the later map’s identity requirement.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0259",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "e441a2b715c112818ccde80504f48fd68e370b2ae2b177147f6dd227eb1048d7",
+        "source_git_blob": "bdb5af003789fc1a7a94c0d0ff2e226b7ec90c45",
+        "line": 403,
+        "column": 9,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 403,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Reproducing the figures",
+          "line": 371
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix C. Memory map",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Reproducing the figures",
+            "line": 371
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 398,
+        "context_end_line": 403,
+        "full_context": "A source change can move build-dependent addresses. Page zero, the cache and\nhistory addresses, RAM BIOS origin `BF00h` and ROM table origin `C003h` are\nfixed by the inspected contract (`ea3ef3d:src/layout.asm:49-90`,\n`ea3ef3d:src/layout.asm:134-135`, `ea3ef3d:src/history.asm:24`,\n`ea3ef3d:tools/build.mjs:255-266`). A symbol lookup is valid for the artifact\nit reads, so a later map needs that build's symbols and identity.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0260",
+      "classification": "remove_optional",
+      "reason": "Or directly separates the two RAM failure conditions. Both predicates remain explicit.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0260",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 35,
+        "column": 84,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 35,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Cold boot",
+          "line": 27
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Cold boot",
+            "line": 27
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 35,
+        "context_end_line": 35,
+        "full_context": "| `TEC-OS needs 64K RAM` | The bank window at `8000h–BFFFh` failed the RAM patterns, or the bank probe did not find EXPAND 1 behind it. | Fit the required 32 KiB RAM chip in U9 and check the configuration, then reset. | [Appendix G](appendix-g-tec-1g.md), `src/boot.asm:579-632`, `src/text.asm:10` |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0261",
+      "classification": "remove_optional",
+      "reason": "While directly distinguishes disk errors from failed warm-boot flushing. No inserted phrase needs closing.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0261",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 72,
+        "column": 13,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 72,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The diagnostic prompt",
+          "line": 37
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The diagnostic prompt",
+            "line": 37
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 68,
+        "context_end_line": 73,
+        "full_context": "Codes `05h` to `0Ah` are the SD card driver's codes for a block read or write\n(`src/sd.asm:20-30`, `385-395`). They do not reach this prompt directly.\nThe driver stores them in `SDERR`, with no later reader in the ROM. A failed\ntable read during mounting becomes code `20h`. A failed BDOS transfer gives\na disk error, while a failed warm-boot flush gives `Write lost`. The\n`MOUNT` program's own reads and writes give the messages in its table below.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0262",
+      "classification": "remove_optional",
+      "reason": "So directly states that transmission before a failure does not establish rollback.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0262",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 86,
+        "column": 30,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 86,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The diagnostic prompt",
+          "line": 37
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The diagnostic prompt",
+            "line": 37
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 84,
+        "context_end_line": 86,
+        "full_context": "These are polling bounds, not measured deadlines (`src/sd.asm:447-486`,\n`735-806`). Code 05 precedes block-data transfer. Codes 07 and 08 can follow\ntransmission of all 512 bytes, so neither establishes rollback of a write.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0263",
+      "classification": "remove_optional",
+      "reason": "So connects container validation before extraction with the blocked read on failure.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0263",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 112,
+        "column": 61,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 112,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The diagnostic prompt",
+          "line": 37
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The diagnostic prompt",
+            "line": 37
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 109,
+        "context_end_line": 116,
+        "full_context": "For `20h`, `R` retries the read. A repeated read failure or a structural fault\nneeds card inspection. [Chapter 5](05-cards-on-the-pc.md#recovery-after-a-power-cut)\ngives the copy-first procedure. `tecvol verify` reports container and directory\nfaults. `get` also validates the container before extraction, so a failed\ncontainer check prevents any file read. `get` does not perform the complete\ndirectory check that `verify` does. A fresh image can be made with `create`\nand `put` or a starter recipe\n(`tools/tecvol.mjs:73-83`, `115-139`, `159-166`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0264",
+      "classification": "remove_optional",
+      "reason": "But directly qualifies a returned write failure’s close attempt. Fatal disk errors stay separately distinguished.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0264",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 149,
+        "column": 177,
+        "conjunction": "but",
+        "matched_text": ", but",
+        "conjunction_line": 149,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The CCP's failures",
+          "line": 137
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The CCP's failures",
+            "line": 137
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 149,
+        "context_end_line": 149,
+        "full_context": "| `NO SPACE` | `SAVE` received a make, write or close failure. It erases an existing destination before making the replacement. After a returned write failure it attempts close, but a failed close does not guarantee a complete directory entry for the partial file. Fatal disk errors use BDOS messages instead. | Inspect the partial file, free space or save to another drive. Keep another copy of the original. | [Chapter 10](10-memory-for-programs.md), `src/cpm/ccpcmd.asm:356-442`, `src/text.asm:57-58` |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0265",
+      "classification": "remove_optional",
+      "reason": "So introduces the width-error naming consequence of updating the argument position.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0265",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 165,
+        "column": 55,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 165,
+        "nearest_heading": {
+          "level": 3,
+          "text": "`NAME?`",
+          "line": 159
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The CCP's failures",
+            "line": 137
+          },
+          {
+            "level": 3,
+            "text": "`NAME?`",
+            "line": 159
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 161,
+        "context_end_line": 170,
+        "full_context": "The CCP prints the word it stopped at, up to the next space, with a question\nmark and a blank line (`src/cpm/ccp.asm:588-629`). For a program, a service,\n`COPY` and `UNLOAD` the word is the command's own. Other built-ins normally\nprint the first argument even when a later argument was wrong. CON updates\nthat position when it starts parsing a separated width, so a width error\nnames the width (`src/cpm/ccpcmd.asm:120-140`, `src/cpm/ccp.asm:544-554`).\nA missing required argument normally gives the question mark alone. TYPE\ninstead gives `NO FILE` (`src/cpm/ccpfile.asm:593-602`).\n[Chapter 3](03-work-with-files.md) has examples. Each row for a program or\nservice gives a distinct cause.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0266",
+      "classification": "remove_optional",
+      "reason": "So directly connects type replacement with the obsolete DRV name’s COM lookup.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0266",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 174,
+        "column": 219,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 174,
+        "nearest_heading": {
+          "level": 3,
+          "text": "`NAME?`",
+          "line": 159
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The CCP's failures",
+            "line": 137
+          },
+          {
+            "level": 3,
+            "text": "`NAME?`",
+            "line": 159
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 174,
+        "context_end_line": 174,
+        "full_context": "| A program's name | No `NAME.COM` was found on the named/current drive in the current area or area 0. A command with no explicit drive can also fall back to A in those two areas. Any type other than `.SVC` becomes COM, so `PICO.DRV` searches for `PICO.COM`. | Check the name, drive and area or use an explicit drive such as `B:NAME`. See the [old-card procedure](#a-card-from-an-older-tec-os) for obsolete display files. | [Chapter 20](20-from-prompt-to-program.md), `src/cpm/ccp.asm:487-517`, `639-673` |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0267",
+      "classification": "retain_boundary",
+      "reason": "This closes optionally followed by a colon. Keep the paired insertion before the separate invalid-text alternative.",
+      "retained_comma_reason": "This closes optionally followed by a colon. Keep the paired insertion before the separate invalid-text alternative.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0267",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 189,
+        "column": 98,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 189,
+        "nearest_heading": {
+          "level": 3,
+          "text": "`NAME?`",
+          "line": 159
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The CCP's failures",
+            "line": 137
+          },
+          {
+            "level": 3,
+            "text": "`NAME?`",
+            "line": 159
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 189,
+        "context_end_line": 189,
+        "full_context": "| `CON` | The device name is not TTY, CRT, BAT, UC1, PICO or GLCD, optionally followed by a colon, or the remaining text is invalid. CRT/PICO may take a separated width. | Use a supported name and width form. | [Chapter 6](06-choose-a-console.md), `src/cpm/ccpcmd.asm:66-231` |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0268",
+      "classification": "remove_optional",
+      "reason": "So directly links absent-device status to no installation or printed failure.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0268",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 201,
+        "column": 45,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 201,
+        "nearest_heading": {
+          "level": 3,
+          "text": "`NAME?`",
+          "line": 159
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The CCP's failures",
+            "line": 137
+          },
+          {
+            "level": 3,
+            "text": "`NAME?`",
+            "line": 159
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 198,
+        "context_end_line": 205,
+        "full_context": "Startup suppresses an installation failure only when INIT returned `TNENODV`\nand cleanup left nothing resident: `SVCRC` is 1 and `SVCRA` is 2. A missing\ngraphics controller can take that path. Startup registration while CRT is\nactive returns the same absent-device status, so that line installs nothing\nand prints nothing. With both displays and the matrix keyboard enabled, a\nsuccessful typed GLCD load keeps the active PICO console selected. It does\nnot select that console again (`src/cpm/ccp.asm:465-484`,\n`src/services.asm:629-647`, `src/loader.asm:925-958`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0269",
+      "classification": "remove_optional",
+      "reason": "So directly connects the obsolete file’s question-mark result with the serial console remaining active.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0269",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 218,
+        "column": 21,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 218,
+        "nearest_heading": {
+          "level": 3,
+          "text": "A card from an older TEC-OS",
+          "line": 214
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The CCP's failures",
+            "line": 137
+          },
+          {
+            "level": 3,
+            "text": "A card from an older TEC-OS",
+            "line": 214
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 216,
+        "context_end_line": 222,
+        "full_context": "Older cards hold their services in files of type `.DRV` and this ROM doesn't\nload them. The CCP takes `GLCD.DRV` as the name of a program and prints it\nwith a question mark, so a board with the graphics LCD keeps its console on\nthe serial terminal until a usable driver is installed and selected. A\nresponding PICO9918 with the Matrix switch enabled has its console from cold\nboot without a card driver. The web page reports an old GLCD driver for a\nGLCD display choice, as Appendix I describes (`host/card.mjs:26-48`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0270",
+      "classification": "remove_optional",
+      "reason": "So links staging checks with startup remaining unchanged when preparation cannot proceed.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0270",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 274,
+        "column": 8,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 274,
+        "nearest_heading": {
+          "level": 3,
+          "text": "A card from an older TEC-OS",
+          "line": 214
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The CCP's failures",
+            "line": 137
+          },
+          {
+            "level": 3,
+            "text": "A card from an older TEC-OS",
+            "line": 214
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 269,
+        "context_end_line": 278,
+        "full_context": "`STARTUP.CMD` still names the old files so the next board reset prints the\nsame two failures until it is updated. `ERA PICO.SVC` removes the old\ndriver. The new file comes from `tecvol put` on a PC or \"Copy file to drive\"\non the web page. A successful Power cycle preparation also removes display\nlines of either type. The page checks the chosen driver and stages the\nrewrite, so missing/old drivers or protected/full storage can leave the\nstartup file unchanged (`host/card.mjs:30-72`, `104-116`).\nA `GLCD.SVC` of an older format fails under the new name too, as\n`GLCD.SVC?`. A matching copy from a new starter card or one put on the card\nwith `tecvol` replaces it.",
+        "manual_classification_hints": [
+          "quotation marks in context: inspect scope and literal/interface status",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0271",
+      "classification": "remove_optional",
+      "reason": "Or directly connects the two attribute-recovery alternatives. Neither changes the literal command options.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0271",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 304,
+        "column": 236,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 304,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The BDOS's errors",
+          "line": 280
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The BDOS's errors",
+            "line": 280
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 304,
+        "context_end_line": 304,
+        "full_context": "| `Bdos Err On d: File R/O` | 3 | Delete, rename or sequential/random write reached a read-only file. ERA, REN, SAVE and COPY can reach this check. Earlier matching entries in a wildcard ERA remain erased. | Set attributes with BDOS 30, or extract the file with tecvol and put it back with --force and without --ro. The CCP has no attribute-setting command. | `src/cpm/bdosfile.asm:430-445`, `477-501`, `653-664`, `672-678`, `733-745`, `src/cpm/bdosrec.asm:348-355`, `tools/lib/cpmfs.mjs:157-191`, `src/text.asm:77-78` |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0272",
+      "classification": "remove_optional",
+      "reason": "So directly introduces why a dropped directory block alone cannot give Write lost next boot.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0272",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 323,
+        "column": 19,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 323,
+        "nearest_heading": {
+          "level": 2,
+          "text": "`Write lost`",
+          "line": 309
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "`Write lost`",
+            "line": 309
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 319,
+        "context_end_line": 328,
+        "full_context": "The cached changes in dropped lines are lost and the next warm boot has\nno such lines left to retry. A directory line is dropped when its write\nor preceding data flush fails. The BDOS reports `Bad Sector` at once. If\nonly the directory write failed, its dropped block leaves nothing for the next\nwarm boot to retry, so that failure alone gives no `Write lost`. The data blocks\nthat failed stay dirty in the cache. Another close or flush can retry them.\nThe warm boot after the recovery key writes them again and gives `Write lost`\nif writes still fail (`src/cache.asm:292-345`, `632-651`). The file\nthat was being written needs writing again, once the card is put right and the\nboard reset.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0273",
+      "classification": "remove_optional",
+      "reason": "So directly connects normal return code zero with the following conditional chain piece.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0273",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "source_git_blob": "686df3652cf6ac3a6f146072da5d23ca4364321f",
+        "line": 343,
+        "column": 24,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 343,
+        "nearest_heading": {
+          "level": 2,
+          "text": "`MOUNT`",
+          "line": 340
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix D. Error messages",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "`MOUNT`",
+            "line": 340
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 342,
+        "context_end_line": 348,
+        "full_context": "The starter card's `MOUNT.COM` prints these messages. Normal return leaves\nthe command result at 0, so even an error message does not by itself cancel\na following `:` piece. A failed warm-boot flush can still drop that piece\n(`test/programs/mount.asm:27-31`, `241-262`, `src/cache.asm:661-668`).\n[Chapter 4](04-drives-and-user-areas.md#changing-a-drives-volume) gives the\noperator commands and [Chapter 17](17-card-blocks-and-volumes.md) explains\nthe volume services.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0274",
+      "classification": "remove_optional",
+      "reason": "And directly coordinates missing drives/table-sum fields with the host volume-count limit.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0274",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 75,
+        "column": 13,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 75,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The header",
+          "line": 30
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The header",
+            "line": 30
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 74,
+        "context_end_line": 81,
+        "full_context": "A card's minor version sets three things. A 1.0 card has no drives field and\nno table sum, and `tecvol` gives it at most 8 volumes. A 1.1 card may have up\nto 127, may give a number of drives and has the table sum\n(`tools/lib/container.mjs:76-80`, `tools/lib/container.mjs:140-148`).\n`tecvol create` makes a 1.1 card when it is given more than 8 volumes or\n`--drives`, and a 1.0 card otherwise. The ROM rejects a 1.0 card of more than\n8 volumes with code `24h` (`src/vol.asm:113-151`). It treats any minor\nversion other than 0 as 1.1 (`src/vol.asm:171-175`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0275",
+      "classification": "remove_optional",
+      "reason": "And directly joins the 1.1 creation condition with the 1.0 otherwise case. No inserted phrase closes here.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0275",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 79,
+        "column": 11,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 79,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The header",
+          "line": 30
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The header",
+            "line": 30
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 74,
+        "context_end_line": 81,
+        "full_context": "A card's minor version sets three things. A 1.0 card has no drives field and\nno table sum, and `tecvol` gives it at most 8 volumes. A 1.1 card may have up\nto 127, may give a number of drives and has the table sum\n(`tools/lib/container.mjs:76-80`, `tools/lib/container.mjs:140-148`).\n`tecvol create` makes a 1.1 card when it is given more than 8 volumes or\n`--drives`, and a 1.0 card otherwise. The ROM rejects a 1.0 card of more than\n8 volumes with code `24h` (`src/vol.asm:113-151`). It treats any minor\nversion other than 0 as 1.1 (`src/vol.asm:171-175`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0276",
+      "classification": "remove_optional",
+      "reason": "And directly joins the two volume-id requirements.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0276",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 89,
+        "column": 27,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 89,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The volume descriptor",
+          "line": 83
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The volume descriptor",
+            "line": 83
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 89,
+        "context_end_line": 89,
+        "full_context": "| 0 | 4 | Volume id: not 0, and different from every other volume's |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0277",
+      "classification": "remove_optional",
+      "reason": "So directly connects the earliest volume start with unused table blocks remaining outside volumes.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0277",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 122,
+        "column": 70,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 122,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The table beyond block 0",
+          "line": 115
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The table beyond block 0",
+            "line": 115
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 117,
+        "context_end_line": 124,
+        "full_context": "Block 0 holds the header and descriptors 0 to 14, at offsets 32 to 511. A 1.1\ncard with more than 15 volumes goes on in blocks 1 to 7, 16 descriptors to a\nblock. With block 0's 15 that gives the limit of 127\n(`tools/lib/container.mjs:33-42`, `format/format.json`). Descriptor `i`, for\n`i` of 15 or more, is in block `1 + floor((i − 15) / 16)`, at\n`32 × ((i − 15) mod 16)` within it. No volume can start below block 8, so\nblocks 1 to 7 remain outside every volume, whether or not the table uses\nthem.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0278",
+      "classification": "remove_optional",
+      "reason": "So directly states the zero-field requirement after computing an empty table sum.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0278",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 135,
+        "column": 12,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 135,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The table beyond block 0",
+          "line": 115
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The table beyond block 0",
+            "line": 115
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 133,
+        "context_end_line": 136,
+        "full_context": "With 15 or fewer descriptors the ROM skips this comparison entirely.\nThe host validator still compares the stored table sum with the computed\nsum of zero, so a 1.1 image must store zero in that field when its table\nfits in block 0 (`src/vol.asm:197-206`, `tools/lib/container.mjs:145-148`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0279",
+      "classification": "remove_optional",
+      "reason": "So directly explains repeated error codes from check order.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0279",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 145,
+        "column": 30,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 145,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The checks and their codes",
+          "line": 138
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The checks and their codes",
+            "line": 138
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 140,
+        "context_end_line": 145,
+        "full_context": "The ROM's `MOUNT` checks the header before walking the descriptors in\ntable order. It mounts each assigned volume as its descriptor passes.\nThe first failure stops the walk and unmounts every drive mounted so far\n(`src/vol.asm:56-461`). Cold boot prints the error code at the diagnostic\nprompt described in [Chapter 27](27-diagnose-the-machine.md). The table\nbelow follows the check order, so the same code appears more than once.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0280",
+      "classification": "remove_optional",
+      "reason": "Or directly separates the two invalid size fields.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0280",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 152,
+        "column": 39,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 152,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The checks and their codes",
+          "line": 138
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The checks and their codes",
+            "line": 138
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 152,
+        "context_end_line": 152,
+        "full_context": "| `23h` | The header bytes are not 512, or the descriptor bytes not 32 | `src/vol.asm:98-112` |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0281",
+      "classification": "remove_optional",
+      "reason": "Remove the serial comma before the final descriptor-failure alternative. Each clause still names its own subject.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0281",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 158,
+        "column": 124,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 158,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The checks and their codes",
+          "line": 138
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The checks and their codes",
+            "line": 138
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 158,
+        "context_end_line": 158,
+        "full_context": "| `26h` | A volume's id is 0, a flag other than read-only is set, the geometry is unknown, the length is not the geometry's, or the start is 0 or not a multiple of 8 | `src/vol.asm:262-315`, `src/vol.asm:449-451` |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0282",
+      "classification": "remove_optional",
+      "reason": "Or directly connects the standard-card bound with the other exclusive-end bounds.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0282",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 160,
+        "column": 72,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 160,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The checks and their codes",
+          "line": 138
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The checks and their codes",
+            "line": 138
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 160,
+        "context_end_line": 160,
+        "full_context": "| `27h` | The exclusive end exceeds `FFFFFFFFh` or the container length, or a standard-capacity card's last volume block exceeds `7FFFFFh` | `src/vol.asm:330-385` |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0283",
+      "classification": "remove_optional",
+      "reason": "Remove the serial comma before the final duplicate-drive alternative. The preceding clause has its own explicit drive subject.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0283",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 161,
+        "column": 104,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 161,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The checks and their codes",
+          "line": 138
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The checks and their codes",
+            "line": 138
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 161,
+        "context_end_line": 161,
+        "full_context": "| `29h` | A drive byte is neither `FFh` nor 0 to 3, the drive is past the number the drives field gives, or two volumes name one drive | `src/vol.asm:389-427` |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0284",
+      "classification": "remove_optional",
+      "reason": "So directly connects ordered creation with passing the ROM order check.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0284",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 204,
+        "column": 6,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 204,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The checks and their codes",
+          "line": 138
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The checks and their codes",
+            "line": 138
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 203,
+        "context_end_line": 204,
+        "full_context": "`tecvol create` and the starter card's recipe always place the volumes in\norder, so a card made by either passes the ROM's order check.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0285",
+      "classification": "remove_optional",
+      "reason": "And directly joins the verify rejection with the create rejection. Both command names make the subjects clear.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0285",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 211,
+        "column": 5,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 211,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The checks and their codes",
+          "line": 138
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The checks and their codes",
+            "line": 138
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 206,
+        "context_end_line": 211,
+        "full_context": "On a 1.1 card the drives field can restrict the assignments. A nonzero\nvalue N permits only drives A through the Nth drive. A value of 0 leaves\nall four available, as on a 1.0 card (`src/vol.asm:398-409`). A violation\nstops cold boot at the diagnostic prompt with code `29h`. `tecvol` makes the\nsame check (`tools/lib/container.mjs:178`). `tecvol verify` rejects such a\ncard, and `tecvol create` rejects a volume on drive C with `--drives 2`:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0286",
+      "classification": "remove_optional",
+      "reason": "So directly connects unobservable physical addressing mode with the separate ROM bound.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0286",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 223,
+        "column": 59,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 223,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The checks and their codes",
+          "line": 138
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The checks and their codes",
+            "line": 138
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 221,
+        "context_end_line": 225,
+        "full_context": "The host validator also enforces the volume-count limit, descriptor order\nand drive assignments (`tools/lib/container.mjs:130-194`). It cannot test\nthe physical card's addressing mode from image bytes alone, so the ROM's\nstandard-capacity bound remains a separate check. These additional image\nrequirements apply in `tecvol`:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0287",
+      "classification": "remove_optional",
+      "reason": "So directly relates the 128-byte record size to four records per card block.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0287",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 245,
+        "column": 24,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 245,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The geometries",
+          "line": 241
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The geometries",
+            "line": 241
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 243,
+        "context_end_line": 247,
+        "full_context": "Both geometries use 128-byte records and 64 records per track\n(`format/format.json`, `geometries`). Record `r` starts at byte `128 × r`\nin the volume's payload, so four records share a 512-byte card block.\nNeither geometry has reserved tracks, sector skew or a directory check\nvector. The card is not removable media in CP/M's sense.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0288",
+      "classification": "remove_optional",
+      "reason": "Or directly introduces the equivalent four-block size for G8M.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0288",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 275,
+        "column": 23,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 275,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The geometries",
+          "line": 241
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The geometries",
+            "line": 241
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 274,
+        "context_end_line": 277,
+        "full_context": "Each directory occupies four allocation blocks. G8M's 512 entries of\n32 bytes occupy 16 KiB, or four 4-KiB blocks. G1M's 256 entries occupy\n8 KiB, or four 2-KiB blocks. Those four blocks come from the volume's\n2,048 allocation blocks on G8M or 512 on G1M.",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0289",
+      "classification": "remove_optional",
+      "reason": "Or directly introduces the equivalent four-block size for G1M.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0289",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "source_git_blob": "dd97a6784e28ad04061ab667efb8bbc84c914b19",
+        "line": 276,
+        "column": 6,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 276,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The geometries",
+          "line": 241
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix E. The container format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The geometries",
+            "line": 241
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 274,
+        "context_end_line": 277,
+        "full_context": "Each directory occupies four allocation blocks. G8M's 512 entries of\n32 bytes occupy 16 KiB, or four 4-KiB blocks. G1M's 256 entries occupy\n8 KiB, or four 2-KiB blocks. Those four blocks come from the volume's\n2,048 allocation blocks on G8M or 512 on G1M.",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    }
+  ]
+}
