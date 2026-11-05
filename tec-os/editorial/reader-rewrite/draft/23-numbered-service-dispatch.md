@@ -48,14 +48,16 @@ arguments are back in place and the caller's return word is next on the
 stack. Neither of the dispatcher's saved pairs remains there
 (`src/services.asm:60-68`).
 
-Both ordinary exits leave `B`, `DE` and `HL` unchanged. `HWERR` uses `OR A`
-and `SCF` to return a nonzero status with carry set. `HWOK` uses `XOR A`
-to return status 0 with zero set and carry clear (`src/services.asm:70-86`).
+The exit helpers `HWERR` and `HWOK` leave `B`, `DE` and `HL` as they
+are on entry to those helpers. They do not restore values changed by the
+selected routine. `HWERR` uses `OR A` and `SCF` to return a nonzero status
+with carry set. `HWOK` uses `XOR A` to return status 0 with zero set and
+carry clear (`src/services.asm:70-86`).
 `FIND` and `LIST` have their own result convention, including the registry
 generation in `A` (`src/abi.inc:149-161`). The ABI preserves `IX`, `IY`
 and the alternate registers except for `MOUNT`, `UNMNT` and `DESC`, which
-may change `IX` and the alternates. Other registers are available for the
-routine to change unless its contract names them as results
+may change `IX` and the alternates. For the whole call, use the selected
+service's documented results. Other registers may be destroyed
 (`src/abi.inc:35-58`).
 
 ## The code behind the table
