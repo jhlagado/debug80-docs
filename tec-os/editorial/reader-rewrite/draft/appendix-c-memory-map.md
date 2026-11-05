@@ -129,7 +129,7 @@ when no qualifying jump remains there (`ea3ef3d:src/boot.asm:454-509`).
 Service-page release clears the first byte of each claimed restart slot
 before the sweep. Successful unload and failure cleanup that releases the
 pages both use this rule. A failed `INIT` can retain its pages when a BIOS
-hook still targets them, so failure alone does not imply slot release
+hook still targets them so failure alone does not imply slot release
 (`ea3ef3d:src/loader.asm:128-173`, `ea3ef3d:src/loader.asm:536-580`,
 `ea3ef3d:src/loader.asm:634-662`).
 
@@ -137,7 +137,7 @@ The CCP records the drive/user byte for its command prompt. Before program
 launch it writes both FCBs, then the command tail and default DMA address, then
 the load-drive byte (`ea3ef3d:src/cpm/ccp.asm:363-384`,
 `ea3ef3d:src/cpm/ccpcmd.asm:447-497`, `ea3ef3d:src/cpm/ccp.asm:519-536`). The
-second FCB reaches `008Fh`, so tail publication follows FCB parsing.
+second FCB reaches `008Fh` so tail publication follows FCB parsing.
 
 CP/M reserves `0040h–004Fh` for BIOS scratch. TEC-OS uses only `0040h`
 there. It is the resident state byte read while EXPAND 1 hides the upper
@@ -293,7 +293,7 @@ describes storage lifetime, not an assurance that its value remains unchanged.
 
 `CIFF` occupies two bytes. `HFLAG` marks the CCP's line-input call with `FFh`.
 `HPOS` is a byte offset into the history page. `CONDEV` combines switch, probe and
-ownership state, so its bits do not all prove device presence
+ownership state so its bits do not all prove device presence
 (`ea3ef3d:src/ram.asm:249-252`, `ea3ef3d:src/ram.asm:332-337`,
 `ea3ef3d:src/layout.asm:92-102`, `ea3ef3d:src/cpm/ccp.asm:161-166`).
 `SVCRA` identifies a cause only when
@@ -400,4 +400,4 @@ history addresses, RAM BIOS origin `BF00h` and ROM table origin `C003h` are
 fixed by the inspected contract (`ea3ef3d:src/layout.asm:49-90`,
 `ea3ef3d:src/layout.asm:134-135`, `ea3ef3d:src/history.asm:24`,
 `ea3ef3d:tools/build.mjs:255-266`). A symbol lookup is valid for the artifact
-it reads, so a later map needs that build's symbols and identity.
+it reads so a later map needs that build's symbols and identity.

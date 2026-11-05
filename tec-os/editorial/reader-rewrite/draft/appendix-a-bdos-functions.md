@@ -252,7 +252,7 @@ takes the BDOS error path.
 record falls in one (`src/cpm/bdosrec.asm:22-207`). Returns 0 on success.
 Returns 1 when the directory has no entry for a new extent or when the close
 of the extent it leaves finds no entry for it. Returns 2 when the drive is
-full. After a 1 the FCB stays on its extent with `CR` at 128, so a later
+full. After a 1 the FCB stays on its extent with `CR` at 128 so a later
 write, once an entry has been freed, makes the extent the FCB needs
 (`src/cpm/bdosrec.asm:119-175`). A block taken for a write that then fails
 stays in the FCB's map. A later successful close publishes it in the entry
@@ -289,7 +289,7 @@ bit 0 for A (`src/cpm/bdosfn.asm:16-21`).
 
 **27 Get allocation vector address.** Returns in `HL` the address of the
 default drive's allocation vector (`src/cpm/bdosfn.asm:58-64`). A `MOUNT`
-onto the default drive selects it again, so this is the new volume's vector at
+onto the default drive selects it again so this is the new volume's vector at
 once (`src/volsvc.asm:377-391`).
 
 **28 Write protect disk.** Sets the default drive's bit in the read-only
@@ -320,7 +320,7 @@ only four bits of the number
 (`src/cpm/ccpcmd.asm:241-280`, `src/cpm/ccp.asm:363-384`).
 
 **33 Read random.** Reads the record whose number is in the FCB's `R0` and
-`R1` into the DMA address and leaves the FCB's extent and `CR` at that record,
+`R1` into the DMA address and leaves the FCB's extent and `CR` at that record
 so that a sequential read after it reads the same record
 (`src/cpm/bdosrec.asm:307-316`, `src/cpm/bdosrec.asm:393-531`). Returns 0 on
 success. Returns 1 when the record has not been written. Returns 3 when the
@@ -357,13 +357,13 @@ does not define. Both do nothing and return 0 (`src/tables.asm:96`).
 **40 Write random with zero fill.** Function 34, with each allocation block the
 write newly allocates filled with zeros before the record is written
 (`src/cpm/bdosrec.asm:328-359`, `src/cpm/bdosrec.asm:794-860`). The BIOS's DMA
-address is put back on the program's after each of the zero-fill's writes, so
+address is put back on the program's after each of the zero-fill's writes so
 a failed write that function 45 returns leaves the program's DMA address in
 the BIOS (`src/cpm/bdoslog.asm:122-136`). Returns as function 34 does.
 
 **44 Set multi-sector count.** With `E` = 1 returns 0. With any other `E`
 changes nothing and returns `FFh` in `A` (`src/cpm/bdos.asm:221-237`). TEC-OS
-reads and writes one record a call, so 1 is the only count.
+reads and writes one record a call so 1 is the only count.
 
 **45 Set BDOS error mode.** Sets the mode to `E` (`src/cpm/bdos.asm:271-275`).
 With `E` = `FFh` a BDOS error returns to the program with `A` = `FFh` and the
@@ -436,7 +436,7 @@ for Digital Research's BDOS encounters these differences:
   (`src/cpm/bdos.asm:143-165`).
 - The CCP's warm-entry disk reset retains clean drives whose allocation
   vector sums still match. Dirty drives rebuild from the directory up to
-  the retained bound, while an unmarked sum mismatch requires a full scan.
+  the retained bound while an unmarked sum mismatch requires a full scan.
   A program's function 13 resets every drive
   (`src/cpm/bdosfile.asm:19-132`).
 - `^P` during output toggles the list copy. Digital Research's BDOS retains

@@ -32,7 +32,7 @@ display or on the LCD.
 
 | Message | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| `TEC-OS needs 64K RAM` | The bank window at `8000h–BFFFh` failed the RAM patterns, or the bank probe did not find EXPAND 1 behind it. | Fit the required 32 KiB RAM chip in U9 and check the configuration, then reset. | [Appendix G](appendix-g-tec-1g.md), `src/boot.asm:579-632`, `src/text.asm:10` |
+| `TEC-OS needs 64K RAM` | The bank window at `8000h–BFFFh` failed the RAM patterns or the bank probe did not find EXPAND 1 behind it. | Fit the required 32 KiB RAM chip in U9 and check the configuration, then reset. | [Appendix G](appendix-g-tec-1g.md), `src/boot.asm:579-632`, `src/text.asm:10` |
 
 ## The diagnostic prompt
 
@@ -69,7 +69,7 @@ Codes `05h` to `0Ah` are the SD card driver's codes for a block read or write
 (`src/sd.asm:20-30`, `385-395`). They do not reach this prompt directly.
 The driver stores them in `SDERR`, with no later reader in the ROM. A failed
 table read during mounting becomes code `20h`. A failed BDOS transfer gives
-a disk error, while a failed warm-boot flush gives `Write lost`. The
+a disk error while a failed warm-boot flush gives `Write lost`. The
 `MOUNT` program's own reads and writes give the messages in its table below.
 
 | Code | Meaning |
@@ -83,7 +83,7 @@ a disk error, while a failed warm-boot flush gives `Write lost`. The
 
 These are polling bounds, not measured deadlines (`src/sd.asm:447-486`,
 `735-806`). Code 05 precedes block-data transfer. Codes 07 and 08 can follow
-transmission of all 512 bytes, so neither establishes rollback of a write.
+transmission of all 512 bytes so neither establishes rollback of a write.
 
 Codes `20h` to `2Ah` come from the ROM's `MOUNT` routine, its check of the
 container. The first check to fail stops the mount and no drive stays mounted
@@ -109,7 +109,7 @@ every check in order and
 For `20h`, `R` retries the read. A repeated read failure or a structural fault
 needs card inspection. [Chapter 5](05-cards-on-the-pc.md#recovery-after-a-power-cut)
 gives the copy-first procedure. `tecvol verify` reports container and directory
-faults. `get` also validates the container before extraction, so a failed
+faults. `get` also validates the container before extraction so a failed
 container check prevents any file read. `get` does not perform the complete
 directory check that `verify` does. A fresh image can be made with `create`
 and `put` or a starter recipe
@@ -146,7 +146,7 @@ explains the code.
 | --- | --- | --- | --- |
 | `NO FILE` | `DIR` matched no visible file, including a match consisting only of system files. `TYPE` found no file or had no name. `ERA` matched nothing. `REN` found no old name. | Check the name, drive and user area. | [Chapter 3](03-work-with-files.md), `src/cpm/ccpfile.asm:138-147`, `248-252`, `593-602`, `660-663`, `src/cpm/ccpmut.asm:71-77`, `171-175`, `src/text.asm:22-23` |
 | `FILE EXISTS` | `REN` found the new name already in the current user area on that drive. | Choose another name or erase the unwanted file first. | [Chapter 3](03-work-with-files.md), `src/cpm/ccpmut.asm:149-184`, `src/text.asm:55-56` |
-| `NO SPACE` | `SAVE` received a make, write or close failure. It erases an existing destination before making the replacement. After a returned write failure it attempts close, but a failed close does not guarantee a complete directory entry for the partial file. Fatal disk errors use BDOS messages instead. | Inspect the partial file, free space or save to another drive. Keep another copy of the original. | [Chapter 10](10-memory-for-programs.md), `src/cpm/ccpcmd.asm:356-442`, `src/text.asm:57-58` |
+| `NO SPACE` | `SAVE` received a make, write or close failure. It erases an existing destination before making the replacement. After a returned write failure it attempts close but a failed close does not guarantee a complete directory entry for the partial file. Fatal disk errors use BDOS messages instead. | Inspect the partial file, free space or save to another drive. Keep another copy of the original. | [Chapter 10](10-memory-for-programs.md), `src/cpm/ccpcmd.asm:356-442`, `src/text.asm:57-58` |
 | `NO SOURCE` | `COPY` did not find its source in the current user area on the specified drive. No destination has changed. | Check the name, drive and user area. | [Chapter 3](03-work-with-files.md), `src/cpm/ccpmut.asm:296-306`, `src/text.asm:34-35` |
 | `CANNOT MAKE DEST` | `COPY` could not allocate the destination's directory entry. An old destination has already been erased. | Free directory space or copy to another drive. | `src/cpm/ccpmut.asm:307-317`, `src/text.asm:36-37` |
 | `WRITE ERROR` | `COPY` received a nonzero sequential-write result, such as no free block or no entry for the next extent. It attempts to close the destination before printing this message. That close can also fail. A successful close preserves the records already copied. | Inspect or erase the partial destination, free space and copy again. | `src/cpm/ccpmut.asm:324-338`, `370-381`, `src/cpm/bdosrec.asm:119-175`, `src/text.asm:38-39` |
@@ -162,7 +162,7 @@ The CCP prints the word it stopped at, up to the next space, with a question
 mark and a blank line (`src/cpm/ccp.asm:588-629`). For a program, a service,
 `COPY` and `UNLOAD` the word is the command's own. Other built-ins normally
 print the first argument even when a later argument was wrong. CON updates
-that position when it starts parsing a separated width, so a width error
+that position when it starts parsing a separated width so a width error
 names the width (`src/cpm/ccpcmd.asm:120-140`, `src/cpm/ccp.asm:544-554`).
 A missing required argument normally gives the question mark alone. TYPE
 instead gives `NO FILE` (`src/cpm/ccpfile.asm:593-602`).
@@ -171,7 +171,7 @@ service gives a distinct cause.
 
 | Word or command | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| A program's name | No `NAME.COM` was found on the named/current drive in the current area or area 0. A command with no explicit drive can also fall back to A in those two areas. Any type other than `.SVC` becomes COM, so `PICO.DRV` searches for `PICO.COM`. | Check the name, drive and area or use an explicit drive such as `B:NAME`. See the [old-card procedure](#a-card-from-an-older-tec-os) for obsolete display files. | [Chapter 20](20-from-prompt-to-program.md), `src/cpm/ccp.asm:487-517`, `639-673` |
+| A program's name | No `NAME.COM` was found on the named/current drive in the current area or area 0. A command with no explicit drive can also fall back to A in those two areas. Any type other than `.SVC` becomes COM so `PICO.DRV` searches for `PICO.COM`. | Check the name, drive and area or use an explicit drive such as `B:NAME`. See the [old-card procedure](#a-card-from-an-older-tec-os) for obsolete display files. | [Chapter 20](20-from-prompt-to-program.md), `src/cpm/ccp.asm:487-517`, `639-673` |
 | A program's name | An ambiguous, empty, overlong or invalid name or a drive beyond P. | Correct the name. | [Appendix J](appendix-j-command-reference.md), `src/cpm/ccpcmd.asm:511-670`, `682-700` |
 | A program's name | The COM image would extend into the page containing the BDOS entry at `0006h`. | Remove a removable service with `UNLOAD` if that provides enough space or use a smaller program. | `src/cpm/ccp.asm:696-752` |
 | `NAME.SVC` | The file is missing or its load returns a failure before installation. A default-mode BDOS disk error instead prints its disk message and aborts through `CHDROP`. | Check the name, drive and card. Services have no area-0 or drive-A lookup fallback. | [Chapter 24](24-loading-and-removing-services.md), `src/loader.asm:925-933`, `src/cpm/ccp.asm:451-481`, `src/cpm/bdoscon.asm:47-72` |
@@ -198,7 +198,7 @@ The bad characters in a name are `<>,;:[]%|()/\`, from `BADCHARS`
 Startup suppresses an installation failure only when INIT returned `TNENODV`
 and cleanup left nothing resident: `SVCRC` is 1 and `SVCRA` is 2. A missing
 graphics controller can take that path. Startup registration while CRT is
-active returns the same absent-device status, so that line installs nothing
+active returns the same absent-device status so that line installs nothing
 and prints nothing. With both displays and the matrix keyboard enabled, a
 successful typed GLCD load keeps the active PICO console selected. It does
 not select that console again (`src/cpm/ccp.asm:465-484`,
@@ -215,7 +215,7 @@ host check, described in [Appendix I](appendix-i-web-page.md).
 
 Older cards hold their services in files of type `.DRV` and this ROM doesn't
 load them. The CCP takes `GLCD.DRV` as the name of a program and prints it
-with a question mark, so a board with the graphics LCD keeps its console on
+with a question mark so a board with the graphics LCD keeps its console on
 the serial terminal until a usable driver is installed and selected. A
 responding PICO9918 with the Matrix switch enabled has its console from cold
 boot without a card driver. The web page reports an old GLCD driver for a
@@ -271,7 +271,7 @@ same two failures until it is updated. `ERA PICO.SVC` removes the old
 driver. The new file comes from `tecvol put` on a PC or "Copy file to drive"
 on the web page. A successful Power cycle preparation also removes display
 lines of either type. The page checks the chosen driver and stages the
-rewrite, so missing/old drivers or protected/full storage can leave the
+rewrite so missing/old drivers or protected/full storage can leave the
 startup file unchanged (`host/card.mjs:30-72`, `104-116`).
 A `GLCD.SVC` of an older format fails under the new name too, as
 `GLCD.SVC?`. A matching copy from a new starter card or one put on the card
@@ -301,7 +301,7 @@ back (`src/cpm/bdos.asm:261-275`, `src/ram.asm:233-237`).
 | `Bdos Err On d: Select` | 4 | No volume on the drive, a drive past D or `?` in an FCB drive byte outside function 17. On warm entry the CCP falls back to A if the saved drive has no volume. | Mount a volume on a usable drive or select another. | [Chapter 4](04-drives-and-user-areas.md), `src/bios.asm:63-96`, `src/cpm/bdosfile.asm:211-234`, `src/cpm/ccp.asm:48-67`, `src/text.asm:74` |
 | `Bdos Err On d: R/O` | 2 | A write, make, delete, rename or attribute change on a drive protected by function 28. Close instead succeeds without writing. | Warm boot clears temporary protection. Correct a program that protects a drive before changing it. | `src/cpm/bdosfn.asm:153-166`, `src/cpm/bdosfile.asm:35-41`, `289-298`, `src/cpm/bdoslog.asm:880-891` |
 | `Bdos Err On d: R/O` | 2 | A change to a volume marked read-only, including SAVE, ERA, REN or COPY's destination. That volume is not written. | Use a writable volume. Its protection is an on-card property, reapplied at login. | `src/cpm/bdoslog.asm:254-264`, `880-891`, `src/text.asm:76` |
-| `Bdos Err On d: File R/O` | 3 | Delete, rename or sequential/random write reached a read-only file. ERA, REN, SAVE and COPY can reach this check. Earlier matching entries in a wildcard ERA remain erased. | Set attributes with BDOS 30, or extract the file with tecvol and put it back with --force and without --ro. The CCP has no attribute-setting command. | `src/cpm/bdosfile.asm:430-445`, `477-501`, `653-664`, `672-678`, `733-745`, `src/cpm/bdosrec.asm:348-355`, `tools/lib/cpmfs.mjs:157-191`, `src/text.asm:77-78` |
+| `Bdos Err On d: File R/O` | 3 | Delete, rename or sequential/random write reached a read-only file. ERA, REN, SAVE and COPY can reach this check. Earlier matching entries in a wildcard ERA remain erased. | Set attributes with BDOS 30 or extract the file with tecvol and put it back with --force and without --ro. The CCP has no attribute-setting command. | `src/cpm/bdosfile.asm:430-445`, `477-501`, `653-664`, `672-678`, `733-745`, `src/cpm/bdosrec.asm:348-355`, `tools/lib/cpmfs.mjs:157-191`, `src/text.asm:77-78` |
 | `Bdos Err On d: Bad Sector` | 1 | A data or directory transfer failed. ERA's earlier successful directory writes remain applied, including entries of the same file or earlier wildcard matches. The failing entry and later entries are not confirmed erased. A physical partial write can damage the failing card block. | Copy first and run tecvol verify on the copy. Inspect recoverable files and replace a persistently failing card. | [Chapter 5](05-cards-on-the-pc.md#recovery-after-a-power-cut), `src/cpm/bdosfile.asm:477-501`, `src/cpm/bdoslog.asm:100-136`, `src/cpm/bdosrec.asm:79-103`, `280-286` |
 | `Bdos Err On d: Bad Sector` | 1 | A volume extends beyond the card and the card rejects the command. The ROM reports that rejection before transferring block data. The source of a host-model test checks that no image byte changes in this case. | Use a card large enough for the container or build a smaller container with create. | [Chapter 17](17-card-blocks-and-volumes.md), `src/sd.asm:447-458`, `495-515`, `735-745`, `test/sd-range.test.mjs:86-107` |
 | `Bdos Err On d: Bad Sector` | 1 | A file's allocation map names a block beyond the volume. Login and delete skip that invalid reference rather than indexing outside the vector. Access to the block fails. | ERA can remove the damaged entry if the required directory writes succeed. Verify a copy before further changes. | [Chapter 19](19-a-file-through-the-bdos.md), `src/cpm/bdosrec.asm:871-873`, `src/cpm/bdoslog.asm:713-742`, `src/cpm/bdoscon.asm:82-101` |
@@ -320,7 +320,7 @@ The cached changes in dropped lines are lost and the next warm boot has
 no such lines left to retry. A directory line is dropped when its write
 or preceding data flush fails. The BDOS reports `Bad Sector` at once. If
 only the directory write failed, its dropped block leaves nothing for the next
-warm boot to retry, so that failure alone gives no `Write lost`. The data blocks
+warm boot to retry so that failure alone gives no `Write lost`. The data blocks
 that failed stay dirty in the cache. Another close or flush can retry them.
 The warm boot after the recovery key writes them again and gives `Write lost`
 if writes still fail (`src/cache.asm:292-345`, `632-651`). The file
@@ -340,7 +340,7 @@ image flag that selects write-behind.
 ## `MOUNT`
 
 The starter card's `MOUNT.COM` prints these messages. Normal return leaves
-the command result at 0, so even an error message does not by itself cancel
+the command result at 0 so even an error message does not by itself cancel
 a following `:` piece. A failed warm-boot flush can still drop that piece
 (`test/programs/mount.asm:27-31`, `241-262`, `src/cache.asm:661-668`).
 [Chapter 4](04-drives-and-user-areas.md#changing-a-drives-volume) gives the
