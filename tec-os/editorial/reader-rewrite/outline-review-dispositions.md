@@ -94,3 +94,18 @@ The separate10 reference for the writable table remains correct and unchanged.
 The lead read all changed containing passages and the destination section.
 No root navigation, renderer or product ran. Independent bounded confirmation
 and final integrated navigation remain separate. Opening1–3 links remain held.
+
+## Chapter 4 and Chapter 5 bounded refinements
+
+P3's independent recheck at book 16918fc closes Chapter 4's operator USER
+scope, historical SAVE-fixture labelling and prerequisite corrections.
+The interrupted-boot/page-zero mechanism is removed from Chapter 4 as a
+duplicate of Chapter 15's complete Retained drive selection explanation.
+Chapter 4 retains the visible fallback and header rule. The crosswalk records
+the actual destination without changing the agreed ladder.
+
+The same recheck closes Chapter 8's four sequence corrections. Chapter 5's
+host setup, backup-first ordering and early extraction section are structurally
+clear. Its complete worked extraction command remains held for the seven
+actual backup/list/raw/text/missing-file observations in the prepared case
+packet. Structural acceptance does not establish those workflow results.

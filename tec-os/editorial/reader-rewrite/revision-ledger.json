@@ -15819,6 +15819,15 @@
     "record_only_tip": "09c057e",
     "qualified_review": "reviews/compact-font-40-result.md; KG53/KD243 accepted, two identical741/741 strict passes",
     "receiver_state": "accepted as preparation basis; current reader mechanism citations remain ea3ef3d until receiver adoption/source review",
-    "runtime": "no book allocation; canonical exact source refresh and sealed command/result review remain separate"
+    "runtime": "no book allocation; canonical exact source refresh and sealed command/result review remain separate",
+    "canonical_landing_receipt": {
+      "commit": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "tested_commit": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+      "authority": "P3 formal receipt; proposal18 and final review at Origo43d5f328",
+      "difference": "Two record files only",
+      "distribution_limit": "Canonical refresh found12 stale legacy dist outputs. Seal exact qualified archive and explicit named input hashes, not wildcard canonical dist. No cleaned-dist claim.",
+      "runtime_allocation": "None",
+      "reader_adoption": "Not yet performed"
+    }
   }
 }
