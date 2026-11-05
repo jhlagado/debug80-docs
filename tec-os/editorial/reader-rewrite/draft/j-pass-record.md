@@ -66,3 +66,27 @@ link matches01-first-session.md in the final-path ledger. The reference has
 no remaining bounded editorial or factual finding. A mechanical rerun leaves
 only the reviewed metadata phrase source offer. Current example qualification
 and final navigation remain pending.
+
+## Complete historical erase fixture
+
+The Chapter3 readiness read found that the whole erase-confirmation fixture
+from frozen old03:258–274 had no complete destination. I read all of Appendix J
+and the full original containing passage before inserting its unchanged capture
+command and output under ERA. The fixture starts with empty B and copies a
+disposable STARTUP.CMD. Its `n` and `y` answers, counts and free space remain
+at the actual78127ec pin. No new run or 40-column qualification is claimed.
+
+The added introduction separates that demonstration from the continued BANNER
+card and states the effect of applying the broad pattern there. Chapter3 can
+therefore remain selective-only. The existing grammar and partial-result
+qualifications are unchanged. I read the whole resulting ERA section and both
+section boundaries, applied the deletion test and checked every added comma.
+The introduction has no Oxford comma, semicolon or em dash. Literal punctuation
+in the historical command and output is preserved.
+
+The prose gate has no hard findings. Three review hits are the older noun
+“offer” in provenance and its existing dispositions. The added passage has no
+gate or complexity flag. Existing complexity prompts concern exact grammar,
+short reference rules and literal counts rather than this preservation move.
+The crosswalk amendment records this complete reference home over the older
+parent placement in Chapter3.
