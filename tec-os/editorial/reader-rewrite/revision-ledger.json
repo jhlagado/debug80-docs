@@ -15829,5 +15829,43 @@
       "runtime_allocation": "None",
       "reader_adoption": "Not yet performed"
     }
+  },
+  "punctuation_pass": {
+    "status": "315 individually reviewed decisions applied or retained; all six slice readbacks independently clear",
+    "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+    "frozen_inventory": "conjunction-comma-inventory.json",
+    "results": "conjunction-comma-result.json",
+    "counts": {
+      "reviewed": 315,
+      "optional_commas_removed": 264,
+      "paired_boundaries_retained": 43,
+      "whole_sentence_or_cell_rephrases": 8
+    },
+    "independent_confirmations": {
+      "04-10": "Lead full changed-context read of f24d701",
+      "11-17": "comma-independent-11-17.json at824c9b2",
+      "18-19": "comma-independent-18-19.json at661d9e8",
+      "20-28": "comma-independent-20-28.json atcc6c22d",
+      "A-E": "comma-independent-A-E.json atfe1bdd9",
+      "F-J": "Lead full changed-context read of5063451"
+    },
+    "aggregate_independent": "Pending separate confirmation of aggregate identities/gate, not a new whole-book craft audit",
+    "final_gate": {
+      "record": "prose-gate-post-punctuation.json",
+      "snapshot_commit": "50634512002c6aeb6610a0a375ae407607e22560",
+      "supported_reader_files": 36,
+      "hard_findings": 0,
+      "review_flags_retained_with_context_reasons": 11
+    },
+    "limits": "Opening1–3 unwritten pending actual workflow. No product execution, root integration, publication or final reader acceptance."
+  },
+  "startup_refinement": {
+    "status": "Bounded Chapter7 corrections closed independently",
+    "application_commit": "58dcb2d9b8481a35ed35854820b4873840a185a4",
+    "lead_mapping_commit": "d7d9237",
+    "independent_confirmation": "startup-refinement-independent.json at6994186",
+    "destinations": "Existing8 exit mechanism,11 LCD service,25 row ownership andH format header; full facts/source proof retained without destination edits",
+    "unchanged_evidence": "15 fences and10 HTML comments byte-identical",
+    "parent_recheck": "Closed at5063451; full-book acceptance remains separate"
   }
 }
