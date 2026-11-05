@@ -7,7 +7,7 @@ nav_group: Appendices
 
 # Appendix J. Command reference
 
-<!-- Draft source checks: TEC-OS ea3ef3d. The two historical captures below
+<!-- Draft source checks: TEC-OS ea3ef3d. The three historical captures below
      retain TEC-OS 78127ec and its starter inputs. They have not been rerun
      for the new source offer. -->
 
@@ -186,6 +186,29 @@ as `*.TXT`, is erased without confirmation. No match produces `NO FILE`
 (`src/cpm/ccpmut.asm:13-84`). Protection and write failures can stop a
 multi-file erase after some entries have already been erased. The exact
 partial-result cases are in [Appendix D](appendix-d-error-messages.md).
+
+The following historical run starts with an empty B drive and copies one
+disposable file there. It records an `n` answer that leaves the file and a `y`
+answer that erases it. This is a separate `78127ec` demonstration, not the card
+used for BANNER in Chapter 2. `ERA *.*` would erase BANNER too on that card.
+
+<!-- node tools/capture.mjs "COPY STARTUP.CMD B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
+```text
+A>COPY STARTUP.CMD B:
+COPIED 0001
+
+A>B:
+B>ERA *.*
+ALL (Y/N)?n
+B>DIR
+STARTUP.CMD 
+1 file, 8172K free
+B>ERA *.*
+ALL (Y/N)?y
+B>DIR
+NO FILE
+B>
+```
 
 ### SAVE
 
