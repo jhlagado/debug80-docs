@@ -15929,6 +15929,20 @@
     "command_shape": "FromOrigo root: sh studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-preparation/qualified-offer02/proposed-command.sh; actualapproval/allocation environment stillabsent",
     "staging": "/tmp/ks48-book-next-batch01",
     "guard_log": "/tmp/ks48-book-next-batch01-guard.jsonl",
-    "status": "UNRUN; final metadata review and explicit single allocation pending"
+    "status": "Executed once under actual external metadata approval/allocation; attempt01 FAILED before emulation. Immutable pre-review fields remain historical; no rerun authorised.",
+    "preservation_clarification": "Offer01 code/payload and original Git objects remain intact. Four metadata documents evolved and seal.json was added afterf459; no broader whole-directory preservation claim is made."
+  },
+  "opening_attempt01": {
+    "status": "FAILED at dependency preflight; no workflow qualification",
+    "authority": "P3 metadata allocation record cb2bd778, reviews/book-next-batch-metadata.md",
+    "approval_id": "KS47-OFFER02-42c194c0",
+    "allocation_id": "KS47-BATCH01-20261106",
+    "result_sha256": "a73403e7002e1862bb6736e8415cf85834e78e166e78d80edded01bf0129fff1",
+    "actual_result": "Zero charged emulated cycles, no phases/inputs/ATOM calls and lastMachine null. Altered-ROM and wrong-profile preflight rejection checks true. No opening example is qualified.",
+    "failure": "ERR_PACKAGE_PATH_NOT_EXPORTED: CJS require.resolve used for the runtime matrix-keymap subpath, which runtime0.3.3 exports under import/types only. Harness lookup defect KE258, not a production defect.",
+    "cost_boundary": "P3 reports guard0.5seconds and39MB peak; complete command log reports exit1 and0.790seconds. These are distinct observations.",
+    "preservation": "P3 retains offer01/02/attempt01, complete stage, packet, guard/command logs and failed result. No automatic retry.",
+    "next_source_preparation": "One owner prepares a new narrow source recut using declared ESM export mapping plus containment validation and ESM import, no ambient/private fallback or new dependencies. All cases/caps/original576inputbytes unchanged; fresh staging/guard names for attempt02. Actual bounded source+metadata review and separate allocation required before execution.",
+    "reader_state": "Opening1–3 and worked Chapter5 extraction insertion remain held"
   }
 }
