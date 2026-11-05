@@ -21,13 +21,12 @@ nav_group: "Part II: Inside TEC-OS"
 You can recall whole command lines even after newer input has overwritten
 older history. TEC-OS keeps those lines in a 256-byte ring. When an insertion
 cuts through an old line, the remaining fragment is cleared before recall
-can reach it (`src/history.asm:223-250`). The storage limit and the stop
-marker explain both which lines remain and where repeated `^W` stops.
+can reach it (`src/history.asm:223-250`).
 
 ## A page of whole lines
 
-The ring occupies the page at `BD00h` in EXPAND 1, named `HRING` in
-`src/history.asm:24`. Each entry contains a line's characters followed by a
+The history page is `HRING` at `BD00h` in EXPAND 1
+(`src/history.asm:24`). Each entry contains a line's characters followed by a
 zero byte. `HHEAD` is the offset where the next entry will start. It is a
 byte in the resident workspace in EXPAND 0 (`src/ram.asm:367-371`). After an
 insertion it points immediately past the newest entry's zero
@@ -35,7 +34,7 @@ insertion it points immediately past the newest entry's zero
 
 The high byte of a ring address stays at `BDh`. Only the low byte changes
 as a routine steps along the page. `INC L` advances from offset `FFh` to
-`00h`, so a line can continue across the end of the page without a separate
+`00h` so a line can continue across the end of the page without a separate
 wrap test (`src/history.asm:226-237`). A line's position in this order is
 independent of whether its address is above or below another line's address.
 
@@ -47,7 +46,7 @@ page into the newest line again (`src/history.asm:9-22`,
 occupied by its entries.
 
 A line costs its character count plus a terminator. `DIR` occupies four
-bytes. The command buffer accepts up to 127 characters, so a longest line
+bytes. The command buffer accepts up to 127 characters so a longest line
 occupies 128 bytes of the ring (`src/boot.asm:540-542`,
 `src/history.asm:226-237`). Long commands displace more history than short
 ones. There is no fixed count of stored lines.
@@ -60,7 +59,7 @@ The routines `HGET` and `HPUT` make that change for each byte. `HGET` returns
 the byte at `HL` in `A`. `HPUT` writes `A` there and reads the byte back
 (`src/history.asm:26-74`). Both keep `BC`, `DE` and `HL`.
 
-Each routine saves `BC` before calling the shared access code. `IFFGET`
+Each routine saves `BC` before entering the shared access code. `IFFGET`
 returns the interrupt state in the parity/overflow flag. The access code
 then disables interrupts and saves that flag on the stack
 (`src/history.asm:35-50`, `src/bios.asm:428-439`). It reads the latch shadow
@@ -97,7 +96,7 @@ therefore has history disabled. An empty line adds no entry.
 An abandoned prompt line follows a different exit. `^C` at the start of
 function 10 jumps through `CHDROP` to warm boot before `LINDONE` runs
 (`src/cpm/bdos.asm:606-621`, `src/cpm/bdos.asm:115-119`). Warm boot clears
-`HFLAG` with the BDOS workspace, so that abandoned read cannot enable
+`HFLAG` with the BDOS workspace so that abandoned read cannot enable
 history in a later program (`src/boot.asm:194-200`,
 `src/boot.asm:530-536`, `src/ram.asm:231-252`).
 
@@ -112,8 +111,10 @@ empty after cold boot until you complete a nonempty prompt line that passes
 The stored bytes still have the case you typed. `HSTORE` runs before
 function 10 returns to the CCP. Only afterwards does `MLTAKE` convert each
 piece's letters to capitals (`src/cpm/bdos.asm:764-765`,
-`src/cpm/ccp.asm:249-267`). In this historical PICO9918 screen capture,
-recalling `con` preserves the small letters:
+`src/cpm/ccp.asm:249-267`). The transcripts here were recorded on TEC-OS
+`78127ec`. They retain that historical build's output, separate from the
+source checks at `ea3ef3d`. In this PICO9918 screen capture, recalling `con`
+preserves the small letters:
 
 <!-- node tools/capture.mjs --board pico --screen con "@start "$'\x17' -->
 ```text
@@ -124,16 +125,13 @@ CON: CRT:
 A>
 ```
 
-All transcripts here are retained captures from TEC-OS `78127ec`. They are
-historical examples, separate from the source checks at `ea3ef3d`.
-
 ## Insertion and the oldest line
 
-A zero inside a line would look like its terminator during recall.
+A zero inside a line would end recall before the rest of its characters.
 `HSTORE` checks every incoming character and leaves the ring unchanged if
 it encounters a zero (`src/history.asm:197-200`,
 `src/history.asm:252-256`). That check occurs before any new bytes are
-written, so a rejected line cannot leave a partial entry.
+written so a rejected line cannot leave a partial entry.
 
 Consecutive duplicates also consume no new space. `HSTORE` first locates
 the newest entry from its terminator at `HHEAD − 1`. It calls `HSTART`,
@@ -177,10 +175,9 @@ partly overwrote an old entry, that existing zero was its terminator. The
 whole remainder of the entry is erased. When the new `HHEAD` already held
 zero, the loop clears that byte and ends immediately.
 
-The completed insertion leaves the newest terminator and the following
-empty entry intact. Recall can then reach only complete older lines.
-Both the capacity limit and the oldest-line stop follow from those adjacent
-zeros (`src/history.asm:9-22`, `src/history.asm:110-120`,
+After cleanup, the newest terminator at `HHEAD − 1` and the zero at
+`HHEAD` separate the surviving whole entries. The backwards test can stop
+before wrapping into newer text (`src/history.asm:110-120`,
 `src/history.asm:233-250`).
 
 ## Recall in the line buffer
@@ -188,11 +185,11 @@ zeros (`src/history.asm:9-22`, `src/history.asm:110-120`,
 `HPOS` is the offset of the terminator of the entry currently shown.
 Function 10 starts each read with `HPOS` equal to `HHEAD`, the empty entry
 (`src/ram.asm:251-252`, `src/cpm/bdos.asm:454-457`). You can move backwards
-from there through older entries with `^W`, then forwards with `^N`.
+from there through older entries with `^W` then forwards with `^N`.
 Moving forwards past the newest entry selects the empty entry again
 (`src/history.asm:102-135`).
 
-Function 10 recognises the key codes 23 and 14 for `^W` and `^N`. Its
+Function 10 compares input with the codes 23 and 14 for `^W` and `^N`. Its
 `LINHIST` branch tests `HFLAG` before calling `HREC`. At the prompt the
 flag enables recall. In a program's ordinary function-10 call the codes
 enter the buffer as characters, as in CP/M 2.2
@@ -201,14 +198,14 @@ enter the buffer as characters, as in CP/M 2.2
 
 For `^W`, `HREC` calls `HSTART` on the shown entry's terminator. It then
 steps back to the previous entry's terminator and one byte further to test
-its last character. A zero there means the previous entry is empty, so
+its last character. A zero there means the previous entry is empty so
 `HREC` returns with the current line unchanged. Otherwise that previous
 terminator becomes the new `HPOS` (`src/history.asm:110-121`,
 `src/history.asm:137-140`). At the oldest line, another `^W` leaves the
 buffer and its edited text as they are.
 
 For `^N`, `HREC` first compares `HPOS` with `HHEAD`. Equality means there is
-no newer entry to show, so it returns immediately. Otherwise it advances
+no newer entry to show so it returns immediately. Otherwise it advances
 through the ring to the next zero, which terminates the next entry
 (`src/history.asm:123-135`). The zero at `HHEAD` follows the newest
 terminator. Selecting it clears the line buffer to an empty line.
@@ -224,9 +221,9 @@ backspace through the BIOS (`src/cpm/bdos.asm:711-729`,
 `HRCOPY` then reads the entry through `HGET` and copies its characters into
 the line buffer. It advances `LINPTR`, increments `LINCNT` and echoes each
 character. Copying stops at the entry's terminator or the buffer's maximum
-(`src/history.asm:147-175`). Function 10 continues reading keys after
-`HREC` returns, so backspace and the other editing keys apply to the recalled
-text before Return runs it (`src/cpm/bdos.asm:472-575`).
+(`src/history.asm:147-175`). Function 10 resumes its input loop after the
+call to `HREC`. You can edit the recalled text with backspace and the other
+line-input keys before pressing Return (`src/cpm/bdos.asm:472-575`).
 
 Here two commands were typed before `^W`, `^W` and Return selected `CON`:
 
@@ -242,7 +239,7 @@ CON: CRT:
 A>
 ```
 
-The capture records the PICO9918 screen after erasure, so it shows the
+The capture records the PICO9918 screen after erasure so it shows the
 replacement line. Serial output would also contain the backspace and space
 bytes used to erase the previous input. In the capture recipe, `@start`
 sends its keys and Return together. The shell notation `$'\x17'` supplies
@@ -260,8 +257,9 @@ the cleared range. The next function-10 call sets `HPOS` from the retained
 
 The warm-boot path leaves the history page in EXPAND 1 untouched
 (`src/boot.asm:178-215`). A program's exit, BDOS function 0 and `^C` at an
-empty prompt all follow that path. In this retained capture `^C` was
-followed by `^W`, which recalled `CON`:
+empty prompt all follow that path (`src/cpm/bdos.asm:257-259`,
+`src/cpm/bdos.asm:606-621`). In this retained capture `^C` was followed by
+`^W`, which recalled `CON`:
 
 <!-- node tools/capture.mjs CON "^C" "@start "$'\x17' -->
 ```text
@@ -280,7 +278,7 @@ its offset to zero (`src/boot.asm:73-79`, `src/ram.asm:367-371`).
 predecessor at `FFh` are zero. The ring starts with the same empty-entry
 boundary that insertion preserves.
 
-A recognised reset can retain the drive selection, but that retention
+A recognised reset can retain the drive selection but that retention
 copies only the drive table (`src/boot.asm:296-303`). It leaves the history
 subject to the cold-boot clears. In this historical run `^W` and Return
 after the reset produced an empty line:
@@ -301,5 +299,6 @@ A>
 ```
 
 `HREC` started from the empty entry at `HHEAD`. Its backwards test found
-zero before any stored line, so it returned without replacing the empty
-buffer (`src/history.asm:102-120`). Return then ran no command.
+zero before any stored line so it returned without replacing the empty
+buffer (`src/history.asm:102-120`). The subsequent Return completed an
+empty line so the CCP printed another prompt (`src/cpm/ccp.asm:173-187`).

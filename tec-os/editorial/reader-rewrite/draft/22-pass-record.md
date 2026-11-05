@@ -35,9 +35,9 @@ inferred from the current source.
   the old Chapter 3 capacity/lifetime paragraph at lines 653–656.
 - Old `22-command-history.md` was read from front matter through its final
   reset interpretation, including all five recipes and fences.
-- The complete old Chapter 3 history passage was read, together with the
-  Chapter 3–6 and Chapter 21–27 reverse-outline notes. Only the assigned
-  capacity/lifetime paragraph from Chapter 3 is moved here. The practical
+- The complete old Chapter 3 history passage was read, together with its
+  Chapter 3 reverse-outline notes and the complete Chapter 22 notes. Only the
+  assigned capacity/lifetime paragraph from Chapter 3 is moved here. The practical
   recall lesson and its separate capture retain their earlier destination.
 - The source-question dispositions were read. None authorises new execution
   evidence or a change of console policy.
@@ -129,15 +129,36 @@ The source-only pin is stated separately. The prompt counts, case, spacing,
 reset banner and old STARTUP output are historical evidence throughout.
 No new example or capture is needed for the draft's teaching job.
 
-## Passes at the first durable draft
+## Completed revision passes
 
-The generous draft is complete. Its order is capacity/format, bank access,
-input eligibility, insertion/deduplication, recall and lifetimes. The
-mechanical prose gate reports zero findings. The complexity report flags
-short definitions/results, provenance comments, one opening sentence and a
-Return/returns echo. The first reading has not yet closed those craft
-findings. The thematic, sentence-deletion, agency, every-comma and complete
-journey passes will be recorded after the next revision.
+The first durable draft and its source/movement record were committed and
+pushed as `84a5b06`. The following passes were then applied to the entire
+chapter, including the introductions and interpretations of retained captures.
+
+| Pass | Actual disposition |
+| --- | --- |
+| Generous draft | Completed the whole explanation before sentence editing. All 41 assigned movement units were accounted for: 40 from old22 and the assigned paragraph from old03. |
+| Mechanical gate | Zero findings on the generous draft. Repeated after the revision and before each prose commit. |
+| Thematic/teaching order | Established capacity, entries and the stop marker before HFLAG/HSTORE, then derived traversal from those same boundaries. Kept the practical recall capture as evidence after HPOS and replacement rather than as a second first-prompt lesson. |
+| Paragraph deletion | Removed the opening's final preview because it announced the subsequent explanation without adding a rule. Replaced the insertion section's broad capacity certification with the exact post-cleanup boundary and its use by backwards traversal. |
+| Sentence deletion | Read every sentence in order, with each paragraph and the following paragraph. Retained byte costs, register preservation, empty-line exclusion, the difference counter and the reset entry as short sentences because each carries a distinct fact. The `HSCLR` sentence establishes the named operation before its loop. The `^X` sentence identifies the shared erase routine. |
+| Agency/plainness | Changed “calling the shared access code” to “entering” because HPUT branches and HGET falls through. Replaced recognition wording with the actual input comparisons. Described a zero's early-termination effect directly. No memory, intention, judgment or social act is assigned to the ROM, routines or chapter. |
+| Every comma | Read every punctuation-bearing paragraph in order. Removed optional commas before `so`, the retained-selection `but` and the directional `then`. Kept list separators, apposition and conditional breaks only where they clarify the grammar. No serial comma, semicolon or em dash remains in authorial prose. Historical recipes, fences and component hashes retain literal punctuation. |
+| Technical/literal | Rechecked the listed source proofs at `ea3ef3d`. All 74 inline file/range citations are in bounds at that pin. Added the actual FNZERO/Ctrl-C exits and empty-input CCP route where the final prose relies on them. Numeric byte costs are source-derived arithmetic, not fresh measurements. |
+| Journey read-back | Read from the opening through the final reset interpretation. HHEAD and the empty entry precede all pointer algorithms; the bank helpers precede store/copy calls; HFLAG precedes both eligibility and key handling; HSTART precedes its reuse in traversal. Ended with the empty buffer producing another prompt, not a recap or forecast. |
+| Preservation | Compared the five complete recipe/fence pairs byte for byte with old22. All five match, including the spaces after SYSTEM and WORK in the reset capture. The two trailing-whitespace reports from the diff check are those required historical lines. |
+
+The complexity report's provenance-comment flags are outside the running
+prose. Its short-sentence flags are the concrete definitions and results
+listed above. The initial stop/stops echo was removed with the preview.
+The Return/returns echo was replaced by the input-loop continuation and the
+reader's editing action. No unresolved hard gate finding remains.
+
+The source-access correction is limited to a dedicated history interface.
+The draft does not assert that arbitrary code cannot access the page.
+HPUT's write and readback are stated separately. The five captures retain
+`78127ec` and their original TED/TAS provenance, while the new source prose
+is checked only by inspection at `ea3ef3d`. No output was invented.
 
 ## Remaining acceptance
 
