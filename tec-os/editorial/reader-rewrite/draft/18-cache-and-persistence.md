@@ -23,16 +23,15 @@ RAM. The block cache makes that possible by collecting records into card blocks.
 Its write policy determines when a successful call also means that the block has
 reached the card.
 
-The historical host-model block read took about 55 milliseconds at
-`78127ec`, with bits passing through a port one at a time. Chapter 17
-explains that transfer. A CP/M program reads the same blocks again and
-again, the directory above all. The block cache keeps what it has read in
-EXPAND 1, so that a later read is a memory copy while that block remains
-cached. Every write goes through the same cache. On a volume written through
-a successful write returns after its line has reached the card. A volume
-written behind keeps its writes in the cache and writes them to the card in
-batches. Chapter 1 introduced the consequence for saved work: until a
-successful flush, the card can lag behind the saved file
+The historical host-model block read took about 55 milliseconds at `78127ec`,
+with bits passing through a port one at a time. Chapter 17 explains that
+transfer. A CP/M program reads the same blocks again and again, the directory
+above all. The block cache keeps what it has read in EXPAND 1 so that a later
+read is a memory copy while that block remains cached. Every write goes through
+the same cache. On a volume written through a successful write returns after its
+line has reached the card. A volume written behind keeps its writes in the cache
+and writes them to the card in batches. Chapter 1 introduced the consequence for
+saved work: until a successful flush, the card can lag behind the saved file
 (`src/cache.asm:493-508`, `src/cache.asm:632-651`).
 
 ## Thirty lines and their table
@@ -46,10 +45,10 @@ The cache's table is the next page. From `CTAB`, `BC00h`, each line has four
 bytes for the number of its card block, `FFFFFFFFh` while the line is empty.
 From `CDIRTY`, `BC80h`, each line has a byte that is nonzero while the line
 holds changes the card lacks. A line is therefore empty, clean or dirty. An
-empty line has no block. A clean line holds a block the card has too, and a
-dirty line holds a block whose newest bytes are only here. Every line is
-empty after a cold boot. The boot clears EXPAND 1 and marks each line empty
-before it mounts the card, as [Chapter 15](15-reset-and-boot.md) describes
+empty line has no block. A clean line holds a block the card has too and a dirty
+line holds a block whose newest bytes are only here. Every line is empty after a
+cold boot. The boot clears EXPAND 1 and marks each line empty before it mounts
+the card, as [Chapter 15](15-reset-and-boot.md) describes
 (`src/boot.asm:100-102`, `src/boot.asm:321-346`). The mount then reads the
 container's table into a line, an ordinary clean one that `CTAKE` gives out
 again in turn (`src/vol.asm:480-524`). Chapter 17 explains the mount.
@@ -77,29 +76,27 @@ stack may be used while EXPAND 1 is in view.
 
 ## A record read through the cache
 
-Every volume's reads go through the cache. BIOS `READ` maps the record to a
-card block and a quarter of it, and calls `CREAD` (`src/bios.asm:247-252`,
-`src/cache.asm:477-491`). `CLOOK` compares `SDLBA` with each line's block
-number in turn, from line 0 (`src/cache.asm:59-116`). On a hit, `CRDREC`
-copies the record's 128 bytes from the line to the DMA address. On a miss,
-`CTAKE` gives out a line, `CFILL` reads the card block straight into it and
-the record is then copied from the line.
+Every volume's reads go through the cache. BIOS `READ` maps the record to a card
+block and a quarter of it and calls `CREAD` (`src/bios.asm:247-252`,
+`src/cache.asm:477-491`). `CLOOK` compares `SDLBA` with each line's block number
+in turn, from line 0 (`src/cache.asm:59-116`). On a hit, `CRDREC` copies the
+record's 128 bytes from the line to the DMA address. On a miss, `CTAKE` gives
+out a line, `CFILL` reads the card block straight into it and the record is then
+copied from the line.
 
-The block goes from the card into EXPAND 1 with no copy through another
-buffer. `CFILL` sets `SDXB` to `LATEXP` for the call, and `SDREAD`'s byte
-loop puts EXPAND 1 in view while it fills the buffer
-(`src/cache.asm:222-245`, `src/sd.asm:525-541`). A failed read leaves the
-line empty.
+The block goes from the card into EXPAND 1 with no copy through another buffer.
+`CFILL` sets `SDXB` to `LATEXP` for the call and `SDREAD`'s byte loop puts
+EXPAND 1 in view while it fills the buffer (`src/cache.asm:222-245`,
+`src/sd.asm:525-541`). A failed read leaves the line empty.
 
-`CTAKE` gives out lines in turn (`src/cache.asm:364-423`). A clean line can
-be given out at any time, since the card has the same bytes. A dirty line
-has to reach the card first. So `CTAKE` starts at `CNEXT` and gives out the
-first clean line from there on. It passes over dirty ones and wraps from
-line 29 to line 0. It sets `CNEXT` to the line after the one it gave out.
-When every line is dirty, `CTAKE` writes the line at `CNEXT` to the card
-first and gives out that one. The order is round-robin and not least
-recently used. A block that is read often is still given up when its turn
-comes, and read again from the card at its next use.
+`CTAKE` gives out lines in turn (`src/cache.asm:364-423`). A clean line can be
+given out at any time, since the card has the same bytes. A dirty line has to
+reach the card first. So `CTAKE` starts at `CNEXT` and gives out the first clean
+line from there on. It passes over dirty ones and wraps from line 29 to line 0.
+It sets `CNEXT` to the line after the one it gave out. When every line is dirty,
+`CTAKE` writes the line at `CNEXT` to the card first and gives out that one. The
+order is round-robin and not least recently used. A block that is read often is
+still given up when its turn comes and read again from the card at its next use.
 
 In the retained `78127ec` starter-card run, a BIOS read in `DIR` that hit
 took 13,718 T-states, with its record going to the directory buffer
@@ -166,14 +163,14 @@ node tools/tecvol.mjs put time.img A read.com
 node tools/tecvol.mjs put time.img A data.bin
 ```
 
-`tools/capture.mjs` prints no T-state count, so the figures come from a
-script that drives `Machine` as it does. The script reads the model's count,
-`cycles` (`host/machine.mjs:265`), twice. The first reading is after `READ
-DATA.BIN` has been typed and echoed, before the Return that ends it. The
-second is at the next prompt. At `78127ec`, after a cold boot, the command's
-first run took 6,642,581 T-states, 1.66 seconds. The next run took
-1,343,674, 0.34 seconds, a fifth of the first. Both figures include loading
-the program from drive A.
+`tools/capture.mjs` prints no T-state count so the figures come from a script
+that drives `Machine` as it does. The script reads the model's count, `cycles`
+(`host/machine.mjs:265`), twice. The first reading is after `READ
+DATA.BIN` has been typed and echoed, before the Return that ends it. The second
+is at the next prompt. At `78127ec`, after a cold boot, the command's first run
+took 6,642,581 T-states, 1.66 seconds. The next run took 1,343,674, 0.34
+seconds, a fifth of the first. Both figures include loading the program from
+drive A.
 
 The gain depends on which blocks remain in the cache. In a separate
 `5a25178` run, the 15,360-byte file took about 2.0 seconds and then about
@@ -185,39 +182,36 @@ read along the way.
 ## A write that reaches the card
 
 A volume whose descriptor does not have the written-behind flag is written
-through: a successful BIOS `WRITE` returns after the card has accepted the
-block and stopped reporting busy (`src/sd.asm:726-733`). Its record goes
-into the block's line by the path the next section describes, and `WRITE`
-sets bit 7 of `CWTYPE` first. `CWRBH` then writes the line to the card with
-`CWRITE` (`src/bios.asm:413-426`, `src/cache.asm:596-630`). A successful
-card write leaves that line clean. A failed card write drops it so the next
-read comes from the card (`src/cache.asm:647-651`). A failure earlier in the
-call, while obtaining a line, can instead leave an older dirty line for a later
-retry
+through: a successful BIOS `WRITE` returns after the card has accepted the block
+and stopped reporting busy (`src/sd.asm:726-733`). Its record goes into the
+block's line by the path the next section describes and `WRITE` sets bit 7 of
+`CWTYPE` first. `CWRBH` then writes the line to the card with `CWRITE`
+(`src/bios.asm:413-426`, `src/cache.asm:596-630`). A successful card write
+leaves that line clean. A failed card write drops it so the next read comes from
+the card (`src/cache.asm:647-651`). A failure while obtaining a line earlier in
+the call can instead leave an older dirty line for a later retry
 (`src/cache.asm:364-423`, `src/cache.asm:510-520`).
 
 A write that is given a line for its block sets bit 6 of `CWTYPE`
 (`src/cache.asm:521-523`). `CWRBH` sets `CNEXT` back to such a line once the
-card has it from a volume written through (`src/cache.asm:620-630`). The
-next line given out is then the same one. A file written through passes
-through a single line, block after block, and the cache keeps the lines that
-hold programs and directories. The line keeps its block, so the block's next
-record is a hit.
+card has it from a volume written through (`src/cache.asm:620-630`). The next
+line given out is then the same one. A file written through passes through a
+single line, block after block, and the cache keeps the lines that hold programs
+and directories. The line keeps its block so the block's next record is a hit.
 
 ## Collecting records before the directory write
 
-A card block holds four CP/M records. Writing each record through can
-therefore write the same block four times. Writing behind combines those
-changes in one line before a flush. Chapter 17 explains the record-to-block
-mapping (`src/cache.asm:425-467`, `src/cache.asm:596-630`). A volume is
-written behind when its descriptor has bit 0 of its cache byte, byte 15,
-set. `tecvol` permits the bit on one volume at most
-(`tools/lib/container.mjs:85-86`). The ROM applies the flag per volume, so
-the host restriction is not a ROM count limit. `MNFILL` copies the bit into
-bit 1 of the drive's flags in the drive table (`src/vol.asm:747-758`). After
-its checks, BIOS `WRITE` sends a write on that drive to `CWRBH` with bit 7
-of `CWTYPE` clear (`src/bios.asm:413-421`). On the starter card the volume
-is `WORK` on drive B.
+A card block holds four CP/M records. Writing each record through can therefore
+write the same block four times. Writing behind combines those changes in one
+line before a flush. Chapter 17 explains the record-to-block mapping
+(`src/cache.asm:425-467`, `src/cache.asm:596-630`). A volume is written behind
+when its descriptor has bit 0 of its cache byte, byte 15, set. `tecvol` permits
+the bit on one volume at most (`tools/lib/container.mjs:85-86`). The ROM applies
+the flag per volume so the host restriction is not a ROM count limit. `MNFILL`
+copies the bit into bit 1 of the drive's flags in the drive table
+(`src/vol.asm:747-758`). After its checks, BIOS `WRITE` sends a write on that
+drive to `CWRBH` with bit 7 of `CWTYPE` clear (`src/bios.asm:413-421`). On the
+starter card the volume is `WORK` on drive B.
 
 `CWRBH`, the path of every write, puts the record into the block's line and
 marks the line dirty (`src/cache.asm:510-651`). If no line holds the block,
@@ -226,22 +220,21 @@ already held the block. It is cleared to zeros instead, with no read, when
 by `WRITE`'s rule from Chapter 17 the card has nothing to supply
 (`src/cache.asm:529-554`).
 
-Either way, the record's 128 bytes are then copied from the DMA address into
-the line with `CWRREC`, and `CDSET` marks the line dirty. On a volume
-written behind a data write ends there. Success at this point means the
-record is in the cache. A miss may already have forced an older dirty line
-to the card, so the complete call need not leave the card unchanged. A write
-of type 1, a directory write, which bit 0 of `CWTYPE` shows, goes on
-(`src/cache.asm:596-613`, `src/cache.asm:632-651`). The new directory entry
-must not reach the card before the data blocks it names. `CFLUSH` writes
-every dirty line except the directory's, and then, if every one was written,
-`CWRITE` writes the directory's line. The data reaches the card before the
-directory block that names it. If any of those writes fails, the directory's
-cached line is dropped, so its next read comes from the card. A data line
-whose write fails stays dirty, since it holds the only copy of its records.
-The write then reports the error to the BDOS. When function 45 returns the
-error to a program, another close can retry the retained dirty data. If
-those writes and the directory write succeed, the close succeeds
+Either way, the record's 128 bytes are then copied from the DMA address into the
+line with `CWRREC` and `CDSET` marks the line dirty. On a volume written behind
+a data write ends there. Success at this point means the record is in the cache.
+A miss may already have forced an older dirty line to the card so the complete
+call need not leave the card unchanged. A write of type 1, a directory write,
+which bit 0 of `CWTYPE` shows, goes on (`src/cache.asm:596-613`,
+`src/cache.asm:632-651`). The new directory entry must not reach the card before
+the data blocks it names. `CFLUSH` writes every dirty line except the
+directory's and then, if every one was written, `CWRITE` writes the directory's
+line. The data reaches the card before the directory block that names it. If any
+of those writes fails, the directory's cached line is dropped so its next read
+comes from the card. A data line whose write fails stays dirty, since it holds
+the only copy of its records. The write then reports the error to the BDOS. When
+function 45 returns the error to a program, another close can retry the retained
+dirty data. If those writes and the directory write succeed, the close succeeds
 (`src/cache.asm:307-350`, `src/cache.asm:632-651`).
 
 The BDOS writes the directory when it creates a file and when it closes a
@@ -294,18 +287,17 @@ can damage any of its 16 entries. Card-reported completion is also not a
 verification of the card's physical power-loss durability
 (`docs/recovery.md:69-70`, `docs/recovery.md:92-94`).
 
-`CWRITE` writes a single line to the card (`src/cache.asm:247-290`). It
-takes the block number from the table and sets `SDXB` so that `SDWRITE`
-reads its 512 bytes straight from the line in EXPAND 1. On success it marks
-the line clean. On a failure it leaves the line dirty and returns `NZ`. A
-flush writes every dirty line, goes on past each failure and returns `NZ` if
-there was one. `CFLALL` drops each line whose write fails, so the card's
-copy of that block stands. `CFLUSH`, the directory write's, leaves such a
-line dirty for a later flush (`src/cache.asm:307-350`). `CTAKE`'s write of
-one line, when every line is dirty, keeps a failed line dirty in the same
-way. `CTAKE` then returns the error with `CNEXT` moved past the line. The
-next miss writes the line after it, so a single bad block can't fail every
-later miss (`src/cache.asm:402-423`).
+`CWRITE` writes a single line to the card (`src/cache.asm:247-290`). It takes
+the block number from the table and sets `SDXB` so that `SDWRITE` reads its 512
+bytes straight from the line in EXPAND 1. On success it marks the line clean. On
+a failure it leaves the line dirty and returns `NZ`. A flush writes every dirty
+line, goes on past each failure and returns `NZ` if there was one. `CFLALL`
+drops each line whose write fails so the card's copy of that block stands.
+`CFLUSH`, the directory write's, leaves such a line dirty for a later flush
+(`src/cache.asm:307-350`). `CTAKE`'s write of one line, when every line is
+dirty, keeps a failed line dirty in the same way. `CTAKE` then returns the error
+with `CNEXT` moved past the line. The next miss writes the line after it so a
+single bad block can't fail every later miss (`src/cache.asm:402-423`).
 
 ### Five flush occasions
 
@@ -315,42 +307,41 @@ Dirty cache lines reach the card on five occasions:
 - `CTAKE` with every line dirty, which writes one line
 - every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:210-215`,
   `src/cache.asm:661-668`)
-- a valid change through the services `MOUNT` or `UNMNT`, whose `VFLUSH`
-  calls `CFLALL` before any drive changes, and fails if a line failed
+- a valid change through the services `MOUNT` or `UNMNT`, whose `VFLUSH` calls
+  `CFLALL` before any drive changes and fails if a line failed
   (`src/volsvc.asm:413-429`)
-- BDOS function 48, which calls `VFLUSH` and returns 0 in `A`, or `FFh` if a
-  line failed and was dropped (`src/cpm/bdos.asm:285-289`)
+- BDOS function 48, which calls `VFLUSH` and returns 0 in `A` or `FFh` if a line
+  failed and was dropped (`src/cpm/bdos.asm:285-289`)
 
-A `^C` at the prompt causes a warm boot. When its flush succeeds, every
-pending cache change has reached the card. A failure prints `Write lost`,
-whose consequence is described below. Reset does not flush the old cache. Cold boot clears EXPAND 1
-(`src/boot.asm:321-346`), so changes still unwritten at reset are lost. Some changes since the last
-directory write may already be on the card. `CTAKE` wrote them when their
-lines were given out for other blocks (`src/cache.asm:402-409`). The card
-can then hold a mix of old and new blocks.
+A `^C` at the prompt causes a warm boot. When its flush succeeds, every pending
+cache change has reached the card. A failure prints `Write lost`, whose
+consequence is described below. Reset does not flush the old cache. Cold boot
+clears EXPAND 1 (`src/boot.asm:321-346`) so changes still unwritten at reset are
+lost. Some changes since the last directory write may already be on the card.
+`CTAKE` wrote them when their lines were given out for other blocks
+(`src/cache.asm:402-409`). The card can then hold a mix of old and new blocks.
 
 ## A failed flush
 
-A data write on a volume written behind can return success before its record
-has reached the card. A failure when its line goes to the card later
-therefore needs a report of its own, and that report is `Write lost`.
-`CWBOOT` calls `CFLALL` at the warm boot. That writes every dirty line and
-drops each one the card rejects. If any failed, `CWBOOT` drops the rest of a
-chained line and prints `Write lost` on its own line
-(`src/cache.asm:661-668`, `src/text.asm:93`). The dropped lines' changes are
-gone from RAM. Blocks the card rejected before programming retain their
-earlier contents. A partially programmed block has the corruption risk
-described above. The message is printed once for that flush. With no new
-dirty data, the next warm boot has nothing more to write.
+A data write on a volume written behind can return success before its record has
+reached the card. A failure when its line goes to the card later therefore needs
+a report of its own and that report is `Write lost`. `CWBOOT` calls `CFLALL` at
+the warm boot. That writes every dirty line and drops each one the card rejects.
+If any failed, `CWBOOT` drops the rest of a chained line and prints `Write lost`
+on its own line (`src/cache.asm:661-668`, `src/text.asm:93`). The dropped lines'
+changes are gone from RAM. Blocks the card rejected before programming retain
+their earlier contents. A partially programmed block has the corruption risk
+described above. The message is printed once for that flush. With no new dirty
+data, the next warm boot has nothing more to write.
 
 A directory write whose flush fails during a program's run is the BDOS's
-`Bad Sector` instead. Its data lines that failed are still dirty, so the
-warm boot after it writes them again. When the card rejects them again, the
-boot prints `Write lost` and drops them. The directory's line was dropped
-when the directory write failed. The failed directory update is not retried
-by that flush. If the card rejected the directory write before changing it,
-the previous directory remains. A card error or power loss during
-programming can instead leave a partly changed block.
+`Bad Sector` instead. Its data lines that failed are still dirty so the warm
+boot after it writes them again. When the card rejects them again, the boot
+prints `Write lost` and drops them. The directory's line was dropped when the
+directory write failed. The failed directory update is not retried by that
+flush. If the card rejected the directory write before changing it, the previous
+directory remains. A card error or power loss during programming can instead
+leave a partly changed block.
 
 A card taken out while TEC-OS runs gives that, since every write then fails.
 The first warm boot after it prints `Write lost` and drops the lines.
@@ -395,18 +386,17 @@ program's `RST 38h` (`src/boot.asm:499-509`). DI does not block a non-maskable
 interrupt (NMI). These routines therefore require the NMI conditions described
 in Chapter 14 as well as their maskable-interrupt protection.
 
-For a program that enables maskable interrupts, the protected portion of
-a BIOS disk call holds them off across mapping, cache work and card I/O.
-A read that misses holds them off for about 235,000 T-states, 59 milliseconds. A directory
+For a program that enables maskable interrupts, the protected portion of a BIOS
+disk call holds them off across mapping, cache work and card I/O. A read that
+misses holds them off for about 235,000 T-states, 59 milliseconds. A directory
 write on the volume written behind holds them off while every dirty line is
-written. In the retained `78127ec` run the close of a file of four blocks
-took 1,111,542 T-states. The retained `78127ec` per-line `CWRITE` cost was
-217,421 T-states. Multiplying it by 30 gives about 6.5 million T-states, or
-1.6 seconds, for data transfer alone. That is an estimate from the model
-cost, not a measured all-dirty flush or an upper bound for a physical card.
-A program with an interrupt response requirement can place disk calls
-outside the interval that needs a short response. Writing through avoids a
-directory-triggered all-line flush on that volume, but a cache miss may
-still write one dirty line. Warm boot, mount changes and function 48 can
-flush the whole cache whatever volume the program uses. Those operations
-must also fall outside that interval.
+written. In the retained `78127ec` run the close of a file of four blocks took
+1,111,542 T-states. The retained `78127ec` per-line `CWRITE` cost was 217,421
+T-states. Multiplying it by 30 gives about 6.5 million T-states, or 1.6 seconds,
+for data transfer alone. That is an estimate from the model cost, not a measured
+all-dirty flush or an upper bound for a physical card. A program with an
+interrupt response requirement can place disk calls outside the interval that
+needs a short response. Writing through avoids a directory-triggered all-line
+flush on that volume but a cache miss may still write one dirty line. Warm boot,
+mount changes and function 48 can flush the whole cache whatever volume the
+program uses. Those operations must also fall outside that interval.

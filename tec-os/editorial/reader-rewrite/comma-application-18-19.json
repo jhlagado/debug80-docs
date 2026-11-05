@@ -1,0 +1,2418 @@
+{
+  "schema_version": 1,
+  "status": "accepted_review_applied_pending_independent_confirmation",
+  "review": {
+    "path": "tec-os/editorial/reader-rewrite/comma-review-18-19.json",
+    "commit": "d9f2f91",
+    "sha256": "8d2a61b7f9bc3b8332e34d08da9499af205e1d615e21278ca80e3933e33ac219"
+  },
+  "inventory": {
+    "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+    "commit": "028ecdde0cd295d162cea47b6db7291b21384bf0",
+    "git_blob": "51228d051e60add154b874f9184e9aa5ec7bf0a6",
+    "path": "tec-os/editorial/reader-rewrite/conjunction-comma-inventory.json",
+    "sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326",
+    "source_identity_policy": "Original source entries and occurrence records are copied unchanged. Derived zero-based character and UTF-8 byte offsets supplement, rather than replace, the original ID, line, column and raw matched text.",
+    "sources": [
+      {
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "bytes": 23346,
+        "git_blob": "ca106d663c24c7606ec425c10f6d897289fad8dc",
+        "occurrences": 26,
+        "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+        "sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860"
+      },
+      {
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "bytes": 29246,
+        "git_blob": "cc78ce9a16a53bc8cf817ca5fa8b9329726f1430",
+        "occurrences": 50,
+        "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+        "sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3"
+      }
+    ]
+  },
+  "scope": {
+    "reader_paths": [
+      "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md"
+    ],
+    "assigned_ids": 76,
+    "supplementary_ids_not_applied": [
+      "CC0002",
+      "CC0019"
+    ],
+    "superseded_id_not_reintroduced": "CC0130",
+    "shared_inventory_and_ledger_edited": false,
+    "root_integration": false,
+    "publication": false,
+    "product_execution": false,
+    "editorial_text_tools_executed": [
+      "prose_gate.py",
+      "sentence_complexity.py"
+    ]
+  },
+  "identity_checks": {
+    "both_working_sources_matched_frozen_sha256_before_any_write": true,
+    "frozen_git_source_bytes_also_matched": true,
+    "all_contexts_and_raw_comma_positions_verified_before_joint_edits": true,
+    "stale_offset_deletion_used": false,
+    "shared_inventory_unchanged": true
+  },
+  "ids": {
+    "remove_optional": [
+      "CC0101",
+      "CC0102",
+      "CC0104",
+      "CC0105",
+      "CC0106",
+      "CC0107",
+      "CC0108",
+      "CC0111",
+      "CC0112",
+      "CC0113",
+      "CC0114",
+      "CC0115",
+      "CC0116",
+      "CC0118",
+      "CC0119",
+      "CC0120",
+      "CC0121",
+      "CC0122",
+      "CC0123",
+      "CC0124",
+      "CC0126",
+      "CC0127",
+      "CC0128",
+      "CC0132",
+      "CC0134",
+      "CC0135",
+      "CC0137",
+      "CC0138",
+      "CC0139",
+      "CC0140",
+      "CC0141",
+      "CC0142",
+      "CC0143",
+      "CC0144",
+      "CC0146",
+      "CC0147",
+      "CC0149",
+      "CC0150",
+      "CC0151",
+      "CC0152",
+      "CC0153",
+      "CC0155",
+      "CC0156",
+      "CC0157",
+      "CC0158",
+      "CC0159",
+      "CC0160",
+      "CC0161",
+      "CC0162",
+      "CC0163",
+      "CC0164",
+      "CC0165",
+      "CC0167",
+      "CC0168",
+      "CC0169",
+      "CC0171",
+      "CC0172",
+      "CC0174",
+      "CC0175",
+      "CC0176",
+      "CC0177"
+    ],
+    "needs_rephrase": [
+      "CC0109"
+    ],
+    "retain_boundary": [
+      "CC0103",
+      "CC0110",
+      "CC0117",
+      "CC0125",
+      "CC0129",
+      "CC0131",
+      "CC0133",
+      "CC0136",
+      "CC0145",
+      "CC0148",
+      "CC0154",
+      "CC0166",
+      "CC0170",
+      "CC0173"
+    ],
+    "retain_literal": []
+  },
+  "applications": [
+    {
+      "id": "CC0101",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 30,
+      "basis_column": 9,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 1412
+    },
+    {
+      "id": "CC0102",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 49,
+      "basis_column": 69,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 2586
+    },
+    {
+      "id": "CC0103",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 57,
+      "basis_column": 63,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 3102
+    },
+    {
+      "id": "CC0104",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 81,
+      "basis_column": 31,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 4290
+    },
+    {
+      "id": "CC0105",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 89,
+      "basis_column": 53,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 4799
+    },
+    {
+      "id": "CC0106",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 102,
+      "basis_column": 6,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 5555
+    },
+    {
+      "id": "CC0107",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 169,
+      "basis_column": 44,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 8755
+    },
+    {
+      "id": "CC0108",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 190,
+      "basis_column": 61,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 9964
+    },
+    {
+      "id": "CC0109",
+      "classification": "needs_rephrase",
+      "action": "applied_accepted_complete_rephrase",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 195,
+      "basis_column": 5,
+      "basis_matched_text": ", while",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 10284,
+      "accepted_proposal": {
+        "companion_punctuation": "Replace the complete sentence, removing both commas around the timing phrase. Do not remove only the inventoried opening comma.",
+        "original_sentence": "A failure earlier in the call, while obtaining a line, can instead leave an older dirty line for a later retry.",
+        "replacement_sentence": "A failure while obtaining a line earlier in the call can instead leave an older dirty line for a later retry."
+      },
+      "citation_disposition": "The review display omits the trailing citation. Applied the approved word sequence to the sentence body, preserving the original trailing citation spans and their terminal period exactly.",
+      "additional_companion_comma_removed": "Closing comma after while obtaining a line, as required by the accepted whole-sentence proposal."
+    },
+    {
+      "id": "CC0110",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 203,
+      "basis_column": 41,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 10747
+    },
+    {
+      "id": "CC0111",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 204,
+      "basis_column": 56,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 10839
+    },
+    {
+      "id": "CC0112",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 215,
+      "basis_column": 71,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 11415
+    },
+    {
+      "id": "CC0113",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 230,
+      "basis_column": 23,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 12237
+    },
+    {
+      "id": "CC0114",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 233,
+      "basis_column": 12,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 12443
+    },
+    {
+      "id": "CC0115",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 237,
+      "basis_column": 40,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 12766
+    },
+    {
+      "id": "CC0116",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 240,
+      "basis_column": 23,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 12978
+    },
+    {
+      "id": "CC0117",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 258,
+      "basis_column": 48,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 14083
+    },
+    {
+      "id": "CC0118",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 302,
+      "basis_column": 58,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 16691
+    },
+    {
+      "id": "CC0119",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 307,
+      "basis_column": 35,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 17038
+    },
+    {
+      "id": "CC0120",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 319,
+      "basis_column": 42,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 17526
+    },
+    {
+      "id": "CC0121",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 321,
+      "basis_column": 62,
+      "basis_matched_text": ", or",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 17645
+    },
+    {
+      "id": "CC0122",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 327,
+      "basis_column": 25,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 17991
+    },
+    {
+      "id": "CC0123",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 336,
+      "basis_column": 36,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 18459
+    },
+    {
+      "id": "CC0124",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 347,
+      "basis_column": 65,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 19188
+    },
+    {
+      "id": "CC0125",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 404,
+      "basis_column": 72,
+      "basis_matched_text": ", or",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 22787
+    },
+    {
+      "id": "CC0126",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_line": 409,
+      "basis_column": 50,
+      "basis_matched_text": ", but",
+      "basis_source_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "basis_comma_character_offset_0_based": 23135
+    },
+    {
+      "id": "CC0127",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 46,
+      "basis_column": 8,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 2203
+    },
+    {
+      "id": "CC0128",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 66,
+      "basis_column": 8,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 3314
+    },
+    {
+      "id": "CC0129",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 68,
+      "basis_column": 21,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 3482
+    },
+    {
+      "id": "CC0131",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 100,
+      "basis_column": 46,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 5244
+    },
+    {
+      "id": "CC0132",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 111,
+      "basis_column": 46,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 5976
+    },
+    {
+      "id": "CC0133",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 114,
+      "basis_column": 40,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 6078
+    },
+    {
+      "id": "CC0134",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 130,
+      "basis_column": 21,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 6781
+    },
+    {
+      "id": "CC0135",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 131,
+      "basis_column": 19,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 6855
+    },
+    {
+      "id": "CC0136",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 131,
+      "basis_column": 58,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 6894
+    },
+    {
+      "id": "CC0137",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 139,
+      "basis_column": 13,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 7227
+    },
+    {
+      "id": "CC0138",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 142,
+      "basis_column": 66,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 7493
+    },
+    {
+      "id": "CC0139",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 152,
+      "basis_column": 11,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 7967
+    },
+    {
+      "id": "CC0140",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 179,
+      "basis_column": 72,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 9561
+    },
+    {
+      "id": "CC0141",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 182,
+      "basis_column": 5,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 9689
+    },
+    {
+      "id": "CC0142",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 187,
+      "basis_column": 7,
+      "basis_matched_text": ", or",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 10030
+    },
+    {
+      "id": "CC0143",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 205,
+      "basis_column": 8,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 11188
+    },
+    {
+      "id": "CC0144",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 216,
+      "basis_column": 36,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 11807
+    },
+    {
+      "id": "CC0145",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 221,
+      "basis_column": 62,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 12202
+    },
+    {
+      "id": "CC0146",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 226,
+      "basis_column": 18,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 12440
+    },
+    {
+      "id": "CC0147",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 228,
+      "basis_column": 23,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 12598
+    },
+    {
+      "id": "CC0148",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 230,
+      "basis_column": 31,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 12751
+    },
+    {
+      "id": "CC0149",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 233,
+      "basis_column": 72,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 12940
+    },
+    {
+      "id": "CC0150",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 244,
+      "basis_column": 73,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 13525
+    },
+    {
+      "id": "CC0151",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 253,
+      "basis_column": 53,
+      "basis_matched_text": ", or",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 13882
+    },
+    {
+      "id": "CC0152",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 260,
+      "basis_column": 22,
+      "basis_matched_text": ", or",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 14355
+    },
+    {
+      "id": "CC0153",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 264,
+      "basis_column": 31,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 14654
+    },
+    {
+      "id": "CC0154",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 274,
+      "basis_column": 53,
+      "basis_matched_text": ", or",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 15244
+    },
+    {
+      "id": "CC0155",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 281,
+      "basis_column": 55,
+      "basis_matched_text": ", or",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 15634
+    },
+    {
+      "id": "CC0156",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 306,
+      "basis_column": 32,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 16868
+    },
+    {
+      "id": "CC0157",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 311,
+      "basis_column": 76,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 17256
+    },
+    {
+      "id": "CC0158",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 320,
+      "basis_column": 29,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 17647
+    },
+    {
+      "id": "CC0159",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 325,
+      "basis_column": 58,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 18043
+    },
+    {
+      "id": "CC0160",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 330,
+      "basis_column": 11,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 18354
+    },
+    {
+      "id": "CC0161",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 331,
+      "basis_column": 20,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 18440
+    },
+    {
+      "id": "CC0162",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 344,
+      "basis_column": 191,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 19221
+    },
+    {
+      "id": "CC0163",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 350,
+      "basis_column": 55,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 19661
+    },
+    {
+      "id": "CC0164",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 353,
+      "basis_column": 6,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 19835
+    },
+    {
+      "id": "CC0165",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 356,
+      "basis_column": 34,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 20042
+    },
+    {
+      "id": "CC0166",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 357,
+      "basis_column": 55,
+      "basis_matched_text": ", but",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 20140
+    },
+    {
+      "id": "CC0167",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 369,
+      "basis_column": 8,
+      "basis_matched_text": ", but",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 20731
+    },
+    {
+      "id": "CC0168",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 371,
+      "basis_column": 7,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 20858
+    },
+    {
+      "id": "CC0169",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 427,
+      "basis_column": 14,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 24085
+    },
+    {
+      "id": "CC0170",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 434,
+      "basis_column": 25,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 24527
+    },
+    {
+      "id": "CC0171",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 463,
+      "basis_column": 12,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 26223
+    },
+    {
+      "id": "CC0172",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 466,
+      "basis_column": 34,
+      "basis_matched_text": ", and",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 26428
+    },
+    {
+      "id": "CC0173",
+      "classification": "retain_boundary",
+      "action": "retained_boundary",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 476,
+      "basis_column": 95,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 27105
+    },
+    {
+      "id": "CC0174",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 484,
+      "basis_column": 6,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 27560
+    },
+    {
+      "id": "CC0175",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 492,
+      "basis_column": 35,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 28062
+    },
+    {
+      "id": "CC0176",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 503,
+      "basis_column": 6,
+      "basis_matched_text": ", while",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 28569
+    },
+    {
+      "id": "CC0177",
+      "classification": "remove_optional",
+      "action": "removed_comma",
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_line": 510,
+      "basis_column": 15,
+      "basis_matched_text": ", so",
+      "basis_source_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "basis_comma_character_offset_0_based": 29007
+    }
+  ],
+  "sources": [
+    {
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "bytes": 23346,
+      "git_blob": "ca106d663c24c7606ec425c10f6d897289fad8dc",
+      "occurrences": 26,
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "input_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "output_sha256": "f7ffc97823da0b464f2701cc54621cfe5d536c1c059d88b639d8e38fe8a4a904",
+      "output_bytes": 23323,
+      "immutable_counts": {
+        "fences": 2,
+        "comments": 1,
+        "inline_spans": 258,
+        "links": 3,
+        "headings": 9,
+        "front_matter": 1
+      },
+      "immutable_comparison": "byte-identical sequences",
+      "input_bytes": 23346,
+      "output_git_blob": "418c6a98352f8f7a374e8e0a95ea74b09b392574",
+      "comma_count_delta": -23,
+      "immutable_sequences": {
+        "fences": {
+          "count": 2,
+          "input_sha256": "33269ecd98231ad9525c0215e0012a15874e4dccdebcca6bd721ed542e2a8c01",
+          "output_sha256": "33269ecd98231ad9525c0215e0012a15874e4dccdebcca6bd721ed542e2a8c01",
+          "equal": true
+        },
+        "comments": {
+          "count": 1,
+          "input_sha256": "97c7426c20b85ecaded73282d72f63c4a405933314245996c10f545c7a526606",
+          "output_sha256": "97c7426c20b85ecaded73282d72f63c4a405933314245996c10f545c7a526606",
+          "equal": true
+        },
+        "inline_spans": {
+          "count": 258,
+          "input_sha256": "c19fd1f32cb0af6fb53f1c4c830e758907c1952991d9fcb9b82b3425e99a6bbd",
+          "output_sha256": "c19fd1f32cb0af6fb53f1c4c830e758907c1952991d9fcb9b82b3425e99a6bbd",
+          "equal": true
+        },
+        "links": {
+          "count": 3,
+          "input_sha256": "3dc3da9baddff6057d50021d7f5e1c8071136e3528a3cfff73df6072f204d100",
+          "output_sha256": "3dc3da9baddff6057d50021d7f5e1c8071136e3528a3cfff73df6072f204d100",
+          "equal": true
+        },
+        "headings": {
+          "count": 9,
+          "input_sha256": "54d050096175dfba515eefc4af0c83b2627f93f2ad7d837a534163f5c77e3217",
+          "output_sha256": "54d050096175dfba515eefc4af0c83b2627f93f2ad7d837a534163f5c77e3217",
+          "equal": true
+        },
+        "front_matter": {
+          "count": 1,
+          "input_sha256": "f6ef0671398706e01f3fda8810d7baa75615c1fa1fc686e920c3b07ecd9dd125",
+          "output_sha256": "f6ef0671398706e01f3fda8810d7baa75615c1fa1fc686e920c3b07ecd9dd125",
+          "equal": true
+        }
+      }
+    },
+    {
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "bytes": 29246,
+      "git_blob": "cc78ce9a16a53bc8cf817ca5fa8b9329726f1430",
+      "occurrences": 50,
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "input_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "output_sha256": "2ea12d0cac1f016654128cf31d28a404251d03fa4903285e3008425056a5daaa",
+      "output_bytes": 29206,
+      "immutable_counts": {
+        "fences": 0,
+        "comments": 1,
+        "inline_spans": 383,
+        "links": 4,
+        "headings": 17,
+        "front_matter": 1
+      },
+      "immutable_comparison": "byte-identical sequences",
+      "input_bytes": 29246,
+      "output_git_blob": "ca5f9b1a3d8ad55b587f77263041bb19b3cd00f6",
+      "comma_count_delta": -40,
+      "immutable_sequences": {
+        "fences": {
+          "count": 0,
+          "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "equal": true
+        },
+        "comments": {
+          "count": 1,
+          "input_sha256": "ee3e7aa2a3b343d7675a314710219ef9790c5b79739f8dd3c24d38abcd0a188e",
+          "output_sha256": "ee3e7aa2a3b343d7675a314710219ef9790c5b79739f8dd3c24d38abcd0a188e",
+          "equal": true
+        },
+        "inline_spans": {
+          "count": 383,
+          "input_sha256": "2a081d648d43eb607330991879178266488ac63c55289aa70c4b4a17281bdc80",
+          "output_sha256": "2a081d648d43eb607330991879178266488ac63c55289aa70c4b4a17281bdc80",
+          "equal": true
+        },
+        "links": {
+          "count": 4,
+          "input_sha256": "1f9ba86cdf0fceefcacb88e82af98284bddf07dde7d2a28e03523130707b151a",
+          "output_sha256": "1f9ba86cdf0fceefcacb88e82af98284bddf07dde7d2a28e03523130707b151a",
+          "equal": true
+        },
+        "headings": {
+          "count": 17,
+          "input_sha256": "6fd36601ae767999eff380204b5f37da6074bbb9f6079ec63303b50d2911744f",
+          "output_sha256": "6fd36601ae767999eff380204b5f37da6074bbb9f6079ec63303b50d2911744f",
+          "equal": true
+        },
+        "front_matter": {
+          "count": 1,
+          "input_sha256": "6e10c388e6a7ba022d0db459c9ff70433b327f2777a2abf91d84ce40f599b159",
+          "output_sha256": "6e10c388e6a7ba022d0db459c9ff70433b327f2777a2abf91d84ce40f599b159",
+          "equal": true
+        }
+      }
+    }
+  ],
+  "contexts": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 26,
+      "basis_context_end_line": 36,
+      "joint_ids": [
+        "CC0101"
+      ],
+      "changed": true,
+      "input_context_sha256": "0b4dedd8f2d9d419844df33b9fed07e0258cccf6658d8033f4cc53b5feec2f76",
+      "output_context_sha256": "1f786b9db8592fbeffbf13009113abc2952676718ad47427493de24a8d9f93fc",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 45,
+      "basis_context_end_line": 55,
+      "joint_ids": [
+        "CC0102"
+      ],
+      "changed": true,
+      "input_context_sha256": "55a3a561cd2cae28c0bd37e2ac64284d9a808b0a8ae411dc44683ef45ff0ee30",
+      "output_context_sha256": "8f75a8a025a50e3545de3c12a0bb327ffe42547f2163b00aaf31efa154e75c68",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 57,
+      "basis_context_end_line": 61,
+      "joint_ids": [
+        "CC0103"
+      ],
+      "changed": false,
+      "input_context_sha256": "7894d8f0df93d188d630582234847149621dfa0c756c6f71627b46a8896b6eb7",
+      "output_context_sha256": "7894d8f0df93d188d630582234847149621dfa0c756c6f71627b46a8896b6eb7",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Unchanged context with accepted retained boundaries."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 80,
+      "basis_context_end_line": 86,
+      "joint_ids": [
+        "CC0104"
+      ],
+      "changed": true,
+      "input_context_sha256": "58e6cc9513cb4bf11037b42531c009c52835501c8d4a9cf849cd3d98b6913da4",
+      "output_context_sha256": "bd596e0d7a4412b747d08f4c8749937d4f36c16fef499113fea420abdeb922ed",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 88,
+      "basis_context_end_line": 92,
+      "joint_ids": [
+        "CC0105"
+      ],
+      "changed": true,
+      "input_context_sha256": "3fa7859e36aec1bb18385dadaa5b27d43439d40c623c71c8ef44235f1dbaf290",
+      "output_context_sha256": "445ac425343f4c7368a1075850dbe6172375d77713d7f992f9a31e3490194bd0",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 94,
+      "basis_context_end_line": 102,
+      "joint_ids": [
+        "CC0106"
+      ],
+      "changed": true,
+      "input_context_sha256": "a47c2891e011cfed7d3cb69529faee41f9bf6c5d075fd9e6ff58eeb59c2ba903",
+      "output_context_sha256": "6bfdb053c31eee9bca52519913d132aaf3bba9a8747e5293412ff5e433eb0e14",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 169,
+      "basis_context_end_line": 176,
+      "joint_ids": [
+        "CC0107"
+      ],
+      "changed": true,
+      "input_context_sha256": "8e7f1898f4fa113b8f16864583ce0466c0f6888e0b72ee0aba56e187db821716",
+      "output_context_sha256": "a5bf9aae282e740b4a2f577f84675e42596e35c92b811711ebd4ca0d5a837f9c",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 187,
+      "basis_context_end_line": 197,
+      "joint_ids": [
+        "CC0108",
+        "CC0109"
+      ],
+      "changed": true,
+      "input_context_sha256": "4df02a39bcde82f1613e3603e607aa3ef1e83f4b90d3f472496b8ec0b1659974",
+      "output_context_sha256": "7e8567f3fb90026941bce013b85a1906a9ca50ce7b7eabdfcc5af35117eb788e",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 199,
+      "basis_context_end_line": 205,
+      "joint_ids": [
+        "CC0110",
+        "CC0111"
+      ],
+      "changed": true,
+      "input_context_sha256": "06d1c2bf1738536e3aea83b29c4e5d64f0209e9070e35faf9e7e892aabbe22e9",
+      "output_context_sha256": "12033ba4e8d5d84b2e559622f6c8e3423646169d6aaa5a466bcd41940eceae91",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 209,
+      "basis_context_end_line": 220,
+      "joint_ids": [
+        "CC0112"
+      ],
+      "changed": true,
+      "input_context_sha256": "f5b993b7eab2c8dbae7c7a6f761ccaf12dabfe89509803477fbafddc29de7a5e",
+      "output_context_sha256": "474ca618302b8a636f161ef497adb125454ccab71d9054cf89a76e585b64da53",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 229,
+      "basis_context_end_line": 245,
+      "joint_ids": [
+        "CC0113",
+        "CC0114",
+        "CC0115",
+        "CC0116"
+      ],
+      "changed": true,
+      "input_context_sha256": "04e976af8609bcbd2a8a689204ea9f4c8c78c320d6694b547cc459e80be72cbd",
+      "output_context_sha256": "09cd0e376cd2ee39c9636184134c5f48ee3c84f8f64596c8068b991a3ed9e7e6",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 254,
+      "basis_context_end_line": 262,
+      "joint_ids": [
+        "CC0117"
+      ],
+      "changed": false,
+      "input_context_sha256": "235896a42b318950cbd04a1f20e925c88913f19880c316b47117b0a03e1ad604",
+      "output_context_sha256": "235896a42b318950cbd04a1f20e925c88913f19880c316b47117b0a03e1ad604",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Unchanged context with accepted retained boundaries."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 297,
+      "basis_context_end_line": 308,
+      "joint_ids": [
+        "CC0118",
+        "CC0119"
+      ],
+      "changed": true,
+      "input_context_sha256": "8af5622a0c0f11a9b2ac451cf84b28b5242120a3d795b0d8000cdf83033a4bd2",
+      "output_context_sha256": "1a763af25bd2f1d15aca6a48a79a5acc97c738c8a014168061dfa2ee1bf773a2",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 314,
+      "basis_context_end_line": 322,
+      "joint_ids": [
+        "CC0120",
+        "CC0121"
+      ],
+      "changed": true,
+      "input_context_sha256": "c6f01de44b0dcc9da731ac1bcf1c6214c4c1f97c9058d7ff49356366077f0705",
+      "output_context_sha256": "8e48caf2d1cfcc6157612f97d97b7fc6b1cab6ebdfe0e916755767180a91d4d6",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 324,
+      "basis_context_end_line": 330,
+      "joint_ids": [
+        "CC0122"
+      ],
+      "changed": true,
+      "input_context_sha256": "6e0164b7004c71d66214b843b31d857f9744b28203a985e0edad71cc90169532",
+      "output_context_sha256": "8af9e2445f5fd08f5ecaf6c02ff04b5726f4686663593317049462af403c7f9c",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 334,
+      "basis_context_end_line": 344,
+      "joint_ids": [
+        "CC0123"
+      ],
+      "changed": true,
+      "input_context_sha256": "e9645f3f4204d0f90f334b45122f28c67aef1e682f64844c40565958c04dc6c1",
+      "output_context_sha256": "d27d4bc2ddae8d2e3b0ce5071a8ecc7239e23fbd291e72a862467b3c83f6603f",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 346,
+      "basis_context_end_line": 353,
+      "joint_ids": [
+        "CC0124"
+      ],
+      "changed": true,
+      "input_context_sha256": "fc6ad886b6ccd9336aef489729f3ba80515a3355f836b764349f2cf39781522d",
+      "output_context_sha256": "4f26297c5316825a52407fa84564f7bb1e658692a6fd0a6cc6813dae2f440ade",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "basis_context_start_line": 398,
+      "basis_context_end_line": 412,
+      "joint_ids": [
+        "CC0125",
+        "CC0126"
+      ],
+      "changed": true,
+      "input_context_sha256": "731e269cc7fb4adf31907d41dbba81376574a055bdbea8da17ba9d5cea1eab4d",
+      "output_context_sha256": "418a807e41bc3e0618bf2914af55c6070d34d9b7564b241ac15aa0836990e2db",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 40,
+      "basis_context_end_line": 48,
+      "joint_ids": [
+        "CC0127"
+      ],
+      "changed": true,
+      "input_context_sha256": "486c3e9baeb9810d8492abf9a1e68fd2cf88fddf38678c9d29ab4ff5b71a80c0",
+      "output_context_sha256": "6efd0c6dcd8cad0928adfdedf50a9b59a5c7b185bafa042abf4299ee78f5112c",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 63,
+      "basis_context_end_line": 70,
+      "joint_ids": [
+        "CC0128",
+        "CC0129"
+      ],
+      "changed": true,
+      "input_context_sha256": "132d6aaa5413b75cc8d3d41054426ff02f24e98ba69552a1e241b564bc82665a",
+      "output_context_sha256": "85940186f3f06574e8bae834f456666591f91d0d6d15b44b021a1457a87ac9b7",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 100,
+      "basis_context_end_line": 100,
+      "joint_ids": [
+        "CC0131"
+      ],
+      "changed": false,
+      "input_context_sha256": "3f573725cf3456c80ccf1be8adfa4d72af13cfd01df08bac3eb132caa3343c88",
+      "output_context_sha256": "3f573725cf3456c80ccf1be8adfa4d72af13cfd01df08bac3eb132caa3343c88",
+      "context_kind": "table_row",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Unchanged context with accepted retained boundaries."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 106,
+      "basis_context_end_line": 112,
+      "joint_ids": [
+        "CC0132"
+      ],
+      "changed": true,
+      "input_context_sha256": "fa3292e24bad8b5c18fc0431df63bce3f65b863f3dfc3cfe9d0c3bba88414998",
+      "output_context_sha256": "fd3511e9cb3df53d9fd5eb3ba309448cdc103757b022b59f41075f74707819c9",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 114,
+      "basis_context_end_line": 116,
+      "joint_ids": [
+        "CC0133"
+      ],
+      "changed": false,
+      "input_context_sha256": "dfe644e1ef12e1876b3b6bbf6bb96adec02d0cf4fbe880181fd3b65af4b0a659",
+      "output_context_sha256": "dfe644e1ef12e1876b3b6bbf6bb96adec02d0cf4fbe880181fd3b65af4b0a659",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Unchanged context with accepted retained boundaries."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 130,
+      "basis_context_end_line": 131,
+      "joint_ids": [
+        "CC0134",
+        "CC0135",
+        "CC0136"
+      ],
+      "changed": true,
+      "input_context_sha256": "c152f3eb1a84b3e185dc21479911b67f9479078ddcc86e0d8aca71bd80daf0de",
+      "output_context_sha256": "d5cd49f8e7b5360581b6cb2100552ab72fb4ff9f8b0ea5b2ef88f4542b0a87db",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 135,
+      "basis_context_end_line": 147,
+      "joint_ids": [
+        "CC0137",
+        "CC0138"
+      ],
+      "changed": true,
+      "input_context_sha256": "6255463e1dc53dc9a4eee5700a818bd248a66acbd8d671c14e542549ca245d40",
+      "output_context_sha256": "2f01f790c4a22d1713e22585299eae7d7e442b7f1f8d11cc06dc1161628fc6f5",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 152,
+      "basis_context_end_line": 152,
+      "joint_ids": [
+        "CC0139"
+      ],
+      "changed": true,
+      "input_context_sha256": "8c891dbf11bb7c7113861dbc440385c3890e29254ecc23832838a81f97973ad8",
+      "output_context_sha256": "9a512b26afea03581d9e6f2d298f209dea15e94b496eec505f7db54081f00bf4",
+      "context_kind": "table_row",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 178,
+      "basis_context_end_line": 190,
+      "joint_ids": [
+        "CC0140",
+        "CC0141",
+        "CC0142"
+      ],
+      "changed": true,
+      "input_context_sha256": "16691029c4ada9691c440a86c6f9a38011cb9c3c2527eacb29678c5363f30679",
+      "output_context_sha256": "2666dcb1f2856b78946c6a79d3fa81731e1b8357ca50479fa2393a4bea83ac89",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 198,
+      "basis_context_end_line": 206,
+      "joint_ids": [
+        "CC0143"
+      ],
+      "changed": true,
+      "input_context_sha256": "0bf55f578e7359f64c5507618b0fb5e703c37eff230f742fa11d588e5f1939f7",
+      "output_context_sha256": "25b2a5001814237d4cdff3ed89f14e5774774cbacea273a904ca9d97728d7fdb",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 210,
+      "basis_context_end_line": 222,
+      "joint_ids": [
+        "CC0144",
+        "CC0145"
+      ],
+      "changed": true,
+      "input_context_sha256": "f21b30bd72c8ffb9f150c453169989034cc261bcd1a650a06ba0cc359c65dade",
+      "output_context_sha256": "0418b1d533b0b0369afdcf539182a2ceae5df9b45fd0c8c3a245b08acc6d0938",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 224,
+      "basis_context_end_line": 231,
+      "joint_ids": [
+        "CC0146",
+        "CC0147",
+        "CC0148"
+      ],
+      "changed": true,
+      "input_context_sha256": "3177f0d5de197959ae43e30df1b296ba40df11ddf1bdc3a5882d8807a4d0beb7",
+      "output_context_sha256": "2b83232d63b7c9cb9002ba6ff5df0719a21d0e58361f533f7dc49ce96a86aa43",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 233,
+      "basis_context_end_line": 236,
+      "joint_ids": [
+        "CC0149"
+      ],
+      "changed": true,
+      "input_context_sha256": "cff69d5d54528847eabf4b62c865a88bfb3cbb93697f6dbc912385956d5e066c",
+      "output_context_sha256": "72338451d3ec0024a5be50befcae29e9e87ad5b4f78433dcdb756a26a28fded0",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 240,
+      "basis_context_end_line": 249,
+      "joint_ids": [
+        "CC0150"
+      ],
+      "changed": true,
+      "input_context_sha256": "c9706ed388d2e195212258bea06e7110aaba64399037e07d527e80cb42b51126",
+      "output_context_sha256": "60a8167a32f7ebb51669b1765b1ce7051cf7e7a6385bf355ff0c45b93d87191a",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 253,
+      "basis_context_end_line": 265,
+      "joint_ids": [
+        "CC0151",
+        "CC0152",
+        "CC0153"
+      ],
+      "changed": true,
+      "input_context_sha256": "0df409e1f754b94641f1a7806adb50790ec931cce1017143042c57b13c65b81f",
+      "output_context_sha256": "3e6e8682b1118c8fa8435bda89822aa8a1eb71f475835f14e080d7f1c99635e2",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 269,
+      "basis_context_end_line": 276,
+      "joint_ids": [
+        "CC0154"
+      ],
+      "changed": false,
+      "input_context_sha256": "23434d41df4c482d04b83898fc5e2e843504787a868ea294918d1d46a418b91d",
+      "output_context_sha256": "23434d41df4c482d04b83898fc5e2e843504787a868ea294918d1d46a418b91d",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Unchanged context with accepted retained boundaries."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 278,
+      "basis_context_end_line": 283,
+      "joint_ids": [
+        "CC0155"
+      ],
+      "changed": true,
+      "input_context_sha256": "0ec8efe191a7957fd6cbfec5d1b42a45b7842669249f2c246b74b83ebe8509d6",
+      "output_context_sha256": "294a867a4cbb5f6ddafdc633ad1d409fbf8abb552d7b86e467e5487255b6dbc8",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 301,
+      "basis_context_end_line": 314,
+      "joint_ids": [
+        "CC0156",
+        "CC0157"
+      ],
+      "changed": true,
+      "input_context_sha256": "364e0c14755a687a2fa5911c087b4d44b2e55f0635563e071cdf63aa17d2039d",
+      "output_context_sha256": "32f747b8f60515528db3d8b77d75a49a799f72d03711cb01ffd7629bb8c273a4",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 318,
+      "basis_context_end_line": 333,
+      "joint_ids": [
+        "CC0158",
+        "CC0159",
+        "CC0160",
+        "CC0161"
+      ],
+      "changed": true,
+      "input_context_sha256": "d35ba935f94eaa5195141c20cf6ee215d602002533bd27eb67bad208bc3255ef",
+      "output_context_sha256": "f9b57528a7bcb7493aecded92952e7061abdaf006e00fce46edf5e3bee53bf8f",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 344,
+      "basis_context_end_line": 344,
+      "joint_ids": [
+        "CC0162"
+      ],
+      "changed": true,
+      "input_context_sha256": "1f3d56779d1e0826cfe443dc2f07a45da224f6161369794f4e1739dcef4b6140",
+      "output_context_sha256": "75822d7d391e2e1f17e3c1fbeb4dad206a172c0a4ca2903cbbd5fa3c096b7c94",
+      "context_kind": "table_row",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 347,
+      "basis_context_end_line": 353,
+      "joint_ids": [
+        "CC0163",
+        "CC0164"
+      ],
+      "changed": true,
+      "input_context_sha256": "b672a603720f52f99ff2468ec1d27d6af162a32e217dfaf8e0dc691e4f160e93",
+      "output_context_sha256": "41ccbd96f42a4c561930743725d117addcb587443b3d57f2aa84244cb3c30015",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 355,
+      "basis_context_end_line": 359,
+      "joint_ids": [
+        "CC0165",
+        "CC0166"
+      ],
+      "changed": true,
+      "input_context_sha256": "9f83141b3da9674e081fc39897446031e162b9ea066b8bec262279f232c60050",
+      "output_context_sha256": "c73bfd48e95a5bb6c9d519ada9194a5424a52a74a3cf4c41aa56d1c4a747552c",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 366,
+      "basis_context_end_line": 380,
+      "joint_ids": [
+        "CC0167",
+        "CC0168"
+      ],
+      "changed": true,
+      "input_context_sha256": "95fe4a0ca77a99ec56b9d9e4fd27242649a1caf1965b821742eadd9a3e996e95",
+      "output_context_sha256": "79f164662fd20ca07dc1852460d426e43c4289c7f71a809d7f668b8ab2b1cf7d",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 423,
+      "basis_context_end_line": 427,
+      "joint_ids": [
+        "CC0169"
+      ],
+      "changed": true,
+      "input_context_sha256": "5f3622ffc684570d00b9e5caf613043c0feb8ab27e58228aae4d580d08bab032",
+      "output_context_sha256": "7f2d1615944eb7ff7737e86411421d3e806083aab0e2fac1e5ab95536a83fc21",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 429,
+      "basis_context_end_line": 441,
+      "joint_ids": [
+        "CC0170"
+      ],
+      "changed": false,
+      "input_context_sha256": "e6c9d3b1e631b73082d71f76613918cd6fcef1cfabb0b14f69b1eeab94b617ac",
+      "output_context_sha256": "e6c9d3b1e631b73082d71f76613918cd6fcef1cfabb0b14f69b1eeab94b617ac",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Unchanged context with accepted retained boundaries."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 457,
+      "basis_context_end_line": 467,
+      "joint_ids": [
+        "CC0171",
+        "CC0172"
+      ],
+      "changed": true,
+      "input_context_sha256": "9a5432ca0c812cd35afdd44739b0795f9fa590570bfe842f8761cee9d023bebb",
+      "output_context_sha256": "157e193d7d1ccd4fb96326b67a936752eb1068a6d4d3ec9edef562d44b904e27",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 469,
+      "basis_context_end_line": 478,
+      "joint_ids": [
+        "CC0173"
+      ],
+      "changed": false,
+      "input_context_sha256": "d8262e0ff94e399f83477923e54c74194ca2582268d0db7a30ea73d2a1b727d2",
+      "output_context_sha256": "d8262e0ff94e399f83477923e54c74194ca2582268d0db7a30ea73d2a1b727d2",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Unchanged context with accepted retained boundaries."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 480,
+      "basis_context_end_line": 487,
+      "joint_ids": [
+        "CC0174"
+      ],
+      "changed": true,
+      "input_context_sha256": "94ef374e7877df39f82ef6e43b9f097716c5b38f64b07850c476a03e95aeef59",
+      "output_context_sha256": "c1e697810e0fc46d943c68a5c7a33f5080791536fffac32e50a9e93087bec3db",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 489,
+      "basis_context_end_line": 497,
+      "joint_ids": [
+        "CC0175"
+      ],
+      "changed": true,
+      "input_context_sha256": "ea22098c1510075f4c5859a3fddee887305231e782da09fdc4e3f15d0c2cfe13",
+      "output_context_sha256": "aa5b1efdd420f779e2c3ad534ccb0b7bf12a7bc7df6678672e4ab7c9001015c9",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 501,
+      "basis_context_end_line": 505,
+      "joint_ids": [
+        "CC0176"
+      ],
+      "changed": true,
+      "input_context_sha256": "73977beb7f2642ccbc4c732ac907154a478ddf61cff6c19768a646e462d807ee",
+      "output_context_sha256": "9ebca071c9f10aac0da3009ac5dba9dfde2b11ed9deebfa5856a039e1d0403de",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "basis_context_start_line": 507,
+      "basis_context_end_line": 513,
+      "joint_ids": [
+        "CC0177"
+      ],
+      "changed": true,
+      "input_context_sha256": "b067fc787d6fc4dab6775827de270d9c03ce9870371143af92940f7970b27124",
+      "output_context_sha256": "739465cd05ffa238f7030baf2a6e8de8c79daf8e3378fccfd20370e702739086",
+      "context_kind": "paragraph",
+      "result_read_back_in_full": true,
+      "readback_disposition": "Accepted joint-context result. Paired retained boundaries and surrounding interface wording checked."
+    }
+  ],
+  "readback": {
+    "changed_joint_contexts": 42,
+    "all_changed_paragraphs_and_table_rows_read_in_full": true,
+    "affected_prose_wrapped_at_columns": 80,
+    "inline_spans_and_links_never_split": true,
+    "unrelated_paragraphs_not_rewrapped": true,
+    "unchanged_neighbouring_list_items_not_rewrapped": true,
+    "tables_not_rewrapped": true,
+    "approved_rephrase_ids": [
+      "CC0109"
+    ],
+    "additional_unreviewed_word_changes": 0
+  },
+  "immutable_comparison": {
+    "all_sequences_byte_identical_and_in_order": true,
+    "counts": {
+      "fences": 2,
+      "comments": 2,
+      "inline_spans": 641,
+      "links": 7,
+      "headings": 26,
+      "front_matter": 2
+    },
+    "multiline_inline_spans_included": true,
+    "historical_inputs_and_pins_preserved": true
+  },
+  "checks": {
+    "prose_gate": {
+      "script": "human-writing/scripts/prose_gate.py",
+      "script_sha256": "0fb52353cf22dc3a1a079c819f9d7df174a1961084689b946857747b5862ee66",
+      "arguments": [
+        "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+        "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+        "--json"
+      ],
+      "runs": [
+        {
+          "phase": "after_application",
+          "exit_status": 0,
+          "report_sha256": "5ff448f8603640fc25f2e5507eac9593e945f695da80b49aead8e272a6dfd3af"
+        },
+        {
+          "phase": "after_flag_disposition_before_commit",
+          "exit_status": 0,
+          "report_sha256": "5ff448f8603640fc25f2e5507eac9593e945f695da80b49aead8e272a6dfd3af"
+        }
+      ],
+      "hard_findings": 0,
+      "review_findings": 1,
+      "unresolved_findings": 0,
+      "findings": [
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 84,
+          "column": 1,
+          "severity": "review",
+          "code": "HW008",
+          "message": "inanimate subject is given interior or social agency",
+          "excerpt": "chapter *block* alone means an allocation block and a *card block* is 512",
+          "disposition": "retain_false_positive",
+          "reason": "The full sentence begins In this chapter. Its subject is the italicised term block and means defines that term as allocation block. Chapter is part of a locative phrase, not an inanimate subject given a mind or intention. Retain the unchanged technical definition."
+        }
+      ]
+    },
+    "sentence_complexity": {
+      "script": "human-writing/scripts/sentence_complexity.py",
+      "script_sha256": "59ef44ca92c947b97c8f73a6e425cb3c3b321190f0f892590c25190300d286a8",
+      "arguments": [
+        "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+        "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md"
+      ],
+      "exit_status": 0,
+      "report_sha256": "7759a4673bf2f443e302b4e8b24a1172064b25e45214bd62ed76b34d0e1cf096",
+      "flagged_sentences": 56,
+      "unresolved_reading_prompts": 0,
+      "dispositions": [
+        {
+          "id": "SC001",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 11,
+          "flags": "SHORT(5)",
+          "reported_sentence": "Unprefixed citations use that revision.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The short sentence fixes the scope of unprefixed citations in the preserved provenance comment. It is metadata, not reader prose to shorten."
+        },
+        {
+          "id": "SC002",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 21,
+          "flags": "ECHO(block/blocks)",
+          "reported_sentence": "The block cache makes that possible by collecting records into card blocks.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "Block cache and card blocks are distinct technical objects connected by this mechanism. The shared stem is necessary terminology, not inflection for emphasis."
+        },
+        {
+          "id": "SC003",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 26,
+          "flags": "SHORT(5)",
+          "reported_sentence": "Chapter 17 explains that transfer.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The sentence directs the transfer explanation to its existing Chapter 17 home. Removing it would lose that route from the timing paragraph."
+        },
+        {
+          "id": "SC004",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 26,
+          "flags": "ECHO(cache/cached)",
+          "reported_sentence": "The block cache keeps what it has read in EXPAND 1 so that a later read is a memory copy while that block remains cached.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "Cache is the named subsystem and cached states the condition for avoiding a card read. The conditional limitation is necessary and remains connected in one sentence."
+        },
+        {
+          "id": "SC005",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 44,
+          "flags": "SHORT(6)",
+          "reported_sentence": "An empty line has no block.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "This is the operational definition of an empty cache line, contrasted with clean and dirty in the same paragraph. It survives deletion review."
+        },
+        {
+          "id": "SC006",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 44,
+          "flags": "SHORT(5)",
+          "reported_sentence": "Chapter 17 explains the mount.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The short sentence gives the mount mechanism its Chapter 17 home after explaining why mounting occupies a clean cache line."
+        },
+        {
+          "id": "SC007",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 110,
+          "flags": "CLAUSES(0+3)",
+          "reported_sentence": "CODE and CODE put the two banks in CODE and CODE as 0 for the program's view and 1 for EXPAND 1.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The counted conjunctions connect two routine names, two descriptor names and two bank values. They are operand lists within one assignment explanation, not nested reasoning."
+        },
+        {
+          "id": "SC008",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 184,
+          "flags": "LONG(30)",
+          "reported_sentence": "A volume whose descriptor does not have the written-behind flag is written through: a successful BIOS CODE returns after the card has accepted the block and stopped reporting busy (CODE).",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The complete sentence defines written-through policy by a successful BIOS return after card acceptance and busy completion. Retain those conditions together rather than shorten the contract."
+        },
+        {
+          "id": "SC009",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 195,
+          "flags": "ECHO(line/lines)",
+          "reported_sentence": "A file written through passes through a single line, block after block, and the cache keeps the lines that hold programs and directories.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The first line is the reused write buffer and the later lines hold programs and directories. Singular and plural name distinct cache resources. The accepted paired block-after-block boundaries remain."
+        },
+        {
+          "id": "SC010",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 204,
+          "flags": "ECHO(writing/write)",
+          "reported_sentence": "Writing each record through can therefore write the same block four times.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The repetition distinguishes the operation performed for each CP/M record from the repeated card-block write it causes. The fourfold transfer count is substantive."
+        },
+        {
+          "id": "SC011",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 216,
+          "flags": "NEG(2)",
+          "reported_sentence": "It is cleared to zeros instead, with no read, when by CODE's rule from Chapter 17 the card has nothing to supply (CODE).",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "No read and nothing to supply describe the BIOS zero-fill case, not rhetorical negative stacking. Both conditions prevent suggesting that old card data was fetched."
+        },
+        {
+          "id": "SC012",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 223,
+          "flags": "ECHO(writes/write)",
+          "reported_sentence": "If those writes and the directory write succeed, the close succeeds (CODE, CODE).",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The sentence makes close success depend on both data writes and the directory write. Repeating write preserves the two required classes of transfer."
+        },
+        {
+          "id": "SC013",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 240,
+          "flags": "LONG(28) CLAUSES(2+1)",
+          "reported_sentence": "The BDOS writes the directory when it creates a file and when it closes a changed file control block (FCB), including at an extent transition (CODE, CODE, CODE).",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The two when clauses enumerate create and changed-FCB close, including extent transition. Keeping their shared directory-write action together preserves the trigger contract."
+        },
+        {
+          "id": "SC014",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 257,
+          "flags": "ECHO(block/blocks)",
+          "reported_sentence": "The 80-block file forced CODE to write three of the first 32 data blocks early: 4,128, 4,129 and 4,130.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The 80-block file, the first 32 data blocks and three early writes are separately measured historical quantities. Block terminology cannot be collapsed without losing the trace explanation."
+        },
+        {
+          "id": "SC015",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 270,
+          "flags": "ECHO(lines/line)",
+          "reported_sentence": "CODE and CODE write the dirty lines in line order, from 0 to 29.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "Dirty lines identify the objects being flushed and line order identifies the traversal order. The repeated stem distinguishes storage from ordering."
+        },
+        {
+          "id": "SC016",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 276,
+          "flags": "SHORT(4)",
+          "reported_sentence": "It provides no rollback.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The four-word statement explicitly limits the ordering guarantee: preceding successful writes cannot be rolled back. Removing it weakens the failure boundary."
+        },
+        {
+          "id": "SC017",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 276,
+          "flags": "SHORT(6)",
+          "reported_sentence": "Chapter 5 describes recovery after that.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The short sentence gives the recovery procedure its existing Chapter 5 home after the power-cut consequences."
+        },
+        {
+          "id": "SC018",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 309,
+          "flags": "SHORT(1)",
+          "reported_sentence": "CODE)",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "This is the parser's isolated continuation of a source citation in the warm-boot bullet, not a one-word authorial sentence. Keep the exact citation."
+        },
+        {
+          "id": "SC019",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 311,
+          "flags": "ECHO(fails/failed)",
+          "reported_sentence": "CODE before any drive changes and fails if a line failed (CODE)",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "Fails is VFLUSH's returned outcome and failed describes an individual line write that causes it. Both levels are required in the mount-change bullet."
+        },
+        {
+          "id": "SC020",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 313,
+          "flags": "CLAUSES(2+2)",
+          "reported_sentence": "BDOS function 48, which calls CODE and returns 0 in CODE or CODE if a line",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The full function-48 bullet states the call, success result, failure result and dropped-line condition. The report splits the wrapped bullet, so read it jointly with SC021 rather than shorten its contract."
+        },
+        {
+          "id": "SC021",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 314,
+          "flags": "SHORT(5)",
+          "reported_sentence": "failed and was dropped (CODE)",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "This is the continuation of the same function-48 bullet at SC020. Failed and dropped are both required parts of the error condition, not an independently deletable short sentence."
+        },
+        {
+          "id": "SC022",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 326,
+          "flags": "NEG(2)",
+          "reported_sentence": "With no new dirty data, the next warm boot has nothing more to write.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "No new dirty data is the condition under which there is nothing more to flush. The negatives state the precise post-failure lifecycle, not an emphatic contrast."
+        },
+        {
+          "id": "SC023",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 357,
+          "flags": "CLAUSES(0+3)",
+          "reported_sentence": "So the BIOS's CODE and CODE disable maskable interrupts across their mapping and cache work (CODE).",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The conjunctions coordinate two BIOS calls and the mapping/cache work they protect. This is the scope of interrupt masking, not multiple nested clauses."
+        },
+        {
+          "id": "SC024",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 389,
+          "flags": "LONG(26)",
+          "reported_sentence": "For a program that enables maskable interrupts, the protected portion of a BIOS disk call holds them off across mapping, cache work and card I/O.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The leading qualification restricts the timing discussion to programs that enabled maskable interrupts. The mapping, cache and card-I/O scope must remain complete."
+        },
+        {
+          "id": "SC025",
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "line": 389,
+          "flags": "ECHO(writing/write)",
+          "reported_sentence": "Writing through avoids a directory-triggered all-line flush on that volume but a cache miss may still write one dirty line.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "Writing through names a policy and write names the residual dirty-line eviction. Keeping both avoids implying that written-through operation eliminates all card-write delays."
+        },
+        {
+          "id": "SC026",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 11,
+          "flags": "SHORT(6)",
+          "reported_sentence": "Unprefixed source citations use that revision.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The short statement fixes the scope of unprefixed source citations in immutable provenance metadata."
+        },
+        {
+          "id": "SC027",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 40,
+          "flags": "LONG(26)",
+          "reported_sentence": "CODE then tests for seven numbers above 40 that have the meanings CP/M 3 gave them: 44, 45, 46, 47, 48, 99 and 108 (CODE).",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The length comes from the exact seven supported extension numbers and their CP/M 3 meaning. The finite list is the dispatcher contract, not padding."
+        },
+        {
+          "id": "SC028",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 40,
+          "flags": "SHORT(4)",
+          "reported_sentence": "Appendix A lists them.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The short sentence identifies Appendix A as the complete function lookup home. It supplies a useful route after enumerating dispatcher numbers."
+        },
+        {
+          "id": "SC029",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 40,
+          "flags": "ECHO(errors/error)",
+          "reported_sentence": "Chapter 12 describes 47 and 108 and the section on errors below describes function 45, the error mode.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "Errors names the section and error mode names function 45's operation. These are distinct reference roles, not an empty inflection echo."
+        },
+        {
+          "id": "SC030",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 80,
+          "flags": "LONG(27) ECHO(block/blocks, holds/hold)",
+          "reported_sentence": "Each entry names a file in a user area and holds a map of allocation block numbers, the blocks of the volume that hold the file's records.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The sentence connects directory entries to maps and maps to the allocation blocks holding file records. Retain both storage levels and their technical nouns."
+        },
+        {
+          "id": "SC031",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 80,
+          "flags": "CLAUSES(0+3)",
+          "reported_sentence": "The BDOS fills the FCB from the entry and changes its position, count and map as the program reads and writes (CODE, CODE, CODE).",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The conjunction count includes the three FCB state fields and the read/write pair. The sentence describes one state-update relationship without deep subordination."
+        },
+        {
+          "id": "SC032",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 105,
+          "flags": "ECHO(block/blocks)",
+          "reported_sentence": "The map holds 16 one-byte block numbers on a volume of 256 blocks or fewer and 8 two-byte numbers otherwise.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "Block numbers are map elements and blocks are the geometry threshold. Singular and plural state the distinction between entry width and volume capacity."
+        },
+        {
+          "id": "SC033",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 113,
+          "flags": "ECHO(extent/extents)",
+          "reported_sentence": "A logical extent is 128 records, 16 KiB, and one entry holds as many extents as its map has room for.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "Logical extent and the extents represented by an entry are distinct quantities. Keep the accepted paired equivalent-size gloss and the entry-capacity relation."
+        },
+        {
+          "id": "SC034",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 129,
+          "flags": "ECHO(block/blocks)",
+          "reported_sentence": "A G1M block is 2 KiB so an entry's eight blocks hold 16 KiB, one extent.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "Block size and the eight blocks an entry references are the factors in this arithmetic. Their repeated stem is necessary to show the G1M capacity calculation."
+        },
+        {
+          "id": "SC035",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 134,
+          "flags": "LONG(31)",
+          "reported_sentence": "It reads the directory a record at a time, four entries, into the directory buffer addressed by the disk parameter header (DPH) and CODE compares each entry with the FCB (CODE).",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The sentence gives one directory read's four-entry transfer, its DPH-selected buffer and the subsequent FCB comparison. The accepted conjunction change leaves that sequence readable."
+        },
+        {
+          "id": "SC036",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 134,
+          "flags": "LONG(26) CLAUSES(1+3) ECHO(matches/match)",
+          "reported_sentence": "In modes 0, 1, 2 and 4 an entry matches when its user number is the current one and its name and type match the FCB's.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The mode set, current user and matching name/type fields are all required parts of the search predicate. Match terminology states the predicate directly, without rhetorical emphasis."
+        },
+        {
+          "id": "SC037",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 134,
+          "flags": "CLAUSES(1+2)",
+          "reported_sentence": "Modes 0, 1 and 4 compare the extent and CODE as well, unless the FCB's extent is CODE.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The sentence gives the extent-comparing modes and the question-mark exception. Keep the exception attached to the comparison it qualifies."
+        },
+        {
+          "id": "SC038",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 134,
+          "flags": "ECHO(extent/extents)",
+          "reported_sentence": "The extent is compared outside the bits CODE covers, since one entry holds CODE + 1 extents (CODE).",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "An extent is compared after masking because an entry represents EXM plus one extents. Repetition distinguishes the queried extent from entry capacity."
+        },
+        {
+          "id": "SC039",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 134,
+          "flags": "SHORT(3)",
+          "reported_sentence": "The modes are:",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The short lead-in introduces the following mode table. Its referent and job are concrete rather than a generic transition."
+        },
+        {
+          "id": "SC040",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 176,
+          "flags": "CLAUSES(1+2)",
+          "reported_sentence": "It fills the entry with the FCB's name, the current user number and an empty map and writes the entry's directory record at once (CODE).",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The conjunctions include three values copied into an entry and the following directory write. The accepted comma removal does not obscure writes resuming the subject It."
+        },
+        {
+          "id": "SC041",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 221,
+          "flags": "LONG(29)",
+          "reported_sentence": "For a worked arithmetic example, take record 37 of extent 0 of a file on drive A, a G1M volume, whose third map cell holds block 300.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The example's record, extent, drive geometry and third map cell establish all arithmetic inputs before calculation. Retain the full setup rather than drop a factor to meet a word target."
+        },
+        {
+          "id": "SC042",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 221,
+          "flags": "CLAUSES(1+2)",
+          "reported_sentence": "CODE shifts 300 left by 4 to get 4,800 and adds 37 AND 15, which is 5.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The AND operation supplies a record-within-block offset that is then added. The apparent extra clause is the necessary explanation of that numeric operand."
+        },
+        {
+          "id": "SC043",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 230,
+          "flags": "SHORT(6)",
+          "reported_sentence": "CODE checks the block number first.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The short sentence establishes validation before POSREC arithmetic and the subsequent damaged-metadata error case."
+        },
+        {
+          "id": "SC044",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 249,
+          "flags": "CLAUSES(2+1)",
+          "reported_sentence": "Function 16, close, returns 0 when it writes nothing or the entry's slot from 0 to 3 when it updates the directory.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The two when clauses distinguish close's no-write result from its updated-entry result. Their alternatives belong in one contract sentence."
+        },
+        {
+          "id": "SC045",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 249,
+          "flags": "LONG(37) CLAUSES(1+3) ECHO(record/records)",
+          "reported_sentence": "Otherwise it searches in mode 4 for the entry again and copies the FCB's extent, record count and map into it or only the map when the FCB is on an earlier extent than the entry records.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The long sentence preserves the mode-4 search, full-field copy and earlier-extent map-only exception. Read back in context, its coordinated alternatives remain explicit after the accepted comma removal."
+        },
+        {
+          "id": "SC046",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 249,
+          "flags": "ECHO(write/writing)",
+          "reported_sentence": "On a volume written behind the directory write flushes every other dirty cache line before writing its own line.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "Directory write and writing its own line identify the metadata operation and the later card transfer. The wording preserves data-before-directory ordering."
+        },
+        {
+          "id": "SC047",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 265,
+          "flags": "SHORT(6)",
+          "reported_sentence": "The FCB keeps its own extent.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "This short statement distinguishes the FCB's requested extent from the directory entry's highest extent before explaining the G8M return counts."
+        },
+        {
+          "id": "SC048",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 265,
+          "flags": "LONG(29) ECHO(extents/extent)",
+          "reported_sentence": "In a G8M file whose entry holds two extents, an FCB naming the earlier extent gets 128 records and one naming a later, empty extent gets 0.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The sentence contrasts earlier and later extents within one G8M entry, including the empty later extent. The repeated technical term is necessary for the two return-count cases."
+        },
+        {
+          "id": "SC049",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 274,
+          "flags": "LONG(27) CLAUSES(1+2)",
+          "reported_sentence": "It returns 1 for end of file when the next extent is absent, CODE has reached or passed CODE or the record's map cell contains block 0.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "All three end-of-file conditions lead to the same result 1. Keeping the finite alternatives together preserves the read contract after removing the accepted serial comma."
+        },
+        {
+          "id": "SC050",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 283,
+          "flags": "CLAUSES(0+4)",
+          "reported_sentence": "The random functions 33, 34 and 40, the size and rename functions and the attributes work on the same entries and FCBs.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The conjunctions enumerate function families sharing the same entries and FCBs. They are category lists, not a chain of dependent logical conditions."
+        },
+        {
+          "id": "SC051",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 297,
+          "flags": "CLAUSES(1+2)",
+          "reported_sentence": "The directory's own blocks are set from CODE and CODE when the vector is built (CODE) and they are never given out.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The sentence links reserved directory bits to the rule that those blocks are never allocated to files. The rule and its construction remain readable together."
+        },
+        {
+          "id": "SC052",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 356,
+          "flags": "SHORT(6)",
+          "reported_sentence": "It then tests the drive's DPH:",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The short sentence introduces the two DPH-dependent warm-reset cases in the following list. It identifies the exact state tested."
+        },
+        {
+          "id": "SC053",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 418,
+          "flags": "ECHO(byte/bytes)",
+          "reported_sentence": "The retained CODE ROM map places CODE at CODE and the last BDOS byte at CODE, a span of 3,846 bytes.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The last byte and the total byte span are different historical map quantities. Repeating byte preserves the address-versus-size distinction."
+        },
+        {
+          "id": "SC054",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 418,
+          "flags": "SHORT(6)",
+          "reported_sentence": "Chapter 26 describes the ROM organisation.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The sentence routes ROM organisation to Chapter 26 without repeating its explanation in this implementation chapter."
+        },
+        {
+          "id": "SC055",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 438,
+          "flags": "SHORT(6)",
+          "reported_sentence": "The output-status check is an exception.",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The short statement announces the output-status path's specific exception to RAM BIOS indirection. The following sentence identifies the direct ROM call and reason."
+        },
+        {
+          "id": "SC056",
+          "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+          "line": 475,
+          "flags": "LONG(27)",
+          "reported_sentence": "A read or write that returns an error leaves the FCB on the record it didn't read or write, as CP/M 3's does (CODE, CODE).",
+          "disposition": "retained_after_contextual_reading",
+          "reason": "The sentence preserves the post-error FCB position for both read and write and explicitly bounds the CP/M 3 comparison. Shortening could lose an operation or its error-state qualification."
+        }
+      ],
+      "summary_lines": [
+        "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md: 250 sentences, mean 14.4 words, 0.70 joints/sentence, 10% flagged, grade 5.8",
+        "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md: 259 sentences, mean 15.8 words, 0.89 joints/sentence, 12% flagged, grade 6.2"
+      ]
+    }
+  }
+}
