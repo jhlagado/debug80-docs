@@ -43,8 +43,11 @@ for row in rows:
     text = (book / row['book_path']).read_text()
     replacement = row.get('new_citation') or ''
     if row['status'] in {'accepted', 'corrected'}:
-        if not replacement or replacement not in text:
-            raise SystemExit('reviewed replacement absent: ' + repr(key))
+        if not replacement or not list(CITATION.finditer(replacement)):
+            raise SystemExit('reviewed replacement missing: ' + repr(key))
+        for target in CITATION.finditer(replacement):
+            if target.group() not in text:
+                raise SystemExit('reviewed replacement absent: ' + repr(key) + ' -> ' + target.group())
         for match in CITATION.finditer(replacement):
             path, start, end = match.groups()
             if path not in source_cache:

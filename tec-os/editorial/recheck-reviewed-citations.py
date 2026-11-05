@@ -27,6 +27,7 @@ rows = ledger['resolutions'] if isinstance(ledger, dict) else ledger
 paths = set()
 for row in rows:
     references = (row.get('new_citation') or '') + '\n' + '\n'.join(e['new'] for e in row.get('prose_edits', []))
+    references += '\n' + '\n'.join(x for x in row.get('supporting_target_ranges', []) if isinstance(x, str))
     for match in REFERENCE.finditer(references):
         path, start, end = match.groups()
         if row.get('status') == 'local-example':

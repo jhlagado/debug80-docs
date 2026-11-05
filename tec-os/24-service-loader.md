@@ -11,6 +11,10 @@ nav_group: "Part II: Inside TEC-OS"
      dbee66a, SHA-256
      `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. -->
 
+<!-- C16 source-only citation revisions: TEC-OS fe2097f.
+     Only the entries in editorial/c16-citation-resolutions.json use that pin.
+     Captures, measurements and other citations retain their earlier provenance. -->
+
 A `.SVC` file is read to `0100h` like a program and then moved to whole pages
 just under the top of the TPA. There it stays through every warm boot. The
 loader in `src/loader.asm` makes that move in seven steps. It keeps a registry
@@ -34,7 +38,7 @@ call should also cost the same however many services are in.
 Relocation adds a page number to the high byte of each address, so a service
 starts on a page boundary. With a service in, the word holds `xx00h`, the
 page's start. Offset 0 of the page holds `JP BENTRY`, a jump straight into the
-ROM (`src/loader.asm:229-232`, `test/svc.test.mjs:159`). Offset 0 is the
+ROM (`src/loader.asm:393-398`, `test/svc.test.mjs:159`). Offset 0 is the
 service's lowest byte, so nothing the service needs lies below the word. A
 stack set from the word grows away from it (`test/svc.test.mjs:872`). No service
 is on the path of a BDOS call, so each `JP` goes straight to `BENTRY`. A BDOS
@@ -47,9 +51,9 @@ the lowest allocation vector, so the TPA keeps every byte up to the vectors
 (`src/boot.asm:456-460`). On the starter card the vectors start at `B9A7h` and
 the stub is at `B9A4h`. Its low byte varies with the card, so a program assumes
 nothing of it. `PZINIT` writes the stub's three bytes at every warm boot
-(`src/boot.asm:232-237`).
+(`src/boot.asm:392-410`).
 
-The loader takes its pages below the page of the top (`src/loader.asm:121-123`).
+The loader takes its pages below the page of the top (`src/loader.asm:218-222`).
 So the first service also costs the bytes from the start of the stub's page up
 to the stub. On the starter card those are the 164 bytes from `B900h` to
 `B9A3h`, and `COUNT.SVC`'s one page lowers the TPA by 420 bytes. A later
@@ -84,8 +88,8 @@ written over some of its fields, and a loaded service's header holds:
 
 A header holds no copy of the old top. `SVCABV` turns an owner into the page
 above a service, taking the stub's page when the owner is 0
-(`src/loader.asm:395-399`). `SLTOP` rebuilds the top the same way when a service
-goes (`src/loader.asm:39-47`).
+(`src/loader.asm:656-671`). `SLTOP` rebuilds the top the same way when a service
+goes (`src/loader.asm:67-92`).
 
 ## Relocation by pages
 
@@ -102,7 +106,7 @@ its `ORG $0100` line changed to another origin (`tools/lib/prl.mjs:37-48`). That
 line has to be indented, with nothing after it (`tools/lib/prl.mjs:34`).
 `makeSvc` assembles at `0000h` and at `0100h` and keeps the first assembly,
 made for page 0, with the 25-byte header at its start
-(`tools/lib/svc.mjs:99-110`). It stops with `INIT and REMOVE required` for a
+(`tools/lib/svc.mjs:99-104`, `tools/lib/svc.mjs:107-133`). It stops with `INIT and REMOVE required` for a
 source with no `INIT` or `REMOVE` (`tools/lib/svc.mjs:101`). It also rejects a
 source that names a ROM address, since only `abi.inc`'s names may reach the
 ROM (`tools/lib/svc.mjs:19-26`, `tools/lib/svc.mjs:85`).
@@ -121,7 +125,7 @@ code is put.
 
 Each fixup is counted from the end of the header, so fixup 0 is the image's
 first byte. `makeSvc` writes the fixups as a list of gaps after the image and
-the dependencies (`tools/lib/svc.mjs:39-49`, `tools/lib/svc.mjs:107-110`).
+the dependencies (`tools/lib/svc.mjs:39-49`, `tools/lib/svc.mjs:118-121`).
 Each byte of the list is the distance from one fixup to the next, the first
 counted from the byte before the image. A byte of 255 moves on with nothing
 fixed. Appendix H lists the file's header, its dependencies and the gap list byte by
@@ -130,15 +134,15 @@ Chapter 12 shows.
 
 ## The seven steps
 
-A command whose type is `SVC` reaches `SVCGO` (`src/cpm/ccp.asm:281-289`).
+A command whose type is `SVC` reaches `SVCGO` (`src/cpm/ccp.asm:425-460`).
 `SVCGO` reads the file to `0100h` with `LOADCOM` and calls `SVCLOAD`
-(`src/loader.asm:532-536`). [Chapter 20](20-ccp.md#loading-a-program) describes
+(`src/loader.asm:869-876`). [Chapter 20](20-ccp.md#loading-a-program) describes
 the read. `SVCLOAD` works on the file at `DF`, `0100h`, and `LOADTOP` holds the
-end of the records read (`src/loader.asm:18-32`, `src/ram.asm:256`). It reports
-through carry and `SVCRC` (`src/loader.asm:91-96`). It keeps the `A` that
+end of the records read (`src/loader.asm:32-61`, `src/ram.asm:361`). It reports
+through carry and `SVCRC` (`src/loader.asm:168-181`). It keeps the `A` that
 `INIT` returns in `SVCRA`, beside `SVCRC`, and sets it to 0 if a record is
-then rejected (`src/loader.asm:246`, `src/loader.asm:289-291`,
-`src/ram.asm:266-267`). The CCP treats a carry as a name with a question mark,
+then rejected (`src/loader.asm:417-418`, `src/loader.asm:483-489`,
+`src/ram.asm:378-381`). The CCP treats a carry as a name with a question mark,
 except for one case in a line from `STARTUP.CMD`, which
 [Chapter 25](25-startup.md#the-quiet-rule) describes.
 
@@ -150,41 +154,41 @@ pages back, as step 6 describes.
 ### 1. The file's checks
 
 `SVCLOAD` zeroes `SVCRC` and tests `SVCBSY`, which is `80h` while an `INIT` or
-`REMOVE` runs (`src/loader.asm:97-102`, `src/ram.asm:260`). It compares the first
+`REMOVE` runs (`src/loader.asm:182-189`, `src/ram.asm:368-369`). It compares the first
 two bytes with `DMAGIC`, the letter `D` and the format, `SVCFMT` from
-`abi.inc`, which is 4 (`src/loader.asm:18`, `src/abi.inc:105`,
-`src/loader.asm:103-106`). A file of another format fails here. `SVCEXT` checks
-that the size at offset 6 lies within the records read (`src/loader.asm:107-110`,
-`src/loader.asm:412-418`). `SVCIN` checks that `INIT` and `REMOVE` each lie
-between the header and the image's end (`src/loader.asm:111-116`,
-`src/loader.asm:423-429`).
+`abi.inc`, which is 4 (`src/loader.asm:32-35`, `src/abi.inc:153`,
+`src/loader.asm:190-196`). A file of another format fails here. `SVCEXT` checks
+that the size at offset 6 lies within the records read (`src/loader.asm:197-202`,
+`src/loader.asm:687-700`). `SVCIN` checks that `INIT` and `REMOVE` each lie
+between the header and the image's end (`src/loader.asm:203-210`,
+`src/loader.asm:709-719`).
 
 The page comes next. The loader adds the extra memory named at offset 8 to the
 size of the header and image, subtracts one and takes the high byte. That is
 the number of pages less one. The service's page is the page of `PZTOP`, less
 one, less that number. An overflow, a borrow or a page below `80h` fails the
-load, and the page goes in `SLDL` (`src/loader.asm:117-127`, `src/ram.asm:259`).
+load, and the page goes in `SLDL` (`src/loader.asm:211-228`, `src/ram.asm:367`).
 For `COUNT.SVC` on the serial board, with the top at `B9A4h` and 100 bytes, the
 page is `B8h`.
 
 ### 2. The dependencies
 
 The dependencies follow the image, and `HL` walks them with a count from
-offset 2 (`src/loader.asm:128-133`). Each must lie within the records read.
+offset 2 (`src/loader.asm:229-238`). Each must lie within the records read.
 `REGFIND`, described with the registry below, looks up its 8-byte name with
-its least version in `C` (`src/loader.asm:136-144`). `EX (SP),HL` keeps the next
-entry's address on the stack across the lookup (`src/loader.asm:138`). A missing
-record ends the load (`src/loader.asm:145-147`).
+its least version in `C` (`src/loader.asm:241-253`). `EX (SP),HL` keeps the next
+entry's address on the stack across the lookup (`src/loader.asm:245`). A missing
+record ends the load (`src/loader.asm:255-259`).
 
 ### 3. The stacks
 
 The relocation data must lie within the records read too
-(`src/loader.asm:151-154`). A service's code runs on its caller's stack, so each
+(`src/loader.asm:264-269`). A service's code runs on its caller's stack, so each
 load has to fit its three stack figures into the room left. `HL` points at
 that room: `SVCLIM` with no service in, and otherwise offset 12 of the newest
-service's header (`src/loader.asm:155-160`). The loop takes each figure in the
+service's header (`src/loader.asm:270-279`). The loop takes each figure in the
 new header from that room and fails on a borrow. It stores the difference over
-the figure in the new header (`src/loader.asm:161-171`). The header in memory
+the figure in the new header (`src/loader.asm:281-298`). The header in memory
 then holds the room left below this service, and the loader keeps no other
 total. On the serial board, with limits 8, 12 and 6, `COUNT.SVC`'s figures of 2
 each leave `06h`, `0Ah` and `04h` at `B80Ch`.
@@ -192,16 +196,16 @@ each leave `06h`, `0Ah` and `04h` at `B80Ch`.
 ### 4. The relocation
 
 The pass works on the file where `LOADCOM` read it, at `0100h`, before the move
-(`src/loader.asm:174-203`). `BC` counts the bytes of the list, and `HL` starts at
-`DF+DHLEN-1`, `0118h`, the byte before the image (`src/loader.asm:177-178`). For
+(`src/loader.asm:304-349`). `BC` counts the bytes of the list, and `HL` starts at
+`DF+DHLEN-1`, `0118h`, the byte before the image (`src/loader.asm:311-314`). For
 each byte the loader:
 
-1. adds the gap to `HL` (`src/loader.asm:182-188`)
+1. adds the gap to `HL` (`src/loader.asm:320-327`)
 2. checks that `HL` is still inside the header and image, below `0100h` plus
-   the size at offset 6, and fails the load if not (`src/loader.asm:189-197`)
+   the size at offset 6, and fails the load if not (`src/loader.asm:328-341`)
 3. if the gap was 255, goes on to the next byte with nothing fixed
-   (`src/loader.asm:198-199`)
-4. otherwise adds `SLDL` to the byte at `HL` (`src/loader.asm:200-203`).
+   (`src/loader.asm:342-344`)
+4. otherwise adds `SLDL` to the byte at `HL` (`src/loader.asm:345-349`).
 
 The check in step 2 is made for a gap of 255 too, so a list can't step past the
 image even with nothing fixed. A failure here leaves the file at `0100h` partly
@@ -212,7 +216,7 @@ at `B600h`. Its image starts with the table of words the driver passes to the
 ROM's terminal, `00F0h`, `014Bh`, `0150h` and so on in the file. After the load
 they read `B6F0h`, `B74Bh` and `B750h` at `B619h`, each high byte raised by
 `B6h`. `SERVICES` prints each page count as the page above the service less the
-service's own page (`src/cpm/ccpcmd.asm:538-545`). The count therefore includes
+service's own page (`src/cpm/ccpcmd.asm:802-812`). The count therefore includes
 the part of the last page the service doesn't fill. `GLCD.SVC`'s 765 bytes of
 header and image take three pages. With the 164 bytes below the stub they
 lower the TPA from 47,268 bytes to 46,336.
@@ -233,28 +237,28 @@ A>
 
 `SVCMOV` reads the flags first. For each of bits 1 to 7 that is set it reads
 the first byte of that restart vector. A `JP` there fails the load, with carry,
-`SVCRC` at 0 and nothing changed but the file (`src/loader.asm:209-222`). The
+`SVCRC` at 0 and nothing changed but the file (`src/loader.asm:358-382`). The
 chapter's last section gives the reason.
 
 The size at offset 6 goes on the stack, since the resident fields are about to
 overwrite it. `LDIR` copies `REGHEAD` and `SVCHEAD`, 3 bytes, to offset 6, and
-`JP BENTRY` goes in at offset 0 (`src/loader.asm:223-233`). A second `LDIR`
+`JP BENTRY` goes in at offset 0 (`src/loader.asm:383-399`). A second `LDIR`
 moves the header and image to the page. The word at `0006h` becomes the page's
 start, with the 0 that `LDIR` leaves in `B` as its low byte
-(`src/loader.asm:234-241`). `PZTOP`, the word that warm boot puts at `0006h`,
-isn't written (`src/ram.asm:253`). `SVCBND` reads the owner at offset 8 for the
-loader's bounds, the page above this service's last (`src/loader.asm:384-399`).
+(`src/loader.asm:400-412`). `PZTOP`, the word that warm boot puts at `0006h`,
+isn't written (`src/ram.asm:353-355`). `SVCBND` reads the owner at offset 8 for the
+loader's bounds, the page above this service's last (`src/loader.asm:640-671`).
 
 ### 6. INIT
 
 `SVCCALL` sets `SVCBSY`, reads the 2-byte offset at `HL`, adds the page to its
-high byte and jumps (`src/loader.asm:243-244`, `src/loader.asm:370-379`). The
+high byte and jumps (`src/loader.asm:413-415`, `src/loader.asm:627-638`). The
 header is on a page boundary, so no 16-bit addition is needed. `INIT` returns to
-the instruction after the call, on the CCP's stack (`src/cpm/ccp.asm:288`).
+the instruction after the call, on the CCP's stack (`src/cpm/ccp.asm:441-442`).
 
 A warm boot during `INIT` leaves the word at `0006h` correct, because `PZTOP` is
-untouched. `PZINIT` writes `PZTOP` to `0006h` (`src/boot.asm:230-231`), and warm
-boot clears `SVCBSY` (`src/boot.asm:101-102`). The pages go back as if the load
+untouched. `PZINIT` writes `PZTOP` to `0006h` (`src/boot.asm:400-402`), and warm
+boot clears `SVCBSY` (`src/boot.asm:192-194`). The pages go back as if the load
 had never started, and `test/svc.test.mjs:469-482` checks that a later load
 works. Function 47 from `INIT` is a warm boot at the same point
 (`test/svc.test.mjs:931`). The sweep in `PZINIT` takes any restart vector `INIT`
@@ -262,36 +266,36 @@ has pointed into its pages, since the new pages lie below `PZTOP`
 (`test/svc.test.mjs:833`). A hook already in the table then points into the
 TPA, which is why hooks go last (`test/svc.test.mjs:498-505`). A reset during a
 hung `INIT` is recognised all the same, because `RSLCAP` doesn't compare the
-word at `0006h` with `PZTOP` (`src/boot.asm:113-123`).
+word at `0006h` with `PZTOP` (`src/boot.asm:213-299`).
 
 ### 7. The records and the commit
 
 `SVCBND` loads `D` with the service's page and `E` with the page above its
-last (`src/loader.asm:247-248`, `src/loader.asm:384-390`). Carry from `INIT`
+last (`src/loader.asm:419-421`, `src/loader.asm:646-654`). Carry from `INIT`
 goes to the failure path. With `HL` at the first record, the walk checks each
 record's first byte, then its last, then the high byte of its table address.
-Each check uses `SVCCK` against `D` and `E` (`src/loader.asm:268-287`,
-`src/loader.asm:403-408`). Since `SVCCK` compares pages, a record can't cross
+Each check uses `SVCCK` against `D` and `E` (`src/loader.asm:452-479`,
+`src/loader.asm:677-685`). Since `SVCCK` compares pages, a record can't cross
 out of the service and a link can't leave it.
 
 Before the walk, `SVCNT` follows the links from `REGHEAD` to count the N
 records already in the registry. `B` starts at 1 − N, or at 0 with the registry
-empty (`src/loader.asm:250-267`). `DJNZ` then allows 256 − N records, or 255
+empty (`src/loader.asm:423-450`, `src/loader.asm:452-481`). `DJNZ` then allows 256 − N records, or 255
 with the registry empty. The registry therefore never holds more than the 256
 records that `FIND` and `LIST` walk. A list longer than that, or one that
-loops, ends the walk and the load fails (`src/loader.asm:288`,
+loops, ends the walk and the load fails (`src/loader.asm:480-481`,
 `test/svc.test.mjs:256`, `test/svc.test.mjs:267-306`). On a board whose PICO9918 console started, a
 service of 128 records and then one of 127 load. The console's record is the
 256th and still found, and a second service of 128 is rejected.
 
 With the walk done, `SVCLK` writes the first record's address to `REGHEAD`, the
 head of the registry. It writes the old head into the last record's link, which
-`SLN` has held (`src/loader.asm:326-335`, `src/ram.asm:258`). A service's records
+`SLN` has held (`src/loader.asm:549-562`, `src/ram.asm:364-366`). A service's records
 thus join the front of the list as one chain, and a service with none leaves
-the list alone (`src/loader.asm:327-329`). `SVCCOM` sets `SVCHEAD`, the lowest
+the list alone (`src/loader.asm:552-554`). `SVCCOM` sets `SVCHEAD`, the lowest
 service's page, to this page and writes `PZTOP`. That write is the commit
-(`src/loader.asm:336-340`, `src/ram.asm:263`). `SVCSHUT` clears `SVCBSY`, and a
-final `CP 1` and `CCF` turn `SVCRC` into the carry (`src/loader.asm:341-349`).
+(`src/loader.asm:564-570`, `src/ram.asm:373`). `SVCSHUT` clears `SVCBSY`, and a
+final `CP 1` and `CCF` turn `SVCRC` into the carry (`src/loader.asm:571-586`).
 
 ## A failed load
 
@@ -306,59 +310,59 @@ carry with `SVCRC` at 0. After the move there are three outcomes, and the labels
 | 2 | A hook left behind, or `REMOVE` rejected the undo | Pages kept |
 
 A carry from `INIT` goes straight to `SVCSCAN`, since a failed `INIT` has undone
-its own work (`src/loader.asm:247-248`). A record that fails its check goes to
+its own work (`src/loader.asm:419-421`). A record that fails its check goes to
 `SVCRF`. That sets `SVCRA` to 0, so that `INIT`'s status can't be taken for the
-cause, and calls `REMOVE` to undo a good `INIT` (`src/loader.asm:289-294`). If
+cause, and calls `REMOVE` to undo a good `INIT` (`src/loader.asm:483-493`). If
 `REMOVE` fails, `SVCKEEP` records 2 and commits. The pages are kept and no
-record is linked (`src/loader.asm:295-296`, `src/loader.asm:322-325`,
+record is linked (`src/loader.asm:494-497`, `src/loader.asm:542-547`,
 `test/svc.test.mjs:437`).
 
 A failed load may have left a hook in the RAM BIOS table, and the service's
 pages can't go while one points at them. So `SVCSCAN` tests the high byte of
 each of the 17 targets in the table against the service's pages
-(`src/loader.asm:302-311`, `src/layout.asm:62`). With no hit, `SVCFRE` clears the
+(`src/loader.asm:510-524`, `src/layout.asm:112`). With no hit, `SVCFRE` clears the
 first byte of each restart vector the flags claim, and the word at `0006h` goes
 back to `PZTOP`. `PZSWP` then gives those vectors their defaults and takes any
-other vector into the pages, and the result is 1 (`src/loader.asm:312-318`,
-`src/loader.asm:354-364`). A hit writes 0 over the flags, so `UNLOAD` will reject
-the service, and it goes to `SVCKEEP` (`src/loader.asm:319-325`). A hook left in
+other vector into the pages, and the result is 1 (`src/loader.asm:525-534`,
+`src/loader.asm:594-616`). A hit writes 0 over the flags, so `UNLOAD` will reject
+the service, and it goes to `SVCKEEP` (`src/loader.asm:536-547`). A hook left in
 the table then points at pages the service still holds, and
 `test/svc.test.mjs:423-435` shows them surviving a warm boot. The scan reads
 only that table, so the table that `DRVR` records for `UC1:` is beyond it
 (`test/svc.test.mjs:572`).
 
 A service kept this way appears in `SERVICES`, because `CMDSVC` walks the owner
-list from `SVCHEAD`, not the registry (`src/cpm/ccpcmd.asm:529-551`). Each
+list from `SVCHEAD`, not the registry (`src/cpm/ccpcmd.asm:781-819`). Each
 header's offset 8 is the next older service's page, 0 at the end.
 
 ## The registry and removal
 
 A client reaches the registry through two numbered services, `FIND`, 13, and
-`LIST`, 14. Their routines are `SVFND` and `SVLST` (`src/abi.inc:82-90`,
-`src/tables.asm:88-89`). `FIND` takes the name at `DE` and the least version in
+`LIST`, 14. Their routines are `SVFND` and `SVLST` (`src/abi.inc:121-131`,
+`src/tables.asm:112-115`). `FIND` takes the name at `DE` and the least version in
 `B`. `SVFND` moves `B` to `C`, clears `B` and goes to `REGFIND`. `LIST` takes an
-index in `B`, and `SVLST` moves it to `C` (`src/loader.asm:434-441`).
+index in `B`, and `SVLST` moves it to `C` (`src/loader.asm:727-739`).
 
 `LIST` walks from `REGHEAD`, counting `C` down, and returns the record with
-the generation in `A` (`src/loader.asm:441-454`, `src/loader.asm:490-492`).
+the generation in `A` (`src/loader.asm:733-758`, `src/loader.asm:805-811`, `src/loader.asm:807-811`).
 `REGFIND` compares 8 bytes at offset 2 and tests the version at offset 10 with
 `CP C`. On a match it returns the table's address from offset 11
-(`src/loader.asm:460-485`). Newer records are at the front of the list, so a find
+(`src/loader.asm:769-800`). Newer records are at the front of the list, so a find
 reaches the newest of a name first. A removal uncovers the older
 (`test/svc.test.mjs:536`). On a board where the ROM's PICO9918 console started,
 `PISTART` writes its record, `PIREC`, to `REGHEAD` at cold boot, before any
 service loads. That record is the list's last and no removal reaches it
-(`src/pico.asm:43-44`).
+(`src/pico.asm:74-75`).
 
 A program can make the list into a cycle, so the walk has a limit. `B` is 0 at
 `REGF1`, so `DJNZ` allows 256 rounds, and such a list can't hold the caller
-(`src/loader.asm:500-502`, `test/svc.test.mjs:580`). The walk uses at most 8
+(`src/loader.asm:821-823`, `test/svc.test.mjs:580`). The walk uses at most 8
 bytes of the caller's stack, three `PUSH`es and the return address
-(`src/loader.asm:466-468`). `abi.inc` gives 8 bytes as the bound for each of the
-two, the dispatcher's included (`src/abi.inc:82-90`). The loader's count of the
+(`src/loader.asm:777-780`). `abi.inc` gives 8 bytes as the bound for each of the
+two, the dispatcher's included (`src/abi.inc:121-131`). The loader's count of the
 registry before a load has no limit of rounds. `SVCNT` stops only at a link of
 0. After a program has made the list a cycle, the next service load never
-returns and only a reset ends it (`src/loader.asm:258-265`). The registry has no
+returns and only a reset ends it (`src/loader.asm:436-445`). The registry has no
 service for removal. Number 16, one past `FONT`, returns carry from the
 dispatcher, and the service stays found (`test/svc.test.mjs:386`). A record is
 visible to a client only once `SVCLK` has linked it, so a service can't find
@@ -371,26 +375,26 @@ memory in the order of the loads.
 
 `UNLOAD` calls `SVCUNL` (`src/cpm/ccpcmd.asm:8-10`), which rejects the command
 while `SVCBSY` is set. It uses the 0 it read there as `L`, making `HL` the base
-of the page in `PZTOP` (`src/loader.asm:61-65`). That page must equal `SVCHEAD`,
+of the page in `PZTOP` (`src/loader.asm:120-127`). That page must equal `SVCHEAD`,
 which is 0 with no service in, so the test then fails. Bit 0 of the flags must
-also be set (`src/loader.asm:66-71`).
+also be set (`src/loader.asm:128-135`).
 
 `SVCCALL` then runs `REMOVE`. `SVCSHUT` clears `SVCBSY` without touching the
 flags, and carry from `REMOVE` returns with nothing changed
-(`src/loader.asm:72-77`). Function 47 from `REMOVE` is a warm boot there, and the
+(`src/loader.asm:136-145`). Function 47 from `REMOVE` is a warm boot there, and the
 service stays listed (`test/svc.test.mjs:940`). With no carry, `SVCFRE` writes 0
 over the first byte of each restart vector the flags claim
-(`src/loader.asm:78-80`, `src/loader.asm:354-364`). `LDIR` copies the 3 bytes at
-offset 6 back to `REGHEAD` and `SVCHEAD` (`src/loader.asm:81-84`). This one copy
+(`src/loader.asm:146-150`, `src/loader.asm:594-616`). `LDIR` copies the 3 bytes at
+offset 6 back to `REGHEAD` and `SVCHEAD` (`src/loader.asm:151-157`). This one copy
 removes all the service's records, whatever their number. `DE` is left at
 `SVCGEN`, and the code raises it by swapping registers for one `INC (HL)`
-(`src/loader.asm:85-87`, `src/ram.asm:265`). `SLTOP` then sets `PZTOP` and
+(`src/loader.asm:158-162`, `src/ram.asm:376-377`). `SLTOP` then sets `PZTOP` and
 `0006h` from the `SVCHEAD` just restored: that page's start, or the stub if it
-is 0 (`src/loader.asm:88`, `src/loader.asm:39-47`). `PZSWP` runs last and
-leaves carry clear, so `UNLOAD` reports success (`src/loader.asm:89`).
+is 0 (`src/loader.asm:163-164`, `src/loader.asm:67-92`). `PZSWP` runs last and
+leaves carry clear, so `UNLOAD` reports success (`src/loader.asm:165-166`).
 
 The generation is what a client has to go on once it holds a record's address.
-`SVCGEN` is one byte, so it repeats after 256 removals (`src/ram.asm:265`).
+`SVCGEN` is one byte, so it repeats after 256 removals (`src/ram.asm:376-377`).
 Only `UNLOAD` removes a service, and `UNLOAD` is a command of the CCP, so no
 record goes while a program runs. A program can therefore keep a record's
 address until it exits. A service that keeps one for longer compares the
@@ -399,9 +403,9 @@ the record as a dependency so that its own load fails without it, as
 [Chapter 12](12-writing-services.md#depending-on-another-service) describes.
 
 A warm boot keeps all of this, since `REGHEAD`, `SVCHEAD` and `PZTOP` lie past
-`BDOSRME`, the end of the range `CPMINIT` clears (`src/ram.asm:216-218`,
-`src/ram.asm:253-264`). Cold boot clears the workspace, so a reset empties both
-lists (`src/boot.asm:37-41`, `test/svc.test.mjs:390`).
+`BDOSRME`, the end of the range `CPMINIT` clears (`src/ram.asm:292-294`,
+`src/ram.asm:353-375`). Cold boot clears the workspace, so a reset empties both
+lists (`src/boot.asm:73-79`, `test/svc.test.mjs:390`).
 
 ## The limits of the loader's checks
 
@@ -413,7 +417,7 @@ last through warm boots and to go when its pages go. The sweep in `PZSWP`
 keeps a vector whose jump lands above `PZTOP` and clears the rest, as
 [Chapter 15](15-reset-and-boot.md#page-zero) describes. `UNLOAD` and a failed
 `INIT` call it once the top is back. A vector into freed pages then fails the
-bound (`src/loader.asm:88-89`, `src/loader.asm:314-316`,
+bound (`src/loader.asm:163-166`, `src/loader.asm:529-532`,
 `test/svc.test.mjs:810`, `test/svc.test.mjs:818`). A reset clears page zero, so
 a vector goes with its service then too (`test/svc.test.mjs:858`).
 
@@ -434,13 +438,13 @@ interrupts it started, because an interrupt left on under the default `EI` and
 
 The stack figures are the other claim. The ROM reserves three stacks. `SVCLIM`
 holds the room services may take on each, 8, 12 and 6 bytes for the BDOS, the
-BIOS and the CCP (`src/tables.asm:96`). Those limits are counted from the
+BIOS and the CCP (`src/tables.asm:123-127`). Those limits are counted from the
 deepest use of each stack with no service in.
 [Chapter 14](14-memory-map.md#the-four-stacks) gives the measurements behind
 them and the quarter of each stack that stays free with the limit taken.
 Step 3 sums the figures the headers state and fails a load that passes a
 limit. At this commit
-`GLCD.SVC` declares 2, 0 and 6 (`drivers/glcd.asm:19`). On a board with the GLCD
+`GLCD.SVC` declares 2, 0 and 6 (`drivers/glcd.asm:32-33`). On a board with the GLCD
 alone it takes the whole of the CCP's allowance, and `COUNT.SVC` with its 2
 can't then load. On a board with the PICO9918 as well the startup line leaves
 `GLCD.SVC` out, as above, and `COUNT.SVC` loads. The ROM's PICO9918 console is

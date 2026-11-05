@@ -13,6 +13,10 @@ nav_group: "Appendices"
      `TAS.COM` from Thorium dbee66a, with the SHA-256
      `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. -->
 
+<!-- C16 source-only citation revisions: TEC-OS fe2097f.
+     Only the entries in editorial/c16-citation-resolutions.json use that pin.
+     Captures, measurements and other citations retain their earlier provenance. -->
+
 This appendix lists the nine commands of `tecvol`, the repository's tool for
 TEC-OS cards on a PC, with their options and an example of each, and ends with
 the card those examples make. `tecvol` makes a card image, lists and checks
@@ -289,9 +293,9 @@ tecvol: 0/NOTE.TXT is read-only
 `recipe RECIPE.json IMAGE` builds a card from a recipe, a JSON file that lists
 the volumes and the files to put on them (`tools/tecvol.mjs:168-174`).
 `npm run media` writes the starter card's recipe as `dist/starter.recipe.json`
-and builds `dist/starter.img` from it (`tools/media.mjs:206-225`). It also
+and builds `dist/starter.img` from it (`tools/media.mjs:212-229`, `tools/media.mjs:240-241`, `tools/media.mjs:258-259`). It also
 writes the web page's recipe, `dist/page.recipe.json`, which adds `DEMO.COM`
-to the starter card's files (`tools/media.mjs:227-240`). A recipe has the
+to the starter card's files (`tools/media.mjs:192-210`, `tools/media.mjs:230-239`, `tools/media.mjs:256-260`). A recipe has the
 schema `tecos-file-recipe-v1`, a list of `volumes` and a list of
 `components`, each with `files`. Each volume is in `create`'s terms: a
 geometry, a label, a drive and `readOnly` or `writeBehind`. Each file has a

@@ -9,6 +9,10 @@ nav_group: "Appendices"
 
 <!-- Checked against TEC-OS 78127ec. -->
 
+<!-- C16 source-only citation revisions: TEC-OS fe2097f.
+     Only the entries in editorial/c16-citation-resolutions.json use that pin.
+     Captures, measurements and other citations retain their earlier provenance. -->
+
 This appendix lists the web page's controls, where the page keeps your card
 and what it writes on it. The page runs the host model at 4 MHz with TEC-OS in
 its ROM, draws the board's displays and has a serial terminal below them.
@@ -44,7 +48,7 @@ their handlers in `web/src/main.mjs`.
 | "Download" on a file | Saves that file to the PC, as text when "as text" is ticked. |
 
 The page's recipe has the starter card's files and `DEMO.COM`, the program
-Chapter 10 describes (`tools/media.mjs:227-240`). The file list under "Drive"
+Chapter 10 describes (`tools/media.mjs:192-210`, `tools/media.mjs:230-239`, `tools/media.mjs:256-260`). The file list under "Drive"
 shows each file's user area, name and size. It is read again every 5
 seconds and after a reset (`web/src/main.mjs:569-582`,
 `web/src/main.mjs:656-662`). The width and the display chosen are kept in the

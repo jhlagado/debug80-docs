@@ -10,6 +10,10 @@ nav_group: "Part II: Inside TEC-OS"
 <!-- Checked against TEC-OS 78127ec, with `@jhlagado/debug80-runtime` 0.3.3, the
      version `package.json` names. -->
 
+<!-- C16 source-only citation revisions: TEC-OS fe2097f.
+     Only the entries in editorial/c16-citation-resolutions.json use that pin.
+     Captures, measurements and other citations retain their earlier provenance. -->
+
 Every transcript in this book came from a TEC-1G that exists only as software.
 The repository runs TEC-OS on the Debug80 TEC-1G runtime, a model of the
 board's CPU, memory, latch and devices, through one module, `host/machine.mjs`.
@@ -231,20 +235,21 @@ rejects them, unless the call sets `force` (`tools/lib/cpmfs.mjs:123-130`,
 `tools/lib/cpmfs.mjs:152-160`, `tools/lib/cpmfs.mjs:175-191`).
 
 Two inputs the tests use come from outside the repository: the starter card's
-assembler, `TAS.COM`, and its editor, `TED.COM`. `test/inputs.json` records
-the default path, size and SHA-256 of each, and the repository, commit and
-path it comes from. `test/lib/inputs.mjs` reads each from its environment
-variable when that is set, or else from its default path beside the clone, or
-else from `.inputs/` (`tools/lib/pins.mjs:12-23`). `npm run inputs` fetches a
-missing file into `.inputs/` from its repository at its commit. The README's setup
-runs `npm run inputs` once on a fresh clone, after `npm ci` and the browser's
-install (`README.md:34-41`). A file whose SHA-256 differs fails its test. A
-missing one skips it, or fails it with `STRICT=1`, which `npm run test:strict`
-sets (`test/lib/inputs.mjs:1-7`, `package.json:18`). The web page's tests,
-`test/web-touch.test.mjs` and `test/web-store.test.mjs`, drive Chromium
-through `playwright`, which `package.json` pins at 1.62.1 (`package.json:28`).
-`npx playwright install chromium` fetches the browser that version expects,
-and `test/deps.test.mjs` checks the pin and that the README gives the install.
+assembler, `TAS.COM`, and its editor, `TED.COM`. `test/inputs.json` records the
+default path, size and SHA-256 of each, and the repository, commit and path it
+comes from. `test/lib/inputs.mjs` reads each from its environment variable when
+that is set, or else from `.inputs/`, or finally from its legacy default path
+beside the clone (`tools/lib/pins.mjs:10-35`). `npm run inputs` fetches a
+missing file into `.inputs/` from its repository at its commit. The README's
+setup runs `npm run inputs` after `npm ci` and then prepares the pinned TAS
+host. It lists the browser's install separately after setup (`README.md:34-64`).
+A file whose SHA-256 differs fails its test. A missing one skips it, or fails it
+with `STRICT=1`, which `npm run test:strict` sets (`test/lib/inputs.mjs:24-41`,
+`package.json:18`). The web page's tests, `test/web-touch.test.mjs` and
+`test/web-store.test.mjs`, drive Chromium through `playwright`, which
+`package.json` pins at 1.62.1 (`package.json:28`). `npx playwright install
+chromium` fetches the browser that version expects, and `test/deps.test.mjs`
+checks the pin and that the README gives the install.
 
 ## The web page
 
@@ -259,7 +264,7 @@ build first deletes `web/dist`, so no file of an older build is left there
 of its symbols, the page's recipe and the files in `dist/files`
 (`web/build.mjs:32-45`). The page's recipe has the starter card's volumes and
 files with one more, `DEMO.COM`, which `npm run media` assembles from
-`test/programs/demo.asm` (`tools/media.mjs:227-240`). The page uses one ROM
+`test/programs/demo.asm` (`tools/media.mjs:192-210`, `tools/media.mjs:230-239`, `tools/media.mjs:256-260`). The page uses one ROM
 for every display and every width (`web/build.mjs:14`). The PICO9918's console
 is the ROM's, and a `CON PICO` line in the startup file sets its width
 (`host/card.mjs:1-4`).
