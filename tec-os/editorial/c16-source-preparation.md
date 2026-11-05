@@ -69,6 +69,14 @@ The TAS migration comparison is recorded in that same Origo revision's
 `studies/p3-tec-os/reports/tas-toolchain-migration.md`, against source offer
 `fe2097f`. These are recorded qualification results, not reruns in this pass.
 
+## Citation dispositions
+
+The original 393 pending ranges (492 occurrences) are resolved in
+`c16-citation-resolutions.json`, with claim-level reasons and corrections.
+The frozen textual map is retained for reproducibility. A later source offer
+still needs the source-identity recheck and substantive review of changed
+files; this does not reopen the original list without identifying a change.
+
 ## Deferred guarded validation
 
 P6 holds compute. No builds, sample/TED workflows or deployment run here.

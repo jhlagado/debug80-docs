@@ -1,5 +1,9 @@
 # Source citation preparation
 
+This is the frozen discovery report, not the current open queue. The original
+393 pending ranges have dispositions in `c16-citation-resolutions.json`;
+`c16-citation-resolution-report.md` records completion and validation scope.
+
 Source: `78127ec63a2478c544af7fa96bfa73345f9df824` → `fe2097f4bad3f7578aa41b8bce8aa571c451dbc7`.
 Book inventory: `4d830dc77f8dacc7c610794e8f0b528237b66fee`.
 

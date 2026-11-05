@@ -78,7 +78,7 @@ in `A` as well and the high byte in `B` (`src/cpm/bdos.asm:220-242`). A
 function that returns a byte has 0 in `H` and `B`. One that returns nothing
 returns 0. No other register is kept, as in CP/M 2.2. The call uses two bytes
 of the program's stack, for its return address: the BDOS runs on its own
-54-byte stack (`src/cpm/bdos.asm:133-138`, `src/layout.asm:71`).
+54-byte stack (`src/cpm/bdos.asm:133-138`, `src/layout.asm:128`).
 
 A function that takes an FCB, a 36-byte file control block whose layout
 Chapter 19 gives, works on the drive in its first byte: 0 for the default
@@ -282,7 +282,7 @@ drive it is the new volume's at once, as for function 27.
 other `E`, sets the user number to the low five bits of `E`, as in CP/M 2.2
 (`src/cpm/bdosfn.asm:185-199`). Returns the user number in `A`, or 0 after a
 set. The CCP's `USER` command takes 0 to 15, and the byte at `0004h` holds
-only four bits of the number (`src/cpm/ccp.asm:225-245`).
+only four bits of the number (`src/cpm/ccpcmd.asm:236-273`, `src/cpm/ccp.asm:346-367`).
 
 **33 Read random.** Reads the record whose number is in the FCB's `R0` and
 `R1` into the DMA address and leaves the FCB's extent and `CR` at that record,

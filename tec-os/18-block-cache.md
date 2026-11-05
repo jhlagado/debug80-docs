@@ -41,7 +41,7 @@ empty line has no block. A clean line holds a block the card has too, and a
 dirty line holds a block whose newest bytes are only here. Every line is
 empty after a cold boot. The boot clears EXPAND 1 and marks each line empty
 before it mounts the card, as [Chapter 15](15-reset-and-boot.md) describes
-(`src/boot.asm:54`, `src/boot.asm:309-332`). The mount then reads the
+(`src/boot.asm:100-102`, `src/boot.asm:309-332`). The mount then reads the
 container's table into a line, an ordinary clean one that `CTAKE` gives out
 again in turn (Chapter 17).
 
@@ -271,7 +271,7 @@ A flush has five occasions:
 
 - a directory write on the volume written behind, as above
 - `CTAKE` with every line dirty, which writes one line
-- every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:108`,
+- every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:206-207`,
   `src/cache.asm:646-653`)
 - every call of the services `MOUNT` and `UNMNT`, whose `VFLUSH` calls
   `CFLALL` before any drive changes, and fails if a line failed
@@ -306,13 +306,13 @@ prints `Write lost` and drops them. The directory's line was dropped when the
 directory write failed. The card's directory is therefore as it was before,
 whether or not the warm boot's writes succeed.
 
-A card taken out while TEC-OS runs gives that, since every write then fails.
-The first warm boot after it prints `Write lost` and drops the lines. The
-same card put back changes nothing, since only cold boot starts a card
-(`src/boot.asm:67`). A later change written behind meets the same failure at
-the next warm boot, and `Write lost` comes again. A reset discards the change,
-still unwritten. While dirty lines stay dirty, fewer lines are free for reads.
-Every `CTAKE` starts with a write once all 30 are dirty.
+A card taken out while TEC-OS runs gives that, since every write then fails. The
+first warm boot after it prints `Write lost` and drops the lines. Putting the
+card back does not itself run `SDINIT`. The cold-boot path starts the card
+(`src/boot.asm:119-132`). If writes still fail, a later change written behind
+produces `Write lost` at the next warm boot. A reset discards the change, still
+unwritten. While dirty lines stay dirty, fewer lines are free for reads. Every
+`CTAKE` starts with a write once all 30 are dirty.
 
 ## Interrupts held off
 
@@ -333,17 +333,17 @@ exit turns the result's Z flag into `A`, 0 for success and 1 for an error.
 call made with interrupts off returns with them off. `VFLUSH`, in the volume
 services, uses the same pair around its flush (`src/volsvc.asm:392-408`).
 `MVCOPY` and the history's routines call `IFFGET` too and keep their own copy
-of the state (`src/cache.asm:687-690`, `src/history.asm:26-28`).
+of the state (`src/cache.asm:687-690`, `src/history.asm:47-76`).
 
-Interrupts come on only when a program or a service enables them, as Chapter
-15 states. The ROM executes `EI` only to restore a state it saved. The places
-are `CEI`, `RXBITS`, `TXBYTE`, the history's access, `MVEND` and the
-PICO9918's `VPAIR` (`src/bios.asm:453-454`, `src/console.asm:242`,
-`src/console.asm:284`, `src/history.asm:40`, `src/cache.asm:831`,
-`src/pico.asm:266-276`). The only other `EI` is the byte each boot writes at
-`0038h`, which runs on an interrupt or a program's `RST 38h`
-(`src/boot.asm:274-283`). So what follows affects only a program that has
-enabled interrupts itself.
+Interrupts come on only when a program or a service enables them, as Chapter 15
+states. The ROM executes `EI` only to restore a state it saved. The places are
+`CEI`, `RXBITS`, `TXBYTE`, the history's access, `MVEND` and the PICO9918's
+`VPAIR` (`src/bios.asm:453-454`, `src/console.asm:377-411`,
+`src/console.asm:440-480`, `src/history.asm:47-76`, `src/cache.asm:831`,
+`src/pico.asm:431-447`). The boot also writes `EI` followed by `RETI` at `0038h`
+when no resident jump is retained there. That code runs on an interrupt or a
+program's `RST 38h` (`src/boot.asm:470-480`). So what follows affects only a
+program that has enabled interrupts itself.
 
 For such a program a BIOS disk call holds interrupts off for its whole
 length. A read that misses holds them off for about 235,000 T-states, 59

@@ -6,6 +6,7 @@ manifest with a later offer. A matching blob preserves source text, not runtime
 proof. A changed blob requires claim-level review even if its labels still exist.
 """
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -22,11 +23,15 @@ a = p.parse_args()
 def git(*args):
     return subprocess.check_output(['git', '-C', str(a.source_repo), *args], text=True).strip()
 revision = git('rev-parse', a.revision + '^{commit}')
-ledger = json.loads(a.ledger.read_text())
+ledger_bytes = a.ledger.read_bytes()
+ledger_digest = hashlib.sha256(ledger_bytes).hexdigest()
+ledger = json.loads(ledger_bytes)
+if a.record and (not isinstance(ledger, dict) or revision != ledger.get('source_revision')):
+    raise SystemExit('record revision must equal the reviewed ledger source_revision')
 rows = ledger['resolutions'] if isinstance(ledger, dict) else ledger
 paths = set()
 source_cache = {}
-for row in rows:
+for row in (rows if a.record else []):
     references = (row.get('new_citation') or '') + '\n' + '\n'.join(e['new'] for e in row.get('prose_edits', []))
     references += '\n' + '\n'.join(x for x in row.get('supporting_target_ranges', []) if isinstance(x, str))
     for match in REFERENCE.finditer(references):
@@ -39,13 +44,15 @@ for row in rows:
             raise SystemExit('citation out of bounds: ' + match.group())
         paths.add(path)
 if a.record:
-    result = {'revision': revision, 'ledger': a.ledger.name,
+    result = {'revision': revision, 'ledger': a.ledger.name, 'ledger_sha256': ledger_digest,
               'qualification': 'Source identity only; no runtime or whole-chapter certification.',
               'files': {path: git('rev-parse', revision + ':' + path) for path in sorted(paths)}}
     a.manifest.write_text(json.dumps(result, indent=2) + '\n')
     print('Recorded', len(paths), 'source blobs at', revision)
 else:
     previous = json.loads(a.manifest.read_text())
+    if previous.get('ledger_sha256') != ledger_digest:
+        raise SystemExit('resolution ledger changed: review it and record a fresh manifest at its source revision before comparing offers')
     changed = []
     for path, blob in previous['files'].items():
         result = subprocess.run(['git', '-C', str(a.source_repo), 'rev-parse', revision + ':' + path], text=True, capture_output=True)
