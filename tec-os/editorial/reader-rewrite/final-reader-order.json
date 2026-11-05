@@ -37,28 +37,54 @@
       "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
       "git_blob": "2be81bd397b0258c1561de9546816b4610422258",
       "sha256": "d044c76708b41a7156ec4151ff89501fe80b17708d7334c520522d365164c5e3",
-      "status": "not_yet_read_in_this_final_sequence"
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence including every heading, table, list, fence, caption/provenance comment and paragraph boundary.",
+      "last_heading": "Saved source and the standalone program",
+      "reader_job": "Enter the complete BANNER, repair the real line14 build failure, save/build/run/edit and reopen persisted work",
+      "prerequisite_result": "Comment notation precedes listing. Only local placement/register/print/return/data concepts are explained. Status restoration occurs once by the edit. Actual arrow trace remains outside reader flow.",
+      "evidence_boundary": "All six source/console fences retain actual attempt02 boundaries; omitted status-only key actions are not claimed as a newly executed shortened trace.",
+      "findings": []
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
       "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
       "git_blob": "adf05487982811ee5db580e669a9fe5fe6f2af01",
       "sha256": "e05220ccb13b0d9ab7bf5af2e33d11c96cc5599e63941eb832d2aa2f3e3da1f4",
-      "status": "not_yet_read_in_this_final_sequence"
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence including every heading, table, list, fence, caption/provenance comment and paragraph boundary.",
+      "last_heading": "Recognise a failed file command",
+      "reader_job": "Read and page source, copy a usable SAMPLE file, interpret separately retained rename/erase and failure cases",
+      "prerequisite_result": "Names/patterns precede TYPE; pager controls precede explicit command-prompt redraw. Practical COPY follows overwrite consequence. Record/allocation reference follows the copied count.",
+      "evidence_boundary": "Paused screens preserve actual chained-fixture provenance. Current COPY has fresh-card/B-empty starting state. Historical REN/ERA stays isolated from BANNER; no combined count or mutation result invented.",
+      "findings": []
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
       "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
       "git_blob": "93ea09daac2fd599aa08df809efca5a15887ce6d",
       "sha256": "22106877815aa329d5c1affe54eb4c234fc82d9ac206fdba7c4766ce46d10cc2",
-      "status": "not_yet_read_in_this_final_sequence"
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence including every heading, table, list, fence, caption/provenance comment and paragraph boundary.",
+      "last_heading": "The drives after a reset",
+      "reader_job": "Locate files and tools through drive/area lookup, use services and select volumes safely",
+      "prerequisite_result": "Operator COM/SVC distinction precedes install/list/remove; drives and areas precede lookup. Custom card is separately prepared, not a new starter prerequisite. Implementation links follow visible actions.",
+      "evidence_boundary": "Every run stays historical78127ec. SAVE area3 is a prepared demonstration, not an unexplained program to run. Read-only file/volume, default/retained assignment and failure limits remain separate.",
+      "findings": [],
+      "later_source_application": "Current source-caption/citation reconciliation pending; reread actual changed scope and prove unchanged body before final snapshot rebase."
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
       "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
       "git_blob": "63c293bde4514e80131704c8097716f34d6f4a54",
       "sha256": "466243033c60a96cb0027b71a6fea50028c24ed350d1d00498c260cc8d4ffd54",
-      "status": "not_yet_read_in_this_final_sequence"
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence including every heading, table, list, fence, caption/provenance comment and paragraph boundary.",
+      "last_heading": "Recovery after a power cut",
+      "reader_job": "Back up a card image, recover actual saved BANNER and prepare/check/install other media",
+      "prerequisite_result": "Host prerequisites and backup precede extraction. Volume/record meanings precede construction. Protection and device identity precede destructive operations. Recovery follows observed preservation limits.",
+      "evidence_boundary": "PC7 is actual accepted attempt02. Fresh BANNER fixture versus continued SAMPLE outputs explicit. Raw384/CRLF286/tail98/text273 retain actual evidence. Historical/physical/browser examples not silently upgraded.",
+      "findings": [],
+      "later_source_application": "Current source-caption/citation reconciliation pending; reread actual changed scope and prove unchanged body before final snapshot rebase."
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
@@ -291,5 +317,7 @@
       "sha256": "b217f9a83a64ac51fe7a30e2e8a6534b785f07a408ed713d8c75f7b5f2d9bff7",
       "status": "not_yet_read_in_this_final_sequence"
     }
-  ]
+  ],
+  "last_complete_page": "draft/05-cards-on-the-pc.md",
+  "reading_limit": "This is a sequential reader-order/teaching/preservation pass. Separate source/citation and factual-result reviews retain their own scope; no automatic correctness or runtime claim follows."
 }
