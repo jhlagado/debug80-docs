@@ -96,7 +96,7 @@ review closes; old paths remain in place meanwhile.
 | 25. Startup inside the CCP | Trace one record through prompts and quiet device outcomes | Practical startup, CCP, loader and console | STPOS/STREC, first read/bypass, exact boundary/echo behaviour, display switching, LCD ownership and quiet-result gating |
 | 26. Build the ROM and media | Reproduce the qualified artifact and understand its organisation | Host setup and implementation map | Source order, selected assembler/default facts, generated geometry/font/config, census/hash checks and prepared media; actual build output only |
 | 27. Diagnose the machine | Interpret card failure or run a separate hardware diagnostic safely | Prepared setup, model/board distinction and storage failures | Prompt/retry, diagnostic ROM identity/checksum, bounded test scope, report, NMI hazards and model-versus-board comparison |
-| 28. Reproduce the evidence | Drive the host model and understand exactly what a passing run establishes | Runtime mechanisms and host setup | Shared machine/options, byte versus screen/serial evidence, deterministic clock, write watches, fixtures, pins, tests and web implementation; no board inference |
+| 28. The host model as evidence | Drive the host model and understand exactly what a passing run establishes | Runtime mechanisms and host setup | Shared machine/options, byte versus screen/serial evidence, deterministic clock, write watches, fixtures, pins, tests and web implementation; no board inference |
 
 The early route needs only Chapters1–3 for its first useful workflow. Later
 operator chapters are independent tasks with explicit prerequisites, not steps

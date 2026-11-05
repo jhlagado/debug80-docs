@@ -444,7 +444,8 @@ Chapter 17.
 The BDOS reaches the BIOS through the RAM BIOS table at `BF00h`. Its names
 for the entries are offsets from `RAMBIOS` (`src/cpm/bdos.asm:22-36`). A
 program that replaces an entry there therefore receives the BDOS's own
-calls, as Chapter 10 describes. The output-status check is an exception. It
+calls, as [Chapter 16](16-console-paths.md#the-bios-boundary) describes.
+The output-status check is an exception. It
 calls the ROM's `BCONST` directly, because the table's `CONST` draws the
 video cursor while no key is waiting. Chapter 16 explains that console path
 (`src/cpm/bdoscon.asm:160-168`, `src/console.asm:210-220`).

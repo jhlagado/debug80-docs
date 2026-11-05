@@ -184,3 +184,18 @@ fences, the full pagination fixture, source assertion versus passing-run
 boundaries, browser persistence and physical-board limits. No further local
 finding was found. This closes the bounded draft review, not final adopted
 source, font/default proof, navigation or whole-book acceptance. Nothing ran.
+
+## Bounded draft-navigation correction
+
+The independent navigation audit read all297 reference-containing passages
+and found two actionable mismatches. Chapter28 now consistently uses the
+authored title The host model as evidence and filename
+28-the-host-model-as-evidence.md across the draft index, Chapter27 link,
+outline and ledger. Its job and position remain unchanged. The earlier
+pass-record naming hold is superseded by this reconciliation.
+Chapter19's specific BIOS-hook replacement explanation now points to
+Chapter16's The BIOS boundary rather than10's raw-call interface.
+The separate10 reference for the writable table remains correct and unchanged.
+The lead read all changed containing passages and the destination section.
+No root navigation, renderer or product ran. Independent bounded confirmation
+and final integrated navigation remain separate. Opening1–3 links remain held.
