@@ -54,12 +54,12 @@ The destinations are headings in the new Chapter 22.
 | 22:1–6, 8 | Replace navigation/title with “The history ring” at number 22. |
 | 22:10–14 | Retain all historical ROM, TED and TAS identities/hashes in the capture-provenance comment. It does not certify the new source prose. |
 | 22:16–18 | Replace the earlier partial-citation ledger comment with the explicit source-only `ea3ef3d` scope. Retain the old capture pin separately. |
-| 22:20–24 | Replace the route announcement with the concrete bounded-storage problem. Retain page size/address and source ownership in the first two sections. |
+| 22:20–24 | Replace the route announcement with the concrete bounded-storage problem. Retain page size/address in the first section and source ownership in the bank-access section. |
 | 22:26, 28–35 | Move recall behaviour to “Recall in the line buffer” after storage and insertion. Combine its key/editing rules with the HPOS derivation. Remove the obsolete practical Chapter 3 link and duplicated prompt-lesson introduction. |
 | 22:37, 38–47 | Retain recipe and complete first PICO recall fence unchanged under traversal. |
 | 22:49–53 | Move erase-byte explanation and shell/recipe notation after that traversal capture. |
 | 22:55, 57–60 | Retain HRING placement in “A page of whole lines”; explain private line-input routines in “Access through the bank window”. Qualify the original absolute page-access statement as the absence of a dedicated history entry. |
-| 22:62–67 | Retain bank/latch/interrupt/stack contract in its own connected access explanation. Correct HPUT's write-plus-readback detail. |
+| 22:62–67 | Introduce HGET/HPUT byte/register contracts after capacity, including HPUT's write-plus-readback detail. Retain the bank/latch/interrupt/stack implementation after insertion/cleanup and before traversal. |
 | 22:69–73 | Retain low-byte wrap, string-plus-zero format and HHEAD in “A page of whole lines”. |
 | 22:75–80 | Retain adjacent-zero/empty-entry invariant before insertion/traversal. Delete only the empty certification “Everything else in this chapter rests on that rule.” |
 | 22:82, 84–90 | Rewrite as “Lines from the prompt”: CCP source priority, HFLAG and nonempty completion. |
@@ -139,7 +139,7 @@ chapter, including the introductions and interpretations of retained captures.
 | Pass | Actual disposition |
 | --- | --- |
 | Generous draft | Completed the whole explanation before sentence editing. All 41 assigned movement units were accounted for: 40 from old22 and the assigned paragraph from old03. |
-| Mechanical gate | Zero findings on the generous draft. Repeated after the revision and before each prose commit. |
+| Mechanical gate | Zero findings on the generous draft and the completed initial prose passes. Later bounded review corrections use the checks recorded below. |
 | Thematic/teaching order | Established capacity, entries and the stop marker before HFLAG/HSTORE, then derived traversal from those same boundaries. Kept the practical recall capture as evidence after HPOS and replacement rather than as a second first-prompt lesson. |
 | Paragraph deletion | Removed the opening's final preview because it announced the subsequent explanation without adding a rule. Replaced the insertion section's broad capacity certification with the exact post-cleanup boundary and its use by backwards traversal. |
 | Sentence deletion | Read every sentence in order, with each paragraph and the following paragraph. Retained byte costs, register preservation, empty-line exclusion, the difference counter and the reset entry as short sentences because each carries a distinct fact. The `HSCLR` sentence establishes the named operation before its loop. The `^X` sentence identifies the shared erase routine. |
@@ -175,6 +175,34 @@ ledger's `tec-os/14-state-and-memory.md` final path. Its anchor matches
 link works between the drafts and between their planned final locations.
 Both corrections were read in their containing paragraphs. No capture,
 build, test or runtime execution was performed for these changes.
+
+## Reader-journey ordering correction
+
+The early byte-access paragraph now follows capacity in “A page of whole
+lines”. It introduces HGET/HPUT's arguments, result, write/readback and
+preserved registers before HSTORE uses HPUT. The input-eligibility section
+still precedes insertion. NUL rejection, duplicate comparison, forward
+writing and suffix cleanup are complete before the latch, IFF and stack
+implementation. “Access through the bank window” now follows cleanup and
+precedes “Recall in the line buffer”.
+
+All three implementation paragraphs were moved together with their source
+ranges and Chapter 14 link. The opening now names HGET and HPUT explicitly
+in place of “Each routine” so its antecedent remains clear after the move.
+No other chapter sentence was rewritten. All source citations, five capture
+recipes and five fences retain their exact text.
+
+I reread the complete reordered chapter from the storage problem to the
+empty prompt, including all captures and their interpretations. The
+boundary explanation now reaches the completed cleanup before the bank
+implementation. HSTART still precedes traversal and the byte contracts
+precede both store and copy. I reread every comma in that order. Lists,
+apposition and conditional breaks remain clear without adding punctuation.
+No comma change was needed and no fact or citation was removed.
+
+This bounded ordering pass used static text comparisons and a diff check.
+No prose script, build, test, capture or product runtime was executed.
+Independent confirmation of the revised order remains open.
 
 ## Remaining acceptance
 
