@@ -11,12 +11,12 @@ nav_group: "Appendices"
      ea3ef3de9133931e925a0220d51c0e971c1fd8dd. Every source range below uses
      that pin. No execution, measurement or new output is claimed. -->
 
-Use the function number to find its registers in the table, then its effects
-and failure results in the numbered entry. TEC-OS implements the CP/M 2.2
-interface with selected additions numbered 44 to 48, 99 and 108. Those
-additions do not establish general CP/M 3 compatibility. Unsupported calls
-are listed at the end. [Chapter 19](19-a-file-through-the-bdos.md) explains
-the file machinery behind these contracts and the file control block (FCB).
+Use the function number to find its registers in the table, then its effects and
+failure results in the numbered entry. TEC-OS implements the CP/M 2.2 interface
+with selected additions numbered 44 to 48, 99 and 108. Those additions do not
+establish general CP/M 3 compatibility. Unsupported calls are listed at the end.
+[Chapter 19](19-a-file-through-the-bdos.md) explains the file machinery behind
+these contracts and the file control block (FCB).
 
 | `C` | Name | In | Out |
 | ---: | --- | --- | --- |

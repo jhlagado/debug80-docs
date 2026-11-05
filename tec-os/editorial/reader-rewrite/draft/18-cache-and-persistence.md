@@ -18,10 +18,10 @@ nav_group: "Part II: Inside TEC-OS"
      No import, assembly, build, test, capture or measurement was performed.
      No current font/default, KS48 workflow or hardware result is qualified. -->
 
-A program can finish writing a record while its newest bytes are still only
-in RAM. The block cache makes that possible by collecting records into card
-blocks. Its write policy determines when a successful call also means that
-the block has reached the card.
+A program can finish writing a record while its newest bytes are still only in
+RAM. The block cache makes that possible by collecting records into card blocks.
+Its write policy determines when a successful call also means that the block has
+reached the card.
 
 The historical host-model block read took about 55 milliseconds at
 `78127ec`, with bits passing through a port one at a time. Chapter 17
@@ -60,8 +60,8 @@ block independently of the drive used to reach it. The lookup therefore
 prevents two lines from holding separate copies of the same block
 (`src/cache.asm:59-116`).
 
-The cache's lines and table are in EXPAND 1. Its four other bytes of state
-are in the resident workspace above the RAM BIOS table (`src/ram.asm:332-337`):
+The cache's lines and table are in EXPAND 1. Its four other bytes of state are
+in the resident workspace above the RAM BIOS table (`src/ram.asm:332-337`):
 
 - `CNEXT`, the next line to give out
 - `CWTYPE`, the write type of the current BIOS `WRITE`, with bit 7 set for a
@@ -384,17 +384,16 @@ off. `VFLUSH`, in the volume services, uses the same pair around its flush
 `IFFGET` too and keep their own copy of the state (`src/cache.asm:700-703`,
 `src/history.asm:47-76`).
 
-Maskable interrupts come on only when a program or a service enables them,
-as Chapter 15 states. The ROM's executable `EI` instructions restore a
-saved state. The places are `CEI`, `RXBITS`, `TXBYTE`, the history's access,
-`MVEND` and the PICO9918's `VPAIR` (`src/bios.asm:467-478`,
-`src/console.asm:387-421`, `src/console.asm:452-492`,
-`src/history.asm:47-76`, `src/cache.asm:853-858`, `src/pico.asm:456-472`).
-The boot also writes `EI` followed by `RETI` at `0038h` when no resident
-jump is retained there. That code runs on an interrupt or a program's `RST 38h`
-(`src/boot.asm:499-509`). DI does not block a non-maskable interrupt (NMI).
-These routines therefore require the NMI conditions described in Chapter 14 as well as their
-maskable-interrupt protection.
+Maskable interrupts come on only when a program or a service enables them, as
+Chapter 15 states. The ROM's executable `EI` instructions restore a saved state.
+The places are `CEI`, `RXBITS`, `TXBYTE`, the history's access, `MVEND` and the
+PICO9918's `VPAIR` (`src/bios.asm:467-478`, `src/console.asm:387-421`,
+`src/console.asm:452-492`, `src/history.asm:47-76`, `src/cache.asm:853-858`,
+`src/pico.asm:456-472`). The boot also writes `EI` followed by `RETI` at `0038h`
+when no resident jump is retained there. That code runs on an interrupt or a
+program's `RST 38h` (`src/boot.asm:499-509`). DI does not block a non-maskable
+interrupt (NMI). These routines therefore require the NMI conditions described
+in Chapter 14 as well as their maskable-interrupt protection.
 
 For a program that enables maskable interrupts, the protected portion of
 a BIOS disk call holds them off across mapping, cache work and card I/O.

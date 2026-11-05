@@ -16,19 +16,18 @@ nav_group: "Part II: Inside TEC-OS"
      Source proofs and preservation accounting: 20-pass-record.md.
      No current runtime check claimed. -->
 
-The CCP reads your command through the BDOS, parses its name and either
-runs a built-in or loads a file. A program command ends that path with
-page zero prepared and a jump to `0100h`. This chapter follows the code
-from the command prompt to that jump. [Appendix J](appendix-j-command-reference.md)
-gives the exact command grammar.
+The CCP reads your command through the BDOS, parses its name and either runs a
+built-in or loads a file. A program command ends that path with page zero
+prepared and a jump to `0100h`. This chapter follows the code from the command
+prompt to that jump. [Appendix J](appendix-j-command-reference.md) gives the
+exact command grammar.
 
 ## Code and working storage
 
 The CCP uses CP/M calls for its ordinary work: function 10 reads a line,
-function 15 opens a file and function 9 prints a string through `0005h`.
-Its own code stays in ROM while program files load into the transient program area (TPA).
-The four source files are assembled in this order
-(`src/rom.asm:31-35`):
+function 15 opens a file and function 9 prints a string through `0005h`. Its own
+code stays in ROM while program files load into the transient program area
+(TPA). The four source files are assembled in this order (`src/rom.asm:31-35`):
 
 | File | Work |
 | --- | --- |
@@ -52,16 +51,15 @@ buffer below it intact (`src/boot.asm:530-542`).
 [Chapter 21](21-chains-across-warm-boot.md) explains the retained line.
 [Appendix C](appendix-c-memory-map.md) lists the memory locations.
 
-File operations share a short call helper. A `CALL DOSSEQ` has an inline
-byte containing twice the BDOS function number plus a file control block (FCB) selection bit.
-Bit 0 selects `CMDFCB` when clear and `RENFCB` when set. `DOSSEQ` advances
-the stacked return address past that byte, decodes it into `C` and `DE`
+File operations share a short call helper. A `CALL DOSSEQ` has an inline byte
+containing twice the BDOS function number plus a file control block (FCB)
+selection bit. Bit 0 selects `CMDFCB` when clear and `RENFCB` when set. `DOSSEQ`
+advances the stacked return address past that byte, decodes it into `C` and `DE`
 and jumps to the BDOS. The BDOS returns after the inline byte
-(`src/cpm/ccpmut.asm:393-409`). The historical source used this form for
-24 calls. DIR's searches use functions 17 and 18, TYPE's reads use 20
-and ERA's deletion uses 19 (`src/cpm/ccpfile.asm:111-113`,
-`src/cpm/ccpfile.asm:238-241`, `src/cpm/ccpfile.asm:614-617`,
-`src/cpm/ccpmut.asm:71-76`).
+(`src/cpm/ccpmut.asm:393-409`). The historical source used this form for 24
+calls. DIR's searches use functions 17 and 18, TYPE's reads use 20 and ERA's
+deletion uses 19 (`src/cpm/ccpfile.asm:111-113`, `src/cpm/ccpfile.asm:238-241`,
+`src/cpm/ccpfile.asm:614-617`, `src/cpm/ccpmut.asm:71-76`).
 
 The CCP also reads the console geometry and mode, the loader's result
 and the program ceiling at `0007h`. Its direct state includes `HFLAG`
@@ -299,10 +297,10 @@ close result, so the message does not certify that update. Digital Research's
 CP/M 2.2 SAVE leaves the file open on that path
 (`src/cpm/ccpcmd.asm:356-445`).
 
-SAVE reads the TPA. The other file-operation handlers use resident workspace and page-zero
-buffers so they leave program memory available to save. Loading a COM program
-or a service overwrites that memory, including a GLCD service loaded by CON
-(`src/cpm/ccpcmd.asm:364-414`, `src/loader.asm:895-932`,
+SAVE reads the TPA. The other file-operation handlers use resident workspace and
+page-zero buffers so they leave program memory available to save. Loading a COM
+program or a service overwrites that memory, including a GLCD service loaded by
+CON (`src/cpm/ccpcmd.asm:364-414`, `src/loader.asm:895-932`,
 `src/cpm/ccpmut.asm:296-333`, `src/cpm/ccp.asm:685-728`).
 
 ### Selection and consoles
@@ -492,12 +490,11 @@ NO FILE
 ## Page zero before entry
 
 A successful load reaches `PREPPAGE`. It parses the first two argument
-references into the FCBs at `005Ch` and `006Ch`, ignoring parse errors for
-those program arguments. It then copies the command tail to `0081h`, writes its
-length at `0080h` and appends zero. Function 26 restores DMA to `0080h`.
-The tail includes the initial space and any spaces before the piece's
-separator. Its letters have already been converted to capitals
-(`src/cpm/ccpcmd.asm:456-497`).
+references into the FCBs at `005Ch` and `006Ch`, ignoring parse errors for those
+program arguments. It then copies the command tail to `0081h`, writes its length
+at `0080h` and appends zero. Function 26 restores DMA to `0080h`. The tail
+includes the initial space and any spaces before the piece's separator. Its
+letters have already been converted to capitals (`src/cpm/ccpcmd.asm:456-497`).
 
 The two FCBs start sixteen bytes apart. Parsing the second overwrites the
 last twenty bytes of the first. The tail begins at `0080h` within the
@@ -606,10 +603,10 @@ return word. A guard separates the stack from command scratch
 [Chapter 14](14-state-and-memory.md) distinguishes configured stack sizes
 from historical measurements and bounds.
 
-A top-level RET reaches the warm-boot jump at `0000h`. A direct jump there
-or function 0 reaches warm boot too (`src/cpm/ccp.asm:532-536`,
-`src/cpm/bdos.asm:254-259`). Warm boot flushes the block cache before re-entering
-the CCP. A failed flush prints `Write lost` and cancels pending pieces
-(`src/boot.asm:194-215`, `src/cache.asm:661-668`). The CCP enters at
+A top-level RET reaches the warm-boot jump at `0000h`. A direct jump there or
+function 0 reaches warm boot too (`src/cpm/ccp.asm:532-536`,
+`src/cpm/bdos.asm:254-259`). Warm boot flushes the block cache before
+re-entering the CCP. A failed flush prints `Write lost` and cancels pending
+pieces (`src/boot.asm:194-215`, `src/cache.asm:661-668`). The CCP enters at
 `STARTED` and prints a new line before its prompt. A program whose output
 already ended with a new line therefore has a blank line before that prompt.

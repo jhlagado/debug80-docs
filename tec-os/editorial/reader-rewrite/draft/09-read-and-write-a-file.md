@@ -129,9 +129,9 @@ buffer only after a successful read. Otherwise it may still hold old data.
 With the default error mode, a disk error prints a message, waits for a key
 and ends the program by warm boot. SHOW below uses that default.
 
-SHOW only reads, so it leaves no changed file state to close. A program
-that writes must close its updated FCB before finishing. Warm boot flushes
-pending writes from the block cache but cannot close the program's FCBs. The write
+SHOW only reads, so it leaves no changed file state to close. A program that
+writes must close its updated FCB before finishing. Warm boot flushes pending
+writes from the block cache but cannot close the program's FCBs. The write
 sequence after SHOW explains how to finish both operations and check them.
 
 ## SHOW reads a text file
@@ -242,10 +242,10 @@ No such file
 B>
 ```
 
-The first output repeats the historical HELLO source. The second prints
-SHOW's own error message. The blank line before each returned command prompt is
-the CCP's new line after a program exit. Nothing in this capture establishes
-a current build size or a newly qualified card.
+The first output repeats the historical HELLO source. The second prints SHOW's
+own error message. The blank line before each returned command prompt is the
+CCP's new line after a program exit. Nothing in this capture establishes a
+current build size or a newly qualified card.
 
 ## Making and writing a file
 

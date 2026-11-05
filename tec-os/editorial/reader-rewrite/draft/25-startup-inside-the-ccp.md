@@ -55,13 +55,13 @@ byte to the CCP so the first startup open uses user area 0
 later entries because `STPOS` is already nonzero
 (`src/cpm/ccpcmd.asm:874-879`).
 
-The routine marks startup finished before attempting any file operation.
-It sets bit 7 of `STPOS`, making `80h` (`src/cpm/ccpcmd.asm:880-881`).
-A BDOS error can warm boot from inside the open or read. On the next
-entry the nonzero position prevents another attempt at that file.
-The source test at `test/startup.test.mjs:221-241` injects a failure at
-the file's card block and asserts a usable command prompt with `Bad Sector`
-and no execution of the stored command.
+The routine marks startup finished before attempting any file operation. It sets
+bit 7 of `STPOS`, making `80h` (`src/cpm/ccpcmd.asm:880-881`). A BDOS error can
+warm boot from inside the open or read. On the next entry the nonzero position
+prevents another attempt at that file. The source test at
+`test/startup.test.mjs:221-241` injects a failure at the file's card block and
+asserts a usable command prompt with `Bad Sector` and no execution of the stored
+command.
 
 The keypad bypass occurs after the finished mark and before the open.
 `STBOOT` reads port `03h` once and returns if bit 6 is low, meaning a
@@ -74,14 +74,14 @@ T-states after reset on the web-page board with the starter card, about
 The hanging-`INIT` and repeated-cold-boot tests both exercise a held key
 as the recovery route (`test/startup.test.mjs:46-58`, `243-259`).
 
-Without the bypass, `STBOOT` copies twelve bytes from `STFCB` into
-`CMDFCB`: drive byte 1 and `STARTUP CMD`. The rest of the file control block (FCB) is still
-zero from cold boot. Drive byte 1 names A regardless of the current drive
-(`src/tables.asm:139`, `src/cpm/ccpcmd.asm:888-893`,
-`src/ram.asm:163-164`). A recognised reset has already run `RESEL` so
-this is the volume currently selected as A, not necessarily the card's
-original SYSTEM volume (`src/boot.asm:130-137`, `src/volsvc.asm:1-37`).
-Chapter 7's `SPARE` example demonstrates that selection.
+Without the bypass, `STBOOT` copies twelve bytes from `STFCB` into `CMDFCB`:
+drive byte 1 and `STARTUP CMD`. The rest of the file control block (FCB) is
+still zero from cold boot. Drive byte 1 names A regardless of the current drive
+(`src/tables.asm:139`, `src/cpm/ccpcmd.asm:888-893`, `src/ram.asm:163-164`). A
+recognised reset has already run `RESEL` so this is the volume currently
+selected as A, not necessarily the card's original SYSTEM volume
+(`src/boot.asm:130-137`, `src/volsvc.asm:1-37`). Chapter 7's `SPARE` example
+demonstrates that selection.
 
 Three BDOS calls acquire the record (`src/cpm/ccpcmd.asm:894-910`):
 

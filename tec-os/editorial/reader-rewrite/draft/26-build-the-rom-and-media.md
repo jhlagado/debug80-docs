@@ -99,11 +99,11 @@ historical image, not newly measured positions at `ea3ef3d`. The census
 stores each region's start and exclusive end while the table above prints
 the last occupied address (`tools/build.mjs:272-287`).
 
-At `C000h`, `JP RSTENT` transfers control into the code. The historical
-target was `C60Ah`. The interface at `C003h` contains `TNA`, major 5,
-minor 1 and a jump at `C008h` to `SVCDSP`. Its exclusive end is `C00Bh`
-(`src/reset.asm:12-14`, `src/abi.asm:12-20`). The boot overlay and entry
-path are explained in [Chapter 15](15-reset-and-boot.md).
+At `C000h`, `JP RSTENT` transfers control into the code. The historical target
+was `C60Ah`. The interface at `C003h` contains `TNA`, major 5, minor 1 and a
+jump at `C008h` to `SVCDSP`. Its exclusive end is `C00Bh`
+(`src/reset.asm:12-14`, `src/abi.asm:12-20`). The boot overlay and entry path
+are explained in [Chapter 15](15-reset-and-boot.md).
 
 The data region starts at `ROMDATA` and ends at `ROMCODE`. It contains
 the BIOS jump table, keyboard tables, command names and handlers, BDOS
@@ -173,15 +173,14 @@ and format equates come from generated files. `layout.asm` names ports,
 latch values, page-zero state and fixed RAM addresses
 (`src/rom.asm:7-10`, `src/layout.asm:13-135`).
 
-`ram.asm` declares resident workspace before the reset origin. Its first `ORG` is
-`WSBASE`. Unfilled `DS` declarations reserve addresses for variables and
-stacks. They are RAM declarations, not initial data that cold boot copies
-from the ROM. The second origin is `RAMBIOS+BIOSLEN`, placing the upper
-state after the 51-byte RAM jump table (`src/ram.asm:1-19`,
-`src/ram.asm:309-320`). The build interprets reservations according to the
-selected backend and extracts the ROM extent after them
-(`tools/build.mjs:196-205`, `tools/lib/tas-d8.mjs:183-188`,
-`tools/lib/tas-d8.mjs:239-279`).
+`ram.asm` declares resident workspace before the reset origin. Its first `ORG`
+is `WSBASE`. Unfilled `DS` declarations reserve addresses for variables and
+stacks. They are RAM declarations, not initial data that cold boot copies from
+the ROM. The second origin is `RAMBIOS+BIOSLEN`, placing the upper state after
+the 51-byte RAM jump table (`src/ram.asm:1-19`, `src/ram.asm:309-320`). The
+build interprets reservations according to the selected backend and extracts the
+ROM extent after them (`tools/build.mjs:196-205`,
+`tools/lib/tas-d8.mjs:183-188`, `tools/lib/tas-d8.mjs:239-279`).
 
 `reset.asm` then sets `ORG $C000`. `abi.asm` follows its jump then the
 four data files and finally the routine files. The CCP, BDOS and volume
@@ -287,7 +286,8 @@ Before writing the outputs, the build checks these properties:
 - `RAMBIOS` is `BF00h` and `BDOSRME` equals it. `SDBYTE` follows the
   51-byte BIOS table. Upper state ends by `C000h` and the BIOS stack ends
   no higher than the CCP workspace (`tools/build.mjs:263-267`).
-- The starter transient program area (TPA) has at least 45,830 bytes (`tools/build.mjs:269-270`).
+- The starter transient program area (TPA) has at least 45,830 bytes
+  (`tools/build.mjs:269-270`).
 
 The last check is arithmetic, not a boot. `cardLayout` packs allocation
 vectors down from `WSBASE` using `floor(DSM / 8) + 1` bytes each then
@@ -469,5 +469,5 @@ Hello from the TEC-1G
 B>
 ```
 
-The blank line before the command prompt comes from the CCP's program-return path
-(`src/cpm/ccp.asm:104-111`).
+The blank line before the command prompt comes from the CCP's program-return
+path (`src/cpm/ccp.asm:104-111`).

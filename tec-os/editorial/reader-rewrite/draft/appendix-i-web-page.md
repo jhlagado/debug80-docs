@@ -11,9 +11,9 @@ nav_group: "Appendices"
      source only. The retained shell recipe comes from the 78127ec-era appendix.
      No new browser run, screen capture or physical result is claimed. -->
 
-The web page has controls for the emulated board, a serial terminal and a
-card you can save or exchange with the PC. This appendix describes those
-controls, file transfers and the startup changes made for the selected display.
+The web page has controls for the emulated board, a serial terminal and a card
+you can save or exchange with the PC. This appendix describes those controls,
+file transfers and the startup changes made for the selected display.
 [Chapter 28](28-the-host-model-as-evidence.md) explains the host model and its
 evidence limits. [Chapter 7](07-commands-at-startup.md) explains using
 STARTUP.CMD and [Chapter 25](25-startup-inside-the-ccp.md) follows its ROM path.
@@ -153,17 +153,17 @@ those errors and recovery actions.
 
 ## Importing a file safely
 
-Before copying PC files into the running card, type `^C` at the command prompt and
-check that the flush succeeds. A normal return without `Write lost` preserves
-pending writes on the model card. Import itself does not flush them.
-Its later reset clears the block cache. TEC-OS rebuilds free-space maps from
-the changed card as drives are accessed. Unwritten cached changes, including
-changes on WORK with write-behind enabled, are lost at that reset
-(`src/boot.asm:100-102`, `src/boot.asm:210-215`,
-`src/boot.asm:321-346`, `src/cache.asm:661-668`,
-`src/cpm/bdoslog.asm:268-343`). [Chapter 18](18-cache-and-persistence.md) explains
-the failed-flush paths. A browser save or download after a successful flush
-is still needed to preserve the resulting image outside RAM.
+Before copying PC files into the running card, type `^C` at the command prompt
+and check that the flush succeeds. A normal return without `Write lost`
+preserves pending writes on the model card. Import itself does not flush them.
+Its later reset clears the block cache. TEC-OS rebuilds free-space maps from the
+changed card as drives are accessed. Unwritten cached changes, including changes
+on WORK with write-behind enabled, are lost at that reset
+(`src/boot.asm:100-102`, `src/boot.asm:210-215`, `src/boot.asm:321-346`,
+`src/cache.asm:661-668`, `src/cpm/bdoslog.asm:268-343`).
+[Chapter 18](18-cache-and-persistence.md) explains the failed-flush paths. A
+browser save or download after a successful flush is still needed to preserve
+the resulting image outside RAM.
 
 "Copy file to drive" pauses the machine and reads all selected PC files.
 It uppercases their names while reading them. The import then joins the

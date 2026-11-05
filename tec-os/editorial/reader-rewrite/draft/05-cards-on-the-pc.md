@@ -41,9 +41,9 @@ Inspecting the later source does not produce a new card or refresh a result.
 
 ## A copy before a change
 
-Before removing a card from the TEC-1G, `^C` at the command prompt writes the pending
-changes. A fresh prompt after a successful flush is the point to remove it.
-`Write lost` means that some writes failed, not that the card is up to date.
+Before removing a card from the TEC-1G, `^C` at the command prompt writes the
+pending changes. A fresh prompt after a successful flush is the point to remove
+it. `Write lost` means that some writes failed, not that the card is up to date.
 Never change a card on a PC while TEC-OS is using it. Its cached blocks and
 free-space maps would no longer match the card. Reset after returning a
 PC-changed card to the board. Warm boot retains those old copies in memory.

@@ -17,12 +17,13 @@ nav_group: "Part II: Inside TEC-OS"
      and serial board. Original evidence: book base10821b6,
      tec-os/15-reset-and-boot.md. No capture or measurement was rerun. -->
 
-A program can finish and leave the next command prompt ready without resetting the
-board. Warm boot rebuilds the program environment while retaining the drive
+A program can finish and leave the next command prompt ready without resetting
+the board. Warm boot rebuilds the program environment while retaining the drive
 selection, services and history. Cold boot follows a reset or a call to the
-BIOS's first entry. It checks RAM and reconstructs the resident workspace, card mount
-and block cache before entering the same warm-boot path (`src/boot.asm:49-158`,
-`src/boot.asm:178-215`). The clearing spans and retained regions are mapped in
+BIOS's first entry. It checks RAM and reconstructs the resident workspace, card
+mount and block cache before entering the same warm-boot path
+(`src/boot.asm:49-158`, `src/boot.asm:178-215`). The clearing spans and retained
+regions are mapped in
 [Chapter 14](14-state-and-memory.md#the-workspace-across-a-program-exit).
 
 ## The reset instruction
@@ -100,8 +101,8 @@ The calls in `COLD` establish those dependencies in this order
     stub. `RESEL` applies a saved selection only if it can match the
     retained volumes to this card and fit their vector slots
     (`src/boot.asm:133-137`, `src/boot.asm:695-800`, `src/volsvc.asm:31-159`).
-11. `PZTOP` receives the stub address as the top of the transient program area (TPA). There are
-    no loaded services yet (`src/boot.asm:139-143`).
+11. `PZTOP` receives the stub address as the top of the transient program area
+    (TPA). There are no loaded services yet (`src/boot.asm:139-143`).
 12. The ROM's seventeen BIOS jumps are copied to `BF00h`. Warm boot
     leaves this RAM table in place, including replacement entries
     (`src/boot.asm:144-152`, `src/layout.asm:134-135`).
@@ -326,8 +327,8 @@ Warm boot rebuilds the environment in this order:
 1. `DI` disables maskable interrupts. `LATCLAS` is written to `LATCHV`
    and the port before `SP` is set to the BIOS stack. Selecting EXPAND 0
    first makes that stack visible (`src/boot.asm:178-186`).
-2. `HWVREL` releases any program claim on the PICO9918 and restores its
-   driver state. Its non-maskable interrupt (NMI) is turned off before page zero is
+2. `HWVREL` releases any program claim on the PICO9918 and restores its driver
+   state. Its non-maskable interrupt (NMI) is turned off before page zero is
    rebuilt (`src/boot.asm:187-192`, `src/services.asm:245-279`,
    `src/pico.asm:247-278`).
 3. `PZINIT` rebuilds the entry jumps, stub and restart vectors

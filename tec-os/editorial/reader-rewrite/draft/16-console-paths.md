@@ -52,14 +52,14 @@ three-byte jump (`src/tables.asm:19-35`):
 | `2Dh` | `LISTST` | `BLISTST` |
 | `30h` | `SECTRAN` | `BSECTRN` |
 
-Cold boot copies the ROM table to `BF00h`. The word at `0001h` points to
-its warm-boot entry, `BF03h`, so subtracting three gives the table base.
-The BDOS's `BIOCST`, `BIOCIN` and `BIOCOT` names address entries in that
-RAM copy (`src/boot.asm:144-152`, `src/boot.asm:412-420`,
-`src/cpm/bdos.asm:22-36`). A program can replace a jump to receive the
-BDOS's calls as well as direct BIOS calls. Warm boot leaves the table in
-place. A hook into a program's transient program area (TPA) must be restored before that program
-ends, including a replacement warm-boot jump.
+Cold boot copies the ROM table to `BF00h`. The word at `0001h` points to its
+warm-boot entry, `BF03h`, so subtracting three gives the table base. The BDOS's
+`BIOCST`, `BIOCIN` and `BIOCOT` names address entries in that RAM copy
+(`src/boot.asm:144-152`, `src/boot.asm:412-420`, `src/cpm/bdos.asm:22-36`). A
+program can replace a jump to receive the BDOS's calls as well as direct BIOS
+calls. Warm boot leaves the table in place. A hook into a program's transient
+program area (TPA) must be restored before that program ends, including a
+replacement warm-boot jump.
 
 The output-time status check is an exception to the BDOS's table route.
 `CONSTQ` calls the ROM's `BCONST` directly so it can poll without drawing
@@ -156,11 +156,11 @@ clears bit 7 and skips a resulting `NUL`. The source documents a leading
 `NUL` before Debug80's first input byte as a reason for that filter
 (`src/console.asm:288-320`, `src/console.asm:361-421`).
 
-Before waiting for serial input, the ROM reads port `00h`. In Debug80
-that read starts queued host model input. On the board it reads the hex-keypad
-encoder and has no effect on the serial line. This is a model input
-trigger, not a hardware receive buffer (`src/console.asm:28-45`,
-`src/console.asm:253-279`, `src/console.asm:361-377`).
+Before waiting for serial input, the ROM reads port `00h`. In Debug80 that read
+starts queued host model input. On the board it reads the hex-keypad encoder and
+has no effect on the serial line. This is a model input trigger, not a hardware
+receive buffer (`src/console.asm:28-45`, `src/console.asm:253-279`,
+`src/console.asm:361-377`).
 
 The BDOS has another one-character reserve, `PENDCHR` and `PENDING`, in its
 own workspace. `GETCHAR` returns that byte first and otherwise calls the
@@ -525,15 +525,14 @@ hold the PICO and GLCD table addresses. The six routines are `VPUT`,
 (`src/video.asm:134-148`, `src/console.asm:165-177`,
 `src/ram.asm:359-365`).
 
-The PICO console has two name tables in video memory (VRAM). Page function 0 shows the page
-already drawn. Functions 1 and 2 begin and end a row move. At the beginning,
-`TMSMBEG` selects the hidden destination page and copies across the rows
-outside the move. The move reads the shown page and writes the hidden one.
-A previous pending move is shown before another begins. Ending a move
-marks it complete while `CONST` or `CONIN` shows it with a register-2
-update (`src/pico.asm:193-245`, `src/pico.asm:501-548`,
-`src/pico.asm:600-661`, `src/console.asm:230-233`,
-`src/console.asm:295-298`).
+The PICO console has two name tables in video memory (VRAM). Page function 0
+shows the page already drawn. Functions 1 and 2 begin and end a row move. At the
+beginning, `TMSMBEG` selects the hidden destination page and copies across the
+rows outside the move. The move reads the shown page and writes the hidden one.
+A previous pending move is shown before another begins. Ending a move marks it
+complete while `CONST` or `CONIN` shows it with a register-2 update
+(`src/pico.asm:193-245`, `src/pico.asm:501-548`, `src/pico.asm:600-661`,
+`src/console.asm:230-233`, `src/console.asm:295-298`).
 
 The terminal brackets scrolling and line insert/delete with those page
 operations. `VTFN` calls them only for a PICO console without a program

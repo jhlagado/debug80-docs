@@ -15,10 +15,10 @@ nav_group: "Part II: Inside TEC-OS"
      captures and model report remain evidence from 78127ec, not new results.
      The earlier C16 partial citation pass used fe2097f; it did not rerun them. -->
 
-A card failure can stop TEC-OS before the first command prompt. The error code and
-`R retry>` let you correct the card and try mounting it again. A separate
-diagnostics ROM tests the board's memory and devices and prints a serial
-report. Each check covers a particular behaviour. Host model results remain separate
+A card failure can stop TEC-OS before the first command prompt. The error code
+and `R retry>` let you correct the card and try mounting it again. A separate
+diagnostics ROM tests the board's memory and devices and prints a serial report.
+Each check covers a particular behaviour. Host model results remain separate
 from observations on a physical board.
 
 ## The diagnostic prompt
@@ -71,14 +71,14 @@ without the required RAM stops at `TEC-OS needs 64K RAM` on serial
 jumps follow completed calls so `DIAG` starts at that stack's top
 (`src/boot.asm:80-86`, `119-132`, `802-829`).
 
-A recognised reset can retain the selected volumes through a failed mount
-and retry. `RSLCAP` copies the drive table before the cold clears.
-`RSLBUF`, its scratch buffer, is at `0100h` in fixed RAM
-(`src/boot.asm:59-69`, `296-303`, `src/layout.asm:166-174`). That buffer
-survives the route to `DIAG`: `MEMINIT` clears EXPAND 1 and the mount uses a
-line in the block cache there for table reads (`src/boot.asm:100-102`, `321-346`,
-`src/vol.asm:44-65`). [Chapter 15](15-reset-and-boot.md#retained-drive-selection)
-explains recognition and reselection.
+A recognised reset can retain the selected volumes through a failed mount and
+retry. `RSLCAP` copies the drive table before the cold clears. `RSLBUF`, its
+scratch buffer, is at `0100h` in fixed RAM (`src/boot.asm:59-69`, `296-303`,
+`src/layout.asm:166-174`). That buffer survives the route to `DIAG`: `MEMINIT`
+clears EXPAND 1 and the mount uses a line in the block cache there for table
+reads (`src/boot.asm:100-102`, `321-346`, `src/vol.asm:44-65`).
+[Chapter 15](15-reset-and-boot.md#retained-drive-selection) explains recognition
+and reselection.
 
 ## The diagnostics ROM
 
@@ -124,11 +124,11 @@ Both the banner and the final report print it (`tools/diag.mjs:25-28`,
 and compares it with the stored word (`tools/diag.mjs:127-130`,
 `diag/memory.asm:200-232`).
 
-Before writing the image, the build checks its entry points and reserved
-areas. RESET must be at `C000h`, INT38 at `C038h` and NMIROM at `C066h`.
-COLD and START must be within the first 2 KiB, visible through the boot
-overlay. CODEEND may reach the image ID's address but must not exceed it.
-Variables must end by `7F00h`. The non-maskable interrupt (NMI) handler copied to `0066h` must fit
+Before writing the image, the build checks its entry points and reserved areas.
+RESET must be at `C000h`, INT38 at `C038h` and NMIROM at `C066h`. COLD and START
+must be within the first 2 KiB, visible through the boot overlay. CODEEND may
+reach the image ID's address but must not exceed it. Variables must end by
+`7F00h`. The non-maskable interrupt (NMI) handler copied to `0066h` must fit
 within `38h` bytes (`tools/diag.mjs:115-123`).
 
 At reset, the board maps the first 2 KiB of ROM at `0000h`. The reset code
@@ -397,17 +397,16 @@ chapter's model results were observed on hardware.
 7. Keep off the hex keypad during the RAM tests, T09 and T25, except to answer
    a question.
 
-The keypad restriction concerns the return from an NMI. With its jumper
-fitted, a keypad press makes the Z80 push a return address and jump to
-`0066h`. The diagnostics RAM tests overwrite that handler. T09 and T25
-instead enable PROTECT over the stack page so an NMI cannot store its
-return address there (`diag/memory.asm:99-107`, `347-372`,
-`diag/misc.asm:587-607`). The counter handler normally preserves registers
-and uses RETN
-(`diag/main.asm:125-145`). Overwritten code or a lost return address
-prevents that normal path. TEC-OS itself installs no NMI handler and uses `0066h` within its default file control block (FCB) area. Its normal setup
-has the keypad NMI jumper off (`src/boot.asm:62-69`, `454-509`,
-`src/cpm/ccp.asm:22-23`), as [Appendix
+The keypad restriction concerns the return from an NMI. With its jumper fitted,
+a keypad press makes the Z80 push a return address and jump to `0066h`. The
+diagnostics RAM tests overwrite that handler. T09 and T25 instead enable PROTECT
+over the stack page so an NMI cannot store its return address there
+(`diag/memory.asm:99-107`, `347-372`, `diag/misc.asm:587-607`). The counter
+handler normally preserves registers and uses RETN (`diag/main.asm:125-145`).
+Overwritten code or a lost return address prevents that normal path. TEC-OS
+itself installs no NMI handler and uses `0066h` within its default file control
+block (FCB) area. Its normal setup has the keypad NMI jumper off
+(`src/boot.asm:62-69`, `454-509`, `src/cpm/ccp.asm:22-23`), as [Appendix
 G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi) explains.
 
 Keep the terminal's complete session log from the banner through the last

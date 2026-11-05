@@ -33,12 +33,12 @@ path uses that many bytes.
 
 ## The ROM table
 
-The inspected application binary interface (ABI) is 5.1. Before calling ABICALL, a program compares the three
-bytes at ABITAB with `TNA` and ABIMAJ with exactly 5. A new major may renumber
-services. A new minor adds service numbers at the end, so code using the 5.0
-calls can run on 5.1. A caller requiring FONT also checks for minor version 1 or
-later (`src/abi.inc:1-32,163-168`, `src/abi.asm:1-20`,
-`test/programs/demo.asm:19-31`).
+The inspected application binary interface (ABI) is 5.1. Before calling ABICALL,
+a program compares the three bytes at ABITAB with `TNA` and ABIMAJ with exactly
+5. A new major may renumber services. A new minor adds service numbers at the
+end, so code using the 5.0 calls can run on 5.1. A caller requiring FONT also
+checks for minor version 1 or later (`src/abi.inc:1-32,163-168`,
+`src/abi.asm:1-20`, `test/programs/demo.asm:19-31`).
 
 | Address | Bytes | Name | Contents |
 | --- | ---: | --- | --- |
@@ -205,8 +205,8 @@ conditional model results rather than a universal release cost.
 
 A claim removes the selected PICO console's cursor and stores HWBCLM in VCLAIM.
 While claimed, PICO console output is discarded and its cursor and page-flip
-paths do not draw on the chip. The program can use its registers and video memory (VRAM)
-through the graphics entries or ports.
+paths do not draw on the chip. The program can use its registers and video
+memory (VRAM) through the graphics entries or ports.
 
 Release with no claim returns status 0 without restoring anything. Otherwise it
 clears VCLAIM and calls the ROM PICO console's restore routine when that console
