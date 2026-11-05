@@ -1,0 +1,1542 @@
+{
+  "schema_version": 1,
+  "status": "review_complete_for_assigned_occurrences",
+  "scope": "Appendices F–J: the 27 current occurrences CC0290–CC0316. Two explicitly requested parent checks are recorded separately and are not included in the assigned total.",
+  "review_book_commit": "028ecdde0cd295d162cea47b6db7291b21384bf0",
+  "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+  "inventory": {
+    "path": "tec-os/editorial/reader-rewrite/conjunction-comma-inventory.json",
+    "git_blob_at_review_book": "51228d051e60add154b874f9184e9aa5ec7bf0a6",
+    "sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326",
+    "schema_version": 2,
+    "current_occurrence_count": 315,
+    "evidence_policy": "Each inventory_evidence object is copied unchanged from the current occurrences array, including its original ID, line/column, raw match, context, hashes and unreviewed inventory fields. The classification outside that object is my review. Historical snapshot IDs/offsets are not substituted."
+  },
+  "sources": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+      "git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+      "bytes": 15231,
+      "occurrences": 6
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "5b6a7efbe36f27daa21f4e9ae0672cec5106d5e4db14a86af3aeb6170da0d996",
+      "git_blob": "f5f18727726523c94c43cee741d72022cdf3fa10",
+      "bytes": 13726,
+      "occurrences": 4
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+      "git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+      "bytes": 10206,
+      "occurrences": 7
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "87d01edda5d68bca4a1794a6eeba992369c98465b53865e62b97f6e9f04d9d0e",
+      "git_blob": "e1582bd7c2a5d75115a04fbf057f7d2259e48610",
+      "bytes": 16865,
+      "occurrences": 4
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+      "git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+      "bytes": 11842,
+      "occurrences": 6
+    }
+  ],
+  "reading": {
+    "input": "Committed Git text at basis_commit, checked byte-identical at review_book_commit for each assigned path. No working-tree reader prose is used as the authority.",
+    "method": "I read every assigned full paragraph or table row, complete sentences, neighbouring passages and any inline/quoted wording. I considered the other commas in each paragraph jointly. A quotation hint or table location does not make explanatory punctuation immutable.",
+    "source_line_ranges_read": {
+      "appendix-f-tecvol.md": [
+        [
+          70,
+          118
+        ],
+        [
+          150,
+          225
+        ],
+        [
+          350,
+          396
+        ]
+      ],
+      "appendix-g-tec-1g.md": [
+        [
+          54,
+          85
+        ],
+        [
+          105,
+          143
+        ],
+        [
+          155,
+          198
+        ]
+      ],
+      "appendix-h-service-file-format.md": [
+        [
+          1,
+          145
+        ],
+        [
+          158,
+          217
+        ]
+      ],
+      "appendix-i-web-page.md": [
+        [
+          30,
+          70
+        ],
+        [
+          95,
+          135
+        ],
+        [
+          200,
+          273
+        ]
+      ],
+      "appendix-j-command-reference.md": [
+        [
+          20,
+          55
+        ],
+        [
+          75,
+          130
+        ],
+        [
+          185,
+          245
+        ]
+      ]
+    },
+    "parent_check_ranges_read": {
+      "04-drives-and-user-areas.md": [
+        [
+          173,
+          195
+        ]
+      ],
+      "08-call-tec-os.md": [
+        [
+          25,
+          56
+        ]
+      ]
+    },
+    "offset_check": "Each original line/column resolves to the comma in basis text and each full_context equals the original source lines. Original offsets remain unchanged.",
+    "scope_limit": "This is punctuation-review data and an unapplied rephrase proposal. It is neither reader insertion, a new factual source audit nor final book acceptance. No product code was executed."
+  },
+  "counts": {
+    "assigned": 27,
+    "remove_optional": 21,
+    "retain_boundary": 5,
+    "retain_literal": 0,
+    "needs_rephrase": 1,
+    "separate_parent_checks": 2
+  },
+  "reviews": [
+    {
+      "id": "CC0290",
+      "classification": "remove_optional",
+      "reason": "The cell gives two DRIVE-field alternatives: A–D or an empty field. The comma separates neither an inserted phrase nor literal syntax and the alternatives remain clear without it.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0290",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 95,
+        "column": 16,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 95,
+        "nearest_heading": {
+          "level": 2,
+          "text": "create",
+          "line": 85
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "create",
+            "line": 85
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 95,
+        "context_end_line": 95,
+        "full_context": "| `DRIVE` | A–D, or empty for a volume on no drive |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0291",
+      "classification": "remove_optional",
+      "reason": "At most one and never together with :ro are coordinated restrictions on the written-behind volume. The second restriction needs no comma boundary. The :wb and :ro tokens remain unchanged.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0291",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 97,
+        "column": 45,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 97,
+        "nearest_heading": {
+          "level": 2,
+          "text": "create",
+          "line": 85
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "create",
+            "line": 85
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 97,
+        "context_end_line": 97,
+        "full_context": "| `:wb` | Written-behind volume. At most one, and never together with `:ro` |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0292",
+      "classification": "remove_optional",
+      "reason": "The sentence states the same default in blocks and MiB. Or directly links the equivalent units without a parenthetical insertion. Keep the thousands separator in 2,048 and all range/error wording.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0292",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 101,
+        "column": 13,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 101,
+        "nearest_heading": {
+          "level": 2,
+          "text": "create",
+          "line": 85
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "create",
+            "line": 85
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 99,
+        "context_end_line": 105,
+        "full_context": "`--align N` places volumes at multiples of N card blocks. The decimal value\nmust be from 1 to 16,777,215 and must also be a multiple of 8. The default is\n2,048 blocks, or 1 MiB. A value outside the decimal range gives a usage error.\nA value inside it that is not a multiple of 8 fails container creation with\n`alignment must be a multiple of 8 blocks` and status 1\n(`tools/tecvol.mjs:35-39`, `tools/tecvol.mjs:52-53`,\n`tools/lib/container.mjs:89-99`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0293",
+      "classification": "remove_optional",
+      "reason": "The record size directly explains why the listing includes padding. So makes that relationship clear without a pause comma. The following historical listing and its sizes remain literal evidence.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0293",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 171,
+        "column": 57,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 171,
+        "nearest_heading": {
+          "level": 2,
+          "text": "dir",
+          "line": 167
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "dir",
+            "line": 167
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 169,
+        "context_end_line": 173,
+        "full_context": "`dir IMAGE [DRIVE]` lists A by default. Each line gives user area, filename\nand record-rounded byte length. `R/O` and `SYS` mark file attributes\n(`tools/tecvol.mjs:142-149`). CP/M records are 128 bytes, so the listing\nincludes padding rather than a PC file's original byte length. The historical\nstarter's A directory was:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0294",
+      "classification": "remove_optional",
+      "reason": "The sentence coordinates the attribute options with the destination-area option. Both subjects are explicit. The conjunction keeps the option groups distinct without the comma. This punctuation is outside the option literals.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0294",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 205,
+        "column": 53,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 205,
+        "nearest_heading": {
+          "level": 2,
+          "text": "put",
+          "line": 191
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "put",
+            "line": 191
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 203,
+        "context_end_line": 208,
+        "full_context": "Binary files are padded with zero bytes to complete their final record.\n`--text` converts LF and CR LF endings to CR LF, appends `^Z` and pads with\n`^Z`. `--ro` and `--sys` set the two file attributes, and `--user N` selects\nthe destination area (`tools/lib/cpmfs.mjs:180-188`,\n`tools/lib/cpmfs.mjs:216-218`). These retained commands make a text file and\ncopy the prepared binaries:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0295",
+      "classification": "remove_optional",
+      "reason": "The absent startup file explains the prompt immediately following the volume list. So is a sufficient connection. Keep the separate observation that MOUNT lists unassigned ARCHIVE.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0295",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+        "source_git_blob": "ed4ff03ae09705e63605e9635ef20e421884db58",
+        "line": 394,
+        "column": 37,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 394,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The worked card",
+          "line": 357
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix F. `tecvol`",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The worked card",
+            "line": 357
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 394,
+        "context_end_line": 396,
+        "full_context": "There is no STARTUP.CMD on this card, so the first prompt follows the volume\nlist without a startup command. MOUNT with no argument lists ARCHIVE too,\neven though it has no assigned drive.",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0296",
+      "classification": "remove_optional",
+      "reason": "The 4 MHz timing assumption directly explains the FAST/oscillator requirement. Removing this comma leaves that causal link clear and does not alter the preceding serial-format list or its punctuation.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0296",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "5b6a7efbe36f27daa21f4e9ae0672cec5106d5e4db14a86af3aeb6170da0d996",
+        "source_git_blob": "f5f18727726523c94c43cee741d72022cdf3fa10",
+        "line": 76,
+        "column": 67,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 76,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Port 01h and the serial line",
+          "line": 64
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix G. The TEC-1G as TEC-OS uses it",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Port 01h and the serial line",
+            "line": 64
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 74,
+        "context_end_line": 79,
+        "full_context": "The CPU generates the serial bits itself. It sends through `01h` bit 6 and\nreceives through `03h` bit 7. The connection uses 4800 baud, eight data bits,\nno parity and two stop bits. The delay counts assume a 4 MHz clock, so the\nboard requires FAST with the 4 MHz oscillator (`tools/build.mjs:25-26`,\n`tools/build.mjs:37-76`, `src/console.asm:387-421`,\n`src/console.asm:452-492`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0297",
+      "classification": "retain_boundary",
+      "reason": "This comma closes the inserted naming phrase named `LATCHV`, opened after `0040h`. It returns the sentence to TEC-OS keeps ... and constructs. Removing only this closer risks attaching and constructs to the naming phrase. Review the two apposition commas as a pair.",
+      "retained_comma_reason": "This comma closes the inserted naming phrase named `LATCHV`, opened after `0040h`. It returns the sentence to TEC-OS keeps ... and constructs. Removing only this closer risks attaching and constructs to the naming phrase. Review the two apposition commas as a pair.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0297",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "5b6a7efbe36f27daa21f4e9ae0672cec5106d5e4db14a86af3aeb6170da0d996",
+        "source_git_blob": "f5f18727726523c94c43cee741d72022cdf3fa10",
+        "line": 114,
+        "column": 27,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 114,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The system latch",
+          "line": 111
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix G. The TEC-1G as TEC-OS uses it",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The system latch",
+            "line": 111
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 113,
+        "context_end_line": 115,
+        "full_context": "The board documents describe `FFh` as write-only. TEC-OS keeps its last value\nat `0040h`, named `LATCHV`, and constructs later writes from that copy\n(`src/layout.asm:25-42`, `src/layout.asm:78-90`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0298",
+      "classification": "remove_optional",
+      "reason": "So clearly connects possible file-metadata execution with the crash consequence. This comma is not part of the earlier address/FCB explanation. Keep the fitted-jumper condition and the separate diagnostic-ROM qualification.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0298",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "5b6a7efbe36f27daa21f4e9ae0672cec5106d5e4db14a86af3aeb6170da0d996",
+        "source_git_blob": "f5f18727726523c94c43cee741d72022cdf3fa10",
+        "line": 169,
+        "column": 52,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 169,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The hex keypad and its NMI",
+          "line": 160
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix G. The TEC-1G as TEC-OS uses it",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The hex keypad and its NMI",
+            "line": 160
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 166,
+        "context_end_line": 172,
+        "full_context": "With the keypad NMI jumper fitted, a press raises a non-maskable interrupt. The\nCPU pushes its return address and enters `0066h`, inside the default file\ncontrol block (FCB) at `005Ch–007Fh`. TEC-OS installs no NMI handler there. The\nbytes can be file metadata rather than instructions, so a press can crash the\nmachine. The supported TEC-OS setup leaves the jumper off. The diagnostics ROM\nhas its own NMI test and different keypad instructions, which must not be\napplied to an ordinary TEC-OS session.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0299",
+      "classification": "remove_optional",
+      "reason": "The bounded wait explains why a missing LCD cannot hold it indefinitely. So needs no comma here. Separately retain both commas enclosing bit 7 of port `04h`: those close the busy-flag apposition before at most 256 times.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0299",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "5b6a7efbe36f27daa21f4e9ae0672cec5106d5e4db14a86af3aeb6170da0d996",
+        "source_git_blob": "f5f18727726523c94c43cee741d72022cdf3fa10",
+        "line": 188,
+        "column": 78,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 188,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The 20 × 4 LCD",
+          "line": 174
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix G. The TEC-1G as TEC-OS uses it",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The 20 × 4 LCD",
+            "line": 174
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 187,
+        "context_end_line": 191,
+        "full_context": "Before a command or character `LCDWAIT` reads the busy flag, bit 7 of port\n`04h`, at most 256 times. The write follows readiness or expiry of that limit, so a missing\nLCD cannot hold this wait indefinitely (`src/lcd.asm:35-61`). The four row\naddress commands are `80h`, `C0h`, `94h` and `D4h`\n(`src/tables.asm:51-52`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0300",
+      "classification": "remove_optional",
+      "reason": "The overwrite of header fields directly explains the different interpretation of an installed header. So supplies the connection without this comma. The file/resident distinction and historical-dump scope remain intact.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0300",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 21,
+        "column": 51,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 21,
+        "nearest_heading": {
+          "level": 1,
+          "text": "Appendix H. The service file format",
+          "line": 8
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 19,
+        "context_end_line": 26,
+        "full_context": "A service file contains the bytes to install, the records it needs and the\npositions that require relocation. Its on-disk header describes that work.\nThe loader overwrites some fields after using them, so an installed header\nmust be read differently from the file header below.\n[Write a resident service](13-write-a-resident-service.md) covers authoring.\n[Loading and removing services](24-loading-and-removing-services.md) follows\ninstallation and gives the resident header. This reference retains a\nhistorical GLCD.SVC dump to show the file fields and gap encoding together.",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0301",
+      "classification": "retain_boundary",
+      "reason": "This comma closes from `abi.inc`, whose opener follows 4. It ends that inserted source qualification before and introduces the separate load-failure clause. The earlier as a word pair is also independent and complete. Deleting only this closer would unbalance the source qualification.",
+      "retained_comma_reason": "This comma closes from `abi.inc`, whose opener follows 4. It ends that inserted source qualification before and introduces the separate load-failure clause. The earlier as a word pair is also independent and complete. Deleting only this closer would unbalance the source qualification.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0301",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 67,
+        "column": 77,
+        "conjunction": "and",
+        "matched_text": ",\nand",
+        "conjunction_line": 68,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The header",
+          "line": 46
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The header",
+            "line": 46
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 66,
+        "context_end_line": 68,
+        "full_context": "The loader compares the first two bytes, as a word, with `DMAGIC`, which is\n`SVCFMT * 256 + 'D'` (`src/loader.asm:32-35`). `SVCFMT` is 4, from `abi.inc`,\nand a file of any other format fails the load (`src/abi.inc:185-190`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0302",
+      "classification": "remove_optional",
+      "reason": "The only-when-DEPS condition directly explains why a no-dependency source must already contain zero. So keeps the implication clear without a comma. Preserve the distinction between pinned TAS and makeSvc.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0302",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 90,
+        "column": 60,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 90,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The header",
+          "line": 46
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The header",
+            "line": 46
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 86,
+        "context_end_line": 93,
+        "full_context": "Leave the measured sizes, dependency count and routine-offset fields zero\nin the source. Supply `SVCFMT` in the format byte. `makeSvc` overwrites that\nbyte with its own format value (`tools/lib/svc-format.mjs:3`,\n`tools/lib/svc.mjs:122`). TAS at Thorium `dbee66a` preserves it. That TAS\nwrites the dependency count only when the source has `DEPS`, so the zero\nin a source without dependencies must already be correct\n(`Thorium dbee66a:src/tas/DRV.ASM:92-120`,\n`Thorium dbee66a:src/tas/DRV.ASM:252-258`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0303",
+      "classification": "remove_optional",
+      "reason": "The sentence joins the no-fixup 255-byte advance to continuation from that position. Both clauses have explicit subjects. The conjunction connects them without this comma. It is not the earlier comma explaining header byte 24.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0303",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 112,
+        "column": 6,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 112,
+        "nearest_heading": {
+          "level": 2,
+          "text": "The relocation data",
+          "line": 106
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The relocation data",
+            "line": 106
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 108,
+        "context_end_line": 113,
+        "full_context": "Relocation positions are encoded as one-byte gaps. At each fixup the\nloader adds the service's base page to an address's high byte. The first\ngap starts at header byte 24, immediately before the image. Each later gap\nstarts at the previous fixup (`tools/lib/svc.mjs:37-49`). A gap of 255 moves on 255 bytes with nothing\nfixed, and the next byte carries on from there. A distance of 255 or more is\ntherefore written as bytes of 255 and then the rest:",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0304",
+      "classification": "remove_optional",
+      "reason": "The comma is authorial punctuation after the source citation, not part of that citation or the historical transcript. So clearly links the bit-7 mask to the printed X. The 20h/D8h values and their apposition remain unchanged.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0304",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 166,
+        "column": 54,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 166,
+        "nearest_heading": {
+          "level": 3,
+          "text": "A first gap of 0",
+          "line": 137
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "The relocation data",
+            "line": 106
+          },
+          {
+            "level": 3,
+            "text": "A first gap of 0",
+            "line": 137
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 164,
+        "context_end_line": 167,
+        "full_context": "In this historical run the service loaded at page `B8h`. The inserted\nzero gap changed header byte 24 from a space, `20h`, to `D8h`.\n`PUTTRIM` masks bit 7 (`src/cpm/ccpfile.asm:529-537`), so the name prints\nwith an `X`.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0305",
+      "classification": "remove_optional",
+      "reason": "No dependencies directly explains relocation data immediately following the image. So is sufficient without a comma. Separately retain the offset/hexadecimal appositions in this paragraph. This decision does not remove them.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0305",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 206,
+        "column": 29,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 206,
+        "nearest_heading": {
+          "level": 2,
+          "text": "GLCD.SVC",
+          "line": 169
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "GLCD.SVC",
+            "line": 169
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 206,
+        "context_end_line": 209,
+        "full_context": "The dump has no dependencies, so its relocation data follows the image\nimmediately at offset 767, `2FFh`. The image begins at offset 25, `19h`,\nwith the table of words the driver passes through service 12. Its entries\ninclude `00F2h`, `014Dh` and `0152h`, assembled for page 0.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0306",
+      "classification": "remove_optional",
+      "reason": "The absence of 255-valued gaps explains why all 69 entries are fixups. The implication is clear without the comma before so. The paired commas enclosing 2 in The first gap, 2, and the high-byte explanation remain separate boundaries.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0306",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+        "source_git_blob": "e284d013883d5acac276f020975c00149c65f8c5",
+        "line": 213,
+        "column": 15,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 213,
+        "nearest_heading": {
+          "level": 2,
+          "text": "GLCD.SVC",
+          "line": 169
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix H. The service file format",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "GLCD.SVC",
+            "line": 169
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 211,
+        "context_end_line": 214,
+        "full_context": "The first gap, 2, advances from offset 24 to 26, the high byte of `00F2h`.\nEach of the next five 2s reaches the next word's high byte. None of the\n69 gaps is 255, so all 69 mark fixups. The last reaches file offset 563.\nA bitmap with one bit for each of the 742 image bytes would take 93 bytes.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0307",
+      "classification": "retain_boundary",
+      "reason": "This comma closes which also has a graphics LCD, opened after PICO9918 board. The following or returns to the two selectable board alternatives. Removing only the closer would pull the second board into the relative clause. Only Display is quoted interface wording; the target comma is retained for syntax, not as a literal.",
+      "retained_comma_reason": "This comma closes which also has a graphics LCD, opened after PICO9918 board. The following or returns to the two selectable board alternatives. Removing only the closer would pull the second board into the relative clause. Only Display is quoted interface wording; the target comma is retained for syntax, not as a literal.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0307",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "87d01edda5d68bca4a1794a6eeba992369c98465b53865e62b97f6e9f04d9d0e",
+        "source_git_blob": "e1582bd7c2a5d75115a04fbf057f7d2259e48610",
+        "line": 50,
+        "column": 72,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 50,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Controls and displayed state",
+          "line": 37
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix I. The web page",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Controls and displayed state",
+            "line": 37
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 50,
+        "context_end_line": 50,
+        "full_context": "| \"Display\" | Selects the PICO9918 board, which also has a graphics LCD, or a board with only the graphics LCD. Changing it power-cycles the board. |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "quotation marks in context: inspect scope and literal/interface status"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0308",
+      "classification": "remove_optional",
+      "reason": "So connects writes after the snapshot with the limitation of an older completed save. The clauses remain clear without the comma. The guard, later retry and retained dirty-mark conditions stay unchanged.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0308",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "87d01edda5d68bca4a1794a6eeba992369c98465b53865e62b97f6e9f04d9d0e",
+        "source_git_blob": "e1582bd7c2a5d75115a04fbf057f7d2259e48610",
+        "line": 116,
+        "column": 14,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 116,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Saving the card",
+          "line": 97
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix I. The web page",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Saving the card",
+            "line": 97
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 114,
+        "context_end_line": 118,
+        "full_context": "Ordinary saves use a single in-flight guard. A save requested during another\nmarks the card dirty for a later timer tick. Writes after a snapshot also\nmark it dirty, so an older completed save need not contain the newest card\nbytes. A failed ordinary save retains the in-memory image and the dirty mark\nfor another attempt (`web/src/main.mjs:118-147`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0309",
+      "classification": "retain_boundary",
+      "reason": "This comma closes as the ROM does for startup, opened after user 0. It restores the main coordination It reads ... and passes. Without the closer, and passes could attach to what the ROM does rather than to preparation. Keep both commas around the comparison.",
+      "retained_comma_reason": "This comma closes as the ROM does for startup, opened after user 0. It restores the main coordination It reads ... and passes. Without the closer, and passes could attach to what the ROM does rather than to preparation. Keep both commas around the comparison.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0309",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "87d01edda5d68bca4a1794a6eeba992369c98465b53865e62b97f6e9f04d9d0e",
+        "source_git_blob": "e1582bd7c2a5d75115a04fbf057f7d2259e48610",
+        "line": 213,
+        "column": 12,
+        "conjunction": "and",
+        "matched_text": ", and",
+        "conjunction_line": 213,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Startup preparation",
+          "line": 208
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix I. The web page",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Startup preparation",
+            "line": 208
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 210,
+        "context_end_line": 216,
+        "full_context": "Each power-on calls `prepareCard` for the selected display and width. It\nstages any STARTUP.CMD rewrite on a whole-card copy and publishes that copy\nonly after preparation succeeds. It reads drive A's user 0, as the ROM does\nfor startup, and passes the volume's read-only flag to file access\n(`web/src/main.mjs:82-84`, `host/card.mjs:18-24`,\n`host/card.mjs:58-73`). The page writes no display driver. The PICO9918\nconsole is in ROM and the graphics LCD requires GLCD.SVC on the card.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0310",
+      "classification": "remove_optional",
+      "reason": "Identical text causing no write directly explains why protection alone gives no error when no rewrite is needed. So carries the implication without a comma. The reusable-entry and separate data-capacity conditions remain in the same paragraph.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0310",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "87d01edda5d68bca4a1794a6eeba992369c98465b53865e62b97f6e9f04d9d0e",
+        "source_git_blob": "e1582bd7c2a5d75115a04fbf057f7d2259e48610",
+        "line": 253,
+        "column": 37,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 253,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Startup preparation",
+          "line": 208
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix I. The web page",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Startup preparation",
+            "line": 208
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 252,
+        "context_end_line": 258,
+        "full_context": "Blank lines are dropped. The new text uses CRLF line endings and a final\n`^Z`. Identical text causes no write, so a protected file or volume does\nnot itself cause an error when no rewrite is needed. Replacing STARTUP.CMD\ncan reuse its existing directory entries and blocks. A full directory causes\nfailure only when the replacement needs more entries than are available,\nincluding reusable entries. Data capacity is checked separately\n(`host/card.mjs:105-116`, `tools/lib/cpmfs.mjs:189-205`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0311",
+      "classification": "remove_optional",
+      "reason": "So clearly links ignoring text after the star with the equal D*X and D* patterns. The comma is outside those literal patterns. No exception to the padded-field matching explanation is removed.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0311",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 43,
+        "column": 34,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 43,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Names and patterns",
+          "line": 23
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Names and patterns",
+            "line": 23
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 41,
+        "context_end_line": 46,
+        "full_context": "`?` matches one character, including a padding space. `*` fills the rest of\nits field with question marks. Thus `G*.*` is `G???????.???`. Text after a\nstar in the same field is ignored, so `D*X` and `D*` select the same pattern.\nA short field is padded with spaces. `????.COM` therefore matches names of\nup to four characters with type COM, not every name ending in COM\n(`src/cpm/ccpcmd.asm:617-645`, `src/cpm/ccpcmd.asm:706-727`).",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0312",
+      "classification": "remove_optional",
+      "reason": "The table description gives the patterned and no-pattern alternatives for DIR. Or is sufficient without this comma. The DIR command form is inline literal syntax but its explanatory Operation cell is editable prose.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0312",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 86,
+        "column": 40,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 86,
+        "nearest_heading": {
+          "level": 2,
+          "text": "Command forms",
+          "line": 78
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Command forms",
+            "line": 78
+          }
+        ],
+        "context_kind": "table_row",
+        "context_start_line": 86,
+        "context_end_line": 86,
+        "full_context": "| `DIR [PATTERN]` | List matching files, or all visible files with no pattern |",
+        "manual_classification_hints": [
+          "table/interface row: classify manually",
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0313",
+      "classification": "retain_boundary",
+      "reason": "This comma closes the hexadecimal apposition `1Ah`, opened after Ctrl-Z byte. The following or introduces the other stopping condition, the end of the last record. Removing only the closer would leave the byte-value insertion unbalanced. The literal value stays unchanged.",
+      "retained_comma_reason": "This comma closes the hexadecimal apposition `1Ah`, opened after Ctrl-Z byte. The following or introduces the other stopping condition, the end of the last record. Removing only the closer would leave the byte-value insertion unbalanced. The literal value stays unchanged.",
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0313",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 120,
+        "column": 53,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 120,
+        "nearest_heading": {
+          "level": 3,
+          "text": "DIR and TYPE",
+          "line": 105
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Command forms",
+            "line": 78
+          },
+          {
+            "level": 3,
+            "text": "DIR and TYPE",
+            "line": 105
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 119,
+        "context_end_line": 121,
+        "full_context": "TYPE takes one name without wildcards and no extra argument. It prints\nthrough the pager until the first Ctrl-Z byte, `1Ah`, or the end of the\nlast record. No name or no matching file produces `NO FILE`.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0314",
+      "classification": "remove_optional",
+      "reason": "So directly connects the strict high-byte count bound with stopping below the resident-entry page. The sentence remains unambiguous without the comma. The zero-count case and exclusive page boundary stay intact.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0314",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 195,
+        "column": 8,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 195,
+        "nearest_heading": {
+          "level": 3,
+          "text": "SAVE",
+          "line": 190
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Command forms",
+            "line": 78
+          },
+          {
+            "level": 3,
+            "text": "SAVE",
+            "line": 190
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 192,
+        "context_end_line": 197,
+        "full_context": "SAVE takes a decimal count from 0 to 255 and one unambiguous file name.\nIt writes that many 256-byte pages starting at `0100h`. A count of 0 makes\nan empty file. The count must be less than the high byte of the word at\n`0006h`, so the saved pages stop below the resident entry's page.\n[Memory for programs](10-memory-for-programs.md) gives the memory boundary\nand the complete capacity example.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0315",
+      "classification": "needs_rephrase",
+      "reason": "The target comma and the later comma after none is named bracket the alternative-drive wording inside the lookup sentence. Removing only the first would leave an awkward unmatched interruption before in the current user area. Separate drive choice from user-area order so the same area order clearly applies to either drive.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": {
+        "old": "Lookup\nstarts on the named drive, or the current drive when none is named, in the\ncurrent user area followed by user 0.",
+        "new": "Lookup starts on the named drive or the current drive when none is named. On that drive it searches the current user area followed by user 0.",
+        "joint_comma_scope": "Replace the complete sentence, including both the comma after named drive and the comma after none is named. Do not apply a deletion at the inventory offset alone."
+      },
+      "inventory_evidence": {
+        "id": "CC0315",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 214,
+        "column": 26,
+        "conjunction": "or",
+        "matched_text": ", or",
+        "conjunction_line": 214,
+        "nearest_heading": {
+          "level": 3,
+          "text": "Drives, USER and program lookup",
+          "line": 205
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Command forms",
+            "line": 78
+          },
+          {
+            "level": 3,
+            "text": "Drives, USER and program lookup",
+            "line": 205
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 213,
+        "context_end_line": 216,
+        "full_context": "For a program command the type is replaced by COM, except for SVC. Lookup\nstarts on the named drive, or the current drive when none is named, in the\ncurrent user area followed by user 0. The current user is restored after\nthat search. A file in user 0 needs no system attribute.",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0316",
+      "classification": "remove_optional",
+      "reason": "The preceding mode-selection clause explains why the reply reports the applied mode. So makes that connection clear without this comma. Keep the BAT discard exception and the later not merely qualification.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0316",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+        "source_git_blob": "f275ecec70cfdc39ae167f68db1f5c243581aa98",
+        "line": 235,
+        "column": 54,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 235,
+        "nearest_heading": {
+          "level": 3,
+          "text": "CON",
+          "line": 225
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "Appendix J. Command reference",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "Command forms",
+            "line": 78
+          },
+          {
+            "level": 3,
+            "text": "CON",
+            "line": 225
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 233,
+        "context_end_line": 237,
+        "full_context": "The reply goes through the selected console and is discarded in BAT mode.\nSelecting an\nunavailable console can leave or restore another mode, so the reply reports\nthe mode in effect, not merely the name typed. The practical alternatives\nand recovery actions are in [Choose a console](06-choose-a-console.md).",
+        "manual_classification_hints": [],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    }
+  ],
+  "parent_requested_checks": [
+    {
+      "id": "CC0002",
+      "classification": "remove_optional",
+      "reason": "COPY remaining within the current area directly explains why it cannot transfer between areas. So needs no comma. The following host put alternative and USER error condition retain their separate roles.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0002",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+        "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+        "line": 186,
+        "column": 37,
+        "conjunction": "so",
+        "matched_text": ", so",
+        "conjunction_line": 186,
+        "nearest_heading": {
+          "level": 2,
+          "text": "User areas",
+          "line": 153
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "4. Drives and user areas",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "User areas",
+            "line": 153
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 184,
+        "context_end_line": 189,
+        "full_context": "The `MOUNT` program still ran in area 3 because program lookup also\nchecks area 0. Its volume list is independent of the files' user areas.\n`COPY` works within the current area, so it cannot transfer a file between\nareas. On a PC, `tecvol put --user N` places a file in a chosen area,\nas [Chapter 5](05-cards-on-the-pc.md) explains. `USER` without a number or\nwith a number outside 0 to 15 fails with a question mark.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    },
+    {
+      "id": "CC0019",
+      "classification": "remove_optional",
+      "reason": "While contrasts the byte parameter in E with an address or word in DE. The explicit subjects and register names make the contrast clear without this comma. It is outside the register literal and not the earlier register-pair apposition.",
+      "retained_comma_reason": null,
+      "rephrase_proposal": null,
+      "inventory_evidence": {
+        "id": "CC0019",
+        "status": "unreviewed",
+        "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+        "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+        "source_sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+        "source_git_blob": "d7f81c817f63164acb6823b4d97424d7cdfd20fd",
+        "line": 40,
+        "column": 43,
+        "conjunction": "while",
+        "matched_text": ", while",
+        "conjunction_line": 40,
+        "nearest_heading": {
+          "level": 2,
+          "text": "A COM program and its calls",
+          "line": 23
+        },
+        "heading_path": [
+          {
+            "level": 1,
+            "text": "8. Call TEC-OS",
+            "line": 8
+          },
+          {
+            "level": 2,
+            "text": "A COM program and its calls",
+            "line": 23
+          }
+        ],
+        "context_kind": "paragraph",
+        "context_start_line": 37,
+        "context_end_line": 44,
+        "full_context": "Registers hold the values passed to a call. `A`, `B`, `C` and `E` each\nhold a byte. `BC`, `DE` and `HL` are 16-bit register pairs, large enough\nfor a memory address. To select a BDOS operation, you put its function number in `C` and\ncall `0005h`. A byte parameter goes in `E`, while an address or word\nparameter goes in `DE`. A byte result is returned in `A` and a word result\nin `HL`. For example, function 2 takes the character in `E` and function 9\ntakes an address in `DE`. In source, `BDOS EQU $0005` gives that call\naddress a name.",
+        "manual_classification_hints": [
+          "inline code retained in context, excluded from matching"
+        ],
+        "classification": null,
+        "retained_comma_reason": null,
+        "review_disposition": null
+      }
+    }
+  ],
+  "excluded_closed_case": "Chapter 19’s removed definition comma is absent from the current inventory and is not resurrected from snapshot_history.",
+  "application_boundary": "No commas or reader prose are changed. The shared inventory and all unrelated completed work remain untouched. The bundled prose gate excludes JSON; this data review makes no prose-gate-clean claim."
+}
