@@ -218,3 +218,49 @@ context dispositions. Full passage/deletion/agency/punctuation/source passes
 remain required. A clean script exit is not a quality verdict. The final
 36-reader-file gate will be rerun after4/5 and the conjunction-comma pass.
 No product import, assembler, build, test, emulator or capture was run.
+
+## Bounded P3 Chapter 7 corrections
+
+The review at c83dc06 is applied after the accepted punctuation application
+f24d701. The chapter now states that TEC-OS takes the next startup line after
+the program finishes. Source at ea3ef3d calls STLINE only after command
+processing returns to MAINLOOP (`src/cpm/ccp.asm:119-166`). Program entry pushes
+the warm-boot return word before jumping to the program
+(`src/cpm/ccp.asm:527-536`). The ordinary return and terminating Ctrl-C outcomes
+stay here. The program's jump to 0000h is deferred to the existing Chapter 8
+program-exit explanation, with an explicit link.
+
+The second-byte format detail is removed from the startup instructions.
+Appendix H, The header, already records format 4 at offset 1 and the combined
+magic/format check (`src/loader.asm:197-203`, `src/abi.inc:185-190`). That is the
+actual destination of this reference fact. The renaming incompatibility warning
+and Appendix D migration link remain in Chapter 7, with a new header-reference
+link. No new source fact needed insertion into H.
+
+The LCD-port and row-state aside is combined with existing destination text.
+Chapter 11, The LCD and the speaker, already explains the LCD service's row-3
+mark change and preservation of replacement text. Chapter 25, Recovery words
+and row ownership, already states the direct-port bypass, retained CDWRD flag
+and five-character overwrite, with exact source proof at
+`src/services.asm:157-192` and `src/loader.asm:945-980`. Chapter 7 retains the
+observable five-character clearing and points to those actual sections.
+Destination paragraphs were read fully before this disposition. All source
+facts are already present there, so 11, 25 and H were not edited and no active
+destination writer's changes were touched.
+
+Removed the optional introductory commas after With the Matrix switch enabled
+and After DIR. Retained the condition boundary after For GLCD or a narrow PICO
+width. Read every changed paragraph and list item with its neighbours, including
+the unchanged display outcomes and historical captures. No changed condition,
+new font/default, timing or example result is asserted.
+
+Static comparison against f24d701 confirms all 15 fenced blocks and all HTML
+comments byte-identical. The removed inline 0000h belongs to the expressly
+deferred program-jump explanation. Remaining inline literals retain their bytes.
+The actual bundled prose gate on the reader chapter returned zero findings.
+The sentence-complexity utility also ran. Its program-exit SHORT prompts include
+a wrapped-list parsing fragment and the useful destination link. The After DIR
+prompt introduces the retained screen capture. Those complete passages were
+read and retained. Other prompts are unchanged material outside this bounded
+correction, not authority for automatic shortening or whole-book acceptance.
+No product import, assembly, build, test, emulator or capture was run.
