@@ -71,8 +71,8 @@ measured fields and routine offsets (`tools/lib/svc.mjs:122-131`):
 | Field | Written by |
 | --- | --- |
 | The letter `D` | The source, as `DB 'D',SVCFMT,0,1` with `abi.inc` included (`drivers/glcd.asm:29-37`) |
-| The format | The source, and then the tool writes its own figure, 4, over it (`tools/lib/svc-format.mjs:3`, `tools/lib/svc.mjs:122`) |
-| The number of dependencies | The tool |
+| The format | The source. `makeSvc` overwrites it with 4. Pinned TAS preserves it |
+| The number of dependencies | `makeSvc` writes the count. Pinned TAS writes it when `DEPS` exists |
 | The flags | The source |
 | `REMOVE` and `INIT` | The tool |
 | The two sizes | The tool |
@@ -81,8 +81,13 @@ measured fields and routine offsets (`tools/lib/svc.mjs:122-131`):
 | The name | The source |
 
 Leave the measured sizes, dependency count and routine-offset fields zero
-in the source. The format byte still names `SVCFMT`, although the tool
-writes its own format value over it.
+in the source. Supply `SVCFMT` in the format byte. `makeSvc` overwrites that
+byte with its own format value (`tools/lib/svc-format.mjs:3`,
+`tools/lib/svc.mjs:122`). TAS at Thorium `dbee66a` preserves it. That TAS
+writes the dependency count only when the source has `DEPS`, so the zero
+in a source without dependencies must already be correct
+(`Thorium dbee66a:src/tas/DRV.ASM:92-120`,
+`Thorium dbee66a:src/tas/DRV.ASM:252-258`).
 
 ## The dependencies
 

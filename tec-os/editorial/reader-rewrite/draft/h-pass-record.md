@@ -45,3 +45,13 @@ fence comparison supplement the semantic read, not runtime evidence. TAS's
 DEPS description is retained with its application pin and needs final input
 qualification. Independent full editorial/factual review, final links and
 current source/media acceptance remain pending.
+
+## Independent review correction
+
+Accepted the writer-distinction finding after reading pinned Thoriumdbee66a
+DRV.ASM92–120 and252–258. TAS preserves the source format byte and only
+writes the dependency count when DEPS exists. makeSvc overwrites the format
+and always writes its supplied count. The table and source instructions now
+distinguish these paths. SVCFMT and an initially zero dependency count remain
+required source fields. Other reviewed preservation, bounds, encodings and
+craft were clear. Confirmation remains pending. No execution was performed.
