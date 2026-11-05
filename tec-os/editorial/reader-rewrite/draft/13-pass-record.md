@@ -207,3 +207,9 @@ agency and every comma. Complete fence/capture preservation is checked across
 the chapter and held candidate together. The full independent technical/craft
 review is otherwise clear, with bounded correction confirmation pending.
 No product import, assembly, build, test, capture or runtime occurred.
+
+## Latest independent confirmation
+
+Independent confirmation at15e5b50 closes all four findings. Every13literal fence and capture comment remains unchanged across reader/held candidate. Specific run pins and Matrix/requestedCRT/loaderactors are confirmed. FAIL remains held for original execution evidence.
+Final source/profile, remaining workflow and whole-book integration remain
+open. No new execution accompanied the confirmation.

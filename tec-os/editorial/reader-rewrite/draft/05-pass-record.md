@@ -209,3 +209,9 @@ The opening code comment is broader than the instructions. The reader text
 and preservation disposition now describe the all-or-empty result at return,
 not a validation pass before any installation. All historical fences are
 unchanged. Bounded confirmation pending. No execution or product change.
+
+## Latest independent confirmation
+
+Independent confirmation at48cd25f closes the sole mounting-order correction. All-or-empty outcome is now stated without a separate validation-before-any-mount pass. No bounded source/craft finding remains.
+Final source/profile, remaining workflow and whole-book integration remain
+open. No new execution accompanied the confirmation.

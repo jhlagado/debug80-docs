@@ -200,3 +200,9 @@ Read ccpcmd.asm360–445 and bdoscon.asm26–76 for that distinction. No literal
 listing, command, capture or historical figure changed. Reread both changed
 paragraphs and their neighbours for agency, punctuation and teaching order.
 Bounded independent confirmation remains pending. No execution occurred.
+
+## Latest independent confirmation
+
+Independent bounded confirmation clears both48cd25f corrections: LOADBUF is inCCPworkspace and NO SPACE for a close failure applies to a returned failure, not default aborting disk errors. No bounded source/craft finding remains.
+Final source/profile, remaining workflow and whole-book integration remain
+open. No new execution accompanied the confirmation.
