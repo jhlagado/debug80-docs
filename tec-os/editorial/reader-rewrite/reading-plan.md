@@ -8,6 +8,11 @@ The rewrite branch is `tec-os-reader-rewrite`, based on accepted book main
 The canonical checkout remains on its unrelated diagnostics branch. This
 work uses the separate TEC-OS documentation checkout.
 
+Authority is P3 KS47 under KD-242. The independent brief findings are closed
+and the corrected stage checklist is fixed. The opening review covers only
+the complete front matter and Chapters 1, 2 and 7, plus headings in 3-6.
+It is input to the full outline, not complete-book coverage.
+
 The job is a complete structural and prose rewrite. The book should explain
 TEC-OS to an intelligent person who wants to use a TEC-1G as a disk computer.
 The voice is a knowledgeable guide: direct and connected, with the reason for
@@ -18,7 +23,9 @@ commands, output, code and quotations keep their required punctuation.
 The ordinary route begins with a TEC-1G whose ROM and card are ready: power
 on, recognise the prompt, find files and drives, run an existing program and
 then edit, build and run a small banner. A working console is the starting
-condition. Optional changes of display follow ordinary use. Device names
+condition. The supplied SAMPLE build/run spine is retained before the first authored
+program. The opening configuration will explicitly name the display, keyboard
+and prepared media. Optional changes of display follow ordinary use. Device names
 follow the devices they identify. IOBYTE bits, BIOS paths, serial timing,
 cache machinery, banks and the loader require a later thematic reason.
 
@@ -83,7 +90,10 @@ place. The journey read-back repairs connections damaged by deletion.
 Necessary warmth and explanation are preserved rather than compressed into
 fragments. The subject's ordinary name is repeated where identity matters.
 
-Each bounded chapter has an editorial and factual result review before its
+Every retained or rewritten passage, including front matter and appendices,
+receives the same complete craft checks. Safety-related implementation detail
+requires a concrete action or failure consequence. Each bounded chapter has an
+editorial and factual result review before its
 status is complete. Navigation, anchors, source references and the movement
 crosswalk are checked with it. Progress is committed and pushed after each
 durable slice. The complete revised book receives a final reader-order read,
