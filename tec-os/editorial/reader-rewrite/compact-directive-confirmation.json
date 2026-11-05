@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "status": "bounded_static_confirmation_clear",
+  "scope": {
+    "chapter_13_commit": "bcdf422c9ce94ebc2dc3b45996acadd5a139a2fa",
+    "chapter_11_commit": "fbef84ee04f969f55d093c3a3a21edda182ee4a2",
+    "reader_insertion": false,
+    "files_edited_in_review": false,
+    "assembly": false,
+    "product_import": false,
+    "runtime": false,
+    "allocation": false,
+    "whole_candidate_factual_review": false
+  },
+  "chapter_13": {
+    "document": {
+      "commit": "bcdf422c9ce94ebc2dc3b45996acadd5a139a2fa",
+      "path": "tec-os/editorial/reader-rewrite/draft/13-compact-example-candidates.md",
+      "git_blob": "9501f1f1bab02ee4978369753a89922d83e6a0a9",
+      "bytes": 17827,
+      "sha256": "bf3af0180e2ecb446f503ca2134eddda175bd0ee4d9bb102472dd8e53914e19a"
+    },
+    "prior_document": {
+      "commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "path": "tec-os/editorial/reader-rewrite/draft/13-compact-example-candidates.md",
+      "git_blob": "831aec749be83be582ebb86dc9c558d93e3c49b9",
+      "bytes": 16298,
+      "sha256": "654116c90ad2ce7bd5d7cf4c68bd985db38cc816a3a7b1d1f28de4ae5b8c9ca2"
+    },
+    "original_reader_source": {
+      "commit": "971ce6c3a82b8e878187575693123d80d54e19cd",
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "git_blob": "aa7c11f1dbfb3f89c72688fc6a38abbc10d509a5",
+      "bytes": 31002,
+      "sha256": "14ddb81283fa5444a91eceea3dbf5f35a04c7a57177dfd9287d8c0b62e3da519"
+    },
+    "source_identities": [
+      {
+        "source": "COUNT",
+        "original_bytes": 1885,
+        "original_sha256": "372bc013b7907fa1b4308f31054a66df925e39e8b0afeceeda739d1b00240966",
+        "prior_candidate_sha256": "df9a49a74aba201a021c5002af69a1bd35aa5e2949bf94086293796255f651d2",
+        "candidate_bytes": 2304,
+        "candidate_sha256": "4f79cbe4e9e99013695c66bf9af2363ba7f09236555f1260f874359406dbe590",
+        "declared_metadata_matches": true,
+        "change": "Only actual candidate directive org becomes ORG."
+      },
+      {
+        "source": "CHARS",
+        "original_bytes": 1048,
+        "original_sha256": "a2e6e3bcbde00088e63918b3516246fbb2fdb2b8964ce8c86aaf68ad5169bf07",
+        "prior_candidate_sha256": "db574fc1d36304c4008f9476e362267b81bec52f8760e4de85324c9c25a510dd",
+        "candidate_bytes": 1249,
+        "candidate_sha256": "db574fc1d36304c4008f9476e362267b81bec52f8760e4de85324c9c25a510dd",
+        "declared_metadata_matches": true,
+        "change": "Candidate fence byte-identical."
+      },
+      {
+        "source": "RECS",
+        "original_bytes": 1361,
+        "original_sha256": "81663bfd2f8393f5bc99bc24ebde5533076c2fc068cbc022ca692f8222075c58",
+        "prior_candidate_sha256": "b21550ff9cef040641e5d03fbb317efa8080589a1e9a8d12d714df42b5e44704",
+        "candidate_bytes": 1713,
+        "candidate_sha256": "b21550ff9cef040641e5d03fbb317efa8080589a1e9a8d12d714df42b5e44704",
+        "declared_metadata_matches": true,
+        "change": "Candidate fence byte-identical."
+      },
+      {
+        "source": "NEEDS",
+        "original_bytes": 944,
+        "original_sha256": "547ed52c6a29f2f282ac4f7d3cb948acecc22f3f15290a5d8b8f8d6fde28a452",
+        "prior_candidate_sha256": "b63647cc1f3f50fb5fe9a55bf16ffcbc700061892eb9e4c2fd5787ea429c184b",
+        "candidate_bytes": 1105,
+        "candidate_sha256": "2889c2b00e90ce3124ad2c363d14d20de81b5adb87f75275b839c6838a1c1898",
+        "declared_metadata_matches": true,
+        "change": "Only actual candidate directive org becomes ORG."
+      },
+      {
+        "source": "Derived CHEAT",
+        "original_bytes": 1885,
+        "original_sha256": "79853814ad799d6b52bbd0e27b067851f89c62fddcac968ebc9b9173a2e1e593",
+        "candidate_bytes": 2304,
+        "candidate_sha256": "a80c3b5681b72740c8bec163ad1e19cc0ef377d3e926de202b463db749d9384e",
+        "declared_metadata_matches": true,
+        "derivation": "Exactly the accepted two COUNT header substitutions. The uppercase ORG is inherited unchanged."
+      }
+    ],
+    "actual_candidate_not_comparison_only": true,
+    "actual_reader_source_intent": "The displayed COUNT and NEEDS sources themselves contain the conforming ORG spelling. Any later reference must use those exact candidate identities, not a separately uppercased comparison copy. No reference assembly is established.",
+    "remaining_boundaries": [
+      "All byte, symbol, relocation and runtime qualification remains unrun.",
+      "NEEDS is displayed in TAS dependency form. A PC-writer comparison still needs an explicitly identified dependency-option representation.",
+      "CHARS and RECS trailing-HWLIB handling remains separately unqualified."
+    ]
+  },
+  "chapter_11": {
+    "document": {
+      "commit": "fbef84ee04f969f55d093c3a3a21edda182ee4a2",
+      "path": "tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md",
+      "git_blob": "11d46b8405563bcc25d3c3d2d1d55f8cb471b96f",
+      "bytes": 29669,
+      "sha256": "c7002d050d3dbb56badbc49fa600642834af25ab879df8f4f181ecd493c98308"
+    },
+    "prior_document": {
+      "commit": "e1b26699ca99bd53db12928553bfa7dedaf81e60",
+      "path": "tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md",
+      "git_blob": "a2151f45553dc19d920b25189cb8f175b9c7edfd",
+      "bytes": 29340,
+      "sha256": "90cdf1e1696bd18a994feb7a00b114ec11ad2b1215edb3f9fd9d66ee52e7bdf0"
+    },
+    "correction": "Nominal UNMOUNT/DESCRIBE to UNMNT/DESC in the contract paragraph. No logic change.",
+    "source_authority": {
+      "commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+      "path": "src/abi.inc",
+      "git_blob": "5882ae0b14c8b48f6f5b643e39ee20a74bb20caa",
+      "bytes": 6242,
+      "sha256": "092ccf072bb559ba8efc5e55f576d303f2f98a3ea13ed2e821bbd102856a9357"
+    },
+    "source_labels": {
+      "TNMOUNT": {
+        "line": 115,
+        "value": 9
+      },
+      "TNUNMNT": {
+        "line": 124,
+        "value": 10
+      },
+      "TNDESC": {
+        "line": 130,
+        "value": 11
+      }
+    },
+    "unchanged_assembly_fences": [
+      {
+        "index_1_based": 1,
+        "bytes": 2606,
+        "sha256": "4e24317cfee3bff6e7c840e41a1fa7c73fa82540faeee4f7de24f6f09d7e89b0"
+      },
+      {
+        "index_1_based": 2,
+        "bytes": 1849,
+        "sha256": "bf27e8f2b4336f097a195e781fd43bb8f7ff16aa685c2f0ae3dda6cc8c3aa80d"
+      },
+      {
+        "index_1_based": 3,
+        "bytes": 928,
+        "sha256": "438daaf6298bf1a7ed2275b7047bc23aacca769e61e765f32f41ccdb4fd2b353"
+      },
+      {
+        "index_1_based": 4,
+        "bytes": 2439,
+        "sha256": "ac9717fb1efb82a33d50112521dfd37fe367430a7e7b63f7ecbed581b040b97d"
+      },
+      {
+        "index_1_based": 5,
+        "bytes": 1589,
+        "sha256": "03a85f9d17b4fbf482b5032d19db42e679120369a6b3c023377aecaad9ac64e8"
+      },
+      {
+        "index_1_based": 6,
+        "bytes": 2126,
+        "sha256": "ea445cb32db0e402f4e93800c045b073bd84bf77aa7a7d515959b2bca8733852"
+      },
+      {
+        "index_1_based": 7,
+        "bytes": 1120,
+        "sha256": "d7a30e32b1c18c42358adb97480b0980df603bbcad0cc88f4775458a692aeed7"
+      },
+      {
+        "index_1_based": 8,
+        "bytes": 2676,
+        "sha256": "3a47e544b11c17bb8a07e829633f7e5feaa656018d8917dd2a39b0f1b34025f3"
+      }
+    ],
+    "all_metadata_table_rows_byte_identical": true,
+    "ix_alternate_register_qualification_unchanged": true
+  },
+  "authority": {
+    "bindings": [
+      {
+        "repository": "origo",
+        "path": "bindings/z80-cpm/assembly-style-compact.md",
+        "sha256": "0882591215c30c8f9789966564b626ef77e3a05340a435d12d29679ac0e31e79",
+        "bytes": 2991
+      },
+      {
+        "repository": "origo",
+        "path": "bindings/z80-cpm/assembly-style.md",
+        "sha256": "525b726f26ed53b88e8bd2c7dcc0f7733ece0bfa006e2705afb0a4285ba9319b",
+        "bytes": 3339
+      }
+    ],
+    "checker_sources": [
+      {
+        "commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "path": "tools/lib/style.mjs",
+        "git_blob": "5d0d62bd2e64d07e2bcf79c25ec7c8da60ec76e5",
+        "bytes": 9679,
+        "sha256": "c7ce716470d754530df84d8a6ac97f61987cd24326a5aa280c1593e2be461a48"
+      },
+      {
+        "commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "path": "tools/lib/style-compact.mjs",
+        "git_blob": "34efd1a48741e81d94f3e4e630bd155f541b1331",
+        "bytes": 5638,
+        "sha256": "74bbd6d6f185fe5286cf82b9918b25866055e92b42ff487563f82b8bc372269e"
+      },
+      {
+        "commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "path": "tools/lib/prl.mjs",
+        "git_blob": "89ed0a14948e1db700f934c22b60e6b780a7d7f1",
+        "bytes": 3166,
+        "sha256": "ca74cbd6226753907507e90373a7668f2d671ce7219e1eb20bb8442a3b0754b8"
+      },
+      {
+        "commit": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+        "path": "tools/lib/svc.mjs",
+        "git_blob": "3dc7fade7cd83069d0e9e409abe156d8ea711085",
+        "bytes": 6051,
+        "sha256": "acec05c4e8136917be344caaba1bffa3d49eda4e631fb32a303e0399cc57744f"
+      }
+    ],
+    "interpretation": "The adopted lowercase rule names instruction mnemonics, registers and conditions. ORG and EQU are directives in the parser, outside the instruction-case branch. Actual uppercase ORG conforms without a style exception or product fix; source-only conformance is not executable qualification."
+  },
+  "unresolved_bounded_findings": []
+}
