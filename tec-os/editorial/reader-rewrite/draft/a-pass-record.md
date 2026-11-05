@@ -44,13 +44,13 @@ whole units. All 64 original-A units plus 3 old19 units are accounted for.
 | A117–121,123–130 | Keep1 pending/all-character echo/CPM difference and2 tabs/pause/resume/discard/list toggle/pending input/no-result/CPM pause-abort. Make tab expansion explicit for1. |
 | A132–133,135–136,138–139 | Keep3 reader input,4 serial punch and5 discarded list output. Check actual BIOS owners rather than generic console-routing text. |
 | A141–145,147–148,150–151,153–155 | Keep6 direct input/output omissions and FD/FE distinction,7 byte read,8 write/console-only routing and9 dollar termination. |
-| A157–164,166–168,170–171 | Keep10 buffer layout/termination/all editing keys/CCP-only recall and program characters,11 pending-status lifetime and12 exact0022 return. Add existing code's0 result and Delete/backspace/midline^C distinctions. Link22 without repeating its implementation lesson. |
+| A157–164,166–168,170–171 | Keep10 buffer layout/termination/all editing keys/CCP-only recall and program characters,11 pending-status lifetime and12 exact0022 return. State the current empty-line ^C condition, restored after deletion/clearing, and scope exclusion of editing controls to the returned line. The abort path stores03h before its nonreturning warm boot. Link22 without repeating its implementation lesson. |
 | A173–178,180–182 | Keep13 complete reset, unchanged user and CCP exception; name actual dirty/sum conditions. Keep14 default publication/login/Select error. |
 | A184–188,190–197 | Keep15 FCB import/CR ownership and16 map-only/ordinary code/missing entry/unmodified/read-only no-write success, including never-opened FCB. State requested logical EX, corresponding RC and S2 marker. |
 | A199–204,206–208 | Keep17 wildcard name/extent/raw default drive/DMA result and18 continuation/noDE. Qualify ordinary extent matching by EXM and S2 clearing without restricting wildcard EX, which bypasses S2 comparison. |
 | A210–216 | Keep19 directory-before-free, returned-write allocation ownership, ordinary result, protection and partial deletion. Remove an implied guarantee about physical card state on failed writes. |
 | A218–220,222–232 | Keep20 CR/extent/EOF and21 block/extent allocation,0/1/2, CR128 retry, block ownership and protection. Add all actual result1 paths for20. Make later close publication conditional on successful close. |
-| A234–240,242–246 | Keep22 no collision check, current user, directory result, S2 reset/EX kept/S1RCmap clearing; keep23 every-entry rename, offsets17–27, ignored second drive and file protection. |
+| A234–240,242–246 | Keep22 no collision check, current user, directory result and EX kept. Distinguish the preliminary S2 reset, module0 copied to the directory buffer and final FCB S2=80h. Retain S1/RC/map clearing and the full-directory reset consequence. Keep23 every-entry rename, offsets17–27, ignored second drive and file protection. |
 | A248–249,251–252,254–255,257–260 | Keep24 login bits,25 logical default,26 DMA and27 live default allocation pointer after remount. |
 | A262–265,267–269,271–275,277–279 | Keep28 protection lifetime,29 selected volume flag,30 name/type attributes and DIR system hiding,31 live default DPB. Explicitly preserve close exception under28. |
 | A281–285 | Keep32 five-bit set/get and0-after-set versus four-bit CCP USER/page-zero behaviour. |
@@ -82,12 +82,12 @@ alone was not accepted as semantic proof.
 | Dispatch/results/stack | src/cpm/bdos.asm:137–213 binds FCB calls through the actual FCBMAP;228–252 replicates HL into A/B and restores caller SP. src/tables.asm:89–97 supplies every function and FCB bit. src/layout.asm:152 declares54. |
 | Extra dispatch/no-ops | bdos.asm:143–165 handles108/47/44/45/46/48/99 before unsupported>=41 returns0. Its221–237 accepts only E1;90–93 refuses44/99. tables.asm:96 maps38/39 directly to RETZERO. |
 | Console0–12 | bdos.asm:257–259,321–433,454–765,772–800 supplies complete call owners. bdoscon.asm:126–153,178–204,229–286,318–350 supplies pending keys, tabs, list copy, raw echo and pause. console.asm:566–599 supplies actual list/punch/reader, not the status routine at200. console.asm:127–199 handles CON field. |
-| Function10 details | bdos.asm:472–531 terminates on CR/LF/full;545–553 gates recall with HFLAG;559–620 distinguishes erase/rubout/^C;627–701 supplies remaining edits;740–765 publishes count and conditionally stores history. |
+| Function10 details | bdos.asm:472–531 terminates on CR/LF/full;545–553 gates recall with HFLAG. Its606–620 tests current LINCNT, stores03h and echoes ^C before CHDROP only when empty. Its559–599,675–729 decrements or clears that count, restoring the abort condition. Its627–701 supplies remaining edits;740–765 publishes the returned count and conditionally stores history. Returned-line exclusion does not deny the nonreturning03h store. |
 | Drive/default/FCB | bdosfile.asm:142–234 publishes DEFDRV/DEFDPB/DEFALV only after selection and does not rewrite an FCB's drive. bios.asm:63–96 rejects absent/pastD. bdosfn.asm:28–31 returns default, not last explicit drive. |
 | Reset/protection lifetime | bdosfile.asm:19–53 clears login/warm/read-only state and DMA before A;72–132 keeps clean sum matches, marks dirty bounded rebuilds and logs mismatches out for full scans. bdosfn.asm:431–447 clears LOGINV/ROVEC/WARMV bits. bdoslog.asm:254–264 reapplies volume protection. |
 | Open/close | bdosfile.asm:246–248,270–339 and bdosfn.asm:621–685 preserve requested EX, set corresponding RC/unmodifiedS2, leave CR and choose map-only close. Read-only close returns0 before directory lookup regardless of FCB open history. |
 | Search | bdosfile.asm:373–419 clears ordinary S2, preserves raw-drive mode and continues search. bdosfn.asm:507–605 publishes four-entry record/slot;747–829 strips attribute bits, admits?EX before S2 comparison and otherwise checks EXM/module. |
-| Delete/make/mutate | bdosfile.asm:430–445,458–514 gives drive/file guards and successful-directory-write-before-free. Its529–643 clears make fields with no duplicate-name test;672–764 copies attribute or rename names to all matching entries, checking file R/O only for rename. ccpfile.asm:138–147 hides system entries. |
+| Delete/make/mutate | bdosfile.asm:430–445,458–514 gives drive/file guards and successful-directory-write-before-free. Its529–538 clears S2 after the drive check, before MAKEFCB can return directory-full at569–572. Its574–609 clears fields and copies module0 to the directory buffer;611–617 sets FCB S2 bit7 before WRITEDIR at638. A successful make returns FCB S2=80h. No duplicate-name test is made. Its672–764 copies attribute or rename names to all matching entries, checking file R/O only for rename. ccpfile.asm:138–147 hides system entries. |
 | Sequential I/O/retry | bdosrec.asm:22–207,227–298 supplies all result paths and CR advancement.119–175 restores failed next-extent EX/S2 with CR128;733–767 publishes an allocated block in the FCB and marks it changed before transfer, allowing a successful later close to publish ownership. |
 | Random I/O | bdosrec.asm:307–378 sets read/write/zero modes and restores CR on completion;393–531 refuses R2 before FCB changes, closes previous extent, opens/makes target and swaps EX/S2 back on missing/full. Its540–559 is the actual swap. |
 | Zero-fill/DMA | bdosrec.asm:794–860 writes every record of a new block and calls DMABACK after each write. bdoslog.asm:122–136 restores CURDMA through BIOS before checking failed status, then goes directly to BADSECT. |
@@ -105,7 +105,7 @@ alone was not accepted as semantic proof.
 | Generous reference | Kept complete lookup table and contract entries rather than compressing them into claims of compatibility. Added precise side effects only where actual code made the old shorthand misleading. |
 | Thematic | Kept number order, shared call rules, error modes and individual contracts. Moved compatibility holdings from19 into a final reference section. Shared error modes precede the detailed contracts. |
 | Sentence deletion | Read all retained and new prose against each assigned unit. Removed syllabus preview, duplicate C16 certification, repeated close citation ranges and an implied physical rollback guarantee. Preserved every API difference and retry-state condition. |
-| Agency | Read function/table/FCB/record subjects. Calls select, copy, return or change bytes through named routines. No file, function or reference thinks, wants or understands. Recast tangled FCB-layout sentence to a direct drive-selection contract. |
+| Agency | Read function/table/FCB/record subjects. Recast tangled FCB-layout sentence to a direct drive-selection contract. Independent review found two remaining social acts: a transfer “promising” rollback and function99 “refusing” truncation. Replaced them with the physical no-rollback consequence and the FFh/no-truncation result. |
 | Every comma | Read every paragraph and table cell, testing optional commas. Removed automatic comma-or results, conjunction commas in output/line input/user/make/chaining and unnecessary console/attribute apposition. Retained enumerations, short input conditions and needed apposition. No authorial semicolon or em dash remains. |
 | Semantic | Checked split routine ownership and actual callers at the offered pin. Corrected control-key pending scope, dirty/sum reset, EXM/S2 search, no-write close, returned transfer position, partial delete ownership and conditional warm-chain execution. Distinguish54 allocation from historical measurement. |
 | Readback/lookup | Read full draft and original-to-draft diff from opening to final compatibility item. Table outputs and entries agree, normal versus fatal errors is explicit, and random/full-directory retry conditions remain local to their calls. Links use final revision-ledger paths. |
@@ -123,3 +123,42 @@ review, integrated anchors and whole-book reference acceptance remain open.
 I edited no root book, shared ledger or other writer's file. Commit scope is
 these two exact owned paths with --only, followed by push to
 origin/tec-os-reader-rewrite. No publication occurred.
+
+## Independent review corrections
+
+Applied all four findings from the complete independent review of 4af304f.
+The correction scope is the affected shared-error, function10, function22
+and compatibility passages plus this record. All 48 summary rows and 67
+movement units remain represented. No literal example, output, header pin
+or historical measurement changed.
+
+1. Function 10 now tests whether the current line is empty, not whether ^C
+   was the first key. I reread LINABRT at ea3ef3d:src/cpm/bdos.asm:606–620,
+   deletion at559–599, clearing at675–729 and returned-line publication
+   at740–765. LINCNT can return to0 after earlier input. The empty-line path
+   stores03h, echoes ^C and goes directly to CHDROP. “The returned line
+   excludes the editing controls” describes the returning path without
+   denying that store. The draft preserves warm exit and chain drop.
+2. Function 22 now separates preliminary S2=0, the module0 directory-buffer
+   copy and the final FCB S2=80h. I reread the complete make owner and caller,
+   src/cpm/bdosfile.asm:517–643. FNMAKE clears S2 after CHKRO even if MAKEFCB
+   later returns directory-full. Successful preparation copies bytes1–31
+   before setting bit7 in the caller FCB, then calls WRITEDIR. The flag is
+   explicitly set before that write, not proof of completed persistence.
+   No-collision-check, current user, EX kept, S1/RC/map clearing and every
+   ordinary result remain in the entry.
+3. The card-change instruction now links to Chapter 5's actual “Writing the
+   physical card” section. I read the complete section opening and its
+   exclusive-use/reinsertion-reset paragraph. Power-cut recovery remains
+   available at its own section but is not the target of this instruction.
+4. Replaced the transfer's “promise” and function99's “refusal” with exact
+   effects. I reread src/cpm/bdos.asm:159–161 and90–93 for FFh/no change,
+   and src/cache.asm:307–351 for the failure/drop path. Earlier or partial
+   physical writes are not rolled back by a failed transfer.
+
+Reread every changed containing passage and its neighbours for contracts,
+agency, deletion and every comma, then the actual two-file diff. The result
+keeps numbered lookup order and the source-only authority at ea3ef3d.
+Bounded independent correction confirmation remains open. No product,
+fixture, dependency, assembly, build, test or runtime was executed or imported.
+Only these two owned paths are committed with --only and pushed.

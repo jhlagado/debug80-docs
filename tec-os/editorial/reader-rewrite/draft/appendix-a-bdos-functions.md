@@ -117,8 +117,8 @@ or full-directory result listed under a function.
 | 4 | `Bdos Err On d: Select` | An unmounted drive, a drive past D or an FCB's `?` drive outside function 17 (`src/bios.asm:63-96`, `src/cpm/bdosfile.asm:211-234`, `src/cpm/bdoslog.asm:897-900`) |
 
 [Appendix D](appendix-d-error-messages.md#the-bdoss-errors) gives recovery
-procedures. A failed transfer does not promise rollback of earlier or
-partial physical writes.
+procedures. Earlier or partial physical writes are not rolled back when a
+transfer fails.
 
 ## The functions
 
@@ -170,14 +170,17 @@ nothing.
 **10 Read console buffer.** Reads a line into the buffer at `DE`. The buffer's
 first byte is the maximum number of characters it takes. Return or LF ends the
 line. Reaching the buffer's maximum ends it too. The editing keys are
-backspace, Delete, `^U`, `^R`, `^X`, `^E`, `^P` and `^C` as the line's first
-key. At the CCP's prompt `^W` and `^N` recall lines from command history.
+backspace, Delete, `^U`, `^R`, `^X`, `^E`, `^P` and `^C` while the line is
+empty. At the CCP's prompt `^W` and `^N` recall lines from command history.
 For a program they are characters
 (`src/cpm/bdos.asm:454-765`, `src/cpm/bdos.asm:545-553`). Returns the number
 read in the buffer's second byte, with the characters from the third on.
-Returns 0 in `A`. The editing controls themselves are not stored. Backspace
-erases the removed character on screen while Delete echoes it. A `^C`
-after the line's first character is ignored (`src/cpm/bdos.asm:559-620`).
+Returns 0 in `A`. The returned line excludes the editing controls. Backspace
+erases the removed character on screen while Delete echoes it. `^C` is
+ignored while the line contains characters. On an empty line it ends the
+program by warm boot and drops the remaining command chain. Deleting or
+clearing all characters restores that abort condition
+(`src/cpm/bdos.asm:559-620`, `675-729`).
 [Chapter 22](22-the-history-ring.md) explains the history storage.
 
 **11 Get console status.** Tests for a waiting character. A character the BIOS
@@ -259,10 +262,15 @@ the `File R/O` error (`src/cpm/bdosfile.asm:430-445`).
 **22 Make file.** Creates an empty entry for the FCB's name in the current
 user area, writes it to the directory and opens it
 (`src/cpm/bdosfile.asm:529-643`). Does not test for a file of the same name.
-Returns the directory code or `FFh` if the directory is full. As in CP/M 2.2,
-the FCB's `S2` is set to 0 and its `EX` kept, so the entry is the extent `EX`
-names among the file's first 32. `S1`, `RC` and the map are cleared
-(`src/cpm/bdosfile.asm:529-538`, `src/cpm/bdosfile.asm:574-617`).
+Returns the directory code or `FFh` if the directory is full. After the
+drive-write check it clears `S2` before searching for a free entry and keeps
+`EX`, selecting an extent among the file's first 32 as in CP/M 2.2. This
+`S2` reset occurs even when the directory is full
+(`src/cpm/bdosfile.asm:529-538`, `558-572`). On the successful path it clears
+`S1`, `RC` and the allocation map, then copies the entry with module 0 into
+the directory buffer. It sets the FCB's `S2` bit 7 before calling the
+directory write. The returned FCB's `S2` is therefore `80h`, marking it
+unmodified (`src/cpm/bdosfile.asm:574-643`).
 
 **23 Rename file.** Gives every entry of the file named in the FCB's first 16
 bytes the name and type at offsets 17 to 27 (`src/cpm/bdosfile.asm:687-764`).
@@ -423,8 +431,8 @@ for Digital Research's BDOS encounters these differences:
   calls the RAM BIOS jump table, where a program can replace an entry
   (`src/rom.asm:35-40`, `src/cpm/bdos.asm:14-35`).
 - Functions 44 to 48, 99 and 108 occupy selected CP/M 3 numbers with the
-  limited meanings above. Function 99 refuses truncation. Every other
-  number above 40 returns 0 without doing anything
+  limited meanings above. Function 99 returns `FFh` without truncating.
+  Every other number above 40 returns 0 without doing anything
   (`src/cpm/bdos.asm:143-165`).
 - The CCP's warm-entry disk reset retains clean drives whose allocation
   vector sums still match. Dirty drives rebuild from the directory up to
@@ -442,4 +450,4 @@ for Digital Research's BDOS encounters these differences:
 - Neither geometry uses the check vector: both set CKS to 0. This mechanism
   therefore does not detect a card exchanged while TEC-OS is running
   (`format/format.json:52`, `59`). Follow the card-change procedure in
-  [Chapter 5](05-cards-on-the-pc.md#recovery-after-a-power-cut).
+  [Chapter 5](05-cards-on-the-pc.md#writing-the-physical-card).
