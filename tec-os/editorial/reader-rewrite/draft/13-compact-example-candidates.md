@@ -51,9 +51,8 @@ INIT:
   call CONSLOT   ; HL = the address held
                  ; by CONOUT's JP
 
-; DE = that jump's target
-
-  ld e,(hl)
+  ld e,(hl)      ; DE = that jump's
+                 ; target
   inc hl
   ld d,(hl)
   ld (OLDCO),de  ; MYCO ends by
@@ -252,9 +251,8 @@ SHOW1:
   ld e,(hl)      ; BDOS console output
   ld c,2
 
-; the BDOS changes these
-
-  push bc
+  push bc        ; the BDOS changes
+                 ; these
   push hl
   call BDOS
   pop hl
@@ -387,11 +385,11 @@ and its EOF/record padding need separate byte identities.
 
 | Source | Original bytes | Original SHA-256 | Compact bytes | Compact SHA-256 |
 | --- | ---: | --- | ---: | --- |
-| COUNT |1885|372bc013b7907fa1b4308f31054a66df925e39e8b0afeceeda739d1b00240966|2281|793e5fa2901f0109aac33e589cc62fd7a8d3c56f7ddf10f689197328b32df013|
+| COUNT |1885|372bc013b7907fa1b4308f31054a66df925e39e8b0afeceeda739d1b00240966|2304|df9a49a74aba201a021c5002af69a1bd35aa5e2949bf94086293796255f651d2|
 | CHARS |1048|a2e6e3bcbde00088e63918b3516246fbb2fdb2b8964ce8c86aaf68ad5169bf07|1249|db574fc1d36304c4008f9476e362267b81bec52f8760e4de85324c9c25a510dd|
-| RECS |1361|81663bfd2f8393f5bc99bc24ebde5533076c2fc068cbc022ca692f8222075c58|1688|1bd335e4b1b7239ac10afb3b0a42c2c9c81f6ebffd515c439efa0ceb4ed08f50|
+| RECS |1361|81663bfd2f8393f5bc99bc24ebde5533076c2fc068cbc022ca692f8222075c58|1713|b21550ff9cef040641e5d03fbb317efa8080589a1e9a8d12d714df42b5e44704|
 | NEEDS |944|547ed52c6a29f2f282ac4f7d3cb948acecc22f3f15290a5d8b8f8d6fde28a452|1105|b63647cc1f3f50fb5fe9a55bf16ffcbc700061892eb9e4c2fd5787ea429c184b|
-| Derived CHEAT |1885|79853814ad799d6b52bbd0e27b067851f89c62fddcac968ebc9b9173a2e1e593|2281|268293fc8e3d56f9de0ce572c17883e1b24e6aff3646422deb75c9df9646008b|
+| Derived CHEAT |1885|79853814ad799d6b52bbd0e27b067851f89c62fddcac968ebc9b9173a2e1e593|2304|643997ebe7c65378df110a0266dcd4c98c0949357c571ed82c5a128a6091b98e|
 
 The original CHEAT identity covers the original COUNT fence with only the
 two historical substitutions applied as text. The compact CHEAT identity
@@ -482,7 +480,13 @@ passes. Long comments were rewrapped at phrases while retaining their meaning
 and literal wording. Static correspondence and hashes were refreshed after
 the final comment-layout changes.
 
-Independent source/style review remains open. The candidate hashes identify
+Independent static review of `c46300f` found two comment-layout issues.
+The COUNT target note now accompanies `ld e,(hl)`, giving COUNT and derived
+CHEAT 13/31 commented instructions. The RECS BDOS-clobber note now
+accompanies `push bc`, reducing its longest uncommented instruction run to
+four. Existing comment words, statements, labels and literals are unchanged.
+COUNT, derived CHEAT and RECS identities were refreshed. Bounded confirmation
+of these fixes remains open. The candidate hashes identify
 only proposed text. Public-route byte/symbol/relocation comparison and positive
 COUNT/CHARS/RECS/NEEDS workflows plus the intended CHEAT rejection still need
 separately reviewed packets and allocation. No executable packet or command
