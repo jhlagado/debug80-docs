@@ -45,3 +45,15 @@ preview are removed, optional commas cut and final CtrlC wording aligned to
 the current empty-line condition. The complete literal fences and provenance
 comments are byte-identical to521c4fc. No runtime was requested or performed.
 Final profile, remaining compact proofs and integration are still open.
+
+## Card reference and draft navigation confirmation
+
+AppendixF's f8f0cab corrections are independently confirmed. Navigation
+corrections at22de85e were confirmed in full context: all three Chapter28
+links, its actual title/path, outline and ledger agree, and19's hook
+explanation correctly targets16 while the separate10 table pointer stays.
+All38 existing fragment targets resolved in the source-only audit. This is
+not a rendered-site check. Opening1–3 destinations and root integration
+remain unaccepted. The lead read all82 meaning and40 form rows of the revised
+glossary at8593c93; its independent review and local-form follow-ups are
+still open. No execution or publication occurred.

@@ -14191,7 +14191,7 @@
     },
     {
       "unit": "appendix-F",
-      "status": "full independent review corrections pushed atf8f0cab; requested-count/recipe-field bounded confirmation pending",
+      "status": "complete independent review andf8f0cab report-condition/recipe-field corrections confirmed; final qualification and integration pending",
       "passes": {
         "full_passage_read": "completed for bounded source-only draft; evidence in f-pass-record.md",
         "draft": "completed for bounded source-only draft; evidence in f-pass-record.md",
@@ -14203,8 +14203,8 @@
         "examples_before_explanation": "all25 historical fences/capture preserved; actual781run record Book45:80; no fresh result claimed",
         "journey_readback": "completed for bounded source-only draft; evidence in f-pass-record.md",
         "mechanical_gate": "completed for bounded source-only draft; evidence in f-pass-record.md",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed after complete review and bounded correction confirmation; final source/workflow integration remains open",
+        "independent_factual_review": "closed after complete review and bounded correction confirmation; final source/workflow integration remains open",
         "navigation": "pending",
         "final_source_pin": "pending"
       },

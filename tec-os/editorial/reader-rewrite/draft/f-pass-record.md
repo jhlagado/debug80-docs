@@ -105,3 +105,11 @@ main119 report condition and recipe16–24 field use, then corrected both
 paragraphs and read them in context. All25 fences and the capture comment
 remain unchanged. Other source, preservation and reference-craft checks were
 clear. Bounded confirmation pending, with no execution.
+
+## Independent correction confirmation
+
+The independent reviewer confirmsf8f0cab's nonzero drives-field report
+condition and recipe volume/component/drive ownership wording. This closes
+the full73-unit bounded review's two findings. Historical examples remain
+unchanged and no output was newly generated. Final source adoption,
+workflow qualification, navigation and whole-book acceptance remain open.
