@@ -25,6 +25,7 @@ revision = git('rev-parse', a.revision + '^{commit}')
 ledger = json.loads(a.ledger.read_text())
 rows = ledger['resolutions'] if isinstance(ledger, dict) else ledger
 paths = set()
+source_cache = {}
 for row in rows:
     references = (row.get('new_citation') or '') + '\n' + '\n'.join(e['new'] for e in row.get('prose_edits', []))
     references += '\n' + '\n'.join(x for x in row.get('supporting_target_ranges', []) if isinstance(x, str))
@@ -32,8 +33,9 @@ for row in rows:
         path, start, end = match.groups()
         if row.get('status') == 'local-example':
             continue
-        content = subprocess.check_output(['git', '-C', str(a.source_repo), 'show', revision + ':' + path], text=True)
-        if not 1 <= int(start) <= int(end or start) <= len(content.splitlines()):
+        if path not in source_cache:
+            source_cache[path] = subprocess.check_output(['git', '-C', str(a.source_repo), 'show', revision + ':' + path], text=True).splitlines()
+        if not 1 <= int(start) <= int(end or start) <= len(source_cache[path]):
             raise SystemExit('citation out of bounds: ' + match.group())
         paths.add(path)
 if a.record:
