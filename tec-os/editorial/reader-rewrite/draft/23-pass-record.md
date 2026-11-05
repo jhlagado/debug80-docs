@@ -149,3 +149,11 @@ now states helper-entry scope and explicitly says those helpers do not undo
 the selected routine's changes. The whole call follows the service contract.
 Read ABI35–58 and services70–86 again. No execution was performed.
 Correction confirmation and final qualification remain pending.
+
+## Correction confirmation
+
+Independent confirmation at8aaec1b closed the helper-entry preservation
+clarification. The two full reviews found no other factual, preservation
+or craft finding. Historical480-byte accounting remains separate from
+current source inspection and future KS48 qualification. Final navigation
+and source/media acceptance remain pending.
