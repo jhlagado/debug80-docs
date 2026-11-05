@@ -89,3 +89,26 @@ recipe, output and interpretation remain in draft/13-fail-example-candidate.md
 outside reader prose. Source inspection supports the mechanism but not the
 claimed capture. Locate an actual original record or prepare a separate
 verification offer. No execution allocation follows from this queue.
+
+## Compact-format assembly across retained examples
+
+The measured LINE insertion establishes its exact compact source only. Other
+retained assembly listings still use their historical spelling/layout. They
+are not silently accepted as the final chosen code style. Prepare separate
+compact candidates, preserve original source/comment meaning and qualify the
+actual assembled result before replacing reader listings or claims. Static
+formatting or source equality alone is insufficient.
+
+Current teaching examples include SHOW and its saved-register fragment,
+TOP/AREA/KEY, HWLIB and its BOARD/LCDMSG/DIGCLK/NOW/ROWS/PLACE clients,
+EXISTS/RUN, COUNT/CHARS/RECS/NEEDS, READ, ARGS, HELLO and VTEST. The ROM
+include-order snippet has a separate source-listing role. FAIL is separately
+held for missing original execution evidence. This list is a preparation
+queue, not a sealed or complete final manifest while drafts are still landing.
+
+Each executable candidate needs its own source identity, named assembler and
+include/dependency closure, comparison against the relevant historical bytes
+or independently checked reference and actual workflow/evidence boundary.
+Do not repin a prior transcript merely because reformatted code assembles
+to matching bytes. A fresh positive workflow, when needed, requires a separately
+reviewed exact packet and allocation. No batch runtime is allocated here.
