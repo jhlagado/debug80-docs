@@ -70,7 +70,8 @@ The stack can be hidden by that bank change. All pushes happen before it
 and all pops happen after EXPAND 0 is restored. The access itself uses the
 registers and the byte at `HL`. The final latch write restores the original
 view. Interrupts are enabled again only when the saved flag records that
-they were enabled on entry (`src/history.asm:55-74`). Chapter 14 explains
+they were enabled on entry (`src/history.asm:55-74`).
+[Chapter 14](14-state-and-memory.md#expand-1-and-the-stack-boundary) explains
 the same no-stack rule for the other uses of EXPAND 1.
 
 History storage is internal to line input. The BDOS table provides function
@@ -242,7 +243,8 @@ A>
 The capture records the PICO9918 screen after erasure so it shows the
 replacement line. Serial output would also contain the backspace and space
 bytes used to erase the previous input. In the capture recipe, `@start`
-sends its keys and Return together. The shell notation `$'\x17'` supplies
+sends its keys and Return together (`tools/capture.mjs:102-106`).
+The shell notation `$'\x17'` supplies
 `^W` (`src/cpm/bdoscon.asm:368-376`).
 
 ## Warm boot and reset
