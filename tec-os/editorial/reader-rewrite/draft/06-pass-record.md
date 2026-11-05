@@ -239,3 +239,9 @@ The repeated ROM/no-driver sentence and front-door result certification were
 removed. The two optional introductory commas were removed. Historical fences
 and capture commands are unchanged. Independent correction confirmation is
 pending. No runtime, build, import or new capture accompanied these edits.
+
+## Independent confirmation
+
+Full independent corrections confirmed at6483ddf, including additional complete front-door/console lead-read findings. All prior source/craft findings closed.
+Historical evidence remains historical. Final navigation, source/profile and
+runtime qualification remain open. No execution accompanied the review.
