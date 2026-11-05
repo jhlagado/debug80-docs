@@ -67,6 +67,15 @@ It cannot be recorded against a different offer. A later source offer is
 compared with the recorded source blobs, and every changed file needs renewed
 claim review. Matching source does not certify runtime results.
 
+The complete application check passed with `--require-all`: zero missing
+pending dispositions and zero unreviewed mapped pairs. Rechecking `fe2097f`
+against the recorded manifest reports no changed source file. Negative checks
+reject an omitted disposition, a record attempt at an unreviewed source pin,
+literal-space or command-line changes, and an unrelated removal edit.
+The prose scan has no hard findings; its four review candidates are existing
+table wording. Independent checks of the applied chapter diffs returned no
+application findings.
+
 ## Recheck commands
 
 From the book checkout, with `tecos_source` naming the source repository:
