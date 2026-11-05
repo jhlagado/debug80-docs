@@ -17,7 +17,7 @@ nav_group: "Part I: Using and programming TEC-OS"
      KS48, browser, font or physical-board qualification. See 08-pass-record.md. -->
 
 Your program can read a key, print text or collect a line through the BDOS.
-The same calls work with the selected console, so the program uses TEC-OS
+The same calls work with the selected console so the program uses TEC-OS
 instead of handling the keyboard or display hardware itself.
 
 ## A COM program and its calls
@@ -41,9 +41,7 @@ call `0005h`. A byte parameter goes in `E`, while an address or word
 parameter goes in `DE`. A byte result is returned in `A` and a word result
 in `HL`. For example, function 2 takes the character in `E` and function 9
 takes an address in `DE`. In source, `BDOS EQU $0005` gives that call
-address a name. The word at `0006h`, within the BDOS jump, marks the end of
-the memory available to your program. Chapter 10 explains that limit when
-placing data and a private stack.
+address a name.
 
 ## Calls, returns and saved values
 
@@ -117,7 +115,7 @@ Function 10 takes a buffer address in `DE`. Its first byte gives the maximum
 character count. The second receives the number entered and the characters
 follow it. A maximum of 20 needs a 22-byte buffer: two control bytes
 followed by the space for input. The returned count defines the text's
-length, so it is not automatically a function-9 string.
+length so it is not automatically a function-9 string.
 
 Save this program as `B:LINE.ASM`. It reads a line, prints a fixed
 acknowledgement and returns to the prompt:
@@ -239,18 +237,19 @@ is:
 | 10 | Read console buffer | `DE`: the buffer | the line in the buffer |
 | 11 | Console status | nothing | `A`: 1 if a key is waiting, else 0 |
 
-Functions 2 and 9 are the two printing calls from the earlier program
-lesson. The file functions 15 and 20 are explained with their file control
-blocks in Chapter 9. Appendix A lists all BDOS functions and their full
-register and result contracts.
+Appendix A lists all BDOS functions and their full register and result
+contracts.
 
 ## Returning to the prompt
+
+The prompt normally returns on the drive and in the user area where your
+program started. If that drive is unavailable, it falls back to A.
 
 A top-level `RET` with the stack restored ends your program through warm
 boot. A jump to `0000h` or BDOS function 0 also takes that path. Console
 input and error handling can end a program there too:
 
-- `^C` as the first key of a function-10 line.
+- `^C` while a function-10 line is empty.
 - `^C` after `^S` has paused output through function 2 or 9.
 - A key pressed after a default-mode BDOS error such as
   `Bdos Err On B: Bad Sector`.
@@ -262,10 +261,6 @@ disk errors and returned error modes alongside file calls.
 Warm boot rebuilds the jumps at the bottom of memory and restarts the CCP.
 Services remain installed and the selected console stays in use. Pending
 card writes are flushed before the next load. A successful flush puts them
-on the card, while a failure drops the failed cache lines and reports
+on the card while a failure drops the failed cache lines and reports
 `Write lost`. Chapter 15 explains the full warm-boot sequence.
 
-The prompt returns on the drive and in the user area held at `0004h`. The
-CCP stored that selection before program entry, so it is normally where the
-program started. A program that changes that byte changes the selection used
-on exit. An unavailable drive falls back to A.

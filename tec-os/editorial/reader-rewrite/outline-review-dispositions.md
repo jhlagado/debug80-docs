@@ -65,3 +65,17 @@ All five P3 findings are resolved and no outline blocker remains from that
 review. This closes the mandatory outline checkpoint before prose. Example
 execution, chapter craft/factual reviews and final source/navigation acceptance
 remain separate requirements. Publication remains excluded.
+
+## Additional Chapter8 draft refinement
+
+P3's independent full review of521c4fc6 accepts LINE's contract and exact
+evidence boundaries but removes unused memory detail before its home. The
+0006h explanation already exists completely in10 and is removed as a duplicate
+from8. The detailed0004h mutation/exit-selection rule moves after10's
+page-zero table. Chapter8 retains the ordinary return/fallback action first.
+Printing-call retrospective and unused file-number preview are deleted while
+9/A retain the actual contracts. Three optional conjunction commas are cut.
+The final CtrlC bullet is aligned to the current-empty-line condition.
+This is a bounded within-ladder refinement, recorded in the crosswalk's
+post_draft_amendments, not a replacement of the frozen movement inventory.
+Literal source and measured LINE bytes remain unchanged. No execution.
