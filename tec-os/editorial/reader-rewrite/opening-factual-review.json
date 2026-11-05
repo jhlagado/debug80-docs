@@ -111,13 +111,14 @@
         "sha256": "5b47e076100b0b997a0b42cb34fe28a244bee00ac45f5113f4c4373f9515e437"
       },
       "full_reader_and_record_read": true,
-      "result": "clear_in_reviewed_scope",
+      "result": "fixture_continuity_qualification_required",
       "checks": [
         "Full587-line reader chapter and548-line pass record read, including unchanged historical procedures.",
         "All16 inherited fences remain ordered and byte-identical;12 inserted fences checked, six exact source/output substrings and six exact packet shell-line sequences.",
         "All seven host cases checked as retained text/artifacts: backup equality, verification, A/B directory, user0 listing, raw get, text get and missing-file failure without output/image mutation.",
         "384 raw bytes contain286 source CRLF bytes plus98 EOF padding bytes;13 CRLF pairs yield273 LF text bytes and the recorded hash.",
-        "Historical78127ec examples stay historical; physical install/dd/protection and unrelated old procedures gain no new runtime acceptance."
+        "Historical78127ec examples stay historical; physical install/dd/protection and unrelated old procedures gain no new runtime acceptance.",
+        "Follow-on continuity check: exact extraction artifacts remain correct, but reader needs the separate fresh-starter fixture qualification described in opening-continuity-01."
       ]
     }
   ],
@@ -163,6 +164,53 @@
       "problem": "Chapters1/2 nav_group is Part I: Using and programming TEC-OS; Chapters3–7 use Part I: Using TEC-OS.",
       "concrete_fix": "Reconcile draft front-matter group labels at integration against the agreed part grouping. No root navigation change is made by this review.",
       "origin": "Also identified by the lead; recorded as a known integration issue, not a runtime defect."
+    },
+    {
+      "id": "opening-continuity-01",
+      "priority": "required_fixture_qualification",
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "containing_sections": [
+        "The host tools",
+        "Recovering BANNER"
+      ],
+      "problem": "The saved Chapter2 card wording and complete eight-file A listing imply continuity from Chapter1, although the recorded BANNER Machine4 starts from a fresh starter. Chapter1 Machine1 saved SAMPLE.COM and SAMPLE.DBG on A; neither is in the BANNER fixture A listing. The general example-specific sizes/hashes/free-space sentence does not identify this separate starting state. No current combined-session count or free-space total has been measured.",
+      "exact_addition_proposal": "The recorded BANNER case began on a fresh starter card, separately from the SAMPLE run in Chapter 1. If you continued on the same card, A may also contain SAMPLE.COM and SAMPLE.DBG.",
+      "placement": "Recovering BANNER, after the saved-image introduction and before the verification output. Keep all captured listings/counts unchanged.",
+      "chapter2_limit": "Its prompt/tool/source instructions remain valid on a continued card; the missing qualification is the later complete-card listing, not proof of a combined-session execution.",
+      "retained_inventory_evidence": [
+        {
+          "archive_member": "stage/results/opening-direct-inventory.json",
+          "bytes": 1696,
+          "sha256": "f829dc985ba1c83391fe92a220a475d70e079d19bce4639f717d213f3196cadb",
+          "observed_A_outputs": [
+            {
+              "name": "SAMPLE.COM",
+              "bytes": 384,
+              "sha256": "6000fa09fa9bd74309216b1b6d827c3fd962bf04f53ad49b37669de8f452d34f"
+            },
+            {
+              "name": "SAMPLE.DBG",
+              "bytes": 640,
+              "sha256": "7313230d8ae0bdc24d7cd46c923fabd368227785ae02a17ddcec19fcac78a85c"
+            }
+          ]
+        },
+        {
+          "archive_member": "stage/results/BANNER-persisted-inventory.json",
+          "bytes": 2321,
+          "sha256": "b3559ef950a16b99fbcc31270af59ccfebb8ac5d97ca3fac1055c8595e7e57c6",
+          "observed_A_names": [
+            "GLCD.SVC",
+            "MOUNT.COM",
+            "SAMPLE.ASM",
+            "STARTUP.CMD",
+            "TAS.COM",
+            "TED.COM",
+            "THOR.PRJ",
+            "THOR.SES"
+          ]
+        }
+      ]
     }
   ],
   "chapter1_historical_unit_reader_home_audit": [
