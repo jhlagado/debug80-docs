@@ -9,7 +9,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 <!-- Source-only semantic check: TEC-OS ea3ef3d.
      Unprefixed source ranges use that revision. Historical captures,
-     addresses, byte counts and test examples retain TEC-OS 78127ec.
+     addresses, byte counts and test examples retain their recorded sources.
+     Most came from the frozen book checked at TEC-OS 78127ec. The
+     765-byte GLCD relocation walkthrough below is recorded at 58d4345,
+     not a 78127ec measurement. Its later driver has a different image size.
      Its starter TAS.COM was Thorium dbee66a, SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      No build, test, import, capture or new measurement was performed.
@@ -120,8 +123,8 @@ before the image. A byte of 255 advances without patching and longer gaps
 use repeated 255 bytes. A gap exactly divisible by 255 needs a final zero
 byte to apply the fixup at that position
 (`tools/lib/svc.mjs:37-48`, `tools/lib/svc.mjs:107-133`). Appendix H describes
-the bytes. TAS writes the same file fields on the card, as Chapter 13
-explains, while the PC helper fills its own header fields
+the bytes. TAS produces the same file format on the card, as Chapter 13 explains.
+The two writers fill different header fields, as Appendix H specifies
 (`Thorium dbee66a:src/tas/DRV.ASM:92-120`).
 
 ## Installation before commit
@@ -195,7 +198,7 @@ including when the gap is 255. A 255 skips the patch, while other bytes
 add `SLDL` to the byte addressed by HL. A rejected list can leave the
 loaded file partly relocated (`src/loader.asm:324-373`).
 
-In the historical GLCD example the driver table began with `00F0h`,
+In the recorded `58d4345` GLCD example the driver table began with `00F0h`,
 `014Bh` and `0150h`. Installation at `B600h` changed them to `B6F0h`,
 `B74Bh` and `B750h` at `B619h`. Its 765 header/image bytes occupied three
 pages. With the 164-byte alignment gap, the TPA fell from 47,268 to
