@@ -362,19 +362,19 @@ the drive's DPH:
 
 - If the changed flag is set, the drive is taken out of `LOGINV` and put in
   `WARMV`, the vector of drives to rebuild to their mark
-  (`src/ram.asm:260-261`).   At its next selection `LOGIN` builds the vector
-  again, but reads the   directory only up to the mark
+  (`src/ram.asm:260-261`). At its next selection `LOGIN` builds the vector
+  again, but reads the directory only up to the mark
   (`src/cpm/bdoslog.asm:297-319`). The mark covers every entry recorded as
-  used, so the scan can omit   the remaining empty entries.
+  used, so the scan can omit the remaining empty entries.
 - If the flag is clear, `ALVSUM` adds up the vector's bytes with `SUMDE`,
-  the   routine that also sums the container's table
+  the routine that also sums the container's table
   (`src/cpm/bdoslog.asm:446-454`, `src/cpm/bdoslog.asm:473-496`,
   `src/volutil.asm:120-136`). If the sum is what `LOGDONE` stored, the drive
   stays logged in with its vector as it is. A different sum indicates a
-  change that   neither an allocation nor a directory write recorded, such
-  as a stray write   by a program. That drive is taken out of `LOGINV` and
-  scanned in full at   its next selection. Equal sums are not a
-  byte-for-byte comparison of the vector.
+  change that neither an allocation nor a directory write recorded, such as
+  a stray write by a program. That drive is taken out of `LOGINV` and
+  scanned in full at its next selection. Equal sums are not a byte-for-byte
+  comparison of the vector.
 
 ### The reset tail
 
@@ -451,7 +451,7 @@ The BDOS has four disk error messages, printed after `Bdos Err On` and the
 drive's letter (`src/text.asm:72-78`):
 
 - `Select`, code 4, for a drive past D, a drive with no volume or a `?`
-  drive   byte outside function 17 (`src/cpm/bdoslog.asm:897-900`,
+  drive byte outside function 17 (`src/cpm/bdoslog.asm:897-900`,
   `src/bios.asm:63-73`, `src/cpm/bdosfile.asm:211-233`).
 - `R/O`, code 2, for a change to a drive that function 28 has made read-only
   or to a volume the card marks read-only (`src/cpm/bdoslog.asm:880-891`).

@@ -190,3 +190,12 @@ No runtime or prose-test script was invoked. Independent editorial/factual
 review, final chapter placement/anchors and whole-book acceptance remain
 pending. The full compatibility reference's separate authoring/review is not
 closed here. Only this draft and this pass record are owned for the commit.
+
+## Bounded prose-spacing correction
+
+Accepted the lead's spacing finding. Removed eight inherited triple-space
+artifacts in the WRESET bullets and Select-error item and reflowed prose
+list items. Word sequence, inline literals and all table lines were compared
+before and after and are unchanged. No factual rewrite, product execution,
+import, build or test occurred. Full independent Chapter19 review remains
+pending. Only the Chapter19 draft and this record were changed.
