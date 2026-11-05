@@ -162,3 +162,23 @@ navigation/anchors, final profile adoption and whole-book reader-order review
 remain open. Historical captures and listings keep their actual pins. Compact
 assembly proof, new-font/default workflow acceptance and publication remain
 held. I have not changed any other writer's files or shared status records.
+
+## Independent teaching and timing corrections
+
+Accepted three findings from the complete96-unit independent review. Defined
+nibble as four bits before HWLIB/BCD use. Qualified the high-byte discard as
+the ordinary video-console path; serial transmits all eight bits. The
+DIGIT20670 run and PICO PUTAT comparison now name60e0768 separately from
+78127eccaptures.
+
+The lead read Book27:1–8,12–23,66–71. Its run setup names60e0768 and the
+DIGIT method is CALLtarget-to-return. PUTAT29702 is one60-character call,
+about495 per character. The separately timed BDOS test runs70calls from0005h
+to return on both19ad916/60e0768 and observes14 fewer T-states at each cell.
+The book-method3908 comparison carries the earlier3922 baseline by that
+measured difference. It is not a new781measurement or fresh calculation of
+the graphics-LCD path. Retained literals, output and recipes are unchanged.
+
+The changed paragraphs were read with their neighbours for teaching order,
+agency and every comma. Bounded independent correction confirmation is pending.
+No assembly, build, product import, execution, test or capture occurred.
