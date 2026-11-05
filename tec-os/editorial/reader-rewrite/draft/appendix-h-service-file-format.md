@@ -17,13 +17,13 @@ nav_group: "Appendices"
      rerun for this draft. -->
 
 A service file contains the bytes to install, the records it needs and the
-positions that require relocation. Its on-disk header describes that work.
-The loader overwrites some fields after using them, so an installed header
-must be read differently from the file header below.
+positions that require relocation. Its on-disk header describes that work. The
+loader overwrites some fields after using them so an installed header must be
+read differently from the file header below.
 [Write a resident service](13-write-a-resident-service.md) covers authoring.
 [Loading and removing services](24-loading-and-removing-services.md) follows
-installation and gives the resident header. This reference retains a
-historical GLCD.SVC dump to show the file fields and gap encoding together.
+installation and gives the resident header. This reference retains a historical
+GLCD.SVC dump to show the file fields and gap encoding together.
 
 ## The file
 
@@ -83,13 +83,12 @@ measured fields and routine offsets (`tools/lib/svc.mjs:122-131`):
 | The stack bytes | The source |
 | The name | The source |
 
-Leave the measured sizes, dependency count and routine-offset fields zero
-in the source. Supply `SVCFMT` in the format byte. `makeSvc` overwrites that
-byte with its own format value (`tools/lib/svc-format.mjs:3`,
-`tools/lib/svc.mjs:122`). TAS at Thorium `dbee66a` preserves it. That TAS
-writes the dependency count only when the source has `DEPS`, so the zero
-in a source without dependencies must already be correct
-(`Thorium dbee66a:src/tas/DRV.ASM:92-120`,
+Leave the measured sizes, dependency count and routine-offset fields zero in the
+source. Supply `SVCFMT` in the format byte. `makeSvc` overwrites that byte with
+its own format value (`tools/lib/svc-format.mjs:3`, `tools/lib/svc.mjs:122`).
+TAS at Thorium `dbee66a` preserves it. That TAS writes the dependency count only
+when the source has `DEPS` so the zero in a source without dependencies must
+already be correct (`Thorium dbee66a:src/tas/DRV.ASM:92-120`,
 `Thorium dbee66a:src/tas/DRV.ASM:252-258`).
 
 ## The dependencies
@@ -105,12 +104,12 @@ or one below the minimum version rejects the load
 
 ## The relocation data
 
-Relocation positions are encoded as one-byte gaps. At each fixup the
-loader adds the service's base page to an address's high byte. The first
-gap starts at header byte 24, immediately before the image. Each later gap
-starts at the previous fixup (`tools/lib/svc.mjs:37-49`). A gap of 255 moves on 255 bytes with nothing
-fixed, and the next byte carries on from there. A distance of 255 or more is
-therefore written as bytes of 255 and then the rest:
+Relocation positions are encoded as one-byte gaps. At each fixup the loader adds
+the service's base page to an address's high byte. The first gap starts at
+header byte 24, immediately before the image. Each later gap starts at the
+previous fixup (`tools/lib/svc.mjs:37-49`). A gap of 255 moves on 255 bytes with
+nothing fixed and the next byte carries on from there. A distance of 255 or more
+is therefore written as bytes of 255 and then the rest:
 
 | Fixups, as image bytes | Gap list |
 | --- | --- |
@@ -161,10 +160,9 @@ COUNTX 1
 B>
 ```
 
-In this historical run the service loaded at page `B8h`. The inserted
-zero gap changed header byte 24 from a space, `20h`, to `D8h`.
-`PUTTRIM` masks bit 7 (`src/cpm/ccpfile.asm:529-537`), so the name prints
-with an `X`.
+In this historical run the service loaded at page `B8h`. The inserted zero gap
+changed header byte 24 from a space, `20h`, to `D8h`. `PUTTRIM` masks bit 7
+(`src/cpm/ccpfile.asm:529-537`) so the name prints with an `X`.
 
 ## GLCD.SVC
 
@@ -203,15 +201,15 @@ The header's fields are:
 | 15 | `2b 00` | `INIT` at offset `002Bh` |
 | 17 | `47 4c 43 44 20 20 20 20` | The name, `GLCD` |
 
-The dump has no dependencies, so its relocation data follows the image
-immediately at offset 767, `2FFh`. The image begins at offset 25, `19h`,
-with the table of words the driver passes through service 12. Its entries
-include `00F2h`, `014Dh` and `0152h`, assembled for page 0.
+The dump has no dependencies so its relocation data follows the image
+immediately at offset 767, `2FFh`. The image begins at offset 25, `19h`, with
+the table of words the driver passes through service 12. Its entries include
+`00F2h`, `014Dh` and `0152h`, assembled for page 0.
 
-The first gap, 2, advances from offset 24 to 26, the high byte of `00F2h`.
-Each of the next five 2s reaches the next word's high byte. None of the
-69 gaps is 255, so all 69 mark fixups. The last reaches file offset 563.
-A bitmap with one bit for each of the 742 image bytes would take 93 bytes.
+The first gap, 2, advances from offset 24 to 26, the high byte of `00F2h`. Each
+of the next five 2s reaches the next word's high byte. None of the 69 gaps is
+255 so all 69 mark fixups. The last reaches file offset 563. A bitmap with one
+bit for each of the 742 image bytes would take 93 bytes.
 
 The driver contains no font. Its `INIT` obtains the ROM font address through
 service 15 and stores it for drawing (`drivers/glcd.asm:66-72`).

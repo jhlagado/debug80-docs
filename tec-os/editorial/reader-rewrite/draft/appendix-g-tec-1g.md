@@ -72,11 +72,10 @@ lit interval and afterwards. `TONE` keeps it set while toggling bit 7
 the shared port value. Chapter 11 gives their calling interface.
 
 The CPU generates the serial bits itself. It sends through `01h` bit 6 and
-receives through `03h` bit 7. The connection uses 4800 baud, eight data bits,
-no parity and two stop bits. The delay counts assume a 4 MHz clock, so the
-board requires FAST with the 4 MHz oscillator (`tools/build.mjs:25-26`,
-`tools/build.mjs:37-76`, `src/console.asm:387-421`,
-`src/console.asm:452-492`).
+receives through `03h` bit 7. The connection uses 4800 baud, eight data bits, no
+parity and two stop bits. The delay counts assume a 4 MHz clock so the board
+requires FAST with the 4 MHz oscillator (`tools/build.mjs:25-26`,
+`tools/build.mjs:37-76`, `src/console.asm:387-421`, `src/console.asm:452-492`).
 
 There is no hardware receive buffer. A byte reaches TEC-OS only while the CPU
 is polling for its start bit and sampling the following bits. A program that
@@ -166,7 +165,7 @@ that single sample. Chapter 7 gives the recovery procedure.
 With the keypad NMI jumper fitted, a press raises a non-maskable interrupt. The
 CPU pushes its return address and enters `0066h`, inside the default file
 control block (FCB) at `005Ch–007Fh`. TEC-OS installs no NMI handler there. The
-bytes can be file metadata rather than instructions, so a press can crash the
+bytes can be file metadata rather than instructions so a press can crash the
 machine. The supported TEC-OS setup leaves the jumper off. The diagnostics ROM
 has its own NMI test and different keypad instructions, which must not be
 applied to an ordinary TEC-OS session.
@@ -185,10 +184,9 @@ data (`src/lcd.asm:7-11`). Cold boot sends four initialisation commands
 | `01h` | Clear the display |
 
 Before a command or character `LCDWAIT` reads the busy flag, bit 7 of port
-`04h`, at most 256 times. The write follows readiness or expiry of that limit, so a missing
-LCD cannot hold this wait indefinitely (`src/lcd.asm:35-61`). The four row
-address commands are `80h`, `C0h`, `94h` and `D4h`
-(`src/tables.asm:51-52`).
+`04h`, at most 256 times. The write follows readiness or expiry of that limit so
+a missing LCD cannot hold this wait indefinitely (`src/lcd.asm:35-61`). The four
+row address commands are `80h`, `C0h`, `94h` and `D4h` (`src/tables.asm:51-52`).
 
 Cold boot writes the banner on row 0 and drives A and B on rows 1 and 2.
 Row 3 holds the recovery words `CARD?` and `GLCD?`, described in Appendix D.

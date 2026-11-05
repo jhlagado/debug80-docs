@@ -38,11 +38,11 @@ ends the current field. A field longer than its limit is rejected.
 The parser and delimiter checks are in `src/cpm/ccpcmd.asm:511-645`,
 `src/cpm/ccpcmd.asm:682-743` at the stated source revision.
 
-`?` matches one character, including a padding space. `*` fills the rest of
-its field with question marks. Thus `G*.*` is `G???????.???`. Text after a
-star in the same field is ignored, so `D*X` and `D*` select the same pattern.
-A short field is padded with spaces. `????.COM` therefore matches names of
-up to four characters with type COM, not every name ending in COM
+`?` matches one character, including a padding space. `*` fills the rest of its
+field with question marks. Thus `G*.*` is `G???????.???`. Text after a star in
+the same field is ignored so `D*X` and `D*` select the same pattern. A short
+field is padded with spaces. `????.COM` therefore matches names of up to four
+characters with type COM, not every name ending in COM
 (`src/cpm/ccpcmd.asm:617-645`, `src/cpm/ccpcmd.asm:706-727`).
 
 DIR and ERA use patterns to select files. TYPE, REN and SAVE require
@@ -83,7 +83,7 @@ additional forms handled by the command processor.
 
 | Form | Operation |
 | --- | --- |
-| `DIR [PATTERN]` | List matching files, or all visible files with no pattern |
+| `DIR [PATTERN]` | List matching files or all visible files with no pattern |
 | `TYPE NAME` | Print one text file |
 | `COPY SOURCE [DEST]` | Copy one file, with the destination rules below |
 | `REN NEW=OLD` | Rename one file on one drive |
@@ -189,12 +189,12 @@ partial-result cases are in [Appendix D](appendix-d-error-messages.md).
 
 ### SAVE
 
-SAVE takes a decimal count from 0 to 255 and one unambiguous file name.
-It writes that many 256-byte pages starting at `0100h`. A count of 0 makes
-an empty file. The count must be less than the high byte of the word at
-`0006h`, so the saved pages stop below the resident entry's page.
-[Memory for programs](10-memory-for-programs.md) gives the memory boundary
-and the complete capacity example.
+SAVE takes a decimal count from 0 to 255 and one unambiguous file name. It
+writes that many 256-byte pages starting at `0100h`. A count of 0 makes an empty
+file. The count must be less than the high byte of the word at `0006h` so the
+saved pages stop below the resident entry's page.
+[Memory for programs](10-memory-for-programs.md) gives the memory boundary and
+the complete capacity example.
 
 An existing file of the same name is erased first. A failed make, write or
 close produces `NO SPACE`. After a write failure SAVE attempts to close the
@@ -210,10 +210,10 @@ selection fails. USER accepts a single digit from 0 to 9 or one of 10 to 15.
 Leading-zero forms such as `00` and `03` are rejected. A nonzero user number
 appears before the drive in the command prompt.
 
-For a program command the type is replaced by COM, except for SVC. Lookup
-starts on the named drive, or the current drive when none is named, in the
-current user area followed by user 0. The current user is restored after
-that search. A file in user 0 needs no system attribute.
+For a program command the type is replaced by COM, except for SVC. Lookup starts
+on the named drive or the current drive when none is named. On that drive it
+searches the current user area followed by user 0. The current user is restored
+after that search. A file in user 0 needs no system attribute.
 
 If no file is found, a plain command on a drive other than A continues on A
 in the same user order. An explicit drive suppresses that fallback.
@@ -231,10 +231,10 @@ by a space and must be 80, 40 or 32. Other devices take no width.
 Extra text is rejected (`src/cpm/ccpcmd.asm:70-232`).
 
 The reply goes through the selected console and is discarded in BAT mode.
-Selecting an
-unavailable console can leave or restore another mode, so the reply reports
-the mode in effect, not merely the name typed. The practical alternatives
-and recovery actions are in [Choose a console](06-choose-a-console.md).
+Selecting an unavailable console can leave or restore another mode so the reply
+reports the mode in effect, not merely the name typed. The practical
+alternatives and recovery actions are in
+[Choose a console](06-choose-a-console.md).
 
 ### Resident services
 

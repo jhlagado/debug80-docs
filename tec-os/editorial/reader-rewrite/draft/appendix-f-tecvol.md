@@ -92,14 +92,14 @@ one descriptor in the given order:
 | --- | --- |
 | `GEOMETRY` | `G1M` or `G8M` |
 | `LABEL` | Capitalised and limited to 11 characters. The resulting labels must differ |
-| `DRIVE` | A–D, or empty for a volume on no drive |
+| `DRIVE` | A–D or empty for a volume on no drive |
 | `:ro` | Read-only volume |
-| `:wb` | Written-behind volume. At most one, and never together with `:ro` |
+| `:wb` | Written-behind volume. At most one and never together with `:ro` |
 
-`--align N` places volumes at multiples of N card blocks. The decimal value
-must be from 1 to 16,777,215 and must also be a multiple of 8. The default is
-2,048 blocks, or 1 MiB. A value outside the decimal range gives a usage error.
-A value inside it that is not a multiple of 8 fails container creation with
+`--align N` places volumes at multiples of N card blocks. The decimal value must
+be from 1 to 16,777,215 and must also be a multiple of 8. The default is 2,048
+blocks or 1 MiB. A value outside the decimal range gives a usage error. A value
+inside it that is not a multiple of 8 fails container creation with
 `alignment must be a multiple of 8 blocks` and status 1
 (`tools/tecvol.mjs:35-39`, `tools/tecvol.mjs:52-53`,
 `tools/lib/container.mjs:89-99`).
@@ -166,11 +166,11 @@ tecvol: header checksum mismatch
 
 ## dir
 
-`dir IMAGE [DRIVE]` lists A by default. Each line gives user area, filename
-and record-rounded byte length. `R/O` and `SYS` mark file attributes
-(`tools/tecvol.mjs:142-149`). CP/M records are 128 bytes, so the listing
-includes padding rather than a PC file's original byte length. The historical
-starter's A directory was:
+`dir IMAGE [DRIVE]` lists A by default. Each line gives user area, filename and
+record-rounded byte length. `R/O` and `SYS` mark file attributes
+(`tools/tecvol.mjs:142-149`). CP/M records are 128 bytes so the listing includes
+padding rather than a PC file's original byte length. The historical starter's A
+directory was:
 
 ```sh
 node tools/tecvol.mjs dir dist/starter.img A
@@ -200,12 +200,11 @@ attribute blocks the operation. `--force` overrides that file attribute but
 never a read-only volume. Insufficient data blocks or directory entries stop
 the copy before the image is replaced (`tools/lib/cpmfs.mjs:180-206`).
 
-Binary files are padded with zero bytes to complete their final record.
-`--text` converts LF and CR LF endings to CR LF, appends `^Z` and pads with
-`^Z`. `--ro` and `--sys` set the two file attributes, and `--user N` selects
-the destination area (`tools/lib/cpmfs.mjs:180-188`,
-`tools/lib/cpmfs.mjs:216-218`). These retained commands make a text file and
-copy the prepared binaries:
+Binary files are padded with zero bytes to complete their final record. `--text`
+converts LF and CR LF endings to CR LF, appends `^Z` and pads with `^Z`. `--ro`
+and `--sys` set the two file attributes and `--user N` selects the destination
+area (`tools/lib/cpmfs.mjs:180-188`, `tools/lib/cpmfs.mjs:216-218`). These
+retained commands make a text file and copy the prepared binaries:
 
 ```sh
 printf 'hello\nworld\n' > build/hello.txt
@@ -391,6 +390,6 @@ A>MOUNT
 A>
 ```
 
-There is no STARTUP.CMD on this card, so the first prompt follows the volume
-list without a startup command. MOUNT with no argument lists ARCHIVE too,
-even though it has no assigned drive.
+There is no STARTUP.CMD on this card so the first prompt follows the volume list
+without a startup command. MOUNT with no argument lists ARCHIVE too, even though
+it has no assigned drive.
