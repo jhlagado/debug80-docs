@@ -16,8 +16,8 @@ comment, `<!-- Checked against TEC-OS <commit>. -->`, with the short hash of
 the commit whose code the chapter's claims were checked against and the build
 of any file from outside the repository that its examples depend on, such as
 the starter card's `TED.COM` or `TAS.COM`. The comment is for the people
-revising the book. A reader never sees it. A revision that rechecks the chapter
-against a later commit changes the comment. A source-only pass keeps the
+revising the book. A reader never sees it. After rechecking the whole chapter
+against a later commit, update the comment. A source-only pass keeps the
 capture's original commit. If only some citations are revised, a separate
 comment names the source revision and the resolution ledger that identifies
 those citations. It does not certify the remaining claims, measurements or
@@ -177,8 +177,8 @@ is safe".
 of a paragraph, and only restates or admires what came before ("This shows how
 compact TEC-OS is"), is deleted.
 
-**No staged questions.** A question the text asks only to answer it in the next
-sentence is replaced by the answer.
+**No staged questions.** Replace a question written only to introduce its
+answer with the answer itself.
 
 **Named sources.** No "it is often said", "many users find" or "it is generally
 agreed". A claim names its source or it is a claim the writer checked.
@@ -224,7 +224,7 @@ a PC's shell go in an `sh` block, and Z80 source in an `asm` block.
 - File names in the text are as TEC-OS shows them, in capitals: `SAMPLE.ASM`,
 `GLCD.SVC`.
 
-## What the book leaves out
+## Excluded material
 
 The book describes the product as it is at each chapter's commit. It gives no
 account of how TEC-OS was developed: no internal plans, no work records and no
