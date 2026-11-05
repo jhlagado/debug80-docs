@@ -1,141 +1,80 @@
 # Remaining workflow proof
 
-This is a verification queue, not an allocation or an executable command.
-KS48's adopted source and final inputs are not yet qualified. Source-backed
-chapter work continues. Do not execute the preserved offer17 80-column
-packet as proof of the new opening.
+This is the single current runtime-needs inventory. No execution is allocated.
+The earlier queue and search history remain at book3dd2200. Historical evidence
+keeps its actual source, input and output boundaries. Publication is excluded.
 
-## Primary opening
+## Next shared-input offer
 
-Use the qualified TEC Compact source with its actual 40-column cold default,
-PICO9918 and enabled matrix input. Preserve the real starter, SYSTEM/A,
-WORK/B and original GLCD/startup policy. Demonstrate the first prompt,
-file/drive actions and supplied SAMPLE build/run before the authored banner.
-The SAMPLE anchor and tools must follow the final offer rather than the old
-source coordinate or application pins.
+Prepare one finite offer around the qualified TEC Compact production source,
+its actual40-column cold default, matching ROM/map/font, real starter card and
+pinned TED/TAS. Preserve SYSTEM/A, WORK/B and the GLCD/startup policy. Reuse
+immutable inputs, not mutable state: each workflow starts from a named fresh
+card copy and machine. Do not execute the preserved offer17 80-column packet.
 
-The banner needs actual TED typing into a new file, save/reopen, TAS build/run,
-a real edit/rebuild/run and persistence into a fresh machine. Compare the
-on-machine TAS output with an explicit ATOM reference. Text decoding alone
-cannot establish the chosen font pixels or reverse status presentation.
-The separate private KS48 preparation plan records the actual input and
-harness changes needed before freezing an executable packet.
+Private preparation home:
+`Origo studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-preparation/`.
+The author is preparing exact sources, input sequences, observations and a
+bounded harness, not an allocation. Its final input manifest and seal require
+the actual qualified source offer. Bind that offer, recheck its diff and seal
+without substituting an assumed pin or generated artifact.
 
-## Existing reading material
+| Workflow | Required successful observation | Required discriminator or failure observation |
+| --- | --- | --- |
+| First session and supplied SAMPLE | Actual cold40 first prompt, drive/file actions, ordinary TAS SAMPLE and SAMPLE execution, persisted COM and intended console/LCD/device results | Wrong input/hash/configuration must fail before execution. Record real console and display state so prompt-like text or a font-dependent decoder cannot count as completion |
+| Authored BANNER | Ordinary TED creation, save/reopen, TAS build/run, edit/rebuild/run and persistence in a fresh machine. Compare actual TAS output with explicit ATOM reference | A finite editor/build rejection control and repaired result must be specified in the exact packet. Verify saved source, status and final output rather than an injected COM or synthetic screen |
+| Chapter3 reading | TYPE the supplied A:SAMPLE.ASM on the same qualified40-column configuration, observe actual pause, continue and return to command input | A separate cancellation case must stop before the unread remainder, erase the pause and reach a genuine ready prompt. Preserve exact keys, row contents and byte boundaries |
+| Held FAIL | Build the exact reviewed no-setup SCF/RET service through the ordinary route. Observe INIT entry, failed installation, unchanged committed top/registry and AREA before/after | Distinguish INIT failure from a bad-header rejection or an unexecuted program. Specify an independently reviewed successful-install/removal control using fresh state. Preserve the original held source/output separately |
 
-Chapter3's pagination uses the supplied A:SAMPLE.ASM, not a host-generated
-fixture. Verify its exact pause, continuation and cancellation on the adopted
-40-column display before writing output around the result. Preserve the
-complete old host-fixture recipe and captures at their Chapter28 home.
+The exact offer must fix all payloads, commands, input bytes and finite cases.
+Inputs that do not genuinely overlap belong in a separate bounded unit rather
+than an open-ended batch. Charge every assembly, boot, model step, control and
+settling interval. Source bindings, command and harness hashes, absolute
+whole-job deadline, memory/heap limits, enforceable cycle ceilings and zero
+shared-lock wait must be reviewed before allocation. No timeout extension,
+retry, fallback, dependency download or hidden fixture build is permitted.
+Retain successful, failed and stopped evidence for independent result review.
 
-## New interactive program
+## Current source prerequisite
 
-The complete LINE source proposed for8 is in
-`draft/08-line-example-candidate.md`. It was added from a test program, not
-retained from an existing book example. Source inspection supports its call
-sequence but the located qualified chain cases exercise abort/reset while
-input waits. They do not prove normal completion followed by GOT and return.
+KS48 modelling closed and KG53 was registered at Origo cbdfd466. Production
+implementation/full qualification is separately owned. The focused historical
+GLCD-input repair has passed. Parent reports production source/data unchanged
+and still requires two successful strict font runs. This is not yet a qualified
+new source offer or an opening-workflow allocation. BANNER40 remains unrun.
+No physical-display result follows from modelling or a host check.
 
-The required positive assembly/input/output/return run was completed by the
-separate immutable37d214f4 offer. P3 independently accepted the retained result
-at Origo71696f2e, evidence/book-reader-rewrite/line-ea3-attempt01. The compact
-reader source is47logical bytes, ATOM/TAS-identical, with exact positive and
-Ctrl-C control observations. This closes only the serialea3 workflow hold.
-Whole-passage insertion and independent editorial/factual recheck remain
-required. Positive/abort console evidence begins at function10, without an
-earlier prompt or typed LINE command. TAS evidence begins at TAS LINE.
-Do not prepend unrecorded text or claim font/default/browser/board proof.
+## Closed and retained evidence
 
-## Measurements and historical provenance
+LINE's serialea3 proof at Origo71696f2e is accepted:47 logical bytes,128 padded
+TAS bytes, exact positive input/GOT/return and empty-line CtrlC control. Full
+insertion review and additional Chapter8 teaching corrections are confirmed.
+Positive/abort captures begin at function10, without an earlier prompt or typed
+LINE. TAS output begins at TAS LINE. Do not prepend unrecorded bytes. This
+closes LINE only, not font/default, browser, display or physical-board proof.
 
-The boot-cost audit distinguishes old actual run records from unsupported
-rewrites. Three recorded figures are restored, one unsupported banner total
-is removed and older subroutine costs retain their proved build revisions.
-Any adopted-source cost table needs its own actual method and evidence.
-A broad marker interval cannot substitute for a complete subroutine duration.
+FAIL's original run remains unestablished. It first entered book5006e2c. The
+bounded text-log/history search found no matching invocation. A different
+older vector-installing fixture is not its proof. Binary images/compressed
+archives were not exhaustively searched. The complete original listing,
+recipe, output and interpretation stay in draft/13-fail-example-candidate.md.
+A new allocated result must name its own pin rather than backdate the capture.
 
-Retained captures need their actual run pin and inputs. A chapter's later
-checked-at header, equal source bytes or a later matching artifact is not
-proof that an old command was rerun. H's GLCD dump remains at621201d while
-its makeSvc/GAPZERO rerun remains at78127ec. Chapter24's765-byte walkthrough
-remains at58d4345. Preserve such distinctions through final integration.
+Old pagination fixtures/screens remain in Chapter28. Old costs keep actual
+measurement methods and pins. H's GLCD dump is621201d, its writer/GAPZERO run
+78127ec and Chapter24's765-byte walkthrough58d4345. Source equality, a later
+checked-at header or a similar artifact never establishes a rerun.
 
-## Before a run
+## Other compact listings and final acceptance
 
-Prepare the exact source/input closure and a reproducible private packet.
-Obtain independent static review of the final harness and exact command.
-Use the allocated whole-job deadline, finite cycle/wait limits, memory guard
-and heap limit. Embedded approval/allocation labels grant neither permission.
-Retain successful, failed and stopped evidence. No extension or retry follows
-from a stopped job without its own decision.
+`compact-proof-plan.md` is the detailed inventory, public-route analysis and
+proposed proof grouping for retained compact candidates. Separate source-only
+candidates and independent static reviews do not qualify bytes or workflows.
+The ea3 PC service writer's case-sensitive uppercase ORG handling and ordinary
+ATOM trailing-INCLUDE route remain obstacles to resolve before their offers.
+No product change is authorised here. LINE is excluded from required reruns.
 
-Final navigation, complete reader-order review and independent result
-acceptance remain separate from runtime passes. Publication stays excluded.
-
-## KS48 modelling checkpoint
-
-P3 reports independent modelling closure and KG53 registration on Origo
-main cbdfd466. Production font/cold40 implementation and full qualification
-have been allocated to development. This is not a qualified source offer
-or an opening workflow allocation. Keep BANNER40 prepared but unrun.
-The modelling supplement's initial failure and corrected positive proof
-remain distinct retained records. No physical-display result follows.
-
-## Retained FAIL example
-
-Chapter13's full independent provenance audit found no explicit original
-execution record for FAIL, introduced at book5006e2c. The complete listing,
-recipe, output and interpretation remain in draft/13-fail-example-candidate.md
-outside reader prose. Source inspection supports the mechanism but not the
-claimed capture. Locate an actual original record or prepare a separate
-verification offer. No execution allocation follows from this queue.
-
-## Compact-format assembly across retained examples
-
-The measured LINE insertion establishes its exact compact source only. Other
-retained assembly listings still use their historical spelling/layout. They
-are not silently accepted as the final chosen code style. Prepare separate
-compact candidates, preserve original source/comment meaning and qualify the
-actual assembled result before replacing reader listings or claims. Static
-formatting or source equality alone is insufficient.
-
-Current teaching examples include SHOW and its saved-register fragment,
-TOP/AREA/KEY, HWLIB and its BOARD/LCDMSG/DIGCLK/NOW/ROWS/PLACE clients,
-EXISTS/RUN, COUNT/CHARS/RECS/NEEDS, READ, ARGS, HELLO and VTEST. The ROM
-include-order snippet has a separate source-listing role. FAIL is separately
-held for missing original execution evidence. This list is a preparation
-queue, not a sealed or complete final manifest while drafts are still landing.
-
-Each executable candidate needs its own source identity, named assembler and
-include/dependency closure, comparison against the relevant historical bytes
-or independently checked reference and actual workflow/evidence boundary.
-Do not repin a prior transcript merely because reformatted code assembles
-to matching bytes. A fresh positive workflow, when needed, requires a separately
-reviewed exact packet and allocation. No batch runtime is allocated here.
-
-## Bounded original-record search
-
-A further read-only search found no matching original invocation and result.
-Book5006e2c introduces the source, command and printed result without an
-execution record. The retained chapter10 rerun JSON records COUNT and RECS,
-its setup omits FAIL and its combined output contains no FAIL.SVC. An older
-FAIL script and binary use a different vector-installing fixture, not this
-no-setup SCF/RET example. Targeted retained text-log searches found no match.
-Binary images and compressed archives were not exhaustively examined.
-No qualifying payload was archived and nothing executed. The hold remains.
-
-## Public compact-source route obstacles
-
-The source-only compact-proof-plan.md inventory records exact retained text
-identities and proposed finite proof groups. No command, budget, allocation
-or executable packet is sealed. Lead inspection confirms ea3ef3d
-tools/lib/prl.mjs32–43 uses a case-sensitive uppercase ORG_LINE expression,
-consumed by makeSvc at tools/lib/svc.mjs100–107. A lowercase compact org
-cannot be assumed to pass that writer. No product fix is authorised here.
-The ordinary ATOM route for HWLIB's trailing include also needs explicit
-qualification. Source expansion or substitution must not silently change
-the reader's public build route. No runtime was used to infer either result.
-
-Original versus compact byte equality must be proved with exact includes,
-then the claimed public workflow must be observed under a reviewed allocated
-packet. Historical captures retain their actual pins even if bytes match.
+After result review, insert only the exact qualified example through a complete
+passage/craft check. Final adopted-source citations/maps, all remaining example
+proofs, navigation, complete reader-order review and independent acceptance
+remain separate work. Root reader pages and publication stay untouched.
