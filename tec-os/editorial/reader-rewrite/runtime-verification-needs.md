@@ -87,9 +87,13 @@ proposed proof grouping for retained compact candidates. Separate source-only
 candidates and independent static reviews do not qualify bytes or workflows.
 The actual service candidates now use uppercase ORG, permitted by the adopted
 directive conventions and required by the existing PC writer. No directive-case
-exception or product fix follows. The ordinary ATOM trailing-INCLUDE reference
-route remains to resolve before those offers. No product change is authorised
-here. LINE is excluded from required reruns.
+exception or product fix follows. The ATOM reference for the nine HWLIB clients
+is held: `BDOS EQU` closes its include header before `ABI.INC` and the trailing
+`HWLIB.ASM` is outside the header too. No inspected public route accepts those
+unchanged sources. The exact source-only analysis and identities are in
+compact-include-route-review.json. A different reference route requires separate
+reviewed authority. No product change is authorised here. LINE is excluded from
+required reruns.
 
 After result review, insert only the exact qualified example through a complete
 passage/craft check. Final adopted-source citations/maps, all remaining example
