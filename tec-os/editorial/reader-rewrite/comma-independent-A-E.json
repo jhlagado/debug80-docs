@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "status": "clear_bounded_independent_confirmation",
+  "scope": "Appendix A–E punctuation application and application record at 4786ebe; plan/canonical source receipt at 025781b. Candidate bcdf422 is excluded from independent authorship review.",
+  "commits": {
+    "appendix_application": "4786ebe443877b27970bc7901adf65bbdbaa6693",
+    "reader_basis": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+    "inventory": "028ecdde0cd295d162cea47b6db7291b21384bf0",
+    "plan_receipt": "025781b0a435d00c20c6858b4c139d6c4b9beaa2"
+  },
+  "reviewed_records": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/comma-review-A-E.json",
+      "commit": "4786ebe443877b27970bc7901adf65bbdbaa6693",
+      "sha256": "1eccf44649c1ce338e2fbe693ff1f6d1e8cd69fd204c4e16ec8cb865cec9d4ef"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/comma-application-A-E.json",
+      "commit": "4786ebe443877b27970bc7901adf65bbdbaa6693",
+      "sha256": "883f42401d12979ef55954a8725bd04aa6c908bbe21937c2e70386f28056b21a"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/source-receipt-gate.json",
+      "commit": "025781b0a435d00c20c6858b4c139d6c4b9beaa2",
+      "sha256": "a815f2b37a3d8ef9851055a8bfaf43cb9ad913eb7498c8d5cb9aa06c893d05b0"
+    }
+  ],
+  "appendix_result": {
+    "verdict": "clear",
+    "applied_ids": [
+      "CC0229",
+      "CC0230",
+      "CC0231",
+      "CC0235",
+      "CC0236",
+      "CC0237",
+      "CC0238",
+      "CC0239",
+      "CC0240",
+      "CC0241",
+      "CC0243",
+      "CC0244",
+      "CC0245",
+      "CC0246",
+      "CC0247",
+      "CC0248",
+      "CC0249",
+      "CC0250",
+      "CC0251",
+      "CC0252",
+      "CC0253",
+      "CC0254",
+      "CC0255",
+      "CC0258",
+      "CC0259",
+      "CC0260",
+      "CC0261",
+      "CC0262",
+      "CC0263",
+      "CC0264",
+      "CC0265",
+      "CC0266",
+      "CC0268",
+      "CC0269",
+      "CC0270",
+      "CC0271",
+      "CC0272",
+      "CC0273",
+      "CC0274",
+      "CC0275",
+      "CC0276",
+      "CC0277",
+      "CC0278",
+      "CC0279",
+      "CC0280",
+      "CC0281",
+      "CC0282",
+      "CC0283",
+      "CC0284",
+      "CC0285",
+      "CC0286",
+      "CC0287",
+      "CC0288",
+      "CC0289"
+    ],
+    "retained_ids": [
+      "CC0232",
+      "CC0233",
+      "CC0234",
+      "CC0242",
+      "CC0256",
+      "CC0257",
+      "CC0267"
+    ],
+    "counts": {
+      "removed_commas": 54,
+      "retained_boundaries": 7,
+      "complete_contexts_read": 58
+    },
+    "exact_comparison": "Reconstructed each output from the 16918fc source by removing only the 54 indexed commas. Every reconstructed file matched the committed output byte for byte. All seven retained target commas remain intact. This also establishes unchanged fenced code, HTML comments, inline literals, links, words, numbers and captures.",
+    "sources": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md",
+        "before_sha256": "98b1201fd33ff077890d1e02bf3a6459ff8c113dfc218626a14859980ba82281",
+        "after_sha256": "673dd46dc02d94929db46ef6cdc74426ddb38b48f54acb745dcd4d606aeebcc7",
+        "removed_commas": 6,
+        "non_comma_bytes_identical": true,
+        "fence_comment_inline_spans_identical": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md",
+        "before_sha256": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+        "after_sha256": "689cce510d87965dba704be178f65196db1c3031429bd2c016c220574c1b8ec0",
+        "removed_commas": 15,
+        "non_comma_bytes_identical": true,
+        "fence_comment_inline_spans_identical": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md",
+        "before_sha256": "e441a2b715c112818ccde80504f48fd68e370b2ae2b177147f6dd227eb1048d7",
+        "after_sha256": "18dcc7f424b36b28fd7d3d391d5a6f3ff899465e689774b2ae2010684344016a",
+        "removed_commas": 4,
+        "non_comma_bytes_identical": true,
+        "fence_comment_inline_spans_identical": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+        "before_sha256": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+        "after_sha256": "3b7356adb1fa589e8f52d6a2e50afdb2a15b69b6e81fc248b1bc98f8a98f043f",
+        "removed_commas": 13,
+        "non_comma_bytes_identical": true,
+        "fence_comment_inline_spans_identical": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md",
+        "before_sha256": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+        "after_sha256": "0b9d8f583084206762f438abb2a16053b4fa25e66910c800d81c69c952356db8",
+        "removed_commas": 16,
+        "non_comma_bytes_identical": true,
+        "fence_comment_inline_spans_identical": true
+      }
+    ],
+    "manual_readback": "Read all resulting containing paragraphs and table rows, including joint contexts and paired appositions. No grammatical or semantic loss found.",
+    "gate": {
+      "reported_review_flags": 5,
+      "hard_flags": 0,
+      "dispositions_checked": [
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+          "line": 60,
+          "column": 3,
+          "severity": "review",
+          "code": "HW008",
+          "message": "inanimate subject is given interior or social agency",
+          "excerpt": "| Code | Cause | Remedy | See |",
+          "disposition": "See is a navigation column label in the code table."
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+          "line": 178,
+          "column": 258,
+          "severity": "review",
+          "code": "HW008",
+          "message": "inanimate subject is given interior or social agency",
+          "excerpt": "| `NAME.SVC` | The file lacks the service magic or format 4 or fails another loader check before `INIT`, such as size, entry, space, dependency, relocation or stack checks. A format-4 file is not rejected merely for its former `.DRV` type. | Use a matching service file. See the old-card procedure before replacing a whole card. | `src/loader.asm:189-322`, `324-390`, `src/abi.inc:190` |",
+          "disposition": "See directs the reader to the old-card procedure in a remedy cell."
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+          "line": 189,
+          "column": 213,
+          "severity": "review",
+          "code": "HW008",
+          "message": "inanimate subject is given interior or social agency",
+          "excerpt": "| `CON` | The device name is not TTY, CRT, BAT, UC1, PICO or GLCD, optionally followed by a colon, or the remaining text is invalid. CRT/PICO may take a separated width. | Use a supported name and width form. | [Chapter 6](06-choose-a-console.md), `src/cpm/ccpcmd.asm:66-231` |",
+          "disposition": "The Chapter 6 link is navigation to console selection, not artifact agency."
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+          "line": 299,
+          "column": 13,
+          "severity": "review",
+          "code": "HW008",
+          "message": "inanimate subject is given interior or social agency",
+          "excerpt": "| Message | Code | Cause | Remedy | See |",
+          "disposition": "See is a navigation column label in the disk-error table."
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+          "line": 371,
+          "column": 211,
+          "severity": "review",
+          "code": "HW008",
+          "message": "inanimate subject is given interior or social agency",
+          "excerpt": "| `CON: TTY:`, `CON: CRT:`, `CON: UC1:` | The effective console after CON. An unavailable CRT falls back to TTY. A returned UC1 load failure leaves the previous mode. `CON: BAT:` is generated but discarded. | [Chapter 6](06-choose-a-console.md), `src/cpm/ccpcmd.asm:200-231`, `src/loader.asm:895-913`, `src/console.asm:127-199`, `429-440` |",
+          "disposition": "The Chapter 6 link points to console operation and recovery; it gives no artifact interior state."
+        }
+      ],
+      "verdict": "All five HW008 flags are benign navigation headers, reader directions or chapter links, not interior or social agency. Complete flagged rows and their contexts were read."
+    }
+  },
+  "plan_receipt_result": {
+    "verdict": "clear",
+    "directive_contract": {
+      "source_pin": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
+      "evidence": [
+        "tools/lib/style.mjs:18–26,64–73 classifies ORG/EQU as directives",
+        "tools/lib/style-compact.mjs:73–81 applies lowercase instruction/register checks to code only",
+        "tools/lib/prl.mjs:33–46 requires indented uppercase ORG with no trailing comment",
+        "tools/lib/svc.mjs:93–99 uses that expression for splitting and rewriting"
+      ],
+      "conclusion": "Plan describes the actual reviewed uppercase-ORG service proposals and the existing directive convention. No product fix or style exception is required. Assembly/workflow qualification is still pending. Candidate correctness itself was not independently rereviewed here.",
+      "trailing_include": "Ordinary public ATOM handling of the trailing HWLIB include remains unqualified and held."
+    },
+    "canonical_receipt": {
+      "tested_source": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+      "landed_source": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "git_diff_paths": [
+        "test/model/ks48/QUALIFICATION.md",
+        "test/model/ks48/qualification.json"
+      ],
+      "difference": "Only the two qualification-record files differ.",
+      "authority_commit": "43d5f3280d5867ef0b4939744c77c5b88ab8b793",
+      "retained_evidence": [
+        "Origo studies/p3-tec-os/reviews/compact-font-40-result.md",
+        "Origo studies/p3-tec-os/evidence/ks48-canonical-refresh-result/README.md",
+        "Origo studies/p3-tec-os/evidence/ks48-canonical-refresh-result/status.json",
+        "Origo studies/p3-tec-os/evidence/ks48-canonical-refresh-result/compare-qualified.stderr"
+      ],
+      "limits": "The canonical refresh did not pass: deadline exit 124, twelve stale legacy dist outputs and a differing web source-map digest remain in retained evidence. Receipt makes no successful-refresh or cleaned-distribution claim. It requires exact qualified archive/named inputs. Receiver adoption, book allocation and execution remain separate."
+    },
+    "gate_input_hashes_verified": {
+      "compact-proof-plan.md": "813cefbf18b66a582a320406a6e14d314a6a87332bdacde60139c7408b14b31c",
+      "runtime-verification-needs.md": "dbd4ef74f8e1a50729ac69e6b0aa574d632ed1a03c13153bea5c34da9db823e4",
+      "outline-review-dispositions.md": "52eb48b224ba199af38d25e0f7d599e34ac278ba68dcbfb99ebc651e4ad0ae47"
+    },
+    "manual_craft": "Read changed containing plan, runtime-needs and outline paragraphs plus record additions. Factual scope and held qualification remain explicit. Existing gate dispositions reviewed in context."
+  },
+  "issues": [],
+  "limits": "Read-only source/text confirmation. No product execution, import, assembly, build, test, capture, reader edit, source adoption or publication. This records completed bounded confirmation, not final book acceptance."
+}
