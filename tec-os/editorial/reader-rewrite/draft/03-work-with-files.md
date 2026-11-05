@@ -8,7 +8,7 @@ nav_group: "Part I: Using TEC-OS"
 # 3. Work with files
 
 <!-- Source mechanisms read at TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
-     New pager excerpts: tested 8b8664a7d93c6dc2e8bce509b9770585e106eedc,
+     Current COPY and pager excerpts: tested 8b8664a7d93c6dc2e8bce509b9770585e106eedc,
      landed 962853f with qualification-record differences only.
      Origo attempt02 e77c7ef0, scoped result receipt 4b5b5a50,
      studies/p3-tec-os/reviews/book-opening-workflows.md.
@@ -34,8 +34,8 @@ listed and the drive's free space in KiB. A KiB is 1,024 bytes.
 `NO FILE` means that no visible file matched the request.
 
 A name has up to eight characters followed by a full stop and a type of up to
-three characters. The type can be omitted with its full stop. A drive letter and
-colon select a file on another drive: `A:SAMPLE.ASM` names the supplied source
+three characters. Both the full stop and type can be omitted. A drive letter
+and colon select a file on another drive: `A:SAMPLE.ASM` names the supplied source
 on A. Without that prefix a name refers to the drive in your prompt. DIR is
 built into the command processor that reads each line you enter. TAS is a
 program stored on the card.
@@ -148,6 +148,28 @@ drive or both. With a drive alone, as in `COPY STARTUP.CMD B:`, the copy keeps
 the source's name. An existing destination of that name is erased before the
 replacement is made. Check the source and destination before copying over work
 you need to keep.
+
+A working copy of SAMPLE's source on B gives you a file of your own to read
+or edit. `COPY A:SAMPLE.ASM B:SAMPLE.ASM` names both source and destination.
+Keep an existing B:SAMPLE.ASM rather than overwriting it for this exercise.
+
+The recorded copy below started at A on a fresh starter card with B empty.
+It is separate from the BANNER session. On your working card, BANNER's files
+have different names. This command writes only B:SAMPLE.ASM:
+
+<!-- Accepted attempt02 Machine 2, stage/results/009-copy-sample.json,
+     screen rows 8–11. Fresh starter card, B initially empty.
+     Earlier boot rows and unused rows after the prompt omitted. -->
+```text
+A>COPY A:SAMPLE.ASM B:SAMPLE.ASM
+COPIED 0028
+
+A>
+```
+
+The count after `COPIED` is hexadecimal. Here `0028` means 40 records of
+128 bytes. The source on A remains in place. `TYPE B:SAMPLE.ASM` reads the
+new copy without changing the current drive.
 
 REN changes a name on the same drive. Its form is `REN NEW=OLD`, with the new
 name first and no spaces around `=`. ERA removes the named file. A rename to an
