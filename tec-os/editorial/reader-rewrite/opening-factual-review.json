@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "review_kind": "independent_source_only_factual_and_preservation",
-  "status": "findings_reported_no_reader_edits",
+  "status": "closed_all_three_bounded_findings",
   "authority": {
     "closed_outline": "0e4feeaf7f8b8063a8301e9073aa598c2cabaea1",
     "outline_closure": "3060e711387b3601a7375e69906f4f5c0175af7c",
@@ -365,5 +365,131 @@
     "chapter3_handoffs": "AppendixJ retains all-files ERA fixture at4c7674e. Complete current pager fixture is retained at Origo attempt02 and recorded by4a76238; partial reader screens assert no plain-TYPE final prompt.",
     "review_limits": "Full committed reader/pass-record reads and assigned-original/passage review completed for1–3/5. No product imports, assembly, tests, builds, syntax checks, emulation, captures or runtime reruns. Runtime acceptance remains solely scoped4b5b5a50; whole batch FAILED later, with no advanced-service, physical, browser, audio, final navigation, whole-book or publication acceptance.",
     "shared_edits": "None. Only this new JSON review is owned."
-  }
+  },
+  "historical_findings_policy": "Original findings, chapter verdicts and nine-unit audit above describe the reviewed input snapshots and remain intact. The confirmations below close their required corrections; they do not broaden source/runtime/integration acceptance.",
+  "confirmations": [
+    {
+      "finding_id": "opening-continuity-01",
+      "status": "closed",
+      "repair_commit": "55807edfbfc8c31a709e582644c01c1e721b202c",
+      "reviewed_files": [
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+          "commit": "55807edfbfc8c31a709e582644c01c1e721b202c",
+          "git_blob": "63c293bde4514e80131704c8097716f34d6f4a54",
+          "bytes": 25185,
+          "sha256": "466243033c60a96cb0027b71a6fea50028c24ed350d1d00498c260cc8d4ffd54"
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/05-pass-record.md",
+          "commit": "55807edfbfc8c31a709e582644c01c1e721b202c",
+          "git_blob": "d14dad10a458c2a67c7c391551f8467c3b8b5b41",
+          "bytes": 48350,
+          "sha256": "9339090e5be73bb9400935bb1bc8edd016b8cea1c1e867e5521f14b1f5c44ea0"
+        }
+      ],
+      "context_read": "Full host-tools introduction, copy/extraction prerequisites, Recovering BANNER introduction and adjacent verification/A/B listings, plus complete correction record.",
+      "support": "The new paragraph explicitly separates the fresh-starter BANNER case from Chapter1 SAMPLE and notes SAMPLE.COM/SAMPLE.DBG on a continued card. Re-read actual opening-direct and BANNER-persisted inventories from retained attempt02; hashes match the evidence already recorded in the original finding. No combined-session count/result is invented.",
+      "immutable_comparison": "All Chapter5 ordered fence bodies are identical at379dd12 and55807ed. Captured eight-file A listing, verification totals and B contents are unchanged."
+    },
+    {
+      "finding_id": "opening-integration-01",
+      "status": "closed",
+      "repair_commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+      "reviewed_files": [
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+          "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+          "git_blob": "0816f084171a45521e7f368fb59f1d0407df668c",
+          "bytes": 9099,
+          "sha256": "d9d3e00ba4406e7731d34efebbf213507bb0fd76d9b40cc7783c1dd2cee2dacf"
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+          "commit": "fa3a042328f6e2b5ffe53f3ca1a1a69b0a4a84e5",
+          "git_blob": "37707ce9add9f4d8b7a5c5a442a0e6b2e9c1ee91",
+          "bytes": 11086,
+          "sha256": "4e288ebbc6a8257055a10f467c5564954fd2b484df17d72788ac94e6a288d029"
+        }
+      ],
+      "context_read": "Complete front matter, evidence headers and opening/preparation passages for both chapters; exact repair diff also read.",
+      "support": "Both nav_group values now read Part I: Using TEC-OS, matching Chapters3–7. No root navigation or final integrated-site acceptance follows."
+    },
+    {
+      "finding_id": "opening-preservation-01",
+      "status": "closed",
+      "repair_commit": "b8251e982d3e814d31e23d7748f764ce1c02ec39",
+      "reviewed_files": [
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+          "commit": "b8251e982d3e814d31e23d7748f764ce1c02ec39",
+          "git_blob": "97427fabbfb4ca73ca6a8181fc9036cc3bc552c7",
+          "bytes": 25102,
+          "sha256": "e4540d9bf5c529190a555a80c278c28542a9394924884b3345643dd34e71e845"
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/18-pass-record.md",
+          "commit": "b8251e982d3e814d31e23d7748f764ce1c02ec39",
+          "git_blob": "046634cd859055497a4dcacf2a18bd2548e62019",
+          "bytes": 29782,
+          "sha256": "e202dc90400a8f240a64c5552be0e0c378b8e72b8f09727bed15da3a22705531"
+        }
+      ],
+      "named_reader_home": {
+        "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+        "section": "A failed flush",
+        "restored_passage_lines": [
+          355,
+          395
+        ]
+      },
+      "context_read": "Complete A failed flush section, preceding flush occasions and following interrupt-boundary passage; provenance header and full new pass-record correction/gate dispositions. Compared frozen old05:169–210 surrounding passage.",
+      "preserved_meaning": "Separate shortened-image preparation; make publishes empty X.COM entry, two records are buffered, close flush fails with Bad Sector, recovery key permits warm-boot retry/drop/Write lost and DIR still lists X.COM with no records. Name visibility is explicitly distinguished from successful preservation.",
+      "literal_comparison": {
+        "frozen_revision": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+        "frozen_path": "tec-os/05-drives-and-cache.md",
+        "shell_body": {
+          "range": [
+            185,
+            186
+          ],
+          "bytes": 62,
+          "sha256": "98b341a96d91d1369fa048b824a49353b1578d24c39630f364dbd5bde5adb955",
+          "exact_match": true
+        },
+        "output_body": {
+          "range": [
+            191,
+            198
+          ],
+          "bytes": 99,
+          "sha256": "0809690255886a0229c7153bcdc61e0d6660e91719dba5f1fa52f0964dd46c37",
+          "exact_match": true
+        },
+        "both_fences_and_capture_comment": {
+          "range": [
+            184,
+            199
+          ],
+          "bytes": 276,
+          "sha256": "32739bd834e1f9cab6591d02c5d2ff5250fa6a408f69b815c894a8afaa56f38d",
+          "exact_match": true
+        },
+        "qualification": "Containing explanation is preserved semantically with explicit historical scope; literal fences/comment, including padded X.COM row, are exact."
+      },
+      "historical_source_read": {
+        "revision": "78127ec",
+        "ranges": [
+          "src/cpm/ccpcmd.asm:169–283",
+          "src/cpm/bdosfile.asm:138–220,304–382",
+          "src/cache.asm:178–225,369–399"
+        ],
+        "support": "SAVE1 makes then writes two records and closes; make clears record count/map and publishes empty entry. Close copies updated fields to directory buffer, but failed pre-directory flush drops its update. Warm CFLALL retries and drops failed data, reporting Write lost. Supports fixture-specific zero-record state beyond the weaker DIR observation."
+      },
+      "proof_scope": "Reader labels retained78127ec run with matching historical ROM/starter and host preparation links. Unprefixed ea3 mechanism authority remains separate. No current962/KS48, physical-card or newly executed result is asserted.",
+      "editorial_checks": "Read recorded prose-gate exit0/empty findings and complexity dispositions. Did not rerun gates, tests or any product workload.",
+      "shared_accounting": "Actual reader home confirmed here; shared movement/crosswalk/ledger remain with the lead."
+    }
+  ],
+  "closure_scope": "All three original factual/preservation findings closed by bounded source/text/artifact confirmation. Historical report snapshots retained. No reader/shared edits, product imports, execution, assembly, tests, builds, emulation, captures or new acceptance. Original runtime receipt4b5b5a50 and all other review boundaries remain unchanged."
 }
