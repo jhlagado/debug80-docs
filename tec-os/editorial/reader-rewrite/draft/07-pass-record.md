@@ -153,7 +153,7 @@ are kept here under the PartI house convention.
 | Width | src/cpm/ccpcmd.asm:161–194 finds PICO before calling its width entry. Absent PICO is quiet only in startup. src/pico.asm:98–191 handles80/40/32 and retained BIOS width. Cold start still uses80 at this source. |
 | Browser preparation | host/card.mjs:58–72 applies its staged copy only on success. Its104–116 sets the selected display command for GLCD/narrow PICO, uses no command for80-column PICO and preserves other commands subject to the exact filtering rules at75–101. Failures boot unchanged and are reported. |
 | Older services | src/abi.inc:190 sets SVCFMT4. src/loader.asm:32,189–203 compares the magic/format before installation. src/cpm/ccp.asm:451–495 distinguishes SVC from the COM search. src/services.asm:618–627 rejects CRT registration by an old PICO service. Rename does not convert a format. |
-| Held-key skip | src/cpm/ccpcmd.asm:874–887 samples port03 bit6 once after marking finished and before file I/O. src/layout.asm:19–20 names the port. The approximate1.5s is retained old06 evidence, not recalculated at the offer. |
+| Held-key skip | src/cpm/ccpcmd.asm:874–887 samples port03 bit6 once after marking finished and before file I/O. src/layout.asm:19–20 names the port. The approximate1.5s retains Book39:31 at58d4345:1.49s on serial/GLCD and1.46s on PICO, not recalculated at the offer. |
 | NMI requirement | src/boot.asm:412–509 publishes page-zero vectors without an NMI handler at0066h. src/cpm/ccpcmd.asm:447–545 overwrites the default FCB spanning that location. docs/board-run.md:313–317 records no NMI routine and the keypad-jumper-off operating requirement. The chapter gives the hazard without claiming every possible byte pattern has an identical crash path. |
 | LCD words and clearing | src/loader.asm:895–980 restores the failed selection, writes GLCD? and clears a marked five-character word on a later successful take. src/lcd.asm:65–120 and src/text.asm:15,84–88 define row3 and strings/blanks. src/services.asm:157–192 clears ownership when a program writes row3, without first blanking it. Direct ports bypass that state change. |
 | CARD? retry | src/boot.asm:119–132,817–847 writes CARD? on failure and returns R to LCDINIT/card init at COLDRT. A successful retry clears it and another mount failure writes it again. |
@@ -184,3 +184,14 @@ Independent editorial/factual review, runtime/profile acceptance and the final
 whole-book read remain outstanding. No import, build, test, capture, program
 execution or new example workflow was run. No new font/default or final checked
 source pin is claimed. Only the two owned Chapter7 paths were changed.
+
+## Independent full review and provenance correction
+
+The full independent review accounts for all65 units and confirms all15
+fences and9 capture commands unchanged. No reader-facing factual or craft
+blocker remains. The approximate keypad time now names its actual58d4345
+run, recorded in Book39:31, separately from the78127ec captures. Book45:3,73
+records the actual reruns supporting the retained startup captures. This is
+retained execution evidence, not merely the old chapter's checked header.
+The reviewer also compared the saved results with rc0 and same=true.
+Bounded correction confirmation remains pending. No new execution occurred.

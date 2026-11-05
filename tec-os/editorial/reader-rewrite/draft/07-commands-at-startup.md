@@ -327,7 +327,7 @@ A program that hangs or resets the board can prevent startup from reaching
 an interactive prompt. With the keypad NMI jumper off, hold any hex-keypad
 key from reset until the prompt appears. TEC-OS samples the keypad once
 just before opening the file and skips startup when a key
-is down. The retained model account placed that sample about 1.5 seconds
+is down. The model run at `58d4345` placed that sample about 1.5 seconds
 after reset.
 
 The NMI jumper must be off for this bypass. A key press with it fitted
