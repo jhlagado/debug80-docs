@@ -35,3 +35,13 @@ AppendixI has also had a complete lead read. Its queued filename-validation
 and saving-sentence corrections remain with the author and are not marked
 closed here. All final source/profile, compact-proof and integration limits
 remain. These were text/source reviews with no execution.
+
+## Additional call-lesson confirmation
+
+Independent correction review confirms8b04cea source semantics, preservation
+and teaching placement. Chapter8 retains normal return before the detailed
+0004h contract now taught in10. The duplicate0006h detail and unused function
+preview are removed, optional commas cut and final CtrlC wording aligned to
+the current empty-line condition. The complete literal fences and provenance
+comments are byte-identical to521c4fc. No runtime was requested or performed.
+Final profile, remaining compact proofs and integration are still open.

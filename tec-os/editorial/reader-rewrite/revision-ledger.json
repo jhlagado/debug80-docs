@@ -2888,7 +2888,7 @@
     },
     {
       "unit": "chapter-08",
-      "status": "prior full review closed; additional8b04cea within-ladder teaching refinement awaits bounded confirmation; final integration pending",
+      "status": "full independent review and additional8b04cea within-ladder teaching refinement confirmed; final qualification and integration pending",
       "passes": {
         "full_passage_read": "completed for bounded draft; 08-pass-record.md records scope",
         "draft": "completed for bounded draft; 08-pass-record.md records scope",
@@ -2900,8 +2900,8 @@
         "examples_before_explanation": "separate37d214f4 allocated run accepted atOrigo71696f2e; actual console suffix boundary retained; only serialea3 scope",
         "journey_readback": "completed for bounded draft; 08-pass-record.md records scope",
         "mechanical_gate": "completed for bounded draft; 08-pass-record.md records scope",
-        "independent_editorial_review": "prior complete review clear; additional8b04cea refinement confirmation pending",
-        "independent_factual_review": "prior complete review clear; moved0004h contract and empty-line CtrlC wording confirmation pending",
+        "independent_editorial_review": "closed after complete review and bounded8b04cea confirmation; final adopted source/workflows remain open",
+        "independent_factual_review": "closed after complete review and bounded8b04cea confirmation; final adopted source/workflows remain open",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -3250,7 +3250,7 @@
     },
     {
       "unit": "chapter-10",
-      "status": "prior full review closed; additional8b04cea within-ladder teaching refinement awaits bounded confirmation; final integration pending",
+      "status": "full independent review and additional8b04cea within-ladder teaching refinement confirmed; final qualification and integration pending",
       "passes": {
         "full_passage_read": "lead read complete draft; full independent review queued",
         "draft": "pending",
@@ -3262,8 +3262,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "prior complete review clear; additional8b04cea refinement confirmation pending",
-        "independent_factual_review": "prior complete review clear; moved0004h contract and empty-line CtrlC wording confirmation pending",
+        "independent_editorial_review": "closed after complete review and bounded8b04cea confirmation; final adopted source/workflows remain open",
+        "independent_factual_review": "closed after complete review and bounded8b04cea confirmation; final adopted source/workflows remain open",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
