@@ -56,7 +56,7 @@ DMA equ $0080
 ; Takes the CCP's default FCB and DMA.
 ; Returns by RET or JP BDOS through the
 ; inherited CCP return word.
-; Changes AF, BC, DE and HL.
+; BDOS may change any register.
 
   xor a          ; Zero for the CR byte.
 
@@ -243,7 +243,7 @@ complete source/comment read. They identify source text, not machine code.
 
 | Candidate LF body | Bytes | SHA-256 |
 | --- | ---: | --- |
-| SHOW.compact.asm | 1,371 | `9fe6d69b0476cb598894a131dfe583c443464de103c269c303377e2613eb7e38` |
+| SHOW.compact.asm | 1,374 | `fd334432d119ca8b486ae39a9577535887a86e4dc0181589351645cf663aadac` |
 | Saved-register fragment | 234 | `da1ef037a7e9772bf83b3d309c149167c01bf784b75a36f33234ee5fa5d91685` |
 
 Both bodies contain only ASCII, no tabs and no line wider than 40 columns.
@@ -264,3 +264,23 @@ record for paragraph purpose, sentence deletion, agency and every comma.
 Only source-text comparisons and identity calculations accompanied preparation.
 I have not changed the reader chapters, their pass records or any historical
 literal. Independent candidate review and every future proof item remain open.
+
+## Independent header correction
+
+The independent review of a5db04f found one required correction. The added
+AF/BC/DE/HL list understated the BDOS clobber contract. At ea3ef3d,
+`src/cpm/bdosrec.asm:274,569-582` reaches FCBLOCK, which loads IX from
+DPBPTR. POSREC also loads IX at `src/cpm/bdosrec.asm:910-938`.
+`src/cpm/bdos.asm:245-252` restores the caller's SP before returning but
+does not restore IX. The candidate header now gives a general BDOS clobber
+qualification instead of an incomplete register list.
+
+I read those source paths as text and reread the complete header with its
+entry and return context. Only the added comment changed. I refreshed the
+complete candidate's text identity. Its statements, definition names and
+original comments are unchanged. The saved-register fragment and its identity
+are unchanged. The review cleared the other static preservation, identity,
+style and route items. Bounded correction confirmation remains open, as do
+all assembly, symbol, relocation, execution and reader-insertion requirements.
+No source, assembler or application was imported or executed. The reader
+originals and their historical evidence remain untouched.
