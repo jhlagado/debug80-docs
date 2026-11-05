@@ -36,7 +36,7 @@ instructions, not a new build or browser result.
 
 ## Controls and displayed state
 
-At the inspected source, a page without stored preferences selects the
+At the inspected source a page without stored preferences selects the
 PICO9918 at 80 columns. Width and display selections use the browser's local
 storage. A reload retains them when that storage is available. Otherwise
 they last only for the open page (`web/src/main.mjs:17-43`).
@@ -89,7 +89,7 @@ available (`web/index.html:35-49`, `web/src/main.mjs:388-427`).
 | Serial terminal | Serial port | `ESC [` followed by a letter |
 
 The page's serial display removes escape sequences sent by TEC-OS and handles
-backspace (`web/src/main.mjs:358-427`). On a phone or tablet, tapping a video
+backspace (`web/src/main.mjs:358-427`). On a phone or tablet tapping a video
 display or the terminal focuses a hidden text field for the on-screen keyboard.
 The extra buttons supply Ctrl, Esc, Tab and four arrows. Ctrl latches for the
 next key (`web/index.html:36-44`, `web/src/main.mjs:429-524`).
@@ -103,7 +103,7 @@ record causes the page to build a starter card. A read or parse failure
 instead disables saving for the session, as the notices below describe
 (`web/src/main.mjs:684-698`).
 
-TEC-OS writes to the model card mark it dirty. A timer attempts a save every
+Writes by TEC-OS mark the model card dirty. A timer attempts a save every
 two seconds when it is dirty and no file import is active. A save takes a
 snapshot for an IndexedDB write transaction and completes when that transaction
 completes (`web/src/main.mjs:92-94`, `web/src/main.mjs:106-110`,
@@ -166,11 +166,12 @@ the failed-flush paths. A browser save or download after a successful flush
 is still needed to preserve the resulting image outside RAM.
 
 "Copy file to drive" pauses the machine and reads all selected PC files.
-It uppercases their names and validates them as CP/M 8.3 names. The import
-then joins the card-operation queue and stages the files on a copy of the
-card current at that turn. It writes user 0 of the selected volume, regardless
-of the ROM's current user area. The file list can show other user areas but
-there is no import user-area selector
+It uppercases their names while reading them. The import then joins the
+card-operation queue and stages the files on a copy of the card current at
+that turn. These staged writes validate each CP/M 8.3 name and use user 0
+of the selected volume, regardless of the ROM's current user area.
+The file list can show other user areas but there is no import user-area
+selector
 (`web/src/main.mjs:617-636`, `tools/lib/cpmfs.mjs:15-20`,
 `tools/lib/cpmfs.mjs:180-191`).
 
@@ -257,7 +258,7 @@ including reusable entries. Data capacity is checked separately
 (`host/card.mjs:105-116`, `tools/lib/cpmfs.mjs:189-205`).
 
 For the starter's original `GLCD.SVC` line, GLCD preparation leaves the text
-unchanged. PICO preparation replaces it with a width line at 40 or 32 columns,
+unchanged. PICO preparation replaces it with a width line at 40 or 32 columns
 or just `^Z` at 80 columns. The retained source assertion checks the 80-column
 case, not a newly executed browser result (`test/pico.test.mjs:834-846`).
 
