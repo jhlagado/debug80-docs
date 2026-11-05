@@ -16,3 +16,22 @@ and INFO clock bit3 fields were confirmed with the full prior review.
 These closures concern retained bounded drafts. They do not qualify the new
 40-column production source, browser/physical observations, compact listings,
 final map/navigation or whole-book acceptance. Nothing executed.
+
+## Hardware and BDOS-reference correction closure
+
+Chapter11 was read completely by the lead through all source/output fences
+and historical boundary explanations. Independent confirmation atf2aa379
+closes the separate bd15528 GLCD/illumination provenance and Matrix-switch
+condition alongside the earlier nibble and video-byte corrections. Literal
+no-matrix-keyboard output remains unchanged.
+
+The lead read AppendixA completely after3a7aa77. Independent confirmation
+closes its current-empty-line CtrlC condition, intermediate/directory/final
+S2 states, card-change destination and concrete failure wording. AppendixB
+was read completely by the lead. The full independent clear review plus
+bounded40a8b11 confirmation closes its three switch-enable corrections.
+
+AppendixI has also had a complete lead read. Its queued filename-validation
+and saving-sentence corrections remain with the author and are not marked
+closed here. All final source/profile, compact-proof and integration limits
+remain. These were text/source reviews with no execution.
