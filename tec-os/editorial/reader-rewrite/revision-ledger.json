@@ -16,7 +16,7 @@
         "examples_before_explanation": "No output fence introduced. Destination workflow verification remains pending in linked chapters.",
         "journey_readback": "completed for first draft; independent review may require another pass",
         "mechanical_gate": "completed for first draft; independent review may require another pass",
-        "independent_editorial_review": "closed at545c9f8 after preservation corrections; confirmation recorded in index-pass-record.md",
+        "independent_editorial_review": "complete independent lead read followed by6483ddf cuts and independent bounded confirmation; no remaining bounded findings",
         "independent_factual_review": "prior-profile bounded review closed; KD243 amendment and final source need recheck",
         "navigation": "pending",
         "final_source_pin": "pending"
@@ -1522,7 +1522,7 @@
     },
     {
       "unit": "chapter-05",
-      "status": "bounded source-only draft in progress; no execution authorised",
+      "status": "bounded draft pushed at4939c23; full independent review in progress",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -2010,7 +2010,7 @@
     },
     {
       "unit": "chapter-06",
-      "status": "bounded draft pushed; independent review/correction cycle in progress",
+      "status": "bounded independent factual/editorial review and corrections closed; final navigation and qualification pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -2022,8 +2022,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "full independent review and bounded correction confirmation closed",
+        "independent_factual_review": "full independent source/provenance review and bounded correction confirmation closed",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -7253,7 +7253,7 @@
     },
     {
       "unit": "chapter-17",
-      "status": "bounded source-only draft pushed at7d9dafe; full independent review in progress",
+      "status": "bounded independent factual/editorial review and corrections closed; final navigation and qualification pending",
       "passes": {
         "full_passage_read": "lead read complete draft; full independent review in progress",
         "draft": "pending",
@@ -7265,8 +7265,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "full independent review and bounded correction confirmation closed",
+        "independent_factual_review": "full independent source/provenance review and bounded correction confirmation closed",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -8061,9 +8061,9 @@
     },
     {
       "unit": "chapter-19",
-      "status": "bounded source-only draft pushed atc22b609; full independent review pending",
+      "status": "bounded draft pushed atc22b609; full independent review in progress",
       "passes": {
-        "full_passage_read": "pending",
+        "full_passage_read": "lead read complete draft; full independent review in progress",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",
