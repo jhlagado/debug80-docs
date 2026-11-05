@@ -93,3 +93,150 @@ are not duplicated: Appendix C retains all entries, sizes and reproduction.
 The historical stack census values are retained in prose here. TOP/AREA code,
 recipes and captures from old08 stay with their assigned chapter10/28 homes;
 none is transferred into14 or silently discarded by this draft.
+
+
+## Completed authorial passes
+
+### Thematic and prerequisite read
+
+Read the entire generous draft in order. The progression follows a real
+visibility constraint before giving latch operations, then distinguishes
+clearing from later writes before using retained command state. Allocation
+policy follows the fixed workspace so the downward subtraction has a known
+origin. Page-zero reconstruction follows the definition of STUBAD/PZTOP.
+Stack allocation precedes the final bank-switch consequence. DPH and DSM are
+defined where used. The reader's call/stack and resident-lifetime prerequisites
+come from the closed outline, not an assumed new assembly tutorial.
+
+The full partition remains: fixed RAM/window/ROM, latch bits and shadow,
+page-zero entry points and load-drive byte, both workspace spans, vectors,
+service pages, all four stacks and EXPAND 1. Repeated exact tables have a
+lookup home in Appendix C. The historical 1,049-byte lower workspace,
+329-byte warm sweep and 205-byte upper span remain as labelled examples.
+
+### Sentence deletion and paragraph repair
+
+Read every sentence in context and across paragraph boundaries. Deleted the
+opening of the page-zero section that merely repeated the previous section's
+explanation. Deleted the generic announcements about familiar behaviours and
+memory population. Deleted the generalisation that a reservation is larger
+than its measured depth and retained the actual historical values instead.
+Combined the short write-only-latch definition with its storage consequence.
+Kept the short reset sentence because it introduces the second lifetime
+against which the rest of the chapter is explained. Kept the empty-cache-key
+and history-address sentences because each contributes an exact lookup fact.
+Combined the historical WSBASE sentence with the worked placement example.
+
+The final bank section retains the consequence for the inherited return word.
+It is not a duplicate of the earlier visibility explanation: the stacks have
+now been located and the CALL/RET failure is mechanically explained.
+
+### Agency and plainness
+
+Read every paragraph for agency and performed explanation. Source routines
+read, write, clear and compare. Replaced the generic phrase about warm boot
+using retained values with the actual availability during reconstruction.
+No memory, routine, chapter or table is assigned intention or perception.
+The first prose gate reported HW008 on the noun phrase 'source offer'.
+Reworded that sentence to state the historical build provenance directly.
+Later gates report no findings.
+
+### Every-comma and punctuation pass
+
+Read every comma in the chapter, including captions/table cells, with the
+optional punctuation removed temporarily. Removed compound-clause commas
+before so/but in the cache-storage, BIOS-hook, workspace and caller-stack
+sentences. Removed the parenthetic 'for example' at BF00h. Removed the
+unneeded comma before the preserved-jump condition. Retained commas that
+separate genuine lists, numeric thousands, an appositional address/name or a
+condition whose extent would otherwise be unclear. No Oxford commas,
+semicolons or em dashes occur in reader-facing prose.
+
+### Technical and literal recheck
+
+Read the offered routines and their callers with git show, not the working
+product checkout. Corrected citation coordinates for LOGIN/ALLOCBLK,
+PREPPAGE, VSLOT and both SD block loops. Expanded the cache-copy range to
+include latch restoration and conditional EI. Corrected the generous draft's
+end coordinate beyond the file's last line. All final citations include their
+revision. The long revision is stated in the provenance comment.
+
+The old chapter claimed warm boot made the first write read its block.
+The draft preserves the actual rule: BUFOK cannot reuse the old key, but a
+new allocation still skips the read. The old byte-table explanation is replaced
+by the code's two clearing spans and explicit later writes. Reset is qualified
+by retained-selection reconstruction. Restart preservation is strictly above
+PZTOP and the default EI/RETI is conditional on no qualifying JP remaining.
+Failed warm flushing drops failed lines and clears CHPOS. Maskable interrupts
+are named explicitly in the bank-access rule because DI does not block NMI.
+The guard detects a changed byte but does not identify its writer.
+
+A factual discrepancy was found while checking the historical stack claim.
+Old14:263-278 gives BDOS base/census30 and base-plus-limit38. At the explicitly
+named historical product revision, docs/services.md:215-229 instead records
+32/32 and40 of54. The draft uses32 and40 with that exact historical citation.
+BIOS18/18 and CCP18/18, reservations54/40/32 and limits8/12/6 remain unchanged.
+This is correction from source authority, not a new measurement. Appendix C
+contains addresses/reservations, not an independent proof of the old30 figure.
+No old capture is transplanted or assigned the offered revision.
+
+### Journey read-back
+
+Read the revised chapter from the opening exit/reset contrast through the final
+bank-hidden return word. Removed an ambiguous 'its bottom' at the start of
+page zero. Restored the several-volume container fact from old01 and the
+20-by-4 LCD dimension. The end stops at the consequence for a program call,
+without a chapter forecast or recap. The prose has no invented terminal output
+or executable example. Historical arithmetic is checked against the original
+address bounds and original product stack account.
+
+## Source proof at the offered revision
+
+Each row is a semantic check of the claim and its callers, not acceptance from
+matching text. Exact citations in the draft identify the smaller supporting
+ranges. All source below is ea3ef3de9133931e925a0220d51c0e971c1fd8dd unless
+explicitly marked historical.
+
+| Claim group | Proof and boundary |
+| --- | --- |
+| System layers and storage | src/rom.asm:17-44 includes BIOS, console, SD, CCP, BDOS, services, cache/history and loader as ROM code. src/ram.asm reserves their changing state. src/layout.asm:104-115 gives console modes. src/abi.inc:64-88 gives digits, LCD rows/width and tone. format/format.json:20-25 bounds the descriptor table. |
+| Visibility and latch | src/layout.asm:3-9,26-45,81-90 defines regions, latch bits and shadow. src/reset.asm:1-14 describes the overlay. COLD at src/boot.asm:49-70 removes it. CLOOK at src/cache.asm:47-116 restores LATCHV on hit and miss; KBCAPS at src/keyboard.asm:135-142 updates bit7 in shadow and port. |
+| Cleared versus retained | COLD:src/boot.asm:73-80 clears WSSPAN. CPMINIT:530-559 clears CCPCLR..BDOSRME, restores DMA/maximum/guard and clears BUFOK. src/ram.asm:153-231 locates retained buffers before CCPCLR and the working spans after it. WBOOTR:178-215 supplies the later state mutations. |
+| Pending writes and chain | src/cache.asm:307-351 visits dirty lines and CDROP on CFLALL failure; CWBOOT:661-668 keeps success separate from CHPOS clear and Write lost. src/bios.asm:368-426 still sends type2 directly to the no-pre-read rule. |
+| Workspace and interfaces | src/layout.asm:134-135 fixes RAMBIOS and17 jumps. src/boot.asm:144-152 copies them only at cold boot. tools/build.mjs:236-266 derives WSBASE from BDOSRME and checks both boundaries. src/ram.asm:314-319 fixes upper-state origin. HWSINFO:src/services.asm:95-105 reads VWID/VHGT as a word. |
+| Allocation | src/boot.asm:695-800 implements drive-count versus per-mounted geometry slots, DRVSLOT and the three-byte stub. src/volsvc.asm:295-315 enforces slot capacity. format/format.json:47-59 supplies DSM. LOGIN at src/cpm/bdoslog.asm:202-350 binds/builds/scans; ALLOCBLK at src/cpm/bdosrec.asm:683-774 scans RAM bits. |
+| Stub and service top | src/boot.asm:142-143 and412-434 publishes PZTOP/stub. src/loader.asm:421-441 writes JP BENTRY and0006h during relocation;608-614 commits the installed page as PZTOP. tools/build.mjs:222-231 and269-270 derives/checks minimum program space without claiming a new build result. |
+| Page zero | PZINIT:src/boot.asm:412-434 changes jumps and stub, preserving0003/0004. PZSWP:454-509 keeps only a qualifying JP and conditionally writes0038. PREPPAGE:src/cpm/ccpcmd.asm:447-497 publishes both FCBs then tail and DMA. CMDRUN:src/cpm/ccp.asm:519-536 publishes0050 and inherited return word. |
+| Stacks and guard | src/layout.asm:122,137-155 declares boot top and resident sizes. src/ram.asm:143-151,219-231,309-312 locates stacks/guard. src/boot.asm:49-88,104-121,178-199,547-555 gives stack transitions and guard fill. BENTRY/RETWORD:src/cpm/bdos.asm:137-142,245-252 saves/restores caller SP. |
+| Declarations versus measurements | src/tables.asm:143-146 declares limits. src/loader.asm:281-317 subtracts each declaration from remaining limits. test/stacks.test.mjs:43-78 watches writes/guard;212-264 enumerates workloads and asserts quarter headroom. No assertion was executed. Historical32/18/18 comes from78127ec:docs/services.md:209-229. |
+| NMI scope | test/stacks.test.mjs:1-11,59-69 only injects when0066 holds RETN. This cannot qualify an arbitrary keypad NMI into a populated FCB. The disabled-jumper requirement is retained from the assigned caller-memory passage. |
+| EXPAND1 | src/layout.asm:50-58 defines30 lines and both tables; src/history.asm:1-24 fixes the ring. MEMINIT:src/boot.asm:321-346 clears the whole bank and empty keys. CLOOK, DETECT:348-401 and SDRBLK/SDWBLK:src/sd.asm:525-644,653-724 use no stack while the other bank is visible. |
+| Copy and interrupt restoration | HACC:src/history.asm:35-74 saves flags before bank selection and pops after restoration. CDI/CEI:src/bios.asm:445-478 saves/restores interrupt state. MVCOPY:src/cache.asm:695-858 splits fixed-RAM LDIR from bank-window byte copies and restores latch before saved registers. |
+
+## Limits and handoff
+
+Authorial passes complete. Independent editorial/factual result review remains
+for the coordinating review. No root chapter, appendix or shared ledger was
+edited. No build, import of product code, emulator, test suite, workflow or
+publication ran. Only prose gate/complexity scripts and static source/link/range
+checks were used. Qualified artifact addresses, new measurements and browser
+or board verification remain outside this draft's evidence.
+
+
+## Final static checks
+
+The final prose gate reports zero findings. The complexity report gives190
+sentences, mean12.9 words,0.59 joints per sentence,4% flagged and approximate
+grade6.4. The seven retained short-sentence flags are: provenance comment,
+reset clearing contrast, several-volume container fact, DS reservation,
+historical source-account attribution, empty-line key and history-ring address.
+Each supplies a fact or its provenance. None is an empty landing. The flagged
+historical byte/bytes echo was removed by describing the four-slot result
+without repeating the unit name.
+
+All final citation occurrences were checked against their named Git object
+for file existence and exact valid line coordinates. Every Appendix C link
+resolves to an existing file and heading from this draft directory. The final
+reader-order read includes the source-backed32-byte historical BDOS correction.
+No invented fences or outputs are present. No root-file edit is needed to
+review these two drafts.
