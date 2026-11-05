@@ -4277,6 +4277,17 @@
         "superseded": 6,
         "corrected": 6
       }
+    },
+    {
+      "slice": "B-extra",
+      "coverage": {
+        "remaining_mapped_occurrences": 32,
+        "resolved_occurrences": 32,
+        "textual_only_leftovers_in_assigned_slice": 0,
+        "prose_citation_overlap": false,
+        "limits": "Source and assertions read only. No build, test, emulator or workflow execution. Historical captures/timings retain their existing provenance. Test-source acceptance establishes what the assertions check, not that they passed at this target. All replacements are exact against current chapter prose; none includes citation text. Use simultaneous citation substitution to avoid transitive replacements."
+      },
+      "decisions_needed": []
     }
   ],
   "resolutions": [
@@ -31907,6 +31918,414 @@
       "prose_edit_overlaps_citation": false,
       "supporting_target_ranges": [
         "tools/media.mjs:261"
+      ]
+    },
+    {
+      "book_path": "tec-os/18-block-cache.md",
+      "old_citation": "host/machine.mjs:265",
+      "new_citation": "host/machine.mjs:265",
+      "reason": "Machine.step at 259-267 reads the CPU step result and adds result.cycles to the public cumulative cycles property. Constructor line 57 starts it at zero. This supports the counter used by the measurement script, not a new timing run or certification of the historical figures.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        149
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "src/abi.asm:7-10",
+      "new_citation": "src/abi.asm:13-21",
+      "reason": "The actual ABI table ends in JP SVCDSP at 20-21. services.asm:45-68 indexes SVTAB by C while restoring caller arguments before entering the routine. This is the program-facing ABICALL dispatch, not the volume routine body.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        347
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "src/abi.inc:18-25",
+      "new_citation": "src/abi.inc:28-50`, `src/abi.inc:93-108",
+      "reason": "The calling contract at 28-50 specifies caller-stack execution and bounds below the return address including dispatch. The per-service rows at 93-108 explicitly give Stack 24 for all three volume services; the general calling paragraph alone does not establish that numeric bound.",
+      "prose_edits": [],
+      "status": "corrected",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        372
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "src/abi.inc:21-23",
+      "new_citation": "src/abi.inc:40-46",
+      "reason": "The ABI contract explicitly excludes MOUNT/UNMOUNT from the no-BDOS-call rule. volsvc.asm:320-371 calls BDOS 37 and reselects a mounted default with 14; bdos.asm:133-138 replaces SP with STKTOP. Thus calls must originate outside an active BDOS call.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        388
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "src/abi.inc:58-70",
+      "new_citation": "src/abi.inc:93-108",
+      "reason": "The three volume-service rows define numbers 9/10/11 and B/E/HL arguments. volsvc.asm:193-223 and 232-296/307-349 implement those contracts, while VDESC at 440-483 substitutes the current drive.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        348
+      ]
+    },
+    {
+      "book_path": "tec-os/19-bdos.md",
+      "old_citation": "src/boot.asm:37-41",
+      "new_citation": "src/boot.asm:73-79",
+      "reason": "Cold boot clears WSBASE through WSEND at 73-79, including PRGCODE above RAMBIOS (ram.asm:357-359). CPMINIT at 499-526 clears only CCPCLR through BDOSRME, preserving PRGCODE at warm boot.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        51
+      ]
+    },
+    {
+      "book_path": "tec-os/18-block-cache.md",
+      "old_citation": "src/boot.asm:54",
+      "new_citation": "src/boot.asm:100-102",
+      "reason": "Cold boot calls MEMINIT at 100 before SDINIT/MOUNT at 127-130. MEMINIT at 309-332 clears EXPAND 1 and makes every cache key FFFFFFFFh, so mount begins with an empty cache.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        40
+      ]
+    },
+    {
+      "book_path": "tec-os/18-block-cache.md",
+      "old_citation": "src/boot.asm:67",
+      "new_citation": "src/boot.asm:119-132",
+      "reason": "SDINIT has one source caller, COLDRT at 127, entered at cold boot and diagnostic retry. Warm boot at 175-211 flushes without initialising the card. Source does not establish that reinserting a physical card necessarily leaves every later write failing, so the prose must make that consequence conditional.",
+      "prose_edits": [
+        {
+          "old": "The\nsame card put back changes nothing, since only cold boot starts a card",
+          "new": "Putting\nthe card back does not itself run `SDINIT`. The cold-boot path starts the card"
+        },
+        {
+          "old": "A later change written behind meets the same failure at\nthe next warm boot, and `Write lost` comes again.",
+          "new": "If writes still fail, a later change written behind produces `Write lost`\nat the next warm boot."
+        }
+      ],
+      "status": "corrected",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        308
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "src/boot.asm:67-70",
+      "new_citation": "src/boot.asm:127-132",
+      "reason": "COLDRT calls SDINIT then MOUNT and branches to DIAG after either NZ result. DIAG at 772-802 reports the code and loops until retry. This supports the failure route without rerunning the historical capture.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        216
+      ]
+    },
+    {
+      "book_path": "tec-os/18-block-cache.md",
+      "old_citation": "src/boot.asm:108",
+      "new_citation": "src/boot.asm:206-207",
+      "reason": "WBOOTR calls CWBOOT at 206; cache.asm:646-653 calls CFLALL and prints Write lost after a failed flush. This confirms the warm-boot flush caller.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        270
+      ]
+    },
+    {
+      "book_path": "tec-os/18-block-cache.md",
+      "old_citation": "src/boot.asm:274-283",
+      "new_citation": "src/boot.asm:470-480",
+      "reason": "Mapped-range semantic false positive: PZSWP returns at 472 if a resident JP is retained at RST7. Only the other path writes EI followed by RETI. The unqualified statement that each boot writes the EI byte is therefore false at the target.",
+      "prose_edits": [
+        {
+          "old": "The only other `EI` is the byte each boot writes at\n`0038h`, which runs on an interrupt or a program's `RST 38h`",
+          "new": "The boot also writes `EI` followed by `RETI` at `0038h` when no\nresident jump is retained there. That code runs on an interrupt or a\nprogram's `RST 38h`"
+        }
+      ],
+      "status": "corrected",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        341
+      ]
+    },
+    {
+      "book_path": "tec-os/19-bdos.md",
+      "old_citation": "src/boot.asm:456-460",
+      "new_citation": "src/boot.asm:749-754",
+      "reason": "ALVINIT finishes by moving STUBAD down three bytes at 749-754, immediately below the packed vectors. PZINIT at 392-410 writes JP BENTRY there and points 0005h at PZTOP.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        66
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "src/boot.asm:479-489",
+      "new_citation": "src/boot.asm:786-802",
+      "reason": "DGLOOP echoes the key, masks it with DFh and compares R, so BOTH R and r retry COLDRT and all other keys repeat the prompt. The old literal-R-only prose needs correction.",
+      "prose_edits": [
+        {
+          "old": "Any key but\n`R` gives the prompt again",
+          "new": "`R` or `r` retries the card and mount. Any other key gives the prompt again"
+        }
+      ],
+      "status": "corrected",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        230
+      ]
+    },
+    {
+      "book_path": "tec-os/19-bdos.md",
+      "old_citation": "src/console.asm:119-131",
+      "new_citation": "src/console.asm:198-217",
+      "reason": "BCONSTC calls BCONST and only when nothing is ready checks the video mode and calls CURSHOW. BDOS CONSTQ at bdoscon.asm:145-151 jumps directly to BCONST, avoiding cursor drawing during output.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        60
+      ]
+    },
+    {
+      "book_path": "tec-os/18-block-cache.md",
+      "old_citation": "src/console.asm:242",
+      "new_citation": "src/console.asm:377-411",
+      "reason": "RXBITS at 377-411 captures IFFGET flags before DI, restores them after receiving eight bits and executes EI only when saved P/V was set. The isolated mapped EI line is expanded to the controlling routine.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        337
+      ]
+    },
+    {
+      "book_path": "tec-os/18-block-cache.md",
+      "old_citation": "src/console.asm:284",
+      "new_citation": "src/console.asm:440-480",
+      "reason": "TXBYTE at 440-480 saves IFFGET flags, disables interrupts for serial transmission and uses RET PO before EI, so the instruction restores only an enabled entry state.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        338
+      ]
+    },
+    {
+      "book_path": "tec-os/19-bdos.md",
+      "old_citation": "src/cpm/ccp.asm:52-55",
+      "new_citation": "src/cpm/ccp.asm:80-86",
+      "reason": "CCPDR sets WRFLAG=FFh and calls BDOS function 13. FNRESET at bdosfile.asm:19-27 consumes and clears WRFLAG then branches to WRESET for the CCP-specific reset.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        424
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-a-bdos-functions.md",
+      "old_citation": "src/cpm/ccp.asm:225-245",
+      "new_citation": "src/cpm/ccpcmd.asm:236-273`, `src/cpm/ccp.asm:346-367",
+      "reason": "Mapped-range semantic false positive by incomplete ownership: target ccp.asm:340-367 is SAVEDU, proving only the four-bit page-zero packing. The USER parser moved to ccpcmd.asm:236-273 and explicitly limits decimal input to 0-15 before calling BDOS 32. Both ranges are needed for the combined claim.",
+      "prose_edits": [],
+      "status": "corrected",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        281
+      ]
+    },
+    {
+      "book_path": "tec-os/18-block-cache.md",
+      "old_citation": "src/history.asm:26-28",
+      "new_citation": "src/history.asm:47-76",
+      "reason": "HGET and HPUT share HACC. HACC at 47-51 calls IFFGET, disables interrupts and saves AF on its own stack. At 67-76 it restores the saved flags after restoring the normal latch, keeping its interrupt-state copy separate from CIFF.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        332
+      ]
+    },
+    {
+      "book_path": "tec-os/18-block-cache.md",
+      "old_citation": "src/history.asm:40",
+      "new_citation": "src/history.asm:47-76",
+      "reason": "HACC restores the latch before POP AF, then skips EI when saved P/V is clear. Include 47-76 rather than the isolated EI so the restoration condition is evidenced.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        338
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "src/layout.asm:12",
+      "new_citation": "src/layout.asm:20-21",
+      "reason": "SDIO EQU FDh defines the adaptor port and its output/input bit assignments. sd.asm:40-81 implements the byte send/receive paths using SDIO.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        27
+      ]
+    },
+    {
+      "book_path": "tec-os/19-bdos.md",
+      "old_citation": "src/layout.asm:71",
+      "new_citation": "src/layout.asm:128",
+      "reason": "BDOSSTN EQU 54 is consumed by ram.asm:289-292 to reserve the stack ending at STKTOP. BENTRY in bdos.asm:133-138 saves caller SP and switches to STKTOP; RETWORD at 235-242 restores caller SP.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        44
+      ]
+    },
+    {
+      "book_path": "tec-os/appendix-a-bdos-functions.md",
+      "old_citation": "src/layout.asm:71",
+      "new_citation": "src/layout.asm:128",
+      "reason": "BDOSSTN EQU 54 is consumed by ram.asm:289-292 to reserve the stack ending at STKTOP. BENTRY in bdos.asm:133-138 saves caller SP and switches to STKTOP; RETWORD at 235-242 restores caller SP.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        77
+      ]
+    },
+    {
+      "book_path": "tec-os/19-bdos.md",
+      "old_citation": "src/loader.asm:229-232",
+      "new_citation": "src/loader.asm:393-398",
+      "reason": "Service installation rewrites its header start as JP BENTRY at 393-398, copies the resident to its allocated page and lowers the page-zero BDOS pointer. PZINIT uses PZTOP for the lowest service while retaining the separate STUBAD jump.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        67
+      ]
+    },
+    {
+      "book_path": "tec-os/18-block-cache.md",
+      "old_citation": "src/pico.asm:266-276",
+      "new_citation": "src/pico.asm:431-447",
+      "reason": "VPAIR at 431-447 saves IFFGET flags, disables interrupts while writing both control-port bytes and returns without EI if saved P/V was clear. This confirms conditional restoration, not unconditional enabling.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        339
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "src/volutil.asm:56-84",
+      "new_citation": "src/volutil.asm:90-133",
+      "reason": "HDRSUM invokes MNSUM for the complete header then subtracts the two checksum bytes. SUMDE sums BC unsigned bytes at DE into HL. vol.asm:539-561 copies 32-byte pieces out of EXPAND 1 before invoking SUMDE, so stack-using calls occur with the normal bank in view.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        163
+      ]
+    },
+    {
+      "book_path": "tec-os/19-bdos.md",
+      "old_citation": "src/volutil.asm:71-84",
+      "new_citation": "src/volutil.asm:112-133",
+      "reason": "SUMDE adds each unsigned source byte to the 16-bit HL sum with carry, advances DE and loops until BC=0. bdoslog.asm:406-414 calls it on the ALVLEN-sized allocation vector; MNSUM calls the same helper for table chunks.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        440
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "test/cpm22.test.mjs:174",
+      "new_citation": "test/cpm22.test.mjs:174-185",
+      "reason": "The containing test at 174-185 invokes function 28, prepares an FCB without open, calls close and asserts A=0, no error text and byte-identical card. The implementation at bdosfile.asm:255-279 skips a read-only drive before directory lookup. This reviews assertions and implementation only; the test was not run.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        303
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "test/programs/mount.asm:159-208",
+      "new_citation": "test/programs/mount.asm:159-208",
+      "reason": "ABIOK at 33-36 selects LIST for an empty argument. LIST repeatedly calls TNDESC, stops on failure, prints index/label/geometry/flags/current drive and advances IDX. The command mount/unmount paths at 49-57 and 123-157 call the corresponding ABI services; VMNT/VSLOT enforce the slot rule. No transcript was regenerated.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        399
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "test/sd-range.test.mjs:36-45",
+      "new_citation": "test/sd-range.test.mjs:36-45",
+      "reason": "farCard at 18-26 moves B and reseals the header. The test at 36-45 asserts error 27 and unchanged image for starts 800800h and 7FF000h, successful mount at the exact exclusive boundary and success for the straddling high-capacity case. mountOf at 30-34 uses cold-boot prompt/error output. vol.asm:323-347 implements the bound. Assertions were read, not executed.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        196
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "test/storage-boundaries.test.mjs:172-241",
+      "new_citation": "test/storage-boundaries.test.mjs:197-241",
+      "reason": "The test at 197-241 instruments SP and tests the three services with six dirty lines or all NLINES dirty, recording deepest stack use and asserting only 0 < depth <=24. It does not assert exact clean-case depths 24/24/22 or exact all-dirty depths 24. Replace those claimed current measurements with the source-verifiable bound and actual setup. The ABI rows at abi.inc:93-108 declare Stack 24.",
+      "prose_edits": [
+        {
+          "old": "On the\nmodel `MOUNT` and `UNMNT` take 24 and `DESC` 22, and with every line dirty\nall three take 24",
+          "new": "The source test records each service's deepest stack use with six dirty\nlines and with every line dirty, and checks that it is no more than\n24 bytes"
+        }
+      ],
+      "status": "corrected",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        373
+      ]
+    },
+    {
+      "book_path": "tec-os/17-sd-card-and-volumes.md",
+      "old_citation": "tools/lib/container.mjs:80",
+      "new_citation": "tools/lib/container.mjs:80",
+      "reason": "createContainer sets minor=1 when volume count exceeds maxVolumesMinor0 or drives is nonzero, then publishes it in the header at line 105. format/format.json:22 fixes maxVolumesMinor0=8. tools/tecvol.mjs:112 calls createContainer for the create command.",
+      "prose_edits": [],
+      "status": "accepted",
+      "inventory_status": "mapped",
+      "occurrence_lines": [
+        154
       ]
     }
   ]

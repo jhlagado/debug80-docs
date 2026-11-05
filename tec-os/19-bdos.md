@@ -45,14 +45,14 @@ patched.
 
 Everything the BDOS changes is in RAM, in the block from `BDOSRAM` to
 `BDOSRME`, `BE76h` to `BEFFh` (`src/ram.asm:213-292`). Its 54-byte stack is at
-the top of the block (`src/layout.asm:71`). Warm boot clears the block, as a
+the top of the block (`src/layout.asm:128`). Warm boot clears the block, as a
 fresh load of the BDOS from disk would leave it, and sets the DMA address to
 `0080h` (`src/boot.asm:499-526`). Two of the BDOS's variables are outside the
 block because a warm boot must not clear them. `LOGINV`, in the BIOS's part of
 the workspace, has a bit for each drive whose allocation vector the BDOS has
 built (`src/ram.asm:55-56`). `PRGCODE`, the return code of function 108, is above
 the RAM BIOS table, where only cold boot clears it (`src/ram.asm:357`,
-`src/boot.asm:37-41`). What the BDOS keeps for each drive is in the drive's DPH,
+`src/boot.asm:73-79`). What the BDOS keeps for each drive is in the drive's DPH,
 the 16-byte disk parameter header that Chapter 17 describes.
 
 The BDOS reaches the BIOS through the RAM BIOS table at `BF00h`. Its names for
@@ -61,14 +61,14 @@ that replaces an entry there therefore receives the BDOS's own calls, as
 Chapter 16 describes. The one exception is the check for `^S` before each
 character the BDOS prints. That check calls the ROM's `BCONST` directly,
 because the table's `CONST` draws the video cursor while no key is waiting
-(`src/cpm/bdoscon.asm:145-151`, `src/console.asm:119-131`).
+(`src/cpm/bdoscon.asm:145-151`, `src/console.asm:198-217`).
 
 ## The entry
 
 The jump at `0005h` leads to `JP BENTRY`, which cold boot puts directly below
 the allocation vectors, as Chapter 14 describes. With a service loaded the same
-jump is at the start of the lowest service's page (`src/boot.asm:456-460`,
-`src/boot.asm:392-410`, `src/loader.asm:229-232`).
+jump is at the start of the lowest service's page (`src/boot.asm:749-754`,
+`src/boot.asm:392-410`, `src/loader.asm:393-398`).
 
 `BENTRY` saves the caller's stack pointer in `OLDSP`, moves to the BDOS's own
 stack and keeps `DE` in `PARAM` (`src/cpm/bdos.asm:133-138`). Every function and
@@ -425,7 +425,7 @@ CP/M 2.2's CCP resets the disk system at every warm boot. Every drive is then
 logged in again, and its directory read, at its next selection. On a G8M
 volume that is 32 card blocks, and Chapter 15 gives the times. TEC-OS's CCP
 makes the same call, function 13, but sets `WRFLAG` first
-(`src/cpm/ccp.asm:52-55`). With the flag set function 13 goes to `WRESET`
+(`src/cpm/ccp.asm:80-86`). With the flag set function 13 goes to `WRESET`
 (`src/cpm/bdosfile.asm:19-27`).
 
 `WRESET` goes through drives 0 to 15 and passes over each one that is not in
@@ -441,7 +441,7 @@ drive's DPH:
 - If the flag is clear, `ALVSUM` adds up the vector's bytes with `SUMDE`, the
   routine that also sums the container's table
   (`src/cpm/bdoslog.asm:406-414`, `src/cpm/bdoslog.asm:431-450`,
-  `src/volutil.asm:71-84`). If the sum is what `LOGDONE` stored, the drive
+  `src/volutil.asm:112-133`). If the sum is what `LOGDONE` stored, the drive
   stays logged in with its vector as it is. Any other sum means a change that
   neither an allocation nor a directory write recorded, such as a stray write
   by a program. The drive is then taken out of `LOGINV` and scanned in full at

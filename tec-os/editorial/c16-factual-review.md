@@ -18,3 +18,7 @@ finding was returned for the edited passages or guard commands. The citation
 map remains preparation: 393 unique ranges need substantive resolution.
 Captures retain their earlier source provenance. Final-pin runtime validation
 and publication remain pending.
+
+This initial review predates the completed citation slices. Its 393-range
+follow-up is resolved in `c16-citation-resolutions.json`; see
+`c16-citation-resolution-report.md` for the later source review and limits.

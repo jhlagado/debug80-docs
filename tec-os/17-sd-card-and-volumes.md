@@ -28,7 +28,7 @@ block cache, which [Chapter 18](18-block-cache.md) describes.
 ## The SD card driver
 
 The card is on the TEC-1G's SD card adaptor at port `FDh`
-(`src/layout.asm:12`). The driver makes every clock edge itself by writing
+(`src/layout.asm:20-21`). The driver makes every clock edge itself by writing
 that port. Three output bits drive the card's lines: bit 0 its data in, MOSI,
 bit 1 its clock and bit 2 its chip select, active low. Bit 7 of the input is
 the card's data out, MISO (`src/sd.asm:1-11`). Data changes while the clock is
@@ -164,7 +164,7 @@ fifteen volumes, `MOUNT` reads each further block of the table and adds up its
 The table's blocks and the header are added up by the same routine, `MNSUM`.
 It copies the block from its line through `MNBUF` 32 bytes at a time and adds
 each 32 with `SUMDE`. No code that uses the stack runs with EXPAND 1 in view
-(`src/vol.asm:539-561`, `src/volutil.asm:56-84`).
+(`src/vol.asm:539-561`, `src/volutil.asm:90-133`).
 
 `MOUNT` then walks the descriptors in table order, checking each one and
 mounting it as it goes (`src/vol.asm:226-401`). A descriptor's own fields are
@@ -217,7 +217,7 @@ A>
 ```
 
 Cold boot sends any failure, of the card or of the container, to the
-diagnostic prompt (`src/boot.asm:67-70`). For the run below, the starter
+diagnostic prompt (`src/boot.asm:127-132`). For the run below, the starter
 card's first byte was changed from `T` to `X` with
 `printf X | dd of=build/bad.img bs=1 seek=0 conv=notrunc` on a copy of
 `dist/starter.img`. `H` was then typed at the prompt:
@@ -230,9 +230,10 @@ R retry> H
 R retry> 
 ```
 
-Error 21 is `MEMAGIC`, the check of the name (`src/vol.asm:27`). Any key but
-`R` gives the prompt again (`src/boot.asm:479-489`), and the header's bytes
-can be read on a PC, as Appendix E shows.
+Error 21 is `MEMAGIC`, the check of the name (`src/vol.asm:27`). `R` or `r`
+retries the card and mount. Any other key gives the prompt again
+(`src/boot.asm:786-802`), and the header's bytes can be read on a PC, as
+Appendix E shows.
 
 ## The drive table and the DPHs
 
@@ -304,7 +305,7 @@ far, since the BDOS's own `R/O` error comes first
 (`src/cpm/bdoslog.asm:802-813`). Function 16, close, tests the drive too. On
 a read-only drive it writes nothing and returns success, as CP/M 2.2's close
 does. That holds even for an FCB that was never opened
-(`src/cpm/bdosfile.asm:274-279`, `test/cpm22.test.mjs:174`). Only a program
+(`src/cpm/bdosfile.asm:274-279`, `test/cpm22.test.mjs:174-185`). Only a program
 that calls the BIOS itself receives the error.
 
 A write to the directory can change which blocks are in use. `WRITE`
@@ -348,8 +349,8 @@ a line.
 `MOUNT` on the starter card is a program. It changes and lists the drives
 through three of the ROM's numbered services. A program calls a service
 through `ABICALL` with the number in `C`, as
-[Chapter 23](23-hardware-services-inside.md) describes (`src/abi.asm:7-10`,
-`src/abi.inc:58-70`):
+[Chapter 23](23-hardware-services-inside.md) describes (`src/abi.asm:13-21`,
+`src/abi.inc:93-108`):
 
 - `MOUNT`, 9, mounts the volume at container index `E` on the drive in `B`, 0
   to 3 for A to D.
@@ -358,23 +359,23 @@ through `ABICALL` with the number in `C`, as
   its drive byte replaced by the drive the volume is on now, `FFh` for none.
 
 The three routines, `VSMNT`, `VSUNM` and `VSDSC`, each start with `VSIN`. It
-moves the drive from `B` to `C` and sets `MNTCB` to `FFh`, so the table's
-blocks are read again from the card (`src/volsvc.asm:193-223`,
+moves the drive from `B` to `C` and sets `MNTCB` to `FFh`, so the table's blocks
+are read again from the card (`src/volsvc.asm:193-223`,
 `src/volsvc.asm:376-382`). Each returns `A` = 0 with carry clear, or `TNEBAD`,
 1, with carry set and nothing changed (`src/volsvc.asm:341-349`). A mount fails
-in four cases. The index is past the table, the drive is past D, the volume
-is on a drive already, or the drive's vector slot is too small for the
-volume. An unmount fails for drive A, which is never left empty, and for a
-drive past D (`src/volsvc.asm:232-244`, `src/volsvc.asm:307-313`). The slot rule
-is `VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
-and any other needs a slot of either size (`src/volsvc.asm:278-296`).
-[Chapter 14](14-memory-map.md#the-allocation-vectors-and-the-bdos-entry)
-describes how cold boot gives out the slots.
-[Appendix B](appendix-b-rom-services.md) gives the three services' register
-contract. Each may take 24 bytes of stack below its return address. On the
-model `MOUNT` and `UNMNT` take 24 and `DESC` 22, and with every line dirty
-all three take 24 (`src/abi.inc:18-25`,
-`test/storage-boundaries.test.mjs:172-241`).
+in four cases. The index is past the table, the drive is past D, the volume is
+on a drive already, or the drive's vector slot is too small for the volume. An
+unmount fails for drive A, which is never left empty, and for a drive past D
+(`src/volsvc.asm:232-244`, `src/volsvc.asm:307-313`). The slot rule is
+`VSLOT`'s: a volume of 4,096 blocks or more, a G8M, needs a 256-byte slot, and
+any other needs a slot of either size (`src/volsvc.asm:278-296`). [Chapter
+14](14-memory-map.md#the-allocation-vectors-and-the-bdos-entry) describes how
+cold boot gives out the slots. [Appendix B](appendix-b-rom-services.md) gives
+the three services' register contract. Each may take 24 bytes of stack below its
+return address. The source test records each service's deepest stack use with
+six dirty lines and with every line dirty, and checks that it is no more than 24
+bytes (`src/abi.inc:28-50`, `src/abi.inc:93-108`,
+`test/storage-boundaries.test.mjs:197-241`).
 
 A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of
@@ -389,7 +390,7 @@ A mount onto the default drive also selects it again with function 14, which
 logs the new volume in at once. Functions 27 and 31 then return the new
 volume's allocation vector and DPB (`src/volsvc.asm:357-371`). Those calls run on the BDOS's own stack, so a program
 calls `MOUNT` and `UNMNT` from outside its own BDOS calls
-(`src/abi.inc:21-23`).
+(`src/abi.inc:40-46`).
 
 The services write nothing of their own to the card, so the card's header
 still names its own drives. A power-off, or a reset whose kept selection no
