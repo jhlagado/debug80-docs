@@ -201,3 +201,20 @@ Bounded correction confirmation remains pending. No new execution occurred.
 Independent confirmation clears70c52f0: the keypad approximation retains its actual58d4345run, distinct from78127eccaptures. No bounded source/craft finding remains.
 Final source/profile/runtime and whole-book integration remain pending.
 No execution accompanied confirmation.
+
+## Mandatory bundled gate correction
+
+The earlier mechanical-pass entry records a real omission: the available
+bundled prose gate was not run. The source-only restriction was applied too
+broadly to an editorial text utility. It does not excuse that missing step.
+P3's actual36-file e1b26699 run includes this chapter and has zero hard
+findings. The lead now also ran the bundled script on current7/19, with
+exact script/input identities and findings in prose-gate-07-19.json.
+Chapter7 produced no finding. This closes the current chapter's missing
+mechanical check without rewriting the earlier record as if it had occurred.
+
+Every future prose commit requires the available bundled gate and manual
+context dispositions. Full passage/deletion/agency/punctuation/source passes
+remain required. A clean script exit is not a quality verdict. The final
+36-reader-file gate will be rerun after4/5 and the conjunction-comma pass.
+No product import, assembler, build, test, emulator or capture was run.

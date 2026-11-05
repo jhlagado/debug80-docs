@@ -82,7 +82,7 @@ A CP/M file is a sequence of 128-byte records. The BDOS finds them through
 the directory, a table of 32-byte entries at the start of the volume. Each
 entry names a file in a user area and holds a map of allocation block
 numbers, the blocks of the volume that hold the file's records. In this
-chapter *block* alone means an allocation block, and a *card block* is 512
+chapter *block* alone means an allocation block and a *card block* is 512
 bytes of the card, as in Chapter 17. A program names a file in an FCB of 36
 bytes. The BDOS fills the FCB from the entry and changes its position, count
 and map as the program reads and writes (`src/cpm/bdosfn.asm:621-685`,

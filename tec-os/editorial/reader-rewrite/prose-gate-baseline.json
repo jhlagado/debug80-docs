@@ -1,0 +1,147 @@
+{
+  "snapshot_commit": "e1b26699ca99bd53db12928553bfa7dedaf81e60",
+  "input_hashes": {
+    "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md": "12a6df51c3116866114bdf103a19390446e98e63eb58ce164828546a57193f14",
+    "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md": "d8cd7bb98b0f7b63096e57d1958261e87996c249dee7f0eb8e87dac80b97b622",
+    "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md": "99fe60faa54ce55f3eee8e590c118e59aa903fd760da8c25a9804f87e14494ec",
+    "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md": "67ba36eb613ba4ec9e7312fa0b7c4b5cfb304d292806311f69fd14add203f6dc",
+    "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+    "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md": "be8b37aa2ef86e864c3f2e9cb11b3ef8e78f644da260166c94f6bc23b00a0ae2",
+    "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md": "b5e3dd9e1eb6a980bcf2e4ae347330b3c2ffa75842d2145d17606e14c60e64b2",
+    "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md": "1c79ce224e404290c00e1c0888331031e2de1e59adafc36033959c7ba1561806",
+    "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md": "4439e80af755940f80d40357a579b41679fe7ac95c56bb57603343e6eb74016f",
+    "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md": "4f74919aaa74c9583c06de305c8d9f2b134082f0836a4a23cc881dcc020f1bcc",
+    "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md": "97a25dfb7dc2d478658d948fc3dd2a219a4f5dc2067c1e9e91fb20d75928787b",
+    "tec-os/editorial/reader-rewrite/draft/15-reset-and-boot.md": "8dd9406f1d46b250868612cf03976250dc5753d17c7d3888cf49e7df7472fed5",
+    "tec-os/editorial/reader-rewrite/draft/16-console-paths.md": "594d3e65943207ebfe22dc1eaf66e422a4f6b1cf92d30d493598200057134ca4",
+    "tec-os/editorial/reader-rewrite/draft/17-card-blocks-and-volumes.md": "1895eccb7c027915ca3e0e649079dad57f4d81a3e75e9d201c7a66fbf87b9e26",
+    "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+    "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md": "ce1d4bd76a3001fe7489fd40fd3580565be154a764c2b01eaf77909d289d2df0",
+    "tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md": "acd4a36de4ed563e2dccce52176ef4ae7a4be4971d7ce479e5b324880f3038fe",
+    "tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md": "47f39fc0eb23ade28e440bf66f7ea3de9be514cd1f73dc557d4a8e6c0fdd0fab",
+    "tec-os/editorial/reader-rewrite/draft/22-the-history-ring.md": "4d797242269cdc224b040fadb88dd397d0632439aff422670fc9f058fbe9dffc",
+    "tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md": "3320d33dcf2e9f4193bbd60b752649f4290ef6a9a389125806d76952a4b55d7b",
+    "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md": "be8650af7ae31c993d2e611f3206ba39ff6db645c27c012698cda71b24f2b32d",
+    "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md": "b0ff5b03f7dad091a4dab79cfd7ebb30d407caf6057bd29657ebf31902d8d1e4",
+    "tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md": "dbd7970be746d13856d490d2e3ff8ed8aba6a03783a4cb25efc39df9b18e03b8",
+    "tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md": "2f5cb41470bf35f3496e658d236d82a0b2e6ef038282c537e6ab35706eae48e7",
+    "tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md": "fadab93d6c69fd55b6dd5c77fd988fd23205193d74006d8b30ef36d592e7ce11",
+    "tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md": "98b1201fd33ff077890d1e02bf3a6459ff8c113dfc218626a14859980ba82281",
+    "tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md": "22dc911adf628d67de47b35030b6d6a20ad79e70287c0a97789935f494d27acf",
+    "tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md": "e441a2b715c112818ccde80504f48fd68e370b2ae2b177147f6dd227eb1048d7",
+    "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md": "b2e4312719c8009ddf47baf1e03b53cee1751347537a288f5513f2c4244f32eb",
+    "tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md": "9bb4a98b2799143cbf2527210798acd7c7f9446846881d3e5935c951c3c39a81",
+    "tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md": "2b98d6c5225aaa4508a7b0ef548181d501a27a7b2b20029e76e4727e2ce81206",
+    "tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md": "5b6a7efbe36f27daa21f4e9ae0672cec5106d5e4db14a86af3aeb6170da0d996",
+    "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md": "f6775d2f140f0a5c90c099a6f238ecf77d11d3a14bb3e1ddd41a38f802af608d",
+    "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md": "87d01edda5d68bca4a1794a6eeba992369c98465b53865e62b97f6e9f04d9d0e",
+    "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md": "2e4dbc8e83abe501ff990a037900a707054884e23e09d887f484a689b6e9647c",
+    "tec-os/editorial/reader-rewrite/draft/index.md": "176423e43c9a4ae3c55a24d5a1ebd14216ddaaff27b997f2aa24bf33a63b3d47"
+  },
+  "snapshot_vs_git": "all36 files byte-identical",
+  "raw_report_sha256": "4acb508f4b6e0bf291b5b3fdfbd6871716d6d5d18c377f93bb974752870685e5",
+  "hard_findings": 0,
+  "review_findings": 11,
+  "report": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "line": 107,
+      "column": 2,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "[Chapter 6](06-choose-a-console.md) explains console selection and"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+      "line": 213,
+      "column": 19,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "from `SERVICES`. [Chapter 6](06-choose-a-console.md) explains switching"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "line": 85,
+      "column": 1,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "chapter *block* alone means an allocation block, and a *card block* is 512"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "line": 60,
+      "column": 3,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| Code | Cause | Remedy | See |"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "line": 178,
+      "column": 258,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| `NAME.SVC` | The file lacks the service magic or format 4 or fails another loader check before `INIT`, such as size, entry, space, dependency, relocation or stack checks. A format-4 file is not rejected merely for its former `.DRV` type. | Use a matching service file. See the old-card procedure before replacing a whole card. | `src/loader.asm:189-322`, `324-390`, `src/abi.inc:190` |"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "line": 189,
+      "column": 213,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| `CON` | The device name is not TTY, CRT, BAT, UC1, PICO or GLCD, optionally followed by a colon, or the remaining text is invalid. CRT/PICO may take a separated width. | Use a supported name and width form. | [Chapter 6](06-choose-a-console.md), `src/cpm/ccpcmd.asm:66-231` |"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "line": 299,
+      "column": 13,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| Message | Code | Cause | Remedy | See |"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md",
+      "line": 371,
+      "column": 211,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| `CON: TTY:`, `CON: CRT:`, `CON: UC1:` | The effective console after CON. An unavailable CRT falls back to TTY. A returned UC1 load failure leaves the previous mode. `CON: BAT:` is generated but discarded. | [Chapter 6](06-choose-a-console.md), `src/cpm/ccpcmd.asm:200-231`, `src/loader.asm:895-913`, `src/console.asm:127-199`, `429-440` |"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md",
+      "line": 55,
+      "column": 15,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "| 1 | 1 | The format, 4 | See offset 0 |"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md",
+      "line": 121,
+      "column": 23,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "following strings are source-defined notices, not a new page capture"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md",
+      "line": 12,
+      "column": 18,
+      "severity": "review",
+      "code": "HW008",
+      "message": "inanimate subject is given interior or social agency",
+      "excerpt": "for the new source offer. -->"
+    }
+  ],
+  "scope": "actual earlier editorial text-gate result, manually inspected; not runtime or prose-quality acceptance"
+}
