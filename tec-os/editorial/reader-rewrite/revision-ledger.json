@@ -4,7 +4,7 @@
   "units": [
     {
       "unit": "front-door",
-      "status": "first draft and own craft passes pushed; independent editorial/factual review pending",
+      "status": "bounded independent editorial/factual review closed at545c9f8; final navigation and whole-book acceptance pending",
       "passes": {
         "full_passage_read": "completed for first draft; independent review may require another pass",
         "draft": "completed for first draft; independent review may require another pass",
@@ -12,12 +12,12 @@
         "sentence_deletion": "completed for first draft; independent review may require another pass",
         "agency": "completed for first draft; independent review may require another pass",
         "every_comma_punctuation": "completed for first draft; independent review may require another pass",
-        "technical_claims": "pending",
+        "technical_claims": "bounded draft checked by independent reader; linked workflow runtime evidence remains pending",
         "examples_before_explanation": "No output fence introduced. Destination workflow verification remains pending in linked chapters.",
         "journey_readback": "completed for first draft; independent review may require another pass",
         "mechanical_gate": "completed for first draft; independent review may require another pass",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed at545c9f8 after preservation corrections; confirmation recorded in index-pass-record.md",
+        "independent_factual_review": "closed at545c9f8 after preservation corrections; confirmation recorded in index-pass-record.md",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -14910,42 +14910,42 @@
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 149,
           "end": 149,
-          "subsection": "The 20 \u00d7 4 LCD",
+          "subsection": "The 20 × 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 151,
           "end": 153,
-          "subsection": "The 20 \u00d7 4 LCD",
+          "subsection": "The 20 × 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 155,
           "end": 160,
-          "subsection": "The 20 \u00d7 4 LCD",
+          "subsection": "The 20 × 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 162,
           "end": 168,
-          "subsection": "The 20 \u00d7 4 LCD",
+          "subsection": "The 20 × 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 170,
           "end": 170,
-          "subsection": "The 8 \u00d7 8 LEDs",
+          "subsection": "The 8 × 8 LEDs",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 172,
           "end": 179,
-          "subsection": "The 8 \u00d7 8 LEDs",
+          "subsection": "The 8 × 8 LEDs",
           "fragment_override": null
         },
         {
