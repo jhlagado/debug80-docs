@@ -14,15 +14,14 @@ nav_group: Appendices
 A command line contains a command and its arguments, separated by spaces.
 Return ends the line. The maximum is 127 characters and typing the last
 available character also ends it. Commands and arguments are converted to
-capitals before execution. The typed echo retains its original case.
+capitals before execution. The echo retains the case typed.
 [Work with files](03-work-with-files.md) explains the ordinary operations.
 This appendix gives their exact forms and boundary cases.
 
 ## Names and patterns
 
 A file reference has an optional drive, a name of up to eight characters
-and an optional type of up to three. A full stop separates the name and type,
-as in `B:NOTES.TXT`. With no drive the reference uses the current drive.
+and an optional type of up to three. A full stop separates the name and type as in `B:NOTES.TXT`. With no drive the reference uses the current drive.
 With no type its three stored type bytes are spaces.
 
 Spaces separate arguments. These thirteen characters are rejected inside
@@ -44,8 +43,10 @@ A short field is padded with spaces. `????.COM` therefore matches names of
 up to four characters with type COM, not every name ending in COM
 (`src/cpm/ccpcmd.asm:617-645`, `src/cpm/ccpcmd.asm:706-727`).
 
-Only DIR and ERA accept patterns. TYPE, COPY, REN and SAVE require a single
-unambiguous name. A program or service command also requires one name.
+DIR and ERA use patterns to select files. TYPE, REN and SAVE require
+unambiguous names. COPY requires an unambiguous source and resolved
+destination, with the blank-destination rules below. A program or service
+command also requires one name.
 The following retained capture shows an overlong name, a pattern where TYPE
 requires one file and a second argument where DIR accepts only one.
 
@@ -88,7 +89,7 @@ additional forms handled by the command processor.
 | `USER N` | Select user area 0 to 15 |
 | `CON [DEVICE [WIDTH]]` | Report or change the console |
 | `SERVICES` | List installed services, newest first |
-| `UNLOAD` | Remove the newest removable service |
+| `UNLOAD` | Attempt to remove the newest service |
 | `D:` | Select drive D, with the same form for another drive |
 | `NAME [ARGS]` | Load a COM program and pass its arguments |
 | `NAME.SVC` | Load a resident service |
@@ -130,8 +131,8 @@ A valid copy replaces any existing destination file, subject to protection.
 On success `COPIED` is followed by the number of 128-byte records copied,
 in hexadecimal (`src/cpm/ccpmut.asm:250-380`).
 
-This historical capture keeps the original type-only destination and self-copy
-cases together. It starts on A with the original starter card.
+The type-only destination and self-copy cases below were captured on A
+with the original starter card.
 
 <!-- Historical capture: TEC-OS 78127ec, original starter card.
      node tools/capture.mjs "COPY STARTUP.CMD B:.DOC" "DIR B:" "COPY A:STARTUP.CMD STARTUP.CMD" "COPY STARTUP.CMD" -->
@@ -176,8 +177,8 @@ and type positions are question marks, as with `*.*`, it prints
 reads through the next Return and erases only when the answer's first
 character is Y or y. Other answers leave the files unchanged.
 
-A pattern that selects fewer than all names, such as `*.TXT`, is erased
-without confirmation. No match produces `NO FILE`
+A pattern whose eleven stored positions are not all question marks, such
+as `*.TXT`, is erased without confirmation. No match produces `NO FILE`
 (`src/cpm/ccpmut.asm:13-84`). Protection and write failures can stop a
 multi-file erase after some entries have already been erased. The exact
 partial-result cases are in [Appendix D](appendix-d-error-messages.md).
@@ -223,7 +224,8 @@ A colon may follow a device name. A width must be separated from CRT or PICO
 by a space and must be 80, 40 or 32. Other devices take no width.
 Extra text is rejected (`src/cpm/ccpcmd.asm:70-232`).
 
-The reply goes through the selected console. BAT discards it. Selecting an
+The reply goes through the selected console and is discarded in BAT mode.
+Selecting an
 unavailable console can leave or restore another mode, so the reply reports
 the mode in effect, not merely the name typed. The practical alternatives
 and recovery actions are in [Choose a console](06-choose-a-console.md).
@@ -233,7 +235,7 @@ and recovery actions are in [Choose a console](06-choose-a-console.md).
 A command ending in SVC installs the named file from the current drive or
 an explicitly named drive. It does not use the COM search's fallback to A.
 SERVICES lists installed names and page counts. UNLOAD acts on the newest
-service, and removal can fail if that service is not removable or its removal
+service. Removal fails if that service is not removable or its removal
 routine reports failure. The practical installation rules are in
 [Chapter 4](04-drives-and-user-areas.md) and authoring is in
 [Chapter 13](13-write-a-resident-service.md).
