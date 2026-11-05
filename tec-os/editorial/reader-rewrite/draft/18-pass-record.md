@@ -208,3 +208,14 @@ to the frozen original. Coordinate validity supplements the semantic reads. Inde
 editorial/factual review, final source/input qualification, navigation integration
 and the whole-book read remain pending. Only the Chapter18 draft and this record
 are owned. No current font/default/runtime acceptance is claimed.
+
+## Independent lead review disposition
+
+The complete independent review is in18-independent-review.md. Corrected the
+overwide resetwritesnothing claim to no flush of the old cache. Deleted a
+redundant copy-path announcement and merged repeated through-write failure
+wording. Complete historical fences are unchanged. The reviewer read the full
+old/new chapter and current cache source, supporting callers and actual retained
+measurement payloads/reports. Bounded source/craft review is closed after
+these corrections; final profile/runtime/navigation acceptance remains open.
+No execution or new observation accompanied the review.
