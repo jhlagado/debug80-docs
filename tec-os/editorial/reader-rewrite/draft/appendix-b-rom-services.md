@@ -211,8 +211,8 @@ through the graphics entries or ports.
 Release with no claim returns status 0 without restoring anything. Otherwise it
 clears VCLAIM and calls the ROM PICO console's restore routine when that console
 started at cold boot. Mode, font and displayed page are restored. If PICO is
-selected, release also clears its screen and homes its cursor. Without the
-matrix keyboard the ROM console did not start, so release leaves the chip's
+selected, release also clears its screen and homes its cursor. With the
+Matrix switch disabled the ROM console did not start, so release leaves the chip's
 programmed state alone. Warm boot releases an active claim before rebuilding
 page zero (`src/boot.asm:178-215`, `src/pico.asm:54-87`).
 
@@ -375,7 +375,7 @@ drops UC1:'s table and returns A = 0 with carry clear and HL destroyed. Stack
 bound: 4 bytes (`src/services.asm:605-658`, `src/video.asm:125-212`).
 
 For an installation, TNEBAD with carry means B is not 3, a UC1: table is already
-installed or the matrix keyboard is absent. TNENODV means a STARTUP.CMD line
+installed or the Matrix switch is disabled. TNENODV means a STARTUP.CMD line
 offered the table while the CON: field was CRT:. A drop with B = 3 is accepted
 before those installation checks. B = 1 is always refused because CRT:'s table
 belongs to the ROM. Failed calls leave the table unchanged and Z undefined.
@@ -544,7 +544,7 @@ B>
 
 Without a started ROM PICO console there is no PICO record. The existing program
 then takes its `no PICO record` branch, including on serial-only configuration
-or a PICO board without the matrix keyboard. A program using such a chip
+or a PICO board with the Matrix switch disabled. A program using such a chip
 directly still claims it before writing its ports.
 
 ## The font
