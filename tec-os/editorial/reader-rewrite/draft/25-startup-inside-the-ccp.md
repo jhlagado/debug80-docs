@@ -287,8 +287,8 @@ from `CONMOD` into the console field with `CONFLD` and writes `GLCD?`
 through `LCDWRD` (`src/loader.asm:895-913`, `src/console.asm:610-620`).
 `LCDWRD` first sets `CDWRD`, bit 7 of `CONDEV`
 (`src/lcd.asm:65-70`, `src/layout.asm:101-102`). The historical address
-of `CONDEV` was `BFE7h`. The byte combines these device and ownership
-bits (`src/ram.asm:433-434`, `src/layout.asm:92-102`):
+of `CONDEV` was `BFE7h`. Its stored bits are
+(`src/ram.asm:433-434`, `src/layout.asm:92-102`):
 
 | Bit | Name | Meaning |
 | --- | --- | --- |
@@ -296,8 +296,14 @@ bits (`src/ram.asm:433-434`, `src/layout.asm:92-102`):
 | 1 | `CDTMS` | The PICO9918 answered at cold boot |
 | 2 | `CDGLC` | `GLCD.SVC` is in |
 | 3 | `CDRTC` | The DS1302 clock answered at cold boot |
-| 4 | `CDCLM` | A program has claimed the PICO9918 |
 | 7 | `CDWRD` | One of the ROM's words is on the LCD's row 3 |
+
+`VCLAIM` separately stores `CDCLM` (`10h`) while a program has claimed the
+PICO9918. `VIDEO` sets that byte on claim and clears it on release
+(`src/ram.asm:138-139`, `src/services.asm:233-237`, `245-252`).
+`INFO` combines `CONDEV` with `VCLAIM` using OR and returns the flags in `B`.
+Its returned bit 4 reports the claim rather than a stored bit of `CONDEV`
+(`src/services.asm:95-105`, `src/layout.asm:99-100`).
 
 The row may have program text by the next console selection.
 `WRDCLR` returns at once when `CDWRD` is clear. Otherwise it clears the

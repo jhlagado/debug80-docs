@@ -62,8 +62,8 @@ gap. The historical GLCD layout and a possible second service were:
 | `B9A7h` up | The allocation vectors, then the resident workspace |
 | `B9A4h–B9A6h` | The stub, `JP BENTRY`, the top with no service in |
 | `B900h–B9A3h` | 164 bytes no service can use |
-| `B600h–B8FFh` | `GLCD.SVC`, three pages; `B600h` holds `JP BENTRY` |
-| `B500h–B5FFh` | A second service of one page; `B500h` would hold `JP BENTRY` |
+| `B600h–B8FFh` | `GLCD.SVC`, three pages. `B600h` holds `JP BENTRY` |
+| `B500h–B5FFh` | A second service of one page. `B500h` would hold `JP BENTRY` |
 | `0100h` up | The TPA, its top at the word in `0006h` |
 
 The file header and resident header occupy the same 25 bytes but several

@@ -189,3 +189,22 @@ results, source fixtures and dependency pins retain their original scope.
 The reader’s fences and capture comments are unchanged. Editorial gate
 results and context dispositions are recorded in the application JSON.
 Independent application review remains open. No product code ran.
+
+## Inherited CONDEV factual correction
+
+I removed the incorrect bit 4 row from the stored `CONDEV` table. `VCLAIM`
+separately stores `CDCLM`. `VIDEO` writes and clears that byte and `INFO`
+returns the OR of `CONDEV` and `VCLAIM` in `B`. I read the full containing
+passage and the complete owning routines at selected source `962853f`.
+The reader now cites the storage definition, claim and release writes and
+the combined return explicitly. The other stored bits and the LCD row
+ownership lesson are unchanged.
+
+This inherited error was not detected by the original source-correspondence
+audit. Identical source blobs and spans establish citation identity but do
+not establish the truth of every inherited claim. Those static identity
+proofs remain valid. I recorded this limitation and the explicit factual
+correction in `source-adoption-unaffected-application.json`. Historical
+results and pins are unchanged. Gate and complexity dispositions are in
+that application record. Lead and independent confirmation remain pending.
+No product code ran.
