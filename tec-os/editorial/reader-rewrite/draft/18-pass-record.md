@@ -29,8 +29,9 @@ physical hardware behaviour.
 ## Exact movement accounting
 
 All assigned facts, examples and failure qualifications have a home below.
-The two complete literal fences remain byte-identical to frozen old18.
-There is no assigned captured-output fence to reproduce. The old check header
+The original READ listing and recipe remain byte-identical to frozen old18.
+The later accepted opening-preservation-01 correction adds the complete
+old05 failed-close recipe/output at A failed flush, as recorded below. The old check header
 and unrelated starter TED identity are replaced by exact evidence scope,
 not treated as a fresh run. No editor workflow was exercised by this chapter.
 
@@ -199,8 +200,9 @@ added-bit shorthand with OR, kept source routines as mechanical subjects and
 removed generic praise/summary endings. Read every comma and other authorial
 punctuation. Literal source comments retain their semicolons; authorial prose
 uses no semicolon or em dash. Explicit pattern searches and a final full
-reader-order pass supplement that judgement. No prose-gate, runtime harness
-or readability workload was invoked.
+reader-order pass supplement that judgement. No prose gate or readability utility was invoked in that initial
+pass. The later bounded preservation correction below records its actual
+text-gate and complexity checks. No runtime harness was invoked.
 
 Final text/Git checks found 80 citation occurrences across 19 source files,
 all within their source bounds. Both complete fences are byte-identical
@@ -219,3 +221,149 @@ old/new chapter and current cache source, supporting callers and actual retained
 measurement payloads/reports. Bounded source/craft review is closed after
 these corrections; final profile/runtime/navigation acceptance remains open.
 No execution or new observation accompanied the review.
+
+## Accepted opening-preservation-01 correction
+
+The accepted independent finding is in `opening-factual-review.json` at book
+`9cdbc1f`, ID `opening-preservation-01`. Read the full current 402-line reader
+chapter and 221-line pass record before editing, then frozen
+`tec-os/05-drives-and-cache.md:180–205` with the surrounding failure-policy
+paragraphs and inherited input header. The complete old recipe/capture also
+remains in 01-pass-record. The new reader home is
+`draft/18-cache-and-persistence.md`, **A failed flush**, after the directory-failure
+and removed-card explanations, before Time with maskable interrupts off.
+
+The original shell fence, exact capture comment and complete output fence
+from frozen old05:184–199 are inserted unchanged. The named file X.COM remains
+in DIR after Bad Sector and Write lost. The block is labelled historical
+TEC-OS `78127ec`, with matching historical ROM/starter media and the existing
+host setup/matching-media prerequisites. It is not a current `962853f` result.
+No physical-card behaviour or new run is inferred.
+
+The old05 header separately names starter TED.COM at Thorium `128edb7`,
+SHA-256 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`,
+and TAS.COM at Thorium `dbee66a`, SHA-256
+`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
+SAVE itself is built in. Those inherited application identities do not turn
+this fixture into an editor or assembler workflow.
+
+### Semantic evidence read
+
+Read historical `78127ec:src/cpm/ccpcmd.asm:169–283` in full for make, two
+records, close and the default failure exit. Read
+`78127ec:src/cpm/bdosfile.asm:138–220,304–382`: make clears RC and the map
+and writes the empty entry before later close publishes changed fields. Read
+`78127ec:src/cache.asm:178–225,369–399`: the directory path drops its failed
+update, preserves failed dirty data for a retry and warm boot drops failed
+lines while reporting Write lost. The existing ea3 mechanism paragraphs were
+checked against their complete `src/cache.asm:292–350,632–668` contexts. They
+remain separate and are not repinned.
+
+The zero-record description is explicit in frozen old05:201–205 and supported
+by the historical make/close path. DIR alone is not evidence of that record
+count. The new interpretation makes both the fixture-specific record state and
+the weaker observation of a listed name explicit. No zero-filled data contents
+or new image inspection is claimed. Cost-audit timing records cover separate workloads. The frozen capture/prose
+and historical source support this preservation repair.
+
+### Preservation identities
+
+Hashes cover UTF-8 text bytes with the original LF endings. Fence-body hashes
+exclude Markdown delimiters and include the body's final LF.
+
+| Retained material | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Complete original old05:180–205 | 801 | `3164f2863fd38267977d5f99a555a46e6b0c993815f01c7b54baf8fe087d73f8` |
+| Shell body old05:185–186 | 62 | `98b341a96d91d1369fa048b824a49353b1578d24c39630f364dbd5bde5adb955` |
+| Capture body old05:191–198 | 99 | `0809690255886a0229c7153bcdc61e0d6660e91719dba5f1fa52f0964dd46c37` |
+| Both fences and capture comment old05:184–199 | 276 | `32739bd834e1f9cab6591d02c5d2ff5250fa6a408f69b815c894a8afaa56f38d` |
+
+### Separate craft and read-back passes
+
+The initial insertion retained every recipe/output byte and developed the
+make, buffered-write, failing-close, key, retry, loss and surviving-name order.
+The thematic pass placed the example beside the existing directory-failure
+mechanism. The sentence-deletion pass removed repeated reassurance while
+keeping the record-count qualification and the prerequisite distinction.
+Agency, every comma and sentence purpose were read separately. All inserted
+paragraphs and both literal blocks were read back with the surrounding A failed
+flush section. The source-only comparison preserves the original two READ
+fences and all other reader prose outside this bounded insertion/header note.
+The final deletion pass removed a restatement after the DIR qualification.
+The fixture follows the complete existing removed-card paragraph so its
+original antecedent remains unchanged.
+
+Only this reader chapter and pass record change. No shared ledger, root
+navigation, source pin, runtime, import, test, build, assembly, capture or
+publication changes. Independent bounded confirmation of the preservation
+correction remains open.
+
+### Actual text gates and complexity dispositions
+
+The bundled prose gate ran on both actual owned files after the insertion and
+craft passes, with an empty findings array and exit 0. No flag required a
+retention exception. The actual complexity utility ran on both files as a
+reading aid. Its prompts were read with their complete paragraphs or list
+items. Unchanged original mechanisms are outside this bounded prose correction.
+A clean gate does not establish reader quality or runtime qualification.
+
+| File | Reported line | Prompt | Context disposition |
+| --- | ---: | --- | --- |
+| 18-cache-and-persistence.md | 11 | SHORT(5) | Metadata fixes the unprefixed citation authority. |
+| 18-cache-and-persistence.md | 21 | ECHO(block/blocks) | Block cache and card blocks name the mechanism and transfer unit. |
+| 18-cache-and-persistence.md | 26 | SHORT(5) | The transfer link and retained-cache state have distinct technical purposes. |
+| 18-cache-and-persistence.md | 26 | ECHO(cache/cached) | The transfer link and retained-cache state have distinct technical purposes. |
+| 18-cache-and-persistence.md | 44 | SHORT(6) | Empty-line definition and mount cross-reference each supply a fact. |
+| 18-cache-and-persistence.md | 44 | SHORT(5) | Empty-line definition and mount cross-reference each supply a fact. |
+| 18-cache-and-persistence.md | 110 | CLAUSES(0+3) | Both bank values and copy directions are needed. |
+| 18-cache-and-persistence.md | 184 | LONG(30) | Accepted block and end-of-busy define completion. |
+| 18-cache-and-persistence.md | 195 | ECHO(line/lines) | One reused data line contrasts with other retained lines. |
+| 18-cache-and-persistence.md | 204 | ECHO(writing/write) | Four record writes per block explain the cost. |
+| 18-cache-and-persistence.md | 216 | NEG(2) | The zero-fill/no-pre-read branch needs both conditions. |
+| 18-cache-and-persistence.md | 223 | ECHO(writes/write) | Data and directory writes must both succeed. |
+| 18-cache-and-persistence.md | 240 | LONG(28) CLAUSES(2+1) | Make, changed-FCB close and extent transition all cause writes. |
+| 18-cache-and-persistence.md | 257 | ECHO(block/blocks) | Historical file size and three early-block counts remain exact. |
+| 18-cache-and-persistence.md | 270 | ECHO(lines/line) | Numerical line order defines the flush sequence. |
+| 18-cache-and-persistence.md | 276 | SHORT(4) | The no-rollback limit and recovery link must remain. |
+| 18-cache-and-persistence.md | 276 | SHORT(6) | The no-rollback limit and recovery link must remain. |
+| 18-cache-and-persistence.md | 309 | SHORT(1) | A scanner fragment of the complete warm-boot list item. |
+| 18-cache-and-persistence.md | 311 | ECHO(fails/failed) | Valid mount changes fail before state changes if a line failed. |
+| 18-cache-and-persistence.md | 313 | CLAUSES(2+2) | The full function-48 bullet specifies both return values. |
+| 18-cache-and-persistence.md | 314 | SHORT(5) | Scanner continuation of that complete function-48 bullet. |
+| 18-cache-and-persistence.md | 326 | NEG(2) | No new dirty data is the condition for no next write. |
+| 18-cache-and-persistence.md | 400 | CLAUSES(0+3) | Both BIOS calls and mapping/cache work define the protected interval. |
+| 18-cache-and-persistence.md | 432 | LONG(26) | The enabled-interrupt condition and all protected phases are needed. |
+| 18-cache-and-persistence.md | 432 | ECHO(writing/write) | One-line miss and whole-cache flush are different latency cases. |
+| 18-pass-record.md | 5 | ECHO(write/writes) | Original brief names write consequences and prerequisites. |
+| 18-pass-record.md | 5 | CLAUSES(0+3) | Original brief names write consequences and prerequisites. |
+| 18-pass-record.md | 22 | SHORT(6) | Original source pin does not certify a rerun. |
+| 18-pass-record.md | 96 | SHORT(6) | Archived payload identities and limits remain explicit. |
+| 18-pass-record.md | 96 | SHORT(6) | Archived payload identities and limits remain explicit. |
+| 18-pass-record.md | 96 | LONG(27) NEG(2) | Archived payload identities and limits remain explicit. |
+| 18-pass-record.md | 141 | LONG(26) | Original complete cache-source reading scope is retained. |
+| 18-pass-record.md | 168 | SHORT(1) | Scanner continuation of an original correction bullet. |
+| 18-pass-record.md | 171 | SHORT(2) | Scanner continuation of the directory-flush correction. |
+| 18-pass-record.md | 173 | SHORT(4) | Original successful-flush/default-continuation distinction remains. |
+| 18-pass-record.md | 173 | SHORT(4) | Original successful-flush/default-continuation distinction remains. |
+| 18-pass-record.md | 176 | SHORT(4) | Scanner continuation of the no-journal correction. |
+| 18-pass-record.md | 183 | SHORT(5) | Scanner continuation of the interrupt/NMI qualification. |
+| 18-pass-record.md | 188 | SHORT(5) | Original fence-preservation and craft scope remain recorded. |
+| 18-pass-record.md | 188 | CLAUSES(1+2) | Original fence-preservation and craft scope remain recorded. |
+| 18-pass-record.md | 198 | ECHO(semicolons/semicolon) | Original literal-punctuation and no-runtime scope remain separate. |
+| 18-pass-record.md | 198 | SHORT(5) | Original literal-punctuation and no-runtime scope remain separate. |
+| 18-pass-record.md | 207 | SHORT(6) | Coordinates supplement the semantic reads. |
+| 18-pass-record.md | 216 | SHORT(5) | Earlier independent correction kept its historical fences. |
+| 18-pass-record.md | 227 | LONG(27) | Exact input sizes and frozen reading scope are recorded. |
+| 18-pass-record.md | 243 | SHORT(5) | Builtin SAVE does not invoke historical TED/TAS. |
+| 18-pass-record.md | 252 | LONG(26) | Drop, retry and warm-loss paths all support this fixture. |
+| 18-pass-record.md | 262 | SHORT(6) | Timing-record workloads are separate from the restored capture. |
+
+Reader input SHA-256: `f7ffc97823da0b464f2701cc54621cfe5d536c1c059d88b639d8e38fe8a4a904`.
+
+Reader output SHA-256: `e4540d9bf5c529190a555a80c278c28542a9394924884b3345643dd34e71e845`.
+
+Removing only the inserted fixture section and restoring its one provenance
+header line reconstructs the entire input reader file exactly. The two original
+READ fences are unchanged. Both added fence bodies and the capture comment
+match frozen old05 bytes, including the padded X.COM row. A whitespace check
+therefore retains that historical trailing-space row deliberately.

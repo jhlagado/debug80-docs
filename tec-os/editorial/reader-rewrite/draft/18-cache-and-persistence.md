@@ -12,7 +12,7 @@ nav_group: "Part II: Inside TEC-OS"
      retain their recorded 78127ec run. CLOOK costs retain 60cfbdc and the
      larger-file/write-order examples retain 5a25178. Specific run records
      and endpoint methods are accounted for in 18-pass-record.md.
-     The two literal listing/recipe fences are historical evidence.
+     The READ listing/recipe and nodata.img failed-close fixture are historical.
      The listed 24-byte READ program was used by the recorded timing work.
      No TED workflow is implied by its presence on a historical starter card.
      No import, assembly, build, test, capture or measurement was performed.
@@ -351,6 +351,49 @@ change written behind produces `Write lost` at the next warm boot. A reset
 discards the change, still unwritten. While dirty lines stay dirty, fewer
 lines are free for reads. Every `CTAKE` starts with a write once all 30 are
 dirty.
+
+The retained `78127ec` run below left X.COM in the directory after a failed
+close. Its buffered records did not reach the card. It used that revision's
+prepared starter image and matching ROM. The PC setup is described in
+[Chapter 5](05-cards-on-the-pc.md#the-host-tools) and matching media in
+[Chapter 26](26-build-the-rom-and-media.md). The historical shell recipe also
+requires `cp` and `truncate`. It changes a separate image, not the working card.
+
+The image ends 32 card blocks into WORK, just past its directory. The directory
+is present but the file's data area is outside the shortened image:
+
+<!-- Retained historical TEC-OS 78127ec fixture, frozen old05:180–205.
+     This is not a current-source run or a physical-card experiment. -->
+```sh
+cp dist/starter.img nodata.img
+truncate -s 2113536 nodata.img
+```
+
+<!-- node tools/capture.mjs --card nodata.img "@start SAVE 1 B:X.COM" "@key x" "DIR B:" -->
+```text
+A>SAVE 1 B:X.COM
+
+Bdos Err On B: Bad Sector
+Write lost
+A>DIR B:
+X.COM       
+1 file, 8176K free
+A>
+```
+
+`SAVE` first made X.COM's empty directory entry and buffered its two records.
+The close's data flush could not write their block and failed with
+`Bad Sector`. After the recovery key, `x` in this capture, warm boot tried the
+block again, dropped it and printed `Write lost`. The failed close did not publish
+the updated record count or allocation map. In this fixture the on-card file
+therefore still had no records
+(`78127ec:src/cpm/ccpcmd.asm:216–270`,
+`78127ec:src/cpm/bdosfile.asm:157–201,328–381`,
+`78127ec:src/cache.asm:189–219,378–399`).
+
+DIR still listed X.COM because making the empty entry had succeeded before the
+failed close. Its name in the listing does not establish that the two buffered
+records reached the card.
 
 ## Time with maskable interrupts off
 
