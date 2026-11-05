@@ -3766,10 +3766,10 @@
       "end": 111,
       "kind": "paragraph",
       "existing_section": "The rules of a line",
-      "destination": 7,
-      "destination_subsection": "The rules of a line",
+      "destination": 25,
+      "destination_subsection": "Dollar-terminated startup echo",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Mechanism and complete matching example here; Chapter7 only states visible echo caveat if needed."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -3810,10 +3810,10 @@
       "end": 132,
       "kind": "paragraph",
       "existing_section": "The rules of a line",
-      "destination": 7,
-      "destination_subsection": "The rules of a line",
+      "destination": 12,
+      "destination_subsection": "Chained commands in startup",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Complete chain example, recipe/output and quiet-result interpretation here after !/: teaching. Chapter7 uses one command per line and links forward."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -3821,10 +3821,10 @@
       "end": 142,
       "kind": "paragraph",
       "existing_section": "The rules of a line",
-      "destination": 7,
-      "destination_subsection": "The rules of a line",
+      "destination": 12,
+      "destination_subsection": "Chained commands in startup",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Complete chain example, recipe/output and quiet-result interpretation here after !/: teaching. Chapter7 uses one command per line and links forward."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -3832,10 +3832,10 @@
       "end": 148,
       "kind": "example source or output",
       "existing_section": "The rules of a line",
-      "destination": 7,
-      "destination_subsection": "The rules of a line",
+      "destination": 12,
+      "destination_subsection": "Chained commands in startup",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Complete chain example, recipe/output and quiet-result interpretation here after !/: teaching. Chapter7 uses one command per line and links forward."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -3843,10 +3843,10 @@
       "end": 150,
       "kind": "provenance or capture recipe",
       "existing_section": "The rules of a line",
-      "destination": 7,
-      "destination_subsection": "The rules of a line",
+      "destination": 12,
+      "destination_subsection": "Chained commands in startup",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Complete chain example, recipe/output and quiet-result interpretation here after !/: teaching. Chapter7 uses one command per line and links forward."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -3854,10 +3854,10 @@
       "end": 163,
       "kind": "example source or output",
       "existing_section": "The rules of a line",
-      "destination": 7,
-      "destination_subsection": "The rules of a line",
+      "destination": 12,
+      "destination_subsection": "Chained commands in startup",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Complete chain example, recipe/output and quiet-result interpretation here after !/: teaching. Chapter7 uses one command per line and links forward."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -3865,10 +3865,10 @@
       "end": 168,
       "kind": "paragraph",
       "existing_section": "The rules of a line",
-      "destination": 7,
-      "destination_subsection": "The rules of a line",
+      "destination": 12,
+      "destination_subsection": "Chained commands in startup",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Complete chain example, recipe/output and quiet-result interpretation here after !/: teaching. Chapter7 uses one command per line and links forward."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4184,10 +4184,10 @@
       "end": 335,
       "kind": "paragraph",
       "existing_section": "Services at the prompt",
-      "destination": 7,
-      "destination_subsection": "Services at the prompt",
+      "destination": 4,
+      "destination_subsection": "Install, list and remove a resident service",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Operator COM/SVC distinction and practical commands before service-search exception and startup. Hook/header/memory implementation stays13/24. Complete associated captures here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4195,10 +4195,10 @@
       "end": 343,
       "kind": "paragraph",
       "existing_section": "Services at the prompt",
-      "destination": 7,
-      "destination_subsection": "Services at the prompt",
+      "destination": 4,
+      "destination_subsection": "Install, list and remove a resident service",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Operator COM/SVC distinction and practical commands before service-search exception and startup. Hook/header/memory implementation stays13/24. Complete associated captures here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4206,10 +4206,10 @@
       "end": 345,
       "kind": "provenance or capture recipe",
       "existing_section": "Services at the prompt",
-      "destination": 7,
-      "destination_subsection": "Services at the prompt",
+      "destination": 4,
+      "destination_subsection": "Install, list and remove a resident service",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Operator COM/SVC distinction and practical commands before service-search exception and startup. Hook/header/memory implementation stays13/24. Complete associated captures here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4217,10 +4217,10 @@
       "end": 358,
       "kind": "example source or output",
       "existing_section": "Services at the prompt",
-      "destination": 7,
-      "destination_subsection": "Services at the prompt",
+      "destination": 4,
+      "destination_subsection": "Install, list and remove a resident service",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Operator COM/SVC distinction and practical commands before service-search exception and startup. Hook/header/memory implementation stays13/24. Complete associated captures here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4228,10 +4228,10 @@
       "end": 367,
       "kind": "paragraph",
       "existing_section": "Services at the prompt",
-      "destination": 7,
-      "destination_subsection": "Services at the prompt",
+      "destination": 4,
+      "destination_subsection": "Install, list and remove a resident service",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Operator COM/SVC distinction and practical commands before service-search exception and startup. Hook/header/memory implementation stays13/24. Complete associated captures here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4239,10 +4239,10 @@
       "end": 372,
       "kind": "paragraph",
       "existing_section": "Services at the prompt",
-      "destination": 7,
-      "destination_subsection": "Services at the prompt",
+      "destination": 4,
+      "destination_subsection": "Install, list and remove a resident service",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Operator COM/SVC distinction and practical commands before service-search exception and startup. Hook/header/memory implementation stays13/24. Complete associated captures here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4250,10 +4250,10 @@
       "end": 374,
       "kind": "provenance or capture recipe",
       "existing_section": "Services at the prompt",
-      "destination": 7,
-      "destination_subsection": "Services at the prompt",
+      "destination": 4,
+      "destination_subsection": "Install, list and remove a resident service",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Operator COM/SVC distinction and practical commands before service-search exception and startup. Hook/header/memory implementation stays13/24. Complete associated captures here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4261,10 +4261,10 @@
       "end": 382,
       "kind": "example source or output",
       "existing_section": "Services at the prompt",
-      "destination": 7,
-      "destination_subsection": "Services at the prompt",
+      "destination": 4,
+      "destination_subsection": "Install, list and remove a resident service",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Operator COM/SVC distinction and practical commands before service-search exception and startup. Hook/header/memory implementation stays13/24. Complete associated captures here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4272,10 +4272,10 @@
       "end": 388,
       "kind": "paragraph",
       "existing_section": "Services at the prompt",
-      "destination": 7,
-      "destination_subsection": "Services at the prompt",
+      "destination": 4,
+      "destination_subsection": "Install, list and remove a resident service",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Operator COM/SVC distinction and practical commands before service-search exception and startup. Hook/header/memory implementation stays13/24. Complete associated captures here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4283,10 +4283,10 @@
       "end": 390,
       "kind": "provenance or capture recipe",
       "existing_section": "Services at the prompt",
-      "destination": 7,
-      "destination_subsection": "Services at the prompt",
+      "destination": 4,
+      "destination_subsection": "Install, list and remove a resident service",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Operator COM/SVC distinction and practical commands before service-search exception and startup. Hook/header/memory implementation stays13/24. Complete associated captures here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4294,10 +4294,10 @@
       "end": 401,
       "kind": "example source or output",
       "existing_section": "Services at the prompt",
-      "destination": 7,
-      "destination_subsection": "Services at the prompt",
+      "destination": 4,
+      "destination_subsection": "Install, list and remove a resident service",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Operator COM/SVC distinction and practical commands before service-search exception and startup. Hook/header/memory implementation stays13/24. Complete associated captures here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -5458,10 +5458,10 @@
       "end": 160,
       "kind": "paragraph",
       "existing_section": "The drives, the services and the word",
-      "destination": 10,
-      "destination_subsection": "The drives, the services and the word",
+      "destination": 14,
+      "destination_subsection": "How cold boot allocates drive vectors",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Allocation policy implementation after caller-visible dynamic top in10."
     },
     {
       "source": "tec-os/08-memory.md",
