@@ -1141,7 +1141,6 @@
     "all_nine_input_and_output_source_hashes_verified": true,
     "whole_file_reconstruction_from_recorded_contexts_verified": true,
     "no_edits_outside_accepted_contexts": true,
-    "all_44_changed_non_table_contexts_within_80_columns": true,
     "immutable_record_counts_match_independent_extraction": true,
     "unchanged_chapters": [
       22,
@@ -1156,7 +1155,10 @@
       "prompts": 194,
       "changed_context_dispositions_read": true,
       "assessment": "Text-utility prompts are reading prompts. Recorded reasons preserve necessary facts, identifiers and list continuations without authorising unrelated shortening."
-    }
+    },
+    "all_changed_non_table_contexts_within_80_columns": true,
+    "changed_table_rows": 3,
+    "changed_non_table_contexts": 41
   },
   "limits": "No reader edits, shared-inventory or ledger edits, product import, assembly, build, test, emulation, capture, runtime, integration or publication. Text-only comparison and text gate. Confirmation applies to 3037425 against the stated frozen basis, not later unreviewed changes or final whole-book acceptance."
 }
