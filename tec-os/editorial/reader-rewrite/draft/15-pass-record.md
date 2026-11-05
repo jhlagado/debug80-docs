@@ -250,3 +250,12 @@ The restored cost section was read for connected method, agency, every comma
 and substantive ending. Final adopted-source measurements still require
 allocation and cannot be inferred from this historical correction. Independent
 confirmation of the exact revised wording remains pending.
+
+## Independent cost-disposition confirmation
+
+The retained-evidence reviewer confirmed the revised cdeb89e cost section.
+The three restored measurements agree with the saved historical output.
+Unsupported238122 is excluded from reader results. MEMINIT346677 remains
+attributed to58d4345 and serial9448 to60cfbdc rather than a blanket78127ec
+measurement claim. The durable audit remains the explanation of the former
+conflict. No new runtime acceptance follows. Final KS48 measurements are held.
