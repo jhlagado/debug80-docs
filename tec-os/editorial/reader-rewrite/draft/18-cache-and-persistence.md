@@ -110,8 +110,6 @@ A separate `60cfbdc` measurement timed `CLOOK` itself at 259 T-states for a
 block in line 0 and 1,979, about 2,000, for the full search. Those earlier
 routine costs are not a breakdown of the `78127ec` read.
 
-The two copy paths account for the different costs of high and low DMA
-addresses.
 `CRDREC` and `CWRREC` put the two banks in `XMDST` and `XMSRC` as 0 for the
 program's view and 1 for EXPAND 1. Both then call `MVCOPY`, the cache's copy
 routine (`src/cache.asm:433-467`). A copy within a
@@ -191,11 +189,11 @@ through: a successful BIOS `WRITE` returns after the card has accepted the
 block and stopped reporting busy (`src/sd.asm:726-733`). Its record goes
 into the block's line by the path the next section describes, and `WRITE`
 sets bit 7 of `CWTYPE` first. `CWRBH` then writes the line to the card with
-`CWRITE` (`src/bios.asm:413-426`, `src/cache.asm:596-630`). If that write
-fails, the line is dropped, so the next read of the block comes from the
-card (`src/cache.asm:647-651`). A successful card write leaves that line
-clean. A failed card write drops that line. A failure earlier in the call, while obtaining a line,
-can instead leave an older dirty line for a later retry
+`CWRITE` (`src/bios.asm:413-426`, `src/cache.asm:596-630`). A successful
+card write leaves that line clean. A failed card write drops it so the next
+read comes from the card (`src/cache.asm:647-651`). A failure earlier in the
+call, while obtaining a line, can instead leave an older dirty line for a later
+retry
 (`src/cache.asm:364-423`, `src/cache.asm:510-520`).
 
 A write that is given a line for its block sets bit 6 of `CWTYPE`
@@ -325,9 +323,8 @@ Dirty cache lines reach the card on five occasions:
 
 A `^C` at the prompt causes a warm boot. When its flush succeeds, every
 pending cache change has reached the card. A failure prints `Write lost`,
-whose consequence is described below. A reset writes nothing, since cold
-boot clears EXPAND 1 (`src/boot.asm:321-346`), and the changes the cache
-still holds unwritten at a reset are lost. Some changes since the last
+whose consequence is described below. Reset does not flush the old cache. Cold boot clears EXPAND 1
+(`src/boot.asm:321-346`), so changes still unwritten at reset are lost. Some changes since the last
 directory write may already be on the card. `CTAKE` wrote them when their
 lines were given out for other blocks (`src/cache.asm:402-409`). The card
 can then hold a mix of old and new blocks.

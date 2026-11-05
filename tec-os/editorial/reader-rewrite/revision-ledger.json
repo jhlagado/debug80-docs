@@ -2407,7 +2407,7 @@
     },
     {
       "unit": "chapter-07",
-      "status": "bounded source-only draft pushed atb47d642; full independent review in progress",
+      "status": "complete independent review and actual-run provenance correction confirmed; final qualification and integration pending",
       "passes": {
         "full_passage_read": "lead read complete draft; full independent review in progress",
         "draft": "pending",
@@ -2419,8 +2419,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "full independent craft/agency/punctuation/journey review clear",
+        "independent_factual_review": "full independent review clear after58d4345timing/781capture provenance correction confirmed at70c52f0",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -7664,9 +7664,9 @@
     },
     {
       "unit": "chapter-18",
-      "status": "bounded source-only authoring in progress; no execution authorised",
+      "status": "complete independent lead source/craft review closed after bounded corrections; final qualification and integration pending",
       "passes": {
-        "full_passage_read": "pending",
+        "full_passage_read": "lead read full original/draft/passrecord and complete cache source with supporting callers/evidence",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",
@@ -7676,8 +7676,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed after full thematic/deletion/agency/everycomma/journey review and bounded cuts",
+        "independent_factual_review": "closed in18-independent-review.md; actual historical measurement records checked; reset scope corrected",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -10464,7 +10464,7 @@
     },
     {
       "unit": "chapter-25",
-      "status": "bounded draft pushed; independent review/correction cycle in progress",
+      "status": "complete independent factual/editorial review and bounded correction confirmation closed; final qualification and integration pending",
       "passes": {
         "full_passage_read": "lead read complete corrected draft atc161da6; independent bounded confirmation pending",
         "draft": "pending",
@@ -10476,8 +10476,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "complete source/craft review and bounded confirmation clear; lead read full corrected draft",
+        "independent_factual_review": "full independent review followed by Matrix/defaultBDOSfailure correction confirmation atc161da6",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -10854,7 +10854,7 @@
     },
     {
       "unit": "chapter-26",
-      "status": "bounded source-only draft pushed atd2d609e; full independent review queued",
+      "status": "complete independent factual/editorial review clear atfde0f89; final qualification and integration pending",
       "passes": {
         "full_passage_read": "lead read entire draft; full independent review queued",
         "draft": "pending",
@@ -10866,8 +10866,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "full independent craft/agency/punctuation/journey review clear",
+        "independent_factual_review": "full independent review cleared88sourcecoordinates,58units and actual historical input/result scopes",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
