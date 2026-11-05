@@ -245,19 +245,20 @@ substitute fixture and all fabricated output. The concrete BANNER recipe,
 its listing, byte counts and recovered source remain held for the shared batch.
 No BANNER-result explanation or new output fence is inserted into the chapter.
 
-### Case inventory for the lead and Ramanujan
+### Case inventory for the shared batch
 
 | Case | Required batch evidence |
 | --- | --- |
-| 05-L0 | Actual saved-card/source/input identity and successful structural verification. |
+| 05-L0 | Actual saved-card/source/input identity, explicit image backup with byte comparison and successful structural verification. |
 | 05-L1 | Complete default-A and explicit-B directory output, including actual by-products. |
 | 05-L2 | User-0 BANNER entry and actual record-rounded byte count. |
 | 05-L3 | Raw extraction to recovered/BANNER.REC, listing-length equality and observed final-record bytes. |
 | 05-L4 | Text extraction to recovered/BANNER.ASM and complete equality with the final saved banner after the specified EOF/CRLF conversion. |
 | 05-L5 | Equal initial/final card hashes and retained extraction artifacts/command evidence. |
+| 05-L6 | Checked absence of MISSING.ASM in B user 0, missing-file get status 1 with exact source-derived diagnostic, no destination created and unchanged card bytes/hash. |
 
 The exact commands, observation conditions, stop conditions and source
-coordinates are in the candidate. The lead maps the six cases into the shared
+coordinates are in the candidate. The lead maps the seven cases into the shared
 batch. No runtime allocation is implied. The failed or incomplete banner
 workflow cannot be repaired by silently importing an equivalent PC file.
 
@@ -304,7 +305,47 @@ conditions. Exact lists of files/regions and the no-rollback/partial-write
 qualifications remain because shortening them would remove assigned facts.
 The final gate is rerun on all three owned files before the prose commit.
 
-Remaining verification is the six held cases on the actual adopted saved
+Remaining verification is the seven held cases on the actual adopted saved
 banner card, independent result review and final book integration. All new
 expected observations remain expectations. No assembly, fixture import,
 product runtime, build, test, browser action, capture or new measured result.
+
+## Held-candidate refinement before independent review
+
+The candidate now uses “Case inventory for the shared batch” with no worker
+alias. The expected final source is separately reviewed exact source, not
+a runtime-qualified BANNER prerequisite. Its static identity and LF form are
+fixed before comparison with the actual saved file. The banner round and
+extraction results remain pending.
+
+The packet now starts from the persisted saved-banner-card.img, checks that
+card.img is absent, copies the source image to it and requires cmp equality
+before listing/extraction. This accounts for the host-image backup operation.
+It does not qualify the separate physical-card dd recipe. Source and backup
+hashes are recorded and byte equality is checked again after extraction and
+after the negative control.
+
+Added 05-L6 without deleting the six positive cases. The prepared user-0 B
+listing is saved and checked for the valid 8.3 name MISSING.ASM before get.
+Presence stops the packet without trying another name. The intended PC
+destination is checked absent both before and after the command. The
+command's expected failure is handled explicitly under set -e and checked
+for status 1, empty stdout and the exact source-derived stderr diagnostic.
+The packet then requires the backup to remain byte-equal to its source and
+records its hash. No failed-command output has been fabricated or executed.
+
+I reread the complete candidate and the containing source at ea3ef3d.
+tools/lib/cpmfs.mjs:15–19,118–130 validates the name, selects the user/file
+and throws the missing-file error. tools/tecvol.mjs:159–167 performs that
+read before any destination write, and201–205 prints the prefixed diagnostic
+and sets process.exitCode to1. tools/tecvol.mjs:142–147 and
+tools/lib/cpmfs.mjs:91–110 establish the actual listing fields used for the
+absence check. The literal expected diagnostic is a source assertion for
+the held run, not a captured result.
+
+I reread the changed passages for reader order, exact source/static/runtime
+boundaries, agency and every comma. Only the candidate and this record
+change in this refinement. The mandatory prose gate is run before commit.
+The chapter's operator prose, historical commands/output and all other
+writers' files remain unchanged. All seven cases await the shared allocation
+and independent result review.
