@@ -8,12 +8,14 @@ nav_group: "Part I: Using and programming TEC-OS"
 # 13. Write a resident service
 
 <!-- Source-only semantic check: TEC-OS ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
-     All retained example source, recipes, captures, addresses and measured
-     sizes are historical evidence from TEC-OS 78127ec. The card examples
-     used TAS.COM from Thorium dbee66a, SHA-256
+     Retained source/recipes are preserved from frozen10821b6, not blanket
+     execution evidence. COUNT workflow:78127ec Book45. CHEAT/RECS/NEEDS:
+     621201d Book42. PC writer111-byte result:7458352 Book31; byte equality
+     with TAS's first111 bytes:60e0768 Book27. FAIL is held outside reader
+     prose in13-fail-example-candidate.md; its original execution is unestablished.
+     Historical TAS input:Thoriumdbee66a, SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     Pinned TAS source was inspected separately for the writer rules.
-     No example was rerun. Source proofs and dispositions: 13-pass-record.md. -->
+     No example was rerun. Source proofs and dispositions:13-pass-record.md. -->
 
 `COUNT.SVC` counts console characters after the command that installs it
 has ended. Its hook shows how resident code survives program exits and how
@@ -216,8 +218,8 @@ The historical recipe below prepares a separate `svc.img` using the host
 card-tool setup from Chapter 5. Save COUNT's listing as `count.asm` beside
 the other PC sources. `HWLIB.ASM` is the helper from Chapter 11 and
 `area.asm` is Chapter 10's AREA program. `chars.asm`, listed under
-Publishing a record below, reads COUNT's count. This recipe and the
-captures retain their original build identities, not a new measurement:
+Publishing a record below, reads COUNT's count. The retained captures name
+their specific run revisions:
 
 ```sh
 cp dist/starter.img svc.img
@@ -228,7 +230,7 @@ node tools/tecvol.mjs put svc.img B count.asm --text
 node tools/tecvol.mjs put svc.img B chars.asm --text
 ```
 
-The historical run assembled AREA and CHARS before writing COUNT.SVC:
+The confirmed `78127ec` run assembled AREA and CHARS before writing COUNT.SVC:
 
 <!-- node tools/capture.mjs --card svc.img B: "TAS AREA" "TAS CHARS" "TAS COUNT COUNT.SVC" AREA COUNT.SVC SERVICES AREA CHARS CHARS UNLOAD SERVICES AREA CHARS -->
 ```text
@@ -276,9 +278,10 @@ no COUNT record
 B>
 ```
 
-In that build COUNT had 100 bytes of header and image plus 11 relocation
-bytes. It occupied one page, as `SERVICES` reported. The measured TPA fell
-by 420 bytes and removal restored them. The page accounted for 256 bytes.
+The retained file description gives 100 header/image bytes and 11 relocation
+bytes. The earlier PC writer result at `7458352` confirms the 111-byte total.
+In the `78127ec` workflow COUNT occupied one page, as `SERVICES` reported.
+The measured TPA fell by 420 bytes and removal restored them. The page accounted for 256 bytes.
 The remaining 164 were the alignment gap at `B900h` to `B9A3h`, below the
 original BDOS entry stub. That gap is lost with the first service only.
 [Chapter 24](24-loading-and-removing-services.md#the-resident-entry-and-its-pages)
@@ -299,9 +302,9 @@ regard to case. Copying `abi.inc` into the current directory is sufficient
 only when `count.asm` is there too. The include remains source-adjacent
 even though temporary assembly copies are written under `build/svc`.
 
-This retained PC recipe wrote COUNT's 111 meaningful bytes in the historical
-example. TAS's corresponding file occupied one 128-byte record. This is
-the complete original recipe, not a new ATOM build or byte comparison:
+At `7458352` this PC recipe wrote COUNT's 111 meaningful bytes. An earlier
+comparison at `60e0768` confirmed equality with the first 111 bytes of TAS's
+128-byte file:
 
 ```sh
 cp dist/abi.inc .
@@ -348,51 +351,16 @@ return and continue or report failure as appropriate.
 
 Before returning carry set, INIT must undo everything it changed. A typed
 installation then fails with the file name and a question mark, though a
-default-mode fatal card-read error can end the command earlier. This
-historical FAIL.SVC does no setup and returns carry set. The capture
-omits the commands that assembled FAIL and AREA:
+default-mode fatal card-read error can end the command earlier. An INIT
+that started an interrupt source must turn it off before reporting failure.
 
-```asm
-; FAIL.SVC: a service whose INIT returns carry set, so the load fails.
-%INCLUDE "ABI.INC"
-
-	ORG	$0100
-HDR:	DB	'D',SVCFMT,0,1	; magic, format, no dependencies, removable
-	DW	0,0,0,0		; REMOVE, size, extra memory, relocation
-	DB	0,0,0		; no stack bytes added
-	DW	0		; INIT
-	DB	"FAIL    "	; the name SERVICES would print
-
-; Nothing was done, so there is nothing to undo. Returns carry set: not
-; installed.
-INIT:	SCF
-	RET
-
-; Never reached: a failed INIT runs no REMOVE. Returns carry clear.
-REMOVE:	OR	A
-	RET
-```
-
-<!-- node tools/tecvol.mjs put svc.img B fail.asm --text; node tools/capture.mjs --card svc.img B: "TAS AREA" "TAS FAIL FAIL.SVC" FAIL.SVC SERVICES AREA -->
-```text
-B>FAIL.SVC
-FAIL.SVC?
-
-B>SERVICES
-B>AREA
-47268 bytes
-
-B>
-```
-
-FAIL left no BIOS hook, so its pages were released and AREA reported the
-original TPA size in this run. A failed INIT runs no REMOVE. An INIT that
-started an interrupt source must turn it off before reporting failure.
+<!-- The full FAIL listing, recipe, output and interpretation are retained in
+     13-fail-example-candidate.md. Its original execution is unestablished. -->
 
 GLCD's INIT reports an absent graphics LCD with carry set and `A` = 2,
-`TNENODV`. Its table registration reports `TNEBAD`, status 1, for a missing
-matrix keyboard or an already registered GLCD table. A startup installation
-returns TNENODV when the ROM's PICO console is already active. In STARTUP.CMD,
+`TNENODV`. Its table registration reports `TNEBAD`, status 1, when the
+Matrix switch is disabled or a GLCD table is already registered. For a startup line with
+CON requesting CRT, registration returns TNENODV. In STARTUP.CMD
 that INIT failure is quiet when cleanup releases the pages. It leaves a
 zero command result, so a following `:` piece can run. Retained-page failures,
 failed file validation and rejected records do not receive that exception.
@@ -422,8 +390,8 @@ reporting refusal.
 COUNT changes no restart vector in page zero. An interrupt or RST handler
 can instead use one of the vectors at `0008h` through `0038h`. Header
 flags bits 1 to 7 claim RST 1 through RST 7. INIT must write the jump
-itself. A claimed vector that already starts with `JP` rejects the load
-before INIT runs, including a jump into ROM left by an earlier program.
+itself. The loader rejects the load before INIT if a claimed vector already
+starts with `JP`, including a jump into ROM left by an earlier program.
 An unclaimed vector change is outside this conflict check.
 
 The page-zero sweep covers `0008h` to `003Fh` at cold and warm boot and
@@ -475,7 +443,8 @@ The earlier console prerequisite avoids that conflict. The historical captures
 used configurations in which COUNT could load.
 
 CHEAT changes COUNT's BDOS declaration to 9, above the limit even with no
-other service installed. This historical capture omits its assembly lines:
+other service installed. This confirmed `621201d` capture omits its assembly
+lines:
 
 <!-- sed 's/^\tDB\t2,2,2/\tDB\t9,2,2/;s/COUNT   "\t; the name/CHEAT   "\t; the name/' count.asm > cheat.asm; node tools/tecvol.mjs put svc.img B cheat.asm --text; node tools/capture.mjs --card svc.img B: "TAS CHEAT CHEAT.SVC" CHEAT.SVC SERVICES -->
 ```text
@@ -518,8 +487,9 @@ One service can publish at most 255 records and the whole registry can
 hold at most 256. FIND examines at most 256 records. LIST takes a byte
 index, 0 through 255. Record rejection calls REMOVE to undo a successful
 INIT. The typed command fails with a question mark, but failure does not
-always free the pages. A refusing REMOVE retains the service with no
-records. Successful cleanup is followed by the BIOS-target scan described
+always free the pages. If REMOVE returns carry set, the loader retains the
+service with no proposed records. Successful cleanup is followed by the
+BIOS-target scan described
 above, which can retain pages as nonremovable. Design REMOVE to work both
 after publication and before publication has succeeded.
 
@@ -646,8 +616,8 @@ CRLF:	DB	13,10,"$"
 ```
 
 Save that source as `recs.asm` and put it on B with the same `--text`
-card-tool operation used for the other sources. The retained run below
-used the PICO board configuration. Startup's GLCD line installed nothing
+card-tool operation used for the other sources. The confirmed `621201d` run
+below used the PICO board configuration. Startup's GLCD line installed nothing
 while the PICO console was active, leaving stack room for COUNT.
 With the historical makeSvc-built COUNT file on the card, RECS listed
 two records. The table addresses are results from that run:
@@ -749,8 +719,8 @@ DEPS:	DB	1,"COUNT   "	; the least version, then the record's name
 The loader checks each dependency before moving the service or running
 INIT. NEEDS uses the same name and version in its declaration and FIND
 call, so that lookup is already satisfied when INIT starts. Without COUNT
-the installation fails before INIT. The historical run below shows the
-failed attempt, then installation and removal in the required order:
+the installation fails before INIT. The confirmed `621201d` run below shows
+the failed attempt, then installation and removal in the required order:
 
 <!-- node tools/tecvol.mjs put svc.img B needs.asm --text; node tools/capture.mjs --card svc.img B: "TAS NEEDS NEEDS.SVC" NEEDS.SVC COUNT.SVC NEEDS.SVC SERVICES UNLOAD UNLOAD SERVICES -->
 ```text
