@@ -15791,8 +15791,9 @@
     "authority": "P3 KD-243 / KS48",
     "width": 40,
     "font": "TEC Compact",
-    "source": "pending qualified adopted source",
-    "runtime": "no allocation; old offer17 80-column packet remains UNRUN",
-    "scope": "first-session and authored-banner route; preserve explicit80 and narrow evidence"
+    "source": "pending qualified adopted production source; modelling closure is not source acceptance",
+    "runtime": "BANNER40 unrun; exact opening workflow allocation still pending; preserved offer17 80-column packet remains UNRUN",
+    "scope": "first-session and authored-banner route; preserve explicit80 and narrow evidence",
+    "modelling": "independently closed; KG53 registered on Origo main cbdfd466; production implementation and full qualification allocated separately"
   }
 }
