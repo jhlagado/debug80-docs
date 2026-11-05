@@ -9,6 +9,16 @@ prose around it. The example uses TED and the pinned on-machine TAS. It prints
 through BDOS function 9 and returns to the CCP. Existing startup, devices, GLCD
 installation, volume configuration and memory configuration remain unchanged.
 
+## Current scheduling amendment
+
+The later allocation proposal supersedes the unrun budget below: 600 MB total,
+450 MB JavaScript heap and a 120-second whole-job deadline. The immutable compact
+candidate, harness, exact command and artifact hashes must be durably filed on
+the existing private remote before final source offer/command approval. Include
+edit/rebuild and an explicit ATOM byte reference alongside the actual TED/TAS
+workflow. The source offer preparing at ea3ef3d is not final. No execution is
+allocated and no automatic deadline extension or retry is permitted.
+
 ## Authority and inspected identities
 
 TEC-OS source authority is
@@ -59,7 +69,8 @@ does not establish that they were generated from this source revision.
 ## Minimal example specification
 
 Working names are `B:BANNER.ASM` and `B:BANNER.COM`, with the tools on A:.
-The candidate contains only ordinary Z80 instructions, a string and a BDOS call.
+The earlier source sketch below must be replaced by the agreed compact layout
+in the immutable executable candidate before verification. It contains only ordinary Z80 instructions, a string and a BDOS call.
 No include file, hardware service, IOBYTE access, bank operation, driver change
 or private stack is needed in the proposed program.
 
@@ -225,8 +236,8 @@ machine-wide memory guard. Until allocation, every execution step is pending.
    banner. Clamp these to the approved budget. If the allocation cannot cover
    them, leave validation pending. Do not extend limits or retry automatically.
 4. **Milestone proof.** Execute the six public steps above. Each input wait must
-   require an empty input queue and an appropriate observable state, not just
-   a fixed cycle delay. Distinguish TED input, build return, post-run polling and
+   require an empty input queue and an appropriate observable state rather than
+   a fixed cycle delay alone. Distinguish TED input, build return, post-run polling and
    the CCP prompt. Use actual screen/status and disk observations alongside
    logical output. A quiescent editor alone does not establish that write-behind
    data reached the SD image. Inspect files through the target filesystem or
@@ -253,7 +264,7 @@ machine-wide memory guard. Until allocation, every execution step is pending.
    production change is permitted.
 
 One complete round on the actual intended teaching profile is the minimum
-publication gate. If the book promises the same sequence on both PICO and GLCD,
+acceptance condition. If the sequence is taught for both PICO and GLCD,
 each needs its own complete round with unchanged startup. Serial evidence can
 be labelled as additional model coverage but cannot replace either display
 claim. Physical hardware and browser interaction remain outside a host-model
