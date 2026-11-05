@@ -785,9 +785,17 @@ The ABI include remains before `org $0100`. The HWLIB include remains after
 the client's code and data. HWLIB emits code and data there, so moving that
 include to the header is not an equivalent formatting change.
 
-The normal public host assembly mechanism is
-`tools/lib/assemble.mjs:10–20`, used by `tools/media.mjs:187–192` for COM
-programs. It passes the source directly to ATOM. There is no
+At the ea3 source pin, `package.json` routes `npm run build` and
+`npm run media` to the build and media scripts. Their production default is
+TAS: `tools/lib/tas-rom.mjs:120–124` selects `tas` unless
+`TECOS_ROM_ASSEMBLER` explicitly selects `atom`. The ROM build uses that
+selection at `tools/build.mjs:341–347`. Media checks the selected ROM backend
+and uses TAS for distribution COM assembly by default
+(`tools/media.mjs:168–192`).
+
+The explicit ATOM reference backend uses `tools/lib/assemble.mjs:10–20`
+for COM assembly through `tools/media.mjs:187–192`. That helper passes source
+directly to ATOM. It is not the default production route at ea3. There is no
 `tecvol asm` command. A later packet must name a supported public workflow
 for these individual sources rather than inventing a CLI.
 At this source pin, the service writer documents ATOM's header-only include
@@ -807,7 +815,8 @@ The retained on-machine route is `TAS BOARD`, `TAS LCDMSG`, `TAS DIGCLK`,
 `TAS NOW`, `TAS ROWS`, `TAS PLACE` or `TAS VTEST`, with ABI.INC and HWLIB.ASM
 on the current drive. Future qualification must establish the actual TAS binary
 and normal card/build provenance, not infer them from an old transcript.
-ATOM remains the production toolchain. TAS is a bounded compatibility comparison.
+The ea3 production default is TAS. ATOM is the explicitly selected reference
+backend for the future byte and symbol comparison.
 
 The include closure also covers CHARS and RECS in the separate Chapter 13
 candidate document. BOARD, LCDMSG, DIGCLK, NOW, ROWS, PLACE, VTEST, CHARS
@@ -893,3 +902,16 @@ statements remain unchanged. HWLIB's source size and SHA-256 above were
 refreshed after this single header change. Full independent review of the
 eight candidates remains open. This correction is source-only, with no
 assembly, import or runtime qualification.
+
+## Production-route review disposition
+
+The second confirmed independent-review finding corrects the production-route
+description above against ea3 package, backend-selection, build and media
+source. TAS is the actual default at that pin. ATOM is an explicit reference
+backend, not the default production assembler. This records the existing
+source behaviour and does not change the toolchain or authorise a run.
+The ATOM trailing-include blocker remains explicit. No candidate fence changed,
+so all source sizes and hashes remain unchanged. The full independent review
+has been received, with both required findings applied. Bounded confirmation
+of this route-wording correction remains open. No assembly, import or runtime
+qualification is claimed.
