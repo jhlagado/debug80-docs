@@ -37,6 +37,9 @@ the cursor's line and column. The arrow keys move through the text.
 Backspace, also written `^H`, removes the character before the cursor.
 While TED is open these keys act on the source text.
 
+A semicolon begins a comment for you to read. Comments and blank lines do
+not become instructions in BANNER.COM.
+
 The following is the complete source to type. Each line ends with Return,
 including the blank lines and the final line. Use the two leading spaces on
 the instruction lines and retain the comments beginning with `;`. On this
@@ -114,10 +117,8 @@ reopen distinguish a stored file from text that was only in the editor.
 
 ## The first successful run
 
-A Left at the start of the reopened file leaves the cursor at `L1 C1`.
 `^T B` now builds the corrected source. TAS writes BANNER.COM and TED opens
-again with the source. Its status may show the project name in place of the
-cursor position. Left restores the position display at `L1 C1`.
+again with the source.
 
 `^T R` performs a build too and then runs the resulting program. This is the
 complete console text from the initial run, with the initial clear-screen
@@ -142,8 +143,7 @@ Press a key
 `BANNER.COM written` reports the successful assembly. The greeting is your
 program's output. The `A>A:TED` lines are commands used to reopen the editor,
 not text printed by BANNER. TED waits at `Press a key` so the result remains
-visible. Space returns to the source. Left leaves its cursor at `L1 C1`
-and restores the position display for the next edit.
+visible. Space returns to the source at `L1 C1`.
 
 TAS also writes BANNER.DBG beside the source and COM file on B. It contains
 information for a debugger. Keep it with the other BANNER files, though this
@@ -153,8 +153,6 @@ exercise needs only the source to edit and the COM file to run.
 
 The source you typed contains both instructions and the message they print.
 An assembler translates the instructions into bytes the Z80 processor executes.
-A semicolon begins a comment for you to read. Comments and blank lines do
-not become instructions in BANNER.COM.
 
 `org $0100` places the assembled program at address `0100h`, where TEC-OS
 loads and starts a COM program. The dollar prefix in `$0100` is the
@@ -187,6 +185,10 @@ final return and uses none of the earlier register values.
 
 ## A changed greeting
 
+A status message can replace TED's position display. An arrow restores it
+and also moves the cursor normally. Left at the start of the file leaves
+the cursor at `L1 C1`.
+
 From `L1 C1`, twelve Down presses reach `L13 C1`, the MSG line. Twenty-six
 Right presses move to `L13 C27`, just before the quote after TEC-OS. Typing
 `!` inserts it inside the quoted greeting. The cursor moves to `L13 C28`
@@ -197,10 +199,7 @@ and the `*` returns. Only this line changes:
 MSG: db "Hello from TEC-OS!",13,10,"$"
 ```
 
-`^S` saves the change. Left clears `Saved` and moves to `L13 C27`.
-`^T B` builds it. To restore the position display afterwards, Left moves to
-`L13 C26` and Right returns to `L13 C27`. These arrows move within the
-source without changing its text.
+`^S` saves the change and `^T B` builds it.
 
 `^T R` builds and runs the changed program. This separate run has the new
 greeting. As before, the initial clear-screen controls and leading blank
@@ -222,9 +221,8 @@ A>A:TED
 Press a key
 ```
 
-Space returns to TED. Left then Right restores the displayed `L13 C27`
-position. The extra exclamation mark is in both the saved source and the
-rebuilt program. Saving alone would have left the earlier COM unchanged.
+Space returns to TED. The extra exclamation mark is in both the saved source
+and the rebuilt program. Saving alone would have left the earlier COM unchanged.
 
 ## Saved source and the standalone program
 
