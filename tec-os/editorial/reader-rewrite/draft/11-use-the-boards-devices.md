@@ -710,8 +710,9 @@ release. The separate character LCD remains available during the graphics work.
 
 A release restores the ROM PICO console's mode, font and displayed page when
 that console started at cold boot. If it is the selected console, the release
-also clears the screen and homes the cursor. Without the matrix keyboard the
-PICO console did not start, so release leaves the chip's programmed state alone.
+also clears the screen and homes the cursor. With the Matrix switch disabled
+the PICO console did not start, so release leaves the chip's programmed state
+alone.
 
 The claim records a flag rather than an owner identity. Warm boot releases it
 through the same path, so an exiting program's claim ends too. Release with no
