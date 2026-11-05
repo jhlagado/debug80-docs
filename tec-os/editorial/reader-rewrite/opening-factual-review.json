@@ -1,0 +1,321 @@
+{
+  "schema_version": 1,
+  "review_kind": "independent_source_only_factual_and_preservation",
+  "status": "findings_reported_no_reader_edits",
+  "authority": {
+    "closed_outline": "0e4feeaf7f8b8063a8301e9073aa598c2cabaea1",
+    "outline_closure": "3060e711387b3601a7375e69906f4f5c0175af7c",
+    "frozen_material": "10821b68f80c10d2037bbd1c5ab207877c897c68",
+    "current_source": "962853f499f05faf281f6cdff1deca8959f58c2b",
+    "tested_source": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+    "actual_result_receipt": "4b5b5a505cb38bd84a787241e09209e9ba9ce5d8",
+    "receipt_path": "studies/p3-tec-os/reviews/book-opening-workflows.md",
+    "receipt_sha256": "1368e77c9bc71797d40d42260110ff7fdbc8c430fb3cf46782214f041638e407",
+    "attempt": "e77c7ef0f81c42d94f12391b099f4cf8c4acd9a6",
+    "archive_path": "studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02/complete-attempt.tar.gz",
+    "archive_sha256": "af08c7ff36ff5ed5cdaaed1a8e1ec20cec938487b22f3ab11e7b7387b23c2afa",
+    "result_sha256": "e4b5ff29b5b8ab7dc0c44a3f1d807dbd08974776665c5cc965cf8c3e15bf9350"
+  },
+  "chapters": [
+    {
+      "chapter": 1,
+      "reader": {
+        "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+        "commit": "33f3b8a4e3a568dcde7aba467046b12b85dc96df",
+        "git_blob": "7b82711627034f00a1221ab0e46b3bbf5d0cea7b",
+        "bytes": 9118,
+        "sha256": "dc76d143773c963725b235256b3268b23f9be6068d40e07382a1eb6765e7d015"
+      },
+      "pass_record": {
+        "path": "tec-os/editorial/reader-rewrite/draft/01-pass-record.md",
+        "commit": "33f3b8a4e3a568dcde7aba467046b12b85dc96df",
+        "git_blob": "371f16b051d52c1d5021eca6b4d8e377ce2edda1",
+        "bytes": 27613,
+        "sha256": "6e7ba31dad019a0841877d7671d8daa6622663bb8723835c01d7a0ae789f3b52"
+      },
+      "full_reader_and_record_read": true,
+      "result": "preservation_fix_required",
+      "checks": [
+        "Six complete contiguous screen-row slices match Machine 1 phases 001,002,004,005,006,007; no invented DIR on B.",
+        "Supplied SAMPLE remains first build/run; cold40/PICOv3/TEC Compact is distinct from historical serial and host80.",
+        "Keyboard correction, prompt-only history and empty-current-line Ctrl-C read against source; successful flush and Write lost are distinguished.",
+        "Nine original literal units remain byte-exact in the pass record; reader-home audit below finds one paired recipe/output gap."
+      ]
+    },
+    {
+      "chapter": 2,
+      "reader": {
+        "path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
+        "commit": "c384c49efcb1057e248cd7e40dd7f62755e97051",
+        "git_blob": "69072fef88bd7256049c560c4bc6296bafae41d1",
+        "bytes": 11102,
+        "sha256": "596b3d541e9f991f7596d2f3933cd5755ce9c1c8cdb041f26207aeff40cdcc48"
+      },
+      "pass_record": {
+        "path": "tec-os/editorial/reader-rewrite/draft/02-pass-record.md",
+        "commit": "c384c49efcb1057e248cd7e40dd7f62755e97051",
+        "git_blob": "427f455d27373527c34f0a009d765ff9cf8936b4",
+        "bytes": 21095,
+        "sha256": "71820e0279ae5f00c6870cf56bbae6d1d3d3cb3bc54987ff107ede39b99db76a"
+      },
+      "full_reader_and_record_read": true,
+      "result": "clear_in_reviewed_scope",
+      "checks": [
+        "All six fences checked against retained original/edited sources, three raw console artifacts and phase096 rows2–7. Only declared newline rendering and excerpt boundaries applied.",
+        "All 54 phase043–096 screen/status records checked for the instructional cursor sequence; six Backspaces then Ctrl-G delete the extra newline.",
+        "Full source entered before deliberate BROKEN; absent COM after rejection, initial greeting, changed greeting and fresh-machine standalone run remain distinct.",
+        "BDOS register/print/return explanation and pinned TED save/build/run/navigation/status paths read as source. No general register-preservation promise is inferred from the retained comment.",
+        "A remains current while explicit B names locate source and COM; final fresh-machine run is separate from the earlier persisted-card snapshot used in Chapter5."
+      ]
+    },
+    {
+      "chapter": 3,
+      "reader": {
+        "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
+        "commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
+        "git_blob": "c16f154efdd80efdf0f8f3cdb9fb5c99ed4e70a6",
+        "bytes": 10364,
+        "sha256": "18db230d83aa4033ddcc3b224464b3a6c33e082acb6e5fc6ccc8968780b229df"
+      },
+      "pass_record": {
+        "path": "tec-os/editorial/reader-rewrite/draft/03-pass-record.md",
+        "commit": "5b69415f5aacc5cd0ffa57bde6987dd263adaba5",
+        "git_blob": "f1e2eeda20ed590aa5bbf104d42b67b26c909a4d",
+        "bytes": 14697,
+        "sha256": "fdd111210fdc294132624e157ae7d00573094190acb84d169a9d1d7b68b87c71"
+      },
+      "full_reader_and_record_read": true,
+      "result": "clear_in_reviewed_scope",
+      "checks": [
+        "Both inherited TYPE/COPY-REN-ERA fences exactly match frozen10821b6; original recipe/context and old78127ec provenance retained.",
+        "Full first paused screen and next-screen rows1–8 are excerpts of actual TYPE A:SAMPLE.ASM!USER 1; prose/metadata do not fabricate plain-TYPE return.",
+        "Complete current fixture has reproduction-accounting home at4a76238 in28-pass-record and retained Origo attempt02; continuation, Escape and Ctrl-C final states differ explicitly.",
+        "Source owners for name parsing, DIR, TYPE, pager stop/continue, ERA confirmation, REN spacing/collision, COPY partial failure and default BDOS error exit read with complete routine context.",
+        "All-files ERA fixture is preserved separately in AppendixJ by4c7674e; current BANNER files are explicitly protected from repeating the isolated historical empty-B sequence."
+      ]
+    },
+    {
+      "chapter": 5,
+      "reader": {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+        "commit": "379dd12efdbcbda8c98ea7817bd4fbcd55dbb402",
+        "git_blob": "0b4d5b799ddbfea65705404c1c2cceb323fc893a",
+        "bytes": 25002,
+        "sha256": "4a6650b16739a1e04180d42eb241921abc08c8b531da18e728ac879fd623e8dd"
+      },
+      "pass_record": {
+        "path": "tec-os/editorial/reader-rewrite/draft/05-pass-record.md",
+        "commit": "379dd12efdbcbda8c98ea7817bd4fbcd55dbb402",
+        "git_blob": "e0a583aa48524f73dbdba5e0bae48608189503e8",
+        "bytes": 47459,
+        "sha256": "5b47e076100b0b997a0b42cb34fe28a244bee00ac45f5113f4c4373f9515e437"
+      },
+      "full_reader_and_record_read": true,
+      "result": "clear_in_reviewed_scope",
+      "checks": [
+        "Full587-line reader chapter and548-line pass record read, including unchanged historical procedures.",
+        "All16 inherited fences remain ordered and byte-identical;12 inserted fences checked, six exact source/output substrings and six exact packet shell-line sequences.",
+        "All seven host cases checked as retained text/artifacts: backup equality, verification, A/B directory, user0 listing, raw get, text get and missing-file failure without output/image mutation.",
+        "384 raw bytes contain286 source CRLF bytes plus98 EOF padding bytes;13 CRLF pairs yield273 LF text bytes and the recorded hash.",
+        "Historical78127ec examples stay historical; physical install/dd/protection and unrelated old procedures gain no new runtime acceptance."
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "opening-preservation-01",
+      "priority": "required_preservation_fix",
+      "path": "tec-os/editorial/reader-rewrite/draft/01-pass-record.md",
+      "lines": [
+        344,
+        366
+      ],
+      "original_path": "tec-os/05-drives-and-cache.md",
+      "original_containing_range": [
+        180,
+        205
+      ],
+      "original_recipe_ranges": [
+        [
+          184,
+          187
+        ],
+        [
+          190,
+          199
+        ]
+      ],
+      "problem": "Historical metadata retention does not provide a reader home for the unique failed-close counterexample: SAVE creates a directory entry, data close fails on the truncated WORK payload, warm boot reports Write lost, yet DIR still lists the zero-record X.COM. Chapters18/28/22 do not contain this recipe/result.",
+      "concrete_fix": "Give the complete historical recipe, capture and containing explanation a named reader home, naturally Chapter18 A failed flush or Chapter28 as a cross-linked failure fixture. Keep actual78127ec provenance and host preparation prerequisites. Do not insert it into the new opening as a claimed current run.",
+      "evidence": "Read complete old05:180–205, reader18:290–353 including A failed flush, complete reader28 and Chapter22 recall passages; exact recipe/result search across draft reader files finds only01-pass-record."
+    },
+    {
+      "id": "opening-integration-01",
+      "priority": "integration_consistency",
+      "paths": [
+        "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
+        "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md"
+      ],
+      "lines": [
+        5,
+        5
+      ],
+      "problem": "Chapters1/2 nav_group is Part I: Using and programming TEC-OS; Chapters3–7 use Part I: Using TEC-OS.",
+      "concrete_fix": "Reconcile draft front-matter group labels at integration against the agreed part grouping. No root navigation change is made by this review.",
+      "origin": "Also identified by the lead; recorded as a known integration issue, not a runtime defect."
+    }
+  ],
+  "chapter1_historical_unit_reader_home_audit": [
+    {
+      "original_path": "tec-os/01-introduction.md",
+      "original_range": [
+        44,
+        52
+      ],
+      "disposition": "equivalent_experience",
+      "actual_passage_support": "Current Chapter1 The first prompt supplies actual cold40 boot/volume/prompt experience. Alternative console observations remain Chapter28 Console bytes, serial bytes and screens; old serial formatting is historical evidence, not a missing unique operator lesson."
+    },
+    {
+      "original_path": "tec-os/01-introduction.md",
+      "original_range": [
+        82,
+        87
+      ],
+      "disposition": "equivalent_experience",
+      "actual_passage_support": "Chapter1 Files at the prompt retains the same six-file DIR lesson with actual40-column rows and the same free-space meaning."
+    },
+    {
+      "original_path": "tec-os/01-introduction.md",
+      "original_range": [
+        98,
+        104
+      ],
+      "disposition": "equivalent_experience",
+      "actual_passage_support": "Chapter1 Drive A and drive B retains selection and return; prepared B-empty fact is explicit. Chapter3 Names in a listing explains DIR B:/NO FILE; its complete separate historical COPY fixture begins with empty B. No current DIR B: capture is invented."
+    },
+    {
+      "original_path": "tec-os/01-introduction.md",
+      "original_range": [
+        115,
+        125
+      ],
+      "disposition": "equivalent_experience",
+      "actual_passage_support": "Chapter1 Supplied source and a running program replaces the serial0-by0 display with actual40-by24 SAMPLE build/run. Source/program distinction, devices and prompt return remain."
+    },
+    {
+      "original_path": "tec-os/01-introduction.md",
+      "original_range": [
+        137,
+        142
+      ],
+      "disposition": "reader_lesson_retained",
+      "actual_passage_support": "Chapter1 question-mark failure advice and Chapter3 failed-command table retain the failure lesson. Chapter12 Results and command chains includes a full historical NOSUCH? counterexample, so the unique failure result is not metadata-only."
+    },
+    {
+      "original_path": "tec-os/03-command-line.md",
+      "original_range": [
+        31,
+        44
+      ],
+      "disposition": "reader_lesson_retained",
+      "actual_passage_support": "Chapter1 correction paragraph retains case-insensitivity; Chapter3 Names in a listing retains *.ASM, G*.*, question-mark and drive-qualified listing. AppendixJ name rules explicitly explains padding-space matching and ????.COM matching up to four characters. No unique wildcard meaning is lost by replacing the old listing."
+    },
+    {
+      "original_path": "tec-os/03-command-line.md",
+      "original_range": [
+        634,
+        651
+      ],
+      "disposition": "reader_lesson_retained",
+      "actual_passage_support": "Chapter1 recall/edit table and paragraph retain ^W/^N and editing. Chapter22 Recall in the line buffer retains a complete two-^W recipe and capture (CON, TYPE STARTUP.CMD, recalled CON), plus source explanation of replacement/erasure. Lines from the prompt retains the case-preserving con capture. This is an actual reader experience, not merely a filename destination."
+    },
+    {
+      "original_path": "tec-os/05-drives-and-cache.md",
+      "original_range": [
+        184,
+        187
+      ],
+      "disposition": "reader_home_missing",
+      "actual_passage_support": "The exact truncated-image preparation appears only in01-pass-record. Chapter18 A failed flush explains the mechanism but lacks this recipe. Chapter28 has a different LINES pagination fixture and does not duplicate it."
+    },
+    {
+      "original_path": "tec-os/05-drives-and-cache.md",
+      "original_range": [
+        190,
+        199
+      ],
+      "disposition": "reader_home_missing",
+      "actual_passage_support": "The exact SAVE1 B:X.COM / Bad Sector / Write lost / DIR-still-lists-X.COM counterexample appears only in01-pass-record. Reader18 explains failed directory flushing but does not retain this zero-record file/result. The paired containing explanation is old05:180–205."
+    }
+  ],
+  "supporting_source_reads": [
+    {
+      "repository": "tec-os",
+      "revision": "962853f",
+      "ranges": [
+        "src/console.asm:57–88",
+        "src/pico.asm:36–91",
+        "src/keyboard.asm:75–219",
+        "src/cpm/ccp.asm:119–166,249–320,487–536,574–629,675–761",
+        "src/cpm/ccpcmd.asm:511–744",
+        "src/cpm/ccpmut.asm:1–185,239–381",
+        "src/cpm/ccpfile.asm:109–147,248–361,464–526,593–662",
+        "src/cpm/bdos.asm:121–252,414–433,435–576,601–729",
+        "src/cpm/bdoscon.asm:47–118,170–204,229–243",
+        "src/history.asm:92–175",
+        "src/boot.asm:178–215",
+        "src/cache.asm:292–350,647–668",
+        "tools/tecvol.mjs:65–83,142–167,201–205",
+        "tools/lib/cpmfs.mjs:91–150"
+      ],
+      "method": "Text-only routines and relevant callers, including split-file ownership; no import or execution."
+    },
+    {
+      "repository": "thorium",
+      "revision": "128edb7cbb27de17a9d3a7a747706a5b227b30c4",
+      "ranges": [
+        "build.json",
+        "tools/build-ted.sh",
+        "ted/src/editor-main.asm:56–197",
+        "ted/src/editor-project.asm:127–185,221–305",
+        "ted/src/editor-save.asm:7–104",
+        "ted/src/editor-screen.asm:518–541,583–612,706–763"
+      ],
+      "support": "Actual dispatch, save-failure exits, build/run prefix and one-based status rendering support the taught contracts. Exact cursor states additionally come from retained screens."
+    },
+    {
+      "repository": "edit",
+      "revision": "ca9a00fefbc32684d595094206315ee6ef0f6e69",
+      "ranges": [
+        "src/editor-buffer.asm:1–105"
+      ],
+      "support": "Backspace deletes before cursor; forward Delete at CR removes the CRLF pair. No assembly performed."
+    }
+  ],
+  "independent_inert_artifact_checks": {
+    "covered_screen_arrays_and_full_foreground_masks": 114,
+    "card_inventory_pairs_decoded": 11,
+    "program_observation_sets_read": 7,
+    "method": "Standard-library byte decoding of retained VRAM, display registers, font and card data; compared stored screen rows, foreground masks and file identities. These are artifact comparisons, not new product execution. The upstream receipt covers18 card artifacts; this independent pair comparison covers11 with inventory sidecars.",
+    "pager": {
+      "actual_command": "TYPE A:SAMPLE.ASM!USER 1",
+      "complete_source_bytes": 5105,
+      "continue_pauses": 10,
+      "escape_and_ctrl_c_prefix_bytes": 539,
+      "escape_page_zero": 16,
+      "ctrl_c_page_zero": 0,
+      "complete_fixture_home": "tec-os/editorial/reader-rewrite/draft/28-pass-record.md at4a76238"
+    },
+    "banner_card_handoff": {
+      "persisted_before_fresh_reopen_sha256": "30af241154514d0b5631fcbf0ef8dcb2d47bb792e3663d5b8d9bdd453ec9c721",
+      "later_fresh_session_final_sha256": "d7919f72163cfab99761b08d45c029abce6361c349adae8037c1798eb3822c0a",
+      "conclusion": "Distinct session images; Chapter5 correctly names the persisted saved-image handoff without claiming these whole-card hashes equal. BANNER source and executable remain the saved edited versions."
+    }
+  },
+  "preservation_boundaries": {
+    "historical_pins": "Old78127ec command captures remain historical. HELLO editor diagnostic/repair is separately7458352 in reader26 with actual book31 provenance; it is not transferred to BANNER. Historical host80 and serial0-by0 are not repinned to current cold40.",
+    "chapter3_handoffs": "AppendixJ retains all-files ERA fixture at4c7674e. Complete current pager fixture is retained at Origo attempt02 and recorded by4a76238; partial reader screens assert no plain-TYPE final prompt.",
+    "review_limits": "Full committed reader/pass-record reads and assigned-original/passage review completed for1–3/5. No product imports, assembly, tests, builds, syntax checks, emulation, captures or runtime reruns. Runtime acceptance remains solely scoped4b5b5a50; whole batch FAILED later, with no advanced-service, physical, browser, audio, final navigation, whole-book or publication acceptance.",
+    "shared_edits": "None. Only this new JSON review is owned."
+  }
+}
