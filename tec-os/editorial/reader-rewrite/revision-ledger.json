@@ -5697,20 +5697,20 @@
     },
     {
       "unit": "chapter-14",
-      "status": "bounded draft in progress; no execution authorised",
+      "status": "bounded independent editorial/factual review closed after corrections; final navigation and qualification pending",
       "passes": {
-        "full_passage_read": "pending",
-        "draft": "pending",
-        "thematic_order": "pending",
-        "sentence_deletion": "pending",
-        "agency": "pending",
-        "every_comma_punctuation": "pending",
-        "technical_claims": "pending",
-        "examples_before_explanation": "pending",
-        "journey_readback": "pending",
-        "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "full_passage_read": "completed for bounded draft; 14-pass-record.md records scope",
+        "draft": "completed for bounded draft; 14-pass-record.md records scope",
+        "thematic_order": "completed for bounded draft; 14-pass-record.md records scope",
+        "sentence_deletion": "completed for bounded draft; 14-pass-record.md records scope",
+        "agency": "completed for bounded draft; 14-pass-record.md records scope",
+        "every_comma_punctuation": "completed for bounded draft; 14-pass-record.md records scope",
+        "technical_claims": "completed for bounded draft; 14-pass-record.md records scope",
+        "examples_before_explanation": "historical evidence preserved with actual provenance; no fresh run inferred",
+        "journey_readback": "completed for bounded draft; 14-pass-record.md records scope",
+        "mechanical_gate": "completed for bounded draft; 14-pass-record.md records scope",
+        "independent_editorial_review": "closed after full review and independent correction confirmation",
+        "independent_factual_review": "closed after full review and independent correction confirmation",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -9036,7 +9036,7 @@
     },
     {
       "unit": "chapter-21",
-      "status": "bounded draft in progress; source-only work, no execution authorised",
+      "status": "draft pushed at751e8b2; independent review pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -9405,7 +9405,7 @@
     },
     {
       "unit": "chapter-22",
-      "status": "bounded draft in progress; no execution authorised",
+      "status": "full factual review clear; corrections pushed, reader-journey ordering confirmation pending",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -13807,7 +13807,7 @@
     },
     {
       "unit": "appendix-E",
-      "status": "bounded draft and own passes pushed atb1cacf1; independent review pending",
+      "status": "bounded independent editorial/factual review closed after corrections; final navigation and qualification pending",
       "passes": {
         "full_passage_read": "completed for bounded draft; e-pass-record.md records scope",
         "draft": "completed for bounded draft; e-pass-record.md records scope",
@@ -13816,11 +13816,11 @@
         "agency": "completed for bounded draft; e-pass-record.md records scope",
         "every_comma_punctuation": "completed for bounded draft; e-pass-record.md records scope",
         "technical_claims": "completed for bounded draft; e-pass-record.md records scope",
-        "examples_before_explanation": "eight historical fences unchanged; no new result asserted",
+        "examples_before_explanation": "historical evidence preserved with actual provenance; no fresh run inferred",
         "journey_readback": "completed for bounded draft; e-pass-record.md records scope",
         "mechanical_gate": "completed for bounded draft; e-pass-record.md records scope",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "closed after full review and independent correction confirmation",
+        "independent_factual_review": "closed after full review and independent correction confirmation",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
