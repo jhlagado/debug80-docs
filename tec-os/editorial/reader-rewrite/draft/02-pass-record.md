@@ -296,3 +296,10 @@ No request to integrate root chapters or navigation is made. Final-location
 paths and the whole-book journey need their separate integration review.
 The whole-batch failure and uncovered advanced-service, physical, browser and
 audio cases remain outside this chapter's acceptance.
+
+## Independent opening correction
+
+Reconciled only the draft nav_group with Chapters3–7 as Part I: Using TEC-OS,
+accepting opening-integration-01. The independent craft review has no body-prose
+finding for this chapter. Its instructions, six fences and result provenance
+are unchanged. No root navigation or runtime change is included.

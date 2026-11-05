@@ -2,7 +2,7 @@
 title: First session
 parent: TEC-OS
 nav_order: 1
-nav_group: "Part I: Using and programming TEC-OS"
+nav_group: "Part I: Using TEC-OS"
 ---
 
 # 1. First session
@@ -112,7 +112,7 @@ These command-line actions let you correct a name or start again:
 | `^X` | Erases the whole line being typed |
 | `^U` | Discards the line, prints `#` and starts a new screen line |
 | `^W` | Brings back the previous command and earlier ones on further presses |
-| `^N` | Moves forward through recalled commands, with an empty line past the newest |
+| `^N` | Moves forward through recalled commands with an empty line past the newest |
 
 Return runs a recalled line just as it runs a newly typed one. You can edit
 its last characters first with Backspace or discard it with `^X`. Recall is
@@ -161,7 +161,7 @@ program only after another assembly. The `.ASM` file remains available to read
 or edit after the build.
 
 Typing `SAMPLE` now runs `SAMPLE.COM`. TEC-OS loads the program and starts it.
-The program prints its greeting and screen size, then returns to the prompt:
+The program prints its greeting and screen size then returns to the prompt:
 
 <!-- attempt02 Machine 1, 006-opening-direct-run.json, screen rows 17–22.
      Earlier commands omitted; response and blank row retained. -->
@@ -209,7 +209,7 @@ A `Write lost` message means that some pending changes could not be written.
 The new prompt after that message does not establish successful preservation.
 Those failed changes have been dropped so another `^C` cannot recover them.
 Keep a separate copy of valuable work. [Chapter 5](05-cards-on-the-pc.md)
-explains card copies and recovery, and
+explains card copies and recovery and
 [Appendix D](appendix-d-error-messages.md) explains the failure messages.
 
 Only a successful completion brings pending saved changes up to date on the

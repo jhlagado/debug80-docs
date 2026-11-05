@@ -28,9 +28,9 @@ a screenful at a time.
 ## Names in a listing
 
 `DIR` lists files on the current drive. `DIR B:` lists B without changing the
-current drive. Each entry gives a name and a type, such as `BANNER.ASM`. The
-final line reports the number listed and the drive's free space in KiB. A KiB
-is 1,024 bytes.
+current drive. Each entry gives a name and a type, such as `BANNER.ASM`. Names
+appear in columns fitted to the console. The final line reports the number
+listed and the drive's free space in KiB. A KiB is 1,024 bytes.
 `NO FILE` means that no visible file matched the request.
 
 A name has up to eight characters followed by a full stop and a type of up to
@@ -47,11 +47,6 @@ example, `G*.*` matches names beginning with G, whatever their type. TYPE, COPY
 and REN each require unambiguous names instead of a wildcard pattern.
 [Appendix J](appendix-j-command-reference.md) gives the complete name rules and
 wildcard forms.
-
-Names appear in columns fitted to the console. You need not use the free-space
-figure to calculate a file's length. Space is allocated in larger units,
-explained in
-[Cards on the PC](05-cards-on-the-pc.md#record-sizes-and-allocated-space).
 
 ## Read a text file
 
@@ -142,9 +137,9 @@ Space continues at each pause until the text ends. Esc, Q or q stops a listing
 before its unread remainder. `^C` stops there too. Each of these keys erases
 `[more]`.
 
-If the line you are typing becomes hard to read, `^R` marks it with `#` and
-reprints the command on a new line. `^E` starts a new screen line while leaving
-the command being typed intact. Neither key changes a stored file.
+`^R` at the command prompt marks a hard-to-read line with `#` and reprints
+it on a new line. `^E` starts a new screen line while leaving the command
+being typed intact. Neither key changes a stored file.
 
 ## Copy, rename and selectively erase
 
@@ -194,10 +189,13 @@ B>
 
 `COPIED 0001` reports one 128-byte record copied. The count is hexadecimal:
 `000A` means ten 128-byte records (1,280 bytes). It counts copied records rather
-than space allocated to the file. The first REN made NOTES.TXT from COPY.TXT.
-The next REN left both files alone because NOTES.TXT already existed. The first
-ERA removed NOTES.TXT. The repeated ERA found no such file. STARTUP.CMD remained
-on B and the source on A was not renamed or erased.
+than space allocated to the file. Space is allocated in larger units, explained
+in [Cards on the PC](05-cards-on-the-pc.md#record-sizes-and-allocated-space).
+
+The first REN made NOTES.TXT from COPY.TXT. The next REN left both files alone
+because NOTES.TXT already existed. The first ERA removed NOTES.TXT. The repeated
+ERA found no such file. STARTUP.CMD remained on B and the source on A was not
+renamed or erased.
 
 On your working card, retain BANNER.ASM, BANNER.COM and BANNER.DBG. Use an exact
 name when erasing a disposable copy. A selective pattern such as `*.TXT` is
