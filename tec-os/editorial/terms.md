@@ -206,7 +206,8 @@ PICO versus loaded GLCD, allocated resident-page lifetime, numbered range
 meaning audit and credit reconciliation are recorded in
 [terms-amendment-record.md](reader-rewrite/terms-amendment-record.md).
 
-Opening first-use credits remain pending for Chapters 1–3. Available drafts
-also need the recorded form follow-ups. Final source adoption, integration
-and a complete reader-order pass are separate acceptance steps. This table
-does not close the glossary for publication.
+Opening first-use credits remain pending for Chapters 1–3. The available
+drafts' local form follow-ups have a bounded review recorded in
+[form-pass-record.md](reader-rewrite/form-pass-record.md). Final source adoption,
+integration and a complete reader-order pass are separate acceptance steps.
+This table does not close the glossary for publication.
