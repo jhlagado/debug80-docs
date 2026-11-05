@@ -256,3 +256,80 @@ Actual positive assembly/input/output/return proof needs its own allocated
 run at the adopted source. No new run was performed and no existing guard
 allocation was expanded. Source/craft checks remain useful but do not close
 this workflow gate.
+
+## Allocated serial LINE result and insertion
+
+The preceding hold is historical. The separately allocated attempt retained
+at private Origo71696f2e16a712cb4b84bdbcddaa4389e9e1130a,
+studies/p3-tec-os/evidence/book-reader-rewrite/line-ea3-attempt01, supplies
+the missing positive result. The sealed offer37d214f4 remains unchanged
+with its original UNRUN preparation status. The attempt is a separate record.
+The runtime queue records specific serial acceptance. Independent review of
+this insertion remains open. No whole-chapter or final-book acceptance follows.
+
+Before writing, read the complete attempt README, attempt/exit records,
+guard/log, artifact hashes, result and both case records. Read all retained
+console bytes and source-on-card bytes, the compact source and the complete
+sealed harness. Rechecked function10's count/characters/end/abort paths at
+ea3ef3d src/cpm/bdos.asm435–575,606–621,730–752 and the earlier call/return
+source proofs. The harness observes the function10 return address, DE/C at
+function9, the final RET's inherited0000h word, entry to zero and WBOOTR,
+then the ready user-zero B prompt. It uses the actual TAS-built card on fresh
+machines rather than injecting a generated COM. No new execution occurred.
+
+The inserted listing is the measured LINE.compact.asm from offer01, not the
+unchanged historical candidate. Its ASCII source has CR/LF lines,455 bytes,
+SHA-2565286389ada471b67a8a9427e8a503121ab014feb2a28c36393ed05d838c077ec.
+The Markdown listing preserves every line and space with LF line endings.
+The card's text conversion adds CP/M EOF/padding to512 bytes, SHA-256
+178b4d85b0c8fca82e5cbb5243959aeda49dad9eec0b528670ff4c8d0abab131.
+The original candidate source remains unchanged with its prior identity.
+Appended a superseded-hold status to08-line-example-candidate.md under the
+explicit follow-up instruction. No candidate literal or interpretation changed.
+
+Both retained ATOM assemblies have47 logical bytes, SHA-256
+ac814ae008976e85253adde41ecc540a6277d5a550f6a5f91b2903ca22e00318.
+Direct byte comparison confirms their equality and the same47-byte prefix
+of the actual TAS file. The TAS record is128 bytes, SHA-256
+1007379ac47a518df7490b77ad0cf04a7853e6fedd7eec88fd87aefb7445de4b.
+The retained harness requires its remaining bytes to be zero. The result's
+common symbols are BDOS0005h, GOT0111h and BUF0119h, with START0100h.
+These are measured artifact identities, not sizes inferred from source alone.
+
+| Retained observation | Meaning and insertion boundary |
+| --- | --- |
+| tas-console.bin |33 bytes, SHA-256 c09cf739bdf8930085300495d09171e84e792ae98b09f584d9b231979130df58. Starts TAS LINE, not B>TAS LINE. Exact bytes TAS LINE\r\r\nLINE.COM written\r\n\r\nB>. |
+| positive-console.bin |17 bytes, SHA-256 b14e930b25c4be26ddccecd47f3b28d68d47d3088033d9f9fb2b4c64ef70d68d. Starts at function10. Exact bytes HELLO\r\r\nGOT\r\n\r\nB>. Neither the preceding prompt nor typed LINE is supplied. |
+| positive.json | HELLO plus CR input, returnedInput true, count5 and bufferHex48454c4c4f. One GOT call, final RET, entry to0000h and WBOOTR. Final prompt is ready on user-zero B. GOT is fixed data, not buffer echo. |
+| abort-control.json | Fresh machine, first input03. No function10 return, GOT call or final program RET. One WBOOTR and exact output ^C\r\nB>. This is a separate control, not the positive completion proof. |
+
+Both displayed captures render the retained carriage-return sequences as
+lines. Their comments retain the byte boundaries. No prefix was invented.
+The positive transcript has no extra blank line between HELLO and GOT:
+the two carriage returns do not supply two line feeds.
+
+The input ROM is16384 bytes, SHA-256
+2b719d6cbcfc50d48498a5d2a8a7449b23df82306d989c1d7018e4830edf7f09,
+with matching D8 SHA-256
+ce08bbf59d8b27b5a3cfdb5c71593b6bd5e7d31d0814bde53f091a88d1a49bb2.
+The starter input SHA-256 is
+0f3d9e33994ac30865b8675c8f8ce7fc493b13a0a840d8e84b7d708107d4266c.
+Normal build provenance remains offer17/Origo92cc92c7f360d3a9c963d49f53627f5edd8c1e20.
+TAS is dbee66a90816df9a5884a08754ebc2d458a38325, application prefix10295
+bytes with SHA-25645c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
+ATOM is0.3.7 and the model runtime0.3.3. The serial configuration has
+tms/matrix/glcd false, rtc/highCapacity true, ramFill0 and clock
+2026-11-01T12:00:00Z. This does not qualify KS48, browser use, a display/font
+or physical hardware. SHOW remains explicitly historical78127ec.
+
+Read the whole chapter before insertion and the complete changed input
+passage afterwards. Paragraph/sentence deletion retained the buffer-to-call,
+build-to-run and input-to-return steps because each establishes a dependency
+or observed result. Agency assigns echo to function10, GOT printing to9
+and final return to the program. Read every comma and punctuation mark in
+the added prose. The listing's semicolons remain literal. The journey pass
+keeps the buffer contract before the full program, followed by actual build
+and input observations before the wider editing and abort rules. Rechecked
+the unchanged SHOW fragment and the candidate's original literal. Manual
+craft and static byte checks only: no prose scripts, imports, assembly,
+tests, model execution or capture generation were performed for this insertion.

@@ -8,10 +8,13 @@ nav_group: "Part I: Using and programming TEC-OS"
 # 8. Call TEC-OS
 
 <!-- Source-only semantic check against TEC-OS
-     ea3ef3de9133931e925a0220d51c0e971c1fd8dd. No current runtime check claimed.
+     ea3ef3de9133931e925a0220d51c0e971c1fd8dd.
      The register-preservation fragment is unchanged from the historical SHOW
-     listing in old07. Historical PC assembly provenance is atom-z80 0.3.7.
-     No new build, capture or application result is supplied here. -->
+     listing in old07 at 78127ec. Historical PC assembly provenance is
+     atom-z80 0.3.7.
+     Compact LINE and its serial TAS/input captures use the qualified attempt
+     retained at private Origo 71696f2e, line-ea3-attempt01. This is not
+     KS48, browser, font or physical-board qualification. See 08-pass-record.md. -->
 
 Your program can read a key, print text or collect a line through the BDOS.
 The same calls work with the selected console, so the program uses TEC-OS
@@ -116,11 +119,71 @@ follow it. A maximum of 20 needs a 22-byte buffer: two control bytes
 followed by the space for input. The returned count defines the text's
 length, so it is not automatically a function-9 string.
 
-<!-- Interactive LINE example held outside reader prose in
-     08-line-example-candidate.md. Positive build/read-line/print/return
-     verification must precede its explanatory insertion. -->
+Save this program as `B:LINE.ASM`. It reads a line, prints a fixed
+acknowledgement and returns to the prompt:
 
-The line ends at Return, line feed or the buffer's maximum length. The
+```asm
+BDOS equ $0005
+
+  org $0100
+
+; Read a line, print GOT and return.
+; Takes input from the console.
+; Returns through the CCP's word.
+; Changes AF, BC, DE and HL.
+
+START:
+  ld de,BUF      ; Line input buffer.
+  ld c,10        ; BDOS edits the line.
+  call BDOS
+  ld de,GOT      ; Fixed GOT message.
+  ld c,9         ; $ ends this string.
+  call BDOS
+  ret            ; CCP warm boot.
+
+GOT: db 13,10,"GOT",13,10,"$"
+BUF: db 20,0
+  ds 20
+```
+
+`BUF` reserves the two control bytes and 20 input bytes. After function 10
+returns, the program loads `DE` and `C` again for function 9. It does not
+depend on their values surviving the input call. `GOT` is a fixed
+acknowledgement, not a copy of the text in `BUF`. The final `RET` uses the
+return word supplied by the CCP.
+
+On drive B, build it with `TAS LINE`. This serial-model capture at
+`ea3ef3d` begins with that command, after the earlier prompt:
+
+<!-- Origo 71696f2e line-ea3-attempt01/output/tas-console.bin;
+     CR/CRLF rendered as lines. No preceding prompt is captured. -->
+```text
+TAS LINE
+LINE.COM written
+
+B>
+```
+
+Type `LINE` to run it, then `HELLO` and Return. The retained input capture
+starts at the program's function-10 call. It omits the earlier prompt and
+the typed `LINE` command:
+
+<!-- Origo 71696f2e line-ea3-attempt01/output/positive-console.bin;
+     exact bytes HELLO\r\r\nGOT\r\n\r\nB>, rendered as lines. -->
+```text
+HELLO
+GOT
+
+B>
+```
+
+Function 10 echoed `HELLO` while reading it. The recorded buffer contains
+count 5 followed by those five characters. Function 9 printed `GOT`.
+The program's final `RET` reached warm boot through `0000h`. The run ended
+at a ready B prompt. The logical program is 47 bytes. TAS wrote it in one
+128-byte record with zero padding, matching the ATOM assembly.
+
+Function 10 ends the line at Return, line feed or the buffer's maximum length. The
 editing keys operate as at the command prompt: backspace removes the last
 character, `^X` removes the line and `^R` reprints it. A `^C` on an empty
 line ends the program. Within a nonempty line it is ignored. Command-history

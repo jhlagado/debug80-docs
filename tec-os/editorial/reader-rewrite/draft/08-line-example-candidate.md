@@ -42,3 +42,16 @@ function 9 uses `GOT`. It does not depend on either register retaining its
 value from input. The final `RET` uses the inherited return word. `GOT` is a
 fixed acknowledgement, not a copy of the text in `BUF`.
 
+## Superseded positive hold
+
+The status above records the original hold. Its missing positive proof is
+superseded by the separately allocated serial attempt retained at private
+Origo71696f2e, evidence/book-reader-rewrite/line-ea3-attempt01. That attempt
+assembled the original and separate compact source with ATOM, compared the
+actual on-card TAS build and observed HELLO input, fixed GOT output and the
+ordinary return through0000h. Chapter8 now uses that measured compact source
+and the actual bounded captures. The original candidate and interpretation
+above remain unchanged as an audit record. This closes only the specific
+serial LINE hold at ea3ef3d. Independent review of the insertion remains open.
+No KS48, browser, font or physical-board qualification follows.
+
