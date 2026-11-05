@@ -65,7 +65,7 @@ lists each code's cause and remedy.
 The banner appears before either card operation. The RAM check, console
 initialisation and clock probe precede it (`src/boot.asm:71-102`). A board
 without the required RAM stops at `TEC-OS needs 64K RAM` on serial
-(`src/boot.asm:579-632`, `src/text.asm:10`). [Chapter 15](15-reset-and-boot.md#the-ram-check) explains that check.
+(`src/boot.asm:579-632`, `src/text.asm:10`). [Chapter 15](15-reset-and-boot.md#ram-before-the-workspace) explains that check.
 `COLDRT` and `DIAG` use the BDOS stack before the CCP runs. Both failure
 jumps follow completed calls, so `DIAG` starts at that stack's top
 (`src/boot.asm:80-86`, `119-132`, `802-829`).
@@ -76,7 +76,7 @@ and retry. `RSLCAP` copies the drive table before the cold clears.
 (`src/boot.asm:59-69`, `296-303`, `src/layout.asm:166-174`). That buffer
 survives the route to `DIAG`: `MEMINIT` clears EXPAND 1 and the mount uses a
 cache line there for table reads (`src/boot.asm:100-102`, `321-346`,
-`src/vol.asm:44-65`). [Chapter 15](15-reset-and-boot.md#the-reset-test)
+`src/vol.asm:44-65`). [Chapter 15](15-reset-and-boot.md#retained-drive-selection)
 explains recognition and reselection.
 
 ## The diagnostics ROM

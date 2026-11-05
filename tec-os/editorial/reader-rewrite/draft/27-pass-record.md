@@ -148,3 +148,12 @@ reader-order navigation and complete-book acceptance remain with the lead.
 No new diagnostic build, current-pin model result, board observation or
 publication is claimed. The preserved historical header and output remain
 at 78127ec even though the implementation citations now refer to ea3ef3d.
+
+## Independent Chapter 15 navigation correction
+
+The Chapter 15 review supplied the final anchors. The RAM-check link now uses
+`15-reset-and-boot.md#ram-before-the-workspace` and the recognised-reset link
+uses `15-reset-and-boot.md#retained-drive-selection`. Both were read in their
+containing Chapter 27 paragraphs. Only those two link fragments changed in the
+chapter. No source citation, prose claim, recipe or historical output changed.
+Full independent Chapter 27 review remains pending. No execution was performed.
