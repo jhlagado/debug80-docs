@@ -355,6 +355,12 @@ program finds the table with `TNFIND` as it would a driver's
 (`src/pico.asm:15-24`, `src/pico.asm:43-44`). `CON` sets the width through the
 table's `PICOWID` entry, as [Chapter 20](20-ccp.md) describes.
 
+At `fe2097f`, the PICO9918's normal text is light green on black at all
+three widths. The colour byte is `31h` in `TMSCOL` and in each width's
+register template (`src/pico.asm:324-327`, `src/pico.asm:645-647`, at
+`fe2097f`). This palette change occupies four ROM bytes; it does not move
+the console's interface.
+
 `GLCD.SVC` gives the ROM its table through `DRVR`, service 12. The service's
 routine `SVDRV` tests the mode and the caller and passes the table to
 `VIDHOOK`, which keeps its address in `GLVEC` (`src/services.asm:362-385`, `src/video.asm:79-102`). The

@@ -181,33 +181,48 @@ calls service 15, which returns its address (`src/services.asm:351-354`,
 
 ## The two assemblies
 
-The ROM is assembled on the PC by ATOM, the npm package `atom-z80` at version
-0.3.7 (`package.json:26`). `npm run build` runs `tools/build.mjs`, which calls
-ATOM as a library. It calls `assembleAtomProject` with `src/` as the root and
-`rom.asm` as the entry, then `writeAtomD8` for the symbol map
-(`tools/build.mjs:196-202`).
-ATOM runs as an emulated Z80 program, and the ROM's assembly takes about
-2 billion of its cycles, the package's default budget. The build therefore
-gives it 4 billion cycles and 400 million instructions
-(`tools/build.mjs:192-194`).
+The production build at TEC-OS `fe2097f` uses TAS on the PC. The same
+backend assembles the main and diagnostic ROMs, `GLCD.SVC`, `MOUNT.COM` and
+`DEMO.COM`. The earlier ATOM route remains available explicitly:
 
-The build assembles the ROM twice, because the workspace's position depends on
-its size. The fixed workspace, the part below the RAM BIOS table, must end at
-the table's fixed address, `BF00h`. Its first byte, `WSBASE`, is therefore
-`BF00h` less the workspace's size, and the size is known only after an
-assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
-build reads the address of `BDOSRME`, the label at the fixed workspace's end,
-and takes `8000h` from it (`tools/build.mjs:232-236`). At 78127ec that part
-is 1,049 bytes, so the second assembly has `WSBASE` at `BAE7h`
-(`tools/build.mjs:237-239`).
+```sh
+TECOS_ROM_ASSEMBLER=atom npm run build
+```
 
-The second assembly's output is the ROM. `materializeAtomGeneration` turns it
-into bytes from `C000h`, filling every gap with `FFh`. The build copies them
-into a 16,384-byte array that is `FFh` everywhere else
-(`tools/build.mjs:244-247`). A separate module, `tools/lib/assemble.mjs`,
-assembles stand-alone programs with the same assembler, at `0100h` for a
-`.COM` file (`tools/lib/assemble.mjs:10-20`). The ROM's build does not use it.
-Chapter 27 describes the starter card's build, which does.
+That reference build needs no TAS host. The default is `tas`; an unknown
+`TECOS_ROM_ASSEMBLER` value stops the build
+(`tools/lib/tas-rom.mjs:120-124`, at `fe2097f`). The standalone ATOM examples
+in Part I are separate from this production selection.
+
+Before the default build, prepare the pinned applications with `npm ci` and
+`npm run inputs`, and prepare the Thorium host as described in the source
+repository's `README.md`, under “Build and test”. The host revision is
+`3d16b30cb8ed7deccc0a8b0b04f1b961e29f5689`; the TAS executable is pinned to
+`dbee66a90816df9a5884a08754ebc2d458a38325`. The preparation verifies the host's
+runner, lock file and Z80 runtime, as well as TAS's bytes. Assembly then uses
+local files without downloading them (`tools/lib/tas-rom.mjs:77-104`, at
+`fe2097f`).
+
+For `TAS.COM` and `TED.COM`, an explicit `TAS_COM` or `TED_COM` selects the
+file first, then `.inputs/NAME`, then the legacy copy in
+`../thorium/dist/NAME`. A selected file with the wrong size or hash stops the
+operation; it does not fall through to another copy. An empty override also
+stops it. `npm run inputs` prepares a pinned local copy when the legacy copy
+is stale (`tools/lib/pins.mjs:10-48`, at `fe2097f`). The host is selected by
+`TECOS_TAS_HOST`, or otherwise `.inputs/tas-host`.
+
+The build still assembles the ROM twice to place its fixed workspace below
+`BF00h`. It first assembles with `WSBASE` at `8000h`, reads the real end label
+`BDOSRME`, and subtracts `8000h` to obtain the size. It then assembles with
+`WSBASE` at `BF00h` less that size and checks the final placement
+(`tools/build.mjs:234-249`, at `fe2097f`). TAS's output is converted to the
+image and symbol data consumed by the build; the probe is not replaced by a
+hard-coded workspace size.
+
+This toolchain description is a source check at `fe2097f`. The image figures
+and captured build output elsewhere in this chapter remain from `78127ec`;
+they are not a new build transcript. A complete check against the eventual
+accepted source revision is still required.
 
 ## The build's checks
 
