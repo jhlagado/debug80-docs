@@ -776,5 +776,59 @@
       "revision": "cf20791f2bdd4e2bea3db396400364aeeb49e7f9",
       "git_blob": "5bc222adcc9e14666eb9c8122c2bbe3bf2f82825"
     }
-  ]
+  ],
+  "lead_amendment_confirmation": {
+    "status": "confirmed_source_only",
+    "reviewed_commit": "2cede123eb63b6dafb97845f4b36943aa334b99e",
+    "original_route_review_commit": "be58309735fc7d3e99eaef9e340fe0259f01a064",
+    "original_json_sha256": "f84e321b4e0b5220695a6c6c5cc39c83983dbab499aef8efc39a0fec490100e5",
+    "scope": "Bounded confirmation of changed containing route paragraphs, the concise queue and the added ledger object. No reader or planning prose edited.",
+    "records": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/compact-proof-plan.md",
+        "sha256": "cf3c4dfa11c41ccbf19633a2790fbd601047db3162f8be7102c548a6e02f1061",
+        "git_blob": "5da2ebae734de2d6e260a92993b2b2979954a364"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/runtime-verification-needs.md",
+        "sha256": "a781f6777ae464ee9ab235e96d55542b173b0cba6d712b1794599ed9bf755511",
+        "git_blob": "ab424180e55661381436805935a9d3de74b6e794"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/revision-ledger.json",
+        "sha256": "c9525a6b197dbdbc6e233e6cae4924fa1ec6d2f61768e04423e4bb4fab5770c8",
+        "git_blob": "489bc4957acd3dd7abec298baec8d863748b4870"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/compact-include-plan-gate.json",
+        "sha256": "4a0b9fb93be0e80c3a3e1a7ac65d79ea705b43e83a31d02969a88c214b116d25",
+        "git_blob": "8c4e45e65f85026adc44a47284b6c672a5bdb6e4"
+      }
+    ],
+    "confirmed_claims": [
+      "ATOM 0.3.7 closes its include header at the first ordinary statement. In every identified HWLIB client BDOS EQU is that statement, so the following ABI.INC is already outside the header even though it precedes ORG.",
+      "The trailing executable HWLIB.ASM include has a separate placement conflict. Correcting the earlier boundary alone would not make the unchanged client supported.",
+      "The ordinary ea3 assembleProgram wrapper calls the restricted project API. The service-specific expansion is not a public COM expander. No adapter, concatenated substitute or product fix is supplied or authorised.",
+      "The explicit ATOM reference remains held for these nine sources. Production on-card TAS remains primary. The separate uppercase service ORG refinement, plain-COM route and LINE exclusion are unchanged."
+    ],
+    "containing_passages_read": [
+      "compact-proof-plan.md: Source closure and public assembly routes, including the route table and complete Route limitations discussion",
+      "runtime-verification-needs.md: complete Other compact listings and final acceptance section",
+      "revision-ledger.json: complete compact_include_reference object, compared with its parent revision"
+    ],
+    "gate_record_confirmation": {
+      "input_hashes_match_reviewed_commit": true,
+      "recorded_exit_code": 0,
+      "recorded_hard_findings": 0,
+      "recorded_retained_review_findings": 7,
+      "scope": "Read the recorded flags and dispositions. They concern existing planning uses of offer and instructions to a future verifier. No new utility execution or wider prose acceptance is asserted."
+    },
+    "opening_packet_boundary": {
+      "changed_paths_exactly_the_four_listed_bookkeeping_files": true,
+      "all_preexisting_ledger_fields_including_opening_profile_and_preparation_checkpoint_equal_parent": true,
+      "effect": "No frozen opening executable, wrapper, case, archive, closure or seal was modified by this book commit. This is not another review of the external packet and does not alter its approval or allocation state."
+    },
+    "proof_limit": "Source-only agreement with the retained primary analysis. No imports, assembly, syntax checks, tests, builds, emulation, capture, command approval or executed assembly proof.",
+    "findings": []
+  }
 }
