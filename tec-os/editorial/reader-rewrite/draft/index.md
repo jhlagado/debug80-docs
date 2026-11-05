@@ -7,8 +7,10 @@ nav_exclude: true
 
 # TEC-OS on the TEC-1G
 
-<!-- Planned opening profile: KD-243 / KS48, TEC Compact at 40 columns.
-     Adopted source and runtime qualification remain pending. -->
+<!-- Opening profile: KD-243 / KS48, TEC Compact at 40 columns.
+     Public workflows accepted by Origo review4b5b5a50 from attempt02/e77c7ef0
+     on tested8b8664a, landed962853f. Whole batch remains FAILED.
+     Final source adoption, opening review and book acceptance remain pending. -->
 
 With TEC-OS in its ROM the TEC-1G starts at a command prompt. You can list
 files on an SD card and run a supplied program before using the editor and
