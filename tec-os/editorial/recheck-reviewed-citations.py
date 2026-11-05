@@ -26,7 +26,8 @@ ledger = json.loads(a.ledger.read_text())
 rows = ledger['resolutions'] if isinstance(ledger, dict) else ledger
 paths = set()
 for row in rows:
-    for match in REFERENCE.finditer(row.get('new_citation') or ''):
+    references = (row.get('new_citation') or '') + '\n' + '\n'.join(e['new'] for e in row.get('prose_edits', []))
+    for match in REFERENCE.finditer(references):
         path, start, end = match.groups()
         if row.get('status') == 'local-example':
             continue
