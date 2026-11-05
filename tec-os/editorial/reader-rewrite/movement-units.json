@@ -386,7 +386,7 @@
       "destination_subsection": "Prepared hardware checklist",
       "disposition": "retain/rewrite",
       "qualification": "Only required RAM-chip fact repeated in1 setup; address-space introduction10.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/01-introduction.md",
@@ -530,7 +530,7 @@
       "destination_subsection": "IOBYTE encoding",
       "disposition": "retain/rewrite",
       "qualification": "Correct inverted relation; full encoded table here, device names without bits6.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/02-console.md",
@@ -542,7 +542,7 @@
       "destination_subsection": "IOBYTE encoding",
       "disposition": "retain/rewrite",
       "qualification": "Correct inverted relation; full encoded table here, device names without bits6.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/02-console.md",
@@ -631,7 +631,7 @@
       "destination_subsection": "Serial bit timing",
       "disposition": "retain/rewrite",
       "qualification": "Extract 4800 8N2 and FAST to6; port bits/T-states remain16.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/02-console.md",
@@ -731,7 +731,7 @@
       "destination_subsection": "CON names and visible replies",
       "disposition": "retain/rewrite",
       "qualification": "Split off IOBYTE/BIOS-next-call sentences to16; no bits needed for action.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1048,9 +1048,10 @@
       "kind": "paragraph",
       "existing_section": "The keyboard and the line",
       "destination": 6,
-      "destination_subsection": "Keyboard differences",
+      "destination_subsection": "Matrix keyboard behaviour",
       "disposition": "retain/rewrite",
-      "qualification": "Correction/modifier actions extracted1/3; scan/control encodings16."
+      "qualification": "Explicit fragments/rows below control the early actions and technical encoding split.",
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1059,9 +1060,10 @@
       "kind": "paragraph",
       "existing_section": "The keyboard and the line",
       "destination": 6,
-      "destination_subsection": "Keyboard differences",
+      "destination_subsection": "Matrix keyboard behaviour",
       "disposition": "retain/rewrite",
-      "qualification": "Correction/modifier actions extracted1/3; scan/control encodings16."
+      "qualification": "Explicit fragments/rows below control the early actions and technical encoding split.",
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1069,10 +1071,10 @@
       "end": 279,
       "kind": "paragraph",
       "existing_section": "The keyboard and the line",
-      "destination": 6,
-      "destination_subsection": "Keyboard differences",
+      "destination": 16,
+      "destination_subsection": "Keyboard codes and BDOS line-input mechanism",
       "disposition": "retain/rewrite",
-      "qualification": "Correction/modifier actions extracted1/3; scan/control encodings16."
+      "qualification": "Explicit fragments/rows below control the early actions and technical encoding split."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1080,10 +1082,10 @@
       "end": 286,
       "kind": "table",
       "existing_section": "The keyboard and the line",
-      "destination": 6,
-      "destination_subsection": "Keyboard differences",
+      "destination": 16,
+      "destination_subsection": "Keyboard codes and BDOS line-input mechanism",
       "disposition": "retain/rewrite",
-      "qualification": "Correction/modifier actions extracted1/3; scan/control encodings16."
+      "qualification": "Explicit fragments/rows below control the early actions and technical encoding split."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1092,9 +1094,10 @@
       "kind": "paragraph",
       "existing_section": "The keyboard and the line",
       "destination": 6,
-      "destination_subsection": "Keyboard differences",
+      "destination_subsection": "Matrix keyboard behaviour",
       "disposition": "retain/rewrite",
-      "qualification": "Correction/modifier actions extracted1/3; scan/control encodings16."
+      "qualification": "Explicit fragments/rows below control the early actions and technical encoding split.",
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1103,9 +1106,10 @@
       "kind": "paragraph",
       "existing_section": "The keyboard and the line",
       "destination": 6,
-      "destination_subsection": "Keyboard differences",
+      "destination_subsection": "Matrix keyboard behaviour",
       "disposition": "retain/rewrite",
-      "qualification": "Correction/modifier actions extracted1/3; scan/control encodings16."
+      "qualification": "Explicit fragments/rows below control the early actions and technical encoding split.",
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1113,10 +1117,10 @@
       "end": 299,
       "kind": "paragraph",
       "existing_section": "The keyboard and the line",
-      "destination": 6,
-      "destination_subsection": "Keyboard differences",
+      "destination": 16,
+      "destination_subsection": "Keyboard codes and BDOS line-input mechanism",
       "disposition": "retain/rewrite",
-      "qualification": "Correction/modifier actions extracted1/3; scan/control encodings16."
+      "qualification": "Explicit fragments/rows below control the early actions and technical encoding split."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1124,10 +1128,11 @@
       "end": 311,
       "kind": "table",
       "existing_section": "The keyboard and the line",
-      "destination": 6,
-      "destination_subsection": "Keyboard differences",
+      "destination": 1,
+      "destination_subsection": "Correct and recall the command line",
       "disposition": "retain/rewrite",
-      "qualification": "Correction/modifier actions extracted1/3; scan/control encodings16."
+      "qualification": "Explicit fragments/rows below control the early actions and technical encoding split.",
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1136,9 +1141,10 @@
       "kind": "paragraph",
       "existing_section": "The keyboard and the line",
       "destination": 6,
-      "destination_subsection": "Keyboard differences",
+      "destination_subsection": "Matrix keyboard behaviour",
       "disposition": "retain/rewrite",
-      "qualification": "Correction/modifier actions extracted1/3; scan/control encodings16."
+      "qualification": "Explicit fragments/rows below control the early actions and technical encoding split.",
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1146,10 +1152,10 @@
       "end": 324,
       "kind": "paragraph",
       "existing_section": "The keyboard and the line",
-      "destination": 6,
-      "destination_subsection": "Keyboard differences",
+      "destination": 8,
+      "destination_subsection": "Output-time input and pause semantics",
       "disposition": "retain/rewrite",
-      "qualification": "Correction/modifier actions extracted1/3; scan/control encodings16."
+      "qualification": "Explicit fragments/rows below control the early actions and technical encoding split."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1179,10 +1185,10 @@
       "end": 338,
       "kind": "paragraph",
       "existing_section": "Pausing output",
-      "destination": 3,
-      "destination_subsection": "Read a screenful",
+      "destination": 28,
+      "destination_subsection": "Reproduce the historical LINES.TXT pager capture",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM instead of later host fixture; original fixture/output retained28."
+      "qualification": "The complete original preparation, three captures and interpretations stay here. New Chapter3 SAMPLE pagination has separate pending evidence."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1190,10 +1196,10 @@
       "end": 344,
       "kind": "example source or output",
       "existing_section": "Pausing output",
-      "destination": 3,
-      "destination_subsection": "Read a screenful",
+      "destination": 28,
+      "destination_subsection": "Reproduce the historical LINES.TXT pager capture",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM instead of later host fixture; original fixture/output retained28."
+      "qualification": "The complete original preparation, three captures and interpretations stay here. New Chapter3 SAMPLE pagination has separate pending evidence."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1201,10 +1207,10 @@
       "end": 347,
       "kind": "paragraph",
       "existing_section": "Pausing output",
-      "destination": 3,
-      "destination_subsection": "Read a screenful",
+      "destination": 28,
+      "destination_subsection": "Reproduce the historical LINES.TXT pager capture",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM instead of later host fixture; original fixture/output retained28."
+      "qualification": "The complete original preparation, three captures and interpretations stay here. New Chapter3 SAMPLE pagination has separate pending evidence."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1212,10 +1218,10 @@
       "end": 349,
       "kind": "provenance or capture recipe",
       "existing_section": "Pausing output",
-      "destination": 3,
-      "destination_subsection": "Read a screenful",
+      "destination": 28,
+      "destination_subsection": "Reproduce the historical LINES.TXT pager capture",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM instead of later host fixture; original fixture/output retained28."
+      "qualification": "The complete original preparation, three captures and interpretations stay here. New Chapter3 SAMPLE pagination has separate pending evidence."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1223,10 +1229,10 @@
       "end": 359,
       "kind": "example source or output",
       "existing_section": "Pausing output",
-      "destination": 3,
-      "destination_subsection": "Read a screenful",
+      "destination": 28,
+      "destination_subsection": "Reproduce the historical LINES.TXT pager capture",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM instead of later host fixture; original fixture/output retained28."
+      "qualification": "The complete original preparation, three captures and interpretations stay here. New Chapter3 SAMPLE pagination has separate pending evidence."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1234,10 +1240,10 @@
       "end": 364,
       "kind": "paragraph",
       "existing_section": "Pausing output",
-      "destination": 3,
-      "destination_subsection": "Read a screenful",
+      "destination": 28,
+      "destination_subsection": "Reproduce the historical LINES.TXT pager capture",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM instead of later host fixture; original fixture/output retained28."
+      "qualification": "The complete original preparation, three captures and interpretations stay here. New Chapter3 SAMPLE pagination has separate pending evidence."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1245,10 +1251,10 @@
       "end": 366,
       "kind": "provenance or capture recipe",
       "existing_section": "Pausing output",
-      "destination": 3,
-      "destination_subsection": "Read a screenful",
+      "destination": 28,
+      "destination_subsection": "Reproduce the historical LINES.TXT pager capture",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM instead of later host fixture; original fixture/output retained28."
+      "qualification": "The complete original preparation, three captures and interpretations stay here. New Chapter3 SAMPLE pagination has separate pending evidence."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1256,10 +1262,10 @@
       "end": 376,
       "kind": "example source or output",
       "existing_section": "Pausing output",
-      "destination": 3,
-      "destination_subsection": "Read a screenful",
+      "destination": 28,
+      "destination_subsection": "Reproduce the historical LINES.TXT pager capture",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM instead of later host fixture; original fixture/output retained28."
+      "qualification": "The complete original preparation, three captures and interpretations stay here. New Chapter3 SAMPLE pagination has separate pending evidence."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1267,10 +1273,11 @@
       "end": 384,
       "kind": "paragraph",
       "existing_section": "Pausing output",
-      "destination": 3,
-      "destination_subsection": "Read a screenful",
+      "destination": 28,
+      "destination_subsection": "Reproduce the historical LINES.TXT pager capture",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM instead of later host fixture; original fixture/output retained28."
+      "qualification": "The complete original preparation, three captures and interpretations stay here. New Chapter3 SAMPLE pagination has separate pending evidence.",
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1278,10 +1285,10 @@
       "end": 386,
       "kind": "provenance or capture recipe",
       "existing_section": "Pausing output",
-      "destination": 3,
-      "destination_subsection": "Read a screenful",
+      "destination": 28,
+      "destination_subsection": "Reproduce the historical LINES.TXT pager capture",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM instead of later host fixture; original fixture/output retained28."
+      "qualification": "The complete original preparation, three captures and interpretations stay here. New Chapter3 SAMPLE pagination has separate pending evidence."
     },
     {
       "source": "tec-os/02-console.md",
@@ -1289,10 +1296,10 @@
       "end": 396,
       "kind": "example source or output",
       "existing_section": "Pausing output",
-      "destination": 3,
-      "destination_subsection": "Read a screenful",
+      "destination": 28,
+      "destination_subsection": "Reproduce the historical LINES.TXT pager capture",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM instead of later host fixture; original fixture/output retained28."
+      "qualification": "The complete original preparation, three captures and interpretations stay here. New Chapter3 SAMPLE pagination has separate pending evidence."
     },
     {
       "source": "tec-os/03-command-line.md",
@@ -1567,8 +1574,7 @@
       "destination": 3,
       "destination_subsection": "List files",
       "disposition": "retain/rewrite",
-      "qualification": "System-attribute/BDOS30 sentences split to4 attribute management, mechanisms19.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "qualification": "Ordinary DIR listing, layout, drive and free-space interpretation. No attribute sentences occur in this paragraph."
     },
     {
       "source": "tec-os/03-command-line.md",
@@ -1579,7 +1585,8 @@
       "destination": 3,
       "destination_subsection": "Read a screenful",
       "disposition": "retain/rewrite",
-      "qualification": "Use prepared SAMPLE.ASM; original listing layout details J."
+      "qualification": "Use prepared SAMPLE.ASM; original listing layout details J.",
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/03-command-line.md",
@@ -1712,7 +1719,7 @@
       "destination_subsection": "Copy and rename files",
       "disposition": "retain/rewrite",
       "qualification": "Complete recipe/capture; allocation-block sizing sentence211\u2013217 split to5/19.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/03-command-line.md",
@@ -3769,7 +3776,7 @@
       "destination": 25,
       "destination_subsection": "Dollar-terminated startup echo",
       "disposition": "retain/rewrite",
-      "qualification": "Mechanism and complete matching example here; Chapter7 only states visible echo caveat if needed."
+      "qualification": "Complete historical matching explanation, recipe, capture command and output together here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -3777,10 +3784,10 @@
       "end": 119,
       "kind": "example source or output",
       "existing_section": "The rules of a line",
-      "destination": 7,
-      "destination_subsection": "The rules of a line",
+      "destination": 25,
+      "destination_subsection": "Dollar-terminated startup echo",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Complete historical matching explanation, recipe, capture command and output together here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -3788,10 +3795,10 @@
       "end": 121,
       "kind": "provenance or capture recipe",
       "existing_section": "The rules of a line",
-      "destination": 7,
-      "destination_subsection": "The rules of a line",
+      "destination": 25,
+      "destination_subsection": "Dollar-terminated startup echo",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Complete historical matching explanation, recipe, capture command and output together here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -3799,10 +3806,10 @@
       "end": 127,
       "kind": "example source or output",
       "existing_section": "The rules of a line",
-      "destination": 7,
-      "destination_subsection": "The rules of a line",
+      "destination": 25,
+      "destination_subsection": "Dollar-terminated startup echo",
       "disposition": "retain/rewrite",
-      "qualification": "Retain this complete unit at its section home; rework prose after outline closure."
+      "qualification": "Complete historical matching explanation, recipe, capture command and output together here."
     },
     {
       "source": "tec-os/06-startup-file.md",
@@ -4573,7 +4580,7 @@
       "destination_subsection": "Calling conventions and preserved values",
       "disposition": "retain/rewrite",
       "qualification": "FCB/table contracts9, not2.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4662,7 +4669,7 @@
       "destination_subsection": "TED build commands and chaining",
       "disposition": "retain/rewrite",
       "qualification": "Only ^T B/^T R operational effect2; full key table including debugger retained12, no debugger prerequisite.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4674,7 +4681,7 @@
       "destination_subsection": "TED build commands and chaining",
       "disposition": "retain/rewrite",
       "qualification": "Only ^T B/^T R operational effect2; full key table including debugger retained12, no debugger prerequisite.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4693,10 +4700,10 @@
       "end": 108,
       "kind": "paragraph",
       "existing_section": "Building and running it on the TEC-1G",
-      "destination": 2,
-      "destination_subsection": "Correct a build error and run",
+      "destination": 26,
+      "destination_subsection": "Reproduce the historical HELLO error and repair round",
       "disposition": "retain/rewrite",
-      "qualification": "Complete old HELLO error recipe/output retained as historical worked round in26 until new verified banner round can replace it with provenance."
+      "qualification": "All nine historical units kept together here with actual historical provenance. New BANNER round2 is separate and requires new evidence."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4704,10 +4711,10 @@
       "end": 110,
       "kind": "provenance or capture recipe",
       "existing_section": "Building and running it on the TEC-1G",
-      "destination": 2,
-      "destination_subsection": "Correct a build error and run",
+      "destination": 26,
+      "destination_subsection": "Reproduce the historical HELLO error and repair round",
       "disposition": "retain/rewrite",
-      "qualification": "Complete old HELLO error recipe/output retained as historical worked round in26 until new verified banner round can replace it with provenance."
+      "qualification": "All nine historical units kept together here with actual historical provenance. New BANNER round2 is separate and requires new evidence."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4715,10 +4722,10 @@
       "end": 117,
       "kind": "example source or output",
       "existing_section": "Building and running it on the TEC-1G",
-      "destination": 2,
-      "destination_subsection": "Correct a build error and run",
+      "destination": 26,
+      "destination_subsection": "Reproduce the historical HELLO error and repair round",
       "disposition": "retain/rewrite",
-      "qualification": "Complete old HELLO error recipe/output retained as historical worked round in26 until new verified banner round can replace it with provenance."
+      "qualification": "All nine historical units kept together here with actual historical provenance. New BANNER round2 is separate and requires new evidence."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4726,10 +4733,10 @@
       "end": 121,
       "kind": "paragraph",
       "existing_section": "Building and running it on the TEC-1G",
-      "destination": 2,
-      "destination_subsection": "Correct a build error and run",
+      "destination": 26,
+      "destination_subsection": "Reproduce the historical HELLO error and repair round",
       "disposition": "retain/rewrite",
-      "qualification": "Complete old HELLO error recipe/output retained as historical worked round in26 until new verified banner round can replace it with provenance."
+      "qualification": "All nine historical units kept together here with actual historical provenance. New BANNER round2 is separate and requires new evidence."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4737,10 +4744,10 @@
       "end": 123,
       "kind": "provenance or capture recipe",
       "existing_section": "Building and running it on the TEC-1G",
-      "destination": 2,
-      "destination_subsection": "Correct a build error and run",
+      "destination": 26,
+      "destination_subsection": "Reproduce the historical HELLO error and repair round",
       "disposition": "retain/rewrite",
-      "qualification": "Complete old HELLO error recipe/output retained as historical worked round in26 until new verified banner round can replace it with provenance."
+      "qualification": "All nine historical units kept together here with actual historical provenance. New BANNER round2 is separate and requires new evidence."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4748,10 +4755,10 @@
       "end": 135,
       "kind": "example source or output",
       "existing_section": "Building and running it on the TEC-1G",
-      "destination": 2,
-      "destination_subsection": "Correct a build error and run",
+      "destination": 26,
+      "destination_subsection": "Reproduce the historical HELLO error and repair round",
       "disposition": "retain/rewrite",
-      "qualification": "Complete old HELLO error recipe/output retained as historical worked round in26 until new verified banner round can replace it with provenance."
+      "qualification": "All nine historical units kept together here with actual historical provenance. New BANNER round2 is separate and requires new evidence."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4759,10 +4766,10 @@
       "end": 140,
       "kind": "paragraph",
       "existing_section": "Building and running it on the TEC-1G",
-      "destination": 2,
-      "destination_subsection": "Correct a build error and run",
+      "destination": 26,
+      "destination_subsection": "Reproduce the historical HELLO error and repair round",
       "disposition": "retain/rewrite",
-      "qualification": "Complete old HELLO error recipe/output retained as historical worked round in26 until new verified banner round can replace it with provenance."
+      "qualification": "All nine historical units kept together here with actual historical provenance. New BANNER round2 is separate and requires new evidence."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4770,10 +4777,10 @@
       "end": 142,
       "kind": "provenance or capture recipe",
       "existing_section": "Building and running it on the TEC-1G",
-      "destination": 2,
-      "destination_subsection": "Correct a build error and run",
+      "destination": 26,
+      "destination_subsection": "Reproduce the historical HELLO error and repair round",
       "disposition": "retain/rewrite",
-      "qualification": "Complete old HELLO error recipe/output retained as historical worked round in26 until new verified banner round can replace it with provenance."
+      "qualification": "All nine historical units kept together here with actual historical provenance. New BANNER round2 is separate and requires new evidence."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4781,10 +4788,10 @@
       "end": 155,
       "kind": "example source or output",
       "existing_section": "Building and running it on the TEC-1G",
-      "destination": 2,
-      "destination_subsection": "Correct a build error and run",
+      "destination": 26,
+      "destination_subsection": "Reproduce the historical HELLO error and repair round",
       "disposition": "retain/rewrite",
-      "qualification": "Complete old HELLO error recipe/output retained as historical worked round in26 until new verified banner round can replace it with provenance."
+      "qualification": "All nine historical units kept together here with actual historical provenance. New BANNER round2 is separate and requires new evidence."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4796,7 +4803,7 @@
       "destination_subsection": "TED session and project files",
       "disposition": "retain/rewrite",
       "qualification": "Banner only names saved source/newCOM; DBG/debugger/project state detailed here.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4940,7 +4947,7 @@
       "destination_subsection": "Arguments and the command-tail buffer",
       "disposition": "retain/rewrite",
       "qualification": "Before SHOW define page zero and tail length/case locally.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4952,7 +4959,7 @@
       "destination_subsection": "Arguments and the command-tail buffer",
       "disposition": "retain/rewrite",
       "qualification": "Before SHOW define page zero and tail length/case locally.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4964,7 +4971,7 @@
       "destination_subsection": "The default FCB and current record",
       "disposition": "retain/rewrite",
       "qualification": "Before SHOW establish all36 bytes, drive/name fields, CR and default DMA.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4976,7 +4983,7 @@
       "destination_subsection": "The default FCB and current record",
       "disposition": "retain/rewrite",
       "qualification": "Before SHOW establish all36 bytes, drive/name fields, CR and default DMA.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -4988,7 +4995,7 @@
       "destination_subsection": "The program load drive",
       "disposition": "retain/rewrite",
       "qualification": "TED mechanism deferred.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/07-first-program.md",
@@ -22534,7 +22541,7 @@
       "destination_subsection": "Measuring time and reading addresses",
       "disposition": "retain/rewrite",
       "qualification": "Hex/size notation can stay briefly in front matter; T-state convention waits for measurements.",
-      "fragment_override": "See fragment_moves: source ranges plus explicit sentence/row selection supersede this parent home."
+      "fragment_override": "See fragment_moves explicit sentence or table-row selections; these override the parent home."
     },
     {
       "source": "tec-os/index.md",
@@ -22859,28 +22866,6 @@
     },
     {
       "source": "tec-os/03-command-line.md",
-      "parent_start": 131,
-      "parent_end": 137,
-      "start": 131,
-      "end": 137,
-      "destination": 3,
-      "destination_subsection": "List ordinary files",
-      "selection": "DIR action/drive/pattern and ordinary listing only.",
-      "authority": "Explicit fragment/row selection overrides parent whole-unit placement. Required surrounding syntax/table headers are reconstructed with unchanged technical meaning."
-    },
-    {
-      "source": "tec-os/03-command-line.md",
-      "parent_start": 131,
-      "parent_end": 137,
-      "start": 131,
-      "end": 137,
-      "destination": 4,
-      "destination_subsection": "System attributes",
-      "selection": "Extract the system-attribute/BDOS30/host-tool sentences; mechanism19, exact attribute contract A.",
-      "authority": "Explicit fragment/row selection overrides parent whole-unit placement. Required surrounding syntax/table headers are reconstructed with unchanged technical meaning."
-    },
-    {
-      "source": "tec-os/03-command-line.md",
       "parent_start": 211,
       "parent_end": 217,
       "start": 211,
@@ -22922,6 +22907,270 @@
       "destination_subsection": "T-state measurement units",
       "selection": "Extract T-state/4MHz/microsecond statements to reproducibility; a local reminder accompanies first measured table.",
       "authority": "Explicit fragment/row selection overrides parent whole-unit placement. Required surrounding syntax/table headers are reconstructed with unchanged technical meaning."
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "parent_start": 139,
+      "parent_end": 145,
+      "start": 139,
+      "end": 145,
+      "destination": 3,
+      "destination_subsection": "Read a screenful",
+      "selection": "A listing longer than the screen stops with `[more]`, as\n[Chapter 2](02-console.md#pausing-output) describes.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "parent_start": 139,
+      "parent_end": 145,
+      "start": 139,
+      "end": 145,
+      "destination": 4,
+      "destination_subsection": "User areas and system attributes",
+      "selection": "`DIR` lists only the\nfiles of the current user area, described below.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "parent_start": 139,
+      "parent_end": 145,
+      "start": 139,
+      "end": 145,
+      "destination": 4,
+      "destination_subsection": "User areas and system attributes",
+      "selection": "It also leaves out a file\nwhose system attribute is set.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "parent_start": 139,
+      "parent_end": 145,
+      "start": 139,
+      "end": 145,
+      "destination": 5,
+      "destination_subsection": "Set host file attributes",
+      "selection": "`tecvol put --sys` sets that attribute on a\nfile put on a card from a PC",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "parent_start": 139,
+      "parent_end": 145,
+      "start": 139,
+      "end": 145,
+      "destination": 9,
+      "destination_subsection": "Set attributes through BDOS",
+      "selection": "a program can set it with BDOS function 30.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/03-command-line.md",
+      "parent_start": 139,
+      "parent_end": 145,
+      "start": 139,
+      "end": 145,
+      "destination": 4,
+      "destination_subsection": "Use a system file",
+      "selection": "A system file is still there for every other command: `TYPE` prints it and a\ncommand runs it.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 264,
+      "parent_end": 267,
+      "start": 264,
+      "end": 267,
+      "destination": 1,
+      "destination_subsection": "Type characters with Shift",
+      "selection": "Modifier/Shift description, excluding numeric Ctrl-code range.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 268,
+      "parent_end": 269,
+      "start": 268,
+      "end": 269,
+      "destination": 16,
+      "destination_subsection": "Control-code encoding",
+      "selection": "Ctrl letter codes01h\u20131Ah only.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 269,
+      "parent_end": 269,
+      "start": 269,
+      "end": 269,
+      "destination": 1,
+      "destination_subsection": "Control-key notation",
+      "selection": "So Ctrl and C together is ^C.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 269,
+      "parent_end": 271,
+      "start": 269,
+      "end": 271,
+      "destination": 6,
+      "destination_subsection": "Fn and simultaneous keys",
+      "selection": "Fn/modifier-only/two-key behaviour.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 273,
+      "parent_end": 276,
+      "start": 273,
+      "end": 276,
+      "destination": 6,
+      "destination_subsection": "Caps Lock and punctuation",
+      "selection": "Visible Caps/Shift/bracket effects; encoded latch bit7 phrase goes16.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 273,
+      "parent_end": 274,
+      "start": 273,
+      "end": 274,
+      "destination": 16,
+      "destination_subsection": "The Caps latch bit",
+      "selection": "Only the phrase identifying bit7 of the system latch.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 288,
+      "parent_end": 290,
+      "start": 288,
+      "end": 290,
+      "destination": 6,
+      "destination_subsection": "Arrow and missing keys",
+      "selection": "TED arrow compatibility and absent characters/Delete.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 292,
+      "parent_end": 295,
+      "start": 292,
+      "end": 295,
+      "destination": 6,
+      "destination_subsection": "Holding and typing ahead",
+      "selection": "Once-per-press/no-repeat and lost-busy-key effects; scan/BDOS timing sentence16.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 293,
+      "parent_end": 294,
+      "start": 293,
+      "end": 294,
+      "destination": 16,
+      "destination_subsection": "When the matrix is scanned",
+      "selection": "Scans while waiting and during BDOS output checks.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 303,
+      "parent_end": 303,
+      "start": 303,
+      "end": 303,
+      "destination": 1,
+      "destination_subsection": "Correct one character",
+      "selection": "Complete ^H/backspace row.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 304,
+      "parent_end": 304,
+      "start": 304,
+      "end": 304,
+      "destination": 6,
+      "destination_subsection": "Terminal rubout",
+      "selection": "Complete Delete row.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 305,
+      "parent_end": 306,
+      "start": 305,
+      "end": 306,
+      "destination": 1,
+      "destination_subsection": "Cancel the typed line",
+      "selection": "Complete ^X/^U rows.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 307,
+      "parent_end": 308,
+      "start": 307,
+      "end": 308,
+      "destination": 3,
+      "destination_subsection": "Redraw and continue a line",
+      "selection": "Complete ^R/^E rows.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 309,
+      "parent_end": 309,
+      "start": 309,
+      "end": 309,
+      "destination": 1,
+      "destination_subsection": "Ctrl-C at an empty prompt",
+      "selection": "Complete ^C row; visible action before warm-boot mechanism.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 310,
+      "parent_end": 310,
+      "start": 310,
+      "end": 310,
+      "destination": 8,
+      "destination_subsection": "List-device copy",
+      "selection": "Complete ^P row.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 311,
+      "parent_end": 311,
+      "start": 311,
+      "end": 311,
+      "destination": 1,
+      "destination_subsection": "Recall and edit",
+      "selection": "Complete ^W/^N row.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 313,
+      "parent_end": 316,
+      "start": 313,
+      "end": 316,
+      "destination": "J",
+      "destination_subsection": "Line length and termination",
+      "selection": "Return/^J/full127-character line and history link; Ctrl-C noninitial-key caveat also1.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
+    },
+    {
+      "source": "tec-os/02-console.md",
+      "parent_start": 378,
+      "parent_end": 384,
+      "start": 378,
+      "end": 384,
+      "destination": 3,
+      "destination_subsection": "Stop or continue a listing",
+      "selection": "Only operative ^C/Esc/Q stop behaviour, without the old graphics-LCD fixture interpretation; chain-drop distinctions12.",
+      "authority": "Explicit selected sentence/row overrides parent placement; preserve table header when reconstructing selected rows."
     }
   ]
 }
