@@ -24553,5 +24553,162 @@
   ],
   "exceptions": [],
   "verification": "Every reader reconstructed exactly from its frozen input using only recorded audited edits and seven whitespace-only prose rewraps. Complete source fences, all non-authority comments and links compare exactly. All22 headers have audited owning-file/range evidence. All1619 path/citation entries are applied or explicitly retained. No silent skips. HistoricalLINEea3 and all historical results remain at actual pins.",
-  "acceptance_boundary": "Implementation readback and static preservation checks only. Bacon/lead independent application review is still required. No runtime, product import, assembly, build, test, model or capture occurred."
+  "acceptance_boundary": "Implementation readback and static preservation checks only. Bacon/lead independent application review is still required. No runtime, product import, assembly, build, test, model or capture occurred.",
+  "follow_on_corrections": [
+    {
+      "id": "bounded-24-punctuation-25-CONDEV-storage",
+      "input_book_commit": "b2e54968291a892ae335e04b598efbbc0fc3ac1f",
+      "source_revision": "962853f499f05faf281f6cdff1deca8959f58c2b",
+      "status": "applied_independent_confirmation_pending",
+      "owned_paths": [
+        "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+        "tec-os/editorial/reader-rewrite/draft/24-pass-record.md",
+        "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+        "tec-os/editorial/reader-rewrite/draft/25-pass-record.md",
+        "tec-os/editorial/reader-rewrite/source-adoption-unaffected-application.json"
+      ],
+      "files": [
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md",
+          "input": {
+            "bytes": 24816,
+            "sha256": "ed4b368614244842723d8b08281416a6ea7106c472f5b08cb2106c5e819c8403",
+            "git_blob": "c2e46d92cc37a0728b8d790c9c00b1129da7fe7f"
+          },
+          "output": {
+            "bytes": 24816,
+            "sha256": "1ff6f8f9511888aba04ad7e76c6efde23b87b0b10c95acf5ec80440d4833f882",
+            "git_blob": "9e0715218c5895e38efa3212773fc4d3eed8b023"
+          },
+          "fences_equal": true,
+          "comments_equal": true,
+          "fence_sha256": [
+            "e246634e1b2df9633828ff0aac21bb6a2b8c43eaa6aba746da39ae5a99a073bb"
+          ],
+          "comment_sha256": [
+            "f324ce1a0aa672677d8a04b14ba1efe45b28054d5b3610553ae2fc63d6808619",
+            "dfc95493ef56bd132ebb3bfd23cc5a906b4e9d9d1644a90e4638818c37404dc3"
+          ],
+          "exact_diff": "--- input\n+++ output\n@@ -62,8 +62,8 @@\n | `B9A7h` up | The allocation vectors, then the resident workspace |\n | `B9A4h–B9A6h` | The stub, `JP BENTRY`, the top with no service in |\n | `B900h–B9A3h` | 164 bytes no service can use |\n-| `B600h–B8FFh` | `GLCD.SVC`, three pages; `B600h` holds `JP BENTRY` |\n-| `B500h–B5FFh` | A second service of one page; `B500h` would hold `JP BENTRY` |\n+| `B600h–B8FFh` | `GLCD.SVC`, three pages. `B600h` holds `JP BENTRY` |\n+| `B500h–B5FFh` | A second service of one page. `B500h` would hold `JP BENTRY` |\n | `0100h` up | The TPA, its top at the word in `0006h` |\n \n The file header and resident header occupy the same 25 bytes but several\n",
+          "inline_literals_equal": true
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/24-pass-record.md",
+          "input": {
+            "bytes": 19149,
+            "sha256": "4087805a2a47b6d6e27a6f306c6a23f1cca1ffb81840b380323f040efaf82c0d",
+            "git_blob": "76b7da59146842ccbc6e96f62c93dbb29105163a"
+          },
+          "output": {
+            "bytes": 19662,
+            "sha256": "0a9c91d34b16ae1a8341adb561df47027e26e82ab6190c66b14e459844ec5fbb",
+            "git_blob": "1dd938fb6b6170cbe49417a41659b73c93b8874b"
+          },
+          "fences_equal": true,
+          "comments_equal": true,
+          "fence_sha256": [],
+          "comment_sha256": [],
+          "exact_diff": "--- input\n+++ output\n@@ -264,3 +264,13 @@\n The reader’s fences and capture comments are unchanged. Editorial gate\n results and context dispositions are recorded in the application JSON.\n Independent application review remains open. No product code ran.\n+\n+## Bounded table punctuation correction\n+\n+I replaced the two authorial semicolons in the historical service-layout\n+table with full stops. I read the complete table and its containing\n+paragraphs before and after the change. Addresses, page counts and the\n+historical layout retain their meaning. Literal code, captures and source\n+identities are unchanged. Gate and complexity dispositions are recorded in\n+`source-adoption-unaffected-application.json`. Independent confirmation\n+remains pending. No product code ran.\n"
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md",
+          "input": {
+            "bytes": 19556,
+            "sha256": "97299e22104783763be2919398e1de670e93d2df2808973b0996e052105016e7",
+            "git_blob": "5572e2aa5ab900fe27b5b4e62c55cfe1309064e4"
+          },
+          "output": {
+            "bytes": 19886,
+            "sha256": "7456e2a0ec80b8fac2e96caae82d845dfb0f1fb5ad7e557238be8256bcaa9b93",
+            "git_blob": "53705aae71f2a5450c887c1e5ec0e6256a71073f"
+          },
+          "fences_equal": true,
+          "comments_equal": true,
+          "fence_sha256": [
+            "648eff42eec9a93825fc35f0bae294199e3756121bee15f41d9069a23b1788c6",
+            "3fbb124b46f9c66aad236f9137fbdb4eda42b40b81ba41df374bbd23d76f0771"
+          ],
+          "comment_sha256": [
+            "176602e461462cacbcb96e7827e60864da5e8edd89f99ad4e7fc3b3d300da830",
+            "73508b15fd777cc17caebff4b2b4e0b9857986341d0fdbee8e85ce093c3333ef"
+          ],
+          "exact_diff": "--- input\n+++ output\n@@ -287,8 +287,8 @@\n through `LCDWRD` (`src/loader.asm:895-913`, `src/console.asm:610-620`).\n `LCDWRD` first sets `CDWRD`, bit 7 of `CONDEV`\n (`src/lcd.asm:65-70`, `src/layout.asm:101-102`). The historical address\n-of `CONDEV` was `BFE7h`. The byte combines these device and ownership\n-bits (`src/ram.asm:433-434`, `src/layout.asm:92-102`):\n+of `CONDEV` was `BFE7h`. Its stored bits are\n+(`src/ram.asm:433-434`, `src/layout.asm:92-102`):\n \n | Bit | Name | Meaning |\n | --- | --- | --- |\n@@ -296,8 +296,14 @@\n | 1 | `CDTMS` | The PICO9918 answered at cold boot |\n | 2 | `CDGLC` | `GLCD.SVC` is in |\n | 3 | `CDRTC` | The DS1302 clock answered at cold boot |\n-| 4 | `CDCLM` | A program has claimed the PICO9918 |\n | 7 | `CDWRD` | One of the ROM's words is on the LCD's row 3 |\n+\n+`VCLAIM` separately stores `CDCLM` (`10h`) while a program has claimed the\n+PICO9918. `VIDEO` sets that byte on claim and clears it on release\n+(`src/ram.asm:138-139`, `src/services.asm:233-237`, `245-252`).\n+`INFO` combines `CONDEV` with `VCLAIM` using OR and returns the flags in `B`.\n+Its returned bit 4 reports the claim rather than a stored bit of `CONDEV`\n+(`src/services.asm:95-105`, `src/layout.asm:99-100`).\n \n The row may have program text by the next console selection.\n `WRDCLR` returns at once when `CDWRD` is clear. Otherwise it clears the\n",
+          "other_CONDEV_rows_equal": true
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/draft/25-pass-record.md",
+          "input": {
+            "bytes": 20408,
+            "sha256": "1a60d84e085a040c6e8426a95eee0876aaf31b44958ed6e221b1550df8724118",
+            "git_blob": "a1f92fba85d906626b70bf565e967d00afdf40ca"
+          },
+          "output": {
+            "bytes": 21457,
+            "sha256": "4311fbd4393a31ea7b1bbb11effab7e27a9bba514364f6d53750344a489e0617",
+            "git_blob": "4d32e9024d8e8455548d443e712bf75c380738ec"
+          },
+          "fences_equal": true,
+          "comments_equal": true,
+          "fence_sha256": [],
+          "comment_sha256": [],
+          "exact_diff": "--- input\n+++ output\n@@ -189,3 +189,22 @@\n The reader’s fences and capture comments are unchanged. Editorial gate\n results and context dispositions are recorded in the application JSON.\n Independent application review remains open. No product code ran.\n+\n+## Inherited CONDEV factual correction\n+\n+I removed the incorrect bit 4 row from the stored `CONDEV` table. `VCLAIM`\n+separately stores `CDCLM`. `VIDEO` writes and clears that byte and `INFO`\n+returns the OR of `CONDEV` and `VCLAIM` in `B`. I read the full containing\n+passage and the complete owning routines at selected source `962853f`.\n+The reader now cites the storage definition, claim and release writes and\n+the combined return explicitly. The other stored bits and the LCD row\n+ownership lesson are unchanged.\n+\n+This inherited error was not detected by the original source-correspondence\n+audit. Identical source blobs and spans establish citation identity but do\n+not establish the truth of every inherited claim. Those static identity\n+proofs remain valid. I recorded this limitation and the explicit factual\n+correction in `source-adoption-unaffected-application.json`. Historical\n+results and pins are unchanged. Gate and complexity dispositions are in\n+that application record. Lead and independent confirmation remain pending.\n+No product code ran.\n"
+        }
+      ],
+      "source_support": [
+        {
+          "range": "src/ram.asm:138-139",
+          "support": "VCLAIM is separate storage for CDCLM."
+        },
+        {
+          "range": "src/layout.asm:92-102",
+          "support": "Other device bits remain 0,1,2,3 and7; CDCLM is explicitly VCLAIM value10h."
+        },
+        {
+          "range": "src/services.asm:95-105",
+          "support": "HWSINFO loads CONDEV, ORs VCLAIM and returns combined flags in B."
+        },
+        {
+          "range": "src/services.asm:211-279",
+          "support": "Complete VIDEO claim/release routines read. Claim stores CDCLM to VCLAIM at236; release stores zero at251."
+        }
+      ],
+      "audit_limit": "The original immutable correspondence audit did not detect this inherited factual error. Blob/span equality proves citation identity, not semantic truth of all inherited prose. Existing static identity proofs remain valid. No blanket semantic or runtime clearance follows. Original audit remains unchanged.",
+      "readback": "Complete containing paragraphs and tables read before and after edits. Every changed sentence and comma reviewed. Chapter24 only two semicolons become full stops. Chapter25 removes only erroneous bit4 row and explains separate claim storage and combined INFO result. LCD row ownership lesson and historical identities retained.",
+      "editorial_checks": {
+        "prose_gate": {
+          "exit_code": 0,
+          "findings": [],
+          "script_sha256": "0fb52353cf22dc3a1a079c819f9d7df174a1961084689b946857747b5862ee66"
+        },
+        "sentence_complexity": {
+          "exit_code": 0,
+          "stdout": "tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:11: SHORT(6)\n  Unprefixed source ranges use that revision.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:11: LONG(42)\n  Its starter TAS.COM was Thorium dbee66a, SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:53: LONG(27)\n  The first service is allocated below the stub's page so the unused bytes between that page boundary and the stub also leave the transient program area (TPA).\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:86: CLAUSES(1+2)\n  CODE reconstructs CODE and CODE from CODE or restores the exact stub address when no owner remains (CODE, CODE).\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:105: ECHO(bytes/byte)\n  CODE ignores equal bytes and accepts a changed byte only when its second value is the first plus one modulo 256.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:105: SHORT(5)\n  A different change produces CODE.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:112: SHORT(6)\n  It requires interface names from CODE.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:112: NEG(2)\n  The scan does not detect decimal or binary spellings and is not a proof that the program uses only published interfaces (CODE).\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:118: ECHO(byte/bytes)\n  A byte of 255 advances without patching and longer gaps use repeated 255 bytes.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:118: SHORT(5)\n  Appendix H describes the bytes.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:137: SHORT(3)\n  Carry reports failure.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:137: SHORT(5)\n  Chapter 25 explains that exception.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:145: SHORT(5)\n  The loader has seven stages.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:159: ONE(2)\n  The loader adds the requested extra memory to the header/image size, subtracts one and takes the high byte as the page count minus one.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:178: SHORT(5)\n  A borrow rejects the load.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:192: SHORT(4)\n  Each gap advances HL.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:192: ECHO(bytes/byte)\n  A 255 skips the patch while other bytes add CODE to the byte addressed by HL.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:199: ECHO(byte/bytes)\n  With the 164-byte alignment gap, the TPA fell from 47,268 to 46,336 bytes.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:199: ECHO(pages/page)\n  SERVICES counts whole reserved pages, including unused bytes in the final page (CODE).\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:206: ECHO(services/service)\n  The TPA remained 47,268 bytes and SERVICES listed no loaded service:\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:227: ECHO(offsets/offset)\n  It copies the old CODE and CODE, three bytes, into header offsets 6 through 8 and writes CODE at offset zero.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:242: SHORT(4)\n  Hooks therefore go last.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:263: ECHO(record/records)\n  INIT returns its first record in HL or zero for no records.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:268: ECHO(byte/bytes)\n  For every proposed record, CODE checks the first byte and the last of its thirteen bytes.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:268: ECHO(page/pages)\n  Page comparisons allow records anywhere inside the reserved pages, including extra storage (CODE, CODE).\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:276: ECHO(records/record)\n  With N existing records, a new service can add at most 256 minus N, still subject to the 255-record per-service limit.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:276: ECHO(records/record)\n  The historical PICO case loaded 128 and then 127 service records, leaving the permanent PICO record at position 255.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:285: SHORT(5)\n  CODE clears the busy window.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:285: CLAUSES(0+3)\n  The final comparison and complemented carry return success for CODE zero or failure for 1 and 2 (CODE).\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:318: SHORT(6)\n  These are two distinct retained-page paths.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:326: ECHO(service/services)\n  A retained failed service can therefore appear in SERVICES while FIND cannot locate its proposed interface.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:340: SHORT(5)\n  New records precede older ones.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:348: SHORT(5)\n  CODE saves three register pairs.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:362: ECHO(records/record)\n  Proposed records become visible only after CODE so INIT cannot find its own newly proposed record through FIND (CODE, CODE).\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:371: ECHO(load/loads)\n  Its header saves exactly the registry and owner heads from before its load so reversing loads in order restores both lists without unlinking records individually.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:375: NEG(2)\n  With no owner, CODE zero cannot match the stub's page.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:422: SHORT(5)\n  Other slots receive their defaults.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:431: LONG(26)\n  The claim check reads only the first byte: even a JP into ROM left by a finished program blocks that slot until reset or explicit repair.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:431: ECHO(claim/claimed)\n  Historical cases cover a second claim and clearing a claimed slot whose target was elsewhere (CODE, CODE).\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:439: SHORT(5)\n  REMOVE must restore such changes.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md:453: SHORT(6)\n  COUNT's additional 2 then cannot fit.\ntec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md: 251 sentences, mean 13.1 words, 0.61 joints/sentence, 16% flagged, grade 7.8\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:5: SHORT(6)\n  H is the exact format reference.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:12: NEG(2) ECHO(fragments/fragment)\n  There are no assigned fragments from another chapter and no fragment overrides for24.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:21: SHORT(6)\n  Current mechanism authority is TEC-OS CODE.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:30: ECHO(file/files)\n  The shell operations were file reads, text scans, git-object inspection and writing the two owned Markdown files.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:30: SHORT(5)\n  No measurement is newly qualified.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:48: SHORT(5)\n  arbitrary BIOS hooks or devices.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:51: SHORT(2)\n  retains flags.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:54: NEG(2)\n  spellings are not caught, so no complete interface-safety proof is asserted.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:59: NEG(2)\n  is conditional on no qualifying JP, not installed over a retained jump.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:61: SHORT(3)\n  successful warm flush.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:89: ONE(2)\n  The original has one text-output fence and one capture recipe.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:96: LONG(88) CLAUSES(0+4) ECHO(examples/example)\n  Historical numerical examples retained locally include TAS's010Dh entry use, the B9A7h/B9A4h stub layout,164-byte gap and420-byte first-page cost, the GLCD three-page map, COUNT100-byte/B8h placement and06h/0Ah/04h stack remainder, the GLCD00F0h→B6F0h relocation atB619h and765-byte image,47,268→46,336-byte TPA,128+127 records beside PICO and the understated2-versus6 stack example.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:103: LONG(41) CLAUSES(0+4)\n  Their source text was inspected for the asserted boundary: simultaneous owners/stack-from-ceiling and two-jump BDOS path, total registry capacity, rollback and stale pointers, lookup precedence, no public removal and own-record invisibility, callback warm boots/function47, reset vectors and declared-versus-used stack.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:103: ECHO(test/tests)\n  They are retained test material, not a claim that those tests were run during this pass.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:112: SHORT(6)\n  There are no cross-chapter assigned units.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:198: SHORT(2)\n  paragraph boundary.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:198: SHORT(5)\n  Bounds and failure qualifications stay.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:203: SHORT(2)\n  the loader.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:207: SHORT(6)\n  Conditional clauses and real lists remain.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:238: SHORT(4)\n  Accepted the provenance finding.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:238: LONG(26)\n  The765-byte image and00F0h/014Bh/0150h table are explicitly recorded at58d4345 in book41:154–161.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:238: NEG(2)\n  No numbers were silently replaced and no older pin was guessed.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:247: SHORT(4)\n  No additional craft finding.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:247: SHORT(4)\n  No execution was performed.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:256: SHORT(6)\n  The mechanism authority is now CODE.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:262: SHORT(5)\n  Independent application review remains open.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:262: SHORT(4)\n  No product code ran.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:270: SHORT(4)\n  Independent confirmation remains pending.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md:270: SHORT(4)\n  No product code ran.\ntec-os/editorial/reader-rewrite/draft/24-pass-record.md: 142 sentences, mean 11.3 words, 0.62 joints/sentence, 20% flagged, grade 9.3\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:11: SHORT(6)\n  Unprefixed source ranges use that revision.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:11: SHORT(4)\n  No new execution result. -->\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:43: SHORT(4)\n  CODE is still zero.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:58: LONG(28)\n  The source test at CODE injects a failure at the file's card block and asserts a usable command prompt with CODE and no execution of the stored command.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:66: CLAUSES(2+1)\n  CODE reads port CODE once and returns if bit 6 is low, meaning a hex-keypad key is down (CODE, CODE).\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:77: ECHO(bytes/byte)\n  Without the bypass, CODE copies twelve bytes from CODE into CODE: drive byte 1 and CODE.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:90: SHORT(5)\n  for the branch to CODE.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:92: SHORT(4)\n  CODE, leaving startup finished.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:94: SHORT(6)\n  The open and read use CODE.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:104: CLAUSES(1+2) ECHO(command/commands, changes/change)\n  A CODE or drive command changes the execution context for following commands but cannot change the record from which their text is taken.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:127: SHORT(6)\n  Zero and CODE end the file.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:127: CLAUSES(2+1)\n  Once 127 characters have been copied, the routine continues scanning but drops further characters until the real line ending (CODE).\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:134: SHORT(6)\n  The CODE route therefore stores CODE.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:150: SHORT(5)\n  Their positions produce this sequence:\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:194: SHORT(6)\n  CODE has one reader, in CODE.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:194: ECHO(read/reading)\n  That read precedes line extraction and each new entry writes CODE before reading it.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:211: ECHO(discard/discarding)\n  It can discard that command's remaining chain without discarding the next startup line.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:224: SHORT(6)\n  The supplied display line loads CODE.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:224: SHORT(5)\n  Chapter 20 explains that search.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:232: SHORT(4)\n  Next it calls CODE.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:232: SHORT(5)\n  An unanswered controller returns CODE.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:254: SHORT(6)\n  No match leaves the console unchanged.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:254: SHORT(4)\n  A match sets CODE.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:264: LONG(27) ECHO(selected/select)\n  With the matrix keyboard enabled by the Matrix switch and the controller answering but no selected PICO9918 console, the startup line can select the graphics LCD.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:277: SHORT(5)\n  Each word is five characters.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:284: SHORT(6)\n  Its stored bits are (CODE, CODE):\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:308: ECHO(writes/writing)\n  Hardware service CODE clears the bit when a program writes row 3, without writing blanks first (CODE).\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:353: SHORT(6)\n  They can take that quiet path.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:353: LONG(27)\n  A disk error under the default BDOS error mode instead prints its disk message, waits for a key and warm boots through CODE, discarding the remaining chain.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md:376: SHORT(6)\n  CODE clears CODE before each command.\ntec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md: 204 sentences, mean 12.7 words, 0.70 joints/sentence, 15% flagged, grade 6.4\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:5: ECHO(chains/chain)\n  The reader has configured startup in Chapter7, used chains in12 and read the CCP/chain mechanisms in20/21.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:12: LONG(33)\n  All52 destination-25 movement units were read at book base10821b68: 48 from old25 and four from old06, comprising the complete dollar-echo explanation, recipe, capture command and output.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:20: LONG(28)\n  Source authority is ea3ef3de9133931e925a0220d51c0e971c1fd8dd, inspected with git show.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:20: SHORT(5)\n  Startup/GLCD policy is preserved.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:88: SHORT(6)\n  All52 units have a home.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:88: SHORT(6)\n  All three original tables are retained.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:95: SHORT(6)\n  Test files were read as text.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:122: LONG(33)\n  The historical BDB6h/BDB7h, BFE7h, BF62h, BF63h and BF64h–BFE3h examples retain the original chapter's78127ec workspace provenance.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:122: NEG(2)\n  It uses no TED/TAS program, so no additional application identity is attached or invented.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:141: CLAUSES(1+2)\n  The record/close limit, first-record state, delimiter rules and row-ownership distinctions remain because removing them loses a mechanism or boundary.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:141: SHORT(6)\n  No numerical readability score is claimed.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:149: SHORT(6)\n  The initial diff check was clean.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:156: SHORT(6)\n  Independent review accepted two factual corrections.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:156: LONG(30) ECHO(returned/returning)\n  I separated returned pre-INIT load failures from default-mode BDOS disk errors, which print a disk message, wait for a key and abort through CHDROP rather than returning to NAME? reporting.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:156: SHORT(4)\n  No execution was used.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:175: SHORT(6)\n  No bounded source/craft finding remains.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:175: SHORT(4)\n  No execution accompanied confirmation.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:181: SHORT(6)\n  The mechanism authority is now CODE.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:187: SHORT(5)\n  Independent application review remains open.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:187: SHORT(4)\n  No product code ran.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:195: SHORT(4)\n  CODE separately stores CODE.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:195: CLAUSES(0+4)\n  CODE writes and clears that byte and CODE returns the OR of CODE and CODE in CODE.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:203: SHORT(6)\n  Those static identity proofs remain valid.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:203: SHORT(6)\n  Historical results and pins are unchanged.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:203: SHORT(6)\n  Lead and independent confirmation remain pending.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md:203: SHORT(4)\n  No product code ran.\ntec-os/editorial/reader-rewrite/draft/25-pass-record.md: 83 sentences, mean 12.0 words, 0.81 joints/sentence, 31% flagged, grade 9.2\n",
+          "dispositions": [
+            {
+              "context": "25 reader stored-bits introduction SHORT",
+              "decision": "retain",
+              "reason": "Introduces the following table and binds its citations to stored CONDEV bits."
+            },
+            {
+              "context": "24 pass record independent confirmation and no product code SHORT",
+              "decision": "retain",
+              "reason": "Separate review status and execution boundary are required evidence."
+            },
+            {
+              "context": "25 pass record VCLAIM SHORT and VIDEO/INFO CLAUSES",
+              "decision": "retain",
+              "reason": "Exact storage distinction and two related mechanisms are the factual correction. Repeated identifiers avoid confusing stored and returned flags."
+            },
+            {
+              "context": "25 pass record static proofs, historical results, independent status and no execution SHORT",
+              "decision": "retain",
+              "reason": "Each records a distinct preservation or acceptance boundary."
+            }
+          ],
+          "unchanged_prompts": "Read as prompts. Existing unmodified text is outside this bounded correction and retains prior application dispositions."
+        }
+      },
+      "execution_boundary": "Text/Git inspection and mandatory editorial utilities only. No product execution, import, assembly, tests, builds, emulation or captures. Lead/Bacon confirmation pending."
+    }
+  ]
 }

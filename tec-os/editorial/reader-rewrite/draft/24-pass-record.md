@@ -264,3 +264,13 @@ results, source fixtures and dependency pins retain their original scope.
 The reader’s fences and capture comments are unchanged. Editorial gate
 results and context dispositions are recorded in the application JSON.
 Independent application review remains open. No product code ran.
+
+## Bounded table punctuation correction
+
+I replaced the two authorial semicolons in the historical service-layout
+table with full stops. I read the complete table and its containing
+paragraphs before and after the change. Addresses, page counts and the
+historical layout retain their meaning. Literal code, captures and source
+identities are unchanged. Gate and complexity dispositions are recorded in
+`source-adoption-unaffected-application.json`. Independent confirmation
+remains pending. No product code ran.
