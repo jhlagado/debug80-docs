@@ -343,7 +343,7 @@ The starter card's `MOUNT.COM` prints these messages. Normal return leaves
 the command result at 0 so even an error message does not by itself cancel
 a following `:` piece. A failed warm-boot flush can still drop that piece
 (`test/programs/mount.asm:27-31`, `241-262`, `src/cache.asm:661-668`).
-[Chapter 4](04-drives-and-user-areas.md#changing-a-drives-volume) gives the
+[Chapter 4](04-drives-and-user-areas.md#changing-a-drive-s-volume) gives the
 operator commands and [Chapter 17](17-card-blocks-and-volumes.md) explains
 the volume services.
 
@@ -351,7 +351,7 @@ the volume services.
 | --- | --- | --- | --- |
 | `MOUNT [D: [NAME or INDEX]]` | The argument does not begin with A to D followed by a colon. | MOUNT lists volumes. `MOUNT B: NAME` or `MOUNT B: 2` assigns one. `MOUNT B:` empties B. | `test/programs/mount.asm:33-57`, `241-243`, `262` |
 | `No such volume` | No matching label/index or a failed descriptor/table read. | List labels and indexes with MOUNT and inspect the card if a known descriptor cannot be read. | `test/programs/mount.asm:98-143`, `src/volsvc.asm:463-506` |
-| `Cannot mount: in use or too large` | The volume is already on another drive, the destination has no suitable allocation-vector slot or the pre-change flush failed. | Empty the other drive or choose a suitably sized slot. A failed flush leaves the assignment unchanged but drops failed cached lines. It prints no additional Write lost message on this path. | [Chapter 4](04-drives-and-user-areas.md#changing-a-drives-volume), `src/volsvc.asm:246-315`, `413-428`, `src/cache.asm:307-345` |
+| `Cannot mount: in use or too large` | The volume is already on another drive, the destination has no suitable allocation-vector slot or the pre-change flush failed. | Empty the other drive or choose a suitably sized slot. A failed flush leaves the assignment unchanged but drops failed cached lines. It prints no additional Write lost message on this path. | [Chapter 4](04-drives-and-user-areas.md#changing-a-drive-s-volume), `src/volsvc.asm:246-315`, `413-428`, `src/cache.asm:307-345` |
 | `Cannot unmount` | An attempt to empty A or failure of the required flush. | Replace A's volume rather than emptying A. For a write fault, recover the card before proceeding. Failed cached lines are dropped with no additional Write lost message on this path. | `src/volsvc.asm:326-362`, `413-428`, `src/cache.asm:307-345` |
 | `MOUNT needs TEC-OS with ABI 5.` | The ROM table lacks the TNA tag or its major version is not 5. | Use a MOUNT.COM matched to the ROM. | [Chapter 11](11-use-the-boards-devices.md), `test/programs/mount.asm:14-31` |
 
