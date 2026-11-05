@@ -15,17 +15,23 @@ nav_group: "Part I: Using TEC-OS"
      source and the historical examples, not a newly qualified default. -->
 
 `A:STARTUP.CMD` holds commands you want to repeat after reset. TEC-OS runs
-them before accepting a command from the keyboard. A short file can select
+them before accepting a command from the keyboard. You can use it to select
 your display width, load the graphics LCD driver or choose your starting
 drive and user area.
 
 ## A short file of commands
 
-Put one command on each line and save the file in user area 0 of drive A.
+Each line supplies a command. The file belongs in user area 0 of drive A.
 You can use the text editing from Chapter 2 or the card tools from
 [Chapter 5](05-cards-on-the-pc.md). The changes take effect at the next
 reset. `TYPE A:STARTUP.CMD` lets you read back the saved text before that
-reset, while user area 0 is selected.
+reset while user area 0 is selected.
+
+After saving on the board, exit the editor normally before resetting.
+A successful exit flush puts pending changes on the card. `Write lost`
+means that failed cached writes were dropped so the intended file may
+be incomplete. Read back the file and correct it before relying on the
+next startup. Reset does not finish pending writes.
 
 The historical starter card contained this single line:
 
@@ -40,11 +46,11 @@ A>
 `GLCD.SVC` is the resident graphics LCD service introduced in
 [Chapter 4](04-drives-and-user-areas.md). The PICO9918 console is in ROM
 and needs no service file. The effect of the GLCD line depends on which
-console cold boot selected, as the display examples below show.
+console cold boot selected.
 
-A startup line uses the same command syntax as a typed command. Keep each
-action on its own line here. Chapter 12 explains multiple commands and
-conditional execution after the programming chapters establish return values.
+A startup line uses the same command syntax as a typed command. With an
+action on each line, its completion is followed by the next prompt and
+command. Chapter 12 explains multiple commands and conditional execution.
 
 The following historical recipe copies the starter card and replaces its
 startup file with six lines. The `tecvol put` command replaces an existing
@@ -87,14 +93,14 @@ lists area 3 of B, which is empty.
 still finds it from area 3 of B. `NOSUCH` prints its usual error and the
 next line runs. `USER 0` leaves the first interactive prompt at `B>`.
 A line that starts a program waits for that program to finish before the
-next startup line is taken. An ordinary program exit does not reread the file.
+next startup line is taken.
 
 ## The first 128 bytes
 
-TEC-OS reads startup text into memory once, before running its first line.
+TEC-OS reads startup text into memory once before running its first line.
 A drive or user-area change affects subsequent commands but does not change
-the text already read. Only the first 128 bytes are used. That is a CP/M *record*, the unit in
-which file data is read. Nothing in a later record runs.
+the text already read. Only the first 128 bytes are used. That is a CP/M
+*record*, the unit in which file data is read. Nothing in a later record runs.
 
 That limit includes line endings. Sixty blank lines take 120 bytes after
 `--text` conversion because each contains CR and LF. In this historical
@@ -116,9 +122,8 @@ A>
 ```
 
 The shortened `DIR *.CM` still runs. TEC-OS executes the part of a line
-that fits instead of rejecting an incomplete final line. A startup file
-therefore needs enough room for the whole intended command, including its
-line ending.
+that fits instead of rejecting an incomplete final line. Count the complete
+intended commands and their line endings when checking that the file fits.
 
 These rules determine the boundaries:
 
@@ -130,13 +135,14 @@ These rules determine the boundaries:
 - A new line cannot start at the record's last byte, the 128th. A line
   already in progress can use that byte.
 
-The dollar-sign echo example and exact boundary mechanism are in
-[Chapter 25](25-startup-inside-the-ccp.md). Its echo can end before the
-command text does. The file's command still runs in full within these limits.
+A `$` in a command ends its displayed echo early while the command still
+runs in full within these limits.
+[Chapter 25](25-startup-inside-the-ccp.md) explains the echo mechanism
+and retains the complete historical example.
 
 ## Program exits and resets
 
-After an ordinary program exit, TEC-OS resumes any startup text it has
+After an ordinary program exit TEC-OS resumes any startup text it has
 already read. Reset begins a new startup attempt. The three routes back
 to a prompt have different effects:
 
@@ -197,9 +203,8 @@ A>USER 2
 2A>
 ```
 
-The reset has kept SPARE on A, so the final prompt is `2A>`. It has
-not returned A to SYSTEM. That can also remove the tools needed for
-recovery from the mounted drives.
+The reset has kept SPARE on A, so the final prompt is `2A>`. SYSTEM is
+no longer mounted, which can remove the tools needed for recovery.
 
 For example, suppose the GLCD driver is absent from the new A volume.
 A recognised reset that retains that assignment cannot load the driver.
@@ -215,8 +220,8 @@ The supplied `GLCD.SVC` line supports different board configurations.
 With the Matrix switch enabled, a responding PICO9918 starts its ROM
 console before that line. The GLCD service then has these outcomes:
 
-- A responding graphics LCD controller with the matrix keyboard enabled
-  and no active PICO9918 console becomes the console.
+- With no active PICO9918 console, the line selects GLCD if its controller
+  responds and the Matrix switch is enabled.
 - With PICO9918 already selected, the startup line installs nothing and
   passes quietly. `CON UC1` can later load the service and select GLCD.
 - An absent graphics LCD controller also makes the startup line pass quietly.
@@ -297,10 +302,11 @@ A>GLCD.SVC
 A>
 ```
 
-The web page's Display control prepares the startup file for its chosen
-display at power-on. A successful preparation places the display command
-first and keeps other commands. If preparation fails, the page reports
-the problem and boots the card unchanged.
+The web page's Display control prepares the startup file at power-on.
+For GLCD or a narrow PICO width, successful preparation places the
+corresponding display command first. At this source, the 80-column PICO
+choice needs no display command. Other commands are kept. If preparation
+fails, the page reports the problem and boots the card unchanged.
 [Appendix I](appendix-i-web-page.md) gives the exact rewrite and failure rules.
 
 ## An older card's display file
@@ -313,31 +319,30 @@ an incompatible format.
 
 An old `PICO.SVC` cannot install under another name because the PICO9918
 console is now in ROM. [Appendix D](appendix-d-error-messages.md#a-card-from-an-older-tec-os)
-retains the complete old-card renaming example. Normal service installation,
-listing and removal remain the Chapter 4 operations.
+retains the complete old-card renaming example.
 
 ## Bypassing a bad startup file
 
 A program that hangs or resets the board can prevent startup from reaching
-an interactive prompt. On a board with the keypad NMI jumper off, hold
-any hex-keypad key from reset until the prompt appears. TEC-OS samples
-the keypad once just before opening the file and skips startup when a key
+an interactive prompt. With the keypad NMI jumper off, hold any hex-keypad
+key from reset until the prompt appears. TEC-OS samples the keypad once
+just before opening the file and skips startup when a key
 is down. The retained model account placed that sample about 1.5 seconds
-after reset. It is a historical timing, not a new deadline.
+after reset.
 
 The NMI jumper must be off for this bypass. A key press with it fitted
 causes a non-maskable interrupt at an address TEC-OS uses for other data
 and can crash the system. [Appendix G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi)
 gives the board requirement.
 
-After a skip, no service has been installed. A responding PICO9918 with
+After a skip no service has been installed. A responding PICO9918 with
 the Matrix switch enabled remains the console. Otherwise the board has
 serial and the 20 × 4 LCD until a GLCD driver is loaded. In that latter
 configuration, matrix input becomes available with the GLCD console after
 installation, provided the Matrix switch is enabled.
 
 At the serial prompt you can erase the bad file with `ERA STARTUP.CMD`
-or replace it with corrected text, then reset. The startup file is in
+or replace it with corrected text then reset. The startup file is in
 user area 0 of A, so recovery must address that location. Without a usable
 terminal, the Chapter 5 card tools can replace or erase it on a PC.
 A recognised reset with a skip retains valid drive assignments just as it
@@ -349,9 +354,10 @@ controls provide recovery from a bad file, as Appendix I explains.
 ## Recovery words on the character LCD
 
 The last row of the 20 × 4 LCD gives a result even without an attached
-terminal. `GLCD?` appears when `CON UC1` cannot load the GLCD service and
-the console stays where it was. `CARD?` accompanies a card-mount failure
-and the diagnostic prompt described in
+terminal. `GLCD?` reports a load or installation failure returned by
+`CON UC1`, with the console still where it was. A fatal card-read error
+instead prints the BDOS disk-error message and ends the command.
+`CARD?` accompanies a card-mount failure and the diagnostic prompt described in
 [Chapter 27](27-diagnose-the-machine.md).
 
 The next historical recipe removes the startup file. On the serial board,
@@ -404,14 +410,14 @@ B: WORK
 The `CON UC1` reply and the typed `G.SVC` line are on serial. The later
 prompt and `CON: UC1:` report are on GLCD.
 
-TEC-OS clears only the five characters occupied by its recovery word.
+Clearing `GLCD?` writes blanks over only its five characters.
 A program can replace that LCD row through the LCD hardware service.
-A later console selection or driver installation then leaves its text
-alone. Direct writes to the LCD port bypass that protection and can leave
-the row marked as a recovery word. A later selection can overwrite the
+A later console selection or successful GLCD installation leaves its
+text alone. Direct writes to the LCD port bypass that protection and can
+leave the row marked as a recovery word. A later selection can overwrite the
 first five characters with blanks. Chapter 11 explains the hardware-service
 interface and Chapter 25 explains the row's ownership state.
 
 `CARD?` is cleared differently. `R` at the diagnostic prompt reinitialises
-the LCD before retrying the card, so a successful retry clears the word.
+the LCD before retrying the card so a successful retry clears the word.
 Another mount failure writes it again.
