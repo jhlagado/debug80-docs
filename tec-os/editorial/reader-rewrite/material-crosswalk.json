@@ -4541,6 +4541,18 @@
       ],
       "readback": "Lead read complete J and original containing passage before insertion, then whole changed ERA section and adjacent boundaries. Exact original recipe/fence bytes verified.",
       "limits": "No new capture, profile repin, allocation or runtime. Broad erase is a reference case, not a Chapter3 action."
+    },
+    {
+      "authority": "Independent opening-factual-review opening-preservation-01; appliedb8251e9",
+      "source_draft": "Frozen10821b6 tec-os/05-drives-and-cache.md:180–205",
+      "moves": [
+        {
+          "material": "Complete nodata.img truncated-card shell recipe, SAVE failed-close/BadSector/Write lost/DIR capture and fixture-specific surviving empty entry explanation",
+          "destination": "draft/18-cache-and-persistence.md, A failed flush",
+          "disposition": "Complete historical78127ec recipe/output retained. Reader host/matching-media prerequisites explicit. Opening1 keeps practical preservation/failure action without the storage-mechanism detour."
+        }
+      ],
+      "limits": "No new run, repin, physical-card experiment or root integration. Independent bounded confirmation pending."
     }
   ]
 }
