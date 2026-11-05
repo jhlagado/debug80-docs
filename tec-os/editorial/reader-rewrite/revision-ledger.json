@@ -2888,7 +2888,7 @@
     },
     {
       "unit": "chapter-08",
-      "status": "source/craft draft reviewed; new interactive example held outside reader prose pending positive workflow proof",
+      "status": "serialea3 LINE positive/abort workflow independently accepted; measured compact-source insertion and full passage recheck in progress",
       "passes": {
         "full_passage_read": "completed for bounded draft; 08-pass-record.md records scope",
         "draft": "completed for bounded draft; 08-pass-record.md records scope",
@@ -2897,7 +2897,7 @@
         "agency": "completed for bounded draft; 08-pass-record.md records scope",
         "every_comma_punctuation": "completed for bounded draft; 08-pass-record.md records scope",
         "technical_claims": "completed for bounded draft; 08-pass-record.md records scope",
-        "examples_before_explanation": "verified SHOW excerpt retained; newly added LINE moved to held candidate, positive workflow unqualified",
+        "examples_before_explanation": "separate37d214f4 allocated run accepted atOrigo71696f2e; actual console suffix boundary retained; only serialea3 scope",
         "journey_readback": "completed for bounded draft; 08-pass-record.md records scope",
         "mechanical_gate": "completed for bounded draft; 08-pass-record.md records scope",
         "independent_editorial_review": "closed after full independent review and accepted corrections/confirmation",
@@ -5085,7 +5085,7 @@
     },
     {
       "unit": "chapter-13",
-      "status": "bounded source-only draft pushed at2232250; full independent review in progress",
+      "status": "full review corrections pushed at15e5b50; per-example pins corrected and FAIL held outside reader prose; bounded confirmation pending",
       "passes": {
         "full_passage_read": "lead read complete draft; full independent review in progress",
         "draft": "pending",
@@ -5094,7 +5094,7 @@
         "agency": "pending",
         "every_comma_punctuation": "pending",
         "technical_claims": "pending",
-        "examples_before_explanation": "pending",
+        "examples_before_explanation": "COUNT781/CHEAT-RECS-NEEDS621/PC745with60equality evidence named; FAIL original run unestablished and held in separate candidate",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
         "independent_editorial_review": "pending",
@@ -11641,7 +11641,7 @@
     },
     {
       "unit": "chapter-28",
-      "status": "source-only authoring queued after current independent review; no execution authorised",
+      "status": "bounded draft pushed atbbd6b10; full independent review in progress",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -14191,18 +14191,18 @@
     },
     {
       "unit": "appendix-F",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded lead-authored source-only draft pushed at02d5fff; full independent review in progress",
       "passes": {
-        "full_passage_read": "pending",
-        "draft": "pending",
-        "thematic_order": "pending",
-        "sentence_deletion": "pending",
-        "agency": "pending",
-        "every_comma_punctuation": "pending",
-        "technical_claims": "pending",
-        "examples_before_explanation": "pending",
-        "journey_readback": "pending",
-        "mechanical_gate": "pending",
+        "full_passage_read": "completed for bounded source-only draft; evidence in f-pass-record.md",
+        "draft": "completed for bounded source-only draft; evidence in f-pass-record.md",
+        "thematic_order": "completed for bounded source-only draft; evidence in f-pass-record.md",
+        "sentence_deletion": "completed for bounded source-only draft; evidence in f-pass-record.md",
+        "agency": "completed for bounded source-only draft; evidence in f-pass-record.md",
+        "every_comma_punctuation": "completed for bounded source-only draft; evidence in f-pass-record.md",
+        "technical_claims": "completed for bounded source-only draft; evidence in f-pass-record.md",
+        "examples_before_explanation": "all25 historical fences/capture preserved; actual781run record Book45:80; no fresh result claimed",
+        "journey_readback": "completed for bounded source-only draft; evidence in f-pass-record.md",
+        "mechanical_gate": "completed for bounded source-only draft; evidence in f-pass-record.md",
         "independent_editorial_review": "pending",
         "independent_factual_review": "pending",
         "navigation": "pending",
@@ -14724,7 +14724,9 @@
       "evidence": [],
       "findings": [],
       "proposed_path": "reference F; existing path retained unless title changes",
-      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass."
+      "notes": "Paths provisional until independent outline closure. Range allocation is input to a full passage read, not evidence of a new prose pass.",
+      "draft_path": "draft/appendix-f-tecvol.md",
+      "pass_record": "draft/f-pass-record.md"
     },
     {
       "unit": "appendix-G",
