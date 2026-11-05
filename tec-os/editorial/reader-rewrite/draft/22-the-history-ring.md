@@ -51,34 +51,11 @@ occupies 128 bytes of the ring (`src/boot.asm:540-542`,
 `src/history.asm:226-237`). Long commands displace more history than short
 ones. There is no fixed count of stored lines.
 
-## Access through the bank window
-
 The ring shares its address window with the resident workspace and stack in
 EXPAND 0. Reading a history byte requires EXPAND 1 to be visible briefly.
 The routines `HGET` and `HPUT` make that change for each byte. `HGET` returns
 the byte at `HL` in `A`. `HPUT` writes `A` there and reads the byte back
 (`src/history.asm:26-74`). Both keep `BC`, `DE` and `HL`.
-
-Each routine saves `BC` before entering the shared access code. `IFFGET`
-returns the interrupt state in the parity/overflow flag. The access code
-then disables interrupts and saves that flag on the stack
-(`src/history.asm:35-50`, `src/bios.asm:428-439`). It reads the latch shadow
-at `0040h`, sets `LATEXP` and writes the latch to select EXPAND 1
-(`src/history.asm:51-54`, `src/layout.asm:39-40`, `src/layout.asm:81-90`).
-
-The stack can be hidden by that bank change. All pushes happen before it
-and all pops happen after EXPAND 0 is restored. The access itself uses the
-registers and the byte at `HL`. The final latch write restores the original
-view. Interrupts are enabled again only when the saved flag records that
-they were enabled on entry (`src/history.asm:55-74`).
-[Chapter 14](14-state-and-memory.md#expand-1-and-the-stack-boundary) explains
-the same no-stack rule for the other uses of EXPAND 1.
-
-History storage is internal to line input. The BDOS table provides function
-10, whose history branches call these private routines. There is no separate
-history entry in the numbered-service table (`src/tables.asm:89-97`,
-`src/tables.asm:104-132`, `src/cpm/bdos.asm:545-553`,
-`src/cpm/bdos.asm:740-765`).
 
 ## Lines from the prompt
 
@@ -180,6 +157,29 @@ After cleanup, the newest terminator at `HHEAD − 1` and the zero at
 `HHEAD` separate the surviving whole entries. The backwards test can stop
 before wrapping into newer text (`src/history.asm:110-120`,
 `src/history.asm:233-250`).
+
+## Access through the bank window
+
+`HGET` and `HPUT` each save `BC` before entering the shared access code. `IFFGET`
+returns the interrupt state in the parity/overflow flag. The access code
+then disables interrupts and saves that flag on the stack
+(`src/history.asm:35-50`, `src/bios.asm:428-439`). It reads the latch shadow
+at `0040h`, sets `LATEXP` and writes the latch to select EXPAND 1
+(`src/history.asm:51-54`, `src/layout.asm:39-40`, `src/layout.asm:81-90`).
+
+The stack can be hidden by that bank change. All pushes happen before it
+and all pops happen after EXPAND 0 is restored. The access itself uses the
+registers and the byte at `HL`. The final latch write restores the original
+view. Interrupts are enabled again only when the saved flag records that
+they were enabled on entry (`src/history.asm:55-74`).
+[Chapter 14](14-state-and-memory.md#expand-1-and-the-stack-boundary) explains
+the same no-stack rule for the other uses of EXPAND 1.
+
+History storage is internal to line input. The BDOS table provides function
+10, whose history branches call these private routines. There is no separate
+history entry in the numbered-service table (`src/tables.asm:89-97`,
+`src/tables.asm:104-132`, `src/cpm/bdos.asm:545-553`,
+`src/cpm/bdos.asm:740-765`).
 
 ## Recall in the line buffer
 
