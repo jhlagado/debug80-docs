@@ -1,8 +1,8 @@
 # Replacement outline for independent review
 
-Status: proposed. Complete reading of all 37 original files is recorded in
-`reading-ledger.json`. No reader-facing rewrite begins until the independent
-outline review is disposed of and this checkpoint is recorded as closed.
+Status: independently reviewed outline, closed at0e4feea. Complete reading of all 37 original files is recorded in
+`reading-ledger.json`. The five accepted P3 findings and independent rechecks are recorded in
+outline-review-dispositions.md. New prose starts after that closed checkpoint.
 
 ## Reader route and evidence
 

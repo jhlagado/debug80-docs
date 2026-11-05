@@ -1,10 +1,10 @@
 {
   "scope": "Every retained and rewritten passage; no pass inferred from a mechanical report or a prior source audit.",
-  "outline_status": "independent review pending",
+  "outline_status": "closed independently at0e4feea; dispositions recorded before prose",
   "units": [
     {
       "unit": "front-door",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -198,7 +198,7 @@
     },
     {
       "unit": "chapter-01",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -763,7 +763,7 @@
     },
     {
       "unit": "chapter-02",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -880,7 +880,7 @@
     },
     {
       "unit": "chapter-03",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -1151,7 +1151,7 @@
     },
     {
       "unit": "chapter-04",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -1520,7 +1520,7 @@
     },
     {
       "unit": "chapter-05",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -2008,7 +2008,7 @@
     },
     {
       "unit": "chapter-06",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -2405,7 +2405,7 @@
     },
     {
       "unit": "chapter-07",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -2886,7 +2886,7 @@
     },
     {
       "unit": "chapter-08",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -3080,7 +3080,7 @@
     },
     {
       "unit": "chapter-09",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -3239,7 +3239,7 @@
     },
     {
       "unit": "chapter-10",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -3818,7 +3818,7 @@
     },
     {
       "unit": "chapter-11",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -4516,7 +4516,7 @@
     },
     {
       "unit": "chapter-12",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -5074,7 +5074,7 @@
     },
     {
       "unit": "chapter-13",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -5695,7 +5695,7 @@
     },
     {
       "unit": "chapter-14",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -6064,7 +6064,7 @@
     },
     {
       "unit": "chapter-15",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -6447,7 +6447,7 @@
     },
     {
       "unit": "chapter-16",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -7215,7 +7215,7 @@
     },
     {
       "unit": "chapter-17",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -7626,7 +7626,7 @@
     },
     {
       "unit": "chapter-18",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -8023,7 +8023,7 @@
     },
     {
       "unit": "chapter-19",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -8462,7 +8462,7 @@
     },
     {
       "unit": "chapter-20",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -9034,7 +9034,7 @@
     },
     {
       "unit": "chapter-21",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -9403,7 +9403,7 @@
     },
     {
       "unit": "chapter-22",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -9716,7 +9716,7 @@
     },
     {
       "unit": "chapter-23",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -9924,7 +9924,7 @@
     },
     {
       "unit": "chapter-24",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -10426,7 +10426,7 @@
     },
     {
       "unit": "chapter-25",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -10816,7 +10816,7 @@
     },
     {
       "unit": "chapter-26",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -11248,7 +11248,7 @@
     },
     {
       "unit": "chapter-27",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -11603,7 +11603,7 @@
     },
     {
       "unit": "chapter-28",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -12070,7 +12070,7 @@
     },
     {
       "unit": "appendix-A",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -12565,7 +12565,7 @@
     },
     {
       "unit": "appendix-B",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -13039,7 +13039,7 @@
     },
     {
       "unit": "appendix-C",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -13408,7 +13408,7 @@
     },
     {
       "unit": "appendix-D",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -13805,7 +13805,7 @@
     },
     {
       "unit": "appendix-E",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -14153,7 +14153,7 @@
     },
     {
       "unit": "appendix-F",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -14690,7 +14690,7 @@
     },
     {
       "unit": "appendix-G",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -15031,7 +15031,7 @@
     },
     {
       "unit": "appendix-H",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -15316,7 +15316,7 @@
     },
     {
       "unit": "appendix-I",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -15608,7 +15608,7 @@
     },
     {
       "unit": "appendix-J",
-      "status": "outline review pending",
+      "status": "ready for bounded revision; runtime-dependent passages held where needed",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",

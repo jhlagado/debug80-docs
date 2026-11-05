@@ -1,6 +1,6 @@
 # Outline review dispositions
 
-Status: repaired proposal, independent recheck pending. No new chapter prose.
+Status: outline review closed at0e4feea before new chapter prose.
 Authority is KS47/KD-242 and the fixed stage checklist. The P3 independent
 review is `origo/studies/p3-tec-os/reviews/book-outline.md` at the Origo checkout.
 Its five findings are accepted. The complete review was read before repair.
@@ -56,3 +56,12 @@ It found two fragment ranges beginning mid-sentence. The control-code sentence
 now selects267–268 literally; the Ctrl-C notation sentence selects268–269
 literally. Shared source lines are distinguished by their complete sentence
 text. Independent confirmation remains pending before prose.
+
+## Closed checkpoint
+
+Independent confirmation at0e4feea matched both complete literal sentences to
+the corrected frozen-source ranges. Only those two fragment records changed.
+All five P3 findings are resolved and no outline blocker remains from that
+review. This closes the mandatory outline checkpoint before prose. Example
+execution, chapter craft/factual reviews and final source/navigation acceptance
+remain separate requirements. Publication remains excluded.
