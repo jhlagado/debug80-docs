@@ -50,3 +50,9 @@ The remaining corrections are now explicit in the controlling records:
 
 This is a repair record, not independent acceptance. Prose remains held for
 recheck of these exact corrections. No runtime work ran.
+
+The second recheck cleared the DIR, complete-example and editing-row repairs.
+It found two fragment ranges beginning mid-sentence. The control-code sentence
+now selects267–268 literally; the Ctrl-C notation sentence selects268–269
+literally. Shared source lines are distinguished by their complete sentence
+text. Independent confirmation remains pending before prose.
