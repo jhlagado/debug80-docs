@@ -92,8 +92,7 @@ lists area 3 of B, which is empty.
 `MOUNT.COM` is in area 0 of A. The program search described in Chapter 4
 still finds it from area 3 of B. `NOSUCH` prints its usual error and the
 next line runs. `USER 0` leaves the first interactive prompt at `B>`.
-A line that starts a program waits for that program to finish before the
-next startup line is taken.
+TEC-OS takes the next startup line after the program finishes.
 
 ## The first 128 bytes
 
@@ -146,9 +145,10 @@ After an ordinary program exit TEC-OS resumes any startup text it has
 already read. Reset begins a new startup attempt. The three routes back
 to a prompt have different effects:
 
-- An ordinary exit is a program return, a program's jump to `0000h` or a
-  `^C` that ends a program. It is a warm boot. Installed services and mounted
-  volumes remain and startup continues at its next unread line.
+- An ordinary program return or a `^C` that ends a program causes a warm
+  boot. Installed services and mounted volumes remain and startup continues
+  at its next unread line. [Chapter 8](08-call-tec-os.md) explains the
+  program-exit routes.
 - A recognised reset finds TEC-OS's retained marks in RAM. It rebuilds the
   working state and can restore the previous drive-to-volume assignments
   when the card and retained selection are valid.
@@ -217,7 +217,7 @@ retained assignment while it remains valid.
 ## Display commands in the file
 
 The supplied `GLCD.SVC` line supports different board configurations.
-With the Matrix switch enabled, a responding PICO9918 starts its ROM
+With the Matrix switch enabled a responding PICO9918 starts its ROM
 console before that line. The GLCD service then has these outcomes:
 
 - With no active PICO9918 console, the line selects GLCD if its controller
@@ -269,7 +269,7 @@ node tools/tecvol.mjs put w32.img A startup.cmd --text
 
 In this historical run the banner and volumes appeared at 80 columns.
 The width command cleared the screen at 32 columns before printing its
-reply. After `DIR`, the PICO screen contained:
+reply. After `DIR` the PICO screen contained:
 
 <!-- node tools/capture.mjs --card w32.img --board pico --screen DIR -->
 ```text
@@ -314,8 +314,9 @@ fails, the page reports the problem and boots the card unchanged.
 An older card may name its driver `GLCD.DRV`. This ROM treats that name
 as a program command and reports `GLCD.DRV?`. Changing the name to
 `GLCD.SVC` and updating the startup line can work when the file is already
-service format 4. The format is its second byte. Renaming does not convert
-an incompatible format.
+service format 4. Renaming does not convert an incompatible format.
+[Appendix H](appendix-h-service-file-format.md#the-header) gives the
+service-format fields and checks.
 
 An old `PICO.SVC` cannot install under another name because the PICO9918
 console is now in ROM. [Appendix D](appendix-d-error-messages.md#a-card-from-an-older-tec-os)
@@ -410,12 +411,10 @@ The `CON UC1` reply and the typed `G.SVC` line are on serial. The later
 prompt and `CON: UC1:` report are on GLCD.
 
 Clearing `GLCD?` writes blanks over only its five characters.
-A program can replace that LCD row through the LCD hardware service.
-A later console selection or successful GLCD installation leaves its
-text alone. Direct writes to the LCD port bypass that protection and can
-leave the row marked as a recovery word. A later selection can overwrite the
-first five characters with blanks. Chapter 11 explains the hardware-service
-interface and Chapter 25 explains the row's ownership state.
+[Chapter 11](11-use-the-boards-devices.md#the-lcd-and-the-speaker) explains
+how a program replaces the row through the LCD service.
+[Chapter 25](25-startup-inside-the-ccp.md#recovery-words-and-row-ownership)
+explains when later console changes preserve or clear its text.
 
 `CARD?` is cleared differently. `R` at the diagnostic prompt reinitialises
 the LCD before retrying the card so a successful retry clears the word.
