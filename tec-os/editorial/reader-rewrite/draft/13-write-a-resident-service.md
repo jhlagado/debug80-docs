@@ -11,16 +11,19 @@ nav_group: "Part I: Using and programming TEC-OS"
      Retained source/recipes are preserved from frozen10821b6, not blanket
      execution evidence. COUNT workflow:78127ec Book45. CHEAT/RECS/NEEDS:
      621201d Book42. PC writer111-byte result:7458352 Book31; byte equality
-     with TAS's first111 bytes:60e0768 Book27. FAIL is held outside reader
-     prose in13-fail-example-candidate.md; its original execution is unestablished.
+     with TAS's first111 bytes:60e0768 Book27. FAIL: attempt04 at Origo06b3e05a,
+     actual-result closure c40c79df. Its earlier purported capture remains held
+     in13-fail-example-candidate.md and is not used below.
      Historical TAS input:Thoriumdbee66a, SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     No example was rerun. Source proofs and dispositions:13-pass-record.md. -->
+     FAIL used tested8b8664a, landed962853f, ROMfa63989b and PICOv3.
+     No new execution accompanied this insertion. Proofs:13-pass-record.md. -->
 
 `COUNT.SVC` counts console characters after the command that installs it
 has ended. Its hook shows how resident code survives program exits and how
-another program finds a routine inside it. The complete examples below
-retain their historical source and results. Use the PC setup from
+another program finds a routine inside it. COUNT and its clients retain their
+historical source and results. The failed-INIT example has a separate current
+workflow below. Use the PC setup from
 [Chapter 5](05-cards-on-the-pc.md) for their card preparation.
 
 ## Code that stays
@@ -353,8 +356,81 @@ installation then fails with the file name and a question mark, though a
 default-mode fatal card-read error can end the command earlier. An INIT
 that started an interrupt source must turn it off before reporting failure.
 
-<!-- The full FAIL listing, recipe, output and interpretation are retained in
-     13-fail-example-candidate.md. Its original execution is unestablished. -->
+FAIL's INIT returns carry set without changing any external state.
+Save this complete original source as `fail.asm`:
+
+```asm
+; FAIL.SVC: a service whose INIT returns carry set, so the load fails.
+%INCLUDE "ABI.INC"
+
+	ORG	$0100
+HDR:	DB	'D',SVCFMT,0,1	; magic, format, no dependencies, removable
+	DW	0,0,0,0		; REMOVE, size, extra memory, relocation
+	DB	0,0,0		; no stack bytes added
+	DW	0		; INIT
+	DB	"FAIL    "	; the name SERVICES would print
+
+; Nothing was done, so there is nothing to undo. Returns carry set: not
+; installed.
+INIT:	SCF
+	RET
+
+; Never reached: a failed INIT runs no REMOVE. Returns carry clear.
+REMOVE:	OR	A
+	RET
+```
+
+`SCF` sets carry and `RET` returns to the loader. Since INIT did no setup,
+there is nothing to undo. The loader does not call REMOVE after this return.
+It scans the BIOS targets and releases FAIL's provisional pages because none
+points into them.
+
+The following excerpts come from a separate verified workflow on the qualified
+ROM `fa63989b`, using the PICO version 3 console at 40 columns with the Matrix
+switch enabled. Startup's GLCD command installed nothing. This is a fresh
+baseline, not a continuation of the historical COUNT session.
+
+Prepare a separate card using Chapter 5's setup with TAS on A. Put this original
+`fail.asm`, Chapter 10's original `area.asm` and the matching `abi.inc` on B
+using the text-file operation. AREA needs no HWLIB include. The build session
+included these two commands:
+
+<!-- attempt04 machine9: contiguous excerpt from fail-build-console.bin -->
+```text
+B>TAS AREA
+AREA.COM written
+
+B>TAS FAIL FAIL.SVC
+FAIL.SVC written
+```
+
+The verification run also built a separate control service, then flushed the
+card with Ctrl+C. The next excerpt starts in fresh RAM with that saved card.
+No resident service was installed in this baseline. `SERVICES` printed no
+service line before the deliberate failure:
+
+<!-- attempt04 machine10: contiguous excerpt from fail-baseline-console.bin -->
+```text
+A>B:
+B>AREA
+47268 bytes
+
+B>SERVICES
+B>FAIL.SVC
+FAIL.SVC?
+
+B>AREA
+47268 bytes
+
+B>
+```
+
+The question mark reports the failed installation. AREA printed the same
+47,268-byte TPA before and after it. In this verified layout FAIL left no
+resident allocation. The verification also checked the service state directly:
+INIT returned carry set once, REMOVE was not called and the loader restored
+the complete baseline after its BIOS scan. An INIT that changes hardware or
+hooks must undo those changes before returning carry set.
 
 GLCD's INIT reports an absent graphics LCD with carry set and `A` = 2,
 `TNENODV`. Its table registration reports `TNEBAD`, status 1, when the Matrix
