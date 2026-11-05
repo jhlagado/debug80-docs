@@ -15,11 +15,11 @@ nav_group: "Part II: Inside TEC-OS"
      SAVE write counts and the final TPA comparison retain TEC-OS 78127ec.
      The diagnostics token-poll figure also retains 78127ec. No run was repeated. -->
 
-A CP/M disk read transfers 128 bytes. An SD card read transfers 512 bytes.
-The BIOS joins these two sizes by mapping each CP/M record to a quarter of
-a card block. The volume's start block supplies the other part of the
-address, so the same track and sector can name different card blocks on
-A and B (`src/bios.asm:7-18`, `src/bios.asm:124-217`).
+A CP/M disk read transfers 128 bytes. An SD card read transfers 512 bytes. The
+BIOS joins these two sizes by mapping each CP/M record to a quarter of a card
+block. The volume's start block supplies the other part of the address so the
+same track and sector can name different card blocks on A and B
+(`src/bios.asm:7-18`, `src/bios.asm:124-217`).
 
 The eight disk entries in the BIOS are `HOME`, `SELDSK`, `SETTRK`, `SETSEC`,
 `SETDMA`, `READ`, `WRITE` and `SECTRAN`. They separate the BDOS's record
@@ -515,12 +515,11 @@ reselection restores the card's defaults through the boot mount path
 (`src/boot.asm:7-14`, `src/boot.asm:127-137`,
 `src/volsvc.asm:31-159`, `src/volsvc.asm:265-284`).
 
-The following historical `78127ec` capture used the format 1.0 starter
-card. Only A and B had allocation-vector slots. `WORK` was initially on B,
-so the first attempt on C failed as already mounted. After unmounting B,
-the attempt on C failed because C had no slot. Remounting on B succeeded.
-The final command lists descriptors through service 11
-(`test/programs/mount.asm:159-212`):
+The following historical `78127ec` capture used the format 1.0 starter card.
+Only A and B had allocation-vector slots. `WORK` was initially on B so the first
+attempt on C failed as already mounted. After unmounting B, the attempt on C
+failed because C had no slot. Remounting on B succeeded. The final command lists
+descriptors through service 11 (`test/programs/mount.asm:159-212`):
 
 <!-- node tools/capture.mjs "MOUNT C: WORK" "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" MOUNT -->
 ```text

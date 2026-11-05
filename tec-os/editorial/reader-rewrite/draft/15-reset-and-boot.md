@@ -297,12 +297,12 @@ locates the other page-zero fields (`src/loader.asm:150-173`,
 
 ## Warm boot and pending writes
 
-The jump at `0000h` reaches `WBOOTR` through the second RAM BIOS entry
-at `BF03h`. At launch the CCP pushes `0000h` before jumping to `0100h`,
-so a program's final return follows that path. An explicit jump to `0000h`,
-BDOS function 0 and an accepted function-47 command also lead to warm boot
-(`src/boot.asm:163-178`, `src/cpm/ccp.asm:519-536`,
-`src/cpm/bdos.asm:95-119`, `src/cpm/bdos.asm:257-259`).
+The jump at `0000h` reaches `WBOOTR` through the second RAM BIOS entry at
+`BF03h`. At launch the CCP pushes `0000h` before jumping to `0100h` so a
+program's final return follows that path. An explicit jump to `0000h`, BDOS
+function 0 and an accepted function-47 command also lead to warm boot
+(`src/boot.asm:163-178`, `src/cpm/ccp.asm:519-536`, `src/cpm/bdos.asm:95-119`,
+`src/cpm/bdos.asm:257-259`).
 
 `CHDROP` clears the remaining chain before that jump. The BDOS uses it
 for `^C` at the start of a function-10 line, for `^C` used to resume output
