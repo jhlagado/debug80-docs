@@ -15944,5 +15944,18 @@
     "preservation": "P3 retains offer01/02/attempt01, complete stage, packet, guard/command logs and failed result. No automatic retry.",
     "next_source_preparation": "One owner prepares a new narrow source recut using declared ESM export mapping plus containment validation and ESM import, no ambient/private fallback or new dependencies. All cases/caps/original576inputbytes unchanged; fresh staging/guard names for attempt02. Actual bounded source+metadata review and separate allocation required before execution.",
     "reader_state": "Opening1–3 and worked Chapter5 extraction insertion remain held"
+  },
+  "opening_recut03": {
+    "status": "WIP / UNRUN; actual bounded source and metadata review pending",
+    "source_commit": "Origo1443dd8501d191026fe8d17ffe5f90e5641d7c9b",
+    "batch_sha256": "de52e3a340b711975b0ace15463a6c5acb59a86e67c44b2b86f9ef6ea238f66e",
+    "complete_executable_diff_sha256": "0420ab31bbc63163fe66da4e12eca21cae5026e2262bbc9e7c4cd3f695e3ad5c",
+    "lead_bounded_read": "Read the complete actual three-file diff, complete recut README/status and batch imports. New path logic checks exact declared ESM map/type, real-path containment and target manifest identity before ESM import. Launcher/command changes only fresh attempt02 stage/guard names.",
+    "lead_inert_comparison": "All unchanged copies, payload manifest and archive compare byte-identical to offer02. Read actual pinned package.json from inert tar and verified the declared module target SHA256. No extraction/import/execution.",
+    "runtime_public_target": "./dist/platforms/tec1g/matrix-keymap.js",
+    "staging": "/tmp/ks48-book-next-batch02",
+    "guard_log": "/tmp/ks48-book-next-batch02-guard.jsonl",
+    "controls": "All cases, time/memory/heap/cycle ceilings and original576 input bytes preserved. Earlier CLEAR stays historical; current packetStaticReview null and no seal/allocation.",
+    "limits": "Not a production fix or successful book workflow. Preserve earlier offers and failed attempt01; no automatic retry."
   }
 }
