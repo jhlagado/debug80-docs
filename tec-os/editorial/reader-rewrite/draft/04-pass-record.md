@@ -207,3 +207,58 @@ in their controlling Chapter4 home with the complete preparation assigned5.
 The256-byte page fact remains to explain SERVICES but early BDOS placement
 teaching is deferred. All accepted review findings close without new output.
 Final navigation and qualified current examples remain pending.
+
+## Parent review: operator range and reset prerequisites
+
+Corrected the operator range to state that `USER` selects areas 0 to 15
+at the command prompt. At ea3ef3d, `src/cpm/ccpcmd.asm:234-280` parses
+that range and rejects extra input. BDOS function 32 instead masks a set
+value to five bits (`src/cpm/bdosfn.asm:198-213`). Its wider API remains
+in Appendix A; the operator chapter no longer asserts a sixteen-area
+storage limit.
+
+The historical `SAVE 1 B:MINE.COM` introduction now identifies preparation
+of a demonstration file for the area comparison. SAVE copies pages of
+existing program memory (`src/cpm/ccpcmd.asm:282-417`); this is not a new
+program qualification. Removed the optional conjunction comma in the
+system-file paragraph without changing its scope.
+
+Movement for the shared records: remove the page-zero clearing and
+interrupted-cold-boot explanation from Chapter 4, “The drives after a
+reset”, formerly lines 427–428 at9507995. Its complete existing home is
+Chapter 15, “Retained drive selection”, the paragraph beginning “Cold boot
+clears page zero early”. No destination prose was added or replaced.
+That paragraph already explains both the missing page-zero jumps and
+failed recognition during the incomplete interval, including the diagnostic
+prompt (`src/boot.asm:62-70`, `src/boot.asm:127-158`,
+`src/boot.asm:194-195`). Chapter 4 retains the operator-visible fallback
+to card-header assignments, power-cycle loss and the destination link.
+Shared movement records remain for the lead to update.
+
+Read the full Chapter 4 and the containing Chapter 15 explanation before
+editing. The changed sentences were reviewed for purpose, agency,
+prerequisites and punctuation. Historical fences, capture comments and
+source identities are preserved. No product execution was performed.
+
+### Required prose-gate disposition
+
+Ran the required human-writing prose gate on the three changed prose
+files: this record, the Chapter 4 draft and the Chapter 15 pass record.
+It returned exit 0 with four HW008 review candidates. Each was read in
+context and retained:
+
+- Chapter 4 line 107: the chapter cross-reference identifies where console
+  selection is explained. It attributes no intention or mental state.
+- This record line 41: the noun `offer` identifies the frozen source
+  revision. The sentence excludes new qualification of historical results.
+- Chapter 15 record line 104: the same noun identifies the revision
+  distinct from the measured build. No mental or social act is asserted.
+- Chapter 15 record line 176: the same noun identifies the unchanged
+  source identity. The sentence makes no agency claim.
+
+The scanner's four candidates require no prose change. The manually
+reviewed changed passages preserve the operator facts and defer the
+page-zero prerequisites to their existing technical home. Text comparison
+against9507995 confirms all ten Chapter 4 fences and ten capture comments
+unchanged; the complete Chapter 15 draft is unchanged. The prose gate is
+a text utility result, not a product test or runtime certification.
