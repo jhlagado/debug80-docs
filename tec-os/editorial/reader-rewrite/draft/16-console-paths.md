@@ -89,9 +89,9 @@ The reader, punch and list calls have fixed implementations whatever those
 upper fields contain (`src/console.asm:566-599`).
 
 A program can write the IOBYTE directly or use BDOS function 8. Function 7
-reads the byte back. A write changes the request immediately, while
+reads the byte back. A write changes the request immediately while
 `CONMOD` records the mode actually applied. `CONSEL` compares the two
-at console status, input and output calls. A changed request enters
+at BIOS console status, input and output calls. A changed request enters
 `CONSW` (`src/cpm/bdos.asm:399-412`, `src/console.asm:98-111`,
 `src/console.asm:230-241`, `src/console.asm:295-305`,
 `src/console.asm:429-430`). This is the standard IOBYTE contract used by
@@ -110,11 +110,13 @@ keeping the other six bits. After a console call has acted on a request,
 that field names the selected device. A missing display or keyboard thus
 changes a requested video mode back to `TTY:`. `INFO` returns the applied
 dimensions in `L` and `H`. Both are zero for serial because TEC-OS cannot
-read the PC terminal's dimensions (`src/console.asm:606-620`,
+read the PC terminal's dimensions. A screen-layout program reads the size
+again after changing consoles (`src/console.asm:606-620`,
 `src/services.asm:95-105`).
 
 The `CON` command uses this same request. Its next output call applies the
-change before printing the reply. In this historical `78127ec` capture,
+change before printing the reply (`src/cpm/ccpcmd.asm:200-232`,
+`src/console.asm:98-111`). In this historical `78127ec` capture,
 the board's 80-column PICO console had printed the banner, drive list,
 first `CON` reply and the typed `CON TTY` line. Only the new reply and
 subsequent input appear in the serial capture:
@@ -127,23 +129,19 @@ CON: TTY:
 A>
 ```
 
-The next-character effect comes from `CONSEL`, not from a separate device
-reconfiguration call made by the program (`src/cpm/ccpcmd.asm:200-208`,
-`src/console.asm:98-111`). The same mechanism also permits a pending request
-to remain unapplied until a console call.
-
 ## Input held at two levels
 
 The BIOS keeps one received character in `RXCHAR`, with `RXFULL` marking
 it ready. These bytes are above the RAM BIOS table. Serial reception and
 keyboard delivery both publish there. `CINTAKE` returns the character and
-clears the flag, or advances a queued arrow sequence while leaving the
-flag set (`src/ram.asm:430-432`, `src/console.asm:274-286`,
+clears the flag or advances a queued arrow sequence while leaving the
+flag set (`src/ram.asm:314-319`, `src/ram.asm:430-432`,
+`src/console.asm:274-286`,
 `src/console.asm:329-354`, `src/keyboard.asm:109-129`).
 
 `BCONST` first applies the console request and shows any completed PICO
 row move. An already buffered byte returns ready without another physical
-read. Otherwise a video mode calls `KBPOLL`, while a serial mode listens
+read. Otherwise a video mode calls `KBPOLL` while a serial mode listens
 for a start bit. The public `CONST` entry, `BCONSTC`, also draws the cursor
 when no character is ready on a video console. The BDOS's output check uses
 the cursor-free entry (`src/console.asm:210-286`,
@@ -153,8 +151,8 @@ the cursor-free entry (`src/console.asm:210-286`,
 video console, it draws the cursor and calls `KBSTEP` repeatedly. Once
 that wait delivers a key it hides the cursor before returning. Serial
 input instead waits for port `03h` bit 7 to go low. Console reception
-clears bit 7 and skips a resulting `NUL`. The model sends a leading `NUL`
-before its first input byte, which the console filters out
+clears bit 7 and skips a resulting `NUL`. The source documents a leading
+`NUL` before Debug80's first input byte as a reason for that filter
 (`src/console.asm:288-320`, `src/console.asm:361-421`).
 
 Before waiting for serial input, the ROM reads port `00h`. In Debug80
@@ -167,7 +165,7 @@ The BDOS has another one-character reserve, `PENDCHR` and `PENDING`, in its
 own workspace. `GETCHAR` returns that byte first and otherwise calls the
 RAM BIOS `CONIN` entry. `CONSTAT` reports it ready before consulting the
 BIOS. Function 11 goes further: a character reported ready by the BIOS is
-read into the BDOS reserve, and the call returns 1. It returns 0 when
+read into the BDOS reserve and the call returns 1. It returns 0 when
 neither level has input (`src/ram.asm:242-245`,
 `src/cpm/bdoscon.asm:126-153`, `src/cpm/bdos.asm:772-792`).
 
@@ -196,9 +194,9 @@ the next BDOS read (`src/cpm/bdoscon.asm:318-360`,
 
 `ECHORAW` updates `COLUMN` before calling either output hook. A carriage
 return sets it to zero, backspace reduces it toward zero and a byte from
-space upwards increments it. With `LISTEN` set, the character is sent
+space upwards increments it. With `LISTEN` set the character is sent
 through `LIST` first, with `BC` saved across that call. It then jumps to
-`CONOUT`. Either replacement BIOS routine may change `C`, so column
+`CONOUT`. Either replacement BIOS routine may change `C` so column
 tracking must already be complete (`src/cpm/bdoscon.asm:229-264`,
 `src/cpm/bdoscon.asm:290-305`).
 
@@ -270,14 +268,14 @@ stop bits. The timing counts assume the 4 MHz FAST clock
 
 `TXBYTE` saves the interrupt state and disables maskable interrupts for
 the byte. Nine passes send a start bit followed by eight data bits, least
-significant first. `SBC A,A` turns carry into `00h` or `FFh`, then
+significant first. `SBC A,A` turns carry into `00h` or `FFh` then
 `AND 40h` selects the output level. Each pass writes the port, delays
 and shifts the next bit into carry. A pass costs `49 + 16 × TXDLY`
 T-states. The stop bits hold the line high for `TXSTOP` delay passes.
 The saved interrupt state is restored after them (`src/console.asm:452-492`).
 
 `RXBITS` begins after a poll detects the low start bit. It also saves
-and masks interrupts, then waits `RXHALF` delay passes before sampling
+and masks interrupts then waits `RXHALF` delay passes before sampling
 the first data bit. Eight samples enter `C` through carry. A sampling
 pass costs `38 + 16 × RXDLY` T-states. The routine restores the saved
 interrupt state before returning the byte (`src/console.asm:387-421`).
@@ -289,7 +287,7 @@ The build derives the five counts from a bit time of
 | --- | --- | ---: |
 | `TXDLY` | Round `(bit time − 49) / 16` | 49 |
 | `RXDLY` | Round `(bit time − 38) / 16` | 50 |
-| `TXSTOP` | Round `2 × bit time / 16`, then add 1 | 105 |
+| `TXSTOP` | Round `2 × bit time / 16` then add 1 | 105 |
 | `RXPOLL` | Round `3.5 × bit time / 38` upwards | 77 |
 | `RXHALF` | Round `(1.5 × bit time − 51 − 58.5 − 19) / 16` | 70 |
 
@@ -299,13 +297,12 @@ the mean of the interrupt-state paths at 65 and 52 T-states and half
 the maximum 38-T-state polling delay. `RXPOLL` covers roughly three and
 a half bit times for one status-listening attempt. A received `NUL` starts
 another attempt rather than becoming a character. The generated counts
-are written to `src/gen/config.asm` (`tools/build.mjs:37-74`,
+are written to `src/gen/config.asm` (`tools/build.mjs:37-76`,
 `src/console.asm:253-279`, `src/console.asm:387-399`).
 
 The historical `78127ec` model measured 9,293 T-states for a whole
 `TXBYTE` character. The `BCONOUT` path raised that to 9,448, roughly
-420 characters a second. Those whole-character measurements retain their
-original build and do not establish a new result for this source offer.
+420 characters a second.
 
 Reception has no hardware buffer. A byte arriving while the CPU is not
 polling can be lost. A PC therefore cannot send an uninterrupted stream
@@ -318,7 +315,7 @@ program must return to `CONIN` or `READER` before the next start bit
 
 BDOS functions 3, 4 and 5 call the BIOS's `READER`, `PUNCH` and `LIST`
 entries. The reader waits without a timeout and returns all eight bits,
-including `NUL`. It reads the serial line directly, so a byte already in
+including `NUL`. It reads the serial line directly so a byte already in
 `RXCHAR` stays with the console. The punch sends all eight bits of `C`
 through `TXBYTE`, whatever console is selected. On a serial console its
 bytes interleave with console output (`src/cpm/bdos.asm:343-369`,
@@ -362,16 +359,16 @@ and delivers a held key only once. Holding it produces no automatic repeat
 is lost.
 
 Two ordinary keys produce no character. A retained second key below 3 is
-a modifier, and a modifier alone also produces none. Caps Lock toggles
+a modifier and a modifier alone also produces none. Caps Lock toggles
 bit 7 in both `LATCHV` and the system latch. `KBASCII` uses plain/shifted
-special-key entries and the `KBSHIFT` table for digits and punctuation.
-Letters are lowercase normally, uppercase with Shift or Caps Lock and
+`KBSPEC` entries for Return, Esc, space, quote and backslash. Digits and
+punctuation use `KBSHIFT`. Letters are lowercase normally, uppercase with Shift or Caps Lock and
 control codes `01h–1Ah` with Ctrl. Fn uses the ordinary character
 (`src/keyboard.asm:88-142`, `src/keyboard.asm:150-220`,
 `src/tables.asm:40-44`).
 
-Return is `0Dh`, Esc `1Bh`, backspace `08h` and tab `09h`. The arrows
-produce three-byte sequences:
+Return is `0Dh` and Esc is `1Bh`. `^H` (`08h`) is backspace and
+`^I` (`09h`) is tab. The arrows produce three-byte sequences:
 
 | Arrow | Bytes |
 | --- | --- |
@@ -406,7 +403,7 @@ Printable bytes `20h–7Eh` are drawn with `VATTR` ORed into them.
 Reverse video sets `VATTR` to `80h`, selecting the reverse glyph.
 Ordinary output bytes `7Fh–FFh` are dropped. A last-column character
 leaves `VCOL` one past the edge. Only the next printable character
-wraps, so an exactly full row followed by CR and LF adds no blank row
+wraps so an exactly full row followed by CR and LF adds no blank row
 (`src/term.asm:49-98`, `src/term.asm:576-590`).
 
 The control path recognises six bytes (`src/term.asm:106-200`):
@@ -420,8 +417,8 @@ The control path recognises six bytes (`src/term.asm:106-200`):
 | `0Dh` | CR | Move to the first column |
 | `1Bh` | ESC | Start escape parsing |
 
-Other control bytes leave the cursor and display unchanged. At the bottom
-of the scroll region, LF deletes its top line. Elsewhere LF moves down
+Other control bytes have no action in `VTCTL`. At the bottom of the scroll
+region, LF deletes its top line. Elsewhere LF moves down
 until the screen's last row. A scroll copies rows through `LINEBUF` and
 clears the freed bottom row. Console selection and warm boot restore the
 region to the whole screen (`src/term.asm:180-234`,
@@ -430,7 +427,7 @@ region to the whole screen (`src/term.asm:180-234`,
 
 ## Escape state and row editing
 
-Output arrives one byte at a time, so `ESCST` records the parser's progress.
+Output arrives one byte at a time so `ESCST` records the parser's progress.
 Zero is ordinary text, 1 follows `ESC`, 2 collects the first number and
 3 collects the second. An opening `[` sets the first parameter to zero
 and the absent second parameter to `FFh`. Another byte immediately after
@@ -456,15 +453,15 @@ final action (`src/term.asm:268-351`).
 | `ESC [ r` | Restore the full-screen scroll region and home the cursor |
 | `ESC [ n L`, `ESC [ n M` | Insert or delete lines within the scroll region and return to the first column |
 
-Cursor movement counts come from `VTN` and stop at the screen's edges,
-not the scroll region. Positioning clips to the dimensions. The second
-parameter's `FFh` sentinel also means that an explicit value of 255 uses
+Movement and insertion/deletion counts use `VTN`, with omitted or zero
+counts meaning 1. Cursor moves stop at the screen's edges, not the scroll
+region. Positioning clips to the dimensions. The second parameter's `FFh` sentinel also means that an explicit value of 255 uses
 its default. A scroll region must fit the screen and contain at least
 two rows. Missing or zero bounds mean the first and last rows
 (`src/term.asm:361-516`).
 
 The erase actions differ from a full VT100. `ESC [ 1 J` clears forwards
-here, as every J parameter except 2 does. K ignores its parameter, so
+here, as every J parameter except 2 does. K ignores its parameter so
 `ESC [ 1 K` and `ESC [ 2 K` also clear forwards. Attribute processing
 applies each parameter in turn, changing only 0 and 7
 (`src/term.asm:523-590`).
@@ -491,7 +488,7 @@ node tools/tecvol.mjs put con.img B term.com
 ```
 
 The retained 80-column PICO screen capture shows the result after exit.
-The textual screen extraction omits attributes, so the reverse `R` appears
+The textual screen extraction omits attributes so the reverse `R` appears
 as an ordinary letter:
 
 <!-- node tools/capture.mjs --board pico --screen --card con.img B:TERM -->
@@ -512,11 +509,11 @@ With any command tail, such as `B:TERM S`, the program continues with
 ## Cursor cells and display pages
 
 The cursor is an inversion of the existing cell. `CURFLIP` reads it with
-`VGET`, flips bit 7 and writes it with `VPUT`. `VCURV` records whether
-the inversion is present. `CONIN`'s video wait and an empty public
+`VGET`, flips bit 7 and writes it with `VPUT`. `VCURV` gates repeated
+show and hide operations. `CONIN`'s video wait and an empty public
 `CONST` poll request it. Output removes it before processing its byte.
-A pending wrap has no drawable cursor cell. Printing a screenful therefore
-avoids redrawing the cursor between characters
+A pending wrap has no drawable cursor cell. Functions 2 and 9 use the
+cursor-free status check so their output avoids redrawing the cursor between characters
 (`src/term.asm:939-979`, `src/console.asm:210-220`,
 `src/console.asm:295-320`, `src/term.asm:49-50`).
 
@@ -525,14 +522,14 @@ page-operation routine and a final columns/rows pair. `PIVEC` and `GLVEC`
 hold the PICO and GLCD table addresses. The six routines are `VPUT`,
 `VGET`, `VCLREOL`, `VREST`, `VRDROW` and `VWRROW`
 (`src/video.asm:134-148`, `src/console.asm:165-177`,
-`src/ram.asm:352-358`).
+`src/ram.asm:359-365`).
 
 The PICO console has two VRAM name tables. Page function 0 shows the page
 already drawn. Functions 1 and 2 begin and end a row move. At the beginning,
 `TMSMBEG` selects the hidden destination page and copies across the rows
 outside the move. The move reads the shown page and writes the hidden one.
 A previous pending move is shown before another begins. Ending a move
-marks it complete, while `CONST` or `CONIN` shows it with a register-2
+marks it complete while `CONST` or `CONIN` shows it with a register-2
 update (`src/pico.asm:193-245`, `src/pico.asm:501-548`,
 `src/pico.asm:600-661`, `src/console.asm:230-233`,
 `src/console.asm:295-298`).
@@ -547,7 +544,7 @@ PICO page operations (`src/term.asm:804-897`, `src/video.asm:91-123`,
 
 At cold boot `TMSINIT` writes `5Ah` and `A5h` to VRAM address `3FFFh`
 through ports `BFh` and `BEh` and reads each back. Both must match.
-`VIDINIT` then sets `CDTMS` and calls `PISTART`. With the matrix keyboard
+`VIDINIT` then sets `CDTMS` and enters `PISTART`. With the matrix keyboard
 also enabled, `PISTART` copies `PITPL` into the BIOS workspace's `PIBLK`,
 sets 80 columns and installs its address in `PIVEC`
 (`src/tms.asm:17-48`, `src/video.asm:22-29`, `src/pico.asm:64-87`).
@@ -556,30 +553,36 @@ That 80-column start belongs to the `ea3ef3d` source inspected here.
 `TMSW` supports 80, 40 and 32 columns, all with 24 rows. It selects the
 register template, name-table address and row-address table for that width.
 `PIBLK` also contains the permanent registry-tail record `PICO`, version 3.
-A program finds it with `TNFIND`; `CON` changes width through `PICOWID`
+A program finds it with `TNFIND`. `CON` changes width through `PICOWID`
 at offset 24 in its table. Width changes are rejected while the PICO is
 claimed (`src/pico.asm:31-52`, `src/pico.asm:98-191`,
 `src/cpm/ccpcmd.asm:161-194`, `src/abi.inc:219-231`).
 
+For an active CRT console, `TMSWID` temporarily sets `CONMOD` to serial
+while the IOBYTE still requests CRT. The next console call then copies
+the new dimensions and clears the screen. The selected width remains in
+the BIOS workspace across warm boot (`src/pico.asm:1-21`,
+`src/pico.asm:98-117`, `src/console.asm:165-199`).
+
 Normal PICO text at this source pin is light green on black at all three
 widths. Four ROM byte values select the palette: the `31h` immediate in
-`TMSCOL` and the colour byte in each register template. They occupy the
-same byte positions in the interface layout (`src/pico.asm:342-345`,
-`src/pico.asm:663-679`). Reverse glyphs come from complementing the ROM
-font's pattern bytes for codes `80h–FFh` (`src/pico.asm:286-331`).
+`TMSCOL` and the colour byte in each register template. Colour selection
+adds no field to the display table (`src/pico.asm:342-345`,
+`src/pico.asm:663-679`). Patterns `80h–FFh` are complements of their
+`00h–7Fh` partners, built from the ROM font (`src/pico.asm:286-331`).
 
 The graphics LCD is a loaded service. Its table gives 21 columns and
 eight rows on the 128 × 64 display. `INIT` obtains the ROM font, probes
-the controller and offers its table through `DRVR`, service 12, with
+the controller and registers its table through `DRVR`, service 12, with
 `B = 3` and `HL` pointing to the table (`drivers/glcd.asm:1-23`,
 `drivers/glcd.asm:39-93`). `SVDRV` accepts only UC1 mode 3. Other values
 return `TNEBAD` and carry without changing the table. That rejects the
-older `PICO.SVC` which offered CRT mode 1; PICO's table is now the ROM's
+older `PICO.SVC` which used CRT mode 1. PICO's table is now the ROM's
 (`src/services.asm:618-627`).
 
-Startup adds a registration condition. A nonzero table offered from a
-startup line while the requested IOBYTE field is CRT returns `TNENODV`.
-The CCP treats that absent-device result quietly. A typed `GLCD.SVC`
+`SVDRV` returns `TNENODV` for a nonzero table passed from a startup line
+while the requested IOBYTE field is CRT. The CCP suppresses the error
+for that startup absent-device result. A typed `GLCD.SVC`
 installation can instead succeed while PICO remains the applied console.
 `SVCGO` keeps that mode when `CONMOD` is CRT, otherwise it selects UC1.
 A later `CON UC1` can select the loaded table without loading it again
@@ -596,7 +599,7 @@ Removal has two parts. `GLCD.SVC` first finds the PICO record. If it exists
 and the requested console is UC1, `REMOVE` changes that request to CRT.
 It then drops the UC1 table through `DRVR`. `VIDHOOK` invalidates an
 applied UC1 mode by setting `CONMOD` to serial without changing the request.
-The next console call can therefore take the available PICO console, or
+The next console call can therefore take the available PICO console or
 fall back to serial when no PICO request was made. Removing an idle GLCD
 while CRT is active leaves PICO and its text in place
 (`drivers/glcd.asm:104-129`, `src/video.asm:184-212`).
@@ -608,9 +611,10 @@ alone. A different console can continue while PICO is claimed
 (`src/services.asm:211-237`, `src/term.asm:915-929`,
 `src/video.asm:110-123`, `src/console.asm:429-437`).
 
-Release, or warm boot, calls `HWVREL`. With a PICO table installed it
-restores that display's registers, font and page even if UC1 is the console.
-It clears and homes the screen only when PICO is the console. Without a
-PICO table it leaves the program's display state in place. Warm boot does
-this before rebuilding page zero (`src/services.asm:245-279`,
+Release and warm boot both enter `HWVREL`. It returns immediately when
+there is no claim. After a claim, an installed PICO table supplies the
+routine to restore the registers, font and page even if UC1 is the console.
+The screen is cleared and homed only when PICO is the console. Without a
+PICO table the program's display state remains in place. Warm boot releases
+the claim before rebuilding page zero (`src/services.asm:245-279`,
 `src/boot.asm:187-195`).
