@@ -1,0 +1,1616 @@
+{
+  "schema_version": 1,
+  "scope": "Chapters 4–10 only: all 36 assigned occurrences. Chapter 6 has no inventory occurrence. Data review only; no reader insertion or final acceptance.",
+  "inventory_commit": "028ecdde0cd295d162cea47b6db7291b21384bf0",
+  "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+  "inventory_path": "tec-os/editorial/reader-rewrite/conjunction-comma-inventory.json",
+  "inventory_sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326",
+  "identity_verification": "All seven assigned source SHA-256 values and Git blob identities match the basis Git objects. Every full context and comma coordinate was checked against that source. Original inventory IDs, coordinates and evidence fields are retained. Added offsets are zero-based and distinguish characters from UTF-8 bytes.",
+  "method": "Read each complete containing paragraph or table row, including all sentences, appositions and inline/interface wording. Reviewed CC0007/CC0008 and CC0022/CC0023 jointly. Proposed classifications only. No product execution or reader edits. No inherited gate or whole-book acceptance claim.",
+  "sources": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "bytes": 16924,
+      "occurrences": 9
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "19531d5b48a2539524472e633502c3b013ca4f03756fede465fa373b4edf15ee",
+      "git_blob": "a0b1f0c455f50413620f171bc1f0689fe29ffb52",
+      "bytes": 20612,
+      "occurrences": 7
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "99fe60faa54ce55f3eee8e590c118e59aa903fd760da8c25a9804f87e14494ec",
+      "git_blob": "fbfc25fbf01daa15fb6ecf19951f4eda11bf9d2a",
+      "bytes": 11414,
+      "occurrences": 0
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "67ba36eb613ba4ec9e7312fa0b7c4b5cfb304d292806311f69fd14add203f6dc",
+      "git_blob": "6b0fd57fa5ad9753e9bf4aa2c4386f2498f9d07b",
+      "bytes": 15707,
+      "occurrences": 2
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+      "git_blob": "d7f81c817f63164acb6823b4d97424d7cdfd20fd",
+      "bytes": 11518,
+      "occurrences": 5
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "be8b37aa2ef86e864c3f2e9cb11b3ef8e78f644da260166c94f6bc23b00a0ae2",
+      "git_blob": "a3217b2afac0a3d10c3d5a354f8edf94f30ea533",
+      "bytes": 16104,
+      "occurrences": 6
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "sha256": "b5e3dd9e1eb6a980bcf2e4ae347330b3c2ffa75842d2145d17606e14c60e64b2",
+      "git_blob": "be3394a9707444d69fe15900bf7e561a68e4e540",
+      "bytes": 22705,
+      "occurrences": 7
+    }
+  ],
+  "decisions": [
+    {
+      "id": "CC0001",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "line": 149,
+      "column": 64,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 149,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Drive letters and volumes",
+        "line": 114
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "4. Drives and user areas",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Drive letters and volumes",
+          "line": 114
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 146,
+      "context_end_line": 151,
+      "full_context": "The default error path waits for a key, `x` in this capture, then ends\nthe command with a warm boot. The prompt stays on B. The CP/M drive\nletters E through P are accepted as names but have no TEC-OS volume and\ngive the same error. Q and later letters are outside that range, so\n`Q:` gives `Q:?`. [Appendix D](appendix-d-error-messages.md) explains these\nmessages and the returned-error option for programs.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Q and later letters being out of range directly explains Q: giving Q:?. The short result clause remains clear without the comma. The earlier paired commas around x in this capture belong to a different sentence and stay intact.",
+      "source_character_offset_zero_based": 5839,
+      "source_byte_offset_zero_based": 5839,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0002",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "line": 186,
+      "column": 37,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 186,
+      "nearest_heading": {
+        "level": 2,
+        "text": "User areas",
+        "line": 153
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "4. Drives and user areas",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "User areas",
+          "line": 153
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 184,
+      "context_end_line": 189,
+      "full_context": "The `MOUNT` program still ran in area 3 because program lookup also\nchecks area 0. Its volume list is independent of the files' user areas.\n`COPY` works within the current area, so it cannot transfer a file between\nareas. On a PC, `tecvol put --user N` places a file in a chosen area,\nas [Chapter 5](05-cards-on-the-pc.md) explains. `USER` without a number or\nwith a number outside 0 to 15 fails with a question mark.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "COPY operating within the current area directly explains its inability to transfer between areas. Removing the comma leaves that causal relation clear and changes neither the area restriction nor the PC alternative.",
+      "source_character_offset_zero_based": 7081,
+      "source_byte_offset_zero_based": 7081,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0003",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "line": 257,
+      "column": 25,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 257,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Program lookup",
+        "line": 197
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "4. Drives and user areas",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Program lookup",
+          "line": 197
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 256,
+      "context_end_line": 261,
+      "full_context": "A COM file starts at `0100h` in program memory. The small program from\nChapter 2 is stored on B, so its plain name works at `B>`. At `A>` its\nplain name gives a question mark unless another copy is available there.\nAn explicit `B:` before the name selects its file without changing the\ncurrent drive. [Chapter 20](20-from-prompt-to-program.md) follows lookup\nand loading inside the command processor.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The program being stored on B directly explains its plain name working at B>. The following A> and explicit-drive cases remain separate sentences.",
+      "source_character_offset_zero_based": 10005,
+      "source_byte_offset_zero_based": 10005,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0004",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "line": 274,
+      "column": 74,
+      "conjunction": "so",
+      "matched_text": ",\nso",
+      "conjunction_line": 275,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Changing a drive's volume",
+        "line": 263
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "4. Drives and user areas",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Changing a drive's volume",
+          "line": 263
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 271,
+      "context_end_line": 275,
+      "full_context": "`MOUNT C: GAMES` assigns the volume labelled GAMES to C. An index can be\nused instead of the label, as in `MOUNT D: 3`. A volume can occupy at\nmost one drive. A drive can be emptied with `MOUNT B:` and filled again\nwithout changing the card's saved assignments. Drive A must keep a volume,\nso `MOUNT A:` cannot empty it. A different volume can replace A's current one.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The requirement that A keep a volume directly explains why MOUNT A: cannot empty it. No comma is needed to distinguish replacement from emptying.",
+      "source_character_offset_zero_based": 10954,
+      "source_byte_offset_zero_based": 10954,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0005",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "line": 307,
+      "column": 66,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 307,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Changing a drive's volume",
+        "line": 263
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "4. Drives and user areas",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Changing a drive's volume",
+          "line": 263
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 304,
+      "context_end_line": 308,
+      "full_context": "On that historical `my.img` card, SYSTEM and WORK start on A and B,\nGAMES and SPARE start unassigned and all four drives have full-size slots.\nGAMES contains `TAS.COM` and SPARE contains `HELLO.TXT`\nwith the line `Hello from the PC.`. This card had no startup file, so\nits initial prompt followed the mounted-drive list directly:",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The absence of a startup file directly explains the prompt following the mounted-drive list. The earlier historical-card and file-content statements remain unchanged.",
+      "source_character_offset_zero_based": 12256,
+      "source_byte_offset_zero_based": 12256,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0006",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "line": 366,
+      "column": 74,
+      "conjunction": "so",
+      "matched_text": ",\nso",
+      "conjunction_line": 367,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Changing a drive's volume",
+        "line": 263
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "4. Drives and user areas",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Changing a drive's volume",
+          "line": 263
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 363,
+      "context_end_line": 367,
+      "full_context": "`MOUNT` changes the running assignments in memory, not the drive fields\nsaved in the card's header. Before changing an assignment it flushes pending\nwrites to the card. The changed drive's directory is read afresh on its\nnext use. Mounting a volume on the current drive selects it again at once,\nso that access uses the new volume.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Reselecting a newly mounted current drive directly explains access using the new volume. The short result clause remains unambiguous without a pause comma.",
+      "source_character_offset_zero_based": 13990,
+      "source_byte_offset_zero_based": 13990,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0007",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "line": 371,
+      "column": 74,
+      "conjunction": "but",
+      "matched_text": ",\nbut",
+      "conjunction_line": 372,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Volume and file protection",
+        "line": 369
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "4. Drives and user areas",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Volume and file protection",
+          "line": 369
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 371,
+      "context_end_line": 375,
+      "full_context": "A volume can be read-only. Its files can be read and its programs can run,\nbut creating, writing, renaming or erasing a file there gives `R/O`.\n`MOUNT` marks such a volume `R/O` in its list. This property belongs to\nthe volume, so changing its drive or warm-booting does not remove it.\nChapter 5 explains how a prepared card receives that flag.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Read/run and create/write/rename/erase are contrasting capabilities with explicit predicates. The but clause remains clear without the comma; review jointly with CC0008 in this paragraph.",
+      "source_character_offset_zero_based": 14133,
+      "source_byte_offset_zero_based": 14133,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0008",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "line": 374,
+      "column": 11,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 374,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Volume and file protection",
+        "line": 369
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "4. Drives and user areas",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Volume and file protection",
+          "line": 369
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 371,
+      "context_end_line": 375,
+      "full_context": "A volume can be read-only. Its files can be read and its programs can run,\nbut creating, writing, renaming or erasing a file there gives `R/O`.\n`MOUNT` marks such a volume `R/O` in its list. This property belongs to\nthe volume, so changing its drive or warm-booting does not remove it.\nChapter 5 explains how a prepared card receives that flag.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The read-only property belonging to the volume directly explains its survival across drive changes and warm boot. No comma is needed; removing this and CC0007 together preserves both contrasts.",
+      "source_character_offset_zero_based": 14286,
+      "source_byte_offset_zero_based": 14286,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0009",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "d0f18de8cac1d6a7a2bd230264b718d43abd8ba747c54711fcdb78e77bdb035d",
+      "source_git_blob": "c54e99fbf6bf69b44349824ece0c6268fa7cda58",
+      "line": 435,
+      "column": 60,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 435,
+      "nearest_heading": {
+        "level": 2,
+        "text": "The drives after a reset",
+        "line": 388
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "4. Drives and user areas",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "The drives after a reset",
+          "line": 388
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 434,
+      "context_end_line": 437,
+      "full_context": "A card changed on a PC needs a reset when returned to the board. Warm boot\nretains cached card blocks and the drives' free-space state, so it does not\nreinitialise the card or discard those old copies. Only cold boot starts\nthe card again. Do not let TEC-OS and a PC write the same card at the same time.",
+      "manual_classification_hints": [],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Warm boot retaining cached blocks and free-space state directly explains why it does not reinitialise or discard them. Removing the comma does not change the cold-boot or concurrent-writer qualifications.",
+      "source_character_offset_zero_based": 16753,
+      "source_byte_offset_zero_based": 16753,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0010",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "19531d5b48a2539524472e633502c3b013ca4f03756fede465fa373b4edf15ee",
+      "source_git_blob": "a0b1f0c455f50413620f171bc1f0689fe29ffb52",
+      "line": 33,
+      "column": 15,
+      "conjunction": "but",
+      "matched_text": ", but",
+      "conjunction_line": 33,
+      "nearest_heading": {
+        "level": 2,
+        "text": "The host tools",
+        "line": 22
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "5. Cards on the PC",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "The host tools",
+          "line": 22
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 30,
+      "context_end_line": 38,
+      "full_context": "The examples that use `dist/starter.img` and `dist/files/` require a prepared\nmedia set made with the matching TEC-OS ROM. These generated files are not\nincluded in a Git clone. `npm ci` installs the locked host dependencies,\nincluding ATOM, but does not itself produce the ROM or media.\n[Chapter 26](26-build-the-rom-and-media.md) gives the source/input preparation\nand build route through `npm run media`, which writes the ROM, starter image,\nrecipes and component files into `dist/`. A host-assembled COM program reaches\na card through the same `put` command as any other binary. The complete\nhistorical PC HELLO recipe and its output remain together in Chapter 26.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "retain_boundary",
+      "retained_comma_reason": "This comma closes the supplementary phrase including ATOM, opened after dependencies. Retain the closing boundary so but does not appear to contrast production of ROM/media with ATOM alone.",
+      "review_disposition": "This comma closes the supplementary phrase including ATOM, opened after dependencies. Retain the closing boundary so but does not appear to contrast production of ROM/media with ATOM alone.",
+      "source_character_offset_zero_based": 1438,
+      "source_byte_offset_zero_based": 1438,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0318",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "19531d5b48a2539524472e633502c3b013ca4f03756fede465fa373b4edf15ee",
+      "source_git_blob": "a0b1f0c455f50413620f171bc1f0689fe29ffb52",
+      "line": 83,
+      "column": 73,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 83,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Listing and extracting saved work",
+        "line": 75
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "5. Cards on the PC",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Listing and extracting saved work",
+          "line": 75
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 82,
+      "context_end_line": 89,
+      "full_context": "`get` copies a named file to the PC. Its optional output-file argument gives\nthe destination. A named destination is overwritten if it already exists, so\nuse a new path for a recovered copy. Without that argument the bytes go to\nstandard output. Binary extraction includes every recorded 128-byte record,\nincluding padding in the last one. With `--text`, extraction stops before the\nfirst `^Z` and converts carriage-return/line-feed pairs to line feeds. A lone\ncarriage return is retained. Without `^Z`, all recorded bytes undergo that\nconversion, including any padding.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The named destination being overwritten directly motivates using a new recovery path. The so imperative reads clearly without the comma; the standard-output and text-conversion alternatives remain separate.",
+      "source_character_offset_zero_based": 4129,
+      "source_byte_offset_zero_based": 4129,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0011",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "19531d5b48a2539524472e633502c3b013ca4f03756fede465fa373b4edf15ee",
+      "source_git_blob": "a0b1f0c455f50413620f171bc1f0689fe29ffb52",
+      "line": 101,
+      "column": 21,
+      "conjunction": "while",
+      "matched_text": ", while",
+      "conjunction_line": 101,
+      "nearest_heading": {
+        "level": 2,
+        "text": "The container and its volumes",
+        "line": 96
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "5. Cards on the PC",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "The container and its volumes",
+          "line": 96
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 98,
+      "context_end_line": 101,
+      "full_context": "The card holds programs, resident services, `STARTUP.CMD` and your files.\nEach drive uses a volume, an ordinary CP/M disk of a fixed size. CP/M 2.2\naddresses at most 8 MiB on a drive. Most CP/M machines used floppy disks\nof a few hundred KiB, while an SD card can hold many volumes.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The while clause explicitly contrasts historical floppy capacity with SD-card volume capacity. Both subjects are stated, so the comma adds no necessary boundary.",
+      "source_character_offset_zero_based": 5112,
+      "source_byte_offset_zero_based": 5112,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0012",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "19531d5b48a2539524472e633502c3b013ca4f03756fede465fa373b4edf15ee",
+      "source_git_blob": "a0b1f0c455f50413620f171bc1f0689fe29ffb52",
+      "line": 124,
+      "column": 27,
+      "conjunction": "and",
+      "matched_text": ", and",
+      "conjunction_line": 124,
+      "nearest_heading": {
+        "level": 2,
+        "text": "The container and its volumes",
+        "line": 96
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "5. Cards on the PC",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "The container and its volumes",
+          "line": 96
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 123,
+      "context_end_line": 127,
+      "full_context": "The container occupies 20,480 blocks or 10 MiB. SYSTEM begins at block\n2,048, 1 MiB into the card, and occupies 1 MiB. WORK starts at block 4,096\nand occupies 8 MiB. The default alignment puts each volume on a multiple of\n2,048 blocks, a common SD erase-block multiple. On this two-volume image\nthe space before SYSTEM contains only the header and unused padding.",
+      "manual_classification_hints": [],
+      "classification": "retain_boundary",
+      "retained_comma_reason": "This comma closes 1 MiB into the card, a supplementary explanation of block 2,048. Its opening comma must be considered with it. Retain the pair to keep and occupies 1 MiB attached to SYSTEM rather than to the explanatory phrase.",
+      "review_disposition": "This comma closes 1 MiB into the card, a supplementary explanation of block 2,048. Its opening comma must be considered with it. Retain the pair to keep and occupies 1 MiB attached to SYSTEM rather than to the explanatory phrase.",
+      "source_character_offset_zero_based": 6044,
+      "source_byte_offset_zero_based": 6044,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0013",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "19531d5b48a2539524472e633502c3b013ca4f03756fede465fa373b4edf15ee",
+      "source_git_blob": "a0b1f0c455f50413620f171bc1f0689fe29ffb52",
+      "line": 150,
+      "column": 63,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 150,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Record sizes and allocated space",
+        "line": 140
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "5. Cards on the PC",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Record sizes and allocated space",
+          "line": 140
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 149,
+      "context_end_line": 153,
+      "full_context": "CP/M reads and writes 128-byte records. Four records fit a 512-byte card\nblock. Space is allocated to files in larger allocation blocks, so a file\nwith any data occupies at least 2 KiB on G1M or 4 KiB on G8M. The one-record\n`STARTUP.CMD` therefore occupies 4 KiB on WORK even though its recorded\nlength is only 128 bytes.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Larger allocation blocks directly explain the minimum allocation for nonempty files. Without the comma, so still connects that cause to the G1M/G8M sizes.",
+      "source_character_offset_zero_based": 7342,
+      "source_byte_offset_zero_based": 7342,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0014",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "19531d5b48a2539524472e633502c3b013ca4f03756fede465fa373b4edf15ee",
+      "source_git_blob": "a0b1f0c455f50413620f171bc1f0689fe29ffb52",
+      "line": 399,
+      "column": 44,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 399,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Browser images and physical limits",
+        "line": 385
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "5. Cards on the PC",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Browser images and physical limits",
+          "line": 385
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 399,
+      "context_end_line": 406,
+      "full_context": "The browser uses a high-capacity card model, so it does not exercise the\nstandard-capacity byte-address limit. Open image also validates the whole\ncontainer and rejects an image shorter than its declared size. It therefore\ncannot reproduce the short-image capture above through that control.\nThese exclusions do not remove every cause of ROM code `27h`: the ROM\nalso rejects a volume end that overflows 32 bits or exceeds the container's\ndeclared size. Browser validation rejects those malformed descriptors\nbefore the ROM receives an opened image.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Using a high-capacity model directly explains exclusion of the standard-capacity byte-address limit. Removing the comma preserves the separate whole-container checks and other code-27h causes.",
+      "source_character_offset_zero_based": 17742,
+      "source_byte_offset_zero_based": 17742,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0015",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "19531d5b48a2539524472e633502c3b013ca4f03756fede465fa373b4edf15ee",
+      "source_git_blob": "a0b1f0c455f50413620f171bc1f0689fe29ffb52",
+      "line": 428,
+      "column": 37,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 428,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Recovery after a power cut",
+        "line": 408
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "5. Cards on the PC",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Recovery after a power cut",
+          "line": 408
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 424,
+      "context_end_line": 429,
+      "full_context": "On a volume written behind, changes still in the cache are lost. Blocks\nwritten early to make cache space and blocks written by a completed part\nof a flush remain on the card. Newly allocated blocks may again have no\ndirectory entry. Overwritten blocks contain the new data. The directory\nwrite follows successful data writes, so an interrupted flush does not\npublish a new allocation map before those data writes succeed.",
+      "manual_classification_hints": [],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Directory writes following successful data writes directly explains why interruption cannot publish the allocation map first. The comma is optional and no flush-success qualification changes.",
+      "source_character_offset_zero_based": 19457,
+      "source_byte_offset_zero_based": 19457,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0017",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "67ba36eb613ba4ec9e7312fa0b7c4b5cfb304d292806311f69fd14add203f6dc",
+      "source_git_blob": "6b0fd57fa5ad9753e9bf4aa2c4386f2498f9d07b",
+      "line": 206,
+      "column": 30,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 206,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Program exits and resets",
+        "line": 143
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "7. Commands at startup",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Program exits and resets",
+          "line": 143
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 206,
+      "context_end_line": 207,
+      "full_context": "The reset has kept SPARE on A, so the final prompt is `2A>`. SYSTEM is\nno longer mounted, which can remove the tools needed for recovery.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Keeping SPARE on A directly explains the final 2A> prompt. The following loss-of-recovery-tools qualification remains a separate sentence.",
+      "source_character_offset_zero_based": 7373,
+      "source_byte_offset_zero_based": 7373,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0018",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "67ba36eb613ba4ec9e7312fa0b7c4b5cfb304d292806311f69fd14add203f6dc",
+      "source_git_blob": "6b0fd57fa5ad9753e9bf4aa2c4386f2498f9d07b",
+      "line": 346,
+      "column": 17,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 346,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Bypassing a bad startup file",
+        "line": 324
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "7. Commands at startup",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Bypassing a bad startup file",
+          "line": 324
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 344,
+      "context_end_line": 349,
+      "full_context": "At the serial prompt you can erase the bad file with `ERA STARTUP.CMD`\nor replace it with corrected text then reset. The startup file is in\nuser area 0 of A, so recovery must address that location. Without a usable\nterminal, the Chapter 5 card tools can replace or erase it on a PC.\nA recognised reset with a skip retains valid drive assignments just as it\ndoes without a skip.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "STARTUP.CMD being in user area 0 of A directly determines the recovery location. Removing the comma preserves the serial and PC recovery alternatives and retained assignments.",
+      "source_character_offset_zero_based": 13099,
+      "source_byte_offset_zero_based": 13101,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0019",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+      "source_git_blob": "d7f81c817f63164acb6823b4d97424d7cdfd20fd",
+      "line": 40,
+      "column": 43,
+      "conjunction": "while",
+      "matched_text": ", while",
+      "conjunction_line": 40,
+      "nearest_heading": {
+        "level": 2,
+        "text": "A COM program and its calls",
+        "line": 23
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "8. Call TEC-OS",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "A COM program and its calls",
+          "line": 23
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 37,
+      "context_end_line": 44,
+      "full_context": "Registers hold the values passed to a call. `A`, `B`, `C` and `E` each\nhold a byte. `BC`, `DE` and `HL` are 16-bit register pairs, large enough\nfor a memory address. To select a BDOS operation, you put its function number in `C` and\ncall `0005h`. A byte parameter goes in `E`, while an address or word\nparameter goes in `DE`. A byte result is returned in `A` and a word result\nin `HL`. For example, function 2 takes the character in `E` and function 9\ntakes an address in `DE`. In source, `BDOS EQU $0005` gives that call\naddress a name.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Byte parameters in E and address/word parameters in DE are explicit parallel alternatives. While supplies their contrast without the comma; all register names and examples remain untouched.",
+      "source_character_offset_zero_based": 1798,
+      "source_byte_offset_zero_based": 1798,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0020",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+      "source_git_blob": "d7f81c817f63164acb6823b4d97424d7cdfd20fd",
+      "line": 57,
+      "column": 54,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 57,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Calls, returns and saved values",
+        "line": 46
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "8. Call TEC-OS",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Calls, returns and saved values",
+          "line": 46
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 54,
+      "context_end_line": 58,
+      "full_context": "The CCP also supplies a return address when it starts your program. It puts\n`0000h` on the inherited stack before jumping to `0100h`. A top-level `RET`\ntherefore ends the program through the warm-boot jump at `0000h`. Calls\nwithin the program must return before that last `RET`, so it reaches the\nword supplied by the CCP.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Returning from internal calls before the final RET directly explains reaching the CCP-supplied word. The result clause stays clear without the comma and does not alter the inherited-stack contract.",
+      "source_character_offset_zero_based": 2707,
+      "source_byte_offset_zero_based": 2707,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0021",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+      "source_git_blob": "d7f81c817f63164acb6823b4d97424d7cdfd20fd",
+      "line": 196,
+      "column": 71,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 196,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Input while output is running",
+        "line": 191
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "8. Call TEC-OS",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Input while output is running",
+          "line": 191
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 193,
+      "context_end_line": 197,
+      "full_context": "Functions 1, 2, 9 and 10 expand tabs to spaces up to the next multiple of\neight columns, counted from the last carriage return. They also copy printed\noutput to the list device while `^P` has that copy enabled. In CP/M the list\ndevice is the printer. TEC-OS's normal list routine discards the bytes, so\ntoggling the copy has no visible effect on the unmodified system.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The normal list routine discarding bytes directly explains why toggling list copy has no visible effect on the unmodified system. The comma is unnecessary and the unmodified-system limit remains.",
+      "source_character_offset_zero_based": 8157,
+      "source_byte_offset_zero_based": 8157,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0022",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+      "source_git_blob": "d7f81c817f63164acb6823b4d97424d7cdfd20fd",
+      "line": 235,
+      "column": 44,
+      "conjunction": "or",
+      "matched_text": ", or",
+      "conjunction_line": 235,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Direct input and the console functions",
+        "line": 215
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "8. Call TEC-OS",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Direct input and the console functions",
+          "line": 215
+        }
+      ],
+      "context_kind": "table_row",
+      "context_start_line": 235,
+      "context_end_line": 235,
+      "full_context": "| 6 | Direct console I/O | `E`: FFh to read, or a character to print | for FFh, `A`: the key, or 0 if none is waiting |",
+      "manual_classification_hints": [
+        "table/interface row: classify manually",
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "In the Takes cell, or separates FFh input from character output. Removing the comma leaves those alternatives clear. This is explanatory table prose, not immutable interface output; review jointly with CC0023.",
+      "source_character_offset_zero_based": 10006,
+      "source_byte_offset_zero_based": 10006,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0023",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "aa80b71bf8f84715a7e9eb76cf035251e014dd839ede5e242a8eed816c990046",
+      "source_git_blob": "d7f81c817f63164acb6823b4d97424d7cdfd20fd",
+      "line": 235,
+      "column": 93,
+      "conjunction": "or",
+      "matched_text": ", or",
+      "conjunction_line": 235,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Direct input and the console functions",
+        "line": 215
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "8. Call TEC-OS",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Direct input and the console functions",
+          "line": 215
+        }
+      ],
+      "context_kind": "table_row",
+      "context_start_line": 235,
+      "context_end_line": 235,
+      "full_context": "| 6 | Direct console I/O | `E`: FFh to read, or a character to print | for FFh, `A`: the key, or 0 if none is waiting |",
+      "manual_classification_hints": [
+        "table/interface row: classify manually",
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "In the Returns cell, or separates a waiting key from zero when none waits. Removing the comma preserves the for FFh qualification and all literal register/value spans; CC0022 is the other optional comma in this row.",
+      "source_character_offset_zero_based": 10055,
+      "source_byte_offset_zero_based": 10055,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0024",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "be8b37aa2ef86e864c3f2e9cb11b3ef8e78f644da260166c94f6bc23b00a0ae2",
+      "source_git_blob": "a3217b2afac0a3d10c3d5a354f8edf94f30ea533",
+      "line": 36,
+      "column": 70,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 36,
+      "nearest_heading": {
+        "level": 2,
+        "text": "The name from your command line",
+        "line": 26
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "9. Read and write a file",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "The name from your command line",
+          "line": 26
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 34,
+      "context_end_line": 38,
+      "full_context": "The *command tail* is the text after the program's name. Its length is at\n`0080h` and its characters start at `0081h`. They include the space before\nthe first argument. The CCP converts letters to capitals before entry, so\n`SHOW b:hello.asm x` gives a length of 14 and the text ` B:HELLO.ASM X`.\nA zero follows the tail's last character.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Capitalisation before entry directly explains the displayed command-tail example. Removing the comma leaves the example, length, leading space and terminating-zero statement intact.",
+      "source_character_offset_zero_based": 1632,
+      "source_byte_offset_zero_based": 1634,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0025",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "be8b37aa2ef86e864c3f2e9cb11b3ef8e78f644da260166c94f6bc23b00a0ae2",
+      "source_git_blob": "a3217b2afac0a3d10c3d5a354f8edf94f30ea533",
+      "line": 41,
+      "column": 45,
+      "conjunction": "or",
+      "matched_text": ", or",
+      "conjunction_line": 41,
+      "nearest_heading": {
+        "level": 2,
+        "text": "The name from your command line",
+        "line": 26
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "9. Read and write a file",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "The name from your command line",
+          "line": 26
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 40,
+      "context_end_line": 45,
+      "full_context": "A file call takes separate drive, name and type fields. The CCP prepares\nthe first argument as a *file control block*, or FCB, at `005Ch`.\nIt is a 36-byte block through\nwhich the BDOS identifies a file and maintains the state of its operations.\nFor a program taking one file name, this default FCB supplies the name\nalready separated into fields.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "retain_boundary",
+      "retained_comma_reason": "The comma before or opens the supplementary alternative name or FCB and the comma after FCB closes it. Retain the paired boundary so the address at 005Ch applies to the same first-argument structure, not an alternative object.",
+      "review_disposition": "The comma before or opens the supplementary alternative name or FCB and the comma after FCB closes it. Retain the paired boundary so the address at 005Ch applies to the same first-argument structure, not an alternative object.",
+      "source_character_offset_zero_based": 1870,
+      "source_byte_offset_zero_based": 1872,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0026",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "be8b37aa2ef86e864c3f2e9cb11b3ef8e78f644da260166c94f6bc23b00a0ae2",
+      "source_git_blob": "a3217b2afac0a3d10c3d5a354f8edf94f30ea533",
+      "line": 84,
+      "column": 8,
+      "conjunction": "and",
+      "matched_text": ", and",
+      "conjunction_line": 84,
+      "nearest_heading": {
+        "level": 2,
+        "text": "A file's position in the FCB",
+        "line": 63
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "9. Read and write a file",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "A file's position in the FCB",
+          "line": 63
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 83,
+      "context_end_line": 88,
+      "full_context": "The sequential position is split between an *extent*, a group of 128\nrecords, and the record within it. `EX` and `S2` identify the extent.\n`CR` selects its next record, normally 0 to 127. At the boundary the BDOS\nmoves to the next extent as needed. You keep the complete FCB between\ncalls so those updates and its allocation map remain available.\nAppendix A gives the full field contracts and random-record operations.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "retain_boundary",
+      "retained_comma_reason": "This comma closes the apposition a group of 128 records, opened after extent. Retain both boundaries so and the record within it remains the second part of the sequential position rather than part of the extent definition.",
+      "review_disposition": "This comma closes the apposition a group of 128 records, opened after extent. Retain both boundaries so and the record within it remains the second part of the sequential position rather than part of the extent definition.",
+      "source_character_offset_zero_based": 4039,
+      "source_byte_offset_zero_based": 4049,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0027",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "be8b37aa2ef86e864c3f2e9cb11b3ef8e78f644da260166c94f6bc23b00a0ae2",
+      "source_git_blob": "a3217b2afac0a3d10c3d5a354f8edf94f30ea533",
+      "line": 100,
+      "column": 25,
+      "conjunction": "while",
+      "matched_text": ", while",
+      "conjunction_line": 100,
+      "nearest_heading": {
+        "level": 2,
+        "text": "A record buffer",
+        "line": 98
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "9. Read and write a file",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "A record buffer",
+          "line": 98
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 100,
+      "context_end_line": 104,
+      "full_context": "The FCB holds file state, while the bytes being read or written go through\na separate memory buffer. The BDOS calls this the *DMA address*. It is a\ntransfer address in your memory, not a request to program a hardware DMA\ncontroller. Initially it is `0080h`, with room for one 128-byte record.\nFunction 26 changes it to the address supplied in `DE`.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The FCB and data-buffer subjects are explicit and while distinguishes their roles. Removing the comma leaves file state versus transferred bytes clear without changing DMA terminology.",
+      "source_character_offset_zero_based": 4924,
+      "source_byte_offset_zero_based": 4934,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0028",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "be8b37aa2ef86e864c3f2e9cb11b3ef8e78f644da260166c94f6bc23b00a0ae2",
+      "source_git_blob": "a3217b2afac0a3d10c3d5a354f8edf94f30ea533",
+      "line": 132,
+      "column": 16,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 132,
+      "nearest_heading": {
+        "level": 2,
+        "text": "A record buffer",
+        "line": 98
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "9. Read and write a file",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "A record buffer",
+          "line": 98
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 132,
+      "context_end_line": 135,
+      "full_context": "SHOW only reads, so it leaves no changed file state to close. A program that\nwrites must close its updated FCB before finishing. Warm boot flushes pending\nwrites from the block cache but cannot close the program's FCBs. The write\nsequence after SHOW explains how to finish both operations and check them.",
+      "manual_classification_hints": [],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "SHOW only reading directly explains why it has no changed file state to close. The comma is optional; the following requirement to close a writing program’s updated FCB remains explicit.",
+      "source_character_offset_zero_based": 6693,
+      "source_byte_offset_zero_based": 6703,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0029",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "be8b37aa2ef86e864c3f2e9cb11b3ef8e78f644da260166c94f6bc23b00a0ae2",
+      "source_git_blob": "a3217b2afac0a3d10c3d5a354f8edf94f30ea533",
+      "line": 252,
+      "column": 53,
+      "conjunction": "but",
+      "matched_text": ", but",
+      "conjunction_line": 252,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Making and writing a file",
+        "line": 250
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "9. Read and write a file",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Making and writing a file",
+          "line": 250
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 252,
+      "context_end_line": 256,
+      "full_context": "Writing uses an FCB and a DMA buffer in the same way, but the state\nmust reach the directory before the program finishes. For a new file,\nprepare all 36 FCB bytes: the drive, the space-padded name/type and zeroed\nstate. Choose a name that is not already present. Function 22, make file,\ncreates a directory entry. It is not a replace-file command.",
+      "manual_classification_hints": [],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The but clause contrasts shared FCB/buffer mechanics with the additional directory-update requirement. Its explicit subject makes the connection clear without a comma. The paired commas around make file are in a later sentence and remain intact.",
+      "source_character_offset_zero_based": 11316,
+      "source_byte_offset_zero_based": 11326,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0030",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "b5e3dd9e1eb6a980bcf2e4ae347330b3c2ffa75842d2145d17606e14c60e64b2",
+      "source_git_blob": "be3394a9707444d69fe15900bf7e561a68e4e540",
+      "line": 39,
+      "column": 25,
+      "conjunction": "or",
+      "matched_text": ", or",
+      "conjunction_line": 39,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Program space and resident memory",
+        "line": 22
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "10. Memory for programs",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Program space and resident memory",
+          "line": 22
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 38,
+      "context_end_line": 41,
+      "full_context": "Page zero occupies `0000h–00FFh` and contains the CP/M jumps and buffers. The\n*transient program area*, or TPA, begins at `0100h`. Its upper bound is the\naddress stored in the jump at `0005h`, read as a word at `0006h`. That address\nis the first byte outside the TPA. Your final usable byte is one below it.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "retain_boundary",
+      "retained_comma_reason": "The comma before or opens the alternative name or TPA and the comma after TPA closes it. Retain the pair to mark TPA as the abbreviation of transient program area, with begins at 0100h applying to that same region.",
+      "review_disposition": "The comma before or opens the alternative name or TPA and the comma after TPA closes it. Retain the pair to mark TPA as the abbreviation of transient program area, with begins at 0100h applying to that same region.",
+      "source_character_offset_zero_based": 1682,
+      "source_byte_offset_zero_based": 1690,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0031",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "b5e3dd9e1eb6a980bcf2e4ae347330b3c2ffa75842d2145d17606e14c60e64b2",
+      "source_git_blob": "be3394a9707444d69fe15900bf7e561a68e4e540",
+      "line": 118,
+      "column": 13,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 118,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Historical memory readings",
+        "line": 75
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "10. Memory for programs",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Historical memory readings",
+          "line": 75
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 115,
+      "context_end_line": 120,
+      "full_context": "`HEX` prints A's high digit through `DIGIT`, then its low digit. `DIGIT`\nconverts a nibble to `0` through `F` and ends with `JP BDOS`. For the high\ndigit, the BDOS returns to HEX after CALL DIGIT. The low digit is entered by\nfall-through, so its BDOS return goes to HEX's caller. The complete program\nprints the high byte of the boundary before the low byte and appends `h`. These\nretained commands prepared a separate copy of the starter card:",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Fall-through entry directly explains the low digit’s BDOS return reaching HEX’s caller. Removing the comma preserves the high-digit CALL versus low-digit fall-through distinction.",
+      "source_character_offset_zero_based": 4888,
+      "source_byte_offset_zero_based": 4896,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0032",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "b5e3dd9e1eb6a980bcf2e4ae347330b3c2ffa75842d2145d17606e14c60e64b2",
+      "source_git_blob": "be3394a9707444d69fe15900bf7e561a68e4e540",
+      "line": 159,
+      "column": 34,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 159,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Historical memory readings",
+        "line": 75
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "10. Memory for programs",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Historical memory readings",
+          "line": 75
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 158,
+      "context_end_line": 160,
+      "full_context": "The following table retains the earlier starter-card address map. The boundary\nmoves with the card and residents, so these addresses are not constants for\nprograms to use:",
+      "manual_classification_hints": [],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The boundary moving with card and residents directly explains why the retained addresses are not program constants. The comma is optional and the historical-map scope remains.",
+      "source_character_offset_zero_based": 6031,
+      "source_byte_offset_zero_based": 6039,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0033",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "b5e3dd9e1eb6a980bcf2e4ae347330b3c2ffa75842d2145d17606e14c60e64b2",
+      "source_git_blob": "be3394a9707444d69fe15900bf7e561a68e4e540",
+      "line": 296,
+      "column": 50,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 296,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Page zero and the program's arguments",
+        "line": 274
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "10. Memory for programs",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Page zero and the program's arguments",
+          "line": 274
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 295,
+      "context_end_line": 298,
+      "full_context": "The CCP stores the current drive and user area at `0004h` before program entry.\nWarm boot uses that byte to restore the selection, so changing that byte changes\nthe selection used on exit. An unavailable drive falls back to A\n(`src/cpm/ccp.asm:363-384`, `src/cpm/ccp.asm:32-102`).",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Warm boot using the selection byte directly explains how modifying it changes the exit selection. Removing the comma preserves the subsequent unavailable-drive fallback.",
+      "source_character_offset_zero_based": 11598,
+      "source_byte_offset_zero_based": 11638,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0034",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "b5e3dd9e1eb6a980bcf2e4ae347330b3c2ffa75842d2145d17606e14c60e64b2",
+      "source_git_blob": "be3394a9707444d69fe15900bf7e561a68e4e540",
+      "line": 309,
+      "column": 26,
+      "conjunction": "so",
+      "matched_text": ", so",
+      "conjunction_line": 309,
+      "nearest_heading": {
+        "level": 2,
+        "text": "Page zero and the program's arguments",
+        "line": 274
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "10. Memory for programs",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "Page zero and the program's arguments",
+          "line": 274
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 306,
+      "context_end_line": 310,
+      "full_context": "`0050h` is a different drive value from the current drive at `0004h`. It follows\nCP/M 3's load-drive convention. A plain command loaded from the current drive\ngives 0. A search that finds the program on A gives 1. An explicit prefix\nsupplies its drive number, so `B:SHOW` at `A>` leaves 2 there. The current drive\ncan remain A throughout that run.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The explicit prefix supplying its drive number directly explains B:SHOW leaving 2 at 0050h. Removing the comma leaves the distinction from the current drive at 0004h intact.",
+      "source_character_offset_zero_based": 12346,
+      "source_byte_offset_zero_based": 12386,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0035",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "b5e3dd9e1eb6a980bcf2e4ae347330b3c2ffa75842d2145d17606e14c60e64b2",
+      "source_git_blob": "be3394a9707444d69fe15900bf7e561a68e4e540",
+      "line": 396,
+      "column": 68,
+      "conjunction": "and",
+      "matched_text": ", and",
+      "conjunction_line": 396,
+      "nearest_heading": {
+        "level": 2,
+        "text": "The bank window and latch copy",
+        "line": 381
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "10. Memory for programs",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "The bank window and latch copy",
+          "line": 381
+        }
+      ],
+      "context_kind": "table_row",
+      "context_start_line": 396,
+      "context_end_line": 396,
+      "full_context": "| `BC00h–BC9Dh` | the cache's table: the card block each line holds, and whether it has changes |",
+      "manual_classification_hints": [
+        "table/interface row: classify manually",
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "The table coordinates two facts about each cache line: the card block it holds and whether it has changes. And separates the two clearly without a comma. This explanatory cell is not a captured or required literal string.",
+      "source_character_offset_zero_based": 16500,
+      "source_byte_offset_zero_based": 16548,
+      "rephrase_proposal": null
+    },
+    {
+      "id": "CC0036",
+      "status": "reviewed",
+      "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
+      "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+      "source_sha256": "b5e3dd9e1eb6a980bcf2e4ae347330b3c2ffa75842d2145d17606e14c60e64b2",
+      "source_git_blob": "be3394a9707444d69fe15900bf7e561a68e4e540",
+      "line": 506,
+      "column": 73,
+      "conjunction": "and",
+      "matched_text": ", and",
+      "conjunction_line": 506,
+      "nearest_heading": {
+        "level": 2,
+        "text": "KEY with its own stack",
+        "line": 453
+      },
+      "heading_path": [
+        {
+          "level": 1,
+          "text": "10. Memory for programs",
+          "line": 8
+        },
+        {
+          "level": 2,
+          "text": "KEY with its own stack",
+          "line": 453
+        }
+      ],
+      "context_kind": "paragraph",
+      "context_start_line": 506,
+      "context_end_line": 509,
+      "full_context": "The address in `0001h` is table + 3. Adding 6 obtains CONIN at table + 9, and\nadding another 3 obtains CONOUT at table + `0Ch`. KEY writes those addresses\ninto the operands of its own JP instructions. CALL CONIN and CALL CONOUT then\nreach the actual BIOS entries.",
+      "manual_classification_hints": [
+        "inline code retained in context, excluded from matching"
+      ],
+      "classification": "remove_optional",
+      "retained_comma_reason": null,
+      "review_disposition": "Adding 6 and adding another 3 have explicit parallel subjects and results. Removing the comma preserves the table-relative CONIN/CONOUT arithmetic and following description of KEY’s JP operands.",
+      "source_character_offset_zero_based": 21174,
+      "source_byte_offset_zero_based": 21226,
+      "rephrase_proposal": null
+    }
+  ],
+  "counts": {
+    "reviewed": 36,
+    "remove_optional": 31,
+    "retain_boundary": 5,
+    "retain_literal": 0,
+    "needs_rephrase": 0
+  }
+}
