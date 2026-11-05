@@ -14,7 +14,10 @@ commit whose code the chapter's claims were checked against, and the build of
 any file from outside the repository that its examples depend on, such as the
 starter card's `TED.COM` or `TAS.COM`. The comment is for the people revising
 the book; a reader never sees it. A revision that rechecks the chapter against a
-later commit changes the comment.
+later commit changes the comment. A source-only pass keeps the capture's
+original commit. If only some citations are revised, a separate comment names
+the source revision and the resolution ledger that identifies those citations.
+It does not certify the remaining claims, measurements or captures.
 
 **The code is the authority.** Every number, address, message, file name and
 behaviour in a chapter is checked against the source at the named commit, not
@@ -45,8 +48,9 @@ the starter card the SHA-256 of its `EDIT.COM`.
 
 A program in an example is assembled on the model by the starter card's `TAS`,
 and the transcript shows `TAS`'s own output. The exception is a program a
-chapter builds on the PC, where its header names ATOM's version. ATOM also builds
-the ROM on the PC.
+chapter builds on the PC, where its header names ATOM's version. The production
+ROM build at `fe2097f` uses pinned TAS; ATOM remains an explicit reference
+backend. Chapter 13 describes the setup and selection.
 
 **Each example names its run.** The capture command for an example is given in
 the sentence that introduces it, or in an HTML comment on the line before the
