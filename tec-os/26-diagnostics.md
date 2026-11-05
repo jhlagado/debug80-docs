@@ -28,7 +28,7 @@ stack, which nothing else uses before the CCP runs (`src/boot.asm:119-123`). It
 starts the card with `SDINIT` and checks the container with `MOUNT`. A
 failure of either jumps to `DIAG` with an error code in `A`
 (`src/boot.asm:127-132`). The code is one of `SDINIT`'s, `01h` to `04h` and
-`0Bh`, or one of `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-20`,
+`0Bh`, or one of `MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:16-31`,
 `src/vol.asm:25-43`). The banner is printed before the card is touched
 (`src/boot.asm:97-99`), so it appears whatever the card holds. Only the RAM
 check, the console's start and the clock's test come before the banner
@@ -38,16 +38,16 @@ with `TEC-OS needs 64K RAM` on the serial port, as [Chapter
 
 `DIAG` runs on the BDOS's stack as `COLDRT` set it. Both jumps to `DIAG` are
 `COLDRT`'s, made after its calls have returned, so the stack is at its top
-(`src/boot.asm:463-471`). `DIAG` writes `CARD?` on the LCD's last row
-(`src/boot.asm:472-473`, `src/text.asm:10`) and then prints `No volume
+(`src/boot.asm:757-774`). `DIAG` writes `CARD?` on the LCD's last row
+(`src/boot.asm:775-777`, `src/text.asm:15`) and then prints `No volume
 mounted, error ` and the code as two hexadecimal digits
-(`src/boot.asm:474-478`, `src/text.asm:8`).
+(`src/boot.asm:778-784`, `src/text.asm:13`).
 
-At the prompt `R retry> ` (`src/text.asm:9`), `DIAG` reads one key with
+At the prompt `R retry> ` (`src/text.asm:14`), `DIAG` reads one key with
 `BCONIN`, echoes it as typed and ends the line. Only then does it turn a small
 letter into a capital for the test. So `r` retries too, and a digit echoes as
-the digit (`src/boot.asm:479-487`). Any key but `R` gives the prompt again
-(`src/boot.asm:489`). On a board with the PICO9918 and the matrix keyboard the
+the digit (`src/boot.asm:786-798`). Any key but `R` gives the prompt again
+(`src/boot.asm:801-802`). On a board with the PICO9918 and the matrix keyboard the
 console is the ROM's PICO9918 console, which cold boot starts before the
 banner (`src/video.asm:16-27`, `src/pico.asm:50-82`). The prompt is then on
 that screen, and the key comes from the matrix keyboard. On any other board
@@ -64,7 +64,7 @@ R retry> H
 R retry>
 ```
 
-`R` jumps back to `COLDRT` (`src/boot.asm:487-488`). That starts the LCD
+`R` jumps back to `COLDRT` (`src/boot.asm:798-800`). That starts the LCD
 again, which clears `CARD?`, and then repeats the card's start and the mount.
 A card fixed or put in while the prompt waits is mounted without a reset.
 `MOUNT` reads each block of the table from the card again, whatever a cache
@@ -131,14 +131,15 @@ stack at `7F00h–7FFFh`, in the fixed RAM (`diag/defs.asm:43-44`).
 Every later test depends on `7E00h–7FFFh`, so test T01 checks those two pages
 first, with no stack and registers alone. It makes four passes, each filling
 them with a pattern derived from the address and reading it back
-(`diag/boot.asm:43-73`). On a failure the ROM sends one line to the serial
-port, again without a stack, from the pattern `HCTEXT`
-(`diag/boot.asm:127-128`). The line is `T01 HOME    FAIL  RAM 7E00-7FFF at `,
-the failing address in four hexadecimal digits, ` wrote ` and the byte
-written, then ` read ` and the byte read. The ROM then waits and sends the
-line again, for ever (`diag/boot.asm:118-125`). The wait is 16 passes of a
-65,536-pass loop of 26 T-states, 27,262,976 T-states in all. On a board the
-line therefore comes back about every 7 seconds.
+(`diag/boot.asm:43-73`). On a failure the ROM sends one line to the serial port,
+again without a stack, from the pattern `HCTEXT` (`diag/boot.asm:127-128`). The
+line is `T01 HOME    FAIL  RAM 7E00-7FFF at `, the failing address in four
+hexadecimal digits, ` wrote ` and the byte written, then ` read ` and the byte
+read. The ROM then waits and sends the line again, for ever
+(`diag/boot.asm:118-125`). The wait makes 16 passes of a 65,536-iteration loop.
+Each iteration takes 26 T-states except the last, which takes 21. Counting the
+surrounding instructions from `HCWAIT` through `JR HCMSG` gives 27,263,278
+T-states. On a board the line therefore comes back about every 7 seconds.
 
 With those pages proved, the ROM clears its variables, installs an NMI handler
 at `0066h` that counts NMIs, reads the Matrix switch and prints its banner
@@ -250,19 +251,19 @@ prints:
 | T33 | `CLOCK` | CPU clock by stopwatch, about 60 s |
 | T34 | `SDTIME` | SD read rate by stopwatch: 256 blocks, 128 KiB |
 
-The tests reach the hardware as TEC-OS does, where TEC-OS has a way. The
-serial output is bit-banged as TEC-OS's is (`diag/out.asm:1-5`). T19's card
-start is TEC-OS's SD card driver, recording each answer the card gives
-(`diag/sd.asm:1-2`). T17 detects the PICO9918 as TEC-OS does and sets the
-registers of TEC-OS's 80-column console (`diag/display.asm:334-336`,
-`diag/display.asm:353`). T35 checks the page flip that console uses
-(`diag/display.asm:751-753`). The others measure what TEC-OS requires of the
-board. T03 measures the RAM in socket U9 that holds EXPAND 0, and T12 and T13
-the bank behind EXPAND 1. T07 measures the boot overlay that cold boot starts
-through, and T11 the bits of port `03h`.
+The tests reach the hardware as TEC-OS does, where TEC-OS has a way. The serial
+output is bit-banged as TEC-OS's is (`diag/out.asm:10-28`). T19's card start
+follows TEC-OS's SD command sequence while recording the replies
+(`diag/sd.asm:115-212`, `src/sd.asm:209-371`). T17 detects the PICO9918 as
+TEC-OS does and selects the 80-column text mode used by the console
+(`diag/display.asm:334-346`, `diag/display.asm:349-372`, `src/tms.asm:17-46`).
+T35 checks the page flip that console uses (`diag/display.asm:751-803`). The
+others measure what TEC-OS requires of the board. T03 measures the RAM in socket
+U9 that holds EXPAND 0, and T12 and T13 the bank behind EXPAND 1. T07 measures
+the boot overlay that cold boot starts through, and T11 the bits of port `03h`.
 
 Only T37 writes to the card. It writes block 7, and only on a card whose block
-0 holds `TECOSVOL` (`diag/sd.asm:616-634`). No volume can use that block,
+0 holds `TECOSVOL` (`diag/sd.asm:616-683`). No volume can use that block,
 since every volume starts at a nonzero multiple of 8 blocks. T37 puts the
 block back afterwards.
 

@@ -4299,6 +4299,20 @@
         "prose_replacements": 4,
         "genuine_decisions_needed": []
       }
+    },
+    {
+      "slice": "D-extra",
+      "coverage": {
+        "input_occurrences": 212,
+        "input_unique_entries": 212,
+        "resolved_input_occurrences": 212,
+        "remaining_input_occurrences": 0,
+        "additional_collateral_corrections": 1,
+        "total_additional_entries": 213,
+        "mapped_semantic_coverage": "All 212 input occurrences in the nine D chapters were read against the exact target owner, relevant callers and complete containing passages. No textual-only remainder. One collateral prior acceptance is explicitly superseded.",
+        "source_only": true
+      },
+      "decisions_needed": []
     }
   ],
   "resolutions": [
@@ -25106,12 +25120,16 @@
       "book_lines": [
         50
       ],
+      "current_book_lines": [
+        54
+      ],
       "old_citation": "web/src/main.mjs:656-662",
-      "new_citation": "web/src/main.mjs:656-662",
-      "reason": "The cited handler/state block implements the passage: serialised card preparation, routed keyboard input, dirty-card saves or staged file import before reset. I checked the direct consumer and related guard, not just matching text.",
-      "status": "accepted",
+      "new_citation": "web/src/main.mjs:667-680",
+      "reason": "This earlier D acceptance was a semantic error: lines 656-662 update display/width state and start a power-on, not the claimed five-second/reset file refresh. The reset handler calls refreshFiles at 667-670 and the five-second setInterval is at 680. This correction supersedes that prior accepted resolution; the other cited refreshFiles body at 569-582 remains valid.",
+      "status": "corrected",
       "prose_edits": [],
-      "inventory_status": "mapped"
+      "inventory_status": "mapped",
+      "supersedes_prior_resolution": true
     },
     {
       "book_path": "tec-os/appendix-i-web-page.md",
@@ -35164,6 +35182,3241 @@
           ]
         }
       ]
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        118
+      ],
+      "current_book_lines": [
+        123
+      ],
+      "old_citation": "diag/boot.asm:8-27",
+      "new_citation": "diag/boot.asm:8-27",
+      "reason": "RESET is assembled at C000h and jumps to its ROM COLD address before OUT(SYSLAT) removes the boot overlay; initial vector padding preserves C038h/C066h entries.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        121
+      ],
+      "current_book_lines": [
+        126
+      ],
+      "old_citation": "diag/boot.asm:29-40",
+      "new_citation": "diag/boot.asm:29-40",
+      "reason": "COLD stores the RETN opcode word at NMIVEC, sets TX idle with digits/speaker off, zeros the LED ports and deselects SD before any RAM test.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        129
+      ],
+      "current_book_lines": [
+        134
+      ],
+      "old_citation": "diag/boot.asm:43-73",
+      "new_citation": "diag/boot.asm:43-73",
+      "reason": "HOMECHK fills and verifies VARS..BOOTSTK-1 using four patterns derived from H xor L xor C. It uses only registers, direct jumps and IX, with no stack operations.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        134
+      ],
+      "current_book_lines": [
+        139
+      ],
+      "old_citation": "diag/boot.asm:118-125",
+      "new_citation": "diag/boot.asm:118-125",
+      "reason": "HCWAIT performs sixteen 65536-iteration DEC DE/LD A,D/OR E/JR NZ loops. Static Z80 instruction arithmetic gives 7 + 16*(10 + 65535*26 + 21) + 15*13 + 8 + 12 = 27263278 T-states through JR HCMSG, rather than the prose total 27262976. No timing run was made.",
+      "status": "corrected",
+      "prose_edits": [
+        {
+          "old": "The wait is 16 passes of a\n65,536-pass loop of 26 T-states, 27,262,976 T-states in all.",
+          "new": "The wait makes 16 passes of a 65,536-iteration loop. Each iteration takes\n26 T-states except the last, which takes 21. Counting the surrounding\ninstructions from `HCWAIT` through `JR HCMSG` gives 27,263,278 T-states."
+        }
+      ],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        131
+      ],
+      "current_book_lines": [
+        136
+      ],
+      "old_citation": "diag/boot.asm:127-128",
+      "new_citation": "diag/boot.asm:127-128",
+      "reason": "HCTEXT provides the exact T01 failure prefix and eight substitution markers for address/written/read hex digits. HCBAD and TXNS at 77-148 format and transmit it without stack use.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        154
+      ],
+      "current_book_lines": [
+        159
+      ],
+      "old_citation": "diag/defs.asm:41",
+      "new_citation": "diag/defs.asm:41",
+      "reason": "RPTBUF is 1000h and RPTEND is 3000h. START initialises RPTP to this buffer and OUTC records result bytes there while REC is set.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        122
+      ],
+      "current_book_lines": [
+        127
+      ],
+      "old_citation": "diag/defs.asm:43-44",
+      "new_citation": "diag/defs.asm:43-44",
+      "reason": "VARS is 7E00h and BOOTSTK is 8000h, matching the variables page and stack page described; HOMECHK tests the combined range before START clears the variables.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        156
+      ],
+      "current_book_lines": [
+        161
+      ],
+      "old_citation": "diag/defs.asm:50-56",
+      "new_citation": "diag/defs.asm:50-56",
+      "reason": "The six enumerated result constants are PASS, FAIL, INFO, SKIP, LOOK and NONE. RESULT indexes the corresponding RESTXT entries and their counters.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        252
+      ],
+      "current_book_lines": [
+        257
+      ],
+      "old_citation": "diag/display.asm:334-336",
+      "new_citation": "diag/display.asm:334-346",
+      "reason": "VREGS and VREGT at 336-346 program 80-column text, but their R1 and colour byte differ from src/pico.asm REGS80. The book should say the same text mode rather than imply an identical console register set.",
+      "status": "corrected",
+      "prose_edits": [
+        {
+          "old": "T17 detects the PICO9918 as TEC-OS does and sets the\nregisters of TEC-OS's 80-column console",
+          "new": "T17 detects the PICO9918 as TEC-OS does and selects the\n80-column text mode used by the console"
+        }
+      ],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        253
+      ],
+      "current_book_lines": [
+        258
+      ],
+      "old_citation": "diag/display.asm:353",
+      "new_citation": "diag/display.asm:349-372`, `src/tms.asm:17-46",
+      "reason": "The probe writes 5Ah and A5h to VRAM 3FFFh and reads them back before VREGS; src/tms.asm:17-46 uses the same two-pattern detection. The original single line only loads the address, so include the complete probe.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        254
+      ],
+      "current_book_lines": [
+        259
+      ],
+      "old_citation": "diag/display.asm:751-753",
+      "new_citation": "diag/display.asm:751-803",
+      "reason": "TVPAGE writes the second 80x24 name page at 2000h then alternates R2 between 0Bh and 07h three times, leaving 07h; the implementation is at 756-803 beyond this introductory comment.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-b-rom-services.md",
+      "book_lines": [
+        185
+      ],
+      "current_book_lines": [
+        191
+      ],
+      "old_citation": "diag/interact.asm:556",
+      "new_citation": "diag/interact.asm:556",
+      "reason": "The TJOY report string explicitly labels joystick bits 01/02/04/08/10/20/40/80 as up/down/left/right/fire2/pin9/fire1/fire3. Its reader uses F7FEh and complements active-low input; the book appropriately leaves these physical labels unconfirmed.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        140
+      ],
+      "current_book_lines": [
+        145
+      ],
+      "old_citation": "diag/main.asm:4-28",
+      "new_citation": "diag/main.asm:4-28",
+      "reason": "START sets the proved stack, clears the variables page, installs the NMI counter, reads the Matrix switch, initialises LCD state and emits the version/image-ID banner.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        141
+      ],
+      "current_book_lines": [
+        146
+      ],
+      "old_citation": "diag/main.asm:29-35",
+      "new_citation": "diag/main.asm:29-35",
+      "reason": "The ROM calls GETKEY with ten half-second units and selects interactive mode only for I or Y; timeout or any other character branches to STAUTO.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        201
+      ],
+      "current_book_lines": [
+        206
+      ],
+      "old_citation": "diag/main.asm:56-87",
+      "new_citation": "diag/main.asm:56-87",
+      "reason": "The explicit calls print T01, RAMREP for T02-T04 then run the automatic tests. TVDP continues into TVCLK, followed by TVPAGE/TF18A and then the SD tests, matching the book ordering.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        205
+      ],
+      "current_book_lines": [
+        210
+      ],
+      "old_citation": "diag/main.asm:88-119",
+      "new_citation": "diag/main.asm:88-119",
+      "reason": "The INTER flag conditionally calls INTERACT after the automatic tests; the idle prompt can invoke it later. INTERACT calls the hands-on serial, keypad, matrix, joystick and stopwatch tests.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        270
+      ],
+      "current_book_lines": [
+        275
+      ],
+      "old_citation": "diag/main.asm:91-106",
+      "new_citation": "diag/main.asm:91-106",
+      "reason": "DONE calls PRREP then IDLE repeatedly reads keys; R branches back to DONE and I runs INTERACT before returning to DONE, exactly as the printed report prompt states.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        249
+      ],
+      "current_book_lines": [
+        254
+      ],
+      "old_citation": "diag/out.asm:1-5",
+      "new_citation": "diag/out.asm:10-28",
+      "reason": "TXBYTE at 10-28 sends the same start/data/stop bit sequence and delay-loop structure as src/console.asm:440-480; OUTC at 48-68 records bytes only while REC is set. Cite the body as well as its description.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        153
+      ],
+      "current_book_lines": [
+        158
+      ],
+      "old_citation": "diag/out.asm:49-62",
+      "new_citation": "diag/out.asm:49-62",
+      "reason": "OUTC tests REC and records each byte through RPTP while below RPTEND, then always transmits it. RESULT sets REC before the result prefix and REND clears it only after the line end.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        144
+      ],
+      "current_book_lines": [
+        149
+      ],
+      "old_citation": "diag/out.asm:241-273",
+      "new_citation": "diag/out.asm:241-273",
+      "reason": "GETKEY polls serial start, keypad KDA and the enabled matrix, counting half-second timeouts. Its continuation at 274-326 decodes/uppercases the actual returned key and maps keypad controls.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        146
+      ],
+      "current_book_lines": [
+        151
+      ],
+      "old_citation": "diag/out.asm:326",
+      "new_citation": "diag/out.asm:326",
+      "reason": "PADASC maps the sixteen hex keys followed by Y, N, Return and Esc. GETKPAD at 286-303 indexes this table after releasing the key.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        155
+      ],
+      "current_book_lines": [
+        160
+      ],
+      "old_citation": "diag/out.asm:592-615",
+      "new_citation": "diag/out.asm:592-615",
+      "reason": "LCDSUM selects LCD row 3 and prints pass/fail/info/skip running counts. RESULT separately prints the current result on row 2, while TBEGIN uses row 1 for the test name.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        149
+      ],
+      "current_book_lines": [
+        154
+      ],
+      "old_citation": "diag/out.asm:637-658",
+      "new_citation": "diag/out.asm:637-658",
+      "reason": "TBEGIN consumes the embedded test number/name/description, prints -- T plus number/title and sends the test number and seven-character name to LCD row 1.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        152
+      ],
+      "current_book_lines": [
+        157
+      ],
+      "old_citation": "diag/out.asm:663-711",
+      "new_citation": "diag/out.asm:663-711",
+      "reason": "RESULT increments the selected counter, sets REC, emits the numbered/name/result prefix, updates LCD row 2 and totals and leaves result details to its caller until REND.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        156
+      ],
+      "current_book_lines": [
+        161
+      ],
+      "old_citation": "diag/out.asm:706-711",
+      "new_citation": "diag/out.asm:706-711",
+      "reason": "RESTXT contains the six exact result spellings, in the numeric order defined in diag/defs.asm:50-56; RESULT indexes each eight-byte slot.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        266
+      ],
+      "current_book_lines": [
+        271
+      ],
+      "old_citation": "diag/out.asm:737-789",
+      "new_citation": "diag/out.asm:737-789",
+      "reason": "PRREP prints heading and image identification, traverses recorded bytes from RPTBUF to RPTP, prints all six totals and ends with the exact END marker. The caller at main:91-106 supplies the repeat/interactive prompt.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        251
+      ],
+      "current_book_lines": [
+        256
+      ],
+      "old_citation": "diag/sd.asm:1-2",
+      "new_citation": "diag/sd.asm:115-212`, `src/sd.asm:209-371",
+      "reason": "The diagnostic SDINIT at 118-212 follows the production CMD0/CMD8/CMD55/ACMD41/CMD58/CMD16 sequence and records replies. It is not identical to src/sd.asm:209-371: production validates CMD8 echo and CMD55 failure while diagnostics records/continues. Narrow the prose to the shared sequence.",
+      "status": "corrected",
+      "prose_edits": [
+        {
+          "old": "T19's card\nstart is TEC-OS's SD card driver, recording each answer the card gives",
+          "new": "T19's card\nstart follows TEC-OS's SD command sequence while recording the replies"
+        }
+      ],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        260
+      ],
+      "current_book_lines": [
+        265
+      ],
+      "old_citation": "diag/sd.asm:616-634",
+      "new_citation": "diag/sd.asm:616-683",
+      "reason": "TSDWR checks SDOK, reads block zero and compares its first eight bytes with SDMAGIC before any write. The continuation at 645-683 saves block seven, writes/checks a pattern and restores/verifies its saved contents on the successful path.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-b-rom-services.md",
+      "book_lines": [
+        209
+      ],
+      "current_book_lines": [
+        215
+      ],
+      "old_citation": "drivers/glcd.asm:374-376",
+      "new_citation": "drivers/glcd.asm:568-610",
+      "reason": "The mapped target 568-572 is only GLGLY documentation. GLGLY at 573-610 actually masks bit 7 for glyph lookup, substitutes a space for control codes and complements the six visible pixels when bit 7 was set. Expand to the body for the reverse-glyph claim.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        265
+      ],
+      "current_book_lines": [
+        270
+      ],
+      "old_citation": "host/card.mjs:1-4",
+      "new_citation": "host/card.mjs:1-4",
+      "reason": "displayFile returns no driver for tms; setDisplayLine emits CON PICO width for non-80 widths and no display line for 80, using the ROM console.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        153
+      ],
+      "current_book_lines": [
+        157
+      ],
+      "old_citation": "host/card.mjs:11-15",
+      "new_citation": "host/card.mjs:11-15",
+      "reason": "DISPLAY_PIECE matches optional-colon PICO/PICO40/PICO32/GLCD SVC or DRV names and numeric CON PICO/CRT width pieces; withoutDisplay consumes that exact regex.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        136
+      ],
+      "current_book_lines": [
+        140
+      ],
+      "old_citation": "host/card.mjs:18-24",
+      "new_citation": "host/card.mjs:18-24",
+      "reason": "driveA parses the card, selects A and creates CpmVolume with descriptor readOnly; userZero restricts directory enumeration to user area zero.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        175
+      ],
+      "current_book_lines": [
+        179
+      ],
+      "old_citation": "host/card.mjs:26-50",
+      "new_citation": "host/card.mjs:26-50",
+      "reason": "cardProblem checks drive A, absence of the selected GLCD driver, legacy .DRV files and the driver format byte. prepareCard calls it before rewriting anything.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        191
+      ],
+      "current_book_lines": [
+        195
+      ],
+      "old_citation": "host/card.mjs:41-44",
+      "new_citation": "host/card.mjs:41-44",
+      "reason": "If GLCD.SVC is missing, the diagnostic chooses the selected name with .DRV first and otherwise the first known display .DRV in the directory, exactly as the notice table explains.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        131
+      ],
+      "current_book_lines": [
+        135
+      ],
+      "old_citation": "host/card.mjs:58-73",
+      "new_citation": "host/card.mjs:58-73",
+      "reason": "prepareCard stages a slice of the image, checks cardProblem, rewrites only when allowed and publishes with image.set only after success. Its catch returns a reason and leaves the original image unchanged.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        178
+      ],
+      "current_book_lines": [
+        182
+      ],
+      "old_citation": "host/card.mjs:67-72",
+      "new_citation": "host/card.mjs:67-72",
+      "reason": "The catch distinguishes read-only STARTUP.CMD from other CpmError failures and returns the exact user-facing notices without forcing a write or publishing the staged image.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        153
+      ],
+      "current_book_lines": [
+        157
+      ],
+      "old_citation": "host/card.mjs:81-102",
+      "new_citation": "host/card.mjs:81-102",
+      "reason": "withoutDisplay removes display pieces, preserves other command pieces, transfers colon dependence with taken/colon and drops empty lines; its handling supports each three-row colon example in Appendix I.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        147
+      ],
+      "current_book_lines": [
+        151
+      ],
+      "old_citation": "host/card.mjs:104-117",
+      "new_citation": "host/card.mjs:104-117",
+      "reason": "setDisplayLine reads A:user0 STARTUP.CMD, removes display pieces, prepends only the selected display line and skips the write when text is unchanged. It uses CpmVolume.write, so read-only restrictions remain in force.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        24
+      ],
+      "current_book_lines": [
+        28
+      ],
+      "old_citation": "host/machine.mjs:1-16",
+      "new_citation": "host/machine.mjs:1-16",
+      "reason": "Imports are the browser-safe Debug80 runtime modules and tools/lib/bytes.mjs; there is no Node builtin dependency. Constructor callers in fixtures.mjs and web/src/main.mjs supply ROM bytes and symbols.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        48
+      ],
+      "current_book_lines": [
+        52
+      ],
+      "old_citation": "host/machine.mjs:4-8",
+      "new_citation": "host/machine.mjs:4-8",
+      "reason": "The imports at lines 10-15 and constructor calls at 59-85 instantiate the runtime CPU/platform, SdSpi and Ds1302 rather than replacing device behaviour in TEC-OS.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        28
+      ],
+      "current_book_lines": [
+        32
+      ],
+      "old_citation": "host/machine.mjs:23-28",
+      "new_citation": "host/machine.mjs:23-28",
+      "reason": "symbolsFromD8 uppercases each symbol name and maps its address, falling back to its constant value. romFor and loadRom pass their D8 symbols through this function.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        31
+      ],
+      "current_book_lines": [
+        35
+      ],
+      "old_citation": "host/machine.mjs:33-49",
+      "new_citation": "host/machine.mjs:33-49",
+      "reason": "The constructor explicitly accepts the board options listed in the passage, including SD capacity, displays, clock, fill, missing window RAM and the ram96/mains/expands decoding options; their consumers are at 59-173.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        83
+      ],
+      "current_book_lines": [
+        87
+      ],
+      "old_citation": "host/machine.mjs:34-38",
+      "new_citation": "host/machine.mjs:34-38",
+      "reason": "With clock omitted the new Ds1302 retains its host-time behaviour; when clock is supplied, lines 87-119 override time refresh and written-time progression with elapsed emulated cycles. I also inspected the installed pinned Ds1302 implementation.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        98
+      ],
+      "current_book_lines": [
+        102
+      ],
+      "old_citation": "host/machine.mjs:49",
+      "new_citation": "host/machine.mjs:49",
+      "reason": "highCapacity defaults to true in the constructor and is passed to SdSpi at line 59. web/src/main.mjs:86-95 supplies no override, so its card is high capacity.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        130
+      ],
+      "current_book_lines": [
+        134
+      ],
+      "old_citation": "host/machine.mjs:51-55",
+      "new_citation": "host/machine.mjs:51-55",
+      "reason": "The constructor creates separate output and serial arrays. step at 259-266 records BIOS console requests; the serial callback at 77 records bytes decoded by the runtime.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        63
+      ],
+      "current_book_lines": [
+        67
+      ],
+      "old_citation": "host/machine.mjs:59",
+      "new_citation": "host/machine.mjs:59",
+      "reason": "The machine attaches its own SdSpi to the caller-provided sdImage; constructor config disables the runtime-owned SD device and io.read/write at 122-134 routes FDh to this instance.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        50
+      ],
+      "current_book_lines": [
+        54
+      ],
+      "old_citation": "host/machine.mjs:61-78",
+      "new_citation": "host/machine.mjs:61-78",
+      "reason": "normalizeTec1gConfig declares RAM 0000h-BFFFh, ROM C000h-FFFFh and entry 0000h, then createTec1gRuntime constructs the platform; createZ80Runtime at 145 also starts at zero.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        63
+      ],
+      "current_book_lines": [
+        67
+      ],
+      "old_citation": "host/machine.mjs:69",
+      "new_citation": "host/machine.mjs:69",
+      "reason": "sdEnabled:false disables the platform SD model so the separately created SdSpi at 59 and FDh handlers at 122-134 are authoritative.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        80
+      ],
+      "current_book_lines": [
+        84
+      ],
+      "old_citation": "host/machine.mjs:72",
+      "new_citation": "host/machine.mjs:72",
+      "reason": "rtcEnabled:false disables the platform RTC; the Ds1302 instance at 85 is wired to FCh by the handlers at 126 and 135-137.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        130
+      ],
+      "current_book_lines": [
+        134
+      ],
+      "old_citation": "host/machine.mjs:77",
+      "new_citation": "host/machine.mjs:77",
+      "reason": "The serial callback pushes decoded bytes into this.serial; console output is separately sampled by step at BCONOUT, so the two records can differ after a display takes the console.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        55
+      ],
+      "current_book_lines": [
+        59
+      ],
+      "old_citation": "host/machine.mjs:80-84",
+      "new_citation": "host/machine.mjs:80-84",
+      "reason": "The machine sets the runtime display-update interval to Infinity; render/test readers use state directly instead of consuming and clearing timed scan queues.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        80
+      ],
+      "current_book_lines": [
+        84
+      ],
+      "old_citation": "host/machine.mjs:85",
+      "new_citation": "host/machine.mjs:85",
+      "reason": "rtc controls creation of a separate Ds1302 instance; false gives null and the FCh read handler returns FFh, while writes are ignored.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        86
+      ],
+      "current_book_lines": [
+        90
+      ],
+      "old_citation": "host/machine.mjs:86-119",
+      "new_citation": "host/machine.mjs:86-119",
+      "reason": "A supplied Date establishes start milliseconds and 4 MHz emulated time. The write wrapper moves tickBaseMs to that clock and advanceWrittenTime counts whole emulated seconds, including clock-halt handling.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        63
+      ],
+      "current_book_lines": [
+        67
+      ],
+      "old_citation": "host/machine.mjs:122-134",
+      "new_citation": "host/machine.mjs:122-134",
+      "reason": "IO reads and writes mask the port to eight bits and dispatch FDh to this.sd. Missing SD returns FFh; all other ports retain platform handling.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        81
+      ],
+      "current_book_lines": [
+        85
+      ],
+      "old_citation": "host/machine.mjs:126",
+      "new_citation": "host/machine.mjs:126",
+      "reason": "The FCh read returns this.rtc.read() or FFh for no RTC, independently of the runtime rtcEnabled:false configuration.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        81
+      ],
+      "current_book_lines": [
+        85
+      ],
+      "old_citation": "host/machine.mjs:135-137",
+      "new_citation": "host/machine.mjs:135-137",
+      "reason": "FCh writes go to the machine-owned RTC with a byte mask; the handler returns without forwarding the write to the disabled platform RTC.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        51
+      ],
+      "current_book_lines": [
+        55
+      ],
+      "old_citation": "host/machine.mjs:143-144",
+      "new_citation": "host/machine.mjs:143-144",
+      "reason": "The memory array is initialised with ramFill and ROM bytes are copied at C000h before the CPU is created; this supports the stated image placement.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        107
+      ],
+      "current_book_lines": [
+        111
+      ],
+      "old_citation": "host/machine.mjs:177-227",
+      "new_citation": "host/machine.mjs:177-227",
+      "reason": "The writer watch locates MEMINIT and its LDIR, arms when the clear reaches BFFFh, exempts cache/SD/MVCOPY-for-cache writers and BD00h-BDFFh history, and records forbidden writes to 8000h-BCFFh or BE00h-BFFFh.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        97
+      ],
+      "current_book_lines": [
+        101
+      ],
+      "old_citation": "host/machine.mjs:215-234",
+      "new_citation": "host/machine.mjs:215-234",
+      "reason": "The installed CPU memWrite hook records rom-write for C000h upward and overlay-write below 0800h while shadowEnabled, each with addr and pc, then forwards the actual write to the memory implementation.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        113
+      ],
+      "current_book_lines": [
+        117
+      ],
+      "old_citation": "host/machine.mjs:222",
+      "new_citation": "host/machine.mjs:222",
+      "reason": "The watch condition excludes BD00h-BDFFh and includes addresses below BD00h or from BE00h upward; this is why the history page is outside this write check.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        125
+      ],
+      "current_book_lines": [
+        129
+      ],
+      "old_citation": "host/machine.mjs:259-267",
+      "new_citation": "host/machine.mjs:259-267",
+      "reason": "step records C when PC is BCONOUT before stepping the Z80, then records cycles in both platform timing and this.cycles. It therefore records requests for every console device.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        172
+      ],
+      "current_book_lines": [
+        176
+      ],
+      "old_citation": "host/machine.mjs:269-279",
+      "new_citation": "host/machine.mjs:269-279",
+      "reason": "runUntil loops until the predicate succeeds, throwing on an unhandled HALT or cycle-limit overrun; it uses the emulated cycle counter rather than host elapsed time.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        175
+      ],
+      "current_book_lines": [
+        179
+      ],
+      "old_citation": "host/machine.mjs:301-321",
+      "new_citation": "host/machine.mjs:301-321",
+      "reason": "expect retries its regex only when output grows. It then settles until waitingForInput or a bounded two-million-cycle interval elapses, so the prose should retain that bounded alternative.",
+      "status": "corrected",
+      "prose_edits": [
+        {
+          "old": "It then runs on\nuntil the console waits, so that the last character has reached the screen",
+          "new": "It then runs on until the console waits or a bounded settling interval\nexpires, allowing the last character to reach the screen"
+        }
+      ],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        177
+      ],
+      "current_book_lines": [
+        181
+      ],
+      "old_citation": "host/machine.mjs:323-335",
+      "new_citation": "host/machine.mjs:323-335",
+      "reason": "waitingForInput resolves the named serial and matrix polling ranges and tests whether PC lies in any of them; it does not infer readiness merely from a printed prompt.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        179
+      ],
+      "current_book_lines": [
+        183
+      ],
+      "old_citation": "host/machine.mjs:337-342",
+      "new_citation": "host/machine.mjs:337-342",
+      "reason": "ready additionally checks STPOS>=80h and HFLAG=FFh when STPOS is present. capture.mjs:75-79 combines ready with a prompt suffix.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        184
+      ],
+      "current_book_lines": [
+        188
+      ],
+      "old_citation": "host/machine.mjs:354-371",
+      "new_citation": "host/machine.mjs:354-371",
+      "reason": "type selects matrix input for a video console; otherwise it queues each serial byte only in an input wait and waits for its receipt at CINRX or CSTRX before sending the next.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        194
+      ],
+      "current_book_lines": [
+        198
+      ],
+      "old_citation": "host/machine.mjs:380-404",
+      "new_citation": "host/machine.mjs:380-404",
+      "reason": "tmsLayout derives width/base from VDP registers; screen uses caller overrides when provided, masks reverse-video bit 7 and returns rows of decoded name-table characters.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        199
+      ],
+      "current_book_lines": [
+        203
+      ],
+      "old_citation": "host/machine.mjs:412-450",
+      "new_citation": "host/machine.mjs:412-450",
+      "reason": "glcdScreen reads graphics RAM in 6x8 cells and matches normal/reversed pixel keys against Machine.font, returning ? for unknown glyphs. test/lib/machine.mjs initialises that font.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        186
+      ],
+      "current_book_lines": [
+        190
+      ],
+      "old_citation": "host/machine.mjs:453-468",
+      "new_citation": "host/machine.mjs:453-468",
+      "reason": "typeMatrix chooses an ASCII matrix combination, presses its modifier and key, waits for KBLAST to identify it, releases both and waits for FFh before the next key.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        189
+      ],
+      "current_book_lines": [
+        193
+      ],
+      "old_citation": "host/machine.mjs:470-520",
+      "new_citation": "host/machine.mjs:470-520",
+      "reason": "enqueueInput stores pending bytes and pumpInput advances serial receipt or matrix press/release phases without blocking; frame and capture callers pump it between CPU steps.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        67
+      ],
+      "current_book_lines": [
+        71
+      ],
+      "old_citation": "host/machine.mjs:522-526",
+      "new_citation": "host/machine.mjs:522-526",
+      "reason": "swapCard replaces sdImage and creates a new SdSpi, or null for an empty socket, so subsequent FDh accesses use the replacement image.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        202
+      ],
+      "current_book_lines": [
+        206
+      ],
+      "old_citation": "host/machine.mjs:528-587",
+      "new_citation": "host/machine.mjs:528-587",
+      "reason": "ramImage/loadRam copy the visible 0000h-BFFFh RAM and EXPAND 1 window while restoring the latch. reset resets platform state and CPU execution/interrupt fields without replacing RAM or the card. This is the ordinary board image, not a dump of every optional MAIN bank.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        22
+      ],
+      "current_book_lines": [
+        26
+      ],
+      "old_citation": "package.json:11-13",
+      "new_citation": "package.json:11-13",
+      "reason": "The bin mapping names tools/tecvol.mjs as tecvol, matching the Node entrypoint and nine command cases.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        207
+      ],
+      "current_book_lines": [
+        211
+      ],
+      "old_citation": "package.json:17",
+      "new_citation": "package.json:17",
+      "reason": "The test script uses Node --test with concurrency 1 and the top-level test/*.test.mjs glob. The exact target Git tree contains 56 matching files, so the old prose count of 55 needs correction.",
+      "status": "corrected",
+      "prose_edits": [
+        {
+          "old": "There are 55 such files",
+          "new": "There are 56 such files"
+        }
+      ],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        243
+      ],
+      "current_book_lines": [
+        248
+      ],
+      "old_citation": "package.json:18",
+      "new_citation": "package.json:18",
+      "reason": "test:strict sets STRICT=1 before npm test; test/lib/inputs.mjs reads that variable to turn absent inputs into failures.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        245
+      ],
+      "current_book_lines": [
+        250
+      ],
+      "old_citation": "package.json:28",
+      "new_citation": "package.json:28",
+      "reason": "devDependencies pins playwright exactly to 1.62.1 rather than a version range; the README install instruction fetches its expected Chromium.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        47
+      ],
+      "current_book_lines": [
+        51
+      ],
+      "old_citation": "src/boot.asm:456-460",
+      "new_citation": "src/boot.asm:749-754",
+      "reason": "After ALVINIT packs allocation vectors by decrementing STUBAD, lines 749-754 subtract three further bytes and retain that address for the JP stub immediately below the lowest vector.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        37
+      ],
+      "current_book_lines": [
+        41
+      ],
+      "old_citation": "src/boot.asm:463-471",
+      "new_citation": "src/boot.asm:757-774",
+      "reason": "DIAG is reached by the two COLDRT jumps after SDINIT/MOUNT have returned; its entry contract and PUSH AF at 757-774 use the freshly established STKTOP stack and preserve the error code.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        38
+      ],
+      "current_book_lines": [
+        42
+      ],
+      "old_citation": "src/boot.asm:472-473",
+      "new_citation": "src/boot.asm:775-777",
+      "reason": "DIAG loads DGCARD and calls LCD3, placing CARD? on row index 3, the last LCD row; src/text.asm:15 defines that literal.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        40
+      ],
+      "current_book_lines": [
+        44
+      ],
+      "old_citation": "src/boot.asm:474-478",
+      "new_citation": "src/boot.asm:778-784",
+      "reason": "DIAG prints DGERR, restores its saved A and calls PUTHEX then PUTCRLF, producing the error prefix and two-digit hexadecimal code.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        45
+      ],
+      "current_book_lines": [
+        49
+      ],
+      "old_citation": "src/boot.asm:479-487",
+      "new_citation": "src/boot.asm:786-798",
+      "reason": "DGLOOP prints DGPROM, reads BCONIN, saves the key while echoing and ending the line then uppercases only the comparison copy before testing R.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        63
+      ],
+      "current_book_lines": [
+        67
+      ],
+      "old_citation": "src/boot.asm:487-488",
+      "new_citation": "src/boot.asm:798-800",
+      "reason": "The CP R result controls JP Z,COLDRT, which resets the stack and reruns LCD/card/container initialisation; retries therefore clear CARD? before another attempt.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        46
+      ],
+      "current_book_lines": [
+        50
+      ],
+      "old_citation": "src/boot.asm:489",
+      "new_citation": "src/boot.asm:801-802",
+      "reason": "A non-R key falls through to JR DGLOOP, so every other key is echoed and causes the retry prompt to be printed again.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-b-rom-services.md",
+      "book_lines": [
+        206
+      ],
+      "current_book_lines": [
+        212
+      ],
+      "old_citation": "src/console.asm:119-131",
+      "new_citation": "src/console.asm:198-217",
+      "reason": "BCONSTC calls the non-cursor BCONST then draws CURSHOW on a video console only when no input character is ready. The book must preserve that condition instead of promising the very next CONST always draws.",
+      "status": "corrected",
+      "prose_edits": [
+        {
+          "old": "The next `CONST` or `CONIN` draws it again, as after any\noutput",
+          "new": "`CONST` draws it again when no character is ready, and `CONIN` draws it\nwhile waiting for input, as after ordinary output"
+        }
+      ],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-b-rom-services.md",
+      "book_lines": [
+        206
+      ],
+      "current_book_lines": [
+        212
+      ],
+      "old_citation": "src/console.asm:169-187",
+      "new_citation": "src/console.asm:283-314",
+      "reason": "BCONIN selects the console, handles buffered RXFULL before its video wait and draws CURSHOW only if it actually waits. It hides the cursor again before returning the matrix key; buffered input may bypass drawing.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        372
+      ],
+      "current_book_lines": [
+        376
+      ],
+      "old_citation": "src/cpm/ccpcmd.asm:8-10",
+      "new_citation": "src/cpm/ccpcmd.asm:13-17",
+      "reason": "CMDUNL calls SVCUNL and branches to STARTED on clear carry or BADCMD on refusal; the loader owns REMOVE/commit/freeing semantics, not the CCP command.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        150
+      ],
+      "current_book_lines": [
+        154
+      ],
+      "old_citation": "src/cpm/ccpcmd.asm:117-119",
+      "new_citation": "src/cpm/ccpcmd.asm:199-204",
+      "reason": "CONFL updates the IOBYTE field, compares the selected mode with CMUC1 and calls GLCLD when UC1 was requested. GLCLD in loader.asm:839-857 reads and installs GLCD.SVC only if it is not already present.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-h-service-file-format.md",
+      "book_lines": [
+        150
+      ],
+      "current_book_lines": [
+        154
+      ],
+      "old_citation": "src/cpm/ccpfile.asm:325-327",
+      "new_citation": "src/cpm/ccpfile.asm:498-501",
+      "reason": "PUTTRIM loads a character and ANDs 7Fh before its space test/output. Thus a relocated D8h name byte prints as 58h, X, as the local GAPZERO example describes; no runtime result was regenerated.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-b-rom-services.md",
+      "book_lines": [
+        208
+      ],
+      "current_book_lines": [
+        214
+      ],
+      "old_citation": "src/pico.asm:143-147",
+      "new_citation": "src/pico.asm:270-315`, `src/pico.asm:523-533",
+      "reason": "The textual target 234-243 describes VREST, not the reverse-code mapping. TMSPUT at 523-533 writes A unchanged and TMSPAT at 270-315 builds reversed glyphs by masking code bit 7 and complementing glyph rows. Replace the incorrect owner range.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-b-rom-services.md",
+      "book_lines": [
+        320
+      ],
+      "current_book_lines": [
+        326
+      ],
+      "old_citation": "src/pico.asm:209-249",
+      "new_citation": "src/pico.asm:335-404",
+      "reason": "GFXFIL/GFXWR/GFXRD set the VRAM address then test their byte counts before transfers, so zero transfers no bytes. GFXREG writes its register pair. These routines rely on the caller claim and do not inspect VCLAIM.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        27
+      ],
+      "current_book_lines": [
+        31
+      ],
+      "old_citation": "src/sd.asm:10-20",
+      "new_citation": "src/sd.asm:16-31",
+      "reason": "The target code declares SDINIT errors 1,2,3,4 and SDEVOLT=11. Its SDINIT body at 209-371 uses those returns for CMD0, ACMD41/CMD55, CMD58, CMD16 and bad CMD8 echo respectively; read/write error declarations in the range are not additional cold-boot errors.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        40
+      ],
+      "current_book_lines": [
+        44
+      ],
+      "old_citation": "src/text.asm:8",
+      "new_citation": "src/text.asm:13",
+      "reason": "DGERR emits the exact No volume mounted, error prefix consumed by DIAG before PUTHEX.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        42
+      ],
+      "current_book_lines": [
+        46
+      ],
+      "old_citation": "src/text.asm:9",
+      "new_citation": "src/text.asm:14",
+      "reason": "DGPROM defines the exact R retry> prompt with its trailing space; DGLOOP prints it before BCONIN.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        38
+      ],
+      "current_book_lines": [
+        42
+      ],
+      "old_citation": "src/text.asm:10",
+      "new_citation": "src/text.asm:15",
+      "reason": "DGCARD is the zero-terminated CARD? literal; DIAG passes it to LCD3 on the last LCD row.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        118
+      ],
+      "current_book_lines": [
+        122
+      ],
+      "old_citation": "test/expand.test.mjs:67-77",
+      "new_citation": "test/expand.test.mjs:67-77",
+      "reason": "The test runs a program that selects EXPAND 1 and writes BF80h, asserts that expand1Writes contains precisely BF80h then removes this deliberate probe from the global failure list. I read the code without running it.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        211
+      ],
+      "current_book_lines": [
+        215
+      ],
+      "old_citation": "test/lib/fixtures.mjs:21-27",
+      "new_citation": "test/lib/fixtures.mjs:21-27",
+      "reason": "romFor always reads build/tecos/tecos.rom and its D8 map regardless of board options; boot and the test helpers use this one image.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        222
+      ],
+      "current_book_lines": [
+        226
+      ],
+      "old_citation": "test/lib/fixtures.mjs:29-38",
+      "new_citation": "test/lib/fixtures.mjs:29-38",
+      "reason": "sourceDigest hashes source bytes and recursively hashes %INCLUDE files, tracking seen paths to avoid repeated inclusion; program uses the digest in its cache filename.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        220
+      ],
+      "current_book_lines": [
+        224
+      ],
+      "old_citation": "test/lib/fixtures.mjs:41-55",
+      "new_citation": "test/lib/fixtures.mjs:41-55",
+      "reason": "program selects test/programs/NAME.asm, incorporates sourceDigest and origin in its cache name, returns cached bytes/maps or calls the ATOM assembleProgram helper and stores the results.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        225
+      ],
+      "current_book_lines": [
+        229
+      ],
+      "old_citation": "test/lib/fixtures.mjs:57-64",
+      "new_citation": "test/lib/fixtures.mjs:57-64",
+      "reason": "standardCard creates SYSTEM/G1M on A and WORK/G8M on B with no files; optional extra volumes follow them. No writeBehind flag is set in this test fixture.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        89
+      ],
+      "current_book_lines": [
+        93
+      ],
+      "old_citation": "test/lib/fixtures.mjs:72-73",
+      "new_citation": "test/lib/fixtures.mjs:72-73",
+      "reason": "TEST_CLOCK is constructed as local 1 January 2026 at 12:00:00 and boot passes it to Machine, whose explicit-clock path advances by emulated cycles.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        223
+      ],
+      "current_book_lines": [
+        227
+      ],
+      "old_citation": "test/lib/fixtures.mjs:75-76",
+      "new_citation": "test/lib/fixtures.mjs:75-76",
+      "reason": "service builds test/programs/NAME.asm through makeSvc into the build/svc workspace; this is test fixture construction, not a claim about the production media assembler.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        211
+      ],
+      "current_book_lines": [
+        215
+      ],
+      "old_citation": "test/lib/fixtures.mjs:93-121",
+      "new_citation": "test/lib/fixtures.mjs:93-121",
+      "reason": "withDisplay retains existing STARTUP.CMD, adds GLCD.SVC/startup only for a matrix-only display, and uses CON PICO only for a non-80 width. boot supplies TEST_CLOCK and waits for output plus ready.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        118
+      ],
+      "current_book_lines": [
+        122
+      ],
+      "old_citation": "test/lib/machine.mjs:14-17",
+      "new_citation": "test/lib/machine.mjs:14-17",
+      "reason": "The Node wrapper registers an after hook asserting the shared EXPAND1_WRITES array is empty. Machine.memWrite populates it for forbidden writes, causing the test file to fail without suppressing the actual write.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        170
+      ],
+      "current_book_lines": [
+        174
+      ],
+      "old_citation": "test/pico.test.mjs:832-844",
+      "new_citation": "test/pico.test.mjs:834-846",
+      "reason": "The owning target test is at 834-846. It builds the starter display files, asserts the original GLCD.SVC startup line, prepares the card at PICO80 and asserts empty startup text, a prompt without refusal and no memory violations.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-b-rom-services.md",
+      "book_lines": [
+        25
+      ],
+      "current_book_lines": [
+        29
+      ],
+      "old_citation": "test/programs/demo.asm:29-31",
+      "new_citation": "test/programs/demo.asm:29-31",
+      "reason": "The demo compares ABIMAJ with exactly 5 and branches to NOHW on mismatch. Its preceding 20-28 loop compares all three signature bytes before this check.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        37
+      ],
+      "current_book_lines": [
+        41
+      ],
+      "old_citation": "test/svc.test.mjs:159",
+      "new_citation": "test/svc.test.mjs:154-159",
+      "reason": "The loaded service test asserts both JP opcode C3h and the following word equal to BENTRY at base+1, as well as the page-aligned top and later removal. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        283
+      ],
+      "current_book_lines": [
+        287
+      ],
+      "old_citation": "test/svc.test.mjs:256",
+      "new_citation": "test/svc.test.mjs:256-265",
+      "reason": "The test accepts a 255-record chain, checks enumeration at its boundary and rejects a 256-record chain with carry and rc=1; bench and V_CHAIN define how the chain is generated. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        283
+      ],
+      "current_book_lines": [
+        287
+      ],
+      "old_citation": "test/svc.test.mjs:267-306",
+      "new_citation": "test/svc.test.mjs:267-306",
+      "reason": "On a PICO board the tests load 128 plus 127 records beside PICO for total 256, find the permanent tail and reject another 128 that would overflow; rejection leaves the previous chain usable. Source inspection only; this review does not claim a fresh test run.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-h-service-file-format.md",
+      "book_lines": [
+        108
+      ],
+      "current_book_lines": [
+        112
+      ],
+      "old_citation": "test/svc.test.mjs:376-378",
+      "new_citation": "test/svc.test.mjs:376-378",
+      "reason": "The encoder test explicitly compares fixups [2,9] with gaps [3,7] and [600] with [255,255,91], matching the appendix arithmetic. It also verifies the alternative encoders. Source inspection only; this review does not claim a fresh test run.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        363
+      ],
+      "current_book_lines": [
+        367
+      ],
+      "old_citation": "test/svc.test.mjs:386",
+      "new_citation": "test/svc.test.mjs:383-388",
+      "reason": "The test calls ABICALL with C=16, asserts carry and asserts DEMO remains found. The production dispatcher rejects numbers from TNCOUNT,16, so this is no removal service. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        404
+      ],
+      "current_book_lines": [
+        408
+      ],
+      "old_citation": "test/svc.test.mjs:390",
+      "new_citation": "test/svc.test.mjs:390-402",
+      "reason": "The complete test loads DEMO, asserts it survives warm boot, resets the machine then asserts REGHEAD and SVCHEAD are both zero. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        326
+      ],
+      "current_book_lines": [
+        330
+      ],
+      "old_citation": "test/svc.test.mjs:423-435",
+      "new_citation": "test/svc.test.mjs:423-435",
+      "reason": "The failing V_HOOK/V_HOOKFL INIT test asserts rc=2, a retained base/PZTOP, no registry publication, refused UNLOAD and preservation of those pages over warm boot. Source inspection only; this review does not claim a fresh test run.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        314
+      ],
+      "current_book_lines": [
+        318
+      ],
+      "old_citation": "test/svc.test.mjs:437",
+      "new_citation": "test/svc.test.mjs:437-444",
+      "reason": "The V_WILD/V_REFUSE test supplies an invalid record after successful INIT then refuses REMOVE; it asserts carry/rc=2, a nonzero owner and no published records. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        365
+      ],
+      "current_book_lines": [
+        369
+      ],
+      "old_citation": "test/svc.test.mjs:461",
+      "new_citation": "test/svc.test.mjs:461-467",
+      "reason": "V_PROBE calls FIND during INIT and stores its carry. The test asserts failure there and success after load publication, proving a service cannot find its own unpublished record. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        258
+      ],
+      "current_book_lines": [
+        262
+      ],
+      "old_citation": "test/svc.test.mjs:469-482",
+      "new_citation": "test/svc.test.mjs:469-482",
+      "reason": "V_WB jumps to zero during INIT. The test checks restored top/PZTOP, cleared SVCBSY and unchanged protected memory, then verifies a subsequent load and UNLOAD work. Source inspection only; this review does not claim a fresh test run.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        263
+      ],
+      "current_book_lines": [
+        267
+      ],
+      "old_citation": "test/svc.test.mjs:498-505",
+      "new_citation": "test/svc.test.mjs:498-505",
+      "reason": "The hook-then-warm-boot INIT test restores the top but deliberately leaves the RAMBIOS CONOUT target below it, directly supporting the dangling-hook warning. Source inspection only; this review does not claim a fresh test run.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        348
+      ],
+      "current_book_lines": [
+        352
+      ],
+      "old_citation": "test/svc.test.mjs:536",
+      "new_citation": "test/svc.test.mjs:536-545",
+      "reason": "The test saves the older table pointer, loads a newer same-name record, asserts FIND changes and then asserts UNLOAD restores the older pointer. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        328
+      ],
+      "current_book_lines": [
+        332
+      ],
+      "old_citation": "test/svc.test.mjs:572",
+      "new_citation": "test/svc.test.mjs:572-578",
+      "reason": "The V_GLVEC variant calls TNDRVR then returns failure. The test asserts rc=1/freed pages but a nonzero GLVEC remains; its state diff is exactly those two vector bytes, outside SVCSCAN RAMBIOS coverage. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        355
+      ],
+      "current_book_lines": [
+        359
+      ],
+      "old_citation": "test/svc.test.mjs:580",
+      "new_citation": "test/svc.test.mjs:580-588",
+      "reason": "The test corrupts a record link into a self-cycle, checks FIND absent returns with carry and LIST index255 still returns, matching bounded registry lookup. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        449
+      ],
+      "current_book_lines": [
+        453
+      ],
+      "old_citation": "test/svc.test.mjs:731",
+      "new_citation": "test/svc.test.mjs:710-737",
+      "reason": "The test instruments service entry stack depths. Declared six bytes and falsely declared two bytes both load and use the same six-byte depths; only the host watch exposes the false declaration. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        428
+      ],
+      "current_book_lines": [
+        432
+      ],
+      "old_citation": "test/svc.test.mjs:798",
+      "new_citation": "test/svc.test.mjs:798-808",
+      "reason": "The test replaces a claimed RST slot with a JP outside the service and checks UNLOAD still resets that slot; an undeclared external JP remains intact. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        417
+      ],
+      "current_book_lines": [
+        421
+      ],
+      "old_citation": "test/svc.test.mjs:810",
+      "new_citation": "test/svc.test.mjs:810-816",
+      "reason": "An undeclared vector into resident pages is reset to the RST38 default after UNLOAD frees those pages. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        417
+      ],
+      "current_book_lines": [
+        421
+      ],
+      "old_citation": "test/svc.test.mjs:818",
+      "new_citation": "test/svc.test.mjs:818-823",
+      "reason": "V_VECFL causes INIT to fail after setting a vector; the test asserts rc=1 and the slot default is restored with the freed pages. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        429
+      ],
+      "current_book_lines": [
+        433
+      ],
+      "old_citation": "test/svc.test.mjs:825",
+      "new_citation": "test/svc.test.mjs:825-831",
+      "reason": "The failing INIT puts a claimed vector outside its pages; the test checks it is still reset and that a subsequent claim loads successfully. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        262
+      ],
+      "current_book_lines": [
+        266
+      ],
+      "old_citation": "test/svc.test.mjs:833",
+      "new_citation": "test/svc.test.mjs:833-838",
+      "reason": "V_VEC plus V_WB installs a vector then jumps to warm boot inside INIT. The test checks no return from the load and a default RST slot after the prompt returns. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        423
+      ],
+      "current_book_lines": [
+        427
+      ],
+      "old_citation": "test/svc.test.mjs:840",
+      "new_citation": "test/svc.test.mjs:840-846",
+      "reason": "The test installs one claimed vector then loads a second with the same claim, asserting carry/rc=0 and no protected-state changes. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        418
+      ],
+      "current_book_lines": [
+        422
+      ],
+      "old_citation": "test/svc.test.mjs:858",
+      "new_citation": "test/svc.test.mjs:858-868",
+      "reason": "The test loads a vector-bearing service via the command path, resets and checks both the default vector and empty SVCHEAD, supporting cold-reset removal. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        39
+      ],
+      "current_book_lines": [
+        43
+      ],
+      "old_citation": "test/svc.test.mjs:872",
+      "new_citation": "test/svc.test.mjs:870-905",
+      "reason": "The SMASH program sets SP from 0006h and pushes six bytes below it. Both serial and PICO cases then check SERVICES and two UNLOADs remain usable; a nonremovable service still refuses. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        42
+      ],
+      "current_book_lines": [
+        46
+      ],
+      "old_citation": "test/svc.test.mjs:907",
+      "new_citation": "test/svc.test.mjs:907-928",
+      "reason": "The test traces instruction addresses from CALL 5 to BENTRY with zero, one and two services and asserts the intermediate addresses are exactly page-zero 5 and the current stub/service base. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        260
+      ],
+      "current_book_lines": [
+        264
+      ],
+      "old_citation": "test/svc.test.mjs:931",
+      "new_citation": "test/svc.test.mjs:930-938",
+      "reason": "The V_CHI/V_CHN variant calls BDOS47 from INIT with USER3 chained text. The test checks restored top, clear guard/owner and a later successful load after the chain runs. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        381
+      ],
+      "current_book_lines": [
+        385
+      ],
+      "old_citation": "test/svc.test.mjs:940",
+      "new_citation": "test/svc.test.mjs:930-949",
+      "reason": "The V_CHR/V_CHN variant invokes BDOS47 during REMOVE. After the USER3 chained command, the test asserts the guard is clear and the original resident head remains. Source inspection only; this review does not claim a fresh test run.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        196
+      ],
+      "current_book_lines": [
+        200
+      ],
+      "old_citation": "tools/capture.mjs:147-153",
+      "new_citation": "tools/capture.mjs:147-153",
+      "reason": "The --screen branch uses glcdScreen for UC1, otherwise reads PIWID and passes that width (or 80 if zero) to Machine.screen, preserving the selected 40/32-column row layout.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        365
+      ],
+      "current_book_lines": [
+        370
+      ],
+      "old_citation": "tools/diag-check.mjs:36-47",
+      "new_citation": "tools/diag-check.mjs:36-47",
+      "reason": "MEASURED explicitly lists the accepted detail forms for tests 14, 15, 16, 18, 19, 20, 21 and 37; compare prints differing captured numeric values as measured rather than behavioural differences.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        369
+      ],
+      "current_book_lines": [
+        374
+      ],
+      "old_citation": "tools/diag-check.mjs:65-73",
+      "new_citation": "tools/diag-check.mjs:65-73",
+      "reason": "affects parses the test rows of docs/board-run.md into a map from test number to the behaviour affected; compare appends that text to each genuine difference.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        361
+      ],
+      "current_book_lines": [
+        366
+      ],
+      "old_citation": "tools/diag-check.mjs:82-107",
+      "new_citation": "tools/diag-check.mjs:82-107",
+      "reason": "compare accepts identical lines, allows board PASS for model LOOK, applies measured forms and records other differences with effects. Extra board-only tests are reported as not compared, not counted as differences.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        170
+      ],
+      "current_book_lines": [
+        175
+      ],
+      "old_citation": "tools/diag-check.mjs:110-134",
+      "new_citation": "tools/diag-check.mjs:110-134",
+      "reason": "modelReport either returns its cached image-ID report or creates a machine with PICO9918, matrix keyboard, empty SYSTEM/WORK volumes and rtc:false, then captures serial output through END. No model run was performed here.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/26-diagnostics.md",
+      "book_lines": [
+        360
+      ],
+      "current_book_lines": [
+        365
+      ],
+      "old_citation": "tools/diag-check.mjs:148-152",
+      "new_citation": "tools/diag-check.mjs:148-152",
+      "reason": "The CLI calculates the chosen ROM image ID and exits 2 before comparing results if the board report names a different or missing ID.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        108
+      ],
+      "current_book_lines": [
+        78,
+        112
+      ],
+      "old_citation": "tools/lib/container.mjs:14",
+      "new_citation": "tools/lib/container.mjs:14",
+      "reason": "DEFAULT_ALIGN is 2048 blocks. createContainer defaults its align argument to that constant and starts the first volume at align.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        91
+      ],
+      "current_book_lines": [
+        95
+      ],
+      "old_citation": "tools/lib/container.mjs:14",
+      "new_citation": "tools/lib/container.mjs:14",
+      "reason": "DEFAULT_ALIGN is 2048 blocks. createContainer defaults its align argument to that constant and starts the first volume at align.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        117
+      ],
+      "current_book_lines": [
+        121
+      ],
+      "old_citation": "tools/lib/container.mjs:33-42",
+      "new_citation": "tools/lib/container.mjs:33-42",
+      "reason": "descriptorAt places the first fifteen descriptors after the block-zero header and later descriptors in sixteen-entry blocks; tableBlocksFor rounds the additional descriptor count up.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        124
+      ],
+      "current_book_lines": [
+        128
+      ],
+      "old_citation": "tools/lib/container.mjs:44-49",
+      "new_citation": "tools/lib/container.mjs:44-49",
+      "reason": "tableSum adds every byte of the additional table blocks, starting at block 1 and ending at the number computed by tableBlocksFor, reducing modulo 65536.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        65
+      ],
+      "current_book_lines": [
+        69
+      ],
+      "old_citation": "tools/lib/container.mjs:51-59",
+      "new_citation": "tools/lib/container.mjs:51-59",
+      "reason": "headerChecksum adds all header bytes except the two checksum-field bytes, with a 16-bit wrap; parseContainer compares this computed sum with the stored value.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        74
+      ],
+      "current_book_lines": [
+        78
+      ],
+      "old_citation": "tools/lib/container.mjs:76-80",
+      "new_citation": "tools/lib/container.mjs:76-80",
+      "reason": "createContainer chooses minor 1 for more than the format-1.0 volume limit or a nonzero drives option and minor 0 otherwise; the parser separately enforces volume-count limits.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        96
+      ],
+      "current_book_lines": [
+        100
+      ],
+      "old_citation": "tools/lib/container.mjs:79-80",
+      "new_citation": "tools/lib/container.mjs:79-80",
+      "reason": "The minor-version expression selects 1.1 exactly when volume count exceeds eight or drives is supplied nonzero; tecvol parses --drives in 1-4.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        104
+      ],
+      "current_book_lines": [
+        108
+      ],
+      "old_citation": "tools/lib/container.mjs:85-86",
+      "new_citation": "tools/lib/container.mjs:85-86",
+      "reason": "createContainer rejects more than one writeBehind volume and any volume that combines writeBehind and readOnly before allocating payloads.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        109
+      ],
+      "current_book_lines": [
+        113
+      ],
+      "old_citation": "tools/lib/container.mjs:89-99",
+      "new_citation": "tools/lib/container.mjs:89-99",
+      "reason": "createContainer enforces alignment modulo the format start-alignment value, puts the first start at align and rounds each following start up after the preceding payload.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        91
+      ],
+      "current_book_lines": [
+        95
+      ],
+      "old_citation": "tools/lib/container.mjs:89-99",
+      "new_citation": "tools/lib/container.mjs:89-99",
+      "reason": "createContainer enforces alignment modulo the format start-alignment value, puts the first start at align and rounds each following start up after the preceding payload.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        110
+      ],
+      "current_book_lines": [
+        114
+      ],
+      "old_citation": "tools/lib/container.mjs:121",
+      "new_citation": "tools/lib/container.mjs:121",
+      "reason": "createContainer fills the full payload of every volume with E5h, not just its directory; this gives the empty CP/M directory described in the passage.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        210
+      ],
+      "current_book_lines": [
+        214
+      ],
+      "old_citation": "tools/lib/container.mjs:130-194",
+      "new_citation": "tools/lib/container.mjs:130-194",
+      "reason": "parseContainer checks header dimensions, counts, sums, image length, descriptors, order, ids, drive assignments and cache restrictions. It requires an A volume and returns parsed metadata only after every check.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        74
+      ],
+      "current_book_lines": [
+        78
+      ],
+      "old_citation": "tools/lib/container.mjs:140-148",
+      "new_citation": "tools/lib/container.mjs:140-148",
+      "reason": "The parser uses the minor version for the 8/127 count limit, drives field and extra-table checksum, rejecting insufficient table bytes before parsing descriptors.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        101
+      ],
+      "current_book_lines": [
+        105
+      ],
+      "old_citation": "tools/lib/container.mjs:150-152",
+      "new_citation": "tools/lib/container.mjs:150-152",
+      "reason": "With default requireLength:true, parseContainer throws image is truncated when the image has fewer bytes than its declared containerBlocks*512. useCard invokes this before accepting an opened image.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        156
+      ],
+      "current_book_lines": [
+        160
+      ],
+      "old_citation": "tools/lib/container.mjs:174",
+      "new_citation": "tools/lib/container.mjs:174",
+      "reason": "The order check rejects a start below the previous volume end, independently of minor version, matching the ROM table-order requirement.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        198
+      ],
+      "current_book_lines": [
+        202
+      ],
+      "old_citation": "tools/lib/container.mjs:178",
+      "new_citation": "tools/lib/container.mjs:178",
+      "reason": "When a nonzero drives count is present, a mounted descriptor at or beyond that count is rejected with the named drive and card count; FFh/unmounted is exempt.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-e-container-format.md",
+      "book_lines": [
+        105
+      ],
+      "current_book_lines": [
+        109
+      ],
+      "old_citation": "tools/lib/container.mjs:187-188",
+      "new_citation": "tools/lib/container.mjs:187-188",
+      "reason": "The parser rejects read-only plus writeBehind and a second writeBehind volume; these are validation rules as well as createContainer preconditions.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        52
+      ],
+      "current_book_lines": [
+        56
+      ],
+      "old_citation": "tools/lib/container.mjs:201-209",
+      "new_citation": "tools/lib/container.mjs:201-209",
+      "reason": "findVolume normalises case and a trailing colon, then tries drive letter, label and decimal id in that order, throwing if none matches.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        184
+      ],
+      "current_book_lines": [
+        188
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:15-20",
+      "new_citation": "tools/lib/cpmfs.mjs:15-20",
+      "reason": "cpmName enforces the supported CP/M 8.3 character set and field lengths, uppercases and pads to eleven bytes. put passes either CPMNAME or the uppercased basename to this parser.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        138
+      ],
+      "current_book_lines": [
+        142
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:78-89",
+      "new_citation": "tools/lib/cpmfs.mjs:78-89",
+      "reason": "usedBlocks includes reserved directory blocks and throws for any live allocation above DSM or assigned twice; info calls freeBytes before it can print that volume line.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        230
+      ],
+      "current_book_lines": [
+        234
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:123-130",
+      "new_citation": "tools/lib/cpmfs.mjs:123-150",
+      "reason": "The introductory read contract names the DSM rejection, but the actual check is at line 140. The replacement includes the read body so the citation proves the claimed exception rather than relying on a comment.",
+      "status": "corrected",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        233
+      ],
+      "current_book_lines": [
+        237
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:123-150",
+      "new_citation": "tools/lib/cpmfs.mjs:123-150",
+      "reason": "read allocates zero-filled output for all logical records, copies each entry only through its own RC and throws for a block above DSM; text mode truncates at ^Z and converts CRLF to LF.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        236
+      ],
+      "current_book_lines": [
+        240
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:133-146",
+      "new_citation": "tools/lib/cpmfs.mjs:133-146",
+      "reason": "Each slot retains its logical record position, n is clipped to the entry and file record ends, and unrepresented records remain in the zero-filled output array.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        239
+      ],
+      "current_book_lines": [
+        243
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:140",
+      "new_citation": "tools/lib/cpmfs.mjs:140",
+      "reason": "The executable guard throws before copying when b>DSM, naming the user, filename, extent, directory entry and invalid block. tecvol get reads before writing OUTFILE.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        231
+      ],
+      "current_book_lines": [
+        235
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:152-160",
+      "new_citation": "tools/lib/cpmfs.mjs:152-160",
+      "reason": "erase first checks volume writability then rejects a matching user/name with the read-only attribute unless force is true; this is the precise erase path used by tecvol and fixtures.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        256
+      ],
+      "current_book_lines": [
+        260
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:157-169",
+      "new_citation": "tools/lib/cpmfs.mjs:157-169",
+      "reason": "erase validates writability and the force/read-only rule before marking matching entries E5h; it returns the number erased and zero if none matched.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        231
+      ],
+      "current_book_lines": [
+        235
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:175-191",
+      "new_citation": "tools/lib/cpmfs.mjs:175-191",
+      "reason": "write validates the volume, user and filename, builds padded records and rejects an existing read-only file unless force is set before changing directory or payload data.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        189
+      ],
+      "current_book_lines": [
+        193
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:180-206",
+      "new_citation": "tools/lib/cpmfs.mjs:180-206",
+      "reason": "write plans reusable entries and free allocation blocks against the intact directory, rejects full disk/directory and only then erases the old entry. tecvol saves the image only after write returns.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        194
+      ],
+      "current_book_lines": [
+        198
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:184-188",
+      "new_citation": "tools/lib/cpmfs.mjs:184-188",
+      "reason": "Text writes normalise LF or CRLF to CRLF, append ^Z and pad the final 128-byte record with ^Z; binary records instead receive zero padding.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        135
+      ],
+      "current_book_lines": [
+        139
+      ],
+      "old_citation": "tools/lib/cpmfs.mjs:240-267",
+      "new_citation": "tools/lib/cpmfs.mjs:240-267",
+      "reason": "verify catches usedBlocks faults and reports duplicate extent groups, RC>128 or blocks beyond claimed records. The info caller later calls freeBytes, which rethrows allocation faults before the volume line prints.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-b-rom-services.md",
+      "book_lines": [
+        424
+      ],
+      "current_book_lines": [
+        430
+      ],
+      "old_citation": "tools/lib/font.mjs:23",
+      "new_citation": "tools/lib/font.mjs:23",
+      "reason": "fontGlyphs translates five #/. pixels to a binary value shifted left three bits, placing each row in bits 7-3. The surrounding loop emits codes 20h..7Fh with exactly eight rows each.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        102
+      ],
+      "current_book_lines": [
+        106
+      ],
+      "old_citation": "tools/lib/prl.mjs:34",
+      "new_citation": "tools/lib/prl.mjs:34",
+      "reason": "ORG_LINE requires leading whitespace, literal uppercase ORG and $0100, followed only by horizontal whitespace; assembleAt uses that regex to rewrite a copied source.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/24-service-loader.md",
+      "book_lines": [
+        101
+      ],
+      "current_book_lines": [
+        105
+      ],
+      "old_citation": "tools/lib/prl.mjs:37-48",
+      "new_citation": "tools/lib/prl.mjs:37-48",
+      "reason": "assembleAt rewrites the origin in a copy, repoints include paths relative to the work directory and calls the ATOM assembleProgram helper with the new base.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        299
+      ],
+      "current_book_lines": [
+        303
+      ],
+      "old_citation": "tools/lib/recipe.mjs:13-26",
+      "new_citation": "tools/lib/recipe.mjs:13-26",
+      "reason": "buildRecipe validates its schema, creates writable temporary volumes, fetches every component file, checks byte count and SHA-256 then writes the file to the selected drive/user.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        305
+      ],
+      "current_book_lines": [
+        309
+      ],
+      "old_citation": "tools/lib/recipe.mjs:27-34",
+      "new_citation": "tools/lib/recipe.mjs:27-34",
+      "reason": "Read-only descriptor bits are added only after all component files were placed. The following common path recomputes table/header sums and validates the completed image.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-h-service-file-format.md",
+      "book_lines": [
+        69
+      ],
+      "current_book_lines": [
+        73
+      ],
+      "old_citation": "tools/lib/svc-format.mjs:3",
+      "new_citation": "tools/lib/svc-format.mjs:3",
+      "reason": "The browser-safe exported FORMAT constant is exactly 4; makeSvc/packSvc writes it to byte 1 and cardProblem compares the same byte against it.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        28
+      ],
+      "current_book_lines": [
+        32
+      ],
+      "old_citation": "tools/tecvol.mjs:4-17",
+      "new_citation": "tools/tecvol.mjs:4-17",
+      "reason": "The CLI documentation enumerates the nine commands; main at 103-189 has matching switch cases and parseArgs recognises their stated flags.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        48
+      ],
+      "current_book_lines": [
+        52
+      ],
+      "old_citation": "tools/tecvol.mjs:19-21",
+      "new_citation": "tools/tecvol.mjs:19-21",
+      "reason": "saveImage at 65-70 validates an image, writes a sibling temporary file and renames it over the destination. put/era/create/recipe use this helper; install writes a device directly, not an image replacement.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        69
+      ],
+      "current_book_lines": [
+        73
+      ],
+      "old_citation": "tools/tecvol.mjs:20-21",
+      "new_citation": "tools/tecvol.mjs:20-21",
+      "reason": "The explicit single-writer rule concerns TEC-OS and the PC editing one card. In-image commands publish via saveImage; TEC-OS has separate in-memory allocation/cache state, so concurrent edits violate that rule.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        65
+      ],
+      "current_book_lines": [
+        69
+      ],
+      "old_citation": "tools/tecvol.mjs:29-33",
+      "new_citation": "tools/tecvol.mjs:29-33",
+      "reason": "usage prints the optional reason plus command usage and exits 2; main catches operational errors at 192-197 and exits 1.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        94
+      ],
+      "current_book_lines": [
+        98
+      ],
+      "old_citation": "tools/tecvol.mjs:35-39",
+      "new_citation": "tools/tecvol.mjs:35-39",
+      "reason": "whole validates decimal syntax and numeric bounds before main opens/creates an image. The multiple-of-eight alignment constraint belongs to createContainer, not this usage-error path.",
+      "status": "corrected",
+      "prose_edits": [
+        {
+          "old": "Any other `N` for either option is a mistake in the\ncommand line, found before the image is made",
+          "new": "The decimal range of each option is checked before the image is made"
+        }
+      ],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        43
+      ],
+      "current_book_lines": [
+        47
+      ],
+      "old_citation": "tools/tecvol.mjs:41-63",
+      "new_citation": "tools/tecvol.mjs:41-63",
+      "reason": "parseArgs gathers positional arguments and recognised options regardless of order and sends unknown --options to usage before command dispatch.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        56
+      ],
+      "current_book_lines": [
+        60
+      ],
+      "old_citation": "tools/tecvol.mjs:47-51",
+      "new_citation": "tools/tecvol.mjs:47-51",
+      "reason": "--user accepts only one or two decimal digits with value <=15 and exits via usage before image access otherwise; omitted user remains undefined for dir and defaults to zero for other operations.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        95
+      ],
+      "current_book_lines": [
+        99
+      ],
+      "old_citation": "tools/tecvol.mjs:52-53",
+      "new_citation": "tools/tecvol.mjs:52-53",
+      "reason": "--align accepts decimal values 1..FFFFFFh and --drives accepts 1..4 through whole. Alignment modulo eight is checked separately in createContainer:89-90.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        49
+      ],
+      "current_book_lines": [
+        53
+      ],
+      "old_citation": "tools/tecvol.mjs:65-71",
+      "new_citation": "tools/tecvol.mjs:65-71",
+      "reason": "saveImage calls parseContainer before writing a sibling temporary file, then atomically renames it over the image. No caller writes the original image before this helper succeeds.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        45
+      ],
+      "current_book_lines": [
+        49
+      ],
+      "old_citation": "tools/tecvol.mjs:73-76",
+      "new_citation": "tools/tecvol.mjs:73-76",
+      "reason": "openImage reads the image then calls parseContainer; every existing-image command in main uses it before its own operation.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        79
+      ],
+      "current_book_lines": [
+        83
+      ],
+      "old_citation": "tools/tecvol.mjs:85-89",
+      "new_citation": "tools/tecvol.mjs:85-89",
+      "reason": "parseVolumeSpec splits geometry:label:mount:flags, accepts only ro and wb flags and treats an empty mount as unmounted; createContainer validates the resulting volume definitions.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        303
+      ],
+      "current_book_lines": [
+        307
+      ],
+      "old_citation": "tools/tecvol.mjs:91-101",
+      "new_citation": "tools/tecvol.mjs:91-101",
+      "reason": "fileFetcher fetches http/https references and treats every other URL as a path relative to the recipe directory; buildRecipe checks sizes/digests after fetching.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        57
+      ],
+      "current_book_lines": [
+        61
+      ],
+      "old_citation": "tools/tecvol.mjs:107",
+      "new_citation": "tools/tecvol.mjs:107",
+      "reason": "main defaults user to zero; get, put and era pass that value, while dir deliberately uses opts.user directly so omission lists every user.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        77
+      ],
+      "current_book_lines": [
+        81
+      ],
+      "old_citation": "tools/tecvol.mjs:109-114",
+      "new_citation": "tools/tecvol.mjs:109-114",
+      "reason": "create requires an output name and volume spec, rejects an existing image, calls createContainer then saveImage and prints nothing on success.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        112
+      ],
+      "current_book_lines": [
+        116
+      ],
+      "old_citation": "tools/tecvol.mjs:115-132",
+      "new_citation": "tools/tecvol.mjs:115-132",
+      "reason": "info/verify parse the container before printing the container line, inspect each CpmVolume, print file count/free bytes and issues, and exit 1 for verify when structural issues were found.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        139
+      ],
+      "current_book_lines": [
+        143
+      ],
+      "old_citation": "tools/tecvol.mjs:124-127",
+      "new_citation": "tools/tecvol.mjs:124-127",
+      "reason": "The template prints drive, padded label, id, geometry, start, read-only/write-behind flags, file count and free bytes. Computing freeBytes may throw before console.log receives the volume line.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        159
+      ],
+      "current_book_lines": [
+        163
+      ],
+      "old_citation": "tools/tecvol.mjs:133-140",
+      "new_citation": "tools/tecvol.mjs:133-140",
+      "reason": "dir selects A by default, lists through fs.list with optional user filtering and prints record-based bytes plus R/O and SYS attributes.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        58
+      ],
+      "current_book_lines": [
+        62
+      ],
+      "old_citation": "tools/tecvol.mjs:136",
+      "new_citation": "tools/tecvol.mjs:136",
+      "reason": "dir passes opts.user rather than the zero-defaulted user local, so undefined enumerates every user area as documented.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        182
+      ],
+      "current_book_lines": [
+        186
+      ],
+      "old_citation": "tools/tecvol.mjs:141-149",
+      "new_citation": "tools/tecvol.mjs:141-149",
+      "reason": "put reads the selected volume, calls fs.write with user/text/ro/sys/force and only publishes through saveImage after write succeeds; default card name is the uppercased host basename.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        231
+      ],
+      "current_book_lines": [
+        235
+      ],
+      "old_citation": "tools/tecvol.mjs:150-159",
+      "new_citation": "tools/tecvol.mjs:150-159",
+      "reason": "get reads the selected user file with optional text conversion before writing an OUTFILE or stdout; a read error cannot create that output file.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        253
+      ],
+      "current_book_lines": [
+        257
+      ],
+      "old_citation": "tools/tecvol.mjs:160-167",
+      "new_citation": "tools/tecvol.mjs:160-167",
+      "reason": "era calls fs.erase with the requested user/force, sends zero erased entries to usage (exit 2) and publishes only a successful erase.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        65
+      ],
+      "current_book_lines": [
+        69
+      ],
+      "old_citation": "tools/tecvol.mjs:164",
+      "new_citation": "tools/tecvol.mjs:164",
+      "reason": "A zero return from fs.erase triggers usage for NAME not found, so a missing file is a command-line error with exit 2, unlike read-only operational failures.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        290
+      ],
+      "current_book_lines": [
+        294
+      ],
+      "old_citation": "tools/tecvol.mjs:168-174",
+      "new_citation": "tools/tecvol.mjs:168-174",
+      "reason": "recipe parses the supplied JSON, fetches files relative to the recipe directory through buildRecipe and saves the completed image; recipe helpers validate schema, file sizes and SHA-256.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        324
+      ],
+      "current_book_lines": [
+        328
+      ],
+      "old_citation": "tools/tecvol.mjs:175-186",
+      "new_citation": "tools/tecvol.mjs:175-186",
+      "reason": "install requires a device and --yes, validates the image through openImage then writes it at device offset zero and closes the descriptor; it makes no device-identity check.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-f-tecvol.md",
+      "book_lines": [
+        66
+      ],
+      "current_book_lines": [
+        70
+      ],
+      "old_citation": "tools/tecvol.mjs:192-197",
+      "new_citation": "tools/tecvol.mjs:192-197",
+      "reason": "The entrypoint catches rejected main operations, prints tecvol: plus the error and exits 1. Deliberate usage errors exit 2 earlier.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        252
+      ],
+      "current_book_lines": [
+        257
+      ],
+      "old_citation": "web/build.mjs:1-4",
+      "new_citation": "web/build.mjs:1-4",
+      "reason": "The build script consumes dist ROMs and recipes and explicitly documents running after build/media; its body bundles main.mjs and copies those release inputs to web/dist.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        263
+      ],
+      "current_book_lines": [
+        268
+      ],
+      "old_citation": "web/build.mjs:14",
+      "new_citation": "web/build.mjs:14",
+      "reason": "PROFILES contains only tecos; the same ROM is copied for every display and width, which the startup file selects at runtime.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        258
+      ],
+      "current_book_lines": [
+        263
+      ],
+      "old_citation": "web/build.mjs:16",
+      "new_citation": "web/build.mjs:16",
+      "reason": "The build removes OUT recursively before creating its output folders, so older output files cannot persist through a build.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        256
+      ],
+      "current_book_lines": [
+        261
+      ],
+      "old_citation": "web/build.mjs:20-30",
+      "new_citation": "web/build.mjs:20-30",
+      "reason": "esbuild bundles main.mjs to app.js as ESM, with minification and a sourcemap; its fs alias points at web/stub/fs.mjs.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        260
+      ],
+      "current_book_lines": [
+        265
+      ],
+      "old_citation": "web/build.mjs:32-45",
+      "new_citation": "web/build.mjs:32-45",
+      "reason": "The copy loop publishes index/style, the single ROM, numeric symbols from its D8 map, page.recipe.json as starter.recipe.json and every dist/files entry.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        269
+      ],
+      "current_book_lines": [
+        274
+      ],
+      "old_citation": "web/src/main.mjs:174-190",
+      "new_citation": "web/src/main.mjs:174-190",
+      "reason": "frame caps elapsed time at 100 ms, targets 4 MHz cycles, pumps queued input between steps and checks a 30 ms wall-clock deadline once per 1024 steps. The replacement prose states this periodic check accurately.",
+      "status": "corrected",
+      "prose_edits": [
+        {
+          "old": "It stops early after 30\nms of the PC's time",
+          "new": "It checks a 30 ms budget every 1,024 instructions and stops when a\ncheck finds that budget exhausted"
+        }
+      ],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        274
+      ],
+      "current_book_lines": [
+        279
+      ],
+      "old_citation": "web/src/main.mjs:191-195",
+      "new_citation": "web/src/main.mjs:191-195",
+      "reason": "Once more than a second elapses, the frame loop computes MHz from emulated cycles over host elapsed time and prints paused when not running, then resets its measurement window.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        273
+      ],
+      "current_book_lines": [
+        278
+      ],
+      "old_citation": "web/src/main.mjs:222-233",
+      "new_citation": "web/src/main.mjs:222-233",
+      "reason": "render obtains a runtime state update, draws the five display types and writes the latch, selected physical bank and Caps lamp state below them; it also pulls serial output.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        281
+      ],
+      "current_book_lines": [
+        286
+      ],
+      "old_citation": "web/src/main.mjs:358-386",
+      "new_citation": "web/src/main.mjs:358-386",
+      "reason": "pullSerial consumes only newly decoded serial bytes, suppresses ANSI escape sequences and passes backspaces to appendSerial, which removes the previous character.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        68
+      ],
+      "current_book_lines": [
+        72
+      ],
+      "old_citation": "web/src/main.mjs:358-386",
+      "new_citation": "web/src/main.mjs:358-386",
+      "reason": "pullSerial consumes only newly decoded serial bytes, suppresses ANSI escape sequences and passes backspaces to appendSerial, which removes the previous character.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        87
+      ],
+      "current_book_lines": [
+        91
+      ],
+      "old_citation": "web/src/main.mjs:540-549",
+      "new_citation": "web/src/main.mjs:540-549",
+      "reason": "refreshCard prints the mounted volume summary and appends either the noSave reload notice or the unsaved notice. save at 118-147 emits the detailed transient/repeated-failure notices.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        49
+      ],
+      "current_book_lines": [
+        53
+      ],
+      "old_citation": "web/src/main.mjs:569-582",
+      "new_citation": "web/src/main.mjs:569-582",
+      "reason": "refreshFiles lists user/name/record bytes and binds downloads. Five-second scheduling and reset-triggered refresh are in 667-680, not in the display/width handlers at 656-662.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/27-host-model.md",
+      "book_lines": [
+        285
+      ],
+      "current_book_lines": [
+        290
+      ],
+      "old_citation": "web/src/store.mjs:6-8",
+      "new_citation": "web/src/store.mjs:6-8",
+      "reason": "The constants define IndexedDB database tecos, object store cards and key current. open/loadCard/saveCard use those same constants for the transaction and persisted card bytes.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
+    },
+    {
+      "book_path": "tec-os/appendix-i-web-page.md",
+      "book_lines": [
+        76
+      ],
+      "current_book_lines": [
+        80
+      ],
+      "old_citation": "web/src/store.mjs:6-8",
+      "new_citation": "web/src/store.mjs:6-8",
+      "reason": "The constants define IndexedDB database tecos, object store cards and key current. open/loadCard/saveCard use those same constants for the transaction and persisted card bytes.",
+      "status": "accepted",
+      "prose_edits": [],
+      "inventory_status": "mapped"
     }
-  ]
+  ],
+  "preparation_source_references": [
+    "tools/lib/tas-rom.mjs:10-11",
+    "tools/lib/tas-rom.mjs:77-124",
+    "tools/lib/pins.mjs:10-48",
+    "tools/inputs.mjs:37-65",
+    "tools/build.mjs:234-249",
+    "tools/media.mjs:205-207",
+    "programs/SAMPLE.ASM:184-186",
+    "src/pico.asm:324-327",
+    "src/pico.asm:645-647",
+    "test/inputs.json:1-2",
+    "package-lock.json:1-2"
+  ],
+  "preparation_reference_scope": "Inputs, setup, compact SAMPLE and palette facts reviewed before the frozen original citation inventory was resolved; dependency lock identity is also retained for final-offer comparison."
 }

@@ -29,6 +29,8 @@ ledger = json.loads(ledger_bytes)
 if a.record and (not isinstance(ledger, dict) or revision != ledger.get('source_revision')):
     raise SystemExit('record revision must equal the reviewed ledger source_revision')
 rows = ledger['resolutions'] if isinstance(ledger, dict) else ledger
+if isinstance(ledger, dict):
+    rows = rows + [{'new_citation': reference} for reference in ledger.get('preparation_source_references', [])]
 paths = set()
 source_cache = {}
 for row in (rows if a.record else []):

@@ -51,7 +51,7 @@ The page's recipe has the starter card's files and `DEMO.COM`, the program
 Chapter 10 describes (`tools/media.mjs:192-210`, `tools/media.mjs:230-239`, `tools/media.mjs:256-260`). The file list under "Drive"
 shows each file's user area, name and size. It is read again every 5
 seconds and after a reset (`web/src/main.mjs:569-582`,
-`web/src/main.mjs:656-662`). The width and the display chosen are kept in the
+`web/src/main.mjs:667-680`). The width and the display chosen are kept in the
 browser's local storage, so a reload keeps them (`web/src/main.mjs:17-19`).
 Once a second the speed reached is shown in MHz beside "Pause".
 
@@ -151,7 +151,7 @@ The first line the page writes:
 The file has no line for the other display (`host/card.mjs:104-117`). The
 page's board with the PICO9918 has the graphics LCD as well, and there a
 `GLCD.SVC` line would load nothing. `CON UC1` loads `GLCD.SVC` itself when
-you move the console to it (`src/cpm/ccpcmd.asm:117-119`).
+you move the console to it (`src/cpm/ccpcmd.asm:199-204`).
 
 The file's other lines stay, less their display pieces
 (`host/card.mjs:11-15`, `host/card.mjs:81-102`). A display piece is either of
@@ -171,7 +171,7 @@ piece:
 Lines left blank are dropped. Nothing is written when the new text equals the
 old. The starter card's `STARTUP.CMD`, `GLCD.SVC` alone, stays as it is for
 the graphics LCD. For the PICO9918 it holds a `CON PICO` line, or nothing
-but its `^Z` at 80 columns (`test/pico.test.mjs:832-844`).
+but its `^Z` at 80 columns (`test/pico.test.mjs:834-846`).
 
 ## Cards left as they are
 

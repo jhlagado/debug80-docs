@@ -172,16 +172,16 @@ CON: UC1:
 A>
 ```
 
-`runUntil` steps until a test function returns true, and fails after a limit
-of cycles (`host/machine.mjs:269-279`). `expect` runs until the console output
+`runUntil` steps until a test function returns true, and fails after a limit of
+cycles (`host/machine.mjs:269-279`). `expect` runs until the console output
 matches a pattern, testing it only when the output has grown. It then runs on
-until the console waits, so that the last character has reached the screen
-(`host/machine.mjs:301-321`). `waitingForInput` is true while the program
-counter is in one of the console's input loops, found by symbol
-(`host/machine.mjs:323-335`). `ready` adds that the startup file has finished
-and the CCP is reading a line, from `STPOS` and `HFLAG`
-(`host/machine.mjs:337-342`). `capture.mjs` waits on `ready` and on output
-ending in a prompt.
+until the console waits or a bounded settling interval expires, allowing the
+last character to reach the screen (`host/machine.mjs:301-321`).
+`waitingForInput` is true while the program counter is in one of the console's
+input loops, found by symbol (`host/machine.mjs:323-335`). `ready` adds that the
+startup file has finished and the CCP is reading a line, from `STPOS` and
+`HFLAG` (`host/machine.mjs:337-342`). `capture.mjs` waits on `ready` and on
+output ending in a prompt.
 
 Typing takes two forms. `type` sends each character to the serial port only
 when TEC-OS is waiting for one. It then waits until TEC-OS has taken it
@@ -207,17 +207,17 @@ and the latches start again, and RAM and the card stay as they were
 
 ## The tests
 
-`npm test` runs every file in `test/` that ends `.test.mjs`, one at a time,
-with Node.js's own test runner (`package.json:17`). There are 55 such files,
-from `arith.test.mjs` to `write.test.mjs`, each on one part of TEC-OS. Most
-build their machines with `boot` in `test/lib/fixtures.mjs`. It reads the one
-ROM, `build/tecos/tecos.rom`, and readies the card for the board's display
+`npm test` runs every file in `test/` that ends `.test.mjs`, one at a time, with
+Node.js's own test runner (`package.json:17`). There are 56 such files, from
+`arith.test.mjs` to `write.test.mjs`, each on one part of TEC-OS. Most build
+their machines with `boot` in `test/lib/fixtures.mjs`. It reads the one ROM,
+`build/tecos/tecos.rom`, and readies the card for the board's display
 (`test/lib/fixtures.mjs:21-27`, `test/lib/fixtures.mjs:93-121`). With the
-graphics LCD and the matrix keyboard the card gets `GLCD.SVC` and a startup
-file naming it. With the PICO9918 the console is the ROM's, so the card gets a
-startup file only for a width other than 80, a `CON PICO` line. A card that
-has a `STARTUP.CMD` keeps it. `boot` then runs to the first prompt with the
-clock at the tests' starting time.
+graphics LCD and the matrix keyboard the card gets `GLCD.SVC` and a startup file
+naming it. With the PICO9918 the console is the ROM's, so the card gets a
+startup file only for a width other than 80, a `CON PICO` line. A card that has
+a `STARTUP.CMD` keeps it. `boot` then runs to the first prompt with the clock at
+the tests' starting time.
 
 `test/lib/fixtures.mjs` also makes the files the tests load. `program`
 assembles a source in `test/programs/` with ATOM and keeps the result in
@@ -231,7 +231,7 @@ file system for a test to write files into. That file system is `CpmVolume`,
 from `tools/lib/cpmfs.mjs`, which `tecvol` and the page use too. Its `read`
 throws for an entry that names a block past `DSM`. Its `write` over a file
 with the read-only attribute, and its `erase` of one, are rejected as the BDOS
-rejects them, unless the call sets `force` (`tools/lib/cpmfs.mjs:123-130`,
+rejects them, unless the call sets `force` (`tools/lib/cpmfs.mjs:123-150`,
 `tools/lib/cpmfs.mjs:152-160`, `tools/lib/cpmfs.mjs:175-191`).
 
 Two inputs the tests use come from outside the repository: the starter card's
@@ -270,14 +270,15 @@ is the ROM's, and a `CON PICO` line in the startup file sets its width
 (`host/card.mjs:1-4`).
 
 Each frame of the browser's display, the page runs the machine for the time
-since the last frame at 4 MHz, at most 100 ms of it. It stops early after 30
-ms of the PC's time (`web/src/main.mjs:174-190`). Between steps it pumps any
-typed input in. It then draws the PICO9918's screen, the 7-segment digits,
-the 8 × 8 LEDs, the 20 × 4 LCD and the graphics LCD from the runtime's state.
-Under the board it shows the latch's value, the bank in the window and the
-Caps lamp (`web/src/main.mjs:222-233`). Once a second it shows the speed
-reached, in MHz (`web/src/main.mjs:191-195`). The machine is made with no
-`clock`, so its DS1302 reads the PC's time (`web/src/main.mjs:86-95`).
+since the last frame at 4 MHz, at most 100 ms of it. It checks a 30 ms budget
+every 1,024 instructions and stops when a check finds that budget exhausted
+(`web/src/main.mjs:174-190`). Between steps it pumps any typed input in. It then
+draws the PICO9918's screen, the 7-segment digits, the 8 × 8 LEDs, the 20 × 4
+LCD and the graphics LCD from the runtime's state. Under the board it shows the
+latch's value, the bank in the window and the Caps lamp
+(`web/src/main.mjs:222-233`). Once a second it shows the speed reached, in MHz
+(`web/src/main.mjs:191-195`). The machine is made with no `clock`, so its DS1302
+reads the PC's time (`web/src/main.mjs:86-95`).
 
 Typing goes to the board two ways (`web/src/main.mjs:411-427`). With the
 PICO9918's screen or the graphics LCD focused, a key goes to the matrix

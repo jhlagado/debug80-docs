@@ -151,7 +151,7 @@ B>
 ```
 
 The service loads. The space at byte 24 has become `20h` + `B8h`, `D8h`.
-`PUTTRIM` masks bit 7 (`src/cpm/ccpfile.asm:325-327`), so the name prints
+`PUTTRIM` masks bit 7 (`src/cpm/ccpfile.asm:498-501`), so the name prints
 with an `X`.
 
 ## GLCD.SVC

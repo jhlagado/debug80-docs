@@ -38,17 +38,17 @@ call should also cost the same however many services are in.
 Relocation adds a page number to the high byte of each address, so a service
 starts on a page boundary. With a service in, the word holds `xx00h`, the
 page's start. Offset 0 of the page holds `JP BENTRY`, a jump straight into the
-ROM (`src/loader.asm:393-398`, `test/svc.test.mjs:159`). Offset 0 is the
+ROM (`src/loader.asm:393-398`, `test/svc.test.mjs:154-159`). Offset 0 is the
 service's lowest byte, so nothing the service needs lies below the word. A
-stack set from the word grows away from it (`test/svc.test.mjs:872`). No service
+stack set from the word grows away from it (`test/svc.test.mjs:870-905`). No service
 is on the path of a BDOS call, so each `JP` goes straight to `BENTRY`. A BDOS
 call is therefore always two jumps, the one at `0005h` and the one at the word.
-That holds with none, one or two services in (`test/svc.test.mjs:907`).
+That holds with none, one or two services in (`test/svc.test.mjs:907-928`).
 
 With no service in, the word holds the address of the BDOS entry jump, the
 *stub*, and `STUBAD` keeps that address. `ALVINIT` puts the stub directly below
 the lowest allocation vector, so the TPA keeps every byte up to the vectors
-(`src/boot.asm:456-460`). On the starter card the vectors start at `B9A7h` and
+(`src/boot.asm:749-754`). On the starter card the vectors start at `B9A7h` and
 the stub is at `B9A4h`. Its low byte varies with the card, so a program assumes
 nothing of it. `PZINIT` writes the stub's three bytes at every warm boot
 (`src/boot.asm:392-410`).
@@ -261,9 +261,9 @@ untouched. `PZINIT` writes `PZTOP` to `0006h` (`src/boot.asm:400-402`), and warm
 boot clears `SVCBSY` (`src/boot.asm:192-194`). The pages go back as if the load
 had never started, and `test/svc.test.mjs:469-482` checks that a later load
 works. Function 47 from `INIT` is a warm boot at the same point
-(`test/svc.test.mjs:931`). The sweep in `PZINIT` takes any restart vector `INIT`
+(`test/svc.test.mjs:930-938`). The sweep in `PZINIT` takes any restart vector `INIT`
 has pointed into its pages, since the new pages lie below `PZTOP`
-(`test/svc.test.mjs:833`). A hook already in the table then points into the
+(`test/svc.test.mjs:833-838`). A hook already in the table then points into the
 TPA, which is why hooks go last (`test/svc.test.mjs:498-505`). A reset during a
 hung `INIT` is recognised all the same, because `RSLCAP` doesn't compare the
 word at `0006h` with `PZTOP` (`src/boot.asm:213-299`).
@@ -284,7 +284,7 @@ empty (`src/loader.asm:423-450`, `src/loader.asm:452-481`). `DJNZ` then allows 2
 with the registry empty. The registry therefore never holds more than the 256
 records that `FIND` and `LIST` walk. A list longer than that, or one that
 loops, ends the walk and the load fails (`src/loader.asm:480-481`,
-`test/svc.test.mjs:256`, `test/svc.test.mjs:267-306`). On a board whose PICO9918 console started, a
+`test/svc.test.mjs:256-265`, `test/svc.test.mjs:267-306`). On a board whose PICO9918 console started, a
 service of 128 records and then one of 127 load. The console's record is the
 256th and still found, and a second service of 128 is rejected.
 
@@ -315,7 +315,7 @@ its own work (`src/loader.asm:419-421`). A record that fails its check goes to
 cause, and calls `REMOVE` to undo a good `INIT` (`src/loader.asm:483-493`). If
 `REMOVE` fails, `SVCKEEP` records 2 and commits. The pages are kept and no
 record is linked (`src/loader.asm:494-497`, `src/loader.asm:542-547`,
-`test/svc.test.mjs:437`).
+`test/svc.test.mjs:437-444`).
 
 A failed load may have left a hook in the RAM BIOS table, and the service's
 pages can't go while one points at them. So `SVCSCAN` tests the high byte of
@@ -329,7 +329,7 @@ the service, and it goes to `SVCKEEP` (`src/loader.asm:536-547`). A hook left in
 the table then points at pages the service still holds, and
 `test/svc.test.mjs:423-435` shows them surviving a warm boot. The scan reads
 only that table, so the table that `DRVR` records for `UC1:` is beyond it
-(`test/svc.test.mjs:572`).
+(`test/svc.test.mjs:572-578`).
 
 A service kept this way appears in `SERVICES`, because `CMDSVC` walks the owner
 list from `SVCHEAD`, not the registry (`src/cpm/ccpcmd.asm:781-819`). Each
@@ -349,14 +349,14 @@ the generation in `A` (`src/loader.asm:733-758`, `src/loader.asm:805-811`, `src/
 `CP C`. On a match it returns the table's address from offset 11
 (`src/loader.asm:769-800`). Newer records are at the front of the list, so a find
 reaches the newest of a name first. A removal uncovers the older
-(`test/svc.test.mjs:536`). On a board where the ROM's PICO9918 console started,
+(`test/svc.test.mjs:536-545`). On a board where the ROM's PICO9918 console started,
 `PISTART` writes its record, `PIREC`, to `REGHEAD` at cold boot, before any
 service loads. That record is the list's last and no removal reaches it
 (`src/pico.asm:74-75`).
 
 A program can make the list into a cycle, so the walk has a limit. `B` is 0 at
 `REGF1`, so `DJNZ` allows 256 rounds, and such a list can't hold the caller
-(`src/loader.asm:821-823`, `test/svc.test.mjs:580`). The walk uses at most 8
+(`src/loader.asm:821-823`, `test/svc.test.mjs:580-588`). The walk uses at most 8
 bytes of the caller's stack, three `PUSH`es and the return address
 (`src/loader.asm:777-780`). `abi.inc` gives 8 bytes as the bound for each of the
 two, the dispatcher's included (`src/abi.inc:121-131`). The loader's count of the
@@ -364,16 +364,16 @@ registry before a load has no limit of rounds. `SVCNT` stops only at a link of
 0. After a program has made the list a cycle, the next service load never
 returns and only a reset ends it (`src/loader.asm:436-445`). The registry has no
 service for removal. Number 16, one past `FONT`, returns carry from the
-dispatcher, and the service stays found (`test/svc.test.mjs:386`). A record is
+dispatcher, and the service stays found (`test/svc.test.mjs:383-388`). A record is
 visible to a client only once `SVCLK` has linked it, so a service can't find
-its own record during `INIT` (`test/svc.test.mjs:461`).
+its own record during `INIT` (`test/svc.test.mjs:461-467`).
 
 Only the lowest service can go. That rule keeps true the three bytes each
 header saves, the registry's head and the lowest service's page. Each header
 holds that state from before its own load, and the states are stacked in
 memory in the order of the loads.
 
-`UNLOAD` calls `SVCUNL` (`src/cpm/ccpcmd.asm:8-10`), which rejects the command
+`UNLOAD` calls `SVCUNL` (`src/cpm/ccpcmd.asm:13-17`), which rejects the command
 while `SVCBSY` is set. It uses the 0 it read there as `L`, making `HL` the base
 of the page in `PZTOP` (`src/loader.asm:120-127`). That page must equal `SVCHEAD`,
 which is 0 with no service in, so the test then fails. Bit 0 of the flags must
@@ -382,7 +382,7 @@ also be set (`src/loader.asm:128-135`).
 `SVCCALL` then runs `REMOVE`. `SVCSHUT` clears `SVCBSY` without touching the
 flags, and carry from `REMOVE` returns with nothing changed
 (`src/loader.asm:136-145`). Function 47 from `REMOVE` is a warm boot there, and the
-service stays listed (`test/svc.test.mjs:940`). With no carry, `SVCFRE` writes 0
+service stays listed (`test/svc.test.mjs:930-949`). With no carry, `SVCFRE` writes 0
 over the first byte of each restart vector the flags claim
 (`src/loader.asm:146-150`, `src/loader.asm:594-616`). `LDIR` copies the 3 bytes at
 offset 6 back to `REGHEAD` and `SVCHEAD` (`src/loader.asm:151-157`). This one copy
@@ -405,7 +405,7 @@ the record as a dependency so that its own load fails without it, as
 A warm boot keeps all of this, since `REGHEAD`, `SVCHEAD` and `PZTOP` lie past
 `BDOSRME`, the end of the range `CPMINIT` clears (`src/ram.asm:292-294`,
 `src/ram.asm:353-375`). Cold boot clears the workspace, so a reset empties both
-lists (`src/boot.asm:73-79`, `test/svc.test.mjs:390`).
+lists (`src/boot.asm:73-79`, `test/svc.test.mjs:390-402`).
 
 ## The limits of the loader's checks
 
@@ -418,19 +418,19 @@ keeps a vector whose jump lands above `PZTOP` and clears the rest, as
 [Chapter 15](15-reset-and-boot.md#page-zero) describes. `UNLOAD` and a failed
 `INIT` call it once the top is back. A vector into freed pages then fails the
 bound (`src/loader.asm:163-166`, `src/loader.asm:529-532`,
-`test/svc.test.mjs:810`, `test/svc.test.mjs:818`). A reset clears page zero, so
-a vector goes with its service then too (`test/svc.test.mjs:858`).
+`test/svc.test.mjs:810-816`, `test/svc.test.mjs:818-823`). A reset clears page zero, so
+a vector goes with its service then too (`test/svc.test.mjs:858-868`).
 
 Two services can't share a vector, and `INIT` writes its own after the move, so
 the loader needs the claim in the header. Flags bits 1 to 7 name `RST 1` to
 `RST 7`, the vectors at `0008h` to `0038h`. Step 5 fails a load whose claimed
-vector holds a `JP` (`test/svc.test.mjs:840`). The test reads one byte, so a
+vector holds a `JP` (`test/svc.test.mjs:840-846`). The test reads one byte, so a
 jump into the ROM that a finished program left there counts as held until a
 reset. The loader reads only the flags. A vector `INIT` writes with no claim
 goes unseen, as a vector in a table that `DRVR` records does. `UNLOAD` and a
 failed `INIT` clear the first byte of each claimed vector before the sweep. The
-sweep then gives it its default whatever it held (`test/svc.test.mjs:798`,
-`test/svc.test.mjs:825`). A jump the service set outside its pages in a vector
+sweep then gives it its default whatever it held (`test/svc.test.mjs:798-808`,
+`test/svc.test.mjs:825-831`). A jump the service set outside its pages in a vector
 it didn't claim passes the bound, so `REMOVE` restores it. A failed `INIT` runs
 no `REMOVE`, so `INIT` restores it. `INIT` also turns off any source of
 interrupts it started, because an interrupt left on under the default `EI` and
@@ -450,7 +450,7 @@ can't then load. On a board with the PICO9918 as well the startup line leaves
 `GLCD.SVC` out, as above, and `COUNT.SVC` loads. The ROM's PICO9918 console is
 no service and declares nothing: its use is in the base.
 
-A service's real use shows only in a run. `test/svc.test.mjs:731` watches the
+A service's real use shows only in a run. `test/svc.test.mjs:710-737` watches the
 stacks on the host model, and a service that declares 2 and uses 6 on each
 stack loads all the same. The loader can check only the sum of what the
 headers state.
