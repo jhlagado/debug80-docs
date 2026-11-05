@@ -145,7 +145,7 @@ Generated files have build identities. Listing their names creates none.
 ### Route limitations to close before an executable offer
 
 At ea3, `tools/lib/prl.mjs:32–43` uses a case-sensitive ORG_LINE expression
-for uppercase ORG. `makeSvc` in `tools/lib/svc.mjs:100–107` uses it to split
+for uppercase ORG. `makeSvc` in `tools/lib/svc.mjs:93–99` uses it to split
 and rewrite the source. The intended lowercase `org` therefore cannot be
 assumed to work through that writer. A separately owned, reviewed writer
 change and its qualification are needed before promising that public route.
@@ -314,3 +314,15 @@ This plan used source reads, manual craft passes and inert text hashing only.
 Paragraph/sentence deletion, agency, every-comma and complete read-back passes
 covered the plan. No product module or fixture was imported and no assembler,
 test, emulator, capture tool or runtime was executed. Only this plan is changed.
+
+## Independent planning review
+
+The complete source-only planning review found one citation-range correction.
+At ea3ef3d the ORG split is atsvc.mjs95 and rewrite at97, within93–99.
+The range above is corrected from100–107. The uppercaseORG blocker itself
+remains supported byprl.mjs34 and the public-route limitations are unchanged.
+The lead read both numbered source bodies without importing them. Immutable
+shared inputs/fresh cases, separate qualification/sealing/allocation, proposed
+whole-job accounting, closedLINE and historical evidence boundaries were
+otherwise clear at this planning level. The private executable preparation
+was not part of that review. No runtime is authorised or performed.
