@@ -84,8 +84,9 @@ The destinations are headings in the new Chapter 22.
 No example is deleted, shortened or replaced by a cross-reference. No
 algorithm, limit, exclusion or lifetime rule is dropped. Headings and
 syllabus-style transitions are rewritten where the new teaching order
-requires them. Chapter 14 is referenced by number for the bank rule; final
-book links belong to integration rather than guessed draft filenames.
+requires them. The bank-rule link uses Chapter 14's final path from the
+revision ledger, `tec-os/14-state-and-memory.md`, with its draft's
+`expand-1-and-the-stack-boundary` anchor.
 
 ## Source proofs
 
@@ -159,6 +160,21 @@ The draft does not assert that arbitrary code cannot access the page.
 HPUT's write and readback are stated separately. The five captures retain
 `78127ec` and their original TED/TAS provenance, while the new source prose
 is checked only by inspection at `ea3ef3d`. No output was invented.
+
+## Independent review corrections
+
+The capture-recipe explanation now cites `tools/capture.mjs:102-106` at
+`ea3ef3d`. The `@start` branch appends `\r` to the supplied keys, queues
+them and pumps the input before its subsequent run interval. This source
+reading supports the keys-and-Return claim without rerunning the capture.
+The chapter now has 75 inline source-range citations.
+
+The Chapter 14 link now uses `14-state-and-memory.md`, matching the revision
+ledger's `tec-os/14-state-and-memory.md` final path. Its anchor matches
+“EXPAND 1 and the stack boundary” in the Chapter 14 draft. The relative
+link works between the drafts and between their planned final locations.
+Both corrections were read in their containing paragraphs. No capture,
+build, test or runtime execution was performed for these changes.
 
 ## Remaining acceptance
 
