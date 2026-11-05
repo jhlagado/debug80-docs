@@ -36,11 +36,15 @@ retained from an existing book example. Source inspection supports its call
 sequence but the located qualified chain cases exercise abort/reset while
 input waits. They do not prove normal completion followed by GOT and return.
 
-A positive assembly/input/output/return run must precede insertion of that
-example and its explanation into the reader draft. Name the exact assembler,
-source, ROM, card, input path and output evidence. Do not turn this need into
-an unallocated extra phase of the banner command. No program or result has
-been discarded while the candidate is held.
+The required positive assembly/input/output/return run was completed by the
+separate immutable37d214f4 offer. P3 independently accepted the retained result
+at Origo71696f2e, evidence/book-reader-rewrite/line-ea3-attempt01. The compact
+reader source is47logical bytes, ATOM/TAS-identical, with exact positive and
+Ctrl-C control observations. This closes only the serialea3 workflow hold.
+Whole-passage insertion and independent editorial/factual recheck remain
+required. Positive/abort console evidence begins at function10, without an
+earlier prompt or typed LINE command. TAS evidence begins at TAS LINE.
+Do not prepend unrecorded text or claim font/default/browser/board proof.
 
 ## Measurements and historical provenance
 
@@ -76,3 +80,12 @@ have been allocated to development. This is not a qualified source offer
 or an opening workflow allocation. Keep BANNER40 prepared but unrun.
 The modelling supplement's initial failure and corrected positive proof
 remain distinct retained records. No physical-display result follows.
+
+## Retained FAIL example
+
+Chapter13's full independent provenance audit found no explicit original
+execution record for FAIL, introduced at book5006e2c. The complete listing,
+recipe, output and interpretation remain in draft/13-fail-example-candidate.md
+outside reader prose. Source inspection supports the mechanism but not the
+claimed capture. Locate an actual original record or prepare a separate
+verification offer. No execution allocation follows from this queue.
