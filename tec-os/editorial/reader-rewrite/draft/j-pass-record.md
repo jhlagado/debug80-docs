@@ -21,3 +21,30 @@ no inanimate subject a mental action. It is retained as provenance. Every-
 sentence deletion, thematic, agency, every-comma and journey read-back passes
 are pending, as are independent editorial/factual result review and final
 navigation. This is a first draft, not accepted reference text.
+
+## Own revision passes
+
+Read the complete first draft in order, including both unchanged output fences.
+The thematic read kept syntax/lookup together and moved teaching recipes to
+named chapters. The sentence deletion read removed a redundant sentence about
+keeping the historical cases together and integrated its provenance into the
+capture introduction. File-operation outcomes remain because deletion would
+lose replacement, partial-result or protection distinctions.
+
+The agency pass retained only operative subjects/verbs. The punctuation read
+removed an optional comma before the file-name example and inspected every
+other comma, including table prose. Literal source/output punctuation remains
+unchanged. The journey read proceeds from field grammar to resolved operation,
+then lookup/configuration and chains. Short reference sentences remain where
+they state a complete lookup rule; no sentence-length quota was imposed.
+
+Two substantive corrections arose in that read. UNLOAD's summary now says it
+attempts the newest service, avoiding an implication that it skips one that
+cannot be removed. Wildcards are described as matching patterns only for DIR/
+ERA; COPY's resolved destination is tested after its blank-name substitution,
+so a discarded destination type can contain a star. The ERA confirmation rule
+now explicitly tests eleven stored question marks, not how many existing
+files happen to match. All are checked in the read source paths cited above.
+
+Mechanical gate is rerun after these edits. Independent editorial/factual
+review and final navigation remain pending. Historical output was not rerun.
