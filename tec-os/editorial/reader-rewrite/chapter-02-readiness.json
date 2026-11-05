@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "status": "scoped_receipt_read_authoring_authorised",
+  "status": "draft_prepared_scoped_workflow_accepted_independent_draft_review_pending",
   "book_snapshot": "10986d93ebe95b11f2268cc5fa4e6faa6d4dd8ce",
   "owned_path": "tec-os/editorial/reader-rewrite/chapter-02-readiness.json",
   "future_reader_path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
-  "future_reader_path_created": false,
+  "future_reader_path_created": true,
   "authority": {
     "outline_closure": "0e4feea",
     "profile_amendment": "KD-243 / KS48: planned 40-column TEC Compact opening",
@@ -76,7 +76,7 @@
       "containing_passages_read": [
         [
           1,
-          166
+          383
         ]
       ],
       "assigned_whole_units": 11,
@@ -211,16 +211,19 @@
     "current_boundaries": [
       {
         "path": "tec-os/editorial/reader-rewrite/draft/01-first-session.md",
-        "exists": false,
-        "disposition": "Absent. No current ending can be read. The closed outline supplies the predecessor contract only."
+        "exists": true,
+        "bytes": 9118,
+        "sha256": "dc76d143773c963725b235256b3268b23f9be6068d40e07382a1eb6765e7d015",
+        "read_complete": true,
+        "boundary": "Chapter 1 establishes prepared machine, SAMPLE and successful preservation."
       },
       {
         "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
         "exists": true,
-        "bytes": 10478,
-        "sha256": "cc3504e1d9a793f0aee7deaf912eba2f43e9819acde0c037db7e6bfa4146c161",
+        "bytes": 10364,
+        "sha256": "18db230d83aa4033ddcc3b224464b3a6c33e082acb6e5fc6ccc8968780b229df",
         "read_complete": true,
-        "boundary": "Opening assumes saved BANNER files on B. File commands and pager remain in Chapter 3."
+        "boundary": "Chapter 3 begins with saved BANNER files on B and teaches file operations/pager."
       },
       {
         "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
@@ -595,8 +598,8 @@
       "effect": "Keep the chapter claims within its accepted emulator workflow."
     }
   ],
-  "work_performed": "Read-only Git/text/JSON/tar inspection and inert hashing; closed receipt read in full. Only this readiness data is changed in this step. No product execution, imports, tests, builds or captures.",
-  "next_action": "Draft the authorised small-program route, then complete separate editorial and semantic passes before exact-path commit and push.",
+  "work_performed": "Closed receipt and actual BANNER artifacts read before prose. Source-only semantic checks at 962853f plus pinned TED overlay and its Edit dependency. Chapter draft and separate pass record prepared with editorial passes and inert literal comparisons. Only owned dossier/draft/pass record changed. No product execution, imports, tests, assembly, builds or new captures.",
+  "next_action": "Independent editorial and factual review of the new draft. No root integration, navigation changes or publication.",
   "scoped_receipt": {
     "commit": "4b5b5a50",
     "path": "studies/p3-tec-os/reviews/book-opening-workflows.md",
@@ -609,5 +612,6 @@
       "Edited save/build/run and preserved card reopened in fresh RAM with standalone execution."
     ],
     "limits": "Whole batch FAILED after the later service carry observer. No advanced service, physical-board, browser, audio or publication acceptance."
-  }
+  },
+  "draft_record": "tec-os/editorial/reader-rewrite/draft/02-pass-record.md"
 }
