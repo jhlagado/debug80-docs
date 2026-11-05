@@ -58,7 +58,7 @@ Ranges refer to the controlling book base, not newly numbered draft lines.
 | old04:34–35,37–39,41–45 | Retain info command and complete historical starter output unchanged. |
 | old04:47–51 | Retain all block/byte/volume offsets, default alignment and starter padding. Scope the header-only prefix to this two-volume image. |
 | old04:53–58 | Retain every info-field meaning, rw/ro/wb and directory-derived file/free totals. Link persistence Chapter 18. |
-| old04:60–67 | Retain 127-volume/four-drive limits, validation-before-mount, no mounted drives on failure and diagnostic/message/format references. |
+| old04:60–67 | Retain 127-volume/four-drive limits, returned all-or-empty mounting outcome and diagnostic/message/format references. |
 | old04:69,71–72,74–77 | Retain geometry definition and complete original table unchanged. |
 | old04:79–86 | Retain minimum data allocation, per-entry capacity, larger files, directory sizes/free-space arithmetic and 128/512-byte relationship. |
 | old04:88–91 | Retain CP/M 2.2 payload compatibility, copied-volume/cpmtools condition and geometry reference. |
@@ -199,3 +199,13 @@ acceptance remain open. The added text-input preparation has not been run
 as a new reproduction. Historical recipes/output retain their actual pins.
 No KS48 font/default or startup-policy implementation is claimed. No product
 execution, imports, builds, publication or new physical-board evidence.
+
+## Independent mount-order correction
+
+Accepted the sole finding from the full independent review at4939c23.
+The lead read ea3ef3d vol.asm completely: each descriptor is installed through
+MNONE before the next is checked, and MNTERR unmounts all after a later failure.
+The opening code comment is broader than the instructions. The reader text
+and preservation disposition now describe the all-or-empty result at return,
+not a validation pass before any installation. All historical fences are
+unchanged. Bounded confirmation pending. No execution or product change.
