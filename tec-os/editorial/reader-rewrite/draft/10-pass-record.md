@@ -188,3 +188,15 @@ Final source/profile adoption, integrated links/anchors and whole-book
 reader-order review remain open. Historical outputs keep their actual pin.
 No new result, program, font/default, board qualification or publication is
 claimed. I have not changed another writer's files or the shared ledger.
+
+## Independent correction disposition
+
+Accepted both full-review findings. LOADLIM probes into LOADBUF in CCP
+workspace, not a buffer at the ceiling. The lead read ccp.asm686–750 and
+ram.asm's LOADBUF declaration before changing that explanation. The close
+consequence now applies to a returned failure; a default-mode physical
+write error can abort through BDERR/CHDROP before SAVE receives a result.
+Read ccpcmd.asm360–445 and bdoscon.asm26–76 for that distinction. No literal
+listing, command, capture or historical figure changed. Reread both changed
+paragraphs and their neighbours for agency, punctuation and teaching order.
+Bounded independent confirmation remains pending. No execution occurred.

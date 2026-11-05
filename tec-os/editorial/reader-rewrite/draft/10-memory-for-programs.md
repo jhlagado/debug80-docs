@@ -261,8 +261,8 @@ A>
 
 The loader reads a COM file from `0100h` in 128-byte records. Its ceiling is the
 start of the 256-byte page containing the boundary address. It probes for end of
-file using a separate scratch buffer at that ceiling, so an extra record cannot
-overwrite resident memory. An oversized file gets the same
+file using `LOADBUF` in the CCP workspace. An extra record is therefore
+not loaded across the program's ceiling. An oversized file gets the same
 name-and-question-mark failure as a missing program.
 
 For the historical starter card, the last loaded record ended at `B8FFh`. That
@@ -338,7 +338,9 @@ A count above 255 is rejected too: `SAVE 320 X.COM` gives `320?`. SAVE erases an
 existing file of the chosen name before making the new one. A full directory
 produces `NO SPACE` before file creation. If the disk or directory fills after
 some records, SAVE closes the partial file before printing `NO SPACE`. A failed
-close also gives `NO SPACE`. The successfully closed file retains the records
+close that returns failure also gives `NO SPACE`. A physical disk-write
+error in the default BDOS mode can instead abort to warm boot before SAVE
+receives a result. The successfully closed file retains the records
 written.
 
 CP/M 2.2's SAVE leaves that partial file open. Its final extent's records may

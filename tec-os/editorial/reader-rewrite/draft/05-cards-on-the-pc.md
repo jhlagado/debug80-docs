@@ -108,9 +108,9 @@ block. `rw` means writable and `ro` means read-only. `wb` marks a volume
 written behind: TEC-OS can hold its recent changes in memory until a flush.
 The remaining fields count files and free bytes from the directory.
 
-Cold boot checks the header's name, version and checksum and every volume
-descriptor before mounting any drive. A failed check mounts nothing and
-stops at the diagnostic prompt. [Chapter 27](27-diagnose-the-machine.md)
+Cold boot validates the header's name, version and checksum and the volume
+descriptors. A failed check leaves no drive mounted and stops at the
+diagnostic prompt. [Chapter 27](27-diagnose-the-machine.md)
 explains that prompt and [Appendix D](appendix-d-error-messages.md) lists
 the codes. [Appendix E](appendix-e-container-format.md) gives every field.
 
