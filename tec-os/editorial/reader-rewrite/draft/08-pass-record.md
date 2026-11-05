@@ -59,10 +59,10 @@ whole unit assigned8. Explicit fragment overrides below take precedence.
 | `01-introduction.md:25–29` | A COM program and its calls: retain CCP/BDOS/BIOS roles, scope hardware independence to ordinary BDOS calls. |
 | `02-console.md:318–324` | Input while output is running: preserve pause/resume, abort, invisible list copy and one pending key. |
 | `07-first-program.md:25–28` | A COM program and its calls: preserve0100h/raw COM contract, clarify that literal data are program bytes too. |
-| `07-first-program.md:30–38` | Call contract, console table and final memory pointer: preserve C/E/DE/A/HL, no general register preservation and0006h. File table rows go9. |
-| `07-first-program.md:40–42` | Call contract, console table and final memory pointer: preserve C/E/DE/A/HL, no general register preservation and0006h. File table rows go9. |
-| `07-first-program.md:44–49` | Call contract, console table and final memory pointer: preserve C/E/DE/A/HL, no general register preservation and0006h. File table rows go9. |
-| `07-first-program.md:51–51` | Call contract, console table and final memory pointer: preserve C/E/DE/A/HL, no general register preservation and0006h. File table rows go9. |
+| `07-first-program.md:30–38` | Call contract, console table and memory-top pointer in the first section: preserve C/E/DE/A/HL, no general register preservation and0006h. File table rows go9. |
+| `07-first-program.md:40–42` | Call contract, console table and memory-top pointer in the first section: preserve C/E/DE/A/HL, no general register preservation and0006h. File table rows go9. |
+| `07-first-program.md:44–49` | Call contract, console table and memory-top pointer in the first section: preserve C/E/DE/A/HL, no general register preservation and0006h. File table rows go9. |
+| `07-first-program.md:51–51` | Call contract, console table and memory-top pointer in the first section: preserve C/E/DE/A/HL, no general register preservation and0006h. File table rows go9. |
 | `07-first-program.md:351–351` | Calls, returns and saved values / Returning to the prompt: preserve inherited0000h and all ordinary/abort exit forms, selection and flush with failure qualification. |
 | `07-first-program.md:353–355` | Calls, returns and saved values / Returning to the prompt: preserve inherited0000h and all ordinary/abort exit forms, selection and flush with failure qualification. |
 | `07-first-program.md:357–364` | Calls, returns and saved values / Returning to the prompt: preserve inherited0000h and all ordinary/abort exit forms, selection and flush with failure qualification. |
@@ -173,7 +173,49 @@ Initial prose_gate.py returned zero findings. Initial sentence_complexity.py
 reported129 sentences, mean13.0 words,0.61 joints per sentence and8% flagged,
 approximate grade6.7. This is a draft-stage report, not final acceptance.
 
-The full deletion, every-comma, final technical/literal and reader-journey passes
-follow as the next bounded step. Independent editorial/factual review, source
+The first source-backed draft and record were committed and pushed as b05cd66.
+After that durable draft I applied the following passes to the entire chapter:
+
+- Thematic/teaching: kept the reason for a console call before the register
+  contract. Defined byte registers and16-bit pairs locally. CALL/RET and the
+  inherited0000h word precede PUSH/POP, which precede the first code fragment.
+  Printing precedes key/line input, then pending input and direct I/O. The
+  complete table follows the uses it summarises. FCB/DMA and raw BIOS remain9/10.
+- Every paragraph/sentence deletion: read each in order, mentally removed it
+  and read across its neighbour. Removed the opening's generic convention
+  preview and the redundant explanation after the SHOW pointer. Kept short
+  stack arithmetic and code-contract sentences because each establishes a
+  value or dependency. Split CR/LF values from the string-end explanation.
+- Agency/plainness: replaced the register-preservation “promise” with the
+  precise absence of a universal kept-register contract. All machine subjects
+  perform operations such as reading, writing, echoing or restoring. The
+  counterexample about function9's terminator names an actual interface trap.
+- Every-comma/punctuation: read every authorial comma and semicolon in order.
+  Removed optional conjunction commas in the2/9 comparison, returned-value
+  rule, stack-depth consequence and buffer description. Remaining commas
+  delimit introductory clauses, apposition or actual lists. Literal source
+  semicolons and the complete table are unchanged. No prose em dash or Oxford
+  comma remains.
+- Technical/literal: re-read the relied entry, console, pending-byte and exit
+  paths. Static text comparison confirms the complete LINE listing matches
+  both78127ec andea3ef3d exactly, the SHOW fragment is unchanged, the entire
+  six-row console table matches old09 and the ^P row matches old02. All49
+  ranges in the citation inventory are in bounds across six source files.
+  Z80 call/push arithmetic is instruction semantics, not a new measurement.
+- Journey: read from title through the final unavailable-drive fallback.
+  The reader has the call and small-stack contracts before either example,
+  then sees the same DE/C setup for input and subsequent printing. The fixed
+  GOT text is distinguished from the counted input. Moved the0006h pointer
+  beside the initial call contract so the chapter ends on the returned prompt's
+  actual selection rule, without a forecast or summary.
+- Gates: prose_gate.py reports zero findings for chapter and pass record.
+  Final sentence_complexity.py reports131 sentences, mean12.5 words,
+  0.62 joints per sentence and5% flagged, approximate grade6.6. I read all
+  flags: short clobber/stack/provenance statements and the20/22-byte explanation
+  carry distinct facts. The isolated error-literal flag is a list item, not
+  a fragment of explanatory prose. An explicit agency/vocabulary/punctuation
+  search supplements the full reading. Diff whitespace checks are clear.
+
+Independent editorial/factual review, source
 and runtime acceptance, any allocated example execution and whole-book navigation
 remain open. No new banner/font/default is qualified and no publication is made.
