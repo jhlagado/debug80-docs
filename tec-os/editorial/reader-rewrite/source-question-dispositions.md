@@ -1,7 +1,7 @@
 # Source questions from the complete reading
 
 Source-only independent checking at offered TEC-OS
-`ea3ef3de9133931e925a0220d51c0e971c1fd8dd`. All eight findings are accepted
+`ea3ef3de9133931e925a0220d51c0e971c1fd8dd`. The initial eight findings are accepted
 as rewrite constraints. No execution, new capture or physical observation is
 claimed. Source ranges below belong to that offer, not the historical captures.
 
@@ -28,3 +28,14 @@ bit in CONDEV. src/pico.asm64–86 tests that enabled bit after the VDP probe.
 Describe a responding PICO and enabled Matrix switch, not two devices
 answering or an independent keyboard-presence test. Corrected drafts15,23
 and27 and flagged the same distinction for25 and remaining authors. No run.
+
+## Mount validation and publication order
+
+A complete text read of ea3ef3d src/vol.asm found the opening comment's
+claim that every descriptor is checked before any drive is mounted to be
+too strong. MNDESC checks one descriptor, MNSTOK calls MNONE for its assigned
+drive and MNNEXT advances to the next descriptor. MNTERR calls UNMOUNT
+after any later failure. Reader prose must describe the all-or-empty result
+at return without claiming a separate all-descriptors validation pass before
+installation. Chapter17 already gives that order. Chapter5's inherited
+before-any-drive sentence is under correction. No execution or product edit.
