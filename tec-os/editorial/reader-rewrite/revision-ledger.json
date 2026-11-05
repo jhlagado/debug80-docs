@@ -15849,7 +15849,7 @@
       "A-E": "comma-independent-A-E.json atfe1bdd9",
       "F-J": "Lead full changed-context read of5063451"
     },
-    "aggregate_independent": "Pending separate confirmation of aggregate identities/gate, not a new whole-book craft audit",
+    "aggregate_independent": "Closed by comma-gate-independent.json at59ddfc7:315 exactIDs,43 manual retentions,36 frozen input/script/raw-report identities and11 benign contexts verified. No fresh whole-book craft or runtime claim.",
     "final_gate": {
       "record": "prose-gate-post-punctuation.json",
       "snapshot_commit": "50634512002c6aeb6610a0a375ae407607e22560",
