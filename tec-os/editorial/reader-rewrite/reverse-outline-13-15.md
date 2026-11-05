@@ -56,7 +56,7 @@ not a repeated description of what the preceding part showed.
   console/debugger offsets, service-call discipline, workspace, stack placement
   and minimum program area. Preserve the differing backend checks precisely.
 - Final paragraph derives the starter allocation layout without executing the ROM.
-- Refresh debugger contracts and source coordinates against the final offer.
+- Refresh debugger contracts and source coordinates against the final source revision.
 
 ### One image for every board
 
@@ -133,7 +133,7 @@ state, clearing events and historical address provenance.
 ## Chapter 15: Reset, cold boot and warm boot
 
 Opening paragraph defines two restart mechanisms, their state effects and the
-chapter's chronological route, then promises a timing survey.
+chapter's chronological route and includes a timing survey.
 
 ### The first instruction
 
