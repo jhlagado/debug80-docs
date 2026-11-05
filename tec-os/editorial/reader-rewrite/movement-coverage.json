@@ -3,7 +3,7 @@
   "book_base": "10821b68f80c10d2037bbd1c5ab207877c897c68",
   "files": 37,
   "base_units": 2060,
-  "fragment_overrides": 22,
+  "fragment_overrides": 44,
   "checks": [
     "Frozen source SHA-256 matches every fully read file",
     "Every nonblank source line belongs to exactly one base movement unit",
@@ -13,5 +13,6 @@
     "Mechanical coverage only; independent review must judge destinations and prerequisites",
     "Overlapping fragment overrides intentionally split a parent by named sentence or table row",
     "No runtime result or prose quality inferred"
-  ]
+  ],
+  "movement_sha256": "adc099d7e32b8abf1600af777c599640be3afef77a587dc24b6c407a5c0dbdb4"
 }
