@@ -307,8 +307,9 @@ are unchanged. No root navigation or runtime change is included.
 ## Additional independent reader-order correction
 
 The complete external opening review at55807ed identified repeated cursor
-actions that only restore a status display. I reread the full reader chapter,
-its record and actual BANNER status sequence before the bounded edit. The
+actions that only restore a status display. I read the full reader chapter
+and actual BANNER status sequence before the edit, then the complete pass record
+during readback. The
 comment/blank-line explanation now precedes the listing. It distinguishes
 annotations from instructions before the reference comments name routines
 and registers. No source comment or assembly byte changes.

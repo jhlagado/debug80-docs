@@ -200,7 +200,7 @@
     },
     {
       "unit": "chapter-01",
-      "status": "Bounded independent factual/preservation and craft reviews closed; final source/navigation/whole-book review pending",
+      "status": "Previous bounded reviews closed; additional external reader corrections applied and awaiting context confirmation. Final source/navigation/whole-book review open.",
       "passes": {
         "full_passage_read": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
         "draft": "Writer completed at33f3b8a; actual scope and dispositions in01-pass-record.md. Independent review pending.",
@@ -774,7 +774,7 @@
     },
     {
       "unit": "chapter-02",
-      "status": "Bounded independent factual/preservation and craft reviews closed; final source/navigation/whole-book review pending",
+      "status": "Previous bounded reviews closed; additional external reader corrections applied and awaiting context confirmation. Final source/navigation/whole-book review open.",
       "passes": {
         "full_passage_read": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
         "draft": "Writer completed atc384c49; actual scope and dispositions in02-pass-record.md. Independent review pending.",
@@ -900,7 +900,7 @@
     },
     {
       "unit": "chapter-03",
-      "status": "Bounded independent factual/preservation and craft reviews closed; final source/navigation/whole-book review pending",
+      "status": "Previous bounded reviews closed; additional external reader corrections applied and awaiting context confirmation. Final source/navigation/whole-book review open.",
       "passes": {
         "full_passage_read": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
         "draft": "Writer completed at5b69415; actual scope and dispositions in03-pass-record.md. Independent review pending.",
@@ -16082,5 +16082,44 @@
     "status": "Selected for current mechanisms. Application/citation refresh and independent final source review pending; no blanket current-header replacement performed.",
     "invariants": "Historical78127ec/58d4345/60cfbdc/5a25178 captures, measurements, maps and recipes keep actual provenance. Explicit80/narrow/serial evidence unchanged. PICOv3, rawcold40 versus host/UI80 and five-pixel/eight-row font format remain distinct.",
     "scope": "Existing reader mechanism/citation/provenance correction only, no product policy, new runtime allocation, root integration, publication or whole-book acceptance."
+  },
+  "additional_opening_reader_review": {
+    "authority": "Origo0e07f18d, studies/p3-tec-os/reviews/book-opening-reader.md",
+    "reviewed_book": "55807ed",
+    "result": "No factual/capture blocker in demonstrated cases; seven additional teaching/craft findings accepted",
+    "status": "All seven applied; independent revised-context confirmation pending",
+    "dispositions": [
+      {
+        "finding": "Repeated status-only arrows in Chapter2",
+        "applied": "f913ec0 and a02a4b1",
+        "preservation": "Full observed nine-phase status navigation retained in02-pass-record and actual archive. Text-changing repair/navigation remains. No new simplified run claimed."
+      },
+      {
+        "finding": "Practical Chapter3 copying foothold",
+        "applied": "2ad313d",
+        "preservation": "Accepted actual COPY A:SAMPLE.ASM B:SAMPLE.ASM phase009rows8–11, freshstarter/emptyB explicit, no invented postBANNER REN/ERA run."
+      },
+      {
+        "finding": "Chapter3 pager to command-prompt transition",
+        "applied": "fa3a042"
+      },
+      {
+        "finding": "Source-comment explanation before Chapter2 listing",
+        "applied": "f913ec0"
+      },
+      {
+        "finding": "Both full stop and type may be omitted",
+        "applied": "2ad313d"
+      },
+      {
+        "finding": "Allocation aside beside copied-record result",
+        "applied": "fa3a042"
+      },
+      {
+        "finding": "Chapter1 final reference conjunction comma",
+        "applied": "fa3a042"
+      }
+    ],
+    "chapter5": "All seven actual extraction cases inserted379dd12; freshfixture qualification55807ed independentlyclosedb911e84. No new execution."
   }
 }
