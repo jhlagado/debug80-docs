@@ -70,7 +70,8 @@
       "prerequisite_result": "Operator COM/SVC distinction precedes install/list/remove; drives and areas precede lookup. Custom card is separately prepared, not a new starter prerequisite. Implementation links follow visible actions.",
       "evidence_boundary": "Every run stays historical78127ec. SAVE area3 is a prepared demonstration, not an unexplained program to run. Read-only file/volume, default/retained assignment and failure limits remain separate.",
       "findings": [],
-      "later_source_application": "Current source-caption/citation reconciliation pending; reread actual changed scope and prove unchanged body before final snapshot rebase."
+      "later_source_application": "Complete4b864→ea49949 changed contexts read; source-header adoption plus explicit six-findings corrections. Historical literal invariants verified. Earlier full page read remains distinct from bounded reread.",
+      "bounded_recheck_snapshot": "db58db7e13aa5e2a312861ac0cc5a66924ec7fbf"
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md",
@@ -84,63 +85,114 @@
       "prerequisite_result": "Host prerequisites and backup precede extraction. Volume/record meanings precede construction. Protection and device identity precede destructive operations. Recovery follows observed preservation limits.",
       "evidence_boundary": "PC7 is actual accepted attempt02. Fresh BANNER fixture versus continued SAMPLE outputs explicit. Raw384/CRLF286/tail98/text273 retain actual evidence. Historical/physical/browser examples not silently upgraded.",
       "findings": [],
-      "later_source_application": "Current source-caption/citation reconciliation pending; reread actual changed scope and prove unchanged body before final snapshot rebase."
+      "later_source_application": "Complete4b864→ea49949 changed contexts read; source-header adoption plus explicit six-findings corrections. Historical literal invariants verified. Earlier full page read remains distinct from bounded reread.",
+      "bounded_recheck_snapshot": "db58db7e13aa5e2a312861ac0cc5a66924ec7fbf"
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md",
-      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
-      "git_blob": "560a1234c43f6c99c5e7b213bb4dcea7daeccf85",
-      "sha256": "e0feb3100ad88f719a47e02adc98533c52fabb1932b456cbb4e0b154c938c5b3",
-      "status": "not_yet_read_in_this_final_sequence"
+      "snapshot": "db58db7e13aa5e2a312861ac0cc5a66924ec7fbf",
+      "git_blob": "14b3c3978422f50abceef66c26031161816639fc",
+      "sha256": "e8774ed57692aa16d85946f19deaf805ad6b179356d2d10471975e0ba4e4df64",
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence, every heading/table/fence/comment and paragraph boundary.",
+      "last_heading": "A silent console and recovery",
+      "reader_job": "Select a visible usable console and recover BAT output",
+      "prerequisite_result": "Selection names precede device conditions, removal and silent-console recovery.",
+      "evidence_boundary": "Current cold40 and explicit host80 stay distinct from retained historical80 captures.",
+      "findings": [],
+      "read_history": "Full page read at4b864e9. Complete bounded later delta reread atdb58db7e13aa5e2a312861ac0cc5a66924ec7fbf. Chapter6 moved console section read in full. Chapter7 body identity unchanged."
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md",
-      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "snapshot": "db58db7e13aa5e2a312861ac0cc5a66924ec7fbf",
       "git_blob": "27ec76e18733855a989b2449340f6981e212c197",
       "sha256": "934203fea1ff6f79b51d2299a92cb3254d244975f2c257f5ebbb6339d71b3b2b",
-      "status": "not_yet_read_in_this_final_sequence"
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence, every heading/table/fence/comment and paragraph boundary.",
+      "last_heading": "The web page and your card",
+      "reader_job": "Prepare startup lines and understand quiet/bypass outcomes",
+      "prerequisite_result": "Operator startup rules precede record limits and web preparation.",
+      "evidence_boundary": "Historical fixture boundaries and current width selection explicit.",
+      "findings": [],
+      "read_history": "Full page read at4b864e9. Complete bounded later delta reread atdb58db7e13aa5e2a312861ac0cc5a66924ec7fbf. Chapter6 moved console section read in full. Chapter7 body identity unchanged."
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md",
-      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
-      "git_blob": "32dc7292797f40168a7a8d1a2210fc504e234d79",
-      "sha256": "8f323d975b7b2be1c46613237c332fabbcea2f0a2a712054cdf8f3fbf2544764",
-      "status": "not_yet_read_in_this_final_sequence"
+      "snapshot": "db58db7e13aa5e2a312861ac0cc5a66924ec7fbf",
+      "git_blob": "0f3a6fc83ccf9a9e788b4dcfa50bba6e7d8afd59",
+      "sha256": "ddaf1c27247b9edd39ac4f23d65a030733db3e578e0463d9e3f04dfaa5889bf0",
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence, every heading/table/fence/comment and paragraph boundary.",
+      "last_heading": "Returning to the prompt",
+      "reader_job": "Call BDOS for character, string and edited-line I/O and return safely",
+      "prerequisite_result": "Register/stack conventions precede calls. FCB and page-zero details deferred to9/10.",
+      "evidence_boundary": "LINE has actual serial ea3 qualification. Historical SHOW fragment unchanged.",
+      "findings": []
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md",
-      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
-      "git_blob": "7d2d085cbb6dea27ecf208f950ae57c0529ae0cc",
-      "sha256": "193ccd41d8a6e6492ae65c96ecd4b126e1098711b28af53aa2e7ae68f7a11f2d",
-      "status": "not_yet_read_in_this_final_sequence"
+      "snapshot": "db58db7e13aa5e2a312861ac0cc5a66924ec7fbf",
+      "git_blob": "2fc528380b4a8600eaedb4ae21f88a30a0a77fe8",
+      "sha256": "01ebdff101a5e948acd275e8293ff576b05a74d9a29194b430feaa7a349b4257",
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence, every heading/table/fence/comment and paragraph boundary.",
+      "last_heading": "Close, flush and errors",
+      "reader_job": "Read through a complete SHOW example then make/write/close/flush a file",
+      "prerequisite_result": "FCB and DMA definitions precede listing. Each write result and close/flush distinction explicit.",
+      "evidence_boundary": "SHOW retains78127ec recipe and output. New write sequence is source-derived not captured.",
+      "findings": []
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md",
-      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
-      "git_blob": "10d6d643749f4ef2511c195c4970b2ac25256f44",
-      "sha256": "32d5806fb11659ee611b34b65ed0fced7d6bdb88f3b69c53d0159d96a7997395",
-      "status": "not_yet_read_in_this_final_sequence"
+      "snapshot": "db58db7e13aa5e2a312861ac0cc5a66924ec7fbf",
+      "git_blob": "05a0aea261fba1b65c8853e1d2503fe076dcfc24",
+      "sha256": "0a252eb5cdbe822dec84fbd13598a1ca0b3a05f5bf16549dc13d71ff44ccb690",
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence, every heading/table/fence/comment and paragraph boundary.",
+      "last_heading": "Input held at the BDOS level",
+      "reader_job": "Place code/buffers/private stacks below runtime TPA ceiling and use raw BIOS safely",
+      "prerequisite_result": "Inherited stack and upper bound precede private stack and BIOS example.",
+      "evidence_boundary": "Historical TOP/AREA/KEY/SAVE figures not current constants; EXPAND exit limitations explicit.",
+      "findings": []
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md",
-      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
+      "snapshot": "db58db7e13aa5e2a312861ac0cc5a66924ec7fbf",
       "git_blob": "f6bf68cc25594c59c0053194a4e6e01d092ff5e5",
       "sha256": "3f870a5add211dff50208e6573358b1d77eb2b4385f68b077fb271bdb9061ae1",
-      "status": "not_yet_read_in_this_final_sequence"
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence, every heading/table/fence/comment and paragraph boundary.",
+      "last_heading": "DEMO",
+      "reader_job": "Use numbered board calls with ABI/status/stack guards",
+      "prerequisite_result": "Signature/register/status and shared helper precede device clients; claims precede graphics use.",
+      "evidence_boundary": "All retained hardware captures and timing pins explicit. Current PICOv3/FONT contract separate.",
+      "findings": []
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md",
-      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
-      "git_blob": "9b095951cb1a324f8e200d615e58fd44755718be",
-      "sha256": "bab07f9762cbd617f55b7fe9eaf90974cae4d772c5d765f989d5ffa414909d41",
-      "status": "not_yet_read_in_this_final_sequence"
+      "snapshot": "db58db7e13aa5e2a312861ac0cc5a66924ec7fbf",
+      "git_blob": "b7a57cabde17e53a6d9ffd9973210eb2e7fcc359",
+      "sha256": "02ff3fbf4ab97eb82db0e4de9d4afa7f1a6a6f7c251647da836cda83c7660f84",
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence, every heading/table/fence/comment and paragraph boundary.",
+      "last_heading": "Chains in the startup file",
+      "reader_job": "Set return codes and supply command chains from programs",
+      "prerequisite_result": "Separators/conditions precede108 and47; failure/drop/flush boundaries explicit.",
+      "evidence_boundary": "Historical distinct chain.img fixtures explicitly recreated; no continuous card inference.",
+      "findings": []
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
-      "snapshot": "4b864e94610ac5dd6b7cdb64256f509522137f5b",
-      "git_blob": "143f09f251a31bae416303d385213cf13a9c06c0",
-      "sha256": "311c04f9739521b51e961d1355636d263bb0fa8270a8dbd68184bbe8b0762124",
-      "status": "not_yet_read_in_this_final_sequence"
+      "snapshot": "db58db7e13aa5e2a312861ac0cc5a66924ec7fbf",
+      "git_blob": "8b50a3630606d47bc9887627c8f4854cbf8312d0",
+      "sha256": "1a49cc9be52c6a2bc88e71ae7ece9c5a01610aa707fe27bbcf3d9e1920dcd934",
+      "status": "complete_read_in_order",
+      "read_scope": "Complete page from front matter through final sentence, every heading/table/fence/comment and paragraph boundary.",
+      "last_heading": "Depending on another service",
+      "reader_job": "Write/install/hook/publish and remove a resident service",
+      "prerequisite_result": "Lifetime/header/INIT/hook/REMOVE precede failure/stack/registry/dependency contracts.",
+      "evidence_boundary": "COUNT/CHEAT/CHARS/RECS/NEEDS historical pins remain. Original FAIL independently qualified current fresh baseline separate.",
+      "findings": []
     },
     {
       "path": "tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md",
@@ -318,6 +370,7 @@
       "status": "not_yet_read_in_this_final_sequence"
     }
   ],
-  "last_complete_page": "draft/05-cards-on-the-pc.md",
-  "reading_limit": "This is a sequential reader-order/teaching/preservation pass. Separate source/citation and factual-result reviews retain their own scope; no automatic correctness or runtime claim follows."
+  "last_complete_page": "tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md",
+  "reading_limit": "Lead full sequential read complete through13. Independent parent sequential opening and two slices cover all39. Parent expressly authorises integration after bounded final correction confirmation without another global lead reread. No unread lead page is represented as personally read.",
+  "independent_whole_reader_order": "P3 confirms complete independent sequential reading of all39 atf7afd42, later-slice d8 delta closed, six corrections/full revised13 bounded confirmation pending at ea49949."
 }
