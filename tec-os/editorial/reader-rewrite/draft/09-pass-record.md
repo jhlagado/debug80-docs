@@ -186,3 +186,13 @@ historical draft-stage diagnostics, not rerun results for this correction.
 No prose script, product execution, import, build or capture was run.
 The accepted findings are addressed for confirmation. Runtime and final
 whole-book acceptance remain held.
+
+## Independent correction confirmation
+
+The original independent reviewer confirmed the corrected draft at2684a6b:
+current-record CR is distinct from the full EX/S2/CR position, JR Z performs
+the branch and all authorial semicolons are removed. The unchanged historical
+SHOW listing remains separate from a future compact-format assembled version.
+The full bounded source/craft review and these three corrections are closed.
+Final source, workflow qualification and whole-book integration remain held.
+No execution accompanied confirmation.

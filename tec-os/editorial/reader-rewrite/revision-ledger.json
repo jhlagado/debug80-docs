@@ -3091,7 +3091,7 @@
     },
     {
       "unit": "chapter-09",
-      "status": "bounded draft pushed; independent review/correction cycle in progress",
+      "status": "bounded independent source/craft review and correction confirmation closed; final workflow and integration pending",
       "passes": {
         "full_passage_read": "lead read complete corrected draft; independent correction confirmation pending",
         "draft": "pending",
@@ -3103,8 +3103,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "full independent review and agency/punctuation correction confirmation closed",
+        "independent_factual_review": "full independent review followed by2684a6b correction confirmation; actual historical SHOW retained",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -3829,7 +3829,7 @@
     },
     {
       "unit": "chapter-11",
-      "status": "ready for bounded revision; runtime-dependent passages held where needed",
+      "status": "bounded source-only authoring in progress; no execution authorised",
       "passes": {
         "full_passage_read": "pending",
         "draft": "pending",
@@ -10854,9 +10854,9 @@
     },
     {
       "unit": "chapter-26",
-      "status": "source-only authoring queued after current independent review; no execution authorised",
+      "status": "bounded source-only draft pushed atd2d609e; full independent review queued",
       "passes": {
-        "full_passage_read": "pending",
+        "full_passage_read": "lead read entire draft; full independent review queued",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",
