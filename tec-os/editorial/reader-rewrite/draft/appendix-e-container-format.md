@@ -123,12 +123,17 @@ block. With block 0's 15 that gives the limit of 127
 blocks 1 to 7 remain outside every volume, whether or not the table uses
 them.
 
-The table sum at header offset 23 covers every byte of the descriptor
-blocks after block 0, including their unused bytes
-(`tools/lib/container.mjs:44-49`). The ROM reads `count / 16` of them, rounded
-down, and sums them (`src/vol.asm:193-239`). With 15 descriptors in block 0,
-that is the number of blocks the table needs. A difference gives code `25h`,
-as the header's checksum does.
+The table sum at header offset 23 is the 16-bit sum of every byte in the
+descriptor blocks after block 0, including their unused bytes
+(`tools/lib/container.mjs:44-49`). The ROM reads `floor(count / 16)` such
+blocks. With 15 descriptors in block 0, that is the number needed for the
+remaining descriptors (`src/vol.asm:193-230`). When those blocks exist, a
+sum difference gives `25h` (`src/vol.asm:234-239`).
+
+With 15 or fewer descriptors the ROM skips this comparison entirely.
+The host validator still compares the stored table sum with the computed
+sum of zero, so a 1.1 image must store zero in that field when its table
+fits in block 0 (`src/vol.asm:197-206`, `tools/lib/container.mjs:145-148`).
 
 ## The checks and their codes
 
@@ -149,7 +154,7 @@ below follows the check order, so the same code appears more than once.
 | `25h` | The checksum differs | `src/vol.asm:147-153` |
 | `23h` | 1.1: the drives field is more than 4 | `src/vol.asm:181-186` |
 | `20h` | 1.1: a block of the table can't be read | `src/vol.asm:215-225` |
-| `25h` | 1.1: the table sum differs | `src/vol.asm:234-239` |
+| `25h` | 1.1 with descriptors beyond block 0: the table sum differs | `src/vol.asm:234-239` |
 | `26h` | A volume's id is 0, a flag other than read-only is set, the geometry is unknown, the length is not the geometry's, or the start is 0 or not a multiple of 8 | `src/vol.asm:262-315`, `src/vol.asm:449-451` |
 | `28h` | A volume starts before the end of the one before it in the table | `src/vol.asm:316-328` |
 | `27h` | The exclusive end exceeds `FFFFFFFFh` or the container length, or a standard-capacity card's last volume block exceeds `7FFFFFh` | `src/vol.asm:330-385` |
@@ -221,6 +226,7 @@ requirements apply in `tecvol`:
 
 | `tecvol` also requires |
 | --- |
+| A zero table sum on a 1.1 image with no descriptors beyond block 0 |
 | A known cache flag |
 | Volume ids different from each other |
 | Unique labels on a 1.1 card |

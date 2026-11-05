@@ -48,3 +48,13 @@ to the frozen original and all citation coordinates are in offered-source
 bounds. Coordinate checks do not prove the prose. The source read supplies
 the semantic check. Independent editorial/factual review, final navigation
 and final qualified examples remain pending.
+
+## Independent review correction
+
+Accepted the table-sum boundary finding. With15 or fewer descriptors the
+ROM branches past comparison, while the host requires the computed zero
+sum on a1.1 image. The prose and validation table now state that exception
+and the host-only table includes it. Restored the explicit16-bit sum
+definition that the first rewrite had dropped. Independent confirmation
+remains pending. All other reviewed semantics, preservation and craft
+checks were clear. No execution was performed.
