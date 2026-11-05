@@ -9,7 +9,9 @@ was then read separately through SVCIN. No claim of a complete source-loader
 read follows from this focused check. No code was executed or imported.
 
 All four command/output fences remain byte-identical to the frozen original.
-Their78127ec/TASdbee66a provenance stays historical. The first-gap-zero case
+The GLCD dump retains its actual621201d run pin. GAPZERO retains its
+78127ec makeSvc run pin, separate from the starter TASdbee66a identity.
+The first-gap-zero case
 now explicitly attributes its B8h placement to that run. The GLCD dump and
 decoded field values are historical bytes, not newly captured offer17 output
 and not a claim about the future KS48 font/default source.
