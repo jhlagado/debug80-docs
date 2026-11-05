@@ -23,7 +23,9 @@ inventory = json.loads(a.inventory.read_text())
 ledger = json.loads(a.ledger.read_text())
 rows = ledger['resolutions']
 expected = Counter()
+all_references = set()
 for row in inventory['citations']:
+    all_references.update((o['path'], o['citation']) for o in row['occurrences'])
     if row['status'] == 'pending':
         expected.update((o['path'], o['citation']) for o in row['occurrences'])
 seen = set()
@@ -31,7 +33,7 @@ counts = Counter()
 source_cache = {}
 for row in rows:
     key = (row['book_path'], row['old_citation'])
-    if key not in expected or key in seen:
+    if key not in all_references or key in seen:
         raise SystemExit('unexpected or duplicate resolution: ' + repr(key))
     seen.add(key)
     if row['status'] not in {'accepted', 'corrected', 'removed', 'local-example', 'superseded'}:
@@ -57,6 +59,7 @@ missing = sorted(set(expected) - seen)
 print(json.dumps({'source_revision': ledger['source_revision'],
                   'pending_occurrences_in_frozen_inventory': sum(expected.values()),
                   'resolved_occurrences_by_disposition': dict(counts),
+                  'additional_reviewed_mapped_ranges': len(seen - set(expected)),
                   'missing_resolutions': [dict(book_path=p, old_citation=c) for p, c in missing],
                   'qualification': 'Coverage and source bounds only; semantic reasons require independent reading.'}, indent=2))
 raise SystemExit(bool(missing))
