@@ -47,44 +47,56 @@
       "sha256": "61bf793e23c7649738414ca56b9960595191f19856b61664ceb1a0c677f96ea0",
       "lines": 656,
       "words": 4532,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "Command history",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 656,
+      "outline": "reverse-outline-03-06.md",
+      "continuity_problems": "Command reference, card construction, cache implementation and startup configuration precede the first edit/build/run experience."
     },
     {
       "path": "tec-os/04-cards-and-volumes.md",
       "sha256": "6142c1df9fdc7d24254334d7659afb9182ea1868b7f7cd07ea3e0b1269974b9e",
       "lines": 263,
       "words": 2043,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "Putting an image on a card",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 263,
+      "outline": "reverse-outline-03-06.md",
+      "continuity_problems": "Command reference, card construction, cache implementation and startup configuration precede the first edit/build/run experience."
     },
     {
       "path": "tec-os/05-drives-and-cache.md",
       "sha256": "2ac8954d8109d315a76f5f6926aaf67c0bd17e23262ad0eac65a5a9730cb0ebb",
       "lines": 302,
       "words": 2271,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "Recovering after a power cut",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 302,
+      "outline": "reverse-outline-03-06.md",
+      "continuity_problems": "Command reference, card construction, cache implementation and startup configuration precede the first edit/build/run experience."
     },
     {
       "path": "tec-os/06-startup-file.md",
       "sha256": "cf70949cc165cfd2f4b1b7830dc375f4bebd14f5093009c1cb2304458bf61a66",
       "lines": 497,
       "words": 3041,
-      "read_status": "unread",
-      "last_heading_read": null,
-      "reverse_outline_status": "unwritten",
+      "read_status": "complete",
+      "last_heading_read": "When the file goes wrong",
+      "reverse_outline_status": "complete",
       "draft_status": "not started",
-      "verification_status": "source preparation retained; final offered source and workflows pending"
+      "verification_status": "source preparation retained; final offered source and workflows pending",
+      "last_line_read": 497,
+      "outline": "reverse-outline-03-06.md",
+      "continuity_problems": "Command reference, card construction, cache implementation and startup configuration precede the first edit/build/run experience."
     },
     {
       "path": "tec-os/07-first-program.md",
@@ -416,5 +428,7 @@
       "draft_status": "not started",
       "verification_status": "source preparation retained; final offered source and workflows pending"
     }
-  ]
+  ],
+  "authority": "P3 KS47 / KD-242; acceptance checklist pending independent brief review",
+  "brief": "origo/studies/p3-tec-os/stages/book-reader-rewrite.md"
 }
