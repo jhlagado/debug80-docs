@@ -94,3 +94,14 @@ Full independent factual/editorial review remains pending, along with final
 source/profile qualification, navigation and whole-book reader-order review.
 No assembly, product import, build, emulator run, test, capture or physical
 operation occurred. Publication remains excluded.
+
+## Independent reference corrections
+
+The full independent73-unit review found two precise corrections. The
+requested-drive count is printed only when nonzero, not for every1.1image.
+Recipe volumes and components are separate lists: components contain files,
+volumes use mount and files use drive. The lead reread the already inspected
+main119 report condition and recipe16–24 field use, then corrected both
+paragraphs and read them in context. All25 fences and the capture comment
+remain unchanged. Other source, preservation and reference-craft checks were
+clear. Bounded confirmation pending, with no execution.
