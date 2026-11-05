@@ -199,3 +199,51 @@ The separate10 reference for the writable table remains correct and unchanged.
 The lead read all changed containing passages and the destination section.
 No root navigation, renderer or product ran. Independent bounded confirmation
 and final integrated navigation remain separate. Opening1–3 links remain held.
+
+## Current 40-column pagination evidence home
+
+The complete current pagination fixture is retained at Origo e77c7ef0,
+`studies/p3-tec-os/evidence/book-reader-rewrite/next-batch-attempt02/complete-attempt.tar.gz`.
+Its independent result receipt is review4b5b5a50,
+`studies/p3-tec-os/reviews/book-opening-workflows.md`. I read that complete
+receipt and all three result objects below as inert archive data. This entry
+is the reproduction-accounting home for Chapter3's paused-screen excerpt.
+It adds no reader-facing runtime recipe or new execution claim.
+
+Each case starts on its own fresh card and machine. The actual input is
+`TYPE A:SAMPLE.ASM!USER 1` with a Return, not plain TYPE. The continuation
+case supplies Space at each pause. The other two supply Escape or Ctrl-C
+at the first pause. The continuation prints the complete 5,105-byte source
+with ten pauses before USER 1. Escape stops at the same 539-byte source prefix
+and permits USER 1. Ctrl-C stops there and drops it. The terminal prompts are
+therefore 1A>, 1A> and A> respectively.
+
+| Complete archive member | Bytes | SHA-256 |
+| --- | ---: | --- |
+| stage/results/type-continue.json | 5950 | 840f72e6f7d5742f65272309d13402e094da31bcd432d5db80eee1972b022cba |
+| stage/results/type-escape.json | 795 | 8a1481c21ed324119111e16fdf4f8217ca1a9853699291670b1d8fc1963f7552 |
+| stage/results/type-ctrl-c.json | 782 | 5474bc27f3bed492e59b100b7f850b35cb67d41461c66b3fa6ed9bff4c07b6d5 |
+
+The first paused VRAM identity is the same in all three cases, SHA-256
+`745350432bceb0bc25d92799807fc6e769c9ef704a8b3718568b3c54de702bb8`.
+The archive retains the complete inputs, screens, registers, masks and card
+evidence rather than only the Chapter3 excerpt. No echoed command or later
+prompt may be rewritten to imply an independently captured plain TYPE run.
+The ordinary command explanation in3 does not require a premature chain or
+user-area lesson. Exact excerpt boundaries remain with that chapter's record.
+
+The original78127ec GLCD LINES recipe, all three screens and their comments
+remain together in reader Chapter28 unchanged. This new current fixture does
+not replace or repin them. Source authority for the new evidence is tested
+8b8664a, landed962853f with ROM fa63989b and PICO record3. Acceptance is scoped
+to the covered public cases. The batch remains FAILED at a later observer.
+No advanced-service, physical, browser, audible or whole-book acceptance follows.
+
+I read the complete existing pass record before this addition, then checked
+the new paragraphs in order for preservation, agency and every comma. The
+mandatory prose gate and complexity report are editorial checks only. No
+reader Chapter28 text, output fence, capture comment or old evidence changed.
+
+The gate reports zero findings. The sole new complexity prompt is the short
+Ctrl-C consequence, retained because it distinguishes cancellation from Escape.
+Older prompts are unchanged historical pass accounting.
