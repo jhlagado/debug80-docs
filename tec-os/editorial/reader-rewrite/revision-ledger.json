@@ -3093,7 +3093,7 @@
       "unit": "chapter-09",
       "status": "bounded draft pushed; independent review/correction cycle in progress",
       "passes": {
-        "full_passage_read": "pending",
+        "full_passage_read": "lead read complete corrected draft; independent correction confirmation pending",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",
@@ -5087,7 +5087,7 @@
       "unit": "chapter-13",
       "status": "bounded source-only draft pushed at2232250; full independent review in progress",
       "passes": {
-        "full_passage_read": "pending",
+        "full_passage_read": "lead read complete draft; full independent review in progress",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",
@@ -6485,9 +6485,9 @@
     },
     {
       "unit": "chapter-16",
-      "status": "bounded draft pushed; independent review/correction cycle in progress",
+      "status": "bounded independent source/craft review closed; serial run provenance corrected and lead confirmed; final qualification pending",
       "passes": {
-        "full_passage_read": "lead read complete draft; independent source/craft review clear; serial measurement provenance audit pending",
+        "full_passage_read": "complete draft read by lead and independent reviewer; bounded correction read in context",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",
@@ -6497,8 +6497,8 @@
         "examples_before_explanation": "pending",
         "journey_readback": "pending",
         "mechanical_gate": "pending",
-        "independent_editorial_review": "pending",
-        "independent_factual_review": "pending",
+        "independent_editorial_review": "full independent review clear; lead read full draft and corrected serial paragraph",
+        "independent_factual_review": "full independent review clear; 2d2dbf1 serial provenance correction confirmed against Book22 actual60cfbdc run report",
         "navigation": "pending",
         "final_source_pin": "pending"
       },
@@ -7255,7 +7255,7 @@
       "unit": "chapter-17",
       "status": "bounded source-only draft pushed at7d9dafe; full independent review in progress",
       "passes": {
-        "full_passage_read": "pending",
+        "full_passage_read": "lead read complete draft; full independent review in progress",
         "draft": "pending",
         "thematic_order": "pending",
         "sentence_deletion": "pending",

@@ -317,3 +317,13 @@ I re-read the changed sentences and punctuation in their serial-section context.
 The earlier full source/craft review remains separate. This bounded correction
 closes the false78127ec attribution of the two serial costs, not runtime/profile
 or whole-book acceptance. No product, assembler, import, test or capture ran.
+
+## Lead confirmation
+
+The lead read the complete chapter and the bounded2d2dbf1 correction.
+Book22's opening identifies60cfbdc and its lines91–92 explicitly record
+both whole-character costs rerun. The corrected reader paragraph and header
+now retain that actual run provenance. The full independent source/craft
+review and this separate evidence correction are closed for the bounded draft.
+Final source/profile qualification, navigation and runtime acceptance remain
+open. No execution accompanied this confirmation.
