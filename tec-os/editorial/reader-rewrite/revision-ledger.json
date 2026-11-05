@@ -15857,7 +15857,15 @@
       "hard_findings": 0,
       "review_flags_retained_with_context_reasons": 11
     },
-    "limits": "Opening1–3 unwritten pending actual workflow. No product execution, root integration, publication or final reader acceptance."
+    "limits": "Opening1–3 unwritten pending actual workflow. No product execution, root integration, publication or final reader acceptance.",
+    "parent_independent_review": {
+      "status": "closed",
+      "basis": "cc6c22d plus later record-only revisions",
+      "scope": "Every315 before/after context in six groups, all36 frozen/result hashes/blobs/offsets, all43 retained boundaries",
+      "unchanged_evidence": "212 fences,152 HTML comments, quoted streams and inline literals; declared Chapter7 0000h removal excepted",
+      "reconstruction": "264 removals and8 rewrites reconstruct35 files; remaining Chapter7 delta exactly declared bounded refinement. SupersededCC0130 not reintroduced.",
+      "limits": "No full-book, runtime, navigation or publication acceptance inferred"
+    }
   },
   "startup_refinement": {
     "status": "Bounded Chapter7 corrections closed independently",
