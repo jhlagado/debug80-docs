@@ -53,7 +53,7 @@ reset/cache/range/GLCD paths. Test source is an assertion, not a passing run.
 | Save notices | web/src/main.mjs:134–141 defines first/repeated-failure text. web/src/main.mjs:540–549 defines volume status, noSave notice and refreshed generic unsaved notice. Import-save failure does not pass through the ordinary retry/failure counter catch |
 | Whole-image selection | web/src/main.mjs:593–615 validates before state.card assignment but assigns before save. A false ordinary-save result does not prevent power-on. Both starter and Open share this path. Import-busy rejection precedes parse/publication |
 | Card/range limits | host/machine.mjs:49 defaults highCapacity true. tools/lib/container.mjs:130–193 checks declared length and descriptor bounds before Open publishes. src/vol.asm:330–385 separately checks end overflow, declared container end and standard-card byte-addressing. Corrected the old universal27h/Bad Sector exclusion |
-| Import identity and protection | web/src/main.mjs:617–636 reads all selected files, uppercases names, stages from the current turn's image and passes descriptor readOnly. tools/lib/cpmfs.mjs:15–20 checks actual8.3 names. Its180–191 defaults user0, converts text and rejects a protected existing file with no force supplied |
+| Import identity and protection | web/src/main.mjs:630 uppercases names while reading PC files. Its631–636 enters the queue, stages the current image and calls fs.write there with descriptor readOnly. tools/lib/cpmfs.mjs:180–183 calls cpmName inside that staged write, after the volume/user checks. Its15–20 validates8.3 names and180–191 defaults user0, converts text and rejects a protected existing file with no force supplied |
 | Import transaction and outcomes | web/src/main.mjs:154–166 waits for an older in-flight save under the same guard. Its631–649 publishes staged bytes only after importSave returns, resets and restores prior run state in finally. noSave returns without storage and therefore permits memory-only import. Errors leave staged edits unpublished, not a promise that all concurrent card state is unchanged |
 | Queue and later preferences | web/src/main.mjs:67–84 serialises power-on preparation with import's callback. Its654–665 changes selectors before queued power-on. Preparation dirties the image and106–110 supplies later persistence. Queue ordering is not a guarantee of a completed save |
 | Flush and reset | src/boot.asm:100–102,321–346 calls MEMINIT and clears the cache at cold boot. Its210–215 invokes CWBOOT before CCP return. src/cache.asm:661–668 flushes, drops chain and prints Write lost on failure. Import does not invoke it. src/cpm/bdoslog.asm:268–343 rebuilds a drive's allocation map on login. The draft states that maps are rebuilt as drives are accessed, not that every directory is scanned before any access |
@@ -125,8 +125,32 @@ at 10821b6. Combined rows preserve every listed record.
 
 ## Delivery boundary
 
-Own source, preservation and craft passes are complete. Independent review,
-final source/media pinning and whole-book navigation/reader-order acceptance
-remain open. No runtime, import, test, build, browser/UI action, capture or
+Own source, preservation and craft passes are complete. Bounded confirmation
+of the independent-review corrections, final source/media pinning and
+whole-book navigation/reader-order acceptance remain open. No runtime,
+import, test, build, browser/UI action, capture or
 physical measurement was performed. Static text comparison supplies preservation
 evidence only. No publication or product/default policy change was made.
+
+## Independent-review corrections
+
+The full independent review identified a validation-order error and an
+awkward dirty-card sentence. Both are corrected. Filename uppercasing happens
+while the PC files are read at web/src/main.mjs:630. Validation occurs later,
+inside the queued staging callback's fs.write at 631–636, through cpmName at
+tools/lib/cpmfs.mjs:180–183 and 15–20. The paragraph now states that order
+without changing the all-files publication boundary or the noSave exception.
+
+The saving paragraph now begins “Writes by TEC-OS mark the model card dirty.”
+That wording names the actual operation without the former ambiguous noun
+phrase. The optional commas at the reviewed draft's lines 39, 92 and 260 were
+removed after reading each sentence without them. No literal notice, rewrite
+example or historical shell fence was changed.
+
+Read the corrected paragraphs with their surrounding sections and rechecked
+the source's read/queue/write/save/publication sequence. The 38 assigned units,
+70 citation occurrences and historical fence remain accounted for. The
+ea3ef3d 80-column fallback, stored preferences and GLCD/startup policy remain
+unchanged. KS48 qualification remains pending. No source or result was repinned.
+Bounded independent confirmation of these corrections remains open. No
+execution, import, build, test, UI/browser action or capture was performed.
