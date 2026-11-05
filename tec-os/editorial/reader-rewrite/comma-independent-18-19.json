@@ -1,0 +1,615 @@
+{
+  "schema_version": 1,
+  "status": "confirmed_source_only",
+  "application_commit": "b35d09c06d17e43e03eb7496e4f1afd436fa5287",
+  "basis_commit": "16918fccb72bd859bfe39f45c44627f3dc26ff1e",
+  "records": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/comma-review-18-19.json",
+      "sha256": "8d2a61b7f9bc3b8332e34d08da9499af205e1d615e21278ca80e3933e33ac219",
+      "git_blob": "8ff044e9b77c45769caf82def05475ee16341196"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/comma-application-18-19.json",
+      "sha256": "4499069f8297bc645a02e8abbc5407827fd29aaf5d8432cade2390a250b3a5ff",
+      "git_blob": "0a2046ec4c2ba7387f809ae53df83e9020146ba4"
+    }
+  ],
+  "scope": "Independent punctuation confirmation of Chapters 18–19 only. No reader prose edits, product execution, root integration, publication or broader factual/runtime acceptance.",
+  "counts": {
+    "assigned_ids": 76,
+    "remove_optional": 61,
+    "retain_boundary": 14,
+    "whole_sentence_rephrase": 1,
+    "changed_contexts_read_in_full": 42,
+    "joint_contexts_checked": 49,
+    "net_commas_removed": 63
+  },
+  "confirmed_ids": {
+    "remove_optional": [
+      "CC0101",
+      "CC0102",
+      "CC0104",
+      "CC0105",
+      "CC0106",
+      "CC0107",
+      "CC0108",
+      "CC0111",
+      "CC0112",
+      "CC0113",
+      "CC0114",
+      "CC0115",
+      "CC0116",
+      "CC0118",
+      "CC0119",
+      "CC0120",
+      "CC0121",
+      "CC0122",
+      "CC0123",
+      "CC0124",
+      "CC0126",
+      "CC0127",
+      "CC0128",
+      "CC0132",
+      "CC0134",
+      "CC0135",
+      "CC0137",
+      "CC0138",
+      "CC0139",
+      "CC0140",
+      "CC0141",
+      "CC0142",
+      "CC0143",
+      "CC0144",
+      "CC0146",
+      "CC0147",
+      "CC0149",
+      "CC0150",
+      "CC0151",
+      "CC0152",
+      "CC0153",
+      "CC0155",
+      "CC0156",
+      "CC0157",
+      "CC0158",
+      "CC0159",
+      "CC0160",
+      "CC0161",
+      "CC0162",
+      "CC0163",
+      "CC0164",
+      "CC0165",
+      "CC0167",
+      "CC0168",
+      "CC0169",
+      "CC0171",
+      "CC0172",
+      "CC0174",
+      "CC0175",
+      "CC0176",
+      "CC0177"
+    ],
+    "needs_rephrase": [
+      "CC0109"
+    ],
+    "retain_boundary": [
+      "CC0103",
+      "CC0110",
+      "CC0117",
+      "CC0125",
+      "CC0129",
+      "CC0131",
+      "CC0133",
+      "CC0136",
+      "CC0145",
+      "CC0148",
+      "CC0154",
+      "CC0166",
+      "CC0170",
+      "CC0173"
+    ],
+    "retain_literal": []
+  },
+  "method": "Read every full original and resulting context. Independently reconstruct accepted changes from 16918fc and compare all words, punctuation and inline bytes with wrapping excluded only outside literals. Undo each changed complete context to verify every remaining file byte. Match all original inventory IDs, raw comma offsets, source hashes, application context hashes and output blobs.",
+  "sources": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md",
+      "input_sha256": "376c7ca5b1bac7e65c3d3ef2044fd1012e7c10cf3ee541b41e5b13f337de1860",
+      "output_sha256": "f7ffc97823da0b464f2701cc54621cfe5d536c1c059d88b639d8e38fe8a4a904",
+      "output_git_blob": "418c6a98352f8f7a374e8e0a95ea74b09b392574",
+      "net_commas": -23,
+      "immutable_counts": {
+        "fences": 2,
+        "comments": 1,
+        "inline_spans": 258,
+        "links": 3,
+        "headings": 9,
+        "front_matter": 1
+      },
+      "protected_sequences_byte_identical": true,
+      "outside_changed_contexts_byte_identical": true,
+      "only_accepted_changes_plus_local_wrapping": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md",
+      "input_sha256": "4fefb49ae090513a45e8d9652d7d0a35aca6fd65416da7d771542f35c939c6c3",
+      "output_sha256": "2ea12d0cac1f016654128cf31d28a404251d03fa4903285e3008425056a5daaa",
+      "output_git_blob": "ca5f9b1a3d8ad55b587f77263041bb19b3cd00f6",
+      "net_commas": -40,
+      "immutable_counts": {
+        "fences": 0,
+        "comments": 1,
+        "inline_spans": 383,
+        "links": 4,
+        "headings": 17,
+        "front_matter": 1
+      },
+      "protected_sequences_byte_identical": true,
+      "outside_changed_contexts_byte_identical": true,
+      "only_accepted_changes_plus_local_wrapping": true
+    }
+  ],
+  "context_confirmations": [
+    {
+      "ids": [
+        "CC0101"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0102"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0103"
+      ],
+      "changed": false,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0104"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0105"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0106"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0107"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0108",
+        "CC0109"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0110",
+        "CC0111"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0112"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0113",
+        "CC0114",
+        "CC0115",
+        "CC0116"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0117"
+      ],
+      "changed": false,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0118",
+        "CC0119"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0120",
+        "CC0121"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0122"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0123"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0124"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0125",
+        "CC0126"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0127"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0128",
+        "CC0129"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0131"
+      ],
+      "changed": false,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0132"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0133"
+      ],
+      "changed": false,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0134",
+        "CC0135",
+        "CC0136"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0137",
+        "CC0138"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0139"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0140",
+        "CC0141",
+        "CC0142"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0143"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0144",
+        "CC0145"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0146",
+        "CC0147",
+        "CC0148"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0149"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0150"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0151",
+        "CC0152",
+        "CC0153"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0154"
+      ],
+      "changed": false,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0155"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0156",
+        "CC0157"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0158",
+        "CC0159",
+        "CC0160",
+        "CC0161"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0162"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0163",
+        "CC0164"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0165",
+        "CC0166"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0167",
+        "CC0168"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0169"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0170"
+      ],
+      "changed": false,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0171",
+        "CC0172"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0173"
+      ],
+      "changed": false,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0174"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0175"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0176"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    },
+    {
+      "ids": [
+        "CC0177"
+      ],
+      "changed": true,
+      "recorded_context_hashes_confirmed": true,
+      "complete_context_readback": "clear"
+    }
+  ],
+  "semantic_readback": {
+    "grammar": "All changed complete paragraphs, list items and table rows remain grammatical. No additional words or conditions were changed beyond the accepted rephrase.",
+    "conditions": "Directory-after-data success, partial-failure retention, retry, flush, EOF alternatives, login/rebuild and read-only qualifications remain intact.",
+    "agency": "No punctuation change transfers an operation or condition to a different subject or introduces mental agency.",
+    "paired_boundaries": "All 14 accepted apposition, equivalent-unit and qualification boundaries remain paired, including those in jointly changed paragraphs.",
+    "CC0109": "The complete accepted failure-timing wording is applied with both former parenthetical commas removed. Original trailing citation spans and terminal period are preserved, as the application explicitly records.",
+    "literal_evidence": "All fences, HTML comments, multiline inline spans, links, headings and provenance front matter remain byte-identical and in order."
+  },
+  "gate_dispositions": {
+    "prose_gate": {
+      "hard_findings": 0,
+      "review_findings": 1,
+      "confirmed_disposition": "HW008 at Chapter 19 line 84 is a false positive. The complete sentence begins In this chapter and defines block as allocation block. Chapter is locative, not a subject given a mind. The technical definition is unchanged.",
+      "unresolved": 0
+    },
+    "sentence_complexity": {
+      "recorded_prompts": 56,
+      "all_dispositions_read": true,
+      "confirmed_disposition": "Reasons preserve required operands, conditions, metadata and useful references. Wrapped-list fragments were read as complete bullets. No automatic shortening was applied.",
+      "unresolved": 0
+    },
+    "independent_text_utility_corroboration": [
+      {
+        "utility": "prose_gate",
+        "exit_status": 0,
+        "recorded_report_sha256": "5ff448f8603640fc25f2e5507eac9593e945f695da80b49aead8e272a6dfd3af",
+        "recorded_report_reproduced": true
+      },
+      {
+        "utility": "sentence_complexity",
+        "exit_status": 0,
+        "recorded_report_sha256": "7759a4673bf2f443e302b4e8b24a1172064b25e45214bd62ed76b34d0e1cf096",
+        "recorded_report_reproduced": true
+      }
+    ]
+  },
+  "findings": [],
+  "exclusions": [
+    "Supplementary CC0002/CC0019 not applied here.",
+    "Superseded CC0130 remains absent.",
+    "Chapter 11 nominal names and Chapter 13 ORG belong to the separately assigned independent reviewer."
+  ]
+}
