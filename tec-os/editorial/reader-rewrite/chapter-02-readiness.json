@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "reading_prepared_result_based_drafting_held",
+  "status": "scoped_receipt_read_authoring_authorised",
   "book_snapshot": "10986d93ebe95b11f2268cc5fa4e6faa6d4dd8ce",
   "owned_path": "tec-os/editorial/reader-rewrite/chapter-02-readiness.json",
   "future_reader_path": "tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md",
@@ -11,8 +11,9 @@
     "frozen_material_base": "10821b68f80c10d2037bbd1c5ab207877c897c68",
     "existing_mechanism_pin": "ea3ef3de9133931e925a0220d51c0e971c1fd8dd",
     "attempt_source_record_only": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
-    "source_adoption": "No pin is changed. The tested next-source preparation basis and reader adoption remain separate.",
-    "drafting_hold": "Wait for the actual scoped-positive-review receipt supplied by the lead before reader prose or output claims."
+    "source_adoption": "Chapter 02 source authority explicitly adopted at 962853f499f05faf281f6cdff1deca8959f58c2b. Tested workflow pin 8b8664a7 remains distinct; historical examples keep their own pins.",
+    "drafting_hold": "Superseded by the supplied closed scoped receipt at Origo 4b5b5a50 and explicit authoring instruction.",
+    "current_source_pin": "962853f499f05faf281f6cdff1deca8959f58c2b"
   },
   "completed_reading": {
     "standards_and_assignment_identities": [
@@ -204,8 +205,8 @@
       "Remove the old survey of later PC/file work from this authored-banner route.",
       "Replace the old HELLO listing/explanation only with the reviewed BANNER exercise. Do not transfer the historical 33-byte result.",
       "Keep ordinary TED editing/save/quit and B/R build/run keys. The line-number option and other editor commands have separate destinations.",
-      "The B/R rows are the explicit fragment of old87–98. Chaining implementation is not assigned to Chapter 2.",
-      "The old157–158 fragment contributes observed key/quit and COM location only. Do not import THOR project/session implementation into the small exercise."
+      "The B/R rows are the explicit fragment of old87\u201398. Chaining implementation is not assigned to Chapter 2.",
+      "The old157\u2013158 fragment contributes observed key/quit and COM location only. Do not import THOR project/session implementation into the small exercise."
     ],
     "current_boundaries": [
       {
@@ -215,8 +216,11 @@
       },
       {
         "path": "tec-os/editorial/reader-rewrite/draft/03-work-with-files.md",
-        "exists": false,
-        "disposition": "Absent. No current opening can be read. The closed outline assigns file operations and pager teaching there."
+        "exists": true,
+        "bytes": 10478,
+        "sha256": "cc3504e1d9a793f0aee7deaf912eba2f43e9819acde0c037db7e6bfa4146c161",
+        "read_complete": true,
+        "boundary": "Opening assumes saved BANNER files on B. File commands and pager remain in Chapter 3."
       },
       {
         "path": "tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md",
@@ -511,7 +515,7 @@
     },
     "whole_evidence_contexts_read": [
       "Four exact BANNER source files, complete packet README and case-inputs.json.",
-      "packet/batch.mjs:45–97,98–135,135–240,242–324,425–440,600–655 as text: snapshots, keys, navigation, save/build/run/error/repair/fresh-machine controls and later failure boundary.",
+      "packet/batch.mjs:45\u201397,98\u2013135,135\u2013240,242\u2013324,425\u2013440,600\u2013655 as text: snapshots, keys, navigation, save/build/run/error/repair/fresh-machine controls and later failure boundary.",
       "Complete rejected/initial/edited/standalone program-observation JSON records; complete saved/persisted/final inventories.",
       "Complete rejected, initial-run, edited-run and fresh-machine BANNER console byte contexts."
     ],
@@ -524,7 +528,7 @@
     "allocation_id": "KS47-BATCH02-20261106",
     "full_batch_qualified": false,
     "failure": "Later FAIL.SVC observer asserts m.cpu.cpu.f & 1. README identifies KE-259: the pinned runtime exposes carry at cpu.flags.C. The batch has no COMPLETE result. This is not a new finding against the ROM.",
-    "positive_subset_status": "Earlier assertions and artifacts exist but scoped result acceptance is pending. No chapter result is accepted by this preparation.",
+    "positive_subset_status": "Closed independent receipt accepts the covered BANNER workflow. This authoring relies on that scoped actual-result review, not journal completion alone.",
     "tool_identities": {
       "MOUNT.COM": {
         "sourcePin": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
@@ -565,7 +569,9 @@
     },
     "historical": "Frozen old07 carries 78127ec/TED128edb7/TASdbee66a/ATOM0.3.7 identities. Its actual HELLO editor round is explicitly at7458352. Retain those pins at the historical destination, never treat its prompts, line7 diagnostic or Right/Backspace repair as a 40-column BANNER run.",
     "actual_new_route_boundary": "The BANNER evidence opens A:TED B:BANNER.ASM from A>. It uses a BROKEN line14 rejection, public status-clear/navigation and removal of that added line, not the historical HELLO line7 repair. Do not rewrite those observations into an assumed B> session.",
-    "host_model_only": "The records are host-model evidence. No browser, physical-board, colour-display or later-default qualification follows."
+    "host_model_only": "The records are host-model evidence. No browser, physical-board, colour-display or later-default qualification follows.",
+    "rom_sha256": "fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d",
+    "pico": "PICOv3, 40-column TEC Compact; normal startup and GLCD policy unchanged."
   },
   "intended_route_within_closed_outline": [
     "Continue from the supplied SAMPLE experience in Chapter 1 to entering a genuinely new BANNER source in TED on B with the prepared tools on A.",
@@ -577,26 +583,31 @@
   ],
   "acceptance_gaps": [
     {
-      "gap": "Actual scoped-positive-review receipt has not been supplied in this task.",
-      "effect": "No reader draft or result-based explanation may start. The full-batch failure remains recorded."
+      "gap": "Independent editorial review of the new Chapter 02 draft remains to follow.",
+      "effect": "No root integration, navigation change or publication is authorised."
     },
     {
-      "gap": "BANNER rejection/repair, exact source/card and COM/DBG identity, input transport, screen/mask and fresh-machine persistence require their separate independent review.",
-      "effect": "Existing milestone records are inventory, not acceptance. Use only the exact accepted subset after receipt."
+      "gap": "Whole-batch service observer failure remains unresolved by this receipt.",
+      "effect": "No advanced-service or blanket batch acceptance."
     },
     {
-      "gap": "First-session/SAMPLE, PC7 and pager are under separate review.",
-      "effect": "No acceptance or prose claims for those families are inferred from the BANNER preparation."
-    },
-    {
-      "gap": "Chapter 1 and Chapter 3 current draft boundaries do not yet exist.",
-      "effect": "Reread their actual final boundary paragraphs before drafting/integration rather than inventing prerequisites or an ending."
-    },
-    {
-      "gap": "Next-source preparation is not final reader source adoption.",
-      "effect": "Keep historical capture pins and existing ea3ef3d mechanism authority separate until the lead adopts the reviewed source. No global 40-column replacement."
+      "gap": "Host-model coverage does not qualify physical, browser or audio behaviour.",
+      "effect": "Keep the chapter claims within its accepted emulator workflow."
     }
   ],
-  "work_performed": "Read-only Git/text/JSON/tar inspection and inert hashing. Only this data dossier is authored. No new planning scheme, source pin, shared ledger/nav/root change, reader prose, prompt/output fence, product execution, imports, tests, builds or captures.",
-  "next_action": "Wait for the actual scoped-review receipt. Do not draft automatically from journal completion or a newly appearing evidence file."
+  "work_performed": "Read-only Git/text/JSON/tar inspection and inert hashing; closed receipt read in full. Only this readiness data is changed in this step. No product execution, imports, tests, builds or captures.",
+  "next_action": "Draft the authorised small-program route, then complete separate editorial and semantic passes before exact-path commit and push.",
+  "scoped_receipt": {
+    "commit": "4b5b5a50",
+    "path": "studies/p3-tec-os/reviews/book-opening-workflows.md",
+    "sha256": "1368e77c9bc71797d40d42260110ff7fdbc8c430fb3cf46782214f041638e407",
+    "read_complete": true,
+    "actual_attempt": "e77c7ef0f81c42d94f12391b099f4cf8c4acd9a6",
+    "accepted_for_chapter_02": [
+      "Whole BANNER source typed into an initially empty TED buffer on B using tools on A.",
+      "Actual BROKEN line 14 rejection, public repair, initial save/reopen/build/run.",
+      "Edited save/build/run and preserved card reopened in fresh RAM with standalone execution."
+    ],
+    "limits": "Whole batch FAILED after the later service carry observer. No advanced service, physical-board, browser, audio or publication acceptance."
+  }
 }
