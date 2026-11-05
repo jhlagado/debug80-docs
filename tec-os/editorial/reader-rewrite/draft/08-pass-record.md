@@ -339,3 +339,21 @@ tests, model execution or capture generation were performed for this insertion.
 Full independent review at8763ba8 found no blockers after the measuredLINE insertion. The compactsource/artifact bytes,47logical versus128padded record, exact console suffixes and source contracts were checked alongside the whole teaching route. Only serialea3proof is accepted.
 Final source/profile, remaining workflow and whole-book integration remain
 open. No new execution accompanied the confirmation.
+
+## Additional Chapter8 sequence review
+
+Accepted the independent full review at521c4fc6. Removed the duplicate0006h
+boundary from8 because10 already teaches the complete limit. Moved the0004h
+mutation/exit-selection contract into10 after its page-zero table. Chapter8
+now leads its ending with the normal return to the starting drive/user area
+and fallbackA. Deleted the retrospective printing-call line and unused file
+function-number preview, retaining AppendixA's lookup pointer and the actual
+contracts in9/A. Removed three optional conjunction commas. Also aligned
+8's final CtrlC bullet with the current-empty-line condition already taught
+in its input section and independently checked for AppendixA.
+
+Read complete8 and10's containing page-zero passage before changes and the
+changed paragraphs with neighbours afterwards. All literals/captures retain
+their exact bytes and actual pins. Crosswalk/disposition records name these
+bounded refinements. No runtime, source import or new proof was used.
+Independent bounded correction confirmation remains pending.

@@ -291,6 +291,11 @@ holds the return vectors, console selection and BIOS scratch:
 | `006Ch–007Bh` | Second argument's name fields, overlapping the first FCB |
 | `0080h–00FFh` | Command tail, then the default DMA buffer |
 
+The CCP stores the current drive and user area at `0004h` before program
+entry. Warm boot uses that byte to restore the selection, so a program that
+changes it changes the drive and user area used on exit. An unavailable drive
+falls back to A (`src/cpm/ccp.asm:363-384`, `src/cpm/ccp.asm:32-102`).
+
 The tail's first byte is its length and the characters follow it. They are in
 capitals and include the leading space after the command's name. A read into the
 default DMA buffer replaces the tail. A program that still needs it copies it

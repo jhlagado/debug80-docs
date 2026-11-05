@@ -4205,7 +4205,7 @@
     {
       "source": "tec-os/appendix-g-tec-1g.md",
       "line_at_base": 149,
-      "section": "The 20 \u00d7 4 LCD",
+      "section": "The 20 × 4 LCD",
       "disposition": "retain and revise",
       "destinations": [
         "G"
@@ -4218,7 +4218,7 @@
     {
       "source": "tec-os/appendix-g-tec-1g.md",
       "line_at_base": 170,
-      "section": "The 8 \u00d7 8 LEDs",
+      "section": "The 8 × 8 LEDs",
       "disposition": "retain and revise",
       "destinations": [
         "G"
@@ -4470,5 +4470,29 @@
       "movement_detail": "movement-units.json source/start/end records; sentence-split qualifications are controlling"
     }
   ],
-  "authority": "movement-units.json is the controlling movement map; section inventory is an index and reverse outlines are historical reading notes. Conflicts must be repaired before prose."
+  "authority": "movement-units.json is the controlling movement map; section inventory is an index and reverse outlines are historical reading notes. Conflicts must be repaired before prose.",
+  "post_draft_amendments": [
+    {
+      "authority": "P3 additional independent full Chapter8 review of521c4fc6; within KS47 use-before-memory sequence",
+      "source_draft": "draft/08-call-tec-os.md at521c4fc6",
+      "moves": [
+        {
+          "material": "0006h exclusive program-memory boundary",
+          "destination": "draft/10-memory-for-programs.md, opening and Program space and resident memory",
+          "disposition": "remove duplicate from8; complete existing10 explanation retained"
+        },
+        {
+          "material": "0004h drive/user mutation and exit selection",
+          "destination": "draft/10-memory-for-programs.md, Page zero",
+          "disposition": "move detailed contract after page-zero table;8 retains ordinary starting-selection return and fallback"
+        },
+        {
+          "material": "retrospective printing-call sentence and file-function-number preview",
+          "destination": "AppendixA lookup and Chapter9 FCB lesson",
+          "disposition": "delete duplicate preview; contracts already retained at their proper homes"
+        }
+      ],
+      "limits": "No ladder change, literal/source/output change or runtime. Controlling frozen movement map remains intact; this records bounded draft-level refinement."
+    }
+  ]
 }
