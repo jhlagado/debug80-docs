@@ -215,8 +215,64 @@ The historical captures and measured whole-character costs are retained,
 not repinned or regenerated. The externally named STAT and olderPICO.SVC
 comparisons retain their interface meaning; no new external program was run.
 
-## Remaining work at checkpoint
+## Completed authorial passes
 
-Full reduction/craft passes and final text comparisons remain due. Independent
-result review and final source/profile qualification remain separate acceptance.
-Only the two owned Chapter16 paths are written.
+The generous draft and material/source record were committed and pushed as
+0b74f47 before the reduction passes. I read the complete revised chapter from
+its opening byte path to the final release-before-page-zero condition.
+
+| Pass | Actual finding and disposition |
+| --- | --- |
+| Mechanical gate | Text searches located optional conjunction/condition commas and a semicolon between the TNFIND and CON facts. Removed the semicolon and optional commas. The only remaining semicolons are literal CSI separators. All headings are noun phrases. No invented score or automated gate pass is claimed. |
+| Thematic/teaching | Kept requested/applied state before either input reserve, BDOS output before its serial bytes and matrix bytes before terminal interpretation. Put the TERM proof immediately after the terminal subset it exercises. Page moves precede ownership/registration so the claim's suppression has a defined mechanism. |
+| Paragraph deletion | Removed the entire paragraph after the CON TTY capture because it repeated the next-call rule already established before the example. Moved its exact CONSHOW source range into the introducing paragraph. Removed duplicate current-offer process discussion from the historical timing paragraph. |
+| Sentence deletion | Read every sentence in order and across paragraph boundaries. Deleted the closing timing certification because the paragraph already names78127ec and the header separates current source. Kept the absent-second-parameter255 rule because a blanket clipping statement would be inaccurate. Kept the one-byte-reserve warning because neither reserve prevents loss while physical reception is inactive. |
+| Agency and exact relations | Named SVDRV as the routine returningTNENODV rather than making the passed table the subject of the return. Replaced driver table offering with passing/registering it. Changed VIDINIT's transfer to enteringPISTART and release's transfer to enteringHWVREL, matching JP/JR rather than implying a CALL instruction. CON is logical, TTY/CRT/BAT/UC1 name its physical bindings and the IOBYTE values encode that selection. No artifact is assigned perception, intentions or social agency. |
+| Every comma | Read every punctuation-bearing paragraph and table entry. Removed optional commas before while, or, and, so and then where the sentence remained clear. Replaced the ^H/^I appositions with code/value parentheses. Kept genuine list separators, thousands separators, value/name apposition and condition boundaries. No Oxford comma, prose semicolon or em dash remains. Historical recipes/fences are immutable. |
+| Technical/literal | Corrected the generous draft's PIVEC/GLVEC reference from the keyboard queue to ram.asm:359-365. Expanded generated-config coordinates through the RXPOLL line and CONSHOW coordinates through the applied-mode report. Added the actual TMSWID invalidation path and conditioned HWVREL restoration on a preceding claim. Refined generic cursor-cost wording to functions2/9's cursor-free poll. |
+| Preservation | All99 assigned units and seven fragment instructions have explicit dispositions above. Four complete fences match frozen10821b6 byte for byte: three captures plus TERM's shell recipe. All three capture recipes also match. The STARTUP.CMD trailing spaces and TERM's blank rows remain literal. No assigned example is deleted or replaced by a reference. |
+| Journey/navigation | Read the entire chapter in order after the changes. INFO uses applied geometry, both receive reserves precede their loss consequence, row vectors precede parser edits and a claim precedes its release. The ending states the exact HWVREL effect before page-zero rebuild, without a recap or forecast. The link to22-the-history-ring.md uses its final sibling destination and resolves to the existing draft. No link to excluded editorial material is in the reader prose. |
+
+### Final source qualifications
+
+The release paragraph explicitly returns without restoration when VCLAIM is0.
+Only a prior claim plus a nonzero PIVEC causes PICO restoration. An activeCRT
+console is cleared/homed, while another console leaves the PICO picture alone.
+With no PIVEC, the program's hardware state remains. This is the actual
+HWVREL branch structure at services.asm:245-279, not an unconditional promise
+that every warm boot redraws every detected display.
+
+PICO width changes while CRT is active set CONMOD to serial so a still-CRT
+IOBYTE triggers CONSEL again. The next call copies geometry and clears the
+screen. The width remains in BIOS state over warm boot. These are separate
+facts from a future cold default and were read at pico.asm:1-21,98-117 and
+console.asm:165-199.
+
+The leading modelNUL explanation is identified as source documentation in
+console.asm:288-291. The filter itself is verified by its actual AND7F/zero
+branches. No fresh model-internal or physical input observation is claimed.
+The port00 queue-trigger explanation retains the source's documented model
+contract. It is distinguished from the board's keypad-port read.
+
+No product or prose-analysis script, test, assembler, emulator, import or
+capture was run. The full craft passes were manual under the no-execution
+constraint. Static comparisons, Git-object reads and range/link checks supply
+literal evidence only. No complexity score or measured new output is invented.
+
+Independent editorial/factual review and final profile qualification remain
+separate acceptance steps. Only the two owned Chapter16 paths are changed.
+
+The cursor paragraph describes VCURV as gating repeated show/hide operations,
+not as unconditional proof that a cell is inverted. CURSHOW sets the flag
+before CURFLIP checks the pending-wrap column, so that flag can be set without
+a drawable cell. The explicit pending-wrap exception remains in the prose.
+
+## Final static comparison
+
+The final draft has158 inline file/range occurrences across20 source files.
+Every range exists and is within its file at ea3ef3d. Each was also read in
+its mechanism/caller context as recorded above. Four complete assigned fences
+and all three capture recipes compare byte-identically with frozen10821b6.
+The Chapter22 sibling target exists. The final owned-path diff check reports
+no whitespace errors. Literal historical trailing spaces remain untouched.
+No automated prose score or runtime pass is claimed.
