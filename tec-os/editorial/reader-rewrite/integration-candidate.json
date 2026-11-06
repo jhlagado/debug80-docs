@@ -226,5 +226,38 @@
     "sha256": "1b6a07dc00059905310e7bb13468a87f085c2e139b053b2237b65791ec3b3baa",
     "findings": 0,
     "candidate": "a3e4c292fee3022e432a18be36370d2d87cd4b30"
+  },
+  "site_verification_packet": {
+    "status": "SEALED_PREPARED_UNRUN_independent_source_confirmation_clear",
+    "source_candidate": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+    "seal_sha256": "3102077825ff6cb6944a117c5fc56d450614f8f82e8998a704cffeea860f0b4e",
+    "packet_commit": "7dec11c0f11f167c5a467ec2a786716f40bf18a0",
+    "seal_confirmation": "e4ea69f366edf0ea41ddeec32a334a5901a71a2e",
+    "request": "site-verification-request.md",
+    "payloads": 16,
+    "installed_entries": 4454,
+    "exported_source_file_inputs": 889,
+    "synthetic_controls": 40,
+    "positive_controls": 4,
+    "negative_controls": 36,
+    "source_reviews": [
+      "runner-source-review.json",
+      "site-verification/checker-source-review.json",
+      "site-verification/seal-confirmation.json"
+    ],
+    "policy": {
+      "wait_seconds": 0,
+      "memory_mb": 850,
+      "heap_mb": 450,
+      "build_workers": 2,
+      "minify": false,
+      "whole_invocation_deadline_seconds": 180,
+      "automatic_retry": false
+    },
+    "actual_build_invocations": 0,
+    "actual_guard_invocations": 0,
+    "product_imports": 0,
+    "real_renderings": 0,
+    "next_action": "P3 reviews the sealed request and separately allocates one invocation. No allocation or publication inferred."
   }
 }

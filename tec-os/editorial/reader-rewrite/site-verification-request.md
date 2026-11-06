@@ -1,7 +1,8 @@
 # Sealed TEC-OS site verification request
 
-Status: source preparation complete. The invocation remains unrun and requires
-P3's separate allocation. Publication is excluded.
+Status: source preparation and independent inert confirmation are clear at
+`e4ea69f`. The invocation remains unrun and requires P3's separate allocation.
+Publication is excluded.
 
 ## Bound candidate and inputs
 
