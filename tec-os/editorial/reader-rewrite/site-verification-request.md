@@ -1,8 +1,14 @@
 # Corrected TEC-OS site verification packet
 
-Status: independent source and input reviews are clear at `9843122` and
-`e30d37f`. The new sealed packet requires a new P3 allocation. Attempt 02 has
-not run. Publication remains excluded.
+Status: SITE02 ran under Origo9de5c81e and failed validation after a successful
+render. Its original receipts and sealed packet are preserved in
+`site-verification/failed-attempt02`. The title-reading proposal is pending an
+explicit Origo gate-reference decision. No changed reading has been activated or
+executed and no next invocation is allocated. Publication remains excluded.
+
+The preparation and command below are historical records of the failed SITE02
+packet, not instructions to reuse its claim or output directory. See
+`site-verification/title-reading-proposal/README.md` for the bounded decision.
 
 ## Preserved first result
 

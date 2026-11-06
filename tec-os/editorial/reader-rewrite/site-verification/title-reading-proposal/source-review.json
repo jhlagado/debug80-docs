@@ -1,0 +1,28 @@
+{
+  "status": "source proposal clear; decision pending",
+  "scope": "Proposal, all39 saved title observations,44 Appendix F navigation links and installed title pipeline",
+  "findings": [],
+  "confirmed": [
+    "One proposed title value change: F. tecvol | Debug80 Docs",
+    "Other38 titles unchanged",
+    "Sidebar and pager labels retain backticks independently",
+    "Controls preserve literal fences and H1 contracts",
+    "Actual SITE02 remains FAILED",
+    "Explicit Origo gate-reference decision precedes activation or altered execution"
+  ],
+  "execution": "No altered checker, expectation or control executed",
+  "reviewed_files": [
+    {
+      "path": "README.md",
+      "sha256": "522ec9833aa15baea40f628cdf0f409b41c2b3866eb376763f48b9ab2e29f14d"
+    },
+    {
+      "path": "census.json",
+      "sha256": "8cb6ef9a97c6282c6f41f34c1aa665d97bbabcf4a3cad5f15891e255fe091b1d"
+    },
+    {
+      "path": "navigation-impact.json",
+      "sha256": "062ff0ce0aaa74cb12960e185918b6c792a6a37fe227c47d833b5abdf85fda0f"
+    }
+  ]
+}

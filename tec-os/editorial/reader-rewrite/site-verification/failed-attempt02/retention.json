@@ -1,0 +1,194 @@
+{
+  "status": "FAILED",
+  "allocation": "KS47-SITE02-20261106",
+  "allocation_reference": "Origo9de5c81e",
+  "seal_sha256": "09719b943cddba8aebcf384f24b37f554dc991833ba79e0ba07ea65f50e0c37d",
+  "original_output": "/private/tmp/tec-os-reader-site-09719b943cdd-attempt02",
+  "copies": [
+    {
+      "path": "build-ended.json",
+      "bytes": 16,
+      "sha256": "d24219f6de94b955cf36d25bd2aca88e2d35eef45b9317b7083f55ec8fe9653c"
+    },
+    {
+      "path": "build-started.json",
+      "bytes": 171,
+      "sha256": "6330859fff346e045b0da41be3933c30e80e945f0064d27fe16325af9ff1f98d"
+    },
+    {
+      "path": "checker.json",
+      "bytes": 9759,
+      "sha256": "42e112eeb23ae04af80acf9a756e2bd6765b0bce4a4febfcdc4d6c61db435d2d"
+    },
+    {
+      "path": "context.json",
+      "bytes": 455,
+      "sha256": "18fae1c54d43837b6c1f6689a47867ef502511f231e3a7a5b6dc32c10e7477d1"
+    },
+    {
+      "path": "events.jsonl",
+      "bytes": 4418,
+      "sha256": "10c91f643bb4c562531d22ffd3e7dfb9f3fcdade6f8a84645d77182536267494"
+    },
+    {
+      "path": "external-owned-process-audit.json",
+      "bytes": 785,
+      "sha256": "c045d823c5776ee65839d3d6624411b543f9766afb599dcc1b09336c4b21e9dc"
+    },
+    {
+      "path": "first-failure.json",
+      "bytes": 148,
+      "sha256": "2ad68c168df6742327d70db5ccc0681d494dee8f0c47b20c0d14c6c647fcb3c8"
+    },
+    {
+      "path": "invocation.json",
+      "bytes": 403,
+      "sha256": "565e20b114445aac82c9dd25342ec6c45da846ac013a5c4e3e7ebfd1859f23b6"
+    },
+    {
+      "path": "job-ack.json",
+      "bytes": 163,
+      "sha256": "f0bd087a034f222a469a943f3f9105754535553b03a2d9765523423dadeba654"
+    },
+    {
+      "path": "job-ownership.json",
+      "bytes": 315,
+      "sha256": "2cdf4aa00e1d0f76c44ea7535f358c5d029abcbe7ebc49faf6b29a5c2ff7442c"
+    },
+    {
+      "path": "memory.jsonl",
+      "bytes": 486,
+      "sha256": "77e3a47fe7faa6c37f2a3fc08e10a1458e0e10f59d7d5aefe2c34ccc084d2541"
+    },
+    {
+      "path": "owned-process-audit.json",
+      "bytes": 17,
+      "sha256": "f9515d267ec1466892aae3c677ba08803c688b1d8a70f5194025f12e8119fb56"
+    },
+    {
+      "path": "ownership-diagnostic.json",
+      "bytes": 428,
+      "sha256": "bd3b81107fa1682678aef0199c94e8f95bb9df0599804fc7287fe3a37c2afd0a"
+    },
+    {
+      "path": "stream.log",
+      "bytes": 766,
+      "sha256": "3109678e2ef3adeb5def8786b821c742430d8df30dcf78261a9fee47818324b9"
+    },
+    {
+      "path": "terminal.json",
+      "bytes": 194,
+      "sha256": "5db03357fdabc05564aa3b9debadfcdd3fb5cf6d54312efdd44291e7ff4daccd"
+    },
+    {
+      "path": "validate-ended.json",
+      "bytes": 16,
+      "sha256": "1b2f5a083325c33035cb246dcb6ceb08b00a036dfd9bf30e39aa76843a88af4f"
+    },
+    {
+      "path": "validate-started.json",
+      "bytes": 465,
+      "sha256": "46c2cfaa9e5c5e6bc2d97f905b6b710315a55e05a3d1b5443980f41ec4d63311"
+    },
+    {
+      "path": "command.log",
+      "sha256": "3109678e2ef3adeb5def8786b821c742430d8df30dcf78261a9fee47818324b9",
+      "bytes": 766
+    },
+    {
+      "path": "persistent-claim.json",
+      "original": "/Users/johnhardy/.origo/site-verification/claims/09719b943cddba8aebcf384f24b37f554dc991833ba79e0ba07ea65f50e0c37d.json",
+      "bytes": 150,
+      "sha256": "298b9734d48afb68f4bf6dc7670ad0ed6332e0f93402accfff092304bde682a0"
+    }
+  ],
+  "ownership_resolution": "Not inferred from an empty process audit. Root retains ownership of independent disposition.",
+  "retry": false,
+  "sealed_packet_copies": [
+    {
+      "path": "packet/README.md",
+      "bytes": 7855,
+      "sha256": "885528a044db87ddd2593e058f5fcac851319f62206ab3e6434e933ffe4f7480"
+    },
+    {
+      "path": "packet/build_and_check.py",
+      "bytes": 3596,
+      "sha256": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410"
+    },
+    {
+      "path": "packet/check_html.py",
+      "bytes": 26143,
+      "sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515"
+    },
+    {
+      "path": "packet/config.after.ts",
+      "bytes": 24163,
+      "sha256": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9"
+    },
+    {
+      "path": "packet/config.before.ts",
+      "bytes": 3349,
+      "sha256": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e"
+    },
+    {
+      "path": "packet/config.diff",
+      "bytes": 21686,
+      "sha256": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489"
+    },
+    {
+      "path": "packet/controls-result.json",
+      "bytes": 1130595,
+      "sha256": "c51da34c86b86f7a0d1262a7b42fd1c1aa6ddf1d10e9fed82b759341f0dc96d9"
+    },
+    {
+      "path": "packet/dependency-manifests.json",
+      "bytes": 556,
+      "sha256": "8631dbb874c8e8e31cb90decb7cc1b968d0ebd7cf53f6a90895a1331107c2107"
+    },
+    {
+      "path": "packet/expectations.json",
+      "bytes": 196110,
+      "sha256": "66ad882a456260a61f6f248cc0aaae6d0a19794fc51bfd850ea26a2edd181c48"
+    },
+    {
+      "path": "packet/installed-inputs.json",
+      "bytes": 757546,
+      "sha256": "cfa02ccc86400c70240ca896dec4e4af85e6acb08dcdc6f5b72803732521b911"
+    },
+    {
+      "path": "packet/invoke.sh",
+      "bytes": 664,
+      "sha256": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e"
+    },
+    {
+      "path": "packet/packet_inputs.py",
+      "bytes": 4299,
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504"
+    },
+    {
+      "path": "packet/prepare_packet.py",
+      "bytes": 9371,
+      "sha256": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8"
+    },
+    {
+      "path": "packet/run_once.py",
+      "bytes": 26357,
+      "sha256": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6"
+    },
+    {
+      "path": "packet/seal.json",
+      "bytes": 3109,
+      "sha256": "09719b943cddba8aebcf384f24b37f554dc991833ba79e0ba07ea65f50e0c37d"
+    },
+    {
+      "path": "packet/source-inputs.json",
+      "bytes": 101673,
+      "sha256": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8"
+    },
+    {
+      "path": "packet/test_checker.py",
+      "bytes": 21232,
+      "sha256": "cb83538f3b1728b2d95babe21849e55fa2df72a36eb326c11345ca738094f219"
+    }
+  ]
+}
