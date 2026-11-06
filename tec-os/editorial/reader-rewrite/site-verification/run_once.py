@@ -46,8 +46,9 @@ def main():
         'retry': False, 'deadline_includes': 'preflight, copy, guard, build, checker and cleanup'
     }, exclusive=True)
     stage = ['preflight']
-    roots = set()
-    observed = set()
+    roots = {}
+    observed = {}
+    children = {}
     done = threading.Event()
     events = os.open(output / 'events.jsonl', os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     stream = os.open(output / 'stream.log', os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
@@ -68,35 +69,58 @@ def main():
         signal.signal(signum, interrupted)
 
     def process_rows():
-        result = subprocess.run(['/bin/ps', '-axo', 'pid=,ppid=,pgid='],
+        result = subprocess.run(['/bin/ps', '-axo', 'pid=,ppid=,pgid=,lstart='],
                                 text=True, capture_output=True, timeout=0.5)
         if result.returncode:
             raise Failed('cannot audit owned processes')
-        return [tuple(map(int, line.split())) for line in result.stdout.splitlines() if line.strip()]
+        rows = []
+        for line in result.stdout.splitlines():
+            if line.strip():
+                pid, parent, group, birth = line.split(None, 3)
+                rows.append((int(pid), int(parent), int(group), birth.strip()))
+        return rows
 
     def owned():
         rows = process_rows()
-        kept = set(roots) | set(observed)
+        root_snapshot = roots.copy()
+        known = {**observed.copy(), **root_snapshot}
+        # A PID alone is not an owned process identity after it has exited.
+        kept = {pid for pid, _, _, birth in rows if known.get(pid) == birth}
+        groups = {pid for pid, _, _, birth in rows if root_snapshot.get(pid) == birth}
         changed = True
         while changed:
             changed = False
-            for pid, parent, group in rows:
-                if pid not in kept and (parent in kept or group in roots):
+            for pid, parent, group, _ in rows:
+                if pid not in kept and (parent in kept or group in groups):
                     kept.add(pid)
                     changed = True
         found = [row for row in rows if row[0] in kept]
-        observed.update(row[0] for row in found)
+        observed.update({row[0]: row[3] for row in found})
         return found
 
     def terminate(sig):
-        rows = owned()
+        try:
+            rows = owned()
+        except BaseException:
+            for child in children.copy().values():
+                if child.poll() is None:
+                    child.send_signal(sig)
+            raise
         # Signal leaders first. The guard's TERM handler kills its detached job.
-        for pid in sorted(roots):
+        live = {row[0]: row[3] for row in rows}
+        for pid, birth in sorted(roots.copy().items()):
+            if birth is None:
+                child = children.get(pid)
+                if child is not None and child.poll() is None:
+                    child.send_signal(sig)
+                continue
+            if live.get(pid) != birth:
+                continue
             try:
                 os.kill(pid, sig)
             except ProcessLookupError:
                 pass
-        for pid, _, _ in reversed(rows):
+        for pid, _, _, _ in reversed(rows):
             try:
                 os.kill(pid, sig)
             except ProcessLookupError:
@@ -119,12 +143,16 @@ def main():
                 durable_json(output / 'deadline-audit.json', {'remaining': audit}, exclusive=True)
             except BaseException as error:
                 first_failure(output, 'watchdog', str(error), 124)
-                # An audit failure cannot permit the invocation to continue.
-                for pid in tuple(roots | observed):
-                    try:
-                        os.kill(pid, signal.SIGKILL)
-                    except ProcessLookupError:
-                        pass
+                # Give the guard its TERM cleanup even when ps is unavailable.
+                for child in children.copy().values():
+                    if child.poll() is None:
+                        child.terminate()
+                time.sleep(0.4)
+                for child in children.copy().values():
+                    if child.poll() is None:
+                        child.kill()
+                durable_json(output / 'deadline-audit.json',
+                             {'clear': False, 'error': str(error)})
             durable_json(output / 'terminal.json', {'status': 'FAILED', 'exit_code': 124,
                          'retry': False, 'elapsed_seconds': time.monotonic() - ENTRY_MONO})
             os._exit(124)
@@ -137,7 +165,11 @@ def main():
         child = subprocess.Popen(argv, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
                                  stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                  start_new_session=True)
-        roots.add(child.pid)
+        children[child.pid] = child
+        roots[child.pid] = None
+        birth = next((row[3] for row in process_rows() if row[0] == child.pid), None)
+        if birth is not None:
+            roots[child.pid] = birth
         while True:
             chunk = os.read(child.stdout.fileno(), 65536)
             if not chunk:
@@ -149,8 +181,9 @@ def main():
             except BrokenPipeError:
                 pass
         code = child.wait()
-        roots.discard(child.pid)
-        observed.discard(child.pid)
+        roots.pop(child.pid, None)
+        observed.pop(child.pid, None)
+        children.pop(child.pid, None)
         event('command-end', code=code)
         if code:
             first_failure(output, stage[0], 'command exited ' + str(code), code)
@@ -231,7 +264,7 @@ def main():
         command(argv, cwd=source, env=env)
         stage[0] = 'postflight'
         checker = json.loads((output / 'checker.json').read_text())
-        if checker.get('status') != 'PASS':
+        if checker.get('status') != 'passed':
             raise Failed('checker acceptance missing')
         expectations = json.loads((packet / 'expectations.json').read_text())
         for page in expectations['pages']:
@@ -262,15 +295,21 @@ def main():
         code = 0
     except BaseException as error:
         first_failure(output, stage[0], str(error), 1)
+        for sig in (signal.SIGTERM, signal.SIGKILL):
+            try:
+                terminate(sig)
+            except BaseException as cleanup_error:
+                event('cleanup-error', detail=str(cleanup_error))
+            if sig == signal.SIGTERM:
+                time.sleep(0.4)
         try:
-            terminate(signal.SIGTERM)
-            time.sleep(0.2)
-            terminate(signal.SIGKILL)
             durable_json(output / 'owned-process-audit.json', {'remaining': owned()})
         except BaseException as cleanup_error:
-            event('cleanup-error', detail=str(cleanup_error))
+            durable_json(output / 'owned-process-audit.json',
+                         {'clear': False, 'error': str(cleanup_error)})
         durable_json(output / 'terminal.json', {'status': 'FAILED', 'retry': False,
-                     'detail': str(error), 'elapsed_seconds': time.monotonic() - ENTRY_MONO})
+                     'exit_code': 1, 'detail': str(error),
+                     'elapsed_seconds': time.monotonic() - ENTRY_MONO})
     finally:
         done.set()
         watcher.join(timeout=0.6)

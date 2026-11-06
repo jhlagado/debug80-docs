@@ -6,7 +6,8 @@ The packet keeps the accepted reader source at `a3e4c29`. Preparation reads
 Git exports and installed dependency files without importing VitePress or
 building the site. The expectation manifest contains 39 pages, 247 local
 links, 45 fragments and 247 literal fences. Its sidebar has 38 pages in
-four groups. The front door has no previous or next sidebar page.
+four groups. The unlisted front door has no previous page. Its default next
+page is the first chapter, as the installed theme's lookup specifies.
 
 ## Invocation and receipts
 
@@ -56,6 +57,12 @@ the actual build passed. The retained controls report lists the mutations and
 receipts. Rendered output remains unqualified until the allocated invocation.
 
 The validator checks titles, first headings, actual IDs and relative links,
-sidebar and previous/next order and decoded literal code. It rejects unexpected
+sidebar and previous/next order and decoded literal code. The manifest retains
+raw source fences and separate expected rendered text. The installed highlighter
+removes whitespace at the end of the whole fence before highlighting. Only that
+source-derived transformation is applied, not linewise trimming or tab expansion.
+Appendix F's inline-code backticks are absent from its visible heading but
+remain in its raw source, frontmatter title and sidebar label. These expected
+representations were fixed before any real build or render. It rejects unexpected
 or absent reader pages. It does not establish visual layout, browser behaviour,
 physical hardware, a global site result or publication readiness.

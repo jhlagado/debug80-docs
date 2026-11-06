@@ -31,8 +31,8 @@ def main():
             first_failure(output, phase, 'first nonzero command result', code)
             return code
     receipt = json.loads((output / 'checker.json').read_text())
-    if receipt.get('status') != 'PASS':
-        first_failure(output, 'validate', 'checker has no PASS receipt', 1)
+    if receipt.get('status') != 'passed':
+        first_failure(output, 'validate', 'checker has no passed receipt', 1)
         return 1
     return 0
 

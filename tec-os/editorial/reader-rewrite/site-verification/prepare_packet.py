@@ -34,7 +34,20 @@ def prepare():
     assert readers == {p for p in tracked if p.startswith('tec-os/') and
                        p.count('/') == 1 and p.endswith('.md')}
     for row in expected['pages']:
-        assert hashlib.sha256(source_bytes(row['path'])).hexdigest() == row['source_sha256']
+        data = source_bytes(row['path'])
+        assert hashlib.sha256(data).hexdigest() == row['source_sha256']
+        text = data.decode()
+        assert row['source_h1'] == re.search(r'^# (.+)$', text, re.M)[1]
+        assert row['h1'] == row['source_h1'].replace('`', '')
+        fences = re.findall(r'^```([^\n]*)\n(.*?)^```[\t ]*$', text, re.M | re.S)
+        assert len(fences) == len(row['fences'])
+        whitespace = ('\t\n\v\f\r \u00a0\u1680' +
+                      ''.join(chr(n) for n in range(0x2000, 0x200b)) +
+                      '\u2028\u2029\u202f\u205f\u3000\ufeff')
+        for (language, raw), fence in zip(fences, row['fences']):
+            assert language.strip() == fence['language'] and raw == fence['text']
+            assert '[!code' not in raw
+            assert fence['rendered_text'] == raw.rstrip(whitespace)
     before = source_bytes('.vitepress/config.ts').decode()
     excluded = [p for p in tracked if p.endswith('.md') and p not in readers]
     after, count = re.subn(r'srcExclude: \[[\s\S]*?\n  \],',
