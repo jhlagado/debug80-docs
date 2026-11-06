@@ -24,6 +24,10 @@ copying, guard startup, build, validation and cleanup share that deadline.
 The final three seconds are reserved for stopping and receipts. No phase
 resets the clock. The watcher starts before preflight and guard startup.
 
+The sealed `invoke.sh` entry computes that absolute deadline before executing
+the isolated standard-library runner. The guard has `--wait 0`. A busy slot
+therefore fails immediately rather than queuing.
+
 A new output directory and an exclusive persistent claim for the seal prevent
 a second invocation of the same sealed attempt. The claim is never removed.
 An existing claim causes failure, even if a different output path is supplied.
@@ -49,7 +53,10 @@ config module are excluded from that source-file comparison.
 arrives. `events.jsonl` records command boundaries. Phase start/end receipts,
 `memory.jsonl`, `checker.json` and `owned-process-audit.json` retain their
 separate meanings. The first failure has an exclusive receipt which later
-cleanup cannot replace. `terminal.json` records the invocation result.
+cleanup cannot replace. Failure latches block later outer command launches
+and ownership acknowledgements. The worker checks the same failure receipt
+before each phase. Ownership and failure receipts are published atomically
+after their complete temporary file has been synchronised. `terminal.json` records the invocation result.
 
 Before starting VitePress, the guarded worker writes its PID, process group,
 start identity and context nonce. It waits for the outer invocation to validate
@@ -86,3 +93,18 @@ remain in its raw source, frontmatter title and sidebar label. These expected
 representations were fixed before any real build or render. It rejects unexpected
 or absent reader pages. It does not establish visual layout, browser behaviour,
 physical hardware, a global site result or publication readiness.
+
+The source preparation and synthetic-control commands are separate from the
+later allocated invocation:
+
+```sh
+python3 -B prepare_packet.py
+python3 -B test_checker.py --expect expectations.json --result NEW_CONTROL_REPORT
+```
+
+The controls mutate actual synthetic HTML files before invoking the same
+checker CLI. Synthetic headings include the installed H1 permalink separator
+and its exact structure. Every expected rendered heading has its
+exact final permalink, one preceding space and the source-defined aria label.
+The checker never strips heading whitespace to make a comparison pass.
+
