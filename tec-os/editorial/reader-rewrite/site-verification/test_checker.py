@@ -45,7 +45,9 @@ def scaffold(manifest, directory):
         heading = ('Appendix F. <code>tecvol</code>' if page['html']=='tec-os/appendix-f-tecvol.html'
                    else escape(page['h1']))
         parts += ['</nav></aside><main><div class="vp-doc"><h1 id="synthetic-title">',
-                  heading, '<a class="header-anchor" href="#synthetic-title">&#8203;</a></h1>']
+                  heading, ' <a class="header-anchor" href="#synthetic-title" aria-label="',
+                  escape('Permalink to "'+page['source_h1']+'"', quote=True),
+                  '">&#8203;</a></h1>']
         for fragment in sorted(ids[page['html']]):
             parts += ['<h2 id="', escape(fragment, quote=True), '">Synthetic target',
                       '<a class="header-anchor" href="#', escape(fragment, quote=True),
@@ -182,11 +184,27 @@ def controls(expect, output, work=None):
     run_case('wrong-title', 'title', lambda d:replace_once(d,name,
              '<title>'+escape(first['title'])+'</title>', '<title>Wrong title</title>'))
     run_case('wrong-h1', 'h1', lambda d:replace_once(d,name,
-             escape(first['h1'])+'<a class="header-anchor"', 'Wrong heading<a class="header-anchor"'))
+             escape(first['h1'])+' <a class="header-anchor"', 'Wrong heading <a class="header-anchor"'))
+    heading_end = escape(first['h1'])+' <a class="header-anchor"'
+    run_case('h1-missing-permalink-separator', 'h1', lambda d:replace_once(d,name,
+             heading_end, escape(first['h1'])+'<a class="header-anchor"'))
+    run_case('h1-extra-permalink-separator', 'h1', lambda d:replace_once(d,name,
+             heading_end, escape(first['h1'])+'  <a class="header-anchor"'))
+    run_case('h1-wrong-permalink-separator', 'h1', lambda d:replace_once(d,name,
+             heading_end, escape(first['h1'])+'\t<a class="header-anchor"'))
+    run_case('h1-content-after-permalink', 'h1', lambda d:replace_once(d,name,
+             '&#8203;</a></h1>', '&#8203;</a>Extra heading content</h1>'))
+    run_case('h1-wrong-permalink-target', 'h1', lambda d:replace_once(d,name,
+             'href="#synthetic-title" aria-label=', 'href="#wrong-heading" aria-label='))
+    run_case('h1-wrong-permalink-symbol', 'h1', lambda d:replace_once(d,name,
+             '&#8203;</a></h1>', '&#8203;Extra</a></h1>'))
+    run_case('h1-wrong-permalink-label', 'h1', lambda d:replace_once(d,name,
+             'aria-label="'+escape('Permalink to "'+first['source_h1']+'"',quote=True)+'"',
+             'aria-label="Wrong label"'))
     appendix_f = next(p for p in manifest['pages'] if p['html']=='tec-os/appendix-f-tecvol.html')
     run_case('h1-source-delimiters-not-visible', 'h1', lambda d:replace_once(d,appendix_f['html'],
-             'Appendix F. <code>tecvol</code><a class="header-anchor"',
-             'Appendix F. `<code>tecvol</code>`<a class="header-anchor"'))
+             'Appendix F. <code>tecvol</code> <a class="header-anchor"',
+             'Appendix F. `<code>tecvol</code>` <a class="header-anchor"'))
     run_case('title-frontmatter-delimiters-retained', 'title', lambda d:replace_once(d,appendix_f['html'],
              '<title>'+escape(appendix_f['title'])+'</title>',
              '<title>'+escape(appendix_f['title'].replace('`',''))+'</title>'))
@@ -284,6 +302,13 @@ def controls(expect, output, work=None):
                   expectations_sha256=sha(original_manifest), checker_sha256=sha((HERE/'check_html.py').read_bytes()),
                   controls_script_sha256=sha(Path(__file__).read_bytes()), work_directory=str(work),
                   controls=records, control_count=len(records),
+                  h1_permalink_correction=dict(
+                      finding='checker-source-01', review_commit='b37c00e956576992c1a6ed0e1f3f9fdd28a38b3c',
+                      source_path='node_modules/vitepress/dist/node/chunk-D3CUZ4fa.js',
+                      source_sha256='07d45c356e7c850c2454904949f4b0b95c1d4a2d92119cbdaf4d419ae20dde98',
+                      source_lines=[31698,35746,35759],
+                      contract='One final direct permalink anchor with exact class, self-id href, source-heading aria-label and U+200B symbol; prefix text equals visible h1 plus exactly one U+0020. No heading whitespace is stripped.',
+                      status='Implemented and synthetic controls passed; bounded independent confirmation remains separate.'),
                   inert_component_source_identities=inert_sources,
                   receipt_reuse_control=dict(exit_status=refusal.returncode, stderr=refusal.stderr,
                                             original_receipt_sha256=sha(old_receipt),receipt_unchanged=True),

@@ -67,10 +67,8 @@ class Node:
             if isinstance(child, Node):
                 yield from child.walk()
 
-    def text(self, omit_permalink=False):
-        if omit_permalink and self.has('header-anchor'):
-            return ''
-        return ''.join(c.text(omit_permalink) if isinstance(c, Node) else c
+    def text(self):
+        return ''.join(c.text() if isinstance(c, Node) else c
                        for c in self.children)
 
 
@@ -291,9 +289,7 @@ def verify(manifest, dist, receipt):
         title = one(head, tag='title', category='title', page=name).text()
         require(title == page['title'], 'title', 'Head title differs', page=name,
                 expected=page['title'], actual=title)
-        h1 = one(content, tag='h1', category='h1', page=name).text(omit_permalink=True)
-        require(h1 == page['h1'], 'h1', 'Document h1 differs', page=name,
-                expected=page['h1'], actual=h1)
+        check_h1(content, page)
         documents[name] = (parsed.root, content)
         receipt['checked']['documents'] += 1
     for page in pages:
@@ -326,6 +322,27 @@ def verify(manifest, dist, receipt):
         receipt['checked']['pagers'] += 1
         check_fences(content, page)
         receipt['checked']['fences'] += len(page['fences'])
+
+
+def check_h1(content, page):
+    heading = one(content, tag='h1', category='h1', page=page['html'])
+    anchors = nodes(heading, cls='header-anchor')
+    require(len(anchors) == 1 and bool(heading.children)
+            and heading.children[-1] is anchors[0], 'h1',
+            'Expected one final direct H1 permalink', page=page['html'])
+    anchor = anchors[0]
+    heading_id = heading.attrs.get('id')
+    require(bool(heading_id) and anchor.tag == 'a'
+            and anchor.attrs == {'class': 'header-anchor', 'href': '#'+heading_id,
+                                 'aria-label': 'Permalink to "'+page['source_h1']+'"'}
+            and anchor.children == ['\u200b'], 'h1',
+            'H1 permalink structure differs from installed source', page=page['html'])
+    # Installed linkInsideHeader: space:true, placement:after, followed by the anchor.
+    # Compare the exact prefix including its one U+0020; never strip heading text.
+    actual = ''.join(c.text() if isinstance(c, Node) else c for c in heading.children[:-1])
+    expected = page['h1'] + ' '
+    require(actual == expected, 'h1', 'Document h1 content or exact permalink separator differs',
+            page=page['html'], expected=expected, actual=actual)
 
 
 def check_sidebar(root, groups, page):
