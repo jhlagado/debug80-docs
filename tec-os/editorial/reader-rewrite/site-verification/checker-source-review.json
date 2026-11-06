@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "review_complete_changes_required",
+  "status": "bounded_source_review_clear_after_h1_correction",
   "scope": "Independent bounded source review of the HTML checker, synthetic controls and retained receipts. No real-site acceptance.",
   "reviewed_commits": {
     "checker_controls": "7dcb4bce59f55f9978155884206f9d17f0a997a4",
@@ -35,7 +35,7 @@
     {
       "id": "checker-source-01",
       "priority": "P1",
-      "status": "unresolved",
+      "status": "closed_by_bounded_confirmation",
       "title": "Installed H1 permalink separator makes valid rendered headings fail",
       "locations": [
         {
@@ -87,7 +87,8 @@
           "actual": "1. First session "
         },
         "interpretation": "Actual checker CLI failure on synthetic text only; predicted real-render failure follows from inert installed-source reading, not a real render."
-      }
+      },
+      "resolved_at": "1cef869e31df10dd928c6ca49d2eec173ed7850d"
     }
   ],
   "completed_checks": [
@@ -836,7 +837,7 @@
     }
   ],
   "remaining_limits": [
-    "No real HTML output has been built or inspected. The unresolved heading mismatch prevents source-review clearance of the current checker contract.",
+    "No real HTML output has been built or inspected. H1 source-contract correction is independently clear; synthetic controls do not establish real emitted output or allocate a build.",
     "The synthetic baseline derives expected links, fences and labels from the same manifest. Independent frozen-source comparisons reduce that shared-oracle risk but do not establish real emitted DOM correctness.",
     "Document links are compared as a target/fragment multiset, not bound to visible labels or source positions. Swapping two destination attributes can preserve that multiset. This does not invalidate the narrower resolution/count check, and no claim of label-to-destination preservation is made.",
     "HTMLParser plus explicit structural checks is not a complete browser HTML conformance validator. CSS visibility, script behaviour, hydration, layout, accessibility, browser interaction, global site and publication remain unaccepted.",
@@ -849,5 +850,805 @@
     "allocation_or_retry": false,
     "shared_files_changed": false
   },
-  "closure": "The bounded review is complete with one required correction. A corrected heading contract and its exact synthetic controls need bounded follow-up review before this checker is treated as ready for allocation."
+  "closure": "The original checker-source-01 finding is closed at 1cef869 by bounded source and retained-receipt confirmation. No additional findings in this correction. Prior unrelated source-review conclusions and limits remain unchanged; real rendering remains unrun and unaccepted.",
+  "initial_review_status": "review_complete_changes_required",
+  "h1_bounded_confirmation": {
+    "commit": "1cef869e31df10dd928c6ca49d2eec173ed7850d",
+    "scope": "Complete changed H1 extraction/validation code and every changed scaffold/control mutation, with actual retained receipt and after-tree identities. No repeat of the old whole review.",
+    "status": "clear",
+    "inputs": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/check_html.py",
+        "sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/test_checker.py",
+        "sha256": "cb83538f3b1728b2d95babe21849e55fa2df72a36eb326c11345ca738094f219"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/controls-result.json",
+        "sha256": "c51da34c86b86f7a0d1262a7b42fd1c1aa6ddf1d10e9fed82b759341f0dc96d9"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/expectations.json",
+        "sha256": "66ad882a456260a61f6f248cc0aaae6d0a19794fc51bfd850ea26a2edd181c48"
+      }
+    ],
+    "manifest_unchanged": true,
+    "manifest_sha256": "66ad882a456260a61f6f248cc0aaae6d0a19794fc51bfd850ea26a2edd181c48",
+    "source_contract": {
+      "path": "node_modules/vitepress/dist/node/chunk-D3CUZ4fa.js",
+      "sha256": "07d45c356e7c850c2454904949f4b0b95c1d4a2d92119cbdaf4d419ae20dde98",
+      "lines": [
+        31698,
+        35746,
+        35759
+      ],
+      "checks": [
+        "The one header-anchor is the final direct child of the sole scoped H1. A nested or additional header-anchor cannot satisfy that final direct-child identity.",
+        "The heading has a nonempty id. The permalink is an a element with exactly class=header-anchor, href=# plus that id and aria-label=Permalink to followed by the quoted raw source_h1. Appendix F backticks remain in this attribute.",
+        "The permalink has exactly one decoded U+200B child, with no nested markup or extra symbol text.",
+        "All prefix children are decoded without whitespace normalization and compared with the visible H1 plus exactly one U+0020. Missing, extra or tab separators fail. Ordinary content and Appendix F inline-code text remain exact.",
+        "Node.text no longer offers arbitrary header-anchor suppression. Title/sidebar/code paths keep their ordinary decoded text extraction."
+      ]
+    },
+    "scaffold_readback": "The baseline now emits the exact U+0020, direct final anchor, self-id href, escaped raw-source aria-label and numeric U+200B entity. Existing wrong-heading and Appendix F mutations now preserve that separator while altering only the intended heading content.",
+    "new_negative_controls": [
+      "h1-missing-permalink-separator",
+      "h1-extra-permalink-separator",
+      "h1-wrong-permalink-separator",
+      "h1-content-after-permalink",
+      "h1-wrong-permalink-target",
+      "h1-wrong-permalink-symbol",
+      "h1-wrong-permalink-label"
+    ],
+    "receipt_evidence": {
+      "total": 40,
+      "positive": 4,
+      "negative": 36,
+      "actual_receipts_and_sha256_verified": 40,
+      "actual_after_html_tree_hashes_verified": 40,
+      "checker_and_manifest_hashes_match_each_receipt": true,
+      "new_h1_mutations_compared_with_retained_baseline": true,
+      "expected_first_failure_matches_each_receipt": true,
+      "reuse_control": {
+        "exit_status": 2,
+        "stderr": "{\"status\": \"refused\", \"category\": \"receipt\", \"message\": \"[Errno 17] File exists: '/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/first-failure-only/receipt.json'\"}\n",
+        "original_receipt_sha256": "51e208df4c53b4177e98a5e9d2d001bdb8127ca66dd4b34805d91a2c79811581",
+        "receipt_unchanged": true
+      },
+      "controls": [
+        {
+          "control": "positive",
+          "exit_status": 0,
+          "first_failure": null,
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/positive/receipt.json",
+          "receipt_sha256": "e9f86ac8e9d5148e308c41408bc07afed82cbbee37550ddea5126c7844cba296"
+        },
+        {
+          "control": "relative-and-self-fragment-positive",
+          "exit_status": 0,
+          "first_failure": null,
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/relative-and-self-fragment-positive/receipt.json",
+          "receipt_sha256": "fb76cfc2275188bab384f5beef737f2a0a716313b9fa51167a1a6694c164f100"
+        },
+        {
+          "control": "delete-page",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "inventory",
+            "message": "Reader HTML inventory differs",
+            "missing": [
+              "tec-os/01-first-session.html"
+            ],
+            "unexpected": []
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/delete-page/receipt.json",
+          "receipt_sha256": "33d5baa002627bab514a8f740b4b22faf0661f12f0fc5eb06725a31498deb371"
+        },
+        {
+          "control": "unexpected-root-page",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "inventory",
+            "message": "Reader HTML inventory differs",
+            "missing": [],
+            "unexpected": [
+              "tec-os/superseded-reader.html"
+            ]
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/unexpected-root-page/receipt.json",
+          "receipt_sha256": "f392f58b70ffcc551d843ecb804429ac5cc1a44a94740d305fd71f5860a7bf7e"
+        },
+        {
+          "control": "unexpected-other-root-html",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "inventory",
+            "message": "Reader HTML inventory differs",
+            "missing": [],
+            "unexpected": [
+              "index.html"
+            ]
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/unexpected-other-root-html/receipt.json",
+          "receipt_sha256": "2245233f066a6f6480eaf13de206688ddd65224a0dfbd2ba74c00d125f733902"
+        },
+        {
+          "control": "framework-404-positive",
+          "exit_status": 0,
+          "first_failure": null,
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/framework-404-positive/receipt.json",
+          "receipt_sha256": "ee80d38b2192debf04f4b10202aac91ce741bbf1e73af6ed79cca784aa435880"
+        },
+        {
+          "control": "public-passthrough-corruption",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "public_html",
+            "message": "Public passthrough bytes/hash differ; no semantic acceptance",
+            "path": "tec1g/mon3-user-guide/index.html",
+            "expected_bytes": 321,
+            "actual_bytes": 321,
+            "expected_sha256": "70578bc32521c647bb17afab0f1a79959cf6733711ebebf1f2ac16dbd7da616d",
+            "actual_sha256": "ed3dfc42c3db7ee7972b40f7c00cc976e311c9cc52c4b59755695caf1af074a5"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/public-passthrough-corruption/receipt.json",
+          "receipt_sha256": "3f66972a24ab00d41c3d91ff3b98aa3dad0631fadd89ad5cbc9c320462528b40"
+        },
+        {
+          "control": "public-passthrough-missing",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "inventory",
+            "message": "Reader HTML inventory differs",
+            "missing": [
+              "tec1g/mon3-user-guide/index.html"
+            ],
+            "unexpected": []
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/public-passthrough-missing/receipt.json",
+          "receipt_sha256": "6c8878e104697a2927ce120aa27efafbdab1219757240e1f7a18685af5655c0f"
+        },
+        {
+          "control": "editorial-output",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "inventory",
+            "message": "Editorial output is forbidden"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/editorial-output/receipt.json",
+          "receipt_sha256": "18c2386caeed4c805ffa9d7ef1abba717d6201fdaa8b1a2971af6373255202fc"
+        },
+        {
+          "control": "wrong-title",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "title",
+            "message": "Head title differs",
+            "page": "tec-os/01-first-session.html",
+            "expected": "First session | Debug80 Docs",
+            "actual": "Wrong title"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/wrong-title/receipt.json",
+          "receipt_sha256": "a0e2c6752e82b61690a9d24d441c1e02b6a2bee5755e83bbe84ad5bf2f377779"
+        },
+        {
+          "control": "wrong-h1",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "h1",
+            "message": "Document h1 content or exact permalink separator differs",
+            "page": "tec-os/01-first-session.html",
+            "expected": "1. First session ",
+            "actual": "Wrong heading "
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/wrong-h1/receipt.json",
+          "receipt_sha256": "ef0bbb7bb040d1313b1945737ea95008fcd9c2032ad23e0ebf3d79ed20cc4e47"
+        },
+        {
+          "control": "h1-missing-permalink-separator",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "h1",
+            "message": "Document h1 content or exact permalink separator differs",
+            "page": "tec-os/01-first-session.html",
+            "expected": "1. First session ",
+            "actual": "1. First session"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/h1-missing-permalink-separator/receipt.json",
+          "receipt_sha256": "5bb316f5dbafa03daac770922551980ee61540ade1c55e12933af4b2a78ab499"
+        },
+        {
+          "control": "h1-extra-permalink-separator",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "h1",
+            "message": "Document h1 content or exact permalink separator differs",
+            "page": "tec-os/01-first-session.html",
+            "expected": "1. First session ",
+            "actual": "1. First session  "
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/h1-extra-permalink-separator/receipt.json",
+          "receipt_sha256": "22967a135c6589d6ae1606d207cbf950631e6d05ca7b81e2a23e5be437d2485c"
+        },
+        {
+          "control": "h1-wrong-permalink-separator",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "h1",
+            "message": "Document h1 content or exact permalink separator differs",
+            "page": "tec-os/01-first-session.html",
+            "expected": "1. First session ",
+            "actual": "1. First session\t"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/h1-wrong-permalink-separator/receipt.json",
+          "receipt_sha256": "38e38ee17d356a22606a2851a555737fa6cd737b77ad57457f9d5be274967fe9"
+        },
+        {
+          "control": "h1-content-after-permalink",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "h1",
+            "message": "Expected one final direct H1 permalink",
+            "page": "tec-os/01-first-session.html"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/h1-content-after-permalink/receipt.json",
+          "receipt_sha256": "37c42d9df6f721f89df10c7fe7d197a886a260c7c17485d69f5993831ac352df"
+        },
+        {
+          "control": "h1-wrong-permalink-target",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "h1",
+            "message": "H1 permalink structure differs from installed source",
+            "page": "tec-os/01-first-session.html"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/h1-wrong-permalink-target/receipt.json",
+          "receipt_sha256": "a27fe7a915d52dc8cf5b7de571d70d2d0ffb695dfc3a1c29f11f77e5256ff308"
+        },
+        {
+          "control": "h1-wrong-permalink-symbol",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "h1",
+            "message": "H1 permalink structure differs from installed source",
+            "page": "tec-os/01-first-session.html"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/h1-wrong-permalink-symbol/receipt.json",
+          "receipt_sha256": "1b7c2adf4425bda6b467cbf0a8e0a15bedeaf425fc2e794543292970c0d426c2"
+        },
+        {
+          "control": "h1-wrong-permalink-label",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "h1",
+            "message": "H1 permalink structure differs from installed source",
+            "page": "tec-os/01-first-session.html"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/h1-wrong-permalink-label/receipt.json",
+          "receipt_sha256": "6969d896cad8f730ac2f8602dbb549c6182d37680481bb7275843cc62fb863b8"
+        },
+        {
+          "control": "h1-source-delimiters-not-visible",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "h1",
+            "message": "Document h1 content or exact permalink separator differs",
+            "page": "tec-os/appendix-f-tecvol.html",
+            "expected": "Appendix F. tecvol ",
+            "actual": "Appendix F. `tecvol` "
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/h1-source-delimiters-not-visible/receipt.json",
+          "receipt_sha256": "20841d81233e54dc5326485ca8dfa53fdf3580413567a3f5a49c4b544db6a568"
+        },
+        {
+          "control": "title-frontmatter-delimiters-retained",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "title",
+            "message": "Head title differs",
+            "page": "tec-os/appendix-f-tecvol.html",
+            "expected": "F. `tecvol` | Debug80 Docs",
+            "actual": "F. tecvol | Debug80 Docs"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/title-frontmatter-delimiters-retained/receipt.json",
+          "receipt_sha256": "02e708cba1575a601003c4ce5acf54fcfe87c556cf2cc6efa9460af27b649376"
+        },
+        {
+          "control": "remove-fragment",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "fragment",
+            "message": "Fragment has no id in target vp-doc",
+            "page": "tec-os/03-work-with-files.html",
+            "target": "tec-os/05-cards-on-the-pc.html",
+            "fragment": "record-sizes-and-allocated-space"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/remove-fragment/receipt.json",
+          "receipt_sha256": "da5e9094b9f6cf1c00db621e3a01e0c59999fcc6a3199059de32706805306d80"
+        },
+        {
+          "control": "wrong-document-link",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "links",
+            "message": "Document reader-link multiset differs",
+            "page": "tec-os/01-first-session.html",
+            "expected": [
+              [
+                "tec-os/appendix-g-tec-1g.html",
+                ""
+              ],
+              [
+                "tec-os/05-cards-on-the-pc.html",
+                ""
+              ],
+              [
+                "tec-os/appendix-d-error-messages.html",
+                ""
+              ]
+            ],
+            "actual": [
+              [
+                "tec-os/03-work-with-files.html",
+                ""
+              ],
+              [
+                "tec-os/05-cards-on-the-pc.html",
+                ""
+              ],
+              [
+                "tec-os/appendix-d-error-messages.html",
+                ""
+              ]
+            ]
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/wrong-document-link/receipt.json",
+          "receipt_sha256": "b72968d28432b574a19ca4c0f7ffd6a567be26ea5384355799ec4a50c1181a96"
+        },
+        {
+          "control": "extra-document-link",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "links",
+            "message": "Document reader-link multiset differs",
+            "page": "tec-os/01-first-session.html",
+            "expected": [
+              [
+                "tec-os/appendix-g-tec-1g.html",
+                ""
+              ],
+              [
+                "tec-os/05-cards-on-the-pc.html",
+                ""
+              ],
+              [
+                "tec-os/appendix-d-error-messages.html",
+                ""
+              ]
+            ],
+            "actual": [
+              [
+                "tec-os/appendix-g-tec-1g.html",
+                ""
+              ],
+              [
+                "tec-os/05-cards-on-the-pc.html",
+                ""
+              ],
+              [
+                "tec-os/appendix-d-error-messages.html",
+                ""
+              ],
+              [
+                "tec-os/03-work-with-files.html",
+                ""
+              ]
+            ]
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/extra-document-link/receipt.json",
+          "receipt_sha256": "88eaf575fceace44b089712f7402711a1f7b74997a1d2cd073172d8628be57d8"
+        },
+        {
+          "control": "duplicate-document",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "document",
+            "message": "Expected exactly one scoped element",
+            "page": "tec-os/01-first-session.html",
+            "tag": null,
+            "css_class": "vp-doc",
+            "actual_count": 2
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/duplicate-document/receipt.json",
+          "receipt_sha256": "010f65f314466e3faba0de5c375d93311b7ae1b3344f845e57416650be8bc67c"
+        },
+        {
+          "control": "missing-document",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "document",
+            "message": "Expected exactly one scoped element",
+            "page": "tec-os/01-first-session.html",
+            "tag": null,
+            "css_class": "vp-doc",
+            "actual_count": 0
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/missing-document/receipt.json",
+          "receipt_sha256": "0f1b0d1561475ea53f981789bc998ececbddfb3a0f87be2f35cdec53150af943"
+        },
+        {
+          "control": "duplicate-id",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "html",
+            "message": "Duplicate HTML id",
+            "page": "tec-os/01-first-session.html"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/duplicate-id/receipt.json",
+          "receipt_sha256": "8ea539322131de2a23e5867fd4ec051bbe33c34b6b4171bf823991570bb76baf"
+        },
+        {
+          "control": "sidebar-reorder",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "sidebar_order",
+            "message": "Sidebar links/order/titles differ",
+            "page": "tec-os/01-first-session.html",
+            "expected": [
+              {
+                "html": "tec-os/01-first-session.html",
+                "title": "First session"
+              },
+              {
+                "html": "tec-os/02-make-a-small-program.html",
+                "title": "Make a small program"
+              },
+              {
+                "html": "tec-os/03-work-with-files.html",
+                "title": "Work with files"
+              },
+              {
+                "html": "tec-os/04-drives-and-user-areas.html",
+                "title": "Drives and user areas"
+              },
+              {
+                "html": "tec-os/05-cards-on-the-pc.html",
+                "title": "Cards on the PC"
+              },
+              {
+                "html": "tec-os/06-choose-a-console.html",
+                "title": "Choose a console"
+              },
+              {
+                "html": "tec-os/07-commands-at-startup.html",
+                "title": "Commands at startup"
+              }
+            ],
+            "actual": [
+              {
+                "html": "tec-os/02-make-a-small-program.html",
+                "title": "First session"
+              },
+              {
+                "html": "tec-os/01-first-session.html",
+                "title": "Make a small program"
+              },
+              {
+                "html": "tec-os/03-work-with-files.html",
+                "title": "Work with files"
+              },
+              {
+                "html": "tec-os/04-drives-and-user-areas.html",
+                "title": "Drives and user areas"
+              },
+              {
+                "html": "tec-os/05-cards-on-the-pc.html",
+                "title": "Cards on the PC"
+              },
+              {
+                "html": "tec-os/06-choose-a-console.html",
+                "title": "Choose a console"
+              },
+              {
+                "html": "tec-os/07-commands-at-startup.html",
+                "title": "Commands at startup"
+              }
+            ]
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/sidebar-reorder/receipt.json",
+          "receipt_sha256": "91767df5dde233430925e169d1e3d2fb3858436b1e84884164ba056746f8f693"
+        },
+        {
+          "control": "sidebar-group-heading",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "sidebar_groups",
+            "message": "Sidebar group heading differs",
+            "page": "tec-os/01-first-session.html",
+            "expected": "Using the machine",
+            "actual": "Wrong group"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/sidebar-group-heading/receipt.json",
+          "receipt_sha256": "37a5c20455c4754e8d3fb41c4e784cbc95bbfcf5f79c100d039e8340ca559137"
+        },
+        {
+          "control": "sidebar-frontmatter-delimiters-retained",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "sidebar_order",
+            "message": "Sidebar links/order/titles differ",
+            "page": "tec-os/01-first-session.html",
+            "expected": [
+              {
+                "html": "tec-os/appendix-a-bdos-functions.html",
+                "title": "A. BDOS functions"
+              },
+              {
+                "html": "tec-os/appendix-b-rom-services.html",
+                "title": "B. The ROM table and hardware services"
+              },
+              {
+                "html": "tec-os/appendix-c-memory-map.html",
+                "title": "C. Memory map"
+              },
+              {
+                "html": "tec-os/appendix-d-error-messages.html",
+                "title": "D. Error messages"
+              },
+              {
+                "html": "tec-os/appendix-e-container-format.html",
+                "title": "E. The container format"
+              },
+              {
+                "html": "tec-os/appendix-f-tecvol.html",
+                "title": "F. `tecvol`"
+              },
+              {
+                "html": "tec-os/appendix-g-tec-1g.html",
+                "title": "G. The TEC-1G as TEC-OS uses it"
+              },
+              {
+                "html": "tec-os/appendix-h-service-file-format.html",
+                "title": "H. The service file format"
+              },
+              {
+                "html": "tec-os/appendix-i-web-page.html",
+                "title": "I. The web page"
+              },
+              {
+                "html": "tec-os/appendix-j-command-reference.html",
+                "title": "J. Command reference"
+              }
+            ],
+            "actual": [
+              {
+                "html": "tec-os/appendix-a-bdos-functions.html",
+                "title": "A. BDOS functions"
+              },
+              {
+                "html": "tec-os/appendix-b-rom-services.html",
+                "title": "B. The ROM table and hardware services"
+              },
+              {
+                "html": "tec-os/appendix-c-memory-map.html",
+                "title": "C. Memory map"
+              },
+              {
+                "html": "tec-os/appendix-d-error-messages.html",
+                "title": "D. Error messages"
+              },
+              {
+                "html": "tec-os/appendix-e-container-format.html",
+                "title": "E. The container format"
+              },
+              {
+                "html": "tec-os/appendix-f-tecvol.html",
+                "title": "F. tecvol"
+              },
+              {
+                "html": "tec-os/appendix-g-tec-1g.html",
+                "title": "G. The TEC-1G as TEC-OS uses it"
+              },
+              {
+                "html": "tec-os/appendix-h-service-file-format.html",
+                "title": "H. The service file format"
+              },
+              {
+                "html": "tec-os/appendix-i-web-page.html",
+                "title": "I. The web page"
+              },
+              {
+                "html": "tec-os/appendix-j-command-reference.html",
+                "title": "J. Command reference"
+              }
+            ]
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/sidebar-frontmatter-delimiters-retained/receipt.json",
+          "receipt_sha256": "2db937d1cb2b10e2eebb36b502c69fc38856faf1f4a45943479170c3902400d2"
+        },
+        {
+          "control": "wrong-pager",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "pager",
+            "message": "Pager target differs",
+            "page": "tec-os/01-first-session.html",
+            "direction": "next",
+            "expected": "tec-os/02-make-a-small-program.html",
+            "actual": "/tec-os/03-work-with-files.html"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/wrong-pager/receipt.json",
+          "receipt_sha256": "782ca01dd27ac7f5aa752feafb18eba5df61b05f87e0b4f2034d530f4c97dab4"
+        },
+        {
+          "control": "index-missing-doorway-next",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "pager",
+            "message": "Pager direction count differs",
+            "page": "tec-os/index.html",
+            "direction": "next",
+            "expected": "tec-os/01-first-session.html",
+            "actual_count": 0
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/index-missing-doorway-next/receipt.json",
+          "receipt_sha256": "783ed4f8324bd3e2813e1a57af1b68aa1d1b56fac919f76806896e57f35eddc3"
+        },
+        {
+          "control": "code-character",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "code_text",
+            "message": "Decoded fence text differs; no whitespace normalization",
+            "page": "tec-os/01-first-session.html",
+            "fence": 1,
+            "first_character_offset": 0,
+            "raw_source_sha256": "79638c9f637b9b1d51b8110fc835ba0036397d29ac6ffbec78ed4b8ef06a9352",
+            "expected_sha256": "ac0c54f7cf08ba4091f3431f71cfbf8dda3953e2d854ab084b8720eae7e13856",
+            "actual_sha256": "cd275380dadde831f364b074a41c709a1094ed777cbc17030e26d438ac37bdc8",
+            "expected_bytes": 56,
+            "actual_bytes": 57,
+            "expected_excerpt": "'\\nTEC-OS 0.1 for TEC-'",
+            "actual_excerpt": "'X\\nTEC-OS 0.1 for TEC'"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/code-character/receipt.json",
+          "receipt_sha256": "d96f9cc5ea956bb75f7073de9cd8ae3b8d1b60d8ebd923c2e484fff46d217394"
+        },
+        {
+          "control": "code-padding",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "code_text",
+            "message": "Decoded fence text differs; no whitespace normalization",
+            "page": "tec-os/01-first-session.html",
+            "fence": 1,
+            "first_character_offset": 0,
+            "raw_source_sha256": "79638c9f637b9b1d51b8110fc835ba0036397d29ac6ffbec78ed4b8ef06a9352",
+            "expected_sha256": "ac0c54f7cf08ba4091f3431f71cfbf8dda3953e2d854ab084b8720eae7e13856",
+            "actual_sha256": "f93212f2e1d302e33c69c8e7916a63c43db8b2c999ed8a2400f012e032e10893",
+            "expected_bytes": 56,
+            "actual_bytes": 58,
+            "expected_excerpt": "'\\nTEC-OS 0.1 for TEC-'",
+            "actual_excerpt": "' \\t\\nTEC-OS 0.1 for TE'"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/code-padding/receipt.json",
+          "receipt_sha256": "cd2b213a18d3f83f06e2354318e4e8794ad3bc0355e53428c3c406c76274a0ca"
+        },
+        {
+          "control": "code-extra-terminal-lf",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "code_text",
+            "message": "Decoded fence text differs; no whitespace normalization",
+            "page": "tec-os/01-first-session.html",
+            "fence": 1,
+            "first_character_offset": 56,
+            "raw_source_sha256": "79638c9f637b9b1d51b8110fc835ba0036397d29ac6ffbec78ed4b8ef06a9352",
+            "expected_sha256": "ac0c54f7cf08ba4091f3431f71cfbf8dda3953e2d854ab084b8720eae7e13856",
+            "actual_sha256": "79638c9f637b9b1d51b8110fc835ba0036397d29ac6ffbec78ed4b8ef06a9352",
+            "expected_bytes": 56,
+            "actual_bytes": 57,
+            "expected_excerpt": "'WORK\\n\\nA>GLCD.SVC\\n\\nA>'",
+            "actual_excerpt": "'WORK\\n\\nA>GLCD.SVC\\n\\nA>\\n'"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/code-extra-terminal-lf/receipt.json",
+          "receipt_sha256": "485a5fb3cf594174f0990b94c3fe4a6555eb5607dbaa785c68c087124f631846"
+        },
+        {
+          "control": "code-tab-expanded",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "code_text",
+            "message": "Decoded fence text differs; no whitespace normalization",
+            "page": "tec-os/10-memory-for-programs.html",
+            "fence": 5,
+            "first_character_offset": 69,
+            "raw_source_sha256": "f3b6e61d5c194653048ec601ef0ef54cc98ebfd5c9833ae85d8ac101ef330034",
+            "expected_sha256": "448981cca150f31248649847d9c06f77683ad34dc303bee3825bd1d4f7151a8c",
+            "actual_sha256": "589b05462ddfdfeca1044772ca27011420dc83df94a2ff9bb37226e854843fe5",
+            "expected_bytes": 1268,
+            "actual_bytes": 1271,
+            "expected_excerpt": "'es, in decimal.\\nBDOS\\tEQU\\t$0005\\n\\n\\tORG\\t$01'",
+            "actual_excerpt": "'es, in decimal.\\nBDOS    EQU\\t$0005\\n\\n\\tORG\\t'"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/code-tab-expanded/receipt.json",
+          "receipt_sha256": "5e672ad0035d53966dcbc04292ddf535ef2ee192c2c2b0709580d289d9503535"
+        },
+        {
+          "control": "code-trailing-space-removed",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "code_text",
+            "message": "Decoded fence text differs; no whitespace normalization",
+            "page": "tec-os/03-work-with-files.html",
+            "fence": 5,
+            "first_character_offset": 113,
+            "raw_source_sha256": "099d7b60c38f0128ef1c71d954d6cbaaa6481071b619dd09cc262eb96e444794",
+            "expected_sha256": "72ebd49f0275f837ed092a4e26763a53c1a20e6183c1d727f728b607883b4889",
+            "actual_sha256": "6bd001194539a898561212db8cde3fc91f7e75ea77d88e7bc44dca15b4f6fd12",
+            "expected_bytes": 332,
+            "actual_bytes": 331,
+            "expected_excerpt": "'TUP.CMD  COPY.TXT    \\n2 files, 8168K fre'",
+            "actual_excerpt": "'TUP.CMD  COPY.TXT   \\n2 files, 8168K free'"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/code-trailing-space-removed/receipt.json",
+          "receipt_sha256": "081ebd11037ced223f34e7c87a071708fd3d6d1822fdc05d5e66200dae2d0f2c"
+        },
+        {
+          "control": "code-language",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "code_language",
+            "message": "Fence language differs",
+            "page": "tec-os/01-first-session.html",
+            "fence": 1,
+            "expected": "text",
+            "actual": "wrong"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/code-language/receipt.json",
+          "receipt_sha256": "395f0f3d9872b79a2464f4635c5a4087dc3fe70309a5925787706ba6b5b89436"
+        },
+        {
+          "control": "extra-code-block",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "code_count",
+            "message": "Fence count differs",
+            "page": "tec-os/01-first-session.html",
+            "expected": 6,
+            "actual": 7
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/extra-code-block/receipt.json",
+          "receipt_sha256": "a40885bdc94e1cdf7233d6d245d8074d5e0d5c1d24f5e06d93bfe485586922af"
+        },
+        {
+          "control": "escaped-entity-positive",
+          "exit_status": 0,
+          "first_failure": null,
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/escaped-entity-positive/receipt.json",
+          "receipt_sha256": "3095b43de670adadf8a929e996d547db00dbae5fb6d21eb73215006a4e01d1cd"
+        },
+        {
+          "control": "first-failure-only",
+          "exit_status": 1,
+          "first_failure": {
+            "category": "title",
+            "message": "Head title differs",
+            "page": "tec-os/01-first-session.html",
+            "expected": "First session | Debug80 Docs",
+            "actual": "Wrong title"
+          },
+          "receipt_path": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-html-controls-51lp8l5j/first-failure-only/receipt.json",
+          "receipt_sha256": "51e208df4c53b4177e98a5e9d2d001bdb8127ca66dd4b34805d91a2c79811581"
+        }
+      ]
+    },
+    "execution": {
+      "new_checker_controls": 0,
+      "product_import_build_render_runtime": false
+    },
+    "limits": "Confirms the correction and its synthetic mutation evidence, not an actual render or any allocation/publication readiness. Original historical evidence remains recorded above rather than silently replaced."
+  }
 }
