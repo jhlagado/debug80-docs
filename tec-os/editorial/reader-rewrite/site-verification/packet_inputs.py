@@ -3,6 +3,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+from datetime import datetime, timezone
 
 
 def digest(path):
@@ -63,6 +64,7 @@ def first_failure(output, stage, detail, code):
     try:
         durable_json(Path(output) / 'first-failure.json',
                      {'status': 'FAILED', 'stage': stage, 'detail': detail,
-                      'exit_code': code, 'retry': False}, exclusive=True)
+                      'exit_code': code, 'retry': False,
+                      'utc': datetime.now(timezone.utc).isoformat()}, exclusive=True)
     except FileExistsError:
         pass
