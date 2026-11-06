@@ -1,0 +1,399 @@
+{
+  "purpose": "Inert observation of actual SITE02 output, not execution or acceptance of an altered validator",
+  "pages": 39,
+  "affected": [
+    "tec-os/appendix-f-tecvol.md"
+  ],
+  "rows": [
+    {
+      "page": "tec-os/01-first-session.md",
+      "raw_frontmatter_title": "First session",
+      "old_expected_title": "First session | Debug80 Docs",
+      "actual_titles": [
+        "First session | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "a67b5e5f20a50bf2ba74d3c6d63a75f045bfbd5668687eaee483e62a5bbe3115"
+    },
+    {
+      "page": "tec-os/02-make-a-small-program.md",
+      "raw_frontmatter_title": "Make a small program",
+      "old_expected_title": "Make a small program | Debug80 Docs",
+      "actual_titles": [
+        "Make a small program | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "0b726b8f08f83c25d9a791183cf5059a7a84bb0b3d7b4a5efc6508c2bce3b286"
+    },
+    {
+      "page": "tec-os/03-work-with-files.md",
+      "raw_frontmatter_title": "Work with files",
+      "old_expected_title": "Work with files | Debug80 Docs",
+      "actual_titles": [
+        "Work with files | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "979b551aed6483109d93723c4a042754c2ebbebddd1fc0980ce8f255ac586332"
+    },
+    {
+      "page": "tec-os/04-drives-and-user-areas.md",
+      "raw_frontmatter_title": "Drives and user areas",
+      "old_expected_title": "Drives and user areas | Debug80 Docs",
+      "actual_titles": [
+        "Drives and user areas | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "4c7e0bae1cd453f6326067aee677b87500c31d58b970563dfb493f3fbc835087"
+    },
+    {
+      "page": "tec-os/05-cards-on-the-pc.md",
+      "raw_frontmatter_title": "Cards on the PC",
+      "old_expected_title": "Cards on the PC | Debug80 Docs",
+      "actual_titles": [
+        "Cards on the PC | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "7484ed53d00198925d54e87465e1ac03251e319d4ec81a4ff0370edbeac9dbaa"
+    },
+    {
+      "page": "tec-os/06-choose-a-console.md",
+      "raw_frontmatter_title": "Choose a console",
+      "old_expected_title": "Choose a console | Debug80 Docs",
+      "actual_titles": [
+        "Choose a console | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "1f3aec6164a13b05306b24cf4d7dc1dddbfec3ceee02e9dc914de1506a8b5556"
+    },
+    {
+      "page": "tec-os/07-commands-at-startup.md",
+      "raw_frontmatter_title": "Commands at startup",
+      "old_expected_title": "Commands at startup | Debug80 Docs",
+      "actual_titles": [
+        "Commands at startup | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "2eadb0b7b8a52a021692309d7efbaec0b22e3ff092ba9e350e52ab29ab9c1e3c"
+    },
+    {
+      "page": "tec-os/08-call-tec-os.md",
+      "raw_frontmatter_title": "Call TEC-OS",
+      "old_expected_title": "Call TEC-OS | Debug80 Docs",
+      "actual_titles": [
+        "Call TEC-OS | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "595e2cc72f5f31d26b384f4c885711174894b2b9feaf6f2bfa6e941e66671111"
+    },
+    {
+      "page": "tec-os/09-read-and-write-a-file.md",
+      "raw_frontmatter_title": "Read and write a file",
+      "old_expected_title": "Read and write a file | Debug80 Docs",
+      "actual_titles": [
+        "Read and write a file | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "d6579e32545f5ee6e5927fd22a034e53d968c23a1ff0bbd74c6eec6ecd296322"
+    },
+    {
+      "page": "tec-os/10-memory-for-programs.md",
+      "raw_frontmatter_title": "Memory for programs",
+      "old_expected_title": "Memory for programs | Debug80 Docs",
+      "actual_titles": [
+        "Memory for programs | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "1b7d3c80bfb0d7ddbc70cce17c0238014f55eb4bd73d1001c38764a8de4818dd"
+    },
+    {
+      "page": "tec-os/11-use-the-boards-devices.md",
+      "raw_frontmatter_title": "Use the board's devices",
+      "old_expected_title": "Use the board's devices | Debug80 Docs",
+      "actual_titles": [
+        "Use the board's devices | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "d48e408a43fb931102f49d4aac4401e1680b9979a54dddeb8ab6f3aa91c81993"
+    },
+    {
+      "page": "tec-os/12-results-and-command-chains.md",
+      "raw_frontmatter_title": "Results and command chains",
+      "old_expected_title": "Results and command chains | Debug80 Docs",
+      "actual_titles": [
+        "Results and command chains | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "d74990e5ce3e3bdee0e8e73415bda09eafcd202d055bfb582480adbf82c9ef14"
+    },
+    {
+      "page": "tec-os/13-write-a-resident-service.md",
+      "raw_frontmatter_title": "Write a resident service",
+      "old_expected_title": "Write a resident service | Debug80 Docs",
+      "actual_titles": [
+        "Write a resident service | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "abdf75f2fd160f1a65bd3150f50510faebf2c59e8f7f65dbdd50091debfe7850"
+    },
+    {
+      "page": "tec-os/14-state-and-memory.md",
+      "raw_frontmatter_title": "State and memory inside TEC-OS",
+      "old_expected_title": "State and memory inside TEC-OS | Debug80 Docs",
+      "actual_titles": [
+        "State and memory inside TEC-OS | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "04c74be0a3f2830756571f708cf56e5c9970b3a9a83a30eeda7967c9c12688d8"
+    },
+    {
+      "page": "tec-os/15-reset-and-boot.md",
+      "raw_frontmatter_title": "Reset and boot",
+      "old_expected_title": "Reset and boot | Debug80 Docs",
+      "actual_titles": [
+        "Reset and boot | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "75eb401aba33d68cebd3ba86d3d095274fd7f81aa1a3a8849ef626050d7bbd75"
+    },
+    {
+      "page": "tec-os/16-console-paths.md",
+      "raw_frontmatter_title": "Console paths",
+      "old_expected_title": "Console paths | Debug80 Docs",
+      "actual_titles": [
+        "Console paths | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "5172b7a12eeaff1ed11fc05e4429f0b8925a9921b1411168cd16ac85c6fe1ffe"
+    },
+    {
+      "page": "tec-os/17-card-blocks-and-volumes.md",
+      "raw_frontmatter_title": "Card blocks and volumes",
+      "old_expected_title": "Card blocks and volumes | Debug80 Docs",
+      "actual_titles": [
+        "Card blocks and volumes | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "523b0c7f83f0c3445a3052ec5271d41bfab63f3451866072d26395992aa00f0b"
+    },
+    {
+      "page": "tec-os/18-cache-and-persistence.md",
+      "raw_frontmatter_title": "Cache and persistence",
+      "old_expected_title": "Cache and persistence | Debug80 Docs",
+      "actual_titles": [
+        "Cache and persistence | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "f3a9b4a1af5409e8e3386b973cbf063301073653dbc347a4fd562f2421837c82"
+    },
+    {
+      "page": "tec-os/19-a-file-through-the-bdos.md",
+      "raw_frontmatter_title": "A file through the BDOS",
+      "old_expected_title": "A file through the BDOS | Debug80 Docs",
+      "actual_titles": [
+        "A file through the BDOS | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "47f39c1454382bc56ab851372eb97c90be727cc1cf645a62e2480e56b7bf7d59"
+    },
+    {
+      "page": "tec-os/20-from-prompt-to-program.md",
+      "raw_frontmatter_title": "From prompt to program",
+      "old_expected_title": "From prompt to program | Debug80 Docs",
+      "actual_titles": [
+        "From prompt to program | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "a9beeab43cb6c08b8d7ad6e8f4650da8ef64cd0ebac94ed5fef1121cd4c10557"
+    },
+    {
+      "page": "tec-os/21-chains-across-warm-boot.md",
+      "raw_frontmatter_title": "Chains across a warm boot",
+      "old_expected_title": "Chains across a warm boot | Debug80 Docs",
+      "actual_titles": [
+        "Chains across a warm boot | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "77076331c8f2b4304eef43389c620705be9f33863fff5162395f98e07d683bf7"
+    },
+    {
+      "page": "tec-os/22-the-history-ring.md",
+      "raw_frontmatter_title": "The history ring",
+      "old_expected_title": "The history ring | Debug80 Docs",
+      "actual_titles": [
+        "The history ring | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "2c86ffb2960982063d4cd2f5fcc94458a1a10ee40a523f9a557c2a27543fc435"
+    },
+    {
+      "page": "tec-os/23-numbered-service-dispatch.md",
+      "raw_frontmatter_title": "Numbered-service dispatch",
+      "old_expected_title": "Numbered-service dispatch | Debug80 Docs",
+      "actual_titles": [
+        "Numbered-service dispatch | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "7f88a551b59d1576256e72721d6af12cf06d64c77670e3ebc03abfc97a05115c"
+    },
+    {
+      "page": "tec-os/24-loading-and-removing-services.md",
+      "raw_frontmatter_title": "Loading and removing services",
+      "old_expected_title": "Loading and removing services | Debug80 Docs",
+      "actual_titles": [
+        "Loading and removing services | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "98ad3eec8fb55150ac051014d47f32eb0dc4adfa8814fc03dcb889343352feac"
+    },
+    {
+      "page": "tec-os/25-startup-inside-the-ccp.md",
+      "raw_frontmatter_title": "Startup inside the CCP",
+      "old_expected_title": "Startup inside the CCP | Debug80 Docs",
+      "actual_titles": [
+        "Startup inside the CCP | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "47daaa06161ebedfa9830f044249b9f3c7c5b9664c380a8df8715ba4c29f4e28"
+    },
+    {
+      "page": "tec-os/26-build-the-rom-and-media.md",
+      "raw_frontmatter_title": "Build the ROM and media",
+      "old_expected_title": "Build the ROM and media | Debug80 Docs",
+      "actual_titles": [
+        "Build the ROM and media | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "eab26b905ceda327d719b85a856b02970282344cab0db4a011fb1c317fdfe249"
+    },
+    {
+      "page": "tec-os/27-diagnose-the-machine.md",
+      "raw_frontmatter_title": "Diagnose the machine",
+      "old_expected_title": "Diagnose the machine | Debug80 Docs",
+      "actual_titles": [
+        "Diagnose the machine | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "448d8e856a44a67315674fcd12da04975e5c535fb96dc8cf80c54f7a6ae88be0"
+    },
+    {
+      "page": "tec-os/28-the-host-model-as-evidence.md",
+      "raw_frontmatter_title": "The host model as evidence",
+      "old_expected_title": "The host model as evidence | Debug80 Docs",
+      "actual_titles": [
+        "The host model as evidence | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "29cdc467865c39d2e3bd194f13e5e610169690de592f4d1c0b0651473f27e9ed"
+    },
+    {
+      "page": "tec-os/appendix-a-bdos-functions.md",
+      "raw_frontmatter_title": "A. BDOS functions",
+      "old_expected_title": "A. BDOS functions | Debug80 Docs",
+      "actual_titles": [
+        "A. BDOS functions | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "9b46312b7a7b4574c39c3cbc862109b54a550674d9aa91d77dbce690707ac016"
+    },
+    {
+      "page": "tec-os/appendix-b-rom-services.md",
+      "raw_frontmatter_title": "B. The ROM table and hardware services",
+      "old_expected_title": "B. The ROM table and hardware services | Debug80 Docs",
+      "actual_titles": [
+        "B. The ROM table and hardware services | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "ac8594d13a7409b96533bb4a9eba184ce9b3162db6db48015d3a5dcd1cc04ea2"
+    },
+    {
+      "page": "tec-os/appendix-c-memory-map.md",
+      "raw_frontmatter_title": "C. Memory map",
+      "old_expected_title": "C. Memory map | Debug80 Docs",
+      "actual_titles": [
+        "C. Memory map | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "30444ec11a83309fdb3027a47290ddcb196bc89f6cf2de5b078fd4b07fe5fecf"
+    },
+    {
+      "page": "tec-os/appendix-d-error-messages.md",
+      "raw_frontmatter_title": "D. Error messages",
+      "old_expected_title": "D. Error messages | Debug80 Docs",
+      "actual_titles": [
+        "D. Error messages | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "0549c13017c43d5e258aaae7306968d56dbecf51f19347d37add03adddc9eaf1"
+    },
+    {
+      "page": "tec-os/appendix-e-container-format.md",
+      "raw_frontmatter_title": "E. The container format",
+      "old_expected_title": "E. The container format | Debug80 Docs",
+      "actual_titles": [
+        "E. The container format | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "bc971b4929ee90a91ce846f9b98c26aa442c89e0ec319d7f6e114e913a6abaa4"
+    },
+    {
+      "page": "tec-os/appendix-f-tecvol.md",
+      "raw_frontmatter_title": "\"F. `tecvol`\"",
+      "old_expected_title": "F. `tecvol` | Debug80 Docs",
+      "actual_titles": [
+        "F. tecvol | Debug80 Docs"
+      ],
+      "differs_from_old": true,
+      "html_sha256": "d6481ea9c409d16ceec0458df4dc68a6b0e379c99c2f1f3d69e58014a8186d50"
+    },
+    {
+      "page": "tec-os/appendix-g-tec-1g.md",
+      "raw_frontmatter_title": "G. The TEC-1G as TEC-OS uses it",
+      "old_expected_title": "G. The TEC-1G as TEC-OS uses it | Debug80 Docs",
+      "actual_titles": [
+        "G. The TEC-1G as TEC-OS uses it | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "3cfdf960ba93b7f862340b71cdedae177742d0c7548d683a4a2a76a28061306e"
+    },
+    {
+      "page": "tec-os/appendix-h-service-file-format.md",
+      "raw_frontmatter_title": "H. The service file format",
+      "old_expected_title": "H. The service file format | Debug80 Docs",
+      "actual_titles": [
+        "H. The service file format | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "042eca8c00a1c214ca95a64f3137c22c389aaab664466983a80fc33705965ebe"
+    },
+    {
+      "page": "tec-os/appendix-i-web-page.md",
+      "raw_frontmatter_title": "I. The web page",
+      "old_expected_title": "I. The web page | Debug80 Docs",
+      "actual_titles": [
+        "I. The web page | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "0ed8bdbee7e751565390df78860cb40737ddaac25b1587a7d55158b164c71cd4"
+    },
+    {
+      "page": "tec-os/appendix-j-command-reference.md",
+      "raw_frontmatter_title": "J. Command reference",
+      "old_expected_title": "J. Command reference | Debug80 Docs",
+      "actual_titles": [
+        "J. Command reference | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "b1ee18c17ea9d823f0cbd0dbb56c3a17340c0de4525ed4a10d3367cb6fa36adc"
+    },
+    {
+      "page": "tec-os/index.md",
+      "raw_frontmatter_title": "TEC-OS",
+      "old_expected_title": "TEC-OS | Debug80 Docs",
+      "actual_titles": [
+        "TEC-OS | Debug80 Docs"
+      ],
+      "differs_from_old": false,
+      "html_sha256": "d65cc59e0f576589de8f6e976ceb8f255483905297e157e91fa63713d24af47d"
+    }
+  ]
+}

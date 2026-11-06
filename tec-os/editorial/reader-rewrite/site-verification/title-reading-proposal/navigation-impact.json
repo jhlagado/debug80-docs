@@ -1,0 +1,420 @@
+{
+  "purpose": "Inert extraction only, no altered acceptance check executed",
+  "rows": [
+    {
+      "page": "tec-os/01-first-session.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/02-make-a-small-program.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/03-work-with-files.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/04-drives-and-user-areas.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/05-cards-on-the-pc.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        },
+        {
+          "href": "./appendix-f-tecvol.html",
+          "text": "Appendix F",
+          "sidebar": false
+        }
+      ]
+    },
+    {
+      "page": "tec-os/06-choose-a-console.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/07-commands-at-startup.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/08-call-tec-os.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/09-read-and-write-a-file.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/10-memory-for-programs.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/11-use-the-boards-devices.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/12-results-and-command-chains.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/13-write-a-resident-service.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/14-state-and-memory.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/15-reset-and-boot.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/16-console-paths.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/17-card-blocks-and-volumes.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/18-cache-and-persistence.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/19-a-file-through-the-bdos.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/20-from-prompt-to-program.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/21-chains-across-warm-boot.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/22-the-history-ring.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/23-numbered-service-dispatch.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/24-loading-and-removing-services.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/25-startup-inside-the-ccp.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/26-build-the-rom-and-media.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/27-diagnose-the-machine.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/28-the-host-model-as-evidence.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/appendix-a-bdos-functions.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/appendix-b-rom-services.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/appendix-c-memory-map.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/appendix-d-error-messages.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        },
+        {
+          "href": "./appendix-f-tecvol.html",
+          "text": "Appendix F",
+          "sidebar": false
+        }
+      ]
+    },
+    {
+      "page": "tec-os/appendix-e-container-format.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        },
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "Next pageF. `tecvol`",
+          "sidebar": false
+        }
+      ]
+    },
+    {
+      "page": "tec-os/appendix-f-tecvol.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/appendix-g-tec-1g.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        },
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "Previous pageF. `tecvol`",
+          "sidebar": false
+        }
+      ]
+    },
+    {
+      "page": "tec-os/appendix-h-service-file-format.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/appendix-i-web-page.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/appendix-j-command-reference.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        }
+      ]
+    },
+    {
+      "page": "tec-os/index.html",
+      "appendix_f_links": [
+        {
+          "href": "/tec-os/appendix-f-tecvol.html",
+          "text": "F. `tecvol`",
+          "sidebar": true
+        },
+        {
+          "href": "./appendix-f-tecvol.html",
+          "text": "F. tecvol",
+          "sidebar": false
+        }
+      ]
+    }
+  ]
+}

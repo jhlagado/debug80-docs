@@ -1,0 +1,30 @@
+{
+  "atUTC": "2026-11-06T04:31:03.562828+00:00",
+  "ownership": {
+    "birth": "Fri Nov  6 04:29:35 2026",
+    "birth_environment": {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    },
+    "context_sha256": "18fae1c54d43837b6c1f6689a47867ef502511f231e3a7a5b6dc32c10e7477d1",
+    "guard_pid": 27725,
+    "nonce": "1ef1924eb8ec96c594448f5ec128fd9539052eb815bd08a519d970d3474c7d3a",
+    "parent_pid": 27725,
+    "pgid": 27737,
+    "pid": 27737
+  },
+  "contextNonceAndHashMatch": true,
+  "ackMatchesOwnership": true,
+  "matchingPIDOrGroupRowsUTC": [],
+  "invocationTerminalExit": 1,
+  "guardTerminalExit": 1,
+  "buildStarted": true,
+  "buildEnded": {
+    "exit_code": 0
+  },
+  "validateEnded": {
+    "exit_code": 1
+  },
+  "guardTerminalEvidence": "memory.jsonl end record"
+}

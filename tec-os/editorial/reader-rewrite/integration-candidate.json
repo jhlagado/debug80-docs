@@ -317,5 +317,20 @@
     "new_control_executions": 0,
     "new_allocation_required": true,
     "input_review": "e30d37f613b0f1795145f6b57213c37c4254f490"
+  },
+  "site_verification_attempt02_result": {
+    "allocation": "KS47-SITE02",
+    "origo_reference": "Origo9de5c81e",
+    "seal_sha256": "09719b943cddba8aebcf384f24b37f554dc991833ba79e0ba07ea65f50e0c37d",
+    "status": "FAILED",
+    "exit_code": 1,
+    "elapsed_seconds": 10.161395083,
+    "build": "actual VitePress render succeeded; validator stopped on browser title",
+    "expected": "F. `tecvol` | Debug80 Docs",
+    "actual": "F. tecvol | Debug80 Docs",
+    "retention": "site-verification/failed-attempt02/retention.json",
+    "next": "title-reading-proposal only; no changed reading activated or executed; explicit Origo gate-reference decision required",
+    "ownership": "Root independent disposition pending here; no inference from empty audit",
+    "retry": false
   }
 }

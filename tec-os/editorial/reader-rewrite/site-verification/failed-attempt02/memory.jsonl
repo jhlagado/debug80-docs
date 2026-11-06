@@ -1,0 +1,2 @@
+{"name":"tec-os-reader-site","command":"python3.9 -S -B build_and_check.py --context context.json","limitMB":850,"heapMB":450,"event":"start","at":"2026-11-06T04:29:35.831Z","freePercent":34,"load":2.02,"waitedSeconds":0}
+{"name":"tec-os-reader-site","command":"python3.9 -S -B build_and_check.py --context context.json","limitMB":850,"heapMB":450,"event":"end","at":"2026-11-06T04:29:40.690Z","outcome":"exit 1","code":1,"peakMB":570,"processes":3,"seconds":4.9,"freePercentAtEnd":35}
