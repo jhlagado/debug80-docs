@@ -1,0 +1,30 @@
+{
+  "status": "PREPARED_UNRUN_PENDING_INDEPENDENT_INPUT_REVIEW_AND_NEW_ALLOCATION",
+  "new_seal_sha256": "09719b943cddba8aebcf384f24b37f554dc991833ba79e0ba07ea65f50e0c37d",
+  "prior_seal_sha256": "3102077825ff6cb6944a117c5fc56d450614f8f82e8998a704cffeea860f0b4e",
+  "source_candidate": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+  "changed_payloads": {
+    "README.md": {
+      "before": "d8c7372e512505898253ac50d60d8a99de01e5eb9f83afa8282e591761b3a963",
+      "after": "885528a044db87ddd2593e058f5fcac851319f62206ab3e6434e933ffe4f7480"
+    },
+    "build_and_check.py": {
+      "before": "d92ee4d1453c05920fb9278ac5a1594eeea58e17569681bc92b215737a1be679",
+      "after": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410"
+    },
+    "run_once.py": {
+      "before": "27b7c6e51358b0840997d59b0fa03bcd019b2a17b71dc0ff327c5562d3342c0d",
+      "after": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6"
+    }
+  },
+  "unchanged": "All other13payloads and all source archive/tree,889source-file/config,4454installeddependency, runtime executable, memory-guard and policy identities equal failed packet01. Expectations, checker and controls are byte-identical.",
+  "source_review": "9843122",
+  "source_diff": "attempt02-source.diff",
+  "diagnosis": "attempt02-diagnosis.json",
+  "retained_first_result": "failed-attempt01/retention.json",
+  "owner_release": "Origo2ea74522 resolves actual01bootstrap only; genericpreACKcleanup remainsunproved",
+  "attempt02_invocations": 0,
+  "new_runtime_or_ps_probes": 0,
+  "new_control_executions": 0,
+  "new_allocation_required": true
+}
