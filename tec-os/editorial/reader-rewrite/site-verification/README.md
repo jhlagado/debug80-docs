@@ -1,8 +1,10 @@
 # Scoped site verification packet
 
-Status: attempt 01 failed before ACK or build. This corrected source packet
-is prepared for sealing, independent input review and a new allocation. It
-has not run.
+Status: SITE01 failed before ACK or build. SITE02 rendered successfully then
+failed its original Appendix F title expectation. Both failures remain retained.
+KD-246 approves only the single browser-title expectation correction and its
+representation explanation. A refreshed seal needs independent input review
+and a fresh allocation. No actual invocation of this corrected packet has run.
 
 The packet keeps the accepted reader source at `a3e4c29`. Preparation reads
 Git exports and installed dependency files without importing VitePress or
@@ -110,9 +112,11 @@ sidebar and previous/next order and decoded literal code. The manifest retains
 raw source fences and separate expected rendered text. The installed highlighter
 removes whitespace at the end of the whole fence before highlighting. Only that
 source-derived transformation is applied, not linewise trimming or tab expansion.
-Appendix F's inline-code backticks are absent from its visible heading but
-remain in its raw source, frontmatter title and sidebar label. These expected
-representations were fixed before any real build or render. It rejects unexpected
+Appendix F's inline-code backticks remain in its raw source frontmatter and
+independently configured sidebar label. They are absent from its visible heading
+and resolved browser title. KD-246 approves the single browser-title expectation
+correction after SITE02's failure. That failure remains unchanged under the old
+reading. Exact comparison remains required, with no generic backtick stripping. It rejects unexpected
 or absent reader pages. It does not establish visual layout, browser behaviour,
 physical hardware, a global site result or publication readiness.
 

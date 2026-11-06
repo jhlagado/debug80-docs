@@ -2258,7 +2258,7 @@
       "path": "tec-os/appendix-f-tecvol.md",
       "html": "tec-os/appendix-f-tecvol.html",
       "source_sha256": "b5882ac03d08ab4c9afe00b529ccb35a4a05479b0a4f4885e7448d1f1cf972e4",
-      "title": "F. `tecvol` | Debug80 Docs",
+      "title": "F. tecvol | Debug80 Docs",
       "h1": "Appendix F. tecvol",
       "links": [],
       "fences": [
@@ -2947,7 +2947,7 @@
         35418
       ]
     },
-    "heading": "Inline code delimiters are Markdown syntax, not visible heading text. source_h1 retains original. Only AppendixF uses inline code in H1. Browser title and sidebar label still retain frontmatter backticks.",
+    "heading": "Inline code delimiters are Markdown syntax, not visible heading text. source_h1 retains original. Only Appendix F uses inline code in H1. Its browser title resolves frontmatter inline Markdown, so it omits code delimiters; its independently configured sidebar label retains backticks. This single browser-title expectation correction was approved in KD-246 after SITE02 failed under the old reading. No generic stripping or checker algorithm change.",
     "index_pager": "Unlisted index is absent from sidebar, findIndex returns -1. Installed default next is first chapter, previous absent. No book/config edit made.",
     "pager_source": {
       "path": "node_modules/vitepress/dist/client/theme-default/composables/prev-next.js",

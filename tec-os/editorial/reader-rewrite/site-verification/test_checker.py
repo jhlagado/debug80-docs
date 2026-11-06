@@ -202,12 +202,31 @@ def controls(expect, output, work=None):
              'aria-label="'+escape('Permalink to "'+first['source_h1']+'"',quote=True)+'"',
              'aria-label="Wrong label"'))
     appendix_f = next(p for p in manifest['pages'] if p['html']=='tec-os/appendix-f-tecvol.html')
+    f_item = next(i for g in manifest['sidebar']['groups'] for i in g['items']
+                  if i['html']==appendix_f['html'])
+    # KD246 changes exactly this browser title; sidebar text remains literal.
+    assert appendix_f['title'] == 'F. tecvol | Debug80 Docs'
+    assert f_item['title'] == 'F. `tecvol`'
+    run_case('title-sidebar-distinction-positive', None)
+    assert first['title'] == 'First session | Debug80 Docs'
+    run_case('ordinary-title-positive', None)
     run_case('h1-source-delimiters-not-visible', 'h1', lambda d:replace_once(d,appendix_f['html'],
              'Appendix F. <code>tecvol</code> <a class="header-anchor"',
              'Appendix F. `<code>tecvol</code>` <a class="header-anchor"'))
     run_case('title-frontmatter-delimiters-retained', 'title', lambda d:replace_once(d,appendix_f['html'],
              '<title>'+escape(appendix_f['title'])+'</title>',
-             '<title>'+escape(appendix_f['title'].replace('`',''))+'</title>'))
+             '<title>F. `tecvol` | Debug80 Docs</title>'))
+    run_case('title-missing-word', 'title', lambda d:replace_once(d,appendix_f['html'],
+             '<title>'+escape(appendix_f['title'])+'</title>', '<title>F. | Debug80 Docs</title>'))
+    run_case('title-wrong-case', 'title', lambda d:replace_once(d,appendix_f['html'],
+             '<title>'+escape(appendix_f['title'])+'</title>', '<title>F. TECVOL | Debug80 Docs</title>'))
+    run_case('title-wrong-suffix', 'title', lambda d:replace_once(d,appendix_f['html'],
+             '<title>'+escape(appendix_f['title'])+'</title>', '<title>F. tecvol | Debug80 Doc</title>'))
+    run_case('duplicate-title', 'title', lambda d:replace_once(d,appendix_f['html'],
+             '<title>'+escape(appendix_f['title'])+'</title>',
+             ('<title>'+escape(appendix_f['title'])+'</title>')*2))
+    run_case('missing-title', 'title', lambda d:replace_once(d,appendix_f['html'],
+             '<title>'+escape(appendix_f['title'])+'</title>', ''))
     run_case('remove-fragment', 'fragment', lambda d:replace_once(d,fragment_link['target'],
              'id="'+fragment_link['fragment']+'"', 'id="synthetic-removed-target"'))
     link = first['links'][0]
@@ -233,8 +252,6 @@ def controls(expect, output, work=None):
     run_case('sidebar-group-heading', 'sidebar_groups', lambda d:replace_once(d,name,
              '<h2 class="text">'+escape(group['title'])+'</h2>',
              '<h2 class="text">Wrong group</h2>'))
-    f_item = next(i for g in manifest['sidebar']['groups'] for i in g['items']
-                  if i['html']==appendix_f['html'])
     run_case('sidebar-frontmatter-delimiters-retained', 'sidebar_order', lambda d:replace_once(d,name,
              '<p class="text">'+escape(f_item['title'])+'</p>',
              '<p class="text">'+escape(f_item['title'].replace('`',''))+'</p>'))
@@ -245,6 +262,13 @@ def controls(expect, output, work=None):
              'class="VPLink pager-link next"', 'class="VPLink synthetic-missing-next"'))
     run_case('code-character', 'code_text', lambda d:replace_once(d,code_name,
              code_start+code_text+code_end, code_start+'X'+code_text+code_end))
+    # No frozen source/rendered fence contains a backtick, so deletion has no input.
+    # Insert one into actual synthetic HTML; source expectations stay unchanged.
+    literal_backticks = sum(f['text'].count('`') for p in manifest['pages'] for f in p['fences'])
+    rendered_backticks = sum(f['rendered_text'].count('`') for p in manifest['pages'] for f in p['fences'])
+    assert literal_backticks == rendered_backticks == 0
+    run_case('code-literal-backtick-inserted', 'code_text', lambda d:replace_once(d,code_name,
+             code_start+code_text+code_end, code_start+'`'+code_text+code_end))
     run_case('code-padding', 'code_text', lambda d:replace_once(d,code_name,
              code_start+code_text+code_end, code_start+' \t'+code_text+code_end))
     assert not code_text.endswith('\n')
@@ -302,6 +326,10 @@ def controls(expect, output, work=None):
                   expectations_sha256=sha(original_manifest), checker_sha256=sha((HERE/'check_html.py').read_bytes()),
                   controls_script_sha256=sha(Path(__file__).read_bytes()), work_directory=str(work),
                   controls=records, control_count=len(records),
+                  literal_backtick_scope=dict(
+                      source_occurrences=literal_backticks, rendered_occurrences=rendered_backticks,
+                      deletion_case='Unavailable: the 247 frozen fences contain no literal backticks. No altered-manifest positive or invented source fence is used.',
+                      insertion_case='One literal backtick is inserted into an actual synthetic HTML fence and must fail code_text against unchanged source/rendered expectations.'),
                   h1_permalink_correction=dict(
                       finding='checker-source-01', review_commit='b37c00e956576992c1a6ed0e1f3f9fdd28a38b3c',
                       source_path='node_modules/vitepress/dist/node/chunk-D3CUZ4fa.js',
@@ -316,7 +344,7 @@ def controls(expect, output, work=None):
                   known_inert_source_observations=[
                       'Installed highlighter applies ECMAScript trimEnd once to the whole fence. Manifest raw text is retained and its exact rendered_text relationship is checked before comparing HTML without normalization.',
                       'Installed default prev-next lookup gives the unlisted index the first chapter as next. This exact manifest doorway is required; no reader/config change is made.',
-                      'source_h1 retains Appendix F inline-code delimiters; visible h1 omits them. Browser title and sidebar labels retain frontmatter backticks. These contracts have separate corruption controls.',
+                      'KD246 changes only the Appendix F browser title to F. tecvol | Debug80 Docs. Its sidebar label retains literal frontmatter backticks; source_h1 retains inline-code delimiters while visible h1 omits them. Exact checker equality and all 247 fence expectations remain unchanged.',
                       'Only framework 404.html and the exact manifest-bound public HTML passthrough are permitted outside the 39 readers. The public file is read from the frozen Git artifact and checked by bytes/hash, without semantic/global acceptance. Other unlisted HTML and any tec-os/editorial output are rejected.'
                   ])
     output.write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n')

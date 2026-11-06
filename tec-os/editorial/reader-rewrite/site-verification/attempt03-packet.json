@@ -1,0 +1,50 @@
+{
+  "status": "PREPARED_UNRUN_PENDING_INDEPENDENT_CONFIRMATION_AND_ALLOCATION",
+  "approval": "KD-246",
+  "seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+  "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+  "command": "sh /Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/invoke.sh 8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4 /private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03 \"$TECOS_SITE03_ALLOCATION\"",
+  "changed_payloads_since_SITE02": {
+    "README.md": {
+      "before": "885528a044db87ddd2593e058f5fcac851319f62206ab3e6434e933ffe4f7480",
+      "after": "8fc7dd19f07ce4c6fc88c894768466919202280652e57f4be62628050babf786"
+    },
+    "controls-result.json": {
+      "before": "c51da34c86b86f7a0d1262a7b42fd1c1aa6ddf1d10e9fed82b759341f0dc96d9",
+      "after": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc"
+    },
+    "expectations.json": {
+      "before": "66ad882a456260a61f6f248cc0aaae6d0a19794fc51bfd850ea26a2edd181c48",
+      "after": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc"
+    },
+    "test_checker.py": {
+      "before": "cb83538f3b1728b2d95babe21849e55fa2df72a36eb326c11345ca738094f219",
+      "after": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e"
+    }
+  },
+  "nonpayload_seal_fields_unchanged": true,
+  "controls": {
+    "count": 48,
+    "positive": 6,
+    "negative": 42,
+    "original_40_preserved": true,
+    "receipt_reuse_exit": 2
+  },
+  "source_archive_sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28",
+  "installed_entries": 4454,
+  "installed_identity": "a020e190a5bc80db7d6ffebda4fc762328dc0c5c771c0a12ecd010b63ea79661",
+  "policy": {
+    "build_workers": 2,
+    "cleanup_reserved_seconds": 3,
+    "guard_limit_mb": 850,
+    "guard_wait_seconds": 0,
+    "minify": false,
+    "node_heap_mb": 450,
+    "retry": false,
+    "whole_invocation_max_seconds": 180
+  },
+  "actual_invocation_allocated": false,
+  "SITE02": "FAILED under original expectation; retained without alteration",
+  "reuse": "No whole saved-output closure claimed; prepare fresh bounded verification rather than infer complete acceptance from title census",
+  "publication": false
+}

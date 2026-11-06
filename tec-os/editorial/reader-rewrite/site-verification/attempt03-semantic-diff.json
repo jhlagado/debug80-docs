@@ -1,0 +1,39 @@
+{
+  "approval": "KD-246",
+  "semantic_expectation_diff": [
+    {
+      "pointer": "/pages/33/title",
+      "before": "F. `tecvol` | Debug80 Docs",
+      "after": "F. tecvol | Debug80 Docs"
+    },
+    {
+      "pointer": "/representation/heading",
+      "before": "Inline code delimiters are Markdown syntax, not visible heading text. source_h1 retains original. Only AppendixF uses inline code in H1. Browser title and sidebar label still retain frontmatter backticks.",
+      "after": "Inline code delimiters are Markdown syntax, not visible heading text. source_h1 retains original. Only Appendix F uses inline code in H1. Its browser title resolves frontmatter inline Markdown, so it omits code delimiters; its independently configured sidebar label retains backticks. This single browser-title expectation correction was approved in KD-246 after SITE02 failed under the old reading. No generic stripping or checker algorithm change."
+    }
+  ],
+  "unchanged_payload_identities": {
+    "check_html.py": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+    "invoke.sh": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e",
+    "run_once.py": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6",
+    "build_and_check.py": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410",
+    "packet_inputs.py": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+    "prepare_packet.py": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8",
+    "config.before.ts": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e",
+    "config.after.ts": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9",
+    "config.diff": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489",
+    "installed-inputs.json": "cfa02ccc86400c70240ca896dec4e4af85e6acb08dcdc6f5b72803732521b911",
+    "dependency-manifests.json": "8631dbb874c8e8e31cb90decb7cc1b968d0ebd7cf53f6a90895a1331107c2107",
+    "source-inputs.json": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8"
+  },
+  "all_39_source_page_hashes_unchanged": true,
+  "all_247_fences_unchanged": true,
+  "all_other_manifest_values_unchanged": "Only the two JSON pointers listed differ; recursive comparison asserted separately",
+  "actual_SITE02": "FAILED under old reading; never retroactively passed",
+  "reuse_assessment": {
+    "proposal": "Do not claim qualified whole-output reuse. Prepare a fresh bounded invocation for independent allocation.",
+    "known_unchanged": "Frozen source/config/dependency input manifests, runtime and guard pins. Saved39-title census and navigation extraction establish only their recorded bytes.",
+    "missing_closure": "SITE02 stopped before complete links/fragments/sidebar/pager/fence validation and has no contemporaneously sealed full generated-output inventory covering HTML plus assets. No whole saved-output/pin closure is established here.",
+    "no_repeated_measurement_claim": "No new actual render or validator of saved rendered output has been run during this preparation."
+  }
+}
