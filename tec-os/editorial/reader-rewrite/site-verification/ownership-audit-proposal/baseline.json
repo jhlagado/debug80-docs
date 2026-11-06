@@ -1,0 +1,13 @@
+{
+  "baseline_commit": "9dd75899314248a83ad345d36aad5dc1b892139b",
+  "active_files": {
+    "run_once.py": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6",
+    "build_and_check.py": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410",
+    "check_html.py": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+    "expectations.json": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+    "seal.json": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+    "controls-result.json": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc"
+  },
+  "root_archive_reference": "Origo e7195e82 retains complete SITE03 archive and records registered-hold-only release",
+  "proposal_execution": false
+}

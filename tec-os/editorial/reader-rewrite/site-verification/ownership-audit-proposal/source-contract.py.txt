@@ -1,0 +1,98 @@
+# Proposed source contracts/pseudocode only. Not importable production code.
+# Target: run_once.py (baseline8433ce3...) and the worker's phase-stop check.
+
+ORDINARY_QUERY_LIMIT = 2.0   # explicit proposal; old literal was0.5
+CLEANUP_QUERY_LIMIT = 0.5    # unchanged, no query retry
+SOFT_RESERVE = 3.0          # unchanged; whole deadline still180
+TERM_GRACE = 0.4            # unchanged
+
+query_budget(now, soft_deadline, hard_deadline, stopping):
+    boundary = hard_deadline if stopping else soft_deadline
+    cap = CLEANUP_QUERY_LIMIT if stopping else ORDINARY_QUERY_LIMIT
+    return min(cap, max(0.0, boundary - now))
+
+process_rows():
+    # Use existing ps argv and UTC/C. Query exactly once.
+    budget = query_budget(clock(), deadline-3, deadline, stopping)
+    if budget <= 0:
+        request_stop('absolute-deadline',124)  # do not spawn another query
+        raise StopRequested
+    query_id = append_query_started(budget, clock(), last_success_id)
+    try:
+        result = ps_once(timeout=budget)
+        # Existing status/parsing errors remain failures, never empty tables.
+        rows = parse_exact_identity_rows(result)
+        append_query_finished(query_id, 'ok', clock(), rows)
+        return rows
+    except QueryTimeoutOrError as error:
+        append_query_finished(query_id, typed_error(error), clock(), None)
+        request_stop('identity-observation',124,error)
+        raise StopRequested
+
+register_direct_child(child,argv):
+    # Add handle to live registry immediately, then append durable registration.
+    # Birth can be unknown; no heavy worker phase may start before validated ACK.
+    remember_handle(child)
+    append_registry('direct-child', child.pid, child.pid, birth=None, argv=argv)
+
+ack_worker(declaration,successful_snapshot):
+    # Keep every current nonce/context/environment/parent/group/birth check.
+    # Record validated group and birth before durable ACK.
+    append_registry('ack-group',validated_identity)
+    publish_existing_ack()
+
+observe_success(rows):
+    # Existing birth/ancestry/group closure; retain discovered identity history.
+    # Removed live entries remain historical; reused PID gets no old authority.
+    append_registry_changes(scoped_discovery(rows))
+
+request_stop(stage,code,detail):
+    # A short memory-only latch chooses first failure once, with no I/O in lock.
+    # Signal/escalation must not depend on later receipt fsync or audit locks.
+    latch_first_failure(stage,code,detail)
+    stopping.set()
+    wake_signalling_path()
+    enqueue_phase_stop_marker_publication()  # memory-only queue, no wait for I/O
+    # Main publishes the marker and first-failure receipt before terminal output.
+    # A blocked publication cannot hold the independent signalling path.
+
+signalling_path():
+    # Independent of query completion, receipt I/O and ownership/audit locks.
+    # Triggered by request_stop OR monotonic deadline-3.
+    wait_until_stop_request_or_soft_deadline()
+    if soft_deadline_reached:
+        latch_first_failure('absolute-deadline',124, 'soft stop')
+        stopping.set()
+        enqueue_phase_stop_marker_publication()  # memory-only, do not write here
+    signal_retained_groups_and_live_handles(TERM)
+    wait_at_most(0.4, bounded_by_hard_deadline)
+    signal_retained_groups_and_live_handles(KILL)
+    # Do not finalize/exit here. Hard timer remains independently armed.
+
+worker_phase_checkpoint():
+    # Before each phase: refuse on either stop marker or first-failure receipt.
+    # Stop-marker creation is fail-closed: inability to publish initiates bound
+    # cleanup and can never permit a later phase. No receipt-I/O lock may prevent
+    # the separately armed escalation timer from signalling by its deadline.
+    if stop_marker_exists or first_failure_exists:
+        return nonzero
+
+main_failure_and_finalisation():
+    # Preserve existing guarded command, stream, immutable packet/input checks.
+    # Drain/reap direct children; perform bounded final cleanup observation.
+    # First failure latch wins over later guard exit1 or another exception.
+    persist_first_failure_if_any()
+    try:
+        rows = owned_once_with_cleanup_budget()
+        persist_final_audit(rows,registry_digest,last_success_id)
+    except ObservationFailure:
+        persist_final_audit(status='UNKNOWN_HELD',last_success_id,registry_digest)
+    # PASS requires no failure and complete fresh audit/input/checker closure.
+    persist_one_terminal_receipt()
+    flush_close_and_exit_before_original_hard_deadline()
+
+hard_timer():
+    # Existing absolute timer. No joins, fsync, audit/query/terminal locks.
+    wait_until_original_deadline()
+    signal_retained_groups_and_live_handles(KILL)
+    os._exit(124)
