@@ -100,6 +100,7 @@ def main():
     durable_json(output / 'invocation.json', {
         'entry_utc': datetime.fromtimestamp(ENTRY_WALL, timezone.utc).isoformat(),
         'absolute_deadline_utc': args.deadline_utc, 'maximum_seconds': 180,
+        'entry_monotonic': ENTRY_MONO, 'deadline_monotonic': deadline,
         'allocation': args.allocation, 'seal_sha256': args.seal_sha256,
         'retry': False, 'deadline_includes': 'preflight, copy, guard, build, checker and cleanup'
     }, exclusive=True)
@@ -303,6 +304,28 @@ def main():
     watcher = threading.Thread(target=watchdog, daemon=True)
     watcher.start()
 
+    def hard_deadline():
+        if done.wait(max(0, deadline - time.monotonic())):
+            return
+        # No blocking audit, receipt writes or waits extend this final deadline.
+        # The soft stop normally has already retained first-failure/audit data.
+        try:
+            for group in tuple(job_groups.copy()):
+                try:
+                    os.killpg(group, signal.SIGKILL)
+                except OSError:
+                    pass
+            for child in children.copy().values():
+                try:
+                    child.kill()
+                except OSError:
+                    pass
+        finally:
+            os._exit(124)
+
+    deadline_thread = threading.Thread(target=hard_deadline, daemon=True)
+    deadline_thread.start()
+
     def command(argv, cwd=None, env=None):
         with terminal_lock:
             if stopping.is_set() or (output / 'first-failure.json').exists():
@@ -485,6 +508,7 @@ def main():
     finally:
         done.set()
         watcher.join(timeout=0.6)
+        deadline_thread.join(timeout=0.1)
         os.fsync(stream)
         os.close(stream)
         os.close(events)
