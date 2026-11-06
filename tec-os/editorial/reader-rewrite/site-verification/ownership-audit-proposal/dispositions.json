@@ -1,0 +1,23 @@
+{
+  "review_sha256": "b8436a0a1d3822aeb1eb9c47b82a2c29b3766be6feaca4a91ff8d1fcb95d3212",
+  "dispositions": [
+    {
+      "id": "P01",
+      "disposition": "accepted",
+      "change": "Latch query failure and wake signalling before completion-log I/O; add logging block/raise variants Q06/Q11."
+    },
+    {
+      "id": "P02",
+      "disposition": "accepted",
+      "change": "Preserve baseline direct hard-timer signals, per-target BaseException isolation and unconditional finally exit124. No normal cleanup helper; Q14 exceptions/iteration controls."
+    },
+    {
+      "id": "P03",
+      "disposition": "accepted",
+      "change": "Explicit visible-marker checkpoint guarantee only; phase may run before publication. Main publishes queued marker when able; all latched failures disqualify acceptance; Q13 publication variants."
+    }
+  ],
+  "implementation_review_points": "ACK memory authority before durable write; stop recheck before ACK; observer quiescence plus serialized PASS decision; scoped observed history not universal census. Added to source contracts/Q07/Q11.",
+  "status": "Corrected source proposal; independent qualified confirmation recorded in source-confirmation.json",
+  "execution": false
+}

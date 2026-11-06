@@ -19,8 +19,8 @@
     {
       "id": "Q03",
       "kind": "negative",
-      "input": "Only0.2s remains before soft stop and snapshot does not finish.",
-      "expected": "Budget0.2s, not2.0s. Independent soft timer signals on schedule even if observation/audit is blocked."
+      "input": "Only0.2s remains before soft stop and snapshot does not finish. Variant: intent persistence consumes the remaining0.2s before launch. Second variant: stop is latched during intent persistence.",
+      "expected": "Budget0.2s, not2.0s. Independent soft timer signals on schedule even if observation/audit is blocked. The intent-delay variant recomputes the exhausted budget and launches no query. Record planned and launch-effective budgets; the stop-during-intent variant launches no ordinary query."
     },
     {
       "id": "Q04",
@@ -37,20 +37,20 @@
     {
       "id": "Q06",
       "kind": "negative",
-      "input": "Observation, audit lock and receipt persistence are held past soft stop.",
-      "expected": "Separate signalling escalates at soft stop and0.4s grace; hard timer at original deadline does not wait for those locks/I/O. No complete receipts means no PASS."
+      "input": "Observation, audit lock and receipt persistence are held past soft stop. Variant: query failure completion logging blocks or raises immediately after timeout.",
+      "expected": "Separate signalling escalates at soft stop and0.4s grace; hard timer at original deadline does not wait for those locks/I/O. No complete receipts means no PASS. Query failure is latched and signalling wakes before any completion-log I/O."
     },
     {
       "id": "Q07",
       "kind": "negative",
-      "input": "Worker nonce/context/birth/parent/group fails an existing ACK check.",
-      "expected": "No ACK or heavy phase; actual specific outcome stays UNKNOWN_HELD until separately resolved."
+      "input": "Worker nonce/context/birth/parent/group fails an existing ACK check. Variant: stop becomes latched during durable ACK binding.",
+      "expected": "No ACK or heavy phase; actual specific outcome stays UNKNOWN_HELD until separately resolved. Group authority is installed in memory before the durable write; ACK requires serialized stop recheck."
     },
     {
       "id": "Q08",
       "kind": "positive",
       "input": "Guard exits; acknowledged worker group retains live member.",
-      "expected": "Group authority survives guard removal; bound cleanup reaches remaining group; final successful empty scoped audit and unchanged inputs required."
+      "expected": "Group authority survives guard removal; bound cleanup reaches remaining group; final successful empty scoped audit and unchanged inputs required. This is a positive ownership-state outcome, not site acceptance after a premature guard exit."
     },
     {
       "id": "Q09",
@@ -67,8 +67,8 @@
     {
       "id": "Q11",
       "kind": "negative",
-      "input": "Observer failure124 precedes guard exit1 and another cleanup error.",
-      "expected": "One first-failure code/stage wins; one main terminal receipt124; no observer finalize/os._exit outside hard path."
+      "input": "Observer failure124 precedes guard exit1 and another cleanup error. Variant: observer failure arrives while main is preparing final PASS.",
+      "expected": "One first-failure code/stage wins; one main terminal receipt124; no observer finalize/os._exit outside hard path. Observer must quiesce; final decision serializes with the latch so no failure can escape or produce PASS."
     },
     {
       "id": "Q12",
@@ -79,14 +79,14 @@
     {
       "id": "Q13",
       "kind": "negative",
-      "input": "Stop marker/first-failure record is visible before a worker phase checkpoint.",
-      "expected": "Next phase is refused. A blocked cross-process publication must not be described as instantaneous preemption; any first failure disqualifies the invocation."
+      "input": "Stop marker/first-failure record is visible before a worker phase checkpoint. Variants: visible marker, delayed publication, failed publication and checkpoint/publication race.",
+      "expected": "Next phase is refused. A blocked cross-process publication must not be described as instantaneous preemption; any first failure disqualifies the invocation. After visibility refuse phase. Before visibility phase may start; every latched-failure case still fails acceptance and bound cleanup proceeds."
     },
     {
       "id": "Q14",
       "kind": "negative",
-      "input": "Main cannot complete terminal/fsync before original hard deadline.",
-      "expected": "Hard path sends bound KILL and exits124 without waiting for finalisation. An incomplete failure is retained, never PASS."
+      "input": "Main cannot complete terminal/fsync before original hard deadline. Variants: one direct signal raises, snapshot iteration raises, normal cleanup helper would block.",
+      "expected": "Hard path sends bound KILL and exits124 without waiting for finalisation. An incomplete failure is retained, never PASS. Preserve baseline hard path with per-target isolation and enclosing finally exit124; never poll handles or call the normal helper."
     },
     {
       "id": "Q15",

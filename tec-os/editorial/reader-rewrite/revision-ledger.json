@@ -16314,5 +16314,14 @@
     "retention": "site-verification/failed-attempt03/retention.json",
     "specific_registered_hold": "Release supported by independent review and scoped actual evidence; P3 records disposition",
     "new_invocation_allocated": false
+  },
+  "site_verification_observer_repair_proposal": {
+    "status": "SOURCE_ONLY_REVIEWED_PROPOSAL_NOT_APPLIED_OR_EXECUTED",
+    "path": "site-verification/ownership-audit-proposal/README.md",
+    "scope": "Explicit ordinary query0.5→2.0s cappedsoft; cleanup0.5 retained; timer/firstfailure/mainfinalizer/observedledger repair",
+    "limits": "850MB/450heap/wait0/180whole/3cleanup/twoworkers unchanged; reader/checker inputs unchanged",
+    "controls": "16 planned controls, no execution or qualification",
+    "deliverable": "Actual complete39-page closure after separately approved source/control/seal/input review and fresh allocation",
+    "new_actual_allocation": false
   }
 }
