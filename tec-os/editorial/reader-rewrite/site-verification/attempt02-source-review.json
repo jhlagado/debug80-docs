@@ -1,0 +1,178 @@
+{
+  "schema": 1,
+  "status": "clear_bounded_source_only",
+  "reviewed_code_commit": "73330480cb6cd72b661cb6df0a968b0eb78f31da",
+  "failed_source_commit": "7ed7670",
+  "inputs": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+      "sha256": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6",
+      "matches_7333048": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+      "sha256": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410",
+      "matches_7333048": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/README.md",
+      "sha256": "9961031e874ba88852ebbef4403ef4bf953b6b9dd5ccfc26d85d9060a205cb66",
+      "matches_7333048": false
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/attempt02-diagnosis.json",
+      "sha256": "cfe417c57191d7ac3ae46c6997df156a7ebb9f38d14659563c3cfcf018bee261",
+      "matches_7333048": false
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/attempt02-source.diff",
+      "sha256": "83c732440f2d32d1c0e882182e7f2f7c78dad1103f02181a117a74986b2733aa",
+      "matches_7333048": false
+    }
+  ],
+  "metadata_delta": "Current README and diagnosis additionally record the specific P3 resolution at Origo2ea74522. These working metadata changes were read; the two code files still match 7333048 exactly.",
+  "findings": [],
+  "checks": [
+    {
+      "source": "run_once.py:21,173-175; build_and_check.py:11,22-29",
+      "result": "Both ps calls explicitly override TZ=UTC, LC_ALL=C and LANG=C. Worker publishes that dictionary and outer requires equality before ACK. Literal birth observations now request the same timezone and locale."
+    },
+    {
+      "source": "run_once.py:187-263",
+      "result": "Diagnostics retain expected and observed PID/group/birth, observed parent, receipt/observer environments, guard state, stopping and first-failure state with distinct mismatch reasons. Canonical signatures deduplicate unchanged observations; latest diagnostic is atomically replaced and changed observations fsynced to events. Fatal declaration mismatches fail closed. Matching observed birth/group and registered live guard remain ACK prerequisites. Binding and ACK retain the terminal-lock stop gate; ACK has a durable event."
+    },
+    {
+      "source": "build_and_check.py:32-58",
+      "result": "Worker still waits for and validates ACK before build, and checks first failure before each phase. Diagnostics do not bypass ownership."
+    },
+    {
+      "result": "Actual failed packet runner and worker equal 7ed7670. Supplied source.diff exactly matches git diff 7ed7670..7333048 for README and both code files."
+    },
+    {
+      "result": "All 12 retained receipts match retention.json byte lengths and SHA-256 values. Read actual invocation, ownership, first failure, terminal, events, memory, stream, internal audit and external audit contexts. Ownership nonce and context hash match retained context. No ACK/build/check phase receipt exists in the actual output inventory."
+    },
+    {
+      "result": "Checker, controls script, expectations, helper, preparation and launcher unchanged against 7ed7670. No reader/source-candidate or 180-second/850-MB/450-MB/zero-wait/no-retry policy change in this bounded delta."
+    }
+  ],
+  "actual_attempt01": {
+    "terminal_exit": 1,
+    "whole_seconds": 7.2871055,
+    "guard_seconds": 2.3,
+    "sampled_peak_mb": 14,
+    "guard_observed_processes": 1,
+    "worker_pid_and_group": 21671,
+    "guard_and_declared_parent": 21660,
+    "worker_birth": "Fri Nov  6 04:00:27 2026",
+    "ack": false,
+    "build_started": false,
+    "checker_started": false
+  },
+  "causal_boundary": "Old outer ps inherited its environment while worker inherited UTC/C. This is a source-supported causal defect, not proof of the sole observed cause: old outer birth text/environment were not logged. The separate owner same-process comparison and illustrative Melbourne string do not supply that missing observation.",
+  "specific_resolution": {
+    "authority": "Origo2ea74522fed5581fb3522d2e70e32b53869fd5a4",
+    "read": [
+      "studies/p3-tec-os/evidence/book-site-attempt01/README.md",
+      "studies/p3-tec-os/reviews/book-site-allocation.md",
+      "studies/p3-tec-os/ledgers/cost.md",
+      "studies/p3-tec-os/ledgers/defects.md"
+    ],
+    "disposition": "P3 independently resolved this specific attempt bootstrap and released its reservation. This review records that authority, not an independent release from empty audits. Generic pre-ACK UNKNOWN_HELD remains unproved."
+  },
+  "unchanged_inputs": [
+    {
+      "file": "check_html.py",
+      "sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515"
+    },
+    {
+      "file": "test_checker.py",
+      "sha256": "cb83538f3b1728b2d95babe21849e55fa2df72a36eb326c11345ca738094f219"
+    },
+    {
+      "file": "expectations.json",
+      "sha256": "66ad882a456260a61f6f248cc0aaae6d0a19794fc51bfd850ea26a2edd181c48"
+    },
+    {
+      "file": "packet_inputs.py",
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504"
+    },
+    {
+      "file": "prepare_packet.py",
+      "sha256": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8"
+    },
+    {
+      "file": "invoke.sh",
+      "sha256": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e"
+    }
+  ],
+  "retained_receipts": [
+    {
+      "file": "invocation.json",
+      "bytes": 404,
+      "sha256": "b5725c3c0f4268d56a2d5e19fb359f28d88b3b003a084e7a18b17bdc67041439"
+    },
+    {
+      "file": "context.json",
+      "bytes": 455,
+      "sha256": "b734602c99ad1831bb79e8cd35aecdca882056f1bda003ea157f2c3e12086185"
+    },
+    {
+      "file": "events.jsonl",
+      "bytes": 2003,
+      "sha256": "1332a00cf8cd01b5cc5e23a6268b55b5c8297c51049b95cdece4abb59bbe3fbe"
+    },
+    {
+      "file": "job-ownership.json",
+      "bytes": 258,
+      "sha256": "4608bdadfd88cfb64bbb14fb1bcf7926da121416b2396465f854b0b08d58a857"
+    },
+    {
+      "file": "first-failure.json",
+      "bytes": 160,
+      "sha256": "2dd963d1266d075f5a76e65de18e88ca64dffdb2009a4cec66a9a5439ac315b0"
+    },
+    {
+      "file": "memory.jsonl",
+      "bytes": 485,
+      "sha256": "7a9395371be7bb505eeb863f345acbea07c2ca6debe3611280da20d5fe036a90"
+    },
+    {
+      "file": "owned-process-audit.json",
+      "bytes": 17,
+      "sha256": "f9515d267ec1466892aae3c677ba08803c688b1d8a70f5194025f12e8119fb56"
+    },
+    {
+      "file": "external-bootstrap-audit.json",
+      "bytes": 573,
+      "sha256": "0c34e57b8471c2393c2042995f28e082f345f436e9cb8893548eb609fa825111"
+    },
+    {
+      "file": "stream.log",
+      "bytes": 207,
+      "sha256": "8057016485f501bca3f3aa76bacacb8eeba5e0e4b9c6a339a824e903595d8676"
+    },
+    {
+      "file": "terminal.json",
+      "bytes": 185,
+      "sha256": "2650e234e45916b4f6911895ddbb5c4e4836152a1849f2345d5962c2697d476b"
+    },
+    {
+      "file": "command.log",
+      "bytes": 207,
+      "sha256": "8057016485f501bca3f3aa76bacacb8eeba5e0e4b9c6a339a824e903595d8676"
+    },
+    {
+      "file": "persistent-claim.json",
+      "bytes": 150,
+      "sha256": "d79bff0749052da06b026c9c55f0bfb401a98eb646b3695340a71418e1f04558"
+    }
+  ],
+  "limits": [
+    "No invocation, process probe, guard, build, checker, new test, target import or render. Git/source/evidence reads and inert hashes only.",
+    "UTC/C normalization and diagnostics are statically reviewed, not runtime-qualified. This is not a guarantee that attempt02 will ACK or complete.",
+    "Generic pre-ACK attribution and cleanup remain UNKNOWN_HELD pending independent disposition, regardless of empty internal or external audits. Specific SITE01 release does not generalise.",
+    "Diagnostic writes precede ACK and may fail or consume the existing two-second wait; they fail closed. Existing formatted-lstart resolution and process-race limits remain.",
+    "Final seal must bind reviewed code and final metadata. New allocation is required; no retry or execution is authorised by this review.",
+    "No rendered-page, browser, physical hardware, whole-site or publication acceptance follows."
+  ]
+}
