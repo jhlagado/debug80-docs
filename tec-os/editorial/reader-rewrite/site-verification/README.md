@@ -22,7 +22,10 @@ and another review before allocation.
 The deadline can be at most 180 seconds after entry. Preflight, dependency
 copying, guard startup, build, validation and cleanup share that deadline.
 The final three seconds are reserved for stopping and receipts. No phase
-resets the clock. The watcher starts before preflight and guard startup.
+resets the clock. Both deadline watchers start before preflight and guard
+startup. The soft stop retains failure and audit data. At the final deadline
+a separate path sends KILL to bound jobs and exits 124 without waiting for
+a process audit or receipt write. Incomplete receipts cannot count as a pass.
 
 The sealed `invoke.sh` entry computes that absolute deadline before executing
 the isolated standard-library runner. The guard has `--wait 0`. A busy slot
