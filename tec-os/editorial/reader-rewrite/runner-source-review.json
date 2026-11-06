@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "status": "clear_source_only",
+  "reviewed_commit": "eef441a778b621e4558b26a3f1577699e6201bcf",
+  "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+  "scope": "Independent static review of runner, preparation, shared identities and launcher. No runner or build execution.",
+  "inputs": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+      "sha256": "f5462edea0c1fb62a30db0480d11e2400ffee3493d17829eaeaa259d4381eecc",
+      "lines": 495,
+      "check": "AST parsed without importing target"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+      "sha256": "d92ee4d1453c05920fb9278ac5a1594eeea58e17569681bc92b215737a1be679",
+      "lines": 69,
+      "check": "AST parsed without importing target"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "lines": 110,
+      "check": "AST parsed without importing target"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/prepare_packet.py",
+      "sha256": "f3742d49e3fbddae9de74fd4ef1497f1afda908b10ec24a17a662560a122de9b",
+      "lines": 149,
+      "check": "AST parsed without importing target"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/invoke.sh",
+      "sha256": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e",
+      "lines": 12,
+      "check": "complete inert text read"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/README.md",
+      "sha256": "0a49d842848a972ed40febb1299953ac8098ba925c7ba2bce08666b8a718f336",
+      "lines": 88,
+      "check": "complete inert text read"
+    }
+  ],
+  "findings": [],
+  "confirmed_corrections": [
+    {
+      "id": "audit-failure-cleanup",
+      "source": "run_once.py:232-249,277-301",
+      "disposition": "Retained validated job groups receive killpg even when ps fails or the guard has exited. Normal terminate and watchdog fallback both reach bound-group signalling; direct Popen handles remain fallback ownership."
+    },
+    {
+      "id": "failure-stop-latch",
+      "source": "run_once.py:135-147,195-203,306-315; build_and_check.py:50-52",
+      "disposition": "Failure sets stopping under the terminal lock before receipt publication. Outer launch and child registration share that lock; ACK publication checks both latch and first failure under it. Worker reads first failure before each phase. A phase already crossing its check is stopped through group cleanup; the worker check alone is not an atomic cross-process launch barrier."
+    },
+    {
+      "id": "receipt-storage-failure",
+      "source": "run_once.py:140-146",
+      "disposition": "Failure receipt OSError sends TERM and KILL to bound groups and live direct children before propagating. Storage failure cannot establish a successful durable receipt."
+    },
+    {
+      "id": "atomic-publication",
+      "source": "run_once.py:38-62; packet_inputs.py:76-100",
+      "disposition": "Both implementations write and fsync a private exclusive temporary file, publish complete bytes using link for no-overwrite or replace otherwise, remove the temporary name and fsync the parent. Ownership and ACK cannot expose a partially written JSON destination."
+    },
+    {
+      "id": "bootstrap-private-code",
+      "source": "invoke.sh:8-12; run_once.py:340-389,428-435; build_and_check.py:43-48",
+      "disposition": "Launcher calculates absolute UTC deadline before exec and uses Python -I -S -B. Bootstrap uses stdlib before self/payload hash verification and private-copy verification; helper import and guarded worker/checker paths use verified private payload. Worker and checker use -S -B. Launcher and README are now sealed payload inputs."
+    },
+    {
+      "id": "first-failure-terminal",
+      "source": "run_once.py:135-167,329-337; build_and_check.py:50-65",
+      "disposition": "Exclusive first failure is retained, negative signal statuses normalized, and a shared locked exclusive terminal finalizer propagates the earliest recorded exit code. Nonzero build skips checker; no automatic retry loop."
+    },
+    {
+      "id": "ownership-and-pid-identity",
+      "source": "run_once.py:169-230; build_and_check.py:19-41",
+      "disposition": "Nonce, context hash, actual PID/PGID and lstart identity bind ownership before ACK permits build. Observed processes require matching birth identities; retained group ownership survives guard exit. Process identities and OS signalling remain static reasoning, not executed proof."
+    },
+    {
+      "id": "input-copy-and-completeness",
+      "source": "packet_inputs.py:22-72; prepare_packet.py:60-146; run_once.py:378-425,443-470",
+      "disposition": "Absolute/escaping dependency symlinks are rejected; copied and original dependencies have full file/symlink identity checks. Every exported regular source input is hashed, including temporary config after its explicit delta. Pre/post comparison excludes only declared generated outputs and separately checked node_modules. Runtime and original/private payload hashes are checked again."
+    }
+  ],
+  "other_checks": [
+    "Absolute deadline is fixed before guard start; no phase resets it. Policy requires maximum 180 seconds, final three seconds reserved, --wait 0, 850 MB guard, 450 MB heap, two workers and no minification.",
+    "Fresh output plus persistent exclusive seal claim rejects reuse; command output and events are synchronised, with separate phase, checker, process audit and terminal receipts.",
+    "Seal bytes are read once and hash-verified before parsing; original payload hashes and every private copy are checked before private helper execution.",
+    "Preparation binds source archive and tree, dependency manifests, installed bytes, runtime executables, guard bytes and config before/after/diff. It compares raw fences and exact ECMAScript TrimEnd expected representation to frozen source.",
+    "Runner and worker require checker status passed. Independent HTML checker findings and control qualification remain a separate scope."
+  ],
+  "limits": [
+    "No target imports, guard invocation, build, render, checker call, product execution or cleanup/deadline experiment occurred. AST parsing and inert source/hash inspection only.",
+    "The superseded ce4d17 PREPARED_UNRUN seal does not bind this final implementation. Regenerate the packet and inspect the final seal, exact command, runtime identity and allocation before any invocation.",
+    "This report does not close the separate checker source review or authorise allocation, publication or real-site acceptance.",
+    "Thread scheduling, process creation, filesystem stalls and OS signal delivery are not hard real-time guarantees. The reserved cleanup interval and ownership algorithm have not been exercised.",
+    "SIGKILL or host loss cannot execute cleanup. Missing terminal receipts remain incomplete failures, never acceptance.",
+    "Dependency postchecks deliberately reject any copied-tree cache mutation. Actual compatibility and cost of copying, hashing and building within the deadline are unestablished.",
+    "Installed package version comparisons cover lock-addressed present packages; actual bytes are separately bound, without a new registry-integrity claim. Source identities bind content rather than runtime correctness."
+  ],
+  "actions": {
+    "implementation_edits": false,
+    "target_execution": false,
+    "review_data_only": true
+  }
+}
