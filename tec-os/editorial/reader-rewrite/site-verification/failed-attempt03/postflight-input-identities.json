@@ -1,0 +1,56 @@
+{
+  "purpose": "Read-only postfailure input identity checks, not SITE03 acceptance",
+  "source_expected_files": 889,
+  "source_actual_files": 889,
+  "source_changes": [],
+  "writable_exclusions_observed": [
+    "node_modules/"
+  ],
+  "dependencies": {
+    "original": {
+      "actual_entries": 4454,
+      "matches_all_expected_entries": true
+    },
+    "private_copy": {
+      "actual_entries": 4454,
+      "matches_all_expected_entries": true
+    }
+  },
+  "runtime": {
+    "git": {
+      "sha256": "5ec2979b3ed9ea1c9ab866ce7177d34324e08fa452416bdd750c090dd77ff3c0",
+      "matches_seal": true
+    },
+    "node": {
+      "sha256": "72c18e2eeda260f67a5b2b66e96fa9b5ad82864676ebb54925695d87120cae3f",
+      "matches_seal": true
+    },
+    "python": {
+      "sha256": "bdea59019a38eb6600cc9e71e984a97fedadc406448431281e7657030f54987e",
+      "matches_seal": true
+    }
+  },
+  "copied_guard_matches": true,
+  "original_guard_matches": true,
+  "source_archive_matches": true,
+  "private_payload_matches": {
+    "README.md": true,
+    "build_and_check.py": true,
+    "check_html.py": true,
+    "config.after.ts": true,
+    "config.before.ts": true,
+    "config.diff": true,
+    "controls-result.json": true,
+    "dependency-manifests.json": true,
+    "expectations.json": true,
+    "installed-inputs.json": true,
+    "invoke.sh": true,
+    "packet_inputs.py": true,
+    "prepare_packet.py": true,
+    "run_once.py": true,
+    "source-inputs.json": true,
+    "test_checker.py": true
+  },
+  "passed_input_identity_checks": true,
+  "site_result": "FAILED; build incomplete; no checker receipt; no acceptance inferred"
+}

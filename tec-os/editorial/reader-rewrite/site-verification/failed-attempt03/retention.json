@@ -1,0 +1,246 @@
+{
+  "status": "FAILED",
+  "allocation": "KS47-SITE03-20261106",
+  "allocation_reference": "Origo2111028d",
+  "seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+  "original_output": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03",
+  "copies": [
+    {
+      "path": "build-started.json",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/build-started.json",
+      "sha256": "9914157fe2bce0d87c55e2d0dc3c979f4c7c2e4fd3cc8b0762184820a4cea520",
+      "bytes": 171
+    },
+    {
+      "path": "context.json",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/context.json",
+      "sha256": "ff2055762623eb314e38f66311cb3ab8f644754bb45d38bdcfe7ee4c8c9d8c86",
+      "bytes": 455
+    },
+    {
+      "path": "deadline-audit.json",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/deadline-audit.json",
+      "sha256": "cc204822703f4a371ae8128bb7348ed3d64e9867ca953d6d030914d1c9ed1aa8",
+      "bytes": 112
+    },
+    {
+      "path": "events.jsonl",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/events.jsonl",
+      "sha256": "157d47a76d12caf6cb7ee3de5bff4567ad6b22b85fad62af1f1483ba6333292f",
+      "bytes": 3907
+    },
+    {
+      "path": "first-failure.json",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/first-failure.json",
+      "sha256": "c3d5da6356209be70428356346f7e762844d0ef4f81575da035eef8027d65b78",
+      "bytes": 207
+    },
+    {
+      "path": "invocation.json",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/invocation.json",
+      "sha256": "e15107dc42c3ab3911bb6b4283d3e652f7d25fb1644bea6490a1a4d5918abfee",
+      "bytes": 403
+    },
+    {
+      "path": "job-ack.json",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/job-ack.json",
+      "sha256": "b50a64712b42b92aa35dc6952042bff0b74570c31859d1daa26aaf3aea032039",
+      "bytes": 163
+    },
+    {
+      "path": "job-ownership.json",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/job-ownership.json",
+      "sha256": "cc33737cef1789620ed23da0ff758a350e4be9618281d559b28336f86187e9d4",
+      "bytes": 315
+    },
+    {
+      "path": "memory.jsonl",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/memory.jsonl",
+      "sha256": "99445711ab224ce0b6844e4b6c76b187459bc5202c75a5d6a437c77b7484a10c",
+      "bytes": 507
+    },
+    {
+      "path": "ownership-diagnostic.json",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/ownership-diagnostic.json",
+      "sha256": "5cf1131dd8e7bac33d72c9834506cb17bcd0a846c73db4dede5c65b5fb83a1cc",
+      "bytes": 428
+    },
+    {
+      "path": "stream.log",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/stream.log",
+      "sha256": "68303efd9fa980e81008f1fb94819b86f3ad6eb1ff3f235cf6b37808fdfe7a25",
+      "bytes": 308
+    },
+    {
+      "path": "terminal.json",
+      "original": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/terminal.json",
+      "sha256": "3d4661a108f880d3aa56ade786e3cc461faa70a039be74dd50d12da8cb4ca3a2",
+      "bytes": 211
+    },
+    {
+      "path": "outer.log",
+      "original": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-site-attempt03-outer.log",
+      "sha256": "68303efd9fa980e81008f1fb94819b86f3ad6eb1ff3f235cf6b37808fdfe7a25",
+      "bytes": 308
+    },
+    {
+      "path": "persistent-claim.json",
+      "original": "/Users/johnhardy/.origo/site-verification/claims/8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4.json",
+      "sha256": "c5a9b9c3a6003da009d8196b7c7c48258bc7b1c27eb106ccf8a4bb641bedfe27",
+      "bytes": 150
+    },
+    {
+      "path": "postflight-process-observation.json",
+      "original": "/private/tmp/tec-os-site03-postflight-observation-20261106.json",
+      "sha256": "7e20b4b58d0886748bab6dc4132032b15ac3984857024a1ca7e9570d06d02e6b",
+      "bytes": 28310
+    },
+    {
+      "path": "postflight-command-scope-observation.json",
+      "original": "/private/tmp/tec-os-site03-command-scope-observation-20261106.json",
+      "sha256": "f48b15b117199d7645060728e4f678098476c62abe254e74b43bc3a4856fc4f1",
+      "bytes": 686
+    },
+    {
+      "path": "postflight-input-identities.json",
+      "original": "/private/tmp/tec-os-site03-postflight-input-identities-20261106.json",
+      "sha256": "c6d4e473acd96eb7e9820430e38d6e1e278f9d60a699050f28053042621cd30c",
+      "bytes": 1612
+    },
+    {
+      "path": "complete-archive-manifest.json",
+      "original": "/private/tmp/tec-os-site03-retained-8ff67aa359ad-20261106/archive-manifest.json",
+      "sha256": "2512454022b343c97de195f03ca844f4a9fadc46048f1852ccfba87977e8e675",
+      "bytes": 1712
+    },
+    {
+      "path": "complete-archive-inventory.json",
+      "original": "/private/tmp/tec-os-site03-retained-8ff67aa359ad-20261106/inventory.json",
+      "sha256": "449abd9c3b85c4ee75c2942bb5dee110c3a2935d9efd17d94c97d74b0dfa60ce",
+      "bytes": 1305358
+    }
+  ],
+  "sealed_packet_copies": [
+    {
+      "path": "packet/README.md",
+      "sha256": "8fc7dd19f07ce4c6fc88c894768466919202280652e57f4be62628050babf786",
+      "bytes": 8266
+    },
+    {
+      "path": "packet/build_and_check.py",
+      "sha256": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410",
+      "bytes": 3596
+    },
+    {
+      "path": "packet/check_html.py",
+      "sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+      "bytes": 26143
+    },
+    {
+      "path": "packet/config.after.ts",
+      "sha256": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9",
+      "bytes": 24163
+    },
+    {
+      "path": "packet/config.before.ts",
+      "sha256": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e",
+      "bytes": 3349
+    },
+    {
+      "path": "packet/config.diff",
+      "sha256": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489",
+      "bytes": 21686
+    },
+    {
+      "path": "packet/controls-result.json",
+      "sha256": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+      "bytes": 1359432
+    },
+    {
+      "path": "packet/dependency-manifests.json",
+      "sha256": "8631dbb874c8e8e31cb90decb7cc1b968d0ebd7cf53f6a90895a1331107c2107",
+      "bytes": 556
+    },
+    {
+      "path": "packet/expectations.json",
+      "sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+      "bytes": 196353
+    },
+    {
+      "path": "packet/installed-inputs.json",
+      "sha256": "cfa02ccc86400c70240ca896dec4e4af85e6acb08dcdc6f5b72803732521b911",
+      "bytes": 757546
+    },
+    {
+      "path": "packet/invoke.sh",
+      "sha256": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e",
+      "bytes": 664
+    },
+    {
+      "path": "packet/packet_inputs.py",
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "bytes": 4299
+    },
+    {
+      "path": "packet/prepare_packet.py",
+      "sha256": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8",
+      "bytes": 9371
+    },
+    {
+      "path": "packet/run_once.py",
+      "sha256": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6",
+      "bytes": 26357
+    },
+    {
+      "path": "packet/seal.json",
+      "sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+      "bytes": 3109
+    },
+    {
+      "path": "packet/source-inputs.json",
+      "sha256": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8",
+      "bytes": 101673
+    },
+    {
+      "path": "packet/test_checker.py",
+      "sha256": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e",
+      "bytes": 23685
+    }
+  ],
+  "complete_raw_archive": {
+    "archive": "/private/tmp/tec-os-site03-retained-8ff67aa359ad-20261106/complete-output-and-inputs.tar.gz",
+    "bytes": 67173406,
+    "sha256": "e1ce7d3f88bb2634805e68ed02b71a43ad4e29f8b667aa3fcfd350d88d6dcba0",
+    "inventory": "/private/tmp/tec-os-site03-retained-8ff67aa359ad-20261106/inventory.json",
+    "inventory_sha256": "449abd9c3b85c4ee75c2942bb5dee110c3a2935d9efd17d94c97d74b0dfa60ce",
+    "regular_files_verified_from_archive": 5368,
+    "complete_original_inventory_unchanged_before_after": true,
+    "supplemental": {
+      "outer.log": {
+        "source": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-site-attempt03-outer.log",
+        "sha256": "68303efd9fa980e81008f1fb94819b86f3ad6eb1ff3f235cf6b37808fdfe7a25"
+      },
+      "persistent-claim.json": {
+        "source": "/Users/johnhardy/.origo/site-verification/claims/8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4.json",
+        "sha256": "c5a9b9c3a6003da009d8196b7c7c48258bc7b1c27eb106ccf8a4bb641bedfe27"
+      },
+      "postflight-process-observation.json": {
+        "source": "/private/tmp/tec-os-site03-postflight-observation-20261106.json",
+        "sha256": "7e20b4b58d0886748bab6dc4132032b15ac3984857024a1ca7e9570d06d02e6b"
+      },
+      "postflight-command-scope-observation.json": {
+        "source": "/private/tmp/tec-os-site03-command-scope-observation-20261106.json",
+        "sha256": "f48b15b117199d7645060728e4f678098476c62abe254e74b43bc3a4856fc4f1"
+      }
+    },
+    "boundary": "Archive includes full actual output tree, private sealed16payloads+seal, exportedsource.tar, full copied dependency tree, generated partial outputs and supplemental outer/claim/postflight evidence. No original writes or actual invocation executed."
+  },
+  "original_outputs_and_claim_unchanged": true,
+  "next_invocation": false,
+  "publication": false,
+  "archive_handoff": "Complete immutable raw archive remains at the exact external path for P3 archival; checksum and all5368 regular-file identities are retained here.",
+  "independent_retention_review": {
+    "path": "../attempt03-retention-review.json",
+    "sha256": "7da72bb18c12f1928510c253c562883cd916cbcee2898464032049040a066760"
+  }
+}

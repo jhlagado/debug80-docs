@@ -1,5 +1,5 @@
 {
-  "status": "PREPARED_UNRUN_INDEPENDENT_REVIEWS_CLEAR_ALLOCATION_REQUIRED",
+  "status": "FAILED_ACTUAL_SITE03",
   "approval": "KD-246",
   "seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
   "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
@@ -43,7 +43,7 @@
     "retry": false,
     "whole_invocation_max_seconds": 180
   },
-  "actual_invocation_allocated": false,
+  "actual_invocation_allocated": true,
   "SITE02": "FAILED under original expectation; retained without alteration",
   "reuse": "No whole saved-output closure claimed; prepare fresh bounded verification rather than infer complete acceptance from title census",
   "publication": false,
@@ -52,5 +52,8 @@
     "attempt03-controls-review.json": "f7d8d274f6b6edfbcdae2f7575770414ff80e8bebb4d8591d45865fe570ba29c",
     "attempt03-seal-confirmation.json": "14d407f198069f0bb5ed7ed6ad1d63d5c3eb0b47d3a2ae9a0dd798bcf9c4f6c2"
   },
-  "sealed_data_commit": "0d4ce9e"
+  "sealed_data_commit": "0d4ce9e",
+  "preparation_status": "PREPARED_UNRUN_INDEPENDENT_REVIEWS_CLEAR_ALLOCATION_REQUIRED",
+  "actual_result": "attempt03-result.json",
+  "successor_allocated": false
 }

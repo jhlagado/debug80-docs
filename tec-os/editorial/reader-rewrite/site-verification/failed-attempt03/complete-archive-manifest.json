@@ -1,0 +1,28 @@
+{
+  "archive": "/private/tmp/tec-os-site03-retained-8ff67aa359ad-20261106/complete-output-and-inputs.tar.gz",
+  "bytes": 67173406,
+  "sha256": "e1ce7d3f88bb2634805e68ed02b71a43ad4e29f8b667aa3fcfd350d88d6dcba0",
+  "inventory": "/private/tmp/tec-os-site03-retained-8ff67aa359ad-20261106/inventory.json",
+  "inventory_sha256": "449abd9c3b85c4ee75c2942bb5dee110c3a2935d9efd17d94c97d74b0dfa60ce",
+  "regular_files_verified_from_archive": 5368,
+  "complete_original_inventory_unchanged_before_after": true,
+  "supplemental": {
+    "outer.log": {
+      "source": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-site-attempt03-outer.log",
+      "sha256": "68303efd9fa980e81008f1fb94819b86f3ad6eb1ff3f235cf6b37808fdfe7a25"
+    },
+    "persistent-claim.json": {
+      "source": "/Users/johnhardy/.origo/site-verification/claims/8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4.json",
+      "sha256": "c5a9b9c3a6003da009d8196b7c7c48258bc7b1c27eb106ccf8a4bb641bedfe27"
+    },
+    "postflight-process-observation.json": {
+      "source": "/private/tmp/tec-os-site03-postflight-observation-20261106.json",
+      "sha256": "7e20b4b58d0886748bab6dc4132032b15ac3984857024a1ca7e9570d06d02e6b"
+    },
+    "postflight-command-scope-observation.json": {
+      "source": "/private/tmp/tec-os-site03-command-scope-observation-20261106.json",
+      "sha256": "f48b15b117199d7645060728e4f678098476c62abe254e74b43bc3a4856fc4f1"
+    }
+  },
+  "boundary": "Archive includes full actual output tree, private sealed16payloads+seal, exportedsource.tar, full copied dependency tree, generated partial outputs and supplemental outer/claim/postflight evidence. No original writes or actual invocation executed."
+}

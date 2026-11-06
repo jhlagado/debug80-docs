@@ -1,0 +1,68 @@
+{
+  "status": "FAILED_SPECIFIC_REGISTERED_HOLD_RELEASE_SUPPORTED",
+  "authority": "Delegated P3 request to retain SITE03, independently review exact failed invocation ownership and decide its narrow resource hold; P3 records the reservation disposition in Origo",
+  "allocation": "KS47-SITE03-20261106",
+  "allocation_reference": "Origo2111028d",
+  "seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+  "terminal_exit_code": 124,
+  "elapsed_seconds": 13.782821208,
+  "first_failure": {
+    "detail": "Command '['/bin/ps', '-axo', 'pid=,ppid=,pgid=,lstart=']' timed out after 0.5 seconds",
+    "exit_code": 124,
+    "retry": false,
+    "stage": "watchdog",
+    "status": "FAILED",
+    "utc": "2026-11-06T07:06:16.407952+00:00"
+  },
+  "budget_interpretation": "The 0.5-second identity-observation call timed out. The 180-second invocation deadline was not exhausted. No timeout or limit is amended.",
+  "build_completed": false,
+  "checker_began": false,
+  "site_acceptance": false,
+  "registered_universe": [
+    {
+      "class": "outer direct children",
+      "source": "packet/run_once.py:371-398",
+      "scope": "Each command starts a new session and is registered immediately in children plus roots; birth is filled after ps. Git archive command completed and was removed. Guard PID 55177 was the active registered direct child and later reaped with command exit 1. Outer PID and historical git PID/birth are not durably enumerated in these receipts."
+    },
+    {
+      "class": "ACK-bound worker group",
+      "source": "packet/run_once.py:185-268; packet/build_and_check.py:20-58",
+      "scope": "Validated worker PID/PGID 55188, UTC/C birth, actual observed parent 55177, context hash and nonce are retained before ACK. job_groups and roots bind its group independently of guard lifetime. Worker build subprocess has no new-session/detached option and inherits group 55188; its PID is not separately recorded."
+    },
+    {
+      "class": "descendants and helper processes",
+      "source": "packet/run_once.py:246-268; mem-guard.mjs:63-80,167-171; source/node_modules/esbuild/lib/main.js:1971-1980",
+      "scope": "Outer discovers matching retained births, descendants of owned parents and members of bound groups. Guard discovers worker descendants plus group members. Inspected esbuild service spawn has no detached option and normally inherits the build group. Guard ps/sysctl/footprint helpers are separate subprocesses under the guard rather than the worker group. No complete historical PID/birth ledger of helpers or all transitive build descendants was retained. Sampled peak three is not a census or proof no other process existed."
+    }
+  ],
+  "independent_review": {
+    "path": "attempt03-ownership-source-review.json",
+    "sha256": "e70924d9d00b191909d0de4110537c0d18bb520904e85833f35771e5c9d8e776"
+  },
+  "specific_hold_disposition": {
+    "decision": "Release only the SITE03 registered invocation resource hold, for P3 to record. No next run or source amendment is authorised.",
+    "basis": [
+      "Actual nonce/context/UTC-birth/parent/group binding and ACK before build",
+      "Actual guard SIGTERM-handler end and direct-child exit1/reap evidence",
+      "Later complete identity snapshot absent original guard/worker and both known groups",
+      "Later scoped command/path/group snapshot has no matches; heavy.lock absent"
+    ],
+    "limit": "No complete historical descendant/helper register was retained. A hypothetical detached,reparented process with no retained path identity is outside this bounded clearance. No such survivor is established. This is not universal or pre-ACK cleanup proof."
+  },
+  "archive_manifest": "failed-attempt03/complete-archive-manifest.json",
+  "postfailure_input_identity_reading": "All 889 source inputs, both 4,454-entry dependency trees, runtimes, guard and 16 payloads matched after the failure. This separate diagnostic is not a PASS from the failed runner.",
+  "next_bounded_recommendation": "Prepare a source-only proposal for durable complete ownership registration and final cleanup/audit receipt handling when identity observation fails. Retain fail-closed 0.5-second observation and unchanged 180 s/850 MB/450 MB/two-worker bounds unless an explicit decision changes them. Independently review that proposal before any amendment,new seal or separately allocated execution. Do not retry the old seal or kill numeric PIDs.",
+  "actions_excluded": [
+    "Retry",
+    "Source amendment",
+    "Timeout increase",
+    "Profile or resource-limit relaxation",
+    "Numeric PID signalling",
+    "Publication"
+  ],
+  "retention_review": {
+    "path": "attempt03-retention-review.json",
+    "sha256": "7da72bb18c12f1928510c253c562883cd916cbcee2898464032049040a066760",
+    "status": "No archival mismatch or blocker; complete archive and copied packet verified"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "purpose": "Read-only command/path/group backstop for SITE03 only, not universal cleanup proof",
+  "utc": "2026-11-06T07:09:54.961372+00:00",
+  "argv": [
+    "/bin/ps",
+    "-axo",
+    "pid=,ppid=,pgid=,lstart=,command="
+  ],
+  "timeout_seconds": 0.5,
+  "environment": {
+    "TZ": "UTC",
+    "LANG": "C",
+    "LC_ALL": "C"
+  },
+  "signals_sent": false,
+  "exit_code": 0,
+  "stderr": "",
+  "observed_rows": 531,
+  "scope_matches": [],
+  "complete_stdout_sha256": "3d61671086acf0e8ee970b3a5436459b9c70a13ea437b805cde8b5f0b9f1e040",
+  "retention": "Only scoped command rows retained, unrelated process arguments omitted",
+  "heavy_lock": {
+    "exists": false,
+    "bytes": null
+  }
+}
