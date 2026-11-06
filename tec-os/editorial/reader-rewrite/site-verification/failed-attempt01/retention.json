@@ -1,0 +1,85 @@
+{
+  "status": "FAILED_BEFORE_BUILD_NO_RETRY",
+  "allocation": "KS47-SITE01-20261106",
+  "allocation_record": "Origo58001ab3",
+  "seal_sha256": "3102077825ff6cb6944a117c5fc56d450614f8f82e8998a704cffeea860f0b4e",
+  "exit_code": 1,
+  "whole_elapsed_seconds": 7.2871055,
+  "guard": {
+    "seconds": 2.3,
+    "sampled_peak_mb": 14,
+    "observed_processes": 1,
+    "exit_code": 1
+  },
+  "acknowledged": false,
+  "build_started": false,
+  "checker_started": false,
+  "bootstrap_classification": "UNKNOWN_HELD",
+  "external_audit": "Retained independent UTC audit found no matching recorded worker PID/PGID or guard at its timestamp. This is not universal pre-ACK cleanup acceptance.",
+  "receipts": [
+    {
+      "file": "invocation.json",
+      "bytes": 404,
+      "sha256": "b5725c3c0f4268d56a2d5e19fb359f28d88b3b003a084e7a18b17bdc67041439"
+    },
+    {
+      "file": "context.json",
+      "bytes": 455,
+      "sha256": "b734602c99ad1831bb79e8cd35aecdca882056f1bda003ea157f2c3e12086185"
+    },
+    {
+      "file": "events.jsonl",
+      "bytes": 2003,
+      "sha256": "1332a00cf8cd01b5cc5e23a6268b55b5c8297c51049b95cdece4abb59bbe3fbe"
+    },
+    {
+      "file": "job-ownership.json",
+      "bytes": 258,
+      "sha256": "4608bdadfd88cfb64bbb14fb1bcf7926da121416b2396465f854b0b08d58a857"
+    },
+    {
+      "file": "first-failure.json",
+      "bytes": 160,
+      "sha256": "2dd963d1266d075f5a76e65de18e88ca64dffdb2009a4cec66a9a5439ac315b0"
+    },
+    {
+      "file": "memory.jsonl",
+      "bytes": 485,
+      "sha256": "7a9395371be7bb505eeb863f345acbea07c2ca6debe3611280da20d5fe036a90"
+    },
+    {
+      "file": "owned-process-audit.json",
+      "bytes": 17,
+      "sha256": "f9515d267ec1466892aae3c677ba08803c688b1d8a70f5194025f12e8119fb56"
+    },
+    {
+      "file": "external-bootstrap-audit.json",
+      "bytes": 573,
+      "sha256": "0c34e57b8471c2393c2042995f28e082f345f436e9cb8893548eb609fa825111"
+    },
+    {
+      "file": "stream.log",
+      "bytes": 207,
+      "sha256": "8057016485f501bca3f3aa76bacacb8eeba5e0e4b9c6a339a824e903595d8676"
+    },
+    {
+      "file": "terminal.json",
+      "bytes": 185,
+      "sha256": "2650e234e45916b4f6911895ddbb5c4e4836152a1849f2345d5962c2697d476b"
+    },
+    {
+      "file": "command.log",
+      "bytes": 207,
+      "sha256": "8057016485f501bca3f3aa76bacacb8eeba5e0e4b9c6a339a824e903595d8676"
+    },
+    {
+      "file": "persistent-claim.json",
+      "bytes": 150,
+      "sha256": "d79bff0749052da06b026c9c55f0bfb401a98eb646b3695340a71418e1f04558"
+    }
+  ],
+  "old_packet": "packet/ contains all16 actual verified payloads and old seal unchanged",
+  "original_output": "/private/tmp/tec-os-reader-site-3102077825ff-attempt01",
+  "original_output_unchanged": true,
+  "scope": "Evidence copy/hash/text inspection only. No rerun, new process probe, guard, build or rendering."
+}
