@@ -1,0 +1,57 @@
+{
+  "status": "INERT_SOURCE_CONTRACT_CHECKS_CLEAR_NOT_EXECUTED",
+  "checks": [
+    {
+      "file": "run_once.py",
+      "sha256": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6",
+      "ps_call_lines": [
+        173
+      ],
+      "explicit_last_environment_override": {
+        "TZ": "UTC",
+        "LC_ALL": "C",
+        "LANG": "C"
+      },
+      "timeout_seconds": 0.5
+    },
+    {
+      "file": "build_and_check.py",
+      "sha256": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410",
+      "ps_call_lines": [
+        22
+      ],
+      "explicit_last_environment_override": {
+        "TZ": "UTC",
+        "LC_ALL": "C",
+        "LANG": "C"
+      },
+      "timeout_seconds": 0.5
+    }
+  ],
+  "unchanged_inputs": [
+    "expectations.json",
+    "check_html.py",
+    "test_checker.py",
+    "controls-result.json",
+    "invoke.sh",
+    "packet_inputs.py",
+    "prepare_packet.py",
+    "config.before.ts",
+    "config.after.ts",
+    "config.diff",
+    "installed-inputs.json",
+    "dependency-manifests.json",
+    "source-inputs.json"
+  ],
+  "policy": {
+    "build_workers": 2,
+    "cleanup_reserved_seconds": 3,
+    "guard_limit_mb": 850,
+    "guard_wait_seconds": 0,
+    "minify": false,
+    "node_heap_mb": 450,
+    "retry": false,
+    "whole_invocation_max_seconds": 180
+  },
+  "boundary": "AST parsing, source and data hashes only. No ps call, observer/worker/runner invocation, new control execution, guard, build or rendering."
+}

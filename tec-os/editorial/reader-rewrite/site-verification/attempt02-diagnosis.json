@@ -22,6 +22,14 @@
       "utc_birth": "Fri Nov  6 04:00:27 2026",
       "melbourne_birth_same_instant": "Fri Nov  6 15:00:27 2026",
       "difference_hours": 11
+    },
+    "owner_supporting_probe": {
+      "source": "Origo2ea74522:studies/p3-tec-os/evidence/book-site-attempt01/README.md",
+      "actual_owner_read_only_comparison": [
+        "Melbourne 15:09:19",
+        "UTC 04:09:19"
+      ],
+      "limit": "A separate same-process comparison, not the missing outer birth observation from the failed run."
     }
   },
   "correction": [
@@ -52,5 +60,15 @@
   "bootstrap_classification": "UNKNOWN_HELD",
   "bootstrap_limit": "No universal pre-ACK cleanup is claimed or fixed. Retained external UTC audit reported no matching recorded identities, while generic attribution remains outside that claim.",
   "next_step": "New seal and independent source/input review. New P3 allocation required before any invocation.",
-  "execution": "Evidence copy, source reading, data hashing and syntax checks only. No new process probe, guard, build, VitePress import, renderer or worker/runner invocation."
+  "execution": "Evidence copy, source reading, data hashing and syntax checks only. No new process probe, guard, build, VitePress import, renderer or worker/runner invocation.",
+  "attempt01_owner_resolution": {
+    "status": "SPECIFIC_ATTEMPT_BOOTSTRAP_RESOLVED_RESERVATION_RELEASED",
+    "authority": "Origo2ea74522",
+    "source": "studies/p3-tec-os/evidence/book-site-attempt01/README.md",
+    "source_sha256": "27907d3c3558d730445f585e0e2b8958c45edfd602454c1162f99535e6c383f4",
+    "raw_archive_sha256": "cc66bc78b89acf934bd7c12b75ac6c78119eacd731ab77859214b444c8e15579",
+    "raw_archive_bytes": 60688710,
+    "basis": "Retained matching nonce/context, actual worker/guard/outer terminal1, no ACK or build-start and later independent UTC audit with no matching recorded identities.",
+    "limit": "Generic pre-ACK cleanup remains unproved. No retry or next allocation authorised."
+  }
 }
