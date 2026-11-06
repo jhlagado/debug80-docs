@@ -152,5 +152,44 @@
       "AST parsing and inert text/hash inspection only. No preparation, checker, guard, build or runtime execution."
     ],
     "findings": []
+  },
+  "bounded_hard_deadline_followup": {
+    "status": "clear_source_only",
+    "reviewed_commit": "626c8b38eec42ffd447e997d1d6ffa0a9e5726f7",
+    "input": {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+      "sha256": "27b7c6e51358b0840997d59b0fa03bcd019b2a17b71dc0ff327c5562d3342c0d",
+      "lines": 519,
+      "current_bytes_equal_reviewed_commit": true
+    },
+    "scope": "Hard-deadline delta only; retains all earlier findings, dispositions and proof limits.",
+    "confirmed_corrections": [
+      {
+        "id": "deadline-cancellation",
+        "source": "run_once.py:307-329,509-519",
+        "disposition": "Independent Event wait is never cancelled by soft-watch done or terminal finalisation. It remains active through final stream fsync and closes. Normal entry uses os._exit(main()), avoiding interpreter shutdown flushing after main returns."
+      },
+      {
+        "id": "blocking-popen-cleanup",
+        "source": "run_once.py:314-324",
+        "disposition": "Hard cleanup uses direct os.killpg and os.kill against retained group/direct-child snapshots; it does not call Popen.kill, poll, process-table audit, receipt I/O or application locks."
+      },
+      {
+        "id": "unconditional-cutoff-exit",
+        "source": "run_once.py:312-326",
+        "disposition": "Each target signal isolates BaseException; an enclosing finally calls os._exit(124), including if snapshot iteration fails."
+      },
+      {
+        "id": "monotonic-provenance",
+        "source": "run_once.py:100-107",
+        "disposition": "Invocation receipt retains entry_monotonic and deadline_monotonic alongside the absolute UTC deadline. Hard wait uses the existing fixed monotonic deadline; it does not reset the invocation budget."
+      }
+    ],
+    "limits": [
+      "Static source and byte/hash comparison only. No runner, guard, build, checker, test or product invocation occurred.",
+      "The daemon starts before preflight but after initial argument/output/receipt setup. This source confirmation does not establish a hard real-time bound on interpreter startup, initial setup, OS scheduling or kernel signal delivery.",
+      "Hard cutoff intentionally adds no terminal writer. Missing or incomplete receipts cannot establish successful completion; hard exit status 124 must be retained by the invoking allocation evidence.",
+      "Final packet seal must be regenerated to bind these exact runner bytes and all other final packet files before allocation. This report grants no allocation or runtime acceptance."
+    ]
   }
 }
