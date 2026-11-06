@@ -105,5 +105,52 @@
     "implementation_edits": false,
     "target_execution": false,
     "review_data_only": true
+  },
+  "bounded_preparation_followup": {
+    "reviewed_commit": "c8a4dd971c2a2202392fc1c96e70c35864c6990f",
+    "status": "clear_source_only",
+    "scope": "Preparation control-report admission checks and README delta only; no independent requalification of changed HTML checker or synthetic controls.",
+    "inputs": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/prepare_packet.py",
+        "sha256": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/README.md",
+        "sha256": "3efb50724a1f6845e53149e7dfe4bb6444fb2bb4e12793428fa1ebab74b17cee"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/test_checker.py",
+        "sha256": "cb83538f3b1728b2d95babe21849e55fa2df72a36eb326c11345ca738094f219"
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/controls-result.json",
+        "sha256": "c51da34c86b86f7a0d1262a7b42fd1c1aa6ddf1d10e9fed82b759341f0dc96d9"
+      }
+    ],
+    "checks": [
+      {
+        "source": "prepare_packet.py:33-47",
+        "result": "Before writing config, manifests or seal, requires passed controls report, current expectations/checker/test-script SHA-256 values and count/list consistency. Each reported control requires its expected exit status and passed/failed receipt status; negative controls require the exact expected first-failure category. Receipt reuse must exit 2 and preserve the receipt."
+      },
+      {
+        "source": "test_checker.py:299-314",
+        "result": "Inert report-construction read confirms field names and status/category representation used by preparation match the producer. This does not independently prove retained controls or receipts were executed or are sufficient."
+      },
+      {
+        "source": "README.md:27-29,56-59,97-109",
+        "result": "Launcher, zero-wait, failure-latch and atomic-publication wording agrees with previously reviewed implementation. Synthetic-only scope remains explicit. New H1 contract wording belongs to separate checker follow-up and is not accepted here as real-render evidence."
+      },
+      {
+        "result": "Git diff against eef441a shows no runner, shared helper or worker change; prior conclusions and hashes for those files remain applicable."
+      }
+    ],
+    "limits": [
+      "Preparation checks report consistency and current code identity; it does not rerun controls, rehash every retained on-disk receipt/tree or independently establish complete required-control coverage. Separate checker review owns that evidence.",
+      "These checks use Python assert and require the documented non-optimised preparation invocation; -O or PYTHONOPTIMIZE must not disable assertions.",
+      "Final seal must bind actual final files after checker corrections and their bounded review. No existing superseded seal is accepted by this follow-up.",
+      "AST parsing and inert text/hash inspection only. No preparation, checker, guard, build or runtime execution."
+    ],
+    "findings": []
   }
 }
