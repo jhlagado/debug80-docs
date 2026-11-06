@@ -27,6 +27,8 @@ def tree_identity(root):
             path = Path(directory) / name
             relative = path.relative_to(root).as_posix()
             if path.is_symlink():
+                if Path(os.readlink(path)).is_absolute():
+                    raise ValueError('absolute dependency symlink is not relocatable: ' + relative)
                 resolved = path.resolve(strict=True)
                 if root not in resolved.parents and resolved != root:
                     raise ValueError('dependency symlink escapes installed input: ' + relative)
@@ -40,6 +42,34 @@ def tree_identity(root):
                 raise ValueError('unsupported installed input: ' + relative)
     rows.sort(key=lambda row: row['path'])
     return {'entries': rows, 'sha256': hashlib.sha256(canonical(rows)).hexdigest()}
+
+
+def source_identity(root):
+    """All exported file inputs, excluding only reviewed generated output paths."""
+    import re
+    root = Path(root)
+    files = {}
+    generated = []
+    excluded_dirs = {'node_modules', '.vitepress/dist', '.vitepress/cache', '.vitepress/.temp'}
+    for directory, dirs, names in os.walk(root, followlinks=False):
+        for name in tuple(dirs):
+            path = Path(directory) / name
+            relative = path.relative_to(root).as_posix()
+            if relative in excluded_dirs:
+                generated.append(relative + '/')
+                dirs.remove(name)
+            elif path.is_symlink():
+                raise ValueError('unreviewed source directory link: ' + relative)
+        for name in names:
+            path = Path(directory) / name
+            relative = path.relative_to(root).as_posix()
+            if re.fullmatch(r'\.vitepress/config\.ts\.timestamp-[\w.-]+\.mjs', relative):
+                generated.append(relative)
+            elif path.is_symlink() or not path.is_file():
+                raise ValueError('unreviewed source file type: ' + relative)
+            else:
+                files[relative] = digest(path)
+    return {'files': files, 'generated_paths': sorted(generated)}
 
 
 def durable_json(path, value, exclusive=False):

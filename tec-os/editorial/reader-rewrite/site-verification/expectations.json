@@ -2958,5 +2958,14 @@
       ]
     },
     "pre_result_boundary": "Derived by inert full source reading before any allocated build or real rendering. Synthetic controls are not a real site result."
-  }
+  },
+  "public_html": [
+    {
+      "source": "public/tec1g/mon3-user-guide/index.html",
+      "html": "tec1g/mon3-user-guide/index.html",
+      "bytes": 321,
+      "sha256": "70578bc32521c647bb17afab0f1a79959cf6733711ebebf1f2ac16dbd7da616d",
+      "scope": "byte-identical public passthrough, not another rendered reader or global site acceptance"
+    }
+  ]
 }
