@@ -33,8 +33,17 @@ The guarded command uses `--wait 0`, 850 MB and a 450 MB Node heap. It runs
 `build_and_check.py`, which starts VitePress once then runs the HTML checker
 once after a successful build. Two workers and disabled minification are
 bound in the temporary config. A failure skips every later build/check phase.
+The entry runner imports only standard-library modules during bootstrap. It
+checks its own identity and copies each sealed payload into a fresh private
+packet directory, checking every copy before importing the helper. Worker and
+checker execution uses that private copy.
+
 The original dependency tree is copied into the isolated source export.
-Both dependency trees are checked again after the run.
+Both dependency trees are checked again after the run. Absolute symlinks are
+rejected before copying. Every exported source input is checked before and
+after the build. Only dependency files checked separately, `.vitepress/dist`,
+`.vitepress/cache`, `.vitepress/.temp` and the installed loader's temporary
+config module are excluded from that source-file comparison.
 
 `stream.log` contains merged child output, written and synchronised while it
 arrives. `events.jsonl` records command boundaries. Phase start/end receipts,
@@ -42,8 +51,16 @@ arrives. `events.jsonl` records command boundaries. Phase start/end receipts,
 separate meanings. The first failure has an exclusive receipt which later
 cleanup cannot replace. `terminal.json` records the invocation result.
 
+Before starting VitePress, the guarded worker writes its PID, process group,
+start identity and context nonce. It waits for the outer invocation to validate
+and acknowledge that group. The group remains bound independently of the
+guard's lifetime. Without acknowledgement the worker exits without building.
+PID start identities distinguish observed processes from later PID reuse.
+
 The deadline path stops the owned process tree and writes a separate process
-audit. External SIGINT, SIGTERM and SIGHUP use the failure/cleanup path.
+audit. The watchdog and main path share one exclusive terminal finaliser.
+The first recorded failure code is preserved through the terminal receipt and
+process exit. External SIGINT, SIGTERM and SIGHUP use the failure/cleanup path.
 SIGKILL or host loss cannot run cleanup code, so the durable invocation/claim
 and missing terminal receipt remain an incomplete failure for review.
 
@@ -55,6 +72,9 @@ changes actual files before calling that validator. These controls neither
 render Markdown nor import VitePress. A positive fixture is not evidence that
 the actual build passed. The retained controls report lists the mutations and
 receipts. Rendered output remains unqualified until the allocated invocation.
+
+A single frozen public HTML passthrough also remains byte-identical to its
+source. It is outside the 39 rendered readers and gives no global site claim.
 
 The validator checks titles, first headings, actual IDs and relative links,
 sidebar and previous/next order and decoded literal code. The manifest retains

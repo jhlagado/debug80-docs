@@ -12,14 +12,59 @@ import sys
 import tarfile
 import threading
 import time
-from packet_inputs import canonical, digest, durable_json, first_failure, tree_identity
+import importlib.util
+import secrets
 
 ENTRY_WALL = time.time()
 ENTRY_MONO = time.monotonic()
+sys.dont_write_bytecode = True
+
+
+# Bootstrap uses only the standard library. No packet helper is imported until
+# its complete private copy has been checked against the supplied seal digest.
+def canonical(value):
+    return (json.dumps(value, sort_keys=True, separators=(',', ':'),
+                       ensure_ascii=False) + '\n').encode()
+
+
+def digest(path):
+    value = hashlib.sha256()
+    with open(path, 'rb') as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+            value.update(chunk)
+    return value.hexdigest()
+
+
+def durable_json(path, value, exclusive=False):
+    path = Path(path)
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | (os.O_EXCL if exclusive else os.O_TRUNC), 0o600)
+    try:
+        data = canonical(value)
+        while data:
+            data = data[os.write(fd, data):]
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    fd = os.open(path.parent, os.O_RDONLY)
+    try:
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+
+
+def first_failure(output, stage, detail, code):
+    try:
+        durable_json(Path(output) / 'first-failure.json', {
+            'status': 'FAILED', 'stage': stage, 'detail': detail, 'exit_code': code,
+            'retry': False, 'utc': datetime.now(timezone.utc).isoformat()}, exclusive=True)
+    except FileExistsError:
+        pass
 
 
 class Failed(Exception):
-    pass
+    def __init__(self, detail, code=1):
+        super().__init__(detail)
+        self.code = code
 
 
 def main():
@@ -32,7 +77,10 @@ def main():
     args = parser.parse_args()
     packet = Path(args.packet).resolve(strict=True)
     output = Path(args.output).absolute()
-    deadline_wall = datetime.fromisoformat(args.deadline_utc.replace('Z', '+00:00')).timestamp()
+    deadline_date = datetime.fromisoformat(args.deadline_utc.replace('Z', '+00:00'))
+    if deadline_date.utcoffset() is None or deadline_date.utcoffset().total_seconds() != 0:
+        parser.error('deadline must include an explicit UTC offset or Z')
+    deadline_wall = deadline_date.timestamp()
     remaining = deadline_wall - ENTRY_WALL
     if not 5 < remaining <= 180:
         parser.error('absolute deadline must be 5 to 180 seconds after invocation entry')
@@ -50,6 +98,11 @@ def main():
     observed = {}
     children = {}
     done = threading.Event()
+    terminal_lock = threading.Lock()
+    audit_lock = threading.RLock()
+    final_code = [None]
+    job_groups = {}
+    context_identity = [None]
     events = os.open(output / 'events.jsonl', os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     stream = os.open(output / 'stream.log', os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
 
@@ -63,10 +116,37 @@ def main():
         os.fsync(events)
 
     def interrupted(signum, frame):
-        raise Failed('invocation interrupted by signal ' + str(signum))
+        raise Failed('invocation interrupted by signal ' + str(signum), 128 + signum)
 
     for signum in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP):
         signal.signal(signum, interrupted)
+
+    def fail(where, detail, code):
+        with terminal_lock:
+            if final_code[0] is not None:
+                return False
+            first_failure(output, where, detail, code)
+            return True
+
+    def finalize(status, detail=''):
+        with terminal_lock:
+            if final_code[0] is not None:
+                return final_code[0]
+            failure_path = output / 'first-failure.json'
+            if status == 'PASS' and time.monotonic() >= deadline - 3:
+                first_failure(output, 'absolute-deadline', 'terminal receipt deadline reached', 124)
+            if failure_path.exists():
+                failure = json.loads(failure_path.read_text())
+                status, code = 'FAILED', failure['exit_code']
+            else:
+                code = 0 if status == 'PASS' else 1
+            durable_json(output / 'terminal.json', {
+                'status': status, 'exit_code': code, 'detail': detail, 'retry': False,
+                'seal_sha256': args.seal_sha256,
+                'elapsed_seconds': time.monotonic() - ENTRY_MONO}, exclusive=True)
+            final_code[0] = code
+            done.set()
+            return code
 
     def process_rows():
         result = subprocess.run(['/bin/ps', '-axo', 'pid=,ppid=,pgid=,lstart='],
@@ -80,13 +160,40 @@ def main():
                 rows.append((int(pid), int(parent), int(group), birth.strip()))
         return rows
 
-    def owned():
+    def owned_unlocked():
         rows = process_rows()
+        ownership_path = output / 'job-ownership.json'
+        if context_identity[0] is not None and ownership_path.exists():
+            ownership = json.loads(ownership_path.read_text())
+            if ownership['nonce'] != context_identity[0]['nonce']:
+                raise Failed('job ownership nonce mismatch')
+            if ownership['context_sha256'] != context_identity[0]['sha256']:
+                raise Failed('job ownership context mismatch')
+            pid = ownership['pid']
+            matching = next((row for row in rows if row[0] == pid and
+                             row[2] == ownership['pgid'] and row[3] == ownership['birth']), None)
+            guard = children.get(ownership['guard_pid'])
+            ack_path = output / 'job-ack.json'
+            if not ack_path.exists() and matching and guard is not None and guard.poll() is None:
+                if ownership['pgid'] != pid or ownership['parent_pid'] != ownership['guard_pid']:
+                    raise Failed('job ownership parent/group mismatch')
+                job_groups[pid] = ownership['birth']
+                roots[pid] = ownership['birth']
+                durable_json(ack_path, {'nonce': ownership['nonce'],
+                             'ownership_sha256': digest(ownership_path)}, exclusive=True)
         root_snapshot = roots.copy()
         known = {**observed.copy(), **root_snapshot}
         # A PID alone is not an owned process identity after it has exited.
         kept = {pid for pid, _, _, birth in rows if known.get(pid) == birth}
         groups = {pid for pid, _, _, birth in rows if root_snapshot.get(pid) == birth}
+        for group, birth in tuple(job_groups.items()):
+            leader = next((row for row in rows if row[0] == group), None)
+            members = [row for row in rows if row[2] == group]
+            if not members or (leader is not None and leader[3] != birth):
+                job_groups.pop(group, None)
+                roots.pop(group, None)
+            else:
+                groups.add(group)
         changed = True
         while changed:
             changed = False
@@ -98,6 +205,10 @@ def main():
         observed.update({row[0]: row[3] for row in found})
         return found
 
+    def owned():
+        with audit_lock:
+            return owned_unlocked()
+
     def terminate(sig):
         try:
             rows = owned()
@@ -108,6 +219,12 @@ def main():
             raise
         # Signal leaders first. The guard's TERM handler kills its detached job.
         live = {row[0]: row[3] for row in rows}
+        for group in tuple(job_groups):
+            if any(row[2] == group for row in rows):
+                try:
+                    os.killpg(group, sig)
+                except ProcessLookupError:
+                    pass
         for pid, birth in sorted(roots.copy().items()):
             if birth is None:
                 child = children.get(pid)
@@ -133,8 +250,9 @@ def main():
                 owned()
                 if time.monotonic() < deadline - 3:
                     continue
-                first_failure(output, 'absolute-deadline',
-                              'stopping before the fixed deadline to include cleanup', 124)
+                if not fail('absolute-deadline',
+                            'stopping before the fixed deadline to include cleanup', 124):
+                    return
                 event('deadline-stop')
                 terminate(signal.SIGTERM)
                 time.sleep(0.4)
@@ -142,7 +260,8 @@ def main():
                 audit = owned()
                 durable_json(output / 'deadline-audit.json', {'remaining': audit}, exclusive=True)
             except BaseException as error:
-                first_failure(output, 'watchdog', str(error), 124)
+                if not fail('watchdog', str(error), 124):
+                    return
                 # Give the guard its TERM cleanup even when ps is unavailable.
                 for child in children.copy().values():
                     if child.poll() is None:
@@ -153,9 +272,7 @@ def main():
                         child.kill()
                 durable_json(output / 'deadline-audit.json',
                              {'clear': False, 'error': str(error)})
-            durable_json(output / 'terminal.json', {'status': 'FAILED', 'exit_code': 124,
-                         'retry': False, 'elapsed_seconds': time.monotonic() - ENTRY_MONO})
-            os._exit(124)
+            os._exit(finalize('FAILED', 'watchdog stopped the invocation'))
 
     watcher = threading.Thread(target=watchdog, daemon=True)
     watcher.start()
@@ -186,15 +303,17 @@ def main():
         children.pop(child.pid, None)
         event('command-end', code=code)
         if code:
-            first_failure(output, stage[0], 'command exited ' + str(code), code)
-            raise Failed('command exited ' + str(code))
+            code = code if code > 0 else 128 - code
+            fail(stage[0], 'command exited ' + str(code), code)
+            raise Failed('command exited ' + str(code), code)
 
     code = 1
     try:
         seal_path = packet / 'seal.json'
-        if digest(seal_path) != args.seal_sha256:
+        seal_bytes = seal_path.read_bytes()
+        if hashlib.sha256(seal_bytes).hexdigest() != args.seal_sha256:
             raise Failed('seal identity mismatch')
-        seal = json.loads(seal_path.read_text())
+        seal = json.loads(seal_bytes)
         if os.environ.get('ORIGO_GUARD'):
             raise Failed('invocation is already inside a memory guard')
         if seal['policy'] != {'guard_limit_mb': 850, 'node_heap_mb': 450,
@@ -210,8 +329,26 @@ def main():
                      {'output': str(output), 'allocation': args.allocation,
                       'deadline': args.deadline_utc}, exclusive=True)
         for name, expected in seal['payload'].items():
+            if Path(name).name != name:
+                raise Failed('packet payload name is not a direct file')
             if digest(packet / name) != expected:
                 raise Failed('sealed packet input mismatch: ' + name)
+        if digest(Path(__file__)) != seal['payload']['run_once.py']:
+            raise Failed('invoked runner identity mismatch')
+        original_packet = packet
+        private_packet = output / 'packet'
+        private_packet.mkdir()
+        for name, expected in seal['payload'].items():
+            shutil.copyfile(packet / name, private_packet / name)
+            if digest(private_packet / name) != expected:
+                raise Failed('private packet copy mismatch: ' + name)
+        (private_packet / 'seal.json').write_bytes(seal_bytes)
+        packet = private_packet
+        specification = importlib.util.spec_from_file_location(
+            'verified_packet_inputs', packet / 'packet_inputs.py')
+        helper = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(helper)
+        tree_identity, source_identity = helper.tree_identity, helper.source_identity
         for runtime in seal['runtime'].values():
             if digest(runtime['path']) != runtime['sha256']:
                 raise Failed('runtime identity mismatch: ' + runtime['path'])
@@ -240,6 +377,9 @@ def main():
         if config.read_bytes() != (packet / 'config.before.ts').read_bytes():
             raise Failed('source config differs from sealed before image')
         config.write_bytes((packet / 'config.after.ts').read_bytes())
+        expected_source = json.loads((packet / 'source-inputs.json').read_text())['files']
+        if source_identity(source)['files'] != expected_source:
+            raise Failed('complete exported source input mismatch')
         shutil.copytree(dependencies, source / 'node_modules', symlinks=True)
         if tree_identity(source / 'node_modules') != expected_dependencies:
             raise Failed('copied dependency input mismatch')
@@ -249,8 +389,10 @@ def main():
             raise Failed('copied memory guard identity mismatch')
         context = {'packet': str(packet), 'output': str(output), 'source': str(source),
                    'node': seal['runtime']['node']['path'],
-                   'python': seal['runtime']['python']['path']}
+                   'python': seal['runtime']['python']['path'], 'nonce': secrets.token_hex(32)}
         durable_json(output / 'context.json', context, exclusive=True)
+        context_identity[0] = {'nonce': context['nonce'],
+                               'sha256': digest(output / 'context.json')}
         env = {'HOME': seal['home'], 'PATH': seal['path'], 'LANG': 'C', 'LC_ALL': 'C',
                'TZ': 'UTC', 'PYTHONDONTWRITEBYTECODE': '1', 'TMPDIR': str(output / 'tmp')}
         (output / 'tmp').mkdir()
@@ -272,6 +414,12 @@ def main():
                 raise Failed('source reader changed during invocation: ' + page['path'])
         if digest(config) != digest(packet / 'config.after.ts'):
             raise Failed('temporary config changed during invocation')
+        source_after = source_identity(source)
+        durable_json(output / 'source-after.json', source_after, exclusive=True)
+        if source_after['files'] != expected_source:
+            raise Failed('exported build input changed outside writable output exclusions')
+        if digest(output / 'context.json') != context_identity[0]['sha256']:
+            raise Failed('execution context changed during invocation')
         if tree_identity(dependencies) != expected_dependencies:
             raise Failed('original installed inputs changed during invocation')
         if tree_identity(source / 'node_modules') != expected_dependencies:
@@ -280,7 +428,7 @@ def main():
             if digest(runtime['path']) != runtime['sha256']:
                 raise Failed('runtime changed during invocation: ' + runtime['path'])
         for name, expected in seal['payload'].items():
-            if digest(packet / name) != expected:
+            if digest(packet / name) != expected or digest(original_packet / name) != expected:
                 raise Failed('packet input changed during invocation: ' + name)
         audit = owned()
         durable_json(output / 'owned-process-audit.json', {'remaining': audit}, exclusive=True)
@@ -288,13 +436,10 @@ def main():
             raise Failed('owned processes remain after guard completion')
         if time.monotonic() >= deadline - 3:
             raise Failed('insufficient time remains for a terminal receipt before the deadline')
-        durable_json(output / 'terminal.json', {'status': 'PASS', 'retry': False,
-                     'candidate': seal['source_revision'], 'seal_sha256': args.seal_sha256,
-                     'checker_sha256': digest(output / 'checker.json'),
-                     'elapsed_seconds': time.monotonic() - ENTRY_MONO}, exclusive=True)
-        code = 0
+        code = finalize('PASS')
     except BaseException as error:
-        first_failure(output, stage[0], str(error), 1)
+        code = error.code if isinstance(error, Failed) else 1
+        fail(stage[0], str(error), code)
         for sig in (signal.SIGTERM, signal.SIGKILL):
             try:
                 terminate(sig)
@@ -307,9 +452,7 @@ def main():
         except BaseException as cleanup_error:
             durable_json(output / 'owned-process-audit.json',
                          {'clear': False, 'error': str(cleanup_error)})
-        durable_json(output / 'terminal.json', {'status': 'FAILED', 'retry': False,
-                     'exit_code': 1, 'detail': str(error),
-                     'elapsed_seconds': time.monotonic() - ENTRY_MONO})
+        code = finalize('FAILED', str(error))
     finally:
         done.set()
         watcher.join(timeout=0.6)

@@ -4,6 +4,9 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import os
+import time
+from packet_inputs import digest
 from packet_inputs import durable_json, first_failure
 
 
@@ -13,6 +16,29 @@ def main():
     args = parser.parse_args()
     context = json.loads(Path(args.context).read_text())
     output = Path(context['output'])
+    # No build child starts until the outer invocation has durably bound this
+    # detached group. The guard may die before an ancestry poll sees it.
+    birth = subprocess.check_output(['/bin/ps', '-o', 'lstart=', '-p', str(os.getpid())],
+                                    text=True, timeout=0.5).strip()
+    ownership = {'nonce': context['nonce'], 'context_sha256': digest(args.context),
+                 'pid': os.getpid(), 'pgid': os.getpgrp(), 'birth': birth,
+                 'parent_pid': os.getppid(), 'guard_pid': int(os.environ['ORIGO_GUARD'])}
+    if ownership['pid'] != ownership['pgid'] or not birth:
+        first_failure(output, 'ownership', 'guard did not create a dedicated job group', 1)
+        return 1
+    ownership_path = output / 'job-ownership.json'
+    durable_json(ownership_path, ownership, exclusive=True)
+    until = time.monotonic() + 2
+    ack_path = output / 'job-ack.json'
+    while not ack_path.exists() and time.monotonic() < until:
+        time.sleep(0.02)
+    if not ack_path.exists():
+        first_failure(output, 'ownership', 'outer ownership acknowledgement missing', 1)
+        return 1
+    ack = json.loads(ack_path.read_text())
+    if ack != {'nonce': context['nonce'], 'ownership_sha256': digest(ownership_path)}:
+        first_failure(output, 'ownership', 'outer ownership acknowledgement differs', 1)
+        return 1
     commands = [
         ('build', [context['node'], str(Path(context['source']) /
                     'node_modules/vitepress/bin/vitepress.js'), 'build']),

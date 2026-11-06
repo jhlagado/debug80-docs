@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tarfile
 from packet_inputs import canonical, digest, durable_json, tree_identity
 
 SOURCE = 'a3e4c292fee3022e432a18be36370d2d87cd4b30'
@@ -48,6 +49,12 @@ def prepare():
             assert language.strip() == fence['language'] and raw == fence['text']
             assert '[!code' not in raw
             assert fence['rendered_text'] == raw.rstrip(whitespace)
+    public_html = {p for p in tracked if p.startswith('public/') and p.endswith('.html')}
+    assert public_html == {p['source'] for p in expected['public_html']}
+    for row in expected['public_html']:
+        data = source_bytes(row['source'])
+        assert len(data) == row['bytes']
+        assert hashlib.sha256(data).hexdigest() == row['sha256']
     before = source_bytes('.vitepress/config.ts').decode()
     excluded = [p for p in tracked if p.endswith('.md') and p not in readers]
     after, count = re.subn(r'srcExclude: \[[\s\S]*?\n  \],',
@@ -91,6 +98,20 @@ def prepare():
         subprocess.run([git, '-C', str(repo), 'archive', '--output', str(archive), SOURCE], check=True)
         archive_hash = digest(archive)
         archive_bytes = archive.stat().st_size
+        with tarfile.open(archive) as tar:
+            source_inputs = {}
+            for member in tar.getmembers():
+                assert not member.issym() and not member.islnk()
+                if member.isfile():
+                    data = tar.extractfile(member).read()
+                    source_inputs[member.name] = hashlib.sha256(data).hexdigest()
+        source_inputs['.vitepress/config.ts'] = hashlib.sha256(after.encode()).hexdigest()
+        durable_json(packet / 'source-inputs.json', {
+            'files': source_inputs,
+            'writable_exclusions': ['node_modules/ (separately checked against installed inputs)',
+                                    '.vitepress/dist/', '.vitepress/cache/', '.vitepress/.temp/',
+                                    '.vitepress/config.ts.timestamp-*.mjs'],
+            'source': 'Installed VitePress config defaults and Vite config loader source; no build run'})
     guard = Path('/Users/johnhardy/projects/origo/tools/mem-guard.mjs').resolve(strict=True)
     runtime = {}
     for name, path in [('node', Path(shutil.which('node')).resolve(strict=True)),
@@ -100,7 +121,7 @@ def prepare():
                      'prepare_packet.py', 'check_html.py', 'test_checker.py',
                      'controls-result.json', 'expectations.json', 'installed-inputs.json',
                      'dependency-manifests.json', 'config.before.ts', 'config.after.ts',
-                     'config.diff']
+                     'config.diff', 'source-inputs.json']
     seal = {'schema': 1, 'status': 'PREPARED_UNRUN', 'source_revision': SOURCE,
             'repository': str(repo), 'source_archive_sha256': archive_hash,
             'source_archive_bytes': archive_bytes,
