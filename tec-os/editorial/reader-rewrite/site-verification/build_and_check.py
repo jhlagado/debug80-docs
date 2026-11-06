@@ -8,6 +8,7 @@ import os
 import time
 from packet_inputs import digest
 from packet_inputs import durable_json, first_failure
+PS_IDENTITY_ENV = {'TZ': 'UTC', 'LC_ALL': 'C', 'LANG': 'C'}
 
 
 def main():
@@ -19,10 +20,12 @@ def main():
     # No build child starts until the outer invocation has durably bound this
     # detached group. The guard may die before an ancestry poll sees it.
     birth = subprocess.check_output(['/bin/ps', '-o', 'lstart=', '-p', str(os.getpid())],
-                                    text=True, timeout=0.5).strip()
+                                    text=True, timeout=0.5,
+                                    env={**os.environ, **PS_IDENTITY_ENV}).strip()
     ownership = {'nonce': context['nonce'], 'context_sha256': digest(args.context),
                  'pid': os.getpid(), 'pgid': os.getpgrp(), 'birth': birth,
                  'parent_pid': os.getppid(), 'guard_pid': int(os.environ['ORIGO_GUARD'])}
+    ownership['birth_environment'] = PS_IDENTITY_ENV
     if ownership['pid'] != ownership['pgid'] or not birth:
         first_failure(output, 'ownership', 'guard did not create a dedicated job group', 1)
         return 1
