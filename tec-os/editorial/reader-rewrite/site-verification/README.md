@@ -1,6 +1,7 @@
 # Scoped site verification packet
 
-Status: source preparation, not allocated or run.
+Status: attempt 01 failed before ACK or build. This corrected source packet
+is prepared for a new seal, review and allocation. It has not run.
 
 The packet keeps the accepted reader source at `a3e4c29`. Preparation reads
 Git exports and installed dependency files without importing VitePress or
@@ -66,11 +67,26 @@ start identity and context nonce. It waits for the outer invocation to validate
 and acknowledge that group. The group remains bound independently of the
 guard's lifetime. Without acknowledgement the worker exits without building.
 PID start identities distinguish observed processes from later PID reuse.
+Both process observers explicitly set `TZ=UTC`, `LC_ALL=C` and `LANG=C` for
+their `ps` calls. The worker declares that environment in its ownership record.
+The outer invocation checks it before acknowledgement.
+
+Ownership diagnostics retain expected and observed PID, group and birth text,
+the observer environment, guard state and exact mismatch reasons. Changes are
+appended to the durable event log and the latest observation is retained in
+`ownership-diagnostic.json`. ACK publication has its own event. The
+`ack_published` field distinguishes pending identity checks from later teardown.
 
 The deadline path stops the owned process tree and writes a separate process
 audit. The watchdog and main path share one exclusive terminal finaliser.
 The first recorded failure code is preserved through the terminal receipt and
 process exit. External SIGINT, SIGTERM and SIGHUP use the failure/cleanup path.
+A failure before ACK remains `UNKNOWN_HELD`. An empty internal audit does not
+prove that every bootstrap process was attributed. The preserved independent
+UTC audit of attempt 01 is evidence about its recorded identities at that time,
+not a universal pre-ACK cleanup guarantee. P3 must separately review that hold
+before allocating another attempt.
+
 SIGKILL or host loss cannot run cleanup code, so the durable invocation/claim
 and missing terminal receipt remain an incomplete failure for review.
 

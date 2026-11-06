@@ -1,0 +1,56 @@
+{
+  "status": "BOUNDED_SOURCE_RECUT_PREPARED_NOT_EXECUTED",
+  "failed_allocation": "KS47-SITE01-20261106",
+  "failed_seal_sha256": "3102077825ff6cb6944a117c5fc56d450614f8f82e8998a704cffeea860f0b4e",
+  "retained_evidence": "failed-attempt01/retention.json",
+  "facts": {
+    "exit_code": 1,
+    "guard_exit_code": 1,
+    "whole_seconds": 7.2871055,
+    "guard_seconds": 2.3,
+    "sampled_peak_mb": 14,
+    "guard_observed_processes": 1,
+    "ack": false,
+    "build_started": false,
+    "checker_started": false
+  },
+  "diagnosis": {
+    "source_proven_defect": "Outer ps birth observation inherited the invocation timezone/locale. The worker ps birth observation inherited explicitly UTC/C worker environment. Exact formatted lstart equality could therefore fail for the same PID/group/instant.",
+    "trace": "Worker recorded Fri Nov  6 04:00:27 2026, matching context/nonce. No ACK or build-start exists. First failure is outer acknowledgement missing.",
+    "not_proved": "The old outer observed row and its timezone were not retained. The trace cannot establish its exact rendered birth string or exclude every additional missing-ACK precondition.",
+    "illustrative_not_observed": {
+      "utc_birth": "Fri Nov  6 04:00:27 2026",
+      "melbourne_birth_same_instant": "Fri Nov  6 15:00:27 2026",
+      "difference_hours": 11
+    }
+  },
+  "correction": [
+    "Both ps subprocess calls explicitly receive TZ UTC, LC_ALL C and LANG C.",
+    "Worker receipt declares the birth environment; outer rejects a mismatched declaration.",
+    "Durable diagnostic/events retain expected and observed identity, environment and guard/stop/first-failure state. Exact mismatch reasons replace silent non-matching. ACK publication is recorded."
+  ],
+  "unchanged": {
+    "source_candidate": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+    "expectations_sha256": "66ad882a456260a61f6f248cc0aaae6d0a19794fc51bfd850ea26a2edd181c48",
+    "policy": {
+      "build_workers": 2,
+      "cleanup_reserved_seconds": 3,
+      "guard_limit_mb": 850,
+      "guard_wait_seconds": 0,
+      "minify": false,
+      "node_heap_mb": 450,
+      "retry": false,
+      "whole_invocation_max_seconds": 180
+    },
+    "checker": "unchanged",
+    "reader_prose": "unchanged",
+    "deadline_seconds": 180,
+    "memory_mb": 850,
+    "heap_mb": 450,
+    "automatic_retry": false
+  },
+  "bootstrap_classification": "UNKNOWN_HELD",
+  "bootstrap_limit": "No universal pre-ACK cleanup is claimed or fixed. Retained external UTC audit reported no matching recorded identities, while generic attribution remains outside that claim.",
+  "next_step": "New seal and independent source/input review. New P3 allocation required before any invocation.",
+  "execution": "Evidence copy, source reading, data hashing and syntax checks only. No new process probe, guard, build, VitePress import, renderer or worker/runner invocation."
+}

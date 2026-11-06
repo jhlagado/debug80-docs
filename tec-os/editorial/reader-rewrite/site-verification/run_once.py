@@ -18,6 +18,7 @@ import secrets
 ENTRY_WALL = time.time()
 ENTRY_MONO = time.monotonic()
 sys.dont_write_bytecode = True
+PS_IDENTITY_ENV = {'TZ': 'UTC', 'LC_ALL': 'C', 'LANG': 'C'}
 
 
 # Bootstrap uses only the standard library. No packet helper is imported until
@@ -115,6 +116,7 @@ def main():
     final_code = [None]
     job_groups = {}
     context_identity = [None]
+    last_ownership_observation = [None]
     events = os.open(output / 'events.jsonl', os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     stream = os.open(output / 'stream.log', os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
 
@@ -169,7 +171,8 @@ def main():
 
     def process_rows():
         result = subprocess.run(['/bin/ps', '-axo', 'pid=,ppid=,pgid=,lstart='],
-                                text=True, capture_output=True, timeout=0.5)
+                                text=True, capture_output=True, timeout=0.5,
+                                env={**os.environ, **PS_IDENTITY_ENV})
         if result.returncode:
             raise Failed('cannot audit owned processes')
         rows = []
@@ -184,24 +187,62 @@ def main():
         ownership_path = output / 'job-ownership.json'
         if context_identity[0] is not None and ownership_path.exists():
             ownership = json.loads(ownership_path.read_text())
-            if ownership['nonce'] != context_identity[0]['nonce']:
-                raise Failed('job ownership nonce mismatch')
-            if ownership['context_sha256'] != context_identity[0]['sha256']:
-                raise Failed('job ownership context mismatch')
             pid = ownership['pid']
-            matching = next((row for row in rows if row[0] == pid and
-                             row[2] == ownership['pgid'] and row[3] == ownership['birth']), None)
+            observed_worker = next((row for row in rows if row[0] == pid), None)
             guard = children.get(ownership['guard_pid'])
             ack_path = output / 'job-ack.json'
-            if not ack_path.exists() and matching and guard is not None and guard.poll() is None:
-                if ownership['pgid'] != pid or ownership['parent_pid'] != ownership['guard_pid']:
-                    raise Failed('job ownership parent/group mismatch')
+            guard_alive = guard is not None and guard.poll() is None
+            mismatches = []
+            if ownership['nonce'] != context_identity[0]['nonce']:
+                mismatches.append('nonce_mismatch')
+            if ownership['context_sha256'] != context_identity[0]['sha256']:
+                mismatches.append('context_hash_mismatch')
+            if ownership.get('birth_environment') != PS_IDENTITY_ENV:
+                mismatches.append('birth_environment_mismatch')
+            if ownership['pgid'] != pid or ownership['parent_pid'] != ownership['guard_pid']:
+                mismatches.append('declared_parent_or_group_mismatch')
+            if observed_worker is None:
+                mismatches.append('worker_pid_not_observed')
+            else:
+                if observed_worker[2] != ownership['pgid']:
+                    mismatches.append('observed_group_mismatch')
+                if observed_worker[3] != ownership['birth']:
+                    mismatches.append('observed_birth_mismatch')
+            if guard is None:
+                mismatches.append('guard_not_registered')
+            elif not guard_alive:
+                mismatches.append('guard_not_live')
+            observation = {
+                'ack_published': ack_path.exists(), 'birth_environment': PS_IDENTITY_ENV,
+                'expected_worker': {key: ownership[key] for key in ('pid', 'pgid', 'birth')},
+                'worker_receipt_birth_environment': ownership.get('birth_environment'),
+                'observed_worker': (dict(zip(('pid', 'parent_pid', 'pgid', 'birth'), observed_worker))
+                                    if observed_worker is not None else None),
+                'guard_pid': ownership['guard_pid'], 'guard_registered': guard is not None,
+                'guard_live': guard_alive, 'stopping': stopping.is_set(),
+                'first_failure_published': (output / 'first-failure.json').exists(),
+                'mismatches': mismatches}
+            signature = canonical(observation)
+            if signature != last_ownership_observation[0]:
+                durable_json(output / 'ownership-diagnostic.json', observation)
+                event('ownership-observation', **observation)
+                last_ownership_observation[0] = signature
+            fatal = {'nonce_mismatch', 'context_hash_mismatch', 'birth_environment_mismatch',
+                     'declared_parent_or_group_mismatch'}
+            if fatal.intersection(mismatches):
+                raise Failed('job ownership declaration mismatch: ' + ', '.join(mismatches))
+            matching = observed_worker is not None and not any(
+                item in mismatches for item in ('observed_group_mismatch', 'observed_birth_mismatch'))
+            if not ack_path.exists() and matching and guard_alive:
                 with terminal_lock:
                     job_groups[pid] = ownership['birth']
                     roots[pid] = ownership['birth']
                     if not stopping.is_set() and not (output / 'first-failure.json').exists():
                         durable_json(ack_path, {'nonce': ownership['nonce'],
                                      'ownership_sha256': digest(ownership_path)}, exclusive=True)
+                        event('ownership-acknowledged', worker_pid=pid,
+                              worker_group=ownership['pgid'], birth=ownership['birth'],
+                              birth_environment=PS_IDENTITY_ENV)
         root_snapshot = roots.copy()
         known = {**observed.copy(), **root_snapshot}
         # A PID alone is not an owned process identity after it has exited.

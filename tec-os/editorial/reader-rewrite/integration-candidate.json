@@ -259,5 +259,22 @@
     "product_imports": 0,
     "real_renderings": 0,
     "next_action": "P3 reviews the sealed request and separately allocates one invocation. No allocation or publication inferred."
+  },
+  "site_verification_attempt01": {
+    "status": "FAILED_BEFORE_ACK_AND_BUILD_NO_RETRY",
+    "allocation": "KS47-SITE01-20261106",
+    "allocation_record": "Origo58001ab3",
+    "seal_sha256": "3102077825ff6cb6944a117c5fc56d450614f8f82e8998a704cffeea860f0b4e",
+    "retained": "site-verification/failed-attempt01/retention.json",
+    "bootstrap_classification": "UNKNOWN_HELD",
+    "exit_code": 1,
+    "guard_exit_code": 1,
+    "whole_seconds": 7.2871055,
+    "guard_seconds": 2.3,
+    "sampled_mb": 14,
+    "ack": false,
+    "build_started": false,
+    "new_source_preparation": "site-verification/attempt02-diagnosis.json",
+    "authority": "P3 requested bounded source-only recut; no execution until another allocation."
   }
 }
