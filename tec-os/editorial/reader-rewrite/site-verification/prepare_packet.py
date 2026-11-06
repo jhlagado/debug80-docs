@@ -30,6 +30,21 @@ def prepare():
                                       '--name-only', SOURCE], text=True).splitlines()
     expected = json.loads((packet / 'expectations.json').read_text())
     assert expected['source_revision'] == SOURCE
+    controls = json.loads((packet / 'controls-result.json').read_text())
+    assert controls['status'] == 'passed'
+    assert controls['expectations_sha256'] == digest(packet / 'expectations.json')
+    assert controls['checker_sha256'] == digest(packet / 'check_html.py')
+    assert controls['controls_script_sha256'] == digest(packet / 'test_checker.py')
+    assert controls['control_count'] == len(controls['controls'])
+    for control in controls['controls']:
+        failure = control['expected_first_failure']
+        receipt = control['actual_receipt']
+        assert control['exit_status'] == (0 if failure is None else 1)
+        assert receipt['status'] == ('passed' if failure is None else 'failed')
+        if failure is not None:
+            assert receipt['first_failure']['category'] == failure
+    assert controls['receipt_reuse_control']['exit_status'] == 2
+    assert controls['receipt_reuse_control']['receipt_unchanged']
     readers = {p['path'] for p in expected['pages']}
     assert len(readers) == 39
     assert readers == {p for p in tracked if p.startswith('tec-os/') and
