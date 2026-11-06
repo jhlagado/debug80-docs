@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import secrets
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -74,8 +75,8 @@ def source_identity(root):
 
 def durable_json(path, value, exclusive=False):
     path = Path(path)
-    flags = os.O_WRONLY | os.O_CREAT | (os.O_EXCL if exclusive else os.O_TRUNC)
-    fd = os.open(path, flags, 0o600)
+    temporary = path.with_name('.' + path.name + '.' + secrets.token_hex(12) + '.tmp')
+    fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     try:
         data = canonical(value)
         while data:
@@ -83,6 +84,15 @@ def durable_json(path, value, exclusive=False):
         os.fsync(fd)
     finally:
         os.close(fd)
+    try:
+        if exclusive:
+            # Publish the complete receipt atomically without replacing a winner.
+            os.link(temporary, path)
+        else:
+            os.replace(temporary, path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
     directory = os.open(path.parent, os.O_RDONLY)
     try:
         os.fsync(directory)

@@ -37,7 +37,8 @@ def digest(path):
 
 def durable_json(path, value, exclusive=False):
     path = Path(path)
-    fd = os.open(path, os.O_WRONLY | os.O_CREAT | (os.O_EXCL if exclusive else os.O_TRUNC), 0o600)
+    temporary = path.with_name('.' + path.name + '.' + secrets.token_hex(12) + '.tmp')
+    fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     try:
         data = canonical(value)
         while data:
@@ -45,11 +46,20 @@ def durable_json(path, value, exclusive=False):
         os.fsync(fd)
     finally:
         os.close(fd)
-    fd = os.open(path.parent, os.O_RDONLY)
     try:
-        os.fsync(fd)
+        if exclusive:
+            # Publish the complete receipt atomically without replacing a winner.
+            os.link(temporary, path)
+        else:
+            os.replace(temporary, path)
     finally:
-        os.close(fd)
+        if temporary.exists():
+            temporary.unlink()
+    directory = os.open(path.parent, os.O_RDONLY)
+    try:
+        os.fsync(directory)
+    finally:
+        os.close(directory)
 
 
 def first_failure(output, stage, detail, code):
