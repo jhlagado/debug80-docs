@@ -16292,10 +16292,15 @@
   },
   "site_verification_attempt03_preparation": {
     "approval": "KD-246",
-    "status": "PREPARED_UNRUN_PENDING_INDEPENDENT_CONFIRMATION_AND_ALLOCATION",
+    "status": "PREPARED_UNRUN_INDEPENDENT_REVIEWS_CLEAR_ALLOCATION_REQUIRED",
     "seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
     "packet": "site-verification/attempt03-packet.json",
     "controls": "48 synthetic controls passed; no actual invocation allocated",
-    "actual_site_result": "SITE02 remains FAILED"
+    "actual_site_result": "SITE02 remains FAILED",
+    "independent_reviews": {
+      "attempt03-source-review.json": "a7505a230f8aa2aae1e418f9181b77fbf56e3e2d3f2d1675fbf092e1c31330a0",
+      "attempt03-controls-review.json": "f7d8d274f6b6edfbcdae2f7575770414ff80e8bebb4d8591d45865fe570ba29c",
+      "attempt03-seal-confirmation.json": "14d407f198069f0bb5ed7ed6ad1d63d5c3eb0b47d3a2ae9a0dd798bcf9c4f6c2"
+    }
   }
 }
