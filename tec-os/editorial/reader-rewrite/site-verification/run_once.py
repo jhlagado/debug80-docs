@@ -108,6 +108,7 @@ def main():
     observed = {}
     children = {}
     done = threading.Event()
+    stopping = threading.Event()
     terminal_lock = threading.Lock()
     audit_lock = threading.RLock()
     final_code = [None]
@@ -135,7 +136,14 @@ def main():
         with terminal_lock:
             if final_code[0] is not None:
                 return False
-            first_failure(output, where, detail, code)
+            stopping.set()
+            try:
+                first_failure(output, where, detail, code)
+            except OSError:
+                # Receipt storage failure cannot permit a live job to continue.
+                signal_bound(signal.SIGTERM)
+                signal_bound(signal.SIGKILL)
+                raise
             return True
 
     def finalize(status, detail=''):
@@ -187,10 +195,12 @@ def main():
             if not ack_path.exists() and matching and guard is not None and guard.poll() is None:
                 if ownership['pgid'] != pid or ownership['parent_pid'] != ownership['guard_pid']:
                     raise Failed('job ownership parent/group mismatch')
-                job_groups[pid] = ownership['birth']
-                roots[pid] = ownership['birth']
-                durable_json(ack_path, {'nonce': ownership['nonce'],
-                             'ownership_sha256': digest(ownership_path)}, exclusive=True)
+                with terminal_lock:
+                    job_groups[pid] = ownership['birth']
+                    roots[pid] = ownership['birth']
+                    if not stopping.is_set() and not (output / 'first-failure.json').exists():
+                        durable_json(ack_path, {'nonce': ownership['nonce'],
+                                     'ownership_sha256': digest(ownership_path)}, exclusive=True)
         root_snapshot = roots.copy()
         known = {**observed.copy(), **root_snapshot}
         # A PID alone is not an owned process identity after it has exited.
@@ -219,13 +229,23 @@ def main():
         with audit_lock:
             return owned_unlocked()
 
+    def signal_bound(sig):
+        # The acknowledged job group remains owned even if the guard has died
+        # or a fresh process-table read is unavailable.
+        for group in tuple(job_groups.copy()):
+            try:
+                os.killpg(group, sig)
+            except ProcessLookupError:
+                pass
+        for child in children.copy().values():
+            if child.poll() is None:
+                child.send_signal(sig)
+
     def terminate(sig):
         try:
             rows = owned()
         except BaseException:
-            for child in children.copy().values():
-                if child.poll() is None:
-                    child.send_signal(sig)
+            signal_bound(sig)
             raise
         # Signal leaders first. The guard's TERM handler kills its detached job.
         live = {row[0]: row[3] for row in rows}
@@ -273,13 +293,9 @@ def main():
                 if not fail('watchdog', str(error), 124):
                     return
                 # Give the guard its TERM cleanup even when ps is unavailable.
-                for child in children.copy().values():
-                    if child.poll() is None:
-                        child.terminate()
+                signal_bound(signal.SIGTERM)
                 time.sleep(0.4)
-                for child in children.copy().values():
-                    if child.poll() is None:
-                        child.kill()
+                signal_bound(signal.SIGKILL)
                 durable_json(output / 'deadline-audit.json',
                              {'clear': False, 'error': str(error)})
             os._exit(finalize('FAILED', 'watchdog stopped the invocation'))
@@ -288,12 +304,15 @@ def main():
     watcher.start()
 
     def command(argv, cwd=None, env=None):
-        event('command-start', argv=argv)
-        child = subprocess.Popen(argv, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
-                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                                 start_new_session=True)
-        children[child.pid] = child
-        roots[child.pid] = None
+        with terminal_lock:
+            if stopping.is_set() or (output / 'first-failure.json').exists():
+                raise Failed('failure latch prevents another command launch')
+            event('command-start', argv=argv)
+            child = subprocess.Popen(argv, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
+                                     stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                     start_new_session=True)
+            children[child.pid] = child
+            roots[child.pid] = None
         birth = next((row[3] for row in process_rows() if row[0] == child.pid), None)
         if birth is not None:
             roots[child.pid] = birth
@@ -409,7 +428,7 @@ def main():
         stage[0] = 'guarded-build-and-check'
         argv = [context['node'], str(guard), '--limit', '850', '--heap', '450',
                 '--name', 'tec-os-reader-site', '--wait', '0', '--log',
-                str(output / 'memory.jsonl'), '--', context['python'], '-B',
+                str(output / 'memory.jsonl'), '--', context['python'], '-S', '-B',
                 str(packet / 'build_and_check.py'), '--context', str(output / 'context.json')]
         event('guard-start-authorized', argv=argv, context_sha256=digest(output / 'context.json'),
               absolute_deadline_utc=args.deadline_utc)
