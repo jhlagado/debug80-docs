@@ -117,7 +117,7 @@ def prepare():
     for name, path in [('node', Path(shutil.which('node')).resolve(strict=True)),
                        ('python', Path(sys.executable).resolve(strict=True)), ('git', Path(git))]:
         runtime[name] = {'path': str(path), 'sha256': digest(path)}
-    payload_names = ['packet_inputs.py', 'run_once.py', 'build_and_check.py',
+    payload_names = ['README.md', 'invoke.sh', 'packet_inputs.py', 'run_once.py', 'build_and_check.py',
                      'prepare_packet.py', 'check_html.py', 'test_checker.py',
                      'controls-result.json', 'expectations.json', 'installed-inputs.json',
                      'dependency-manifests.json', 'config.before.ts', 'config.after.ts',

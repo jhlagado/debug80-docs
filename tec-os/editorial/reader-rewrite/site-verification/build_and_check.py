@@ -42,11 +42,13 @@ def main():
     commands = [
         ('build', [context['node'], str(Path(context['source']) /
                     'node_modules/vitepress/bin/vitepress.js'), 'build']),
-        ('validate', [context['python'], '-B', str(Path(context['packet']) /
+        ('validate', [context['python'], '-S', '-B', str(Path(context['packet']) /
                      'check_html.py'), '--expect', str(Path(context['packet']) /
                      'expectations.json'), '--dist', str(Path(context['source']) /
                      '.vitepress/dist'), '--receipt', str(output / 'checker.json')])]
     for phase, command in commands:
+        if (output / 'first-failure.json').exists():
+            return json.loads((output / 'first-failure.json').read_text())['exit_code']
         durable_json(output / (phase + '-started.json'), {'argv': command}, exclusive=True)
         print('SITE_PHASE ' + phase + ' START', flush=True)
         result = subprocess.run(command, cwd=context['source'], stdin=subprocess.DEVNULL)
