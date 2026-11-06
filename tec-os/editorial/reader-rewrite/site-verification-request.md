@@ -1,8 +1,8 @@
 # Current site verification request
 
 KD-246 is explicitly approved. The corrected packet and fresh command are in
-`site-verification/attempt03-request.md`. Synthetic controls passed; independent
-confirmation and a fresh actual allocation remain required. No actual invocation
+`site-verification/attempt03-request.md`. Synthetic controls and independent
+source/result/input reviews are clear. A fresh actual allocation remains required. No actual invocation
 of the new seal has run. The following SITE02 request is historical.
 
 # Corrected TEC-OS site verification packet

@@ -1,7 +1,8 @@
 # KD-246 corrected title packet: allocation request
 
-Status: synthetic controls passed. Exact packet prepared, independent confirmation
-pending. No actual build or real-output validator invocation is allocated.
+Status: synthetic controls passed and independent source, control-result and
+input-seal reviews are clear. No actual build or real-output validator invocation
+is allocated. The packet remains prepared and unrun.
 
 KD-246 explicitly approves Appendix F's expected browser title changing from
 ``F. `tecvol` | Debug80 Docs`` to `F. tecvol | Debug80 Docs`. The precise JSON
@@ -43,3 +44,6 @@ Limits remain: absolute 180 seconds including preflight and cleanup, three secon
 cleanup reserve, guard wait 0, 850 MB, Node heap 450 MB, two workers, minification
 disabled, one run and no retry. Existing ownership/deadline limitations remain.
 No publication, global-site, browser, visual-layout or physical-hardware claim.
+
+Independent confirmations: `attempt03-controls-review.json` and
+`attempt03-seal-confirmation.json`. Sealed data is committed at `0d4ce9e`.
