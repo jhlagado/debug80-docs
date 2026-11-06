@@ -76,18 +76,23 @@ contracts and pseudocode. No production file is changed by that file.
    `min(2.0, soft_deadline-now)`. A nonpositive budget starts soft-stop handling
    without launching a query. Cleanup queries use
    `min(0.5, hard_deadline-now)`. A query has no retry. Keep UTC/C and the exact
-   identity fields. Record start,end,effective budget,typed outcome and actual
+   identity fields. Recompute the budget after any log/lock wait and immediately
+   before launch; an ordinary query cannot launch once stop is latched.
+   Record start,end,effective budget,typed outcome and actual
    duration. Successful queries over 0.5 seconds are recorded as such, not hidden.
 2. Separate the monotonic soft-stop timer from the observation loop. An in-flight
    query or audit lock must not postpone bound TERM at soft stop or KILL after
    the existing 0.4-second grace. The existing hard timer remains independent,
-   sends KILL without waiting for audit/receipt I/O and exits124 at the original
+   keeps its existing direct-signal, per-target exception isolation and
+   `finally: os._exit(124)` path without Popen polling or shared cleanup helpers.
+   It sends KILL without waiting for audit/receipt I/O and exits124 at the original
    absolute deadline. The new budget cannot reset or extend either timer.
 3. Keep the first failure in a short in-memory latch, preserving its code/stage
    before later command exits. Publish a stop marker for the worker phase checkpoint; it refuses a
    later phase once the marker is visible. Cross-process publication is not
    instantaneous preemption, and any first failure disqualifies the invocation. Receipt persistence must not hold the signalling/escalation path.
-   Main is the only normal terminal/audit writer. The observer requests stop and
+   Latch a query failure before attempting its completion log, so blocked or
+   failed logging cannot postpone stop. Main is the only normal terminal/audit writer. The observer requests stop and
    returns; it no longer calls `finalize` or `os._exit`. Only the hard deadline
    retains forced exit. An unresponsive main still fails at that hard deadline.
 4. Retain direct-child registration immediately after Popen, including an unknown
@@ -98,7 +103,9 @@ contracts and pseudocode. No production file is changed by that file.
    processes can still detach and reparent between snapshots.
 5. Keep all identity checks and final audit fail-closed. After guard/build/checker
    completion, main must retain a successful fresh audit and all input checks
-   before PASS. Audit timeout, residual owned identity, missing registry/ACK,
+   before PASS. Quiesce the observer within the remaining soft budget and
+   serialize the final decision against the first-failure latch. Failure to
+   quiesce prevents PASS. Audit timeout, residual owned identity, missing registry/ACK,
    nonzero command or any first failure prevents acceptance. If cleanup observation
    fails, record UNKNOWN_HELD with registered identities and the last successful
    snapshot, not `remaining:[]`. Independent resolution remains necessary.
@@ -116,7 +123,11 @@ indefinite signalling authority. The acknowledged worker group remains bound
 independently of guard lifetime. Each successful global snapshot extends only
 observed PID/birth and parent/group closure. A later snapshot must detect PID
 reuse and never transfer authority to the new birth. The proposed longer query
-window does not prove that every intervening descendant was observed.
+window permits a longer interval without refreshed discovery: up to 2.0 seconds
+for a query rather than 0.5, plus polling and scheduling overhead. Registered
+groups and live handles remain available for signalling in that interval. This
+is an explicit observational tradeoff, not proof that every intervening
+descendant was observed.
 
 Signal failures, OS scheduling, interrupted receipt writes, SIGKILL/host loss and
 bootstrap attribution limits remain explicit. A blocked or failed final audit

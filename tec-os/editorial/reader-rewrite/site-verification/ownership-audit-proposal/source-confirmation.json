@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "status": "clear_qualified_source_proposal",
+  "scope": "Bounded confirmation of corrected proposal contracts and planned controls; not implementation or execution acceptance.",
+  "inputs": [
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/README.md",
+      "sha256": "fbf50397ffd09a835d5f74fc93190cba43dac62df0d9612ffc96f2bb4cea93df",
+      "complete_current_text_read": true
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/source-contract.py.txt",
+      "sha256": "116d28f50baad9f34394805452ceb7bf89c52e5c9de161b6a2ce8ad675e41ba1",
+      "complete_current_text_read": true
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/controls.json",
+      "sha256": "acaa10694baf4a9ea1d0a7b1c32bda4eab16b9f3eaaf2e1fc08182ab04f3ebce",
+      "complete_current_text_read": true,
+      "read_scope_followup": "Read current Q08 in full, including appended qualification: positive ownership-state outcome only, not site acceptance after premature guard exit."
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/baseline.json",
+      "sha256": "cf97f3a7da7f3e2b5c712d36c851c3527ebf2e95184653a443a78d3279d8a696",
+      "complete_current_text_read": true
+    }
+  ],
+  "original_review": {
+    "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/source-review.json",
+    "sha256": "b8436a0a1d3822aeb1eb9c47b82a2c29b3766be6feaca4a91ff8d1fcb95d3212",
+    "preserved": true
+  },
+  "dispositions": [
+    {
+      "id": "P01",
+      "status": "closed_at_proposal_level",
+      "source": "source-contract.py.txt:33",
+      "reason": "Query failure and completion timestamp are captured in memory, then request_stop latches/wakes signalling before finished-log enqueue. Current Q06 explicitly covers blocked or raised failure logging; receipt failure cannot replace the first failure or delay signalling."
+    },
+    {
+      "id": "P02",
+      "status": "closed_at_proposal_level",
+      "source": "source-contract.py.txt:109",
+      "reason": "Literal baseline hard path retained: direct os.killpg/os.kill, per-target BaseException isolation and enclosing finally os._exit(124). No Popen cleanup helper, poll, audit, join or receipt dependency. Q14 includes individual target errors, snapshot iteration errors and blocking normal-helper alternative."
+    },
+    {
+      "id": "P03",
+      "status": "closed_at_proposal_level",
+      "source": "source-contract.py.txt:81",
+      "reason": "Checkpoint now explicitly permits a phase crossing before publication and refuses visible stop/failure. Any latched failure disqualifies PASS. Main explicitly publishes queued marker only when it can progress; no promise of publication while blocked draining output. Q13 covers visible, delayed, failed and racing publication."
+    }
+  ],
+  "additional_confirmations": [
+    {
+      "source": "source-contract.py.txt:45",
+      "result": "Memory group registration precedes durable binding; ACK retains serialized stop recheck. Q07 includes stop during durable ACK binding. Actual implementation must preserve that serialization through ACK publication, not merely perform an unlocked earlier check."
+    },
+    {
+      "source": "source-contract.py.txt:90",
+      "result": "Observer quiescence within remaining soft budget is required before final PASS; inability prevents PASS. Final outcome serializes against the first-failure latch after audit so failures arriving during finalisation cannot escape persistence. Q11 includes this race."
+    },
+    {
+      "source": "source-contract.py.txt:14",
+      "result": "Launch budget is recomputed after intent persistence/lock overhead. Stop-during-intent and exhausted-budget cases refuse ordinary launch. Q03 includes both variants and planned/effective budget evidence."
+    }
+  ],
+  "full_scope_readback": {
+    "diagnosis": "Remains the actual SITE03 internal observer timeout before whole deadline; query beyond-cutoff duration unknown, not resource exhaustion. Archived registered-hold release is not widened.",
+    "classification": "2.0-second ordinary query is an explicit internal implementation candidate, not a changed measured 180/850/450 gate or automatic owner-decision requirement. Cleanup0.5, reserve3, grace0.4, wait0, workers2 and no minification remain.",
+    "timers": "Independent soft signalling and unchanged absolute hard cutoff remain independent of receipt/audit waits; main is sole normal terminal/audit writer.",
+    "registry": "Direct handle and validated group memory ownership precede durable records/ACK; observed identity history retained without transferring PID reuse authority. Global discovery remains.",
+    "publication": "Queue is memory-only nonblocking. Visibility gap is explicit; no zero-instruction or universal phase-preemption guarantee.",
+    "continuity": "Longer stale discovery window up to query2.0 plus polling/scheduling is explicitly stated; retained groups/live handles remain available. No complete historical-descendant claim.",
+    "controls": "All Q01-Q16 remain planned and reviewed. Q03/Q06/Q07/Q11/Q13/Q14 corrective variants now support their stated contracts. Q15/Q16 remain separately allocated public fixture controls, not real book validation."
+  },
+  "planned_control_ids": [
+    "Q01",
+    "Q02",
+    "Q03",
+    "Q04",
+    "Q05",
+    "Q06",
+    "Q07",
+    "Q08",
+    "Q09",
+    "Q10",
+    "Q11",
+    "Q12",
+    "Q13",
+    "Q14",
+    "Q15",
+    "Q16"
+  ],
+  "baseline_checks": [
+    {
+      "name": "run_once.py",
+      "sha256": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6",
+      "matches_baseline": true
+    },
+    {
+      "name": "build_and_check.py",
+      "sha256": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410",
+      "matches_baseline": true
+    },
+    {
+      "name": "check_html.py",
+      "sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+      "matches_baseline": true
+    },
+    {
+      "name": "expectations.json",
+      "sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+      "matches_baseline": true
+    },
+    {
+      "name": "seal.json",
+      "sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+      "matches_baseline": true
+    },
+    {
+      "name": "controls-result.json",
+      "sha256": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+      "matches_baseline": true
+    }
+  ],
+  "remaining_blockers": [],
+  "implementation_checkpoints": [
+    "Use actual candidate routines in controls; no separate duplicate state model. Preserve stdlib bootstrap/private verified payload boundary when adding control code.",
+    "Implement stop/launch serialization and immediate effective-budget recomputation; retain typed not-launched query disposition when intent consumes budget.",
+    "Implement observer quiescence and final failure persistence, not just a comment. Final audit unavailable/residual/missing still prevents PASS.",
+    "Keep any joins, persistence, normal Popen signalling and registry locks out of the literal hard path."
+  ],
+  "limits": [
+    "Clearance is for this bounded source proposal only. Production patch requires its own review and controls; 2.0 seconds is not empirically qualified.",
+    "No execution, imports, probes, builds, controls, signals, active-file changes, seal or allocation. Only source-confirmation.json written; original review preserved.",
+    "Unchanged48 checker controls do not establish runner behavior or actual39-page completion. Fresh sealed/input-reviewed allocation remains necessary for book closure.",
+    "No generic bootstrap/escaped-descendant cleanup guarantee, historical result change or publication acceptance."
+  ],
+  "q08_qualification_followup": {
+    "status": "clear",
+    "text": "This is a positive ownership-state outcome, not site acceptance after a premature guard exit.",
+    "reason": "Narrows Q08 to retained group ownership and cleanup behavior. It does not permit site PASS after premature guard exit or weaken command/checker/input/final-audit requirements.",
+    "scope": "Q08 current case read in full; other three input hashes unchanged. Earlier dispositions retained."
+  }
+}

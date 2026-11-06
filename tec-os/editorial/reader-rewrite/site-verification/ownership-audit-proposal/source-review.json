@@ -1,0 +1,275 @@
+{
+  "schema": 1,
+  "status": "full_review_complete_changes_required",
+  "scope": "Full independent source-proposal review of the four current files, including Q03 intent-delay/stop variants and explicit stale-discovery tradeoff. No implementation or execution.",
+  "inputs": [
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/README.md",
+      "sha256": "4eb1331a04dc276288a22cdb544b702c4170d39aa511bf021bf0410a0a926c9b",
+      "complete_current_text_read": true
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/source-contract.py.txt",
+      "sha256": "df3539a995a1836b0b7ead190aeb51d752e85c753fd37d4edd78ddebdff279fb",
+      "complete_current_text_read": true
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/controls.json",
+      "sha256": "88e17faf398a38d4a952bae2d7ceb115ec9eeab121d23f7f5c2ff3bc64a07f0f",
+      "complete_current_text_read": true
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/baseline.json",
+      "sha256": "cf97f3a7da7f3e2b5c712d36c851c3527ebf2e95184653a443a78d3279d8a696",
+      "complete_current_text_read": true
+    }
+  ],
+  "baseline_checks": [
+    {
+      "name": "run_once.py",
+      "sha256": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6",
+      "matches_baseline": true
+    },
+    {
+      "name": "build_and_check.py",
+      "sha256": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410",
+      "matches_baseline": true
+    },
+    {
+      "name": "check_html.py",
+      "sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+      "matches_baseline": true
+    },
+    {
+      "name": "expectations.json",
+      "sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+      "matches_baseline": true
+    },
+    {
+      "name": "seal.json",
+      "sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+      "matches_baseline": true
+    },
+    {
+      "name": "controls-result.json",
+      "sha256": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+      "matches_baseline": true
+    }
+  ],
+  "findings": [
+    {
+      "id": "P01",
+      "priority": "P1",
+      "source": "source-contract.py.txt:33-35",
+      "title": "Durable failure logging precedes the memory stop latch",
+      "reason": "append_query_finished runs before request_stop in the query exception handler. If receipt persistence stalls or raises, the observer need not latch the query failure or wake cleanup until the independent soft deadline. This violates the proposed prompt failure stop and earliest-failure preservation contract, even though the absolute timer remains armed.",
+      "correction": "Capture the typed error and completion timestamp in memory, call request_stop first, then enqueue or attempt the durable query-finished record. Receipt errors must preserve the original query failure and must not prevent bound signalling.",
+      "planned_control": "Extend Q06/Q11: make query failure logging block and raise in separate variants immediately after a query timeout, well before soft stop. First latch remains identity-observation/124 and signalling wakes without waiting for logging."
+    },
+    {
+      "id": "P02",
+      "priority": "P1",
+      "source": "source-contract.py.txt:100-104",
+      "title": "Hard-timer pseudocode drops the unconditional exit invariant",
+      "reason": "The shared signal_retained_groups_and_live_handles helper is not specified to avoid Popen operations or to isolate all exceptions. An exception before os._exit prevents the forced exit. The baseline hard path explicitly uses direct signals, per-target exception isolation and enclosing finally; the proposal must retain those safeguards rather than abstract them away.",
+      "correction": "Keep the baseline hard timer unchanged: direct os.killpg/os.kill on bounded ownership snapshots, per-target BaseException isolation and enclosing finally: os._exit(124), with no Popen.kill/poll or application/audit/receipt locks. Do not share a potentially blocking normal-cleanup helper with this path.",
+      "planned_control": "Extend Q14: inject failures for individual targets and snapshot iteration; exit124 remains unconditional. Verify inert source/adapter path contains no handle polling, joins or receipt/audit operations."
+    },
+    {
+      "id": "P03",
+      "priority": "P2",
+      "source": "source-contract.py.txt:78-86",
+      "title": "Checkpoint comment overstates the publication guarantee",
+      "reason": "The worker cannot see the parent memory latch or an unpublished marker. It may cross a checkpoint before publication, including when publication is blocked. The statement that inability to publish can never permit a later phase contradicts the README publication-gap limit. The main pseudocode also names first-failure persistence but does not explicitly publish the queued marker.",
+      "correction": "State that a checkpoint refuses a phase once either file is visible; before visibility, a phase may start, bound cleanup remains responsible and any latched failure disqualifies acceptance. Explicitly include marker publication in main without making it a dependency of signalling. If main is blocked draining child output, do not promise marker publication before cleanup unblocks it.",
+      "planned_control": "Extend Q13 with visible-marker, delayed-marker, failed-publication and checkpoint/publication race variants. Assert refusal after visibility and failed overall acceptance for every latched-failure variant, without asserting zero intervening phase instructions."
+    }
+  ],
+  "cleared_contracts": [
+    "Internal ordinary query budget 0.5 to 2.0 seconds is explicitly proposed, not applied or empirically qualified. It is distinct from allocation03 whole/resource figures. No automatic owner decision or gate amendment follows merely from that internal change.",
+    "Ordinary budgets are capped at soft deadline; cleanup remains at most 0.5 seconds capped at hard deadline. Nonpositive budget launches no query; no automatic query retry. The budget should be recomputed immediately before spawn if durable query-start recording intervenes.",
+    "Global discovery is retained. PID/birth history and validated ACK-group binding are proposed; unseen detached/reparented processes remain an explicit coverage limit. No group-only or universal historical closure is asserted.",
+    "Updated request_stop wakes signalling before memory-only nonblocking marker enqueue. The signalling path performs no marker I/O; that earlier dependency is resolved.",
+    "Main-only normal terminal/audit ownership and a preserved first-failure latch address the actual SITE03 watchdog finalisation race in scope, subject to P01/P02 above.",
+    "Book closure remains the actual 39-page checker/input/process result, not synthetic positives. All 48 checker artifacts and active baseline hashes remain unchanged. No new seal or allocation exists."
+  ],
+  "implementation_review_points": [
+    "Final PASS decision must serialize with failure latching so an observer failure arriving during final audit cannot escape persistence or turn into PASS. Preserve one immutable first failure and one main terminal writer.",
+    "Install validated group authority in the memory cleanup registry before any potentially blocking durable ACK-group write; publish ACK only after durable binding and a serialized stop-latch recheck.",
+    "Preserve group ownership independently of leader/guard lifetime; successful observations may disposition old identities without granting authority to reused PID births. Historical ledger alone is not live signalling authority.",
+    "Prospective adapter controls must drive candidate routines rather than duplicate the model. Separate native fixture allocation remains required; none is exercised in this review."
+  ],
+  "actions": {
+    "proposal_report_only": true,
+    "active_file_changes": false,
+    "execution_import_probe_build_controls": false,
+    "commit": false
+  },
+  "limits": [
+    "Current four-file proposal fully read; hashes bind this review. It is not production implementation or runtime qualification.",
+    "No implementation, imports, probes, tests, controls, builds, signals or new allocation performed. Only this review JSON written.",
+    "All sixteen controls are planned, not passed. Q15/Q16 require separate native allocation; unchanged48 checker artifacts do not establish runner correctness or actual39-page closure.",
+    "Existing source proposal findings P01/P02/P03 remain open in the current text. No active file or evidence changed; no commit."
+  ],
+  "reviewed_snapshot": "Current working proposal after f74b5a0, identified by exact file hashes rather than assuming all current text is committed.",
+  "actual_diagnosis_review": {
+    "result": "Accurate and bounded",
+    "actual_first_failure_utc": "2026-11-06T07:06:16.407952+00:00",
+    "absolute_deadline_utc": "2026-11-06T07:09:02.787484+00:00",
+    "whole_elapsed_seconds": 13.782821208,
+    "guard_seconds": 6.7,
+    "sampled_peak_mb": 322,
+    "sampled_processes": 3,
+    "reason": "Sealed watchdog calls global ps with internal timeout 0.5 before testing the whole deadline. Actual TimeoutExpired triggered watchdog failure124 and bound cleanup. ACK succeeded before build began; build/checker completion and final owned audit were absent. Guard TERM end is actual cleanup-path evidence, not universal cleanup proof. Failed query duration beyond its cutoff is unknown.",
+    "specific_release": "Origo e7195e82 registered-hold-only release is carried as prior authority, not broadened by this review."
+  },
+  "classification_review": {
+    "result": "Clear",
+    "internal_change": "Ordinary query limit 0.5 to 2.0 seconds, with no retry; cleanup at most 0.5 remains. This changes an internal sealed implementation profile, not the registered whole-invocation/resource gate. It requires explicit source adoption/reseal/review, not an automatic new owner decision solely for changing that number.",
+    "unchanged_registered_figures": {
+      "guard_limit_mb": 850,
+      "heap_mb": 450,
+      "wait_seconds": 0,
+      "whole_seconds": 180,
+      "cleanup_reserve_seconds": 3,
+      "workers": 2,
+      "minify": false
+    },
+    "tradeoff": "Current README explicitly permits longer stale discovery: up to 2.0 seconds per query rather than 0.5, plus polling/scheduling overhead. Retained groups and live handles remain signalable. The interval is not a proven maximum observation age or historical-descendant guarantee.",
+    "qualification": "2.0 seconds is a proposed candidate, not measured sufficient or optimal."
+  },
+  "query_budget_review": {
+    "result": "Core arithmetic and Q03 variants clear; implementation obligations remain",
+    "ordinary": "min(2.0, max(0, soft_deadline-now))",
+    "cleanup": "min(0.5, max(0, hard_deadline-now))",
+    "intent_overhead": "Current source recomputes budget after durable intent and lock waits, immediately before launch; ordinary query is refused if stopping is latched. Q03 includes exhausted-budget and stop-during-intent variants.",
+    "remaining_precision": [
+      "Keep stop/launch ordering explicit when implementing: a bare check followed by a separate spawn has a race. Serialize launch registration with the short memory stop latch without making timers wait for receipt/audit I/O.",
+      "Record actual query launch time and effective budget after intent, and a typed not-launched disposition when intent exhausts budget or stop intervenes. Current early-raise branch does not explicitly write that disposition; do not count the intent as a completed query.",
+      "Any locks or persistence between final recomputation and spawn consume the budget too. No new ordinary query may be launched from a cleanup call merely by switching query modes."
+    ]
+  },
+  "registry_and_phase_review": {
+    "result": "Appropriate bounded design, subject to P03 and explicit implementation checks",
+    "registry": "Retain direct-child handle immediately after Popen; append durable registration; validate nonce/context/environment/actual identity before ACK. Keep memory bound-group authority before durable ACK and retain observed birth/exit/reuse history. Guard exit or group leader exit does not alone remove group authority.",
+    "discovery": "Global discovery remains; a historical ledger retains observed escaped/reparented identities but does not discover unseen transient descendants. A later different birth never inherits old PID authority.",
+    "first_failure": "Short memory latch selects first failure independently of I/O; main alone normally persists terminal/audit. P01 still violates stop-before-failure-logging order.",
+    "worker": "Visibility-based checkpoint can refuse visible marker/first failure. Queued publication is not cross-process preemption and may be delayed while main drains output. P03 must remove the stronger contrary promise and explicitly publish marker in main.",
+    "finalisation": "Require successful fresh scoped audit, complete input/checker closure and no latched failure; audit unavailable means UNKNOWN_HELD. Serialize final PASS selection with failure latching and persist failures arriving during final audit before terminal publication."
+  },
+  "planned_control_review": [
+    {
+      "id": "Q01",
+      "kind": "positive",
+      "verdict": "clear_planned",
+      "reason": "One 0.6-second successful query distinguishes candidate2.0 from old0.5 and records overrun; no actual sufficiency inference.",
+      "executed": false
+    },
+    {
+      "id": "Q02",
+      "kind": "negative",
+      "verdict": "blocked_by_P01",
+      "reason": "Correct fail-closed/no-retry expectation; add blocked/failed error-log variants so timeout latches before persistence.",
+      "executed": false
+    },
+    {
+      "id": "Q03",
+      "kind": "negative",
+      "verdict": "clear_planned_with_implementation_detail",
+      "reason": "Both intent-consumes-budget and stop-during-intent variants present. Verify no launch, effective recomputation, typed not-launched record and launch/stop serialization.",
+      "executed": false
+    },
+    {
+      "id": "Q04",
+      "kind": "negative",
+      "verdict": "clear_planned",
+      "reason": "Nonpositive budget means no subprocess; no retry and unchanged soft deadline.",
+      "executed": false
+    },
+    {
+      "id": "Q05",
+      "kind": "negative",
+      "verdict": "clear_planned",
+      "reason": "Cleanup timeout retains UNKNOWN_HELD plus registry/last success, never empty success; also exercise remaining-hard-budget below0.5.",
+      "executed": false
+    },
+    {
+      "id": "Q06",
+      "kind": "negative",
+      "verdict": "blocked_by_P01",
+      "reason": "Independent escalation under query/audit/I/O stalls is correctly required; include failure-result persistence before soft stop, which current ordering mishandles.",
+      "executed": false
+    },
+    {
+      "id": "Q07",
+      "kind": "negative",
+      "verdict": "clear_planned",
+      "reason": "Preserves ACK identity gate. Treat nonce/context/environment/actual parent/group/birth as separately injected variants, not one composite failure.",
+      "executed": false
+    },
+    {
+      "id": "Q08",
+      "kind": "positive",
+      "verdict": "clear_planned",
+      "reason": "Retains group after guard/leader exit and requires actual final audit/input closure; fixture cleanup completion alone is not book acceptance.",
+      "executed": false
+    },
+    {
+      "id": "Q09",
+      "kind": "negative",
+      "verdict": "clear_planned",
+      "reason": "Different birth must retain history without transferring old PID signalling authority; include group leader reuse disposition.",
+      "executed": false
+    },
+    {
+      "id": "Q10",
+      "kind": "positive",
+      "verdict": "clear_planned",
+      "reason": "Observed birth remains discoverable/auditable after group change/reparent; explicitly excludes unseen escapes.",
+      "executed": false
+    },
+    {
+      "id": "Q11",
+      "kind": "negative",
+      "verdict": "clear_planned_with_extension",
+      "reason": "Earliest failure and one main terminal are appropriate. Add observer failure arriving during final audit/final PASS selection and failure persistence error.",
+      "executed": false
+    },
+    {
+      "id": "Q12",
+      "kind": "negative",
+      "verdict": "clear_planned",
+      "reason": "Nonempty, unavailable and absent final audits all prevent PASS; fixtures do not turn missing evidence into closure.",
+      "executed": false
+    },
+    {
+      "id": "Q13",
+      "kind": "negative",
+      "verdict": "blocked_by_P03",
+      "reason": "Visible marker refusal is right. Add delayed/failed publication and checkpoint race; do not assert no phase starts before visibility.",
+      "executed": false
+    },
+    {
+      "id": "Q14",
+      "kind": "negative",
+      "verdict": "blocked_by_P02",
+      "reason": "Hard cutoff during stalled main is right. Add target signalling/snapshot exceptions and verify unconditional finally exit with direct signals, not blocking Popen methods.",
+      "executed": false
+    },
+    {
+      "id": "Q15",
+      "kind": "integration-positive",
+      "verdict": "clear_planned_separate_allocation",
+      "reason": "Public fixture validates real registration/ACK/exit path only; require source-binding and actual scoped process outcome, not real book output.",
+      "executed": false
+    },
+    {
+      "id": "Q16",
+      "kind": "integration-negative",
+      "verdict": "clear_planned_separate_allocation",
+      "reason": "Injected observer failure after ACK exercises escalation and independent outcome review; no execution authorised by this proposal.",
+      "executed": false
+    }
+  ],
+  "brief_judgement": "The chosen query-budget/single-finalizer/ledger approach is a small relevant repair for complete book verification and preserves global discovery. Three concrete source-contract corrections remain before clearance; no generic guard research or changed resource gate is needed."
+}

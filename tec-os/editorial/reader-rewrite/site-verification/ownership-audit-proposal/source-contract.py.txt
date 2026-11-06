@@ -6,27 +6,34 @@ CLEANUP_QUERY_LIMIT = 0.5    # unchanged, no query retry
 SOFT_RESERVE = 3.0          # unchanged; whole deadline still180
 TERM_GRACE = 0.4            # unchanged
 
-query_budget(now, soft_deadline, hard_deadline, stopping):
-    boundary = hard_deadline if stopping else soft_deadline
-    cap = CLEANUP_QUERY_LIMIT if stopping else ORDINARY_QUERY_LIMIT
+query_budget(now, soft_deadline, hard_deadline, cleanup_phase):
+    boundary = hard_deadline if cleanup_phase else soft_deadline
+    cap = CLEANUP_QUERY_LIMIT if cleanup_phase else ORDINARY_QUERY_LIMIT
     return min(cap, max(0.0, boundary - now))
 
-process_rows():
+process_rows(cleanup_phase=False):
     # Use existing ps argv and UTC/C. Query exactly once.
-    budget = query_budget(clock(), deadline-3, deadline, stopping)
+    budget = query_budget(clock(), deadline-3, deadline, cleanup_phase)
     if budget <= 0:
         request_stop('absolute-deadline',124)  # do not spawn another query
         raise StopRequested
-    query_id = append_query_started(budget, clock(), last_success_id)
+    query_id = append_query_intent(clock(), planned_budget=budget, last_success_id=last_success_id)
+    # Intent persistence or lock waits consume the same original deadline.
+    # Recheck stop and recompute effective budget immediately before launch.
+    budget = query_budget(clock(), deadline-3, deadline, cleanup_phase)
+    if budget <= 0 or (stopping and not cleanup_phase):
+        request_stop('absolute-deadline',124)
+        raise StopRequested
     try:
         result = ps_once(timeout=budget)
         # Existing status/parsing errors remain failures, never empty tables.
         rows = parse_exact_identity_rows(result)
-        append_query_finished(query_id, 'ok', clock(), rows)
+        append_query_finished(query_id, 'ok', clock(), rows, effective_budget=budget)
         return rows
     except QueryTimeoutOrError as error:
-        append_query_finished(query_id, typed_error(error), clock(), None)
-        request_stop('identity-observation',124,error)
+        finished = capture_query_failure_in_memory(query_id,error,clock(),budget)
+        request_stop('identity-observation',124,error)  # before any receipt I/O
+        enqueue_query_finished(finished)  # logging failure cannot replace first failure
         raise StopRequested
 
 register_direct_child(child,argv):
@@ -38,7 +45,9 @@ register_direct_child(child,argv):
 ack_worker(declaration,successful_snapshot):
     # Keep every current nonce/context/environment/parent/group/birth check.
     # Record validated group and birth before durable ACK.
+    remember_validated_group_in_memory(validated_identity)  # before receipt I/O
     append_registry('ack-group',validated_identity)
+    recheck_stop_latch_serialized_before_ack_publication()
     publish_existing_ack()
 
 observe_success(rows):
@@ -71,9 +80,10 @@ signalling_path():
 
 worker_phase_checkpoint():
     # Before each phase: refuse on either stop marker or first-failure receipt.
-    # Stop-marker creation is fail-closed: inability to publish initiates bound
-    # cleanup and can never permit a later phase. No receipt-I/O lock may prevent
-    # the separately armed escalation timer from signalling by its deadline.
+    # Before publication a phase may cross its checkpoint. Publication failure
+    # does not prevent bound cleanup and any latched failure disqualifies PASS.
+    # Do not claim zero intervening phase instructions or marker publication
+    # while main is blocked draining the child stream.
     if stop_marker_exists or first_failure_exists:
         return nonzero
 
@@ -81,6 +91,7 @@ main_failure_and_finalisation():
     # Preserve existing guarded command, stream, immutable packet/input checks.
     # Drain/reap direct children; perform bounded final cleanup observation.
     # First failure latch wins over later guard exit1 or another exception.
+    publish_queued_stop_marker_when_main_can_progress()
     persist_first_failure_if_any()
     try:
         rows = owned_once_with_cleanup_budget()
@@ -88,11 +99,27 @@ main_failure_and_finalisation():
     except ObservationFailure:
         persist_final_audit(status='UNKNOWN_HELD',last_success_id,registry_digest)
     # PASS requires no failure and complete fresh audit/input/checker closure.
+    # Quiesce/join observer within remaining soft budget before final decision;
+    # failure to quiesce prevents PASS. Serialize final PASS with failure latch
+    # after fresh audit; no in-flight observer failure can escape persistence.
+    commit_final_outcome_against_first_failure_latch()
     persist_one_terminal_receipt()
     flush_close_and_exit_before_original_hard_deadline()
 
 hard_timer():
-    # Existing absolute timer. No joins, fsync, audit/query/terminal locks.
-    wait_until_original_deadline()
-    signal_retained_groups_and_live_handles(KILL)
-    os._exit(124)
+    # Preserve baseline hard-deadline implementation, not a normal cleanup helper.
+    # No Popen poll/kill, joins, fsync or application/audit/receipt locks here.
+    threading.Event().wait(max(0, deadline - time.monotonic()))
+    try:
+        for group in tuple(job_groups.copy()):
+            try:
+                os.killpg(group, signal.SIGKILL)
+            except BaseException:
+                pass
+        for pid in tuple(children.copy()):
+            try:
+                os.kill(pid, signal.SIGKILL)
+            except BaseException:
+                pass
+    finally:
+        os._exit(124)
