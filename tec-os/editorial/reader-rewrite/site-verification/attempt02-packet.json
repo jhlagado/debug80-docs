@@ -1,5 +1,5 @@
 {
-  "status": "PREPARED_UNRUN_PENDING_INDEPENDENT_INPUT_REVIEW_AND_NEW_ALLOCATION",
+  "status": "PREPARED_UNRUN_INDEPENDENT_SOURCE_AND_INPUT_REVIEWS_CLEAR_NEW_ALLOCATION_REQUIRED",
   "new_seal_sha256": "09719b943cddba8aebcf384f24b37f554dc991833ba79e0ba07ea65f50e0c37d",
   "prior_seal_sha256": "3102077825ff6cb6944a117c5fc56d450614f8f82e8998a704cffeea860f0b4e",
   "source_candidate": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
@@ -26,5 +26,6 @@
   "attempt02_invocations": 0,
   "new_runtime_or_ps_probes": 0,
   "new_control_executions": 0,
-  "new_allocation_required": true
+  "new_allocation_required": true,
+  "input_review": "e30d37f613b0f1795145f6b57213c37c4254f490"
 }
