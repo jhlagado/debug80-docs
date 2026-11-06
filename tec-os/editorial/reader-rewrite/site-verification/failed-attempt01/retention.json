@@ -81,5 +81,15 @@
   "old_packet": "packet/ contains all16 actual verified payloads and old seal unchanged",
   "original_output": "/private/tmp/tec-os-reader-site-3102077825ff-attempt01",
   "original_output_unchanged": true,
-  "scope": "Evidence copy/hash/text inspection only. No rerun, new process probe, guard, build or rendering."
+  "scope": "Evidence copy/hash/text inspection only. No rerun, new process probe, guard, build or rendering.",
+  "owner_resolution": {
+    "status": "SPECIFIC_ATTEMPT_BOOTSTRAP_RESOLVED_RESERVATION_RELEASED",
+    "authority": "Origo2ea74522",
+    "source": "studies/p3-tec-os/evidence/book-site-attempt01/README.md",
+    "source_sha256": "27907d3c3558d730445f585e0e2b8958c45edfd602454c1162f99535e6c383f4",
+    "raw_archive_sha256": "cc66bc78b89acf934bd7c12b75ac6c78119eacd731ab77859214b444c8e15579",
+    "raw_archive_bytes": 60688710,
+    "basis": "Retained matching nonce/context, actual worker/guard/outer terminal1, no ACK or build-start and later independent UTC audit with no matching recorded identities.",
+    "limit": "Generic pre-ACK cleanup remains unproved. No retry or next allocation authorised."
+  }
 }

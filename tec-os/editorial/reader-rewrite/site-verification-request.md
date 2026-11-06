@@ -7,9 +7,10 @@ and guard exited 1. Whole elapsed time was 7.2871055 seconds. The guard ran
 
 The first packet and actual receipts are preserved in
 `site-verification/failed-attempt01`. Its seal and persistent claim remain
-unchanged. No retry was run. The pre-ACK classification remains `UNKNOWN_HELD`.
-The external UTC audit is scoped evidence about the recorded identities and
-does not establish universal bootstrap termination.
+unchanged. No retry was run. The initial pre-ACK classification was `UNKNOWN_HELD`. The owner resolved
+this attempt's specific outcome and released its reservation at Origo
+`2ea74522`. The external UTC audit is scoped evidence about the recorded
+identities and does not establish universal bootstrap termination.
 
 The source-only correction makes both process-birth observers use explicit
 UTC/C settings and retains detailed mismatch observations. The old outer
