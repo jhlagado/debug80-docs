@@ -1,7 +1,7 @@
 # Corrected TEC-OS site verification packet
 
-Status: corrected source is independently reviewed. The new sealed packet is
-prepared for independent input review and a new P3 allocation. Attempt 02 has
+Status: independent source and input reviews are clear at `9843122` and
+`e30d37f`. The new sealed packet requires a new P3 allocation. Attempt 02 has
 not run. Publication remains excluded.
 
 ## Preserved first result
