@@ -1,0 +1,134 @@
+{
+  "schema": 1,
+  "status": "CLEAR_INERT_SEAL_CONFIRMATION_PREPARED_UNRUN",
+  "scope": "Bounded independent final seal and inert identity confirmation only. Closed source reviews are identity-bound, not repeated as whole-code reviews. No allocation or runtime acceptance.",
+  "sealed_data_commit": "7dec11c0f11f167c5a467ec2a786716f40bf18a0",
+  "seal": {
+    "path": "tec-os/editorial/reader-rewrite/site-verification/seal.json",
+    "sha256": "3102077825ff6cb6944a117c5fc56d450614f8f82e8998a704cffeea860f0b4e",
+    "status": "PREPARED_UNRUN"
+  },
+  "checks": {
+    "payloads": {
+      "status": "pass",
+      "count": 16,
+      "every_actual_file_hash_matches": true
+    },
+    "source": {
+      "status": "pass",
+      "revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+      "tree": "f17d6f9a99fa45b8ec00bb8cb71b1adf855e877a",
+      "git_archive_bytes": 34037760,
+      "git_archive_sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28",
+      "method": "Actual git archive bytes held in memory and parsed without filesystem extraction. Every archived regular file hash compared after substituting only the bound config.after.ts.",
+      "files": 889,
+      "all_paths_and_hashes_equal_source_manifest": true,
+      "archive_symlinks_or_hardlinks": 0,
+      "reader_pages": 39,
+      "config_before_equals_git_export": true,
+      "config_after_independently_reconstructed": true,
+      "config_diff_exact": true,
+      "config_delta": "Exact nonreader Markdown exclusion list, buildConcurrency 2 and minify false. All other config bytes unchanged."
+    },
+    "installed": {
+      "status": "pass",
+      "root": "/Users/johnhardy/projects/debug80-docs-tec-os/.github/site/node_modules",
+      "entries": 4454,
+      "regular_file_bytes_hashed": 100537934,
+      "tree_sha256": "a020e190a5bc80db7d6ffebda4fc762328dc0c5c771c0a12ecd010b63ea79661",
+      "every_actual_row_equals_manifest": true,
+      "checks": "Complete filesystem file bytes, lengths and executable bits plus relative symlink targets and resolved containment. No installed module imported.",
+      "package_versions_matching_site_lock": 126,
+      "absent_optional_platform_packages": 47,
+      "four_source_package_and_lock_manifests_exact": true
+    },
+    "runtime_and_guard": {
+      "status": "pass",
+      "runtime": {
+        "git": {
+          "path": "/opt/homebrew/Cellar/git/2.39.1/bin/git",
+          "sha256": "5ec2979b3ed9ea1c9ab866ce7177d34324e08fa452416bdd750c090dd77ff3c0"
+        },
+        "node": {
+          "path": "/opt/homebrew/Cellar/node@24/24.18.0/bin/node",
+          "sha256": "72c18e2eeda260f67a5b2b66e96fa9b5ad82864676ebb54925695d87120cae3f"
+        },
+        "python": {
+          "path": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+          "sha256": "bdea59019a38eb6600cc9e71e984a97fedadc406448431281e7657030f54987e"
+        }
+      },
+      "guard": {
+        "path": "/Users/johnhardy/projects/origo/tools/mem-guard.mjs",
+        "sha256": "45e4edaee20eba1b2d8ec67983ed3acc06be31a64eb059e8bc4ad21257871374"
+      },
+      "actual_file_hashes_match": true
+    },
+    "reviews": {
+      "status": "pass",
+      "runner": {
+        "receipt_path": "tec-os/editorial/reader-rewrite/runner-source-review.json",
+        "receipt_sha256": "000730b8b0152a3c390d0dfcde81a912d83f888547231ce8e0cac28b7daae60f",
+        "record_commit": "fba05394c39c4e7451a620e1419850a7d1fd57fb",
+        "current_bytes_equal_review_record": true,
+        "current_runner_sha256": "27b7c6e51358b0840997d59b0fa03bcd019b2a17b71dc0ff327c5562d3342c0d",
+        "hard_deadline_followup": "626c8b38eec42ffd447e997d1d6ffa0a9e5726f7"
+      },
+      "checker": {
+        "receipt_path": "tec-os/editorial/reader-rewrite/site-verification/checker-source-review.json",
+        "receipt_sha256": "5e9ec81ea24ba3a2de09cf0fbe49a3ac610fe7c4531a3783a2c3fd25bc2cf192",
+        "record_commit": "f6eecb6caef773b8bb56f68bbed88117924e0043",
+        "current_bytes_equal_review_record": true,
+        "current_checker_sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+        "all_four_final_h1_confirmation_inputs_match": true,
+        "retained_controls": 40,
+        "retained_control_report_hash_bindings_and_statuses_consistent": true,
+        "controls_executed_by_this_confirmation": 0
+      }
+    },
+    "command": {
+      "status": "pass",
+      "request_path": "tec-os/editorial/reader-rewrite/site-verification-request.md",
+      "request_sha256": "0be40d128bb7627be47380467cecba660d9561bc18823ca65ae99d9d7a21cf0c",
+      "invoke_sha256": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e",
+      "shape": "TECOS_SITE_ALLOCATION=<actual separate P3 allocation>; sh /Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/invoke.sh 3102077825ff6cb6944a117c5fc56d450614f8f82e8998a704cffeea860f0b4e /private/tmp/tec-os-reader-site-3102077825ff-attempt01 \"$TECOS_SITE_ALLOCATION\"",
+      "packet_path_matches_seal_repository": true,
+      "output": "/private/tmp/tec-os-reader-site-3102077825ff-attempt01",
+      "output_exists_at_confirmation": false,
+      "persistent_claim": "/Users/johnhardy/.origo/site-verification/claims/3102077825ff6cb6944a117c5fc56d450614f8f82e8998a704cffeea860f0b4e.json",
+      "claim_exists_at_confirmation": false,
+      "policy": {
+        "build_workers": 2,
+        "cleanup_reserved_seconds": 3,
+        "guard_limit_mb": 850,
+        "guard_wait_seconds": 0,
+        "minify": false,
+        "node_heap_mb": 450,
+        "retry": false,
+        "whole_invocation_max_seconds": 180
+      },
+      "deadline": "invoke.sh computes the absolute UTC deadline before exec of the isolated runner. Runner maps the remaining absolute budget to a fixed monotonic deadline. Both watchers start before preflight and guard startup. Soft stop reserves three seconds; hard cutoff stays active through finalisation.",
+      "guard_arguments": "--wait 0 --limit 850 --heap 450",
+      "worker_and_checker_paths_match_bound_private_packet_and_output": true
+    }
+  },
+  "findings": [],
+  "execution": {
+    "entry_invoked": false,
+    "packet_helpers_imported": false,
+    "guard_invoked": false,
+    "vitepress_import_build_render": false,
+    "controls_or_tests_run": false,
+    "product_execution": false,
+    "source_export_extracted": false,
+    "claim_or_run_output_created": false,
+    "repository_write_scope": "Only this seal-confirmation.json"
+  },
+  "limits": [
+    "This confirms file identities and prepared command consistency only. No runtime allocation or actual rendered-site result is supplied.",
+    "Retained synthetic controls and independent source-review conclusions were checked for current identity and report consistency, not rerun.",
+    "The existing runner review does not establish hard real-time bounds for interpreter startup, initial setup, OS scheduling or kernel signal delivery. The absolute deadline is set before runner and guard startup; watchers begin after initial runner setup.",
+    "Physical hardware, browser behaviour, visual layout, the global site, llms built-output checks and publication remain outside this confirmation.",
+    "P3 owns separate allocation and later actual-result acceptance. A changed sealed input requires a new seal and review."
+  ]
+}
