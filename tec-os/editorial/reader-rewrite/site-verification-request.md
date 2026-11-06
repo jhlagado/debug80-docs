@@ -1,3 +1,11 @@
+# Current site verification result
+
+SITE03 actually ran under Origo2111028d and FAILED on a 0.5-second watchdog
+identity-observation timeout. No build completion or checker acceptance exists.
+The complete result and bounded resource-hold disposition are in
+`site-verification/attempt03-result.json`. No retry, source amendment, profile
+relaxation or publication is allocated. All following commands are historical.
+
 # Current site verification request
 
 KD-246 is explicitly approved. The corrected packet and fresh command are in

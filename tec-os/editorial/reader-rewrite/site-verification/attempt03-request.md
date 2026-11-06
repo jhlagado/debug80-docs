@@ -1,3 +1,14 @@
+# SITE03 actual result
+
+Status: FAILED, exit124 after 13.782821208 seconds. The build started but did not
+complete and the checker did not begin. The first failure was an identity-ps
+observation exceeding 0.5 seconds, not expiry of the 180-second deadline.
+
+The result, retention and narrow resource-hold disposition are in
+`attempt03-result.json` and `failed-attempt03/retention.json`. The original sealed
+packet and permanent claim are unchanged. No retry or successor is allocated.
+The preparation request and command below are historical and must not be rerun.
+
 # KD-246 corrected title packet: allocation request
 
 Status: synthetic controls passed and independent source, control-result and

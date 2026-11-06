@@ -16302,5 +16302,17 @@
       "attempt03-controls-review.json": "f7d8d274f6b6edfbcdae2f7575770414ff80e8bebb4d8591d45865fe570ba29c",
       "attempt03-seal-confirmation.json": "14d407f198069f0bb5ed7ed6ad1d63d5c3eb0b47d3a2ae9a0dd798bcf9c4f6c2"
     }
+  },
+  "site_verification_attempt03_result": {
+    "status": "FAILED",
+    "allocation": "KS47-SITE03-20261106",
+    "origo_reference": "Origo2111028d",
+    "terminal_exit_code": 124,
+    "elapsed_seconds": 13.782821208,
+    "failure": "watchdog identityps timed out after 0.5 seconds, not whole 180-second deadline",
+    "result": "site-verification/attempt03-result.json",
+    "retention": "site-verification/failed-attempt03/retention.json",
+    "specific_registered_hold": "Release supported by independent review and scoped actual evidence; P3 records disposition",
+    "new_invocation_allocated": false
   }
 }

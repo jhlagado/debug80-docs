@@ -1,0 +1,338 @@
+{
+  "schema": 1,
+  "status": "clear_bounded_archive_and_postfailure_input_evidence",
+  "scope": "Independent read-only SITE03 archive, copied-record, sealed-payload and postfailure input-identity review. Ownership release is separately reviewed.",
+  "actual_result": {
+    "status": "FAILED",
+    "exit_code": 124,
+    "terminal": {
+      "detail": "watchdog stopped the invocation",
+      "elapsed_seconds": 13.782821208000001,
+      "exit_code": 124,
+      "retry": false,
+      "seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+      "status": "FAILED"
+    },
+    "first_failure": {
+      "detail": "Command '['/bin/ps', '-axo', 'pid=,ppid=,pgid=,lstart=']' timed out after 0.5 seconds",
+      "exit_code": 124,
+      "retry": false,
+      "stage": "watchdog",
+      "status": "FAILED",
+      "utc": "2026-11-06T07:06:16.407952+00:00"
+    },
+    "build_completed": false,
+    "checker_completed": false,
+    "interpretation": "Watchdog global ps observation timed out after 0.5 seconds. The terminal result is not a completed build/checker acceptance or a runner postflight pass."
+  },
+  "archive": {
+    "path": "/private/tmp/tec-os-site03-retained-8ff67aa359ad-20261106/complete-output-and-inputs.tar.gz",
+    "sha256": "e1ce7d3f88bb2634805e68ed02b71a43ad4e29f8b667aa3fcfd350d88d6dcba0",
+    "bytes": 67173406,
+    "inventory_sha256": "449abd9c3b85c4ee75c2942bb5dee110c3a2935d9efd17d94c97d74b0dfa60ce",
+    "manifest_sha256": "2512454022b343c97de195f03ca844f4a9fadc46048f1852ccfba87977e8e675",
+    "total_tar_members": 5927,
+    "original_tree_members": {
+      "file": 5368,
+      "directory": 547,
+      "symlink": 6
+    },
+    "all_member_paths_kinds_modes_file_bytes_hashes_symlink_targets_match": true,
+    "embedded_inventory_byte_exact": true,
+    "no_unexpected_or_duplicate_members": true,
+    "supplemental": {
+      "outer.log": {
+        "sha256": "68303efd9fa980e81008f1fb94819b86f3ad6eb1ff3f235cf6b37808fdfe7a25",
+        "bytes": 308
+      },
+      "persistent-claim.json": {
+        "sha256": "c5a9b9c3a6003da009d8196b7c7c48258bc7b1c27eb106ccf8a4bb641bedfe27",
+        "bytes": 150
+      },
+      "postflight-process-observation.json": {
+        "sha256": "7e20b4b58d0886748bab6dc4132032b15ac3984857024a1ca7e9570d06d02e6b",
+        "bytes": 28310
+      },
+      "postflight-command-scope-observation.json": {
+        "sha256": "f48b15b117199d7645060728e4f678098476c62abe254e74b43bc3a4856fc4f1",
+        "bytes": 686
+      }
+    },
+    "live_original_tree_matches_frozen_inventory_at_review": true,
+    "historical_before_after_boundary": "Current comparison confirms bytes retained now; the historical unchanged-before/after assertion remains the archive producer record, not independently observed past events."
+  },
+  "retained_copy_checks": [
+    {
+      "path": "build-started.json",
+      "bytes": 171,
+      "sha256": "9914157fe2bce0d87c55e2d0dc3c979f4c7c2e4fd3cc8b0762184820a4cea520",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "context.json",
+      "bytes": 455,
+      "sha256": "ff2055762623eb314e38f66311cb3ab8f644754bb45d38bdcfe7ee4c8c9d8c86",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "deadline-audit.json",
+      "bytes": 112,
+      "sha256": "cc204822703f4a371ae8128bb7348ed3d64e9867ca953d6d030914d1c9ed1aa8",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "events.jsonl",
+      "bytes": 3907,
+      "sha256": "157d47a76d12caf6cb7ee3de5bff4567ad6b22b85fad62af1f1483ba6333292f",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "first-failure.json",
+      "bytes": 207,
+      "sha256": "c3d5da6356209be70428356346f7e762844d0ef4f81575da035eef8027d65b78",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "invocation.json",
+      "bytes": 403,
+      "sha256": "e15107dc42c3ab3911bb6b4283d3e652f7d25fb1644bea6490a1a4d5918abfee",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "job-ack.json",
+      "bytes": 163,
+      "sha256": "b50a64712b42b92aa35dc6952042bff0b74570c31859d1daa26aaf3aea032039",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "job-ownership.json",
+      "bytes": 315,
+      "sha256": "cc33737cef1789620ed23da0ff758a350e4be9618281d559b28336f86187e9d4",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "memory.jsonl",
+      "bytes": 507,
+      "sha256": "99445711ab224ce0b6844e4b6c76b187459bc5202c75a5d6a437c77b7484a10c",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "ownership-diagnostic.json",
+      "bytes": 428,
+      "sha256": "5cf1131dd8e7bac33d72c9834506cb17bcd0a846c73db4dede5c65b5fb83a1cc",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "stream.log",
+      "bytes": 308,
+      "sha256": "68303efd9fa980e81008f1fb94819b86f3ad6eb1ff3f235cf6b37808fdfe7a25",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "terminal.json",
+      "bytes": 211,
+      "sha256": "3d4661a108f880d3aa56ade786e3cc461faa70a039be74dd50d12da8cb4ca3a2",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "outer.log",
+      "bytes": 308,
+      "sha256": "68303efd9fa980e81008f1fb94819b86f3ad6eb1ff3f235cf6b37808fdfe7a25",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "persistent-claim.json",
+      "bytes": 150,
+      "sha256": "c5a9b9c3a6003da009d8196b7c7c48258bc7b1c27eb106ccf8a4bb641bedfe27",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "postflight-process-observation.json",
+      "bytes": 28310,
+      "sha256": "7e20b4b58d0886748bab6dc4132032b15ac3984857024a1ca7e9570d06d02e6b",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "postflight-command-scope-observation.json",
+      "bytes": 686,
+      "sha256": "f48b15b117199d7645060728e4f678098476c62abe254e74b43bc3a4856fc4f1",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "postflight-input-identities.json",
+      "bytes": 1612,
+      "sha256": "c6d4e473acd96eb7e9820430e38d6e1e278f9d60a699050f28053042621cd30c",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "complete-archive-manifest.json",
+      "bytes": 1712,
+      "sha256": "2512454022b343c97de195f03ca844f4a9fadc46048f1852ccfba87977e8e675",
+      "copy_and_original_match": true
+    },
+    {
+      "path": "complete-archive-inventory.json",
+      "bytes": 1305358,
+      "sha256": "449abd9c3b85c4ee75c2942bb5dee110c3a2935d9efd17d94c97d74b0dfa60ce",
+      "copy_and_original_match": true
+    }
+  ],
+  "sealed_packet": {
+    "seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+    "payload_count": 16,
+    "retained_packet_file_count_including_seal": 17,
+    "files": [
+      {
+        "path": "README.md",
+        "sha256": "8fc7dd19f07ce4c6fc88c894768466919202280652e57f4be62628050babf786",
+        "bytes": 8266,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "build_and_check.py",
+        "sha256": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410",
+        "bytes": 3596,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "check_html.py",
+        "sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+        "bytes": 26143,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "config.after.ts",
+        "sha256": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9",
+        "bytes": 24163,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "config.before.ts",
+        "sha256": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e",
+        "bytes": 3349,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "config.diff",
+        "sha256": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489",
+        "bytes": 21686,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "controls-result.json",
+        "sha256": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+        "bytes": 1359432,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "dependency-manifests.json",
+        "sha256": "8631dbb874c8e8e31cb90decb7cc1b968d0ebd7cf53f6a90895a1331107c2107",
+        "bytes": 556,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "expectations.json",
+        "sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+        "bytes": 196353,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "installed-inputs.json",
+        "sha256": "cfa02ccc86400c70240ca896dec4e4af85e6acb08dcdc6f5b72803732521b911",
+        "bytes": 757546,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "invoke.sh",
+        "sha256": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e",
+        "bytes": 664,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "packet_inputs.py",
+        "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+        "bytes": 4299,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "prepare_packet.py",
+        "sha256": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8",
+        "bytes": 9371,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "run_once.py",
+        "sha256": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6",
+        "bytes": 26357,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "seal.json",
+        "sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+        "bytes": 3109,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": "seal identity verified separately"
+      },
+      {
+        "path": "source-inputs.json",
+        "sha256": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8",
+        "bytes": 101673,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      },
+      {
+        "path": "test_checker.py",
+        "sha256": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e",
+        "bytes": 23685,
+        "archive_private_retained_current_match": true,
+        "matches_seal_payload": true
+      }
+    ],
+    "scope": "All 16 payloads plus seal compared across tar/private original/retained copy/current sealed packet. No seal alteration or new allocation inferred."
+  },
+  "postfailure_input_identities": {
+    "record_sha256": "c6d4e473acd96eb7e9820430e38d6e1e278f9d60a699050f28053042621cd30c",
+    "source_expected_and_actual_files": 889,
+    "source_files_match_sealed_source_input_map": true,
+    "original_private_and_archived_dependency_entries": 4454,
+    "all_dependency_identities_match": true,
+    "runtime_current_hashes": {
+      "git": "5ec2979b3ed9ea1c9ab866ce7177d34324e08fa452416bdd750c090dd77ff3c0",
+      "node": "72c18e2eeda260f67a5b2b66e96fa9b5ad82864676ebb54925695d87120cae3f",
+      "python": "bdea59019a38eb6600cc9e71e984a97fedadc406448431281e7657030f54987e"
+    },
+    "original_and_copied_guard_sha256": "45e4edaee20eba1b2d8ec67983ed3acc06be31a64eb059e8bc4ad21257871374",
+    "source_tar_sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28",
+    "source_tar_bytes": 34037760,
+    "input_checks_reproduced_by_read_only_hashes": true,
+    "not_actual_runner_postflight_pass": true,
+    "record_boundary": "postflight-input-identities.json and archive-manifest.json are separately hash-bound retained records, not members of the original-output archive. The tar embeds inventory.json and the four declared supplemental records."
+  },
+  "read_scope": {
+    "small_records": "All retention copies read as bytes; JSON/JSONL records parsed or read in full. Complete original event/log/terminal/failure records inspected. Process observations retained and hash-verified without new probes or an ownership-release conclusion.",
+    "packet": "All 17 packet copies read and hash-compared; prior source/control reviews are not replaced by payload identity.",
+    "review_actions": "Archive read/scan and file hashing only. No extraction, imports of product/checker/runner, invocation, build, probes, signals, rearchive or mutation of retained inputs."
+  },
+  "findings": [],
+  "limits": [
+    "SITE03 remains FAILED. Postfailure byte equality cannot establish successful runner postflight or site acceptance.",
+    "No process ownership/release determination; that separate review remains with Hooke.",
+    "Complete retained input/output bytes do not establish completed generated output, browser behaviour, global site acceptance, publication or retry authority."
+  ],
+  "output_only": "tec-os/editorial/reader-rewrite/site-verification/attempt03-retention-review.json",
+  "commit_or_push": false
+}

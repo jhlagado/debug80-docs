@@ -1,0 +1,2 @@
+{"name":"tec-os-reader-site","command":"python3.9 -S -B build_and_check.py --context context.json","limitMB":850,"heapMB":450,"event":"start","at":"2026-11-06T07:06:09.941Z","freePercent":38,"load":2.74,"waitedSeconds":0}
+{"name":"tec-os-reader-site","command":"python3.9 -S -B build_and_check.py --context context.json","limitMB":850,"heapMB":450,"event":"end","at":"2026-11-06T07:06:16.664Z","outcome":"guard stopped by SIGTERM","code":null,"peakMB":322,"processes":3,"seconds":6.7,"freePercentAtEnd":36}

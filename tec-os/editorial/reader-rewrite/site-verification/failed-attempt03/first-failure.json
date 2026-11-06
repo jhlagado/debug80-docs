@@ -1,0 +1,1 @@
+{"detail":"Command '['/bin/ps', '-axo', 'pid=,ppid=,pgid=,lstart=']' timed out after 0.5 seconds","exit_code":124,"retry":false,"stage":"watchdog","status":"FAILED","utc":"2026-11-06T07:06:16.407952+00:00"}

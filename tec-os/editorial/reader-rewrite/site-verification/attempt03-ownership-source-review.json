@@ -1,0 +1,215 @@
+{
+  "schema": 1,
+  "status": "review_complete_specific_hold_release_recommended",
+  "scope": "SITE03 specific registered resource hold only. No universal lifecycle clearance or execution acceptance.",
+  "allocation_authority": "Origo2111028d3225d6384e6742e25c41fd788f66ffef:studies/p3-tec-os/reviews/book-site-allocation03.md",
+  "sealed_sources": [
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/packet/run_once.py",
+      "sha256": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6",
+      "matches_seal": true
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/packet/build_and_check.py",
+      "sha256": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410",
+      "matches_seal": true
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/packet/packet_inputs.py",
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "matches_seal": true
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/mem-guard.mjs",
+      "sha256": "45e4edaee20eba1b2d8ec67983ed3acc06be31a64eb059e8bc4ad21257871374",
+      "matches_seal": true
+    }
+  ],
+  "actual_receipts": [
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/build-started.json",
+      "sha256": "9914157fe2bce0d87c55e2d0dc3c979f4c7c2e4fd3cc8b0762184820a4cea520"
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/context.json",
+      "sha256": "ff2055762623eb314e38f66311cb3ab8f644754bb45d38bdcfe7ee4c8c9d8c86"
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/deadline-audit.json",
+      "sha256": "cc204822703f4a371ae8128bb7348ed3d64e9867ca953d6d030914d1c9ed1aa8"
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/events.jsonl",
+      "sha256": "157d47a76d12caf6cb7ee3de5bff4567ad6b22b85fad62af1f1483ba6333292f"
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/first-failure.json",
+      "sha256": "c3d5da6356209be70428356346f7e762844d0ef4f81575da035eef8027d65b78"
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/invocation.json",
+      "sha256": "e15107dc42c3ab3911bb6b4283d3e652f7d25fb1644bea6490a1a4d5918abfee"
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/job-ack.json",
+      "sha256": "b50a64712b42b92aa35dc6952042bff0b74570c31859d1daa26aaf3aea032039"
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/job-ownership.json",
+      "sha256": "cc33737cef1789620ed23da0ff758a350e4be9618281d559b28336f86187e9d4"
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/memory.jsonl",
+      "sha256": "99445711ab224ce0b6844e4b6c76b187459bc5202c75a5d6a437c77b7484a10c"
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/ownership-diagnostic.json",
+      "sha256": "5cf1131dd8e7bac33d72c9834506cb17bcd0a846c73db4dede5c65b5fb83a1cc"
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/stream.log",
+      "sha256": "68303efd9fa980e81008f1fb94819b86f3ad6eb1ff3f235cf6b37808fdfe7a25"
+    },
+    {
+      "path": "/private/tmp/tec-os-reader-site-8ff67aa359ad-attempt03/terminal.json",
+      "sha256": "3d4661a108f880d3aa56ade786e3cc461faa70a039be74dd50d12da8cb4ca3a2"
+    }
+  ],
+  "observed_result": {
+    "terminal": {
+      "detail": "watchdog stopped the invocation",
+      "elapsed_seconds": 13.782821208000001,
+      "exit_code": 124,
+      "retry": false,
+      "seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+      "status": "FAILED"
+    },
+    "first_failure": {
+      "detail": "Command '['/bin/ps', '-axo', 'pid=,ppid=,pgid=,lstart=']' timed out after 0.5 seconds",
+      "exit_code": 124,
+      "retry": false,
+      "stage": "watchdog",
+      "status": "FAILED",
+      "utc": "2026-11-06T07:06:16.407952+00:00"
+    },
+    "deadline_audit": {
+      "clear": false,
+      "error": "Command '['/bin/ps', '-axo', 'pid=,ppid=,pgid=,lstart=']' timed out after 0.5 seconds"
+    },
+    "ack_context_identity_verified": true,
+    "worker_pid": 55188,
+    "worker_pgid": 55188,
+    "worker_birth_utc": "Fri Nov  6 07:06:09 2026",
+    "guard_pid_and_declared_parent": 55177,
+    "ack_event_utc": "2026-11-06T07:06:10.137816+00:00",
+    "build_began": true,
+    "build_completion_receipt": false,
+    "checker_began": false,
+    "final_owned_process_audit_exists": false
+  },
+  "diagnosis": [
+    {
+      "source": "packet/run_once.py:171-183,319-343",
+      "finding": "Watchdog performs repeated global identity snapshots with timeout 0.5 seconds. Timeout raises through owned into the watchdog exception path immediately, independently of the absolute deadline. It records first failure 124 and performs bound-group/direct-child fallback cleanup. The recorded failure at 07:06:16.407952Z is not expiry of the 07:09:02.787484Z whole deadline."
+    },
+    {
+      "source": "packet/run_once.py:135-168,334-343,371-402",
+      "finding": "First failure remains watchdog/124 despite the direct guard command later returning 1 at 07:06:16.731159Z. Watchdog exits after its own failed terminal finalisation and can end the main thread before main cleanup writes its process audit. This explains missing final audit without treating absence as cleanup success."
+    },
+    {
+      "source": "mem-guard.mjs:157-182; memory.jsonl",
+      "finding": "Guard spawns detached worker, records its group, installs TERM handler calling killTree then finish. killTree tries group SIGKILL plus currently discoverable descendant PIDs; finish writes end and releases its own lock without verifying every target exit. Actual guard end reports stopped by SIGTERM at 07:06:16.664Z, sampled peak 322 MB, three observed processes, 6.7 seconds. This is actual handler-path evidence, not proof all signals succeeded."
+    },
+    {
+      "finding": "Underlying reason the global ps exceeded 0.5 seconds is not established. Later successful snapshots with that same timeout do not disprove the transient failure or justify increasing it. No CPU, memory or build defect is inferred."
+    }
+  ],
+  "owned_universe": [
+    {
+      "class": "outer direct children",
+      "source": "packet/run_once.py:371-398",
+      "scope": "Each command starts a new session and is registered immediately in children plus roots; birth is filled after ps. Git archive command completed and was removed. Guard PID 55177 was the active registered direct child and later reaped with command exit 1. Outer PID and historical git PID/birth are not durably enumerated in these receipts."
+    },
+    {
+      "class": "ACK-bound worker group",
+      "source": "packet/run_once.py:185-268; packet/build_and_check.py:20-58",
+      "scope": "Validated worker PID/PGID 55188, UTC/C birth, actual observed parent 55177, context hash and nonce are retained before ACK. job_groups and roots bind its group independently of guard lifetime. Worker build subprocess has no new-session/detached option and inherits group 55188; its PID is not separately recorded."
+    },
+    {
+      "class": "descendants and helper processes",
+      "source": "packet/run_once.py:246-268; mem-guard.mjs:63-80,167-171; source/node_modules/esbuild/lib/main.js:1971-1980",
+      "scope": "Outer discovers matching retained births, descendants of owned parents and members of bound groups. Guard discovers worker descendants plus group members. Inspected esbuild service spawn has no detached option and normally inherits the build group. Guard ps/sysctl/footprint helpers are separate subprocesses under the guard rather than the worker group. No complete historical PID/birth ledger of helpers or all transitive build descendants was retained. Sampled peak three is not a census or proof no other process existed."
+    }
+  ],
+  "postflight_observations": [
+    {
+      "path": "/private/tmp/tec-os-site03-postflight-observation-20261106.json",
+      "sha256": "7e20b4b58d0886748bab6dc4132032b15ac3984857024a1ca7e9570d06d02e6b",
+      "utc": "2026-11-06T07:08:37.381454+00:00",
+      "argv": [
+        "/bin/ps",
+        "-axo",
+        "pid=,ppid=,pgid=,lstart="
+      ],
+      "environment": {
+        "TZ": "UTC",
+        "LANG": "C",
+        "LC_ALL": "C"
+      },
+      "timeout_seconds": 0.5,
+      "exit_code": 0,
+      "parsed_rows": 582,
+      "independently_recomputed_recorded_pid_or_group_matches": [],
+      "scope": "Full retained identity rows parsed independently; no new ps executed."
+    },
+    {
+      "path": "/private/tmp/tec-os-site03-command-scope-observation-20261106.json",
+      "sha256": "f48b15b117199d7645060728e4f678098476c62abe254e74b43bc3a4856fc4f1",
+      "utc": "2026-11-06T07:09:54.961372+00:00",
+      "argv": [
+        "/bin/ps",
+        "-axo",
+        "pid=,ppid=,pgid=,lstart=,command="
+      ],
+      "environment": {
+        "TZ": "UTC",
+        "LANG": "C",
+        "LC_ALL": "C"
+      },
+      "timeout_seconds": 0.5,
+      "exit_code": 0,
+      "observed_rows": 531,
+      "reported_scope_matches": [],
+      "heavy_lock": {
+        "exists": false,
+        "bytes": null
+      },
+      "complete_stdout_sha256": "3d61671086acf0e8ee970b3a5436459b9c70a13ea437b805cde8b5f0b9f1e040",
+      "scope": "Accepts the supplied scoped observation of no recorded IDs/groups/private-path matches. Unrelated command rows were deliberately omitted; their original full text and hash cannot be independently reconstructed from this JSON. No claim of independent full-command re-filtering."
+    }
+  ],
+  "hold_recommendation": {
+    "verdict": "Recommend P3 release SITE03 specific registered resource reservation, without changing FAILED status.",
+    "basis": "Jointly: valid ACK and observed parent bind the worker group before heavy work; retained group signalling survives guard exit; actual guard TERM-handler end and direct-child completion; later complete identity snapshot has neither known PID nor group; later command/path-scope observation has no matches and lock absent. This exceeds a bare empty internal array and resolves the specific registered job to the bounded observational standard.",
+    "missing_class_boundary": "No complete historical descendant/auxiliary PID register exists. A hypothetical process that detached, reparented and lost private-path command identity could evade these observations. No such survivor is established. The recommendation does not claim that unbounded class or generic pre-ACK cleanup is proved.",
+    "authority": "Recommendation only; P3 records the reservation decision. It does not authorise retry, a new allocation or mutation."
+  },
+  "next_bounded_recommendation": [
+    "Preserve sealed failed packet, complete actual output, both postflight observations and this review; retain failure/cost unchanged.",
+    "P3 may record only the specific resource-hold release supported above. Keep generic cleanup/attribution limits explicit.",
+    "Before any successor, request a bounded source proposal addressing identity-observer failure handling and durable complete ownership/audit receipts under the unchanged budget. Do not silently raise timeout, rerun builds or kill numeric PIDs. Separate review, new seal and explicit allocation remain required."
+  ],
+  "actions": {
+    "live_process_probes": 0,
+    "signals": 0,
+    "runner_guard_build_checker_controls_execution": false,
+    "source_changes": false,
+    "old_evidence_changes": false,
+    "new_report_only": true
+  },
+  "limits": [
+    "No build completion, checker pass, final source/dependency postflight acceptance, rendered-output validation or publication follows.",
+    "Snapshots are observations at recorded times, not universal absence or no-process-ever-existed guarantees.",
+    "The hard deadline path did not trigger; this result does not qualify its behavior."
+  ]
+}
