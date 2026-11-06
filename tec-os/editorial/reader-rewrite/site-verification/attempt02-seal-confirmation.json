@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "status": "CLEAR_BOUNDED_INERT_CONFIRMATION_PREPARED_UNRUN",
+  "sealed_data_commit": "21be1385fb8a9dbae644fd70d9202c8c2094d022",
+  "new_seal_sha256": "09719b943cddba8aebcf384f24b37f554dc991833ba79e0ba07ea65f50e0c37d",
+  "prior_seal_sha256": "3102077825ff6cb6944a117c5fc56d450614f8f82e8998a704cffeea860f0b4e",
+  "checks": {
+    "current_payloads": {
+      "status": "pass",
+      "count": 16,
+      "all_actual_hashes_match": true,
+      "only_changed_payloads": {
+        "README.md": {
+          "before": "d8c7372e512505898253ac50d60d8a99de01e5eb9f83afa8282e591761b3a963",
+          "after": "885528a044db87ddd2593e058f5fcac851319f62206ab3e6434e933ffe4f7480"
+        },
+        "build_and_check.py": {
+          "before": "d92ee4d1453c05920fb9278ac5a1594eeea58e17569681bc92b215737a1be679",
+          "after": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410"
+        },
+        "run_once.py": {
+          "before": "27b7c6e51358b0840997d59b0fa03bcd019b2a17b71dc0ff327c5562d3342c0d",
+          "after": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6"
+        }
+      },
+      "other_13_payloads_exact": true
+    },
+    "seal_nonpayload_fields": {
+      "status": "pass",
+      "all_equal_prior_seal": true,
+      "includes": "Source commit/tree/archive, repository, installed root/count/tree, runtime executables, guard, policy, host/path and claim directory."
+    },
+    "source": {
+      "status": "pass",
+      "revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+      "tree": "f17d6f9a99fa45b8ec00bb8cb71b1adf855e877a",
+      "archive_bytes": 34037760,
+      "archive_sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28",
+      "files": 889,
+      "method": "Hash-read actual retained original source.tar and compare every archived regular-file hash with source-inputs.json after only the unchanged config.after.ts substitution. Archive identity matches the previously independently verified actual Git export.",
+      "config_before_after_diff_unchanged": true,
+      "package_and_lock_manifests_unchanged": true
+    },
+    "installed": {
+      "status": "pass",
+      "actual_entries": 4454,
+      "regular_file_bytes_hashed": 100537934,
+      "tree_sha256": "a020e190a5bc80db7d6ffebda4fc762328dc0c5c771c0a12ecd010b63ea79661",
+      "method": "Fresh complete installed-filesystem hash/length/executable-bit and symlink-target/containment comparison, without importing modules."
+    },
+    "runtime_guard": {
+      "status": "pass",
+      "all_actual_executable_and_guard_file_hashes_match": true,
+      "identities_unchanged": true
+    },
+    "source_review": {
+      "status": "pass",
+      "record_commit": "9843122fd21da076c04cee532610422493accf7e",
+      "receipt_path": "tec-os/editorial/reader-rewrite/site-verification/attempt02-source-review.json",
+      "receipt_sha256": "d31096902edcccb232d1b296f06e51174578b3cc460482aa2a28caf727b4c66a",
+      "reviewed_code_commit": "73330480cb6cd72b661cb6df0a968b0eb78f31da",
+      "both_current_code_files_match_reviewed_hashes_and_commit": true,
+      "final_metadata_commit": "c260ff93f0c6e5379166fac2e215568a0d27acaf",
+      "source_diff_sha256": "4f81e4be46b551328459a2c34df9e750753517da9c42f543f4987db889b39609",
+      "source_diff_equals_git_diff_7ed7670_to_c260ff9": true,
+      "metadata_boundary": "Final README/source.diff owner-resolution additions were read. They retain the specific SITE01 release and generic UNKNOWN_HELD limit. No changed code is inferred from metadata additions."
+    },
+    "checker_controls": {
+      "status": "pass",
+      "checker_expectations_controls_script_40_control_report_unchanged": true,
+      "new_controls_executed": 0
+    },
+    "preserved_attempt01": {
+      "status": "pass",
+      "all_16_old_payloads_and_old_seal_hash_exact": true,
+      "retention_receipts_verified": 12,
+      "original_output": "/private/tmp/tec-os-reader-site-3102077825ff-attempt01",
+      "actual_original_output_regular_files_matched_owner_archive": 5366,
+      "original_output_file_and_symlink_inventory_exact": true,
+      "original_output_symlink_targets_exact": true,
+      "owner_raw_archive_bytes": 60688710,
+      "owner_raw_archive_sha256": "cc66bc78b89acf934bd7c12b75ac6c78119eacd731ab77859214b444c8e15579",
+      "old_global_claim": "/Users/johnhardy/.origo/site-verification/claims/3102077825ff6cb6944a117c5fc56d450614f8f82e8998a704cffeea860f0b4e.json",
+      "old_global_claim_sha256": "d79bff0749052da06b026c9c55f0bfb401a98eb646b3695340a71418e1f04558",
+      "old_global_claim_equals_retained_copy": true,
+      "no_old_output_or_claim_writes": true
+    },
+    "command": {
+      "status": "pass",
+      "request_sha256": "2843f0a5821f11d014c590d3ddd35fc98b0d32dd6eda0ab801328336b3e82955",
+      "request_matches_sealed_data_commit": true,
+      "allocation_variable": "TECOS_SITE02_ALLOCATION",
+      "shape": "sh /Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/invoke.sh 09719b943cddba8aebcf384f24b37f554dc991833ba79e0ba07ea65f50e0c37d /private/tmp/tec-os-reader-site-09719b943cdd-attempt02 \"$TECOS_SITE02_ALLOCATION\"",
+      "output": "/private/tmp/tec-os-reader-site-09719b943cdd-attempt02",
+      "output_exists": false,
+      "new_seal_claim_exists": false,
+      "entry_unchanged": true,
+      "absolute_deadline_seconds": 180,
+      "deadline_set_before_runner_and_guard_startup": true,
+      "guard_wait_seconds": 0,
+      "guard_limit_mb": 850,
+      "node_heap_mb": 450,
+      "build_workers": 2,
+      "minify": false,
+      "retry": false,
+      "new_allocation_required": true
+    }
+  },
+  "findings": [],
+  "execution": {
+    "entry_worker_runner_invoked": false,
+    "ps_or_other_process_probe": false,
+    "guard_invoked": false,
+    "build_import_render": false,
+    "new_test_or_controls_execution": false,
+    "new_claim_or_output_created": false,
+    "packet_helpers_imported": false,
+    "write_scope": "Only attempt02-seal-confirmation.json"
+  },
+  "limits": [
+    "The owner released only the specific SITE01 bootstrap reservation at Origo2ea74522. Generic pre-ACK attribution/cleanup remains unproved and UNKNOWN_HELD requires specific owner disposition.",
+    "The old outer observed birth text was not retained. UTC/C mismatch is source-supported, not proof of the sole actual failure cause. No new process observation was made.",
+    "The new observer correction and diagnostic writes are source-reviewed only. This confirmation does not establish successful ACK, cleanup or rendering.",
+    "Prior hard-deadline source-review limits remain: no hard real-time proof for interpreter startup, initial setup, scheduling or signal delivery. Diagnostics may consume the unchanged ACK window and fail closed.",
+    "A fresh separate P3 allocation is required before attempt02. Owner release, previous allocation and elapsed time supply no execution authority.",
+    "No browser, physical hardware, visual-layout, global-site, llms output or publication acceptance."
+  ]
+}
