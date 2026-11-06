@@ -1,0 +1,853 @@
+{
+  "schema": 1,
+  "status": "review_complete_changes_required",
+  "scope": "Independent bounded source review of the HTML checker, synthetic controls and retained receipts. No real-site acceptance.",
+  "reviewed_commits": {
+    "checker_controls": "7dcb4bce59f55f9978155884206f9d17f0a997a4",
+    "expectations_update": "ec20681dd663d9e853cf95d4bcf159447e55db33",
+    "checkout_at_review": "afafd4c8ff1be4732ea0b4b2a34d9d4a1e7766de"
+  },
+  "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+  "inputs": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/check_html.py",
+      "sha256": "dbd3a91b5d5d48ce4c522052add4a7e448062dea5fd96fd255f7091b05a1a7b1"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/test_checker.py",
+      "sha256": "b1b447d17967740d810b92a661a7eccfbe3db33cf57ac5710c518889bc2ae560"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/controls-result.json",
+      "sha256": "fca1feb4326a37ef1d7185f3f822de48ea680b76dad4cb9d657f8be09244123a"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/expectations.json",
+      "sha256": "66ad882a456260a61f6f248cc0aaae6d0a19794fc51bfd850ea26a2edd181c48"
+    }
+  ],
+  "expectations_history": {
+    "7dcb4bc_sha256": "78c4ae86b0d85046aa288f02b4b5e77a099c5e0b386ab609335ccc5b78805939",
+    "ec20681_sha256": "66ad882a456260a61f6f248cc0aaae6d0a19794fc51bfd850ea26a2edd181c48",
+    "interpretation": "The committed expectations at 7dcb4bc lack public_html and would fail the checker manifest requirement. ec20681 adds that exact frozen passthrough; its expectations hash matches all retained controls. Checker, controls script and controls report bytes are unchanged between these commits. No fresh execution is inferred from the expectation commit."
+  },
+  "findings": [
+    {
+      "id": "checker-source-01",
+      "priority": "P1",
+      "status": "unresolved",
+      "title": "Installed H1 permalink separator makes valid rendered headings fail",
+      "locations": [
+        {
+          "path": "tec-os/editorial/reader-rewrite/site-verification/check_html.py",
+          "lines": [
+            70,
+            74
+          ]
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/site-verification/check_html.py",
+          "lines": [
+            295,
+            298
+          ]
+        },
+        {
+          "path": "tec-os/editorial/reader-rewrite/site-verification/test_checker.py",
+          "lines": [
+            45,
+            48
+          ]
+        }
+      ],
+      "source_proof": {
+        "path": "node_modules/vitepress/dist/node/chunk-D3CUZ4fa.js",
+        "sha256": "07d45c356e7c850c2454904949f4b0b95c1d4a2d92119cbdaf4d419ae20dde98",
+        "lines": [
+          31698,
+          35746,
+          35759
+        ],
+        "details": "linkInsideHeader defaults space:true and placement:after. Its implementation pushes a separate text token containing one U+0020 before pushing the permalink anchor. VitePress configures symbol and renderAttrs without overriding space. The complete frozen config has no anchor override."
+      },
+      "failure": "Node.text(omit_permalink=True) suppresses the anchor node but retains its preceding sibling space. All 39 manifest H1 values end without that separator. The first otherwise-valid reader therefore fails the exact H1 comparison. The scaffold concatenates heading and anchor without the installed separator, masking the mismatch.",
+      "required_change": "Bind the exact installed permalink separator representation in expectations or validate and remove only that source-defined separator when extracting the heading. Preserve exact heading-content comparison and the Appendix F inline-code distinction. Make the synthetic positive fixture include the real separator, with negative controls for changed heading content and an extra separator. Do not broadly strip heading whitespace.",
+      "new_control": {
+        "reason": "Existing scaffold omits a source-proven renderer separator; one bounded synthetic control was needed to demonstrate the mismatch. Existing 33 controls were not rerun.",
+        "mutation": "Copy the retained synthetic baseline and replace exactly one occurrence of 1. First session<a class=\"header-anchor\" with 1. First session <a class=\"header-anchor\".",
+        "product_execution": false,
+        "exit_status": 1,
+        "receipt": "/var/folders/z3/5d423z657d7fm572qd818jd00000gn/T/tec-os-heading-separator-control-gkvgmfdc/receipt.json",
+        "receipt_sha256": "7a782908e789b80a12d7d073bff953d28639a0106c67d4bbeb653a547a2767c1",
+        "first_failure": {
+          "category": "h1",
+          "message": "Document h1 differs",
+          "page": "tec-os/01-first-session.html",
+          "expected": "1. First session",
+          "actual": "1. First session "
+        },
+        "interpretation": "Actual checker CLI failure on synthetic text only; predicted real-render failure follows from inert installed-source reading, not a real render."
+      }
+    }
+  ],
+  "completed_checks": [
+    {
+      "scope": "Complete checker and controls implementation",
+      "result": "Read every function and CLI path in both files, plus complete packet README, preparation script, build/check caller and verification request. Runner allocation and process-ownership implementation remain outside this bounded checker review."
+    },
+    {
+      "scope": "Frozen source representation",
+      "result": "All 39 source hashes independently match git show a3e4c29:path. All 39 frontmatter titles, raw H1 values and all 247 complete language/raw-fence pairs independently match. All source bodies use LF without CR. Independent multiline Markdown-link extraction matches all 247 target/fragment pairs."
+    },
+    {
+      "scope": "Decoded code contract",
+      "result": "Installed highlighter calls trimEnd once on the whole fence. ECMAScript suffix set matches the checker; no linewise trim or tab expansion. Installed Shiki classic structure joins line spans with LF and empty-line wbr contributes no text. Current languages asm/json/sh/text need no Vue mustache restoration; notation directives are excluded. Raw and rendered identities remain separate."
+    },
+    {
+      "scope": "Theme structure and routing",
+      "result": "Read complete installed sidebar, group, item, VPDoc, VPDocFooter, VPLink and prev-next sources, plus link normalization and configured theme. Sidebar direct headers/items match the checker shape. Flattened chapter/appendix order matches the manifest. Unlisted index lookup index=-1 gives next=chapter01 and no previous. Appendix F visible code text omits backticks while literal frontmatter browser/sidebar text retains them. H1 separator exception is the finding above."
+    },
+    {
+      "scope": "Inventory and public file",
+      "result": "39 reader HTML paths required; extra HTML outside framework 404 and the single public passthrough rejected. The 321-byte public passthrough is exact-byte/hash evidence only. Editorial subtree and symlinks rejected. Framework 404 is excluded rather than semantically accepted."
+    },
+    {
+      "scope": "Receipts and first failure",
+      "result": "All 33 retained on-disk receipts match their embedded JSON and SHA-256. Every retained after-tree HTML entry matches its actual file hash. Reviewed each control mutation and reported first failure. Positive receipts count 39 documents/247 links/45 fragments/39 sidebars/39 pagers/247 fences/one passthrough. Existing receipt refusal exits 2 and preserves its original bytes. Mismatch/input/internal exceptions become failure; successful checker exit requires passed status; build failure skips validation. Interrupted running receipts cannot count as passed."
+    }
+  ],
+  "controls": [
+    {
+      "name": "positive",
+      "exit_status": 0,
+      "expected_first_failure": null,
+      "actual_first_failure": null,
+      "receipt_sha256": "bd9a84c05cb399d154bdf997f25268d1c99454e67dfb80b7ef10a64c0d91d1eb",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "relative-and-self-fragment-positive",
+      "exit_status": 0,
+      "expected_first_failure": null,
+      "actual_first_failure": null,
+      "receipt_sha256": "f288c4ea6d59a707e2e7fcf060582400d5ce174820721477398dcc3a1c8c6a1e",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "delete-page",
+      "exit_status": 1,
+      "expected_first_failure": "inventory",
+      "actual_first_failure": {
+        "category": "inventory",
+        "message": "Reader HTML inventory differs",
+        "missing": [
+          "tec-os/01-first-session.html"
+        ],
+        "unexpected": []
+      },
+      "receipt_sha256": "9134e36ae1f315baae5313e33bd6b4f1e46a8fa163d6474b89088919d42fa5ff",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "unexpected-root-page",
+      "exit_status": 1,
+      "expected_first_failure": "inventory",
+      "actual_first_failure": {
+        "category": "inventory",
+        "message": "Reader HTML inventory differs",
+        "missing": [],
+        "unexpected": [
+          "tec-os/superseded-reader.html"
+        ]
+      },
+      "receipt_sha256": "80b369dc4ac89f684859a25f12dadb0dba113b8dce0749eea9c5716be811825d",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "unexpected-other-root-html",
+      "exit_status": 1,
+      "expected_first_failure": "inventory",
+      "actual_first_failure": {
+        "category": "inventory",
+        "message": "Reader HTML inventory differs",
+        "missing": [],
+        "unexpected": [
+          "index.html"
+        ]
+      },
+      "receipt_sha256": "5c2521cbbaeb4f237daf5d68e8f08d7bf5b1764c20551edd4911dbcbefb18511",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "framework-404-positive",
+      "exit_status": 0,
+      "expected_first_failure": null,
+      "actual_first_failure": null,
+      "receipt_sha256": "1a028682dd4e8a87c9e9203aba76bf6fe59cfbf9b64734d6717545ef76ab2b06",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "public-passthrough-corruption",
+      "exit_status": 1,
+      "expected_first_failure": "public_html",
+      "actual_first_failure": {
+        "category": "public_html",
+        "message": "Public passthrough bytes/hash differ; no semantic acceptance",
+        "path": "tec1g/mon3-user-guide/index.html",
+        "expected_bytes": 321,
+        "actual_bytes": 321,
+        "expected_sha256": "70578bc32521c647bb17afab0f1a79959cf6733711ebebf1f2ac16dbd7da616d",
+        "actual_sha256": "ed3dfc42c3db7ee7972b40f7c00cc976e311c9cc52c4b59755695caf1af074a5"
+      },
+      "receipt_sha256": "1eb756c25765d33571a7130eeb60feacdf04292e40bea76e40e428908f0ce0d5",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "public-passthrough-missing",
+      "exit_status": 1,
+      "expected_first_failure": "inventory",
+      "actual_first_failure": {
+        "category": "inventory",
+        "message": "Reader HTML inventory differs",
+        "missing": [
+          "tec1g/mon3-user-guide/index.html"
+        ],
+        "unexpected": []
+      },
+      "receipt_sha256": "4f7f885c1011a3f857cc7af501bf54235ff582f49ef80b599e3226d12af17eb8",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "editorial-output",
+      "exit_status": 1,
+      "expected_first_failure": "inventory",
+      "actual_first_failure": {
+        "category": "inventory",
+        "message": "Editorial output is forbidden"
+      },
+      "receipt_sha256": "7f148b8e5171aa70370e85dc79bdf3bddd380943095977cfdb61eddd404b7e56",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "wrong-title",
+      "exit_status": 1,
+      "expected_first_failure": "title",
+      "actual_first_failure": {
+        "category": "title",
+        "message": "Head title differs",
+        "page": "tec-os/01-first-session.html",
+        "expected": "First session | Debug80 Docs",
+        "actual": "Wrong title"
+      },
+      "receipt_sha256": "b6ac36e7c5bed555f40ce98e8cb7d977489d3229b7b9a28f65245745183cca58",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "wrong-h1",
+      "exit_status": 1,
+      "expected_first_failure": "h1",
+      "actual_first_failure": {
+        "category": "h1",
+        "message": "Document h1 differs",
+        "page": "tec-os/01-first-session.html",
+        "expected": "1. First session",
+        "actual": "Wrong heading"
+      },
+      "receipt_sha256": "3bf88f4b337cf0ce0c405bdaf6f1e75f26efbc9f07f4b9b66b9940c20d80bbfc",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "h1-source-delimiters-not-visible",
+      "exit_status": 1,
+      "expected_first_failure": "h1",
+      "actual_first_failure": {
+        "category": "h1",
+        "message": "Document h1 differs",
+        "page": "tec-os/appendix-f-tecvol.html",
+        "expected": "Appendix F. tecvol",
+        "actual": "Appendix F. `tecvol`"
+      },
+      "receipt_sha256": "cd542d4270bc08a2d9d7bea0a2185a54b874e298de4845fab36bfc3282ed0508",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "title-frontmatter-delimiters-retained",
+      "exit_status": 1,
+      "expected_first_failure": "title",
+      "actual_first_failure": {
+        "category": "title",
+        "message": "Head title differs",
+        "page": "tec-os/appendix-f-tecvol.html",
+        "expected": "F. `tecvol` | Debug80 Docs",
+        "actual": "F. tecvol | Debug80 Docs"
+      },
+      "receipt_sha256": "03fc819008b3dfd6f763009107bdc1e61f1697d84cb6735762553614a88b2b64",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "remove-fragment",
+      "exit_status": 1,
+      "expected_first_failure": "fragment",
+      "actual_first_failure": {
+        "category": "fragment",
+        "message": "Fragment has no id in target vp-doc",
+        "page": "tec-os/03-work-with-files.html",
+        "target": "tec-os/05-cards-on-the-pc.html",
+        "fragment": "record-sizes-and-allocated-space"
+      },
+      "receipt_sha256": "5d27b61de38403586dff47cc9d93fec05b2a15db2b8e82e98e4ddec87e7f6744",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "wrong-document-link",
+      "exit_status": 1,
+      "expected_first_failure": "links",
+      "actual_first_failure": {
+        "category": "links",
+        "message": "Document reader-link multiset differs",
+        "page": "tec-os/01-first-session.html",
+        "expected": [
+          [
+            "tec-os/appendix-g-tec-1g.html",
+            ""
+          ],
+          [
+            "tec-os/05-cards-on-the-pc.html",
+            ""
+          ],
+          [
+            "tec-os/appendix-d-error-messages.html",
+            ""
+          ]
+        ],
+        "actual": [
+          [
+            "tec-os/03-work-with-files.html",
+            ""
+          ],
+          [
+            "tec-os/05-cards-on-the-pc.html",
+            ""
+          ],
+          [
+            "tec-os/appendix-d-error-messages.html",
+            ""
+          ]
+        ]
+      },
+      "receipt_sha256": "f1e2be9416e16a00f3de99983137d128a61bd7c8ccbfe45a62628a52b1cedd9d",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "extra-document-link",
+      "exit_status": 1,
+      "expected_first_failure": "links",
+      "actual_first_failure": {
+        "category": "links",
+        "message": "Document reader-link multiset differs",
+        "page": "tec-os/01-first-session.html",
+        "expected": [
+          [
+            "tec-os/appendix-g-tec-1g.html",
+            ""
+          ],
+          [
+            "tec-os/05-cards-on-the-pc.html",
+            ""
+          ],
+          [
+            "tec-os/appendix-d-error-messages.html",
+            ""
+          ]
+        ],
+        "actual": [
+          [
+            "tec-os/appendix-g-tec-1g.html",
+            ""
+          ],
+          [
+            "tec-os/05-cards-on-the-pc.html",
+            ""
+          ],
+          [
+            "tec-os/appendix-d-error-messages.html",
+            ""
+          ],
+          [
+            "tec-os/03-work-with-files.html",
+            ""
+          ]
+        ]
+      },
+      "receipt_sha256": "7ff58935a798a467dbf9df174e0ca8d1dc2089aca06fa6a1185b327f56f4d81a",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "duplicate-document",
+      "exit_status": 1,
+      "expected_first_failure": "document",
+      "actual_first_failure": {
+        "category": "document",
+        "message": "Expected exactly one scoped element",
+        "page": "tec-os/01-first-session.html",
+        "tag": null,
+        "css_class": "vp-doc",
+        "actual_count": 2
+      },
+      "receipt_sha256": "6680aedc1578ce4d2ac810375c6a9809dcb83ab00cb3b3832240de81b82d3998",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "missing-document",
+      "exit_status": 1,
+      "expected_first_failure": "document",
+      "actual_first_failure": {
+        "category": "document",
+        "message": "Expected exactly one scoped element",
+        "page": "tec-os/01-first-session.html",
+        "tag": null,
+        "css_class": "vp-doc",
+        "actual_count": 0
+      },
+      "receipt_sha256": "b53022ba71fbf03b81dfbfe71649c6a572d1f5ac31417e06f619d61fc16e78f0",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "duplicate-id",
+      "exit_status": 1,
+      "expected_first_failure": "html",
+      "actual_first_failure": {
+        "category": "html",
+        "message": "Duplicate HTML id",
+        "page": "tec-os/01-first-session.html"
+      },
+      "receipt_sha256": "6b057b629faed417ae1504b8debf510cac336c13225786253b1c8facf2136a20",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "sidebar-reorder",
+      "exit_status": 1,
+      "expected_first_failure": "sidebar_order",
+      "actual_first_failure": {
+        "category": "sidebar_order",
+        "message": "Sidebar links/order/titles differ",
+        "page": "tec-os/01-first-session.html",
+        "expected": [
+          {
+            "html": "tec-os/01-first-session.html",
+            "title": "First session"
+          },
+          {
+            "html": "tec-os/02-make-a-small-program.html",
+            "title": "Make a small program"
+          },
+          {
+            "html": "tec-os/03-work-with-files.html",
+            "title": "Work with files"
+          },
+          {
+            "html": "tec-os/04-drives-and-user-areas.html",
+            "title": "Drives and user areas"
+          },
+          {
+            "html": "tec-os/05-cards-on-the-pc.html",
+            "title": "Cards on the PC"
+          },
+          {
+            "html": "tec-os/06-choose-a-console.html",
+            "title": "Choose a console"
+          },
+          {
+            "html": "tec-os/07-commands-at-startup.html",
+            "title": "Commands at startup"
+          }
+        ],
+        "actual": [
+          {
+            "html": "tec-os/02-make-a-small-program.html",
+            "title": "First session"
+          },
+          {
+            "html": "tec-os/01-first-session.html",
+            "title": "Make a small program"
+          },
+          {
+            "html": "tec-os/03-work-with-files.html",
+            "title": "Work with files"
+          },
+          {
+            "html": "tec-os/04-drives-and-user-areas.html",
+            "title": "Drives and user areas"
+          },
+          {
+            "html": "tec-os/05-cards-on-the-pc.html",
+            "title": "Cards on the PC"
+          },
+          {
+            "html": "tec-os/06-choose-a-console.html",
+            "title": "Choose a console"
+          },
+          {
+            "html": "tec-os/07-commands-at-startup.html",
+            "title": "Commands at startup"
+          }
+        ]
+      },
+      "receipt_sha256": "ae673a990e17406c77920cc2c88d65d5675bdee44b81032e0c93d8843e75de69",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "sidebar-group-heading",
+      "exit_status": 1,
+      "expected_first_failure": "sidebar_groups",
+      "actual_first_failure": {
+        "category": "sidebar_groups",
+        "message": "Sidebar group heading differs",
+        "page": "tec-os/01-first-session.html",
+        "expected": "Using the machine",
+        "actual": "Wrong group"
+      },
+      "receipt_sha256": "cd227d43980c8387b9ff6466705911ca7b7cd46dcf7c8daa37f00ea4eecb0763",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "sidebar-frontmatter-delimiters-retained",
+      "exit_status": 1,
+      "expected_first_failure": "sidebar_order",
+      "actual_first_failure": {
+        "category": "sidebar_order",
+        "message": "Sidebar links/order/titles differ",
+        "page": "tec-os/01-first-session.html",
+        "expected": [
+          {
+            "html": "tec-os/appendix-a-bdos-functions.html",
+            "title": "A. BDOS functions"
+          },
+          {
+            "html": "tec-os/appendix-b-rom-services.html",
+            "title": "B. The ROM table and hardware services"
+          },
+          {
+            "html": "tec-os/appendix-c-memory-map.html",
+            "title": "C. Memory map"
+          },
+          {
+            "html": "tec-os/appendix-d-error-messages.html",
+            "title": "D. Error messages"
+          },
+          {
+            "html": "tec-os/appendix-e-container-format.html",
+            "title": "E. The container format"
+          },
+          {
+            "html": "tec-os/appendix-f-tecvol.html",
+            "title": "F. `tecvol`"
+          },
+          {
+            "html": "tec-os/appendix-g-tec-1g.html",
+            "title": "G. The TEC-1G as TEC-OS uses it"
+          },
+          {
+            "html": "tec-os/appendix-h-service-file-format.html",
+            "title": "H. The service file format"
+          },
+          {
+            "html": "tec-os/appendix-i-web-page.html",
+            "title": "I. The web page"
+          },
+          {
+            "html": "tec-os/appendix-j-command-reference.html",
+            "title": "J. Command reference"
+          }
+        ],
+        "actual": [
+          {
+            "html": "tec-os/appendix-a-bdos-functions.html",
+            "title": "A. BDOS functions"
+          },
+          {
+            "html": "tec-os/appendix-b-rom-services.html",
+            "title": "B. The ROM table and hardware services"
+          },
+          {
+            "html": "tec-os/appendix-c-memory-map.html",
+            "title": "C. Memory map"
+          },
+          {
+            "html": "tec-os/appendix-d-error-messages.html",
+            "title": "D. Error messages"
+          },
+          {
+            "html": "tec-os/appendix-e-container-format.html",
+            "title": "E. The container format"
+          },
+          {
+            "html": "tec-os/appendix-f-tecvol.html",
+            "title": "F. tecvol"
+          },
+          {
+            "html": "tec-os/appendix-g-tec-1g.html",
+            "title": "G. The TEC-1G as TEC-OS uses it"
+          },
+          {
+            "html": "tec-os/appendix-h-service-file-format.html",
+            "title": "H. The service file format"
+          },
+          {
+            "html": "tec-os/appendix-i-web-page.html",
+            "title": "I. The web page"
+          },
+          {
+            "html": "tec-os/appendix-j-command-reference.html",
+            "title": "J. Command reference"
+          }
+        ]
+      },
+      "receipt_sha256": "fe91cb44545668572991a582c4e51ee0e93ace57c27f16342b463fd3fc11ea6c",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "wrong-pager",
+      "exit_status": 1,
+      "expected_first_failure": "pager",
+      "actual_first_failure": {
+        "category": "pager",
+        "message": "Pager target differs",
+        "page": "tec-os/01-first-session.html",
+        "direction": "next",
+        "expected": "tec-os/02-make-a-small-program.html",
+        "actual": "/tec-os/03-work-with-files.html"
+      },
+      "receipt_sha256": "da7621e4bc005ecf17bff5dd3486848150bf3f03e8c617ac305ad6ca3ab9c0f9",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "index-missing-doorway-next",
+      "exit_status": 1,
+      "expected_first_failure": "pager",
+      "actual_first_failure": {
+        "category": "pager",
+        "message": "Pager direction count differs",
+        "page": "tec-os/index.html",
+        "direction": "next",
+        "expected": "tec-os/01-first-session.html",
+        "actual_count": 0
+      },
+      "receipt_sha256": "fd7022bb029ab0135afad61f6aa720df22b72c204ecb3611fe947244f214e1be",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "code-character",
+      "exit_status": 1,
+      "expected_first_failure": "code_text",
+      "actual_first_failure": {
+        "category": "code_text",
+        "message": "Decoded fence text differs; no whitespace normalization",
+        "page": "tec-os/01-first-session.html",
+        "fence": 1,
+        "first_character_offset": 0,
+        "raw_source_sha256": "79638c9f637b9b1d51b8110fc835ba0036397d29ac6ffbec78ed4b8ef06a9352",
+        "expected_sha256": "ac0c54f7cf08ba4091f3431f71cfbf8dda3953e2d854ab084b8720eae7e13856",
+        "actual_sha256": "cd275380dadde831f364b074a41c709a1094ed777cbc17030e26d438ac37bdc8",
+        "expected_bytes": 56,
+        "actual_bytes": 57,
+        "expected_excerpt": "'\\nTEC-OS 0.1 for TEC-'",
+        "actual_excerpt": "'X\\nTEC-OS 0.1 for TEC'"
+      },
+      "receipt_sha256": "fa526945b5db9882bd57ab81289f17072651cfb8604c3f44ef8047aeb91f0e48",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "code-padding",
+      "exit_status": 1,
+      "expected_first_failure": "code_text",
+      "actual_first_failure": {
+        "category": "code_text",
+        "message": "Decoded fence text differs; no whitespace normalization",
+        "page": "tec-os/01-first-session.html",
+        "fence": 1,
+        "first_character_offset": 0,
+        "raw_source_sha256": "79638c9f637b9b1d51b8110fc835ba0036397d29ac6ffbec78ed4b8ef06a9352",
+        "expected_sha256": "ac0c54f7cf08ba4091f3431f71cfbf8dda3953e2d854ab084b8720eae7e13856",
+        "actual_sha256": "f93212f2e1d302e33c69c8e7916a63c43db8b2c999ed8a2400f012e032e10893",
+        "expected_bytes": 56,
+        "actual_bytes": 58,
+        "expected_excerpt": "'\\nTEC-OS 0.1 for TEC-'",
+        "actual_excerpt": "' \\t\\nTEC-OS 0.1 for TE'"
+      },
+      "receipt_sha256": "4836a012d4cf03d78c25b06dbe12471882ee5ba17902e50514d8d2394776ee0d",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "code-extra-terminal-lf",
+      "exit_status": 1,
+      "expected_first_failure": "code_text",
+      "actual_first_failure": {
+        "category": "code_text",
+        "message": "Decoded fence text differs; no whitespace normalization",
+        "page": "tec-os/01-first-session.html",
+        "fence": 1,
+        "first_character_offset": 56,
+        "raw_source_sha256": "79638c9f637b9b1d51b8110fc835ba0036397d29ac6ffbec78ed4b8ef06a9352",
+        "expected_sha256": "ac0c54f7cf08ba4091f3431f71cfbf8dda3953e2d854ab084b8720eae7e13856",
+        "actual_sha256": "79638c9f637b9b1d51b8110fc835ba0036397d29ac6ffbec78ed4b8ef06a9352",
+        "expected_bytes": 56,
+        "actual_bytes": 57,
+        "expected_excerpt": "'WORK\\n\\nA>GLCD.SVC\\n\\nA>'",
+        "actual_excerpt": "'WORK\\n\\nA>GLCD.SVC\\n\\nA>\\n'"
+      },
+      "receipt_sha256": "1a89c5dca0f55f96e84bb6ac2751e11380b323e28cdb27a9e3aa475e80d729b0",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "code-tab-expanded",
+      "exit_status": 1,
+      "expected_first_failure": "code_text",
+      "actual_first_failure": {
+        "category": "code_text",
+        "message": "Decoded fence text differs; no whitespace normalization",
+        "page": "tec-os/10-memory-for-programs.html",
+        "fence": 5,
+        "first_character_offset": 69,
+        "raw_source_sha256": "f3b6e61d5c194653048ec601ef0ef54cc98ebfd5c9833ae85d8ac101ef330034",
+        "expected_sha256": "448981cca150f31248649847d9c06f77683ad34dc303bee3825bd1d4f7151a8c",
+        "actual_sha256": "589b05462ddfdfeca1044772ca27011420dc83df94a2ff9bb37226e854843fe5",
+        "expected_bytes": 1268,
+        "actual_bytes": 1271,
+        "expected_excerpt": "'es, in decimal.\\nBDOS\\tEQU\\t$0005\\n\\n\\tORG\\t$01'",
+        "actual_excerpt": "'es, in decimal.\\nBDOS    EQU\\t$0005\\n\\n\\tORG\\t'"
+      },
+      "receipt_sha256": "938d360bcc2f5550ee7793cbdfb19c86527f65b22f6fa81d974ba77c35b1b8f5",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "code-trailing-space-removed",
+      "exit_status": 1,
+      "expected_first_failure": "code_text",
+      "actual_first_failure": {
+        "category": "code_text",
+        "message": "Decoded fence text differs; no whitespace normalization",
+        "page": "tec-os/03-work-with-files.html",
+        "fence": 5,
+        "first_character_offset": 113,
+        "raw_source_sha256": "099d7b60c38f0128ef1c71d954d6cbaaa6481071b619dd09cc262eb96e444794",
+        "expected_sha256": "72ebd49f0275f837ed092a4e26763a53c1a20e6183c1d727f728b607883b4889",
+        "actual_sha256": "6bd001194539a898561212db8cde3fc91f7e75ea77d88e7bc44dca15b4f6fd12",
+        "expected_bytes": 332,
+        "actual_bytes": 331,
+        "expected_excerpt": "'TUP.CMD  COPY.TXT    \\n2 files, 8168K fre'",
+        "actual_excerpt": "'TUP.CMD  COPY.TXT   \\n2 files, 8168K free'"
+      },
+      "receipt_sha256": "03bf5b6c165e38ce6e0314c308820fcd17707cb33b7590b39a6b52e9ad041eee",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "code-language",
+      "exit_status": 1,
+      "expected_first_failure": "code_language",
+      "actual_first_failure": {
+        "category": "code_language",
+        "message": "Fence language differs",
+        "page": "tec-os/01-first-session.html",
+        "fence": 1,
+        "expected": "text",
+        "actual": "wrong"
+      },
+      "receipt_sha256": "b25062fe3730f7ea4a78bc4d80bf51b1837ba124947598c01776eb610ee42c15",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "extra-code-block",
+      "exit_status": 1,
+      "expected_first_failure": "code_count",
+      "actual_first_failure": {
+        "category": "code_count",
+        "message": "Fence count differs",
+        "page": "tec-os/01-first-session.html",
+        "expected": 6,
+        "actual": 7
+      },
+      "receipt_sha256": "f81961381993cbd3d9baf2f6fcdc7f708b09513e3cb8d5852c7074105df02fc8",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "escaped-entity-positive",
+      "exit_status": 0,
+      "expected_first_failure": null,
+      "actual_first_failure": null,
+      "receipt_sha256": "4b7fdcb0002f990b6718b809cece006ce7eff02744215e2a2105cc3686f7db19",
+      "retained_receipt_and_after_html_hashes_verified": true
+    },
+    {
+      "name": "first-failure-only",
+      "exit_status": 1,
+      "expected_first_failure": "title",
+      "actual_first_failure": {
+        "category": "title",
+        "message": "Head title differs",
+        "page": "tec-os/01-first-session.html",
+        "expected": "First session | Debug80 Docs",
+        "actual": "Wrong title"
+      },
+      "receipt_sha256": "adb050faf49dd8b1a1e508fe08d22ac5179232784e5bfef7bec66cdc180e7fdf",
+      "retained_receipt_and_after_html_hashes_verified": true
+    }
+  ],
+  "installed_sources": [
+    {
+      "path": "dist/client/theme-default/components/VPSidebar.vue",
+      "sha256": "5f5b9b344ce556830d3fb298acd3b23f1fbc27b48daf50f5d22d6e95d4ce345d",
+      "inspection": "Read as inert text only; not imported or executed."
+    },
+    {
+      "path": "dist/client/theme-default/components/VPSidebarGroup.vue",
+      "sha256": "f40cfb3a24368be3dcddbd2f945a67a381dd3711ce957bb40f0522816fc23b74",
+      "inspection": "Read as inert text only; not imported or executed."
+    },
+    {
+      "path": "dist/client/theme-default/components/VPSidebarItem.vue",
+      "sha256": "9ea60476470d950321db0afedd975f5de5ce266cb7f38c5e7915424c0f1c8493",
+      "inspection": "Read as inert text only; not imported or executed."
+    },
+    {
+      "path": "dist/client/theme-default/components/VPDoc.vue",
+      "sha256": "f97249274f8aeceb907e3a9f5839379569e03677d80f3543ef44279ca756e9c0",
+      "inspection": "Read as inert text only; not imported or executed."
+    },
+    {
+      "path": "dist/client/theme-default/components/VPDocFooter.vue",
+      "sha256": "4126f800d50e849636ceb934c8d8ef31259976d4a9206dc46d6a26cf7b182589",
+      "inspection": "Read as inert text only; not imported or executed."
+    },
+    {
+      "path": "dist/client/theme-default/components/VPLink.vue",
+      "sha256": "8683a8e70016fcc586af01750f5489e3887d601cdc68a8558d398fc3e378fc61",
+      "inspection": "Read as inert text only; not imported or executed."
+    },
+    {
+      "path": "dist/client/theme-default/composables/prev-next.js",
+      "sha256": "2288a677ec465c6e3fe584024730c9add222bf7b880e0e2d6c9828ea8a6edd91",
+      "inspection": "Read as inert text only; not imported or executed."
+    },
+    {
+      "path": "dist/node/chunk-D3CUZ4fa.js",
+      "sha256": "07d45c356e7c850c2454904949f4b0b95c1d4a2d92119cbdaf4d419ae20dde98",
+      "inspection": "Read as inert text only; not imported or executed."
+    }
+  ],
+  "remaining_limits": [
+    "No real HTML output has been built or inspected. The unresolved heading mismatch prevents source-review clearance of the current checker contract.",
+    "The synthetic baseline derives expected links, fences and labels from the same manifest. Independent frozen-source comparisons reduce that shared-oracle risk but do not establish real emitted DOM correctness.",
+    "Document links are compared as a target/fragment multiset, not bound to visible labels or source positions. Swapping two destination attributes can preserve that multiset. This does not invalidate the narrower resolution/count check, and no claim of label-to-destination preservation is made.",
+    "HTMLParser plus explicit structural checks is not a complete browser HTML conformance validator. CSS visibility, script behaviour, hydration, layout, accessibility, browser interaction, global site and publication remain unaccepted.",
+    "Source identity and synthetic mutation detection do not prove inherited reader claims, historical runtime results or physical hardware behaviour."
+  ],
+  "actions": {
+    "reader_checker_runner_edits": false,
+    "synthetic_checker_cli_calls": 1,
+    "product_import_build_render_runtime": false,
+    "allocation_or_retry": false,
+    "shared_files_changed": false
+  },
+  "closure": "The bounded review is complete with one required correction. A corrected heading contract and its exact synthetic controls need bounded follow-up review before this checker is treated as ready for allocation."
+}
