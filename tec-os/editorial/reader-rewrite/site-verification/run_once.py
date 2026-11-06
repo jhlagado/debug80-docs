@@ -305,20 +305,21 @@ def main():
     watcher.start()
 
     def hard_deadline():
-        if done.wait(max(0, deadline - time.monotonic())):
-            return
+        # Never cancelled by receipt finalisation: final flush/close is still
+        # part of the invocation. Normal completion uses os._exit after it.
+        threading.Event().wait(max(0, deadline - time.monotonic()))
         # No blocking audit, receipt writes or waits extend this final deadline.
         # The soft stop normally has already retained first-failure/audit data.
         try:
             for group in tuple(job_groups.copy()):
                 try:
                     os.killpg(group, signal.SIGKILL)
-                except OSError:
+                except BaseException:
                     pass
-            for child in children.copy().values():
+            for pid in tuple(children.copy()):
                 try:
-                    child.kill()
-                except OSError:
+                    os.kill(pid, signal.SIGKILL)
+                except BaseException:
                     pass
         finally:
             os._exit(124)
@@ -508,7 +509,6 @@ def main():
     finally:
         done.set()
         watcher.join(timeout=0.6)
-        deadline_thread.join(timeout=0.1)
         os.fsync(stream)
         os.close(stream)
         os.close(events)
@@ -516,4 +516,4 @@ def main():
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    os._exit(main())
