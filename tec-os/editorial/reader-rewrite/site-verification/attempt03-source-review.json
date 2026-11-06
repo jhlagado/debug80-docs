@@ -1,0 +1,22 @@
+{
+  "status": "CLEAR_BOUNDED_SOURCE_REVIEW",
+  "decision": "KD-246",
+  "scope": "Single title expectation and48 synthetic controls before execution",
+  "findings": [],
+  "verified": [
+    "Only /pages/33/title and /representation/heading differ in expectation data",
+    "Original40 control labels/categories and relative order intact",
+    "Eight focus cases give48 planned cases,6positive42negative",
+    "Title-negative explicitly injects backticks",
+    "Sidebar/H1 distinctions remain protected",
+    "Fence-backtick insertion covered; deletion unavailable in frozen input",
+    "Checker,runner,source/config and dependency input manifests unchanged"
+  ],
+  "files": {
+    "expectations.json": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+    "test_checker.py": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e",
+    "check_html.py": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+    "README.md": "8fc7dd19f07ce4c6fc88c894768466919202280652e57f4be62628050babf786"
+  },
+  "review_execution": "No controls or actual validation executed by the source reviewer; actual synthetic results are recorded separately"
+}

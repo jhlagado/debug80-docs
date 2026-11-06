@@ -16289,5 +16289,13 @@
     "next": "title-reading-proposal only; no changed reading activated or executed; explicit Origo gate-reference decision required",
     "ownership": "Root independent disposition pending here; no inference from empty audit",
     "retry": false
+  },
+  "site_verification_attempt03_preparation": {
+    "approval": "KD-246",
+    "status": "PREPARED_UNRUN_PENDING_INDEPENDENT_CONFIRMATION_AND_ALLOCATION",
+    "seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+    "packet": "site-verification/attempt03-packet.json",
+    "controls": "48 synthetic controls passed; no actual invocation allocated",
+    "actual_site_result": "SITE02 remains FAILED"
   }
 }

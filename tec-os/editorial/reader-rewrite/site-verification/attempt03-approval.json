@@ -1,0 +1,11 @@
+{
+  "decision": "KD-246",
+  "source": "/Users/johnhardy/projects/origo/studies/p3-tec-os/decisions.md",
+  "origo_head": "a98364f4b39010ccbdb624134cda99b8a2208248",
+  "source_file_sha256": "4f1bdf1aa17af617c580e766f453364ee6adf2effce4c6d7e80131f2d0989d04",
+  "literal_section": "## KD-246 Rendered-title reference correction\n\nMine, 6 November 2026: “Approve the single title correction”. I approved the\nAppendix F expected browser title changing from “F. `tecvol` | Debug80 Docs”\nto “F. tecvol | Debug80 Docs”. The renderer resolves inline Markdown rather\nthan displaying code delimiters. Exactly that title value and its representation\nexplanation may change. Reader text, the other thirty-eight titles, H1s, sidebar\nlabels, pagers, links, fragments, literal fences, inputs and execution limits\nremain unchanged. The checker algorithm remains exact equality and no generic\nbacktick transformation is authorised.\n\nRetain SITE02 as failed under its original reading. Apply the approved single\ncorrection, run all existing controls plus the focused title/navigation/fence\ncases, then seal and independently review the exact new packet before a fresh\nallocated actual render. This decision grants no retry of the old seal, site\npublication or broader reference amendment. The source mechanism and complete\nimpact census remain in [the reviewed proposal](reviews/book-title-reference.md).\n",
+  "authority": "Explicit approval conveyed by P3; source decision inspected",
+  "scope": "Single Appendix F title and representation explanation; refreshed synthetic controls and sealed independent review only; no actual invocation or publication allocated",
+  "prior_proposal": "title-reading-proposal/README.md",
+  "prior_proposal_sha256": "522ec9833aa15baea40f628cdf0f409b41c2b3866eb376763f48b9ab2e29f14d"
+}
