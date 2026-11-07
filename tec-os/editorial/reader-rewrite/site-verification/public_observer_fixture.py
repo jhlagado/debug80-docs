@@ -442,10 +442,35 @@ def main():
     except Exception as error:
         # No arbitrary PID/group rescue. Retain unresolved scope for independent
         # disposition if even the public runner's own hard deadline fails.
-        if runner is not None and runner.poll() is None:
-            runner.terminate()
         record.update(status='FAILED_OR_UNKNOWN_HELD', error=str(error),
                       actual_exit_status=runner.returncode if runner else None)
+        if runner is not None:
+            cleanup = {'scope': 'direct_runner_Popen_handle_only',
+                       'term_requested': False, 'reap': 'PENDING_UNKNOWN_HELD'}
+            record['exception_runner_cleanup'] = cleanup
+            try:
+                if runner.poll() is None:
+                    runner.terminate()
+                    cleanup['term_requested'] = True
+            except OSError as signal_error:
+                cleanup['termination_error'] = {
+                    'type': type(signal_error).__name__, 'message': str(signal_error)}
+            # Leave receipt time inside the original60; do not grant a fresh
+            # interval or wait beyond the controller's independent hard cutoff.
+            remaining = max(0.0, hard_end - time.monotonic())
+            budget = max(0.0, remaining - 0.5)
+            cleanup.update(wait_budget_seconds=budget,
+                           controller_seconds_remaining=remaining)
+            try:
+                runner.wait(timeout=budget)
+                cleanup['reap'] = 'REAPED'
+            except subprocess.TimeoutExpired:
+                cleanup['timeout'] = True
+            except OSError as reap_error:
+                cleanup['reap_error'] = {
+                    'type': type(reap_error).__name__, 'message': str(reap_error)}
+            cleanup['returncode'] = runner.returncode
+            record['actual_exit_status'] = runner.returncode
     finally:
         record['identity_queries'] = queries
         record['child_handles'] = [{'argv': argv, 'pid': child.pid,

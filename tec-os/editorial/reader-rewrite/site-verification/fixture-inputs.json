@@ -1,16 +1,16 @@
 {
   "schema": 1,
-  "status": "SOURCE_ONLY_UNRUN_AWAITING_INDEPENDENT_REVIEW_AND_ALLOCATION",
+  "status": "SOURCE_ONLY_UNRUN_PENDING_FINAL_CORE_TAMPER_CONTRACT_AND_REVIEW",
   "scope": "UNQUALIFIED_PUBLIC_RUNNER_FIXTURE_NOT_BOOK_ACCEPTANCE",
   "authority": "Origo fc90db15163c634f5230e67e769157365dd24da3: implementation source only; no native control allocation.",
   "book_packet": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/failed-attempt03/packet",
   "book_seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
   "candidate_packet": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification",
   "candidate_payloads": {
-    "run_once.py": "f2af8053fc704aea0e84d7c055e1336e74f90452190b0f7b614fec6a8cbf3225",
+    "run_once.py": null,
     "build_and_check.py": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc"
   },
-  "harness_sha256": "aef3bf093410a532c4fd34c846ee065bc45bbccc1160a01848abf340b5fd0d06",
+  "harness_sha256": "df73a97839a402c8b172c54eb7994d17dc3f2f1f0ca0e16abe7c65a472b42e73",
   "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
   "source_archive_sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28",
   "source_archive_bytes": 34037760,
@@ -155,7 +155,7 @@
     ]
   },
   "remaining_before_execution": [
-    "Independently review the exact bound runner/worker candidate and fixture source; any subsequent candidate change requires new fixture binding and external digest. No imports or controls have run.",
+    "Await final corrected core source and literal post-ACK receipt-integrity error contract. Bind the specific Q16 tamper family/injection and exact final runner/worker hashes; current null runner pin deliberately refuses execution.",
     "Review this exact fixture source/binding, public commands, timing and owned-scope limits.",
     "Obtain separate explicit bounded Q15/Q16 native-control allocation. No allocation exists.",
     "Do not infer book-run allocation, reseal the active book packet or rerun its48 unchanged checker controls."
@@ -171,6 +171,17 @@
   },
   "binding_contract": "The allocation must name the exact external fixture-inputs.json SHA-256 passed as required --binding-sha256. The CLI verifies raw bytes before JSON parsing, payload adaptation or any child launch. It rejects placeholder candidate hashes and allocation labels before materialisation; missing or altered raw binding identity fails before JSON parsing. This binding cannot contain its own digest; the reviewed digest belongs in the allocation command.",
   "controller_hard_cutoff_limit": "Forced controller exit leaves incomplete evidence and cannot count as expected fixture outcome. The public runner owns inner guard/group cleanup at its earlier hard cutoff; no universal cleanup or hard-loss guarantee is inferred from the controller timer.",
-  "candidate_source_commit": "3679b7837a74e3eb45fd469a4c3645058b08aa99",
-  "copy_identity_contract": "Read baseline seal bytes once, verify the externally bound seal hash before JSON parsing. For every baseline payload and candidate runner/worker, read source bytes once, authenticate against original seal or candidate binding, write exactly those approved bytes, then immediately authenticate the copy. All baseline copies complete before intentional fixture overrides. Before emitting a fixture seal, compare the entire final payload digest map with the approved baseline/candidate map plus only the explicit generated overrides; never adopt arbitrary changed copied bytes."
+  "candidate_source_commit": "Pending final corrected core; prior3679b78 binding is superseded, not silently repinned.",
+  "copy_identity_contract": "Read baseline seal bytes once, verify the externally bound seal hash before JSON parsing. For every baseline payload and candidate runner/worker, read source bytes once, authenticate against original seal or candidate binding, write exactly those approved bytes, then immediately authenticate the copy. All baseline copies complete before intentional fixture overrides. Before emitting a fixture seal, compare the entire final payload digest map with the approved baseline/candidate map plus only the explicit generated overrides; never adopt arbitrary changed copied bytes.",
+  "exception_cleanup_contract": "PF-01: after a controller exception, TERM only the still-live retained runner Popen handle, recording any termination error. Wait/reap that same handle using max(0, original controller time remaining minus0.5 receipt reserve). Record wait budget, timeout/reap error and returncode. Unreaped scope remains FAILED_OR_UNKNOWN_HELD; never signal arbitrary numeric PIDs/groups, reset a deadline or claim independent scope resolution.",
+  "review_dispositions": {
+    "PF-01": {
+      "status": "implemented_source_only_awaiting_bounded_confirmation",
+      "reason": "Exception path now retains the runner handle through a bounded wait/reap and records pending/termination/reap errors within the original60 seconds."
+    },
+    "Q16_final_predicate": {
+      "status": "pending_final_core_source",
+      "reason": "Keep the existing exact nonce_mismatch/identity-observation predicate until the corrected core reports its literal post-ACK receipt-integrity failure. Do not accept arbitrary errors; bind the actual tamper family and private injection evidence, then refresh exact candidate hashes."
+    }
+  }
 }
