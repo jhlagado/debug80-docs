@@ -1,0 +1,1128 @@
+diff --git a/tec-os/editorial/reader-rewrite/site-verification/build_and_check.py b/tec-os/editorial/reader-rewrite/site-verification/build_and_check.py
+index b73f497..de5aae3 100644
+--- a/tec-os/editorial/reader-rewrite/site-verification/build_and_check.py
++++ b/tec-os/editorial/reader-rewrite/site-verification/build_and_check.py
+@@ -1,5 +1,6 @@
+ """Exactly one build followed by one checker, inside the memory guard."""
+ import argparse
++from datetime import datetime
+ import json
+ from pathlib import Path
+ import subprocess
+@@ -11,6 +12,27 @@ from packet_inputs import durable_json, first_failure
+ PS_IDENTITY_ENV = {'TZ': 'UTC', 'LC_ALL': 'C', 'LANG': 'C'}
+ 
+ 
++def phase_stop_code(output):
++    """A visible stop is nonzero; an unpublished parent latch is not visible."""
++    for name in ('stop-requested.json', 'first-failure.json'):
++        path = output / name
++        if path.exists():
++            try:
++                code = int(json.loads(path.read_text()).get('exit_code', 1))
++                return code if 1 <= code <= 255 else 1
++            except (OSError, ValueError, TypeError, AttributeError, OverflowError):
++                return 1
++    return None
++
++
++def worker_identity_budget(context, wall_now):
++    """Use the bound UTC deadline, not another process's monotonic origin."""
++    deadline = datetime.fromisoformat(context['absolute_deadline_utc'].replace('Z', '+00:00'))
++    if deadline.utcoffset() is None or deadline.utcoffset().total_seconds() != 0:
++        raise ValueError('worker deadline must be UTC')
++    return min(2.0, max(0.0, deadline.timestamp() - wall_now - 3.0))
++
++
+ def main():
+     parser = argparse.ArgumentParser()
+     parser.add_argument('--context', required=True)
+@@ -19,22 +41,46 @@ def main():
+     output = Path(context['output'])
+     # No build child starts until the outer invocation has durably bound this
+     # detached group. The guard may die before an ancestry poll sees it.
+-    birth = subprocess.check_output(['/bin/ps', '-o', 'lstart=', '-p', str(os.getpid())],
+-                                    text=True, timeout=0.5,
+-                                    env={**os.environ, **PS_IDENTITY_ENV}).strip()
++    stop_code = phase_stop_code(output)
++    if stop_code is not None:
++        return stop_code
++    budget = worker_identity_budget(context, time.time())
++    if budget <= 0:
++        first_failure(output, 'absolute-deadline', 'no worker identity-query budget remains', 124)
++        return 124
++    query_started = time.monotonic()
++    try:
++        birth = subprocess.check_output(['/bin/ps', '-o', 'lstart=', '-p', str(os.getpid())],
++                                        text=True, timeout=budget,
++                                        env={**os.environ, **PS_IDENTITY_ENV}).strip()
++    except (subprocess.SubprocessError, OSError, ValueError) as error:
++        detail = {'message': str(error), 'query_error': type(error).__name__,
++                  'effective_budget_seconds': budget,
++                  'elapsed_seconds': time.monotonic() - query_started}
++        first_failure(output, 'ownership-observation', detail, 124)
++        return 124
++    query_elapsed = time.monotonic() - query_started
+     ownership = {'nonce': context['nonce'], 'context_sha256': digest(args.context),
+                  'pid': os.getpid(), 'pgid': os.getpgrp(), 'birth': birth,
+                  'parent_pid': os.getppid(), 'guard_pid': int(os.environ['ORIGO_GUARD'])}
+     ownership['birth_environment'] = PS_IDENTITY_ENV
++    ownership['identity_query_budget_seconds'] = budget
++    ownership['identity_query_elapsed_seconds'] = query_elapsed
+     if ownership['pid'] != ownership['pgid'] or not birth:
+         first_failure(output, 'ownership', 'guard did not create a dedicated job group', 1)
+         return 1
+     ownership_path = output / 'job-ownership.json'
+     durable_json(ownership_path, ownership, exclusive=True)
+-    until = time.monotonic() + 2
++    until = time.monotonic() + worker_identity_budget(context, time.time())
+     ack_path = output / 'job-ack.json'
+     while not ack_path.exists() and time.monotonic() < until:
++        stop_code = phase_stop_code(output)
++        if stop_code is not None:
++            return stop_code
+         time.sleep(0.02)
++    stop_code = phase_stop_code(output)
++    if stop_code is not None:
++        return stop_code
+     if not ack_path.exists():
+         first_failure(output, 'ownership', 'outer ownership acknowledgement missing', 1)
+         return 1
+@@ -50,8 +96,9 @@ def main():
+                      'expectations.json'), '--dist', str(Path(context['source']) /
+                      '.vitepress/dist'), '--receipt', str(output / 'checker.json')])]
+     for phase, command in commands:
+-        if (output / 'first-failure.json').exists():
+-            return json.loads((output / 'first-failure.json').read_text())['exit_code']
++        stop_code = phase_stop_code(output)
++        if stop_code is not None:
++            return stop_code
+         durable_json(output / (phase + '-started.json'), {'argv': command}, exclusive=True)
+         print('SITE_PHASE ' + phase + ' START', flush=True)
+         result = subprocess.run(command, cwd=context['source'], stdin=subprocess.DEVNULL)
+diff --git a/tec-os/editorial/reader-rewrite/site-verification/run_once.py b/tec-os/editorial/reader-rewrite/site-verification/run_once.py
+index 64ebb9b..23313de 100644
+--- a/tec-os/editorial/reader-rewrite/site-verification/run_once.py
++++ b/tec-os/editorial/reader-rewrite/site-verification/run_once.py
+@@ -63,6 +63,29 @@ def durable_json(path, value, exclusive=False):
+         os.close(directory)
+ 
+ 
++def prepare_receipt(path, value):
++    """Durable preparation only. Publication is a separate atomic link."""
++    path = Path(path)
++    temporary = path.with_name('.' + path.name + '.' + secrets.token_hex(12) + '.tmp')
++    fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
++    try:
++        data = canonical(value)
++        while data:
++            data = data[os.write(fd, data):]
++        os.fsync(fd)
++    finally:
++        os.close(fd)
++    return temporary
++
++
++def sync_directory(path):
++    fd = os.open(path, os.O_RDONLY)
++    try:
++        os.fsync(fd)
++    finally:
++        os.close(fd)
++
++
+ def first_failure(output, stage, detail, code):
+     try:
+         durable_json(Path(output) / 'first-failure.json', {
+@@ -78,6 +101,353 @@ class Failed(Exception):
+         self.code = code
+ 
+ 
++def query_budget(now, soft_deadline, hard_deadline, cleanup_phase=False):
++    boundary = hard_deadline if cleanup_phase else soft_deadline
++    return min(0.5 if cleanup_phase else 2.0, max(0.0, boundary - now))
++
++
++def validate_ownership(ownership, context, rows, guard_alive):
++    worker = next((row for row in rows if row[0] == ownership['pid']), None)
++    errors = []
++    for key, expected in (('nonce', context['nonce']),
++                          ('context_sha256', context['sha256']),
++                          ('birth_environment', PS_IDENTITY_ENV)):
++        if ownership.get(key) != expected:
++            errors.append(key + '_mismatch')
++    if ownership['pgid'] != ownership['pid'] or ownership['parent_pid'] != ownership['guard_pid']:
++        errors.append('declared_parent_or_group_mismatch')
++    if worker is None:
++        errors.append('worker_pid_not_observed')
++    else:
++        for actual, expected, name in ((worker[1], ownership['guard_pid'], 'parent'),
++                                       (worker[2], ownership['pgid'], 'group'),
++                                       (worker[3], ownership['birth'], 'birth')):
++            if actual != expected:
++                errors.append('observed_' + name + '_mismatch')
++    if not guard_alive:
++        errors.append('guard_not_live')
++    return errors
++
++
++def discover_owned(rows, roots, observed, job_groups):
++    known = {**observed, **roots}
++    reused = {pid for pid, _, _, birth in rows
++              if known.get(pid) is not None and known[pid] != birth}
++    kept = {pid for pid, _, _, birth in rows if known.get(pid) == birth}
++    groups = {pid for pid, _, _, birth in rows if roots.get(pid) == birth}
++    retained_groups = dict(job_groups)
++    for group, birth in job_groups.items():
++        leader = next((row for row in rows if row[0] == group), None)
++        if not any(row[2] == group for row in rows) or (leader and leader[3] != birth):
++            retained_groups.pop(group, None)
++        else:
++            groups.add(group)
++    changed = True
++    while changed:
++        changed = False
++        for pid, parent, group, _ in rows:
++            if pid not in kept and pid not in reused and (parent in kept or group in groups):
++                kept.add(pid)
++                changed = True
++    return [row for row in rows if row[0] in kept], retained_groups
++
++
++class InvocationState:
++    """Source-only candidate seams. Record callbacks do I/O outside the latch.
++
++    Snapshots cover observed identities, not every historical descendant.
++    A worker can cross a phase checkpoint before main publishes its marker.
++    """
++    def __init__(self, deadline, clock=time.monotonic):
++        self.deadline, self.soft_deadline, self.clock = deadline, deadline - 3, clock
++        self.lock = threading.RLock()
++        self.failure_lock = threading.RLock()
++        self.pending_failures = []
++        self.stopping = threading.Event()
++        self.signal_requested = threading.Event()
++        self.failure = None
++        self.final_code = None
++        self.roots, self.observed, self.children, self.job_groups = {}, {}, {}, {}
++        self.history = []
++        self.last_rows = None
++        self.last_success_id = None
++        self.query_id = 0
++        self.acknowledged = False
++        self.accepted_ownership_sha256 = None
++
++    def _adopt_pending(self):
++        # Caller holds both state and failure locks. The first queued identity
++        # already exists even if its requesting thread is waiting for state.lock.
++        if self.failure is None and self.pending_failures:
++            self.failure = self.pending_failures[0]
++
++    def _queue_stop(self, failure):
++        # No receipt/audit/ownership lock is required to retain the first cause.
++        # Final publication uses this same short latch lock.
++        with self.failure_lock:
++            if self.final_code is not None:
++                return False
++            if failure not in self.pending_failures:
++                self.pending_failures.append(failure)
++            self.stopping.set()
++            self.signal_requested.set()
++        with self.lock, self.failure_lock:
++            self._adopt_pending()
++        return True
++
++    def request_stop(self, stage, detail, code=124):
++        return self._queue_stop({
++            'status': 'FAILED', 'stage': stage, 'detail': detail,
++            'exit_code': code if 0 < code < 256 else 1, 'retry': False,
++            'utc': datetime.now(timezone.utc).isoformat()})
++
++    def import_failure(self, failure):
++        code = failure.get('exit_code')
++        if not isinstance(code, int) or not 0 < code < 256:
++            raise Failed('malformed worker first-failure receipt')
++        # Import before a generic guard failure, never overwrite an earlier
++        # pending or latched parent cause. Preserve structured detail verbatim.
++        self._queue_stop(dict(failure))
++        with self.lock, self.failure_lock:
++            if self.final_code is None and self.failure != failure:
++                conflict = {'kind': 'failure-receipt-conflict',
++                            'latched': self.failure, 'receipt': dict(failure)}
++                if conflict not in self.history:
++                    self.history.append(conflict)
++
++    def query(self, query_once, record, cleanup_phase=False):
++        planned = query_budget(self.clock(), self.soft_deadline, self.deadline, cleanup_phase)
++        with self.lock:
++            self.query_id += 1
++            query_id = self.query_id
++        intent = {'query_id': query_id, 'planned_budget': planned,
++                  'cleanup_phase': cleanup_phase, 'last_success_id': self.last_success_id}
++        launch_data = {}
++        launch_checked_budget = planned if planned <= 0 else None
++        try:
++            if planned <= 0:
++                self.request_stop('absolute-deadline', 'no identity query budget', 124)
++                raise Failed('no identity query budget', 124)
++            record('query-intent', **intent)
++
++            def launch(spawn):
++                nonlocal launch_checked_budget
++                # Serialize the stop check/launch intent, not native Popen.
++                # While Popen is blocked there may be no returned handle yet.
++                with self.lock:
++                    with self.failure_lock:
++                        self._adopt_pending()
++                        if launch_data:
++                            raise Failed('identity adapter attempted a second launch', 124)
++                        start = self.clock()
++                        budget = query_budget(start, self.soft_deadline,
++                                              self.deadline, cleanup_phase)
++                        launch_checked_budget = budget
++                        if budget <= 0:
++                            self.request_stop('absolute-deadline', 'query intent consumed remaining budget', 124)
++                        if budget <= 0 or (self.stopping.is_set() and not cleanup_phase):
++                            raise Failed('identity query stopped before launch', 124)
++                        launch_data.update(start=start, effective_budget=budget)
++                    # The actual adapter registers the returned handle before
++                    # any I/O and repeats bound cleanup if stop crossed spawn.
++                    return spawn(budget)
++
++            rows = query_once(launch)
++            if not launch_data:
++                raise Failed('identity adapter did not register launch', 124)
++            finished = self.clock()
++            self.last_success_id = query_id
++            record('query-finished', **intent, **launch_data, end=finished, outcome='ok',
++                   elapsed=finished - launch_data['start'],
++                   exceeded_old_half_second=finished - launch_data['start'] > 0.5)
++            return rows
++        except BaseException as error:
++            finished = self.clock()
++            self.request_stop('identity-observation', {
++                'message': str(error), 'query_error': type(error).__name__,
++                'query_id': query_id, 'finished': finished,
++                'elapsed_seconds': finished - launch_data.get('start', finished),
++                **launch_data}, 124)
++            # Failure is latched and signalling awake before completion-log I/O.
++            # No launch means no effective execution budget or start timestamp.
++            # Preserve the separately recomputed budget even when stop refused it.
++            completion = {**launch_data,
++                          'effective_budget': launch_data.get('effective_budget', 0.0),
++                          'launch_checked_budget': launch_checked_budget}
++            record('query-failed' if launch_data else 'query-not-launched',
++                   **intent, end=finished, outcome=type(error).__name__, **completion)
++            raise Failed('identity observation unavailable', 124) from error
++
++    def register_child(self, child, argv):
++        with self.lock:
++            self.children[child.pid] = child
++            self.roots[child.pid] = None
++            self.history.append({'kind': 'direct-child', 'pid': child.pid,
++                                 'birth': None, 'argv': argv})
++
++    def stop_new_child(self, child, cleanup_phase=False):
++        expired = self.clock() >= (self.deadline if cleanup_phase else self.soft_deadline)
++        if expired or (not cleanup_phase and
++                       (self.stopping.is_set() or self.signal_requested.is_set())):
++            # The independent one-shot signaller may already have completed.
++            # A handle returned after it still receives immediate cleanup.
++            for signum in (signal.SIGTERM, signal.SIGKILL):
++                try:
++                    child.send_signal(signum)
++                except BaseException:
++                    pass
++            return True
++        return False
++
++    def bind_group(self, ownership):
++        with self.lock:
++            pid, birth = ownership['pid'], ownership['birth']
++            self.job_groups[pid] = birth
++            self.roots[pid] = birth
++            self.history.append({'kind': 'ack-group', **ownership})
++
++    def publish_ack(self, prepare, publish, ownership_sha256=None):
++        prepared = prepare()  # Durable file preparation outside the failure lock.
++        with self.lock, self.failure_lock:
++            self._adopt_pending()
++            if self.stopping.is_set() or self.clock() >= self.soft_deadline:
++                raise Failed('stop prevents ownership ACK', 124)
++            publish(prepared)  # Atomic link only, no fsync/record operations here.
++            self.accepted_ownership_sha256 = ownership_sha256
++            self.acknowledged = True
++
++    def observe(self, rows):
++        with self.lock:
++            found, groups = discover_owned(rows, self.roots, self.observed, self.job_groups)
++            current = {row[0]: row[3] for row in rows}
++            for pid, birth in self.observed.items():
++                if current.get(pid) != birth:
++                    self.history.append({'kind': 'exit-or-reuse', 'pid': pid,
++                                         'birth': birth, 'observed_birth': current.get(pid)})
++            for row in found:
++                if self.observed.get(row[0]) != row[3]:
++                    self.history.append({'kind': 'discovered', 'identity': row})
++            self.observed.update({row[0]: row[3] for row in found})
++            # Keep cumulative PID/birth history even after live registrations end.
++            for group in tuple(self.job_groups):
++                if group not in groups:
++                    self.job_groups.pop(group, None)
++            self.job_groups.update(groups)
++            self.last_rows = list(rows)
++            return found
++
++    def snapshot(self):
++        with self.lock:
++            return {'history': list(self.history), 'roots': dict(self.roots),
++                    'groups': dict(self.job_groups), 'observed': dict(self.observed),
++                    'last_success_id': self.last_success_id, 'last_rows': self.last_rows,
++                    'first_failure': self.failure,
++                    'accepted_ownership_sha256': self.accepted_ownership_sha256}
++
++    def final_audit_disposition(self, rows):
++        # A missing birth never establishes that a retained direct handle exited.
++        # Snapshot handles briefly, then poll without failure/audit-I/O locks.
++        with self.lock:
++            handles = [(pid, child, self.roots.get(pid))
++                       for pid, child in self.children.items()]
++        direct = []
++        unresolved = rows is None
++        live = bool(rows)
++        for pid, child, birth in handles:
++            entry = {'pid': pid, 'birth': birth}
++            try:
++                code = child.poll()
++                if code is None:
++                    entry['status'] = 'LIVE'
++                    live = True
++                elif type(code) is not int:
++                    raise ValueError('direct handle poll returned no valid exit code')
++                else:
++                    entry.update(status='REAPED', exit_code=code)
++                    with self.lock:
++                        self.history.append({'kind': 'direct-audit-exit', **entry})
++                        # Retire this handle only, never authority for a new PID
++                        # birth or a separately bound acknowledged worker group.
++                        if self.children.get(pid) is child:
++                            self.children.pop(pid, None)
++                            if pid not in self.job_groups and self.roots.get(pid) == birth:
++                                self.roots.pop(pid, None)
++            except BaseException as error:
++                entry.update(status='UNRESOLVED', error=str(error),
++                             error_type=type(error).__name__)
++                unresolved = True
++            direct.append(entry)
++        return {'status': 'UNKNOWN_HELD' if unresolved else ('HELD' if live else 'CLEAR'),
++                'remaining': rows, 'direct_handles': direct, 'registry': self.snapshot()}
++
++    def signal_bound(self, sig, group_signal, handle_signal):
++        # Never acquire failure/audit/receipt locks or wait for query completion.
++        for group in tuple(self.job_groups.copy()):
++            try:
++                group_signal(group, sig)
++            except BaseException:
++                pass
++        for child in self.children.copy().values():
++            try:
++                handle_signal(child, sig)
++            except BaseException:
++                pass
++
++    def soft_stop(self):
++        if self.clock() >= self.soft_deadline:
++            # Wake bound signalling without an ownership or receipt lock.
++            self.signal_requested.set()
++            self.request_stop('absolute-deadline', 'cleanup reserve reached', 124)
++
++    def signal_escalation(self, group_signal, handle_signal, wait):
++        self.signal_bound(signal.SIGTERM, group_signal, handle_signal)
++        wait(min(0.4, max(0.0, self.deadline - self.clock())))
++        self.signal_bound(signal.SIGKILL, group_signal, handle_signal)
++
++    def commit_decision(self, audit, observer_quiet, expected_code,
++                        expected_failure, publish):
++        with self.lock, self.failure_lock:
++            code = self.decision(audit, observer_quiet)
++            if code != expected_code or canonical(self.failure) != expected_failure:
++                return False
++            publish()  # Atomic link only, prepared and fsynced outside the latch.
++            self.final_code = code
++            return True
++
++    def decision(self, audit, observer_quiet):
++        with self.lock, self.failure_lock:
++            self._adopt_pending()
++            if self.failure is None and self.stopping.is_set():
++                # A bare externally set stop is never acceptance evidence.
++                self.request_stop('pending-stop', 'stop set without a retained cause', 124)
++            if self.failure is None:
++                if (not observer_quiet or audit is None or audit.get('status') != 'CLEAR'
++                        or audit.get('remaining') != []):
++                    self.request_stop('final-audit', 'fresh audit/quiescence missing', 124)
++                elif not self.acknowledged:
++                    self.request_stop('ownership', 'validated ownership ACK missing', 124)
++                elif self.clock() >= self.soft_deadline:
++                    self.request_stop('absolute-deadline', 'terminal soft deadline reached', 124)
++            return self.failure['exit_code'] if self.failure else 0
++
++
++def hard_stop(groups, children, killpg=os.killpg, kill=os.kill, exit_now=os._exit):
++    # Direct signals only. This is independent of normal cleanup/receipt locks.
++    try:
++        for group in tuple(groups.copy()):
++            try:
++                killpg(group, signal.SIGKILL)
++            except BaseException:
++                pass
++        for pid in tuple(children.copy()):
++            try:
++                kill(pid, signal.SIGKILL)
++            except BaseException:
++                pass
++    finally:
++        exit_now(124)
++
++
+ def main():
+     parser = argparse.ArgumentParser()
+     parser.add_argument('--packet', required=True)
+@@ -106,17 +476,18 @@ def main():
+         'retry': False, 'deadline_includes': 'preflight, copy, guard, build, checker and cleanup'
+     }, exclusive=True)
+     stage = ['preflight']
+-    roots = {}
+-    observed = {}
+-    children = {}
++    state = InvocationState(deadline)
++    roots, observed, children = state.roots, state.observed, state.children
++    job_groups = state.job_groups
+     done = threading.Event()
+-    stopping = threading.Event()
+-    terminal_lock = threading.Lock()
++    terminal_complete = threading.Event()
++    stopping = state.stopping
++    terminal_lock = state.lock
+     audit_lock = threading.RLock()
+-    final_code = [None]
+-    job_groups = {}
++    event_lock = threading.Lock()
++    registry_io_lock = threading.Lock()
++    query_launch = [None]
+     context_identity = [None]
+-    last_ownership_observation = [None]
+     events = os.open(output / 'events.jsonl', os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+     stream = os.open(output / 'stream.log', os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+ 
+@@ -125,9 +496,10 @@ def main():
+             data = data[os.write(fd, data):]
+ 
+     def event(kind, **fields):
+-        write_all(events, canonical({'event': kind, 'utc': datetime.now(timezone.utc).isoformat(),
+-                                     'stage': stage[0], **fields}))
+-        os.fsync(events)
++        with event_lock:
++            write_all(events, canonical({'event': kind, 'utc': datetime.now(timezone.utc).isoformat(),
++                                         'stage': stage[0], **fields}))
++            os.fsync(events)
+ 
+     def interrupted(signum, frame):
+         raise Failed('invocation interrupted by signal ' + str(signum), 128 + signum)
+@@ -135,180 +507,215 @@ def main():
+     for signum in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP):
+         signal.signal(signum, interrupted)
+ 
++    def persist_registry():
++        with registry_io_lock:
++            durable_json(output / 'ownership-history.json', state.snapshot())
++
+     def fail(where, detail, code):
+-        with terminal_lock:
+-            if final_code[0] is not None:
+-                return False
+-            stopping.set()
++        # Worker may have exclusively published its earlier specific failure.
++        try:
++            import_worker_failure()
++        except BaseException as error:
++            state.request_stop('failure-receipt', str(error), 124)
++        return state.request_stop(where, detail, code)
++
++    def import_worker_failure():
++        path = output / 'first-failure.json'
++        if path.exists():
++            state.import_failure(json.loads(path.read_text()))
++
++    def flush_failure():
++        import_worker_failure()
++        with state.lock:
++            failure = state.failure
++        if failure is None:
++            return
++        try:
++            durable_json(output / 'first-failure.json', failure, exclusive=True)
++        except FileExistsError:
++            import_worker_failure()
++        # Publication is visibility-based, not instantaneous worker preemption.
++        durable_json(output / 'stop-requested.json', state.failure)
++        conflicts = [item for item in state.snapshot()['history']
++                     if item['kind'] == 'failure-receipt-conflict']
++        if conflicts:
++            durable_json(output / 'failure-receipt-conflicts.json', conflicts)
++
++    def finalize(status, detail='', audit=None, observer_quiet=False):
++        # Main alone calls this. Prepare/flush outside the latch, then commit
++        # only the still-current decision with one atomic link under the latch.
++        while True:
++            import_worker_failure()
++            if status != 'PASS' and state.failure is None:
++                state.request_stop(stage[0], detail, 1)
++            code = state.decision(audit, observer_quiet)
++            flush_failure()
++            with state.lock:
++                failure_identity = canonical(state.failure)
++            value = {'status': 'FAILED' if code else 'PASS', 'exit_code': code,
++                     'detail': detail, 'retry': False, 'seal_sha256': args.seal_sha256,
++                     'elapsed_seconds': time.monotonic() - ENTRY_MONO,
++                     'first_failure': state.failure}
++            prepared = prepare_receipt(output / 'terminal.json', value)
+             try:
+-                first_failure(output, where, detail, code)
+-            except OSError:
+-                # Receipt storage failure cannot permit a live job to continue.
+-                signal_bound(signal.SIGTERM)
+-                signal_bound(signal.SIGKILL)
+-                raise
+-            return True
+-
+-    def finalize(status, detail=''):
+-        with terminal_lock:
+-            if final_code[0] is not None:
+-                return final_code[0]
+-            failure_path = output / 'first-failure.json'
+-            if status == 'PASS' and time.monotonic() >= deadline - 3:
+-                first_failure(output, 'absolute-deadline', 'terminal receipt deadline reached', 124)
+-            if failure_path.exists():
+-                failure = json.loads(failure_path.read_text())
+-                status, code = 'FAILED', failure['exit_code']
+-            else:
+-                code = 0 if status == 'PASS' else 1
+-            durable_json(output / 'terminal.json', {
+-                'status': status, 'exit_code': code, 'detail': detail, 'retry': False,
+-                'seal_sha256': args.seal_sha256,
+-                'elapsed_seconds': time.monotonic() - ENTRY_MONO}, exclusive=True)
+-            final_code[0] = code
+-            done.set()
+-            return code
+-
+-    def process_rows():
+-        result = subprocess.run(['/bin/ps', '-axo', 'pid=,ppid=,pgid=,lstart='],
+-                                text=True, capture_output=True, timeout=0.5,
+-                                env={**os.environ, **PS_IDENTITY_ENV})
+-        if result.returncode:
+-            raise Failed('cannot audit owned processes')
++                import_worker_failure()
++                if not state.commit_decision(
++                        audit, observer_quiet, code, failure_identity,
++                        lambda: os.link(prepared, output / 'terminal.json')):
++                    continue
++                sync_directory(output)
++                terminal_complete.set()
++                return code
++            finally:
++                prepared.unlink(missing_ok=True)
++
++    def ps_once(launch, cleanup_phase=False):
++        argv = ['/bin/ps', '-axo', 'pid=,ppid=,pgid=,lstart=']
++        def spawn_query(budget):
++            child = subprocess.Popen(argv, text=True, stdout=subprocess.PIPE,
++                                     stderr=subprocess.PIPE,
++                                     env={**os.environ, **PS_IDENTITY_ENV})
++            state.register_child(child, argv)  # Memory only, before any wait/I/O.
++            state.stop_new_child(child, cleanup_phase)
++            return child
++        child = launch(spawn_query)
+         rows = []
+-        for line in result.stdout.splitlines():
+-            if line.strip():
+-                pid, parent, group, birth = line.split(None, 3)
+-                rows.append((int(pid), int(parent), int(group), birth.strip()))
+-        return rows
++        try:
++            # Launch overhead consumes the same query budget, not a fresh one.
++            try:
++                stdout, stderr = child.communicate(timeout=max(
++                    0.0, query_launch[0]['start'] + query_launch[0]['effective_budget']
++                    - time.monotonic()))
++            except BaseException as error:
++                state.request_stop('identity-observation', {
++                    'message': str(error), 'query_error': type(error).__name__,
++                    'effective_budget_seconds': query_launch[0]['effective_budget'],
++                    'elapsed_seconds': time.monotonic() - query_launch[0]['start']}, 124)
++                try:
++                    child.kill()
++                except ProcessLookupError:
++                    pass
++                # One query only. Reap is bounded by the original hard deadline;
++                # the registered live helper remains reachable by hard_stop.
++                child.communicate(timeout=max(0.0, deadline - time.monotonic()))
++                raise
++            if child.returncode:
++                raise Failed('cannot audit owned processes: ' + stderr, 124)
++            for line in stdout.splitlines():
++                if line.strip():
++                    pid, parent, group, birth = line.split(None, 3)
++                    if not birth.strip():
++                        raise Failed('empty process birth identity', 124)
++                    rows.append((int(pid), int(parent), int(group), birth.strip()))
++            if not rows or not any(row[0] == os.getpid() for row in rows):
++                raise Failed('global process observation is empty or omits the runner', 124)
++            if len({row[0] for row in rows}) != len(rows):
++                raise Failed('duplicate process identities in global observation', 124)
++            return rows
++        finally:
++            if child.returncode is not None:
++                birth = next((row[3] for row in rows if row[0] == child.pid), None)
++                with state.lock:
++                    state.history.append({'kind': 'identity-query-exit', 'pid': child.pid,
++                                          'birth': birth, 'exit_code': child.returncode})
++                    roots.pop(child.pid, None)
++                    children.pop(child.pid, None)
++
++    def process_rows(cleanup_phase=False):
++        # Queries are serialized by audit_lock. The launch callback captures the
++        # exact effective launch budget for the production adapter, not a retry.
++        def query_once(launch):
++            def tracked_launch(spawn):
++                def tracked_spawn(budget):
++                    query_launch[0] = {'start': time.monotonic(), 'effective_budget': budget}
++                    return spawn(budget)
++                return launch(tracked_spawn)
++            return ps_once(tracked_launch, cleanup_phase)
++        with audit_lock:
++            return state.query(query_once, event, cleanup_phase)
+ 
+-    def owned_unlocked():
+-        rows = process_rows()
++    def owned_unlocked(cleanup_phase=False):
++        rows = process_rows(cleanup_phase)
++        import_worker_failure()
+         ownership_path = output / 'job-ownership.json'
+-        if context_identity[0] is not None and ownership_path.exists():
+-            ownership = json.loads(ownership_path.read_text())
+-            pid = ownership['pid']
+-            observed_worker = next((row for row in rows if row[0] == pid), None)
++        ownership = None
++        ack_ready = False
++        errors = []
++        if context_identity[0] is not None and (state.acknowledged or ownership_path.exists()):
++            ownership_bytes = ownership_path.read_bytes()
++            ownership_sha256 = hashlib.sha256(ownership_bytes).hexdigest()
++            # Check the accepted write-once bytes before interpreting any later
++            # PID/group/birth fields. Never replace already bound authority.
++            if state.acknowledged and ownership_sha256 != state.accepted_ownership_sha256:
++                state.request_stop('identity-observation', {
++                    'message': 'job ownership receipt hash mismatch',
++                    'expected_sha256': state.accepted_ownership_sha256,
++                    'observed_sha256': ownership_sha256}, 124)
++                raise Failed('job ownership receipt hash mismatch', 124)
++            ownership = json.loads(ownership_bytes)
+             guard = children.get(ownership['guard_pid'])
+-            ack_path = output / 'job-ack.json'
+             guard_alive = guard is not None and guard.poll() is None
+-            mismatches = []
+-            if ownership['nonce'] != context_identity[0]['nonce']:
+-                mismatches.append('nonce_mismatch')
+-            if ownership['context_sha256'] != context_identity[0]['sha256']:
+-                mismatches.append('context_hash_mismatch')
+-            if ownership.get('birth_environment') != PS_IDENTITY_ENV:
+-                mismatches.append('birth_environment_mismatch')
+-            if ownership['pgid'] != pid or ownership['parent_pid'] != ownership['guard_pid']:
+-                mismatches.append('declared_parent_or_group_mismatch')
+-            if observed_worker is None:
+-                mismatches.append('worker_pid_not_observed')
+-            else:
+-                if observed_worker[2] != ownership['pgid']:
+-                    mismatches.append('observed_group_mismatch')
+-                if observed_worker[3] != ownership['birth']:
+-                    mismatches.append('observed_birth_mismatch')
+-            if guard is None:
+-                mismatches.append('guard_not_registered')
+-            elif not guard_alive:
+-                mismatches.append('guard_not_live')
+-            observation = {
+-                'ack_published': ack_path.exists(), 'birth_environment': PS_IDENTITY_ENV,
+-                'expected_worker': {key: ownership[key] for key in ('pid', 'pgid', 'birth')},
+-                'worker_receipt_birth_environment': ownership.get('birth_environment'),
+-                'observed_worker': (dict(zip(('pid', 'parent_pid', 'pgid', 'birth'), observed_worker))
+-                                    if observed_worker is not None else None),
+-                'guard_pid': ownership['guard_pid'], 'guard_registered': guard is not None,
+-                'guard_live': guard_alive, 'stopping': stopping.is_set(),
+-                'first_failure_published': (output / 'first-failure.json').exists(),
+-                'mismatches': mismatches}
+-            signature = canonical(observation)
+-            if signature != last_ownership_observation[0]:
+-                durable_json(output / 'ownership-diagnostic.json', observation)
+-                event('ownership-observation', **observation)
+-                last_ownership_observation[0] = signature
+-            fatal = {'nonce_mismatch', 'context_hash_mismatch', 'birth_environment_mismatch',
+-                     'declared_parent_or_group_mismatch'}
+-            if fatal.intersection(mismatches):
+-                raise Failed('job ownership declaration mismatch: ' + ', '.join(mismatches))
+-            matching = observed_worker is not None and not any(
+-                item in mismatches for item in ('observed_group_mismatch', 'observed_birth_mismatch'))
+-            if not ack_path.exists() and matching and guard_alive:
+-                with terminal_lock:
+-                    job_groups[pid] = ownership['birth']
+-                    roots[pid] = ownership['birth']
+-                    if not stopping.is_set() and not (output / 'first-failure.json').exists():
+-                        durable_json(ack_path, {'nonce': ownership['nonce'],
+-                                     'ownership_sha256': digest(ownership_path)}, exclusive=True)
+-                        event('ownership-acknowledged', worker_pid=pid,
+-                              worker_group=ownership['pgid'], birth=ownership['birth'],
+-                              birth_environment=PS_IDENTITY_ENV)
+-        root_snapshot = roots.copy()
+-        known = {**observed.copy(), **root_snapshot}
+-        # A PID alone is not an owned process identity after it has exited.
+-        kept = {pid for pid, _, _, birth in rows if known.get(pid) == birth}
+-        groups = {pid for pid, _, _, birth in rows if root_snapshot.get(pid) == birth}
+-        for group, birth in tuple(job_groups.items()):
+-            leader = next((row for row in rows if row[0] == group), None)
+-            members = [row for row in rows if row[2] == group]
+-            if not members or (leader is not None and leader[3] != birth):
+-                job_groups.pop(group, None)
+-                roots.pop(group, None)
+-            else:
+-                groups.add(group)
+-        changed = True
+-        while changed:
+-            changed = False
+-            for pid, parent, group, _ in rows:
+-                if pid not in kept and (parent in kept or group in groups):
+-                    kept.add(pid)
+-                    changed = True
+-        found = [row for row in rows if row[0] in kept]
+-        observed.update({row[0]: row[3] for row in found})
++            errors = validate_ownership(ownership, context_identity[0], rows, guard_alive)
++            # Declaration corruption stays fatal even after ACK. Transient
++            # absence after a valid ACK is dispositioned by observed closure.
++            fatal = {'nonce_mismatch', 'context_sha256_mismatch',
++                     'birth_environment_mismatch', 'declared_parent_or_group_mismatch'}
++            if fatal.intersection(errors):
++                state.observe(rows)
++                state.request_stop('identity-observation', {'mismatches': errors}, 124)
++                raise Failed('job ownership declaration mismatch: ' + ', '.join(errors), 124)
++            if not (output / 'job-ack.json').exists():
++                invalid_identity = {'observed_parent_mismatch', 'observed_group_mismatch',
++                                    'observed_birth_mismatch'}
++                if invalid_identity.intersection(errors):
++                    state.request_stop('identity-observation', {'mismatches': errors}, 124)
++                    raise Failed('job ownership identity mismatch: ' + ', '.join(errors), 124)
++                # A successful global snapshot can precede receipt publication.
++                # Missing worker/guard stays pending, without ACK, until another
++                # successful observation or the unchanged worker ACK deadline.
++                if not errors:
++                    state.bind_group(ownership)  # Memory before all ACK I/O.
++                    ack_ready = True
++        found = state.observe(rows)
++        persist_registry()
++        if ack_ready:
++            value = {'nonce': ownership['nonce'], 'ownership_sha256': ownership_sha256}
++            prepared = []
++            def prepare_ack():
++                temp = prepare_receipt(output / 'job-ack.json', value)
++                prepared.append(temp)
++                return temp
++            try:
++                state.publish_ack(prepare_ack,
++                                  lambda temp: os.link(temp, output / 'job-ack.json'),
++                                  ownership_sha256=ownership_sha256)
++                sync_directory(output)
++                event('ownership-acknowledged', worker_pid=ownership['pid'],
++                      worker_group=ownership['pgid'], birth=ownership['birth'],
++                      birth_environment=PS_IDENTITY_ENV)
++            finally:
++                for temp in prepared:
++                    temp.unlink(missing_ok=True)
+         return found
+ 
+-    def owned():
++    def owned(cleanup_phase=False):
+         with audit_lock:
+-            return owned_unlocked()
++            try:
++                return owned_unlocked(cleanup_phase)
++            except BaseException as error:
++                state.request_stop('identity-observation', str(error), 124)
++                raise
+ 
+     def signal_bound(sig):
+-        # The acknowledged job group remains owned even if the guard has died
+-        # or a fresh process-table read is unavailable.
+-        for group in tuple(job_groups.copy()):
+-            try:
+-                os.killpg(group, sig)
+-            except ProcessLookupError:
+-                pass
+-        for child in children.copy().values():
++        def handle_signal(child, signum):
+             if child.poll() is None:
+-                child.send_signal(sig)
++                child.send_signal(signum)
++        state.signal_bound(sig, os.killpg, handle_signal)
+ 
+     def terminate(sig):
+-        try:
+-            rows = owned()
+-        except BaseException:
+-            signal_bound(sig)
+-            raise
+-        # Signal leaders first. The guard's TERM handler kills its detached job.
+-        live = {row[0]: row[3] for row in rows}
+-        for group in tuple(job_groups):
+-            if any(row[2] == group for row in rows):
+-                try:
+-                    os.killpg(group, sig)
+-                except ProcessLookupError:
+-                    pass
+-        for pid, birth in sorted(roots.copy().items()):
+-            if birth is None:
+-                child = children.get(pid)
+-                if child is not None and child.poll() is None:
+-                    child.send_signal(sig)
+-                continue
+-            if live.get(pid) != birth:
+-                continue
+-            try:
+-                os.kill(pid, sig)
+-            except ProcessLookupError:
+-                pass
++        # Independent signalling never calls this observation-dependent helper.
++        signal_bound(sig)
++        rows = owned(cleanup_phase=True)
+         for pid, _, _, _ in reversed(rows):
+             try:
+                 os.kill(pid, sig)
+@@ -318,32 +725,28 @@ def main():
+ 
+     def watchdog():
+         while not done.wait(0.1):
++            if stopping.is_set():
++                return
+             try:
+                 owned()
+-                if time.monotonic() < deadline - 3:
+-                    continue
+-                if not fail('absolute-deadline',
+-                            'stopping before the fixed deadline to include cleanup', 124):
+-                    return
+-                event('deadline-stop')
+-                terminate(signal.SIGTERM)
+-                time.sleep(0.4)
+-                terminate(signal.SIGKILL)
+-                audit = owned()
+-                durable_json(output / 'deadline-audit.json', {'remaining': audit}, exclusive=True)
+             except BaseException as error:
+-                if not fail('watchdog', str(error), 124):
+-                    return
+-                # Give the guard its TERM cleanup even when ps is unavailable.
+-                signal_bound(signal.SIGTERM)
+-                time.sleep(0.4)
+-                signal_bound(signal.SIGKILL)
+-                durable_json(output / 'deadline-audit.json',
+-                             {'clear': False, 'error': str(error)})
+-            os._exit(finalize('FAILED', 'watchdog stopped the invocation'))
++                state.request_stop('identity-observation', str(error), 124)
++                return  # No audit, terminal receipt or process exit here.
++
++    def soft_deadline():
++        if not terminal_complete.wait(max(0.0, deadline - 3 - time.monotonic())):
++            state.soft_stop()
++
++    def signalling_path():
++        state.signal_requested.wait()
++        def handle_signal(child, signum):
++            if child.poll() is None:
++                child.send_signal(signum)
++        state.signal_escalation(os.killpg, handle_signal, threading.Event().wait)
+ 
+     watcher = threading.Thread(target=watchdog, daemon=True)
+-    watcher.start()
++    soft_thread = threading.Thread(target=soft_deadline, daemon=True)
++    signal_thread = threading.Thread(target=signalling_path, daemon=True)
+ 
+     def hard_deadline():
+         # Never cancelled by receipt finalisation: final flush/close is still
+@@ -351,40 +754,67 @@ def main():
+         threading.Event().wait(max(0, deadline - time.monotonic()))
+         # No blocking audit, receipt writes or waits extend this final deadline.
+         # The soft stop normally has already retained first-failure/audit data.
+-        try:
+-            for group in tuple(job_groups.copy()):
+-                try:
+-                    os.killpg(group, signal.SIGKILL)
+-                except BaseException:
+-                    pass
+-            for pid in tuple(children.copy()):
+-                try:
+-                    os.kill(pid, signal.SIGKILL)
+-                except BaseException:
+-                    pass
+-        finally:
+-            os._exit(124)
++        hard_stop(job_groups, children)
+ 
+     deadline_thread = threading.Thread(target=hard_deadline, daemon=True)
+     deadline_thread.start()
++    soft_thread.start()
++    signal_thread.start()
++    watcher.start()
++
++    def quiesce_observer():
++        done.set()
++        watcher.join(timeout=max(0.0, deadline - 3 - time.monotonic()))
++        quiet = not watcher.is_alive()
++        if not quiet:
++            state.request_stop('observer-quiescence', 'observer did not quiesce before soft stop', 124)
++        return quiet
++
++    def final_audit(observer_quiet):
++        try:
++            if not observer_quiet:
++                raise Failed('observer still active; final observation unavailable', 124)
++            rows = owned(cleanup_phase=True)
++            audit = state.final_audit_disposition(rows)
++            if audit['status'] != 'CLEAR':
++                state.request_stop('final-audit', 'owned processes or unresolved direct handles remain', 124)
++        except BaseException as error:
++            state.request_stop('final-audit', str(error), 124)
++            audit = state.final_audit_disposition(None)
++            audit.update(status='UNKNOWN_HELD', clear=False, error=str(error))
++        durable_json(output / 'owned-process-audit.json', audit)
++        return audit
+ 
+     def command(argv, cwd=None, env=None):
++        import_worker_failure()
++        flush_failure()
++        event('command-start', argv=argv)
+         with terminal_lock:
+-            if stopping.is_set() or (output / 'first-failure.json').exists():
+-                raise Failed('failure latch prevents another command launch')
+-            event('command-start', argv=argv)
++            with state.failure_lock:
++                state._adopt_pending()
++                if stopping.is_set() or time.monotonic() >= deadline - 3:
++                    raise Failed('failure latch prevents another command launch', 124)
++            # Launch intent is serialized, Popen is not under the failure latch.
+             child = subprocess.Popen(argv, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
+                                      stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                      start_new_session=True)
+-            children[child.pid] = child
+-            roots[child.pid] = None
+-        birth = next((row[3] for row in process_rows() if row[0] == child.pid), None)
++            state.register_child(child, argv)
++            crossed_stop = state.stop_new_child(child)
++        if crossed_stop:
++            raise Failed('stop crossed child launch; returned handle signalled', 124)
++        event('direct-child-registered', pid=child.pid, birth=None, argv=argv)
++        persist_registry()
++        with audit_lock:
++            birth = next((row[3] for row in process_rows() if row[0] == child.pid), None)
+         if birth is not None:
+-            roots[child.pid] = birth
++            with state.lock:
++                roots[child.pid] = birth
++                state.history.append({'kind': 'direct-birth', 'pid': child.pid, 'birth': birth})
+         while True:
+             chunk = os.read(child.stdout.fileno(), 65536)
+             if not chunk:
+                 break
++            flush_failure()
+             write_all(stream, chunk)
+             os.fsync(stream)
+             try:
+@@ -392,13 +822,17 @@ def main():
+             except BrokenPipeError:
+                 pass
+         code = child.wait()
+-        roots.pop(child.pid, None)
+-        observed.pop(child.pid, None)
+-        children.pop(child.pid, None)
+-        event('command-end', code=code)
++        with state.lock:
++            state.history.append({'kind': 'direct-exit', 'pid': child.pid, 'birth': birth,
++                                  'exit_code': code})
++            roots.pop(child.pid, None)
++            children.pop(child.pid, None)
++        import_worker_failure()
+         if code:
+             code = code if code > 0 else 128 - code
+             fail(stage[0], 'command exited ' + str(code), code)
++        event('command-end', code=code)
++        if code:
+             raise Failed('command exited ' + str(code), code)
+ 
+     code = 1
+@@ -483,7 +917,8 @@ def main():
+             raise Failed('copied memory guard identity mismatch')
+         context = {'packet': str(packet), 'output': str(output), 'source': str(source),
+                    'node': seal['runtime']['node']['path'],
+-                   'python': seal['runtime']['python']['path'], 'nonce': secrets.token_hex(32)}
++                   'python': seal['runtime']['python']['path'], 'nonce': secrets.token_hex(32),
++                   'absolute_deadline_utc': args.deadline_utc}
+         durable_json(output / 'context.json', context, exclusive=True)
+         context_identity[0] = {'nonce': context['nonce'],
+                                'sha256': digest(output / 'context.json')}
+@@ -524,32 +959,34 @@ def main():
+         for name, expected in seal['payload'].items():
+             if digest(packet / name) != expected or digest(original_packet / name) != expected:
+                 raise Failed('packet input changed during invocation: ' + name)
+-        audit = owned()
+-        durable_json(output / 'owned-process-audit.json', {'remaining': audit}, exclusive=True)
+-        if audit:
+-            raise Failed('owned processes remain after guard completion')
+-        if time.monotonic() >= deadline - 3:
+-            raise Failed('insufficient time remains for a terminal receipt before the deadline')
+-        code = finalize('PASS')
++        observer_quiet = quiesce_observer()
++        audit = final_audit(observer_quiet)
++        code = finalize('PASS', audit=audit, observer_quiet=observer_quiet)
+     except BaseException as error:
++        # An exclusively published worker failure is imported before generic
++        # command/cleanup failures, including structured JSON detail.
+         code = error.code if isinstance(error, Failed) else 1
+         fail(stage[0], str(error), code)
++        try:
++            flush_failure()
++        except BaseException as receipt_error:
++            state.request_stop('failure-receipt', str(receipt_error), 124)
++        observer_quiet = quiesce_observer()
+         for sig in (signal.SIGTERM, signal.SIGKILL):
+             try:
+-                terminate(sig)
++                if observer_quiet:
++                    terminate(sig)
++                else:
++                    signal_bound(sig)
+             except BaseException as cleanup_error:
+-                event('cleanup-error', detail=str(cleanup_error))
++                state.request_stop('cleanup', str(cleanup_error), 124)
+             if sig == signal.SIGTERM:
+-                time.sleep(0.4)
+-        try:
+-            durable_json(output / 'owned-process-audit.json', {'remaining': owned()})
+-        except BaseException as cleanup_error:
+-            durable_json(output / 'owned-process-audit.json',
+-                         {'clear': False, 'error': str(cleanup_error)})
+-        code = finalize('FAILED', str(error))
++                threading.Event().wait(min(0.4, max(0.0, deadline - time.monotonic())))
++        audit = final_audit(observer_quiet)
++        flush_failure()
++        code = finalize('FAILED', str(error), audit, observer_quiet)
+     finally:
+         done.set()
+-        watcher.join(timeout=0.6)
+         os.fsync(stream)
+         os.close(stream)
+         os.close(events)

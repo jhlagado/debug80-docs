@@ -1,0 +1,209 @@
+{
+  "schema": 1,
+  "status": "full_source_review_changes_required",
+  "initial_requested_core_commit": "3679b7837a74e3eb45fd469a4c3645058b08aa99",
+  "reviewed_snapshot": "65223e8cd5472c3718e3d9a88060dd8372420872",
+  "snapshot_note": "Full source read includes committed ffaa486 and 65223e8 follow-ups that arrived during review. Findings bind this exact snapshot, not later fixes. No control-driver or fixture implementation clearance.",
+  "authority": "Origo fc90db15:studies/p3-tec-os/reviews/book-observer-repair-adoption.md, complete source adoption read",
+  "inputs": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+      "sha256": "b901dfb1b46a2114dc30fe960f98678e4fccc7e4c807c56df6d696b8291dd229",
+      "bytes": 42894,
+      "matches_current_at_record": false
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+      "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "bytes": 5656,
+      "matches_current_at_record": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "bytes": 4299,
+      "matches_current_at_record": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/invoke.sh",
+      "sha256": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e",
+      "bytes": 664,
+      "matches_current_at_record": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/observer-repair-authority.json",
+      "sha256": "cff8541f76105fe8e817d564c2843d0fcfd730370c9e19dfe5e024bbd42f9701",
+      "bytes": 2887,
+      "matches_current_at_record": true
+    }
+  ],
+  "findings": [
+    {
+      "id": "OBS01",
+      "priority": "P1",
+      "source": "run_once.py:232-245,508-515",
+      "lines": [
+        235,
+        245,
+        508,
+        515
+      ],
+      "title": "Identity-query Popen holds the short failure latch",
+      "reason": "query.launch calls spawn under both state.lock and failure_lock. Production spawn is subprocess.Popen plus registration. If process creation blocks, _queue_stop cannot acquire failure_lock to retain an observer failure or wake signalling. The soft deadline explicitly wakes signalling first, but an earlier observer failure cannot rely on that later timer to satisfy prompt-stop and first-cause contracts.",
+      "correction": "Keep failure_lock memory-only. Reserve/check launch intent under short locking, release before Popen, then immediately register the returned child and check pending stop. If stop arrived during creation, retain the handle/history and trigger cleanup of that child without claiming zero instructions ran in the publication/creation gap. Preserve hard cutoff and one-query semantics.",
+      "origin": "Lead independently identified this same current-code blocker."
+    },
+    {
+      "id": "OBS02",
+      "priority": "P1",
+      "source": "run_once.py:712-723; InvocationState._queue_stop",
+      "title": "Command child can arrive after the only escalation snapshots",
+      "reason": "command checks stopping while holding state.lock alone, then calls Popen. _queue_stop can queue failure and set stopping under failure_lock while that Popen is in flight. The one-shot signalling thread can take both TERM/KILL child snapshots before Popen returns and registration occurs. command does not recheck stop after registration and proceeds to persistence/identity observation. A late child can therefore survive the completed escalation until hard cutoff or later main cleanup.",
+      "correction": "Use the same explicit in-flight spawn/late-registration disposition for ordinary commands as for identity helpers. Once Popen returns, register first and, if stop is pending, immediately perform or schedule bound cleanup for that returned handle; do not repair this by holding failure_lock across Popen. Retain launch/registration/stopped-during-launch receipts.",
+      "future_control": "Inject a blocked command spawn, latch stop and allow escalation to complete before returning the fake child; its late registration must remain owned and receive cleanup without waiting until the hard deadline."
+    },
+    {
+      "id": "OBS03",
+      "priority": "P1",
+      "source": "run_once.py:132-152,269-274,696-709",
+      "title": "Final CLEAR can omit a live registered child whose birth is unknown",
+      "reason": "register_child stores roots[pid]=None. discover_owned includes only matching PID/birth or discovered ancestry/group closure; a root with unknown birth is not included even if its PID is present. final_audit chooses CLEAR solely from returned rows and does not disposition remaining Popen handles/unknown registrations. On failed birth observation or incomplete cleanup this can overstate resource closure. An already latched failure prevents site PASS, but does not make the CLEAR process-audit claim sound.",
+      "correction": "Final audit must disposition every retained direct child/helper using its live/reaped handle state and recorded identity. A known-live handle means HELD; an unresolved registration means UNKNOWN_HELD. Never infer absence solely from a missing birth match, and never turn bare PID reuse into authority. Retain dispositions in the audit/history.",
+      "future_control": "Inject a live direct child with unknown birth, successful otherwise-valid global rows and no discoverable owned ancestry/group; final audit must not be CLEAR. Include unresolved handle and confirmed-reaped variants."
+    }
+  ],
+  "known_issue_dispositions": [
+    {
+      "issue": "pre-ACK snapshot/receipt race",
+      "status": "fixed_in_65223e8",
+      "source": "run_once.py:572-622",
+      "support": "Successful snapshot lacking a later-published worker now remains pending without ACK; only declaration corruption and observed parent/group/birth mismatch fail immediately. Later successful observation is normal discovery, not a retry of a failed query. Worker original capped ACK wait remains."
+    },
+    {
+      "issue": "later worker receipt replaces earlier memory cause",
+      "status": "fixed",
+      "source": "run_once.py:177-215,458-506",
+      "support": "Pending failure queue adopts the first retained cause. Worker receipt is imported without overwriting earlier parent cause; conflicts are retained separately. Terminal embeds latched first failure and rechecks its identity, not merely its code."
+    },
+    {
+      "issue": "temporary empty group map during observation",
+      "status": "fixed",
+      "source": "run_once.py:292-309",
+      "support": "No clear-then-update window: retained groups are removed individually only when dispositioned, while surviving keys remain present for unlocked signalling snapshots."
+    },
+    {
+      "issue": "empty/invalid global observation accepted",
+      "status": "fixed",
+      "source": "run_once.py:520-548",
+      "support": "Production parser rejects empty rows, runner omission, empty birth and duplicate PIDs; failed observation cannot become empty closure."
+    },
+    {
+      "issue": "identity helper not registered",
+      "status": "fixed_subject_to_OBS01_OBS02",
+      "source": "run_once.py:508-557",
+      "support": "ps Popen is registered before waiting; helper reap and birth/exit are recorded and live helper remains in children if unreaped. Late-spawn stop handling remains open."
+    }
+  ],
+  "completed_checks": [
+    {
+      "scope": "Full runner/worker integration",
+      "result": "Read complete current source, baseline-to-candidate changes and adopted proposal. Parent includes original absolute_deadline_utc in context before hashing it; worker uses UTC soft remainder rather than sharing parent monotonic origin. Context hash/nonce/environment/actual parent/group/birth are validated before ACK."
+    },
+    {
+      "scope": "Budget and query adapter",
+      "result": "Ordinary cap2.0 and cleanup cap0.5 remain capped by original soft/hard deadlines. Query intent precedes recomputation immediately at launch. Failed queries latch before completion logging; production adapter uses one Popen/communicate, no query retry, and launch/parse/OS errors fail closed. All production queries now serialize through audit_lock, avoiding shared query_launch cross-talk. No empirical sufficiency claim."
+    },
+    {
+      "scope": "Ownership and durable history",
+      "result": "Direct children and ps helpers are memory-registered before waiting; validated group binds before ACK I/O. Registry snapshot persistence is serialized. Discovered identity and exit/reuse history retained; unknown handles remain OBS03. Unseen detached/reparented descendants remain outside complete historical coverage."
+    },
+    {
+      "scope": "Stop marker and worker",
+      "result": "Worker visible stop codes limited1..255 with malformed/overflow default1. Query error budget/elapsed/class recorded as structured first failure. Parent publishes first failure and stop marker from main; worker checkpoint sees only published files. Phase crossing before visibility remains explicitly possible. Group cleanup is still responsible."
+    },
+    {
+      "scope": "Timers and hard exit",
+      "result": "Soft timer/signalling independent of global query and receipt/audit waits in intended path. Hard_stop uses direct signals, per-target exception isolation and unconditional finally exit124. Main alone writes normal audit/terminal; observer only requests stop. OBS01 blocks prompt early observer stop during Popen and OBS02 permits late registration after escalation."
+    },
+    {
+      "scope": "Final failure serialization and audit freshness",
+      "result": "Production main quiesces observer, performs fresh cleanup-budget audit after input postflight, then prepares terminal outside latch and atomically rechecks code plus first-failure identity under state/failure locks. decision refuses pending stops, missing ACK, non-CLEAR/nonempty audit or soft-deadline exhaustion. The production call sequence supplies freshness; decision itself trusts caller-supplied audit/quiet values and has no query-ID freshness assertion. This is not an independently qualified control or arbitrary-input security guarantee."
+    },
+    {
+      "scope": "Protected reader/checker/source pins",
+      "result": "Protected file byte comparisons below are unchanged from adopted baseline. Source a3e4c29 and full source/dependency/config/runtime/guard checks remain in bootstrap/postflight. Reader text is not edited by this patch; 48 checker artifacts are unchanged. No new prepared seal or actual installed-tree verification is performed by this review."
+    },
+    {
+      "scope": "Bootstrap boundary",
+      "result": "Runner remains stdlib-only until self/payload hashes and private copies verified; helper then loaded from verified private path. Worker/checker run private copies under -S -B. Added test/fixture sources are outside this review and require separate source/input review and explicit allocation before use."
+    }
+  ],
+  "protected_input_comparisons": [
+    {
+      "name": "check_html.py",
+      "sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "expectations.json",
+      "sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "controls-result.json",
+      "sha256": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "config.before.ts",
+      "sha256": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "config.after.ts",
+      "sha256": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "config.diff",
+      "sha256": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "source-inputs.json",
+      "sha256": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "installed-inputs.json",
+      "sha256": "cfa02ccc86400c70240ca896dec4e4af85e6acb08dcdc6f5b72803732521b911",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "dependency-manifests.json",
+      "sha256": "8631dbb874c8e8e31cb90decb7cc1b968d0ebd7cf53f6a90895a1331107c2107",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "seal.json",
+      "sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+      "unchanged_from_adopted_baseline": true
+    }
+  ],
+  "control_followup": [
+    "Add blocked-spawn/late-registration interleavings for both identity helpers and commands, without running them during source review.",
+    "Add live/unknown/reaped direct-handle audit variants, plus existing observer quiescence, first-failure conflict and final-commit race cases.",
+    "Future Q01-Q14/public fixture sources and any results remain separate review scopes; no model-only or synthetic positive substitutes for the actual39-page checker/input/process acceptance."
+  ],
+  "actions": {
+    "source_edits": false,
+    "only_new_review_json_written": true,
+    "execution_import_test_probe_guard_build_validator": false,
+    "commit": false
+  },
+  "limits": [
+    "Changes-required source review, not allocation or runtime acceptance. Later core fixes need bounded hash-bound confirmation.",
+    "Internal2.0-query candidate does not alter measured180/850/450/wait0/reserve3/workers2/no-minification figures or establish sufficiency.",
+    "Historical failures and registered-hold releases stay unchanged. No universal lifecycle, escaped-process, physical hardware, browser or publication acceptance."
+  ]
+}
