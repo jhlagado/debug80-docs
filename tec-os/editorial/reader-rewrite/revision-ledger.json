@@ -14975,42 +14975,42 @@
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 149,
           "end": 149,
-          "subsection": "The 20 × 4 LCD",
+          "subsection": "The 20 \u00d7 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 151,
           "end": 153,
-          "subsection": "The 20 × 4 LCD",
+          "subsection": "The 20 \u00d7 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 155,
           "end": 160,
-          "subsection": "The 20 × 4 LCD",
+          "subsection": "The 20 \u00d7 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 162,
           "end": 168,
-          "subsection": "The 20 × 4 LCD",
+          "subsection": "The 20 \u00d7 4 LCD",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 170,
           "end": 170,
-          "subsection": "The 8 × 8 LEDs",
+          "subsection": "The 8 \u00d7 8 LEDs",
           "fragment_override": null
         },
         {
           "path": "tec-os/appendix-g-tec-1g.md",
           "start": 172,
           "end": 179,
-          "subsection": "The 8 × 8 LEDs",
+          "subsection": "The 8 \u00d7 8 LEDs",
           "fragment_override": null
         },
         {
@@ -15830,15 +15830,15 @@
   "local_form_pass": {
     "change": "93b0c41",
     "rewrap": "9e1a695",
-    "scope": "36 existing reader texts: chapters4–28, appendicesA–J and index; opening1–3 excluded",
-    "independent_review": "chapters4–16 clear by independent reviewer; chapters17–28 clear by separate independent reviewer; appendicesA–J/index changed passages and neighbours read by lead, no finding",
+    "scope": "36 existing reader texts: chapters4\u201328, appendicesA\u2013J and index; opening1\u20133 excluded",
+    "independent_review": "chapters4\u201316 clear by independent reviewer; chapters17\u201328 clear by separate independent reviewer; appendicesA\u2013J/index changed passages and neighbours read by lead, no finding",
     "preservation": "rewrap independently checked in34 changed reader files: whitespace-only prose movement; fence/comment/inline-code spans exact",
     "status": "bounded local form pass and glossary source/available-credit review closed; opening first-use credits and final whole-book acceptance remain open"
   },
   "glossary_review": {
     "source_audit": "8593c93 complete independent82-meaning/40-form review clear; full report terms-independent-review.md",
     "local_forms": "93b0c41/9e1a695 bounded form pass closed",
-    "remaining": "opening1–3 first-use credits, adopted-source reconciliation and final whole-book order/publication acceptance"
+    "remaining": "opening1\u20133 first-use credits, adopted-source reconciliation and final whole-book order/publication acceptance"
   },
   "next_source_offer": {
     "proposal": "P3 proposal18 at Origo43d5f328",
@@ -15884,7 +15884,7 @@
       "hard_findings": 0,
       "review_flags_retained_with_context_reasons": 11
     },
-    "limits": "Opening1–3 unwritten pending actual workflow. No product execution, root integration, publication or final reader acceptance.",
+    "limits": "Opening1\u20133 unwritten pending actual workflow. No product execution, root integration, publication or final reader acceptance.",
     "parent_independent_review": {
       "status": "closed",
       "basis": "cc6c22d plus later record-only revisions",
@@ -15941,7 +15941,7 @@
   "compact_include_reference": {
     "status": "held_no_existing_public_ATOM_route_for_unchanged_nine_clients",
     "record": "compact-include-route-review.json atbe583097",
-    "lead_check": "Read exact ATOM0.3.7 directives198–227, using-atom header rule andea3 assemble.mjs1–20 as text. Confirmed ordinaryBDOSEQU closesheader beforeABI andtrailingHWLIB also unsupported.",
+    "lead_check": "Read exact ATOM0.3.7 directives198\u2013227, using-atom header rule andea3 assemble.mjs1\u201320 as text. Confirmed ordinaryBDOSEQU closesheader beforeABI andtrailingHWLIB also unsupported.",
     "primary_route": "Productionon-cardTAS unchanged; no runtimequalification bystaticreview",
     "limits": "No adapter, productfix, readerlistingchange, import, assembly or execution."
   },
@@ -15970,7 +15970,7 @@
     "cost_boundary": "P3 reports guard0.5seconds and39MB peak; complete command log reports exit1 and0.790seconds. These are distinct observations.",
     "preservation": "P3 retains offer01/02/attempt01, complete stage, packet, guard/command logs and failed result. No automatic retry.",
     "next_source_preparation": "One owner prepares a new narrow source recut using declared ESM export mapping plus containment validation and ESM import, no ambient/private fallback or new dependencies. All cases/caps/original576inputbytes unchanged; fresh staging/guard names for attempt02. Actual bounded source+metadata review and separate allocation required before execution.",
-    "reader_state": "Opening1–3 and worked Chapter5 extraction insertion remain held"
+    "reader_state": "Opening1\u20133 and worked Chapter5 extraction insertion remain held"
   },
   "opening_recut03": {
     "status": "Executed once under P3 allocation827ba198. Attempt02 failed late; retained ate77c7ef0. Earlier public workflows separately accepted4b5b5a50.",
@@ -16021,7 +16021,7 @@
       "scope": "Cold40/directSAMPLE, separateTED/SAMPLE, whole-fileBANNER badbuild/repair/two variants/persistence, all7host cases and all3pager cases",
       "reading": "Lead read complete actual frozen4b5b5a50 receipt. It accepts18card inventories,124screens/masks,9ATOM references and seven entry/RET-zero/warm observation sets within stated limits."
     },
-    "reader_action": "Release Chapters1–3 drafting and Chapter5 verified extraction insertion. Preserve actual historical provenance for uncovered file cases.",
+    "reader_action": "Release Chapters1\u20133 drafting and Chapter5 verified extraction insertion. Preserve actual historical provenance for uncovered file cases.",
     "limits": "No advanced service, whole-batch, physical, audible, browser, debugger, final-book, stage or publication acceptance."
   },
   "opening_recut04": {
@@ -16039,7 +16039,7 @@
     "status": "Executed once by P3 under05129c87. Attempt03 FAILED later at stale restart-padding snapshot; no COMPLETE. Sealed metadata remains historical."
   },
   "opening_material_preservation": {
-    "all_files_erase": "Complete frozenold03:258–274 recipe/output now retained under AppendixJ ERA, exact historical78127ec pin and empty-B state. Crosswalk post-draft amendment governs over old parent placement in3.",
+    "all_files_erase": "Complete frozenold03:258\u2013274 recipe/output now retained under AppendixJ ERA, exact historical78127ec pin and empty-B state. Crosswalk post-draft amendment governs over old parent placement in3.",
     "pager_excerpt": "Exact paused-screen098/099 excerpts approved with actual TYPE A:SAMPLE.ASM!USER 1 fixture provenance. Complete three-case input/output/key/card/screen evidence remains at immutable Origo e77c7ef0 attempt02 archive, with exact member identities and scope recorded under Current40-column pagination evidence home in28-pass-record.md. No fake plain-TYPE transcript/return or early chain lesson.",
     "file_operations": "Historical empty-B COPY/REN/selectiveERA remains isolated from post-BANNER card. No new continued-card mutation result invented.",
     "chapter01_historical_literals": "Nine assigned historical fences/recipes retained byte-exact in01-pass-record.md. Independent preservation review checks whether unique examples also need a reader home; no claim of blanket reader preservation closure.",
@@ -16047,7 +16047,7 @@
       "opening-craft-review.json",
       "opening-factual-review.json"
     ],
-    "failed_close_reader_home": "Closed independentlyb911e84: complete old05:184–199 shell/capture/output and useful containing explanation now under reader18 A failed flush atb8251e9, exact historical78127ec identity.",
+    "failed_close_reader_home": "Closed independentlyb911e84: complete old05:184\u2013199 shell/capture/output and useful containing explanation now under reader18 A failed flush atb8251e9, exact historical78127ec identity.",
     "craft_confirmation": "All four craft/grouping findings independently closed atd9d57d2 againstfa3a042; all16readerfences/19comments unchanged. Final source/navigation/whole-book acceptance separate."
   },
   "opening_attempt03": {
@@ -16057,7 +16057,7 @@
     "reported_charged_cycles": 1784689074,
     "reported_cost": "21.4seconds/458MB; raw retention/result review owned by P3",
     "reported_progress": "Carry observer corrected. fail-baseline completes INIT carry, no REMOVE, scan and rollback. This reported progress is not a new acceptance receipt.",
-    "failure": "Stale immediate-install restart snapshot compared across AREA warm boot. Source-defined PZSWP preserves JP3 and zeros its five padding bytes. Actual difference reported only000F C9→00. No product defect inferred.",
+    "failure": "Stale immediate-install restart snapshot compared across AREA warm boot. Source-defined PZSWP preserves JP3 and zeros its five padding bytes. Actual difference reported only000F C9\u219200. No product defect inferred.",
     "reader_boundary": "Earlier independent4b5b5a50 opening/PC7/pager acceptance remains available. It is not held by this later failure."
   },
   "opening_recut05": {
@@ -16107,7 +16107,7 @@
       {
         "finding": "Practical Chapter3 copying foothold",
         "applied": "2ad313d",
-        "preservation": "Accepted actual COPY A:SAMPLE.ASM B:SAMPLE.ASM phase009rows8–11, freshstarter/emptyB explicit, no invented postBANNER REN/ERA run."
+        "preservation": "Accepted actual COPY A:SAMPLE.ASM B:SAMPLE.ASM phase009rows8\u201311, freshstarter/emptyB explicit, no invented postBANNER REN/ERA run."
       },
       {
         "finding": "Chapter3 pager to command-prompt transition",
@@ -16318,7 +16318,7 @@
   "site_verification_observer_repair_proposal": {
     "status": "SOURCE_ONLY_REVIEWED_PROPOSAL_NOT_APPLIED_OR_EXECUTED",
     "path": "site-verification/ownership-audit-proposal/README.md",
-    "scope": "Explicit ordinary query0.5→2.0s cappedsoft; cleanup0.5 retained; timer/firstfailure/mainfinalizer/observedledger repair",
+    "scope": "Explicit ordinary query0.5\u21922.0s cappedsoft; cleanup0.5 retained; timer/firstfailure/mainfinalizer/observedledger repair",
     "limits": "850MB/450heap/wait0/180whole/3cleanup/twoworkers unchanged; reader/checker inputs unchanged",
     "controls": "16 planned controls, no execution or qualification",
     "deliverable": "Actual complete39-page closure after separately approved source/control/seal/input review and fresh allocation",
@@ -16332,5 +16332,14 @@
     "controls": "Q01-Q14source-onlystatecontrols;Q15/Q16publicfixturesseparate;noneexecuted",
     "book_closure": "Actual39-pagecompletechecker/input/process result remains pending",
     "actual_allocation": false
+  },
+  "site_verification_observer_state01_result": {
+    "status": "PASS_SCOPED_STATE_CONTROLS_INDEPENDENTLY_REVIEWED",
+    "allocation": "KS47-OBSERVER-STATE01-20261107",
+    "result": "site-verification/observer-state01-result.json",
+    "cases_passed": 14,
+    "terminal_exit_code": 0,
+    "Q15": "Source eligible for separate allocation consideration, not executed",
+    "site_acceptance": false
   }
 }

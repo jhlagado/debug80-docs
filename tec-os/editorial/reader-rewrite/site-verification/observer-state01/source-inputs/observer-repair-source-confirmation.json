@@ -1,0 +1,396 @@
+{
+  "schema": 1,
+  "status": "clear_qualified_core_source",
+  "reviewed_commit": "dcb14a834d9cc043bcb8af16b4b62b3bc4a4a7a4",
+  "review_scope": "Full current core and worker source/delta review against adopted proposal and prior65223 review. Clear for separate control-source/input review and allocation consideration only, not execution authorisation.",
+  "original_review": {
+    "path": "tec-os/editorial/reader-rewrite/site-verification/observer-repair-source-review.json",
+    "sha256": "e9b3830b987283281c3ae65d74781255fdd91ac6db71c4600763ee40c347cf64",
+    "preserved": true
+  },
+  "authority": "Origo fc90db15 source adoption, unchanged 180/850/450/wait0/reserve3/workers2/no-minification acceptance figures",
+  "inputs": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+      "sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "bytes": 47621,
+      "lines": 997,
+      "matches_reviewed_commit": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+      "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "bytes": 5656,
+      "lines": 119,
+      "matches_reviewed_commit": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "bytes": 4299,
+      "lines": 110,
+      "matches_reviewed_commit": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/invoke.sh",
+      "sha256": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e",
+      "bytes": 664,
+      "lines": 12,
+      "matches_reviewed_commit": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/observer-repair-authority.json",
+      "sha256": "cff8541f76105fe8e817d564c2843d0fcfd730370c9e19dfe5e024bbd42f9701",
+      "bytes": 2887,
+      "lines": 18,
+      "matches_reviewed_commit": true
+    }
+  ],
+  "dispositions": [
+    {
+      "id": "OBS01",
+      "status": "closed_source",
+      "source": "run_once.py:218-279,572-622",
+      "reason": "Query intent/check remains serialized, but failure_lock is released before native Popen. A stop cause can be queued and signalling awakened while state.lock remains occupied by creation. Returned helper is memory-registered before any I/O and stop_new_child repeats immediate handle cleanup if stop crossed creation. No claim of a process handle before Popen returns."
+    },
+    {
+      "id": "OBS02",
+      "status": "closed_source",
+      "source": "run_once.py:281-300,788-836",
+      "reason": "Command stop check adopts pending failure under short latch, releases it for Popen, registers returned handle, then checks stop/soft expiry. A late child receives TERM/KILL attempts even if one-shot escalation already completed; crossed-stop path raises rather than continuing normal launch flow. The handle remains in registry for main cleanup and final disposition. Signal success/exit are not inferred from attempts."
+    },
+    {
+      "id": "OBS03",
+      "status": "closed_source",
+      "source": "run_once.py:347-381,773-786",
+      "reason": "Actual state.final_audit_disposition inspects retained Popen handles regardless of birth match. Live means HELD, invalid/failed polling or absent observation means UNKNOWN_HELD, reaped integer status is recorded in history and only that handle registration is retired. Separately bound groups are preserved. Main supplies a fresh query after observer quiescence and refuses any non-CLEAR outcome."
+    },
+    {
+      "id": "post_ACK_ownership_receipt_integrity",
+      "status": "closed_source",
+      "source": "run_once.py:309-317,339-345,637-698",
+      "reason": "Initial receipt bytes are read once, hashed, parsed and validated. Their hash is included in ACK and retained as accepted_ownership_sha256 under ACK publication locking. Every post-ACK observation reads/hashes bytes before JSON interpretation; mismatch or missing receipt fails closed without rebinding authority to changed PID/group/birth fields."
+    }
+  ],
+  "full_current_review": [
+    {
+      "scope": "Budgets and evidence",
+      "source": "run_once.py:104-106,218-279,572-635",
+      "result": "Ordinary2.0 and cleanup0.5 capped at original soft/hard boundary; no failed-query retry. Effective budget recomputed after intent/lock overhead. Nonlaunch records effective0 and separately records launch_checked_budget; no fabricated executed start/budget. Launch overhead consumes the same communicate budget. First query failure retained before completion logging. Empty table, runner omission, empty birth and duplicate PIDs fail closed."
+    },
+    {
+      "scope": "Pre-ACK and ownership universe",
+      "source": "run_once.py:109-152,281-337,637-707",
+      "result": "Nonce/context hash/UTC-C environment/declaration plus actual parent/group/birth validate before binding and ACK. Successful snapshots preceding worker publication remain pending without ACK; later normal discovery is not failed-query retry. Group binds in memory before durable history/ACK preparation. Group lifetime survives guard/leader exit; cumulative observed birth/history retained, without transferring authority to a different PID birth. Remaining live/unresolved direct handles are now included by OBS03."
+    },
+    {
+      "scope": "First failure and imports",
+      "source": "run_once.py:178-216,514-570",
+      "result": "Short failure queue sets stop/wakes signalling before taking state.lock or doing I/O. Earliest pending cause is adopted once. Later worker receipt is imported before generic guard failure when available but cannot overwrite an earlier parent cause; conflicting durable receipt is retained explicitly. Terminal embeds latched first-failure identity and conflicts are recorded. A later same-code cause cannot silently replace the earlier one."
+    },
+    {
+      "scope": "Independent signalling and hard cutoff",
+      "source": "run_once.py:288-300,383-405,434-449,709-763",
+      "result": "Soft stop wakes signalling independently of audit/receipt waits. Escalation attempts TERM then KILL under original0.4 grace/hard remainder. Hard_stop is direct os.killpg/os.kill, per-target exception-isolated and finally exit124; it takes no failure/audit/receipt locks and does not poll Popen handles. Hard wait remains active through main final flush/close and process entry uses os._exit(main())."
+    },
+    {
+      "scope": "Final quiescence, audit and commit",
+      "source": "run_once.py:407-431,544-570,765-786,962-992",
+      "result": "Main joins observer within remaining soft time before fresh cleanup-budget audit and retained-handle disposition. Unavailable observation or unquiet observer cannot become empty CLEAR. Registry is retained in audit. Main alone prepares/fsyncs normal terminal, re-imports worker failure and atomically checks exit code plus canonical first-failure identity while publishing under short locks. Pending cause or soft expiry prevents PASS. Freshness is supplied by the production main sequence after input checks; decision seam itself still accepts caller-supplied audit, not an arbitrary-input audit attestation API."
+    },
+    {
+      "scope": "Worker deadline/context and phase contract",
+      "source": "run_once.py:918-935; build_and_check.py:15-115",
+      "result": "Parent places original absolute_deadline_utc in context before its hash/nonce binding. Worker uses UTC soft remainder locally, not cross-process monotonic origin. Both ps observations explicitly UTC/C. Worker query and ACK wait capped2/original soft; no-budget refuses query. Stop marker/first-failure checkpoints return1..255 or1 for malformed/overflow. Failed worker identity query retains structured class/message/effective budget/elapsed in first failure. Before file visibility, phase crossing remains possible; parent failure invalidates acceptance and bound cleanup remains responsible."
+    },
+    {
+      "scope": "Verified bootstrap and immutable inputs",
+      "source": "run_once.py:838-961",
+      "result": "Stdlib-only entry verifies supplied seal bytes once, self and direct payload names/hashes, then verifies private copies before importing private helper. Worker/checker paths remain private and -S -B, launcher -I -S -B. Policy, original/copy dependency trees, full source/config/reader/context/runtime/payload pre/post checks retained. Source revision/guard pins unchanged. Existing consumed seal remains historical and cannot qualify the changed core."
+    }
+  ],
+  "findings": [],
+  "protected_inputs": [
+    {
+      "name": "check_html.py",
+      "sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "expectations.json",
+      "sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "controls-result.json",
+      "sha256": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "config.before.ts",
+      "sha256": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "config.after.ts",
+      "sha256": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "config.diff",
+      "sha256": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "source-inputs.json",
+      "sha256": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "installed-inputs.json",
+      "sha256": "cfa02ccc86400c70240ca896dec4e4af85e6acb08dcdc6f5b72803732521b911",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "dependency-manifests.json",
+      "sha256": "8631dbb874c8e8e31cb90decb7cc1b968d0ebd7cf53f6a90895a1331107c2107",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "seal.json",
+      "sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+      "unchanged_from_adopted_baseline": true
+    },
+    {
+      "name": "prepare_packet.py",
+      "sha256": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8",
+      "unchanged_from_adopted_baseline": true
+    }
+  ],
+  "reader_source": {
+    "revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+    "count": 39,
+    "all_actual_root_bytes_equal_frozen_source_and_expectation": true,
+    "files": [
+      {
+        "path": "tec-os/01-first-session.md",
+        "sha256": "982101a7dcce73678472492d0fe0c2954a1a4a107f276099a9e333aa32c96480",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/02-make-a-small-program.md",
+        "sha256": "ae0f232fe28f90fd6bde10f58bff7e8b1cdad461570d5b58feef6d5db5cf30f0",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/03-work-with-files.md",
+        "sha256": "5828ff5e927bad3813e1bedb6a4324a7191bfdfe98fb0acd94c54884e7353828",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/04-drives-and-user-areas.md",
+        "sha256": "195afaf55f6c028a1d712ea087c6342dbbac93f0f490e09a8c848c4679ffef28",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/05-cards-on-the-pc.md",
+        "sha256": "2147bfbc8fc69d4139810502592cb7367220965950d98fa5ca83b05c6f9b7e95",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/06-choose-a-console.md",
+        "sha256": "e48a49c798e4eedb433320728f3c24edefbea54230932701a6892b5f77a59d34",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/07-commands-at-startup.md",
+        "sha256": "4336d1372ff50572bdfcdd5554c266ad84052e5de9421e26e7f6d743c2e3e237",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/08-call-tec-os.md",
+        "sha256": "8aeb33d0c2bfe88de2269c343c5686cc6cfc26792f2f1b2bd2329fd902996790",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/09-read-and-write-a-file.md",
+        "sha256": "0829de9ec9905c3d685aa06a72e432daa2aa1968e36a0753968a45fe392f1980",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/10-memory-for-programs.md",
+        "sha256": "4c47dfaec37d5223d7d8587ee02eb75b1d9e352a7b98eb25a8ad39b8587b7d33",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/11-use-the-boards-devices.md",
+        "sha256": "4f4c6891e9c1a8d63ffbdd3c6c809e876a200c45b6b0c4ffa6c8611663012672",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/12-results-and-command-chains.md",
+        "sha256": "db02f131ae5284cf19d3ca63ddb2b60b91218ffdcabf21b0721ec3b930f473e6",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/13-write-a-resident-service.md",
+        "sha256": "ce41f0d53845043fde293f184d0057d5a42ac920eca02c5e95ced6886cb1677e",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/14-state-and-memory.md",
+        "sha256": "fe0240e11ba2572036a54881ed76640b8e0a2a227408e6d2c79cc07bfac42b28",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/15-reset-and-boot.md",
+        "sha256": "b670b89138ff916f97c4a3caade5fc70bfd7a9989e3211d8d40b794dc6db3cc0",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/16-console-paths.md",
+        "sha256": "5d37cb47445b9a30431c0900827d337f7844041ea2de50d90261a49ec85430cf",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/17-card-blocks-and-volumes.md",
+        "sha256": "906bde8f2758d75297d110d2ade6083998c8a7186d9431e103aa6da2289afa91",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/18-cache-and-persistence.md",
+        "sha256": "65452579354eb5e48380a3d8653ca733a00bf9caea5bbb8336ffa4422d4dade2",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/19-a-file-through-the-bdos.md",
+        "sha256": "96ebc2adc830bd1aa15cc390a051a2ed9947f718021c5be860a024508d13ce0f",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/20-from-prompt-to-program.md",
+        "sha256": "f87836a373a50f2e1da343dd7b208ed01e382d33bd0688f6e8ad2306355c610a",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/21-chains-across-warm-boot.md",
+        "sha256": "00dafe111d60babaf2bf318374088a39d5fae3f984548c4b9890f611a418cb23",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/22-the-history-ring.md",
+        "sha256": "6c11896d9e867c5f248df86a6cec3f541dd90d5ef182d51cc1f5e27af1cebf79",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/23-numbered-service-dispatch.md",
+        "sha256": "167c2f5ddf58c9efb332f94b9a352288d10ea4dc0965200e1bb0a968a6bba81f",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/24-loading-and-removing-services.md",
+        "sha256": "9ac0c0b06961ca1da739f8141051ae2733a1a0bc0df3bc96986bbaa6def15c66",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/25-startup-inside-the-ccp.md",
+        "sha256": "b29a92c2458e7820885874af39ba3a47cbed92d653a9d2743dff44ba3f787708",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/26-build-the-rom-and-media.md",
+        "sha256": "709eaddf642de42a4c86cb08f88e63e05368392904413a6f1cd962a2b07f7b40",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/27-diagnose-the-machine.md",
+        "sha256": "8184d5eda73009a3fd38740328dad4eb3f9ddd919410641349315f329f245e43",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/28-the-host-model-as-evidence.md",
+        "sha256": "405a7d80be0ebbd310c1a89c27f233d661cb7ecc891685e4353399064ee17b6f",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/appendix-a-bdos-functions.md",
+        "sha256": "edc890f187aa8d1df0cf4b7081a4895fd07858092f1355ecca5da34d0754517b",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/appendix-b-rom-services.md",
+        "sha256": "4d05aaaacad7faa9b75ea172e7461fb20e9662a02191e4b2dae3f4d44f9a23ff",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/appendix-c-memory-map.md",
+        "sha256": "752031f1a8b4a04640709552750ca830e617fe81e5c4d34c343333aba383adc7",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/appendix-d-error-messages.md",
+        "sha256": "274a082339d0ade81919c71d3e25a3d8149f7ff5b186f1d4833553db8db5bf03",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/appendix-e-container-format.md",
+        "sha256": "7b6b46e77e665076ed4c81f15da4fb6aa177c13f460bad60b3c8c87f091496e4",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/appendix-f-tecvol.md",
+        "sha256": "b5882ac03d08ab4c9afe00b529ccb35a4a05479b0a4f4885e7448d1f1cf972e4",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/appendix-g-tec-1g.md",
+        "sha256": "1f5a0c5587e0ab0f5d7aa28fb160fad1ac97954ef678f28082845c9a17d60c45",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/appendix-h-service-file-format.md",
+        "sha256": "6a69cc7cb474c52f4f0bd1d5205f09297c332eb8aa08596506d19ac76512d115",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/appendix-i-web-page.md",
+        "sha256": "e5f095e8539a2581969edb3559b8119d622c4321e5d9472fd80636edb053b947",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/appendix-j-command-reference.md",
+        "sha256": "ea6037d89eb85834dab5cd9d5441f235f39ba5f38fdbe1ac2a76c969d471f60b",
+        "matches_frozen_source_and_expectation": true
+      },
+      {
+        "path": "tec-os/index.md",
+        "sha256": "81cdf91fa07128f76f90873eaadb61ac58e76e43f596fe338f646ee3e3deea0c",
+        "matches_frozen_source_and_expectation": true
+      }
+    ]
+  },
+  "guard": {
+    "path": "/Users/johnhardy/projects/origo/tools/mem-guard.mjs",
+    "sha256": "45e4edaee20eba1b2d8ec67983ed3acc06be31a64eb059e8bc4ad21257871374",
+    "matches_historical_pin": true
+  },
+  "scope_exclusions": [
+    "test_observer.py, public_observer_fixture.py and control/fixture manifests require their own exact source/input review. This core review neither accepts their synthetic results nor allocates their execution.",
+    "No new seal, input collection, dependency-tree runtime qualification or control invocation occurred here. Protected manifest bytes and guard file identity were checked inertly."
+  ],
+  "remaining_limits": [
+    "No imports, runner/worker/helper calls, syntax checks, probes, tests, controls, guard/build/checker/validator execution or signals. Text and inert Git/file/hash reads only.",
+    "Two-second ordinary query is an adopted internal candidate, not empirically qualified sufficiency. OS process creation, lock publication, scheduling, signal delivery and storage may stall; kernel/host-loss/bootstrap limits remain explicit.",
+    "Before Popen returns no handle exists for registration; late-return cleanup is now present but no universal lifecycle enforcement or zero child instructions during creation/publication gap is claimed.",
+    "Global snapshots and cumulative ledger cover known/discovered identities, not every historical descendant; unseen detached/reparented processes remain outside complete proof.",
+    "Failures/UNKNOWN_HELD still need independent actual outcome disposition. Historic SITE01/02/03 failures and registered-hold-only releases remain unchanged.",
+    "Fresh source/input review, exact allocated focused controls and their result review precede any actual39-page verification offer. This report grants no execution, book acceptance, browser/hardware or publication authority."
+  ],
+  "actions": {
+    "only_new_confirmation_json_written": true,
+    "original_review_changed": false,
+    "active_source_changes": false,
+    "target_execution_or_imports": false,
+    "commit": false
+  }
+}

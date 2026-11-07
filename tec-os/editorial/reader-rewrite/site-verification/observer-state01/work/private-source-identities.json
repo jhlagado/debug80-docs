@@ -1,0 +1,35 @@
+{
+  "inputs_sha256": "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+  "sources": [
+    {
+      "module": "build_and_check",
+      "source_path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+      "expected_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "source_read_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "private_path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/build_and_check.py",
+      "private_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "bytes": 5656,
+      "execution_bytes_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc"
+    },
+    {
+      "module": "packet_inputs",
+      "source_path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+      "expected_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "source_read_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "private_path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/packet_inputs.py",
+      "private_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "bytes": 4299,
+      "execution_bytes_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504"
+    },
+    {
+      "module": "run_once",
+      "source_path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+      "expected_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "source_read_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "private_path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/run_once.py",
+      "private_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "bytes": 47621,
+      "execution_bytes_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5"
+    }
+  ]
+}

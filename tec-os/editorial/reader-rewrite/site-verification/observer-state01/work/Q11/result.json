@@ -1,0 +1,117 @@
+{
+  "case": "Q11",
+  "status": "PASS",
+  "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+  "observations": {
+    "first_failure": {
+      "status": "FAILED",
+      "stage": "identity-observation",
+      "detail": {
+        "cause": "original"
+      },
+      "exit_code": 124,
+      "retry": false,
+      "utc": "2026-11-07T04:11:51.704189+00:00"
+    },
+    "pending_first_failure": {
+      "status": "FAILED",
+      "stage": "identity-observation",
+      "detail": {
+        "cause": "pending original"
+      },
+      "exit_code": 124,
+      "retry": false,
+      "utc": "2026-11-07T04:11:51.704238+00:00"
+    },
+    "terminal": {
+      "status": "FAILED",
+      "exit_code": 124,
+      "first_failure": {
+        "status": "FAILED",
+        "stage": "identity-observation",
+        "detail": {
+          "cause": "pending original"
+        },
+        "exit_code": 124,
+        "retry": false,
+        "utc": "2026-11-07T04:11:51.704238+00:00"
+      }
+    },
+    "terminal_publications": [
+      "/private/tmp/tec-os-observer-state-019f63903250/Q11/synthetic-terminal.json"
+    ],
+    "imported_failure": {
+      "stage": "ownership-observation",
+      "detail": {
+        "query_error": "TimeoutExpired",
+        "effective_budget_seconds": 0.2,
+        "elapsed_seconds": 0.21
+      },
+      "exit_code": 124,
+      "status": "FAILED",
+      "retry": false,
+      "utc": "2026-01-05T00:00:00+00:00"
+    },
+    "publication_failure_cause": {
+      "status": "FAILED",
+      "stage": "identity-observation",
+      "detail": "publication failed",
+      "exit_code": 124,
+      "retry": false,
+      "utc": "2026-11-07T04:11:51.704884+00:00"
+    },
+    "parent_first_failure": {
+      "status": "FAILED",
+      "stage": "identity-observation",
+      "detail": {
+        "query_error": "TimeoutExpired",
+        "effective_budget_seconds": 2.0,
+        "elapsed_seconds": 2.01
+      },
+      "exit_code": 124,
+      "retry": false,
+      "utc": "2026-11-07T04:11:51.704921+00:00"
+    },
+    "later_worker_receipt": {
+      "stage": "ownership-observation",
+      "detail": {
+        "query_error": "OSError",
+        "effective_budget_seconds": 0.5,
+        "elapsed_seconds": 0.51
+      },
+      "exit_code": 7,
+      "status": "FAILED",
+      "retry": false,
+      "utc": "2026-01-05T00:00:01+00:00"
+    },
+    "failure_conflicts": [
+      {
+        "kind": "failure-receipt-conflict",
+        "latched": {
+          "status": "FAILED",
+          "stage": "identity-observation",
+          "detail": {
+            "query_error": "TimeoutExpired",
+            "effective_budget_seconds": 2.0,
+            "elapsed_seconds": 2.01
+          },
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.704921+00:00"
+        },
+        "receipt": {
+          "stage": "ownership-observation",
+          "detail": {
+            "query_error": "OSError",
+            "effective_budget_seconds": 0.5,
+            "elapsed_seconds": 0.51
+          },
+          "exit_code": 7,
+          "status": "FAILED",
+          "retry": false,
+          "utc": "2026-01-05T00:00:01+00:00"
+        }
+      }
+    ]
+  }
+}

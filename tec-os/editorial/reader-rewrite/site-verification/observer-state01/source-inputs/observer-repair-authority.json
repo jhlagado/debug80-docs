@@ -1,0 +1,18 @@
+{
+  "authority": "Origo fc90db15",
+  "source": "/Users/johnhardy/projects/origo/studies/p3-tec-os/reviews/book-observer-repair-adoption.md",
+  "sha256": "cc77135d6b00467ecb302be3bcbde394f90b5e32e32f075ad3bb7dbcadf70eb3",
+  "literal_adoption": "# Book observer-repair source adoption\n\nDelegated under KD-242. I read the complete current proposal, source contracts,\nall sixteen planned controls and independent correction closure at book a61393d.\nThe retained proposal is in evidence/book-ownership-observer-proposal. Its four\ncurrent input hashes and six unchanged baseline hashes match the final review.\nThis is a recut after SITE03's observation failure, not actual verification.\n\nAdopt the bounded proposal for implementation source only. Ordinary identity\nqueries may use at most two seconds, capped by original soft time remaining;\ncleanup queries retain at most half a second. Each query runs once and every\nfailure still prevents acceptance. Independent signalling/hard stop, first-failure\nprecedence, observed identity history, serialized ACK and final decision, observer\nquiescence and worker-visible stop checkpoints are explicit implementation work.\nThe visibility gap and incomplete historical-descendant coverage remain stated.\n\nThe old half-second ordinary query is an internal runner setting, not a registered\nM3 acceptance figure. The whole 180 seconds, three-second cleanup reserve,\n850 MB sampled limit, 450 MB heap, wait zero, two workers and no minification\nremain unchanged. Complete checker/input/actual-exit/process closure is still\nrequired. This adoption changes no measured gate reading and grants no automatic\nretry or acceptance of unavailable observations. Two seconds is an unqualified\ncandidate setting, not measured sufficiency.\n\nDevelopment may implement the exact runner/worker seams and focused controls.\nControls must call the candidate routines and preserve their first-failure\nidentities; a duplicated state model is insufficient. The fourteen synthetic\nstate cases and two public fixture cases need exact separately reviewed command,\nsource/input binding and explicit bounded allocation before running. No collector,\nVitePress build, real-output validator, browser, live probe or publication is\nallocated here. Keep all reader/checker inputs and the already qualified 48\nchecker-control artifacts unchanged. Source and final packet review precede\nany actual command. The deliverable remains complete 39-page verification.\n",
+  "scope": "Sourceimplementationonly; noimports,controls,probes,builds,actualvalidatororpublication allocated",
+  "ordinary_query_candidate_seconds": 2.0,
+  "cleanup_query_seconds": 0.5,
+  "limits_unchanged": {
+    "whole_seconds": 180,
+    "cleanup_reserve_seconds": 3,
+    "guard_mb": 850,
+    "heap_mb": 450,
+    "guard_wait_seconds": 0,
+    "build_workers": 2,
+    "minify": false
+  }
+}

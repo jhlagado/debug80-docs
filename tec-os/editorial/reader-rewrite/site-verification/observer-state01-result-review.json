@@ -1,0 +1,552 @@
+{
+  "schema": 1,
+  "status": "accepted_scoped_actual_state_control_result",
+  "allocation": "KS47-OBSERVER-STATE01-20261107",
+  "allocation_authority": {
+    "commit": "ddde6a76",
+    "path": "studies/p3-tec-os/reviews/book-observer-state01-allocation.md",
+    "reading": "Only the exact Q01-Q14 offered first argv, pinned CLT-I-S-B,60suite/10case/2s thread bounds. Native guard/query/build/site and automatic successor not allocated."
+  },
+  "offered_source_commit": "fb36754c78a79c2622caf8c2189b73909c607004",
+  "external_receipt": {
+    "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-observer-state01-external.json",
+    "sha256": "aa24b5e19da1632628806f8efed9fff006549cff3f5cf851d602cfee4b636cd7",
+    "actual_terminal_exit": 0,
+    "terminal_chunk": "e36d9b",
+    "external_session": null,
+    "tool_reported_wall_seconds": 0.051158666,
+    "guarded": false,
+    "measured_peak_memory": null,
+    "provenance": "External terminal/cost facts are retained in the supplied owner receipt and matching task account; this review did not rerun or retrieve a live tool session."
+  },
+  "suite": {
+    "path": "/private/tmp/tec-os-observer-state-019f63903250.json",
+    "sha256": "896c2eef9311244219ef5c26d322c2eb31c9ddb595c180270fe5770b735e359d",
+    "bytes": 66954,
+    "status": "PASS",
+    "complete_ordered_cases": [
+      "Q01",
+      "Q02",
+      "Q03",
+      "Q04",
+      "Q05",
+      "Q06",
+      "Q07",
+      "Q08",
+      "Q09",
+      "Q10",
+      "Q11",
+      "Q12",
+      "Q13",
+      "Q14"
+    ],
+    "case_count": 14,
+    "binding_sha256": "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+    "retry": false,
+    "site_acceptance": false,
+    "standalone_suite_records_equal": true
+  },
+  "retention_check": {
+    "external_manifest_entries": 44,
+    "all_sizes_and_hashes_match": true,
+    "complete_work_tree_file_set_matches": true,
+    "outer_log_bytes": 0,
+    "artifacts": [
+      {
+        "name": "Q01/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q01/result.json",
+        "sha256": "f69a02c65a42ccc701a393c43922d1a3c0552a718779eb3a9902770626a9fb63",
+        "bytes": 871
+      },
+      {
+        "name": "Q02/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q02/result.json",
+        "sha256": "2e67e5735f51c3461479d2b883fb61f58c65bf9e50c91089cc41f771debe2611",
+        "bytes": 1393
+      },
+      {
+        "name": "Q03/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q03/result.json",
+        "sha256": "97153d73f49d4a9dca5e5aedfcadb549ffe1b2e37c91ac4cb36d63f5e349b172",
+        "bytes": 2319
+      },
+      {
+        "name": "Q04/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q04/result.json",
+        "sha256": "96f4e3e93252dfe2f7e432a6556f46bde8baa4fc26a99e2c5eb9788622552430",
+        "bytes": 2185
+      },
+      {
+        "name": "Q05/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q05/result.json",
+        "sha256": "82a913b6629cd02e25ea39ebf698660e2cc2c63ac01bc4039b6f055ed0169c88",
+        "bytes": 11774
+      },
+      {
+        "name": "Q06/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q06/result.json",
+        "sha256": "941c942c0d2c05b88d0ecb06424c3b794c694d7c98f2a7cab8140d0169b6fa35",
+        "bytes": 7739
+      },
+      {
+        "name": "Q07/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q07/result.json",
+        "sha256": "df41a116a3039554b9208d747cbdda763afaa27a27f47c9e999501c9e8f18b71",
+        "bytes": 1619
+      },
+      {
+        "name": "Q08/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q08/result.json",
+        "sha256": "d0654adb9da2f99d7fbb1316423d3c03b166e56a2452d231ece14636e9827a11",
+        "bytes": 2290
+      },
+      {
+        "name": "Q09/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q09/result.json",
+        "sha256": "1214b34ae56ca26cdd671b85c265ee5908832f06554c95cbacf4756c4e43fcd8",
+        "bytes": 1922
+      },
+      {
+        "name": "Q10/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q10/result.json",
+        "sha256": "d58d138d92bdf6f175bab8c020090467ee4847fc10e125873b4acc3e947774f4",
+        "bytes": 1887
+      },
+      {
+        "name": "Q11/.synthetic-terminal.json.f121df804feba2e2c8903ccf.tmp",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q11/.synthetic-terminal.json.f121df804feba2e2c8903ccf.tmp",
+        "sha256": "13ef2b4c23b8b6b885ec8a3ae3fbeab758a143915efbd93379016d525615ab3e",
+        "bytes": 212
+      },
+      {
+        "name": "Q11/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q11/result.json",
+        "sha256": "f42946ab82eaa6de3cef7e49ad00216dd1468e788748c8faa5b25aa867b96aef",
+        "bytes": 3173
+      },
+      {
+        "name": "Q11/synthetic-terminal.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q11/synthetic-terminal.json",
+        "sha256": "13ef2b4c23b8b6b885ec8a3ae3fbeab758a143915efbd93379016d525615ab3e",
+        "bytes": 212
+      },
+      {
+        "name": "Q12/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q12/result.json",
+        "sha256": "c044d6a8ff9d192fd954c8881329ae53dda11e86cc33404b584ade67ff2d0525",
+        "bytes": 6102
+      },
+      {
+        "name": "Q13/ack-stop/context.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/ack-stop/context.json",
+        "sha256": "06de7abc028cc9109a1b170ce69c4d9eb4f3068fa13db54fee1c270de95a2d5a",
+        "bytes": 408
+      },
+      {
+        "name": "Q13/ack-stop/output/job-ownership.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/ack-stop/output/job-ownership.json",
+        "sha256": "5c8005046dd2c48bf4629d87701a9daa22e3c59e5799d3024f103d834076cda2",
+        "bytes": 358
+      },
+      {
+        "name": "Q13/ack-stop/output/stop-requested.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/ack-stop/output/stop-requested.json",
+        "sha256": "92f17c50b9ae2eaf791d7cd770a216da88377ddf3cdb15ebb2285d31a8b91efc",
+        "bytes": 18
+      },
+      {
+        "name": "Q13/delayed-publication/context.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/delayed-publication/context.json",
+        "sha256": "0a59a6db150663742a3861cd114a1f9d99ed5361d9ea3eceff4a4741d081e377",
+        "bytes": 441
+      },
+      {
+        "name": "Q13/delayed-publication/output/build-ended.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/delayed-publication/output/build-ended.json",
+        "sha256": "d24219f6de94b955cf36d25bd2aca88e2d35eef45b9317b7083f55ec8fe9653c",
+        "bytes": 16
+      },
+      {
+        "name": "Q13/delayed-publication/output/build-started.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/delayed-publication/output/build-started.json",
+        "sha256": "de9f105fe614784c42ffec747c5df8105167e7d75586a08589efeebc1d8f0939",
+        "bytes": 167
+      },
+      {
+        "name": "Q13/delayed-publication/output/job-ack.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/delayed-publication/output/job-ack.json",
+        "sha256": "22c9d5e7cf2af2771e9706b225113061d576ba25fc79e61ce07997792f899c60",
+        "bytes": 121
+      },
+      {
+        "name": "Q13/delayed-publication/output/job-ownership.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/delayed-publication/output/job-ownership.json",
+        "sha256": "ed5448227c645c91aa286bb722c1e6f2de8005ecb53727067d4fc66a0e3f0642",
+        "bytes": 358
+      },
+      {
+        "name": "Q13/delayed-publication/output/stop-requested.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/delayed-publication/output/stop-requested.json",
+        "sha256": "92f17c50b9ae2eaf791d7cd770a216da88377ddf3cdb15ebb2285d31a8b91efc",
+        "bytes": 18
+      },
+      {
+        "name": "Q13/failed-publication/context.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/context.json",
+        "sha256": "539d4695f8541d2d3c2a2f9ba6b8b1921eca4198cf2e4b4d0b4143c010abf66c",
+        "bytes": 438
+      },
+      {
+        "name": "Q13/failed-publication/output/build-ended.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/output/build-ended.json",
+        "sha256": "d24219f6de94b955cf36d25bd2aca88e2d35eef45b9317b7083f55ec8fe9653c",
+        "bytes": 16
+      },
+      {
+        "name": "Q13/failed-publication/output/build-started.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/output/build-started.json",
+        "sha256": "3e9d83ea7c43fb2003d1581de739950f91fbcd36932a55a5034a04b111835c49",
+        "bytes": 166
+      },
+      {
+        "name": "Q13/failed-publication/output/checker.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/output/checker.json",
+        "sha256": "b215ff190a08ad5dcf98fbe6ee599c5a3a2b5b7034c6b526eeeaa887f67ae648",
+        "bytes": 20
+      },
+      {
+        "name": "Q13/failed-publication/output/job-ack.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/output/job-ack.json",
+        "sha256": "41f951c04e05986c97ce508eeba8fce5ce1ce1b99542a016f87d86f6c0bbf45f",
+        "bytes": 121
+      },
+      {
+        "name": "Q13/failed-publication/output/job-ownership.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/output/job-ownership.json",
+        "sha256": "c5b58608cd889c66373c1780912b7f1a24f0daa7c673cb5cb55691bbc1bd19e6",
+        "bytes": 358
+      },
+      {
+        "name": "Q13/failed-publication/output/validate-ended.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/output/validate-ended.json",
+        "sha256": "d24219f6de94b955cf36d25bd2aca88e2d35eef45b9317b7083f55ec8fe9653c",
+        "bytes": 16
+      },
+      {
+        "name": "Q13/failed-publication/output/validate-started.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/output/validate-started.json",
+        "sha256": "214508f1f1cd821716ebdccfa0b72d3c6136853f9aa52283439dc4d5504a7d1c",
+        "bytes": 483
+      },
+      {
+        "name": "Q13/query-timeout/context.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/query-timeout/context.json",
+        "sha256": "c3c9ac82584dcc1fb658e51badcb7d93511b27a4c3c58d282d5a220b02d91d52",
+        "bytes": 423
+      },
+      {
+        "name": "Q13/query-timeout/output/first-failure.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/query-timeout/output/first-failure.json",
+        "sha256": "f2afe7b855b081aa0b2cdc5ad85d96d341d6bb6d6409f96fe179ad97c730cc5a",
+        "bytes": 305
+      },
+      {
+        "name": "Q13/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/result.json",
+        "sha256": "e06dc8007c41111c4bde809c14a6db890a9c9695b63d8f025672845f01312ef6",
+        "bytes": 7463
+      },
+      {
+        "name": "Q13/worker-output/stop-requested.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/worker-output/stop-requested.json",
+        "sha256": "3e02e388502651209dced4075210f09d8189efcf06c6a69d21909027a2ac145d",
+        "bytes": 17
+      },
+      {
+        "name": "Q13/zero-budget/context.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/zero-budget/context.json",
+        "sha256": "c5461c67e6c1f4e7ab20efe996df713c80c83c02810d7ff1809be6ebf1150cc3",
+        "bytes": 417
+      },
+      {
+        "name": "Q13/zero-budget/output/first-failure.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q13/zero-budget/output/first-failure.json",
+        "sha256": "79c244bb9edf739f5024f252fa3d4da93bd6c6f6b14fcf5a721343f8c69a7ad8",
+        "bytes": 170
+      },
+      {
+        "name": "Q14/result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/Q14/result.json",
+        "sha256": "acd9bb2824f11220fcad327f422972c3953e2edbf34c2e04435e24b6ec6dfdc0",
+        "bytes": 1734
+      },
+      {
+        "name": "private-source-identities.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/private-source-identities.json",
+        "sha256": "03421e120d257e4ba79860691adec559c7d09917142ccedbeb5e5c52b66c7acf",
+        "bytes": 2174
+      },
+      {
+        "name": "verified-modules/build_and_check.py",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/build_and_check.py",
+        "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+        "bytes": 5656
+      },
+      {
+        "name": "verified-modules/packet_inputs.py",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/packet_inputs.py",
+        "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+        "bytes": 4299
+      },
+      {
+        "name": "verified-modules/run_once.py",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/run_once.py",
+        "sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+        "bytes": 47621
+      },
+      {
+        "name": "suite-result.json",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250.json",
+        "sha256": "896c2eef9311244219ef5c26d322c2eb31c9ddb595c180270fe5770b735e359d",
+        "bytes": 66954
+      },
+      {
+        "name": "outer.log",
+        "path": "/private/tmp/tec-os-observer-state-019f63903250.outer.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    ]
+  },
+  "private_execution_identity": {
+    "before_import_receipt_sha256": "03421e120d257e4ba79860691adec559c7d09917142ccedbeb5e5c52b66c7acf",
+    "before_import_equals_suite": true,
+    "sources": [
+      {
+        "module": "build_and_check",
+        "source_path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+        "expected_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+        "source_read_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+        "private_path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/build_and_check.py",
+        "private_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+        "bytes": 5656,
+        "execution_bytes_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc"
+      },
+      {
+        "module": "packet_inputs",
+        "source_path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+        "expected_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+        "source_read_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+        "private_path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/packet_inputs.py",
+        "private_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+        "bytes": 4299,
+        "execution_bytes_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504"
+      },
+      {
+        "module": "run_once",
+        "source_path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+        "expected_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+        "source_read_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+        "private_path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/run_once.py",
+        "private_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+        "bytes": 47621,
+        "execution_bytes_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5"
+      }
+    ],
+    "actual_private_files_rehashed": true,
+    "imports": [
+      {
+        "module": "packet_inputs",
+        "execution_name": "packet_inputs"
+      },
+      {
+        "module": "run_once",
+        "execution_name": "observer_candidate"
+      },
+      {
+        "module": "build_and_check",
+        "execution_name": "observer_worker"
+      }
+    ],
+    "reading": "Bound driver verifies all3 source/private copies before any helper/candidate execution, then compile/exec uses those exact retained verified bytes with fresh non-main names. Helper packet_inputs first, observer_candidate second, observer_worker third. Import main guards do not invoke production runner or worker. Private/source/execute hashes agree."
+  },
+  "postflight_source_checks": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/test_observer.py",
+      "sha256": "4d8cefed169fec51c6e8692d5f421f43d18ee7d1b3bf7dbc647f1c98efd8ab20",
+      "equals_offered_fb36754": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/observer-control-inputs.json",
+      "sha256": "83d54c40e91621a6ed30e9510b15981d706b449bad7b7e93a4cb7687865a4396",
+      "equals_offered_fb36754": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/observer-state-allocation-inputs.json",
+      "sha256": "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+      "equals_offered_fb36754": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+      "sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "equals_offered_fb36754": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+      "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "equals_offered_fb36754": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "equals_offered_fb36754": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/public_observer_fixture.py",
+      "sha256": "9df4ae6ade0d6812205a73ff1a58e37c665a8aaf4bebc92e3fd050c52a4cbc23",
+      "equals_offered_fb36754": true
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/fixture-inputs.json",
+      "sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+      "equals_offered_fb36754": true
+    }
+  ],
+  "current_python": {
+    "path": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+    "sha256": "bdea59019a38eb6600cc9e71e984a97fedadc406448431281e7657030f54987e",
+    "matches_bound_hash": true
+  },
+  "cases": [
+    {
+      "id": "Q01",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "f69a02c65a42ccc701a393c43922d1a3c0552a718779eb3a9902770626a9fb63",
+      "standalone_equals_suite": true,
+      "review": "Actual query/ownership routines return expected rows from one fake2.0-budget query; fake0.6 elapsed exceeds old half-second and is recorded. This is not real ps latency."
+    },
+    {
+      "id": "Q02",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "2e67e5735f51c3461479d2b883fb61f58c65bf9e50c91089cc41f771debe2611",
+      "standalone_equals_suite": true,
+      "review": "Injected TimeoutExpired retains observation stage/code124/class and routes fake bound TERM/KILL; no query retry and failure cannot pass."
+    },
+    {
+      "id": "Q03",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "97153d73f49d4a9dca5e5aedfcadb549ffe1b2e37c91ac4cb36d63f5e349b172",
+      "standalone_equals_suite": true,
+      "review": "All three variants present: near-soft0.2 launch, intent-exhausted no launch/effective0 and stop-during-intent no launch with retained positive checked budget."
+    },
+    {
+      "id": "Q04",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "96f4e3e93252dfe2f7e432a6556f46bde8baa4fc26a99e2c5eb9788622552430",
+      "standalone_equals_suite": true,
+      "review": "At fake177/180/181 no launch and absolute-deadline124 retained."
+    },
+    {
+      "id": "Q05",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "82a913b6629cd02e25ea39ebf698660e2cc2c63ac01bc4039b6f055ed0169c88",
+      "standalone_equals_suite": true,
+      "review": "Both cleanup budgets0.5 and shortened0.2 fail closed, preserve previous known group/rows and return UNKNOWN_HELD with remaining null, not empty success."
+    },
+    {
+      "id": "Q06",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "941c942c0d2c05b88d0ecb06424c3b794c694d7c98f2a7cab8140d0169b6fa35",
+      "standalone_equals_suite": true,
+      "review": "Six variants recorded: two soft-lock/grace positions, blocked failure log, raised failure log, late return and actual-query blocked-spawn. Pending cause precedes spawn release; fake TERM/KILL precede return; returned handle cleanupTrue with signals15/9 and same cause retained. Source PASS also witnesses bounded joins/no captured thread errors; timings are fake, not measured kernel scheduling."
+    },
+    {
+      "id": "Q07",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "df41a116a3039554b9208d747cbdda763afaa27a27f47c9e999501c9e8f18b71",
+      "standalone_equals_suite": true,
+      "review": "Separate invalid declaration/actual identity variants exercise validation; direct handle/group remembered before durable ACK preparation; injected stop leaves no published ACK and retains group."
+    },
+    {
+      "id": "Q08",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "d0654adb9da2f99d7fbb1316423d3c03b166e56a2452d231ece14636e9827a11",
+      "standalone_equals_suite": true,
+      "review": "Leader/guard loss retains worker group for fake cleanup. Subsequent empty state observation retires group; premature guard exit1 remains failure. Positive ownership-state case, not site acceptance or acceptance of empty production global ps."
+    },
+    {
+      "id": "Q09",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "1214b34ae56ca26cdd671b85c265ee5908832f06554c95cbacf4756c4e43fcd8",
+      "standalone_equals_suite": true,
+      "review": "Reused leader/child births do not retain group or inherit authority; old observed birth/history remains. No fake signal target survives."
+    },
+    {
+      "id": "Q10",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "d58d138d92bdf6f175bab8c020090467ee4847fc10e125873b4acc3e947774f4",
+      "standalone_equals_suite": true,
+      "review": "Only previously observed matching-birth detached identity4103 is retained; unseen4104 excluded. No unseen-history claim."
+    },
+    {
+      "id": "Q11",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "f42946ab82eaa6de3cef7e49ad00216dd1468e788748c8faa5b25aa867b96aef",
+      "standalone_equals_suite": true,
+      "review": "Parent first cause survives later guard/cleanup, pending request defeats stale PASS commit, synthetic terminal is published once and matches its file. Publication exception leaves no committed code. Worker-first receipt preserved; parent-first later worker7 cannot overwrite parent124 and one conflict retains both. JSON UTC is diagnostic data; receipt import order, not comparing synthetic vs real timestamps, establishes precedence."
+    },
+    {
+      "id": "Q12",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "c044d6a8ff9d192fd954c8881329ae53dda11e86cc33404b584ade67ff2d0525",
+      "standalone_equals_suite": true,
+      "review": "ACK baseline makes audit tests non-vacuous: six absent/residual/unknown/inconsistent/unquiet cases fail. Actual unknown-birth handle dispositions are HELD/LIVE, UNKNOWN_HELD/poll-error and CLEAR/confirmed REAPED0 with retirement history."
+    },
+    {
+      "id": "Q13",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "e06dc8007c41111c4bde809c14a6db890a9c9695b63d8f025672845f01312ef6",
+      "standalone_equals_suite": true,
+      "review": "All14 malformed/range/overflow/visible stop conversions recorded, plus zero-budget/query-timeout/ACK-stop/delayed/failed publication worker.main modes. Native command effects are fake. Publication parents have recorded CLEAR0 ACK baselines and retain exact observation/publication-gap124. Delayed visibility stops second phase; failed publication permits fake worker0/two phases but parent still fails. Fake phase stdout is captured inside case evidence, not actual build output."
+    },
+    {
+      "id": "Q14",
+      "verdict": "accepted_within_allocated_synthetic_scope",
+      "receipt_sha256": "acd9bb2824f11220fcad327f422972c3953e2edbf34c2e04435e24b6ec6dfdc0",
+      "standalone_equals_suite": true,
+      "review": "All four hard_stop variants record own fake exit callback124 and no normal/Popen helper calls. Target exceptions allow subsequent targets; iteration/copy exception variants still reach finally. No real SIGKILL or native process exit from hard_stop."
+    }
+  ],
+  "scope_and_nonvacuity": [
+    "All14 actual PASS receipts and owner external exit0 satisfy both allocated acceptance conditions. Hash verification alone was not treated as predicate review: every full case observation and relevant generated worker/terminal receipt was read against the frozen driver/candidate functions.",
+    "Q06 blocked-spawn, Q11 both import orders and Q13 acknowledged pre-failure baselines retain the corrected non-vacuous predicates. Source PASS attests conditions that are not separately serialised, such as bounded thread joins and zero captured thread errors; no independent OS thread probe was performed.",
+    "worker.main uses worker-local fake argparse/os/time/subprocess namespaces restored in finally, not mutation of stdlib functions. Fake ps argv and SITE_PHASE build/validate strings are fixture callbacks/captured stdout only. No actual ps/build/checker is inferred from those strings.",
+    "Q14 injects fake killpg/kill/exit; Q06 signal callbacks record data only. Actual in-process threads, synthetic filesystem writes/fsync/link and own-process alarm installation occurred in the allocated driver, not native candidate subprocesses or cross-process signalling.",
+    "Observed tool wall0.051158666 is for this one lightweight process only. Fake0.6/2.01/180 clock values are not actual costs, host query sufficiency or memory figures. Alarm expiry/kernel hard-time enforcement were not exercised merely because the quick suite passed.",
+    "Q11 retained dot-temp and synthetic-terminal share prepared bytes/hardlink identity; this is expected prepare/publish evidence, not a second execution. No retained evidence was cleaned up or changed."
+  ],
+  "findings": [],
+  "Q15_eligibility": {
+    "verdict": "Unit/state-control prerequisite is satisfied; Q15 source offer is eligible for separate allocation consideration.",
+    "source_and_binding_still_offered_bytes": true,
+    "fixture_binding_sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+    "profile": "Separate public fixture controller60seconds from entry, candidate cutoff entry+55 with5seconds postflight inside60; one actual inner850MB/450MB/wait0 guard, no outer guard. Explicit synthetic dependency/Node/checker doubles, not VitePress or book acceptance.",
+    "still_required": [
+      "P3 must grant its own exact Q15 allocation and fresh command/output/input checks; this review grants no launch authority.",
+      "Actual Q15 requires controller0, candidate0/PASS, complete input postflight, exactly CLEAR empty runner audit and independently resolved retained native scope.",
+      "Q15 actual-result review precedes any separately allocated Q16. No automatic chain/retry, no book invocation allocation follows."
+    ],
+    "unproved": "No native process discovery/signalling/cleanup, host2-second sufficiency, unseen historical descendant coverage or real39-page render/checker closure is established by STATE01."
+  },
+  "actions": {
+    "only_observer_state01_result_review_json_written": true,
+    "reruns_imports_controls_probes_signals_builds_validators": false,
+    "source_or_evidence_changes": false,
+    "commit": false
+  },
+  "limits": [
+    "Review accepts this retained allocated result only, not generic correctness or a new gate reading. Actual external terminal status is sourced to the named retained external receipt, not independently instrumented here.",
+    "Complete immutable archive creation/source bundle retention remains with the lead. This review independently covers the44 listed retained files and current/offered/private hashes; it does not assert an unprovided archive hash.",
+    "No measured peak-memory result, native fixture success, browser/hardware/site/publication acceptance. Historical failed jobs and their narrow hold dispositions remain intact."
+  ]
+}

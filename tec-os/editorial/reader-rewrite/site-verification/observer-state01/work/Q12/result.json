@@ -1,0 +1,231 @@
+{
+  "case": "Q12",
+  "status": "PASS",
+  "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+  "observations": {
+    "variants": [
+      {
+        "variant": "absent",
+        "code": 124,
+        "first_failure": {
+          "status": "FAILED",
+          "stage": "final-audit",
+          "detail": "fresh audit/quiescence missing",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.705193+00:00"
+        }
+      },
+      {
+        "variant": "nonempty",
+        "code": 124,
+        "first_failure": {
+          "status": "FAILED",
+          "stage": "final-audit",
+          "detail": "fresh audit/quiescence missing",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.705207+00:00"
+        }
+      },
+      {
+        "variant": "timeout",
+        "code": 124,
+        "first_failure": {
+          "status": "FAILED",
+          "stage": "final-audit",
+          "detail": "fresh audit/quiescence missing",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.705219+00:00"
+        }
+      },
+      {
+        "variant": "clear-missing-remaining",
+        "code": 124,
+        "first_failure": {
+          "status": "FAILED",
+          "stage": "final-audit",
+          "detail": "fresh audit/quiescence missing",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.705231+00:00"
+        }
+      },
+      {
+        "variant": "clear-with-residual",
+        "code": 124,
+        "first_failure": {
+          "status": "FAILED",
+          "stage": "final-audit",
+          "detail": "fresh audit/quiescence missing",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.705243+00:00"
+        }
+      },
+      {
+        "variant": "not-quiescent",
+        "code": 124,
+        "first_failure": {
+          "status": "FAILED",
+          "stage": "final-audit",
+          "detail": "fresh audit/quiescence missing",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.705254+00:00"
+        }
+      },
+      {
+        "variant": "unbound-live",
+        "audit": {
+          "status": "HELD",
+          "remaining": [],
+          "direct_handles": [
+            {
+              "pid": 4101,
+              "birth": null,
+              "status": "LIVE"
+            }
+          ],
+          "registry": {
+            "history": [
+              {
+                "kind": "direct-child",
+                "pid": 4101,
+                "birth": null,
+                "argv": [
+                  "synthetic-unbound-direct"
+                ]
+              }
+            ],
+            "roots": {
+              "4101": null
+            },
+            "groups": {},
+            "observed": {},
+            "last_success_id": null,
+            "last_rows": null,
+            "first_failure": null,
+            "accepted_ownership_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        },
+        "history": [
+          {
+            "kind": "direct-child",
+            "pid": 4101,
+            "birth": null,
+            "argv": [
+              "synthetic-unbound-direct"
+            ]
+          }
+        ]
+      },
+      {
+        "variant": "unbound-poll-error",
+        "audit": {
+          "status": "UNKNOWN_HELD",
+          "remaining": [],
+          "direct_handles": [
+            {
+              "pid": 4101,
+              "birth": null,
+              "status": "UNRESOLVED",
+              "error": "synthetic handle poll error",
+              "error_type": "OSError"
+            }
+          ],
+          "registry": {
+            "history": [
+              {
+                "kind": "direct-child",
+                "pid": 4101,
+                "birth": null,
+                "argv": [
+                  "synthetic-unbound-direct"
+                ]
+              }
+            ],
+            "roots": {
+              "4101": null
+            },
+            "groups": {},
+            "observed": {},
+            "last_success_id": null,
+            "last_rows": null,
+            "first_failure": null,
+            "accepted_ownership_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        },
+        "history": [
+          {
+            "kind": "direct-child",
+            "pid": 4101,
+            "birth": null,
+            "argv": [
+              "synthetic-unbound-direct"
+            ]
+          }
+        ]
+      },
+      {
+        "variant": "unbound-reaped",
+        "audit": {
+          "status": "CLEAR",
+          "remaining": [],
+          "direct_handles": [
+            {
+              "pid": 4101,
+              "birth": null,
+              "status": "REAPED",
+              "exit_code": 0
+            }
+          ],
+          "registry": {
+            "history": [
+              {
+                "kind": "direct-child",
+                "pid": 4101,
+                "birth": null,
+                "argv": [
+                  "synthetic-unbound-direct"
+                ]
+              },
+              {
+                "kind": "direct-audit-exit",
+                "pid": 4101,
+                "birth": null,
+                "status": "REAPED",
+                "exit_code": 0
+              }
+            ],
+            "roots": {},
+            "groups": {},
+            "observed": {},
+            "last_success_id": null,
+            "last_rows": null,
+            "first_failure": null,
+            "accepted_ownership_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        },
+        "history": [
+          {
+            "kind": "direct-child",
+            "pid": 4101,
+            "birth": null,
+            "argv": [
+              "synthetic-unbound-direct"
+            ]
+          },
+          {
+            "kind": "direct-audit-exit",
+            "pid": 4101,
+            "birth": null,
+            "status": "REAPED",
+            "exit_code": 0
+          }
+        ]
+      }
+    ]
+  }
+}

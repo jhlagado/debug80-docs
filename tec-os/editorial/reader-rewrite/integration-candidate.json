@@ -361,7 +361,7 @@
   "site_verification_observer_repair_proposal": {
     "status": "SOURCE_ONLY_REVIEWED_PROPOSAL_NOT_APPLIED_OR_EXECUTED",
     "path": "site-verification/ownership-audit-proposal/README.md",
-    "scope": "Explicit ordinary query0.5→2.0s cappedsoft; cleanup0.5 retained; timer/firstfailure/mainfinalizer/observedledger repair",
+    "scope": "Explicit ordinary query0.5\u21922.0s cappedsoft; cleanup0.5 retained; timer/firstfailure/mainfinalizer/observedledger repair",
     "limits": "850MB/450heap/wait0/180whole/3cleanup/twoworkers unchanged; reader/checker inputs unchanged",
     "controls": "16 planned controls, no execution or qualification",
     "deliverable": "Actual complete39-page closure after separately approved source/control/seal/input review and fresh allocation",
@@ -375,5 +375,14 @@
     "controls": "Q01-Q14source-onlystatecontrols;Q15/Q16publicfixturesseparate;noneexecuted",
     "book_closure": "Actual39-pagecompletechecker/input/process result remains pending",
     "actual_allocation": false
+  },
+  "site_verification_observer_state01_result": {
+    "status": "PASS_SCOPED_STATE_CONTROLS_INDEPENDENTLY_REVIEWED",
+    "allocation": "KS47-OBSERVER-STATE01-20261107",
+    "result": "site-verification/observer-state01-result.json",
+    "cases_passed": 14,
+    "terminal_exit_code": 0,
+    "Q15": "Source eligible for separate allocation consideration, not executed",
+    "site_acceptance": false
   }
 }
