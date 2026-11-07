@@ -13,19 +13,19 @@
     "PF_01": "3e3c362b8cbdd9fedfc10b6f3ebba6559686d4ad",
     "Q16": "77593a0acf28fec2d897a2797b5ef399a75e0f0d",
     "core": "dcb14a834d9cc043bcb8af16b4b62b3bc4a4a7a4",
-    "final_binding": "f128b6ea77c6aa461e2cf0564d0165a3a2f6a947",
-    "head_observed": "f128b6ea77c6aa461e2cf0564d0165a3a2f6a947"
+    "final_binding": "fe8d897cabd75abf067a3025dc0a67a44e85b9c7",
+    "head_observed": "fe8d897cabd75abf067a3025dc0a67a44e85b9c7"
   },
   "sha256": {
-    "public_observer_fixture.py": "b5d2435af29308be0a74e8d8ad687d3f989346e7b20052f4b3b9a42181dbf1bb",
-    "fixture-inputs.json": "12e8154f7af1bf645a6d21b0dce6d1f03f6c1820b94b632f276ffe59a7805e12",
+    "public_observer_fixture.py": "9df4ae6ade0d6812205a73ff1a58e37c665a8aaf4bebc92e3fd050c52a4cbc23",
+    "fixture-inputs.json": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
     "run_once.py": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
     "build_and_check.py": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
     "public-fixture-source-review.json": "62208dc40b80229af464ea3914769f299b79a8a0fb109134fb88850a045961b8",
     "failed-attempt03/packet/seal.json": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
     "failed-attempt03/packet/check_html.py": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515"
   },
-  "external_binding_sha256": "12e8154f7af1bf645a6d21b0dce6d1f03f6c1820b94b632f276ffe59a7805e12",
+  "external_binding_sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
   "static_identity_checks": {
     "harness": true,
     "baseline_seal": true,
@@ -41,7 +41,8 @@
     "Complete current public_observer_fixture.py from module header through main entry, including preparation, doubles, independent audit, Q15/Q16 and all exception/finally paths.",
     "Complete final fixture-inputs.json and binding-refresh diff at ae6e676.",
     "Original review and complete scoped changes at3e3c362/77593a0; current core accepted-receipt hash publication and mismatch context, read as inert source.",
-    "Bounded f128b6e one-line oracle change, complete binding-refresh diff and neighbouring Q15 requirements. Current harness, binding and candidate identities rehashed without importing candidate code."
+    "Bounded f128b6e one-line oracle change, complete binding-refresh diff and neighbouring Q15 requirements. Current harness, binding and candidate identities rehashed without importing candidate code.",
+    "Bounded fe8d897 one-flag harness diff, complete binding-refresh diff, neighbouring actual Popen argv and frozen failed-attempt03/packet/invoke.sh. Current hashes checked without candidate import or execution."
   ],
   "dispositions": [
     {
@@ -84,6 +85,17 @@
         425
       ],
       "reason": "Q15 now requires both owned.remaining exactly[] and owned.status exactly CLEAR. HELD, UNKNOWN_HELD, missing and other statuses fail independently of a hypothetical erroneous candidate PASS. Actual zero exit/PASS terminal, postflight receipt, no first failure and labelled checker receipt requirements remain. Static whole-file byte comparison against ae6e676 confirms that the one status predicate is the only harness change. The refreshed binding changes its self-hash, Q15 requirement and disposition only; runner/worker and generated doubles remain the previously confirmed bytes."
+    },
+    {
+      "id": "outer-candidate-isolation",
+      "status": "confirmed_source_only",
+      "commit": "fe8d897cabd75abf067a3025dc0a67a44e85b9c7",
+      "path": "public_observer_fixture.py",
+      "lines": [
+        393,
+        405
+      ],
+      "reason": "The sole harness byte change since f128b6e adds -I before -S -B on the actual public run_once.py Popen argv. This matches the frozen public invoke.sh outer Python flags. Isolated mode ignores inherited PYTHONPATH for that interpreter; this is a source-level statement, not a measured isolation result. The inner worker -S -B command and all core/worker bytes remain unchanged. Final refreshed binding raw SHA equals the supplied e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c and its harness self-hash matches the current file. No other fixture acceptance predicate changed."
     }
   ],
   "preserved_boundaries": [

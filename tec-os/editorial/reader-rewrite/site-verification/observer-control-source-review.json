@@ -1,0 +1,203 @@
+{
+  "schema": 1,
+  "status": "full_source_review_changes_required",
+  "reviewed_driver_commit": "c8d0a8b",
+  "scope": "Complete Q01-Q14 driver/spec and proposed exact allocation binding source review. No candidate import or control execution. Q15/Q16 remain separate.",
+  "inputs": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/test_observer.py",
+      "sha256": "4f58ae5d176fd83e6e19b0ca8a19d7e12b414fa86feb2b22c62abb6ddad7a496",
+      "bytes": 41775,
+      "lines": 764
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/observer-control-inputs.json",
+      "sha256": "ecccd60eec185248d8a6947deb7dad0f0eb3cf6d75e940aa2bb8b953c290e6ba",
+      "bytes": 29920,
+      "lines": 594
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/observer-state-allocation-inputs.json",
+      "sha256": "02918f51e7c3f86eedcd936292a667038f14782b99b75827a0e87dd7221bba10",
+      "bytes": 1761,
+      "lines": 39
+    }
+  ],
+  "bound_modules": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+      "sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "bytes": 47621,
+      "lines": 997
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "bytes": 4299,
+      "lines": 110
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+      "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "bytes": 5656,
+      "lines": 119
+    }
+  ],
+  "python_identity": {
+    "path": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+    "sha256": "bdea59019a38eb6600cc9e71e984a97fedadc406448431281e7657030f54987e",
+    "matches_binding": true
+  },
+  "proposed_allocation": "KS47-OBSERVER-STATE01-20261107",
+  "allocation_granted": false,
+  "findings": [
+    {
+      "id": "OC01",
+      "priority": "P1",
+      "source": "test_observer.py:491,516-559,582-585",
+      "title": "Q13 parent failure predicates can pass solely because ACK is missing",
+      "reason": "worker_main_fixture creates parent InvocationState without acknowledge(parent). In delayed/failed publication modes, parent.decision(CLEAR,True)==124 can therefore pass when request_stop fails to retain the publication-gap cause: decision rejects missing ACK with124. The separate unpublished-latch state in q13 has the same missing-ACK fallback. This makes the claimed acceptance-disqualification predicate vacuous for that invariant.",
+      "correction": "Establish a valid acknowledged parent baseline before injecting publication failure, including the separate unpublished-latch state. After injection assert the original identity-observation stage, publication-gap detail and124 remain; then assert failed decision. Do not infer actual site acceptance from this synthetic ACK."
+    },
+    {
+      "id": "OC02",
+      "priority": "P2",
+      "source": "test_observer.py:232-300; run_once.py:233-253",
+      "title": "Q06 does not exercise the corrected failure-lock release during query spawn",
+      "reason": "Holding state.lock around soft_stop proves timer wake independence, and manually registering a child after completed escalation proves stop_new_child routing. Neither calls actual InvocationState.query with its launch callback blocked inside a Popen-like spawn while another request_stop must acquire failure_lock. Restoring the original OBS01 failure-lock-across-spawn defect would not be detected by these variants.",
+      "correction": "Add one bounded Q06 variant using the actual query launch callback with an injected blocked spawn. Concurrently invoke actual request_stop and require retained pending cause plus signal wake before releasing spawn. Release/join in finally; register returned fake handle and exercise stop_new_child cleanup. Keep barriers2s, no native process or separate model."
+    },
+    {
+      "id": "OC03",
+      "priority": "P2",
+      "source": "test_observer.py:372-438",
+      "title": "Q11 lacks parent-first then later worker-receipt precedence predicate",
+      "reason": "The existing import_failure variant imports a worker receipt into a fresh state then requests generic guard failure. The earlier regression unconditionally replaced an already latched parent failure with a later worker receipt; that defective version still satisfies this worker-first test. Parent-vs-guard tests do not call import_failure.",
+      "correction": "Add a small variant: latch a structured parent observation failure, import a different later valid worker receipt, assert parent first-failure identity/code/detail remain and conflict history records both. Retain existing worker-first variant. No further native fixture is needed."
+    }
+  ],
+  "case_review": [
+    {
+      "id": "Q01",
+      "verdict": "clear_source",
+      "reason": "Actual query_budget/query/validate/bind/observe with0.6 fake elapsed; asserts one2.0 launch and overrun record.",
+      "executed": false
+    },
+    {
+      "id": "Q02",
+      "verdict": "clear_source",
+      "reason": "Actual query timeout type, first failure stage/code/class, bound TERM/KILL routing and failed decision; fake adapter only.",
+      "executed": false
+    },
+    {
+      "id": "Q03",
+      "verdict": "clear_source",
+      "reason": "Near-soft timeout, exhausted intent and stop-during-intent variants assert launch counts and planned/effective/launch-checked budgets.",
+      "executed": false
+    },
+    {
+      "id": "Q04",
+      "verdict": "clear_source",
+      "reason": "At/beyond soft and hard times, actual query refuses all launches and retains absolute-deadline cause.",
+      "executed": false
+    },
+    {
+      "id": "Q05",
+      "verdict": "clear_source",
+      "reason": "Cleanup0.5/shorter-hard-remainder timeout preserves last rows/group and actual UNKNOWN_HELD disposition; decision cannot pass.",
+      "executed": false
+    },
+    {
+      "id": "Q06",
+      "verdict": "coverage_correction_required_OC02",
+      "reason": "Actual soft_stop/escalation under held state.lock, blocked/raised failure logging and manual late-child cleanup are substantive. Does not yet place the actual query launch callback inside a blocked Popen-like spawn while a separate stop request must queue/wake.",
+      "executed": false
+    },
+    {
+      "id": "Q07",
+      "verdict": "clear_source",
+      "reason": "Separate nonce/context/environment/declaration/observed parent/group/birth/missing-worker/dead-guard validation; actual register/bind and durable-preparation stop prevent publish_ack.",
+      "executed": false
+    },
+    {
+      "id": "Q08",
+      "verdict": "clear_source",
+      "reason": "Actual observe retains leaderless group and routes signals; premature guard failure is explicitly latched before failed decision. Positive ownership state only.",
+      "executed": false
+    },
+    {
+      "id": "Q09",
+      "verdict": "clear_source",
+      "reason": "Different leader/child births produce no owned rows/groups/signals while old history remains.",
+      "executed": false
+    },
+    {
+      "id": "Q10",
+      "verdict": "clear_source",
+      "reason": "Known matching-birth escaped identity remains observed; unrelated unseen identity is excluded, without historical census claim.",
+      "executed": false
+    },
+    {
+      "id": "Q11",
+      "verdict": "coverage_correction_required_OC03",
+      "reason": "Earliest parent vs guard/cleanup and pending-request/commit race assertions are substantive; actual atomic failure publication and publication error are exercised. Import path only tests worker receipt first, not later worker receipt after an earlier parent cause.",
+      "executed": false
+    },
+    {
+      "id": "Q12",
+      "verdict": "clear_source",
+      "reason": "ACK baseline makes absent/nonempty/unknown/inconsistent/unquiet audit rejection non-vacuous. Actual live/unknown/reaped handle disposition checks status, authority retention/retirement and history.",
+      "executed": false
+    },
+    {
+      "id": "Q13",
+      "verdict": "blocked_OC01",
+      "reason": "Actual phase_stop_code and worker_identity_budget plus actual worker.main with local fake modules exercise zero-budget/query timeout/ACK stop and publication modes. Synthetic parent acceptance assertions lack ACK and can fail for the wrong reason.",
+      "executed": false
+    },
+    {
+      "id": "Q14",
+      "verdict": "clear_source",
+      "reason": "Actual hard_stop with fake direct signals/exit covers normal, per-target error, iteration error and copy error. Forbidden Popen methods are never invoked; finally exit124 asserted.",
+      "executed": false
+    }
+  ],
+  "cleared_checks": [
+    {
+      "scope": "Exact binding and limits",
+      "source": "test_observer.py:646-709; observer-state-allocation-inputs.json",
+      "result": "Current proposed binding matches actual driver/spec/Python and all3 candidate/helper/worker hashes. Schema/allocation/digest and exact lowercase SHA syntax checked before candidate imports. Binding supplies suite60 and case10; 2s barrier/join values are checked against spec. Driver permits other bounded values only through a separately pinned/reviewed binding; it does not independently hardcode case10."
+    },
+    {
+      "scope": "Pre-import closure",
+      "source": "test_observer.py:631-642,702-736",
+      "result": "All three modules are read/hash-checked, exclusively copied/fsynced, re-read/hash-checked and retained before first module execution. Exact retained bytes are compile/exec input under fresh non-main names, with packet_inputs first. No worktree/private path reread for execution and no product main entry is invoked. Driver and standard-library bootstrap necessarily execute before self/binding checks; no candidate/helper does."
+    },
+    {
+      "scope": "Worker local adapters",
+      "source": "test_observer.py:479-562",
+      "result": "Actual worker.main runs with worker module attributes replaced by local argparse/os/time/subprocess namespaces and a durable callback. It does not mutate shared stdlib os/time/subprocess functions. Original attributes restored in finally. Query/phase callbacks record fake requests only; file writes stay in fresh synthetic work paths."
+    },
+    {
+      "scope": "Real-wall and thread bounds",
+      "source": "test_observer.py:657-680,739-759; Q06/Q11",
+      "result": "SIGALRM/ITIMER_REAL exits124 independently of fake clock, candidate locks and I/O; initial cap60 and each case bounded by min(original suite cutoff, now+case10). Threads daemonised with2s waits/joins and checked quiescent. Alarm expiry leaves incomplete/malformed rather than qualified passing run; actual process exit must accompany receipt review. Python startup/stdlib bootstrap and OS scheduling are not hard real-time proofs."
+    },
+    {
+      "scope": "Failure/report scope",
+      "source": "test_observer.py:682-687,738-760",
+      "result": "Fresh work and exclusive initial result reject path reuse. Cases stop after first failing predicate; report contains module identities and attempted imports, case data, retryFalse and site_acceptanceFalse. Full driver source contains no native subprocess launch or real process signal call; only actual allocated in-process threads, synthetic file I/O and real alarm/exit. NoUnavailable/placeholder case remains."
+    },
+    {
+      "scope": "Separation from public fixtures and site",
+      "result": "Q01-Q14 exercise actual routines with injected effects. They are not whole-main scheduling, full process cleanup, real host timing or39-page acceptance. Q15/Q16 public fixture source/result/allocation remain independent. Failed publication worker mode may return0 while parent must fail; this visibility limit is correct once OC01 makes its predicate non-vacuous."
+    }
+  ],
+  "binding_followup": "After driver corrections, refresh driver SHA and spec/source coverage as needed, then regenerate and independently confirm the complete allocation binding and exact fresh command paths. Current matching proposed binding is not execution authority.",
+  "remaining_limits": [
+    "No imports, compile/exec calls, syntax checks, tests, controls, native queries/signals/processes, guard/build/validator or probes performed by this review.",
+    "Only observer-control-source-review.json written. Active driver/spec/binding/core and prior reviews unchanged; no commit.",
+    "Current core source remains independently cleared at dcb14a8. This control-source review does not revise that result or qualify runtime.",
+    "Do not run the proposed suite until findings are disposed, refreshed binding reviewed and external allocation granted."
+  ]
+}
