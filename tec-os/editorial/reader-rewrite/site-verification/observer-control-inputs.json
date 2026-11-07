@@ -2,7 +2,7 @@
   "schema": 1,
   "status": "SOURCE_PREPARATION_AWAITING_RUNNER_API",
   "executed": false,
-  "scope": "Q01-Q14 must call actual candidate routines through injected clock/query/record/signal dependencies. Q15/Q16 remain separate future allocated public fixtures. No separate ownership-state model.",
+  "scope": "Owned driver covers Q01-Q14 only, calling actual candidate routines through injected clock/query/record/signal dependencies. Q15/Q16 are separately owned by public_observer_fixture.py and are not implemented or invoked here.",
   "reviewed_contracts": [
     {
       "path": "tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/controls.json",
@@ -245,18 +245,6 @@
       "kind": "negative",
       "input": "Main cannot complete terminal/fsync before original hard deadline. Variants: one direct signal raises, snapshot iteration raises, normal cleanup helper would block.",
       "expected": "Hard path sends bound KILL and exits124 without waiting for finalisation. An incomplete failure is retained, never PASS. Preserve baseline hard path with per-target isolation and enclosing finally exit124; never poll handles or call the normal helper."
-    },
-    {
-      "id": "Q15",
-      "kind": "integration-positive",
-      "input": "Separately allocated short public-runner fixture child follows the real ACK/group path and exits normally.",
-      "expected": "Actual command0, complete synthetic terminal/audit, no children left under qualified scope; no real book result inferred."
-    },
-    {
-      "id": "Q16",
-      "kind": "integration-negative",
-      "input": "Separately allocated short public-runner fixture child blocks after ACK; inject one observer failure.",
-      "expected": "Actual nonzero exit, preserved first failure, bound escalation and independently reviewed actual owned-process outcome; no native probe/build during proposal."
     }
   ],
   "fake_input_conventions": {
@@ -273,13 +261,27 @@
     "prior_query_limit_seconds": 0.5
   },
   "future_cli": {
-    "status": "Not ready to invoke: exact runner API, candidate byte bindings, driver source review and separate allocation are pending.",
+    "status": "Design only. Exact runner API, final binding and source review remain pending; no invocation authorized by these command shapes.",
+    "required_flags": [
+      "--allocation",
+      "--inputs",
+      "--inputs-sha256",
+      "--result",
+      "--work"
+    ],
+    "binding_rule": "The externally pinned SHA-256 of --inputs is checked first. Verify allocation identity, pinned Python path/hash, declared candidate/helper hashes and private-copy identities before any candidate/helper import. A missing, stale or mismatched binding fails closed. Lead prepares the final binding after the core API is final.",
     "argv_shape": [
       "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
       "-I",
       "-S",
       "-B",
       "test_observer.py",
+      "--allocation",
+      "ALLOCATION",
+      "--inputs",
+      "BINDING.json",
+      "--inputs-sha256",
+      "BINDING_SHA256",
       "--case",
       "Qxx",
       "--result",
@@ -293,6 +295,12 @@
       "-S",
       "-B",
       "test_observer.py",
+      "--allocation",
+      "ALLOCATION",
+      "--inputs",
+      "BINDING.json",
+      "--inputs-sha256",
+      "BINDING_SHA256",
       "--suite",
       "Q01-Q14",
       "--result",
@@ -300,13 +308,24 @@
       "--work",
       "NEW"
     ],
-    "public_fixture_policy": "Q15/Q16 must additionally require an allocation argument and an exact separately sealed public command. No public command is invented before its API is supplied."
+    "real_wall_limit": "Require positive bounded suite and per-case real-wall limits from the allocation-bound inputs before candidate import. Use original monotonic cutoff; no reset by fake time, blocked I/O or later cases. Exact values await the final allocation binding.",
+    "case_paths": "Fresh suite root and exclusive result; each Q01-Q14 case gets distinct fresh work and result paths. Existing paths are refused, not reused.",
+    "native_actions": "No native ps, site build or real validator. Synthetic child/thread use requires allocation and is allowed only where the actual routine cannot otherwise be controlled. No generic process framework or Q15/Q16 dispatch."
   },
   "limits": [
     "No candidate import/execution, process query, signal, probe, control, native build, VitePress render or validator is performed in preparation.",
     "Routines coverage and failure-predicate assertions are pending actual runner APIs, not inferred from pseudocode.",
     "All existing 48 checker artifacts, active checker, manifest, source inputs and seals remain untouched.",
     "Fake-positive outcomes cannot establish real host timing sufficiency, universal descendant discovery, universal cleanup or actual book acceptance.",
-    "Q13 publication before visibility may permit a phase; after visibility the next checkpoint must refuse. No instantaneous cross-process preemption is claimed."
-  ]
+    "Q13 publication before visibility may permit a phase; after visibility the next checkpoint must refuse. No instantaneous cross-process preemption is claimed.",
+    "Allocation and input binding are mandatory before future imports; Q01-Q14 real-wall bounds and per-case artifact isolation are not simulated by the fake clock."
+  ],
+  "separately_owned_public_fixtures": {
+    "path": "public_observer_fixture.py",
+    "ids": [
+      "Q15",
+      "Q16"
+    ],
+    "scope": "Separate public fixture ownership/allocation; no public-mode implementation in test_observer.py."
+  }
 }
