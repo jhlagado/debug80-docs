@@ -12,7 +12,6 @@ import hashlib
 import json
 import os
 from pathlib import Path
-import shutil
 import subprocess
 import sys
 import threading
@@ -191,12 +190,21 @@ def read_json(path):
     return json.loads(Path(path).read_text())
 
 
+def copy_approved(source, destination, expected):
+    """Authenticate one read, copy those bytes, then authenticate the copy."""
+    data = Path(source).read_bytes()
+    require(sha(data) == expected, 'source changed before copy: ' + str(source))
+    Path(destination).write_bytes(data)
+    require(digest(destination) == expected, 'approved copy changed: ' + str(destination))
+
+
 def prepare(binding, work, case):
     """Materialise an isolated fixture seal; never call the book preparer."""
     book = Path(binding['book_packet'])
     candidate = Path(binding['candidate_packet'])
-    original_seal = read_json(book / 'seal.json')
-    require(digest(book / 'seal.json') == binding['book_seal_sha256'], 'book baseline changed')
+    seal_bytes = (book / 'seal.json').read_bytes()
+    require(sha(seal_bytes) == binding['book_seal_sha256'], 'book baseline changed')
+    original_seal = json.loads(seal_bytes)
     require(digest(__file__) == binding['harness_sha256'], 'fixture harness changed')
     require(set(binding['candidate_payloads']) == {'run_once.py', 'build_and_check.py'},
             'unexpected candidate payload set')
@@ -226,14 +234,16 @@ def prepare(binding, work, case):
     packet = work / 'fixture-packet'
     packet.mkdir()
     for name, expected in original_seal['payload'].items():
-        shutil.copyfile(book / name, packet / name)
-        require(digest(packet / name) == expected, 'baseline changed during copy: ' + name)
+        copy_approved(book / name, packet / name, expected)
     for name, expected in binding['candidate_payloads'].items():
-        shutil.copyfile(candidate / name, packet / name)
-        require(digest(packet / name) == expected, 'candidate changed during copy: ' + name)
+        copy_approved(candidate / name, packet / name, expected)
+    approved_payload = {**original_seal['payload'], **binding['candidate_payloads']}
     (packet / 'check_html.py').write_text(CHECKER_DOUBLE)
     (packet / 'README.md').write_text(FIXTURE_README)
     (packet / 'invoke.sh').write_text(FIXTURE_INVOKE)
+    approved_payload.update({'check_html.py': sha(CHECKER_DOUBLE.encode()),
+                             'README.md': sha(FIXTURE_README.encode()),
+                             'invoke.sh': sha(FIXTURE_INVOKE.encode())})
     dependencies = work / 'synthetic-node_modules'
     (dependencies / 'vitepress/bin').mkdir(parents=True)
     (dependencies / 'vitepress/bin/vitepress.js').write_text(STUB_JS)
@@ -243,15 +253,20 @@ def prepare(binding, work, case):
     write_json(dependencies / 'fixture-case.json', {'scope': SCOPE, 'case': case}, True)
     installed = dependency_identity(dependencies)
     write_json(packet / 'installed-inputs.json', installed)
-    write_json(packet / 'dependency-manifests.json', {
+    dependency_manifest = {
         'scope': SCOPE, 'no_vitepress_or_renderer': True,
-        'synthetic_tree_sha256': installed['sha256']})
+        'synthetic_tree_sha256': installed['sha256']}
+    write_json(packet / 'dependency-manifests.json', dependency_manifest)
+    approved_payload.update({'installed-inputs.json': sha(canonical(installed)),
+                             'dependency-manifests.json': sha(canonical(dependency_manifest))})
     seal = json.loads(json.dumps(original_seal))
     seal.update(status='UNQUALIFIED_FIXTURE_UNRUN', fixture_scope=SCOPE, fixture_case=case,
                 installed_root=str(dependencies), installed_entries=len(installed['entries']),
                 installed_identity=installed['sha256'],
                 claim_directory=binding['fixture_claim_directory'])
     seal['payload'] = {name: digest(packet / name) for name in original_seal['payload']}
+    require(seal['payload'] == approved_payload,
+            'fixture payload changed outside the explicit approved overrides; refuse seal')
     differences = {name: {'book': old, 'fixture': seal['payload'][name]}
                    for name, old in original_seal['payload'].items()
                    if seal['payload'][name] != old}

@@ -10,7 +10,7 @@
     "run_once.py": "f2af8053fc704aea0e84d7c055e1336e74f90452190b0f7b614fec6a8cbf3225",
     "build_and_check.py": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc"
   },
-  "harness_sha256": "db486685d8ec0ce2f73f8a84dd3c776602e6ee7d183a168bebc0c722469c1284",
+  "harness_sha256": "aef3bf093410a532c4fd34c846ee065bc45bbccc1160a01848abf340b5fd0d06",
   "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
   "source_archive_sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28",
   "source_archive_bytes": 34037760,
@@ -171,5 +171,6 @@
   },
   "binding_contract": "The allocation must name the exact external fixture-inputs.json SHA-256 passed as required --binding-sha256. The CLI verifies raw bytes before JSON parsing, payload adaptation or any child launch. It rejects placeholder candidate hashes and allocation labels before materialisation; missing or altered raw binding identity fails before JSON parsing. This binding cannot contain its own digest; the reviewed digest belongs in the allocation command.",
   "controller_hard_cutoff_limit": "Forced controller exit leaves incomplete evidence and cannot count as expected fixture outcome. The public runner owns inner guard/group cleanup at its earlier hard cutoff; no universal cleanup or hard-loss guarantee is inferred from the controller timer.",
-  "candidate_source_commit": "3679b7837a74e3eb45fd469a4c3645058b08aa99"
+  "candidate_source_commit": "3679b7837a74e3eb45fd469a4c3645058b08aa99",
+  "copy_identity_contract": "Read baseline seal bytes once, verify the externally bound seal hash before JSON parsing. For every baseline payload and candidate runner/worker, read source bytes once, authenticate against original seal or candidate binding, write exactly those approved bytes, then immediately authenticate the copy. All baseline copies complete before intentional fixture overrides. Before emitting a fixture seal, compare the entire final payload digest map with the approved baseline/candidate map plus only the explicit generated overrides; never adopt arbitrary changed copied bytes."
 }
