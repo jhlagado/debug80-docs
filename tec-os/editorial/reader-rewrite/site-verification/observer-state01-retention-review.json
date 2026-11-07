@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "review_kind": "independent_read_only_retention_check",
+  "verdict": "clear_within_retention_scope",
+  "retention_mismatches": [],
+  "scope": "STATE01 archive, original raw file bytes/metadata, retained copies, frozen source/input identities, allocation and external receipt only. No14-case predicate, thread-scope or runtime sufficiency verdict.",
+  "source_commit": "fb36754c78a79c2622caf8c2189b73909c607004",
+  "original_work": "/private/tmp/tec-os-observer-state-019f63903250",
+  "archive": {
+    "path": "observer-state01/complete-evidence-and-inputs.tar.gz",
+    "bytes": 565332,
+    "sha256": "742049e880f8ef88ec40dc6e6c963fdcbeefc6a271eb57de2ddb458160b3c06e",
+    "identity_matches_requested_and_manifest": true,
+    "members": 102,
+    "duplicate_or_unexpected_members": false
+  },
+  "reviewed_manifest_identities": {
+    "retention.json": "0d2ed8c8d987f3bddc60e3a53b6ca73dfc69fc32498ae4d08d47e11975e161ba",
+    "archive-manifest.json": "dbbc19563b9f8fe240b3c7e956a77fdac31497f823eae27090512795c0c2cc71",
+    "suite-result.json": "896c2eef9311244219ef5c26d322c2eb31c9ddb595c180270fe5770b735e359d",
+    "outer.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "external-terminal.json": "aa24b5e19da1632628806f8efed9fff006549cff3f5cf851d602cfee4b636cd7",
+    "allocation.md": "c0d54cfc4023ee227b3372c9c15e39b6c2bb2ed26be116335f77cc557f7e8139"
+  },
+  "external_receipt": {
+    "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-observer-state01-external.json",
+    "sha256": "aa24b5e19da1632628806f8efed9fff006549cff3f5cf851d602cfee4b636cd7",
+    "copied_receipt_byte_exact": true,
+    "original_files_bound": 44,
+    "all44_original_sizes_and_hashes_match": true
+  },
+  "checks": [
+    {
+      "check": "Original inventory",
+      "result": "clear",
+      "evidence": "Reconstructed all68 raw relative paths from the original work directory, including hidden names. Kind, permission mode,42 file byte lengths/hashes, link counts and first-hardlink paths exactly equal retention.json raw_inventory. The same complete inventory before and after this check is equal."
+    },
+    {
+      "check": "Archive raw retention",
+      "result": "clear",
+      "evidence": "All68 original raw paths are present under actual-work with exact permission modes and file bytes. Resolved archive hardlink data for the42 file paths equals original bytes. No unexpected or duplicate tar members. Archive was read in place without extraction."
+    },
+    {
+      "check": "Q11 hardlink topology",
+      "result": "clear",
+      "evidence": "The original Q11 hidden .synthetic-terminal.json.f121df804feba2e2c8903ccf.tmp and synthetic-terminal.json share original inode identity with link_count2. Tar stores synthetic-terminal.json as a hardlink to that hidden path. Flattened work copies have exact bytes but are not used as inode/topology proof."
+    },
+    {
+      "check": "Versioned raw copies",
+      "result": "clear",
+      "evidence": "All42 retained work file bytes, including hidden temporary filename, equal the originals. External receipt covers exactly these42 paths plus suite-result.json and outer.log, all with exact length and SHA."
+    },
+    {
+      "check": "Frozen source/input/profile copies",
+      "result": "clear",
+      "evidence": "All27 retained source-inputs files match retention.json sizes/hashes, archive source-inputs member bytes and their exact Git blobs under site-verification at fb36754c78a79c2622caf8c2189b73909c607004. Current worktree drift was not substituted for frozen provenance."
+    },
+    {
+      "check": "Root receipts and allocation",
+      "result": "clear",
+      "evidence": "Retained suite-result.json equals /private/tmp/tec-os-observer-state-019f63903250.json; outer.log equals the original .outer.log; external-terminal.json equals the P3 external receipt; allocation.md equals the Origo STATE01 allocation file. All four archive members equal those copies. Archived retention.json also equals its loose retained copy."
+    },
+    {
+      "check": "Manifest totals and complete member scope",
+      "result": "clear",
+      "evidence": "Archive bytes/SHA match both the supplied identity and archive-manifest.json.42 raw file paths,27 source inputs and exact raw/source directories plus suite, outer log, external receipt, allocation and retention manifest account for all102 members."
+    }
+  ],
+  "preservation": "Only observer-state01-retention-review.json was written. Original evidence, historical SITE03 and48 checker artifacts were not modified. Frozen controls-result/checker/expectations/source references among the27 inputs were byte-compared rather than executed.",
+  "not_performed": [
+    "candidate imports",
+    "control replay",
+    "syntax validation",
+    "PS or other live process probes",
+    "signals",
+    "native control jobs",
+    "builds",
+    "validator runs",
+    "archive extraction",
+    "commits"
+  ],
+  "remaining": "Hooke’s actual14-case predicate, thread-scope and source-postflight review remains separate. Retention clearance is not a site result, runtime allocation or universal process-closure assertion."
+}

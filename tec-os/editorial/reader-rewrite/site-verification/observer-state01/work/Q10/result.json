@@ -1,0 +1,84 @@
+{
+  "case": "Q10",
+  "status": "PASS",
+  "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+  "observations": {
+    "found": [
+      [
+        4103,
+        1,
+        9999,
+        "Mon Jan  5 00:00:03 2026"
+      ]
+    ],
+    "snapshot": {
+      "history": [
+        {
+          "kind": "ack-group",
+          "nonce": "synthetic-nonce",
+          "context_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "birth_environment": {
+            "TZ": "UTC",
+            "LC_ALL": "C",
+            "LANG": "C"
+          },
+          "pid": 4102,
+          "pgid": 4102,
+          "parent_pid": 4101,
+          "guard_pid": 4101,
+          "birth": "Mon Jan  5 00:00:02 2026"
+        },
+        {
+          "kind": "discovered",
+          "identity": [
+            4102,
+            4101,
+            4102,
+            "Mon Jan  5 00:00:02 2026"
+          ]
+        },
+        {
+          "kind": "discovered",
+          "identity": [
+            4103,
+            4102,
+            4102,
+            "Mon Jan  5 00:00:03 2026"
+          ]
+        },
+        {
+          "kind": "exit-or-reuse",
+          "pid": 4102,
+          "birth": "Mon Jan  5 00:00:02 2026",
+          "observed_birth": null
+        }
+      ],
+      "roots": {
+        "4102": "Mon Jan  5 00:00:02 2026"
+      },
+      "groups": {},
+      "observed": {
+        "4102": "Mon Jan  5 00:00:02 2026",
+        "4103": "Mon Jan  5 00:00:03 2026"
+      },
+      "last_success_id": null,
+      "last_rows": [
+        [
+          4103,
+          1,
+          9999,
+          "Mon Jan  5 00:00:03 2026"
+        ],
+        [
+          4104,
+          1,
+          9999,
+          "unseen birth"
+        ]
+      ],
+      "first_failure": null,
+      "accepted_ownership_sha256": null
+    },
+    "limit": "No unseen-transient discovery is claimed."
+  }
+}

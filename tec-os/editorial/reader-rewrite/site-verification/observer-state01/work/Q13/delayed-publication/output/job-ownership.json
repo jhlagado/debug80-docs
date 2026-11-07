@@ -1,0 +1,1 @@
+{"birth":"Mon Jan  5 00:00:02 2026","birth_environment":{"LANG":"C","LC_ALL":"C","TZ":"UTC"},"context_sha256":"0a59a6db150663742a3861cd114a1f9d99ed5361d9ea3eceff4a4741d081e377","guard_pid":4101,"identity_query_budget_seconds":2.0,"identity_query_elapsed_seconds":0.05000000000001137,"nonce":"synthetic-worker-nonce","parent_pid":4101,"pgid":4102,"pid":4102}

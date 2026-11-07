@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "status": "PASS_SCOPED_STATE_CONTROLS_INDEPENDENTLY_REVIEWED",
+  "allocation": "KS47-OBSERVER-STATE01-20261107",
+  "authority": "Origo ddde6a76",
+  "offered_source_commit": "fb36754c78a79c2622caf8c2189b73909c607004",
+  "binding_sha256": "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+  "actual_terminal": {
+    "exit_code": 0,
+    "chunk": "e36d9b",
+    "session_id": null,
+    "tool_reported_wall_seconds": 0.051158666,
+    "measured_peak_memory": null
+  },
+  "cases": {
+    "count": 14,
+    "ids": [
+      "Q01",
+      "Q02",
+      "Q03",
+      "Q04",
+      "Q05",
+      "Q06",
+      "Q07",
+      "Q08",
+      "Q09",
+      "Q10",
+      "Q11",
+      "Q12",
+      "Q13",
+      "Q14"
+    ],
+    "all_pass": true,
+    "private_module_imports": 3
+  },
+  "independent_reviews": {
+    "observer-state01-result-review.json": "118f311858dcefad087d2060b3641dc364ffcc5448759160b03627e3299fb1d6",
+    "observer-state01-retention-review.json": "de6615b4e848178e01790418bc77dce8151aa6d0db0a162eb7294568e9148092"
+  },
+  "retention": {
+    "manifest": "observer-state01/archive-manifest.json",
+    "archive": "observer-state01/complete-evidence-and-inputs.tar.gz",
+    "bytes": 565332,
+    "sha256": "742049e880f8ef88ec40dc6e6c963fdcbeefc6a271eb57de2ddb458160b3c06e",
+    "raw_files": 42,
+    "frozen_source_input_files": 27
+  },
+  "source_postflight": "All 27 retained files equal offered fb36754 blobs and current files. No consumed source changed.",
+  "qualified_scope": "In-process controls using fake cross-process effects, real bounded threads, own alarm installation and synthetic files. Virtual durations are control inputs, not host query timing evidence.",
+  "Q15": {
+    "status": "SOURCE_ELIGIBLE_FOR_SEPARATE_ALLOCATION_CONSIDERATION",
+    "binding_sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+    "profile": "60-second controller including preparation/postflight, candidate cutoff entry+55 seconds, one inner 850MB/450MB/wait0 guard, no outer guard. Explicit fixture doubles.",
+    "executed": false,
+    "launch_authority_granted_here": false
+  },
+  "not_established": [
+    "Native discovery/signalling/cleanup",
+    "Host two-second query sufficiency",
+    "Unseen historical descendants",
+    "Actual 39-page render/checker closure",
+    "Site publication"
+  ],
+  "retry": false,
+  "site_acceptance": false
+}

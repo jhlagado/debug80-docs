@@ -1,0 +1,36 @@
+{
+  "case": "Q01",
+  "status": "PASS",
+  "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+  "observations": {
+    "routines": [
+      "query_budget",
+      "InvocationState.query",
+      "validate_ownership",
+      "InvocationState.bind_group",
+      "InvocationState.observe"
+    ],
+    "events": [
+      {
+        "kind": "query-intent",
+        "query_id": 1,
+        "planned_budget": 2.0,
+        "cleanup_phase": false,
+        "last_success_id": null
+      },
+      {
+        "kind": "query-finished",
+        "query_id": 1,
+        "planned_budget": 2.0,
+        "cleanup_phase": false,
+        "last_success_id": null,
+        "start": 167.0,
+        "effective_budget": 2.0,
+        "end": 167.6,
+        "outcome": "ok",
+        "elapsed": 0.5999999999999943,
+        "exceeded_old_half_second": true
+      }
+    ]
+  }
+}

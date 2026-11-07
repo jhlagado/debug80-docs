@@ -1,0 +1,270 @@
+{
+  "case": "Q13",
+  "status": "PASS",
+  "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+  "observations": {
+    "variants": [
+      {
+        "variant": "malformed",
+        "file": "stop-requested.json",
+        "actual": 1
+      },
+      {
+        "variant": "malformed",
+        "file": "first-failure.json",
+        "actual": 1
+      },
+      {
+        "variant": "zero",
+        "file": "stop-requested.json",
+        "actual": 1
+      },
+      {
+        "variant": "zero",
+        "file": "first-failure.json",
+        "actual": 1
+      },
+      {
+        "variant": "negative",
+        "file": "stop-requested.json",
+        "actual": 1
+      },
+      {
+        "variant": "negative",
+        "file": "first-failure.json",
+        "actual": 1
+      },
+      {
+        "variant": "exit-256",
+        "file": "stop-requested.json",
+        "actual": 1
+      },
+      {
+        "variant": "exit-256",
+        "file": "first-failure.json",
+        "actual": 1
+      },
+      {
+        "variant": "exit-512",
+        "file": "stop-requested.json",
+        "actual": 1
+      },
+      {
+        "variant": "exit-512",
+        "file": "first-failure.json",
+        "actual": 1
+      },
+      {
+        "variant": "overflow-1e400",
+        "file": "stop-requested.json",
+        "actual": 1
+      },
+      {
+        "variant": "overflow-1e400",
+        "file": "first-failure.json",
+        "actual": 1
+      },
+      {
+        "variant": "visible-124",
+        "file": "stop-requested.json",
+        "actual": 124
+      },
+      {
+        "variant": "visible-124",
+        "file": "first-failure.json",
+        "actual": 124
+      }
+    ],
+    "worker_main_variants": [
+      {
+        "variant": "zero-budget",
+        "worker_exit": 124,
+        "query_calls": [],
+        "sleep_calls": [],
+        "fake_phase_requests": [],
+        "native_commands_executed": false,
+        "first_failure": {
+          "detail": "no worker identity-query budget remains",
+          "exit_code": 124,
+          "retry": false,
+          "stage": "absolute-deadline",
+          "status": "FAILED",
+          "utc": "2026-11-07T04:11:51.708626+00:00"
+        },
+        "parent_first_failure": null,
+        "parent_clear_baseline": null,
+        "stdout": ""
+      },
+      {
+        "variant": "query-timeout",
+        "worker_exit": 124,
+        "query_calls": [
+          {
+            "argv": [
+              "/bin/ps",
+              "-o",
+              "lstart=",
+              "-p",
+              "4102"
+            ],
+            "budget": 2.0,
+            "environment": {
+              "ORIGO_GUARD": "4101",
+              "TZ": "UTC",
+              "LC_ALL": "C",
+              "LANG": "C"
+            }
+          }
+        ],
+        "sleep_calls": [],
+        "fake_phase_requests": [],
+        "native_commands_executed": false,
+        "first_failure": {
+          "detail": {
+            "effective_budget_seconds": 2.0,
+            "elapsed_seconds": 2.009999999999991,
+            "message": "Command 'synthetic-worker-query' timed out after 2.0 seconds",
+            "query_error": "TimeoutExpired"
+          },
+          "exit_code": 124,
+          "retry": false,
+          "stage": "ownership-observation",
+          "status": "FAILED",
+          "utc": "2026-11-07T04:11:51.709523+00:00"
+        },
+        "parent_first_failure": null,
+        "parent_clear_baseline": null,
+        "stdout": ""
+      },
+      {
+        "variant": "ack-stop",
+        "worker_exit": 124,
+        "query_calls": [
+          {
+            "argv": [
+              "/bin/ps",
+              "-o",
+              "lstart=",
+              "-p",
+              "4102"
+            ],
+            "budget": 2.0,
+            "environment": {
+              "ORIGO_GUARD": "4101",
+              "TZ": "UTC",
+              "LC_ALL": "C",
+              "LANG": "C"
+            }
+          }
+        ],
+        "sleep_calls": [
+          0.02
+        ],
+        "fake_phase_requests": [],
+        "native_commands_executed": false,
+        "first_failure": null,
+        "parent_first_failure": null,
+        "parent_clear_baseline": null,
+        "stdout": ""
+      },
+      {
+        "variant": "delayed-publication",
+        "worker_exit": 124,
+        "query_calls": [
+          {
+            "argv": [
+              "/bin/ps",
+              "-o",
+              "lstart=",
+              "-p",
+              "4102"
+            ],
+            "budget": 2.0,
+            "environment": {
+              "ORIGO_GUARD": "4101",
+              "TZ": "UTC",
+              "LC_ALL": "C",
+              "LANG": "C"
+            }
+          }
+        ],
+        "sleep_calls": [],
+        "fake_phase_requests": [
+          [
+            "NO_NATIVE_NODE",
+            "/private/tmp/tec-os-observer-state-019f63903250/Q13/delayed-publication/NO_NATIVE_SOURCE/node_modules/vitepress/bin/vitepress.js",
+            "build"
+          ]
+        ],
+        "native_commands_executed": false,
+        "first_failure": null,
+        "parent_first_failure": {
+          "status": "FAILED",
+          "stage": "identity-observation",
+          "detail": "publication gap original",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.713939+00:00"
+        },
+        "parent_clear_baseline": 0,
+        "stdout": "SITE_PHASE build START\nSITE_PHASE build END 0\n"
+      },
+      {
+        "variant": "failed-publication",
+        "worker_exit": 0,
+        "query_calls": [
+          {
+            "argv": [
+              "/bin/ps",
+              "-o",
+              "lstart=",
+              "-p",
+              "4102"
+            ],
+            "budget": 2.0,
+            "environment": {
+              "ORIGO_GUARD": "4101",
+              "TZ": "UTC",
+              "LC_ALL": "C",
+              "LANG": "C"
+            }
+          }
+        ],
+        "sleep_calls": [],
+        "fake_phase_requests": [
+          [
+            "NO_NATIVE_NODE",
+            "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/NO_NATIVE_SOURCE/node_modules/vitepress/bin/vitepress.js",
+            "build"
+          ],
+          [
+            "NO_NATIVE_PYTHON",
+            "-S",
+            "-B",
+            "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/NO_NATIVE_PACKET/check_html.py",
+            "--expect",
+            "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/NO_NATIVE_PACKET/expectations.json",
+            "--dist",
+            "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/NO_NATIVE_SOURCE/.vitepress/dist",
+            "--receipt",
+            "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/output/checker.json"
+          ]
+        ],
+        "native_commands_executed": false,
+        "first_failure": null,
+        "parent_first_failure": {
+          "status": "FAILED",
+          "stage": "identity-observation",
+          "detail": "publication gap original",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.717512+00:00"
+        },
+        "parent_clear_baseline": 0,
+        "stdout": "SITE_PHASE build START\nSITE_PHASE build END 0\nSITE_PHASE validate START\nSITE_PHASE validate END 0\n"
+      }
+    ],
+    "unpublished_parent_clear_baseline": 0,
+    "publication_gap": "Before visibility a checkpoint may cross; no instantaneous preemption."
+  }
+}

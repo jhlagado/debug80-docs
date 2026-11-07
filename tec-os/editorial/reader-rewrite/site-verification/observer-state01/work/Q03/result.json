@@ -1,0 +1,84 @@
+{
+  "case": "Q03",
+  "status": "PASS",
+  "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+  "observations": {
+    "variants": [
+      {
+        "variant": "timeout",
+        "events": [
+          {
+            "kind": "query-intent",
+            "query_id": 1,
+            "planned_budget": 0.19999999999998863,
+            "cleanup_phase": false,
+            "last_success_id": null
+          },
+          {
+            "kind": "query-failed",
+            "query_id": 1,
+            "planned_budget": 0.19999999999998863,
+            "cleanup_phase": false,
+            "last_success_id": null,
+            "end": 177.0,
+            "outcome": "TimeoutExpired",
+            "start": 176.8,
+            "effective_budget": 0.19999999999998863,
+            "launch_checked_budget": 0.19999999999998863
+          }
+        ],
+        "launches": [
+          0.19999999999998863
+        ]
+      },
+      {
+        "variant": "intent-exhausts-budget",
+        "events": [
+          {
+            "kind": "query-intent",
+            "query_id": 1,
+            "planned_budget": 0.19999999999998863,
+            "cleanup_phase": false,
+            "last_success_id": null
+          },
+          {
+            "kind": "query-not-launched",
+            "query_id": 1,
+            "planned_budget": 0.19999999999998863,
+            "cleanup_phase": false,
+            "last_success_id": null,
+            "end": 177.0,
+            "outcome": "Failed",
+            "effective_budget": 0.0,
+            "launch_checked_budget": 0.0
+          }
+        ],
+        "launches": []
+      },
+      {
+        "variant": "stop-during-intent",
+        "events": [
+          {
+            "kind": "query-intent",
+            "query_id": 1,
+            "planned_budget": 0.19999999999998863,
+            "cleanup_phase": false,
+            "last_success_id": null
+          },
+          {
+            "kind": "query-not-launched",
+            "query_id": 1,
+            "planned_budget": 0.19999999999998863,
+            "cleanup_phase": false,
+            "last_success_id": null,
+            "end": 176.8,
+            "outcome": "Failed",
+            "effective_budget": 0.0,
+            "launch_checked_budget": 0.19999999999998863
+          }
+        ],
+        "launches": []
+      }
+    ]
+  }
+}

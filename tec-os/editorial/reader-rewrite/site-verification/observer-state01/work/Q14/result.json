@@ -1,0 +1,95 @@
+{
+  "case": "Q14",
+  "status": "PASS",
+  "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+  "observations": {
+    "variants": [
+      {
+        "variant": "normal",
+        "signals": [
+          [
+            "group",
+            4102,
+            9
+          ],
+          [
+            "group",
+            4105,
+            9
+          ],
+          [
+            "pid",
+            4101,
+            9
+          ],
+          [
+            "pid",
+            4106,
+            9
+          ]
+        ],
+        "exit_codes": [
+          124
+        ],
+        "normal_helper_calls": []
+      },
+      {
+        "variant": "target-raises",
+        "signals": [
+          [
+            "group",
+            4102,
+            9
+          ],
+          [
+            "group",
+            4105,
+            9
+          ],
+          [
+            "pid",
+            4101,
+            9
+          ],
+          [
+            "pid",
+            4106,
+            9
+          ]
+        ],
+        "exit_codes": [
+          124
+        ],
+        "normal_helper_calls": []
+      },
+      {
+        "variant": "group-iteration-raises",
+        "signals": [],
+        "exit_codes": [
+          124
+        ],
+        "normal_helper_calls": []
+      },
+      {
+        "variant": "child-copy-raises",
+        "signals": [
+          [
+            "group",
+            4102,
+            9
+          ],
+          [
+            "group",
+            4105,
+            9
+          ]
+        ],
+        "exit_codes": [
+          124
+        ],
+        "normal_helper_calls": []
+      }
+    ],
+    "scope": "Actual hard_stop direct-signal/finally-exit routine; callbacks never signal or exit a native process."
+  }
+}

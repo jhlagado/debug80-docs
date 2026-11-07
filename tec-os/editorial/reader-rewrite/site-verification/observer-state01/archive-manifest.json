@@ -1,0 +1,10 @@
+{
+  "archive": "complete-evidence-and-inputs.tar.gz",
+  "bytes": 565332,
+  "sha256": "742049e880f8ef88ec40dc6e6c963fdcbeefc6a271eb57de2ddb458160b3c06e",
+  "raw_regular_files_verified": 42,
+  "source_input_files": 27,
+  "raw_before_after_inventory_exact": true,
+  "originals_unchanged": true,
+  "scope": "Complete state-control work/private/raw, external terminal/allocation and exact source/input/profile references. Not an OS/shared-library binary bundle. No replay or native process audit performed."
+}

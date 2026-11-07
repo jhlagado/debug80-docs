@@ -1,0 +1,2160 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "allocation": "KS47-OBSERVER-STATE01-20261107",
+  "inputs_sha256": "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+  "executed_cases": [
+    {
+      "case": "Q01",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "routines": [
+          "query_budget",
+          "InvocationState.query",
+          "validate_ownership",
+          "InvocationState.bind_group",
+          "InvocationState.observe"
+        ],
+        "events": [
+          {
+            "kind": "query-intent",
+            "query_id": 1,
+            "planned_budget": 2.0,
+            "cleanup_phase": false,
+            "last_success_id": null
+          },
+          {
+            "kind": "query-finished",
+            "query_id": 1,
+            "planned_budget": 2.0,
+            "cleanup_phase": false,
+            "last_success_id": null,
+            "start": 167.0,
+            "effective_budget": 2.0,
+            "end": 167.6,
+            "outcome": "ok",
+            "elapsed": 0.5999999999999943,
+            "exceeded_old_half_second": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "Q02",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "events": [
+          {
+            "kind": "query-intent",
+            "query_id": 1,
+            "planned_budget": 2.0,
+            "cleanup_phase": false,
+            "last_success_id": null
+          },
+          {
+            "kind": "query-failed",
+            "query_id": 1,
+            "planned_budget": 2.0,
+            "cleanup_phase": false,
+            "last_success_id": null,
+            "end": 169.01,
+            "outcome": "TimeoutExpired",
+            "start": 167.0,
+            "effective_budget": 2.0,
+            "launch_checked_budget": 2.0
+          }
+        ],
+        "signal_calls": [
+          [
+            "group",
+            4102,
+            15
+          ],
+          [
+            "group",
+            4102,
+            9
+          ]
+        ],
+        "first_failure": {
+          "status": "FAILED",
+          "stage": "identity-observation",
+          "detail": {
+            "message": "Command 'synthetic-query' timed out after 2.0 seconds",
+            "query_error": "TimeoutExpired",
+            "query_id": 1,
+            "finished": 169.01,
+            "elapsed_seconds": 2.009999999999991,
+            "start": 167.0,
+            "effective_budget": 2.0
+          },
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.700069+00:00"
+        },
+        "limit": "Signal routing is exercised; independent timer scheduling requires its own seam."
+      }
+    },
+    {
+      "case": "Q03",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "variants": [
+          {
+            "variant": "timeout",
+            "events": [
+              {
+                "kind": "query-intent",
+                "query_id": 1,
+                "planned_budget": 0.19999999999998863,
+                "cleanup_phase": false,
+                "last_success_id": null
+              },
+              {
+                "kind": "query-failed",
+                "query_id": 1,
+                "planned_budget": 0.19999999999998863,
+                "cleanup_phase": false,
+                "last_success_id": null,
+                "end": 177.0,
+                "outcome": "TimeoutExpired",
+                "start": 176.8,
+                "effective_budget": 0.19999999999998863,
+                "launch_checked_budget": 0.19999999999998863
+              }
+            ],
+            "launches": [
+              0.19999999999998863
+            ]
+          },
+          {
+            "variant": "intent-exhausts-budget",
+            "events": [
+              {
+                "kind": "query-intent",
+                "query_id": 1,
+                "planned_budget": 0.19999999999998863,
+                "cleanup_phase": false,
+                "last_success_id": null
+              },
+              {
+                "kind": "query-not-launched",
+                "query_id": 1,
+                "planned_budget": 0.19999999999998863,
+                "cleanup_phase": false,
+                "last_success_id": null,
+                "end": 177.0,
+                "outcome": "Failed",
+                "effective_budget": 0.0,
+                "launch_checked_budget": 0.0
+              }
+            ],
+            "launches": []
+          },
+          {
+            "variant": "stop-during-intent",
+            "events": [
+              {
+                "kind": "query-intent",
+                "query_id": 1,
+                "planned_budget": 0.19999999999998863,
+                "cleanup_phase": false,
+                "last_success_id": null
+              },
+              {
+                "kind": "query-not-launched",
+                "query_id": 1,
+                "planned_budget": 0.19999999999998863,
+                "cleanup_phase": false,
+                "last_success_id": null,
+                "end": 176.8,
+                "outcome": "Failed",
+                "effective_budget": 0.0,
+                "launch_checked_budget": 0.19999999999998863
+              }
+            ],
+            "launches": []
+          }
+        ]
+      }
+    },
+    {
+      "case": "Q04",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "variants": [
+          {
+            "now": 177.0,
+            "events": [
+              {
+                "kind": "query-not-launched",
+                "query_id": 1,
+                "planned_budget": 0.0,
+                "cleanup_phase": false,
+                "last_success_id": null,
+                "end": 177.0,
+                "outcome": "Failed",
+                "effective_budget": 0.0,
+                "launch_checked_budget": 0.0
+              }
+            ],
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "absolute-deadline",
+              "detail": "no identity query budget",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.700902+00:00"
+            }
+          },
+          {
+            "now": 180.0,
+            "events": [
+              {
+                "kind": "query-not-launched",
+                "query_id": 1,
+                "planned_budget": 0.0,
+                "cleanup_phase": false,
+                "last_success_id": null,
+                "end": 180.0,
+                "outcome": "Failed",
+                "effective_budget": 0.0,
+                "launch_checked_budget": 0.0
+              }
+            ],
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "absolute-deadline",
+              "detail": "no identity query budget",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.700925+00:00"
+            }
+          },
+          {
+            "now": 181.0,
+            "events": [
+              {
+                "kind": "query-not-launched",
+                "query_id": 1,
+                "planned_budget": 0.0,
+                "cleanup_phase": false,
+                "last_success_id": null,
+                "end": 181.0,
+                "outcome": "Failed",
+                "effective_budget": 0.0,
+                "launch_checked_budget": 0.0
+              }
+            ],
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "absolute-deadline",
+              "detail": "no identity query budget",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.700946+00:00"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "case": "Q05",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "variants": [
+          {
+            "events": [
+              {
+                "kind": "query-intent",
+                "query_id": 1,
+                "planned_budget": 0.5,
+                "cleanup_phase": true,
+                "last_success_id": null
+              },
+              {
+                "kind": "query-failed",
+                "query_id": 1,
+                "planned_budget": 0.5,
+                "cleanup_phase": true,
+                "last_success_id": null,
+                "end": 178.51,
+                "outcome": "TimeoutExpired",
+                "start": 178.0,
+                "effective_budget": 0.5,
+                "launch_checked_budget": 0.5
+              }
+            ],
+            "snapshot": {
+              "history": [
+                {
+                  "kind": "ack-group",
+                  "nonce": "synthetic-nonce",
+                  "context_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "birth_environment": {
+                    "TZ": "UTC",
+                    "LC_ALL": "C",
+                    "LANG": "C"
+                  },
+                  "pid": 4102,
+                  "pgid": 4102,
+                  "parent_pid": 4101,
+                  "guard_pid": 4101,
+                  "birth": "Mon Jan  5 00:00:02 2026"
+                },
+                {
+                  "kind": "discovered",
+                  "identity": [
+                    4102,
+                    4101,
+                    4102,
+                    "Mon Jan  5 00:00:02 2026"
+                  ]
+                },
+                {
+                  "kind": "discovered",
+                  "identity": [
+                    4103,
+                    4102,
+                    4102,
+                    "Mon Jan  5 00:00:03 2026"
+                  ]
+                }
+              ],
+              "roots": {
+                "4102": "Mon Jan  5 00:00:02 2026"
+              },
+              "groups": {
+                "4102": "Mon Jan  5 00:00:02 2026"
+              },
+              "observed": {
+                "4102": "Mon Jan  5 00:00:02 2026",
+                "4103": "Mon Jan  5 00:00:03 2026"
+              },
+              "last_success_id": null,
+              "last_rows": [
+                [
+                  4101,
+                  1,
+                  4101,
+                  "Mon Jan  5 00:00:01 2026"
+                ],
+                [
+                  4102,
+                  4101,
+                  4102,
+                  "Mon Jan  5 00:00:02 2026"
+                ],
+                [
+                  4103,
+                  4102,
+                  4102,
+                  "Mon Jan  5 00:00:03 2026"
+                ]
+              ],
+              "first_failure": {
+                "status": "FAILED",
+                "stage": "identity-observation",
+                "detail": {
+                  "message": "Command 'synthetic-query' timed out after 0.5 seconds",
+                  "query_error": "TimeoutExpired",
+                  "query_id": 1,
+                  "finished": 178.51,
+                  "elapsed_seconds": 0.5099999999999909,
+                  "start": 178.0,
+                  "effective_budget": 0.5
+                },
+                "exit_code": 124,
+                "retry": false,
+                "utc": "2026-11-07T04:11:51.701223+00:00"
+              },
+              "accepted_ownership_sha256": null
+            },
+            "audit": {
+              "status": "UNKNOWN_HELD",
+              "remaining": null,
+              "direct_handles": [],
+              "registry": {
+                "history": [
+                  {
+                    "kind": "ack-group",
+                    "nonce": "synthetic-nonce",
+                    "context_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "birth_environment": {
+                      "TZ": "UTC",
+                      "LC_ALL": "C",
+                      "LANG": "C"
+                    },
+                    "pid": 4102,
+                    "pgid": 4102,
+                    "parent_pid": 4101,
+                    "guard_pid": 4101,
+                    "birth": "Mon Jan  5 00:00:02 2026"
+                  },
+                  {
+                    "kind": "discovered",
+                    "identity": [
+                      4102,
+                      4101,
+                      4102,
+                      "Mon Jan  5 00:00:02 2026"
+                    ]
+                  },
+                  {
+                    "kind": "discovered",
+                    "identity": [
+                      4103,
+                      4102,
+                      4102,
+                      "Mon Jan  5 00:00:03 2026"
+                    ]
+                  }
+                ],
+                "roots": {
+                  "4102": "Mon Jan  5 00:00:02 2026"
+                },
+                "groups": {
+                  "4102": "Mon Jan  5 00:00:02 2026"
+                },
+                "observed": {
+                  "4102": "Mon Jan  5 00:00:02 2026",
+                  "4103": "Mon Jan  5 00:00:03 2026"
+                },
+                "last_success_id": null,
+                "last_rows": [
+                  [
+                    4101,
+                    1,
+                    4101,
+                    "Mon Jan  5 00:00:01 2026"
+                  ],
+                  [
+                    4102,
+                    4101,
+                    4102,
+                    "Mon Jan  5 00:00:02 2026"
+                  ],
+                  [
+                    4103,
+                    4102,
+                    4102,
+                    "Mon Jan  5 00:00:03 2026"
+                  ]
+                ],
+                "first_failure": {
+                  "status": "FAILED",
+                  "stage": "identity-observation",
+                  "detail": {
+                    "message": "Command 'synthetic-query' timed out after 0.5 seconds",
+                    "query_error": "TimeoutExpired",
+                    "query_id": 1,
+                    "finished": 178.51,
+                    "elapsed_seconds": 0.5099999999999909,
+                    "start": 178.0,
+                    "effective_budget": 0.5
+                  },
+                  "exit_code": 124,
+                  "retry": false,
+                  "utc": "2026-11-07T04:11:51.701223+00:00"
+                },
+                "accepted_ownership_sha256": null
+              }
+            }
+          },
+          {
+            "events": [
+              {
+                "kind": "query-intent",
+                "query_id": 1,
+                "planned_budget": 0.19999999999998863,
+                "cleanup_phase": true,
+                "last_success_id": null
+              },
+              {
+                "kind": "query-failed",
+                "query_id": 1,
+                "planned_budget": 0.19999999999998863,
+                "cleanup_phase": true,
+                "last_success_id": null,
+                "end": 180.01000000000002,
+                "outcome": "TimeoutExpired",
+                "start": 179.8,
+                "effective_budget": 0.19999999999998863,
+                "launch_checked_budget": 0.19999999999998863
+              }
+            ],
+            "snapshot": {
+              "history": [
+                {
+                  "kind": "ack-group",
+                  "nonce": "synthetic-nonce",
+                  "context_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "birth_environment": {
+                    "TZ": "UTC",
+                    "LC_ALL": "C",
+                    "LANG": "C"
+                  },
+                  "pid": 4102,
+                  "pgid": 4102,
+                  "parent_pid": 4101,
+                  "guard_pid": 4101,
+                  "birth": "Mon Jan  5 00:00:02 2026"
+                },
+                {
+                  "kind": "discovered",
+                  "identity": [
+                    4102,
+                    4101,
+                    4102,
+                    "Mon Jan  5 00:00:02 2026"
+                  ]
+                },
+                {
+                  "kind": "discovered",
+                  "identity": [
+                    4103,
+                    4102,
+                    4102,
+                    "Mon Jan  5 00:00:03 2026"
+                  ]
+                }
+              ],
+              "roots": {
+                "4102": "Mon Jan  5 00:00:02 2026"
+              },
+              "groups": {
+                "4102": "Mon Jan  5 00:00:02 2026"
+              },
+              "observed": {
+                "4102": "Mon Jan  5 00:00:02 2026",
+                "4103": "Mon Jan  5 00:00:03 2026"
+              },
+              "last_success_id": null,
+              "last_rows": [
+                [
+                  4101,
+                  1,
+                  4101,
+                  "Mon Jan  5 00:00:01 2026"
+                ],
+                [
+                  4102,
+                  4101,
+                  4102,
+                  "Mon Jan  5 00:00:02 2026"
+                ],
+                [
+                  4103,
+                  4102,
+                  4102,
+                  "Mon Jan  5 00:00:03 2026"
+                ]
+              ],
+              "first_failure": {
+                "status": "FAILED",
+                "stage": "identity-observation",
+                "detail": {
+                  "message": "Command 'synthetic-query' timed out after 0.19999999999998863 seconds",
+                  "query_error": "TimeoutExpired",
+                  "query_id": 1,
+                  "finished": 180.01000000000002,
+                  "elapsed_seconds": 0.21000000000000796,
+                  "start": 179.8,
+                  "effective_budget": 0.19999999999998863
+                },
+                "exit_code": 124,
+                "retry": false,
+                "utc": "2026-11-07T04:11:51.701261+00:00"
+              },
+              "accepted_ownership_sha256": null
+            },
+            "audit": {
+              "status": "UNKNOWN_HELD",
+              "remaining": null,
+              "direct_handles": [],
+              "registry": {
+                "history": [
+                  {
+                    "kind": "ack-group",
+                    "nonce": "synthetic-nonce",
+                    "context_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "birth_environment": {
+                      "TZ": "UTC",
+                      "LC_ALL": "C",
+                      "LANG": "C"
+                    },
+                    "pid": 4102,
+                    "pgid": 4102,
+                    "parent_pid": 4101,
+                    "guard_pid": 4101,
+                    "birth": "Mon Jan  5 00:00:02 2026"
+                  },
+                  {
+                    "kind": "discovered",
+                    "identity": [
+                      4102,
+                      4101,
+                      4102,
+                      "Mon Jan  5 00:00:02 2026"
+                    ]
+                  },
+                  {
+                    "kind": "discovered",
+                    "identity": [
+                      4103,
+                      4102,
+                      4102,
+                      "Mon Jan  5 00:00:03 2026"
+                    ]
+                  }
+                ],
+                "roots": {
+                  "4102": "Mon Jan  5 00:00:02 2026"
+                },
+                "groups": {
+                  "4102": "Mon Jan  5 00:00:02 2026"
+                },
+                "observed": {
+                  "4102": "Mon Jan  5 00:00:02 2026",
+                  "4103": "Mon Jan  5 00:00:03 2026"
+                },
+                "last_success_id": null,
+                "last_rows": [
+                  [
+                    4101,
+                    1,
+                    4101,
+                    "Mon Jan  5 00:00:01 2026"
+                  ],
+                  [
+                    4102,
+                    4101,
+                    4102,
+                    "Mon Jan  5 00:00:02 2026"
+                  ],
+                  [
+                    4103,
+                    4102,
+                    4102,
+                    "Mon Jan  5 00:00:03 2026"
+                  ]
+                ],
+                "first_failure": {
+                  "status": "FAILED",
+                  "stage": "identity-observation",
+                  "detail": {
+                    "message": "Command 'synthetic-query' timed out after 0.19999999999998863 seconds",
+                    "query_error": "TimeoutExpired",
+                    "query_id": 1,
+                    "finished": 180.01000000000002,
+                    "elapsed_seconds": 0.21000000000000796,
+                    "start": 179.8,
+                    "effective_budget": 0.19999999999998863
+                  },
+                  "exit_code": 124,
+                  "retry": false,
+                  "utc": "2026-11-07T04:11:51.701261+00:00"
+                },
+                "accepted_ownership_sha256": null
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "case": "Q06",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "variants": [
+          {
+            "variant": "soft-stop-under-lock",
+            "calls": [
+              [
+                4102,
+                15,
+                177.0
+              ],
+              [
+                4102,
+                9,
+                177.4
+              ]
+            ],
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "absolute-deadline",
+              "detail": "cleanup reserve reached",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.702038+00:00"
+            }
+          },
+          {
+            "variant": "soft-stop-under-lock",
+            "calls": [
+              [
+                4102,
+                15,
+                179.8
+              ],
+              [
+                4102,
+                9,
+                180.0
+              ]
+            ],
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "absolute-deadline",
+              "detail": "cleanup reserve reached",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.702114+00:00"
+            }
+          },
+          {
+            "variant": "blocked-failure-log",
+            "calls": [
+              [
+                4102,
+                15,
+                169.01
+              ],
+              [
+                4102,
+                9,
+                169.41
+              ]
+            ],
+            "events": [
+              {
+                "kind": "query-intent",
+                "query_id": 1,
+                "planned_budget": 2.0,
+                "cleanup_phase": false,
+                "last_success_id": null
+              },
+              {
+                "kind": "query-failed",
+                "query_id": 1,
+                "planned_budget": 2.0,
+                "cleanup_phase": false,
+                "last_success_id": null,
+                "end": 169.01,
+                "outcome": "TimeoutExpired",
+                "start": 167.0,
+                "effective_budget": 2.0,
+                "launch_checked_budget": 2.0
+              }
+            ],
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "identity-observation",
+              "detail": {
+                "message": "Command 'synthetic-query' timed out after 2.0 seconds",
+                "query_error": "TimeoutExpired",
+                "query_id": 1,
+                "finished": 169.01,
+                "elapsed_seconds": 2.009999999999991,
+                "start": 167.0,
+                "effective_budget": 2.0
+              },
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.702202+00:00"
+            }
+          },
+          {
+            "variant": "raised-failure-log",
+            "calls": [
+              [
+                4102,
+                15,
+                169.01
+              ],
+              [
+                4102,
+                9,
+                169.41
+              ]
+            ],
+            "events": [
+              {
+                "kind": "query-intent",
+                "query_id": 1,
+                "planned_budget": 2.0,
+                "cleanup_phase": false,
+                "last_success_id": null
+              },
+              {
+                "kind": "query-failed",
+                "query_id": 1,
+                "planned_budget": 2.0,
+                "cleanup_phase": false,
+                "last_success_id": null,
+                "end": 169.01,
+                "outcome": "TimeoutExpired",
+                "start": 167.0,
+                "effective_budget": 2.0,
+                "launch_checked_budget": 2.0
+              }
+            ],
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "identity-observation",
+              "detail": {
+                "message": "Command 'synthetic-query' timed out after 2.0 seconds",
+                "query_error": "TimeoutExpired",
+                "query_id": 1,
+                "finished": 169.01,
+                "elapsed_seconds": 2.009999999999991,
+                "start": 167.0,
+                "effective_budget": 2.0
+              },
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.702286+00:00"
+            }
+          },
+          {
+            "variant": "late-return-after-one-shot",
+            "signals": [
+              15,
+              9
+            ],
+            "snapshot": {
+              "history": [
+                {
+                  "kind": "direct-child",
+                  "pid": 4199,
+                  "birth": null,
+                  "argv": [
+                    "synthetic-late-return"
+                  ]
+                }
+              ],
+              "roots": {
+                "4199": null
+              },
+              "groups": {},
+              "observed": {},
+              "last_success_id": null,
+              "last_rows": null,
+              "first_failure": {
+                "status": "FAILED",
+                "stage": "identity-observation",
+                "detail": "late child",
+                "exit_code": 124,
+                "retry": false,
+                "utc": "2026-11-07T04:11:51.702315+00:00"
+              },
+              "accepted_ownership_sha256": null
+            }
+          },
+          {
+            "variant": "actual-query-blocked-spawn",
+            "pending_before_release": {
+              "status": "FAILED",
+              "stage": "identity-observation",
+              "detail": {
+                "cause": "blocked-spawn original"
+              },
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.702386+00:00"
+            },
+            "budgets": [
+              2.0
+            ],
+            "events": [
+              {
+                "kind": "query-intent",
+                "query_id": 1,
+                "planned_budget": 2.0,
+                "cleanup_phase": false,
+                "last_success_id": null
+              },
+              {
+                "kind": "query-finished",
+                "query_id": 1,
+                "planned_budget": 2.0,
+                "cleanup_phase": false,
+                "last_success_id": null,
+                "start": 167.0,
+                "effective_budget": 2.0,
+                "end": 167.4,
+                "outcome": "ok",
+                "elapsed": 0.4000000000000057,
+                "exceeded_old_half_second": false
+              }
+            ],
+            "signals_before_return": [
+              [
+                4102,
+                15
+              ],
+              [
+                4102,
+                9
+              ]
+            ],
+            "returned_handle_signals": [
+              15,
+              9
+            ],
+            "cleanup_results": [
+              true
+            ],
+            "snapshot": {
+              "history": [
+                {
+                  "kind": "ack-group",
+                  "nonce": "synthetic-nonce",
+                  "context_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "birth_environment": {
+                    "TZ": "UTC",
+                    "LC_ALL": "C",
+                    "LANG": "C"
+                  },
+                  "pid": 4102,
+                  "pgid": 4102,
+                  "parent_pid": 4101,
+                  "guard_pid": 4101,
+                  "birth": "Mon Jan  5 00:00:02 2026"
+                },
+                {
+                  "kind": "direct-child",
+                  "pid": 4198,
+                  "birth": null,
+                  "argv": [
+                    "synthetic-blocked-spawn-return"
+                  ]
+                }
+              ],
+              "roots": {
+                "4102": "Mon Jan  5 00:00:02 2026",
+                "4198": null
+              },
+              "groups": {
+                "4102": "Mon Jan  5 00:00:02 2026"
+              },
+              "observed": {},
+              "last_success_id": 1,
+              "last_rows": null,
+              "first_failure": {
+                "status": "FAILED",
+                "stage": "identity-observation",
+                "detail": {
+                  "cause": "blocked-spawn original"
+                },
+                "exit_code": 124,
+                "retry": false,
+                "utc": "2026-11-07T04:11:51.702386+00:00"
+              },
+              "accepted_ownership_sha256": null
+            }
+          }
+        ],
+        "scope": "Actual soft-stop/escalation/late-child routines with fake signals and waits; no OS scheduling sufficiency claim."
+      }
+    },
+    {
+      "case": "Q07",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "validation_variants": [
+          "nonce",
+          "context_sha256",
+          "birth_environment",
+          "parent_pid",
+          "pgid",
+          "observed_parent_mismatch",
+          "observed_group_mismatch",
+          "observed_birth_mismatch"
+        ],
+        "ack_published": [],
+        "snapshot": {
+          "history": [
+            {
+              "kind": "direct-child",
+              "pid": 4101,
+              "birth": null,
+              "argv": [
+                "synthetic-child"
+              ]
+            },
+            {
+              "kind": "ack-group",
+              "nonce": "synthetic-nonce",
+              "context_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "birth_environment": {
+                "TZ": "UTC",
+                "LC_ALL": "C",
+                "LANG": "C"
+              },
+              "pid": 4102,
+              "pgid": 4102,
+              "parent_pid": 4101,
+              "guard_pid": 4101,
+              "birth": "Mon Jan  5 00:00:02 2026"
+            }
+          ],
+          "roots": {
+            "4101": null,
+            "4102": "Mon Jan  5 00:00:02 2026"
+          },
+          "groups": {
+            "4102": "Mon Jan  5 00:00:02 2026"
+          },
+          "observed": {},
+          "last_success_id": null,
+          "last_rows": null,
+          "first_failure": {
+            "status": "FAILED",
+            "stage": "synthetic-stop",
+            "detail": "during durable ACK preparation",
+            "exit_code": 124,
+            "retry": false,
+            "utc": "2026-11-07T04:11:51.703136+00:00"
+          },
+          "accepted_ownership_sha256": null
+        }
+      }
+    },
+    {
+      "case": "Q08",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "signal_calls": [
+          [
+            "group",
+            4102,
+            15
+          ],
+          [
+            "group",
+            4102,
+            9
+          ]
+        ],
+        "snapshot": {
+          "history": [
+            {
+              "kind": "ack-group",
+              "nonce": "synthetic-nonce",
+              "context_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "birth_environment": {
+                "TZ": "UTC",
+                "LC_ALL": "C",
+                "LANG": "C"
+              },
+              "pid": 4102,
+              "pgid": 4102,
+              "parent_pid": 4101,
+              "guard_pid": 4101,
+              "birth": "Mon Jan  5 00:00:02 2026"
+            },
+            {
+              "kind": "discovered",
+              "identity": [
+                4102,
+                4101,
+                4102,
+                "Mon Jan  5 00:00:02 2026"
+              ]
+            },
+            {
+              "kind": "discovered",
+              "identity": [
+                4103,
+                4102,
+                4102,
+                "Mon Jan  5 00:00:03 2026"
+              ]
+            },
+            {
+              "kind": "exit-or-reuse",
+              "pid": 4102,
+              "birth": "Mon Jan  5 00:00:02 2026",
+              "observed_birth": null
+            },
+            {
+              "kind": "exit-or-reuse",
+              "pid": 4102,
+              "birth": "Mon Jan  5 00:00:02 2026",
+              "observed_birth": null
+            },
+            {
+              "kind": "exit-or-reuse",
+              "pid": 4103,
+              "birth": "Mon Jan  5 00:00:03 2026",
+              "observed_birth": null
+            }
+          ],
+          "roots": {
+            "4102": "Mon Jan  5 00:00:02 2026"
+          },
+          "groups": {},
+          "observed": {
+            "4102": "Mon Jan  5 00:00:02 2026",
+            "4103": "Mon Jan  5 00:00:03 2026"
+          },
+          "last_success_id": null,
+          "last_rows": [],
+          "first_failure": {
+            "status": "FAILED",
+            "stage": "guard",
+            "detail": "premature exit",
+            "exit_code": 1,
+            "retry": false,
+            "utc": "2026-11-07T04:11:51.703417+00:00"
+          },
+          "accepted_ownership_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "scope": "Positive ownership-state outcome only."
+      }
+    },
+    {
+      "case": "Q09",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "snapshot": {
+          "history": [
+            {
+              "kind": "ack-group",
+              "nonce": "synthetic-nonce",
+              "context_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "birth_environment": {
+                "TZ": "UTC",
+                "LC_ALL": "C",
+                "LANG": "C"
+              },
+              "pid": 4102,
+              "pgid": 4102,
+              "parent_pid": 4101,
+              "guard_pid": 4101,
+              "birth": "Mon Jan  5 00:00:02 2026"
+            },
+            {
+              "kind": "discovered",
+              "identity": [
+                4102,
+                4101,
+                4102,
+                "Mon Jan  5 00:00:02 2026"
+              ]
+            },
+            {
+              "kind": "discovered",
+              "identity": [
+                4103,
+                4102,
+                4102,
+                "Mon Jan  5 00:00:03 2026"
+              ]
+            },
+            {
+              "kind": "exit-or-reuse",
+              "pid": 4102,
+              "birth": "Mon Jan  5 00:00:02 2026",
+              "observed_birth": "different leader birth"
+            },
+            {
+              "kind": "exit-or-reuse",
+              "pid": 4103,
+              "birth": "Mon Jan  5 00:00:03 2026",
+              "observed_birth": "different child birth"
+            }
+          ],
+          "roots": {
+            "4102": "Mon Jan  5 00:00:02 2026"
+          },
+          "groups": {},
+          "observed": {
+            "4102": "Mon Jan  5 00:00:02 2026",
+            "4103": "Mon Jan  5 00:00:03 2026"
+          },
+          "last_success_id": null,
+          "last_rows": [
+            [
+              4102,
+              1,
+              4102,
+              "different leader birth"
+            ],
+            [
+              4103,
+              1,
+              4102,
+              "different child birth"
+            ]
+          ],
+          "first_failure": null,
+          "accepted_ownership_sha256": null
+        }
+      }
+    },
+    {
+      "case": "Q10",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "found": [
+          [
+            4103,
+            1,
+            9999,
+            "Mon Jan  5 00:00:03 2026"
+          ]
+        ],
+        "snapshot": {
+          "history": [
+            {
+              "kind": "ack-group",
+              "nonce": "synthetic-nonce",
+              "context_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "birth_environment": {
+                "TZ": "UTC",
+                "LC_ALL": "C",
+                "LANG": "C"
+              },
+              "pid": 4102,
+              "pgid": 4102,
+              "parent_pid": 4101,
+              "guard_pid": 4101,
+              "birth": "Mon Jan  5 00:00:02 2026"
+            },
+            {
+              "kind": "discovered",
+              "identity": [
+                4102,
+                4101,
+                4102,
+                "Mon Jan  5 00:00:02 2026"
+              ]
+            },
+            {
+              "kind": "discovered",
+              "identity": [
+                4103,
+                4102,
+                4102,
+                "Mon Jan  5 00:00:03 2026"
+              ]
+            },
+            {
+              "kind": "exit-or-reuse",
+              "pid": 4102,
+              "birth": "Mon Jan  5 00:00:02 2026",
+              "observed_birth": null
+            }
+          ],
+          "roots": {
+            "4102": "Mon Jan  5 00:00:02 2026"
+          },
+          "groups": {},
+          "observed": {
+            "4102": "Mon Jan  5 00:00:02 2026",
+            "4103": "Mon Jan  5 00:00:03 2026"
+          },
+          "last_success_id": null,
+          "last_rows": [
+            [
+              4103,
+              1,
+              9999,
+              "Mon Jan  5 00:00:03 2026"
+            ],
+            [
+              4104,
+              1,
+              9999,
+              "unseen birth"
+            ]
+          ],
+          "first_failure": null,
+          "accepted_ownership_sha256": null
+        },
+        "limit": "No unseen-transient discovery is claimed."
+      }
+    },
+    {
+      "case": "Q11",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "first_failure": {
+          "status": "FAILED",
+          "stage": "identity-observation",
+          "detail": {
+            "cause": "original"
+          },
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.704189+00:00"
+        },
+        "pending_first_failure": {
+          "status": "FAILED",
+          "stage": "identity-observation",
+          "detail": {
+            "cause": "pending original"
+          },
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.704238+00:00"
+        },
+        "terminal": {
+          "status": "FAILED",
+          "exit_code": 124,
+          "first_failure": {
+            "status": "FAILED",
+            "stage": "identity-observation",
+            "detail": {
+              "cause": "pending original"
+            },
+            "exit_code": 124,
+            "retry": false,
+            "utc": "2026-11-07T04:11:51.704238+00:00"
+          }
+        },
+        "terminal_publications": [
+          "/private/tmp/tec-os-observer-state-019f63903250/Q11/synthetic-terminal.json"
+        ],
+        "imported_failure": {
+          "stage": "ownership-observation",
+          "detail": {
+            "query_error": "TimeoutExpired",
+            "effective_budget_seconds": 0.2,
+            "elapsed_seconds": 0.21
+          },
+          "exit_code": 124,
+          "status": "FAILED",
+          "retry": false,
+          "utc": "2026-01-05T00:00:00+00:00"
+        },
+        "publication_failure_cause": {
+          "status": "FAILED",
+          "stage": "identity-observation",
+          "detail": "publication failed",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.704884+00:00"
+        },
+        "parent_first_failure": {
+          "status": "FAILED",
+          "stage": "identity-observation",
+          "detail": {
+            "query_error": "TimeoutExpired",
+            "effective_budget_seconds": 2.0,
+            "elapsed_seconds": 2.01
+          },
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.704921+00:00"
+        },
+        "later_worker_receipt": {
+          "stage": "ownership-observation",
+          "detail": {
+            "query_error": "OSError",
+            "effective_budget_seconds": 0.5,
+            "elapsed_seconds": 0.51
+          },
+          "exit_code": 7,
+          "status": "FAILED",
+          "retry": false,
+          "utc": "2026-01-05T00:00:01+00:00"
+        },
+        "failure_conflicts": [
+          {
+            "kind": "failure-receipt-conflict",
+            "latched": {
+              "status": "FAILED",
+              "stage": "identity-observation",
+              "detail": {
+                "query_error": "TimeoutExpired",
+                "effective_budget_seconds": 2.0,
+                "elapsed_seconds": 2.01
+              },
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.704921+00:00"
+            },
+            "receipt": {
+              "stage": "ownership-observation",
+              "detail": {
+                "query_error": "OSError",
+                "effective_budget_seconds": 0.5,
+                "elapsed_seconds": 0.51
+              },
+              "exit_code": 7,
+              "status": "FAILED",
+              "retry": false,
+              "utc": "2026-01-05T00:00:01+00:00"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "case": "Q12",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "variants": [
+          {
+            "variant": "absent",
+            "code": 124,
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "final-audit",
+              "detail": "fresh audit/quiescence missing",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.705193+00:00"
+            }
+          },
+          {
+            "variant": "nonempty",
+            "code": 124,
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "final-audit",
+              "detail": "fresh audit/quiescence missing",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.705207+00:00"
+            }
+          },
+          {
+            "variant": "timeout",
+            "code": 124,
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "final-audit",
+              "detail": "fresh audit/quiescence missing",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.705219+00:00"
+            }
+          },
+          {
+            "variant": "clear-missing-remaining",
+            "code": 124,
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "final-audit",
+              "detail": "fresh audit/quiescence missing",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.705231+00:00"
+            }
+          },
+          {
+            "variant": "clear-with-residual",
+            "code": 124,
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "final-audit",
+              "detail": "fresh audit/quiescence missing",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.705243+00:00"
+            }
+          },
+          {
+            "variant": "not-quiescent",
+            "code": 124,
+            "first_failure": {
+              "status": "FAILED",
+              "stage": "final-audit",
+              "detail": "fresh audit/quiescence missing",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.705254+00:00"
+            }
+          },
+          {
+            "variant": "unbound-live",
+            "audit": {
+              "status": "HELD",
+              "remaining": [],
+              "direct_handles": [
+                {
+                  "pid": 4101,
+                  "birth": null,
+                  "status": "LIVE"
+                }
+              ],
+              "registry": {
+                "history": [
+                  {
+                    "kind": "direct-child",
+                    "pid": 4101,
+                    "birth": null,
+                    "argv": [
+                      "synthetic-unbound-direct"
+                    ]
+                  }
+                ],
+                "roots": {
+                  "4101": null
+                },
+                "groups": {},
+                "observed": {},
+                "last_success_id": null,
+                "last_rows": null,
+                "first_failure": null,
+                "accepted_ownership_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+              }
+            },
+            "history": [
+              {
+                "kind": "direct-child",
+                "pid": 4101,
+                "birth": null,
+                "argv": [
+                  "synthetic-unbound-direct"
+                ]
+              }
+            ]
+          },
+          {
+            "variant": "unbound-poll-error",
+            "audit": {
+              "status": "UNKNOWN_HELD",
+              "remaining": [],
+              "direct_handles": [
+                {
+                  "pid": 4101,
+                  "birth": null,
+                  "status": "UNRESOLVED",
+                  "error": "synthetic handle poll error",
+                  "error_type": "OSError"
+                }
+              ],
+              "registry": {
+                "history": [
+                  {
+                    "kind": "direct-child",
+                    "pid": 4101,
+                    "birth": null,
+                    "argv": [
+                      "synthetic-unbound-direct"
+                    ]
+                  }
+                ],
+                "roots": {
+                  "4101": null
+                },
+                "groups": {},
+                "observed": {},
+                "last_success_id": null,
+                "last_rows": null,
+                "first_failure": null,
+                "accepted_ownership_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+              }
+            },
+            "history": [
+              {
+                "kind": "direct-child",
+                "pid": 4101,
+                "birth": null,
+                "argv": [
+                  "synthetic-unbound-direct"
+                ]
+              }
+            ]
+          },
+          {
+            "variant": "unbound-reaped",
+            "audit": {
+              "status": "CLEAR",
+              "remaining": [],
+              "direct_handles": [
+                {
+                  "pid": 4101,
+                  "birth": null,
+                  "status": "REAPED",
+                  "exit_code": 0
+                }
+              ],
+              "registry": {
+                "history": [
+                  {
+                    "kind": "direct-child",
+                    "pid": 4101,
+                    "birth": null,
+                    "argv": [
+                      "synthetic-unbound-direct"
+                    ]
+                  },
+                  {
+                    "kind": "direct-audit-exit",
+                    "pid": 4101,
+                    "birth": null,
+                    "status": "REAPED",
+                    "exit_code": 0
+                  }
+                ],
+                "roots": {},
+                "groups": {},
+                "observed": {},
+                "last_success_id": null,
+                "last_rows": null,
+                "first_failure": null,
+                "accepted_ownership_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+              }
+            },
+            "history": [
+              {
+                "kind": "direct-child",
+                "pid": 4101,
+                "birth": null,
+                "argv": [
+                  "synthetic-unbound-direct"
+                ]
+              },
+              {
+                "kind": "direct-audit-exit",
+                "pid": 4101,
+                "birth": null,
+                "status": "REAPED",
+                "exit_code": 0
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "Q13",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "variants": [
+          {
+            "variant": "malformed",
+            "file": "stop-requested.json",
+            "actual": 1
+          },
+          {
+            "variant": "malformed",
+            "file": "first-failure.json",
+            "actual": 1
+          },
+          {
+            "variant": "zero",
+            "file": "stop-requested.json",
+            "actual": 1
+          },
+          {
+            "variant": "zero",
+            "file": "first-failure.json",
+            "actual": 1
+          },
+          {
+            "variant": "negative",
+            "file": "stop-requested.json",
+            "actual": 1
+          },
+          {
+            "variant": "negative",
+            "file": "first-failure.json",
+            "actual": 1
+          },
+          {
+            "variant": "exit-256",
+            "file": "stop-requested.json",
+            "actual": 1
+          },
+          {
+            "variant": "exit-256",
+            "file": "first-failure.json",
+            "actual": 1
+          },
+          {
+            "variant": "exit-512",
+            "file": "stop-requested.json",
+            "actual": 1
+          },
+          {
+            "variant": "exit-512",
+            "file": "first-failure.json",
+            "actual": 1
+          },
+          {
+            "variant": "overflow-1e400",
+            "file": "stop-requested.json",
+            "actual": 1
+          },
+          {
+            "variant": "overflow-1e400",
+            "file": "first-failure.json",
+            "actual": 1
+          },
+          {
+            "variant": "visible-124",
+            "file": "stop-requested.json",
+            "actual": 124
+          },
+          {
+            "variant": "visible-124",
+            "file": "first-failure.json",
+            "actual": 124
+          }
+        ],
+        "worker_main_variants": [
+          {
+            "variant": "zero-budget",
+            "worker_exit": 124,
+            "query_calls": [],
+            "sleep_calls": [],
+            "fake_phase_requests": [],
+            "native_commands_executed": false,
+            "first_failure": {
+              "detail": "no worker identity-query budget remains",
+              "exit_code": 124,
+              "retry": false,
+              "stage": "absolute-deadline",
+              "status": "FAILED",
+              "utc": "2026-11-07T04:11:51.708626+00:00"
+            },
+            "parent_first_failure": null,
+            "parent_clear_baseline": null,
+            "stdout": ""
+          },
+          {
+            "variant": "query-timeout",
+            "worker_exit": 124,
+            "query_calls": [
+              {
+                "argv": [
+                  "/bin/ps",
+                  "-o",
+                  "lstart=",
+                  "-p",
+                  "4102"
+                ],
+                "budget": 2.0,
+                "environment": {
+                  "ORIGO_GUARD": "4101",
+                  "TZ": "UTC",
+                  "LC_ALL": "C",
+                  "LANG": "C"
+                }
+              }
+            ],
+            "sleep_calls": [],
+            "fake_phase_requests": [],
+            "native_commands_executed": false,
+            "first_failure": {
+              "detail": {
+                "effective_budget_seconds": 2.0,
+                "elapsed_seconds": 2.009999999999991,
+                "message": "Command 'synthetic-worker-query' timed out after 2.0 seconds",
+                "query_error": "TimeoutExpired"
+              },
+              "exit_code": 124,
+              "retry": false,
+              "stage": "ownership-observation",
+              "status": "FAILED",
+              "utc": "2026-11-07T04:11:51.709523+00:00"
+            },
+            "parent_first_failure": null,
+            "parent_clear_baseline": null,
+            "stdout": ""
+          },
+          {
+            "variant": "ack-stop",
+            "worker_exit": 124,
+            "query_calls": [
+              {
+                "argv": [
+                  "/bin/ps",
+                  "-o",
+                  "lstart=",
+                  "-p",
+                  "4102"
+                ],
+                "budget": 2.0,
+                "environment": {
+                  "ORIGO_GUARD": "4101",
+                  "TZ": "UTC",
+                  "LC_ALL": "C",
+                  "LANG": "C"
+                }
+              }
+            ],
+            "sleep_calls": [
+              0.02
+            ],
+            "fake_phase_requests": [],
+            "native_commands_executed": false,
+            "first_failure": null,
+            "parent_first_failure": null,
+            "parent_clear_baseline": null,
+            "stdout": ""
+          },
+          {
+            "variant": "delayed-publication",
+            "worker_exit": 124,
+            "query_calls": [
+              {
+                "argv": [
+                  "/bin/ps",
+                  "-o",
+                  "lstart=",
+                  "-p",
+                  "4102"
+                ],
+                "budget": 2.0,
+                "environment": {
+                  "ORIGO_GUARD": "4101",
+                  "TZ": "UTC",
+                  "LC_ALL": "C",
+                  "LANG": "C"
+                }
+              }
+            ],
+            "sleep_calls": [],
+            "fake_phase_requests": [
+              [
+                "NO_NATIVE_NODE",
+                "/private/tmp/tec-os-observer-state-019f63903250/Q13/delayed-publication/NO_NATIVE_SOURCE/node_modules/vitepress/bin/vitepress.js",
+                "build"
+              ]
+            ],
+            "native_commands_executed": false,
+            "first_failure": null,
+            "parent_first_failure": {
+              "status": "FAILED",
+              "stage": "identity-observation",
+              "detail": "publication gap original",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.713939+00:00"
+            },
+            "parent_clear_baseline": 0,
+            "stdout": "SITE_PHASE build START\nSITE_PHASE build END 0\n"
+          },
+          {
+            "variant": "failed-publication",
+            "worker_exit": 0,
+            "query_calls": [
+              {
+                "argv": [
+                  "/bin/ps",
+                  "-o",
+                  "lstart=",
+                  "-p",
+                  "4102"
+                ],
+                "budget": 2.0,
+                "environment": {
+                  "ORIGO_GUARD": "4101",
+                  "TZ": "UTC",
+                  "LC_ALL": "C",
+                  "LANG": "C"
+                }
+              }
+            ],
+            "sleep_calls": [],
+            "fake_phase_requests": [
+              [
+                "NO_NATIVE_NODE",
+                "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/NO_NATIVE_SOURCE/node_modules/vitepress/bin/vitepress.js",
+                "build"
+              ],
+              [
+                "NO_NATIVE_PYTHON",
+                "-S",
+                "-B",
+                "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/NO_NATIVE_PACKET/check_html.py",
+                "--expect",
+                "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/NO_NATIVE_PACKET/expectations.json",
+                "--dist",
+                "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/NO_NATIVE_SOURCE/.vitepress/dist",
+                "--receipt",
+                "/private/tmp/tec-os-observer-state-019f63903250/Q13/failed-publication/output/checker.json"
+              ]
+            ],
+            "native_commands_executed": false,
+            "first_failure": null,
+            "parent_first_failure": {
+              "status": "FAILED",
+              "stage": "identity-observation",
+              "detail": "publication gap original",
+              "exit_code": 124,
+              "retry": false,
+              "utc": "2026-11-07T04:11:51.717512+00:00"
+            },
+            "parent_clear_baseline": 0,
+            "stdout": "SITE_PHASE build START\nSITE_PHASE build END 0\nSITE_PHASE validate START\nSITE_PHASE validate END 0\n"
+          }
+        ],
+        "unpublished_parent_clear_baseline": 0,
+        "publication_gap": "Before visibility a checkpoint may cross; no instantaneous preemption."
+      }
+    },
+    {
+      "case": "Q14",
+      "status": "PASS",
+      "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "observations": {
+        "variants": [
+          {
+            "variant": "normal",
+            "signals": [
+              [
+                "group",
+                4102,
+                9
+              ],
+              [
+                "group",
+                4105,
+                9
+              ],
+              [
+                "pid",
+                4101,
+                9
+              ],
+              [
+                "pid",
+                4106,
+                9
+              ]
+            ],
+            "exit_codes": [
+              124
+            ],
+            "normal_helper_calls": []
+          },
+          {
+            "variant": "target-raises",
+            "signals": [
+              [
+                "group",
+                4102,
+                9
+              ],
+              [
+                "group",
+                4105,
+                9
+              ],
+              [
+                "pid",
+                4101,
+                9
+              ],
+              [
+                "pid",
+                4106,
+                9
+              ]
+            ],
+            "exit_codes": [
+              124
+            ],
+            "normal_helper_calls": []
+          },
+          {
+            "variant": "group-iteration-raises",
+            "signals": [],
+            "exit_codes": [
+              124
+            ],
+            "normal_helper_calls": []
+          },
+          {
+            "variant": "child-copy-raises",
+            "signals": [
+              [
+                "group",
+                4102,
+                9
+              ],
+              [
+                "group",
+                4105,
+                9
+              ]
+            ],
+            "exit_codes": [
+              124
+            ],
+            "normal_helper_calls": []
+          }
+        ],
+        "scope": "Actual hard_stop direct-signal/finally-exit routine; callbacks never signal or exit a native process."
+      }
+    }
+  ],
+  "retry": false,
+  "site_acceptance": false,
+  "control_settings": {
+    "unit_bootstrap_wall_cap_seconds": 60.0,
+    "suite_wall_seconds": "Positive finite allocation-bound input, <=60, measured from original driver entry.",
+    "case_wall_seconds": "Positive finite allocation-bound input <=suite wall; >4.0 for a suite or Q06/Q11 to accommodate one2.0s barrier plus one2.0s join.",
+    "thread_barrier_seconds": 2.0,
+    "thread_join_seconds": 2.0,
+    "scope": "Thread bounds are unit-control settings only, not production observation/query profile changes. All native query/signal/exit adapters are fake.",
+    "worker_UTC_epoch": 0.0,
+    "worker_deadline_unit_context": "1970-01-01T00:00:00Z; negative synthetic wall times permitted for precise small subtraction. Worker main fixtures use epoch0 plus180.",
+    "numeric_abs_tolerance": 1e-08,
+    "native_commands_executed": false
+  },
+  "routine_coverage": {
+    "Q01": [
+      "query_budget",
+      "InvocationState.query",
+      "validate_ownership",
+      "InvocationState.bind_group",
+      "InvocationState.observe"
+    ],
+    "Q02": [
+      "InvocationState.query",
+      "InvocationState.request_stop",
+      "InvocationState.decision",
+      "InvocationState.signal_bound"
+    ],
+    "Q03": [
+      "query_budget",
+      "InvocationState.query",
+      "InvocationState.request_stop",
+      "InvocationState.decision"
+    ],
+    "Q04": [
+      "InvocationState.query",
+      "InvocationState.request_stop"
+    ],
+    "Q05": [
+      "InvocationState.query",
+      "InvocationState.snapshot",
+      "InvocationState.final_audit_disposition",
+      "InvocationState.decision"
+    ],
+    "Q06": [
+      "InvocationState.soft_stop",
+      "InvocationState.signal_escalation",
+      "InvocationState.query",
+      "InvocationState.request_stop",
+      "InvocationState.register_child",
+      "InvocationState.stop_new_child",
+      "InvocationState.decision",
+      "Actual query launch blocked-spawn / concurrent request_stop interleave"
+    ],
+    "Q07": [
+      "validate_ownership",
+      "InvocationState.register_child",
+      "InvocationState.bind_group",
+      "InvocationState.publish_ack"
+    ],
+    "Q08": [
+      "validate_ownership",
+      "discover_owned via InvocationState.observe",
+      "InvocationState.bind_group",
+      "InvocationState.publish_ack",
+      "InvocationState.signal_bound",
+      "InvocationState.decision"
+    ],
+    "Q09": [
+      "discover_owned via InvocationState.observe",
+      "InvocationState.signal_bound",
+      "InvocationState.snapshot"
+    ],
+    "Q10": [
+      "discover_owned via InvocationState.observe",
+      "InvocationState.snapshot"
+    ],
+    "Q11": [
+      "InvocationState.request_stop",
+      "InvocationState.import_failure",
+      "InvocationState.decision",
+      "InvocationState.commit_decision",
+      "prepare_receipt",
+      "Parent-first later worker import / conflict ledger"
+    ],
+    "Q12": [
+      "InvocationState.final_audit_disposition",
+      "InvocationState.register_child",
+      "InvocationState.decision"
+    ],
+    "Q13": [
+      "build_and_check.phase_stop_code",
+      "build_and_check.worker_identity_budget",
+      "build_and_check.main with isolated fake module dependencies",
+      "InvocationState.request_stop",
+      "InvocationState.decision",
+      "Actual acknowledged CLEAR0 baseline before publication-gap stop"
+    ],
+    "Q14": [
+      "hard_stop"
+    ]
+  },
+  "candidate_profile": {
+    "runner_commit": "dcb14a834d9cc043bcb8af16b4b62b3bc4a4a7a4",
+    "runner_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+    "worker_commit": "b227207f069a8a533c24e0f6e8e6fc777a3843eb",
+    "worker_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+    "source_review": "Independent full core source clearance at dcb14a8, supplied by the lead. This is not execution/control acceptance."
+  },
+  "private_sources": [
+    {
+      "module": "build_and_check",
+      "source_path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+      "expected_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "source_read_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "private_path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/build_and_check.py",
+      "private_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "bytes": 5656,
+      "execution_bytes_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc"
+    },
+    {
+      "module": "packet_inputs",
+      "source_path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+      "expected_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "source_read_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "private_path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/packet_inputs.py",
+      "private_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "bytes": 4299,
+      "execution_bytes_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504"
+    },
+    {
+      "module": "run_once",
+      "source_path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+      "expected_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "source_read_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "private_path": "/private/tmp/tec-os-observer-state-019f63903250/verified-modules/run_once.py",
+      "private_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "bytes": 47621,
+      "execution_bytes_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5"
+    }
+  ],
+  "imports_attempted": [
+    {
+      "module": "packet_inputs",
+      "execution_name": "packet_inputs"
+    },
+    {
+      "module": "run_once",
+      "execution_name": "observer_candidate"
+    },
+    {
+      "module": "build_and_check",
+      "execution_name": "observer_worker"
+    }
+  ]
+}

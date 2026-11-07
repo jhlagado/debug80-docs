@@ -1,0 +1,2971 @@
+{
+  "schema": 1,
+  "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+  "counts": {
+    "pages": 39,
+    "links": 247,
+    "fragments": 45,
+    "fences": 247
+  },
+  "pages": [
+    {
+      "path": "tec-os/01-first-session.md",
+      "html": "tec-os/01-first-session.html",
+      "source_sha256": "982101a7dcce73678472492d0fe0c2954a1a4a107f276099a9e333aa32c96480",
+      "title": "First session | Debug80 Docs",
+      "h1": "1. First session",
+      "links": [
+        {
+          "target": "tec-os/appendix-g-tec-1g.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM\nB: WORK\n\nA>GLCD.SVC\n\nA>\n",
+          "rendered_text": "\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM\nB: WORK\n\nA>GLCD.SVC\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>DIR\nMOUNT.COM    GLCD.SVC     STARTUP.CMD\nTED.COM      SAMPLE.ASM   TAS.COM\n6 files, 980K free\nA>\n",
+          "rendered_text": "A>DIR\nMOUNT.COM    GLCD.SVC     STARTUP.CMD\nTED.COM      SAMPLE.ASM   TAS.COM\n6 files, 980K free\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>A:\nA>\n",
+          "rendered_text": "A>B:\nB>A:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>TAS SAMPLE\nSAMPLE.COM written\n\nA>\n",
+          "rendered_text": "A>TAS SAMPLE\nSAMPLE.COM written\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>SAMPLE\nHello from TEC-OS.\nScreen: 40 by 24\nBack to the prompt.\n\nA>\n",
+          "rendered_text": "A>SAMPLE\nHello from TEC-OS.\nScreen: 40 by 24\nBack to the prompt.\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>^C\nA>\n",
+          "rendered_text": "A>^C\nA>"
+        }
+      ],
+      "previous": null,
+      "next": "tec-os/02-make-a-small-program.html",
+      "source_h1": "1. First session"
+    },
+    {
+      "path": "tec-os/02-make-a-small-program.md",
+      "html": "tec-os/02-make-a-small-program.html",
+      "source_sha256": "ae0f232fe28f90fd6bde10f58bff7e8b1cdad461570d5b58feef6d5db5cf30f0",
+      "title": "Make a small program | Debug80 Docs",
+      "h1": "2. Make a small program",
+      "links": [],
+      "fences": [
+        {
+          "language": "asm",
+          "text": "  org $0100\n\n; Print one line to the console.\n; Takes nothing. Returns to the CCP.\n; Changes AF, BC, DE and HL.\n\nSTART:\n  ld de,MSG      ; Text for BDOS.\n  ld c,9         ; $ ends the text.\n  call 5\n  ret            ; CCP warm boot.\n\nMSG: db \"Hello from TEC-OS\",13,10,\"$\"\n",
+          "rendered_text": "  org $0100\n\n; Print one line to the console.\n; Takes nothing. Returns to the CCP.\n; Changes AF, BC, DE and HL.\n\nSTART:\n  ld de,MSG      ; Text for BDOS.\n  ld c,9         ; $ ends the text.\n  call 5\n  ret            ; CCP warm boot.\n\nMSG: db \"Hello from TEC-OS\",13,10,\"$\""
+        },
+        {
+          "language": "text",
+          "text": "A>A:TAS B:BANNER.ASM\nBANNER.ASM:14:1: unknown instruction or directive\n\nA>A:TED\n",
+          "rendered_text": "A>A:TAS B:BANNER.ASM\nBANNER.ASM:14:1: unknown instruction or directive\n\nA>A:TED"
+        },
+        {
+          "language": "text",
+          "text": "A>A:TAS B:BANNER.ASM\nBANNER.COM written\n\nA>A:TED\n\nA>B:BANNER\nHello from TEC-OS\n\nA>A:TED\nPress a key\n",
+          "rendered_text": "A>A:TAS B:BANNER.ASM\nBANNER.COM written\n\nA>A:TED\n\nA>B:BANNER\nHello from TEC-OS\n\nA>A:TED\nPress a key"
+        },
+        {
+          "language": "asm",
+          "text": "MSG: db \"Hello from TEC-OS!\",13,10,\"$\"\n",
+          "rendered_text": "MSG: db \"Hello from TEC-OS!\",13,10,\"$\""
+        },
+        {
+          "language": "text",
+          "text": "A>A:TAS B:BANNER.ASM\nBANNER.COM written\n\nA>A:TED\n\nA>B:BANNER\nHello from TEC-OS!\n\nA>A:TED\nPress a key\n",
+          "rendered_text": "A>A:TAS B:BANNER.ASM\nBANNER.COM written\n\nA>A:TED\n\nA>B:BANNER\nHello from TEC-OS!\n\nA>A:TED\nPress a key"
+        },
+        {
+          "language": "text",
+          "text": "A>^C\nA>B:BANNER\nHello from TEC-OS!\n\nA>^C\nA>\n",
+          "rendered_text": "A>^C\nA>B:BANNER\nHello from TEC-OS!\n\nA>^C\nA>"
+        }
+      ],
+      "previous": "tec-os/01-first-session.html",
+      "next": "tec-os/03-work-with-files.html",
+      "source_h1": "2. Make a small program"
+    },
+    {
+      "path": "tec-os/03-work-with-files.md",
+      "html": "tec-os/03-work-with-files.html",
+      "source_sha256": "5828ff5e927bad3813e1bedb6a4324a7191bfdfe98fb0acd94c54884e7353828",
+      "title": "Work with files | Debug80 Docs",
+      "h1": "3. Work with files",
+      "links": [
+        {
+          "target": "tec-os/appendix-j-command-reference.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": "record-sizes-and-allocated-space"
+        },
+        {
+          "target": "tec-os/appendix-j-command-reference.html",
+          "fragment": "era"
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "A>TYPE STARTUP.CMD\nGLCD.SVC\n\nA>\n",
+          "rendered_text": "A>TYPE STARTUP.CMD\nGLCD.SVC\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "; A first program for TEC-OS. Build it\n; with TAS SAMPLE. Run it with SAMPLE.\n;\n; Say hello through CP/M BDOS, then\n; check for the TEC-OS ABI 5 table.\n; Print the screen size, write to LCD\n; row 2, show 123456 and beep.\n\n; TEC-OS's table and service numbers, by\n; the names abi.inc gives them. \"TNA\",\n; then the major version\n\nABITAB EQU $C003\n\n; the major version this speaks: 5\n\nABIMAJ EQU $C006\n\n; CALL here with the service in C\n\nABICALL EQU $C008\nTNINFO EQU 0     ; -> L = columns, H =\n                 ; rows\n[more]\n",
+          "rendered_text": "; A first program for TEC-OS. Build it\n; with TAS SAMPLE. Run it with SAMPLE.\n;\n; Say hello through CP/M BDOS, then\n; check for the TEC-OS ABI 5 table.\n; Print the screen size, write to LCD\n; row 2, show 123456 and beep.\n\n; TEC-OS's table and service numbers, by\n; the names abi.inc gives them. \"TNA\",\n; then the major version\n\nABITAB EQU $C003\n\n; the major version this speaks: 5\n\nABIMAJ EQU $C006\n\n; CALL here with the service in C\n\nABICALL EQU $C008\nTNINFO EQU 0     ; -> L = columns, H =\n                 ; rows\n[more]"
+        },
+        {
+          "language": "text",
+          "text": "TNDIGIT EQU 1    ; HL -> six digit\n                 ; patterns\nTNLCD EQU 2      ; B = row 0-3, HL -> 20\n                 ; characters\nTNTONE EQU 4     ; B = pitch, DE =\n                 ; length\nBDOS EQU 5       ; CP/M's entry, for the\n                 ; console\n",
+          "rendered_text": "TNDIGIT EQU 1    ; HL -> six digit\n                 ; patterns\nTNLCD EQU 2      ; B = row 0-3, HL -> 20\n                 ; characters\nTNTONE EQU 4     ; B = pitch, DE =\n                 ; length\nBDOS EQU 5       ; CP/M's entry, for the\n                 ; console"
+        },
+        {
+          "language": "text",
+          "text": "A>COPY A:SAMPLE.ASM B:SAMPLE.ASM\nCOPIED 0028\n\nA>\n",
+          "rendered_text": "A>COPY A:SAMPLE.ASM B:SAMPLE.ASM\nCOPIED 0028\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>COPY STARTUP.CMD B:\nCOPIED 0001\n\nA>COPY STARTUP.CMD B:COPY.TXT\nCOPIED 0001\n\nA>B:\nB>DIR\nSTARTUP.CMD  COPY.TXT    \n2 files, 8168K free\nB>REN NOTES.TXT=COPY.TXT\nB>REN NOTES.TXT=STARTUP.CMD\nFILE EXISTS\nB>DIR\nSTARTUP.CMD  NOTES.TXT   \n2 files, 8168K free\nB>ERA NOTES.TXT\nB>ERA NOTES.TXT\nNO FILE\nB>DIR\nSTARTUP.CMD \n1 file, 8172K free\nB>\n",
+          "rendered_text": "A>COPY STARTUP.CMD B:\nCOPIED 0001\n\nA>COPY STARTUP.CMD B:COPY.TXT\nCOPIED 0001\n\nA>B:\nB>DIR\nSTARTUP.CMD  COPY.TXT    \n2 files, 8168K free\nB>REN NOTES.TXT=COPY.TXT\nB>REN NOTES.TXT=STARTUP.CMD\nFILE EXISTS\nB>DIR\nSTARTUP.CMD  NOTES.TXT   \n2 files, 8168K free\nB>ERA NOTES.TXT\nB>ERA NOTES.TXT\nNO FILE\nB>DIR\nSTARTUP.CMD \n1 file, 8172K free\nB>"
+        }
+      ],
+      "previous": "tec-os/02-make-a-small-program.html",
+      "next": "tec-os/04-drives-and-user-areas.html",
+      "source_h1": "3. Work with files"
+    },
+    {
+      "path": "tec-os/04-drives-and-user-areas.md",
+      "html": "tec-os/04-drives-and-user-areas.html",
+      "source_sha256": "195afaf55f6c028a1d712ea087c6342dbbac93f0f490e09a8c848c4679ffef28",
+      "title": "Drives and user areas | Debug80 Docs",
+      "h1": "4. Drives and user areas",
+      "links": [
+        {
+          "target": "tec-os/10-memory-for-programs.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/06-choose-a-console.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/07-commands-at-startup.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/13-write-a-resident-service.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/24-loading-and-removing-services.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-e-container-format.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/20-from-prompt-to-program.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": "allocation-vectors-below-the-workspace"
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/15-reset-and-boot.html",
+          "fragment": "retained-drive-selection"
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "A>GLCD.SVC\n\nA>SERVICES\nGLCD 3\nA>UNLOAD\n\nA>SERVICES\nA>UNLOAD\nUNLOAD?\n\nA>\n",
+          "rendered_text": "A>GLCD.SVC\n\nA>SERVICES\nGLCD 3\nA>UNLOAD\n\nA>SERVICES\nA>UNLOAD\nUNLOAD?\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>GLCD.SVC\nGLCD.SVC?\n\nA>SERVICES\nGLCD 3\nA>\n",
+          "rendered_text": "A>GLCD.SVC\nGLCD.SVC?\n\nA>SERVICES\nGLCD 3\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>C:\nBdos Err On C: Select\nB>DIR C:\n\nBdos Err On C: Select\nB>\n",
+          "rendered_text": "A>B:\nB>C:\nBdos Err On C: Select\nB>DIR C:\n\nBdos Err On C: Select\nB>"
+        },
+        {
+          "language": "text",
+          "text": "A>USER 3\n3A>SAVE 1 B:MINE.COM\n3A>DIR B:\nMINE.COM    \n1 file, 8172K free\n3A>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\n3A>USER 0\nA>DIR B:\nNO FILE\nA>\n",
+          "rendered_text": "A>USER 3\n3A>SAVE 1 B:MINE.COM\n3A>DIR B:\nMINE.COM    \n1 file, 8172K free\n3A>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\n3A>USER 0\nA>DIR B:\nNO FILE\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>A:MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nB>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nB>STARTUP.CMD\nSTARTUP.CMD?\n\nB>\n",
+          "rendered_text": "A>B:\nB>A:MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nB>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nB>STARTUP.CMD\nSTARTUP.CMD?\n\nB>"
+        },
+        {
+          "language": "text",
+          "text": "A>MOUNT B:\nUnmounted\n\nA>MOUNT C: WORK\nCannot mount: in use or too large\n\nA>MOUNT B: WORK\nB: WORK       \n\nA>\n",
+          "rendered_text": "A>MOUNT B:\nUnmounted\n\nA>MOUNT C: WORK\nCannot mount: in use or too large\n\nA>MOUNT B: WORK\nB: WORK       \n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>\n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n02 GAMES       G8M\n03 SPARE       G1M\n\nA>MOUNT C: GAMES\nC: GAMES      \n\nA>MOUNT D: 3\nD: SPARE      \n\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n02 GAMES       G8M C:\n03 SPARE       G1M D:\n\nA>DIR C:\nTAS.COM     \n1 file, 8164K free\nA>TYPE D:HELLO.TXT\nHello from the PC.\n\nA>MOUNT C: SPARE\nCannot mount: in use or too large\n\nA>\n",
+          "rendered_text": "A>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n02 GAMES       G8M\n03 SPARE       G1M\n\nA>MOUNT C: GAMES\nC: GAMES      \n\nA>MOUNT D: 3\nD: SPARE      \n\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n02 GAMES       G8M C:\n03 SPARE       G1M D:\n\nA>DIR C:\nTAS.COM     \n1 file, 8164K free\nA>TYPE D:HELLO.TXT\nHello from the PC.\n\nA>MOUNT C: SPARE\nCannot mount: in use or too large\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>MOUNT C: GAMES\nC: GAMES      \n\nA>MOUNT B:\nUnmounted\n\nA>\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nC: GAMES      \n\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M\n02 GAMES       G8M C:\n03 SPARE       G1M\n\nA>\n",
+          "rendered_text": "A>MOUNT C: GAMES\nC: GAMES      \n\nA>MOUNT B:\nUnmounted\n\nA>\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nC: GAMES      \n\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M\n02 GAMES       G8M C:\n03 SPARE       G1M\n\nA>"
+        }
+      ],
+      "previous": "tec-os/03-work-with-files.html",
+      "next": "tec-os/05-cards-on-the-pc.html",
+      "source_h1": "4. Drives and user areas"
+    },
+    {
+      "path": "tec-os/05-cards-on-the-pc.md",
+      "html": "tec-os/05-cards-on-the-pc.html",
+      "source_sha256": "2147bfbc8fc69d4139810502592cb7367220965950d98fa5ca83b05c6f9b7e95",
+      "title": "Cards on the PC | Debug80 Docs",
+      "h1": "5. Cards on the PC",
+      "links": [
+        {
+          "target": "tec-os/appendix-f-tecvol.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/26-build-the-rom-and-media.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/18-cache-and-persistence.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/27-diagnose-the-machine.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-e-container-format.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-i-web-page.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "sh",
+          "text": "dd if=/dev/rdiskN of=card.img bs=512 count=20480\nnode tools/tecvol.mjs verify card.img\n",
+          "rendered_text": "dd if=/dev/rdiskN of=card.img bs=512 count=20480\nnode tools/tecvol.mjs verify card.img"
+        },
+        {
+          "language": "sh",
+          "text": "cp saved-banner-card.img card.img\ncmp saved-banner-card.img card.img\nmkdir recovered\nnode tools/tecvol.mjs verify card.img\n",
+          "rendered_text": "cp saved-banner-card.img card.img\ncmp saved-banner-card.img card.img\nmkdir recovered\nnode tools/tecvol.mjs verify card.img"
+        },
+        {
+          "language": "text",
+          "text": "container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)\n  A: SYSTEM      id 1 G1M start 2048 rw 8 file(s), 999424 bytes free\n  B: WORK        id 2 G8M start 4096 rw wb 3 file(s), 8359936 bytes free\n",
+          "rendered_text": "container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)\n  A: SYSTEM      id 1 G1M start 2048 rw 8 file(s), 999424 bytes free\n  B: WORK        id 2 G8M start 4096 rw wb 3 file(s), 8359936 bytes free"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs dir card.img\nnode tools/tecvol.mjs dir card.img B\n",
+          "rendered_text": "node tools/tecvol.mjs dir card.img\nnode tools/tecvol.mjs dir card.img B"
+        },
+        {
+          "language": "text",
+          "text": " 0 GLCD.SVC          896\n 0 MOUNT.COM         768\n 0 SAMPLE.ASM       5120\n 0 STARTUP.CMD       128\n 0 TAS.COM         10368\n 0 TED.COM         12032\n 0 THOR.PRJ          128\n 0 THOR.SES          128\n",
+          "rendered_text": " 0 GLCD.SVC          896\n 0 MOUNT.COM         768\n 0 SAMPLE.ASM       5120\n 0 STARTUP.CMD       128\n 0 TAS.COM         10368\n 0 TED.COM         12032\n 0 THOR.PRJ          128\n 0 THOR.SES          128"
+        },
+        {
+          "language": "text",
+          "text": " 0 BANNER.ASM        384\n 0 BANNER.COM        128\n 0 BANNER.DBG        384\n",
+          "rendered_text": " 0 BANNER.ASM        384\n 0 BANNER.COM        128\n 0 BANNER.DBG        384"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs dir card.img B --user 0 > recovered/B-user0.txt\ncat recovered/B-user0.txt\nnode tools/tecvol.mjs get card.img B BANNER.ASM recovered/BANNER.REC --user 0\nnode tools/tecvol.mjs get card.img B BANNER.ASM recovered/BANNER.ASM --user 0 --text\nwc -c recovered/BANNER.REC recovered/BANNER.ASM\n",
+          "rendered_text": "node tools/tecvol.mjs dir card.img B --user 0 > recovered/B-user0.txt\ncat recovered/B-user0.txt\nnode tools/tecvol.mjs get card.img B BANNER.ASM recovered/BANNER.REC --user 0\nnode tools/tecvol.mjs get card.img B BANNER.ASM recovered/BANNER.ASM --user 0 --text\nwc -c recovered/BANNER.REC recovered/BANNER.ASM"
+        },
+        {
+          "language": "text",
+          "text": "     384 recovered/BANNER.REC\n     273 recovered/BANNER.ASM\n     657 total\n",
+          "rendered_text": "     384 recovered/BANNER.REC\n     273 recovered/BANNER.ASM\n     657 total"
+        },
+        {
+          "language": "sh",
+          "text": "cat recovered/BANNER.ASM\n",
+          "rendered_text": "cat recovered/BANNER.ASM"
+        },
+        {
+          "language": "asm",
+          "text": "  org $0100\n\n; Print one line to the console.\n; Takes nothing. Returns to the CCP.\n; Changes AF, BC, DE and HL.\n\nSTART:\n  ld de,MSG      ; Text for BDOS.\n  ld c,9         ; $ ends the text.\n  call 5\n  ret            ; CCP warm boot.\n\nMSG: db \"Hello from TEC-OS!\",13,10,\"$\"\n",
+          "rendered_text": "  org $0100\n\n; Print one line to the console.\n; Takes nothing. Returns to the CCP.\n; Changes AF, BC, DE and HL.\n\nSTART:\n  ld de,MSG      ; Text for BDOS.\n  ld c,9         ; $ ends the text.\n  call 5\n  ret            ; CCP warm boot.\n\nMSG: db \"Hello from TEC-OS!\",13,10,\"$\""
+        },
+        {
+          "language": "sh",
+          "text": "missing_status=0\nnode tools/tecvol.mjs get card.img B MISSING.ASM recovered/MISSING.ASM --user 0 > recovered/missing.stdout 2> recovered/missing.stderr || missing_status=$?\nprintf 'missing get exit: %s\\n' \"$missing_status\"\ncat recovered/missing.stderr\n",
+          "rendered_text": "missing_status=0\nnode tools/tecvol.mjs get card.img B MISSING.ASM recovered/MISSING.ASM --user 0 > recovered/missing.stdout 2> recovered/missing.stderr || missing_status=$?\nprintf 'missing get exit: %s\\n' \"$missing_status\"\ncat recovered/missing.stderr"
+        },
+        {
+          "language": "text",
+          "text": "missing get exit: 1\ntecvol: 0/MISSING.ASM not found\n",
+          "rendered_text": "missing get exit: 1\ntecvol: 0/MISSING.ASM not found"
+        },
+        {
+          "language": "sh",
+          "text": "cmp saved-banner-card.img card.img\n",
+          "rendered_text": "cmp saved-banner-card.img card.img"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs info dist/starter.img\n",
+          "rendered_text": "node tools/tecvol.mjs info dist/starter.img"
+        },
+        {
+          "language": "text",
+          "text": "container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)\n  A: SYSTEM      id 1 G1M start 2048 rw 6 file(s), 1003520 bytes free\n  B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free\n",
+          "rendered_text": "container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)\n  A: SYSTEM      id 1 G1M start 2048 rw 6 file(s), 1003520 bytes free\n  B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs create my.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G8M:GAMES --volume G1M:SPARE --drives 4\n",
+          "rendered_text": "node tools/tecvol.mjs create my.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G8M:GAMES --volume G1M:SPARE --drives 4"
+        },
+        {
+          "language": "sh",
+          "text": "printf 'Hello from the PC.\\n' > hello.txt\n",
+          "rendered_text": "printf 'Hello from the PC.\\n' > hello.txt"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs put my.img A dist/files/MOUNT.COM\nnode tools/tecvol.mjs put my.img GAMES dist/files/TAS.COM\nnode tools/tecvol.mjs put my.img SPARE hello.txt --text\nnode tools/tecvol.mjs dir my.img\n",
+          "rendered_text": "node tools/tecvol.mjs put my.img A dist/files/MOUNT.COM\nnode tools/tecvol.mjs put my.img GAMES dist/files/TAS.COM\nnode tools/tecvol.mjs put my.img SPARE hello.txt --text\nnode tools/tecvol.mjs dir my.img"
+        },
+        {
+          "language": "text",
+          "text": " 0 MOUNT.COM         768\n",
+          "rendered_text": " 0 MOUNT.COM         768"
+        },
+        {
+          "language": "text",
+          "text": "container: format 1.1, 38912 blocks (19922944 bytes), 4 volume(s), 4 drive(s) wanted\n  A: SYSTEM      id 1 G1M start 2048 rw 1 file(s), 1038336 bytes free\n  B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free\n  -: GAMES       id 3 G8M start 20480 rw 1 file(s), 8359936 bytes free\n  -: SPARE       id 4 G1M start 36864 rw 1 file(s), 1038336 bytes free\n",
+          "rendered_text": "container: format 1.1, 38912 blocks (19922944 bytes), 4 volume(s), 4 drive(s) wanted\n  A: SYSTEM      id 1 G1M start 2048 rw 1 file(s), 1038336 bytes free\n  B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free\n  -: GAMES       id 3 G8M start 20480 rw 1 file(s), 8359936 bytes free\n  -: SPARE       id 4 G1M start 36864 rw 1 file(s), 1038336 bytes free"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs recipe dist/starter.recipe.json mystarter.img\n",
+          "rendered_text": "node tools/tecvol.mjs recipe dist/starter.recipe.json mystarter.img"
+        },
+        {
+          "language": "json",
+          "text": "\"volumes\": [\n  { \"geometry\": \"G1M\", \"label\": \"SYSTEM\", \"mount\": \"A\" },\n  { \"geometry\": \"G8M\", \"label\": \"WORK\", \"mount\": \"B\", \"writeBehind\": true }\n]\n",
+          "rendered_text": "\"volumes\": [\n  { \"geometry\": \"G1M\", \"label\": \"SYSTEM\", \"mount\": \"A\" },\n  { \"geometry\": \"G8M\", \"label\": \"WORK\", \"mount\": \"B\", \"writeBehind\": true }\n]"
+        },
+        {
+          "language": "json",
+          "text": "{\n  \"name\": \"MOUNT.COM\",\n  \"url\": \"files/MOUNT.COM\",\n  \"drive\": \"A\",\n  \"bytes\": 671,\n  \"sha256\": \"5273f0ba443817f9168a1909fe7c934a5ad186ba1480d35b7ab169c27ead83cc\"\n}\n",
+          "rendered_text": "{\n  \"name\": \"MOUNT.COM\",\n  \"url\": \"files/MOUNT.COM\",\n  \"drive\": \"A\",\n  \"bytes\": 671,\n  \"sha256\": \"5273f0ba443817f9168a1909fe7c934a5ad186ba1480d35b7ab169c27ead83cc\"\n}"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs create build/errs.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:ARCHIVE:C:ro\nnode tools/tecvol.mjs put build/errs.img B dist/files/STARTUP.CMD --ro\n",
+          "rendered_text": "node tools/tecvol.mjs create build/errs.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:ARCHIVE:C:ro\nnode tools/tecvol.mjs put build/errs.img B dist/files/STARTUP.CMD --ro"
+        },
+        {
+          "language": "text",
+          "text": "A>SAVE 1 C:X.COM\n\nBdos Err On C: R/O\nA>ERA B:STARTUP.CMD\n\nBdos Err On B: File R/O\nA>DIR B:\nSTARTUP.CMD \n1 file, 8172K free\nA>\n",
+          "rendered_text": "A>SAVE 1 C:X.COM\n\nBdos Err On C: R/O\nA>ERA B:STARTUP.CMD\n\nBdos Err On B: File R/O\nA>DIR B:\nSTARTUP.CMD \n1 file, 8172K free\nA>"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs install my.img /dev/rdiskN --yes\n",
+          "rendered_text": "node tools/tecvol.mjs install my.img /dev/rdiskN --yes"
+        },
+        {
+          "language": "sh",
+          "text": "cp dist/starter.img short.img\ntruncate -s 2104320 short.img\n",
+          "rendered_text": "cp dist/starter.img short.img\ntruncate -s 2104320 short.img"
+        },
+        {
+          "language": "text",
+          "text": "A>DIR B:\n\nBdos Err On B: Bad Sector\nA>\n",
+          "rendered_text": "A>DIR B:\n\nBdos Err On B: Bad Sector\nA>"
+        }
+      ],
+      "previous": "tec-os/04-drives-and-user-areas.html",
+      "next": "tec-os/06-choose-a-console.html",
+      "source_h1": "5. Cards on the PC"
+    },
+    {
+      "path": "tec-os/06-choose-a-console.md",
+      "html": "tec-os/06-choose-a-console.html",
+      "source_sha256": "e48a49c798e4eedb433320728f3c24edefbea54230932701a6892b5f77a59d34",
+      "title": "Choose a console | Debug80 Docs",
+      "h1": "6. Choose a console",
+      "links": [],
+      "fences": [
+        {
+          "language": "text",
+          "text": "A>CON XYZ\nXYZ?\n\nA>\n",
+          "rendered_text": "A>CON XYZ\nXYZ?\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "CON: TTY:\nA>\n",
+          "rendered_text": "CON: TTY:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "CON: CRT:\nA>\n",
+          "rendered_text": "CON: CRT:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>CON\nCON: TTY:\nA>CON CRT\nCON: TTY:\nA>CON UC1\nCON: TTY:\nA>CON\nCON: TTY:\nA>\n",
+          "rendered_text": "A>CON\nCON: TTY:\nA>CON CRT\nCON: TTY:\nA>CON UC1\nCON: TTY:\nA>CON\nCON: TTY:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "CON: UC1:\nA>CON\nCON: UC1:\nA>\n",
+          "rendered_text": "CON: UC1:\nA>CON\nCON: UC1:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>CON UC1\nCON: UC1:\nA>SERVICES\nGLCD 3\nA>UNLOAD\n\nA>CON\nCON: CRT:\nA>\n",
+          "rendered_text": "A>CON UC1\nCON: UC1:\nA>SERVICES\nGLCD 3\nA>UNLOAD\n\nA>CON\nCON: CRT:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>GLCD.SVC\n\nA>CON BAT\nCON: TTY:\nA>\n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>GLCD.SVC\n\nA>CON BAT\nCON: TTY:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "CON: CRT:\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nA>DIR\nMOUNT.COM    GLCD.SVC\nSTARTUP.CMD  TED.COM\nSAMPLE.ASM   TAS.COM\n6 files, 980K free\nA>\n",
+          "rendered_text": "CON: CRT:\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nA>DIR\nMOUNT.COM    GLCD.SVC\nSTARTUP.CMD  TED.COM\nSAMPLE.ASM   TAS.COM\n6 files, 980K free\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>CON CRT80\nCRT80?\n\nA>CON TTY 40\n40?\n\nA>CON PICO 50\n50?\n\nA>\n",
+          "rendered_text": "A>CON CRT80\nCRT80?\n\nA>CON TTY 40\n40?\n\nA>CON PICO 50\n50?\n\nA>"
+        }
+      ],
+      "previous": "tec-os/05-cards-on-the-pc.html",
+      "next": "tec-os/07-commands-at-startup.html",
+      "source_h1": "6. Choose a console"
+    },
+    {
+      "path": "tec-os/07-commands-at-startup.md",
+      "html": "tec-os/07-commands-at-startup.html",
+      "source_sha256": "4336d1372ff50572bdfcdd5554c266ad84052e5de9421e26e7f6d743c2e3e237",
+      "title": "Commands at startup | Debug80 Docs",
+      "h1": "7. Commands at startup",
+      "links": [
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/04-drives-and-user-areas.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/25-startup-inside-the-ccp.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/08-call-tec-os.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/04-drives-and-user-areas.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-i-web-page.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-h-service-file-format.html",
+          "fragment": "the-header"
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": "a-card-from-an-older-tec-os"
+        },
+        {
+          "target": "tec-os/appendix-g-tec-1g.html",
+          "fragment": "the-hex-keypad-and-its-nmi"
+        },
+        {
+          "target": "tec-os/27-diagnose-the-machine.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/11-use-the-boards-devices.html",
+          "fragment": "the-lcd-and-the-speaker"
+        },
+        {
+          "target": "tec-os/25-startup-inside-the-ccp.html",
+          "fragment": "recovery-words-and-row-ownership"
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "A>TYPE STARTUP.CMD\nGLCD.SVC\n\nA>\n",
+          "rendered_text": "A>TYPE STARTUP.CMD\nGLCD.SVC\n\nA>"
+        },
+        {
+          "language": "sh",
+          "text": "printf 'B:\\nUSER 3\\nmount\\nDIR\\nNOSUCH\\nUSER 0\\n' > startup.cmd\ncp dist/starter.img lines.img\nnode tools/tecvol.mjs put lines.img A startup.cmd --text\n",
+          "rendered_text": "printf 'B:\\nUSER 3\\nmount\\nDIR\\nNOSUCH\\nUSER 0\\n' > startup.cmd\ncp dist/starter.img lines.img\nnode tools/tecvol.mjs put lines.img A startup.cmd --text"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>B:\nB>USER 3\n3B>mount\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\n3B>DIR\nNO FILE\n3B>NOSUCH\nNOSUCH?\n\n3B>USER 0\nB>\n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>B:\nB>USER 3\n3B>mount\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\n3B>DIR\nNO FILE\n3B>NOSUCH\nNOSUCH?\n\n3B>USER 0\nB>"
+        },
+        {
+          "language": "sh",
+          "text": "printf '\\n%.0s' $(seq 60) > startup.cmd\nprintf 'DIR *.CMD\\nUSER 3\\n' >> startup.cmd\ncp dist/starter.img cut.img\nnode tools/tecvol.mjs put cut.img A startup.cmd --text\n",
+          "rendered_text": "printf '\\n%.0s' $(seq 60) > startup.cmd\nprintf 'DIR *.CMD\\nUSER 3\\n' >> startup.cmd\ncp dist/starter.img cut.img\nnode tools/tecvol.mjs put cut.img A startup.cmd --text"
+        },
+        {
+          "language": "text",
+          "text": "A>DIR *.CM\nNO FILE\nA>\n",
+          "rendered_text": "A>DIR *.CM\nNO FILE\nA>"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs create spare.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:SPARE --drives 4\nnode tools/tecvol.mjs put spare.img A dist/files/MOUNT.COM\nprintf 'MOUNT\\n' > startup.cmd\nnode tools/tecvol.mjs put spare.img A startup.cmd --text\nprintf 'USER 2\\n' > startup.cmd\nnode tools/tecvol.mjs put spare.img SPARE startup.cmd --text\n",
+          "rendered_text": "node tools/tecvol.mjs create spare.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:SPARE --drives 4\nnode tools/tecvol.mjs put spare.img A dist/files/MOUNT.COM\nprintf 'MOUNT\\n' > startup.cmd\nnode tools/tecvol.mjs put spare.img A startup.cmd --text\nprintf 'USER 2\\n' > startup.cmd\nnode tools/tecvol.mjs put spare.img SPARE startup.cmd --text"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n02 SPARE       G1M\n\nA>MOUNT A: SPARE\nA: SPARE      \n\nA>\nTEC-OS 0.1 for TEC-1G\nA: SPARE      \nB: WORK       \n\nA>USER 2\n2A>\n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n02 SPARE       G1M\n\nA>MOUNT A: SPARE\nA: SPARE      \n\nA>\nTEC-OS 0.1 for TEC-1G\nA: SPARE      \nB: WORK       \n\nA>USER 2\n2A>"
+        },
+        {
+          "language": "text",
+          "text": "A>SERVICES\nA>CON\nCON: CRT:\nA>\n",
+          "rendered_text": "A>SERVICES\nA>CON\nCON: CRT:\nA>"
+        },
+        {
+          "language": "sh",
+          "text": "printf 'CON PICO 32\\nGLCD.SVC\\n' > startup.cmd\ncp dist/starter.img w32.img\nnode tools/tecvol.mjs put w32.img A startup.cmd --text\n",
+          "rendered_text": "printf 'CON PICO 32\\nGLCD.SVC\\n' > startup.cmd\ncp dist/starter.img w32.img\nnode tools/tecvol.mjs put w32.img A startup.cmd --text"
+        },
+        {
+          "language": "text",
+          "text": "CON: CRT:\nA>GLCD.SVC\n\nA>DIR\nMOUNT.COM    GLCD.SVC\nSTARTUP.CMD  TED.COM\nSAMPLE.ASM   TAS.COM\n6 files, 980K free\nA>\n",
+          "rendered_text": "CON: CRT:\nA>GLCD.SVC\n\nA>DIR\nMOUNT.COM    GLCD.SVC\nSTARTUP.CMD  TED.COM\nSAMPLE.ASM   TAS.COM\n6 files, 980K free\nA>"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>CON PICO 32\n\nA>GLCD.SVC\n\nA>\n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>CON PICO 32\n\nA>GLCD.SVC\n\nA>"
+        },
+        {
+          "language": "sh",
+          "text": "cp dist/starter.img nostart.img\nnode tools/tecvol.mjs era nostart.img A STARTUP.CMD\n",
+          "rendered_text": "cp dist/starter.img nostart.img\nnode tools/tecvol.mjs era nostart.img A STARTUP.CMD"
+        },
+        {
+          "language": "text",
+          "text": "A>CON UC1\nCON: TTY:\nA>\n--- LCD\nTEC-OS 0.1  TEC-1G\nA: SYSTEM\nB: WORK\nGLCD?\n",
+          "rendered_text": "A>CON UC1\nCON: TTY:\nA>\n--- LCD\nTEC-OS 0.1  TEC-1G\nA: SYSTEM\nB: WORK\nGLCD?"
+        },
+        {
+          "language": "sh",
+          "text": "cp nostart.img gname.img\nnode tools/tecvol.mjs put gname.img A dist/files/GLCD.SVC G.SVC\nnode tools/tecvol.mjs era gname.img A GLCD.SVC\n",
+          "rendered_text": "cp nostart.img gname.img\nnode tools/tecvol.mjs put gname.img A dist/files/GLCD.SVC G.SVC\nnode tools/tecvol.mjs era gname.img A GLCD.SVC"
+        },
+        {
+          "language": "text",
+          "text": "A>CON UC1\nCON: TTY:\nA>G.SVC\n\nA>CON\nCON: UC1:\nA>\n--- LCD\nTEC-OS 0.1  TEC-1G\nA: SYSTEM\nB: WORK\n\n",
+          "rendered_text": "A>CON UC1\nCON: TTY:\nA>G.SVC\n\nA>CON\nCON: UC1:\nA>\n--- LCD\nTEC-OS 0.1  TEC-1G\nA: SYSTEM\nB: WORK"
+        }
+      ],
+      "previous": "tec-os/06-choose-a-console.html",
+      "next": "tec-os/08-call-tec-os.html",
+      "source_h1": "7. Commands at startup"
+    },
+    {
+      "path": "tec-os/08-call-tec-os.md",
+      "html": "tec-os/08-call-tec-os.html",
+      "source_sha256": "8aeb33d0c2bfe88de2269c343c5686cc6cfc26792f2f1b2bd2329fd902996790",
+      "title": "Call TEC-OS | Debug80 Docs",
+      "h1": "8. Call TEC-OS",
+      "links": [],
+      "fences": [
+        {
+          "language": "asm",
+          "text": "        PUSH    HL\n        PUSH    BC\n        LD      E,A\n        LD      C,2             ; print the character in E\n        CALL    BDOS\n        POP     BC\n        POP     HL\n",
+          "rendered_text": "        PUSH    HL\n        PUSH    BC\n        LD      E,A\n        LD      C,2             ; print the character in E\n        CALL    BDOS\n        POP     BC\n        POP     HL"
+        },
+        {
+          "language": "asm",
+          "text": "BDOS equ $0005\n\n  org $0100\n\n; Read a line, print GOT and return.\n; Takes input from the console.\n; Returns through the CCP's word.\n; Changes AF, BC, DE and HL.\n\nSTART:\n  ld de,BUF      ; Line input buffer.\n  ld c,10        ; BDOS edits the line.\n  call BDOS\n  ld de,GOT      ; Fixed GOT message.\n  ld c,9         ; $ ends this string.\n  call BDOS\n  ret            ; CCP warm boot.\n\nGOT: db 13,10,\"GOT\",13,10,\"$\"\nBUF: db 20,0\n  ds 20\n",
+          "rendered_text": "BDOS equ $0005\n\n  org $0100\n\n; Read a line, print GOT and return.\n; Takes input from the console.\n; Returns through the CCP's word.\n; Changes AF, BC, DE and HL.\n\nSTART:\n  ld de,BUF      ; Line input buffer.\n  ld c,10        ; BDOS edits the line.\n  call BDOS\n  ld de,GOT      ; Fixed GOT message.\n  ld c,9         ; $ ends this string.\n  call BDOS\n  ret            ; CCP warm boot.\n\nGOT: db 13,10,\"GOT\",13,10,\"$\"\nBUF: db 20,0\n  ds 20"
+        },
+        {
+          "language": "text",
+          "text": "TAS LINE\nLINE.COM written\n\nB>\n",
+          "rendered_text": "TAS LINE\nLINE.COM written\n\nB>"
+        },
+        {
+          "language": "text",
+          "text": "HELLO\nGOT\n\nB>\n",
+          "rendered_text": "HELLO\nGOT\n\nB>"
+        }
+      ],
+      "previous": "tec-os/07-commands-at-startup.html",
+      "next": "tec-os/09-read-and-write-a-file.html",
+      "source_h1": "8. Call TEC-OS"
+    },
+    {
+      "path": "tec-os/09-read-and-write-a-file.md",
+      "html": "tec-os/09-read-and-write-a-file.html",
+      "source_sha256": "0829de9ec9905c3d685aa06a72e432daa2aa1968e36a0753968a45fe392f1980",
+      "title": "Read and write a file | Debug80 Docs",
+      "h1": "9. Read and write a file",
+      "links": [],
+      "fences": [
+        {
+          "language": "asm",
+          "text": "; SHOW NAME: print the text file NAME on the console.\nBDOS    EQU     $0005\nFCB     EQU     $005C           ; the CCP's FCB for the first name\nDMA     EQU     $0080           ; where the BDOS reads a record\n\n        ORG     $0100\n        XOR     A\n        LD      (FCB+32),A      ; read from the first record\n        LD      DE,FCB\n        LD      C,15            ; open the file\n        CALL    BDOS\n        INC     A               ; FFh: no such file\n        JR      Z,NOFILE\nNEXT:   LD      DE,FCB\n        LD      C,20            ; read the next record into DMA\n        CALL    BDOS\n        OR      A\n        RET     NZ              ; no more records\n        LD      HL,DMA\n        LD      B,128\nPUT:    LD      A,(HL)\n        CP      $1A             ; ^Z ends a text file\n        RET     Z\n        PUSH    HL\n        PUSH    BC\n        LD      E,A\n        LD      C,2             ; print the character in E\n        CALL    BDOS\n        POP     BC\n        POP     HL\n        INC     HL\n        DJNZ    PUT\n        JR      NEXT\nNOFILE: LD      DE,NOMSG\n        LD      C,9\n        JP      BDOS            ; print, and return from there\nNOMSG:  DB      \"No such file\",13,10,\"$\"\n",
+          "rendered_text": "; SHOW NAME: print the text file NAME on the console.\nBDOS    EQU     $0005\nFCB     EQU     $005C           ; the CCP's FCB for the first name\nDMA     EQU     $0080           ; where the BDOS reads a record\n\n        ORG     $0100\n        XOR     A\n        LD      (FCB+32),A      ; read from the first record\n        LD      DE,FCB\n        LD      C,15            ; open the file\n        CALL    BDOS\n        INC     A               ; FFh: no such file\n        JR      Z,NOFILE\nNEXT:   LD      DE,FCB\n        LD      C,20            ; read the next record into DMA\n        CALL    BDOS\n        OR      A\n        RET     NZ              ; no more records\n        LD      HL,DMA\n        LD      B,128\nPUT:    LD      A,(HL)\n        CP      $1A             ; ^Z ends a text file\n        RET     Z\n        PUSH    HL\n        PUSH    BC\n        LD      E,A\n        LD      C,2             ; print the character in E\n        CALL    BDOS\n        POP     BC\n        POP     HL\n        INC     HL\n        DJNZ    PUT\n        JR      NEXT\nNOFILE: LD      DE,NOMSG\n        LD      C,9\n        JP      BDOS            ; print, and return from there\nNOMSG:  DB      \"No such file\",13,10,\"$\""
+        },
+        {
+          "language": "sh",
+          "text": "npx atom show.asm show.com\nnode tools/tecvol.mjs put work.img B show.com\nnode tools/tecvol.mjs put work.img B hello.asm --text\n",
+          "rendered_text": "npx atom show.asm show.com\nnode tools/tecvol.mjs put work.img B show.com\nnode tools/tecvol.mjs put work.img B hello.asm --text"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>SHOW HELLO.ASM\n; HELLO: print a line and return to the CCP.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      DE,MESSAGE      ; the string, ended by $\n        LD      C,9             ; BDOS function 9: print a string\n        CALL    BDOS\n        RET                     ; back to TEC-OS\nMESSAGE:DB      \"Hello from the TEC-1G\",13,10,\"$\"\n\nB>SHOW NOSUCH.TXT\nNo such file\n\nB>\n",
+          "rendered_text": "A>B:\nB>SHOW HELLO.ASM\n; HELLO: print a line and return to the CCP.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      DE,MESSAGE      ; the string, ended by $\n        LD      C,9             ; BDOS function 9: print a string\n        CALL    BDOS\n        RET                     ; back to TEC-OS\nMESSAGE:DB      \"Hello from the TEC-1G\",13,10,\"$\"\n\nB>SHOW NOSUCH.TXT\nNo such file\n\nB>"
+        }
+      ],
+      "previous": "tec-os/08-call-tec-os.html",
+      "next": "tec-os/10-memory-for-programs.html",
+      "source_h1": "9. Read and write a file"
+    },
+    {
+      "path": "tec-os/10-memory-for-programs.md",
+      "html": "tec-os/10-memory-for-programs.html",
+      "source_sha256": "4c47dfaec37d5223d7d8587ee02eb75b1d9e352a7b98eb25a8ad39b8587b7d33",
+      "title": "Memory for programs | Debug80 Docs",
+      "h1": "10. Memory for programs",
+      "links": [],
+      "fences": [
+        {
+          "language": "asm",
+          "text": "; TOP: print the word at 0006h, the first byte above the program area.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      A,($0007)       ; the high byte first\n        CALL    HEX\n        LD      A,($0006)\n        CALL    HEX\n        LD      DE,CRLF\n        LD      C,9\n        JP      BDOS\n\nHEX:    PUSH    AF              ; A as two hex digits\n        RRCA\n        RRCA\n        RRCA\n        RRCA\n        CALL    DIGIT\n        POP     AF\nDIGIT:  AND     $0F\n        ADD     A,'0'\n        CP      '9'+1\n        JR      C,DIGIT1\n        ADD     A,'A'-'9'-1\nDIGIT1: LD      E,A\n        LD      C,2\n        JP      BDOS\nCRLF:   DB      \"h\",13,10,\"$\"\n",
+          "rendered_text": "; TOP: print the word at 0006h, the first byte above the program area.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      A,($0007)       ; the high byte first\n        CALL    HEX\n        LD      A,($0006)\n        CALL    HEX\n        LD      DE,CRLF\n        LD      C,9\n        JP      BDOS\n\nHEX:    PUSH    AF              ; A as two hex digits\n        RRCA\n        RRCA\n        RRCA\n        RRCA\n        CALL    DIGIT\n        POP     AF\nDIGIT:  AND     $0F\n        ADD     A,'0'\n        CP      '9'+1\n        JR      C,DIGIT1\n        ADD     A,'A'-'9'-1\nDIGIT1: LD      E,A\n        LD      C,2\n        JP      BDOS\nCRLF:   DB      \"h\",13,10,\"$\""
+        },
+        {
+          "language": "sh",
+          "text": "cp dist/starter.img mem.img\nnpx atom top.asm top.com\nnode tools/tecvol.mjs put mem.img B top.com\n",
+          "rendered_text": "cp dist/starter.img mem.img\nnpx atom top.asm top.com\nnode tools/tecvol.mjs put mem.img B top.com"
+        },
+        {
+          "language": "text",
+          "text": "A>B:TOP\nB9A4h\n\nA>\n",
+          "rendered_text": "A>B:TOP\nB9A4h\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>B:TOP\nB9A4h\n\nA>CON UC1\nCON: UC1:\nA>B:TOP\nB600h\n\nA>\n",
+          "rendered_text": "A>B:TOP\nB9A4h\n\nA>CON UC1\nCON: UC1:\nA>B:TOP\nB600h\n\nA>"
+        },
+        {
+          "language": "asm",
+          "text": "; AREA: print the size of the program area in bytes, in decimal.\nBDOS\tEQU\t$0005\n\n\tORG\t$0100\n\tLD\tHL,($0006)\t; the first byte above the area\n\tLD\tDE,$0100\t; the area's first byte\n\tOR\tA\t\t; clear carry for the subtraction\n\tSBC\tHL,DE\t\t; HL = the size in bytes\n\tCALL\tPUTDEC\n\tLD\tDE,BYTES\t; the text after the number\n\tLD\tC,9\t\t; BDOS function 9: print a string\n\tJP\tBDOS\t\t; print, and return from there\n\n; PUTDEC: print HL in decimal, always as five digits. Takes HL.\n; Returns nothing. Changes AF, BC, DE and HL.\nPUTDEC:\tLD\tBC,-10000\t; the ten-thousands digit\n\tCALL\tDIGIT\n\tLD\tBC,-1000\t; the thousands, from what is left\n\tCALL\tDIGIT\n\tLD\tBC,-100\t\t; the hundreds\n\tCALL\tDIGIT\n\tLD\tBC,-10\t\t; the tens\n\tCALL\tDIGIT\n\tLD\tBC,-1\t\t; the units: fall into DIGIT\n\n; DIGIT: print how many times a power of ten goes into HL. Takes the\n; negative of the power in BC and the number in HL. Returns the\n; remainder in HL. Changes AF, BC and DE.\nDIGIT:\tLD\tA,'0'-1\t\t; one below the character for 0\nDLOOP:\tINC\tA\t\t; the next digit\n\tADD\tHL,BC\t\t; take off one power of ten\n\tJR\tC,DLOOP\t\t; carry: HL is still 0 or more\n\tSBC\tHL,BC\t\t; one too many: add the power back\n\tPUSH\tHL\t\t; function 2 changes the registers\n\tLD\tE,A\n\tLD\tC,2\t\t; BDOS function 2: print E\n\tCALL\tBDOS\n\tPOP\tHL\n\tRET\n\nBYTES:\tDB\t\" bytes\",13,10,\"$\"\n",
+          "rendered_text": "; AREA: print the size of the program area in bytes, in decimal.\nBDOS\tEQU\t$0005\n\n\tORG\t$0100\n\tLD\tHL,($0006)\t; the first byte above the area\n\tLD\tDE,$0100\t; the area's first byte\n\tOR\tA\t\t; clear carry for the subtraction\n\tSBC\tHL,DE\t\t; HL = the size in bytes\n\tCALL\tPUTDEC\n\tLD\tDE,BYTES\t; the text after the number\n\tLD\tC,9\t\t; BDOS function 9: print a string\n\tJP\tBDOS\t\t; print, and return from there\n\n; PUTDEC: print HL in decimal, always as five digits. Takes HL.\n; Returns nothing. Changes AF, BC, DE and HL.\nPUTDEC:\tLD\tBC,-10000\t; the ten-thousands digit\n\tCALL\tDIGIT\n\tLD\tBC,-1000\t; the thousands, from what is left\n\tCALL\tDIGIT\n\tLD\tBC,-100\t\t; the hundreds\n\tCALL\tDIGIT\n\tLD\tBC,-10\t\t; the tens\n\tCALL\tDIGIT\n\tLD\tBC,-1\t\t; the units: fall into DIGIT\n\n; DIGIT: print how many times a power of ten goes into HL. Takes the\n; negative of the power in BC and the number in HL. Returns the\n; remainder in HL. Changes AF, BC and DE.\nDIGIT:\tLD\tA,'0'-1\t\t; one below the character for 0\nDLOOP:\tINC\tA\t\t; the next digit\n\tADD\tHL,BC\t\t; take off one power of ten\n\tJR\tC,DLOOP\t\t; carry: HL is still 0 or more\n\tSBC\tHL,BC\t\t; one too many: add the power back\n\tPUSH\tHL\t\t; function 2 changes the registers\n\tLD\tE,A\n\tLD\tC,2\t\t; BDOS function 2: print E\n\tCALL\tBDOS\n\tPOP\tHL\n\tRET\n\nBYTES:\tDB\t\" bytes\",13,10,\"$\""
+        },
+        {
+          "language": "sh",
+          "text": "npx atom area.asm area.com\nnode tools/tecvol.mjs put mem.img B area.com\n",
+          "rendered_text": "npx atom area.asm area.com\nnode tools/tecvol.mjs put mem.img B area.com"
+        },
+        {
+          "language": "text",
+          "text": "A>B:AREA\n47268 bytes\n\nA>\n",
+          "rendered_text": "A>B:AREA\n47268 bytes\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>SAVE 2 TWO.COM\nB>SAVE 185 BIG.COM\n185?\n\nB>DIR\nTWO.COM     \n1 file, 8172K free\nB>\n",
+          "rendered_text": "A>B:\nB>SAVE 2 TWO.COM\nB>SAVE 185 BIG.COM\n185?\n\nB>DIR\nTWO.COM     \n1 file, 8172K free\nB>"
+        },
+        {
+          "language": "asm",
+          "text": "; KEY: read keys through the BIOS and print each one's code in hex, until\n; Return.\n        ORG     $0100\n        LD      SP,STACK        ; the BIOS's routines run on this stack\n        LD      HL,($0001)      ; the BIOS's warm boot entry, table + 3\n        LD      DE,6\n        ADD     HL,DE\n        LD      (CONIN+1),HL    ; table + 9: CONIN\n        LD      DE,3\n        ADD     HL,DE\n        LD      (CONOUT+1),HL   ; table + 0Ch: CONOUT\nNEXT:   CALL    CONIN           ; wait for a key; A = its code\n        PUSH    AF\n        CALL    HEX\n        LD      C,' '\n        CALL    CONOUT\n        POP     AF\n        CP      13\n        JR      NZ,NEXT\n        LD      C,13\n        CALL    CONOUT\n        LD      C,10\n        CALL    CONOUT\n        JP      $0000           ; no return word on this stack\nCONOUT: JP      0               ; print C; the address goes here\nCONIN:  JP      0               ; the address goes here\n\nHEX:    PUSH    AF              ; A as two hex digits\n        RRCA\n        RRCA\n        RRCA\n        RRCA\n        CALL    DIGIT\n        POP     AF\nDIGIT:  AND     $0F\n        ADD     A,'0'\n        CP      '9'+1\n        JR      C,DIGIT1\n        ADD     A,'A'-'9'-1\nDIGIT1: LD      C,A\n        JR      CONOUT\n\n        DS      64\nSTACK:\n",
+          "rendered_text": "; KEY: read keys through the BIOS and print each one's code in hex, until\n; Return.\n        ORG     $0100\n        LD      SP,STACK        ; the BIOS's routines run on this stack\n        LD      HL,($0001)      ; the BIOS's warm boot entry, table + 3\n        LD      DE,6\n        ADD     HL,DE\n        LD      (CONIN+1),HL    ; table + 9: CONIN\n        LD      DE,3\n        ADD     HL,DE\n        LD      (CONOUT+1),HL   ; table + 0Ch: CONOUT\nNEXT:   CALL    CONIN           ; wait for a key; A = its code\n        PUSH    AF\n        CALL    HEX\n        LD      C,' '\n        CALL    CONOUT\n        POP     AF\n        CP      13\n        JR      NZ,NEXT\n        LD      C,13\n        CALL    CONOUT\n        LD      C,10\n        CALL    CONOUT\n        JP      $0000           ; no return word on this stack\nCONOUT: JP      0               ; print C; the address goes here\nCONIN:  JP      0               ; the address goes here\n\nHEX:    PUSH    AF              ; A as two hex digits\n        RRCA\n        RRCA\n        RRCA\n        RRCA\n        CALL    DIGIT\n        POP     AF\nDIGIT:  AND     $0F\n        ADD     A,'0'\n        CP      '9'+1\n        JR      C,DIGIT1\n        ADD     A,'A'-'9'-1\nDIGIT1: LD      C,A\n        JR      CONOUT\n\n        DS      64\nSTACK:"
+        },
+        {
+          "language": "sh",
+          "text": "cp dist/starter.img con.img\nnpx atom key.asm key.com\nnode tools/tecvol.mjs put con.img B key.com\n",
+          "rendered_text": "cp dist/starter.img con.img\nnpx atom key.asm key.com\nnode tools/tecvol.mjs put con.img B key.com"
+        },
+        {
+          "language": "text",
+          "text": "A>B:KEY\n61 5A 03 1B 0D \n\nA>\n",
+          "rendered_text": "A>B:KEY\n61 5A 03 1B 0D \n\nA>"
+        }
+      ],
+      "previous": "tec-os/09-read-and-write-a-file.html",
+      "next": "tec-os/11-use-the-boards-devices.html",
+      "source_h1": "10. Memory for programs"
+    },
+    {
+      "path": "tec-os/11-use-the-boards-devices.md",
+      "html": "tec-os/11-use-the-boards-devices.html",
+      "source_sha256": "4f4c6891e9c1a8d63ffbdd3c6c809e876a200c45b6b0c4ffa6c8611663012672",
+      "title": "Use the board's devices | Debug80 Docs",
+      "h1": "11. Use the board's devices",
+      "links": [],
+      "fences": [
+        {
+          "language": "asm",
+          "text": "; HWLIB.ASM: routines this chapter's programs share. It goes after a\n; program's own code, since it makes bytes where it is included.\n\n; Test for TEC-OS with ABI 5. Returns Z if the table's four bytes match,\n; NZ if not. Changes AF, B, DE and HL.\nCHKHW:\tLD\tHL,ABITAB\t; signature, then the major version\n\tLD\tDE,TAG\t\t; what they must be\n\tLD\tB,4\t\t; a major of 6 fails as a wrong letter does\nCHKH1:\tLD\tA,(DE)\n\tCP\t(HL)\n\tRET\tNZ\t\t; NZ: not what TAG holds\n\tINC\tHL\t\t; on to the next of each\n\tINC\tDE\n\tDJNZ\tCHKH1\n\tRET\t\t\t; Z from the last comparison\n\n; End a program that found another system. Takes nothing, and returns to\n; the CCP through the program's own return address.\nNOTHW:\tLD\tDE,NOTMSG\t; no board devices here, and no harm done\n; Print the $-ended string at DE. A jump here prints and ends the program.\n; Changes AF, BC, DE and HL.\nSAY:\tLD\tC,9\t\t; BDOS print string\n\tJP\tBDOS\t\t; its RET is this routine's\n\n; Print the $-ended label at DE, then A in hex. Changes AF, BC and DE.\nLABHEX:\tPUSH\tAF\t\t; the value, across the BDOS call\n\tPUSH\tHL\t\t; the BDOS changes HL\n\tCALL\tSAY\n\tPOP\tHL\n\tPOP\tAF\t\t; on into HEX\n; Print A as two hex digits, which also prints a BCD byte in decimal.\n; Changes AF, BC and DE.\nHEX:\tPUSH\tHL\t\t; a caller may keep a value here\n\tPUSH\tAF\t\t; the low digit comes second\n\tRRCA\t\t\t; the high digit down to bits 0 to 3\n\tRRCA\n\tRRCA\n\tRRCA\n\tCALL\tNIBBLE\t\t; the high digit\n\tPOP\tAF\n\tCALL\tNIBBLE\t\t; the low digit\n\tPOP\tHL\n\tRET\n\n; Print the low four bits of A as a hex digit. Changes AF, BC, DE and HL.\nNIBBLE:\tAND\t$0F\t\t; one digit\n\tADD\tA,'0'\n\tCP\t'9'+1\t\t; past 9: the letters start seven later\n\tJR\tC,NIBB1\n\tADD\tA,7\nNIBB1:\tLD\tE,A\t\t; BDOS console output\n\tLD\tC,2\n\tJP\tBDOS\t\t; its RET is this routine's\n\nTAG:\tDB\t\"TNA\",5\nNOTMSG:\tDB\t\"not TEC-OS with ABI 5\",13,10,\"$\"\n",
+          "rendered_text": "; HWLIB.ASM: routines this chapter's programs share. It goes after a\n; program's own code, since it makes bytes where it is included.\n\n; Test for TEC-OS with ABI 5. Returns Z if the table's four bytes match,\n; NZ if not. Changes AF, B, DE and HL.\nCHKHW:\tLD\tHL,ABITAB\t; signature, then the major version\n\tLD\tDE,TAG\t\t; what they must be\n\tLD\tB,4\t\t; a major of 6 fails as a wrong letter does\nCHKH1:\tLD\tA,(DE)\n\tCP\t(HL)\n\tRET\tNZ\t\t; NZ: not what TAG holds\n\tINC\tHL\t\t; on to the next of each\n\tINC\tDE\n\tDJNZ\tCHKH1\n\tRET\t\t\t; Z from the last comparison\n\n; End a program that found another system. Takes nothing, and returns to\n; the CCP through the program's own return address.\nNOTHW:\tLD\tDE,NOTMSG\t; no board devices here, and no harm done\n; Print the $-ended string at DE. A jump here prints and ends the program.\n; Changes AF, BC, DE and HL.\nSAY:\tLD\tC,9\t\t; BDOS print string\n\tJP\tBDOS\t\t; its RET is this routine's\n\n; Print the $-ended label at DE, then A in hex. Changes AF, BC and DE.\nLABHEX:\tPUSH\tAF\t\t; the value, across the BDOS call\n\tPUSH\tHL\t\t; the BDOS changes HL\n\tCALL\tSAY\n\tPOP\tHL\n\tPOP\tAF\t\t; on into HEX\n; Print A as two hex digits, which also prints a BCD byte in decimal.\n; Changes AF, BC and DE.\nHEX:\tPUSH\tHL\t\t; a caller may keep a value here\n\tPUSH\tAF\t\t; the low digit comes second\n\tRRCA\t\t\t; the high digit down to bits 0 to 3\n\tRRCA\n\tRRCA\n\tRRCA\n\tCALL\tNIBBLE\t\t; the high digit\n\tPOP\tAF\n\tCALL\tNIBBLE\t\t; the low digit\n\tPOP\tHL\n\tRET\n\n; Print the low four bits of A as a hex digit. Changes AF, BC, DE and HL.\nNIBBLE:\tAND\t$0F\t\t; one digit\n\tADD\tA,'0'\n\tCP\t'9'+1\t\t; past 9: the letters start seven later\n\tJR\tC,NIBB1\n\tADD\tA,7\nNIBB1:\tLD\tE,A\t\t; BDOS console output\n\tLD\tC,2\n\tJP\tBDOS\t\t; its RET is this routine's\n\nTAG:\tDB\t\"TNA\",5\nNOTMSG:\tDB\t\"not TEC-OS with ABI 5\",13,10,\"$\""
+        },
+        {
+          "language": "asm",
+          "text": "; BOARD: print what INFO reports, then what a bad number returns.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tC,TNINFO\n\tCALL\tABICALL\n\tPUSH\tHL\t\t; the size, across the printing\n\tPUSH\tDE\t\t; and the version\n\tLD\tA,B\t\t; the device bits\n\tLD\tDE,MSGB\t\t; the first line\n\tCALL\tLABHEX\n\tPOP\tHL\t\t; the version, high byte first\n\tLD\tA,H\n\tLD\tDE,MSGVER\t; the second\n\tCALL\tLABHEX\n\tLD\tA,L\t\t; then the low byte on the same line\n\tCALL\tHEX\n\tPOP\tHL\t\t; the console's size\n\tPUSH\tHL\t\t; the rows, for the next line\n\tLD\tA,L\t\t; the columns\n\tLD\tDE,MSGCOL\t; the third\n\tCALL\tLABHEX\n\tPOP\tHL\t\t; the rows\n\tLD\tA,H\n\tLD\tDE,MSGROW\t; the fourth\n\tCALL\tLABHEX\n\tLD\tC,TNCOUNT\t; the number after the last service\n\tCALL\tABICALL\n\tPUSH\tAF\t\t; the status, and its carry\n\tLD\tDE,MSGBAD\n\tCALL\tLABHEX\n\tPOP\tAF\t\t; only the carry is wanted now\n\tLD\tDE,MSGNC\n\tJP\tNC,SAY\t\t; prints and ends the program\n\tLD\tDE,MSGC\t\t; the carry was set\n\tJP\tSAY\t\t; prints and ends the program\n\n; What each line starts with, and how the last ends.\nMSGB:\tDB\t\"Devices  B = $\"\nMSGVER:\tDB\t13,10,\"Version DE = $\"\nMSGCOL:\tDB\t13,10,\"Columns  L = $\"\nMSGROW:\tDB\t13,10,\"Rows     H = $\"\n; The last line: the status, then its carry.\nMSGBAD:\tDB\t13,10,\"Number 16: status $\"\nMSGC:\tDB\t\", carry set\",13,10,\"$\"\nMSGNC:\tDB\t\", carry clear\",13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\"\n",
+          "rendered_text": "; BOARD: print what INFO reports, then what a bad number returns.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tC,TNINFO\n\tCALL\tABICALL\n\tPUSH\tHL\t\t; the size, across the printing\n\tPUSH\tDE\t\t; and the version\n\tLD\tA,B\t\t; the device bits\n\tLD\tDE,MSGB\t\t; the first line\n\tCALL\tLABHEX\n\tPOP\tHL\t\t; the version, high byte first\n\tLD\tA,H\n\tLD\tDE,MSGVER\t; the second\n\tCALL\tLABHEX\n\tLD\tA,L\t\t; then the low byte on the same line\n\tCALL\tHEX\n\tPOP\tHL\t\t; the console's size\n\tPUSH\tHL\t\t; the rows, for the next line\n\tLD\tA,L\t\t; the columns\n\tLD\tDE,MSGCOL\t; the third\n\tCALL\tLABHEX\n\tPOP\tHL\t\t; the rows\n\tLD\tA,H\n\tLD\tDE,MSGROW\t; the fourth\n\tCALL\tLABHEX\n\tLD\tC,TNCOUNT\t; the number after the last service\n\tCALL\tABICALL\n\tPUSH\tAF\t\t; the status, and its carry\n\tLD\tDE,MSGBAD\n\tCALL\tLABHEX\n\tPOP\tAF\t\t; only the carry is wanted now\n\tLD\tDE,MSGNC\n\tJP\tNC,SAY\t\t; prints and ends the program\n\tLD\tDE,MSGC\t\t; the carry was set\n\tJP\tSAY\t\t; prints and ends the program\n\n; What each line starts with, and how the last ends.\nMSGB:\tDB\t\"Devices  B = $\"\nMSGVER:\tDB\t13,10,\"Version DE = $\"\nMSGCOL:\tDB\t13,10,\"Columns  L = $\"\nMSGROW:\tDB\t13,10,\"Rows     H = $\"\n; The last line: the status, then its carry.\nMSGBAD:\tDB\t13,10,\"Number 16: status $\"\nMSGC:\tDB\t\", carry set\",13,10,\"$\"\nMSGNC:\tDB\t\", carry clear\",13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\""
+        },
+        {
+          "language": "sh",
+          "text": "cp dist/starter.img hw.img\nnode tools/tecvol.mjs put hw.img B dist/abi.inc --text\nnode tools/tecvol.mjs put hw.img B hwlib.asm --text\nnode tools/tecvol.mjs put hw.img B board.asm --text\n",
+          "rendered_text": "cp dist/starter.img hw.img\nnode tools/tecvol.mjs put hw.img B dist/abi.inc --text\nnode tools/tecvol.mjs put hw.img B hwlib.asm --text\nnode tools/tecvol.mjs put hw.img B board.asm --text"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>TAS BOARD\nBOARD.COM written\n\nB>BOARD\nDevices  B = 08\nVersion DE = 0001\nColumns  L = 00\nRows     H = 00\nNumber 16: status 01, carry set\n\nB>\n",
+          "rendered_text": "A>B:\nB>TAS BOARD\nBOARD.COM written\n\nB>BOARD\nDevices  B = 08\nVersion DE = 0001\nColumns  L = 00\nRows     H = 00\nNumber 16: status 01, carry set\n\nB>"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>TAS BOARD\nBOARD.COM written\n\nB>BOARD\nDevices  B = 0B\nVersion DE = 0001\nColumns  L = 50\nRows     H = 18\nNumber 16: status 01, carry set\n\nB>\n",
+          "rendered_text": "A>B:\nB>TAS BOARD\nBOARD.COM written\n\nB>BOARD\nDevices  B = 0B\nVersion DE = 0001\nColumns  L = 50\nRows     H = 18\nNumber 16: status 01, carry set\n\nB>"
+        },
+        {
+          "language": "asm",
+          "text": "; LCDMSG: write a row of the 20 x 4 LCD and beep, on TEC-OS only.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tB,1\t\t; the LCD's second row\n\tLD\tHL,TEXT\t\t; exactly 20 characters\n\tLD\tC,TNLCD\n\tCALL\tABICALL\t\t; A is the status, 0 for this row\n\tLD\tB,120\t\t; about 1 kHz\n\tLD\tDE,400\t\t; 400 half cycles, about 0.2 s\n\tLD\tC,TNTONE\n\tCALL\tABICALL\t\t; returns when the tone ends\n\tLD\tDE,DONE\n\tJP\tSAY\t\t; prints and ends the program\n\nTEXT:\tDB\t\"Hello on the LCD    \"\nDONE:\tDB\t\"Written and beeped\",13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\"\n",
+          "rendered_text": "; LCDMSG: write a row of the 20 x 4 LCD and beep, on TEC-OS only.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tB,1\t\t; the LCD's second row\n\tLD\tHL,TEXT\t\t; exactly 20 characters\n\tLD\tC,TNLCD\n\tCALL\tABICALL\t\t; A is the status, 0 for this row\n\tLD\tB,120\t\t; about 1 kHz\n\tLD\tDE,400\t\t; 400 half cycles, about 0.2 s\n\tLD\tC,TNTONE\n\tCALL\tABICALL\t\t; returns when the tone ends\n\tLD\tDE,DONE\n\tJP\tSAY\t\t; prints and ends the program\n\nTEXT:\tDB\t\"Hello on the LCD    \"\nDONE:\tDB\t\"Written and beeped\",13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\""
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>TAS LCDMSG\nLCDMSG.COM written\n\nB>LCDMSG\nWritten and beeped\n\nB>\n",
+          "rendered_text": "A>B:\nB>TAS LCDMSG\nLCDMSG.COM written\n\nB>LCDMSG\nWritten and beeped\n\nB>"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1  TEC-1G\nHello on the LCD\nB: WORK\n",
+          "rendered_text": "TEC-OS 0.1  TEC-1G\nHello on the LCD\nB: WORK"
+        },
+        {
+          "language": "asm",
+          "text": "; DIGCLK: the time on the 7-segment digits, until a key.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\nLOOP:\tLD\tHL,PASSES\t; the clock is read one pass in 32\n\tINC\t(HL)\n\tLD\tA,(HL)\n\tAND\t31\t\t; 0 on every 32nd pass\n\tCALL\tZ,TOSEG\n\tLD\tHL,DIGS\t\t; one pass over the six digits\n\tLD\tC,TNDIGIT\n\tCALL\tABICALL\n\tLD\tE,$FF\t\t; BDOS direct input: a key, or 0\n\tLD\tC,6\n\tCALL\tBDOS\n\tOR\tA\n\tJR\tZ,LOOP\t\t; no key: the digits need another pass\n\tRET\t\t\t; DIGIT left them dark\n\n; Read the clock and turn hours, minutes and seconds into six patterns at\n; DIGS. Changes AF, BC, DE and HL; with no clock DIGS stays as it was.\nTOSEG:\tLD\tHL,TIME\t\t; seven BCD bytes, seconds first\n\tLD\tB,0\t\t; B = 0: read\n\tLD\tC,TNRTC\n\tCALL\tABICALL\n\tRET\tNZ\t\t; status 2: no clock\n\tLD\tDE,DIGS\t\t; the leftmost digit's pattern first\n\tLD\tA,(TIME+2)\t; hours\n\tCALL\tPAIR\n\tLD\tA,(TIME+1)\t; minutes\n\tCALL\tPAIR\n\tLD\tA,(TIME)\t; seconds, and PAIR's RET ends TOSEG\n; Store the two digits of the BCD byte in A as patterns at DE, which moves\n; on by two. Changes AF, BC and HL.\nPAIR:\tPUSH\tAF\t\t; the units digit, for after the tens\n\tRRCA\t\t\t; the tens digit down to bits 0 to 3\n\tRRCA\n\tRRCA\n\tRRCA\n\tCALL\tSEG\t\t; the tens\n\tPOP\tAF\t\t; on into SEG for the units\n; Store the low four bits of A as a pattern at DE, which moves on. Changes\n; AF, BC and HL.\nSEG:\tAND\t$0F\t\t; one digit\n\tLD\tC,A\t\t; BC = the digit\n\tLD\tB,0\n\tLD\tHL,SEGTAB\t; the digit's segments, one bit each\n\tADD\tHL,BC\n\tLD\tA,(HL)\n\tLD\t(DE),A\t\t; into the row of six\n\tINC\tDE\n\tRET\n\n; The digits 0 to 9 as segment patterns.\nSEGTAB:\tDB\t$EB,$28,$CD,$AD\t; 0 to 3\n\tDB\t$2E,$A7,$E7,$29\t; 4 to 7\n\tDB\t$EF,$AF\t\t; 8 and 9\nPASSES:\tDB\t31\t\t; 31: the first pass reads the clock\nDIGS:\tDB\t0,0,0,0,0,0\nTIME:\tDS\t7\n%INCLUDE \"HWLIB.ASM\"\n",
+          "rendered_text": "; DIGCLK: the time on the 7-segment digits, until a key.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\nLOOP:\tLD\tHL,PASSES\t; the clock is read one pass in 32\n\tINC\t(HL)\n\tLD\tA,(HL)\n\tAND\t31\t\t; 0 on every 32nd pass\n\tCALL\tZ,TOSEG\n\tLD\tHL,DIGS\t\t; one pass over the six digits\n\tLD\tC,TNDIGIT\n\tCALL\tABICALL\n\tLD\tE,$FF\t\t; BDOS direct input: a key, or 0\n\tLD\tC,6\n\tCALL\tBDOS\n\tOR\tA\n\tJR\tZ,LOOP\t\t; no key: the digits need another pass\n\tRET\t\t\t; DIGIT left them dark\n\n; Read the clock and turn hours, minutes and seconds into six patterns at\n; DIGS. Changes AF, BC, DE and HL; with no clock DIGS stays as it was.\nTOSEG:\tLD\tHL,TIME\t\t; seven BCD bytes, seconds first\n\tLD\tB,0\t\t; B = 0: read\n\tLD\tC,TNRTC\n\tCALL\tABICALL\n\tRET\tNZ\t\t; status 2: no clock\n\tLD\tDE,DIGS\t\t; the leftmost digit's pattern first\n\tLD\tA,(TIME+2)\t; hours\n\tCALL\tPAIR\n\tLD\tA,(TIME+1)\t; minutes\n\tCALL\tPAIR\n\tLD\tA,(TIME)\t; seconds, and PAIR's RET ends TOSEG\n; Store the two digits of the BCD byte in A as patterns at DE, which moves\n; on by two. Changes AF, BC and HL.\nPAIR:\tPUSH\tAF\t\t; the units digit, for after the tens\n\tRRCA\t\t\t; the tens digit down to bits 0 to 3\n\tRRCA\n\tRRCA\n\tRRCA\n\tCALL\tSEG\t\t; the tens\n\tPOP\tAF\t\t; on into SEG for the units\n; Store the low four bits of A as a pattern at DE, which moves on. Changes\n; AF, BC and HL.\nSEG:\tAND\t$0F\t\t; one digit\n\tLD\tC,A\t\t; BC = the digit\n\tLD\tB,0\n\tLD\tHL,SEGTAB\t; the digit's segments, one bit each\n\tADD\tHL,BC\n\tLD\tA,(HL)\n\tLD\t(DE),A\t\t; into the row of six\n\tINC\tDE\n\tRET\n\n; The digits 0 to 9 as segment patterns.\nSEGTAB:\tDB\t$EB,$28,$CD,$AD\t; 0 to 3\n\tDB\t$2E,$A7,$E7,$29\t; 4 to 7\n\tDB\t$EF,$AF\t\t; 8 and 9\nPASSES:\tDB\t31\t\t; 31: the first pass reads the clock\nDIGS:\tDB\t0,0,0,0,0,0\nTIME:\tDS\t7\n%INCLUDE \"HWLIB.ASM\""
+        },
+        {
+          "language": "asm",
+          "text": "; NOW: print the date and time from the clock.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tHL,TIME\t\t; seven BCD bytes\n\tLD\tB,0\t\t; B = 0: read\n\tLD\tC,TNRTC\n\tCALL\tABICALL\n\tLD\tDE,NOCLK\n\tJP\tNZ,SAY\t\t; status 2: no clock answered\n\tLD\tDE,CENTY\t; the clock holds two digits of the year\n\tCALL\tSAY\n\tLD\tHL,PLAN\t\t; each field's offset, then what follows it\nNEXT:\tLD\tC,(HL)\t\t; BC = the field's offset in TIME\n\tLD\tB,0\n\tINC\tHL\n\tPUSH\tHL\t\t; the plan, across the printing\n\tLD\tHL,TIME\n\tADD\tHL,BC\n\tLD\tA,(HL)\t\t; a BCD byte prints as decimal\n\tCALL\tHEX\n\tPOP\tHL\n\tLD\tE,(HL)\t\t; the separator\n\tINC\tHL\n\tPUSH\tHL\t\t; the plan again\n\tLD\tC,2\t\t; BDOS console output\n\tCALL\tBDOS\n\tPOP\tHL\n\tLD\tA,(HL)\t\t; another field?\n\tINC\tA\n\tJR\tNZ,NEXT\t\t; FFh ends the plan\n\tLD\tDE,ENDLN\n\tJP\tSAY\t\t; prints and ends the program\n\nPLAN:\tDB\t6,'-',4,'-'\t; year, month\n\tDB\t3,' ',2,':'\t; date, hours\n\tDB\t1,':',0,' '\t; minutes, seconds\n\tDB\t5,13,$FF\t; weekday, 1 to 7; FFh ends the plan\nCENTY:\tDB\t\"20$\"\nNOCLK:\tDB\t\"no clock\",13,10,\"$\"\nENDLN:\tDB\t10,\"$\"\t\t; after the plan's carriage return\nTIME:\tDS\t7\n%INCLUDE \"HWLIB.ASM\"\n",
+          "rendered_text": "; NOW: print the date and time from the clock.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tHL,TIME\t\t; seven BCD bytes\n\tLD\tB,0\t\t; B = 0: read\n\tLD\tC,TNRTC\n\tCALL\tABICALL\n\tLD\tDE,NOCLK\n\tJP\tNZ,SAY\t\t; status 2: no clock answered\n\tLD\tDE,CENTY\t; the clock holds two digits of the year\n\tCALL\tSAY\n\tLD\tHL,PLAN\t\t; each field's offset, then what follows it\nNEXT:\tLD\tC,(HL)\t\t; BC = the field's offset in TIME\n\tLD\tB,0\n\tINC\tHL\n\tPUSH\tHL\t\t; the plan, across the printing\n\tLD\tHL,TIME\n\tADD\tHL,BC\n\tLD\tA,(HL)\t\t; a BCD byte prints as decimal\n\tCALL\tHEX\n\tPOP\tHL\n\tLD\tE,(HL)\t\t; the separator\n\tINC\tHL\n\tPUSH\tHL\t\t; the plan again\n\tLD\tC,2\t\t; BDOS console output\n\tCALL\tBDOS\n\tPOP\tHL\n\tLD\tA,(HL)\t\t; another field?\n\tINC\tA\n\tJR\tNZ,NEXT\t\t; FFh ends the plan\n\tLD\tDE,ENDLN\n\tJP\tSAY\t\t; prints and ends the program\n\nPLAN:\tDB\t6,'-',4,'-'\t; year, month\n\tDB\t3,' ',2,':'\t; date, hours\n\tDB\t1,':',0,' '\t; minutes, seconds\n\tDB\t5,13,$FF\t; weekday, 1 to 7; FFh ends the plan\nCENTY:\tDB\t\"20$\"\nNOCLK:\tDB\t\"no clock\",13,10,\"$\"\nENDLN:\tDB\t10,\"$\"\t\t; after the plan's carriage return\nTIME:\tDS\t7\n%INCLUDE \"HWLIB.ASM\""
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>TAS NOW\nNOW.COM written\n\nB>NOW\n2026-11-01 12:00:08 07\n\nB>\n",
+          "rendered_text": "A>B:\nB>TAS NOW\nNOW.COM written\n\nB>NOW\n2026-11-01 12:00:08 07\n\nB>"
+        },
+        {
+          "language": "asm",
+          "text": "; ROWS: wait for a key on the matrix keyboard, then print the eight rows\n; and the joystick's byte.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tC,TNINFO\t; is there a matrix keyboard to wait for?\n\tCALL\tABICALL\n\tBIT\t0,B\t\t; INFO's matrix bit\n\tLD\tDE,NOMTX\n\tJP\tZ,SAY\t\t; none: the wait would never end\nWAIT:\tCALL\tSCAN\t\t; until a key is down\n\tJR\tZ,WAIT\n\tLD\tC,TNJOY\t\t; the same moment, read as the joystick\n\tCALL\tABICALL\n\tLD\tA,B\t\t; its bits\n\tLD\t(STICK),A\t; printed after the rows\n\tLD\tHL,BUF\t\t; the eight rows, on one line\n\tLD\tB,8\nSHOW:\tLD\tA,(HL)\t\t; one row's byte\n\tINC\tHL\n\tPUSH\tBC\t\t; the count, across the printing\n\tCALL\tHEX\n\tLD\tE,' '\t\t; BDOS console output\n\tLD\tC,2\n\tPUSH\tHL\t\t; the BDOS changes HL\n\tCALL\tBDOS\n\tPOP\tHL\n\tPOP\tBC\n\tDJNZ\tSHOW\n\tLD\tA,(STICK)\t; JOY's bits\n\tLD\tDE,MSGJOY\n\tCALL\tLABHEX\n\tLD\tDE,CRLF\t\t; end the line\n\tCALL\tSAY\nDRAIN:\tCALL\tSCAN\t\t; end only when every key is up\n\tJR\tNZ,DRAIN\n\tRET\n\n; Read the rows into BUF. Returns Z if no key is down, NZ if one is.\n; Changes AF, BC, DE and HL.\nSCAN:\tLD\tHL,BUF\t\t; eight bytes, row 0 first\n\tLD\tC,TNKEYS\n\tCALL\tABICALL\n\tLD\tHL,BUF\t\t; OR the rows together\n\tLD\tB,8\n\tXOR\tA\t\t; nothing seen yet\nSCAN1:\tOR\t(HL)\t\t; a key leaves a bit set\n\tINC\tHL\n\tDJNZ\tSCAN1\n\tOR\tA\t\t; Z if every row was 0\n\tRET\n\nNOMTX:\tDB\t\"no matrix keyboard\",13,10,\"$\"\nMSGJOY:\tDB\t\" JOY $\"\nCRLF:\tDB\t13,10,\"$\"\nBUF:\tDS\t8\t\t; the rows, as KEYS leaves them\nSTICK:\tDS\t1\t\t; JOY's byte\n%INCLUDE \"HWLIB.ASM\"\n",
+          "rendered_text": "; ROWS: wait for a key on the matrix keyboard, then print the eight rows\n; and the joystick's byte.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tC,TNINFO\t; is there a matrix keyboard to wait for?\n\tCALL\tABICALL\n\tBIT\t0,B\t\t; INFO's matrix bit\n\tLD\tDE,NOMTX\n\tJP\tZ,SAY\t\t; none: the wait would never end\nWAIT:\tCALL\tSCAN\t\t; until a key is down\n\tJR\tZ,WAIT\n\tLD\tC,TNJOY\t\t; the same moment, read as the joystick\n\tCALL\tABICALL\n\tLD\tA,B\t\t; its bits\n\tLD\t(STICK),A\t; printed after the rows\n\tLD\tHL,BUF\t\t; the eight rows, on one line\n\tLD\tB,8\nSHOW:\tLD\tA,(HL)\t\t; one row's byte\n\tINC\tHL\n\tPUSH\tBC\t\t; the count, across the printing\n\tCALL\tHEX\n\tLD\tE,' '\t\t; BDOS console output\n\tLD\tC,2\n\tPUSH\tHL\t\t; the BDOS changes HL\n\tCALL\tBDOS\n\tPOP\tHL\n\tPOP\tBC\n\tDJNZ\tSHOW\n\tLD\tA,(STICK)\t; JOY's bits\n\tLD\tDE,MSGJOY\n\tCALL\tLABHEX\n\tLD\tDE,CRLF\t\t; end the line\n\tCALL\tSAY\nDRAIN:\tCALL\tSCAN\t\t; end only when every key is up\n\tJR\tNZ,DRAIN\n\tRET\n\n; Read the rows into BUF. Returns Z if no key is down, NZ if one is.\n; Changes AF, BC, DE and HL.\nSCAN:\tLD\tHL,BUF\t\t; eight bytes, row 0 first\n\tLD\tC,TNKEYS\n\tCALL\tABICALL\n\tLD\tHL,BUF\t\t; OR the rows together\n\tLD\tB,8\n\tXOR\tA\t\t; nothing seen yet\nSCAN1:\tOR\t(HL)\t\t; a key leaves a bit set\n\tINC\tHL\n\tDJNZ\tSCAN1\n\tOR\tA\t\t; Z if every row was 0\n\tRET\n\nNOMTX:\tDB\t\"no matrix keyboard\",13,10,\"$\"\nMSGJOY:\tDB\t\" JOY $\"\nCRLF:\tDB\t13,10,\"$\"\nBUF:\tDS\t8\t\t; the rows, as KEYS leaves them\nSTICK:\tDS\t1\t\t; JOY's byte\n%INCLUDE \"HWLIB.ASM\""
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>TAS ROWS\nROWS.COM written\n\nB>ROWS\n00 00 00 00 00 00 00 08  JOY 00\n\nB>\n",
+          "rendered_text": "A>B:\nB>TAS ROWS\nROWS.COM written\n\nB>ROWS\n00 00 00 00 00 00 00 08  JOY 00\n\nB>"
+        },
+        {
+          "language": "asm",
+          "text": "; PLACE: write a word at two screen positions with PUTAT, plain and in\n; reverse, leaving the cursor where it is.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tDE,$0A1E\t; row 10, column 30\n\tLD\tHL,PLAIN\n\tCALL\tWRITE\n\tLD\tDE,$0B1E\t; the row below\n\tLD\tHL,INVERT\n\tCALL\tWRITE\n\tLD\tDE,MSG\t\t; A holds the second call's status\n\tCALL\tLABHEX\n\tLD\tDE,CRLF\t\t; end the line\n\tJP\tSAY\t\t; prints and ends the program\n\n; Write the six characters at HL at row D, column E. Returns the status\n; in A. Changes F, BC, DE and HL.\nWRITE:\tLD\tB,6\n\tLD\tC,TNPUTAT\n\tJP\tABICALL\t\t; its RET is this routine's\n\nPLAIN:\tDB\t\"TEC-OS\"\nINVERT:\tDB\t$D4,$C5,$C3\t; \"TEC\" with bit 7 set: reverse images\n\tDB\t$AD,$CF,$D3\t; \"-OS\", the same\nMSG:\tDB\t\"PUTAT status $\"\nCRLF:\tDB\t13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\"\n",
+          "rendered_text": "; PLACE: write a word at two screen positions with PUTAT, plain and in\n; reverse, leaving the cursor where it is.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tDE,$0A1E\t; row 10, column 30\n\tLD\tHL,PLAIN\n\tCALL\tWRITE\n\tLD\tDE,$0B1E\t; the row below\n\tLD\tHL,INVERT\n\tCALL\tWRITE\n\tLD\tDE,MSG\t\t; A holds the second call's status\n\tCALL\tLABHEX\n\tLD\tDE,CRLF\t\t; end the line\n\tJP\tSAY\t\t; prints and ends the program\n\n; Write the six characters at HL at row D, column E. Returns the status\n; in A. Changes F, BC, DE and HL.\nWRITE:\tLD\tB,6\n\tLD\tC,TNPUTAT\n\tJP\tABICALL\t\t; its RET is this routine's\n\nPLAIN:\tDB\t\"TEC-OS\"\nINVERT:\tDB\t$D4,$C5,$C3\t; \"TEC\" with bit 7 set: reverse images\n\tDB\t$AD,$CF,$D3\t; \"-OS\", the same\nMSG:\tDB\t\"PUTAT status $\"\nCRLF:\tDB\t13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\""
+        },
+        {
+          "language": "text",
+          "text": "\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM\nB: WORK\n\nA>GLCD.SVC\n\nA>B:\nB>TAS PLACE\nPLACE.COM written\n                              TEC-OS\nB>PLACE                       TEC-OS\nPUTAT status 00\n\nB>\n",
+          "rendered_text": "\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM\nB: WORK\n\nA>GLCD.SVC\n\nA>B:\nB>TAS PLACE\nPLACE.COM written\n                              TEC-OS\nB>PLACE                       TEC-OS\nPUTAT status 00\n\nB>"
+        },
+        {
+          "language": "sh",
+          "text": "npx atom test/programs/demo.asm demo.com\nnode tools/tecvol.mjs put hw.img B demo.com\n",
+          "rendered_text": "npx atom test/programs/demo.asm demo.com\nnode tools/tecvol.mjs put hw.img B demo.com"
+        },
+        {
+          "language": "text",
+          "text": "A>B:DEMO\n\nTEC-OS hardware services demo\nPICO9918: yes   GLCD: no   clock: yes\nWatch the LCD, the digits, the LEDs and the screen.\nPress any key to stop.\n\nDemo stopped.\n\nA>\n",
+          "rendered_text": "A>B:DEMO\n\nTEC-OS hardware services demo\nPICO9918: yes   GLCD: no   clock: yes\nWatch the LCD, the digits, the LEDs and the screen.\nPress any key to stop.\n\nDemo stopped.\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "\nDemo stopped.\n\nA>\n",
+          "rendered_text": "\nDemo stopped.\n\nA>"
+        }
+      ],
+      "previous": "tec-os/10-memory-for-programs.html",
+      "next": "tec-os/12-results-and-command-chains.html",
+      "source_h1": "11. Use the board's devices"
+    },
+    {
+      "path": "tec-os/12-results-and-command-chains.md",
+      "html": "tec-os/12-results-and-command-chains.html",
+      "source_sha256": "db02f131ae5284cf19d3ca63ddb2b60b91218ffdcabf21b0721ec3b930f473e6",
+      "title": "Results and command chains | Debug80 Docs",
+      "h1": "12. Results and command chains",
+      "links": [],
+      "fences": [
+        {
+          "language": "text",
+          "text": "A>DIR *.CMD!TYPE STARTUP.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>TYPE STARTUP.CMD\nGLCD.SVC\n\nA>mount!!  ! dir b:!\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nA>dir b:\nNO FILE\nA>\n",
+          "rendered_text": "A>DIR *.CMD!TYPE STARTUP.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>TYPE STARTUP.CMD\nGLCD.SVC\n\nA>mount!!  ! dir b:!\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nA>dir b:\nNO FILE\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>B:!COPY A:STARTUP.CMD NOTES.TXT!DIR\nB>COPY A:STARTUP.CMD NOTES.TXT\nCOPIED 0001\n\nB>DIR\nNOTES.TXT   \n1 file, 8172K free\nB>\n",
+          "rendered_text": "A>B:!COPY A:STARTUP.CMD NOTES.TXT!DIR\nB>COPY A:STARTUP.CMD NOTES.TXT\nCOPIED 0001\n\nB>DIR\nNOTES.TXT   \n1 file, 8172K free\nB>"
+        },
+        {
+          "language": "text",
+          "text": "A>NOSUCH!:DIR *.CMD!DIR *.SVC\nNOSUCH?\n\nA>:DIR *.CMD\nA>DIR *.SVC!:DIR *.CMD\nGLCD.SVC    \n1 file, 980K free\nA>:DIR *.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>:DIR *.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>\n",
+          "rendered_text": "A>NOSUCH!:DIR *.CMD!DIR *.SVC\nNOSUCH?\n\nA>:DIR *.CMD\nA>DIR *.SVC!:DIR *.CMD\nGLCD.SVC    \n1 file, 980K free\nA>:DIR *.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>:DIR *.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>"
+        },
+        {
+          "language": "asm",
+          "text": "; EXISTS: a failure, return code FF00h, when the file named on the command\n; line isn't there.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      DE,$005C        ; the FCB the CCP filled from the tail\n        LD      C,15            ; BDOS function 15: open the file\n        CALL    BDOS\n        INC     A               ; A = FFh: no such file\n        RET     NZ              ; it is there: the code stays 0\n        LD      DE,$FF00        ; a failure\n        LD      C,108           ; BDOS function 108: set the return code\n        CALL    BDOS\n        RET\n",
+          "rendered_text": "; EXISTS: a failure, return code FF00h, when the file named on the command\n; line isn't there.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      DE,$005C        ; the FCB the CCP filled from the tail\n        LD      C,15            ; BDOS function 15: open the file\n        CALL    BDOS\n        INC     A               ; A = FFh: no such file\n        RET     NZ              ; it is there: the code stays 0\n        LD      DE,$FF00        ; a failure\n        LD      C,108           ; BDOS function 108: set the return code\n        CALL    BDOS\n        RET"
+        },
+        {
+          "language": "sh",
+          "text": "npx atom exists.asm exists.com\nnpx atom run.asm run.com\ncp dist/starter.img chain.img\nnode tools/tecvol.mjs put chain.img B exists.com\nnode tools/tecvol.mjs put chain.img B run.com\n",
+          "rendered_text": "npx atom exists.asm exists.com\nnpx atom run.asm run.com\ncp dist/starter.img chain.img\nnode tools/tecvol.mjs put chain.img B exists.com\nnode tools/tecvol.mjs put chain.img B run.com"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR\n\nB>:TYPE NOTES.TXT\nB>COPY A:STARTUP.CMD NOTES.TXT\nCOPIED 0001\n\nB>EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR\n\nB>:TYPE NOTES.TXT\nGLCD.SVC\n\nB>DIR\nEXISTS.COM   RUN.COM      NOTES.TXT   \n3 files, 8164K free\nB>\n",
+          "rendered_text": "A>B:\nB>EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR\n\nB>:TYPE NOTES.TXT\nB>COPY A:STARTUP.CMD NOTES.TXT\nCOPIED 0001\n\nB>EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR\n\nB>:TYPE NOTES.TXT\nGLCD.SVC\n\nB>DIR\nEXISTS.COM   RUN.COM      NOTES.TXT   \n3 files, 8164K free\nB>"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>EXISTS NONE.TXT!DIR\n\nB>DIR\nEXISTS.COM   RUN.COM     \n2 files, 8168K free\nB>EXISTS NONE.TXT\n\nB>:DIR\nB>USER 0\nB>:DIR\nEXISTS.COM   RUN.COM     \n2 files, 8168K free\nB>\n",
+          "rendered_text": "A>B:\nB>EXISTS NONE.TXT!DIR\n\nB>DIR\nEXISTS.COM   RUN.COM     \n2 files, 8168K free\nB>EXISTS NONE.TXT\n\nB>:DIR\nB>USER 0\nB>:DIR\nEXISTS.COM   RUN.COM     \n2 files, 8168K free\nB>"
+        },
+        {
+          "language": "text",
+          "text": "A>DIR C:!MOUNT\n\nBdos Err On C: Select\nA>\n",
+          "rendered_text": "A>DIR C:!MOUNT\n\nBdos Err On C: Select\nA>"
+        },
+        {
+          "language": "asm",
+          "text": "; RUN: end by running the rest of the command line as a command.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      DE,$0081        ; the command tail, ended by a 0\n        LD      C,26            ; BDOS function 26: set the DMA address\n        CALL    BDOS\n        LD      C,47            ; BDOS function 47: chain to the command\n        CALL    BDOS\n        LD      DE,NOTRUN       ; back here only if it was rejected\n        LD      C,9\n        CALL    BDOS\n        RET\nNOTRUN: DB      \"Not run\",13,10,\"$\"\n",
+          "rendered_text": "; RUN: end by running the rest of the command line as a command.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      DE,$0081        ; the command tail, ended by a 0\n        LD      C,26            ; BDOS function 26: set the DMA address\n        CALL    BDOS\n        LD      C,47            ; BDOS function 47: chain to the command\n        CALL    BDOS\n        LD      DE,NOTRUN       ; back here only if it was rejected\n        LD      C,9\n        CALL    BDOS\n        RET\nNOTRUN: DB      \"Not run\",13,10,\"$\""
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>RUN DIR\n\nB>DIR\nEXISTS.COM   RUN.COM     \n2 files, 8168K free\nB>RUN A:MOUNT!DIR\n\nB>A:MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nB>RUN NOSUCH!DIR\n\nB>NOSUCH\nNOSUCH?\n\nB>RUN\n\nB>\n",
+          "rendered_text": "A>B:\nB>RUN DIR\n\nB>DIR\nEXISTS.COM   RUN.COM     \n2 files, 8168K free\nB>RUN A:MOUNT!DIR\n\nB>A:MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nB>RUN NOSUCH!DIR\n\nB>NOSUCH\nNOSUCH?\n\nB>RUN\n\nB>"
+        },
+        {
+          "language": "sh",
+          "text": "printf 'GLCD.SVC!:MOUNT\\nNOSUCH.SVC!:MOUNT\\n' > startup.cmd\ncp dist/starter.img chain.img\nnode tools/tecvol.mjs put chain.img A startup.cmd --text\n",
+          "rendered_text": "printf 'GLCD.SVC!:MOUNT\\nNOSUCH.SVC!:MOUNT\\n' > startup.cmd\ncp dist/starter.img chain.img\nnode tools/tecvol.mjs put chain.img A startup.cmd --text"
+        },
+        {
+          "language": "text",
+          "text": "A>GLCD.SVC!:MOUNT\n\nA>:MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nA>NOSUCH.SVC!:MOUNT\nNOSUCH.SVC?\n\nA>:MOUNT\nA>\n",
+          "rendered_text": "A>GLCD.SVC!:MOUNT\n\nA>:MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nA>NOSUCH.SVC!:MOUNT\nNOSUCH.SVC?\n\nA>:MOUNT\nA>"
+        },
+        {
+          "language": "sh",
+          "text": "printf 'B:RUN A:MOUNT\\nNOSUCH\\n' > startup.cmd\ncp chain.img chain2.img\nnode tools/tecvol.mjs put chain2.img A startup.cmd --text\n",
+          "rendered_text": "printf 'B:RUN A:MOUNT\\nNOSUCH\\n' > startup.cmd\ncp chain.img chain2.img\nnode tools/tecvol.mjs put chain2.img A startup.cmd --text"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>B:RUN A:MOUNT\n\nA>A:MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nA>NOSUCH\nNOSUCH?\n\nA>:DIR A:*.CMD\nA>DIR A:*.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>\n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>B:RUN A:MOUNT\n\nA>A:MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nA>NOSUCH\nNOSUCH?\n\nA>:DIR A:*.CMD\nA>DIR A:*.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>"
+        }
+      ],
+      "previous": "tec-os/11-use-the-boards-devices.html",
+      "next": "tec-os/13-write-a-resident-service.html",
+      "source_h1": "12. Results and command chains"
+    },
+    {
+      "path": "tec-os/13-write-a-resident-service.md",
+      "html": "tec-os/13-write-a-resident-service.html",
+      "source_sha256": "ce41f0d53845043fde293f184d0057d5a42ac920eca02c5e95ced6886cb1677e",
+      "title": "Write a resident service | Debug80 Docs",
+      "h1": "13. Write a resident service",
+      "links": [
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/04-drives-and-user-areas.html",
+          "fragment": "programs-and-resident-services"
+        },
+        {
+          "target": "tec-os/10-memory-for-programs.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/11-use-the-boards-devices.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/16-console-paths.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-h-service-file-format.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/06-choose-a-console.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/24-loading-and-removing-services.html",
+          "fragment": "the-resident-entry-and-its-pages"
+        },
+        {
+          "target": "tec-os/12-results-and-command-chains.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/07-commands-at-startup.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-b-rom-services.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "asm",
+          "text": "; COUNT.SVC: count the characters that reach the BIOS's CONOUT, and publish\n; the count in a record. REMOVE puts CONOUT back.\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\nHDR:\tDB\t'D',SVCFMT,0,1\t; magic, format, no dependencies, removable\n\tDW\t0,0,0,0\t\t; REMOVE, size, extra memory, relocation\n\tDB\t2,2,2\t\t; bytes added to the BDOS, BIOS, CCP stacks\n\tDW\t0\t\t; INIT\n\tDB\t\"COUNT   \"\t; the name SERVICES prints\n\n; Point CONOUT at MYCO, keeping the old target. Returns HL = the record,\n; carry clear. Changes AF, DE and HL.\nINIT:\tCALL\tCONSLOT\t\t; HL = the address held by CONOUT's JP\n\tLD\tE,(HL)\t\t; DE = that jump's target\n\tINC\tHL\n\tLD\tD,(HL)\n\tLD\t(OLDCO),DE\t; MYCO ends by jumping there\n\tLD\tDE,MYCO\t\t; the hook goes in last\n\tLD\t(HL),D\n\tDEC\tHL\n\tLD\t(HL),E\n\tLD\tHL,REC\t\t; the record for the loader\n\tOR\tA\t\t; carry clear: installed\n\tRET\n\n; Put CONOUT back. Returns carry clear. Changes AF, DE and HL.\nREMOVE:\tCALL\tCONSLOT\t\t; HL = the address held by CONOUT's JP\n\tLD\tDE,(OLDCO)\t; the target INIT saved\n\tLD\t(HL),E\n\tINC\tHL\n\tLD\t(HL),D\n\tOR\tA\t\t; carry clear: removal goes ahead\n\tRET\n\n; Find CONOUT's slot in the BIOS table. Returns HL = the address held by its\n; JP. Changes F and DE.\nCONSLOT:LD\tHL,($0001)\t; HL = the WBOOT entry\n\tLD\tDE,9+1\t\t; three entries on, and past the JP's opcode\n\tADD\tHL,DE\n\tRET\n\n; The hook: count a character, then CONOUT as it was. Keeps every register\n; for that jump.\nMYCO:\tPUSH\tHL\t\t; two bytes of the caller's stack\n\tLD\tHL,(CHARS)\t; the count, a word\n\tINC\tHL\n\tLD\t(CHARS),HL\n\tPOP\tHL\t\t; C still holds the character\n\tDB\t$C3\t\t; JP to the entry replaced\nOLDCO:\tDW\t0\t\t; INIT fills this in\n\n; The record's one entry. Returns HL = the count. Changes nothing else.\nGETCNT:\tLD\tHL,(CHARS)\n\tRET\n\nREC:\tDW\t0\t\t; the link: the loader fills it\n\tDB\t\"COUNT   \"\t; the record's name\n\tDB\t1\t\t; its interface version\n\tDW\tTABLE\t\t; its entry table\nTABLE:\tJP\tGETCNT\t\t; offset 0: the count\nCHARS:\tDW\t0\t\t; the count itself\n",
+          "rendered_text": "; COUNT.SVC: count the characters that reach the BIOS's CONOUT, and publish\n; the count in a record. REMOVE puts CONOUT back.\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\nHDR:\tDB\t'D',SVCFMT,0,1\t; magic, format, no dependencies, removable\n\tDW\t0,0,0,0\t\t; REMOVE, size, extra memory, relocation\n\tDB\t2,2,2\t\t; bytes added to the BDOS, BIOS, CCP stacks\n\tDW\t0\t\t; INIT\n\tDB\t\"COUNT   \"\t; the name SERVICES prints\n\n; Point CONOUT at MYCO, keeping the old target. Returns HL = the record,\n; carry clear. Changes AF, DE and HL.\nINIT:\tCALL\tCONSLOT\t\t; HL = the address held by CONOUT's JP\n\tLD\tE,(HL)\t\t; DE = that jump's target\n\tINC\tHL\n\tLD\tD,(HL)\n\tLD\t(OLDCO),DE\t; MYCO ends by jumping there\n\tLD\tDE,MYCO\t\t; the hook goes in last\n\tLD\t(HL),D\n\tDEC\tHL\n\tLD\t(HL),E\n\tLD\tHL,REC\t\t; the record for the loader\n\tOR\tA\t\t; carry clear: installed\n\tRET\n\n; Put CONOUT back. Returns carry clear. Changes AF, DE and HL.\nREMOVE:\tCALL\tCONSLOT\t\t; HL = the address held by CONOUT's JP\n\tLD\tDE,(OLDCO)\t; the target INIT saved\n\tLD\t(HL),E\n\tINC\tHL\n\tLD\t(HL),D\n\tOR\tA\t\t; carry clear: removal goes ahead\n\tRET\n\n; Find CONOUT's slot in the BIOS table. Returns HL = the address held by its\n; JP. Changes F and DE.\nCONSLOT:LD\tHL,($0001)\t; HL = the WBOOT entry\n\tLD\tDE,9+1\t\t; three entries on, and past the JP's opcode\n\tADD\tHL,DE\n\tRET\n\n; The hook: count a character, then CONOUT as it was. Keeps every register\n; for that jump.\nMYCO:\tPUSH\tHL\t\t; two bytes of the caller's stack\n\tLD\tHL,(CHARS)\t; the count, a word\n\tINC\tHL\n\tLD\t(CHARS),HL\n\tPOP\tHL\t\t; C still holds the character\n\tDB\t$C3\t\t; JP to the entry replaced\nOLDCO:\tDW\t0\t\t; INIT fills this in\n\n; The record's one entry. Returns HL = the count. Changes nothing else.\nGETCNT:\tLD\tHL,(CHARS)\n\tRET\n\nREC:\tDW\t0\t\t; the link: the loader fills it\n\tDB\t\"COUNT   \"\t; the record's name\n\tDB\t1\t\t; its interface version\n\tDW\tTABLE\t\t; its entry table\nTABLE:\tJP\tGETCNT\t\t; offset 0: the count\nCHARS:\tDW\t0\t\t; the count itself"
+        },
+        {
+          "language": "sh",
+          "text": "cp dist/starter.img svc.img\nnode tools/tecvol.mjs put svc.img B dist/abi.inc --text\nnode tools/tecvol.mjs put svc.img B area.asm --text\nnode tools/tecvol.mjs put svc.img B hwlib.asm --text\nnode tools/tecvol.mjs put svc.img B count.asm --text\nnode tools/tecvol.mjs put svc.img B chars.asm --text\n",
+          "rendered_text": "cp dist/starter.img svc.img\nnode tools/tecvol.mjs put svc.img B dist/abi.inc --text\nnode tools/tecvol.mjs put svc.img B area.asm --text\nnode tools/tecvol.mjs put svc.img B hwlib.asm --text\nnode tools/tecvol.mjs put svc.img B count.asm --text\nnode tools/tecvol.mjs put svc.img B chars.asm --text"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>TAS AREA\nAREA.COM written\n\nB>TAS CHARS\nCHARS.COM written\n\nB>TAS COUNT COUNT.SVC\nCOUNT.SVC written\n",
+          "rendered_text": "A>B:\nB>TAS AREA\nAREA.COM written\n\nB>TAS CHARS\nCHARS.COM written\n\nB>TAS COUNT COUNT.SVC\nCOUNT.SVC written"
+        },
+        {
+          "language": "text",
+          "text": "B>AREA\n47268 bytes\n\nB>COUNT.SVC\n\nB>SERVICES\nCOUNT 1\nB>AREA\n46848 bytes\n\nB>CHARS\ncount 003A\n\nB>CHARS\ncount 0052\n\nB>UNLOAD\n\nB>SERVICES\nB>AREA\n47268 bytes\n\nB>CHARS\nno COUNT record\n\nB>\n",
+          "rendered_text": "B>AREA\n47268 bytes\n\nB>COUNT.SVC\n\nB>SERVICES\nCOUNT 1\nB>AREA\n46848 bytes\n\nB>CHARS\ncount 003A\n\nB>CHARS\ncount 0052\n\nB>UNLOAD\n\nB>SERVICES\nB>AREA\n47268 bytes\n\nB>CHARS\nno COUNT record\n\nB>"
+        },
+        {
+          "language": "sh",
+          "text": "cp dist/abi.inc .\nnode --input-type=module -e '\nimport { writeFileSync } from \"node:fs\";\nimport { makeSvc } from \"./tools/lib/svc.mjs\";\nconst { file } = await makeSvc(\"count.asm\", { work: \"build/svc\" });\nwriteFileSync(\"COUNT.SVC\", file);\n'\nnode tools/tecvol.mjs put svc.img B COUNT.SVC\n",
+          "rendered_text": "cp dist/abi.inc .\nnode --input-type=module -e '\nimport { writeFileSync } from \"node:fs\";\nimport { makeSvc } from \"./tools/lib/svc.mjs\";\nconst { file } = await makeSvc(\"count.asm\", { work: \"build/svc\" });\nwriteFileSync(\"COUNT.SVC\", file);\n'\nnode tools/tecvol.mjs put svc.img B COUNT.SVC"
+        },
+        {
+          "language": "asm",
+          "text": "; FAIL.SVC: a service whose INIT returns carry set, so the load fails.\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\nHDR:\tDB\t'D',SVCFMT,0,1\t; magic, format, no dependencies, removable\n\tDW\t0,0,0,0\t\t; REMOVE, size, extra memory, relocation\n\tDB\t0,0,0\t\t; no stack bytes added\n\tDW\t0\t\t; INIT\n\tDB\t\"FAIL    \"\t; the name SERVICES would print\n\n; Nothing was done, so there is nothing to undo. Returns carry set: not\n; installed.\nINIT:\tSCF\n\tRET\n\n; Never reached: a failed INIT runs no REMOVE. Returns carry clear.\nREMOVE:\tOR\tA\n\tRET\n",
+          "rendered_text": "; FAIL.SVC: a service whose INIT returns carry set, so the load fails.\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\nHDR:\tDB\t'D',SVCFMT,0,1\t; magic, format, no dependencies, removable\n\tDW\t0,0,0,0\t\t; REMOVE, size, extra memory, relocation\n\tDB\t0,0,0\t\t; no stack bytes added\n\tDW\t0\t\t; INIT\n\tDB\t\"FAIL    \"\t; the name SERVICES would print\n\n; Nothing was done, so there is nothing to undo. Returns carry set: not\n; installed.\nINIT:\tSCF\n\tRET\n\n; Never reached: a failed INIT runs no REMOVE. Returns carry clear.\nREMOVE:\tOR\tA\n\tRET"
+        },
+        {
+          "language": "text",
+          "text": "B>TAS AREA\nAREA.COM written\n\nB>TAS FAIL FAIL.SVC\nFAIL.SVC written\n",
+          "rendered_text": "B>TAS AREA\nAREA.COM written\n\nB>TAS FAIL FAIL.SVC\nFAIL.SVC written"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>AREA\n47268 bytes\n\nB>SERVICES\nB>FAIL.SVC\nFAIL.SVC?\n\nB>AREA\n47268 bytes\n\nB>\n",
+          "rendered_text": "A>B:\nB>AREA\n47268 bytes\n\nB>SERVICES\nB>FAIL.SVC\nFAIL.SVC?\n\nB>AREA\n47268 bytes\n\nB>"
+        },
+        {
+          "language": "text",
+          "text": "B>CHEAT.SVC\nCHEAT.SVC?\n\nB>SERVICES\nB>\n",
+          "rendered_text": "B>CHEAT.SVC\nCHEAT.SVC?\n\nB>SERVICES\nB>"
+        },
+        {
+          "language": "asm",
+          "text": "; CHARS: print the count that COUNT.SVC publishes, in hex.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\t; prints and ends the program\n\tLD\tDE,NAME\t\t; the record's eight-byte name\n\tLD\tB,1\t\t; the least interface version\n\tLD\tC,TNFIND\t; the registry's find\n\tCALL\tABICALL\n\tLD\tDE,NONE\n\tJP\tC,SAY\t\t; carry: no such record, so print and end\n\tCALL\tCALLHL\t\t; offset 0 of the table: HL = the count\n\tPUSH\tHL\t\t; the low byte, for after the label\n\tLD\tA,H\t\t; the high byte first\n\tLD\tDE,MSG\t\t; the label\n\tCALL\tLABHEX\t\t; A is the high byte\n\tPOP\tHL\n\tLD\tA,L\t\t; the low byte, on the same line\n\tCALL\tHEX\n\tLD\tDE,CRLF\t\t; end the line\n\tJP\tSAY\t\t; prints and ends the program\n\n; Call the routine at HL, whose RET returns to the caller of CALLHL. Changes\n; what that routine changes.\nCALLHL:\tJP\t(HL)\n\nNAME:\tDB\t\"COUNT   \"\t; the record to find\nNONE:\tDB\t\"no COUNT \"\t; printed when there is no record\n\tDB\t\"record\"\n\tDB\t13,10,\"$\"\nMSG:\tDB\t\"count $\"\t; the label before the count\nCRLF:\tDB\t13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\"\n",
+          "rendered_text": "; CHARS: print the count that COUNT.SVC publishes, in hex.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\t; prints and ends the program\n\tLD\tDE,NAME\t\t; the record's eight-byte name\n\tLD\tB,1\t\t; the least interface version\n\tLD\tC,TNFIND\t; the registry's find\n\tCALL\tABICALL\n\tLD\tDE,NONE\n\tJP\tC,SAY\t\t; carry: no such record, so print and end\n\tCALL\tCALLHL\t\t; offset 0 of the table: HL = the count\n\tPUSH\tHL\t\t; the low byte, for after the label\n\tLD\tA,H\t\t; the high byte first\n\tLD\tDE,MSG\t\t; the label\n\tCALL\tLABHEX\t\t; A is the high byte\n\tPOP\tHL\n\tLD\tA,L\t\t; the low byte, on the same line\n\tCALL\tHEX\n\tLD\tDE,CRLF\t\t; end the line\n\tJP\tSAY\t\t; prints and ends the program\n\n; Call the routine at HL, whose RET returns to the caller of CALLHL. Changes\n; what that routine changes.\nCALLHL:\tJP\t(HL)\n\nNAME:\tDB\t\"COUNT   \"\t; the record to find\nNONE:\tDB\t\"no COUNT \"\t; printed when there is no record\n\tDB\t\"record\"\n\tDB\t13,10,\"$\"\nMSG:\tDB\t\"count $\"\t; the label before the count\nCRLF:\tDB\t13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\""
+        },
+        {
+          "language": "asm",
+          "text": "; RECS: list the registry, newest record first: each record's name, its\n; interface version and the address of its entry table.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\nNEXT:\tLD\tA,(INDEX)\t; the next record's number\n\tLD\tB,A\t\t; B = that number\n\tLD\tC,TNLIST\t; the registry's enumerate\n\tCALL\tABICALL\n\tRET\tC\t\t; carry: past the last record\n\tLD\tA,(INDEX)\t; the next one, for the next round\n\tINC\tA\n\tLD\t(INDEX),A\n\tCALL\tSHOW\t\t; one line for this record\n\tJR\tNEXT\t\t; until the carry above\n\n; Print the record at HL on one line. Changes AF, BC, DE and HL.\nSHOW:\tINC\tHL\t\t; past the link word\n\tINC\tHL\t\t; HL = the name\n\tLD\tB,8\t\t; the eight bytes of the name\nSHOW1:\tLD\tE,(HL)\t\t; BDOS console output\n\tLD\tC,2\n\tPUSH\tBC\t\t; the BDOS changes these\n\tPUSH\tHL\n\tCALL\tBDOS\n\tPOP\tHL\n\tPOP\tBC\n\tINC\tHL\t\t; the name's next byte\n\tDJNZ\tSHOW1\n\tLD\tA,(HL)\t\t; the version, after the name\n\tINC\tHL\t\t; HL = the table's word\n\tLD\tDE,VERS\n\tCALL\tLABHEX\t\t; LABHEX and HEX keep HL\n\tLD\tE,(HL)\t\t; DE = the table's address\n\tINC\tHL\n\tLD\tD,(HL)\n\tEX\tDE,HL\t\t; HL = it, which HEX keeps\n\tLD\tA,H\t\t; high byte first\n\tLD\tDE,TABL\n\tCALL\tLABHEX\n\tLD\tA,L\t\t; the low byte, on the same line\n\tCALL\tHEX\n\tLD\tDE,CRLF\t\t; end the line\n\tJP\tSAY\t\t; its RET is this routine's\n\nINDEX:\tDB\t0\nVERS:\tDB\t\" version $\"\nTABL:\tDB\t\" table $\"\nCRLF:\tDB\t13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\"\n",
+          "rendered_text": "; RECS: list the registry, newest record first: each record's name, its\n; interface version and the address of its entry table.\nBDOS\tEQU\t$0005\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\nNEXT:\tLD\tA,(INDEX)\t; the next record's number\n\tLD\tB,A\t\t; B = that number\n\tLD\tC,TNLIST\t; the registry's enumerate\n\tCALL\tABICALL\n\tRET\tC\t\t; carry: past the last record\n\tLD\tA,(INDEX)\t; the next one, for the next round\n\tINC\tA\n\tLD\t(INDEX),A\n\tCALL\tSHOW\t\t; one line for this record\n\tJR\tNEXT\t\t; until the carry above\n\n; Print the record at HL on one line. Changes AF, BC, DE and HL.\nSHOW:\tINC\tHL\t\t; past the link word\n\tINC\tHL\t\t; HL = the name\n\tLD\tB,8\t\t; the eight bytes of the name\nSHOW1:\tLD\tE,(HL)\t\t; BDOS console output\n\tLD\tC,2\n\tPUSH\tBC\t\t; the BDOS changes these\n\tPUSH\tHL\n\tCALL\tBDOS\n\tPOP\tHL\n\tPOP\tBC\n\tINC\tHL\t\t; the name's next byte\n\tDJNZ\tSHOW1\n\tLD\tA,(HL)\t\t; the version, after the name\n\tINC\tHL\t\t; HL = the table's word\n\tLD\tDE,VERS\n\tCALL\tLABHEX\t\t; LABHEX and HEX keep HL\n\tLD\tE,(HL)\t\t; DE = the table's address\n\tINC\tHL\n\tLD\tD,(HL)\n\tEX\tDE,HL\t\t; HL = it, which HEX keeps\n\tLD\tA,H\t\t; high byte first\n\tLD\tDE,TABL\n\tCALL\tLABHEX\n\tLD\tA,L\t\t; the low byte, on the same line\n\tCALL\tHEX\n\tLD\tDE,CRLF\t\t; end the line\n\tJP\tSAY\t\t; its RET is this routine's\n\nINDEX:\tDB\t0\nVERS:\tDB\t\" version $\"\nTABL:\tDB\t\" table $\"\nCRLF:\tDB\t13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\""
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>TAS RECS\nRECS.COM written\n\nB>COUNT.SVC\n\nB>RECS\nCOUNT    version 01 table B85F\nPICO     version 03 table BBE3\n\nB>\n",
+          "rendered_text": "A>B:\nB>TAS RECS\nRECS.COM written\n\nB>COUNT.SVC\n\nB>RECS\nCOUNT    version 01 table B85F\nPICO     version 03 table BBE3\n\nB>"
+        },
+        {
+          "language": "asm",
+          "text": "; NEEDS.SVC: a service that names COUNT's record as a dependency and binds to\n; it once, at INIT. Its own entry would use TABLE.\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\nHDR:\tDB\t'D',SVCFMT,0,1\t; the tool writes the dependency count\n\tDW\t0,0,0,0\t\t; REMOVE, size, extra memory, relocation\n\tDB\t0,0,0\t\t; no stack bytes added\n\tDW\t0\t\t; INIT\n\tDB\t\"NEEDS   \"\n\n; Find COUNT's table and keep it. Returns HL = 0, no record, carry clear.\n; Changes AF, BC and DE.\nINIT:\tLD\tDE,NAME\t\t; the same name and version as the dependency\n\tLD\tB,1\n\tLD\tC,TNFIND\t; the registry's find\n\tCALL\tABICALL\n\tRET\tC\t\t; the loader has checked this already\n\tLD\t(TABLE),HL\t; safe to keep: COUNT can't leave first\n\tLD\tHL,0\t\t; no record of its own\n\tOR\tA\n\tRET\n\n; Nothing to undo. Returns carry clear.\nREMOVE:\tOR\tA\t\t; carry clear: removal goes ahead\n\tRET\n\nNAME:\tDB\t\"COUNT   \"\t; the record to find\nTABLE:\tDW\t0\t\t; the table, once found\nDEPS:\tDB\t1,\"COUNT   \"\t; the least version, then the record's name\n",
+          "rendered_text": "; NEEDS.SVC: a service that names COUNT's record as a dependency and binds to\n; it once, at INIT. Its own entry would use TABLE.\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\nHDR:\tDB\t'D',SVCFMT,0,1\t; the tool writes the dependency count\n\tDW\t0,0,0,0\t\t; REMOVE, size, extra memory, relocation\n\tDB\t0,0,0\t\t; no stack bytes added\n\tDW\t0\t\t; INIT\n\tDB\t\"NEEDS   \"\n\n; Find COUNT's table and keep it. Returns HL = 0, no record, carry clear.\n; Changes AF, BC and DE.\nINIT:\tLD\tDE,NAME\t\t; the same name and version as the dependency\n\tLD\tB,1\n\tLD\tC,TNFIND\t; the registry's find\n\tCALL\tABICALL\n\tRET\tC\t\t; the loader has checked this already\n\tLD\t(TABLE),HL\t; safe to keep: COUNT can't leave first\n\tLD\tHL,0\t\t; no record of its own\n\tOR\tA\n\tRET\n\n; Nothing to undo. Returns carry clear.\nREMOVE:\tOR\tA\t\t; carry clear: removal goes ahead\n\tRET\n\nNAME:\tDB\t\"COUNT   \"\t; the record to find\nTABLE:\tDW\t0\t\t; the table, once found\nDEPS:\tDB\t1,\"COUNT   \"\t; the least version, then the record's name"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>TAS NEEDS NEEDS.SVC\nNEEDS.SVC written\n\nB>NEEDS.SVC\nNEEDS.SVC?\n\nB>COUNT.SVC\n\nB>NEEDS.SVC\n\nB>SERVICES\nNEEDS 1\nCOUNT 1\nB>UNLOAD\n\nB>UNLOAD\n\nB>SERVICES\nB>\n",
+          "rendered_text": "A>B:\nB>TAS NEEDS NEEDS.SVC\nNEEDS.SVC written\n\nB>NEEDS.SVC\nNEEDS.SVC?\n\nB>COUNT.SVC\n\nB>NEEDS.SVC\n\nB>SERVICES\nNEEDS 1\nCOUNT 1\nB>UNLOAD\n\nB>UNLOAD\n\nB>SERVICES\nB>"
+        }
+      ],
+      "previous": "tec-os/12-results-and-command-chains.html",
+      "next": "tec-os/14-state-and-memory.html",
+      "source_h1": "13. Write a resident service"
+    },
+    {
+      "path": "tec-os/14-state-and-memory.md",
+      "html": "tec-os/14-state-and-memory.html",
+      "source_sha256": "fe0240e11ba2572036a54881ed76640b8e0a2a227408e6d2c79cc07bfac42b28",
+      "title": "State and memory inside TEC-OS | Debug80 Docs",
+      "h1": "14. State and memory inside TEC-OS",
+      "links": [
+        {
+          "target": "tec-os/appendix-c-memory-map.html",
+          "fragment": "the-resident-workspace"
+        },
+        {
+          "target": "tec-os/appendix-c-memory-map.html",
+          "fragment": "the-cpu-s-address-space"
+        },
+        {
+          "target": "tec-os/appendix-c-memory-map.html",
+          "fragment": "page-zero"
+        },
+        {
+          "target": "tec-os/appendix-c-memory-map.html",
+          "fragment": "the-stacks"
+        }
+      ],
+      "fences": [],
+      "previous": "tec-os/13-write-a-resident-service.html",
+      "next": "tec-os/15-reset-and-boot.html",
+      "source_h1": "14. State and memory inside TEC-OS"
+    },
+    {
+      "path": "tec-os/15-reset-and-boot.md",
+      "html": "tec-os/15-reset-and-boot.html",
+      "source_sha256": "b670b89138ff916f97c4a3caade5fc70bfd7a9989e3211d8d40b794dc6db3cc0",
+      "title": "Reset and boot | Debug80 Docs",
+      "h1": "15. Reset and boot",
+      "links": [
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": "the-workspace-across-a-program-exit"
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": "expand-1-and-the-stack-boundary"
+        },
+        {
+          "target": "tec-os/appendix-g-tec-1g.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": "write-lost"
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": "page-zero-is-rebuilt-selectively"
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "A>MOUNT B:\nUnmounted\n\nA>\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM     \n\nA>GLCD.SVC\n\nA>\n",
+          "rendered_text": "A>MOUNT B:\nUnmounted\n\nA>\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM     \n\nA>GLCD.SVC\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>^C\nA>\n",
+          "rendered_text": "A>^C\nA>"
+        }
+      ],
+      "previous": "tec-os/14-state-and-memory.html",
+      "next": "tec-os/16-console-paths.html",
+      "source_h1": "15. Reset and boot"
+    },
+    {
+      "path": "tec-os/16-console-paths.md",
+      "html": "tec-os/16-console-paths.html",
+      "source_sha256": "5d37cb47445b9a30431c0900827d337f7844041ea2de50d90261a49ec85430cf",
+      "title": "Console paths | Debug80 Docs",
+      "h1": "16. Console paths",
+      "links": [
+        {
+          "target": "tec-os/22-the-history-ring.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "CON: TTY:\nA>CON\nCON: TTY:\nA>\n",
+          "rendered_text": "CON: TTY:\nA>CON\nCON: TTY:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>TYPE X#\nDIR *.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>DIR *.CMD#\nDIR *.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>\n",
+          "rendered_text": "A>TYPE X#\nDIR *.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>DIR *.CMD#\nDIR *.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>"
+        },
+        {
+          "language": "sh",
+          "text": "npx atom test/programs/term.asm term.com\nnode tools/tecvol.mjs put con.img B term.com\n",
+          "rendered_text": "npx atom test/programs/term.asm term.com\nnode tools/tecvol.mjs put con.img B term.com"
+        },
+        {
+          "language": "text",
+          "text": "AB\n\n\n\n         XR\n\nA>\n",
+          "rendered_text": "AB\n\n\n\n         XR\n\nA>"
+        }
+      ],
+      "previous": "tec-os/15-reset-and-boot.html",
+      "next": "tec-os/17-card-blocks-and-volumes.html",
+      "source_h1": "16. Console paths"
+    },
+    {
+      "path": "tec-os/17-card-blocks-and-volumes.md",
+      "html": "tec-os/17-card-blocks-and-volumes.html",
+      "source_sha256": "906bde8f2758d75297d110d2ade6083998c8a7186d9431e103aa6da2289afa91",
+      "title": "Card blocks and volumes | Debug80 Docs",
+      "h1": "17. Card blocks and volumes",
+      "links": [
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": "expand-1-and-the-stack-boundary"
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-e-container-format.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": "allocation-vectors-below-the-workspace"
+        },
+        {
+          "target": "tec-os/appendix-b-rom-services.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "A>DIR B:\n\nBdos Err On B: Bad Sector\nA>DIR A:*.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>\n",
+          "rendered_text": "A>DIR B:\n\nBdos Err On B: Bad Sector\nA>DIR A:*.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nNo volume mounted, error 21\nR retry> H\nR retry> \n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nNo volume mounted, error 21\nR retry> H\nR retry>"
+        },
+        {
+          "language": "text",
+          "text": "A>MOUNT C: WORK\nCannot mount: in use or too large\n\nA>MOUNT B:\nUnmounted\n\nA>MOUNT C: WORK\nCannot mount: in use or too large\n\nA>MOUNT B: WORK\nB: WORK       \n\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nA>\n",
+          "rendered_text": "A>MOUNT C: WORK\nCannot mount: in use or too large\n\nA>MOUNT B:\nUnmounted\n\nA>MOUNT C: WORK\nCannot mount: in use or too large\n\nA>MOUNT B: WORK\nB: WORK       \n\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nA>"
+        }
+      ],
+      "previous": "tec-os/16-console-paths.html",
+      "next": "tec-os/18-cache-and-persistence.html",
+      "source_h1": "17. Card blocks and volumes"
+    },
+    {
+      "path": "tec-os/18-cache-and-persistence.md",
+      "html": "tec-os/18-cache-and-persistence.html",
+      "source_sha256": "65452579354eb5e48380a3d8653ca733a00bf9caea5bbb8336ffa4422d4dade2",
+      "title": "Cache and persistence | Debug80 Docs",
+      "h1": "18. Cache and persistence",
+      "links": [
+        {
+          "target": "tec-os/15-reset-and-boot.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": "expand-1-and-the-stack-boundary"
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": "recovery-after-a-power-cut"
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": "the-host-tools"
+        },
+        {
+          "target": "tec-os/26-build-the-rom-and-media.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "asm",
+          "text": "; READ: open the file named on the command line and read it to the end.\nBDOS    EQU     $0005\nFCB     EQU     $005C           ; the name from the command line\n        ORG     $0100\n        LD      DE,FCB\n        LD      C,15            ; BDOS function 15: open a file\n        CALL    BDOS\n        INC     A               ; FFh, no such file, becomes 0\n        RET     Z\nNEXT:   LD      DE,FCB\n        LD      C,20            ; BDOS function 20: read a record to 0080h\n        CALL    BDOS\n        OR      A               ; 0: a record was read\n        JR      Z,NEXT\n        JP      $0000\n",
+          "rendered_text": "; READ: open the file named on the command line and read it to the end.\nBDOS    EQU     $0005\nFCB     EQU     $005C           ; the name from the command line\n        ORG     $0100\n        LD      DE,FCB\n        LD      C,15            ; BDOS function 15: open a file\n        CALL    BDOS\n        INC     A               ; FFh, no such file, becomes 0\n        RET     Z\nNEXT:   LD      DE,FCB\n        LD      C,20            ; BDOS function 20: read a record to 0080h\n        CALL    BDOS\n        OR      A               ; 0: a record was read\n        JR      Z,NEXT\n        JP      $0000"
+        },
+        {
+          "language": "sh",
+          "text": "npx atom read.asm read.com\nhead -c 12288 /dev/zero > data.bin\nnode tools/tecvol.mjs create time.img --volume G1M:SYSTEM:A --volume G8M:THROUGH:B --volume G8M:BEHIND:C:wb\nnode tools/tecvol.mjs put time.img A read.com\nnode tools/tecvol.mjs put time.img A data.bin\n",
+          "rendered_text": "npx atom read.asm read.com\nhead -c 12288 /dev/zero > data.bin\nnode tools/tecvol.mjs create time.img --volume G1M:SYSTEM:A --volume G8M:THROUGH:B --volume G8M:BEHIND:C:wb\nnode tools/tecvol.mjs put time.img A read.com\nnode tools/tecvol.mjs put time.img A data.bin"
+        },
+        {
+          "language": "sh",
+          "text": "cp dist/starter.img nodata.img\ntruncate -s 2113536 nodata.img\n",
+          "rendered_text": "cp dist/starter.img nodata.img\ntruncate -s 2113536 nodata.img"
+        },
+        {
+          "language": "text",
+          "text": "A>SAVE 1 B:X.COM\n\nBdos Err On B: Bad Sector\nWrite lost\nA>DIR B:\nX.COM       \n1 file, 8176K free\nA>\n",
+          "rendered_text": "A>SAVE 1 B:X.COM\n\nBdos Err On B: Bad Sector\nWrite lost\nA>DIR B:\nX.COM       \n1 file, 8176K free\nA>"
+        }
+      ],
+      "previous": "tec-os/17-card-blocks-and-volumes.html",
+      "next": "tec-os/19-a-file-through-the-bdos.html",
+      "source_h1": "18. Cache and persistence"
+    },
+    {
+      "path": "tec-os/19-a-file-through-the-bdos.md",
+      "html": "tec-os/19-a-file-through-the-bdos.html",
+      "source_sha256": "96ebc2adc830bd1aa15cc390a051a2ed9947f718021c5be860a024508d13ce0f",
+      "title": "A file through the BDOS | Debug80 Docs",
+      "h1": "19. A file through the BDOS",
+      "links": [
+        {
+          "target": "tec-os/08-call-tec-os.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/16-console-paths.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-a-bdos-functions.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/16-console-paths.html",
+          "fragment": "the-bios-boundary"
+        }
+      ],
+      "fences": [],
+      "previous": "tec-os/18-cache-and-persistence.html",
+      "next": "tec-os/20-from-prompt-to-program.html",
+      "source_h1": "19. A file through the BDOS"
+    },
+    {
+      "path": "tec-os/20-from-prompt-to-program.md",
+      "html": "tec-os/20-from-prompt-to-program.html",
+      "source_sha256": "f87836a373a50f2e1da343dd7b208ed01e382d33bd0688f6e8ad2306355c610a",
+      "title": "From prompt to program | Debug80 Docs",
+      "h1": "20. From prompt to program",
+      "links": [
+        {
+          "target": "tec-os/appendix-j-command-reference.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/21-chains-across-warm-boot.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-c-memory-map.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/19-a-file-through-the-bdos.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/25-startup-inside-the-ccp.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/15-reset-and-boot.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/22-the-history-ring.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/12-results-and-command-chains.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/24-loading-and-removing-services.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/16-console-paths.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/09-read-and-write-a-file.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "A>B:\nB>A:MOUNT B:\nUnmounted\n\nA>\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM     \n\nA>GLCD.SVC\n\nA>\n",
+          "rendered_text": "A>B:\nB>A:MOUNT B:\nUnmounted\n\nA>\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM     \n\nA>GLCD.SVC\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>SAVE 320 B:X.COM\n320?\n\nA>SAVE 185 B:X.COM\n185?\n\nA>\n",
+          "rendered_text": "A>SAVE 320 B:X.COM\n320?\n\nA>SAVE 185 B:X.COM\n185?\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>CON PICO 40\nCON: CRT:\nA>CON CRT80\nCRT80?\n\nA>CON PICO 50\n50?\n\nA>CON TTY 80\n80?\n\nA>CON CRT: 32\nCON: CRT:\nA>\n",
+          "rendered_text": "A>CON PICO 40\nCON: CRT:\nA>CON CRT80\nCRT80?\n\nA>CON PICO 50\n50?\n\nA>CON TTY 80\n80?\n\nA>CON CRT: 32\nCON: CRT:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nB>B:MOUNT\nB:MOUNT?\n\nB>\n",
+          "rendered_text": "A>B:\nB>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\nB>B:MOUNT\nB:MOUNT?\n\nB>"
+        },
+        {
+          "language": "sh",
+          "text": "node -e 'const b = n => { const x = Buffer.alloc(n); x[0] = 0xC9; return x; };\nrequire(\"fs\").writeFileSync(\"build/fits.com\", b(47104));\nrequire(\"fs\").writeFileSync(\"build/big.com\", b(47105));'\nnpx atom build/args.asm build/args.com\ncp dist/starter.img build/ccp.img\nnode tools/tecvol.mjs put build/ccp.img B build/args.com\nnode tools/tecvol.mjs put build/ccp.img B build/fits.com\nnode tools/tecvol.mjs put build/ccp.img B build/big.com\n",
+          "rendered_text": "node -e 'const b = n => { const x = Buffer.alloc(n); x[0] = 0xC9; return x; };\nrequire(\"fs\").writeFileSync(\"build/fits.com\", b(47104));\nrequire(\"fs\").writeFileSync(\"build/big.com\", b(47105));'\nnpx atom build/args.asm build/args.com\ncp dist/starter.img build/ccp.img\nnode tools/tecvol.mjs put build/ccp.img B build/args.com\nnode tools/tecvol.mjs put build/ccp.img B build/fits.com\nnode tools/tecvol.mjs put build/ccp.img B build/big.com"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>FITS\n\nB>BIG\nBIG?\n\nB>\n",
+          "rendered_text": "A>B:\nB>FITS\n\nB>BIG\nBIG?\n\nB>"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>USER 3\n3B>ARGS\n0            \n0            \n[]\n3B>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\n3B>B:MOUNT\nB:MOUNT?\n\n3B>DIR\nNO FILE\n3B>\n",
+          "rendered_text": "A>B:\nB>USER 3\n3B>ARGS\n0            \n0            \n[]\n3B>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n\n3B>B:MOUNT\nB:MOUNT?\n\n3B>DIR\nNO FILE\n3B>"
+        },
+        {
+          "language": "asm",
+          "text": "; ARGS: prints the two FCBs and the command tail that the CCP leaves in\n; page zero: each FCB's drive byte as a digit and its eleven name bytes,\n; then the tail between brackets.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      HL,$005C        ; the first FCB\n        CALL    SHOWFCB\n        LD      HL,$006C        ; the second\n        CALL    SHOWFCB\n        LD      A,'['\n        CALL    PUT\n        LD      HL,$0080        ; the tail's length, then its characters\n        LD      B,(HL)\nTAIL:   LD      A,B\n        OR      A\n        JR      Z,TEND\n        INC     HL\n        LD      A,(HL)\n        CALL    PUT\n        DEC     B\n        JR      TAIL\nTEND:   LD      A,']'\n        JP      PUT\n\nSHOWFCB:LD      A,(HL)          ; the drive: 0 for the current one\n        ADD     A,'0'\n        CALL    PUT\n        LD      A,' '\n        CALL    PUT\n        LD      B,11            ; the name and type, as stored\nNAME:   INC     HL\n        LD      A,(HL)\n        CALL    PUT\n        DJNZ    NAME\n        LD      A,13\n        CALL    PUT\n        LD      A,10\n\n; Print A by function 2, keeping B and HL.\nPUT:    PUSH    HL\n        PUSH    BC\n        LD      E,A\n        LD      C,2\n        CALL    BDOS\n        POP     BC\n        POP     HL\n        RET\n",
+          "rendered_text": "; ARGS: prints the two FCBs and the command tail that the CCP leaves in\n; page zero: each FCB's drive byte as a digit and its eleven name bytes,\n; then the tail between brackets.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      HL,$005C        ; the first FCB\n        CALL    SHOWFCB\n        LD      HL,$006C        ; the second\n        CALL    SHOWFCB\n        LD      A,'['\n        CALL    PUT\n        LD      HL,$0080        ; the tail's length, then its characters\n        LD      B,(HL)\nTAIL:   LD      A,B\n        OR      A\n        JR      Z,TEND\n        INC     HL\n        LD      A,(HL)\n        CALL    PUT\n        DEC     B\n        JR      TAIL\nTEND:   LD      A,']'\n        JP      PUT\n\nSHOWFCB:LD      A,(HL)          ; the drive: 0 for the current one\n        ADD     A,'0'\n        CALL    PUT\n        LD      A,' '\n        CALL    PUT\n        LD      B,11            ; the name and type, as stored\nNAME:   INC     HL\n        LD      A,(HL)\n        CALL    PUT\n        DJNZ    NAME\n        LD      A,13\n        CALL    PUT\n        LD      A,10\n\n; Print A by function 2, keeping B and HL.\nPUT:    PUSH    HL\n        PUSH    BC\n        LD      E,A\n        LD      C,2\n        CALL    BDOS\n        POP     BC\n        POP     HL\n        RET"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>args one.txt a:*.c\n0 ONE     TXT\n1 ????????C  \n[ ONE.TXT A:*.C]\nB>ARGS X Y ! ARGS\n0 X          \n0 Y          \n[ X Y ]\nB>ARGS\n0            \n0            \n[]\nB>\n",
+          "rendered_text": "A>B:\nB>args one.txt a:*.c\n0 ONE     TXT\n1 ????????C  \n[ ONE.TXT A:*.C]\nB>ARGS X Y ! ARGS\n0 X          \n0 Y          \n[ X Y ]\nB>ARGS\n0            \n0            \n[]\nB>"
+        }
+      ],
+      "previous": "tec-os/19-a-file-through-the-bdos.html",
+      "next": "tec-os/21-chains-across-warm-boot.html",
+      "source_h1": "20. From prompt to program"
+    },
+    {
+      "path": "tec-os/21-chains-across-warm-boot.md",
+      "html": "tec-os/21-chains-across-warm-boot.html",
+      "source_sha256": "00dafe111d60babaf2bf318374088a39d5fae3f984548c4b9890f611a418cb23",
+      "title": "Chains across a warm boot | Debug80 Docs",
+      "h1": "21. Chains across a warm boot",
+      "links": [],
+      "fences": [
+        {
+          "language": "sh",
+          "text": "printf 'DIR *.CMD!:TYPE STARTUP.CMD\\nNOSUCH.SVC!:MOUNT\\nUSER 0\\n' > startup.cmd\ncp dist/starter.img start.img\nnode tools/tecvol.mjs put start.img A startup.cmd --text\n",
+          "rendered_text": "printf 'DIR *.CMD!:TYPE STARTUP.CMD\\nNOSUCH.SVC!:MOUNT\\nUSER 0\\n' > startup.cmd\ncp dist/starter.img start.img\nnode tools/tecvol.mjs put start.img A startup.cmd --text"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>DIR *.CMD!:TYPE STARTUP.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>:TYPE STARTUP.CMD\nDIR *.CMD!:TYPE STARTUP.CMD\nNOSUCH.SVC!:MOUNT\nUSER 0\n\nA>NOSUCH.SVC!:MOUNT\nNOSUCH.SVC?\n\nA>:MOUNT\nA>USER 0\nA>\n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>DIR *.CMD!:TYPE STARTUP.CMD\nSTARTUP.CMD \n1 file, 980K free\nA>:TYPE STARTUP.CMD\nDIR *.CMD!:TYPE STARTUP.CMD\nNOSUCH.SVC!:MOUNT\nUSER 0\n\nA>NOSUCH.SVC!:MOUNT\nNOSUCH.SVC?\n\nA>:MOUNT\nA>USER 0\nA>"
+        }
+      ],
+      "previous": "tec-os/20-from-prompt-to-program.html",
+      "next": "tec-os/22-the-history-ring.html",
+      "source_h1": "21. Chains across a warm boot"
+    },
+    {
+      "path": "tec-os/22-the-history-ring.md",
+      "html": "tec-os/22-the-history-ring.html",
+      "source_sha256": "6c11896d9e867c5f248df86a6cec3f541dd90d5ef182d51cc1f5e27af1cebf79",
+      "title": "The history ring | Debug80 Docs",
+      "h1": "22. The history ring",
+      "links": [
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": "expand-1-and-the-stack-boundary"
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "A>con\nCON: CRT:\nA>con\nCON: CRT:\nA>\n",
+          "rendered_text": "A>con\nCON: CRT:\nA>con\nCON: CRT:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>CON\nCON: CRT:\nA>CON\nCON: CRT:\nA>DIR *.CMD\nSTARTUP.CMD\n1 file, 980K free\nA>CON\nCON: CRT:\nA>\n",
+          "rendered_text": "A>CON\nCON: CRT:\nA>CON\nCON: CRT:\nA>DIR *.CMD\nSTARTUP.CMD\n1 file, 980K free\nA>CON\nCON: CRT:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>CON\nCON: CRT:\nA>TYPE STARTUP.CMD\nGLCD.SVC\n\nA>CON\nCON: CRT:\nA>\n",
+          "rendered_text": "A>CON\nCON: CRT:\nA>TYPE STARTUP.CMD\nGLCD.SVC\n\nA>CON\nCON: CRT:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>CON\nCON: TTY:\nA>^C\nA>CON\nCON: TTY:\nA>\n",
+          "rendered_text": "A>CON\nCON: TTY:\nA>^C\nA>CON\nCON: TTY:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>CON\nCON: TTY:\nA>\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>GLCD.SVC\n\nA>\nA>\n",
+          "rendered_text": "A>CON\nCON: TTY:\nA>\nTEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>GLCD.SVC\n\nA>\nA>"
+        }
+      ],
+      "previous": "tec-os/21-chains-across-warm-boot.html",
+      "next": "tec-os/23-numbered-service-dispatch.html",
+      "source_h1": "22. The history ring"
+    },
+    {
+      "path": "tec-os/23-numbered-service-dispatch.md",
+      "html": "tec-os/23-numbered-service-dispatch.html",
+      "source_sha256": "167c2f5ddf58c9efb332f94b9a352288d10ea4dc0965200e1bb0a968a6bba81f",
+      "title": "Numbered-service dispatch | Debug80 Docs",
+      "h1": "23. Numbered-service dispatch",
+      "links": [
+        {
+          "target": "tec-os/17-card-blocks-and-volumes.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/16-console-paths.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/24-loading-and-removing-services.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/25-startup-inside-the-ccp.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/11-use-the-boards-devices.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [],
+      "previous": "tec-os/22-the-history-ring.html",
+      "next": "tec-os/24-loading-and-removing-services.html",
+      "source_h1": "23. Numbered-service dispatch"
+    },
+    {
+      "path": "tec-os/24-loading-and-removing-services.md",
+      "html": "tec-os/24-loading-and-removing-services.html",
+      "source_sha256": "9ac0c0b06961ca1da739f8141051ae2733a1a0bc0df3bc96986bbaa6def15c66",
+      "title": "Loading and removing services | Debug80 Docs",
+      "h1": "24. Loading and removing services",
+      "links": [
+        {
+          "target": "tec-os/13-write-a-resident-service.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-h-service-file-format.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/20-from-prompt-to-program.html",
+          "fragment": "program-lookup-and-capacity"
+        },
+        {
+          "target": "tec-os/25-startup-inside-the-ccp.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/12-results-and-command-chains.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "A>SERVICES\nA>\n",
+          "rendered_text": "A>SERVICES\nA>"
+        }
+      ],
+      "previous": "tec-os/23-numbered-service-dispatch.html",
+      "next": "tec-os/25-startup-inside-the-ccp.html",
+      "source_h1": "24. Loading and removing services"
+    },
+    {
+      "path": "tec-os/25-startup-inside-the-ccp.md",
+      "html": "tec-os/25-startup-inside-the-ccp.html",
+      "source_sha256": "b29a92c2458e7820885874af39ba3a47cbed92d653a9d2743dff44ba3f787708",
+      "title": "Startup inside the CCP | Debug80 Docs",
+      "h1": "25. Startup inside the CCP",
+      "links": [
+        {
+          "target": "tec-os/07-commands-at-startup.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": "the-workspace-across-a-program-exit"
+        },
+        {
+          "target": "tec-os/12-results-and-command-chains.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/21-chains-across-warm-boot.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/20-from-prompt-to-program.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/24-loading-and-removing-services.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/16-console-paths.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-i-web-page.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "sh",
+          "text": "printf 'It ran whole.\\n' > 'NOTE$.TXT'\nprintf 'TYPE NOTE$.TXT\\n' > startup.cmd\ncp dist/starter.img dollar.img\nnode tools/tecvol.mjs put dollar.img A startup.cmd --text\nnode tools/tecvol.mjs put dollar.img A 'NOTE$.TXT' --text\n",
+          "rendered_text": "printf 'It ran whole.\\n' > 'NOTE$.TXT'\nprintf 'TYPE NOTE$.TXT\\n' > startup.cmd\ncp dist/starter.img dollar.img\nnode tools/tecvol.mjs put dollar.img A startup.cmd --text\nnode tools/tecvol.mjs put dollar.img A 'NOTE$.TXT' --text"
+        },
+        {
+          "language": "text",
+          "text": "A>TYPE NOTE\nIt ran whole.\n\nA>\n",
+          "rendered_text": "A>TYPE NOTE\nIt ran whole.\n\nA>"
+        }
+      ],
+      "previous": "tec-os/24-loading-and-removing-services.html",
+      "next": "tec-os/26-build-the-rom-and-media.html",
+      "source_h1": "25. Startup inside the CCP"
+    },
+    {
+      "path": "tec-os/26-build-the-rom-and-media.md",
+      "html": "tec-os/26-build-the-rom-and-media.html",
+      "source_sha256": "709eaddf642de42a4c86cb08f88e63e05368392904413a6f1cd962a2b07f7b40",
+      "title": "Build the ROM and media | Debug80 Docs",
+      "h1": "26. Build the ROM and media",
+      "links": [
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/15-reset-and-boot.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/16-console-paths.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/17-card-blocks-and-volumes.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "sh",
+          "text": "TECOS_ROM_ASSEMBLER=atom npm run build\n",
+          "rendered_text": "TECOS_ROM_ASSEMBLER=atom npm run build"
+        },
+        {
+          "language": "asm",
+          "text": "\t%INCLUDE\t\"abi.inc\"\n\t%INCLUDE\t\"gen/config.asm\"\n\t%INCLUDE\t\"gen/format.asm\"\n\t%INCLUDE\t\"layout.asm\"\n\t%INCLUDE\t\"ram.asm\"\n\t%INCLUDE\t\"reset.asm\"\n\t%INCLUDE\t\"abi.asm\"\n\t%INCLUDE\t\"tables.asm\"\n\t%INCLUDE\t\"gen/geom.asm\"\n\t%INCLUDE\t\"gen/font.asm\"\n\t%INCLUDE\t\"text.asm\"\n\t%INCLUDE\t\"boot.asm\"\n\t%INCLUDE\t\"bios.asm\"\n\t%INCLUDE\t\"console.asm\"\n\t%INCLUDE\t\"keyboard.asm\"\n\t%INCLUDE\t\"term.asm\"\n\t%INCLUDE\t\"video.asm\"\n\t%INCLUDE\t\"tms.asm\"\n\t%INCLUDE\t\"pico.asm\"\n\t%INCLUDE\t\"lcd.asm\"\n\t%INCLUDE\t\"sd.asm\"\n\t%INCLUDE\t\"vol.asm\"\n\t%INCLUDE\t\"volsvc.asm\"\n\t%INCLUDE\t\"volutil.asm\"\n\t%INCLUDE\t\"cpm/ccp.asm\"\n\t%INCLUDE\t\"cpm/ccpfile.asm\"\n\t%INCLUDE\t\"cpm/ccpmut.asm\"\n\t%INCLUDE\t\"cpm/ccpcmd.asm\"\n\t%INCLUDE\t\"cpm/bdos.asm\"\n\t%INCLUDE\t\"cpm/bdosfile.asm\"\n\t%INCLUDE\t\"cpm/bdosrec.asm\"\n\t%INCLUDE\t\"cpm/bdosfn.asm\"\n\t%INCLUDE\t\"cpm/bdoslog.asm\"\n\t%INCLUDE\t\"cpm/bdoscon.asm\"\n\t%INCLUDE\t\"services.asm\"\n\t%INCLUDE\t\"cache.asm\"\n\t%INCLUDE\t\"history.asm\"\n\t%INCLUDE\t\"loader.asm\"\n\t%INCLUDE\t\"end.asm\"\n",
+          "rendered_text": "\t%INCLUDE\t\"abi.inc\"\n\t%INCLUDE\t\"gen/config.asm\"\n\t%INCLUDE\t\"gen/format.asm\"\n\t%INCLUDE\t\"layout.asm\"\n\t%INCLUDE\t\"ram.asm\"\n\t%INCLUDE\t\"reset.asm\"\n\t%INCLUDE\t\"abi.asm\"\n\t%INCLUDE\t\"tables.asm\"\n\t%INCLUDE\t\"gen/geom.asm\"\n\t%INCLUDE\t\"gen/font.asm\"\n\t%INCLUDE\t\"text.asm\"\n\t%INCLUDE\t\"boot.asm\"\n\t%INCLUDE\t\"bios.asm\"\n\t%INCLUDE\t\"console.asm\"\n\t%INCLUDE\t\"keyboard.asm\"\n\t%INCLUDE\t\"term.asm\"\n\t%INCLUDE\t\"video.asm\"\n\t%INCLUDE\t\"tms.asm\"\n\t%INCLUDE\t\"pico.asm\"\n\t%INCLUDE\t\"lcd.asm\"\n\t%INCLUDE\t\"sd.asm\"\n\t%INCLUDE\t\"vol.asm\"\n\t%INCLUDE\t\"volsvc.asm\"\n\t%INCLUDE\t\"volutil.asm\"\n\t%INCLUDE\t\"cpm/ccp.asm\"\n\t%INCLUDE\t\"cpm/ccpfile.asm\"\n\t%INCLUDE\t\"cpm/ccpmut.asm\"\n\t%INCLUDE\t\"cpm/ccpcmd.asm\"\n\t%INCLUDE\t\"cpm/bdos.asm\"\n\t%INCLUDE\t\"cpm/bdosfile.asm\"\n\t%INCLUDE\t\"cpm/bdosrec.asm\"\n\t%INCLUDE\t\"cpm/bdosfn.asm\"\n\t%INCLUDE\t\"cpm/bdoslog.asm\"\n\t%INCLUDE\t\"cpm/bdoscon.asm\"\n\t%INCLUDE\t\"services.asm\"\n\t%INCLUDE\t\"cache.asm\"\n\t%INCLUDE\t\"history.asm\"\n\t%INCLUDE\t\"loader.asm\"\n\t%INCLUDE\t\"end.asm\""
+        },
+        {
+          "language": "text",
+          "text": "tecos: ROM 16018/16384 bytes, TPA $0100-$B9A3 (47268 bytes), sha256 8cad40923ce1c3c6\n",
+          "rendered_text": "tecos: ROM 16018/16384 bytes, TPA $0100-$B9A3 (47268 bytes), sha256 8cad40923ce1c3c6"
+        },
+        {
+          "language": "asm",
+          "text": "; HELLO: print a line and return to the CCP.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      DE,MESSAGE      ; the string, ended by $\n        LD      C,9             ; BDOS function 9: print a string\n        CALL    BDOS\n        RET                     ; back to TEC-OS\nMESSAGE:DB      \"Hello from the TEC-1G\",13,10,\"$\"\n",
+          "rendered_text": "; HELLO: print a line and return to the CCP.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      DE,MESSAGE      ; the string, ended by $\n        LD      C,9             ; BDOS function 9: print a string\n        CALL    BDOS\n        RET                     ; back to TEC-OS\nMESSAGE:DB      \"Hello from the TEC-1G\",13,10,\"$\""
+        },
+        {
+          "language": "text",
+          "text": "\nB>A:TAS HELLO.ASM\nHELLO.ASM:7:1: expected a label, instruction or directive\n\nB>A:TED\n",
+          "rendered_text": "\nB>A:TAS HELLO.ASM\nHELLO.ASM:7:1: expected a label, instruction or directive\n\nB>A:TED"
+        },
+        {
+          "language": "text",
+          "text": "; HELLO: print a line and return to the CCP.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      DE,MESSAGE      ; the string, ended by $\n        LD      C,9             ; BDOS function 9: print a string\n1        CALL    BDOS\n        RET                     ; back to TEC-OS\nMESSAGE:DB      \"Hello from the TEC-1G\",13,10,\"$\"\nTED  HELLO.ASM    expected a label, instruction or directive  ^S Save  ^Q Quit\n",
+          "rendered_text": "; HELLO: print a line and return to the CCP.\nBDOS    EQU     $0005\n\n        ORG     $0100\n        LD      DE,MESSAGE      ; the string, ended by $\n        LD      C,9             ; BDOS function 9: print a string\n1        CALL    BDOS\n        RET                     ; back to TEC-OS\nMESSAGE:DB      \"Hello from the TEC-1G\",13,10,\"$\"\nTED  HELLO.ASM    expected a label, instruction or directive  ^S Save  ^Q Quit"
+        },
+        {
+          "language": "text",
+          "text": "\nB>A:TAS HELLO.ASM\nHELLO.COM written\n\nB>A:TED\n\nB>HELLO\nHello from the TEC-1G\n\nB>A:TED\nPress a key\n",
+          "rendered_text": "\nB>A:TAS HELLO.ASM\nHELLO.COM written\n\nB>A:TED\n\nB>HELLO\nHello from the TEC-1G\n\nB>A:TED\nPress a key"
+        },
+        {
+          "language": "sh",
+          "text": "npx atom hello.asm hello.com\n",
+          "rendered_text": "npx atom hello.asm hello.com"
+        },
+        {
+          "language": "sh",
+          "text": "cp dist/starter.img work.img\nnode tools/tecvol.mjs put work.img B hello.com\n",
+          "rendered_text": "cp dist/starter.img work.img\nnode tools/tecvol.mjs put work.img B hello.com"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>DIR\nHELLO.COM   \n1 file, 8172K free\nB>HELLO\nHello from the TEC-1G\n\nB>\n",
+          "rendered_text": "A>B:\nB>DIR\nHELLO.COM   \n1 file, 8172K free\nB>HELLO\nHello from the TEC-1G\n\nB>"
+        }
+      ],
+      "previous": "tec-os/25-startup-inside-the-ccp.html",
+      "next": "tec-os/27-diagnose-the-machine.html",
+      "source_h1": "26. Build the ROM and media"
+    },
+    {
+      "path": "tec-os/27-diagnose-the-machine.md",
+      "html": "tec-os/27-diagnose-the-machine.html",
+      "source_sha256": "8184d5eda73009a3fd38740328dad4eb3f9ddd919410641349315f329f245e43",
+      "title": "Diagnose the machine | Debug80 Docs",
+      "h1": "27. Diagnose the machine",
+      "links": [
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/15-reset-and-boot.html",
+          "fragment": "ram-before-the-workspace"
+        },
+        {
+          "target": "tec-os/15-reset-and-boot.html",
+          "fragment": "retained-drive-selection"
+        },
+        {
+          "target": "tec-os/26-build-the-rom-and-media.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/28-the-host-model-as-evidence.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-g-tec-1g.html",
+          "fragment": "the-hex-keypad-and-its-nmi"
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nNo volume mounted, error 01\nR retry> H\nR retry>\n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nNo volume mounted, error 01\nR retry> H\nR retry>"
+        },
+        {
+          "language": "sh",
+          "text": "npm run diag\n",
+          "rendered_text": "npm run diag"
+        },
+        {
+          "language": "text",
+          "text": "diag: ROM 16318/16384 bytes, 56 free, image D90143609F53FAAB, checksum $47C0\n",
+          "rendered_text": "diag: ROM 16318/16384 bytes, 56 free, image D90143609F53FAAB, checksum $47C0"
+        },
+        {
+          "language": "sh",
+          "text": "node --input-type=module -e '\nimport { modelReport } from \"./tools/diag-check.mjs\";\nmodelReport(\"build/diag/diag.rom\");\n'\n",
+          "rendered_text": "node --input-type=module -e '\nimport { modelReport } from \"./tools/diag-check.mjs\";\nmodelReport(\"build/diag/diag.rom\");\n'"
+        },
+        {
+          "language": "text",
+          "text": "\n\nTEC-1G diagnostics 0.2 image D90143609F53FAAB\nRAM 7E00-7FFF (variables and stack) passed.\nPress I, Y or keypad + within 5 s to include the interactive tests.\nAutomatic tests only.\nRAM tests take about 6 s. Keep off the keypad: its NMI would\nland in the RAM under test.\n\n-- T01 RAM 7E00h-7FFFh, before any stack use\nT01 HOME    PASS  4 passes, registers only\n\n-- T02 Fixed RAM 0000h-7DFFh, 4 pattern passes\nT02 RAMLO   PASS  all bits both ways, no aliasing\n",
+          "rendered_text": "\n\nTEC-1G diagnostics 0.2 image D90143609F53FAAB\nRAM 7E00-7FFF (variables and stack) passed.\nPress I, Y or keypad + within 5 s to include the interactive tests.\nAutomatic tests only.\nRAM tests take about 6 s. Keep off the keypad: its NMI would\nland in the RAM under test.\n\n-- T01 RAM 7E00h-7FFFh, before any stack use\nT01 HOME    PASS  4 passes, registers only\n\n-- T02 Fixed RAM 0000h-7DFFh, 4 pattern passes\nT02 RAMLO   PASS  all bits both ways, no aliasing"
+        },
+        {
+          "language": "text",
+          "text": "==== TEC-1G DIAGNOSTICS REPORT ====\nROM diag 0.2 image D90143609F53FAAB, 4800 8N2, times in T-states (4 MHz nominal), error counts expect 0\nT01 HOME    PASS  4 passes, registers only\nT02 RAMLO   PASS  all bits both ways, no aliasing\nT03 RAMWIN  PASS  all bits both ways, no aliasing\nT04 RAMHOME PASS  all bits both ways, no aliasing\nT05 ROMSUM  PASS  sum 47C0 stored 47C0\nT06 ROMWR   PASS  wrote 5A at CDB4, expect A5, read A5\nT07 OVERLAY PASS  07FF read CD (ROM C7FF CD), 0800 read AB (RAM, expect AB)\nT08 OVLWR   INFO  reaches the RAM underneath; read under overlay CD\nT09 PROTECT PASS  wrote A5 over 5A, expect 5A 5A A5: 4000 5A 7DFF 5A 3FFF A5\nT10 LATCHRD INFO  01>01 05>05 0D>0D 81>81 reads back\nT11 STATUS  INFO  01>C1 03>C3 05>C5 81>C1 (bit 7 RX, 6 KDA)\nT12 BANKS   INFO  field 0-F: 0122446688AACCEE (B base, - none); 9 banks + base\nT13 BANKRAM PASS  9 banks pass\nT14 SERTX   LOOK  TX bit 833 T, stop bits 1691 T\nT15 LCD     PASS  read-back errors 0/20, clear busy 128 polls x 50 T\nT16 GLCD    LOOK  read-back errors 0/1024, clear busy 127 polls x 50 T, pattern drawn\nT17 VDP     LOOK  tags 11 22 33 44 (11 22 33 44 = 16K); errors at 16 T/byte 0, at 104 T/byte 0 (of 16384, then 1920)\nT18 VDPCLK  INFO  frame 79999 T; CPU at 50 Hz 3999950 Hz, at 60 Hz 4799940 Hz\nT35 VDPPAGE LOOK  R2 0Bh for page 2000h, 07h for 1000h; left at 07h\nT36 F18A    INFO  not F18A-compatible: SR1 read 00 (F18A E0h-EFh), locked 80\nT19 SD      PASS  v2 SDHC/XC, CMD0 x1, R7 00 00 01 AA, ACMD41 x2, OCR C0 00 00 00, block 0 ends 0000, token polls 0\nT20 SDBLKS  PASS  block 0 twice same; 64 blocks, errors 0, token polls min 0 max 0 (x678 T)\nT37 SDWRITE PASS  pattern read back, block restored; busy polls 1\nT21 RTC     NONE  no DS1302 (read FF)\nT22 SEG7    LOOK  segment bits a01 b08 c20 d80 e40 f02 g04 dp10 on port 02h\nT23 SPEAKER LOOK  port 01h bit 7\nT24 RGB8X8  LOOK  rows on 05h, red 06h, green F8h, blue F9h\nT25 LEDBAR  LOOK  01 03 05 09 11 21 41 81 00 01\nT26 NMI     PASS  0 taken through 0066h\nTOTAL PASS 14 FAIL 0 INFO 6 SKIP 0 LOOK 8 NONE 1\n==== END ====\n",
+          "rendered_text": "==== TEC-1G DIAGNOSTICS REPORT ====\nROM diag 0.2 image D90143609F53FAAB, 4800 8N2, times in T-states (4 MHz nominal), error counts expect 0\nT01 HOME    PASS  4 passes, registers only\nT02 RAMLO   PASS  all bits both ways, no aliasing\nT03 RAMWIN  PASS  all bits both ways, no aliasing\nT04 RAMHOME PASS  all bits both ways, no aliasing\nT05 ROMSUM  PASS  sum 47C0 stored 47C0\nT06 ROMWR   PASS  wrote 5A at CDB4, expect A5, read A5\nT07 OVERLAY PASS  07FF read CD (ROM C7FF CD), 0800 read AB (RAM, expect AB)\nT08 OVLWR   INFO  reaches the RAM underneath; read under overlay CD\nT09 PROTECT PASS  wrote A5 over 5A, expect 5A 5A A5: 4000 5A 7DFF 5A 3FFF A5\nT10 LATCHRD INFO  01>01 05>05 0D>0D 81>81 reads back\nT11 STATUS  INFO  01>C1 03>C3 05>C5 81>C1 (bit 7 RX, 6 KDA)\nT12 BANKS   INFO  field 0-F: 0122446688AACCEE (B base, - none); 9 banks + base\nT13 BANKRAM PASS  9 banks pass\nT14 SERTX   LOOK  TX bit 833 T, stop bits 1691 T\nT15 LCD     PASS  read-back errors 0/20, clear busy 128 polls x 50 T\nT16 GLCD    LOOK  read-back errors 0/1024, clear busy 127 polls x 50 T, pattern drawn\nT17 VDP     LOOK  tags 11 22 33 44 (11 22 33 44 = 16K); errors at 16 T/byte 0, at 104 T/byte 0 (of 16384, then 1920)\nT18 VDPCLK  INFO  frame 79999 T; CPU at 50 Hz 3999950 Hz, at 60 Hz 4799940 Hz\nT35 VDPPAGE LOOK  R2 0Bh for page 2000h, 07h for 1000h; left at 07h\nT36 F18A    INFO  not F18A-compatible: SR1 read 00 (F18A E0h-EFh), locked 80\nT19 SD      PASS  v2 SDHC/XC, CMD0 x1, R7 00 00 01 AA, ACMD41 x2, OCR C0 00 00 00, block 0 ends 0000, token polls 0\nT20 SDBLKS  PASS  block 0 twice same; 64 blocks, errors 0, token polls min 0 max 0 (x678 T)\nT37 SDWRITE PASS  pattern read back, block restored; busy polls 1\nT21 RTC     NONE  no DS1302 (read FF)\nT22 SEG7    LOOK  segment bits a01 b08 c20 d80 e40 f02 g04 dp10 on port 02h\nT23 SPEAKER LOOK  port 01h bit 7\nT24 RGB8X8  LOOK  rows on 05h, red 06h, green F8h, blue F9h\nT25 LEDBAR  LOOK  01 03 05 09 11 21 41 81 00 01\nT26 NMI     PASS  0 taken through 0066h\nTOTAL PASS 14 FAIL 0 INFO 6 SKIP 0 LOOK 8 NONE 1\n==== END ===="
+        },
+        {
+          "language": "sh",
+          "text": "node tools/diag-check.mjs board-log.txt\n",
+          "rendered_text": "node tools/diag-check.mjs board-log.txt"
+        }
+      ],
+      "previous": "tec-os/26-build-the-rom-and-media.html",
+      "next": "tec-os/28-the-host-model-as-evidence.html",
+      "source_h1": "27. Diagnose the machine"
+    },
+    {
+      "path": "tec-os/28-the-host-model-as-evidence.md",
+      "html": "tec-os/28-the-host-model-as-evidence.html",
+      "source_sha256": "405a7d80be0ebbd310c1a89c27f233d661cb7ecc891685e4353399064ee17b6f",
+      "title": "The host model as evidence | Debug80 Docs",
+      "h1": "28. The host model as evidence",
+      "links": [
+        {
+          "target": "tec-os/26-build-the-rom-and-media.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/17-card-blocks-and-volumes.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-i-web-page.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/27-diagnose-the-machine.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>GLCD.SVC\n\nA>CON\nCON: UC1:\nA>\n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>GLCD.SVC\n\nA>CON\nCON: UC1:\nA>"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>GLCD.SVC\n\n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>GLCD.SVC"
+        },
+        {
+          "language": "text",
+          "text": "\nA>CON\nCON: UC1:\nA>\n",
+          "rendered_text": "\nA>CON\nCON: UC1:\nA>"
+        },
+        {
+          "language": "sh",
+          "text": "printf 'The graphics LCD has 8 rows of 21 characters.\\nA line wider than that goes on in the next row.\\nThree\\nFour\\nFive\\nSix\\nSeven\\nEight\\nNine\\nTen\\n' > lines.txt\ncp dist/starter.img long.img\nnode tools/tecvol.mjs put long.img A lines.txt --text\n",
+          "rendered_text": "printf 'The graphics LCD has 8 rows of 21 characters.\\nA line wider than that goes on in the next row.\\nThree\\nFour\\nFive\\nSix\\nSeven\\nEight\\nNine\\nTen\\n' > lines.txt\ncp dist/starter.img long.img\nnode tools/tecvol.mjs put long.img A lines.txt --text"
+        },
+        {
+          "language": "text",
+          "text": "The graphics LCD has\n8 rows of 21 characte\nrs.\nA line wider than tha\nt goes on in the next\n row.\nThree\n[more]\n",
+          "rendered_text": "The graphics LCD has\n8 rows of 21 characte\nrs.\nA line wider than tha\nt goes on in the next\n row.\nThree\n[more]"
+        },
+        {
+          "language": "text",
+          "text": "Four\nFive\nSix\nSeven\nEight\nNine\nTen\n[more]\n",
+          "rendered_text": "Four\nFive\nSix\nSeven\nEight\nNine\nTen\n[more]"
+        },
+        {
+          "language": "text",
+          "text": "8 rows of 21 characte\nrs.\nA line wider than tha\nt goes on in the next\n row.\nThree\n\nA>\n",
+          "rendered_text": "8 rows of 21 characte\nrs.\nA line wider than tha\nt goes on in the next\n row.\nThree\n\nA>"
+        }
+      ],
+      "previous": "tec-os/27-diagnose-the-machine.html",
+      "next": "tec-os/appendix-a-bdos-functions.html",
+      "source_h1": "28. The host model as evidence"
+    },
+    {
+      "path": "tec-os/appendix-a-bdos-functions.md",
+      "html": "tec-os/appendix-a-bdos-functions.html",
+      "source_sha256": "edc890f187aa8d1df0cf4b7081a4895fd07858092f1355ecca5da34d0754517b",
+      "title": "A. BDOS functions | Debug80 Docs",
+      "h1": "Appendix A. BDOS functions",
+      "links": [
+        {
+          "target": "tec-os/19-a-file-through-the-bdos.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/19-a-file-through-the-bdos.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": "the-bdos-s-errors"
+        },
+        {
+          "target": "tec-os/22-the-history-ring.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": "writing-the-physical-card"
+        }
+      ],
+      "fences": [],
+      "previous": "tec-os/28-the-host-model-as-evidence.html",
+      "next": "tec-os/appendix-b-rom-services.html",
+      "source_h1": "Appendix A. BDOS functions"
+    },
+    {
+      "path": "tec-os/appendix-b-rom-services.md",
+      "html": "tec-os/appendix-b-rom-services.html",
+      "source_sha256": "4d05aaaacad7faa9b75ea172e7461fb20e9662a02191e4b2dae3f4d44f9a23ff",
+      "title": "B. The ROM table and hardware services | Debug80 Docs",
+      "h1": "Appendix B. The ROM table and hardware services",
+      "links": [],
+      "fences": [
+        {
+          "language": "asm",
+          "text": "; VTEST: write four bytes to the PICO9918's VRAM and read them back through\n; the graphics entries of the ROM's PICO9918 console.\nBDOS\tEQU\t$0005\nVRAM\tEQU\t$3000\t\t; an address the text modes leave alone\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tDE,NAME\t\t; the record's eight-byte name\n\tLD\tB,2\t\t; version 2 has the graphics entries\n\tLD\tC,TNFIND\t; the registry's find\n\tCALL\tABICALL\n\tLD\tDE,NONE\n\tJP\tC,SAY\t\t; carry: no such record, so print and end\n\tLD\t(TABLE),HL\t; good until this program exits\n\tLD\tB,1\t\t; claim the PICO9918\n\tLD\tC,TNVIDEO\n\tCALL\tABICALL\n\tLD\tHL,VRAM\t\t; PICOWR: BC bytes from DE to VRAM at HL\n\tLD\tDE,DATA\t\t; the bytes to write\n\tLD\tBC,4\n\tLD\tA,PICOWR\t; the entry's offset in the table\n\tCALL\tENTRY\n\tLD\tHL,VRAM\t\t; PICORD: BC bytes from VRAM at HL to DE\n\tLD\tDE,BACK\t\t; where to put them\n\tLD\tBC,4\n\tLD\tA,PICORD\t; the entry's offset in the table\n\tCALL\tENTRY\n\tLD\tB,0\t\t; give it back: the console's screen returns\n\tLD\tC,TNVIDEO\n\tCALL\tABICALL\n\tLD\tDE,BACK\t\t; the four bytes, as text\n\tJP\tSAY\t\t; prints and ends the program\n\n; Run the table's entry at offset A, with its arguments in BC, DE and HL.\n; Changes what the entry changes.\nENTRY:\tPUSH\tHL\t\t; the entry's HL\n\tPUSH\tDE\t\t; and its DE\n\tLD\tE,A\t\t; DE = the offset\n\tLD\tD,0\n\tLD\tHL,(TABLE)\n\tADD\tHL,DE\t\t; HL = the entry's word\n\tLD\tE,(HL)\n\tINC\tHL\n\tLD\tD,(HL)\n\tEX\tDE,HL\t\t; HL = the routine\n\tPOP\tDE\t\t; the entry's DE back\n\tEX\t(SP),HL\t\t; the routine goes on the stack, HL comes back\n\tRET\t\t\t; a jump to it, with HL free\n\nTABLE:\tDW\t0\t\t; the table, once found\nNAME:\tDB\t\"PICO    \"\t; the record to find\nNONE:\tDB\t\"no PICO \"\t; printed when there is no record\n\tDB\t\"record\"\n\tDB\t13,10,\"$\"\nDATA:\tDB\t\"VRAM\"\t\t; the four bytes to write\nBACK:\tDB\t\"????\"\t\t; PICORD fills these four\n\tDB\t13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\"\n",
+          "rendered_text": "; VTEST: write four bytes to the PICO9918's VRAM and read them back through\n; the graphics entries of the ROM's PICO9918 console.\nBDOS\tEQU\t$0005\nVRAM\tEQU\t$3000\t\t; an address the text modes leave alone\n%INCLUDE \"ABI.INC\"\n\n\tORG\t$0100\n\tCALL\tCHKHW\t\t; the numbers below hold only on ABI 5\n\tJP\tNZ,NOTHW\n\tLD\tDE,NAME\t\t; the record's eight-byte name\n\tLD\tB,2\t\t; version 2 has the graphics entries\n\tLD\tC,TNFIND\t; the registry's find\n\tCALL\tABICALL\n\tLD\tDE,NONE\n\tJP\tC,SAY\t\t; carry: no such record, so print and end\n\tLD\t(TABLE),HL\t; good until this program exits\n\tLD\tB,1\t\t; claim the PICO9918\n\tLD\tC,TNVIDEO\n\tCALL\tABICALL\n\tLD\tHL,VRAM\t\t; PICOWR: BC bytes from DE to VRAM at HL\n\tLD\tDE,DATA\t\t; the bytes to write\n\tLD\tBC,4\n\tLD\tA,PICOWR\t; the entry's offset in the table\n\tCALL\tENTRY\n\tLD\tHL,VRAM\t\t; PICORD: BC bytes from VRAM at HL to DE\n\tLD\tDE,BACK\t\t; where to put them\n\tLD\tBC,4\n\tLD\tA,PICORD\t; the entry's offset in the table\n\tCALL\tENTRY\n\tLD\tB,0\t\t; give it back: the console's screen returns\n\tLD\tC,TNVIDEO\n\tCALL\tABICALL\n\tLD\tDE,BACK\t\t; the four bytes, as text\n\tJP\tSAY\t\t; prints and ends the program\n\n; Run the table's entry at offset A, with its arguments in BC, DE and HL.\n; Changes what the entry changes.\nENTRY:\tPUSH\tHL\t\t; the entry's HL\n\tPUSH\tDE\t\t; and its DE\n\tLD\tE,A\t\t; DE = the offset\n\tLD\tD,0\n\tLD\tHL,(TABLE)\n\tADD\tHL,DE\t\t; HL = the entry's word\n\tLD\tE,(HL)\n\tINC\tHL\n\tLD\tD,(HL)\n\tEX\tDE,HL\t\t; HL = the routine\n\tPOP\tDE\t\t; the entry's DE back\n\tEX\t(SP),HL\t\t; the routine goes on the stack, HL comes back\n\tRET\t\t\t; a jump to it, with HL free\n\nTABLE:\tDW\t0\t\t; the table, once found\nNAME:\tDB\t\"PICO    \"\t; the record to find\nNONE:\tDB\t\"no PICO \"\t; printed when there is no record\n\tDB\t\"record\"\n\tDB\t13,10,\"$\"\nDATA:\tDB\t\"VRAM\"\t\t; the four bytes to write\nBACK:\tDB\t\"????\"\t\t; PICORD fills these four\n\tDB\t13,10,\"$\"\n%INCLUDE \"HWLIB.ASM\""
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>TAS VTEST\nVTEST.COM written\n\nB>VTEST\nVRAM\n\nB>\n",
+          "rendered_text": "A>B:\nB>TAS VTEST\nVTEST.COM written\n\nB>VTEST\nVRAM\n\nB>"
+        }
+      ],
+      "previous": "tec-os/appendix-a-bdos-functions.html",
+      "next": "tec-os/appendix-c-memory-map.html",
+      "source_h1": "Appendix B. The ROM table and hardware services"
+    },
+    {
+      "path": "tec-os/appendix-c-memory-map.md",
+      "html": "tec-os/appendix-c-memory-map.html",
+      "source_sha256": "752031f1a8b4a04640709552750ca830e617fe81e5c4d34c343333aba383adc7",
+      "title": "C. Memory map | Debug80 Docs",
+      "h1": "Appendix C. Memory map",
+      "links": [
+        {
+          "target": "tec-os/10-memory-for-programs.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/21-chains-across-warm-boot.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/24-loading-and-removing-services.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/15-reset-and-boot.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": "four-stacks-for-different-stages"
+        },
+        {
+          "target": "tec-os/24-loading-and-removing-services.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "sh",
+          "text": "node -e '\nconst s = JSON.parse(require(\"fs\").readFileSync(\"build/tecos/tecos.d8.json\", \"utf8\")).symbols;\nfor (const n of process.argv.slice(1)) {\n  const x = s.find((y) => y.name === n);\n  console.log(n, (x.address ?? x.value).toString(16).toUpperCase() + \"h\");\n}' CMDTXT PRGCODE CHPOS\n",
+          "rendered_text": "node -e '\nconst s = JSON.parse(require(\"fs\").readFileSync(\"build/tecos/tecos.d8.json\", \"utf8\")).symbols;\nfor (const n of process.argv.slice(1)) {\n  const x = s.find((y) => y.name === n);\n  console.log(n, (x.address ?? x.value).toString(16).toUpperCase() + \"h\");\n}' CMDTXT PRGCODE CHPOS"
+        },
+        {
+          "language": "text",
+          "text": "CMDTXT BD37h\nPRGCODE BF54h\nCHPOS BFE4h\n",
+          "rendered_text": "CMDTXT BD37h\nPRGCODE BF54h\nCHPOS BFE4h"
+        }
+      ],
+      "previous": "tec-os/appendix-b-rom-services.html",
+      "next": "tec-os/appendix-d-error-messages.html",
+      "source_h1": "Appendix C. Memory map"
+    },
+    {
+      "path": "tec-os/appendix-d-error-messages.md",
+      "html": "tec-os/appendix-d-error-messages.html",
+      "source_sha256": "274a082339d0ade81919c71d3e25a3d8149f7ff5b186f1d4833553db8db5bf03",
+      "title": "D. Error messages | Debug80 Docs",
+      "h1": "Appendix D. Error messages",
+      "links": [
+        {
+          "target": "tec-os/appendix-f-tecvol.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/27-diagnose-the-machine.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-g-tec-1g.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/27-diagnose-the-machine.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/17-card-blocks-and-volumes.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/17-card-blocks-and-volumes.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-e-container-format.html",
+          "fragment": "the-checks-and-their-codes"
+        },
+        {
+          "target": "tec-os/17-card-blocks-and-volumes.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": "recovery-after-a-power-cut"
+        },
+        {
+          "target": "tec-os/25-startup-inside-the-ccp.html",
+          "fragment": "recovery-words-and-row-ownership"
+        },
+        {
+          "target": "tec-os/27-diagnose-the-machine.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/25-startup-inside-the-ccp.html",
+          "fragment": "recovery-words-and-row-ownership"
+        },
+        {
+          "target": "tec-os/12-results-and-command-chains.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/03-work-with-files.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/03-work-with-files.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/10-memory-for-programs.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/03-work-with-files.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/03-work-with-files.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": "a-card-from-an-older-tec-os"
+        },
+        {
+          "target": "tec-os/20-from-prompt-to-program.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-j-command-reference.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/24-loading-and-removing-services.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/04-drives-and-user-areas.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/06-choose-a-console.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/03-work-with-files.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/25-startup-inside-the-ccp.html",
+          "fragment": "startup-origin-and-quiet-results"
+        },
+        {
+          "target": "tec-os/appendix-i-web-page.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/19-a-file-through-the-bdos.html",
+          "fragment": "errors-returned-or-reported"
+        },
+        {
+          "target": "tec-os/appendix-a-bdos-functions.html",
+          "fragment": "the-errors"
+        },
+        {
+          "target": "tec-os/04-drives-and-user-areas.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": "recovery-after-a-power-cut"
+        },
+        {
+          "target": "tec-os/17-card-blocks-and-volumes.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/19-a-file-through-the-bdos.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/18-cache-and-persistence.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/04-drives-and-user-areas.html",
+          "fragment": "changing-a-drive-s-volume"
+        },
+        {
+          "target": "tec-os/17-card-blocks-and-volumes.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/04-drives-and-user-areas.html",
+          "fragment": "changing-a-drive-s-volume"
+        },
+        {
+          "target": "tec-os/11-use-the-boards-devices.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/01-first-session.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/03-work-with-files.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/06-choose-a-console.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/04-drives-and-user-areas.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "No volume mounted, error nn\nR retry> \n",
+          "rendered_text": "No volume mounted, error nn\nR retry>"
+        },
+        {
+          "language": "sh",
+          "text": "cp dist/starter.img old.img\nnode tools/tecvol.mjs put old.img A test/fixtures/e5154ad/PICO.SVC PICO.DRV\nnode tools/tecvol.mjs put old.img A dist/files/GLCD.SVC GLCD.DRV\nnode tools/tecvol.mjs era old.img A GLCD.SVC\nprintf 'PICO.DRV\\nGLCD.DRV\\n' > startup.cmd\nnode tools/tecvol.mjs put old.img A startup.cmd --text\n",
+          "rendered_text": "cp dist/starter.img old.img\nnode tools/tecvol.mjs put old.img A test/fixtures/e5154ad/PICO.SVC PICO.DRV\nnode tools/tecvol.mjs put old.img A dist/files/GLCD.SVC GLCD.DRV\nnode tools/tecvol.mjs era old.img A GLCD.SVC\nprintf 'PICO.DRV\\nGLCD.DRV\\n' > startup.cmd\nnode tools/tecvol.mjs put old.img A startup.cmd --text"
+        },
+        {
+          "language": "text",
+          "text": "A>PICO.DRV\nPICO.DRV?\n\nA>GLCD.DRV\nGLCD.DRV?\n\nA>REN PICO.SVC=PICO.DRV\nA>REN GLCD.SVC=GLCD.DRV\nA>PICO.SVC\nPICO.SVC?\n\nA>GLCD.SVC\n\nA>CON\nCON: UC1:\nA>SERVICES\nGLCD 3\nA>\n",
+          "rendered_text": "A>PICO.DRV\nPICO.DRV?\n\nA>GLCD.DRV\nGLCD.DRV?\n\nA>REN PICO.SVC=PICO.DRV\nA>REN GLCD.SVC=GLCD.DRV\nA>PICO.SVC\nPICO.SVC?\n\nA>GLCD.SVC\n\nA>CON\nCON: UC1:\nA>SERVICES\nGLCD 3\nA>"
+        }
+      ],
+      "previous": "tec-os/appendix-c-memory-map.html",
+      "next": "tec-os/appendix-e-container-format.html",
+      "source_h1": "Appendix D. Error messages"
+    },
+    {
+      "path": "tec-os/appendix-e-container-format.md",
+      "html": "tec-os/appendix-e-container-format.html",
+      "source_sha256": "7b6b46e77e665076ed4c81f15da4fb6aa177c13f460bad60b3c8c87f091496e4",
+      "title": "E. The container format | Debug80 Docs",
+      "h1": "Appendix E. The container format",
+      "links": [
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/17-card-blocks-and-volumes.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/27-diagnose-the-machine.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "sh",
+          "text": "od -A x -t x1 -N 96 dist/starter.img\n",
+          "rendered_text": "od -A x -t x1 -N 96 dist/starter.img"
+        },
+        {
+          "language": "text",
+          "text": "000000 54 45 43 4f 53 56 4f 4c 01 00 00 02 20 00 02 00\n000010 00 50 00 00 f4 07 00 00 00 00 00 00 00 00 00 00\n000020 01 00 00 00 00 08 00 00 00 08 00 00 02 00 00 00\n000030 53 59 53 54 45 4d 20 20 20 20 20 00 00 00 00 00\n000040 02 00 00 00 00 10 00 00 00 40 00 00 01 00 01 01\n000050 57 4f 52 4b 20 20 20 20 20 20 20 00 00 00 00 00\n000060\n",
+          "rendered_text": "000000 54 45 43 4f 53 56 4f 4c 01 00 00 02 20 00 02 00\n000010 00 50 00 00 f4 07 00 00 00 00 00 00 00 00 00 00\n000020 01 00 00 00 00 08 00 00 00 08 00 00 02 00 00 00\n000030 53 59 53 54 45 4d 20 20 20 20 20 00 00 00 00 00\n000040 02 00 00 00 00 10 00 00 00 40 00 00 01 00 01 01\n000050 57 4f 52 4b 20 20 20 20 20 20 20 00 00 00 00 00\n000060"
+        },
+        {
+          "language": "sh",
+          "text": "node --input-type=module -e '\nimport { readFileSync, writeFileSync } from \"node:fs\";\nimport { headerChecksum } from \"./tools/lib/container.mjs\";\nconst img = new Uint8Array(readFileSync(\"dist/starter.img\"));\nconst a = img.slice(32, 64);\nimg.copyWithin(32, 64, 96);\nimg.set(a, 64);\nconst s = headerChecksum(img.subarray(0, 512));\nimg[20] = s & 255;\nimg[21] = s >> 8;\nwriteFileSync(\"build/swapped.img\", img);\n'\n",
+          "rendered_text": "node --input-type=module -e '\nimport { readFileSync, writeFileSync } from \"node:fs\";\nimport { headerChecksum } from \"./tools/lib/container.mjs\";\nconst img = new Uint8Array(readFileSync(\"dist/starter.img\"));\nconst a = img.slice(32, 64);\nimg.copyWithin(32, 64, 96);\nimg.set(a, 64);\nconst s = headerChecksum(img.subarray(0, 512));\nimg[20] = s & 255;\nimg[21] = s >> 8;\nwriteFileSync(\"build/swapped.img\", img);\n'"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs verify build/swapped.img\n",
+          "rendered_text": "node tools/tecvol.mjs verify build/swapped.img"
+        },
+        {
+          "language": "text",
+          "text": "tecvol: volume 1: not after volume 0\n",
+          "rendered_text": "tecvol: volume 1: not after volume 0"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nNo volume mounted, error 28\nR retry> \n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nNo volume mounted, error 28\nR retry>"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs create build/drv2.img --volume G1M:SYSTEM:A --volume G1M:EXTRA:C --drives 2\n",
+          "rendered_text": "node tools/tecvol.mjs create build/drv2.img --volume G1M:SYSTEM:A --volume G1M:EXTRA:C --drives 2"
+        },
+        {
+          "language": "text",
+          "text": "tecvol: volume 1: drive C is past the card's 2 drive(s)\n",
+          "rendered_text": "tecvol: volume 1: drive C is past the card's 2 drive(s)"
+        }
+      ],
+      "previous": "tec-os/appendix-d-error-messages.html",
+      "next": "tec-os/appendix-f-tecvol.html",
+      "source_h1": "Appendix E. The container format"
+    },
+    {
+      "path": "tec-os/appendix-f-tecvol.md",
+      "html": "tec-os/appendix-f-tecvol.html",
+      "source_sha256": "b5882ac03d08ab4c9afe00b529ccb35a4a05479b0a4f4885e7448d1f1cf972e4",
+      "title": "F. tecvol | Debug80 Docs",
+      "h1": "Appendix F. tecvol",
+      "links": [],
+      "fences": [
+        {
+          "language": "text",
+          "text": "tecvol create IMAGE --volume G1M:SYSTEM:A [--volume G8M:WORK:B:ro] [--align N] [--drives N]\ntecvol info IMAGE\ntecvol verify IMAGE\ntecvol dir IMAGE [DRIVE] [--user N]\ntecvol put IMAGE DRIVE FILE [CPMNAME] [--user N] [--text] [--ro] [--sys] [--force]\ntecvol get IMAGE DRIVE CPMNAME [OUTFILE] [--user N] [--text]\ntecvol era IMAGE DRIVE CPMNAME [--user N] [--force]\ntecvol recipe RECIPE.json IMAGE\ntecvol install IMAGE DEVICE --yes\n",
+          "rendered_text": "tecvol create IMAGE --volume G1M:SYSTEM:A [--volume G8M:WORK:B:ro] [--align N] [--drives N]\ntecvol info IMAGE\ntecvol verify IMAGE\ntecvol dir IMAGE [DRIVE] [--user N]\ntecvol put IMAGE DRIVE FILE [CPMNAME] [--user N] [--text] [--ro] [--sys] [--force]\ntecvol get IMAGE DRIVE CPMNAME [OUTFILE] [--user N] [--text]\ntecvol era IMAGE DRIVE CPMNAME [--user N] [--force]\ntecvol recipe RECIPE.json IMAGE\ntecvol install IMAGE DEVICE --yes"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs create build/my.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:ARCHIVE::ro\n",
+          "rendered_text": "node tools/tecvol.mjs create build/my.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:ARCHIVE::ro"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs info build/my.img\n",
+          "rendered_text": "node tools/tecvol.mjs info build/my.img"
+        },
+        {
+          "language": "text",
+          "text": "container: format 1.0, 22528 blocks (11534336 bytes), 3 volume(s)\n  A: SYSTEM      id 1 G1M start 2048 rw 0 file(s), 1040384 bytes free\n  B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free\n  -: ARCHIVE     id 3 G1M start 20480 ro 0 file(s), 1040384 bytes free\n",
+          "rendered_text": "container: format 1.0, 22528 blocks (11534336 bytes), 3 volume(s)\n  A: SYSTEM      id 1 G1M start 2048 rw 0 file(s), 1040384 bytes free\n  B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free\n  -: ARCHIVE     id 3 G1M start 20480 ro 0 file(s), 1040384 bytes free"
+        },
+        {
+          "language": "sh",
+          "text": "cp dist/starter.img build/badsum.img\nprintf 'X' | dd of=build/badsum.img bs=1 seek=25 conv=notrunc\nnode tools/tecvol.mjs verify build/badsum.img\n",
+          "rendered_text": "cp dist/starter.img build/badsum.img\nprintf 'X' | dd of=build/badsum.img bs=1 seek=25 conv=notrunc\nnode tools/tecvol.mjs verify build/badsum.img"
+        },
+        {
+          "language": "text",
+          "text": "tecvol: header checksum mismatch\n",
+          "rendered_text": "tecvol: header checksum mismatch"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs dir dist/starter.img A\n",
+          "rendered_text": "node tools/tecvol.mjs dir dist/starter.img A"
+        },
+        {
+          "language": "text",
+          "text": " 0 GLCD.SVC          896\n 0 MOUNT.COM         768\n 0 SAMPLE.ASM       4480\n 0 STARTUP.CMD       128\n 0 TAS.COM         10368\n 0 TED.COM         12032\n",
+          "rendered_text": " 0 GLCD.SVC          896\n 0 MOUNT.COM         768\n 0 SAMPLE.ASM       4480\n 0 STARTUP.CMD       128\n 0 TAS.COM         10368\n 0 TED.COM         12032"
+        },
+        {
+          "language": "sh",
+          "text": "printf 'hello\\nworld\\n' > build/hello.txt\nnode tools/tecvol.mjs put build/my.img A build/hello.txt --text\nnode tools/tecvol.mjs put build/my.img A dist/files/MOUNT.COM\nnode tools/tecvol.mjs put build/my.img B dist/files/TAS.COM --user 3\n",
+          "rendered_text": "printf 'hello\\nworld\\n' > build/hello.txt\nnode tools/tecvol.mjs put build/my.img A build/hello.txt --text\nnode tools/tecvol.mjs put build/my.img A dist/files/MOUNT.COM\nnode tools/tecvol.mjs put build/my.img B dist/files/TAS.COM --user 3"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs put build/my.img ARCHIVE build/hello.txt\n",
+          "rendered_text": "node tools/tecvol.mjs put build/my.img ARCHIVE build/hello.txt"
+        },
+        {
+          "language": "text",
+          "text": "tecvol: volume is read-only\n",
+          "rendered_text": "tecvol: volume is read-only"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs put build/my.img A build/hello.txt --user 1.5\n",
+          "rendered_text": "node tools/tecvol.mjs put build/my.img A build/hello.txt --user 1.5"
+        },
+        {
+          "language": "text",
+          "text": "tecvol: --user \"1.5\": a user number 0 to 15\nusage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/tecvol.mjs)\n",
+          "rendered_text": "tecvol: --user \"1.5\": a user number 0 to 15\nusage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/tecvol.mjs)"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs get build/my.img A HELLO.TXT --text\n",
+          "rendered_text": "node tools/tecvol.mjs get build/my.img A HELLO.TXT --text"
+        },
+        {
+          "language": "text",
+          "text": "hello\nworld\n",
+          "rendered_text": "hello\nworld"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs era build/my.img B TAS.COM\nnode tools/tecvol.mjs era build/my.img B TAS.COM --user 3\n",
+          "rendered_text": "node tools/tecvol.mjs era build/my.img B TAS.COM\nnode tools/tecvol.mjs era build/my.img B TAS.COM --user 3"
+        },
+        {
+          "language": "text",
+          "text": "tecvol: TAS.COM not found\nusage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/tecvol.mjs)\n",
+          "rendered_text": "tecvol: TAS.COM not found\nusage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/tecvol.mjs)"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs put build/my.img B build/hello.txt NOTE.TXT --ro\nnode tools/tecvol.mjs put build/my.img B build/hello.txt NOTE.TXT\nnode tools/tecvol.mjs era build/my.img B NOTE.TXT\nnode tools/tecvol.mjs era build/my.img B NOTE.TXT --force\n",
+          "rendered_text": "node tools/tecvol.mjs put build/my.img B build/hello.txt NOTE.TXT --ro\nnode tools/tecvol.mjs put build/my.img B build/hello.txt NOTE.TXT\nnode tools/tecvol.mjs era build/my.img B NOTE.TXT\nnode tools/tecvol.mjs era build/my.img B NOTE.TXT --force"
+        },
+        {
+          "language": "text",
+          "text": "tecvol: 0/NOTE.TXT is read-only\ntecvol: 0/NOTE.TXT is read-only\n",
+          "rendered_text": "tecvol: 0/NOTE.TXT is read-only\ntecvol: 0/NOTE.TXT is read-only"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs recipe dist/starter.recipe.json build/fresh.img\nsha256sum build/fresh.img dist/starter.img\n",
+          "rendered_text": "node tools/tecvol.mjs recipe dist/starter.recipe.json build/fresh.img\nsha256sum build/fresh.img dist/starter.img"
+        },
+        {
+          "language": "text",
+          "text": "22881c466664eedeed4c7482fba6e9a798b77d83d2c6666d9a2a2e8b05286f70  build/fresh.img\n22881c466664eedeed4c7482fba6e9a798b77d83d2c6666d9a2a2e8b05286f70  dist/starter.img\n",
+          "rendered_text": "22881c466664eedeed4c7482fba6e9a798b77d83d2c6666d9a2a2e8b05286f70  build/fresh.img\n22881c466664eedeed4c7482fba6e9a798b77d83d2c6666d9a2a2e8b05286f70  dist/starter.img"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs install dist/starter.img /dev/rdiskN --yes\n",
+          "rendered_text": "node tools/tecvol.mjs install dist/starter.img /dev/rdiskN --yes"
+        },
+        {
+          "language": "sh",
+          "text": "node tools/tecvol.mjs dir build/my.img A\n",
+          "rendered_text": "node tools/tecvol.mjs dir build/my.img A"
+        },
+        {
+          "language": "text",
+          "text": " 0 HELLO.TXT         128\n 0 MOUNT.COM         768\n",
+          "rendered_text": " 0 HELLO.TXT         128\n 0 MOUNT.COM         768"
+        },
+        {
+          "language": "text",
+          "text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>DIR\nHELLO.TXT    MOUNT.COM   \n2 files, 1012K free\nA>TYPE HELLO.TXT\nhello\nworld\n\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n02 ARCHIVE     G1M R/O\n\nA>\n",
+          "rendered_text": "TEC-OS 0.1 for TEC-1G\nA: SYSTEM     \nB: WORK       \n\nA>DIR\nHELLO.TXT    MOUNT.COM   \n2 files, 1012K free\nA>TYPE HELLO.TXT\nhello\nworld\n\nA>MOUNT\n00 SYSTEM      G1M A:\n01 WORK        G8M B:\n02 ARCHIVE     G1M R/O\n\nA>"
+        }
+      ],
+      "previous": "tec-os/appendix-e-container-format.html",
+      "next": "tec-os/appendix-g-tec-1g.html",
+      "source_h1": "Appendix F. `tecvol`"
+    },
+    {
+      "path": "tec-os/appendix-g-tec-1g.md",
+      "html": "tec-os/appendix-g-tec-1g.html",
+      "source_sha256": "1f5a0c5587e0ab0f5d7aa28fb160fad1ac97954ef678f28082845c9a17d60c45",
+      "title": "G. The TEC-1G as TEC-OS uses it | Debug80 Docs",
+      "h1": "Appendix G. The TEC-1G as TEC-OS uses it",
+      "links": [],
+      "fences": [],
+      "previous": "tec-os/appendix-f-tecvol.html",
+      "next": "tec-os/appendix-h-service-file-format.html",
+      "source_h1": "Appendix G. The TEC-1G as TEC-OS uses it"
+    },
+    {
+      "path": "tec-os/appendix-h-service-file-format.md",
+      "html": "tec-os/appendix-h-service-file-format.html",
+      "source_sha256": "6a69cc7cb474c52f4f0bd1d5205f09297c332eb8aa08596506d19ac76512d115",
+      "title": "H. The service file format | Debug80 Docs",
+      "h1": "Appendix H. The service file format",
+      "links": [
+        {
+          "target": "tec-os/13-write-a-resident-service.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/24-loading-and-removing-services.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "sh",
+          "text": "node -e '\nconst { readFileSync, writeFileSync } = require(\"node:fs\");\nconst f = readFileSync(\"COUNT.SVC\");\nconst out = Buffer.concat([f.subarray(0, 100), Buffer.from([0]), f.subarray(100)]);\nout[10] += 1;\nwriteFileSync(\"GAPZERO.SVC\", out);\n'\nnode tools/tecvol.mjs put svc.img B GAPZERO.SVC\n",
+          "rendered_text": "node -e '\nconst { readFileSync, writeFileSync } = require(\"node:fs\");\nconst f = readFileSync(\"COUNT.SVC\");\nconst out = Buffer.concat([f.subarray(0, 100), Buffer.from([0]), f.subarray(100)]);\nout[10] += 1;\nwriteFileSync(\"GAPZERO.SVC\", out);\n'\nnode tools/tecvol.mjs put svc.img B GAPZERO.SVC"
+        },
+        {
+          "language": "text",
+          "text": "A>B:\nB>GAPZERO.SVC\n\nB>SERVICES\nCOUNTX 1\nB>\n",
+          "rendered_text": "A>B:\nB>GAPZERO.SVC\n\nB>SERVICES\nCOUNTX 1\nB>"
+        },
+        {
+          "language": "sh",
+          "text": "xxd -g 1 -l 48 dist/files/GLCD.SVC\nxxd -g 1 -s 767 dist/files/GLCD.SVC\n",
+          "rendered_text": "xxd -g 1 -l 48 dist/files/GLCD.SVC\nxxd -g 1 -s 767 dist/files/GLCD.SVC"
+        },
+        {
+          "language": "text",
+          "text": "00000000: 44 04 00 01 4e 00 ff 02 00 00 45 00 02 00 06 2b  D...N.....E....+\n00000010: 00 47 4c 43 44 20 20 20 20 f2 00 4d 01 52 01 c9  .GLCD    ..M.R..\n00000020: 00 a7 00 b6 00 00 00 15 08 00 00 0e 0f cd 08 c0  ................\n000002ff: 02 02 02 02 02 02 0f 03 09 09 08 29 08 04 0a 03  ...........)....\n0000030f: 03 07 03 03 09 04 0c 04 09 03 04 06 0d 13 08 04  ................\n0000031f: 22 06 05 03 04 04 05 09 08 09 10 03 07 06 04 03  \"...............\n0000032f: 04 04 03 0a 08 0f 03 06 03 04 11 0a 07 0a 06 06  ................\n0000033f: 18 05 17 07 05                                   .....\n",
+          "rendered_text": "00000000: 44 04 00 01 4e 00 ff 02 00 00 45 00 02 00 06 2b  D...N.....E....+\n00000010: 00 47 4c 43 44 20 20 20 20 f2 00 4d 01 52 01 c9  .GLCD    ..M.R..\n00000020: 00 a7 00 b6 00 00 00 15 08 00 00 0e 0f cd 08 c0  ................\n000002ff: 02 02 02 02 02 02 0f 03 09 09 08 29 08 04 0a 03  ...........)....\n0000030f: 03 07 03 03 09 04 0c 04 09 03 04 06 0d 13 08 04  ................\n0000031f: 22 06 05 03 04 04 05 09 08 09 10 03 07 06 04 03  \"...............\n0000032f: 04 04 03 0a 08 0f 03 06 03 04 11 0a 07 0a 06 06  ................\n0000033f: 18 05 17 07 05                                   ....."
+        }
+      ],
+      "previous": "tec-os/appendix-g-tec-1g.html",
+      "next": "tec-os/appendix-i-web-page.html",
+      "source_h1": "Appendix H. The service file format"
+    },
+    {
+      "path": "tec-os/appendix-i-web-page.md",
+      "html": "tec-os/appendix-i-web-page.html",
+      "source_sha256": "e5f095e8539a2581969edb3559b8119d622c4321e5d9472fd80636edb053b947",
+      "title": "I. The web page | Debug80 Docs",
+      "h1": "Appendix I. The web page",
+      "links": [
+        {
+          "target": "tec-os/28-the-host-model-as-evidence.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/07-commands-at-startup.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/25-startup-inside-the-ccp.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/26-build-the-rom-and-media.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/11-use-the-boards-devices.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/18-cache-and-persistence.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "sh",
+          "text": "npm run web\npython3 -m http.server 8765 --directory web/dist\n",
+          "rendered_text": "npm run web\npython3 -m http.server 8765 --directory web/dist"
+        }
+      ],
+      "previous": "tec-os/appendix-h-service-file-format.html",
+      "next": "tec-os/appendix-j-command-reference.html",
+      "source_h1": "Appendix I. The web page"
+    },
+    {
+      "path": "tec-os/appendix-j-command-reference.md",
+      "html": "tec-os/appendix-j-command-reference.html",
+      "source_sha256": "ea6037d89eb85834dab5cd9d5441f235f39ba5f38fdbe1ac2a76c969d471f60b",
+      "title": "J. Command reference | Debug80 Docs",
+      "h1": "Appendix J. Command reference",
+      "links": [
+        {
+          "target": "tec-os/01-first-session.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/03-work-with-files.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/03-work-with-files.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/10-memory-for-programs.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/04-drives-and-user-areas.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/06-choose-a-console.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/04-drives-and-user-areas.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/13-write-a-resident-service.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/12-results-and-command-chains.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [
+        {
+          "language": "text",
+          "text": "< > , ; : [ ] % | ( ) / \\\n",
+          "rendered_text": "< > , ; : [ ] % | ( ) / \\"
+        },
+        {
+          "language": "text",
+          "text": "A>DIR VERYLONGNAME.TXT\nVERYLONGNAME.TXT?\n\nA>TYPE *.CMD\n*.CMD?\n\nA>DIR A: B:\nA:?\n\nA>\n",
+          "rendered_text": "A>DIR VERYLONGNAME.TXT\nVERYLONGNAME.TXT?\n\nA>TYPE *.CMD\n*.CMD?\n\nA>DIR A: B:\nA:?\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>COPY STARTUP.CMD B:.DOC\nCOPIED 0001\n\nA>DIR B:\nSTARTUP.CMD \n1 file, 8172K free\nA>COPY A:STARTUP.CMD STARTUP.CMD\nCOPY?\n\nA>COPY STARTUP.CMD\nCOPY?\n\nA>\n",
+          "rendered_text": "A>COPY STARTUP.CMD B:.DOC\nCOPIED 0001\n\nA>DIR B:\nSTARTUP.CMD \n1 file, 8172K free\nA>COPY A:STARTUP.CMD STARTUP.CMD\nCOPY?\n\nA>COPY STARTUP.CMD\nCOPY?\n\nA>"
+        },
+        {
+          "language": "text",
+          "text": "A>COPY STARTUP.CMD B:\nCOPIED 0001\n\nA>B:\nB>ERA *.*\nALL (Y/N)?n\nB>DIR\nSTARTUP.CMD \n1 file, 8172K free\nB>ERA *.*\nALL (Y/N)?y\nB>DIR\nNO FILE\nB>\n",
+          "rendered_text": "A>COPY STARTUP.CMD B:\nCOPIED 0001\n\nA>B:\nB>ERA *.*\nALL (Y/N)?n\nB>DIR\nSTARTUP.CMD \n1 file, 8172K free\nB>ERA *.*\nALL (Y/N)?y\nB>DIR\nNO FILE\nB>"
+        }
+      ],
+      "previous": "tec-os/appendix-i-web-page.html",
+      "next": null,
+      "source_h1": "Appendix J. Command reference"
+    },
+    {
+      "path": "tec-os/index.md",
+      "html": "tec-os/index.html",
+      "source_sha256": "81cdf91fa07128f76f90873eaadb61ac58e76e43f596fe338f646ee3e3deea0c",
+      "title": "TEC-OS | Debug80 Docs",
+      "h1": "TEC-OS on the TEC-1G",
+      "links": [
+        {
+          "target": "tec-os/appendix-g-tec-1g.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/01-first-session.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/02-make-a-small-program.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-i-web-page.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/28-the-host-model-as-evidence.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/01-first-session.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/02-make-a-small-program.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/03-work-with-files.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/04-drives-and-user-areas.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/05-cards-on-the-pc.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/06-choose-a-console.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/07-commands-at-startup.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/08-call-tec-os.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/09-read-and-write-a-file.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/10-memory-for-programs.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/11-use-the-boards-devices.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/12-results-and-command-chains.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/13-write-a-resident-service.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/14-state-and-memory.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/15-reset-and-boot.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/16-console-paths.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/17-card-blocks-and-volumes.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/18-cache-and-persistence.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/19-a-file-through-the-bdos.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/20-from-prompt-to-program.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/21-chains-across-warm-boot.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/22-the-history-ring.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/23-numbered-service-dispatch.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/24-loading-and-removing-services.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/25-startup-inside-the-ccp.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/26-build-the-rom-and-media.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/27-diagnose-the-machine.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/28-the-host-model-as-evidence.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-a-bdos-functions.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-b-rom-services.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-c-memory-map.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-d-error-messages.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-e-container-format.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-f-tecvol.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-g-tec-1g.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-h-service-file-format.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-i-web-page.html",
+          "fragment": ""
+        },
+        {
+          "target": "tec-os/appendix-j-command-reference.html",
+          "fragment": ""
+        }
+      ],
+      "fences": [],
+      "previous": null,
+      "next": "tec-os/01-first-session.html",
+      "source_h1": "TEC-OS on the TEC-1G"
+    }
+  ],
+  "sidebar": {
+    "groups": [
+      {
+        "title": "Using the machine",
+        "items": [
+          {
+            "html": "tec-os/01-first-session.html",
+            "title": "First session"
+          },
+          {
+            "html": "tec-os/02-make-a-small-program.html",
+            "title": "Make a small program"
+          },
+          {
+            "html": "tec-os/03-work-with-files.html",
+            "title": "Work with files"
+          },
+          {
+            "html": "tec-os/04-drives-and-user-areas.html",
+            "title": "Drives and user areas"
+          },
+          {
+            "html": "tec-os/05-cards-on-the-pc.html",
+            "title": "Cards on the PC"
+          },
+          {
+            "html": "tec-os/06-choose-a-console.html",
+            "title": "Choose a console"
+          },
+          {
+            "html": "tec-os/07-commands-at-startup.html",
+            "title": "Commands at startup"
+          }
+        ]
+      },
+      {
+        "title": "Writing programs",
+        "items": [
+          {
+            "html": "tec-os/08-call-tec-os.html",
+            "title": "Call TEC-OS"
+          },
+          {
+            "html": "tec-os/09-read-and-write-a-file.html",
+            "title": "Read and write a file"
+          },
+          {
+            "html": "tec-os/10-memory-for-programs.html",
+            "title": "Memory for programs"
+          },
+          {
+            "html": "tec-os/11-use-the-boards-devices.html",
+            "title": "Use the board's devices"
+          },
+          {
+            "html": "tec-os/12-results-and-command-chains.html",
+            "title": "Results and command chains"
+          },
+          {
+            "html": "tec-os/13-write-a-resident-service.html",
+            "title": "Write a resident service"
+          }
+        ]
+      },
+      {
+        "title": "Inside TEC-OS",
+        "items": [
+          {
+            "html": "tec-os/14-state-and-memory.html",
+            "title": "State and memory inside TEC-OS"
+          },
+          {
+            "html": "tec-os/15-reset-and-boot.html",
+            "title": "Reset and boot"
+          },
+          {
+            "html": "tec-os/16-console-paths.html",
+            "title": "Console paths"
+          },
+          {
+            "html": "tec-os/17-card-blocks-and-volumes.html",
+            "title": "Card blocks and volumes"
+          },
+          {
+            "html": "tec-os/18-cache-and-persistence.html",
+            "title": "Cache and persistence"
+          },
+          {
+            "html": "tec-os/19-a-file-through-the-bdos.html",
+            "title": "A file through the BDOS"
+          },
+          {
+            "html": "tec-os/20-from-prompt-to-program.html",
+            "title": "From prompt to program"
+          },
+          {
+            "html": "tec-os/21-chains-across-warm-boot.html",
+            "title": "Chains across a warm boot"
+          },
+          {
+            "html": "tec-os/22-the-history-ring.html",
+            "title": "The history ring"
+          },
+          {
+            "html": "tec-os/23-numbered-service-dispatch.html",
+            "title": "Numbered-service dispatch"
+          },
+          {
+            "html": "tec-os/24-loading-and-removing-services.html",
+            "title": "Loading and removing services"
+          },
+          {
+            "html": "tec-os/25-startup-inside-the-ccp.html",
+            "title": "Startup inside the CCP"
+          },
+          {
+            "html": "tec-os/26-build-the-rom-and-media.html",
+            "title": "Build the ROM and media"
+          },
+          {
+            "html": "tec-os/27-diagnose-the-machine.html",
+            "title": "Diagnose the machine"
+          },
+          {
+            "html": "tec-os/28-the-host-model-as-evidence.html",
+            "title": "The host model as evidence"
+          }
+        ]
+      },
+      {
+        "title": "Reference",
+        "items": [
+          {
+            "html": "tec-os/appendix-a-bdos-functions.html",
+            "title": "A. BDOS functions"
+          },
+          {
+            "html": "tec-os/appendix-b-rom-services.html",
+            "title": "B. The ROM table and hardware services"
+          },
+          {
+            "html": "tec-os/appendix-c-memory-map.html",
+            "title": "C. Memory map"
+          },
+          {
+            "html": "tec-os/appendix-d-error-messages.html",
+            "title": "D. Error messages"
+          },
+          {
+            "html": "tec-os/appendix-e-container-format.html",
+            "title": "E. The container format"
+          },
+          {
+            "html": "tec-os/appendix-f-tecvol.html",
+            "title": "F. `tecvol`"
+          },
+          {
+            "html": "tec-os/appendix-g-tec-1g.html",
+            "title": "G. The TEC-1G as TEC-OS uses it"
+          },
+          {
+            "html": "tec-os/appendix-h-service-file-format.html",
+            "title": "H. The service file format"
+          },
+          {
+            "html": "tec-os/appendix-i-web-page.html",
+            "title": "I. The web page"
+          },
+          {
+            "html": "tec-os/appendix-j-command-reference.html",
+            "title": "J. Command reference"
+          }
+        ]
+      }
+    ]
+  },
+  "representation": {
+    "code": "Exact emitted decoded text after the installed highlighter ECMAScript trimEnd on the whole fence. No linewise whitespace normalization. Original source text remains in text and source_sha256.",
+    "code_transform_source": {
+      "path": "node_modules/vitepress/dist/node/chunk-D3CUZ4fa.js",
+      "sha256": "07d45c356e7c850c2454904949f4b0b95c1d4a2d92119cbdaf4d419ae20dde98",
+      "lines": [
+        35347,
+        35418
+      ]
+    },
+    "heading": "Inline code delimiters are Markdown syntax, not visible heading text. source_h1 retains original. Only Appendix F uses inline code in H1. Its browser title resolves frontmatter inline Markdown, so it omits code delimiters; its independently configured sidebar label retains backticks. This single browser-title expectation correction was approved in KD-246 after SITE02 failed under the old reading. No generic stripping or checker algorithm change.",
+    "index_pager": "Unlisted index is absent from sidebar, findIndex returns -1. Installed default next is first chapter, previous absent. No book/config edit made.",
+    "pager_source": {
+      "path": "node_modules/vitepress/dist/client/theme-default/composables/prev-next.js",
+      "sha256": "2288a677ec465c6e3fe584024730c9add222bf7b880e0e2d6c9828ea8a6edd91",
+      "lines": [
+        6,
+        48
+      ]
+    },
+    "pre_result_boundary": "Derived by inert full source reading before any allocated build or real rendering. Synthetic controls are not a real site result."
+  },
+  "public_html": [
+    {
+      "source": "public/tec1g/mon3-user-guide/index.html",
+      "html": "tec1g/mon3-user-guide/index.html",
+      "bytes": 321,
+      "sha256": "70578bc32521c647bb17afab0f1a79959cf6733711ebebf1f2ac16dbd7da616d",
+      "scope": "byte-identical public passthrough, not another rendered reader or global site acceptance"
+    }
+  ]
+}

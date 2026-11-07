@@ -1,0 +1,81 @@
+{
+  "case": "Q04",
+  "status": "PASS",
+  "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+  "observations": {
+    "variants": [
+      {
+        "now": 177.0,
+        "events": [
+          {
+            "kind": "query-not-launched",
+            "query_id": 1,
+            "planned_budget": 0.0,
+            "cleanup_phase": false,
+            "last_success_id": null,
+            "end": 177.0,
+            "outcome": "Failed",
+            "effective_budget": 0.0,
+            "launch_checked_budget": 0.0
+          }
+        ],
+        "first_failure": {
+          "status": "FAILED",
+          "stage": "absolute-deadline",
+          "detail": "no identity query budget",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.700902+00:00"
+        }
+      },
+      {
+        "now": 180.0,
+        "events": [
+          {
+            "kind": "query-not-launched",
+            "query_id": 1,
+            "planned_budget": 0.0,
+            "cleanup_phase": false,
+            "last_success_id": null,
+            "end": 180.0,
+            "outcome": "Failed",
+            "effective_budget": 0.0,
+            "launch_checked_budget": 0.0
+          }
+        ],
+        "first_failure": {
+          "status": "FAILED",
+          "stage": "absolute-deadline",
+          "detail": "no identity query budget",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.700925+00:00"
+        }
+      },
+      {
+        "now": 181.0,
+        "events": [
+          {
+            "kind": "query-not-launched",
+            "query_id": 1,
+            "planned_budget": 0.0,
+            "cleanup_phase": false,
+            "last_success_id": null,
+            "end": 181.0,
+            "outcome": "Failed",
+            "effective_budget": 0.0,
+            "launch_checked_budget": 0.0
+          }
+        ],
+        "first_failure": {
+          "status": "FAILED",
+          "stage": "absolute-deadline",
+          "detail": "no identity query budget",
+          "exit_code": 124,
+          "retry": false,
+          "utc": "2026-11-07T04:11:51.700946+00:00"
+        }
+      }
+    ]
+  }
+}
