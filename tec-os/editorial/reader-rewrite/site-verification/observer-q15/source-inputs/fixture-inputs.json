@@ -1,0 +1,204 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_UNRUN_FINAL_IDENTITIES_AWAITING_INDEPENDENT_CONFIRMATION_AND_ALLOCATION",
+  "scope": "UNQUALIFIED_PUBLIC_RUNNER_FIXTURE_NOT_BOOK_ACCEPTANCE",
+  "authority": "Origo fc90db15163c634f5230e67e769157365dd24da3: implementation source only; no native control allocation.",
+  "book_packet": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/failed-attempt03/packet",
+  "book_seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+  "candidate_packet": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification",
+  "candidate_payloads": {
+    "run_once.py": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+    "build_and_check.py": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc"
+  },
+  "harness_sha256": "9df4ae6ade0d6812205a73ff1a58e37c665a8aaf4bebc92e3fd050c52a4cbc23",
+  "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+  "source_archive_sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28",
+  "source_archive_bytes": 34037760,
+  "runtime": {
+    "git": {
+      "path": "/opt/homebrew/Cellar/git/2.39.1/bin/git",
+      "sha256": "5ec2979b3ed9ea1c9ab866ce7177d34324e08fa452416bdd750c090dd77ff3c0"
+    },
+    "node": {
+      "path": "/opt/homebrew/Cellar/node@24/24.18.0/bin/node",
+      "sha256": "72c18e2eeda260f67a5b2b66e96fa9b5ad82864676ebb54925695d87120cae3f"
+    },
+    "python": {
+      "path": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+      "sha256": "bdea59019a38eb6600cc9e71e984a97fedadc406448431281e7657030f54987e"
+    }
+  },
+  "guard": {
+    "path": "/Users/johnhardy/projects/origo/tools/mem-guard.mjs",
+    "sha256": "45e4edaee20eba1b2d8ec67983ed3acc06be31a64eb059e8bc4ad21257871374"
+  },
+  "fixture_claim_directory": "/Users/johnhardy/.origo/site-verification/public-observer-fixture-claims",
+  "controller_seconds": 60,
+  "postflight_reserved_seconds": 5,
+  "public_runner_cutoff": "Controller entry UTC plus55 seconds, including fixture materialisation; independent controller hard exit124 at entry+60 remains armed through preparation/postflight/receipt I/O. Five seconds for independent postflight are inside the same60, not extra. No whole limit increase beyond180.",
+  "guard_policy": {
+    "build_workers": 2,
+    "cleanup_reserved_seconds": 3,
+    "guard_limit_mb": 850,
+    "guard_wait_seconds": 0,
+    "minify": false,
+    "node_heap_mb": 450,
+    "retry": false,
+    "whole_invocation_max_seconds": 180
+  },
+  "outer_memory_guard": false,
+  "generated_sources": {
+    "node_stub_sha256": "0fbfd135f7f5020cf6c1a04d05f07524a00c6433df319c9fc2a5de381bf7c7fb",
+    "checker_test_double_sha256": "c6e180fd833fb21be4dc537a182e4bd94a7605f6fff6f6032d185bf15ecb99e7",
+    "node_dependency_files": [
+      "vitepress/bin/vitepress.js",
+      "vitepress/package.json",
+      "fixture-case.json"
+    ]
+  },
+  "differing_payloads": {
+    "run_once.py": "Final source-only candidate dcb14a8 including post-ACK receipt integrity and direct-handle final audit; exact hash in candidate_payloads, copied byte-exact. Public CLI unchanged. Independent full-core confirmation remains separate.",
+    "build_and_check.py": "Committed stop checkpoints, UTC deadline context and bounded worker error receipts carried at dcb14a8; exact hash in candidate_payloads, copied byte-exact.",
+    "check_html.py": "Private fixture-only receipt-writer test double. status=passed is labelled fixture_only and has no real HTML/count evidence. Active book checker stays untouched.",
+    "installed-inputs.json": "Exact generated three-file synthetic installed tree, not the real VitePress dependencies.",
+    "dependency-manifests.json": "Fixture-labelled descriptor of synthetic tree; real book package manifests are not amended.",
+    "README.md": "Private fixture-only status, no book result.",
+    "invoke.sh": "Private refusing stub directing callers to the fixture harness, never the book invocation command."
+  },
+  "other_seal_differences": [
+    "status=UNQUALIFIED_FIXTURE_UNRUN",
+    "fixture_scope",
+    "fixture_case",
+    "installed_root",
+    "installed_entries",
+    "installed_identity",
+    "claim_directory",
+    "payload digest entries listed above"
+  ],
+  "unchanged_payloads": {
+    "config.after.ts": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9",
+    "config.before.ts": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e",
+    "config.diff": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489",
+    "controls-result.json": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+    "expectations.json": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+    "packet_inputs.py": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+    "prepare_packet.py": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8",
+    "source-inputs.json": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8",
+    "test_checker.py": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e"
+  },
+  "unchanged_reading": "Full a3e4c29 Git export and reviewed before/after config source map are unchanged. Private fixture carries exact39 expectations and48 checker-control report only as reference inputs. Stub checker never validates them. Runner still performs real source/config/dependency/runtime/payload postflight. No accepted reader/checker/control file is edited.",
+  "cases": {
+    "Q15": {
+      "input": "Actual pinned Node stub verifies actual ACK/declaration/context, writes original ownership and own OS pid/ppid, then exits normally. No VitePress library or HTML render.",
+      "required": "Actual public runner exit0 and terminal PASS, fixture receipt, complete input postflight and fresh runner-owned audit with status exactly CLEAR and remaining exactly[]. HELD, UNKNOWN_HELD, absent or other status must fail even if a candidate incorrectly emits PASS. Separately require a successful real0.5-second postflight identity snapshot resolving retained direct-root/ACK-group/stub scope.",
+      "claim": "Expected fixture outcome only, never book PASS."
+    },
+    "Q16": {
+      "input": "Same stub after actual ACK atomically changes only its private job-ownership.json nonce, records the injection and blocks. No ps hooks, fake query rows, injected production flags or automatic query retries.",
+      "required": "Specific post-ACK receipt-integrity family from core535ecba: stage identity-observation, structured detail exactly message=job ownership receipt hash mismatch, expected_sha256=actual ACK original receipt hash and observed_sha256=actual nonce-tampered receipt hash (different). Retain exact Q16 fixture injection and prove JSON differs only at the intended nonce. Public runner/terminal/first failure all124; no later checker. Runner UNKNOWN_HELD stays distinct from independently resolved actual retained scope.",
+      "claim": "Failure-path fixture outcome only. UNKNOWN_HELD cannot be relabelled runner clear from a later empty query."
+    }
+  },
+  "independent_audit": {
+    "query_argv": [
+      "/bin/ps",
+      "-axo",
+      "pid=,ppid=,pgid=,lstart="
+    ],
+    "query_timeout_seconds": 0.5,
+    "retry": false,
+    "environment": {
+      "TZ": "UTC",
+      "LC_ALL": "C",
+      "LANG": "C"
+    },
+    "scope": "Actual retained runner Popen handle; actual fixture-started original worker declaration/ACK group/stub identifiers; candidate final-audit registry history/roots/observed/groups; early and final real snapshot ancestry closure. Numeric reuse conservatively remains unresolved, never signalling authority.",
+    "retention": "Every direct runner/query Popen handle retained through result disposition. Query records include exact argv/budget/start/end/outcome/stdout/stderr or partial timeout data, reap status and exit status. Original public receipts, fixture-started/injection, initial/final real snapshots and independent-owned-scope-audit remain under NEW work. No arbitrary numeric PID/group kill.",
+    "unavailable": "A timed-out query is killed via its own Popen handle; wait/reap uses only the original query budget still remaining, otherwise records PENDING_UNKNOWN_HELD. A pending or unavailable observation prevents success, never triggers a query retry. Separate historical descendant absence is not established."
+  },
+  "planned_commands": {
+    "Q15": [
+      "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+      "-S",
+      "-B",
+      "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/public_observer_fixture.py",
+      "--case",
+      "Q15",
+      "--binding",
+      "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/fixture-inputs.json",
+      "--binding-sha256",
+      "<REVIEWED_BINDING_SHA256>",
+      "--work",
+      "/private/tmp/tec-os-public-observer-q15-UNALLOCATED",
+      "--result",
+      "/private/tmp/tec-os-public-observer-q15-UNALLOCATED-result.json",
+      "--allocation",
+      "<SEPARATE_Q15_ALLOCATION_REQUIRED>"
+    ],
+    "Q16": [
+      "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+      "-S",
+      "-B",
+      "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/public_observer_fixture.py",
+      "--case",
+      "Q16",
+      "--binding",
+      "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/fixture-inputs.json",
+      "--binding-sha256",
+      "<REVIEWED_BINDING_SHA256>",
+      "--work",
+      "/private/tmp/tec-os-public-observer-q16-UNALLOCATED",
+      "--result",
+      "/private/tmp/tec-os-public-observer-q16-UNALLOCATED-result.json",
+      "--allocation",
+      "<SEPARATE_Q16_ALLOCATION_REQUIRED>"
+    ]
+  },
+  "remaining_before_execution": [
+    "Obtain independent full-core confirmation for exact dcb14a8 runner and current worker; identity binding is not acceptance.",
+    "Obtain bounded fixture confirmation covering current copy-byte integrity, PF-01 bounded TERM/wait/reap, exact Q16 hash-mismatch/injection and final binding identities.",
+    "Obtain separate explicit bounded Q15/Q16 native-control allocation naming the exact external binding digest and fresh work/result paths. No allocation exists.",
+    "Do not infer book-run allocation, reseal the active book packet or rerun its48 unchanged checker controls."
+  ],
+  "performed": {
+    "candidate_imports": false,
+    "fixtures_prepared": false,
+    "commands_run": false,
+    "probes": false,
+    "signals": false,
+    "product_build_or_render": false,
+    "book_packet_modified": false
+  },
+  "binding_contract": "The allocation must name the exact external fixture-inputs.json SHA-256 passed as required --binding-sha256. The CLI verifies raw bytes before JSON parsing, payload adaptation or any child launch. It rejects placeholder candidate hashes and allocation labels before materialisation; missing or altered raw binding identity fails before JSON parsing. This binding cannot contain its own digest; the reviewed digest belongs in the allocation command.",
+  "controller_hard_cutoff_limit": "Forced controller exit leaves incomplete evidence and cannot count as expected fixture outcome. The public runner owns inner guard/group cleanup at its earlier hard cutoff; no universal cleanup or hard-loss guarantee is inferred from the controller timer.",
+  "candidate_source_commit": "dcb14a834d9cc043bcb8af16b4b62b3bc4a4a7a4",
+  "copy_identity_contract": "Read baseline seal bytes once, verify the externally bound seal hash before JSON parsing. For every baseline payload and candidate runner/worker, read source bytes once, authenticate against original seal or candidate binding, write exactly those approved bytes, then immediately authenticate the copy. All baseline copies complete before intentional fixture overrides. Before emitting a fixture seal, compare the entire final payload digest map with the approved baseline/candidate map plus only the explicit generated overrides; never adopt arbitrary changed copied bytes.",
+  "exception_cleanup_contract": "PF-01: after a controller exception, TERM only the still-live retained runner Popen handle, recording any termination error. Wait/reap that same handle using max(0, original controller time remaining minus0.5 receipt reserve). Record wait budget, timeout/reap error and returncode. Unreaped scope remains FAILED_OR_UNKNOWN_HELD; never signal arbitrary numeric PIDs/groups, reset a deadline or claim independent scope resolution.",
+  "review_dispositions": {
+    "PF-01": {
+      "status": "implemented_source_only_awaiting_bounded_confirmation",
+      "reason": "Exception path now retains the runner handle through a bounded wait/reap and records pending/termination/reap errors within the original60 seconds.",
+      "source_commit": "3e3c362"
+    },
+    "Q16_final_predicate": {
+      "status": "implemented_and_bound_to_final_dcb14a8_awaiting_independent_confirmation",
+      "source_commit": "535ecba1d4042ced7a771b0ffeed8fffd1832c81",
+      "reason": "Core rejects altered ownership bytes before nonce interpretation. Fixture requires its exact typed hash-mismatch message and expected/observed raw hashes, accepted registry/ACK hash and exact nonce-only injection. It cannot accept an unrelated error, query timeout or absolute deadline.",
+      "final_candidate_commit": "dcb14a834d9cc043bcb8af16b4b62b3bc4a4a7a4"
+    },
+    "Q15_oracle_precision": {
+      "status": "implemented_source_only_awaiting_bounded_confirmation",
+      "reason": "Require audit status exactly CLEAR and remaining exactly[]. Do not depend on candidate finalizer logic to reject a hypothetical false PASS with HELD."
+    },
+    "outer_candidate_isolation": {
+      "status": "implemented_source_only_awaiting_bounded_confirmation",
+      "reason": "Outer candidate public run_once.py invocation matches invoke.sh Python -I -S -B and ignores inherited PYTHONPATH. Inner worker flags remain unchanged at -S -B; core pins unchanged."
+    }
+  },
+  "source_readback": "Final dcb14a8 audit returns CLEAR/HELD/UNKNOWN_HELD with direct_handles and registry. Fixture reads its retained registry; Q16 still requires UNKNOWN_HELD and the exact accepted receipt hash mismatch before parsing changed ownership fields. No core runtime was imported, syntax checked or run during binding refresh.",
+  "outer_candidate_python_flags": [
+    "-I",
+    "-S",
+    "-B"
+  ]
+}
