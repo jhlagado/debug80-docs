@@ -366,5 +366,14 @@
     "controls": "16 planned controls, no execution or qualification",
     "deliverable": "Actual complete39-page closure after separately approved source/control/seal/input review and fresh allocation",
     "new_actual_allocation": false
+  },
+  "site_verification_observer_repair_implementation": {
+    "status": "SOURCE_REVIEWED_UNEXECUTED_ALLOCATION_REQUIRED",
+    "authority": "Origo fc90db15",
+    "offer": "site-verification/observer-repair-source-offer.json",
+    "commands": "site-verification/observer-control-allocation-request.json",
+    "controls": "Q01-Q14source-onlystatecontrols;Q15/Q16publicfixturesseparate;noneexecuted",
+    "book_closure": "Actual39-pagecompletechecker/input/process result remains pending",
+    "actual_allocation": false
   }
 }
