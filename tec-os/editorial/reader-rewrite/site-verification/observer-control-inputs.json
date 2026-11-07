@@ -410,7 +410,8 @@
         "InvocationState.request_stop",
         "InvocationState.register_child",
         "InvocationState.stop_new_child",
-        "InvocationState.decision"
+        "InvocationState.decision",
+        "Actual query launch blocked-spawn / concurrent request_stop interleave"
       ],
       "Q07": [
         "validate_ownership",
@@ -440,7 +441,8 @@
         "InvocationState.import_failure",
         "InvocationState.decision",
         "InvocationState.commit_decision",
-        "prepare_receipt"
+        "prepare_receipt",
+        "Parent-first later worker import / conflict ledger"
       ],
       "Q12": [
         "InvocationState.final_audit_disposition",
@@ -452,7 +454,8 @@
         "build_and_check.worker_identity_budget",
         "build_and_check.main with isolated fake module dependencies",
         "InvocationState.request_stop",
-        "InvocationState.decision"
+        "InvocationState.decision",
+        "Actual acknowledged CLEAR0 baseline before publication-gap stop"
       ],
       "Q14": [
         "hard_stop"
@@ -582,7 +585,8 @@
     "soft stop and escalation while actual state lock is held at177 and179.8; fake grace0.4/0.2",
     "query failure completion logging blocked behind bounded control gate",
     "query failure completion logging raises OSError after latch and signal wake",
-    "returned child arrives after one-shot cleanup; actual stop_new_child repeats TERM/KILL"
+    "returned child arrives after one-shot cleanup; actual stop_new_child repeats TERM/KILL",
+    "Actual InvocationState.query launch blocks inside fake spawn while another thread invokes actual request_stop. Retained cause, signal wake and escalation must precede spawn release; returned fake handle is registered and stopped by actual methods. All waits/joins2s and whole-case wall cap unchanged."
   ],
   "Q14_variants": [
     "normal direct signals",
@@ -590,5 +594,58 @@
     "group snapshot iteration raises; enclosing finally still exits124",
     "children snapshot copy raises; enclosing finally still exits124"
   ],
-  "Q14_scope": "Actual top-level hard_stop with injected killpg/kill/exit. No normal helper/Popen poll is allowed. Independent full-main hard timer/native scheduler coverage belongs to separately allocated public fixtures."
+  "Q14_scope": "Actual top-level hard_stop with injected killpg/kill/exit. No normal helper/Popen poll is allowed. Independent full-main hard timer/native scheduler coverage belongs to separately allocated public fixtures.",
+  "source_review_corrections": {
+    "review_path": "tec-os/editorial/reader-rewrite/site-verification/observer-control-source-review.json",
+    "review_sha256": "5e4356bc78eec6aa4c271d433583ef20c386f6d033659d9f562b1a7fa5d6f5e2",
+    "status": "Accepted source changes implemented; independent bounded confirmation pending; no execution.",
+    "dispositions": [
+      {
+        "id": "OC01",
+        "implementation": "Q13 publication-mode parent and standalone unpublished-latch parent now use actual acknowledge and decision(CLEAR/remaining[],quiet=True)==0 before request_stop. Zero-budget/timeout/ACK-wait modes do not add parent ACK. Original identity-observation stage/detail/124 are asserted before and after failed acceptance.",
+        "evidence_fields": [
+          "parent_clear_baseline",
+          "unpublished_parent_clear_baseline",
+          "parent_first_failure"
+        ]
+      },
+      {
+        "id": "OC02",
+        "implementation": "Q06 invokes actual query with launch(spawn) blocked on a bounded gate. A separate actual request_stop must retain pending original cause and wake signalling before gate release. Timed actual failure-lock acquisition exposes a spawn-held failure lock. Actual signal_escalation runs before spawn return; actual register_child and stop_new_child follow return. Gates are released and both threads joined in finally.",
+        "evidence_fields": [
+          "pending_before_release",
+          "budgets",
+          "events",
+          "signals_before_return",
+          "returned_handle_signals",
+          "cleanup_results",
+          "snapshot"
+        ]
+      },
+      {
+        "id": "OC03",
+        "implementation": "Q11 retains worker-first/generic-guard ordering and adds structured parent-first/different later valid worker-receipt import. Entire original cause remains equal, including UTC/code/detail, and one conflict ledger entry must contain both original parent and later worker receipt.",
+        "evidence_fields": [
+          "imported_failure",
+          "parent_first_failure",
+          "later_worker_receipt",
+          "failure_conflicts"
+        ]
+      }
+    ]
+  },
+  "Q13_acknowledged_parent_baseline": {
+    "modes": [
+      "delayed-publication",
+      "failed-publication",
+      "standalone-unpublished-latch"
+    ],
+    "before_stop": "Actual acknowledge(parent), then actual decision(CLEAR with remaining[], observer_quiet=True) must return0. This is an accepted synthetic ownership-state baseline only, not site acceptance.",
+    "after_stop": "Require original identity-observation cause/detail/code124 and failed decision, not missing-ACK rejection.",
+    "excluded_mode": "zero-budget at fake clock177 must not ACK; other non-publication worker modes also retain their prior setup."
+  },
+  "Q11_failure_import_orders": {
+    "worker_first": "Actual import_failure(worker receipt), then request_stop(generic guard1): original worker receipt unchanged.",
+    "parent_first": "Actual request_stop(structured parent observation124), then import_failure(different valid worker receipt7): complete parent cause unchanged and failure-receipt-conflict retains both."
+  }
 }
