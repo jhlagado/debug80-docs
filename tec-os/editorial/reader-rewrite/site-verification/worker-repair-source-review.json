@@ -1,0 +1,24 @@
+{
+  "status": "BOUNDED_WORKER_SOURCE_REVIEW_CLEAR_NO_EXECUTION",
+  "authority": "Origo fc90db15:studies/p3-tec-os/reviews/book-observer-repair-adoption.md",
+  "worker_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+  "findings": [
+    {
+      "id": "W01",
+      "finding": "Stop codes above255 can become actualexit0; overflowconversion canraise",
+      "disposition": "Accepted: restrict1..255, invalid/overflow=>1."
+    },
+    {
+      "id": "W02",
+      "finding": "Failedidentityqueries lackedbudget/elapsed evidence",
+      "disposition": "Accepted: first-failure structured detail retains message,errorclass,budget,elapsed in the samewrite."
+    }
+  ],
+  "confirmed": [
+    "UTC/C observation andsoft-cappedquery/ACKwaits fitadoption",
+    "Visiblemarker/firstfailurecheckpoints refusefuturephase; publicationgapexplicit",
+    "Structuredfirstfailure detail supportedbyunchangedpackethelper"
+  ],
+  "pending_full_integration": "Parent must supply/hashbind absolute_deadline_utc and preserveworker-firstfailure record. No runtime qualification inferred.",
+  "execution": false
+}
