@@ -384,5 +384,13 @@
     "terminal_exit_code": 0,
     "Q15": "Source eligible for separate allocation consideration, not executed",
     "site_acceptance": false
+  },
+  "site_verification_observer_q15_result": {
+    "status": "ACTUAL_EXPECTED_FIXTURE_OUTCOME_INDEPENDENTLY_REVIEWED",
+    "allocation": "KS47-OBSERVER-Q15-20261107",
+    "result": "site-verification/observer-q15-result.json",
+    "resource_verdict": "Specific retained Q15 scope resolved. Independent review recommends release of this invocation hold only; P3 records disposition.",
+    "Q16": "Source eligible for separate allocation consideration, not executed",
+    "site_acceptance": false
   }
 }

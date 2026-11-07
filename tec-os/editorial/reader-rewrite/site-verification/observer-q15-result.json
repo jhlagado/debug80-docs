@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "ACTUAL_EXPECTED_FIXTURE_OUTCOME_INDEPENDENTLY_REVIEWED",
+  "allocation": "KS47-OBSERVER-Q15-20261107",
+  "authority": "Origo 1fa6875b",
+  "external_session": 28815,
+  "actual_controller_exit": 0,
+  "actual_runner_exit": 0,
+  "runner_terminal": "PASS",
+  "runner_audit": "CLEAR",
+  "independent_scope": "RESOLVED_RETAINED_SCOPE",
+  "controller_elapsed_seconds": 1.893847083,
+  "controller_bound_seconds": 60,
+  "guard_cost": {
+    "name": "tec-os-reader-site",
+    "command": "python3.9 -S -B build_and_check.py --context context.json",
+    "limitMB": 850,
+    "heapMB": 450,
+    "event": "end",
+    "at": "2026-11-07T04:37:39.284Z",
+    "outcome": "exit 0",
+    "code": 0,
+    "peakMB": 10,
+    "processes": 1,
+    "seconds": 0.3,
+    "freePercentAtEnd": 38
+  },
+  "retention": {
+    "archive": "complete-evidence-and-inputs.tar.gz",
+    "bytes": 36743463,
+    "sha256": "101318151468b12fcaa88fa89225b480ca95a9cf65ff81dfa3ab0b357879ae67",
+    "raw_files_verified": 953,
+    "originals_unchanged": true
+  },
+  "evidence": "observer-q15/retention.json",
+  "scope": "UNQUALIFIED_PUBLIC_RUNNER_FIXTURE_NOT_BOOK_ACCEPTANCE",
+  "limits": "Known direct-root/ACK-group/stub scope, candidate observed history and snapshots only. No universal historical descendant closure or real HTML evidence.",
+  "source_postflight": "All27 frozen source/input files equal current files, protected14 prior payloads unchanged. No consumed source rewritten.",
+  "Q16": {
+    "source_eligibility": "Eligible for separate allocation consideration under unchanged original offer. No automatic successor or launch authority.",
+    "binding_sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+    "same_original_offer": true,
+    "work_and_result_and_outer_paths_absent": true,
+    "executed": false,
+    "allocation_granted_here": false
+  },
+  "site_acceptance": false,
+  "retry": false,
+  "resource_verdict": "Specific retained Q15 scope resolved. Independent review recommends release of this invocation hold only; P3 records disposition.",
+  "independent_reviews": {
+    "observer-q15-result-review.json": "f3c3798435e7bd593641b3bcf1f1dfc05247c9b9427b77cc39a888fdab09588e",
+    "observer-q15-retention-review.json": "a32ed1f11761b5afc4325eaa0bc288d1194a317ee5c15815dbcdc8cc185073c8"
+  }
+}
