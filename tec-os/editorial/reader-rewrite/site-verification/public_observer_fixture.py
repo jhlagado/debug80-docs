@@ -300,6 +300,8 @@ def independent_audit(output, child, first_snapshot, final_snapshot):
     groups = {child.pid, original['pgid']}
     registry = read_json(output / 'owned-process-audit.json')['registry']
     require(isinstance(registry['history'], list), 'candidate ownership history absent')
+    require(registry['accepted_ownership_sha256'] == started['original_ownership_sha256'],
+            'candidate registry does not bind the original ACK receipt')
     for item in registry['history']:
         if item['kind'] in ('direct-child', 'direct-birth', 'ack-group', 'exit-or-reuse'):
             known_pids.add(int(item['pid']))
@@ -426,14 +428,29 @@ def main():
         else:
             failure = read_json(output / 'first-failure.json')
             injection = read_json(output / 'fixture-injection.json')
-            require(injection['after_ack'] and injection['changed_field'] == 'nonce', 'Q16 injection absent')
+            started = read_json(output / 'fixture-started.json')
+            original = started['original_ownership']
+            tampered_bytes = (output / 'job-ownership.json').read_bytes()
+            tampered = json.loads(tampered_bytes)
+            expected_tamper = {**original, 'nonce': original['nonce'] + '-fixture-corruption'}
+            require(injection == {'scope': SCOPE, 'case': 'Q16', 'changed_field': 'nonce',
+                                  'old': original['nonce'], 'new': expected_tamper['nonce'],
+                                  'after_ack': True,
+                                  'original_ownership_sha256': started['original_ownership_sha256']}
+                    and started['case'] == 'Q16' and tampered == expected_tamper,
+                    'Q16 must retain the exact nonce-only injection after its actual ACK')
             require(runner.returncode == terminal['exit_code'] == failure['exit_code'] == 124,
                     'Q16 must preserve actual first observer failure 124')
-            detail = json.dumps(failure['detail'], sort_keys=True)
+            # The corrected observer rejects changed receipt bytes before
+            # interpreting nonce/PID/group fields. Bind that exact typed cause
+            # and both real receipt hashes, not an arbitrary error substring.
+            expected_detail = {'message': 'job ownership receipt hash mismatch',
+                               'expected_sha256': started['original_ownership_sha256'],
+                               'observed_sha256': sha(tampered_bytes)}
             require(terminal['status'] == 'FAILED' and failure['stage'] == 'identity-observation'
-                    and 'nonce_mismatch' in detail and not any(
-                        text in detail for text in ('TimeoutExpired', 'absolute-deadline')),
-                    'Q16 must fail for the real nonce observation, not another timeout')
+                    and failure['detail'] == expected_detail
+                    and expected_detail['expected_sha256'] != expected_detail['observed_sha256'],
+                    'Q16 needs the specific post-ACK receipt-integrity failure, not a query/deadline error')
             require(owned.get('status') == 'UNKNOWN_HELD',
                     'Q16 corrupted declaration requires UNKNOWN_HELD runner audit')
             require(not (output / 'checker.json').exists(), 'Q16 later fixture validation ran')

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "SOURCE_ONLY_UNRUN_PENDING_FINAL_CORE_TAMPER_CONTRACT_AND_REVIEW",
+  "status": "SOURCE_ONLY_UNRUN_PENDING_FINAL_CORE_LIVE_HANDLE_FIX_AND_REVIEW",
   "scope": "UNQUALIFIED_PUBLIC_RUNNER_FIXTURE_NOT_BOOK_ACCEPTANCE",
   "authority": "Origo fc90db15163c634f5230e67e769157365dd24da3: implementation source only; no native control allocation.",
   "book_packet": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/failed-attempt03/packet",
@@ -10,7 +10,7 @@
     "run_once.py": null,
     "build_and_check.py": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc"
   },
-  "harness_sha256": "df73a97839a402c8b172c54eb7994d17dc3f2f1f0ca0e16abe7c65a472b42e73",
+  "harness_sha256": "2a0e3a4e59c4097244043d5f3d75a6363dfe9b78eac7b5d0ce79aea803380c5b",
   "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
   "source_archive_sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28",
   "source_archive_bytes": 34037760,
@@ -95,7 +95,7 @@
     },
     "Q16": {
       "input": "Same stub after actual ACK atomically changes only its private job-ownership.json nonce, records the injection and blocks. No ps hooks, fake query rows, injected production flags or automatic query retries.",
-      "required": "Actual first failure stage identity-observation and normalized detail containing nonce_mismatch, excluding timeout/deadline origin. Public runner/terminal/first failure all124; no later checker. Corrupted declaration produces UNKNOWN_HELD runner audit, never clear. Independent actual postflight must resolve the retained fixture universe.",
+      "required": "Specific post-ACK receipt-integrity family from core535ecba: stage identity-observation, structured detail exactly message=job ownership receipt hash mismatch, expected_sha256=actual ACK original receipt hash and observed_sha256=actual nonce-tampered receipt hash (different). Retain exact Q16 fixture injection and prove JSON differs only at the intended nonce. Public runner/terminal/first failure all124; no later checker. Runner UNKNOWN_HELD stays distinct from independently resolved actual retained scope.",
       "claim": "Failure-path fixture outcome only. UNKNOWN_HELD cannot be relabelled runner clear from a later empty query."
     }
   },
@@ -155,7 +155,7 @@
     ]
   },
   "remaining_before_execution": [
-    "Await final corrected core source and literal post-ACK receipt-integrity error contract. Bind the specific Q16 tamper family/injection and exact final runner/worker hashes; current null runner pin deliberately refuses execution.",
+    "Await confirmation of final OBS03 live-handle correction; then bind exact final runner/worker hashes and request bounded fixture confirmation. Runner pin stays null until that final source is available.",
     "Review this exact fixture source/binding, public commands, timing and owned-scope limits.",
     "Obtain separate explicit bounded Q15/Q16 native-control allocation. No allocation exists.",
     "Do not infer book-run allocation, reseal the active book packet or rerun its48 unchanged checker controls."
@@ -180,8 +180,9 @@
       "reason": "Exception path now retains the runner handle through a bounded wait/reap and records pending/termination/reap errors within the original60 seconds."
     },
     "Q16_final_predicate": {
-      "status": "pending_final_core_source",
-      "reason": "Keep the existing exact nonce_mismatch/identity-observation predicate until the corrected core reports its literal post-ACK receipt-integrity failure. Do not accept arbitrary errors; bind the actual tamper family and private injection evidence, then refresh exact candidate hashes."
+      "status": "implemented_against_535ecba_awaiting_final_core_live_handle_fix_and_pins",
+      "source_commit": "535ecba1d4042ced7a771b0ffeed8fffd1832c81",
+      "reason": "Core rejects altered ownership bytes before nonce interpretation. Fixture requires its exact typed hash-mismatch message and expected/observed raw hashes, accepted registry/ACK hash and exact nonce-only injection. It cannot accept an unrelated error, query timeout or absolute deadline."
     }
   }
 }
