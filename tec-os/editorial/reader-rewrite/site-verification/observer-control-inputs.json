@@ -1,0 +1,218 @@
+{
+  "schema": 1,
+  "status": "SOURCE_PREPARATION_AWAITING_RUNNER_API",
+  "executed": false,
+  "scope": "Q01-Q14 must call actual candidate routines through injected clock/query/record/signal dependencies. Q15/Q16 remain separate future allocated public fixtures. No separate ownership-state model.",
+  "reviewed_contracts": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/controls.json",
+      "bytes": 7093,
+      "sha256": "acaa10694baf4a9ea1d0a7b1c32bda4eab16b9f3eaaf2e1fc08182ab04f3ebce"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/source-contract.py.txt",
+      "bytes": 6220,
+      "sha256": "116d28f50baad9f34394805452ceb7bf89c52e5c9de161b6a2ce8ad675e41ba1"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/source-confirmation.json",
+      "bytes": 8593,
+      "sha256": "f7eb46842614ddd182a2be4624a7eee70594bdbb4255d42d38bbcbdfab97d0c6"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/README.md",
+      "bytes": 10091,
+      "sha256": "fbf50397ffd09a835d5f74fc93190cba43dac62df0d9612ffc96f2bb4cea93df"
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/ownership-audit-proposal/baseline.json",
+      "bytes": 786,
+      "sha256": "cf97f3a7da7f3e2b5c712d36c851c3527ebf2e95184653a443a78d3279d8a696"
+    }
+  ],
+  "preparation_head": "94868a1204d644cf984fc493553dad01ee38a94d",
+  "python": {
+    "path": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+    "sha256": "bdea59019a38eb6600cc9e71e984a97fedadc406448431281e7657030f54987e"
+  },
+  "python_flags": [
+    "-I",
+    "-S",
+    "-B"
+  ],
+  "candidate_api": {
+    "status": "awaiting_supplied_runner_API",
+    "candidate_path": "run_once.py",
+    "candidate_sha256": null,
+    "routines": null
+  },
+  "worker_api": {
+    "status": "supplied_seams_pending_final_byte_binding",
+    "module": "build_and_check.py",
+    "routines": {
+      "phase_stop_code": {
+        "arguments": [
+          "outputPath"
+        ],
+        "returns": "None or positive code; stop-requested before first-failure; malformed/nonpositive maps to 1"
+      },
+      "worker_identity_budget": {
+        "arguments": [
+          "context",
+          "wall_now"
+        ],
+        "returns": "min(2,max(0,UTC absolute_deadline_utc-wall_now-3))"
+      }
+    },
+    "required_verified_helper": "packet_inputs.py",
+    "helper_binding": "Hash-declare and verify complete private helper bytes before importing the worker; no unverified packet helper may execute."
+  },
+  "cases": [
+    {
+      "id": "Q01",
+      "kind": "positive",
+      "input": "Ordinary snapshot returns valid scoped rows after0.6s with10s before soft stop.",
+      "expected": "Exactly one query gets2.0s budget; records0.6s duration and old0.5s overrun; validates birth/parent/group and continues."
+    },
+    {
+      "id": "Q02",
+      "kind": "negative",
+      "input": "Ordinary snapshot exceeds2.0s.",
+      "expected": "Typed identity-observation failure124; no query retry; bound TERM/KILL; first failure persists; invocation cannot PASS."
+    },
+    {
+      "id": "Q03",
+      "kind": "negative",
+      "input": "Only0.2s remains before soft stop and snapshot does not finish. Variant: intent persistence consumes the remaining0.2s before launch. Second variant: stop is latched during intent persistence.",
+      "expected": "Budget0.2s, not2.0s. Independent soft timer signals on schedule even if observation/audit is blocked. The intent-delay variant recomputes the exhausted budget and launches no query. Record planned and launch-effective budgets; the stop-during-intent variant launches no ordinary query."
+    },
+    {
+      "id": "Q04",
+      "kind": "negative",
+      "input": "No positive query budget remains.",
+      "expected": "No process query launched; soft stop requested under original deadline."
+    },
+    {
+      "id": "Q05",
+      "kind": "negative",
+      "input": "Cleanup snapshot exceeds0.5s.",
+      "expected": "Cleanup query budget never exceeds0.5s; final audit UNKNOWN_HELD with known registry/last snapshot, not an empty success."
+    },
+    {
+      "id": "Q06",
+      "kind": "negative",
+      "input": "Observation, audit lock and receipt persistence are held past soft stop. Variant: query failure completion logging blocks or raises immediately after timeout.",
+      "expected": "Separate signalling escalates at soft stop and0.4s grace; hard timer at original deadline does not wait for those locks/I/O. No complete receipts means no PASS. Query failure is latched and signalling wakes before any completion-log I/O."
+    },
+    {
+      "id": "Q07",
+      "kind": "negative",
+      "input": "Worker nonce/context/birth/parent/group fails an existing ACK check. Variant: stop becomes latched during durable ACK binding.",
+      "expected": "No ACK or heavy phase; actual specific outcome stays UNKNOWN_HELD until separately resolved. Group authority is installed in memory before the durable write; ACK requires serialized stop recheck."
+    },
+    {
+      "id": "Q08",
+      "kind": "positive",
+      "input": "Guard exits; acknowledged worker group retains live member.",
+      "expected": "Group authority survives guard removal; bound cleanup reaches remaining group; final successful empty scoped audit and unchanged inputs required. This is a positive ownership-state outcome, not site acceptance after a premature guard exit."
+    },
+    {
+      "id": "Q09",
+      "kind": "negative",
+      "input": "An old registered PID reappears with a different birth.",
+      "expected": "History retained; no authority transferred to reused PID; mismatched identity is never signalled as the old process."
+    },
+    {
+      "id": "Q10",
+      "kind": "positive",
+      "input": "A descendant is discovered with matching birth, then leaves group/reparents.",
+      "expected": "Retained observed identity stays in closure/history after live-root pruning. Does not claim discovery of unseen transient descendants."
+    },
+    {
+      "id": "Q11",
+      "kind": "negative",
+      "input": "Observer failure124 precedes guard exit1 and another cleanup error. Variant: observer failure arrives while main is preparing final PASS.",
+      "expected": "One first-failure code/stage wins; one main terminal receipt124; no observer finalize/os._exit outside hard path. Observer must quiesce; final decision serializes with the latch so no failure can escape or produce PASS."
+    },
+    {
+      "id": "Q12",
+      "kind": "negative",
+      "input": "Final audit is nonempty, times out or is absent (three variants).",
+      "expected": "Every variant prevents PASS even if build/checker fixtures succeeded. Missing audit is not an empty table."
+    },
+    {
+      "id": "Q13",
+      "kind": "negative",
+      "input": "Stop marker/first-failure record is visible before a worker phase checkpoint. Variants: visible marker, delayed publication, failed publication and checkpoint/publication race.",
+      "expected": "Next phase is refused. A blocked cross-process publication must not be described as instantaneous preemption; any first failure disqualifies the invocation. After visibility refuse phase. Before visibility phase may start; every latched-failure case still fails acceptance and bound cleanup proceeds."
+    },
+    {
+      "id": "Q14",
+      "kind": "negative",
+      "input": "Main cannot complete terminal/fsync before original hard deadline. Variants: one direct signal raises, snapshot iteration raises, normal cleanup helper would block.",
+      "expected": "Hard path sends bound KILL and exits124 without waiting for finalisation. An incomplete failure is retained, never PASS. Preserve baseline hard path with per-target isolation and enclosing finally exit124; never poll handles or call the normal helper."
+    },
+    {
+      "id": "Q15",
+      "kind": "integration-positive",
+      "input": "Separately allocated short public-runner fixture child follows the real ACK/group path and exits normally.",
+      "expected": "Actual command0, complete synthetic terminal/audit, no children left under qualified scope; no real book result inferred."
+    },
+    {
+      "id": "Q16",
+      "kind": "integration-negative",
+      "input": "Separately allocated short public-runner fixture child blocks after ACK; inject one observer failure.",
+      "expected": "Actual nonzero exit, preserved first failure, bound escalation and independently reviewed actual owned-process outcome; no native probe/build during proposal."
+    }
+  ],
+  "fake_input_conventions": {
+    "process_ids": "Synthetic identifiers only; every Q01-Q14 query, signal, process handle and clock operation must be injected; never probe or signal these numeric identifiers.",
+    "ordinary_query_cap_seconds": 2.0,
+    "cleanup_query_cap_seconds": 0.5,
+    "soft_reserve_seconds": 3.0,
+    "term_grace_seconds": 0.4,
+    "absolute_deadline_preserved": true,
+    "query_retry_count": 0,
+    "Q01_elapsed_seconds": 0.6,
+    "Q01_time_before_soft_seconds": 10.0,
+    "Q03_time_before_soft_seconds": 0.2,
+    "prior_query_limit_seconds": 0.5
+  },
+  "future_cli": {
+    "status": "Not ready to invoke: exact runner API, candidate byte bindings, driver source review and separate allocation are pending.",
+    "argv_shape": [
+      "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+      "-I",
+      "-S",
+      "-B",
+      "test_observer.py",
+      "--case",
+      "Qxx",
+      "--result",
+      "NEW",
+      "--work",
+      "NEW"
+    ],
+    "suite_shape": [
+      "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+      "-I",
+      "-S",
+      "-B",
+      "test_observer.py",
+      "--suite",
+      "Q01-Q14",
+      "--result",
+      "NEW",
+      "--work",
+      "NEW"
+    ],
+    "public_fixture_policy": "Q15/Q16 must additionally require an allocation argument and an exact separately sealed public command. No public command is invented before its API is supplied."
+  },
+  "limits": [
+    "No candidate import/execution, process query, signal, probe, control, native build, VitePress render or validator is performed in preparation.",
+    "Routines coverage and failure-predicate assertions are pending actual runner APIs, not inferred from pseudocode.",
+    "All existing 48 checker artifacts, active checker, manifest, source inputs and seals remain untouched.",
+    "Fake-positive outcomes cannot establish real host timing sufficiency, universal descendant discovery, universal cleanup or actual book acceptance.",
+    "Q13 publication before visibility may permit a phase; after visibility the next checkpoint must refuse. No instantaneous cross-process preemption is claimed."
+  ]
+}
