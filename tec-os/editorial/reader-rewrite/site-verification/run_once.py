@@ -221,13 +221,12 @@ class InvocationState:
             query_id = self.query_id
         intent = {'query_id': query_id, 'planned_budget': planned,
                   'cleanup_phase': cleanup_phase, 'last_success_id': self.last_success_id}
+        launch_data = {}
         try:
             if planned <= 0:
                 self.request_stop('absolute-deadline', 'no identity query budget', 124)
-                record('query-not-launched', **intent, effective_budget=0.0)
                 raise Failed('no identity query budget', 124)
             record('query-intent', **intent)
-            launch_data = {}
 
             def launch(spawn):
                 # No record/receipt I/O under the stop/launch lock. The adapter
@@ -239,6 +238,8 @@ class InvocationState:
                     start = self.clock()
                     budget = query_budget(start, self.soft_deadline,
                                           self.deadline, cleanup_phase)
+                    if budget <= 0:
+                        self.request_stop('absolute-deadline', 'query intent consumed remaining budget', 124)
                     if budget <= 0 or (self.stopping.is_set() and not cleanup_phase):
                         raise Failed('identity query stopped before launch', 124)
                     launch_data.update(start=start, effective_budget=budget)
@@ -258,12 +259,12 @@ class InvocationState:
             self.request_stop('identity-observation', {
                 'message': str(error), 'query_error': type(error).__name__,
                 'query_id': query_id, 'finished': finished,
-                'elapsed_seconds': finished - locals().get('launch_data', {}).get('start', finished),
-                **locals().get('launch_data', {})}, 124)
+                'elapsed_seconds': finished - launch_data.get('start', finished),
+                **launch_data}, 124)
             # Failure is latched and signalling awake before completion-log I/O.
-            record('query-failed' if locals().get('launch_data') else 'query-not-launched',
+            record('query-failed' if launch_data else 'query-not-launched',
                    **intent, end=finished, outcome=type(error).__name__,
-                   **locals().get('launch_data', {}))
+                   **{'effective_budget': 0.0, **launch_data})
             raise Failed('identity observation unavailable', 124) from error
 
     def register_child(self, child, argv):
@@ -713,7 +714,8 @@ def main():
         import_worker_failure()
         flush_failure()
         event('command-start', argv=argv)
-        with terminal_lock:
+        with terminal_lock, state.failure_lock:
+            state._adopt_pending()
             if stopping.is_set() or time.monotonic() >= deadline - 3:
                 raise Failed('failure latch prevents another command launch', 124)
             child = subprocess.Popen(argv, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
@@ -746,10 +748,11 @@ def main():
             roots.pop(child.pid, None)
             children.pop(child.pid, None)
         import_worker_failure()
-        event('command-end', code=code)
         if code:
             code = code if code > 0 else 128 - code
             fail(stage[0], 'command exited ' + str(code), code)
+        event('command-end', code=code)
+        if code:
             raise Failed('command exited ' + str(code), code)
 
     code = 1
