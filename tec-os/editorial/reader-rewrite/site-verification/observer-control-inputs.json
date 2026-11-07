@@ -428,5 +428,23 @@
       "original identity-observation stage/detail/124 must survive subsequent generic guard exit1"
     ],
     "thread_limits": "One daemon thread, 0.25s event wait and 0.25s join, additionally bounded by per-case and suite real-wall alarms. Only used in a future allocated control."
+  },
+  "private_import_contract": {
+    "binding_pin": "--inputs-sha256 must be exactly 64 lowercase hexadecimal characters and match the complete inputs bytes before candidate/helper imports.",
+    "all_sha_fields": "Python, driver, control spec and all three declared module SHA-256 values must each be exact64 lowercase hex; null, pending, empty or placeholder values fail closed. No candidate_api pending field substitutes for the external binding.",
+    "copy_then_execute": "Read each source once, hash bytes against binding, write to a fresh private path exclusively, fsync, re-read/hash that private copy, retain those exact immutable bytes, then verify all three modules before the first import. Compile/execute the retained bytes with a non-__main__ name. Import never re-reads a mutable worktree/private source path.",
+    "helper_order": "Verified packet_inputs bytes load first, followed by verified runner and worker bytes. No source or helper imports happen during preparation.",
+    "result_identities": [
+      "module",
+      "source_path",
+      "expected_sha256",
+      "source_read_sha256",
+      "private_path",
+      "private_sha256",
+      "bytes",
+      "execution_bytes_sha256"
+    ],
+    "durable_before_import": "Future work/private-source-identities.json records the complete copy identities before candidate/helper imports; the terminal result also embeds private_sources and attempted execution names.",
+    "validation": "Static Python3.9 AST parse only; no import, compile/exec call, probe or control execution performed."
   }
 }

@@ -7,17 +7,17 @@ allocation-bound input digest and verified private copies of every module.
 import argparse
 from datetime import datetime, timezone
 import hashlib
-import importlib.util
 import json
 import math
 import os
 from pathlib import Path
+import re
 import signal
 import subprocess
 import sys
 import threading
 import time
-from types import SimpleNamespace
+from types import ModuleType, SimpleNamespace
 
 ENTRY = time.monotonic()
 HERE = Path(__file__).resolve().parent
@@ -40,6 +40,11 @@ def close(actual, expected):
 
 def sha(data):
     return hashlib.sha256(data).hexdigest()
+
+
+def require_sha(value, label):
+    check(isinstance(value,str) and re.fullmatch(r'[0-9a-f]{64}',value) is not None,
+          'expected exact 64-character SHA-256: '+label)
 
 
 def save_new(path, value):
@@ -382,11 +387,16 @@ def q14(m, worker, work, inputs):
 CASES={name:globals()['q'+name[1:]] for name in CASE_IDS}
 
 
-def import_private(name, path):
-    spec=importlib.util.spec_from_file_location(name,path)
-    module=importlib.util.module_from_spec(spec)
+def import_private(name, path, verified_bytes, expected_sha256):
+    require_sha(expected_sha256,name)
+    check(sha(verified_bytes)==expected_sha256,'verified import bytes differ: '+name)
+    check(name!='__main__' and name not in sys.modules,'import name is not fresh: '+name)
+    module=ModuleType(name)
+    module.__file__=str(path)
+    module.__package__=''
     sys.modules[name]=module
-    spec.loader.exec_module(module)
+    # Compile the exact immutable bytes already verified, not a path reread.
+    exec(compile(verified_bytes,str(path),'exec',dont_inherit=True),module.__dict__)
     return module
 
 
@@ -406,11 +416,14 @@ def main(argv=None):
     signal.setitimer(signal.ITIMER_REAL,max(0.001,60.0-(time.monotonic()-ENTRY)))
     check(sys.flags.isolated and sys.flags.no_site and sys.dont_write_bytecode,
           'invoke pinned Python with -I -S -B')
+    require_sha(args.inputs_sha256,'--inputs-sha256')
     raw=args.inputs.read_bytes()
     check(sha(raw)==args.inputs_sha256,'input binding digest differs')
     binding=json.loads(raw)
     check(binding['schema']==1 and binding['allocation']==args.allocation,'allocation binding differs')
     python=binding['python']
+    require_sha(python['sha256'],'python')
+    require_sha(binding['driver_sha256'],'driver')
     check(Path(sys.executable).resolve()==Path(python['path']).resolve(),'Python path differs')
     check(sha(Path(python['path']).read_bytes())==python['sha256'],'Python bytes differ')
     check(sha(Path(__file__).read_bytes())==binding['driver_sha256'],'driver bytes differ')
@@ -428,6 +441,7 @@ def main(argv=None):
     report=dict(schema=1,status='INCOMPLETE',allocation=args.allocation,inputs_sha256=sha(raw),
                 executed_cases=[],retry=False,site_acceptance=False)
     try:
+        require_sha(binding['control_spec']['sha256'],'control_spec')
         spec_path=Path(binding['control_spec']['path'])
         spec_bytes=spec_path.read_bytes()
         check(sha(spec_bytes)==binding['control_spec']['sha256'],'control spec differs')
@@ -436,15 +450,34 @@ def main(argv=None):
         expected={'run_once','packet_inputs','build_and_check'}
         check(set(binding['modules'])==expected,'complete declared module closure is required')
         for name in sorted(expected):
+            require_sha(binding['modules'][name]['sha256'],name)
+        verified={}
+        report['private_sources']=[]
+        report['imports_attempted']=[]
+        for name in sorted(expected):
             item=binding['modules'][name]
             source=Path(item['path']);check(not source.is_symlink(),'module symlink refused')
             data=source.read_bytes();check(sha(data)==item['sha256'],'module source differs: '+name)
-            target=private/(name+'.py');target.write_bytes(data)
-            check(sha(target.read_bytes())==item['sha256'],'private module differs: '+name)
+            target=private/(name+'.py')
+            with target.open('xb') as stream:
+                stream.write(data);stream.flush();os.fsync(stream.fileno())
+            copied=target.read_bytes()
+            check(sha(copied)==item['sha256'],'private module differs: '+name)
+            verified[name]=copied
+            report['private_sources'].append(dict(
+                module=name,source_path=str(source),expected_sha256=item['sha256'],
+                source_read_sha256=sha(data),private_path=str(target),private_sha256=sha(copied),
+                bytes=len(copied),execution_bytes_sha256=sha(verified[name])))
+        save_new(args.work/'private-source-identities.json',dict(
+            inputs_sha256=sha(raw),sources=report['private_sources']))
         # Verify all copied dependencies before the first candidate/helper import.
-        helper=import_private('packet_inputs',private/'packet_inputs.py')
-        candidate=import_private('observer_candidate',private/'run_once.py')
-        worker=import_private('observer_worker',private/'build_and_check.py')
+        def load(role,name):
+            report['imports_attempted'].append(dict(module=role,execution_name=name))
+            return import_private(name,private/(role+'.py'),verified[role],
+                                  binding['modules'][role]['sha256'])
+        helper=load('packet_inputs','packet_inputs')
+        candidate=load('run_once','observer_candidate')
+        worker=load('build_and_check','observer_worker')
         del helper
         chosen=(args.case,) if args.case else CASE_IDS
         for case in chosen:
