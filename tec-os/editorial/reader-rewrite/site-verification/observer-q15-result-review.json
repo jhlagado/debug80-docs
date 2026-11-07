@@ -1,0 +1,298 @@
+{
+  "schema": 1,
+  "status": "accepted_scoped_actual_Q15_fixture",
+  "resource_verdict": "Specific Q15 retained native fixture scope is resolved; recommend release/closure of this invocation resource hold only.",
+  "allocation_authority": {
+    "commit": "1fa6875b",
+    "path": "studies/p3-tec-os/reviews/book-observer-q15-allocation.md",
+    "allocation": "KS47-OBSERVER-Q15-20261107",
+    "reading": "Exact offered Q15 command, pinned CLT-I-S-B, no outer guard, controller60/public cutoff55 and inner850/450/wait0. No retry or successor allocated."
+  },
+  "external_terminal": {
+    "receipt_path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-observer-q15-external.json",
+    "receipt_sha256": "5cf6e9354623a9f56c224feab841c2d3da507251ac45152f5da52cb9c09ab99e",
+    "session": 28815,
+    "exit_code": 0,
+    "provenance": "Recorded root terminal and external receipt; no session polling or re-execution by this review."
+  },
+  "result": {
+    "path": "/private/tmp/tec-os-observer-q15-e7faf93e1680.json",
+    "sha256": "83dcdaf75d7ed06333d8267cfcdcd149e9df4d5a5576a833bfac19bf3d378c77",
+    "status": "EXPECTED_FIXTURE_OUTCOME",
+    "actual_runner_exit": 0,
+    "controller_seconds_recorded": 1.893847083,
+    "controller_deadline_exceeded": false,
+    "runner_terminal": {
+      "detail": "",
+      "elapsed_seconds": 1.6832628330000001,
+      "exit_code": 0,
+      "first_failure": null,
+      "retry": false,
+      "seal_sha256": "825df7fd25f3db62943217b1aca54be9bec9edb1b09c12b607a6d98e8a441104",
+      "status": "PASS"
+    },
+    "runner_audit_status": "CLEAR",
+    "runner_remaining": [],
+    "runner_direct_handles": [],
+    "independent_audit_status": "RESOLVED_RETAINED_SCOPE",
+    "real_book_acceptance": false,
+    "retry": false
+  },
+  "source_binding": {
+    "offered_commit": "fb36754c78a79c2622caf8c2189b73909c607004",
+    "fixture_binding_sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+    "controller_sha256": "9df4ae6ade0d6812205a73ff1a58e37c665a8aaf4bebc92e3fd050c52a4cbc23",
+    "generated_fixture_seal_sha256": "825df7fd25f3db62943217b1aca54be9bec9edb1b09c12b607a6d98e8a441104",
+    "postflight_sources": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/public_observer_fixture.py",
+        "sha256": "9df4ae6ade0d6812205a73ff1a58e37c665a8aaf4bebc92e3fd050c52a4cbc23",
+        "postflight_equals_offered_fb36754": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/fixture-inputs.json",
+        "sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+        "postflight_equals_offered_fb36754": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+        "sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+        "postflight_equals_offered_fb36754": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+        "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+        "postflight_equals_offered_fb36754": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+        "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+        "postflight_equals_offered_fb36754": true
+      }
+    ],
+    "two_packet_payload_maps_all16_actual_hashes_match": true,
+    "all_private_runner_worker_helper_bytes_match_reviewed_source": true
+  },
+  "resource_checks": {
+    "runner_pid": 4772,
+    "guard_pid": 4786,
+    "worker_pid_and_group": 4797,
+    "worker_birth_UTC_C": "Sat Nov  7 04:37:38 2026",
+    "stub_pid": 4828,
+    "valid_context_nonce_hash_ACK_and_accepted_receipt_hash": true,
+    "known_pids": [
+      4772,
+      4774,
+      4775,
+      4776,
+      4777,
+      4778,
+      4779,
+      4780,
+      4782,
+      4783,
+      4785,
+      4786,
+      4787,
+      4788,
+      4789,
+      4797,
+      4818,
+      4828,
+      4831,
+      4832,
+      4849,
+      4850
+    ],
+    "scope_groups": [
+      4772,
+      4774,
+      4775,
+      4776,
+      4777,
+      4778,
+      4779,
+      4780,
+      4782,
+      4783,
+      4785,
+      4786,
+      4787,
+      4788,
+      4789,
+      4797,
+      4818,
+      4832,
+      4849,
+      4850
+    ],
+    "independently_recomputed_final_remaining": [],
+    "snapshots": [
+      {
+        "name": "initial",
+        "path": "/private/tmp/tec-os-observer-q15-e7faf93e1680/independent-initial-snapshot.json",
+        "sha256": "0ceb62fd47e32232d96b1137f49346dd880c38410c2f621ae550d8eb0059b4ef",
+        "rows": 568,
+        "query_pid": 4773,
+        "budget_seconds": 0.5,
+        "elapsed_within_own_controller_clock": 0.015595082999999982,
+        "outcome": "OK",
+        "reap": "REAPED",
+        "returncode": 0,
+        "raw_stdout_sha256_recorded": "d7ea572815eeb5acad93df188cf5d3765e4d56e4ba6b4b29f77e20ebd86dfb4a"
+      },
+      {
+        "name": "final",
+        "path": "/private/tmp/tec-os-observer-q15-e7faf93e1680/independent-final-snapshot.json",
+        "sha256": "c70ab888305f4657e3c90e18917144fc545c8204070e6cb012050c0cc76d775a",
+        "rows": 568,
+        "query_pid": 4851,
+        "budget_seconds": 0.5,
+        "elapsed_within_own_controller_clock": 0.01451662499999995,
+        "outcome": "OK",
+        "reap": "REAPED",
+        "returncode": 0,
+        "raw_stdout_sha256_recorded": "38d2072fbb740610bbb5b1b2efc14b8711c8ba7b8f058861f626df2037556be8"
+      }
+    ],
+    "controller_handles": [
+      {
+        "argv": [
+          "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+          "-I",
+          "-S",
+          "-B",
+          "/private/tmp/tec-os-observer-q15-e7faf93e1680/fixture-packet/run_once.py",
+          "--packet",
+          "/private/tmp/tec-os-observer-q15-e7faf93e1680/fixture-packet",
+          "--seal-sha256",
+          "825df7fd25f3db62943217b1aca54be9bec9edb1b09c12b607a6d98e8a441104",
+          "--output",
+          "/private/tmp/tec-os-observer-q15-e7faf93e1680/actual-public-output",
+          "--allocation",
+          "KS47-OBSERVER-Q15-20261107",
+          "--deadline-utc",
+          "2026-11-07T04:38:32.524943+00:00"
+        ],
+        "pid": 4772,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "/bin/ps",
+          "-axo",
+          "pid=,ppid=,pgid=,lstart="
+        ],
+        "pid": 4773,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "/bin/ps",
+          "-axo",
+          "pid=,ppid=,pgid=,lstart="
+        ],
+        "pid": 4851,
+        "returncode": 0
+      }
+    ],
+    "all_controller_runner_query_handles_reaped_zero": true,
+    "runner_history_query_exits": 16,
+    "runner_known_roots_remaining_only_historical_entries": {
+      "4797": "Sat Nov  7 04:37:38 2026"
+    },
+    "actual_runner_audit_sha256": "5d5b2403e3f60e6c9e3052c7a0360c691ffb02617cd4faa64b7fdbf39b83d0d9",
+    "actual_independent_scope_audit_sha256": "7a41c8d92835830d36e5bdc41bde15a42afdcc889ddcea118a80353efd0ab35f",
+    "scope_reason": "Registered direct runner, actual guard/worker ACK group and Node stub plus candidate observed history/roots/groups and ancestry/group closure across both retained snapshots have no final members. Controller runner/helper handles are reaped. This is not a bare empty-array inference or a universal/historical-descendant cleanup claim."
+  },
+  "cost_and_profile": {
+    "controller_elapsed_seconds": 1.893847083,
+    "runner_elapsed_seconds": 1.6832628330000001,
+    "guard_end": {
+      "name": "tec-os-reader-site",
+      "command": "python3.9 -S -B build_and_check.py --context context.json",
+      "limitMB": 850,
+      "heapMB": 450,
+      "event": "end",
+      "at": "2026-11-07T04:37:39.284Z",
+      "outcome": "exit 0",
+      "code": 0,
+      "peakMB": 10,
+      "processes": 1,
+      "seconds": 0.3,
+      "freePercentAtEnd": 38
+    },
+    "guard_starts": 1,
+    "outer_guard": false,
+    "controller_profile_seconds": 60,
+    "public_runner_cutoff_seconds_from_controller_entry": 55,
+    "postflight_reserve_within_controller_seconds": 5,
+    "inner_policy": {
+      "build_workers": 2,
+      "cleanup_reserved_seconds": 3,
+      "guard_limit_mb": 850,
+      "guard_wait_seconds": 0,
+      "minify": false,
+      "node_heap_mb": 450,
+      "retry": false,
+      "whole_invocation_max_seconds": 180
+    },
+    "reading": "Guard0.3seconds, sampled10MB and one observed process are actual guard readings for this fixture only. Sampling may miss short-lived Node/checker/helpers; one observed process is not one process launched. Controller/preflight and independent queries are not a measured whole-job memory peak. No outer/whole-job peak is inferred."
+  },
+  "predicates": [
+    {
+      "name": "Actual exit and audit",
+      "verified": "Root controller0 and actual candidate0/PASS, no first failure, exact CLEAR/remaining[]/direct_handles[] and no deadline overrun. Embedded terminal/audits equal on-disk files; early/final snapshot objects equal embedded identity_queries."
+    },
+    {
+      "name": "Ownership precedes heavy phase",
+      "verified": "Recorded ownership validates UTC/C PID4797/group4797/parent guard4786, nonce/context hash and ACK raw ownership SHA. fixture-started ties actual Node stub4828 to worker4797 and original ACK. Guard/worker flow and phase receipts complete; no receipt injection or corrupted nonce in Q15."
+    },
+    {
+      "name": "Fresh final observation and query budgets",
+      "verified": "16 successful runner query events, no failure/retry; final query16 is cleanup mode0.5 and matches audit last_success_id after guard command completion. Production main quiescence/finalisation path is the exact source-cleared candidate. Both independent controller queries succeed within0.5, reaped0, UTC/C. No live probes repeated here."
+    },
+    {
+      "name": "Input postflight",
+      "verified": "Both fixture/private packet16-payload maps match generated seal. Retained source-after map equals expected889-file input manifest and every actual file hash matches. Retained34,037,760-byte source archive hash matches frozen binding; synthetic installed original/copy trees are exact bound3-file identities; runtime and guard actual bytes match pins. These are fixture dependency inputs, not real VitePress dependencies."
+    },
+    {
+      "name": "Explicit test doubles",
+      "verified": "Node stub source hash matches generated binding, build/validate phase exits0 and fixture-only checker receipt has checked{} and real_html_validationFalse. Stream explicitly states no VitePress/render or book validation. Real public runner/worker/guard/process queries ran, not actual book renderer/checker."
+    },
+    {
+      "name": "Retention",
+      "verified": "All955 external file-manifest entries match actual sizes/SHA-256, including suite sibling/outer log mapping; complete work-tree file set matches retained manifest. No retained source/evidence modified. Archive creation/provenance remains with lead and no unprovided archive hash is asserted."
+    }
+  ],
+  "retention": {
+    "external_manifest_entries": 955,
+    "all_actual_file_hashes_and_sizes_match": true,
+    "all_work_files_accounted": true,
+    "input_source_file_count": 889,
+    "source_after_sha256": "e8ff0081388b9826234208a027533f02ee30da29a70af5d54945a853c5116eb4",
+    "outer_log_bytes": 0
+  },
+  "findings": [],
+  "Q16_eligibility": {
+    "verdict": "Q15 actual-result and specific resource prerequisite satisfied; unchanged Q16 source offer eligible for its own separate allocation consideration only.",
+    "binding_sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+    "controller_sha256": "9df4ae6ade0d6812205a73ff1a58e37c665a8aaf4bebc92e3fd050c52a4cbc23",
+    "expected_profile": "Separate controller60, public cutoff entry+55, five-second postflight inside60, one850/450/wait0 inner guard and no outer guard; explicit fixture doubles.",
+    "required_outcome": "Q16 controller0 only for expected candidate/terminal/first-failure124 and exact typed post-ACK ownership-receipt hash mismatch/injection, runner UNKNOWN_HELD preserved separately from independent retained-scope resolution.",
+    "launch_authority": false,
+    "limits": "No Q16 command, retry or automatic successor authorised by this review. Independent exact input/fresh path checks, allocation and later result/resource review remain required. No actual book run or publication follows."
+  },
+  "actions": {
+    "only_observer_q15_result_review_json_written": true,
+    "imports_replay_probes_signals_guard_build_site_validator": false,
+    "source_or_consumed_evidence_changes": false,
+    "commit": false
+  },
+  "limits": [
+    "Specific retained-scope native fixture success only, not universal lifecycle or complete historical descendant proof. The snapshots have full retained parsed rows plus raw stdout hashes, not separately retained raw formatted stdout, so raw formatting hashes are not independently reconstructed here.",
+    "Raw monotonic values from runner and controller are not compared across processes. Query durations use each controller own start/end; cutoff/readback uses the shared original UTC deadline and recorded elapsed/profile fields.",
+    "This quick successful fixture does not prove2-second observation sufficiency under real compilation, hard-deadline firing, stalled I/O, host loss or all failure paths.",
+    "Q15 source changes no accepted reader/checker reference. No39-page render, HTML/link/fence validation, browser/hardware or publication acceptance."
+  ]
+}

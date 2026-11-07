@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "review_kind": "independent_read_only_retention_check",
+  "verdict": "clear_within_retention_scope",
+  "retention_mismatches": [],
+  "scope": "Q15 evidence archive/copies/manifests, original identity/topology, frozen inputs, actual sealed profiles and both snapshot retention. Result/resource predicates remain separate.",
+  "source_commit": "fb36754c78a79c2622caf8c2189b73909c607004",
+  "original_work": "/private/tmp/tec-os-observer-q15-e7faf93e1680",
+  "archive": {
+    "path": "observer-q15/complete-evidence-and-inputs.tar.gz",
+    "bytes": 36743463,
+    "sha256": "101318151468b12fcaa88fa89225b480ca95a9cf65ff81dfa3ab0b357879ae67",
+    "members": 1078,
+    "raw_file_paths": 953,
+    "raw_paths_including_directories": 1045,
+    "source_input_files": 27
+  },
+  "external_receipt": {
+    "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-observer-q15-external.json",
+    "sha256": "5cf6e9354623a9f56c224feab841c2d3da507251ac45152f5da52cb9c09ab99e",
+    "bound_original_file_count": 955,
+    "loose_and_archive_copy_exact": true
+  },
+  "both_snapshots": [
+    {
+      "path": "independent-initial-snapshot.json",
+      "bytes": 71263,
+      "sha256": "0ceb62fd47e32232d96b1137f49346dd880c38410c2f621ae550d8eb0059b4ef",
+      "outcome": "OK",
+      "reap": "REAPED"
+    },
+    {
+      "path": "independent-final-snapshot.json",
+      "bytes": 71265,
+      "sha256": "c70ab888305f4657e3c90e18917144fc545c8204070e6cb012050c0cc76d775a",
+      "outcome": "OK",
+      "reap": "REAPED"
+    }
+  ],
+  "checks": [
+    "All953 original raw file sizes/hashes equal retention inventory and external receipt; all archive resolved file bytes equal originals.",
+    "Complete raw path set, file/directory types, permission modes, uid/gid and mtimes match original metadata; no original regular-file hardlinks or symlinks and no tar link entries.",
+    "Archive has no duplicate/unexpected entries and its exact requested36743463-byte SHA identity matches archive-manifest.json.",
+    "All27 source/input/profile files match retained hashes, archive members and exact fb36754 Git blobs.",
+    "Loose fixture result, outer log and external receipt match original files byte for byte and archived copies; archived retention manifest equals loose manifest.",
+    "Actual fixture seal and private copied seal agree; runtime, guard, policy, Q15/scope and candidate hashes match the frozen binding. This is retained-profile identity, not measured resource acceptance.",
+    "Both independent real-query snapshots are retained in full, externally hash-bound, byte-exact in tar and object-exact with fixture-result identity_queries. No fresh PS query performed.",
+    "Complete original raw metadata/inode/link/content inventory before and after this read-only check is identical."
+  ],
+  "preservation": "Only observer-q15-retention-review.json written. Original evidence and historical SITE03/48 artifacts left untouched.",
+  "not_performed": [
+    "candidate imports",
+    "replay",
+    "PS/native probes",
+    "signals",
+    "guard invocation",
+    "build/render",
+    "validator",
+    "archive extraction",
+    "commits"
+  ],
+  "remaining": "Hooke handles actual result/resource predicate review. Retention clearance is not book acceptance or a universal process-closure claim."
+}
