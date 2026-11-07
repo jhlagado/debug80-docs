@@ -54,7 +54,7 @@
         "arguments": [
           "outputPath"
         ],
-        "returns": "None or positive code; stop-requested before first-failure; malformed/nonpositive maps to 1"
+        "returns": "None if neither file is visible; otherwise 1..255 only. stop-requested precedes first-failure; malformed, zero, negative, >255 or conversion overflow maps to 1."
       },
       "worker_identity_budget": {
         "arguments": [
@@ -65,7 +65,100 @@
       }
     },
     "required_verified_helper": "packet_inputs.py",
-    "helper_binding": "Hash-declare and verify complete private helper bytes before importing the worker; no unverified packet helper may execute."
+    "helper_binding": "Hash-declare and verify complete private helper bytes before importing the worker; no unverified packet helper may execute.",
+    "phase_stop_variants": [
+      {
+        "id": "malformed",
+        "record_text": "{",
+        "expected_code": 1,
+        "record_names": [
+          "stop-requested.json",
+          "first-failure.json"
+        ]
+      },
+      {
+        "id": "zero",
+        "record_text": "{\"exit_code\":0}",
+        "expected_code": 1,
+        "record_names": [
+          "stop-requested.json",
+          "first-failure.json"
+        ]
+      },
+      {
+        "id": "negative",
+        "record_text": "{\"exit_code\":-1}",
+        "expected_code": 1,
+        "record_names": [
+          "stop-requested.json",
+          "first-failure.json"
+        ]
+      },
+      {
+        "id": "exit-256",
+        "record_text": "{\"exit_code\":256}",
+        "expected_code": 1,
+        "record_names": [
+          "stop-requested.json",
+          "first-failure.json"
+        ]
+      },
+      {
+        "id": "exit-512",
+        "record_text": "{\"exit_code\":512}",
+        "expected_code": 1,
+        "record_names": [
+          "stop-requested.json",
+          "first-failure.json"
+        ]
+      },
+      {
+        "id": "overflow-1e400",
+        "record_text": "{\"exit_code\":1e400}",
+        "expected_code": 1,
+        "record_names": [
+          "stop-requested.json",
+          "first-failure.json"
+        ]
+      },
+      {
+        "id": "visible-124",
+        "record_text": "{\"exit_code\":124}",
+        "expected_code": 124,
+        "record_names": [
+          "stop-requested.json",
+          "first-failure.json"
+        ]
+      }
+    ],
+    "phase_stop_precedence": {
+      "files": {
+        "stop-requested.json": "{\"exit_code\":124}",
+        "first-failure.json": "{\"exit_code\":7}"
+      },
+      "expected_code": 124
+    },
+    "identity_query_failure_detail": {
+      "type": "JSON object",
+      "required_fields": [
+        "message",
+        "query_error",
+        "effective_budget_seconds",
+        "elapsed_seconds"
+      ],
+      "query_error": "Exact injected exception class name, not a flattened message",
+      "effective_budget_seconds": "Exact launch budget passed to the fake query",
+      "elapsed_seconds": "Fake monotonic completion minus fake monotonic launch",
+      "failure_stage": "ownership-observation",
+      "exit_code": 124,
+      "execution": false
+    },
+    "corrected_seam_source_snapshot": {
+      "path": "build_and_check.py",
+      "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "bytes": 5656,
+      "status": "Inert source read only; final candidate/private payload binding still pending."
+    }
   },
   "cases": [
     {
@@ -144,7 +237,8 @@
       "id": "Q13",
       "kind": "negative",
       "input": "Stop marker/first-failure record is visible before a worker phase checkpoint. Variants: visible marker, delayed publication, failed publication and checkpoint/publication race.",
-      "expected": "Next phase is refused. A blocked cross-process publication must not be described as instantaneous preemption; any first failure disqualifies the invocation. After visibility refuse phase. Before visibility phase may start; every latched-failure case still fails acceptance and bound cleanup proceeds."
+      "expected": "Next phase is refused. A blocked cross-process publication must not be described as instantaneous preemption; any first failure disqualifies the invocation. After visibility refuse phase. Before visibility phase may start; every latched-failure case still fails acceptance and bound cleanup proceeds.",
+      "additional_worker_variants": "For each stop filename separately, malformed JSON, exit codes 0/-1/256/512 and JSON numeric 1e400 must return 1; visible 124 must remain 124. Check stop-requested precedence. These use the actual phase_stop_code function during future allocated controls."
     },
     {
       "id": "Q14",
