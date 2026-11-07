@@ -393,7 +393,7 @@ def main():
         packet, seal = prepare(binding, work, args.case)
         require(digest(args.binding) == args.binding_sha256, 'binding changed during preparation')
         require(time.monotonic() < runner_end - 5, 'preparation consumed runner launch budget')
-        argv = [seal['runtime']['python']['path'], '-S', '-B', str(packet / 'run_once.py'),
+        argv = [seal['runtime']['python']['path'], '-I', '-S', '-B', str(packet / 'run_once.py'),
                 '--packet', str(packet), '--seal-sha256', digest(packet / 'seal.json'),
                 '--output', str(output), '--allocation', args.allocation, '--deadline-utc', deadline]
         record.update(argv=argv, fixture_seal_sha256=digest(packet / 'seal.json'))
