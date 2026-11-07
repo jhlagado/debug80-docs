@@ -173,6 +173,7 @@ class InvocationState:
         self.last_success_id = None
         self.query_id = 0
         self.acknowledged = False
+        self.accepted_ownership_sha256 = None
 
     def _adopt_pending(self):
         # Caller holds both state and failure locks. The first queued identity
@@ -298,13 +299,14 @@ class InvocationState:
             self.roots[pid] = birth
             self.history.append({'kind': 'ack-group', **ownership})
 
-    def publish_ack(self, prepare, publish):
+    def publish_ack(self, prepare, publish, ownership_sha256=None):
         prepared = prepare()  # Durable file preparation outside the failure lock.
         with self.lock, self.failure_lock:
             self._adopt_pending()
             if self.stopping.is_set() or self.clock() >= self.soft_deadline:
                 raise Failed('stop prevents ownership ACK', 124)
             publish(prepared)  # Atomic link only, no fsync/record operations here.
+            self.accepted_ownership_sha256 = ownership_sha256
             self.acknowledged = True
 
     def observe(self, rows):
@@ -332,7 +334,8 @@ class InvocationState:
             return {'history': list(self.history), 'roots': dict(self.roots),
                     'groups': dict(self.job_groups), 'observed': dict(self.observed),
                     'last_success_id': self.last_success_id, 'last_rows': self.last_rows,
-                    'first_failure': self.failure}
+                    'first_failure': self.failure,
+                    'accepted_ownership_sha256': self.accepted_ownership_sha256}
 
     def signal_bound(self, sig, group_signal, handle_signal):
         # Never acquire failure/audit/receipt locks or wait for query completion.
@@ -595,8 +598,18 @@ def main():
         ownership = None
         ack_ready = False
         errors = []
-        if context_identity[0] is not None and ownership_path.exists():
-            ownership = json.loads(ownership_path.read_text())
+        if context_identity[0] is not None and (state.acknowledged or ownership_path.exists()):
+            ownership_bytes = ownership_path.read_bytes()
+            ownership_sha256 = hashlib.sha256(ownership_bytes).hexdigest()
+            # Check the accepted write-once bytes before interpreting any later
+            # PID/group/birth fields. Never replace already bound authority.
+            if state.acknowledged and ownership_sha256 != state.accepted_ownership_sha256:
+                state.request_stop('identity-observation', {
+                    'message': 'job ownership receipt hash mismatch',
+                    'expected_sha256': state.accepted_ownership_sha256,
+                    'observed_sha256': ownership_sha256}, 124)
+                raise Failed('job ownership receipt hash mismatch', 124)
+            ownership = json.loads(ownership_bytes)
             guard = children.get(ownership['guard_pid'])
             guard_alive = guard is not None and guard.poll() is None
             errors = validate_ownership(ownership, context_identity[0], rows, guard_alive)
@@ -623,14 +636,16 @@ def main():
         found = state.observe(rows)
         persist_registry()
         if ack_ready:
-            value = {'nonce': ownership['nonce'], 'ownership_sha256': digest(ownership_path)}
+            value = {'nonce': ownership['nonce'], 'ownership_sha256': ownership_sha256}
             prepared = []
             def prepare_ack():
                 temp = prepare_receipt(output / 'job-ack.json', value)
                 prepared.append(temp)
                 return temp
             try:
-                state.publish_ack(prepare_ack, lambda temp: os.link(temp, output / 'job-ack.json'))
+                state.publish_ack(prepare_ack,
+                                  lambda temp: os.link(temp, output / 'job-ack.json'),
+                                  ownership_sha256=ownership_sha256)
                 sync_directory(output)
                 event('ownership-acknowledged', worker_pid=ownership['pid'],
                       worker_group=ownership['pgid'], birth=ownership['birth'],
