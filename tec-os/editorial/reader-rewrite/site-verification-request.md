@@ -1,3 +1,15 @@
+# Current actual result and C18 recommendation
+
+SITE04 passed its real 39-page render/check under Origo26b45fd2. Independent
+actual-result/resource and retention reviews are clear. The result and exact
+published receipt provenance are in site-verification/attempt04-result.json.
+Release of only this registered invocation's resource hold is supported.
+
+C18 acceptance is recommended in c18-acceptance-recommendation.json. P3
+records the disposition. C16 updates, main landing and publication remain
+separate. No successor is allocated. All requests and failures below are
+historical and must not be reused.
+
 # Current production offer 04
 
 STATE01, Q15 and Q16 have scoped independent actual-result and retention

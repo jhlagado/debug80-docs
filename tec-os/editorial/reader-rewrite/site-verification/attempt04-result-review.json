@@ -1,0 +1,621 @@
+{
+  "schema": 1,
+  "status": "CLEAR_FOR_SCOPED_ACTUAL_SITE04_RESULT_AND_REGISTERED_RESOURCE_RELEASE",
+  "allocation": {
+    "id": "KS47-SITE04-20261107",
+    "origo_commit": "26b45fd2742c7b3219e6232261944b6d14075bf3",
+    "book_offer": "2f8b498",
+    "external_session": 49113,
+    "external_terminal_exit_code": 0,
+    "external_terminal_basis": "Retained external receipt; no session replay or new process observation."
+  },
+  "findings": [],
+  "review_method": {
+    "actual_evidence_only": true,
+    "operations": "Inert text/JSON/archive reads, SHA-256 calculations and Git documentation reads. No candidate imports or execution, validator replay, process probes, signals, build, guard or browser use. Only this report was written; no commit.",
+    "source_review_basis": "Exact private packet matches all sixteen sealed payloads and the independently cleared production command/source offer. Re-read actual worker flow, runner input/postflight/finalization flow and checker predicates against actual receipts. This is not a new execution of those predicates."
+  },
+  "identity": {
+    "seal_sha256": "68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd",
+    "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+    "source_tree": "f17d6f9a99fa45b8ec00bb8cb71b1adf855e877a",
+    "source_archive_sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28",
+    "source_archive_bytes": 34037760,
+    "source_archive_regular_files": 889,
+    "archive_links": 0,
+    "payload_sha256": {
+      "README.md": "8fc7dd19f07ce4c6fc88c894768466919202280652e57f4be62628050babf786",
+      "build_and_check.py": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "check_html.py": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+      "config.after.ts": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9",
+      "config.before.ts": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e",
+      "config.diff": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489",
+      "controls-result.json": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+      "dependency-manifests.json": "8631dbb874c8e8e31cb90decb7cc1b968d0ebd7cf53f6a90895a1331107c2107",
+      "expectations.json": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+      "installed-inputs.json": "cfa02ccc86400c70240ca896dec4e4af85e6acb08dcdc6f5b72803732521b911",
+      "invoke.sh": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e",
+      "packet_inputs.py": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "prepare_packet.py": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8",
+      "run_once.py": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "source-inputs.json": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8",
+      "test_checker.py": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e"
+    },
+    "all_16_private_and_offered_payloads_match": true,
+    "runtime": {
+      "git": {
+        "path": "/opt/homebrew/Cellar/git/2.39.1/bin/git",
+        "sha256": "5ec2979b3ed9ea1c9ab866ce7177d34324e08fa452416bdd750c090dd77ff3c0"
+      },
+      "node": {
+        "path": "/opt/homebrew/Cellar/node@24/24.18.0/bin/node",
+        "sha256": "72c18e2eeda260f67a5b2b66e96fa9b5ad82864676ebb54925695d87120cae3f"
+      },
+      "python": {
+        "path": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+        "sha256": "bdea59019a38eb6600cc9e71e984a97fedadc406448431281e7657030f54987e"
+      }
+    },
+    "runtime_current_bytes_match": true,
+    "guard": {
+      "path": "/Users/johnhardy/projects/origo/tools/mem-guard.mjs",
+      "sha256": "45e4edaee20eba1b2d8ec67983ed3acc06be31a64eb059e8bc4ad21257871374"
+    },
+    "original_and_private_guard_match": true,
+    "external_receipt": {
+      "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-site04-external.json",
+      "sha256": "d21e9e7dd5aea232a47a5353fedd72207db415cba4be3f4032f0a11897d02b67"
+    },
+    "persistent_claim": {
+      "path": "/Users/johnhardy/.origo/site-verification/claims/68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd.json",
+      "bytes": 135,
+      "sha256": "b334115e9f3fb7f6c642c8f9b42131fa271103c1272696b327613bd64b6a8116"
+    },
+    "claim_preserved": true
+  },
+  "registered_input_checks": {
+    "source": "All 889 archive regular files accounted for. Archive config equals sealed before image; replacing only config with sealed after image yields all 889 source-input hashes. Actual source-after map equals source-input map; independently hashed actual source files all match.",
+    "readers": "All 39 expected reader source_sha256 values match both archive bytes and actual exported Markdown. No accepted reader, citation, transcript or recipe was rewritten for this render.",
+    "config": {
+      "actual_sha256": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9",
+      "equals_sealed_after": true,
+      "policy": {
+        "build_workers": 2,
+        "cleanup_reserved_seconds": 3,
+        "guard_limit_mb": 850,
+        "guard_wait_seconds": 0,
+        "minify": false,
+        "node_heap_mb": 450,
+        "retry": false,
+        "whole_invocation_max_seconds": 180
+      },
+      "boundary": "The approved private config delta is used for this bounded verification; no root config integration or publication follows."
+    },
+    "dependencies": {
+      "entries": 4454,
+      "registered_identity": "a020e190a5bc80db7d6ffebda4fc762328dc0c5c771c0a12ecd010b63ea79661",
+      "original_and_private_full_entry_sets_match": true,
+      "file_hashes_relative_symlink_targets_and_executable_flags_match": true,
+      "symlinks": 6,
+      "absolute_symlinks": 0,
+      "boundary": "Both actual trees were read independently against the sealed installed-input manifest; the actual runner PASS also requires pre/post identity checks."
+    },
+    "postflight": "source-after.json exists and is exact. Private/original payloads, runtimes, original/copied dependencies, context and approved config pass the source-enforced checks before final PASS. Independent inert current hashes agree.",
+    "generated_paths_reported": [
+      ".vitepress/dist/",
+      "node_modules/"
+    ]
+  },
+  "actual_flow": {
+    "terminal": {
+      "detail": "",
+      "elapsed_seconds": 11.873271875,
+      "exit_code": 0,
+      "first_failure": null,
+      "retry": false,
+      "seal_sha256": "68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd",
+      "status": "PASS"
+    },
+    "invocation": {
+      "absolute_deadline_utc": "2026-11-07T05:27:54.697878+00:00",
+      "allocation": "KS47-SITE04-20261107",
+      "deadline_includes": "preflight, copy, guard, build, checker and cleanup",
+      "deadline_monotonic": 179.9903455910719,
+      "entry_monotonic": 0.132509583,
+      "entry_utc": "2026-11-07T05:24:54.840042+00:00",
+      "maximum_seconds": 180,
+      "retry": false,
+      "seal_sha256": "68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd"
+    },
+    "phases": {
+      "build-started": {
+        "argv": [
+          "/opt/homebrew/Cellar/node@24/24.18.0/bin/node",
+          "/private/tmp/tec-os-site04-68f1b1aaacf6/source/node_modules/vitepress/bin/vitepress.js",
+          "build"
+        ]
+      },
+      "build-ended": {
+        "exit_code": 0
+      },
+      "validate-started": {
+        "argv": [
+          "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+          "-S",
+          "-B",
+          "/private/tmp/tec-os-site04-68f1b1aaacf6/packet/check_html.py",
+          "--expect",
+          "/private/tmp/tec-os-site04-68f1b1aaacf6/packet/expectations.json",
+          "--dist",
+          "/private/tmp/tec-os-site04-68f1b1aaacf6/source/.vitepress/dist",
+          "--receipt",
+          "/private/tmp/tec-os-site04-68f1b1aaacf6/checker.json"
+        ]
+      },
+      "validate-ended": {
+        "exit_code": 0
+      }
+    },
+    "one_build_one_checker": "Recorded phase sequence build START/END 0 then validate START/END 0; the registered direct real VitePress CLI and real check_html.py paths match context, not the Q15/Q16 doubles. One guard-start and one guarded command are retained; retry is false.",
+    "guard_start_event": {
+      "absolute_deadline_utc": "2026-11-07T05:27:54.697878+00:00",
+      "argv": [
+        "/opt/homebrew/Cellar/node@24/24.18.0/bin/node",
+        "/private/tmp/tec-os-site04-68f1b1aaacf6/mem-guard.mjs",
+        "--limit",
+        "850",
+        "--heap",
+        "450",
+        "--name",
+        "tec-os-reader-site",
+        "--wait",
+        "0",
+        "--log",
+        "/private/tmp/tec-os-site04-68f1b1aaacf6/memory.jsonl",
+        "--",
+        "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+        "-S",
+        "-B",
+        "/private/tmp/tec-os-site04-68f1b1aaacf6/packet/build_and_check.py",
+        "--context",
+        "/private/tmp/tec-os-site04-68f1b1aaacf6/context.json"
+      ],
+      "context_sha256": "cd8b8184f7c6920cf6305681fea3171d4d0e0d6220c206579600049ea8c55cf2",
+      "event": "guard-start-authorized",
+      "stage": "guarded-build-and-check",
+      "utc": "2026-11-07T05:24:59.616979+00:00"
+    },
+    "costs": {
+      "whole_runner_elapsed_seconds": 11.873271875,
+      "vitepress_reported_build_seconds": 3.3,
+      "guard_elapsed_seconds": 4.9,
+      "guard_peak_sampled_mb": 573,
+      "guard_max_observed_processes": 3,
+      "guard_wait_seconds": 0,
+      "guard_exit_code": 0,
+      "boundary": "Distinct scopes: whole runner, build tool report and sampled guarded tree. Guard memory/process sampling is not an exact whole-host or bootstrap/controller peak/census."
+    },
+    "memory_records": [
+      {
+        "name": "tec-os-reader-site",
+        "command": "python3.9 -S -B build_and_check.py --context context.json",
+        "limitMB": 850,
+        "heapMB": 450,
+        "event": "start",
+        "at": "2026-11-07T05:24:59.886Z",
+        "freePercent": 37,
+        "load": 2.29,
+        "waitedSeconds": 0
+      },
+      {
+        "name": "tec-os-reader-site",
+        "command": "python3.9 -S -B build_and_check.py --context context.json",
+        "limitMB": 850,
+        "heapMB": 450,
+        "event": "end",
+        "at": "2026-11-07T05:25:04.815Z",
+        "outcome": "exit 0",
+        "code": 0,
+        "peakMB": 573,
+        "processes": 3,
+        "seconds": 4.9,
+        "freePercentAtEnd": 36
+      }
+    ],
+    "first_failure": null,
+    "failure_and_stop_markers_present": false,
+    "deadline_boundary": "Normal completion was below 180 seconds. Actual success does not exercise the hard deadline, stop races or forced cleanup controls. No cross-process monotonic timestamp subtraction was used."
+  },
+  "real_output": {
+    "checker_status": "passed",
+    "first_failure": null,
+    "checker_sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+    "expectations_sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+    "checked": {
+      "documents": 39,
+      "links": 247,
+      "fragments": 45,
+      "sidebars": 39,
+      "pagers": 39,
+      "fences": 247,
+      "public_html": 1
+    },
+    "expected_counts": {
+      "pages": 39,
+      "links": 247,
+      "fragments": 45,
+      "fences": 247
+    },
+    "independent_identity_readback": {
+      "html_files": 41,
+      "all_recorded_html_sizes_hashes_and_exact_file_set_match": true,
+      "composition": "39 readers including unlisted index, framework 404, one public passthrough. 404 is not a fortieth reader.",
+      "all_four_literal_array_digests_recomputed_match": true,
+      "literal_inputs": {
+        "encoding": "SHA-256 of UTF-8 compact JSON ordered page/value arrays; ensure_ascii=false",
+        "raw_fences_sha256": "d3a834ce9b85b8c204d0e352512ad67488504ebaed55fb22e5c4adfba790fff0",
+        "rendered_fences_sha256": "7843a47331fc4af971d0fa92535a21dc541c1417bbddcb18136411a33b55b426",
+        "raw_headings_sha256": "0d8c4867766d54fc8d2ec4a748aae3fe7b31053cf8398c5f42694a5ebfd1e034",
+        "visible_headings_sha256": "5bbc47c6a8dcf827a94cf12c0bacf95da921e6e6f3d92f21a040d00a3749e83d"
+      },
+      "html_inputs": [
+        {
+          "path": "404.html",
+          "sha256": "6ec82d3db7c92ae04990c9d51594d55fd0294a8acf1f56852bec8829714e4919",
+          "bytes": 114982
+        },
+        {
+          "path": "tec-os/01-first-session.html",
+          "sha256": "fa56cfcbaee16081664b894063bab42a07564975d9e04328a637f44c5adc04b1",
+          "bytes": 149969
+        },
+        {
+          "path": "tec-os/02-make-a-small-program.html",
+          "sha256": "0537a5eaeb698fee0e1d91a22d22166ced061b98f46215b2f23259aa6e377a70",
+          "bytes": 153201
+        },
+        {
+          "path": "tec-os/03-work-with-files.html",
+          "sha256": "5a5418ee7a0ff28965054338655e87cc1dd936001c8dd0549d1369111fde0128",
+          "bytes": 152985
+        },
+        {
+          "path": "tec-os/04-drives-and-user-areas.html",
+          "sha256": "2c8ccea4cf0ec0d0f703234b1896d30bf01e2da1d54f796eece9f3ba71cd48dd",
+          "bytes": 162513
+        },
+        {
+          "path": "tec-os/05-cards-on-the-pc.html",
+          "sha256": "a0a42aa84b2c5ef5253c0e4cd4035d3a28563b41836c6f6dabdd44d739330173",
+          "bytes": 184216
+        },
+        {
+          "path": "tec-os/06-choose-a-console.html",
+          "sha256": "edc2f30ed04d181e5a7f1a2150d1a4d3941720f19d3b816368a4325653a1824e",
+          "bytes": 156251
+        },
+        {
+          "path": "tec-os/07-commands-at-startup.html",
+          "sha256": "8e5fd46803bbf0203bcad724e91de713a3ae638cdfee40f6226dfecd23b68831",
+          "bytes": 166800
+        },
+        {
+          "path": "tec-os/08-call-tec-os.html",
+          "sha256": "d20194b66225a47899c4ef1517a4c4e31ae20fc6aa5e931f0862abfe208e3bff",
+          "bytes": 155897
+        },
+        {
+          "path": "tec-os/09-read-and-write-a-file.html",
+          "sha256": "2223684637e7722e075005d84460ac1356805be88e40e94e856a6f17c6ebc881",
+          "bytes": 162586
+        },
+        {
+          "path": "tec-os/10-memory-for-programs.html",
+          "sha256": "ffdfd9e564b1ee1955f3b17addf948bcd828d6d5f3e42cbed5208b1cddb91b3c",
+          "bytes": 182692
+        },
+        {
+          "path": "tec-os/11-use-the-boards-devices.html",
+          "sha256": "f2ded8b146ecd775a9f690fde1b53a381d18fe9328028f577e8a56a95fa47c72",
+          "bytes": 218437
+        },
+        {
+          "path": "tec-os/12-results-and-command-chains.html",
+          "sha256": "83ce08a37f58c6804d72c4fe8288aa6b176e76bc5ced887bae2d1e10d7f23853",
+          "bytes": 170111
+        },
+        {
+          "path": "tec-os/13-write-a-resident-service.html",
+          "sha256": "53c7919e4d068cedb59734f86afcbf9bc357cd65422235689e1bcf24e5b99cbf",
+          "bytes": 207115
+        },
+        {
+          "path": "tec-os/14-state-and-memory.html",
+          "sha256": "e6739f7e9829cf2868bbd2fd4cc50b3695dd892c3a28e50abfb13e61d9dd0b7a",
+          "bytes": 160802
+        },
+        {
+          "path": "tec-os/15-reset-and-boot.html",
+          "sha256": "b7e402e2ce818e0cb66a33d7cf72b09de0c00defeda3d51336f6e27c36c9aa82",
+          "bytes": 165502
+        },
+        {
+          "path": "tec-os/16-console-paths.html",
+          "sha256": "8ae8d530c45653108be0ada06eef208620cb867f43b89822481f399a89cc09ba",
+          "bytes": 181833
+        },
+        {
+          "path": "tec-os/17-card-blocks-and-volumes.html",
+          "sha256": "02afba7d5b5c3217e0113630caaba645c71c004a9f3e8591ca592c1dacc4fb81",
+          "bytes": 176166
+        },
+        {
+          "path": "tec-os/18-cache-and-persistence.html",
+          "sha256": "1e9c2633d68a90c6283ccc1af746e161ae083496226ce9d2b6339bba9470d66b",
+          "bytes": 171960
+        },
+        {
+          "path": "tec-os/19-a-file-through-the-bdos.html",
+          "sha256": "3ba91f34554b965e2984cd75cc8a41b1f466fa45a8e88b88eca701f263fad94a",
+          "bytes": 177492
+        },
+        {
+          "path": "tec-os/20-from-prompt-to-program.html",
+          "sha256": "d00ae7e5f4fe87f60824e96ab262f9bec53f62127c07a9ddd413a32ddf390ce6",
+          "bytes": 181884
+        },
+        {
+          "path": "tec-os/21-chains-across-warm-boot.html",
+          "sha256": "5af60ac6a0a9708e9526de3543bf46f7210b4a708379f2b646f515c796b554dc",
+          "bytes": 163182
+        },
+        {
+          "path": "tec-os/22-the-history-ring.html",
+          "sha256": "82988d09d6d1bd10f2112d330f55139e0deef7ff0218c90b1f405fb231be50fb",
+          "bytes": 157393
+        },
+        {
+          "path": "tec-os/23-numbered-service-dispatch.html",
+          "sha256": "e5ede72ef99db56cd9f2e91dc6e18271498859ba66213e4a5c8f187bed13257b",
+          "bytes": 159814
+        },
+        {
+          "path": "tec-os/24-loading-and-removing-services.html",
+          "sha256": "fed8fff0699808ea77ae5364666c7f3d66229aa008719abf99c2b42b479ce953",
+          "bytes": 170222
+        },
+        {
+          "path": "tec-os/25-startup-inside-the-ccp.html",
+          "sha256": "fd2ca2da78e51e5822af58a120c5ad5975e6c71687dab7f8eae13f33a7a15b03",
+          "bytes": 166184
+        },
+        {
+          "path": "tec-os/26-build-the-rom-and-media.html",
+          "sha256": "77fe9ba825a4bb040c10011dfc213a94f57cd4b4ae1d9da202ea12c707b6771d",
+          "bytes": 173330
+        },
+        {
+          "path": "tec-os/27-diagnose-the-machine.html",
+          "sha256": "12ab68a81f0d9879e6c7d3bfbe095ce4dd9f49675d2e1ec94a4b33b70aa703f1",
+          "bytes": 170674
+        },
+        {
+          "path": "tec-os/28-the-host-model-as-evidence.html",
+          "sha256": "f639e28f3ef37384bd5832655395c493df020f2ee5c59cd78b1552b27bb74aa8",
+          "bytes": 167919
+        },
+        {
+          "path": "tec-os/appendix-a-bdos-functions.html",
+          "sha256": "3a559421d349d593b65f5498bb08cc31ecc78e8a9e64667087e4bb677a76a004",
+          "bytes": 173816
+        },
+        {
+          "path": "tec-os/appendix-b-rom-services.html",
+          "sha256": "97e727b0feb9e0e0227abf2af6eba8c45b735fe8b2ff860e9fa5252569c10948",
+          "bytes": 183897
+        },
+        {
+          "path": "tec-os/appendix-c-memory-map.html",
+          "sha256": "d4f6d3515b6450781f84a4e21b502f038b05fb3bb1e1635118f693587dc429d8",
+          "bytes": 175951
+        },
+        {
+          "path": "tec-os/appendix-d-error-messages.html",
+          "sha256": "2ad443d15e9954c8dbfc11a1b7a4bb3c9db9a9ab874c3bb261689c5a190bdb92",
+          "bytes": 182758
+        },
+        {
+          "path": "tec-os/appendix-e-container-format.html",
+          "sha256": "ff09b997d7e4bedba8d5a932263504f4c3028ce51ea3f0282c0df4821bbeee3b",
+          "bytes": 161394
+        },
+        {
+          "path": "tec-os/appendix-f-tecvol.html",
+          "sha256": "857ebb21d603f330dc216a15d40bfdd132831dfb01edd4cd4d64cb9cffdf4290",
+          "bytes": 168174
+        },
+        {
+          "path": "tec-os/appendix-g-tec-1g.html",
+          "sha256": "1a69ff13656b4f4b7c8d626f27962518a6f1855b23106a5b67c1f7adbacb723b",
+          "bytes": 157385
+        },
+        {
+          "path": "tec-os/appendix-h-service-file-format.html",
+          "sha256": "0efb811ed0c07e6e698ace77bfc62a6b9fcda7a07ccd9f47284d84071837d20f",
+          "bytes": 155133
+        },
+        {
+          "path": "tec-os/appendix-i-web-page.html",
+          "sha256": "c6269cb4c8d375b0a58c902a916245d6a5c1ce8fae644350798a8a7070aeb5ac",
+          "bytes": 160441
+        },
+        {
+          "path": "tec-os/appendix-j-command-reference.html",
+          "sha256": "3368cd8f0b3cffbab0c999d626cdb1093975f19a3c0569699e03f9cd1236bd0c",
+          "bytes": 155414
+        },
+        {
+          "path": "tec-os/index.html",
+          "sha256": "49854f5ab9cb0a55f630e3d7a19bfed683ae6e629ff6fd0e7f3625cbd5492ab0",
+          "bytes": 147967
+        },
+        {
+          "path": "tec1g/mon3-user-guide/index.html",
+          "sha256": "70578bc32521c647bb17afab0f1a79959cf6733711ebebf1f2ac16dbd7da616d",
+          "bytes": 321
+        }
+      ]
+    },
+    "predicate_scope": "Real checker enforces exact HTML inventory/editorial exclusion, title/H1/permalink structure, scoped reader-link multisets and fragment targets, four ordered sidebar groups on every reader, flattened previous/next chain and 247 decoded fence texts/languages/counts. This review binds the executed checker and output identities without rerunning its HTML validator.",
+    "sidebar_group_sizes": [
+      7,
+      6,
+      15,
+      10
+    ],
+    "fragment_boundary": "45 fragment-bearing reference occurrences, 32 distinct target/fragment pairs; not 45 distinct anchors.",
+    "public_html": "One public file checked by exact 321-byte identity only; no semantic acceptance of its contents.",
+    "prior_controls": {
+      "retained_control_count": 48,
+      "status": "passed",
+      "checker_and_expectations_and_driver_identity_match": true,
+      "boundary": "Retained prior 48 synthetic controls, unchanged; no controls were rerun in this review or substituted for actual real-site results."
+    }
+  },
+  "source_and_literal_basis": {
+    "representation": {
+      "code": "Exact emitted decoded text after the installed highlighter ECMAScript trimEnd on the whole fence. No linewise whitespace normalization. Original source text remains in text and source_sha256.",
+      "code_transform_source": {
+        "path": "node_modules/vitepress/dist/node/chunk-D3CUZ4fa.js",
+        "sha256": "07d45c356e7c850c2454904949f4b0b95c1d4a2d92119cbdaf4d419ae20dde98",
+        "lines": [
+          35347,
+          35418
+        ]
+      },
+      "heading": "Inline code delimiters are Markdown syntax, not visible heading text. source_h1 retains original. Only Appendix F uses inline code in H1. Its browser title resolves frontmatter inline Markdown, so it omits code delimiters; its independently configured sidebar label retains backticks. This single browser-title expectation correction was approved in KD-246 after SITE02 failed under the old reading. No generic stripping or checker algorithm change.",
+      "index_pager": "Unlisted index is absent from sidebar, findIndex returns -1. Installed default next is first chapter, previous absent. No book/config edit made.",
+      "pager_source": {
+        "path": "node_modules/vitepress/dist/client/theme-default/composables/prev-next.js",
+        "sha256": "2288a677ec465c6e3fe584024730c9add222bf7b880e0e2d6c9828ea8a6edd91",
+        "lines": [
+          6,
+          48
+        ]
+      },
+      "pre_result_boundary": "Derived by inert full source reading before any allocated build or real rendering. Synthetic controls are not a real site result."
+    },
+    "source_support": "Read the installed, hash-matching highlighter lines 35347–35418 and pager lines 6–48. Highlighter applies trimEnd to the whole fence before codeToHtml; pager uses index +/- 1, so absent unlisted index yields no previous and next first chapter. No line-wise stripping or generic title/backtick normalization is accepted.",
+    "historical_boundary": "Raw Markdown source, explicit historical capture/citation pins and literal evidence remain bound to accepted a3e4c29 bytes. Rendered fence expectations retain both raw and approved emitted forms. Trailing historical padding is not silently corrected. This site result does not repin examples or rerun product workflows.",
+    "technical_citation_boundary": "Current adopted mechanism source authority remains 962853f499f05faf281f6cdff1deca8959f58c2b where declared by accepted readers. Byte-preserved citations inherit prior factual reviews; HTML success is not a new semantic source/caller review or current execution proof for every claim."
+  },
+  "ownership_and_resource": {
+    "verdict": "RESOLVED_RETAINED_REGISTERED_SCOPE; release this specific SITE04 resource hold is justified.",
+    "context_sha256": "cd8b8184f7c6920cf6305681fea3171d4d0e0d6220c206579600049ea8c55cf2",
+    "ownership": {
+      "birth": "Sat Nov  7 05:24:59 2026",
+      "birth_environment": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC"
+      },
+      "context_sha256": "cd8b8184f7c6920cf6305681fea3171d4d0e0d6220c206579600049ea8c55cf2",
+      "guard_pid": 28375,
+      "identity_query_budget_seconds": 2.0,
+      "identity_query_elapsed_seconds": 0.0033392920000000006,
+      "nonce": "2038611d6eb3df6047682acedd6939e691924bdb283d3d737f84889730a69336",
+      "parent_pid": 28375,
+      "pgid": 28386,
+      "pid": 28386
+    },
+    "ownership_sha256": "888b157ef03dc83fc93e2c065cf7dc0cb6b4415520326b4cd05c9bc3738db313",
+    "ack": {
+      "nonce": "2038611d6eb3df6047682acedd6939e691924bdb283d3d737f84889730a69336",
+      "ownership_sha256": "888b157ef03dc83fc93e2c065cf7dc0cb6b4415520326b4cd05c9bc3738db313"
+    },
+    "ack_event": {
+      "birth": "Sat Nov  7 05:24:59 2026",
+      "birth_environment": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC"
+      },
+      "event": "ownership-acknowledged",
+      "stage": "guarded-build-and-check",
+      "utc": "2026-11-07T05:24:59.945676+00:00",
+      "worker_group": 28386,
+      "worker_pid": 28386
+    },
+    "binding": "UTC/C birth, nonce, context hash, guard parent PID 28375, dedicated worker PID/PGID 28386 and exact ownership receipt SHA agree with durable ACK and registry accepted SHA. Worker source requires that exact ACK before build; post-ACK receipt hash remains bound.",
+    "query_history": {
+      "completed_queries": 95,
+      "all_outcomes_ok": true,
+      "largest_recorded_query_elapsed_seconds": 0.030652165999999426,
+      "final_query": {
+        "cleanup_phase": true,
+        "effective_budget": 0.5,
+        "elapsed": 0.015717874999999992,
+        "end": 12.002647083,
+        "event": "query-finished",
+        "exceeded_old_half_second": false,
+        "last_success_id": 94,
+        "outcome": "ok",
+        "planned_budget": 0.5,
+        "query_id": 95,
+        "stage": "postflight",
+        "start": 11.986929208,
+        "utc": "2026-11-07T05:25:06.710194+00:00"
+      },
+      "ordinary_internal_budget_seconds": 2.0,
+      "cleanup_internal_budget_seconds": 0.5,
+      "boundary": "Internal observation allowances, not host latency guarantees or revised 180/850/450 measured gates. No failed-query retry is evidenced."
+    },
+    "audit_status": "CLEAR",
+    "audit_remaining": [],
+    "direct_handles": [],
+    "retained_history": {
+      "entries": 930,
+      "registered_direct_children": 97,
+      "registered_children_with_exit_records": 97,
+      "known_observed_identities": 21,
+      "final_snapshot_rows": 622,
+      "final_success_query_id": 95,
+      "ownership_history_equals_audit_registry": true,
+      "independently_filtered_final_known_pid_parent_or_guard_worker_group_matches": []
+    },
+    "resolution_basis": "Both non-query direct children (archive 28339 and guard 28375) have exit 0; all 95 registered query helpers have exit records, including final helper. Final retained 622-row global snapshot has none of the 21 known owned PIDs, their direct child relationships, or PGID 28375/28386. Registry retired groups, live handles and unresolved entries are empty. External terminal 0 separately establishes outer invocation completion. Final audit is after source postflight under the reviewed observer-quiescence/finalization path.",
+    "limits": "No new external snapshot was taken. This is an independent read/filter of retained evidence, not an independent live observation. It proves the registered/discovered identity and group scope at the final audit plus recorded direct-child exits; it cannot prove universal historical discovery or exclude a never-observed escaped/reparented process. Empty audit alone was not used as that guarantee."
+  },
+  "retention": {
+    "external_regular_file_inventory_count_including_outer_log": 5523,
+    "actual_work_regular_files": 5522,
+    "all_sizes_and_hashes_match": true,
+    "external_outer_log_alias": "external/outer.log binds the sibling /private/tmp/tec-os-site04-68f1b1aaacf6.outer.log",
+    "actual_six_symlink_targets_match": true,
+    "boundary": "Current original evidence and manifest identities verified. Independent archive retention/topology review is separate and is not completed by this report."
+  },
+  "recommendation": {
+    "C18": "Recommend acceptance of the actual SITE04 render/check and narrow registered resource resolution. This supplies the remaining real-site result to C18. Root may close C18 after the separate independent retention review and its acceptance disposition; this report does not edit or independently declare that package closed.",
+    "C16": "Separate factual documentation and product-handoff obligations remain governed by C16; rendering supplies no substitute for their source/qualification acceptance.",
+    "publication": "No publication, deployment, browser/visual-layout, hardware, new product execution or successor allocation is authorised. Preserve prior failed attempts and consumed claims unchanged.",
+    "blocking_findings": []
+  },
+  "evidence_sha256": {
+    "terminal.json": "d60b27845125116f38f8686ef610c7502fab88f665ffde33fe675e078fabfac3",
+    "checker.json": "1f2fca4a9bf6e01bbffe0e9e0b86c261dd32fe56e2012a587c7b480e4208418a",
+    "context.json": "cd8b8184f7c6920cf6305681fea3171d4d0e0d6220c206579600049ea8c55cf2",
+    "invocation.json": "b102fa27a84b51c94ac71ded610f7a9031752ccb593f2b698f34cd8bd637cb38",
+    "events.jsonl": "eb59d3b549d737e17d18bba25e66cd145fb442528e1316ecea0789c00fb57b62",
+    "job-ack.json": "91879fc05222ed813d150bd1f6e11589d6e289890a3f94c2b2f42f2d89e22beb",
+    "job-ownership.json": "888b157ef03dc83fc93e2c065cf7dc0cb6b4415520326b4cd05c9bc3738db313",
+    "owned-process-audit.json": "6e7191bd38377eb9fc739071b2baff4bd4ce4b67b6719e215ed7fd3a555df07f",
+    "ownership-history.json": "51a1fabb997d1d42aa5b7408f80583a7fc83f8376e5abbef7355be1e3fab44a6",
+    "source-after.json": "a93c2770e8cdf667a08bdc5b9576f23749718d01bbaea3b99c3256c4881892fa",
+    "memory.jsonl": "974e6ee04b99ee4837a5073ec881c279750cc56794b27f325118c7bddbd287e0",
+    "stream.log": "4639d80f0915c6848f4c586d9792570dc18943c5fa469e5a62ca8e450b7ad27c",
+    "build-started.json": "5e1aed2792b44ecc8106ffedf05d918586e5dbe5b96b68fc3fe53c02f68a206c",
+    "build-ended.json": "d24219f6de94b955cf36d25bd2aca88e2d35eef45b9317b7083f55ec8fe9653c",
+    "validate-started.json": "f8e97dceda51fbccacb4328c07420d57a49945a1320be726887c9829c61d2f4c",
+    "validate-ended.json": "d24219f6de94b955cf36d25bd2aca88e2d35eef45b9317b7083f55ec8fe9653c"
+  }
+}

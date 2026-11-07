@@ -1,7 +1,7 @@
 {
   "candidate_commit": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
   "branch": "tec-os-reader-rewrite",
-  "status": "actual reader-facing integration and independent source/navigation confirmation complete; parent final acceptance and allocated build/render verification pending",
+  "status": "reader integration and independent editorial/factual/navigation plus actual SITE04 result/retention/resource reviews clear; C18 owner acceptance recommended, main landing/publication separate",
   "reader_count": 39,
   "source": "962853f499f05faf281f6cdff1deca8959f58c2b",
   "tested_source": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
@@ -419,5 +419,13 @@
     },
     "actual_allocation": false,
     "site_acceptance": false
+  },
+  "site_verification_attempt04_result": {
+    "status": "ACTUAL_PASS_INDEPENDENT_RESULT_RETENTION_RESOURCE_REVIEW_CLEAR",
+    "allocation": "KS47-SITE04-20261107",
+    "result": "site-verification/attempt04-result.json",
+    "recommendation": "c18-acceptance-recommendation.json",
+    "resource_verdict": "Release of this specific SITE04 registered resource hold is supported. Retained registered/discovered identity/group scope and direct-handle exits only, not universal historical descendant discovery. P3 records disposition.",
+    "site_publication": false
   }
 }
