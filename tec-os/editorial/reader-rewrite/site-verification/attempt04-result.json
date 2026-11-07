@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "ACTUAL_PASS_INDEPENDENT_RESULT_RETENTION_RESOURCE_REVIEW_CLEAR",
+  "allocation": "KS47-SITE04-20261107",
+  "authority": "Origo 26b45fd2",
+  "offered_commit": "2f8b498",
+  "external_session": 49113,
+  "external_terminal_exit": 0,
+  "runner_terminal": {
+    "detail": "",
+    "elapsed_seconds": 11.873271875,
+    "exit_code": 0,
+    "first_failure": null,
+    "retry": false,
+    "seal_sha256": "68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd",
+    "status": "PASS"
+  },
+  "checker_status": "passed",
+  "checked": {
+    "documents": 39,
+    "links": 247,
+    "fragments": 45,
+    "sidebars": 39,
+    "pagers": 39,
+    "fences": 247,
+    "public_html": 1
+  },
+  "checker_sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+  "expectations_sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+  "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+  "runner_audit_status": "CLEAR",
+  "remaining": [],
+  "direct_handles": [],
+  "guard_cost": {
+    "name": "tec-os-reader-site",
+    "command": "python3.9 -S -B build_and_check.py --context context.json",
+    "limitMB": 850,
+    "heapMB": 450,
+    "event": "end",
+    "at": "2026-11-07T05:25:04.815Z",
+    "outcome": "exit 0",
+    "code": 0,
+    "peakMB": 573,
+    "processes": 3,
+    "seconds": 4.9,
+    "freePercentAtEnd": 36
+  },
+  "cost_scope": "Guard sampled scope only, not whole-controller or transient-process memory proof. Whole elapsed is runner recorded duration.",
+  "retention": {
+    "archive": "complete-evidence-and-inputs.tar.gz",
+    "bytes": 63663283,
+    "sha256": "6cef4b8346f9ffe6ca79988391400dfc69b3a94b21ea0a70ddcb0dc654543bf0",
+    "raw_files_verified": 5522,
+    "symlinks": 6,
+    "originals_unchanged": true
+  },
+  "site_publication": false,
+  "retry": false,
+  "independent_reviews": {
+    "attempt04-result-review.json": "d264ecb59792a5e10447e357db6a514a0beccd393c5f0a19469f436885b57b84",
+    "attempt04-retention-review.json": "41685a40b2d88e87cf1a86eab21c33b825d63a8810c399d3f0f254f2bde794c9"
+  },
+  "resource_verdict": "Release of this specific SITE04 registered resource hold is supported. Retained registered/discovered identity/group scope and direct-handle exits only, not universal historical descendant discovery. P3 records disposition.",
+  "external_receipt_publication": {
+    "origo_commit": "862dd616",
+    "path": "studies/p3-tec-os/evidence/book-site04-external.json",
+    "sha256": "d21e9e7dd5aea232a47a5353fedd72207db415cba4be3f4032f0a11897d02b67",
+    "byte_identical_to_published_receipt": true,
+    "regular_file_identities_including_external_outer_log": 5523,
+    "separate_symlink_targets": 6
+  },
+  "C18_recommendation": "Accept the KS47 reader-centred rewrite at a3e4c29 using prior editorial/factual acceptance plus actual SITE04 closure. Root acceptance disposition remains separate."
+}

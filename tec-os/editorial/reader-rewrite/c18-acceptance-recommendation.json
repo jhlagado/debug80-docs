@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "status": "RECOMMEND_C18_ACCEPTANCE_OWNER_DISPOSITION_PENDING",
+  "authority": "KD-242 / KS47 and completion C18",
+  "accepted_reader_source": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+  "readers": 39,
+  "chapters": 28,
+  "appendices": 10,
+  "current_mechanism_source": "962853f499f05faf281f6cdff1deca8959f58c2b",
+  "tested_opening_source": "8b8664a7d93c6dc2e8bce509b9770585e106eedc",
+  "citation_basis": "Declared selected mechanism source and prior independent factual/citation reviews remain the basis. Historical captures/measurements/recipes retain explicit actual pins. SITE04 does not repin examples or establish a new semantic factual audit. C16 final qualified-source updates remain separate.",
+  "prior_evidence_hashes": {
+    "reading-ledger.json": "d086f11db98f9813a384796b9bc17d8309151ef6d0ed0d16822ed8a70568bf14",
+    "replacement-outline.md": "a7de903ce27c75f0b0344547b76a3210b07d10674e5f63d2c77ee575f1303ec0",
+    "outline-review-dispositions.md": "52eb48b224ba199af38d25e0f7d599e34ac278ba68dcbfb99ebc651e4ad0ae47",
+    "integration-source-checks.json": "d2e2f42a446b9656c37c0e4128dd5b0ccba7e660ef58bfe0d53d09dca7b15c49",
+    "integration-independent.json": "1b6a07dc00059905310e7bb13468a87f085c2e139b053b2237b65791ec3b3baa",
+    "source-adoption-independent.json": "2f967b57dabc867057e4e0d2b54ed7e2144fbb666b0f6bdc09e12a808ad3a083",
+    "source-adoption-unaffected-independent.json": "a9c633772daa57a3da79ec710f292a4d4d6822d6cb12705e53b9cc2b88146b24",
+    "source-adoption-impact-confirmation.json": "d65e2b9534550c189f8ebf1f13bba494dc76243e5a5369366afcdc3a73c7e879",
+    "opening-reader-confirmation.json": "60fc4106bdb2be30658654ae230a605438b8eea426c0f051e9ecec9e0d42aa5c"
+  },
+  "actual_site_result": {
+    "path": "site-verification/attempt04-result.json",
+    "sha256": "7e237737e41df0c5aa619e2494c2a535cb6a2177fe7d66f8f2df7f21bb8b0ac2",
+    "seal": "68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd",
+    "external_receipt_origo": "862dd616",
+    "reviews": {
+      "attempt04-result-review.json": "d264ecb59792a5e10447e357db6a514a0beccd393c5f0a19469f436885b57b84",
+      "attempt04-retention-review.json": "41685a40b2d88e87cf1a86eab21c33b825d63a8810c399d3f0f254f2bde794c9"
+    }
+  },
+  "acceptance_basis": [
+    "Complete original reading, justified independent outline/crosswalk and all39 rewritten pages have prior closed editorial/factual reviews.",
+    "Practical opening and complete138-milestone workflow acceptance retain their recorded source and host-model boundaries.",
+    "Reader integration/navigation confirmed independently at0aecb61 for a3e4c29. No reader/sidebar bytes changed for SITE04.",
+    "Real SITE04 passes39documents/247links/45fragmentreferences/39sidebars/39pagers/247fences and1public passthrough identity; complete source/input/ownership postflight and independent retention/resource reviews are clear.",
+    "KD-246 single title expectation and prior48checker controls remain unchanged. Prior failed actual attempts remain failed."
+  ],
+  "branch_status": {
+    "branch": "tec-os-reader-rewrite",
+    "reader_integration_complete": true,
+    "reader_integration_commit": "9e227055c63f8d47773c53f6421cec3a6ebf7b67",
+    "final_reader_correction": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+    "evidence_retention_commit": "03bc313",
+    "remote_main_observed": "4d830dc77f8dacc7c610794e8f0b528237b66fee",
+    "landed_to_main": false,
+    "published": false
+  },
+  "separate_obligations": [
+    "Owner C18 acceptance disposition",
+    "C16 final qualified-source factual/product-handoff updates",
+    "Any main landing/integration authorisation",
+    "Publication/deployment",
+    "No browser/visual or physical-board claim supplied by SITE04"
+  ],
+  "successor_allocated": false
+}

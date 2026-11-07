@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "review_kind": "independent_read_only_site04_retention_review",
+  "verdict": "clear_within_retention_scope",
+  "retention_mismatches": [],
+  "archive": {
+    "path": "actual-attempt04/complete-evidence-and-inputs.tar.gz",
+    "bytes": 63663283,
+    "sha256": "6cef4b8346f9ffe6ca79988391400dfc69b3a94b21ea0a70ddcb0dc654543bf0",
+    "members": 6115,
+    "regular_files": 5522,
+    "symlinks": 6,
+    "raw_paths": 6084,
+    "offered_files": 23
+  },
+  "external_receipt": {
+    "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-site04-external.json",
+    "sha256": "d21e9e7dd5aea232a47a5353fedd72207db415cba4be3f4032f0a11897d02b67",
+    "file_entries": 5523,
+    "link_entries": 6,
+    "external_log_key": [
+      "external/outer.log"
+    ]
+  },
+  "claim": {
+    "path": "/Users/johnhardy/.origo/site-verification/claims/68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd.json",
+    "bytes": 135,
+    "sha256": "b334115e9f3fb7f6c642c8f9b42131fa271103c1272696b327613bd64b6a8116"
+  },
+  "frozen_authorities": {
+    "allocation": "26b45fd2",
+    "allocation_path": "studies/p3-tec-os/reviews/book-site-allocation04.md",
+    "offer": "2f8b498",
+    "seal": "68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd"
+  },
+  "checks": [
+    "All6084 original raw inventory entries equal retention.json including nanosecond mtimes, modes, uid/gid, bytes, link counts and first-hardlink paths. Complete before/after raw inventories equal.",
+    "All5522 regular-file bytes and6 symlink targets match tar and external receipt;5523 receipt entries include external/outer.log mapped to original sibling .outer.log. No multi-linked original regular files or tar hardlink entries.",
+    "Complete tar member set/types/modes/uid/gid/mtime match originals, timestamps at archive precision within1microsecond. Exact archive63663283-byte SHA matches request and manifest. No duplicate/missing/unexpected members.",
+    "Generated HTML/assets, source, dependency tree and packet are all included in full raw byte comparison. No render or checker invocation used.",
+    "All23 retained offer files match declared hashes, archive members and exact2f8b498 Git blobs. Allocation copy matches exact26b45fd2 Git blob.",
+    "Claim, external terminal, outer log and retention copies are archive-byte exact. Claim and external receipt match their declared hashes. Originals remain byte-identical before/after.",
+    "Actual seal/payloads agree with offered seal and policy/path profile. All889 source files hash-match packet source-inputs and source-after map. Retained source.tar matches sealed34037760-byte archive identity.",
+    "All4454 actual copied dependency entries, including symlink targets and executable bits, match exact sealed installed-inputs manifest."
+  ],
+  "retained_counts": {
+    "source_inputs": 889,
+    "dependency_entries": 4454,
+    "generated_html_files": 41
+  },
+  "manifest_hashes": {
+    "retention.json": "acb5c83f7eadcbfc90f074f69fb8c2459147215c033234d774fe6aadd0881f94",
+    "archive-manifest.json": "2a7343fd649082f89cdea35391ddbd2c509460fd7c20f70220a245a5a53aea56",
+    "external-terminal.json": "d21e9e7dd5aea232a47a5353fedd72207db415cba4be3f4032f0a11897d02b67",
+    "claim.json": "b334115e9f3fb7f6c642c8f9b42131fa271103c1272696b327613bd64b6a8116",
+    "allocation.md": "1e2e0ec0fb77c6480408e7eaf8d0e4731bdff184749cece0982ea9d6e537251f",
+    "outer.log": "4639d80f0915c6848f4c586d9792570dc18943c5fa469e5a62ca8e450b7ad27c"
+  },
+  "scope_limits": "Retention and actual-input/profile identity only. Hooke handles actual result/resource predicates. No site acceptance, visual/browser check or universal historical process-closure claim.",
+  "preservation": "Only attempt04-retention-review.json written. Original evidence, historical SITE03 and48 checker artifacts untouched.",
+  "not_performed": [
+    "candidate/helper imports",
+    "replay",
+    "controls",
+    "live process probes",
+    "signals",
+    "guard execution",
+    "build/site/checker runs",
+    "archive extraction",
+    "commits"
+  ]
+}
