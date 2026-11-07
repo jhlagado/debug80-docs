@@ -418,7 +418,7 @@ def main():
         if args.case == 'Q15':
             require(runner.returncode == terminal['exit_code'] == 0 and terminal['status'] == 'PASS',
                     'Q15 needs actual public command zero and PASS terminal')
-            require(owned.get('remaining') == [] and owned.get('status') != 'UNKNOWN_HELD',
+            require(owned.get('remaining') == [] and owned.get('status') == 'CLEAR',
                     'Q15 needs fresh successful empty runner audit')
             require((output / 'source-after.json').is_file(), 'Q15 input postflight missing')
             require(not (output / 'first-failure.json').exists(), 'Q15 first failure exists')
