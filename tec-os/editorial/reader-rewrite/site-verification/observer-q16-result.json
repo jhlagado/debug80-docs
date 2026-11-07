@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "status": "ACTUAL_EXPECTED_FAILURE_INDEPENDENTLY_REVIEWED",
+  "allocation": "KS47-OBSERVER-Q16-20261107",
+  "authority": "Origo a7b86b83",
+  "external_session": 89504,
+  "controller_exit": 0,
+  "controller_elapsed_seconds": 2.042504,
+  "runner_exit": 124,
+  "runner_terminal": {
+    "detail": "command exited 1",
+    "elapsed_seconds": 1.806913625,
+    "exit_code": 124,
+    "first_failure": {
+      "detail": {
+        "expected_sha256": "79372cbaf100ddbb2cc1fef6140e4ebac2b71557d9b165a603327fbff02ffd3a",
+        "message": "job ownership receipt hash mismatch",
+        "observed_sha256": "4bad096ed00cc698995187a51a72f8361d0f3d16af1761dddadf68f681e1c6ec"
+      },
+      "exit_code": 124,
+      "retry": false,
+      "stage": "identity-observation",
+      "status": "FAILED",
+      "utc": "2026-11-07T05:04:51.937168+00:00"
+    },
+    "retry": false,
+    "seal_sha256": "567506ab106fa9a00c80e1ce799f6aae58eed158f6de788150ca8db04e125893",
+    "status": "FAILED"
+  },
+  "runner_audit": "UNKNOWN_HELD",
+  "independent_scope": "RESOLVED_RETAINED_SCOPE",
+  "guard_cost": {
+    "name": "tec-os-reader-site",
+    "command": "python3.9 -S -B build_and_check.py --context context.json",
+    "limitMB": 850,
+    "heapMB": 450,
+    "event": "end",
+    "at": "2026-11-07T05:04:51.950Z",
+    "outcome": "guard stopped by SIGTERM",
+    "code": null,
+    "peakMB": 9,
+    "processes": 1,
+    "seconds": 0.2,
+    "freePercentAtEnd": 32
+  },
+  "retention": {
+    "archive": "complete-evidence-and-inputs.tar.gz",
+    "bytes": 36696803,
+    "sha256": "098f719e6356c6df8a082c89f00ad445fe0673eba8154a8064833609978b4f14",
+    "raw_files_verified": 951,
+    "originals_unchanged": true
+  },
+  "scope": "UNQUALIFIED_PUBLIC_RUNNER_FIXTURE_NOT_BOOK_ACCEPTANCE",
+  "site_acceptance": false,
+  "retry": false,
+  "production_offer_prepared": false,
+  "resource_verdict": "Specific Q16 retained native scope resolved. Independent review recommends release of this invocation hold only. Runner UNKNOWN_HELD remains unchanged; P3 records disposition.",
+  "independent_reviews": {
+    "observer-q16-result-review.json": "1b7ff3b3435f3f28b73e1ef60f7ecf960a3518d70d1c648f26a43f006fd73352",
+    "observer-q16-retention-review.json": "2eb86222318b778ac90c7d019617eb9ef413160e03a9f3d4689dd8a20e9f378c"
+  },
+  "production_offer_preparation_eligible": true,
+  "production_execution_allocated": false
+}
