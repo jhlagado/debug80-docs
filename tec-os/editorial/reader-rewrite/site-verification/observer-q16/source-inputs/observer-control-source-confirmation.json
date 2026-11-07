@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "status": "clear_qualified_control_source",
+  "reviewed_driver_spec_commit": "78294b7966698e0d99d53023b7aa63088c066208",
+  "scope": "Bounded complete correction confirmation for OC01/OC02/OC03 plus current driver/spec/proposed allocation-binding identity closure. Earlier complete unchanged-case source review retained. Source clearance only; no allocation or execution acceptance.",
+  "inputs": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/test_observer.py",
+      "sha256": "4d8cefed169fec51c6e8692d5f421f43d18ee7d1b3bf7dbc647f1c98efd8ab20",
+      "bytes": 48280,
+      "lines": 860
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/observer-control-inputs.json",
+      "sha256": "83d54c40e91621a6ed30e9510b15981d706b449bad7b7e93a4cb7687865a4396",
+      "bytes": 33600,
+      "lines": 651
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/observer-state-allocation-inputs.json",
+      "sha256": "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+      "bytes": 1878,
+      "lines": 39
+    }
+  ],
+  "original_review": {
+    "path": "tec-os/editorial/reader-rewrite/site-verification/observer-control-source-review.json",
+    "sha256": "5e4356bc78eec6aa4c271d433583ef20c386f6d033659d9f562b1a7fa5d6f5e2",
+    "preserved": true
+  },
+  "dispositions": [
+    {
+      "id": "OC01",
+      "status": "closed_source",
+      "source": "test_observer.py:563-571,596-644,669-680",
+      "reason": "Publication-mode parent calls actual acknowledge then requires decision(CLEAR/remaining[],True)==0 before injecting stop. Standalone unpublished-latch parent has the same ACK/CLEAR0 baseline. Both assert exact identity-observation stage, original publication detail and124, then failed decision. Removing the requested failure no longer passes by missing ACK. Zero-budget/query-timeout/ACK-stop modes retain setup without accidental ACK at exhausted soft budget."
+    },
+    {
+      "id": "OC02",
+      "status": "closed_source",
+      "source": "test_observer.py:298-358",
+      "reason": "New Q06 runs actual InvocationState.query/launch with a fake spawn blocked on a2s gate. A second actual request_stop must set stopping/signal_requested and retain the expected pending cause while spawn remains blocked; timed acquisition confirms failure_lock is available. Actual signal_escalation routes TERM/KILL before release. Finally releases gate and joins both threads; returned fake handle is registered and actual stop_new_child must signal TERM/KILL, remain owned, and preserve the original cause. No process is spawned or signalled by these adapters."
+    },
+    {
+      "id": "OC03",
+      "status": "closed_source",
+      "source": "test_observer.py:490-513",
+      "reason": "Q11 keeps worker-first/generic-guard ordering and adds structured parent-first then later valid worker receipt with different detail/code/time. It requires the entire original parent cause remain equal and exactly one conflict ledger entry retain both causes. An overwrite regression fails directly, independently of a missing-ACK decision."
+    }
+  ],
+  "current_source_readback": [
+    "Only Q06/Q11/Q13 behavior and corresponding coverage/disposition metadata change from the completely reviewed c8d0a8b driver/spec; current changed containing functions and full diff read. Other Q01-Q14 cases, import pipeline, alarms and result flow remain unchanged.",
+    "All14 cases are source-complete calls of actual candidate routines, not a duplicated decision model. New blocked-spawn case uses bounded real in-process threads with fake query/signal/wait effects. No newly introduced subprocess, native process query, external signal or site/checker execution.",
+    "Worker.main continues using worker-local fake module attributes restored in finally. Parent CLEAR0 baselines are synthetic ownership-state fixtures, not actual site acceptance. Visibility-gap cases continue to permit phase crossing before publication while rejecting parent acceptance.",
+    "Pre-import closure remains: binding SHA/schema/allocation/Python/driver/spec/module checks, all3 exclusive private copies and copied hashes before any candidate/helper execution, retained verified-byte compile/exec with fresh non-main names and helper first. No source path reread for execution.",
+    "60-second original-entry suite cutoff and10-second per-case cutoff remain real SIGALRM/ITIMER_REAL behavior in the bound command, independent of fake clocks. Barrier/join2s remains unchanged. These are planned control limits, not measured runtime outcomes.",
+    "Initial result/work freshness, fail-first case loop, import/copy identities, retryFalse and site_acceptanceFalse remain. Control-source review grants no actual native fixture or book invocation."
+  ],
+  "binding_confirmation": {
+    "proposed_allocation": "KS47-OBSERVER-STATE01-20261107",
+    "allocation_granted": false,
+    "binding_sha256": "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+    "python": {
+      "path": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+      "sha256": "bdea59019a38eb6600cc9e71e984a97fedadc406448431281e7657030f54987e",
+      "matches_binding": true
+    },
+    "modules": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+        "sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+        "bytes": 47621,
+        "lines": 997
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+        "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+        "bytes": 4299,
+        "lines": 110
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+        "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+        "bytes": 5656,
+        "lines": 119
+      }
+    ],
+    "suite_wall_seconds": 60,
+    "case_wall_seconds": 10,
+    "thread_barrier_seconds": 2,
+    "thread_join_seconds": 2,
+    "scope": "Synthetic candidate routines; fake query/cross-process signal/exit adapters, allocated in-process threads, own-process alarm/exit and synthetic filesystem receipts. Q15/Q16 guarded public fixtures separate.",
+    "output_work_paths": "Final exact command must choose fresh distinct result/work paths and carry this binding digest; no command or allocation is executed or granted here."
+  },
+  "findings": [],
+  "remaining_limits": [
+    "No candidate/helper/driver imports, compile/exec, syntax checks, controls, tests, probes, process creation, external signals, guard/build/validator or real-output execution performed by this review.",
+    "Source logic and non-vacuous predicates are confirmed, not passing outcomes. Thread scheduling, elapsed host costs, alarms and runtime behavior remain unqualified until exact separately allocated execution and result review.",
+    "Core remains independently source-cleared at dcb14a8; three exact module hashes match that reviewed profile. No source/checker/reader pin changes inferred or authorised.",
+    "Final allocation/command binding must retain these hashes and limits. Changes invalidate this snapshot confirmation; Q15/Q16/public fixture inputs/results and actual39-page closure remain separate.",
+    "Only observer-control-source-confirmation.json written. Initial review, active driver/spec/binding/core and other artifacts preserved; no commit."
+  ]
+}
