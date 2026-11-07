@@ -295,6 +295,66 @@ def q06(m, worker, work, inputs):
     check(state.stop_new_child(child) is True,'late returned child escaped cleanup')
     check(late_calls==[int(signal.SIGTERM),int(signal.SIGKILL)],'late child escalation differs')
     evidence.append(dict(variant='late-return-after-one-shot',signals=late_calls,snapshot=state.snapshot()))
+    # Drive the actual launch closure while its Popen-like callback is blocked.
+    # A stop requester must queue/wake through failure_lock before spawn returns.
+    state,clock=state_at(m);_,owner,_=identities();state.bind_group(owner)
+    entered=threading.Event();release=threading.Event()
+    query_errors=[];stop_errors=[];budgets=[];child_signals=[];cleanup=[];routed=[]
+    child=SimpleNamespace(pid=4198,send_signal=lambda sig:child_signals.append(int(sig)))
+    record=Record()
+    def blocked_query(launch):
+        def spawn(budget):
+            budgets.append(budget);entered.set()
+            check(release.wait(THREAD_WAIT),'blocked spawn gate was not released')
+            return child
+        returned=launch(spawn)
+        state.register_child(returned,['synthetic-blocked-spawn-return'])
+        cleanup.append(state.stop_new_child(returned))
+        return []
+    def querying():
+        try:state.query(blocked_query,record)
+        except BaseException as error:query_errors.append(repr(error))
+    def stopping():
+        try:state.request_stop('identity-observation',{'cause':'blocked-spawn original'},124)
+        except BaseException as error:stop_errors.append(repr(error))
+    query_thread=threading.Thread(target=querying,name='Q06-blocked-spawn',daemon=True)
+    stop_thread=threading.Thread(target=stopping,name='Q06-stop-during-spawn',daemon=True)
+    try:
+        query_thread.start();check(entered.wait(THREAD_WAIT),'actual query did not enter blocked spawn')
+        stop_thread.start()
+        check(state.signal_requested.wait(THREAD_WAIT) and state.stopping.is_set(),
+              'blocked spawn held failure latch or prevented signal wake')
+        check(not release.is_set(),'spawn gate released before pending-failure predicate')
+        check(state.failure_lock.acquire(timeout=THREAD_WAIT),
+              'actual query spawn retained the failure lock')
+        try:
+            check(bool(state.pending_failures),'stop cause was not retained before spawn return')
+            pending=dict(state.pending_failures[0])
+            check(pending['stage']=='identity-observation' and pending['exit_code']==124
+                  and pending['detail']=={'cause':'blocked-spawn original'},
+                  'wrong pending cause while actual spawn remains blocked')
+        finally:
+            state.failure_lock.release()
+        state.signal_escalation(lambda g,s:routed.append([g,int(s)]),
+                                lambda c,s:routed.append([c.pid,int(s)]),clock.advance)
+        check(routed==[[4102,int(signal.SIGTERM)],[4102,int(signal.SIGKILL)]],
+              'independent escalation waited for blocked spawn')
+    finally:
+        release.set()
+        for thread in (query_thread,stop_thread):
+            if thread.ident is not None:thread.join(THREAD_WAIT)
+    check(not query_thread.is_alive() and not stop_thread.is_alive()
+          and not query_errors and not stop_errors,'blocked-spawn interleave did not quiesce cleanly')
+    check(budgets==[2.0] and cleanup==[True],'actual launch retried or late returned handle escaped cleanup')
+    check(state.children.get(child.pid) is child
+          and child_signals==[int(signal.SIGTERM),int(signal.SIGKILL)],
+          'actual registration/stop_new_child did not clean returned handle')
+    check(state.failure==pending and state.decision({'status':'CLEAR','remaining':[]},True)==124,
+          'blocked-spawn original failure was replaced or accepted')
+    evidence.append(dict(variant='actual-query-blocked-spawn',pending_before_release=pending,
+                         budgets=budgets,events=record.rows,signals_before_return=routed,
+                         returned_handle_signals=child_signals,cleanup_results=cleanup,
+                         snapshot=state.snapshot()))
     return dict(variants=evidence,scope='Actual soft-stop/escalation/late-child routines with fake signals and waits; no OS scheduling sufficiency claim.')
 
 
@@ -433,9 +493,23 @@ def q11(m, worker, work, inputs):
              'status':'FAILED','retry':False,'utc':'2026-01-05T00:00:00+00:00'}
     imported.import_failure(receipt);imported.request_stop('guard','later exit1',1)
     check(imported.failure==receipt,'structured worker receipt lost precedence/detail')
+    parent_first,_=state_at(m)
+    parent_detail={'query_error':'TimeoutExpired','effective_budget_seconds':2.0,'elapsed_seconds':2.01}
+    parent_first.request_stop('identity-observation',parent_detail,124)
+    parent_cause=json.loads(m.canonical(parent_first.failure))
+    later_receipt=dict(receipt,detail={'query_error':'OSError','effective_budget_seconds':0.5,
+                                     'elapsed_seconds':0.51},exit_code=7,
+                       utc='2026-01-05T00:00:01+00:00')
+    parent_first.import_failure(later_receipt)
+    check(parent_first.failure==parent_cause and parent_first.failure['exit_code']==124
+          and parent_first.failure['detail']==parent_detail,'later worker receipt replaced parent first cause')
+    conflicts=[h for h in parent_first.history if h['kind']=='failure-receipt-conflict']
+    check(len(conflicts)==1 and conflicts[0]['latched']==parent_cause
+          and conflicts[0]['receipt']==later_receipt,'parent/worker conflict ledger lost either identity')
     return dict(first_failure=original,pending_first_failure=race.failure,
                 terminal=value,terminal_publications=publications,imported_failure=imported.failure,
-                publication_failure_cause=failed.failure)
+                publication_failure_cause=failed.failure,parent_first_failure=parent_first.failure,
+                later_worker_receipt=later_receipt,failure_conflicts=conflicts)
 
 
 def q12(m, worker, work, inputs):
@@ -489,6 +563,11 @@ def worker_main_fixture(m, worker, work, mode):
                  node='NO_NATIVE_NODE',python='NO_NATIVE_PYTHON')
     context_path=base/'context.json';context_path.write_text(json.dumps(context))
     parent=m.InvocationState(180.0,clock=clock)
+    parent_baseline=None
+    if mode in ('delayed-publication','failed-publication'):
+        acknowledge(parent)
+        parent_baseline=parent.decision({'status':'CLEAR','remaining':[]},True)
+        check(parent_baseline==0,'publication fixture parent lacks a valid accepted baseline')
     query_calls=[];phase_calls=[];sleeps=[]
     original={name:getattr(worker,name) for name in ('argparse','os','time','subprocess','durable_json')}
     class Parser:
@@ -519,6 +598,9 @@ def worker_main_fixture(m, worker, work, mode):
         if len(phase_calls)==1:
             check(worker.phase_stop_code(output) is None,'phase started after a visible stop')
             parent.request_stop('identity-observation','publication gap original',124)
+            check(parent.failure is not None and parent.failure['stage']=='identity-observation'
+                  and parent.failure['detail']=='publication gap original'
+                  and parent.failure['exit_code']==124,'publication-gap failure cause was not retained')
             if mode=='delayed-publication':
                 original['durable_json'](output/'stop-requested.json',{'exit_code':124},exclusive=True)
         else:
@@ -553,13 +635,20 @@ def worker_main_fixture(m, worker, work, mode):
         check(code==124 and len(sleeps)==1 and not phase_calls,'ACK stop did not refuse next phase')
     elif mode=='delayed-publication':
         check(code==124 and len(phase_calls)==1,'visible delayed marker did not stop second phase')
+        check(parent.failure['stage']=='identity-observation'
+              and parent.failure['detail']=='publication gap original'
+              and parent.failure['exit_code']==124,'delayed publication lost the original cause')
         check(parent.decision({'status':'CLEAR','remaining':[]},True)==124,'publication gap allowed acceptance')
     else:
         check(code==0 and len(phase_calls)==2,'invisible failed publication falsely claimed preemption')
+        check(parent.failure['stage']=='identity-observation'
+              and parent.failure['detail']=='publication gap original'
+              and parent.failure['exit_code']==124,'failed publication lost the original cause')
         check(parent.decision({'status':'CLEAR','remaining':[]},True)==124,'failed publication allowed acceptance')
     return dict(variant=mode,worker_exit=code,query_calls=query_calls,sleep_calls=sleeps,
                 fake_phase_requests=phase_calls,native_commands_executed=False,
-                first_failure=failure,parent_first_failure=parent.failure,stdout=captured.getvalue())
+                first_failure=failure,parent_first_failure=parent.failure,
+                parent_clear_baseline=parent_baseline,stdout=captured.getvalue())
 
 
 def q13(m, worker, work, inputs):
@@ -577,9 +666,15 @@ def q13(m, worker, work, inputs):
     for name,text in precedence['files'].items():(output/name).write_text(text)
     check(worker.phase_stop_code(output)==precedence['expected_code'],'stop precedence differs')
     for name in precedence['files']:(output/name).unlink()
-    state,_=state_at(m);state.request_stop('identity-observation','publication pending',124)
+    state,_=state_at(m);acknowledge(state)
+    parent_baseline=state.decision({'status':'CLEAR','remaining':[]},True)
+    check(parent_baseline==0,'unpublished-latch fixture lacks a valid accepted baseline')
+    state.request_stop('identity-observation','publication pending',124)
+    check(state.failure is not None and state.failure['stage']=='identity-observation'
+          and state.failure['detail']=='publication pending' and state.failure['exit_code']==124,
+          'unpublished original failure cause was not retained')
     check(worker.phase_stop_code(output) is None,'unpublished latch was visible across processes')
-    check(state.decision({'status':'CLEAR','remaining':[]},True)!=0,'unpublished failure allowed acceptance')
+    check(state.decision({'status':'CLEAR','remaining':[]},True)==124,'unpublished failure allowed acceptance')
     (output/'stop-requested.json').write_text('{"exit_code":124}')
     check(worker.phase_stop_code(output)==124,'visible marker did not refuse phase')
     epoch=0.0
@@ -589,6 +684,7 @@ def q13(m, worker, work, inputs):
     main_variants=[worker_main_fixture(m,worker,work,mode) for mode in
                    ('zero-budget','query-timeout','ack-stop','delayed-publication','failed-publication')]
     return dict(variants=evidence,worker_main_variants=main_variants,
+                unpublished_parent_clear_baseline=parent_baseline,
                 publication_gap='Before visibility a checkpoint may cross; no instantaneous preemption.')
 
 
