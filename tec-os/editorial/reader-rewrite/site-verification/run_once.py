@@ -277,8 +277,10 @@ class InvocationState:
             self.history.append({'kind': 'direct-child', 'pid': child.pid,
                                  'birth': None, 'argv': argv})
 
-    def stop_new_child(self, child):
-        if self.stopping.is_set() or self.signal_requested.is_set():
+    def stop_new_child(self, child, cleanup_phase=False):
+        expired = self.clock() >= (self.deadline if cleanup_phase else self.soft_deadline)
+        if expired or (not cleanup_phase and
+                       (self.stopping.is_set() or self.signal_requested.is_set())):
             # The independent one-shot signaller may already have completed.
             # A handle returned after it still receives immediate cleanup.
             for signum in (signal.SIGTERM, signal.SIGKILL):
@@ -521,14 +523,14 @@ def main():
             finally:
                 prepared.unlink(missing_ok=True)
 
-    def ps_once(launch):
+    def ps_once(launch, cleanup_phase=False):
         argv = ['/bin/ps', '-axo', 'pid=,ppid=,pgid=,lstart=']
         def spawn_query(budget):
             child = subprocess.Popen(argv, text=True, stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE,
                                      env={**os.environ, **PS_IDENTITY_ENV})
             state.register_child(child, argv)  # Memory only, before any wait/I/O.
-            state.stop_new_child(child)
+            state.stop_new_child(child, cleanup_phase)
             return child
         child = launch(spawn_query)
         rows = []
@@ -582,7 +584,7 @@ def main():
                     query_launch[0] = {'start': time.monotonic(), 'effective_budget': budget}
                     return spawn(budget)
                 return launch(tracked_spawn)
-            return ps_once(tracked_launch)
+            return ps_once(tracked_launch, cleanup_phase)
         with audit_lock:
             return state.query(query_once, event, cleanup_phase)
 
