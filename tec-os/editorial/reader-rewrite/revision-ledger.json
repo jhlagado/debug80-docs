@@ -16384,5 +16384,13 @@
     "recommendation": "c18-acceptance-recommendation.json",
     "resource_verdict": "Release of this specific SITE04 registered resource hold is supported. Retained registered/discovered identity/group scope and direct-handle exits only, not universal historical descendant discovery. P3 records disposition.",
     "site_publication": false
+  },
+  "main_delivery_publication_proposal": {
+    "status": "C18_ACCEPTED_KD251_MAIN_DELIVERY_PUBLICATION_OUTSTANDING",
+    "proposal": "main-landing-proposal/proposal.json",
+    "proposal_sha256": "7d71b7331e206777be5324b491357bd7e28f9fff86f0c2c604ad74e053c3a8b9",
+    "accepted_reader_source": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+    "frozen_delivery_comparison": "1ed7e508996f7e27e50d853833238559fb95915f",
+    "recommendation": "Defer main push until C16 final qualified-input changes accepted, then explicit fresh full-branch FF and CI/Pages publication authority. No action allocated."
   }
 }

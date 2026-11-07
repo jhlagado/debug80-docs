@@ -1,0 +1,7 @@
+{
+  "KD251_excerpt_sha256": "24a0199e55bc78238eba65f4953ff7633bc2c20f3cc8fe4d4c2418b60b671ea4",
+  "root_acceptance_sha256": "10045113af48a8b4162ea4027bb962c420578a20075a118b3915e8c984da6ee7",
+  "root_acceptance_path": "studies/p3-tec-os/reviews/book-site04-result.md",
+  "Origo_read_head": "a04d14b9b1d0ddb6d5267ab6ff23e7782ce03970",
+  "instruction": "Prepare source-only proposal. No main landing, CI, new render or publication."
+}

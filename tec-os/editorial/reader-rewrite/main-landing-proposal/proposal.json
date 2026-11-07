@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_MAIN_LANDING_PUBLICATION_PROPOSAL_NO_ACTION_ALLOCATED",
+  "C18": "Accepted by KD-251 on prepared branch, not main/publication",
+  "main": "4d830dc77f8dacc7c610794e8f0b528237b66fee",
+  "accepted_branch_snapshot": "1ed7e508996f7e27e50d853833238559fb95915f",
+  "main_is_ancestor": true,
+  "commits_beyond_main": 363,
+  "net_changed_paths": 640,
+  "non_tec_os_delta": [
+    ".vitepress/sidebar.generated.js"
+  ],
+  "recommendation": "Defer publication until final C16 input changes accepted, then one exact reviewed full-branch fast-forward preserving evidence/history. Fresh ancestry/delta/input validation and explicit CI/Pages publication authority required.",
+  "current_frozen_outward_argv": [
+    "git",
+    "push",
+    "origin",
+    "1ed7e508996f7e27e50d853833238559fb95915f:refs/heads/main"
+  ],
+  "argv_is_not_authorised": true,
+  "main_landing_outstanding": true,
+  "publication_outstanding": true,
+  "C16_final_input_work_outstanding": true,
+  "accepted_reader_text_changed_here": false,
+  "workflow_or_config_changes_here": false,
+  "executed_CI_render_probe_or_publication": false,
+  "proposal_scope": "Inert Git/source/file/JSON inspection and proposal records only. Existing untracked node_modules left untouched.",
+  "files_sha256": {
+    "KD251-excerpt.md": "24a0199e55bc78238eba65f4953ff7633bc2c20f3cc8fe4d4c2418b60b671ea4",
+    "authority.json": "321a6878288d1756d6d5bb1fc664072c26ec44d197b87f9407a5c0cb90d3f600",
+    "ci-comparison.json": "ff8cadf00bd08cfdabbeb6c44afe14dcfdb52ed0dc216e915437d9df4fb9ffd0",
+    "deploy-workflow.yml.txt": "3c6adc5158c4943033771ab8abb0d7ce9c6d8634e86040022aa8a1da87d9ea59",
+    "full-branch-inventory.json": "9afdff66067c4d093721eaf51fad42000b80832f8e0670fea098b6801d1c1775",
+    "navigation-config.json": "701bf0b01d9c424ee6d2b9a9dd6dee6cca9cce2d4873fc2083bb2680c565185a",
+    "proposal.md": "20cd5f051dd8066fce1987f4eff10305a2bb6756d99c82cbfbaf98a5217acc57",
+    "reader-citation-delta.json": "7b938b297c02994dfc035c37dcb4791e1963834790ea9f94b6a20392d1332cc4",
+    "reader-delta.patch": "7713ef3edff2985f0cf8c737b0f9f0364d847f9e1539a8873898f16657d7e3ff",
+    "root-C18-acceptance.md": "10045113af48a8b4162ea4027bb962c420578a20075a118b3915e8c984da6ee7",
+    "sidebar.diff": "e1c07c9e0c70db0b728b919601b89cad8c7f75499eb32048f0762e38613b050b",
+    "site04-private-config.diff": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489"
+  }
+}

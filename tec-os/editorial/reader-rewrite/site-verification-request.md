@@ -1,3 +1,12 @@
+# Current accepted rewrite and outstanding main delivery
+
+KD-251 accepts C18 on the prepared branch. Main delivery and publication
+remain outstanding because a push to main triggers Pages. The source-only
+proposal is main-landing-proposal/proposal.md. It preserves accepted reader
+text and proof history, with final C16 inputs and explicit publication
+authority still required. No main push, CI run or deployment is allocated.
+The acceptance recommendations and requests below remain historical.
+
 # Current actual result and C18 recommendation
 
 SITE04 passed its real 39-page render/check under Origo26b45fd2. Independent
