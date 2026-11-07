@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "SOURCE_PREPARATION_CORE_DRIVER_PARTIAL_PENDING_INTEGRATION_SEAMS",
+  "status": "SOURCE_READY_FOR_INDEPENDENT_REVIEW_UNRUN",
   "executed": false,
   "scope": "Owned driver covers Q01-Q14 only, calling actual candidate routines through injected clock/query/record/signal dependencies. Q15/Q16 are separately owned by public_observer_fixture.py and are not implemented or invoked here.",
   "reviewed_contracts": [
@@ -41,9 +41,10 @@
     "-B"
   ],
   "candidate_api": {
-    "status": "Core API read as inert source; main integration is still in progress. Snapshot hashes are not a final execution binding.",
+    "status": "Final core interfaces bound after independent source clearance; driver remains unrun.",
     "candidate_path": "run_once.py",
-    "candidate_sha256": null,
+    "candidate_commit": "dcb14a834d9cc043bcb8af16b4b62b3bc4a4a7a4",
+    "candidate_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
     "core_source_observation": {
       "query_budget": {
         "signature_ast": "arguments(posonlyargs=[], args=[arg(arg='now'), arg(arg='soft_deadline'), arg(arg='hard_deadline'), arg(arg='cleanup_phase')], kwonlyargs=[], kw_defaults=[], defaults=[Constant(value=False)])",
@@ -66,23 +67,28 @@
           "import_failure": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='failure')], kwonlyargs=[], kw_defaults=[], defaults=[])",
           "query": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='query_once'), arg(arg='record'), arg(arg='cleanup_phase')], kwonlyargs=[], kw_defaults=[], defaults=[Constant(value=False)])",
           "register_child": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='child'), arg(arg='argv')], kwonlyargs=[], kw_defaults=[], defaults=[])",
-          "stop_new_child": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='child')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "stop_new_child": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='child'), arg(arg='cleanup_phase')], kwonlyargs=[], kw_defaults=[], defaults=[Constant(value=False)])",
           "bind_group": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='ownership')], kwonlyargs=[], kw_defaults=[], defaults=[])",
-          "publish_ack": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='prepare'), arg(arg='publish')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "publish_ack": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='prepare'), arg(arg='publish'), arg(arg='ownership_sha256')], kwonlyargs=[], kw_defaults=[], defaults=[Constant(value=None)])",
           "observe": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='rows')], kwonlyargs=[], kw_defaults=[], defaults=[])",
           "snapshot": "arguments(posonlyargs=[], args=[arg(arg='self')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "final_audit_disposition": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='rows')], kwonlyargs=[], kw_defaults=[], defaults=[])",
           "signal_bound": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='sig'), arg(arg='group_signal'), arg(arg='handle_signal')], kwonlyargs=[], kw_defaults=[], defaults=[])",
           "soft_stop": "arguments(posonlyargs=[], args=[arg(arg='self')], kwonlyargs=[], kw_defaults=[], defaults=[])",
           "signal_escalation": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='group_signal'), arg(arg='handle_signal'), arg(arg='wait')], kwonlyargs=[], kw_defaults=[], defaults=[])",
           "commit_decision": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='audit'), arg(arg='observer_quiet'), arg(arg='expected_code'), arg(arg='expected_failure'), arg(arg='publish')], kwonlyargs=[], kw_defaults=[], defaults=[])",
           "decision": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='audit'), arg(arg='observer_quiet')], kwonlyargs=[], kw_defaults=[], defaults=[])"
         },
-        "source_sha256": "b69f357bb5f4df1defdf6492ad1186eecf575a2c5d7948241d65398164a3de8c"
+        "source_sha256": "2d2e6b01e1cd16dc2de121beab7419eea3176cd8ba1a26c0753bf0d92c0deae6"
+      },
+      "hard_stop": {
+        "signature_ast": "arguments(posonlyargs=[], args=[arg(arg='groups'), arg(arg='children'), arg(arg='killpg'), arg(arg='kill'), arg(arg='exit_now')], kwonlyargs=[], kw_defaults=[], defaults=[Attribute(value=Name(id='os', ctx=Load()), attr='killpg', ctx=Load()), Attribute(value=Name(id='os', ctx=Load()), attr='kill', ctx=Load()), Attribute(value=Name(id='os', ctx=Load()), attr='_exit', ctx=Load())])",
+        "source_sha256": "635b7a910df2a869ab66e757ceaf003ddf586dd1f76f0d45ccb297fd154be3f5"
       }
     }
   },
   "worker_api": {
-    "status": "supplied_seams_pending_final_byte_binding",
+    "status": "Final worker source hash bound; actual phase/budget/main adapters prepared, unrun.",
     "module": "build_and_check.py",
     "routines": {
       "phase_stop_code": {
@@ -192,7 +198,7 @@
       "path": "build_and_check.py",
       "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
       "bytes": 5656,
-      "status": "Inert source read only; final candidate/private payload binding still pending."
+      "status": "Bound final worker bytes. No import/execution performed."
     }
   },
   "cases": [
@@ -296,7 +302,7 @@
     "prior_query_limit_seconds": 0.5
   },
   "future_cli": {
-    "status": "Design only. Exact runner API, final binding and source review remain pending; no invocation authorized by these command shapes.",
+    "status": "Complete Q01-Q14 source prepared, not executed. Requires independent driver review, final external binding and a separate exact allocation before invocation.",
     "required_flags": [
       "--allocation",
       "--inputs",
@@ -349,11 +355,11 @@
   },
   "limits": [
     "No candidate import/execution, process query, signal, probe, control, native build, VitePress render or validator is performed in preparation.",
-    "Routines coverage and failure-predicate assertions are pending actual runner APIs, not inferred from pseudocode.",
     "All existing 48 checker artifacts, active checker, manifest, source inputs and seals remain untouched.",
     "Fake-positive outcomes cannot establish real host timing sufficiency, universal descendant discovery, universal cleanup or actual book acceptance.",
     "Q13 publication before visibility may permit a phase; after visibility the next checkpoint must refuse. No instantaneous cross-process preemption is claimed.",
-    "Allocation and input binding are mandatory before future imports; Q01-Q14 real-wall bounds and per-case artifact isolation are not simulated by the fake clock."
+    "Allocation and input binding are mandatory before future imports; Q01-Q14 real-wall bounds and per-case artifact isolation are not simulated by the fake clock.",
+    "All14 cases are source-complete with actual routine calls and failure predicates, but no case has been imported or executed. Source coverage is not a passing control result."
   ],
   "separately_owned_public_fixtures": {
     "path": "public_observer_fixture.py",
@@ -366,28 +372,96 @@
   "driver": {
     "path": "test_observer.py",
     "validation": "Python3.9 AST parse only; not imported or executed.",
+    "source_case_count": 14,
     "coverage": {
-      "Q01": "Actual budget/query/ownership-validation/discovery calls.",
-      "Q02": "Actual timeout/latch/decision/signal-routing calls; independent scheduling belongs to Q06.",
-      "Q03": "Actual query calls for near-soft timeout, intent exhaustion and stop-during-intent; requires typed effective-budget evidence, no derived replacement.",
-      "Q04": "Actual nonpositive-budget query refusal and original deadline cause.",
-      "Q05": "Actual cleanup query, retained snapshot and UNKNOWN_HELD decision; durable main audit writer pending.",
-      "Q06": "UNAVAILABLE: exposed independent signalling/timer/I/O-interleave seam pending.",
-      "Q07": "Actual separate ownership validation mutations, child registration, memory binding and ACK stop recheck.",
-      "Q08": "Actual retained-group discovery/signalling after guard/leader absence; no site acceptance after premature guard exit.",
-      "Q09": "Actual reused PID/birth rejection, group retirement and retained history.",
-      "Q10": "Actual observed detached-identity retention; no claim about unseen identities.",
-      "Q11": "Actual first-failure/decision calls and bounded pending-request thread interleave; main terminal-writer integration seam pending.",
-      "Q12": "Actual missing/residual/unknown audit and nonquiescent decision refusals.",
-      "Q13": "Actual worker phase_stop_code and worker_identity_budget; worker main structured query-error and ACK-wait coverage pending.",
-      "Q14": "UNAVAILABLE: actual direct hard-deadline signal/finally-exit callable seam pending."
+      "Q01": [
+        "query_budget",
+        "InvocationState.query",
+        "validate_ownership",
+        "InvocationState.bind_group",
+        "InvocationState.observe"
+      ],
+      "Q02": [
+        "InvocationState.query",
+        "InvocationState.request_stop",
+        "InvocationState.decision",
+        "InvocationState.signal_bound"
+      ],
+      "Q03": [
+        "query_budget",
+        "InvocationState.query",
+        "InvocationState.request_stop",
+        "InvocationState.decision"
+      ],
+      "Q04": [
+        "InvocationState.query",
+        "InvocationState.request_stop"
+      ],
+      "Q05": [
+        "InvocationState.query",
+        "InvocationState.snapshot",
+        "InvocationState.final_audit_disposition",
+        "InvocationState.decision"
+      ],
+      "Q06": [
+        "InvocationState.soft_stop",
+        "InvocationState.signal_escalation",
+        "InvocationState.query",
+        "InvocationState.request_stop",
+        "InvocationState.register_child",
+        "InvocationState.stop_new_child",
+        "InvocationState.decision"
+      ],
+      "Q07": [
+        "validate_ownership",
+        "InvocationState.register_child",
+        "InvocationState.bind_group",
+        "InvocationState.publish_ack"
+      ],
+      "Q08": [
+        "validate_ownership",
+        "discover_owned via InvocationState.observe",
+        "InvocationState.bind_group",
+        "InvocationState.publish_ack",
+        "InvocationState.signal_bound",
+        "InvocationState.decision"
+      ],
+      "Q09": [
+        "discover_owned via InvocationState.observe",
+        "InvocationState.signal_bound",
+        "InvocationState.snapshot"
+      ],
+      "Q10": [
+        "discover_owned via InvocationState.observe",
+        "InvocationState.snapshot"
+      ],
+      "Q11": [
+        "InvocationState.request_stop",
+        "InvocationState.import_failure",
+        "InvocationState.decision",
+        "InvocationState.commit_decision",
+        "prepare_receipt"
+      ],
+      "Q12": [
+        "InvocationState.final_audit_disposition",
+        "InvocationState.register_child",
+        "InvocationState.decision"
+      ],
+      "Q13": [
+        "build_and_check.phase_stop_code",
+        "build_and_check.worker_identity_budget",
+        "build_and_check.main with isolated fake module dependencies",
+        "InvocationState.request_stop",
+        "InvocationState.decision"
+      ],
+      "Q14": [
+        "hard_stop"
+      ]
     },
-    "unavailable_cases": [
-      "Q06",
-      "Q14"
-    ],
+    "unavailable_cases": [],
+    "placeholder_cases": [],
     "no_passing_controls_claimed": true,
-    "pending_coverage": "Complete main terminal/audit/publisher hooks and independent soft/hard timer seams must be wired before the full suite can be represented as ready."
+    "native_integration_limit": "Q01-Q14 drive actual supplied routines with fake query/signal/wait inputs and bounded synthetic threads for the demonstrated lock interleavings. Whole-main native scheduling, actual process ownership and Q15/Q16 are separately owned/allocated; no unit fixture is a site pass."
   },
   "binding_schema_for_lead": {
     "schema": 1,
@@ -427,7 +501,7 @@
       "release lock and join bounded requester even after predicate failure",
       "original identity-observation stage/detail/124 must survive subsequent generic guard exit1"
     ],
-    "thread_limits": "One daemon thread, 0.25s event wait and 0.25s join, additionally bounded by per-case and suite real-wall alarms. Only used in a future allocated control."
+    "thread_limits": "One daemon thread, explicit2.0s barrier and2.0s join, within the original per-case/suite real-wall cutoff. Actual decision and commit_decision must both refuse stale PASS; original pending observer cause must survive later guard1."
   },
   "private_import_contract": {
     "binding_pin": "--inputs-sha256 must be exactly 64 lowercase hexadecimal characters and match the complete inputs bytes before candidate/helper imports.",
@@ -446,5 +520,75 @@
     ],
     "durable_before_import": "Future work/private-source-identities.json records the complete copy identities before candidate/helper imports; the terminal result also embeds private_sources and attempted execution names.",
     "validation": "Static Python3.9 AST parse only; no import, compile/exec call, probe or control execution performed."
-  }
+  },
+  "module_pins": {
+    "run_once": {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+      "sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "bytes": 47621
+    },
+    "packet_inputs": {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "bytes": 4299
+    },
+    "build_and_check": {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+      "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "bytes": 5656
+    }
+  },
+  "candidate_profile": {
+    "runner_commit": "dcb14a834d9cc043bcb8af16b4b62b3bc4a4a7a4",
+    "runner_sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+    "worker_commit": "b227207f069a8a533c24e0f6e8e6fc777a3843eb",
+    "worker_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+    "source_review": "Independent full core source clearance at dcb14a8, supplied by the lead. This is not execution/control acceptance."
+  },
+  "control_settings": {
+    "unit_bootstrap_wall_cap_seconds": 60.0,
+    "suite_wall_seconds": "Positive finite allocation-bound input, <=60, measured from original driver entry.",
+    "case_wall_seconds": "Positive finite allocation-bound input <=suite wall; >4.0 for a suite or Q06/Q11 to accommodate one2.0s barrier plus one2.0s join.",
+    "thread_barrier_seconds": 2.0,
+    "thread_join_seconds": 2.0,
+    "scope": "Thread bounds are unit-control settings only, not production observation/query profile changes. All native query/signal/exit adapters are fake.",
+    "worker_UTC_epoch": 0.0,
+    "worker_deadline_unit_context": "1970-01-01T00:00:00Z; negative synthetic wall times permitted for precise small subtraction. Worker main fixtures use epoch0 plus180.",
+    "numeric_abs_tolerance": 1e-08,
+    "native_commands_executed": false
+  },
+  "Q12_direct_handle_variants": [
+    {
+      "poll": "None",
+      "birth": null,
+      "expected_status": "HELD",
+      "retirement": false
+    },
+    {
+      "poll": "raises OSError",
+      "birth": null,
+      "expected_status": "UNKNOWN_HELD",
+      "retirement": false
+    },
+    {
+      "poll": 0,
+      "birth": null,
+      "expected_status": "CLEAR",
+      "retirement": true,
+      "required_history": "direct-audit-exit"
+    }
+  ],
+  "Q06_variants": [
+    "soft stop and escalation while actual state lock is held at177 and179.8; fake grace0.4/0.2",
+    "query failure completion logging blocked behind bounded control gate",
+    "query failure completion logging raises OSError after latch and signal wake",
+    "returned child arrives after one-shot cleanup; actual stop_new_child repeats TERM/KILL"
+  ],
+  "Q14_variants": [
+    "normal direct signals",
+    "per-target signal raises; later targets still reached",
+    "group snapshot iteration raises; enclosing finally still exits124",
+    "children snapshot copy raises; enclosing finally still exits124"
+  ],
+  "Q14_scope": "Actual top-level hard_stop with injected killpg/kill/exit. No normal helper/Popen poll is allowed. Independent full-main hard timer/native scheduler coverage belongs to separately allocated public fixtures."
 }
