@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "source_candidate": "1ed7e508996f7e27e50d853833238559fb95915f",
+  "workflow_sha256": "3c6adc5158c4943033771ab8abb0d7ce9c6d8634e86040022aa8a1da87d9ea59",
+  "trigger": "push to main or workflow_dispatch",
+  "destination": "GitHub Pages via upload-pages-artifact/deploy-pages",
+  "publication_is_automatic_workflow_path": true,
+  "platform": {
+    "CI": "ubuntu-latest, setup-node@v4 node-version20, exact patch not fixed",
+    "SITE04": "Darwin arm64 pinned Node24.18.0, pinned CLT Python3.9, real local installed dependencies"
+  },
+  "dependencies": {
+    "CI": "npm ci --prefix .github/site then root node_modules symlink; VitePress1.6.4 with committed lock and Linux optional binaries",
+    "SITE04": "Exact4454-entry macOS installed tree, SHAa020e190a5bc80db7d6ffebda4fc762328dc0c5c771c0a12ecd010b63ea79661",
+    "compiler_dependencies": "CI intentionally skips root Git-based compiler/example development dependencies; no assembly/workflow validation occurs."
+  },
+  "steps": [
+    {
+      "step": "sidebar",
+      "command": "npm run sidebar",
+      "scope": "Regenerates all books from front matter, modifies generated sidebar in CI workspace."
+    },
+    {
+      "step": "links",
+      "command": "npm run links",
+      "scope": "Scans Markdown throughout repository including editorial and retained packet Markdown; excludes archive directories/node_modules/public/.vitepress, not tec-os/editorial. Path-only checker strips fragments. Not equivalent to SITE04 exact TEC-OS HTML links/fragments."
+    },
+    {
+      "step": "symbols",
+      "command": "npm run symbols",
+      "scope": "Scans only azm-book/debug80-book/glimmer-book. Does not establish TEC-OS citation correctness."
+    },
+    {
+      "step": "Debug80",
+      "command": "npm run verify:debug80 || echo warning",
+      "scope": "Failure is downgraded to warning, not a strict TEC-OS gate."
+    },
+    {
+      "step": "build",
+      "command": "npm run build",
+      "scope": "Whole-site VitePress using committed config; ignoreDeadLinks true. Not SITE04 private config."
+    },
+    {
+      "step": "llms",
+      "command": "npm run llms",
+      "scope": "Requires both citation-guide copies equal and their URLs present in full dist. Listed required series exclude TEC-OS."
+    },
+    {
+      "step": "Pages",
+      "command": "configure-pages@v5;upload-pages-artifact@v3;deploy-pages@v4",
+      "scope": "Uploads whole .vitepress/dist and deploys after successful build job, on main push or dispatch."
+    }
+  ],
+  "profile_comparison": {
+    "SITE04": "180s/3s cleanup/850MB sampled/450MB heap/wait0/two workers/minifyfalse; scoped private srcExclude renders39readers plus public passthrough and404. Real exact checker executed.",
+    "CI": "No mem-guard, explicit heap, buildConcurrency, minifyfalse or180s bound in workflow/committed config. Full corpus rendered with framework defaults. No exact SITE04 check_html invocation.",
+    "not_equivalent": true
+  },
+  "proof_limits": [
+    "SITE04 proves accepted a3e4c29 scoped real render/input/ownership/checker result only.",
+    "No CI run, Ubuntu/Node20 build, whole-site link/llms check, browser/visual test, deployment or publication performed by this proposal.",
+    "Remote environment approval/protection settings were not queried; no server-side deployment pause is assumed."
+  ],
+  "remaining_action": "After final C16 source/capture review and a new immutable delivery candidate, obtain explicit authority for main push plus automatic full-site CI/Pages publication. Freeze/review any changed inputs and resource allocation before further local actual validation."
+}
