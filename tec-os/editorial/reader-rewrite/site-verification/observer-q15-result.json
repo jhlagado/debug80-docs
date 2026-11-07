@@ -50,5 +50,14 @@
   "independent_reviews": {
     "observer-q15-result-review.json": "f3c3798435e7bd593641b3bcf1f1dfc05247c9b9427b77cc39a888fdab09588e",
     "observer-q15-retention-review.json": "a32ed1f11761b5afc4325eaa0bc288d1194a317ee5c15815dbcdc8cc185073c8"
+  },
+  "external_receipt_publication": {
+    "origo_commit": "feedbc64",
+    "path": "studies/p3-tec-os/evidence/book-observer-q15-external.json",
+    "sha256": "5cf6e9354623a9f56c224feab841c2d3da507251ac45152f5da52cb9c09ab99e",
+    "byte_identical_to_retained_and_reviewed_receipt": true,
+    "file_identities": 955,
+    "cost_limit": "Guard sampled10MB/one observed process does not bound transient Node peak or whole controller memory.",
+    "successor_allocated": false
   }
 }
