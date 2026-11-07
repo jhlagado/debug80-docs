@@ -1,0 +1,203 @@
+{
+  "schema": 1,
+  "status": "clear_bounded_allocation_offer_source",
+  "scope": "Inert final three-command offer/input/path check. No allocation or execution granted.",
+  "inputs": [
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/observer-control-allocation-request.json",
+      "sha256": "e11d6578482f5d247329f405cf66d4e385d61983cde9093dba1215539bd87167",
+      "bytes": 8199
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/observer-control-allocation-request.md",
+      "sha256": "91c1077119c8eab1eb9e31f28b101bb6466ed93db1e4138dfffa5c996c418e1c",
+      "bytes": 5566
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/observer-state-allocation-inputs.json",
+      "sha256": "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+      "bytes": 1878
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/fixture-inputs.json",
+      "sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+      "bytes": 14691
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/test_observer.py",
+      "sha256": "4d8cefed169fec51c6e8692d5f421f43d18ee7d1b3bf7dbc647f1c98efd8ab20",
+      "bytes": 48280
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/observer-control-inputs.json",
+      "sha256": "83d54c40e91621a6ed30e9510b15981d706b449bad7b7e93a4cb7687865a4396",
+      "bytes": 33600
+    },
+    {
+      "path": "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/public_observer_fixture.py",
+      "sha256": "9df4ae6ade0d6812205a73ff1a58e37c665a8aaf4bebc92e3fd050c52a4cbc23",
+      "bytes": 28137
+    }
+  ],
+  "command_checks": [
+    {
+      "case": "Q01-Q14",
+      "argv": [
+        "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+        "-I",
+        "-S",
+        "-B",
+        "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/test_observer.py",
+        "--suite",
+        "Q01-Q14",
+        "--allocation",
+        "KS47-OBSERVER-STATE01-20261107",
+        "--inputs",
+        "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/observer-state-allocation-inputs.json",
+        "--inputs-sha256",
+        "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+        "--work",
+        "/private/tmp/tec-os-observer-state-019f63903250",
+        "--result",
+        "/private/tmp/tec-os-observer-state-019f63903250.json"
+      ],
+      "binding_sha256": "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+      "work_absent": true,
+      "result_absent": true,
+      "expected_controller_exit": 0,
+      "expected_candidate_exit": null,
+      "source_contract_matches": true
+    },
+    {
+      "case": "Q15",
+      "argv": [
+        "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+        "-I",
+        "-S",
+        "-B",
+        "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/public_observer_fixture.py",
+        "--case",
+        "Q15",
+        "--allocation",
+        "KS47-OBSERVER-Q15-20261107",
+        "--binding",
+        "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/fixture-inputs.json",
+        "--binding-sha256",
+        "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+        "--work",
+        "/private/tmp/tec-os-observer-q15-e7faf93e1680",
+        "--result",
+        "/private/tmp/tec-os-observer-q15-e7faf93e1680.json"
+      ],
+      "binding_sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+      "work_absent": true,
+      "result_absent": true,
+      "expected_controller_exit": 0,
+      "expected_candidate_exit": 0,
+      "source_contract_matches": true
+    },
+    {
+      "case": "Q16",
+      "argv": [
+        "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+        "-I",
+        "-S",
+        "-B",
+        "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/public_observer_fixture.py",
+        "--case",
+        "Q16",
+        "--allocation",
+        "KS47-OBSERVER-Q16-20261107",
+        "--binding",
+        "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/fixture-inputs.json",
+        "--binding-sha256",
+        "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+        "--work",
+        "/private/tmp/tec-os-observer-q16-e7faf93e1680",
+        "--result",
+        "/private/tmp/tec-os-observer-q16-e7faf93e1680.json"
+      ],
+      "binding_sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+      "work_absent": true,
+      "result_absent": true,
+      "expected_controller_exit": 0,
+      "expected_candidate_exit": 124,
+      "source_contract_matches": true
+    }
+  ],
+  "binding_checks": {
+    "unit_binding_sha256": "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+    "fixture_binding_sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+    "three_unit_module_hashes_match_current_and_spec": true,
+    "python_runtime_guard_current_bytes_checked": true,
+    "fourteen_prior_production_payloads_unchanged": true,
+    "all16_historical_baseline_payload_hashes_match": true,
+    "all39_actual_reader_hashes_match": true,
+    "reference_review_hashes": [
+      {
+        "path": "observer-repair-source-confirmation.json",
+        "sha256": "79d508acbf14b7f8005501fe2f484a6cfee8d84d7e9f30033832f969853003fa",
+        "matches_offer": true
+      },
+      {
+        "path": "observer-control-source-confirmation.json",
+        "sha256": "ddeb18453358fadfe962dd196c8ff6acbe89b2c3ccdabf22aff7f68afd0c5949",
+        "matches_offer": true
+      },
+      {
+        "path": "public-fixture-source-confirmation.json",
+        "sha256": "44430c522bea7195c9b013ffbce12325e784b262616877c29d34402b51a5a6a9",
+        "matches_offer": true
+      }
+    ]
+  },
+  "source_predicates": [
+    {
+      "scope": "Q01-Q14",
+      "source": "test_observer.py main and correctedQ06/Q11/Q13; observer-control-source-confirmation.json",
+      "result": "Exact supplied unit binding selects60 suite/10 case,2s barriers/joins and all14 actual candidate-routine controls. All module copies verified before executing retained non-main bytes. Query/cross-process signal/exit adapters fake; actual in-process threads, synthetic file I/O and own-process alarm/exit only. Driver exit0 plus14 passing complete case records required; no site or peak-memory acceptance."
+    },
+    {
+      "scope": "Q15/Q16 launch and budgets",
+      "source": "public_observer_fixture.py:343-405; fixture-inputs.json",
+      "result": "Offered commands invoke controller directly with-I-S-B, not an outer guard. Controller60 includes preparation/postflight, public-runner cutoff fixed at controller entry+55 and five reserved seconds are inside60. Inner candidate starts one actual pinned guard with850/450/wait0 and unchanged workers/minification. Runtime fixture substitutions are explicit, not actual VitePress/render/checker acceptance."
+    },
+    {
+      "scope": "Q15 oracle",
+      "source": "public_observer_fixture.py:405-426",
+      "result": "Requires independent retained-scope resolution, actual candidate exit0/PASS terminal, runner audit exactly CLEAR with remaining[], source-after postflight, no first failure and labelled fixture-only checker passed receipt. Controller0 means expected fixture outcome only."
+    },
+    {
+      "scope": "Q16 oracle",
+      "source": "public_observer_fixture.py:428-455",
+      "result": "Requires exact nonce-only post-ACK injection, original ACK/context/accepted ownership-hash binding and different original/tampered raw hashes. Actual candidate, terminal and failure all124; terminalFAILED, stage identity-observation and exact hash-mismatch detail. No checker; runner audit remains UNKNOWN_HELD. Separately resolved actual retained scope is required, never relabelled runnerCLEAR."
+    },
+    {
+      "scope": "Failure and sequencing",
+      "source": "public_observer_fixture.py independent_audit/exception/finally; offer sequence",
+      "result": "Unavailable observations, unresolved handles or mismatched fixture outcomes fail controller. Numeric observations are not kill authority. Unit suite then Q15 then Q16 need separate explicit allocations/result review, with no automatic successor or retry. No actual book-run command is included."
+    }
+  ],
+  "non_authoritative_templates": "fixture-inputs planned_commands retain illustrative UNALLOCATED placeholders and older controller-S-B templates. They are not dispatched or offered for execution. The authoritative exact three commands checked here are the MD fences and allocation-request JSON argv, which match byte-for-token including-I-S-B. Final actual candidate argv also uses-I-S-B.",
+  "patch_artifact_boundary": {
+    "core_patch_present": true,
+    "complete_patch_present": true,
+    "disposition": "Complete patch appeared during this inert review. Its presence and hash are recorded; patch-to-Git/six-path handoff verification is not included in this bounded three-command/input review and remains a final handoff check.",
+    "complete_patch_sha256": "b0cc058acc279b78de10d1fbf7094278aadd1d0c4a3fe063bd007d4b286d51ee",
+    "complete_patch_bytes": 185773
+  },
+  "findings": [],
+  "freshness_limit": "Work/result absence checked now using lexists, including dangling symlinks. This point-in-time observation is not a reservation and must be rechecked immediately before any authorised command. Generated fixture claim/seal paths are not materialised or qualified here.",
+  "actions": {
+    "only_allocation_source_review_json_written": true,
+    "allocation": false,
+    "imports_controls_probes_signals_processes_build_render_validator": false,
+    "commit": false
+  },
+  "limits": [
+    "Source/input consistency only; all controls remain unrun and proposed IDs are not allocations.",
+    "Q15/Q16 contain real native fixture queries/Node/guard only if separately allocated; Q01-Q14 fake-effects suite is a distinct profile.",
+    "Old SITE03 seal is consumed/failed and remains historical, not the changed production packet seal.",
+    "No universal lifecycle/historical-descendant cleanup, actual39-page closure, browser/hardware or publication acceptance."
+  ]
+}

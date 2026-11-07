@@ -1,9 +1,13 @@
 # Observer-repair source implementation
 
-Status: runner/worker source implementation has qualified independent clearance
-at `dcb14a8`. Control-source bindings and their review remain in preparation.
+Status: source implementation and all control-source reviews are clear. The
+complete patch and exact input bindings are ready for independent allocation.
 No candidate import, control, probe, build or actual-output validator has run.
-Exact control allocation is required before any prepared command is executed.
+
+The complete source/input diff is `observer-repair-complete.patch`, with base,
+endpoint and hashes recorded in `observer-repair-source-offer.json`. The exact
+three proposed commands and limits are in `observer-control-allocation-request.md`
+and its JSON counterpart. Every command still requires a new explicit allocation.
 
 Authority is Origo `fc90db15`,
 `studies/p3-tec-os/reviews/book-observer-repair-adoption.md`. The literal adoption

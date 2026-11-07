@@ -1,3 +1,12 @@
+# Current observer-repair source handoff
+
+Source implementation and independent source/control/input reviews are closed.
+No control or new actual book invocation is allocated or executed. The exact
+source patch and command offer are in `site-verification/observer-repair-source-offer.json`
+and `site-verification/observer-control-allocation-request.md`.
+The historical consumed SITE03 seal remains FAILED and must not be reused.
+All earlier requests and actual-result records below remain historical.
+
 # Current site verification result
 
 SITE03 actually ran under Origo2111028d and FAILED on a 0.5-second watchdog
