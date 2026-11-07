@@ -19,8 +19,8 @@ def phase_stop_code(output):
         if path.exists():
             try:
                 code = int(json.loads(path.read_text()).get('exit_code', 1))
-                return code if code > 0 else 1
-            except (OSError, ValueError, TypeError, AttributeError):
+                return code if 1 <= code <= 255 else 1
+            except (OSError, ValueError, TypeError, AttributeError, OverflowError):
                 return 1
     return None
 
@@ -54,7 +54,10 @@ def main():
                                         text=True, timeout=budget,
                                         env={**os.environ, **PS_IDENTITY_ENV}).strip()
     except (subprocess.SubprocessError, OSError, ValueError) as error:
-        first_failure(output, 'ownership-observation', str(error), 124)
+        detail = {'message': str(error), 'query_error': type(error).__name__,
+                  'effective_budget_seconds': budget,
+                  'elapsed_seconds': time.monotonic() - query_started}
+        first_failure(output, 'ownership-observation', detail, 124)
         return 124
     query_elapsed = time.monotonic() - query_started
     ownership = {'nonce': context['nonce'], 'context_sha256': digest(args.context),
