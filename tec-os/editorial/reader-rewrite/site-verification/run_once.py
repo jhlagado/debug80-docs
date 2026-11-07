@@ -329,6 +329,27 @@ class InvocationState:
             except BaseException:
                 pass
 
+    def soft_stop(self):
+        if self.clock() >= self.soft_deadline:
+            # Wake bound signalling without an ownership or receipt lock.
+            self.signal_requested.set()
+            self.request_stop('absolute-deadline', 'cleanup reserve reached', 124)
+
+    def signal_escalation(self, group_signal, handle_signal, wait):
+        self.signal_bound(signal.SIGTERM, group_signal, handle_signal)
+        wait(min(0.4, max(0.0, self.deadline - self.clock())))
+        self.signal_bound(signal.SIGKILL, group_signal, handle_signal)
+
+    def commit_decision(self, audit, observer_quiet, expected_code,
+                        expected_failure, publish):
+        with self.lock, self.failure_lock:
+            code = self.decision(audit, observer_quiet)
+            if code != expected_code or canonical(self.failure) != expected_failure:
+                return False
+            publish()  # Atomic link only, prepared and fsynced outside the latch.
+            self.final_code = code
+            return True
+
     def decision(self, audit, observer_quiet):
         with self.lock, self.failure_lock:
             self._adopt_pending()
@@ -474,12 +495,10 @@ def main():
             prepared = prepare_receipt(output / 'terminal.json', value)
             try:
                 import_worker_failure()
-                with state.lock, state.failure_lock:
-                    current = state.decision(audit, observer_quiet)
-                    if current != code or canonical(state.failure) != failure_identity:
-                        continue
-                    os.link(prepared, output / 'terminal.json')
-                    state.final_code = code
+                if not state.commit_decision(
+                        audit, observer_quiet, code, failure_identity,
+                        lambda: os.link(prepared, output / 'terminal.json')):
+                    continue
                 sync_directory(output)
                 terminal_complete.set()
                 return code
@@ -555,6 +574,7 @@ def main():
         import_worker_failure()
         ownership_path = output / 'job-ownership.json'
         ownership = None
+        ack_ready = False
         errors = []
         if context_identity[0] is not None and ownership_path.exists():
             ownership = json.loads(ownership_path.read_text())
@@ -570,13 +590,20 @@ def main():
                 state.request_stop('identity-observation', {'mismatches': errors}, 124)
                 raise Failed('job ownership declaration mismatch: ' + ', '.join(errors), 124)
             if not (output / 'job-ack.json').exists():
-                if errors:
+                invalid_identity = {'observed_parent_mismatch', 'observed_group_mismatch',
+                                    'observed_birth_mismatch'}
+                if invalid_identity.intersection(errors):
                     state.request_stop('identity-observation', {'mismatches': errors}, 124)
                     raise Failed('job ownership identity mismatch: ' + ', '.join(errors), 124)
-                state.bind_group(ownership)  # In memory before all ACK I/O.
+                # A successful global snapshot can precede receipt publication.
+                # Missing worker/guard stays pending, without ACK, until another
+                # successful observation or the unchanged worker ACK deadline.
+                if not errors:
+                    state.bind_group(ownership)  # Memory before all ACK I/O.
+                    ack_ready = True
         found = state.observe(rows)
         persist_registry()
-        if ownership is not None and not (output / 'job-ack.json').exists():
+        if ack_ready:
             value = {'nonce': ownership['nonce'], 'ownership_sha256': digest(ownership_path)}
             prepared = []
             def prepare_ack():
@@ -631,15 +658,14 @@ def main():
 
     def soft_deadline():
         if not terminal_complete.wait(max(0.0, deadline - 3 - time.monotonic())):
-            # Signal wake-up precedes the latch lock, not any receipt I/O.
-            state.signal_requested.set()
-            state.request_stop('absolute-deadline', 'cleanup reserve reached', 124)
+            state.soft_stop()
 
     def signalling_path():
         state.signal_requested.wait()
-        signal_bound(signal.SIGTERM)
-        threading.Event().wait(min(0.4, max(0.0, deadline - time.monotonic())))
-        signal_bound(signal.SIGKILL)
+        def handle_signal(child, signum):
+            if child.poll() is None:
+                child.send_signal(signum)
+        state.signal_escalation(os.killpg, handle_signal, threading.Event().wait)
 
     watcher = threading.Thread(target=watchdog, daemon=True)
     soft_thread = threading.Thread(target=soft_deadline, daemon=True)
