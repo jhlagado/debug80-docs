@@ -229,20 +229,23 @@ class InvocationState:
             record('query-intent', **intent)
 
             def launch(spawn):
-                # No record/receipt I/O under the stop/launch lock. The adapter
-                # spawns here, then waits/parses outside it, exactly once.
-                with self.lock, self.failure_lock:
-                    self._adopt_pending()
-                    if launch_data:
-                        raise Failed('identity adapter attempted a second launch', 124)
-                    start = self.clock()
-                    budget = query_budget(start, self.soft_deadline,
-                                          self.deadline, cleanup_phase)
-                    if budget <= 0:
-                        self.request_stop('absolute-deadline', 'query intent consumed remaining budget', 124)
-                    if budget <= 0 or (self.stopping.is_set() and not cleanup_phase):
-                        raise Failed('identity query stopped before launch', 124)
-                    launch_data.update(start=start, effective_budget=budget)
+                # Serialize the stop check/launch intent, not native Popen.
+                # While Popen is blocked there may be no returned handle yet.
+                with self.lock:
+                    with self.failure_lock:
+                        self._adopt_pending()
+                        if launch_data:
+                            raise Failed('identity adapter attempted a second launch', 124)
+                        start = self.clock()
+                        budget = query_budget(start, self.soft_deadline,
+                                              self.deadline, cleanup_phase)
+                        if budget <= 0:
+                            self.request_stop('absolute-deadline', 'query intent consumed remaining budget', 124)
+                        if budget <= 0 or (self.stopping.is_set() and not cleanup_phase):
+                            raise Failed('identity query stopped before launch', 124)
+                        launch_data.update(start=start, effective_budget=budget)
+                    # The actual adapter registers the returned handle before
+                    # any I/O and repeats bound cleanup if stop crossed spawn.
                     return spawn(budget)
 
             rows = query_once(launch)
@@ -273,6 +276,18 @@ class InvocationState:
             self.roots[child.pid] = None
             self.history.append({'kind': 'direct-child', 'pid': child.pid,
                                  'birth': None, 'argv': argv})
+
+    def stop_new_child(self, child):
+        if self.stopping.is_set() or self.signal_requested.is_set():
+            # The independent one-shot signaller may already have completed.
+            # A handle returned after it still receives immediate cleanup.
+            for signum in (signal.SIGTERM, signal.SIGKILL):
+                try:
+                    child.send_signal(signum)
+                except BaseException:
+                    pass
+            return True
+        return False
 
     def bind_group(self, ownership):
         with self.lock:
@@ -513,6 +528,7 @@ def main():
                                      stderr=subprocess.PIPE,
                                      env={**os.environ, **PS_IDENTITY_ENV})
             state.register_child(child, argv)  # Memory only, before any wait/I/O.
+            state.stop_new_child(child)
             return child
         child = launch(spawn_query)
         rows = []
@@ -714,14 +730,19 @@ def main():
         import_worker_failure()
         flush_failure()
         event('command-start', argv=argv)
-        with terminal_lock, state.failure_lock:
-            state._adopt_pending()
-            if stopping.is_set() or time.monotonic() >= deadline - 3:
-                raise Failed('failure latch prevents another command launch', 124)
+        with terminal_lock:
+            with state.failure_lock:
+                state._adopt_pending()
+                if stopping.is_set() or time.monotonic() >= deadline - 3:
+                    raise Failed('failure latch prevents another command launch', 124)
+            # Launch intent is serialized, Popen is not under the failure latch.
             child = subprocess.Popen(argv, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
                                      stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                      start_new_session=True)
             state.register_child(child, argv)
+            crossed_stop = state.stop_new_child(child)
+        if crossed_stop:
+            raise Failed('stop crossed child launch; returned handle signalled', 124)
         event('direct-child-registered', pid=child.pid, birth=None, argv=argv)
         persist_registry()
         with audit_lock:
