@@ -1,0 +1,3849 @@
+{
+  "schema": 1,
+  "source_commit": "fb36754c78a79c2622caf8c2189b73909c607004",
+  "allocation": "KS47-OBSERVER-Q15-20261107",
+  "raw_inventory": {
+    "actual-public-output/build-ended.json": {
+      "bytes": 16,
+      "sha256": "d24219f6de94b955cf36d25bd2aca88e2d35eef45b9317b7083f55ec8fe9653c"
+    },
+    "actual-public-output/build-started.json": {
+      "bytes": 183,
+      "sha256": "f1ce68337b5b9d31d089a1b57844d91d97a6e30a44bef5d91ab5a00b3d2d277b"
+    },
+    "actual-public-output/checker.json": {
+      "bytes": 155,
+      "sha256": "6cfdc63e845a3f9bcf1edb21221fbaedcc9ce90453a0a45645335e750a67d10e"
+    },
+    "actual-public-output/context.json": {
+      "bytes": 550,
+      "sha256": "bf26c0816d20a9b4c0b1bd6d1d484a1e029d5027a0a01588587084b34e4eae06"
+    },
+    "actual-public-output/events.jsonl": {
+      "bytes": 11080,
+      "sha256": "b66a905bd940af377b8965601db924c138471e2af5351ae46138bb6d9a0b730e"
+    },
+    "actual-public-output/fixture-started.json": {
+      "bytes": 792,
+      "sha256": "4b298d9284018486f630321f8122c78e31774592cd9d025fa3aef36f12714fbd"
+    },
+    "actual-public-output/invocation.json": {
+      "bytes": 409,
+      "sha256": "4ede67cc5441c049daedbb1bf5f225499c22f89f74322c3649f3cc845515148c"
+    },
+    "actual-public-output/job-ack.json": {
+      "bytes": 163,
+      "sha256": "4468bf8af4ef762c731808e3090d88752912184aeda0e01b1a016664f31dcd1b"
+    },
+    "actual-public-output/job-ownership.json": {
+      "bytes": 401,
+      "sha256": "9aa92d5404cabe1f95d478b3105a6e22fcd77bb4f3e304ae88bd669a8b587e7f"
+    },
+    "actual-public-output/mem-guard.mjs": {
+      "bytes": 11482,
+      "sha256": "45e4edaee20eba1b2d8ec67983ed3acc06be31a64eb059e8bc4ad21257871374"
+    },
+    "actual-public-output/memory.jsonl": {
+      "bytes": 485,
+      "sha256": "1cae39dbb9a5afcf0594f2aa32dff0d0135ce4be86511a6c41bac89b6cd832ee"
+    },
+    "actual-public-output/owned-process-audit.json": {
+      "bytes": 31345,
+      "sha256": "5d5b2403e3f60e6c9e3052c7a0360c691ffb02617cd4faa64b7fdbf39b83d0d9"
+    },
+    "actual-public-output/ownership-history.json": {
+      "bytes": 31280,
+      "sha256": "5394149d3d130cdd225b21f6feb5df461c403214b10da46e59e195784d531d7f"
+    },
+    "actual-public-output/packet/README.md": {
+      "bytes": 268,
+      "sha256": "a123371de84b3667f152d81eb334e7eecb30dc7ab5881adc6722b68c0a353838"
+    },
+    "actual-public-output/packet/build_and_check.py": {
+      "bytes": 5656,
+      "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc"
+    },
+    "actual-public-output/packet/check_html.py": {
+      "bytes": 621,
+      "sha256": "c6e180fd833fb21be4dc537a182e4bd94a7605f6fff6f6032d185bf15ecb99e7"
+    },
+    "actual-public-output/packet/config.after.ts": {
+      "bytes": 24163,
+      "sha256": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9"
+    },
+    "actual-public-output/packet/config.before.ts": {
+      "bytes": 3349,
+      "sha256": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e"
+    },
+    "actual-public-output/packet/config.diff": {
+      "bytes": 21686,
+      "sha256": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489"
+    },
+    "actual-public-output/packet/controls-result.json": {
+      "bytes": 1359432,
+      "sha256": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc"
+    },
+    "actual-public-output/packet/dependency-manifests.json": {
+      "bytes": 189,
+      "sha256": "717514a47a6538688d10c643f03d861d8d659ac5e4ad3d4ae52757897c969fac"
+    },
+    "actual-public-output/packet/expectations.json": {
+      "bytes": 196353,
+      "sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc"
+    },
+    "actual-public-output/packet/installed-inputs.json": {
+      "bytes": 553,
+      "sha256": "4824bbe4378263c4bd5d9c3ea3ea44ec6efb11c06f808e30d8ee7238501d3531"
+    },
+    "actual-public-output/packet/invoke.sh": {
+      "bytes": 77,
+      "sha256": "bb4df5a4058680538cd2ab3a91ceb554afa3683d354cc06d161f1c336d68ffee"
+    },
+    "actual-public-output/packet/packet_inputs.py": {
+      "bytes": 4299,
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504"
+    },
+    "actual-public-output/packet/prepare_packet.py": {
+      "bytes": 9371,
+      "sha256": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8"
+    },
+    "actual-public-output/packet/run_once.py": {
+      "bytes": 47621,
+      "sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5"
+    },
+    "actual-public-output/packet/seal.json": {
+      "bytes": 3231,
+      "sha256": "825df7fd25f3db62943217b1aca54be9bec9edb1b09c12b607a6d98e8a441104"
+    },
+    "actual-public-output/packet/source-inputs.json": {
+      "bytes": 101673,
+      "sha256": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8"
+    },
+    "actual-public-output/packet/test_checker.py": {
+      "bytes": 23685,
+      "sha256": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e"
+    },
+    "actual-public-output/source/.github/site/package-lock.json": {
+      "bytes": 88673,
+      "sha256": "a58e78d1019c8cc3c1772b5a62e8aa84aa6a61859e23ee2d8c0963bd466f0998"
+    },
+    "actual-public-output/source/.github/site/package.json": {
+      "bytes": 129,
+      "sha256": "072e8c6d6c6fba4d41f1c05929a31b9993fb30f400e0ed011bbbdbed39f72ebc"
+    },
+    "actual-public-output/source/.github/workflows/deploy.yml": {
+      "bytes": 1774,
+      "sha256": "3c6adc5158c4943033771ab8abb0d7ce9c6d8634e86040022aa8a1da87d9ea59"
+    },
+    "actual-public-output/source/.gitignore": {
+      "bytes": 350,
+      "sha256": "f9124f85c3603ccbfe0fddd585f9e8728032bc906724b6538040c73334278ef9"
+    },
+    "actual-public-output/source/.vitepress/basie.tmLanguage.json": {
+      "bytes": 3095,
+      "sha256": "733307568cec30189603f62f80b6a9b7d736e29b511a0a05c9ab9f6130de9237"
+    },
+    "actual-public-output/source/.vitepress/config.ts": {
+      "bytes": 24163,
+      "sha256": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9"
+    },
+    "actual-public-output/source/.vitepress/generate-sidebar.mjs": {
+      "bytes": 8469,
+      "sha256": "ff7468878e1a0a870024f5552c2af2f41ef8162f195c3bd560f1e4b8499dec52"
+    },
+    "actual-public-output/source/.vitepress/lanternfly.tmLanguage.json": {
+      "bytes": 1638,
+      "sha256": "45a9072f5d9617b4090fc0ca7a867ac23e6e45dfe292d6b9974118314aa75649"
+    },
+    "actual-public-output/source/.vitepress/sidebar.generated.js": {
+      "bytes": 156294,
+      "sha256": "b953c73fbf6bab0ea572f1596d51d694a0063e54c73f43ab6b5520ac8c27f298"
+    },
+    "actual-public-output/source/.vitepress/theme/Mark.vue": {
+      "bytes": 4817,
+      "sha256": "05cea11b084285d9d8aa185c19fb2cd770533045416a18e3912d6eba283b5963"
+    },
+    "actual-public-output/source/.vitepress/theme/PageEyebrow.vue": {
+      "bytes": 1131,
+      "sha256": "fe825a2c2157aee489eed97fe0c0ae600ea94ca4855b3c441126497d89ea057c"
+    },
+    "actual-public-output/source/.vitepress/theme/custom.css": {
+      "bytes": 22726,
+      "sha256": "857bacc6cb787375b4d5c317c643ae01a61a9e821c4c9395d01b58c7e0d51656"
+    },
+    "actual-public-output/source/.vitepress/theme/index.ts": {
+      "bytes": 1766,
+      "sha256": "ae009a070885596b4b4623a1d381094eb8c3d98b7491e1491d3518c5509aa184"
+    },
+    "actual-public-output/source/.vitepress/theme/page-enhancements.js": {
+      "bytes": 6063,
+      "sha256": "e28ec4562f85505548706fdf3462193815ade064e6f2400b0abcbfe997bdce4f"
+    },
+    "actual-public-output/source/01-basic-operation.md": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual-public-output/source/CNAME": {
+      "bytes": 12,
+      "sha256": "4e578b05296173e4e3306615da43869cb37f7a3663eb91caffe4d96283e22b77"
+    },
+    "actual-public-output/source/README.md": {
+      "bytes": 8465,
+      "sha256": "530c674ff1d00d02eb858445293e54d3d8bc2218aa9dad55a5b89c22e46e61f6"
+    },
+    "actual-public-output/source/archive/README.md": {
+      "bytes": 355,
+      "sha256": "f36639cd17fe1c5bf9b53a55487f8b3d714c799d21b229947287f47ce10e37ab"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/00-introduction.md": {
+      "bytes": 1536,
+      "sha256": "823770c24d36603b81ce6cef6e521c851edee840d54395bcd959650386c9e196"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/01-a-first-program.md": {
+      "bytes": 6946,
+      "sha256": "dd47f72e314053a37889d85eee57d9c3ba8a6ccd48e9b4bbaa8d4e4d1d38eedc"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/02-scalar-values-and-literals.md": {
+      "bytes": 6796,
+      "sha256": "47105a96a10c4356dfeb4122c3f3a88312720168a3e5c4bd2eb8f1574392629d"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/03-expressions-and-conversions.md": {
+      "bytes": 6940,
+      "sha256": "f1f2ba8f013901a91a2595f17f8b02dba54d43688b3eb0b64125703fdc9e5504"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/04-comparisons-booleans-and-masks.md": {
+      "bytes": 9046,
+      "sha256": "f6e6f0ee45c00b71c94355642fe2eafeb1669ea21e6785b1411f5b4b4a7511e5"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/05-ordinals-and-decisions.md": {
+      "bytes": 9835,
+      "sha256": "aab5648909fcae0a0a4378df86b8cacf2aaa0e0cdc1b964d30633a22c80558b7"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/06-loops.md": {
+      "bytes": 9491,
+      "sha256": "6f36e9e8750b58bc7767294b71b7c18915e3245691fd94d39c7d5e859881dedf"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/07-fixed-arrays.md": {
+      "bytes": 10033,
+      "sha256": "f4ec81c8db5908a19ef11d18c9c297cf072a0f7952ceadb29f3720ed1e9d0cf2"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/08-characters-and-strings.md": {
+      "bytes": 8754,
+      "sha256": "9aa4d4828e5e7cd1f7d7201771b8ce4c9e6a8fd5508c119767769ae63677aaaa"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/09-records-and-exact-layout.md": {
+      "bytes": 10590,
+      "sha256": "59ccffa977fa3cba24fd653a1960903e68cfb33ef13771c2bf1daaee3801f13a"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/10-subroutines.md": {
+      "bytes": 7304,
+      "sha256": "914c074743a2bfa0bca560a3940032477a3118a40f78262e43c1e722a724bd63"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/11-selecting-storage.md": {
+      "bytes": 6893,
+      "sha256": "077b2c336ffc3c47bdda7919e2037f0fb3b72645cba50cea3daf75a362f42686"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/12-modules-and-imports.md": {
+      "bytes": 5903,
+      "sha256": "61aecba99edbb42d764a0479fad2d5c0da0da2d65fe144b30d50a3789c44751a"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/13-portable-text-io.md": {
+      "bytes": 5169,
+      "sha256": "69731a2f131370151236832b429911c9e600e0f4973814c16d35483e93f2292b"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/14-expecting-failure.md": {
+      "bytes": 8686,
+      "sha256": "52afdcfea123ba3fdb122e7c100b127eb8181a2a86229bc666c42607c73f27b7"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/15-propagation-and-cleanup.md": {
+      "bytes": 6121,
+      "sha256": "a8df6ffe3acb1898788c87d92620fa7efc8651fd3c34d03683b1b4ace84e4d64"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/16-machine-services-and-assembly.md": {
+      "bytes": 9481,
+      "sha256": "8b1f1d08e2615b36bacfdc84717b9171e62ab5e1c4528f12eff32096e73c357f"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/01-first-program.txt": {
+      "bytes": 247,
+      "sha256": "16d831478d08125b5c00d7e958d6c7cb06d20c785e322efd4b790d04dd0c240b"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/02-scalar-values.txt": {
+      "bytes": 593,
+      "sha256": "943d55af64eb9dc3237313e5459aaae0295f6b8689bb0707ef6e6ca2b4fae6fd"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/03-expressions.txt": {
+      "bytes": 518,
+      "sha256": "05e34bdbd8da0df8c52367aee4f84493d8a482b55273276fd7544f5157cde295"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/04-comparisons.txt": {
+      "bytes": 990,
+      "sha256": "222827517c43e04b4684abe3d7ec47f8e09df97a1797f099eed1ffca68c7750b"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/05-decisions.txt": {
+      "bytes": 1586,
+      "sha256": "e2be3df254bb287abc4bface6a8aa54931446db399df3bf08d3d67a33bf05b6d"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/06-loops.txt": {
+      "bytes": 1844,
+      "sha256": "12b61381d167a42dfd568c5b71a3efc1bb98330c0034e2a86734b55bd5b9e0d9"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/07-fixed-arrays.txt": {
+      "bytes": 1138,
+      "sha256": "31b1e26d27082446b8c72afa4b8041b16896e4391ee853b3507cec362b341c35"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/08-strings.txt": {
+      "bytes": 574,
+      "sha256": "1573d9fb0732877a069241e8caa39b797fa77321e26e0e35e98975f6f8fab52a"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/09-records.txt": {
+      "bytes": 1273,
+      "sha256": "af293d3115a5d9619989d8215db7959de8e8a4c1dcf885fa0a98900a1ce3816c"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/10-routines.txt": {
+      "bytes": 1297,
+      "sha256": "cee82ba695265bdcb3fedd696f49bb7733b811f72edb348f8cdcc459b448dbd5"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/11-selecting-storage.txt": {
+      "bytes": 1361,
+      "sha256": "9d745c534d331adbe66b8929f52aeacec5c1282587aa1a383e612a7647d49198"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/12-counters.txt": {
+      "bytes": 308,
+      "sha256": "0a2b1e8ccd02ef3410af25560f46fb2c071ce05facce075d1e12290c86e7df62"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/12-tally.txt": {
+      "bytes": 197,
+      "sha256": "f8f4333e38a1330d1df73a7a60edec8c49b6a0bc921c420532e6dee4f54bb8b6"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/13-portable-text.txt": {
+      "bytes": 678,
+      "sha256": "b82d5a2dfc8ab1eca1c7b86138b51cf87668c8dc0a808187831b84c08d534336"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/14-number-entry.txt": {
+      "bytes": 1905,
+      "sha256": "86ad5e525d328cb6ee0d35fc00dac6fed02e1ee11f35a80074b4f7f3d3d03ee2"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/15-number-entry.txt": {
+      "bytes": 2224,
+      "sha256": "beecbe07444e15860245e1c64185f0e8114cf497417fba511fe8a00f17c8e8b9"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/16-console.txt": {
+      "bytes": 1025,
+      "sha256": "68f32085d0fff7a8c09fcce7539ae41b81f5c9f0192ac8d1a8da7b0ba74e3f85"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/16-readings.txt": {
+      "bytes": 261,
+      "sha256": "a42afce1622b3a833910607bba36b25a2152e89c06cb5443a61c5bf201fff71c"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/code/16-report.txt": {
+      "bytes": 613,
+      "sha256": "a23fbbd7459f068d0d8dcef43d725f8038b0014d576517e9415c3143630df19b"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/glossary.md": {
+      "bytes": 3069,
+      "sha256": "19cfc44138b957db14989c5aafcd4074bb7cccbcec022bed18a728892eb8f565"
+    },
+    "actual-public-output/source/archive/lanternfly/book1/index.md": {
+      "bytes": 1797,
+      "sha256": "575039a54a3be1b4191bd741ef945e58fc950f9b1efaef79fea6f4e8049c8646"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/01-language-and-source.md": {
+      "bytes": 5291,
+      "sha256": "db0bd67544b20d0ecb4f0ca865fe58cc043a606aad73d9b4b85cba2156d09628"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/02-names-and-scopes.md": {
+      "bytes": 4950,
+      "sha256": "28781eaf51cda99049be112b64a578e7268d57f83a7f20f62c929901f49bf57d"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/03-types-literals-and-text.md": {
+      "bytes": 9832,
+      "sha256": "77192d60b2c881a713a4b488a0c972247ba21335c041cc594ac273b1720f82ba"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/04-integer-expressions.md": {
+      "bytes": 7495,
+      "sha256": "8f10844615a81c3fd89190ad0fd7884c9cf38abab8373fed71717a186b5bc340"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/05-constants-variables-placement.md": {
+      "bytes": 7041,
+      "sha256": "0f92ca65f3dcf270cc3059a70bfecf96908c2fca586aa79e6428c8a499c41d41"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/06-records-arrays-paths.md": {
+      "bytes": 6404,
+      "sha256": "c6f2018c529f8f2ebde6e81916d4353f4b2148a2d4e0cda4bc182cbd6c35d8bf"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/07-assignment-and-operations.md": {
+      "bytes": 7590,
+      "sha256": "07cd10d98780ce8baf00b35f1c3ef96e02b15f5340793778cfec43db1d2f6c5d"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/08-conditions-and-loops.md": {
+      "bytes": 6392,
+      "sha256": "495270dec4d2f458a4fb4aade00d0e795483a3fdaeabcdcd0b0ff1d77c41364a"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/09-routines.md": {
+      "bytes": 6779,
+      "sha256": "34cdd372e13f2ce23c3ed749193cc2e6579c5e05484a9c8dd6e706b8de48d262"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/10-modules-and-programs.md": {
+      "bytes": 12089,
+      "sha256": "751bf980e11d0f44d1171f554aaf44a611a3fc45317dc2481a83a158c5153270"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/11-targets-and-native-code.md": {
+      "bytes": 8926,
+      "sha256": "81d40c8c87f858567d3105a78c8049ff7495380b06920deaebebebfd2b2a5ab2"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/12-grammar-and-words.md": {
+      "bytes": 13307,
+      "sha256": "f926509a32230319de5b80c4cf4ea52bfdf2e0bad2b08f7d8ad13a685956cf6d"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/13-diagnostics-and-conformance.md": {
+      "bytes": 17027,
+      "sha256": "29f7dc770d4c87a3c33e25e4d15ba02abbaf12810a129a10935500093e86670f"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/14-error-handling.md": {
+      "bytes": 11020,
+      "sha256": "c2d030ce58af547a2220c8f5fda315b6ea2f5a6a02d5ce4c955680d035fc2627"
+    },
+    "actual-public-output/source/archive/lanternfly/book2/index.md": {
+      "bytes": 2923,
+      "sha256": "80729c92bf71fea49b2fff55b6aa445e497b47622bbce990fb6fe7cdf2dce2c4"
+    },
+    "actual-public-output/source/archive/lanternfly/index.md": {
+      "bytes": 1910,
+      "sha256": "277cef69c844c423a3614c35faea1e3e9b845e339ce9300a68adddaa533d01f8"
+    },
+    "actual-public-output/source/archive/lanternfly/papers/cooperative-tasks.md": {
+      "bytes": 42705,
+      "sha256": "f8ffa6f86e11b06e6c59e6ee4b524e59093ec9697179765f69dd0f0c90c8b516"
+    },
+    "actual-public-output/source/archive/lanternfly/papers/index.md": {
+      "bytes": 1660,
+      "sha256": "048bafe167f83fb0f97bacef13e1a08aec75b98e6d7b44aecac303c6b3848b46"
+    },
+    "actual-public-output/source/archive/lanternfly/papers/reactive.md": {
+      "bytes": 12617,
+      "sha256": "cad8c5c733df46b25dbccac7e45f31aaeb1fe7337b4f556b35802c6e3b1efc1d"
+    },
+    "actual-public-output/source/archive/lanternfly/papers/static-frames.md": {
+      "bytes": 22737,
+      "sha256": "7ecd7488ee9ce3f2c84dc393e39e5d47db18984dab796f0215649a534dc5c844"
+    },
+    "actual-public-output/source/archive/lanternfly/papers/task-first.md": {
+      "bytes": 14726,
+      "sha256": "5a23766da765444c2896d07a08d86489a9be7173c0e63061dd535d6d548d9df0"
+    },
+    "actual-public-output/source/archive/lanternfly/rewrite/book-plan-07.md": {
+      "bytes": 12448,
+      "sha256": "ce69e4ade0e20b9e39c3e7ecea7b3242a1f991f127b1f61ff93864183ba3dd3e"
+    },
+    "actual-public-output/source/archive/lanternfly/rewrite/book1-current-review.md": {
+      "bytes": 16413,
+      "sha256": "7c5574d845f1498ba3dac0096e3007b13b8b3a59dcd894d113d397a8b29dc8ba"
+    },
+    "actual-public-output/source/archive/lanternfly/rewrite/book1-first-use.md": {
+      "bytes": 2150,
+      "sha256": "0fa92ab48c8877d755c4c7050afc9d771e104200be36ebc70fd101237dc377ce"
+    },
+    "actual-public-output/source/archive/lanternfly/rewrite/prose-lint.sh": {
+      "bytes": 3208,
+      "sha256": "8a34afdae20777b82acb7ab9ff7a411a3f01ebe1b9961a677ba93e7c05cf0fa3"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/addressing-modes.svg": {
+      "bytes": 7297,
+      "sha256": "cb05d5d96af26b0322cfe601de9d322be88209b39a12539fd64380a18acdec57"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/call-and-ret.svg": {
+      "bytes": 5780,
+      "sha256": "243e0724a682cc818b19e2425f397fba510aa9ad631c740282a40c556043c7fa"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/caller-callee-save.svg": {
+      "bytes": 5719,
+      "sha256": "2436e1c49dbfc459ec3c72b19b6e50afd65a9ce1052a0ec460350d5eb7bab6d2"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/compare-and-branch.svg": {
+      "bytes": 6257,
+      "sha256": "9d6921a6284c0cbdc271794c0b361a5da443b5623839ca74fd019ab3d2fc4335"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/cross-register-move.svg": {
+      "bytes": 6028,
+      "sha256": "a5bfeb5b3581021091fe1e446de1308149654891462b61d0372130c796587b47"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/djnz-flow.svg": {
+      "bytes": 5820,
+      "sha256": "a72b2da98a5c4af6970f74fc9f52043d333caa215672754e02cc9dd0f9eab452"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/fetch-execute.svg": {
+      "bytes": 4979,
+      "sha256": "4e7ccab627d744703d7b8698b1398a25f13b6e641d55a328e0ef42afb5d6b3a1"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/flags-register.svg": {
+      "bytes": 6640,
+      "sha256": "dfe956a82b352420f446af1a5b3159e8dbda3faec972d6d129dc61fe4c5016f0"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/hex-program.svg": {
+      "bytes": 7541,
+      "sha256": "5e55da4bf9d1703abed543746f29348b893121f30bcf1f1e7ed798d51cacf8b8"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/hl-walking.svg": {
+      "bytes": 6262,
+      "sha256": "83e175e1f35992065b1498a1c4bd501aace6e62f4def6a335cb4c90c91d1936f"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/io-address-space.svg": {
+      "bytes": 5234,
+      "sha256": "ddf2ce38dde0daf5ca5d61a45dada3fc3aa846ce8527b1aa53d5092190e9ad04"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/ix-displacement.svg": {
+      "bytes": 5865,
+      "sha256": "3071610e3da766c0eaa7d78a2948fb57c349ec72aa2cdad2e527481fb2ab49e2"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/ix-frame.svg": {
+      "bytes": 6804,
+      "sha256": "6d31e8b1ddadc79953743e0e30a5341d5490d25679696fe9d08e02c51f654a30"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/ldir-copy.svg": {
+      "bytes": 7348,
+      "sha256": "949c94ee548dcc233c2c9f49cfad1a53d3228e3adb8645af544a68f1c66b9458"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/little-endian.svg": {
+      "bytes": 5301,
+      "sha256": "9a8f33d12b8dd4c8c99dc03264c7aff7dc9aaa259f485da4c12d40371dde3f15"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/loop-shapes.svg": {
+      "bytes": 6837,
+      "sha256": "f8d56b41796fda50e0bcd5ca1a6ede6a702a854fba56c293d10d38f46c3a1ad5"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/main-data-flow.svg": {
+      "bytes": 5625,
+      "sha256": "df4dd03a22f40bab281aafe860f1b2054ba1f5104083bb56edeceeac6be2c524"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/memory-map.svg": {
+      "bytes": 5247,
+      "sha256": "a880f33406ce09c8e4ffa016f4fbe3064185e2a3ce2c567ea31d390ed49f8526"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/nested-calls.svg": {
+      "bytes": 5826,
+      "sha256": "852f45d7c93b142cfbffa175a577d8f06e7dd47299dd3ef70fb7ddfb522897dd"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/polling-loop.svg": {
+      "bytes": 5056,
+      "sha256": "d744fceb25bacceaa93062ac3e67a01472b505645a5298731d520df8c25a4727"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/register-file.svg": {
+      "bytes": 9086,
+      "sha256": "79ae8d91a6fab073d4182f9c64c5ff2b2918f0af7d0b0fe4a7139bd8090071dd"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/signed-unsigned.svg": {
+      "bytes": 5459,
+      "sha256": "908b746239615f2226a7f574ae59e2062e0a998e803bdef69fb943f21bacc9fe"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/source-and-bytes.svg": {
+      "bytes": 6389,
+      "sha256": "e5c5d16753f04b8fea490eab9af6fe4dd58e8d578b4d6b5825c7425163571c40"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/stack-grows-down.svg": {
+      "bytes": 5583,
+      "sha256": "b9365cca1c2bc5ae1b29ad913546336ad4b7e0583da92ae6d7ae60b1819663b0"
+    },
+    "actual-public-output/source/assets/images/atom-book/book2/system-block.svg": {
+      "bytes": 5909,
+      "sha256": "d492dc75298a789754c31d67b71977ba161d0a54b9f7085b51868d8f550cbd9c"
+    },
+    "actual-public-output/source/assets/images/atom-book/book3/byte-as-switches.svg": {
+      "bytes": 6994,
+      "sha256": "c765254943b685aceda30d3e0c32e8acffc0da490852b131783766114a1ba923"
+    },
+    "actual-public-output/source/assets/images/atom-book/book3/factorial-frames.svg": {
+      "bytes": 8084,
+      "sha256": "f7b9163a6e4e226459f0008f52315eccf3fd7e88d42304130893d7a4149933a4"
+    },
+    "actual-public-output/source/assets/images/atom-book/book3/gcd-euclid.svg": {
+      "bytes": 10594,
+      "sha256": "43e4dc49df374445494f0e9f2915b455cd323b7c4e6b4f7e0891ef74c715ad43"
+    },
+    "actual-public-output/source/assets/images/atom-book/book3/recursive-vs-iterative.svg": {
+      "bytes": 6902,
+      "sha256": "5c21f5730890b54ff3c139891abaac94d231a75ee7df4095c17e3380a226e0ee"
+    },
+    "actual-public-output/source/assets/images/atom-book/book3/string-layout.svg": {
+      "bytes": 8099,
+      "sha256": "2e62d712417eafa7bf5734a0bf095e4ba9847870cd684d39d6280a7dfc176e65"
+    },
+    "actual-public-output/source/assets/images/atom-book/book3/two-pointer-copy.svg": {
+      "bytes": 7496,
+      "sha256": "ca35631cdf8e34ecd428860f87d6a522882819a4cad8137763bb772fd4a846a0"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/address-ruler.svg": {
+      "bytes": 8358,
+      "sha256": "4c64f127172ec3c06b10b38e99ae1ceb5c7d2caa987a7b1a518067d0d31aaa47"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/bringing-in-code.svg": {
+      "bytes": 6557,
+      "sha256": "22e0bd7f54e0d6df2a192601fabe6305a87bd9a06d830599cc11c37c4415e368"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/carrier-expansion.svg": {
+      "bytes": 6874,
+      "sha256": "ed5b8ee70f578adc9938e046a389a2e0d765339270f2fdfc1bab3f9e577d1e11"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/cast-paths.svg": {
+      "bytes": 6166,
+      "sha256": "43ab7058da2ee17236858404d1f9d365a67c61664a149b1528725bbfad360f3a"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/contract-analysis.svg": {
+      "bytes": 7228,
+      "sha256": "e480f0c8ba54f370e9b05675ed8a991a9a0e16b03f1dae059c4b7760bcdf7e22"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/data-directives.svg": {
+      "bytes": 10309,
+      "sha256": "ef08c74c3bb9d390b07dca6628faad3429159a25354b50728d7094a73d355eec"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/diagnostic-line.svg": {
+      "bytes": 5958,
+      "sha256": "08c6c16592d8b02bd12de0114e26f6cfc44260a92f6608a347570de06a2dfa35"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/export-boundary.svg": {
+      "bytes": 5708,
+      "sha256": "210831c2f7d68513df7264ae154c41dbd71b99a82f26c3507b98db386072353c"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/inline-versus-call.svg": {
+      "bytes": 4972,
+      "sha256": "c0059398899284a96cf3daba5c152d7cd4ee8f18fac56f3018be71294789fe4d"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/label-scope.svg": {
+      "bytes": 6033,
+      "sha256": "5b5425300ed93f7cc144176953ce597c4c303e78c822a83c5db5bb1383d0ab4a"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/listing-line.svg": {
+      "bytes": 6295,
+      "sha256": "4dcc389fc22ec5046cd04ab38a2cc526a303d679ed9c8d87601200e9431ea6cf"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/org-and-gaps.svg": {
+      "bytes": 6006,
+      "sha256": "9e93ccedee574d47d2139d41fe0939c13932f0983c390338173bd19624eba0c3"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/record-layout.svg": {
+      "bytes": 10812,
+      "sha256": "57087af559a1b6973bc834d67c07f9b3fa530123251777dcd356b019271000d5"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/return-paths.svg": {
+      "bytes": 7889,
+      "sha256": "fbf35e617b069062bdfbb2becb4d9d5c27e4f00b2d814f97adb80d0a756e6d2c"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/source-line.svg": {
+      "bytes": 5828,
+      "sha256": "205341ef9c311169c525e16287b96d267da498df2ba0639e6fdbf36b4ce0c0f4"
+    },
+    "actual-public-output/source/assets/images/azm-book/book1/union-overlay.svg": {
+      "bytes": 5453,
+      "sha256": "e5d11a023241b521e70202d4929f017d9c32c1869bdb4d2fc7ed9797af645001"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/addressing-modes.svg": {
+      "bytes": 7297,
+      "sha256": "cb05d5d96af26b0322cfe601de9d322be88209b39a12539fd64380a18acdec57"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/assembler-outputs.svg": {
+      "bytes": 5591,
+      "sha256": "c312e28b4801cc9f8b54ec72d34d279df5d71c95bfda2f2d89ce91a26a92e1ee"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/call-and-ret.svg": {
+      "bytes": 5780,
+      "sha256": "243e0724a682cc818b19e2425f397fba510aa9ad631c740282a40c556043c7fa"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/caller-callee-save.svg": {
+      "bytes": 5719,
+      "sha256": "2436e1c49dbfc459ec3c72b19b6e50afd65a9ce1052a0ec460350d5eb7bab6d2"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/compare-and-branch.svg": {
+      "bytes": 6257,
+      "sha256": "9d6921a6284c0cbdc271794c0b361a5da443b5623839ca74fd019ab3d2fc4335"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/contract-boundary.svg": {
+      "bytes": 5115,
+      "sha256": "4226b3420f4256ef9fed7b865bc9261b1cf681c2dd71e06bfc3bd6b402abac82"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/cross-register-move.svg": {
+      "bytes": 6028,
+      "sha256": "a5bfeb5b3581021091fe1e446de1308149654891462b61d0372130c796587b47"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/djnz-flow.svg": {
+      "bytes": 5820,
+      "sha256": "a72b2da98a5c4af6970f74fc9f52043d333caa215672754e02cc9dd0f9eab452"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/fetch-execute.svg": {
+      "bytes": 4979,
+      "sha256": "4e7ccab627d744703d7b8698b1398a25f13b6e641d55a328e0ef42afb5d6b3a1"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/flags-register.svg": {
+      "bytes": 6640,
+      "sha256": "dfe956a82b352420f446af1a5b3159e8dbda3faec972d6d129dc61fe4c5016f0"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/hex-program.svg": {
+      "bytes": 7541,
+      "sha256": "5e55da4bf9d1703abed543746f29348b893121f30bcf1f1e7ed798d51cacf8b8"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/hl-walking.svg": {
+      "bytes": 6262,
+      "sha256": "83e175e1f35992065b1498a1c4bd501aace6e62f4def6a335cb4c90c91d1936f"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/io-address-space.svg": {
+      "bytes": 5234,
+      "sha256": "ddf2ce38dde0daf5ca5d61a45dada3fc3aa846ce8527b1aa53d5092190e9ad04"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/ix-displacement.svg": {
+      "bytes": 5865,
+      "sha256": "3071610e3da766c0eaa7d78a2948fb57c349ec72aa2cdad2e527481fb2ab49e2"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/ix-frame.svg": {
+      "bytes": 6804,
+      "sha256": "6d31e8b1ddadc79953743e0e30a5341d5490d25679696fe9d08e02c51f654a30"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/ldir-copy.svg": {
+      "bytes": 7348,
+      "sha256": "949c94ee548dcc233c2c9f49cfad1a53d3228e3adb8645af544a68f1c66b9458"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/little-endian.svg": {
+      "bytes": 5301,
+      "sha256": "9a8f33d12b8dd4c8c99dc03264c7aff7dc9aaa259f485da4c12d40371dde3f15"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/liveness-violation.svg": {
+      "bytes": 5505,
+      "sha256": "fd2a2804dcfdede7cb92517c8fc814e3c2f1a8f8b6e9af5f3913642c8395f9c2"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/loop-shapes.svg": {
+      "bytes": 6837,
+      "sha256": "f8d56b41796fda50e0bcd5ca1a6ede6a702a854fba56c293d10d38f46c3a1ad5"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/main-data-flow.svg": {
+      "bytes": 5625,
+      "sha256": "df4dd03a22f40bab281aafe860f1b2054ba1f5104083bb56edeceeac6be2c524"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/memory-map.svg": {
+      "bytes": 5247,
+      "sha256": "a880f33406ce09c8e4ffa016f4fbe3064185e2a3ce2c567ea31d390ed49f8526"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/nested-calls.svg": {
+      "bytes": 5826,
+      "sha256": "852f45d7c93b142cfbffa175a577d8f06e7dd47299dd3ef70fb7ddfb522897dd"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/polling-loop.svg": {
+      "bytes": 5056,
+      "sha256": "d744fceb25bacceaa93062ac3e67a01472b505645a5298731d520df8c25a4727"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/register-file.svg": {
+      "bytes": 9086,
+      "sha256": "79ae8d91a6fab073d4182f9c64c5ff2b2918f0af7d0b0fe4a7139bd8090071dd"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/signed-unsigned.svg": {
+      "bytes": 5459,
+      "sha256": "908b746239615f2226a7f574ae59e2062e0a998e803bdef69fb943f21bacc9fe"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/source-and-bytes.svg": {
+      "bytes": 6388,
+      "sha256": "d132d366c0ec36623ba0765bd4e99ced860fd8c4259c4da07c62694833e1c589"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/stack-grows-down.svg": {
+      "bytes": 5583,
+      "sha256": "b9365cca1c2bc5ae1b29ad913546336ad4b7e0583da92ae6d7ae60b1819663b0"
+    },
+    "actual-public-output/source/assets/images/azm-book/book2/system-block.svg": {
+      "bytes": 5909,
+      "sha256": "d492dc75298a789754c31d67b71977ba161d0a54b9f7085b51868d8f550cbd9c"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/array-indexing.svg": {
+      "bytes": 8361,
+      "sha256": "c56ac7784006563ae3ddb74d2cf04678a5dc6816b44ac32dd2de79e5ce9fd2dd"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/asmi-boundary.svg": {
+      "bytes": 6225,
+      "sha256": "12d8d17bdf95d236772a9886822c0914ab22fc5987fce89601c9cf8b12c021b8"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/backtracking-tree.svg": {
+      "bytes": 10704,
+      "sha256": "84c175eb752430b0a3829027ba3203c7e95a47a74594a3a6a305f81dbcc315ac"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/bst-insert.svg": {
+      "bytes": 7461,
+      "sha256": "18080db957bc795bb826c5a9fd6efca3f409460282746b36a6549a4658b48556"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/byte-as-switches.svg": {
+      "bytes": 6994,
+      "sha256": "c765254943b685aceda30d3e0c32e8acffc0da490852b131783766114a1ba923"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/factorial-frames.svg": {
+      "bytes": 8084,
+      "sha256": "f7b9163a6e4e226459f0008f52315eccf3fd7e88d42304130893d7a4149933a4"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/gcd-euclid.svg": {
+      "bytes": 10594,
+      "sha256": "43e4dc49df374445494f0e9f2915b455cd323b7c4e6b4f7e0891ef74c715ad43"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/gcd-results.svg": {
+      "bytes": 6531,
+      "sha256": "48b1e6aaaebc4cb394ffe2ea97f93cf60fc6402525c96997ecf4f2ea442e490e"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/include-address-space.svg": {
+      "bytes": 6960,
+      "sha256": "4592e97099115b5e09860e45d79529bce8e4d9e0e074b24b628dbd3ddd061c79"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/include-vs-import.svg": {
+      "bytes": 6401,
+      "sha256": "c242395cc9c572345684d55613e61c7232dceddb0ca8a237537c3e6173f4712c"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/insert-at-head.svg": {
+      "bytes": 8957,
+      "sha256": "8816da7285a3c1226666cfae3b6c842a34f8148dc6ac0d95398e717b62a864f4"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/insertion-sort-pass.svg": {
+      "bytes": 11375,
+      "sha256": "9a9d6f511399cf047307d4362091fa311d85b62057220d7dd3505ebfa8d42f4d"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/insertion-sort.svg": {
+      "bytes": 16501,
+      "sha256": "870c3e45462304ed38df88fa244e428268d6d463246f853d23dc188382f2895f"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/linear-search.svg": {
+      "bytes": 8443,
+      "sha256": "9eff5f8585e73614af57341b4ee87976ff433ef800e7c21655aa7cc5d48f3fa3"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/linked-list.svg": {
+      "bytes": 6662,
+      "sha256": "226a9b7402eaac89a7305c4130a6f0e0d6305cdc1a610d1f64b157add36beb71"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/mark-recurse-unmark.svg": {
+      "bytes": 8217,
+      "sha256": "73c5e5e25d8986f3e60c04904bd4b0952bdbd4cfb806cb09a3ba182707b696b0"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/mask-operations.svg": {
+      "bytes": 18716,
+      "sha256": "7f9fa13c05cba208366e988d34b74add74c24fde93e1f3bb07f43b807bfcd84b"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/queens-board.svg": {
+      "bytes": 20851,
+      "sha256": "3e3839348e405e39ab78b835b04882545ebe4753593cadd38fa38ca5cee0463b"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/queens-workspace.svg": {
+      "bytes": 8066,
+      "sha256": "e3a38ac6e48ca479551ca3bdb1db2fc608ab1d556f50052336d45f5b2638d200"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/recursive-vs-iterative.svg": {
+      "bytes": 6902,
+      "sha256": "5c21f5730890b54ff3c139891abaac94d231a75ee7df4095c17e3380a226e0ee"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/ring-buffer.svg": {
+      "bytes": 12472,
+      "sha256": "5d89d2195a991b491c2558bc2ea351b11895f230d1663cad884cbb99b92ef17a"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/ring-state-layout.svg": {
+      "bytes": 8206,
+      "sha256": "97daa6a80b88df6a24d8edaae9b64ea0fc41850cfe94edf91939ca2f66b85f80"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/rotate-vs-shift.svg": {
+      "bytes": 11529,
+      "sha256": "9afdf62dd8fe0a7acf90f356c75569e26f088237a13abee7373b920552131283"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/strcmp-walk.svg": {
+      "bytes": 8242,
+      "sha256": "342b23d8a33d9dfc6a8b9a4d95f6d784e6c9a3561fb1c07fb7b780161ba1028a"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/string-layout.svg": {
+      "bytes": 8099,
+      "sha256": "2e62d712417eafa7bf5734a0bf095e4ba9847870cd684d39d6280a7dfc176e65"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/string-representations.svg": {
+      "bytes": 9179,
+      "sha256": "44a396d00ac42a257f86ca23b5678ebb27273443525dd8e70c87e1ba67586964"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/string-workspace.svg": {
+      "bytes": 9245,
+      "sha256": "af338d7228ecf684b414ec67acc45192be70e78e3d3059f7e8534012cbb149de"
+    },
+    "actual-public-output/source/assets/images/azm-book/book3/two-pointer-copy.svg": {
+      "bytes": 7496,
+      "sha256": "ca35631cdf8e34ecd428860f87d6a522882819a4cad8137763bb772fd4a846a0"
+    },
+    "actual-public-output/source/assets/images/basie-book/book1/activation-depth.svg": {
+      "bytes": 2687,
+      "sha256": "287259281eb75e2e3a6923d15b339e7d2f2cf33f2e3ff7fd5fb26ce4387504e1"
+    },
+    "actual-public-output/source/assets/images/basie-book/book1/aggregate-storage-and-access.svg": {
+      "bytes": 3563,
+      "sha256": "f9bbf4a2e8d78cf97b382b89cad9c123158234eba06efe417f004acd73b2348f"
+    },
+    "actual-public-output/source/assets/images/basie-book/book1/call-lifetime.svg": {
+      "bytes": 3194,
+      "sha256": "3d60a9667a624d763f6793ce87ff6f17c3b9972f85dd1e0919ce413b3ae16f8c"
+    },
+    "actual-public-output/source/assets/images/basie-book/book1/capacity-and-length.svg": {
+      "bytes": 3370,
+      "sha256": "c5e0026fe82456f2292a38aae080bdcf0397ca56edabcd21709e9c936726c8f8"
+    },
+    "actual-public-output/source/assets/images/basie-book/book1/collection-lifetimes.svg": {
+      "bytes": 3667,
+      "sha256": "775fb266cd463846115706bc4bd7d995294341809fe051e80a83a2eb11201716"
+    },
+    "actual-public-output/source/assets/images/basie-book/book1/ownership-transfer.svg": {
+      "bytes": 2780,
+      "sha256": "59743cb45a225c519abe7e810c467ec7cb19b0eeadde6a6fc84b1986dd654685"
+    },
+    "actual-public-output/source/assets/images/basie-book/book1/record-lending.svg": {
+      "bytes": 2683,
+      "sha256": "d7f77a978a5d263a16b2a19dd15d314c2fe13dce133f627cd445fc1450a2ec54"
+    },
+    "actual-public-output/source/assets/images/basie-book/book1/scalar-copy.svg": {
+      "bytes": 2275,
+      "sha256": "c28a6a99fa588e7d599f8a2649d5411bcb113a4367685b6bdb44238fce85ee2c"
+    },
+    "actual-public-output/source/assets/images/basie-book/book1/utility-flow.svg": {
+      "bytes": 3322,
+      "sha256": "54776ff9875aeb9ce70d5889a1fc1a4cd74425574afec6d37ef78a99ebd5003f"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/debug-toolbar.svg": {
+      "bytes": 3301,
+      "sha256": "57f66ec12e11da2eab448232f148c08d21c2bbad5839268557e02332b309f7b9"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/debug80-panel-in-vscode.png": {
+      "bytes": 208239,
+      "sha256": "670fb81026c5a7922c3605c4f5ea73faeef22a96c9c0b507fb4edb516ca61beb"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/displays-section.svg": {
+      "bytes": 8823,
+      "sha256": "116199cc53197c268c1e878ecdc24b88c24e04f098040a0db7dde3cd789fd93d"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/editor-breakpoint.svg": {
+      "bytes": 2716,
+      "sha256": "2d2a248a7b649dd27b37af25a8f045e261b47c536e9edf57f787281e2789461b"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/emulator-vs-coolterm-serial.svg": {
+      "bytes": 2313,
+      "sha256": "785b6e038a3c856d8a7646e80ef650a354c9eb9d3bace5d793bf890afa31df51"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/explorer-after-init.svg": {
+      "bytes": 2394,
+      "sha256": "80a81c4887a9841527660238100d490f4c16ab14e756e9aa19277e7ca2b348b2"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/folder-project-target-source.svg": {
+      "bytes": 2174,
+      "sha256": "e2c5cfd56d9d5d9ded0e5e26b1ba4667422f694656d126118f06dfa3b5695b1e"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/glimmer-build-output.svg": {
+      "bytes": 2337,
+      "sha256": "0f66e3e79ff34b3c3d897c371d7155e6fb946b8d07271bcda87e88163d0cb807"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/machine-running.svg": {
+      "bytes": 10635,
+      "sha256": "a9735a8787aae82bc24a29beaa17028e299e35fdeba75df04bd60d3dfdfd3407"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/memory-unlock.svg": {
+      "bytes": 2636,
+      "sha256": "e2e0088f163717cf1f13ee234d36fbae44325649b73db15a04eff0dd9c622a57"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/menu-run-to-here.svg": {
+      "bytes": 2594,
+      "sha256": "7bc57f403973465ef48dc62197456431ef330079344e3723c45bb045a5e1b93d"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/modal-remove-target.svg": {
+      "bytes": 2382,
+      "sha256": "e25446538d4f811279e59d5866b92e1537d15a7b4cbc75809f5e72f5cb328890"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/panel-memory-views.svg": {
+      "bytes": 4087,
+      "sha256": "a83d82749ea4a6b55240fb43442daef5750fafb2821da93427edb90c4d306af8"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/panel-sections.svg": {
+      "bytes": 3925,
+      "sha256": "877086f1f0713653840f2d4d5aa29e1ed248c5f354ab4c272e710161d3ab8d50"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/panel-sidebar-location.svg": {
+      "bytes": 4908,
+      "sha256": "446b532156f8655f02ba23cdc46c6240c2e88a7d6c4b6a5db1f918e30297bee4"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/panel-state-build-failed.svg": {
+      "bytes": 2853,
+      "sha256": "bd24455e6d7efe9602ea75568fb2856a3eb366b039d38d96d1f45fa1249ac4e9"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/panel-state-no-folder.svg": {
+      "bytes": 2483,
+      "sha256": "6fd301b0143bb0f6da627e2aca8c319a5693389c379c5535b7d65600df9cf438"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/panel-state-no-targets.svg": {
+      "bytes": 3746,
+      "sha256": "77df8d8d3f8205676dc170581c738b646e4ecd63f1c17313a30e37be80bc0b10"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/panel-state-ready.svg": {
+      "bytes": 4975,
+      "sha256": "14dfa7e1ac2a9b89a5428f861e06360591e084becd42827e626faca8179a08c6"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/panel-state-uninitialized.svg": {
+      "bytes": 3197,
+      "sha256": "6ff985dfb51742483aefa58031d598a235fa28925aacca9fcc7a7af0cbe3c3a3"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/picker-program-file.svg": {
+      "bytes": 2529,
+      "sha256": "101666a26613dcbead60468d3d4122c0aca0b1cc7c98b8c4c2ae5148000d5dd1"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/picker-target-dropdown.svg": {
+      "bytes": 2318,
+      "sha256": "f8537bf1af79486c84487e5c536aec455baaee71fd2f248991ec202d7ffcc79d"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/registers-editable.svg": {
+      "bytes": 4602,
+      "sha256": "6c2adb2a86394c2c237f2592512cfc5d6224bb91af49a6df9c991ab92aa9c58b"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/section-joystick.svg": {
+      "bytes": 3537,
+      "sha256": "ab32ed009701de51771a3cfd62dd19c21dc8297d0d0a020c3649759858ff25d2"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/section-matrix-keyboard.svg": {
+      "bytes": 11664,
+      "sha256": "d87f957e86a0abcc4c9cd36966dd87b98507105077866cc7423bbbd05b1940b4"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/section-serial.svg": {
+      "bytes": 2758,
+      "sha256": "d5a473c818355d37304654a5a54df180a07a57cdf264e3c6f32cdd7994d5e1bd"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/section-tms9918.svg": {
+      "bytes": 2470,
+      "sha256": "9908e67ad6bcc194f26b754eda2a94b67b74c42f14ef1d358927d68765f4fb2f"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/source-azm-artifacts.svg": {
+      "bytes": 1880,
+      "sha256": "23e63f51ab71c0bd0f4c3f4eea912ca3c5e3278f4abfe263acade78ade93627d"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/source-map-status-features.svg": {
+      "bytes": 2493,
+      "sha256": "51edb4e021ac30db7fcf04f059d15184c4444160f3174f830fa0ed17a8bf43e9"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/symbol-hover.svg": {
+      "bytes": 2229,
+      "sha256": "23934c9742289f946e1f567308fd30969edcd486ed424b74465e2d4c8d4837a2"
+    },
+    "actual-public-output/source/assets/images/debug80-book/book1/variables-symbols.svg": {
+      "bytes": 2815,
+      "sha256": "5e3810bdc92c8d1b14484b6ae2839199ca17285e4ee67051cc61830225135310"
+    },
+    "actual-public-output/source/assets/images/favicon.ico": {
+      "bytes": 766,
+      "sha256": "00da74bd5f1a2492f6631e6bd32d5b128cf84203cd74660b7109de0b544e131f"
+    },
+    "actual-public-output/source/assets/images/favicon.svg": {
+      "bytes": 923,
+      "sha256": "170ae3916aec82d84acc49732f64e45d24073eb63c52a5a002c5ce1ca344a41e"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/board-instruments.svg": {
+      "bytes": 14235,
+      "sha256": "c7c6f8f69a71bb4fb6e9958b3e4da3b901b3045fbcf9182a0ab81f3645f1ecab"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/build-pipeline.svg": {
+      "bytes": 6469,
+      "sha256": "0b90c1f8fd5dbc417f04aa0d8d2ab7066b661a730c37f1b7742c43731142fd0b"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/card-machine.svg": {
+      "bytes": 5734,
+      "sha256": "f2a8a045f50ea48e2b0a9f7b15b3d361222d17762ac53f74df41cdd59e2aba0a"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/card-transition.svg": {
+      "bytes": 6765,
+      "sha256": "3c27249de80951980b976118bd10fa32817d5dfa2c624282f16a761ec975d283"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/change-flags.svg": {
+      "bytes": 9641,
+      "sha256": "ea94c80f114d5e45949afae62299300e42cbcf5fe3a4832d5d6a3de4c8955deb"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/colour-planes.svg": {
+      "bytes": 7856,
+      "sha256": "84077b570611bba3e50e40667bcd1c142c0d9804b66f3ad24543e44742269bec"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/dependency-graph.svg": {
+      "bytes": 7215,
+      "sha256": "aab07787d0ed01bd708b74897031651d8c7f35bdcd4834a17c546e6c00c98113"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/dispatch-gating.svg": {
+      "bytes": 7349,
+      "sha256": "9a84091f0e5d3e5e8a99efda38d2719e4bbd404ddde99830884b043d9bfb7c0a"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/file-composition.svg": {
+      "bytes": 7927,
+      "sha256": "5e86a570e15a3b5625abf93fcef1a0ae3466dabb3f8bfd242e0788f21416f223"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/framebuffer.svg": {
+      "bytes": 11619,
+      "sha256": "69d8e3d56cb65030e8148b0766a2de722cece850bdf3eaea71c42610f8a88a5f"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/imperative-reactive.svg": {
+      "bytes": 6377,
+      "sha256": "a3c59db71f66617cb660242906f31c9d417c71049ceb2de701537fef5a4f437c"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/key-bindings.svg": {
+      "bytes": 6811,
+      "sha256": "521256bc78862185f688610e7d4b802ea7e53fc361a16739846e7ff023655be6"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/motion-presets.svg": {
+      "bytes": 12624,
+      "sha256": "36821f232de789ebb3376149fefa1bb626791043c7f22f4f22592d7820b0f4b7"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/picture-as-state.svg": {
+      "bytes": 9369,
+      "sha256": "7f1e5d6f7855081a86f332e4c3d186ac7009c86a4e598bc2ae06f62342169e51"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/ramp-and-curve.svg": {
+      "bytes": 13249,
+      "sha256": "f9378e126ea89497b40f179a5653ec1aed1dee5ea6f098d22a71050ef783ebaa"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/reactive-chain.svg": {
+      "bytes": 7919,
+      "sha256": "ef613c5692d8a05d9450129dbb744846204219421d40728beda93a7307141849"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/record-layout.svg": {
+      "bytes": 9848,
+      "sha256": "1032161d8617920ac7ea945e915e1d647c2949f48df32e30c699002cabcc9329"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/scan-timing.svg": {
+      "bytes": 12420,
+      "sha256": "794589d70072d25936f7174a3adfc4f844ea0b74c51d6373bb114bb19f600600"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/the-frame.svg": {
+      "bytes": 8720,
+      "sha256": "75ab76f3422a85b95f541eb5037e2c5e7b24e75ad4ea93d162a1d23b4c78be54"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book1/time-schedules.svg": {
+      "bytes": 8205,
+      "sha256": "3620c245db38731976467ee9fa2ae3a16c0afde1b9af9ab6f16ef0b283762fdd"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book2/rushlight-play.svg": {
+      "bytes": 6504,
+      "sha256": "199ef2ada305ee57accbc5d2246e7f5a9897c6d23d03a0330b382511b3c612f3"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book2/shadow-commit.svg": {
+      "bytes": 7465,
+      "sha256": "8d38eaa5edaf44c408d53fde869e21fcf23ea1a2db0f4f7721855eafe0c8359d"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book2/skyfall-design.svg": {
+      "bytes": 7679,
+      "sha256": "88860ae92a5d742641712b3335dc8b5ed9a72f5f2592ae5ff218b428a23f0dd0"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book2/skyfall-play.svg": {
+      "bytes": 10648,
+      "sha256": "abc583488f76243cae708508946008984ce32f9d9af8bb80f64f1ea7ccf7ec8a"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book2/tetro-board.svg": {
+      "bytes": 13488,
+      "sha256": "0581f046d11b658f5f563f4953d0aa7cdf27baaf4ac755f9cd59908caa809a7e"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book2/tetro-pieces.svg": {
+      "bytes": 15043,
+      "sha256": "df48753169ac169a91d5b42a3cbf49ffbddd50ff87ecb927c1982da34b61ad10"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book2/two-coordinate-systems.svg": {
+      "bytes": 7041,
+      "sha256": "19e2893768b89f8f5b0db5a273bf8110e0726ae57f291632036a0475c8684b0f"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book2/two-loops.svg": {
+      "bytes": 7004,
+      "sha256": "7826fff675030eda2a1fbbd22f4e028cbc7299e366657898d75cd75ff627512f"
+    },
+    "actual-public-output/source/assets/images/glimmer-book/book2/vdp-layers.svg": {
+      "bytes": 8812,
+      "sha256": "10c502ce25b9c77e4907436d4e777cf84c6fe8d82aa102e5402f44b481fab126"
+    },
+    "actual-public-output/source/assets/images/lanternfly-book/book1/array-stride.svg": {
+      "bytes": 5552,
+      "sha256": "93bd251bc08ebc8e4b9fb3fb909d122f4e19b070564a85e824f3920a235d42de"
+    },
+    "actual-public-output/source/assets/images/lanternfly-book/book1/date-layout.svg": {
+      "bytes": 5480,
+      "sha256": "2228fc42502549359b6e5a391cb03ad7f7cedbf10ab6bf7d6c608060ad5fca2e"
+    },
+    "actual-public-output/source/assets/images/lanternfly-book/book1/record-array-stride.svg": {
+      "bytes": 7279,
+      "sha256": "ab36a77156fe8529881a2c1e0308e0c102649b54bc01520f6d817bb0cd798940"
+    },
+    "actual-public-output/source/assets/images/lanternfly-book/book1/row-major-array.svg": {
+      "bytes": 7650,
+      "sha256": "d32a1301bbe260e77e577204cd37cd8f54891710d62905e981a23292a6844a24"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-01-figure-1.png": {
+      "bytes": 20279,
+      "sha256": "892ddeb880b69b388c60ae175784a51d1b37eb3fe5ecd160c19bbca162b719dc"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-01-figure-2.jpg": {
+      "bytes": 529410,
+      "sha256": "47a360c243e2fa3eeb164fd542de78ec3629df16bb24f1c99b67bab41f8910a9"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-04-figure-1.png": {
+      "bytes": 2660,
+      "sha256": "8923bb7ad5f168aaed6c7cf34dace5c4b37abd873d0f770f7bea485f428e94ab"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-05-figure-1.png": {
+      "bytes": 2859,
+      "sha256": "7880416c6e705ca51fdf003ddb6fa2eaccf62c1ff6dbe83b98b59f5944e2ae1d"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-10-figure-1.jpg": {
+      "bytes": 352294,
+      "sha256": "0a2399e02964156c063a4fbf964e6e422aec5511eb017a6b9f119ed127586285"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-11-figure-1.png": {
+      "bytes": 26881,
+      "sha256": "53637d193b5133c2b39f07b9308a2907448b7e5a126b5e95c3a09e6299a45e42"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-13-figure-1.png": {
+      "bytes": 768014,
+      "sha256": "38417c410cf9553736c56487b043fddd283bcd8944abcbd9226e0d0f9a5afb25"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-14-figure-1.png": {
+      "bytes": 21857,
+      "sha256": "acf7e6de0bbeabdc4439be6415228e2dd3dbd739cf2ef64f61c454c0e224be15"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-15-figure-1.png": {
+      "bytes": 2810,
+      "sha256": "2b6a17100f8b9b2bec8e06533dcaaf4b2ea39cc8af9e77050ffcbf4d8d8809e0"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-16-figure-1.png": {
+      "bytes": 2887,
+      "sha256": "0c32217d45de2c4c53e58e66592135df88cc5f8bfb481dc5a6d72850f3c68cbe"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-17-figure-1.jpg": {
+      "bytes": 542337,
+      "sha256": "09894afab69958bea44b2aefde8444e826b0ec9a5d2f771d353b4cba2a531a35"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-18-figure-1.jpg": {
+      "bytes": 403278,
+      "sha256": "178e0d6e00ac6db2cb3c5181fd71b97ec022bc7a0095006184edb6693237df8d"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-26-figure-1.png": {
+      "bytes": 520336,
+      "sha256": "0ff3ae60758b8f31f2f46c0e0d5cbef5c311a6b8f5c4c86e1cec578c74697a17"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-27-figure-1.png": {
+      "bytes": 60177,
+      "sha256": "ae911ae4a89daac0bb18c6f0470320f473565bb93e2ccf1d820acc13c2644da7"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-30-figure-1.png": {
+      "bytes": 174246,
+      "sha256": "72b969bc6130ee50f07f3208a7fae62e024c71355b8f59159fc5e047ec12a538"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-49-figure-1.jpg": {
+      "bytes": 46282,
+      "sha256": "14a9f1445958c51ccd80d188fc963ea65ca2e595bc2b87a10a63db97e8ed4088"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-50-figure-1.jpg": {
+      "bytes": 492845,
+      "sha256": "3b7a9603741d707e1938e4109753a72a93a888fa58d0e2a5fc6ecb572cab200f"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-50-figure-2.png": {
+      "bytes": 22058,
+      "sha256": "8d8218b2304196508495567bc8edd111a08851caf2b0e513a59999b052ca44c7"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-56-figure-1.png": {
+      "bytes": 4067155,
+      "sha256": "a439aac968c75b331e4ad3727f9e550f53b971aa09306bc8d74744e3e4ddaf5b"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-57-figure-1.jpg": {
+      "bytes": 557817,
+      "sha256": "d8c5eaf107ed06cbc4351983e0ea717b56bfbbc743d13f23e027c1562eba02d9"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-57-figure-2.png": {
+      "bytes": 853824,
+      "sha256": "087c4dab7e19ec40a6fec799a9ce13c2d4f174c357d22e01ac9c10835025cad4"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-63-figure-1.png": {
+      "bytes": 125910,
+      "sha256": "523db050a9c284f1fe330d172f882a0950e591079c7599de9b127a2d84efabaf"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-67-figure-1.png": {
+      "bytes": 5195,
+      "sha256": "11e3d4b75bbed2435e7f33153f755275a71e8b5bc6cdd94f4c54e51b5b9bb898"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-67-figure-2.png": {
+      "bytes": 15215,
+      "sha256": "2f9aa06b8a3114ab0a68fc49582effdbfbb7508558e367b424f42c2f7430b9ce"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-68-figure-1.png": {
+      "bytes": 1621378,
+      "sha256": "fa61f827f55ce907c939e8627e43e182b07b529dd7eef45c423e393de73a72af"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-72-figure-1.jpg": {
+      "bytes": 532447,
+      "sha256": "3224f92e386d2422d3060c5131304c9141ba10bdd6a3567c122ce9343e1d31db"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-73-figure-1.jpg": {
+      "bytes": 188625,
+      "sha256": "331a3d59aa4f018c5f634928018e83ed45356805cb57e9230fc3e67ca45fdf0f"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-73-figure-2.jpg": {
+      "bytes": 268590,
+      "sha256": "ff1f26154cf682f4a05ea6a08514670e11aa44071fdde6cb04d0beba13da94f8"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-74-figure-1.png": {
+      "bytes": 2754,
+      "sha256": "e284b03136f933bfc4bd9668af16a1130b985208f06e32d909adb5241fd77e2a"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-74-figure-2.png": {
+      "bytes": 2790,
+      "sha256": "fc7eb567f65c347043f9328a2ae438f4e4f414fdddd579fa22fdd337d3d4e5a0"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-75-figure-1.png": {
+      "bytes": 2615,
+      "sha256": "39a877011f220b754eac25be7d70da0f26f9b3962a6bf3c5dbb40ffefcf5d155"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-76-figure-1.png": {
+      "bytes": 2833,
+      "sha256": "f029352756f741edd404dba23b3eb0f8061855f47c65400e28a21ca649908d86"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-88-figure-1.png": {
+      "bytes": 268,
+      "sha256": "dbf8dcbf6bce87b4027fa7833ee09cef344aab198908e4826b812a19405d4bb7"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-88-figure-2.jpg": {
+      "bytes": 271791,
+      "sha256": "975e7b4d7e9ee1806acbd504db5d123a7a19ae69f4a3dee2deaf78f3607e61c9"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-88-figure-3.jpg": {
+      "bytes": 293236,
+      "sha256": "3f0a45ae8e87eeb289cc299f76069abe8b2ff1fdf24e8b7ecd956d856b48a755"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-89-figure-1.png": {
+      "bytes": 264169,
+      "sha256": "d4e9de87d88e019ba05d5a22fbb46148d48c2e9261e7e5826940cc7282e143c8"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-89-figure-2.jpg": {
+      "bytes": 215618,
+      "sha256": "161066907dc5b70a7acaea45e3f60a97d246a28c097439d3867af5e3cc8cbe7b"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-90-figure-1.png": {
+      "bytes": 700,
+      "sha256": "700cfc96ebdc2096a6f6db5d877f2b9b21722e6e9db52a0c812bae8b10cc65fb"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-90-figure-2.png": {
+      "bytes": 986999,
+      "sha256": "6fb34193dd50793ad9eb11aba6ce3c8eb5f5945d2cb2f80e8edb872f5f254788"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-92-figure-1.png": {
+      "bytes": 70666,
+      "sha256": "00868250017f588f9b015c3549def365250c12a3cef028d988c6e96c2e662d25"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-92-figure-2.png": {
+      "bytes": 48025,
+      "sha256": "839f4d257ccd02170e1b3be62a528043a2812707e4a7d915b7cb521447d007e2"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-92-figure-3.png": {
+      "bytes": 82969,
+      "sha256": "7c9423d959c6f1f3fa95376be5aea8f51d1a84358d890a14314faf714745637a"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-92-figure-4.png": {
+      "bytes": 28341,
+      "sha256": "acbb6aa1282146ac3eccb7888b74de9fff9705b8762d1f8042a9cc59d8ba1a78"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-92-figure-5.png": {
+      "bytes": 37495,
+      "sha256": "fc5653eacda27af315e1e3b3b9bfc8f1ef6e9c71a71e24b74e0be989546c53ef"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-92-figure-6.png": {
+      "bytes": 37089,
+      "sha256": "e89f6a43544492fc9ca7694148f46cb4b70bbe4302d92032263b884d5d0bde4d"
+    },
+    "actual-public-output/source/assets/images/tec1g/mon3/page-92-figure-7.png": {
+      "bytes": 556,
+      "sha256": "ff892740d165f79520137fbf0dbf9b3e5840f0ea97965e56c704205b4d1241c7"
+    },
+    "actual-public-output/source/atom/index.md": {
+      "bytes": 1127,
+      "sha256": "c3a3a5e7035c43951e6eb5be5036a578dbc3051a9995f099eb95178ad19a3b86"
+    },
+    "actual-public-output/source/atom-book/appendices/01-directives.md": {
+      "bytes": 3129,
+      "sha256": "42f6a10c2bb4eeeb40d86ece7a6dc71ea64119e5fa5b99fadf7e2101c9a2727f"
+    },
+    "actual-public-output/source/atom-book/appendices/02-expressions-and-numbers.md": {
+      "bytes": 2152,
+      "sha256": "1401292d26f6e85eb3a6e28fcee16e0553bdd5fd467800855c5996c8841b8733"
+    },
+    "actual-public-output/source/atom-book/appendices/03-cli-flags.md": {
+      "bytes": 2183,
+      "sha256": "bf2e5d3e46cc7f3519d22d8f8f6fd77cd20923047275da5c58a359de961ef082"
+    },
+    "actual-public-output/source/atom-book/appendices/04-functions.md": {
+      "bytes": 1014,
+      "sha256": "4a3b52eba4b0eef1aa95d7971993f3014fc3992840d90ae7e45ddcfaeedc5cce"
+    },
+    "actual-public-output/source/atom-book/appendices/05-limits-and-capacities.md": {
+      "bytes": 3327,
+      "sha256": "069366188faa7d807150d125aa73f30559d1c7f53a0ec42b5d257ed05a78e1a1"
+    },
+    "actual-public-output/source/atom-book/appendices/06-programming-interface.md": {
+      "bytes": 4909,
+      "sha256": "0cf048b7d92120c11d33986ffc93980581b66135d36041f28a1f7a85243dbf4a"
+    },
+    "actual-public-output/source/atom-book/appendices/07-numbers-bits-and-ascii.md": {
+      "bytes": 5661,
+      "sha256": "3e2c6511e3bec5d17abf2b62bf6caf03239ba1f48215e6e0c2a8646113067b9e"
+    },
+    "actual-public-output/source/atom-book/appendices/08-registers-flags-and-conditions.md": {
+      "bytes": 3612,
+      "sha256": "d4228004dc0aab3714de1af271e0dd9a8bffadd3c2083bc5fa954997db1bfa87"
+    },
+    "actual-public-output/source/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.md": {
+      "bytes": 5762,
+      "sha256": "32e42f75137c0a163c029861d9b3d04af2572cba226ac8542241b332f46e5914"
+    },
+    "actual-public-output/source/atom-book/appendices/10-z80-instruction-reference.md": {
+      "bytes": 14624,
+      "sha256": "472bd698f880f042aabca5e9c3f094112714335746b457491140f858b64ea95d"
+    },
+    "actual-public-output/source/atom-book/appendices/index.md": {
+      "bytes": 1026,
+      "sha256": "573c6396ae5c7e96c336c7e618f4885992a3089f18970857278e235ab6e572b8"
+    },
+    "actual-public-output/source/atom-book/book1/00-introduction.md": {
+      "bytes": 1735,
+      "sha256": "4495c5b57d3ee633b9577aebcbc851591eafd1541d6b5bcc07ca8fb466632a4a"
+    },
+    "actual-public-output/source/atom-book/book1/01-getting-started.md": {
+      "bytes": 1677,
+      "sha256": "ec8d5e6a877b0bb7082d2b8c1cff539a110e90bb3adcb18e191579849c396545"
+    },
+    "actual-public-output/source/atom-book/book1/02-source-syntax-and-symbols.md": {
+      "bytes": 3478,
+      "sha256": "b9b8691a5b800d0e3f4b0acb02e4b98b87bf0a21f7252b02d734455ea6b063bc"
+    },
+    "actual-public-output/source/atom-book/book1/03-addresses-constants-and-expressions.md": {
+      "bytes": 4113,
+      "sha256": "9e359156086b0e8d5ea2d34749406c36c88fc8d7f6c042ac83782e981a8fe4d9"
+    },
+    "actual-public-output/source/atom-book/book1/04-instructions-data-and-storage.md": {
+      "bytes": 5181,
+      "sha256": "5080908be704096140bb8bef13466bc66b0d0d349476cbe17f7e0d988ec246a1"
+    },
+    "actual-public-output/source/atom-book/book1/05-source-composition.md": {
+      "bytes": 4311,
+      "sha256": "156ab3fc864a0b2584edacf9b4de1453e7922c8797607c59259ce342e807b2fe"
+    },
+    "actual-public-output/source/atom-book/book1/06-diagnostics-and-output.md": {
+      "bytes": 2998,
+      "sha256": "ceaa60a68b7a20a808ed9640986a994c6031047404a10bdfd706213be8a6768f"
+    },
+    "actual-public-output/source/atom-book/book1/examples/counter.asm": {
+      "bytes": 127,
+      "sha256": "3f991287c3e5d4bc344b25dfa4158bba9e62e1052af2cbcf770f1127c8085ee8"
+    },
+    "actual-public-output/source/atom-book/book1/examples/reference-tour/lib/device.asm": {
+      "bytes": 16,
+      "sha256": "c0091cbd7cd39f959d85bb79812453b4961a836c13b0032ccb2fd4e7c3db589b"
+    },
+    "actual-public-output/source/atom-book/book1/examples/reference-tour/main.asm": {
+      "bytes": 197,
+      "sha256": "4f263dd67162ceec6821d4c14af9c9b8c5829c19a53c06153324b4ed8de053fb"
+    },
+    "actual-public-output/source/atom-book/book1/index.md": {
+      "bytes": 1251,
+      "sha256": "5f1c45c57f51173405b3489b21f7638c88a1f7fec5cdd303d820add7ac2e5b71"
+    },
+    "actual-public-output/source/atom-book/book2/00-introduction.md": {
+      "bytes": 1957,
+      "sha256": "f713632c4af96f105444593fc67d34999cefb02775dcb068d6ee9a136daa9f8d"
+    },
+    "actual-public-output/source/atom-book/book2/01-the-computer.md": {
+      "bytes": 7498,
+      "sha256": "08dc743c40d4cf9a93e0a840a3e1e1e838e256d3bababc90417a3d322b513893"
+    },
+    "actual-public-output/source/atom-book/book2/02-machine-code.md": {
+      "bytes": 4201,
+      "sha256": "e6679b5e2ff6ff2120bc84826d265fc883a5727384a744058105c918129fa370"
+    },
+    "actual-public-output/source/atom-book/book2/03-assembly-language.md": {
+      "bytes": 6141,
+      "sha256": "ae137acf998d7b652f2eb936942464b3e4079ad5695965dbb5ffdb5316573384"
+    },
+    "actual-public-output/source/atom-book/book2/04-memory-access-and-data.md": {
+      "bytes": 6680,
+      "sha256": "ea15d50b41016beb4b6fe1abcd56724698fdbbb66bf750c993a86b23e5cf5d6b"
+    },
+    "actual-public-output/source/atom-book/book2/05-flags-comparisons-jumps.md": {
+      "bytes": 13301,
+      "sha256": "46e4ad67d88c6fff066e834499c1340f454ad912f78b67bcd4890194119107a2"
+    },
+    "actual-public-output/source/atom-book/book2/06-counting-loops-and-djnz.md": {
+      "bytes": 4267,
+      "sha256": "b60a44a168a89a12c7c7484ae3d1c8c60376e59d7daebfe6b542faa38d625d2a"
+    },
+    "actual-public-output/source/atom-book/book2/07-data-tables-and-indexed-access.md": {
+      "bytes": 9329,
+      "sha256": "5944d268baa7803f606f49f324553dbf3b2734e7ee6135b2b02b94de7a78de07"
+    },
+    "actual-public-output/source/atom-book/book2/08-stack-and-subroutines.md": {
+      "bytes": 8385,
+      "sha256": "1961f6f5e9ae3bd97494dc071d562ef2e3425f4af3302db14d4ab8b083535cf0"
+    },
+    "actual-public-output/source/atom-book/book2/09-io-and-ports.md": {
+      "bytes": 5794,
+      "sha256": "1007618f102276afa186afc966cd6b9dd8da295abfaeb15b6ef8e9bd438aae9f"
+    },
+    "actual-public-output/source/atom-book/book2/10-a-complete-program.md": {
+      "bytes": 5732,
+      "sha256": "9ea144999e11ea01f0b75490470d8661e0de955e8768105cddd7ec49a665ce4a"
+    },
+    "actual-public-output/source/atom-book/book2/11-subroutine-conventions.md": {
+      "bytes": 5112,
+      "sha256": "d16caba7e61c24a4c2307a879386bda1978ccf5d018495d6cacccd235b538f52"
+    },
+    "actual-public-output/source/atom-book/book2/12-arithmetic-routines.md": {
+      "bytes": 3239,
+      "sha256": "25e76a098cdb5c6dad90eadfe0fff71d91c85b682ff0e32fb3526c3f8b482d94"
+    },
+    "actual-public-output/source/atom-book/book2/13-sorting-and-searching.md": {
+      "bytes": 3071,
+      "sha256": "b3743cb11501c9d01a19aa88db9c165fd0d8369f731bcff2a2a81409e64f9990"
+    },
+    "actual-public-output/source/atom-book/book2/14-strings.md": {
+      "bytes": 3115,
+      "sha256": "74f99d6257b620bf412b2f65c618aee2a148698fcd3fcfa331558c0b893b04bc"
+    },
+    "actual-public-output/source/atom-book/book2/15-bit-patterns.md": {
+      "bytes": 2531,
+      "sha256": "5d55222a22853fd242e995affa07a0bb91237aad6d385a4a06a48f6d4dc39fbf"
+    },
+    "actual-public-output/source/atom-book/book2/16-recursion.md": {
+      "bytes": 3505,
+      "sha256": "16622b93dfcecd9ef3f0cbd41047d63a93ec12eee53c21c9fc705b731c1e3f1f"
+    },
+    "actual-public-output/source/atom-book/book2/examples/arithmetic.asm": {
+      "bytes": 953,
+      "sha256": "717f1ef6bb94547343c7aefa4683d904d757702488bf47d3db9fb7b8ea4f3a78"
+    },
+    "actual-public-output/source/atom-book/book2/examples/bit-flags.asm": {
+      "bytes": 645,
+      "sha256": "67f40cfb61676e37ac852a187048d3ea220e66ec4e8ac33c827dc52d74bbe03d"
+    },
+    "actual-public-output/source/atom-book/book2/examples/recursion.asm": {
+      "bytes": 1313,
+      "sha256": "c884d5b041e58a314f82a3328e2f1c4f3ce09c8579cd8b6ccb98a2b3094fcf86"
+    },
+    "actual-public-output/source/atom-book/book2/examples/sorting.asm": {
+      "bytes": 1371,
+      "sha256": "5d970ca964d0b871ee9249f610b23e14428fb97d1fcf2331757ae24f381dc6f7"
+    },
+    "actual-public-output/source/atom-book/book2/examples/strings.asm": {
+      "bytes": 1419,
+      "sha256": "492d07e86c5f5e296c810af41ce8808ee266bb65dd2d5d766a179120d7eaf793"
+    },
+    "actual-public-output/source/atom-book/book2/exercise-notes.md": {
+      "bytes": 6530,
+      "sha256": "613cb6d6ee9971ded32a3be03b83dc11b832c0e5f1632682e340ca082a5fe8bd"
+    },
+    "actual-public-output/source/atom-book/book2/index.md": {
+      "bytes": 1523,
+      "sha256": "f12c1da585351139a8863665619931005817a77f3d08c75c0158e331253e9fb3"
+    },
+    "actual-public-output/source/atom-book/index.md": {
+      "bytes": 1278,
+      "sha256": "d396d6e92aae607fe3f397636f926123fc5b142142a4de447423ec7a80545472"
+    },
+    "actual-public-output/source/atom-book/using-atom-on-cpm.md": {
+      "bytes": 13008,
+      "sha256": "c46a11e8b3e6fecbc856fab0df2d538bb70cc07b0fe4bdb640d988bc6e06c510"
+    },
+    "actual-public-output/source/atom-book/using-atom-on-node.md": {
+      "bytes": 4721,
+      "sha256": "83112326cd9fe9247f8b5d513376d9c146aa39c5b630b6a966d1ea56fb3c8486"
+    },
+    "actual-public-output/source/azm-book/appendices/01-directives.md": {
+      "bytes": 4856,
+      "sha256": "8e0475003d3e5bad4df931604146d1b7f1b4e395ffb98e87fd08880a460bd769"
+    },
+    "actual-public-output/source/azm-book/appendices/02-operators.md": {
+      "bytes": 2053,
+      "sha256": "c7dbf3ebdd2090bda55f6a0d3025399a272e47f68713fbc33e0e31325e25a3b9"
+    },
+    "actual-public-output/source/azm-book/appendices/03-cli-flags.md": {
+      "bytes": 3986,
+      "sha256": "794bf2a7bca8227d8d7fab8c93b6bcee9c074b1f283840ab264622ab2e6ac365"
+    },
+    "actual-public-output/source/azm-book/appendices/04-functions.md": {
+      "bytes": 3894,
+      "sha256": "08d5e1cb19932eeae635540ebc8c21f4abcae71fce56dd25390a722d9f07cb16"
+    },
+    "actual-public-output/source/azm-book/appendices/05-numbers-notation-and-ascii.md": {
+      "bytes": 5700,
+      "sha256": "2792f257cbf5748eb17cfa9808a8551a67187dc8eb751a6e605e5d52acf999c1"
+    },
+    "actual-public-output/source/azm-book/appendices/06-registers-flags-and-conditions.md": {
+      "bytes": 3590,
+      "sha256": "f0d81310731d6ebccd560e0a81a48669681f256ad532f046249c39c63c95790c"
+    },
+    "actual-public-output/source/azm-book/appendices/07-addressing-prefixes-and-instruction-forms.md": {
+      "bytes": 5445,
+      "sha256": "501edabf4001aa8371e967a817ff2709b431bd12eb15d059075773c22cf35131"
+    },
+    "actual-public-output/source/azm-book/appendices/08-z80-instruction-reference.md": {
+      "bytes": 14071,
+      "sha256": "6b7c6662acff6702cb249af26f038bc8677dab74c7d17a0087adeb4b045bb53e"
+    },
+    "actual-public-output/source/azm-book/appendices/index.md": {
+      "bytes": 1211,
+      "sha256": "25333d59b31228d65a1e28129541fc620a1490dfbee3083db316df1fe04f5a13"
+    },
+    "actual-public-output/source/azm-book/book1/00-introduction.md": {
+      "bytes": 2164,
+      "sha256": "8643059d2c6614667ea7510f3ce95fbbb6daf489531bc8f47e84190eab899143"
+    },
+    "actual-public-output/source/azm-book/book1/01-getting-started.md": {
+      "bytes": 3538,
+      "sha256": "098b1835c9461cd05e564945e76f18ccbcd0437260472f6f42c35b684284b997"
+    },
+    "actual-public-output/source/azm-book/book1/02-source-syntax.md": {
+      "bytes": 8171,
+      "sha256": "bb9c60136ac781e7e79eb422fa228d688410a0526f11305c6c43e7861856c047"
+    },
+    "actual-public-output/source/azm-book/book1/03-addresses-constants-expressions.md": {
+      "bytes": 11379,
+      "sha256": "428e47c205ff20dd19b915b6f113745153803169e3c94021c049fe99bbebb14f"
+    },
+    "actual-public-output/source/azm-book/book1/04-data-storage-includes.md": {
+      "bytes": 5399,
+      "sha256": "16370bc935f9d70eb15f7eb577e5b07f3e644176f788fe3d336731ca2beebde2"
+    },
+    "actual-public-output/source/azm-book/book1/05-layout-system.md": {
+      "bytes": 9846,
+      "sha256": "165acde1f57858d58c3bf67b0e2a56c939a49ce852c8b60104729a257001b9d7"
+    },
+    "actual-public-output/source/azm-book/book1/06-register-contracts.md": {
+      "bytes": 22001,
+      "sha256": "4999a4a98800e2f395e934f5d595a7766170f05eeed542f0127aa9787c9cfbda"
+    },
+    "actual-public-output/source/azm-book/book1/07-ops-aliases.md": {
+      "bytes": 13080,
+      "sha256": "6dd35e121ec1587c96283d9a710df0a8481c58cf2fe6dc952dda7a1e14089eef"
+    },
+    "actual-public-output/source/azm-book/book1/08-diagnostics-listings-output.md": {
+      "bytes": 8403,
+      "sha256": "cef3277c974789ee86390f62444f72319f877137e70bf2584caeea194594fdba"
+    },
+    "actual-public-output/source/azm-book/book1/index.md": {
+      "bytes": 1028,
+      "sha256": "1b02a24bdb16d9824c155bfeba13bb9ba853463fa4f14f32fb9b8e6c9b692ec6"
+    },
+    "actual-public-output/source/azm-book/book2/00-introduction.md": {
+      "bytes": 2324,
+      "sha256": "f2715e076a5956122b4c93825ae43c76a6333600bc03ef9fe1f9bfded24a7ff3"
+    },
+    "actual-public-output/source/azm-book/book2/01-the-computer.md": {
+      "bytes": 9086,
+      "sha256": "dc63de629483323af29345afd8afe5a5f50d85353f5acab00035371250202d78"
+    },
+    "actual-public-output/source/azm-book/book2/02-machine-code.md": {
+      "bytes": 5897,
+      "sha256": "3b6e375c4c30cf798b84355ea76cf8f4b6aee95e0731ec3082eca8aef7c280b8"
+    },
+    "actual-public-output/source/azm-book/book2/03-assembly-language.md": {
+      "bytes": 11124,
+      "sha256": "c95b8f4bf2c15e262af01ec164776988cffaab33e7805929115f952eb2972d94"
+    },
+    "actual-public-output/source/azm-book/book2/04-memory-access-and-data.md": {
+      "bytes": 6683,
+      "sha256": "64b35385550b13e988d6cb7771d7636450896da9063f6f3e3de12f8d080fb094"
+    },
+    "actual-public-output/source/azm-book/book2/05-flags-comparisons-jumps.md": {
+      "bytes": 14709,
+      "sha256": "760916ff3a522fe177ba22c4a88f4de5e48e564d0d12592050079b38edb25a3f"
+    },
+    "actual-public-output/source/azm-book/book2/06-counting-loops-and-djnz.md": {
+      "bytes": 8158,
+      "sha256": "f3eed9e2b9258d2894fd71e2b24a529354a6b5437a57772f1ab24573e2d416b5"
+    },
+    "actual-public-output/source/azm-book/book2/07-data-tables-and-indexed-access.md": {
+      "bytes": 9417,
+      "sha256": "3c593092a0f3734addd6caf7f84b4d7c19f64e32e3482e702720041bd2247dc0"
+    },
+    "actual-public-output/source/azm-book/book2/08-stack-and-subroutines.md": {
+      "bytes": 10479,
+      "sha256": "6b3cd9906cb5da8136e9efb7d509731c1da0dfad64b61bc34f053c3f5e34b042"
+    },
+    "actual-public-output/source/azm-book/book2/09-io-and-ports.md": {
+      "bytes": 8328,
+      "sha256": "56ab9549315bd69d2b245d9b75eed3f73b6dae3c371c1fb4ffd03e915dc03945"
+    },
+    "actual-public-output/source/azm-book/book2/10-a-complete-program.md": {
+      "bytes": 7905,
+      "sha256": "c019a6cfc4378412acbc6e874951116bdfc562f3faf85880dccf822712e56815"
+    },
+    "actual-public-output/source/azm-book/book2/11-subroutine-conventions.md": {
+      "bytes": 10805,
+      "sha256": "2416da7404dd00415c3962d51d4a5180d72e53e8416b0b614c90722d7edf033a"
+    },
+    "actual-public-output/source/azm-book/book2/exercise-notes.md": {
+      "bytes": 5431,
+      "sha256": "f002d316ba5997a924742fe807aee6dbb1cff06b7e7676d01f4b8c78dd2ae263"
+    },
+    "actual-public-output/source/azm-book/book2/index.md": {
+      "bytes": 1217,
+      "sha256": "385dbb69d7f1a6c26efc9753878ded3c656a245eeddc853d0913f64638984e9c"
+    },
+    "actual-public-output/source/azm-book/book3/00-introduction.md": {
+      "bytes": 3609,
+      "sha256": "90d6f0e4f5d6d7dfc45790b930942f44ac1741d2d46658522ad71cad22f20d90"
+    },
+    "actual-public-output/source/azm-book/book3/01-foundations.md": {
+      "bytes": 6622,
+      "sha256": "72ac4c45fbdbc35dac69ea6ac68d5ca6753be0082b9a53ab12e5fa2a627b621f"
+    },
+    "actual-public-output/source/azm-book/book3/02-arrays-and-loops.md": {
+      "bytes": 7935,
+      "sha256": "63ececde4aef9ba8fa43f1cae4d4dcb2256ed1e6d741cf0448ff223d2252133d"
+    },
+    "actual-public-output/source/azm-book/book3/03-strings.md": {
+      "bytes": 8519,
+      "sha256": "9db1d706dc6190050f734b5a1a04b057e2e69f0c895ff5ab7704001ae78553ec"
+    },
+    "actual-public-output/source/azm-book/book3/04-bit-patterns.md": {
+      "bytes": 7070,
+      "sha256": "ab8978634d574b36e4604c2f7d1c928348b706156b1dc45cc40fc58408cccdd9"
+    },
+    "actual-public-output/source/azm-book/book3/05-records.md": {
+      "bytes": 11514,
+      "sha256": "4fc27fce7bda9c4f57520af9ea1c999976ca9d668950778cab0479d4794eb0bc"
+    },
+    "actual-public-output/source/azm-book/book3/06-recursion.md": {
+      "bytes": 10725,
+      "sha256": "2a5ee04815f62895e22747c43b807c9dc36fe174f507ab1b788b4c91c045f37d"
+    },
+    "actual-public-output/source/azm-book/book3/07-composition.md": {
+      "bytes": 9886,
+      "sha256": "c4ce686d6ac4bcd3b3ff62ff56e1a485dd3ec63870354077a69639de8d3efbdd"
+    },
+    "actual-public-output/source/azm-book/book3/08-pointer-structures.md": {
+      "bytes": 11971,
+      "sha256": "50fb72198bbd36f2e90dad62637fd8e67a0199064db19e774ed565196af7f29f"
+    },
+    "actual-public-output/source/azm-book/book3/09-capstone.md": {
+      "bytes": 13392,
+      "sha256": "ea933f5e9b8f7ceb0c0d8da8edb58ac47f5fcc2fd20330988555c8e76e1ac555"
+    },
+    "actual-public-output/source/azm-book/book3/examples/01_gcd.asm": {
+      "bytes": 1367,
+      "sha256": "a88c5fccdf1210c9bc28ce09a9a2631e21418cb8bb56d4117e9f9fc8eca80a7d"
+    },
+    "actual-public-output/source/azm-book/book3/examples/02_insertion_sort.asm": {
+      "bytes": 1911,
+      "sha256": "c7a8eb6aec143cccd0a78e6ccfa519f8e6ca752454ad477c47a4206922600fe9"
+    },
+    "actual-public-output/source/azm-book/book3/examples/03_string_length.asm": {
+      "bytes": 1973,
+      "sha256": "aed3ad2a928c36d83177add86a7b9ea71633b2915195fb844f356c7c7c5afe5b"
+    },
+    "actual-public-output/source/azm-book/book3/examples/04_bit_flags.asm": {
+      "bytes": 1317,
+      "sha256": "e3664e28c5068eafa3d7b9db3e6e34adf7998f9abf40271a9c3f2330c4a69700"
+    },
+    "actual-public-output/source/azm-book/book3/examples/05_ring_buffer.asm": {
+      "bytes": 2650,
+      "sha256": "c0e245603df210daaf64b11cf4acfed236b59aa4cec61949baf4a12d5888ff06"
+    },
+    "actual-public-output/source/azm-book/book3/examples/06_factorial.asm": {
+      "bytes": 2440,
+      "sha256": "8fe717c68e6bff549376fb683937c25ef0e6ef814cc3f9c6f16539efb74d05cb"
+    },
+    "actual-public-output/source/azm-book/book3/examples/07_include_demo.asm": {
+      "bytes": 647,
+      "sha256": "2fb1c0eaafd4183ba6c30c4f48b363f49125358e40134a7c4a773b03590aaf21"
+    },
+    "actual-public-output/source/azm-book/book3/examples/08_linked_list.asm": {
+      "bytes": 3126,
+      "sha256": "2eb01de2076c684da44f723ae403b58514d1757d325161bcfcec3d5372a4532d"
+    },
+    "actual-public-output/source/azm-book/book3/examples/09_eight_queens.asm": {
+      "bytes": 5243,
+      "sha256": "9b38180fd5903f0120d709d5a464afff8155f0bbe67670d20678d88e84ce8d9b"
+    },
+    "actual-public-output/source/azm-book/book3/examples/lib/strings.asm": {
+      "bytes": 431,
+      "sha256": "7ba0b4bc00df0a58922535c868c03b58494bd340c35f844a1fc1a7ecaed8626e"
+    },
+    "actual-public-output/source/azm-book/book3/exercise-notes.md": {
+      "bytes": 2784,
+      "sha256": "6d812b9d7e135b260288208b44045167ea19228eff0e47b662206dddd3fba0cb"
+    },
+    "actual-public-output/source/azm-book/book3/index.md": {
+      "bytes": 827,
+      "sha256": "4e9071b3848d2eab7659063e72abcec42d93c8d69185add92e10cb59b21c15e8"
+    },
+    "actual-public-output/source/azm-book/index.md": {
+      "bytes": 1409,
+      "sha256": "079fcb2584602d2e86b8efbfccf94fbf628331165153d666ce1f4feafbd2d4a2"
+    },
+    "actual-public-output/source/basie/book1/00-introduction.md": {
+      "bytes": 7542,
+      "sha256": "f7c47012f6ece684d32f6240d94c6324fbfc3681b6247de8ea9a28915df19f09"
+    },
+    "actual-public-output/source/basie/book1/01-the-life-of-a-value.md": {
+      "bytes": 10262,
+      "sha256": "a63dc6791a1acc1b1895f02d45724b9f91e845755ffe3c8fc1f78bdc58c9067d"
+    },
+    "actual-public-output/source/basie/book1/02-within-bounds.md": {
+      "bytes": 13047,
+      "sha256": "6a72a536cd677a4f7e78c859664577ae30c2cf63104e769fb6eb107c998fd8ca"
+    },
+    "actual-public-output/source/basie/book1/03-coming-and-going.md": {
+      "bytes": 6721,
+      "sha256": "9a004c8c786df36862b2c7b2a0510f26cf654cfa1304490fe95af3941a453501"
+    },
+    "actual-public-output/source/basie/book1/04-the-original-and-the-copy.md": {
+      "bytes": 8424,
+      "sha256": "8e478d6b50f35d48091ae8986294d219906740cb69561b285b491de018849391"
+    },
+    "actual-public-output/source/basie/book1/05-in-good-hands.md": {
+      "bytes": 9214,
+      "sha256": "cbbbddb75849105c48a27348c6baa11733241798ee2b20f8e18b9da1d94dc212"
+    },
+    "actual-public-output/source/basie/book1/06-on-loan.md": {
+      "bytes": 11505,
+      "sha256": "15a97c56c928e77981a32fc472f1994eccec560be80e2e79a995f5a5015b9ccc"
+    },
+    "actual-public-output/source/basie/book1/07-a-change-of-plan.md": {
+      "bytes": 14128,
+      "sha256": "4c4ca3531b83d37a3bb93d03f39e7b9a6e7b39d1c5c028fb6294e78442923ddd"
+    },
+    "actual-public-output/source/basie/book1/08-room-to-work.md": {
+      "bytes": 12505,
+      "sha256": "0b0309bd3bbe463047f92531075ad8cc0d00d86d431bf2918b505d40259d46c5"
+    },
+    "actual-public-output/source/basie/book1/09-a-wider-view.md": {
+      "bytes": 12138,
+      "sha256": "5e1e8ac1ccd2034c4dc3b30cce51e8fe37360522b56e223f8f293ef4c41c98e7"
+    },
+    "actual-public-output/source/basie/book1/10-jobs-come-and-go.md": {
+      "bytes": 11560,
+      "sha256": "5b13b56b0cd732c34d350d9e79fb988af43e44c45b5c36c079bb6fc953bfd6cc"
+    },
+    "actual-public-output/source/basie/book1/11-taking-the-measure.md": {
+      "bytes": 10047,
+      "sha256": "efe54e756ec91c0c13f3f03c8a64a3ce974d4b2b9b03a8c2741668cc2ee3fab3"
+    },
+    "actual-public-output/source/basie/book1/12-a-place-for-everything.md": {
+      "bytes": 13799,
+      "sha256": "7053df84b02a9624d54addca3b09813ca4b9e94253d3a4c64866af31aaf0aa95"
+    },
+    "actual-public-output/source/basie/book1/13-one-call-too-many.md": {
+      "bytes": 12216,
+      "sha256": "07dcafbd7960f58a9e8ec3d62d855717f4f6caabc9ba96137d3c5295963757b0"
+    },
+    "actual-public-output/source/basie/book1/14-putting-it-to-work.md": {
+      "bytes": 10208,
+      "sha256": "365891ddd4fd9351e7c393cdd56cf910709bdd7b20ed3a36a3c6bb1c95f424e9"
+    },
+    "actual-public-output/source/basie/book1/15-following-the-clues.md": {
+      "bytes": 11890,
+      "sha256": "4f145886919e8bbf7e8a63babf1ce4ea14dbbdbdc7afe372a54ac138d80d51b2"
+    },
+    "actual-public-output/source/basie/book1/examples/01-postage.BSI": {
+      "bytes": 335,
+      "sha256": "a942bb7b841a6cc70fa2d94da3651286f0e0b806354dfa8221d2619a3420cde7"
+    },
+    "actual-public-output/source/basie/book1/examples/01-postage.md": {
+      "bytes": 230,
+      "sha256": "30398e22dc7f0c5e9e0c4975b47f4f1444195de7103c0c2a51abd206139f01ed"
+    },
+    "actual-public-output/source/basie/book1/examples/02-values.BSI": {
+      "bytes": 262,
+      "sha256": "e53d3b2d19a330518bfe807abb7f6d1565c012b7f4d28ba504ea13c92cd01579"
+    },
+    "actual-public-output/source/basie/book1/examples/02-values.md": {
+      "bytes": 191,
+      "sha256": "02febff3b96c011b17e3fb9abe660bd82230f99c9c4477adf57e81b3cf3d90d7"
+    },
+    "actual-public-output/source/basie/book1/examples/03-expressions.BSI": {
+      "bytes": 261,
+      "sha256": "52e52f42386df95246b8aca424c98c67979e2e67152fb0b216bf57f24deafca5"
+    },
+    "actual-public-output/source/basie/book1/examples/03-expressions.md": {
+      "bytes": 211,
+      "sha256": "6abb53e1987f25b6c0579620a7df221d22d482ab4a87de2ba9eb5c840e9e32d6"
+    },
+    "actual-public-output/source/basie/book1/examples/04-decisions.BSI": {
+      "bytes": 378,
+      "sha256": "7d8c6bbcbf15d5539a500dd7957ac856b52b97a0a571049b514ebb9937a9a533"
+    },
+    "actual-public-output/source/basie/book1/examples/04-decisions.md": {
+      "bytes": 203,
+      "sha256": "2bda214c8e9b8640aaa9953fab703e6c09e8150a463ec8ddc0c04f732d18d75d"
+    },
+    "actual-public-output/source/basie/book1/examples/05-loops.BSI": {
+      "bytes": 408,
+      "sha256": "9525843637b312c775360cd278ec9280d560bfd9e49067565bfeeb3c0a380f56"
+    },
+    "actual-public-output/source/basie/book1/examples/05-loops.md": {
+      "bytes": 187,
+      "sha256": "88fcd36401b39752f6b8e5e58360cdacff25aedd8e8be6683bb5b6499af90203"
+    },
+    "actual-public-output/source/basie/book1/examples/06-arrays.BSI": {
+      "bytes": 279,
+      "sha256": "b9f8a112fc5a1f6a52e5fafb3a19043f66525bef207457feef6912d950299607"
+    },
+    "actual-public-output/source/basie/book1/examples/06-arrays.md": {
+      "bytes": 191,
+      "sha256": "e30cba49ef1d07481ad784f53fd1bacefa0c9dd4c2870560fc6b7508e3272e8a"
+    },
+    "actual-public-output/source/basie/book1/examples/07-strings.BSI": {
+      "bytes": 219,
+      "sha256": "4c612d3fdae38b508e19d82c44de4c11f3380558d2386860f5fc820ef7712abb"
+    },
+    "actual-public-output/source/basie/book1/examples/07-strings.md": {
+      "bytes": 195,
+      "sha256": "2c257bb84f5c74c379b9916ee96ecd0642fee6d97592eb6971568f8b8df083d1"
+    },
+    "actual-public-output/source/basie/book1/examples/08-records.BSI": {
+      "bytes": 321,
+      "sha256": "fd91576e198122b40fdac2e46a10b2bbb7f738765d5645536072ae3d5f3e5173"
+    },
+    "actual-public-output/source/basie/book1/examples/08-records.md": {
+      "bytes": 195,
+      "sha256": "b634f4c7dacddbf46acd1a8b61cd24f73cdac5e49dae58f2d5232f044ad67a86"
+    },
+    "actual-public-output/source/basie/book1/examples/09-bytes.BSI": {
+      "bytes": 771,
+      "sha256": "10f84c8de17c4a9917c9bc921b69a70fd80267eeffe3b7e9c72790c4bbab8d3b"
+    },
+    "actual-public-output/source/basie/book1/examples/09-bytes.md": {
+      "bytes": 187,
+      "sha256": "b386c772812109fc2e51d32d0c26f97bea9386d3762ae86c9cbc30989e0cacd3"
+    },
+    "actual-public-output/source/basie/book1/examples/09-open-views.BSI": {
+      "bytes": 470,
+      "sha256": "f8f6b9216f5f777efca5fc0c7755632c3989b7f87649b1169b9000b40b0f5231"
+    },
+    "actual-public-output/source/basie/book1/examples/09-open-views.md": {
+      "bytes": 207,
+      "sha256": "094a83ec4529598f0a3d1e5f6e22326e28479495a2abd0c08ffbcdf20c9bc014"
+    },
+    "actual-public-output/source/basie/book1/examples/09-slices.BSI": {
+      "bytes": 504,
+      "sha256": "5f642ec5bf5a44daf3c155e73e1098ca7ca839906817d8a31d8a383b6dade6e1"
+    },
+    "actual-public-output/source/basie/book1/examples/09-slices.md": {
+      "bytes": 191,
+      "sha256": "8695f269c19d86a40a411472b0f8469bd2ec14b3e6f654a4280ef7cbe14f282f"
+    },
+    "actual-public-output/source/basie/book1/examples/10-routines.BSI": {
+      "bytes": 334,
+      "sha256": "d10e95422aa3e26e339982fd5a12d10ac992217018056e044892d1972bdc66b2"
+    },
+    "actual-public-output/source/basie/book1/examples/10-routines.md": {
+      "bytes": 199,
+      "sha256": "b298feb0ecdb03f9e8b70251be98c563a848b19f05a8518e9cdda977f67c079c"
+    },
+    "actual-public-output/source/basie/book1/examples/11-aggregate-results.BSI": {
+      "bytes": 440,
+      "sha256": "cc728501ee9b8fdbd0cd05d707f955b146c9114831598aa71e9ec8fb9fa6e08e"
+    },
+    "actual-public-output/source/basie/book1/examples/11-aggregate-results.md": {
+      "bytes": 235,
+      "sha256": "e2882d7a6214732edd8fb322f478045676bdcfb2b9326fa776231c17daf1c014"
+    },
+    "actual-public-output/source/basie/book1/examples/12-forwards.BSI": {
+      "bytes": 333,
+      "sha256": "368fb0a9785f07bb7fddf4629fb219c63f1aa7092402939665786dca697fa0ec"
+    },
+    "actual-public-output/source/basie/book1/examples/12-forwards.md": {
+      "bytes": 199,
+      "sha256": "8564917e2ec4054402567d795235c5774b21a0d6c346ed3a864b78a5732048a7"
+    },
+    "actual-public-output/source/basie/book1/examples/13-errors.BSI": {
+      "bytes": 492,
+      "sha256": "d621b44d7e0a86dedb2b7903080951affe3d2e99ae4d10a8b52ffa4774751cdc"
+    },
+    "actual-public-output/source/basie/book1/examples/13-errors.md": {
+      "bytes": 191,
+      "sha256": "bd848fc4243d70e04be7d7d617ee50fe4b7080973f35d768c7939808df96d7cc"
+    },
+    "actual-public-output/source/basie/book1/examples/13-handlers.BSI": {
+      "bytes": 409,
+      "sha256": "a35ed74534823517ec541d4dc7d798d05bf336af9c5dfc9ee26de1642b6e6095"
+    },
+    "actual-public-output/source/basie/book1/examples/13-handlers.md": {
+      "bytes": 199,
+      "sha256": "a9adc64ab5ac5cba345abdd74c9354558230fcd1474324e1060d0d3a2265f91b"
+    },
+    "actual-public-output/source/basie/book1/examples/13-orderings.BSI": {
+      "bytes": 786,
+      "sha256": "07f03d13718b5048498113e5466d44fcba714a0e1ea79d9474f5646ca298748c"
+    },
+    "actual-public-output/source/basie/book1/examples/13-orderings.md": {
+      "bytes": 203,
+      "sha256": "291561fe7bb80949f66afca140b5665c4a5cad457393d2b037c4411638577b27"
+    },
+    "actual-public-output/source/basie/book1/examples/ACCESS.BSI": {
+      "bytes": 374,
+      "sha256": "e199e4fdf8471abca119f9d6e578d3d47b82c3d4faa2a44e76310edd96a980d6"
+    },
+    "actual-public-output/source/basie/book1/examples/ACCESS.md": {
+      "bytes": 204,
+      "sha256": "7ee42d19626eaa97d64c17236399714ca1df68b073ff0d0d0552c4ae59078a60"
+    },
+    "actual-public-output/source/basie/book1/examples/CALLS.BSI": {
+      "bytes": 346,
+      "sha256": "6e3ea31938a879f1a2812b5049b08f1101b1897213e98babf52b160fa690e9b8"
+    },
+    "actual-public-output/source/basie/book1/examples/CALLS.md": {
+      "bytes": 200,
+      "sha256": "1fa8efba7adba04c7d0a4688ed9d3362761fe99ce5dcfb36e8c367f26ec960de"
+    },
+    "actual-public-output/source/basie/book1/examples/CAPSTONE.BSI": {
+      "bytes": 2338,
+      "sha256": "b2a0b803cfca948c9671ab3b17dd244f53d40447e578276f5b313ebc24598918"
+    },
+    "actual-public-output/source/basie/book1/examples/CAPSTONE.md": {
+      "bytes": 212,
+      "sha256": "9ad5fcb112c7638f8517ca2b55d5bd486130daf3032446c45a35a1aa9b945b52"
+    },
+    "actual-public-output/source/basie/book1/examples/CHARS.BSI": {
+      "bytes": 172,
+      "sha256": "9e5d8b95516e2f673ff2e9ffc33b64f6cefcd953eda32482c0b74b74308b4670"
+    },
+    "actual-public-output/source/basie/book1/examples/CHARS.md": {
+      "bytes": 124,
+      "sha256": "df96b073250fc41be6c811583c38a4920ceefb3b773302a4008f5654a713d4a0"
+    },
+    "actual-public-output/source/basie/book1/examples/COLLECT.BSI": {
+      "bytes": 874,
+      "sha256": "e877aa2637fcff5d35756f314654b4f690e04820b26b677651f293ef10c82522"
+    },
+    "actual-public-output/source/basie/book1/examples/COLLECT.md": {
+      "bytes": 208,
+      "sha256": "1736e57d1664a4804596bc60e3178de75013598971c50ad1e182165d0d7760c6"
+    },
+    "actual-public-output/source/basie/book1/examples/COMMAND.BSI": {
+      "bytes": 1459,
+      "sha256": "4144891512f3b208e8a3169015c8d4a3fa5bac03068d19b3597bfb39a455d098"
+    },
+    "actual-public-output/source/basie/book1/examples/COMMAND.md": {
+      "bytes": 183,
+      "sha256": "4b1b11cdd6a11154e9501f79d1462ff5c0fc3682dc53c879461e0163048d4421"
+    },
+    "actual-public-output/source/basie/book1/examples/CONTROL.BSI": {
+      "bytes": 886,
+      "sha256": "15630aabfe71ddb0f30858d183a8997e71b3299d98ff62055d40c9c01ee6fbb1"
+    },
+    "actual-public-output/source/basie/book1/examples/CONTROL.md": {
+      "bytes": 208,
+      "sha256": "cb29615e6a94b3fa91b97f3d54b7be09902d910be33c2bd59ca444e2f5797535"
+    },
+    "actual-public-output/source/basie/book1/examples/ECHO.BSI": {
+      "bytes": 187,
+      "sha256": "5b2778d71a31dd2f3768b8ad5880daf012cf41855f7ef8529f741f21a074d4e3"
+    },
+    "actual-public-output/source/basie/book1/examples/ECHO.md": {
+      "bytes": 121,
+      "sha256": "568a55ee05f342e1f1b4d439695890d334feb7509ccfe1ac7d857bde7c629d6d"
+    },
+    "actual-public-output/source/basie/book1/examples/FACTOR.BSI": {
+      "bytes": 417,
+      "sha256": "1edc3c0cfc7bf371124e3ffe7a706f597eb9b39a0643ab9da7d81052a2c1cb58"
+    },
+    "actual-public-output/source/basie/book1/examples/FACTOR.md": {
+      "bytes": 204,
+      "sha256": "84190b2e01ee614f0ad6ddaf381e1772a26fd1f53f3585165ebc74405106fcb6"
+    },
+    "actual-public-output/source/basie/book1/examples/LENDING.BSI": {
+      "bytes": 792,
+      "sha256": "8f08b9f11c5ae255f0f77e76428f15a727b84f58fcffd286cdc66e6a90bd1a1c"
+    },
+    "actual-public-output/source/basie/book1/examples/LENDING.md": {
+      "bytes": 208,
+      "sha256": "39899335f262683ce17729cbeb45ea98847f879c7fbd4c4883fca77e8fbd38be"
+    },
+    "actual-public-output/source/basie/book1/examples/NUMBERS.BSI": {
+      "bytes": 301,
+      "sha256": "b9d3ac3e1c5f42f0f6c1ed8d4004dd8b109c61aa2301ea261714a4d46b0ce79e"
+    },
+    "actual-public-output/source/basie/book1/examples/NUMBERS.md": {
+      "bytes": 183,
+      "sha256": "8cd8bcb20da38d6d4a04ca7cbf0fd9732c0bfcebfc9e8825b9c41e0e398a13f8"
+    },
+    "actual-public-output/source/basie/book1/examples/OWNERS.BSI": {
+      "bytes": 345,
+      "sha256": "0a49fe48fb4e8eb04c7048d209371dd8390e7e7343537b7c1c7eafdee6fa5ead"
+    },
+    "actual-public-output/source/basie/book1/examples/OWNERS.md": {
+      "bytes": 179,
+      "sha256": "78415cc55eae5a07c7de305db3fe73c6af5e4f6aca5c9759a4ce7cde4da5e3b4"
+    },
+    "actual-public-output/source/basie/book1/examples/PICK.BSI": {
+      "bytes": 304,
+      "sha256": "c2a9bb787f78d03ac90a27aa86b0c6e47c3a1297cfb4977fc8f92ae7238fbc60"
+    },
+    "actual-public-output/source/basie/book1/examples/PICK.md": {
+      "bytes": 171,
+      "sha256": "8978c1a50954c99bfb589b0fd5d9b5c4b42369751d2a3fc577d135f7938bb33a"
+    },
+    "actual-public-output/source/basie/book1/examples/READINGS.BSI": {
+      "bytes": 1159,
+      "sha256": "a932bad39e6b62b4df8846829408c00eee978290f232a59625543fd6d8d94bda"
+    },
+    "actual-public-output/source/basie/book1/examples/READINGS.md": {
+      "bytes": 187,
+      "sha256": "efab40846f39cbb2518c3614f84ea64804f5c1e449a4509bd2327984ffa5af97"
+    },
+    "actual-public-output/source/basie/book1/examples/STACK.BSI": {
+      "bytes": 1712,
+      "sha256": "1456523e07666d637c57d2328ab39ada2f54acd79c761c53c24f45b6f6b4fce0"
+    },
+    "actual-public-output/source/basie/book1/examples/STACK.md": {
+      "bytes": 200,
+      "sha256": "ca778489f802f642fba12d075d59e9447890a877bd9d844f31a4125a8d3af63f"
+    },
+    "actual-public-output/source/basie/book1/examples/TOTAL.BSI": {
+      "bytes": 832,
+      "sha256": "dc18d43d2e69558eb02ba1a4a1fa07addf6f9d02521609765bde73b84db9d87a"
+    },
+    "actual-public-output/source/basie/book1/examples/TOTAL.md": {
+      "bytes": 175,
+      "sha256": "b69bf55232a330f879d456c9a1c94c1be153b07bb2fc8b88a3353a894956d363"
+    },
+    "actual-public-output/source/basie/book1/examples/VALID.BSI": {
+      "bytes": 185,
+      "sha256": "b36a809304963fb9f5a945db33b424f293f43568bd6ba8fb6b47f23c0a827e9d"
+    },
+    "actual-public-output/source/basie/book1/examples/VALID.md": {
+      "bytes": 124,
+      "sha256": "faea8afb4a23623490f1e9799f073a250674a9351304a4ee530b8930aa48a7a3"
+    },
+    "actual-public-output/source/basie/book1/examples/checks/BOUNDS.BSI": {
+      "bytes": 92,
+      "sha256": "ad3f9c3afef0305bda1267a5484cc860b0e70f3bf3f8da30b6897a7f6f2e69c4"
+    },
+    "actual-public-output/source/basie/book1/examples/checks/COPY.BSI": {
+      "bytes": 124,
+      "sha256": "df47695509e3b29eba89cb24310b38c07f469f8939e8024c445f51a8ba0cf622"
+    },
+    "actual-public-output/source/basie/book1/examples/checks/ESCAPE.BSI": {
+      "bytes": 118,
+      "sha256": "ee64e1f427bcd6eb48713dafb55b43b9935c19b91568573c75efe08580961bf0"
+    },
+    "actual-public-output/source/basie/book1/examples/checks/NARROW.BSI": {
+      "bytes": 61,
+      "sha256": "6f335ed6b9e048dbefffcec79a701b465c31e72384ce146ae100eb568161d4ce"
+    },
+    "actual-public-output/source/basie/book1/examples/checks/READONLY.BSI": {
+      "bytes": 67,
+      "sha256": "522a8904931b715ea69aaef6fc81d89425fc75b4461792bfe2a34b9114815a44"
+    },
+    "actual-public-output/source/basie/book1/examples/checks/STALE.BSI": {
+      "bytes": 692,
+      "sha256": "2b2cf7e857b67843b3acc4937b929b85f0f0052ea58d6fa2851d835ecb8a4934"
+    },
+    "actual-public-output/source/basie/book1/index.md": {
+      "bytes": 1575,
+      "sha256": "151c33c0d798a3f672026ba20924b877f249c668a71d3caca18b23abfd596626"
+    },
+    "actual-public-output/source/basie/editorial/alternatives-and-variants-analysis.md": {
+      "bytes": 5712,
+      "sha256": "0c84aca3829836829dbef269f68553997092a9bbc36c54514b24344fa54d802f"
+    },
+    "actual-public-output/source/basie/editorial/chapter-manifest.json": {
+      "bytes": 2259,
+      "sha256": "b7472688889a33e4649cd2103e003e1c4f19809f14868fa43fd741839db0fddc"
+    },
+    "actual-public-output/source/basie/editorial/chapter-progress.md": {
+      "bytes": 4905,
+      "sha256": "39ff194007094fc7bd18150640517ac80c32c2cbe7b2c075592d00b0dcf9e5a8"
+    },
+    "actual-public-output/source/basie/editorial/data-and-resource-analysis.md": {
+      "bytes": 6543,
+      "sha256": "9868fbfec7ea11a5c7dad2d61bfe23259a7b52c91f97a61a622b6e86cd847a4a"
+    },
+    "actual-public-output/source/basie/editorial/draft-status.md": {
+      "bytes": 2662,
+      "sha256": "692316a173567bb517ad7e89c3596b52d015169faeb315d2fe3d1a2e7782e207"
+    },
+    "actual-public-output/source/basie/editorial/first-chapter-verification.json": {
+      "bytes": 686,
+      "sha256": "0a73d466a423be2ed0ec8b91526fc8742d6427f1b8893044efe79ad63d634f03"
+    },
+    "actual-public-output/source/basie/editorial/progress.md": {
+      "bytes": 702,
+      "sha256": "f80c10502f2a48cf8c87fb9f186b3f9865d398ce32d70f23b908af7aebe4ec81"
+    },
+    "actual-public-output/source/basie/editorial/safety-and-lifetime-analysis.md": {
+      "bytes": 6804,
+      "sha256": "ea60854ec5806574f8ea0f2b66edfeae18c93e4ae9daacfcea3d0631b4dfdf79"
+    },
+    "actual-public-output/source/basie/editorial/storage-verification.json": {
+      "bytes": 395,
+      "sha256": "70a8e4429b8133febc1e1252c9faf22f50959404715a2885e5c14a335e5d3dd0"
+    },
+    "actual-public-output/source/basie/editorial/thematic-book-plan.md": {
+      "bytes": 33045,
+      "sha256": "4bf676583b1dec9551e819b58dd740863a10ea97d7f50cd7fd44e8d7ae88bfcf"
+    },
+    "actual-public-output/source/basie/editorial/values-and-syntax-analysis.md": {
+      "bytes": 4554,
+      "sha256": "faa258634df7a37c641236560b63c239ede52a647c77963ada6adb0b5712bd93"
+    },
+    "actual-public-output/source/basie/editorial/verification.json": {
+      "bytes": 8740,
+      "sha256": "444dbe3ca3a893853a4aedab3eff339d588e384153a7fc74a3d37c823e9b5fd0"
+    },
+    "actual-public-output/source/basie/index.md": {
+      "bytes": 1453,
+      "sha256": "b06b6ba7d4db608d12793cd79e0d6aff85df77074e7faa79cfedc7cb03082acb"
+    },
+    "actual-public-output/source/basie/programming-manual-plan.md": {
+      "bytes": 399,
+      "sha256": "c5fca466f683f1fc8e88aafd57fcae48cdac644f7fa0315993275591a6c68f4f"
+    },
+    "actual-public-output/source/colophon.md": {
+      "bytes": 365,
+      "sha256": "7ad30224d0f1603385349e82de3e1f13bb312448ca059e13aa643909f06c32c5"
+    },
+    "actual-public-output/source/debug80-book/book1/01-install-debug80.md": {
+      "bytes": 2834,
+      "sha256": "8550076e82d4e048380ff45a13b35d1586d3932540c732a09098c60c21f80236"
+    },
+    "actual-public-output/source/debug80-book/book1/02-open-a-folder.md": {
+      "bytes": 5180,
+      "sha256": "7d34cb058d0e24d4a30a0a38042e2a475e65a4f71fe6a46e6162bd32127970fc"
+    },
+    "actual-public-output/source/debug80-book/book1/03-targets.md": {
+      "bytes": 5224,
+      "sha256": "057091dfcc816c93394a8defd8fa865df544bbab07665bb1c21442c88721aa6e"
+    },
+    "actual-public-output/source/debug80-book/book1/04-build-and-run.md": {
+      "bytes": 4754,
+      "sha256": "271fec5ff8365dd8b802d64800d135310f820475a8caa4e2a4fa5c183f8cb0f7"
+    },
+    "actual-public-output/source/debug80-book/book1/05-build-and-step.md": {
+      "bytes": 4591,
+      "sha256": "141b1c50e2c4dcd3d19da5a329378ff6e62b1f6b86db483dca276aff3922db16"
+    },
+    "actual-public-output/source/debug80-book/book1/06-inspect-the-machine.md": {
+      "bytes": 4556,
+      "sha256": "7b9fa5ed5a979074f72688400b6492d27a96c69ab3c4d0964d276303699f3ee1"
+    },
+    "actual-public-output/source/debug80-book/book1/07-source-navigation.md": {
+      "bytes": 2406,
+      "sha256": "43752c27959835f543f9ab73a73c1d994e537b6879add97131a91d21843401b2"
+    },
+    "actual-public-output/source/debug80-book/book1/08-glimmer-targets.md": {
+      "bytes": 2259,
+      "sha256": "93be58ed40a211a9b18d1d690f5791742885f23e1e8e82ada167a65e990cd904"
+    },
+    "actual-public-output/source/debug80-book/book1/09-video-input-and-serial.md": {
+      "bytes": 4787,
+      "sha256": "87e0c6c689d81e23dc85910849a1a8aa1b356f81c7662bf6aa2052a030691400"
+    },
+    "actual-public-output/source/debug80-book/book1/10-send-to-hardware.md": {
+      "bytes": 3083,
+      "sha256": "3b52c033ad0a384e432dea062f566578bc82c77cc3b34aae05902c5e4c88d25c"
+    },
+    "actual-public-output/source/debug80-book/book1/appendices/a-debug-expressions.md": {
+      "bytes": 2788,
+      "sha256": "76a9a7d439303684b129dd17c77ac401889e79336c692645a22aaf663c3ed0af"
+    },
+    "actual-public-output/source/debug80-book/book1/appendices/b-command-reference.md": {
+      "bytes": 2974,
+      "sha256": "1f0d577302c1fe9867c0ddd91d2a89bbdbe59439a14f9ea7aa737108c0cbf998"
+    },
+    "actual-public-output/source/debug80-book/book1/appendices/c-project-configuration.md": {
+      "bytes": 11911,
+      "sha256": "62b9364ccd89bceef0726b77bd67b1013df57c34a265dbcfb07b1211726dbc0f"
+    },
+    "actual-public-output/source/debug80-book/book1/appendices/d-azm-options-row.md": {
+      "bytes": 5004,
+      "sha256": "62e727b619f2e7b63d624f5fcaae9b4242cee942faa8e915c624f5ebb122f1f5"
+    },
+    "actual-public-output/source/debug80-book/book1/appendices/e-copy-monitor-rom.md": {
+      "bytes": 2561,
+      "sha256": "24e93ec5ea64d07bf46ad4abb60d48ba47af9fe097c38609367aabe18815c3f3"
+    },
+    "actual-public-output/source/debug80-book/book1/index.md": {
+      "bytes": 1362,
+      "sha256": "1730b082969dcb637f01ef869b57c04195fe0605307891c77d8549bd76117549"
+    },
+    "actual-public-output/source/debug80-book/index.md": {
+      "bytes": 329,
+      "sha256": "060fc07db4b8df7541c815b3831f46e75e7826e2d3dadf8fff50248022d72f8b"
+    },
+    "actual-public-output/source/glimmer-book/appendices/appendix-a-declarations.md": {
+      "bytes": 15158,
+      "sha256": "625e7e9c74babba7226af6787ce32c99c01cf3a93bf017a36daf45b1e825d097"
+    },
+    "actual-public-output/source/glimmer-book/appendices/appendix-b-matrix-profile.md": {
+      "bytes": 10155,
+      "sha256": "4c7643a72d0f469a7c2c69299c53077d6130fa39f10421086fd78063a391712d"
+    },
+    "actual-public-output/source/glimmer-book/appendices/appendix-c-tms9918-profile.md": {
+      "bytes": 9255,
+      "sha256": "0406413560b9c282328841b4c948fc1fe0a6f72132ef466e5f21343eec9b13b1"
+    },
+    "actual-public-output/source/glimmer-book/appendices/appendix-d-build-and-debug.md": {
+      "bytes": 8827,
+      "sha256": "4b410b595cb6dd23408aacec2766d84699a80e0c26460091ebdb945b28de0f53"
+    },
+    "actual-public-output/source/glimmer-book/appendices/appendix-e-azm-touchpoints.md": {
+      "bytes": 8849,
+      "sha256": "50c60ce561b7eca5dd2bb9f0b2a801596413586da212b0ad66c5fa5c7a8d6e2a"
+    },
+    "actual-public-output/source/glimmer-book/appendices/index.md": {
+      "bytes": 810,
+      "sha256": "952fc3026800433ec8388a9e3b33e6c37979145dce3e9d1a43bf5cf864cb8472"
+    },
+    "actual-public-output/source/glimmer-book/book1/00-introduction.md": {
+      "bytes": 2639,
+      "sha256": "2b1683e139b63eaeb2cc666f63ce6406ee7157b5b24f8361b541b08c95e18072"
+    },
+    "actual-public-output/source/glimmer-book/book1/01-the-shape-of-a-game.md": {
+      "bytes": 14067,
+      "sha256": "754a8eb76572806e45203d6052ee850a52519e7a1a2f453d052aa22e48d2d907"
+    },
+    "actual-public-output/source/glimmer-book/book1/02-first-light.md": {
+      "bytes": 8726,
+      "sha256": "cef3275e4e62a10881844f8e17e48f3f732f0fe6b03afb1f4756ad93d8f93bda"
+    },
+    "actual-public-output/source/glimmer-book/book1/03-state.md": {
+      "bytes": 7771,
+      "sha256": "7a35cffa07350e981b21c25a5dbb5ebbe4c9085c66ad9ce9d10896ddc0eaa931"
+    },
+    "actual-public-output/source/glimmer-book/book1/04-pulses-and-bindings.md": {
+      "bytes": 7399,
+      "sha256": "3ac075ee3175442b3f3d3af5f85036275a5cf400ed88e2767b2d4893ea436f1d"
+    },
+    "actual-public-output/source/glimmer-book/book1/05-compute-effect-render.md": {
+      "bytes": 8927,
+      "sha256": "11a06dada5d8acc5ac0aba3dc7af233d59830ddef21bf884e4d3d43689399300"
+    },
+    "actual-public-output/source/glimmer-book/book1/06-the-matrix-profile.md": {
+      "bytes": 14745,
+      "sha256": "e1f01625045769feb75de77fb2a4d14b87d4152a2a817d9a4969b21396aded80"
+    },
+    "actual-public-output/source/glimmer-book/book1/07-time.md": {
+      "bytes": 15019,
+      "sha256": "c523464f22e0399d8eb7084328712d71d9ea7cb6c60bfec51b57fb5fb7421bc8"
+    },
+    "actual-public-output/source/glimmer-book/book1/08-motion-curves.md": {
+      "bytes": 11904,
+      "sha256": "fd8f0a5cd859d23507c18b70b8004d9f6f1104e9a959469c8d8c1a46707b6b62"
+    },
+    "actual-public-output/source/glimmer-book/book1/09-shapes-sound-and-displays.md": {
+      "bytes": 12524,
+      "sha256": "5e67dc87851a7cbd001fece89cac85ce39846068c10da63a616738f1cb6d7043"
+    },
+    "actual-public-output/source/glimmer-book/book1/10-arrays-and-layout-types.md": {
+      "bytes": 12243,
+      "sha256": "7b8494c9357d548ed380191f3d7274e394a6a8bdc20e9326252ce9e283a6de93"
+    },
+    "actual-public-output/source/glimmer-book/book1/11-dependency-reports-and-debugging.md": {
+      "bytes": 13475,
+      "sha256": "76838faeafde9b88f810db8d64c4eb4b211021e9efd8603c62f49b227b371e48"
+    },
+    "actual-public-output/source/glimmer-book/book1/12-routines-parts-and-imports.md": {
+      "bytes": 13365,
+      "sha256": "7a89b5a67443d70eb5d1da21e2900a3d0d427b8e9a93335172498fa183443724"
+    },
+    "actual-public-output/source/glimmer-book/book1/13-cards.md": {
+      "bytes": 16665,
+      "sha256": "b56086ee00568dc39cbb1ee6f2bafb2a428a1e95dfbae864173bc88374918008"
+    },
+    "actual-public-output/source/glimmer-book/book1/exercise-notes.md": {
+      "bytes": 3685,
+      "sha256": "1262670f2a9c97628dbe3816b16d1d9744cb542c1459ae99d33259697d0efed8"
+    },
+    "actual-public-output/source/glimmer-book/book1/index.md": {
+      "bytes": 1816,
+      "sha256": "6e0fadd3e98c4491e650739ab2adf4b069fc2886f9108d4da7a658811721daf5"
+    },
+    "actual-public-output/source/glimmer-book/book2/00-introduction.md": {
+      "bytes": 1749,
+      "sha256": "eb214c3ddd5d3620ead8b5afcafada465215938646e51316e81451fce4517932"
+    },
+    "actual-public-output/source/glimmer-book/book2/01-building-skyfall.md": {
+      "bytes": 17828,
+      "sha256": "32f38bd8bdbfe596bfeda61acd337082b6842ce141aa4b5962b49445003b8438"
+    },
+    "actual-public-output/source/glimmer-book/book2/02-reading-tetro.md": {
+      "bytes": 19088,
+      "sha256": "2ce98372210fdd6ccd95a6e9e8474cc899cb4a9803e6fb6b37864cac36736e8a"
+    },
+    "actual-public-output/source/glimmer-book/book2/03-the-tms9918-profile.md": {
+      "bytes": 17107,
+      "sha256": "24b47196ed5f4c05927d4d043557a2c94f5797d5310cd0fea18c8495cbe53d1a"
+    },
+    "actual-public-output/source/glimmer-book/book2/04-building-rushlight.md": {
+      "bytes": 19878,
+      "sha256": "8af44f614b2a87fb8c669f6a9cb7e2e30c5bcc383f86df200dda01be9decca60"
+    },
+    "actual-public-output/source/glimmer-book/book2/05-two-displays-one-language.md": {
+      "bytes": 11410,
+      "sha256": "1b8ab052346a50e880ed0c3e8b74f5a923ae6e55dd20b6045b6eb0208f9115ab"
+    },
+    "actual-public-output/source/glimmer-book/book2/exercise-notes.md": {
+      "bytes": 1728,
+      "sha256": "368d9e0222873c24818ca9bb74c70a75af733b10bf547c14686af7778283761f"
+    },
+    "actual-public-output/source/glimmer-book/book2/index.md": {
+      "bytes": 1171,
+      "sha256": "3e56e770bcfc4dd24825ea727734e5f7b925356b24f5893c5a4dbcd623711194"
+    },
+    "actual-public-output/source/glimmer-book/index.md": {
+      "bytes": 883,
+      "sha256": "48cc067e7658e3754a708735133c67b8b26dcc8846c1c710ce707bfbded96622"
+    },
+    "actual-public-output/source/index.md": {
+      "bytes": 9707,
+      "sha256": "871732ce3ed18b2bd0b685172147238ee022bf025e7275e4d07109f67f5cc306"
+    },
+    "actual-public-output/source/llms.txt": {
+      "bytes": 20165,
+      "sha256": "567da131a7c104ff5b636f5d363e4ef61becb01998e1bd1fa57b4ff8b96f21e8"
+    },
+    "actual-public-output/source/node_modules/fixture-case.json": {
+      "bytes": 79,
+      "sha256": "a26508a64836163f270681f402af8e39291a48e3ba93033fbb9e99d23c52211a"
+    },
+    "actual-public-output/source/node_modules/vitepress/bin/vitepress.js": {
+      "bytes": 2256,
+      "sha256": "0fbfd135f7f5020cf6c1a04d05f07524a00c6433df319c9fc2a5de381bf7c7fb"
+    },
+    "actual-public-output/source/node_modules/vitepress/package.json": {
+      "bytes": 80,
+      "sha256": "0350d533f2dc756763902e1bbf51903fc8fbda3835a7a7fce48eb74539b45e08"
+    },
+    "actual-public-output/source/origo/00-preface.md": {
+      "bytes": 6204,
+      "sha256": "6389d46cf5ccc2249834a4fdeb353bdda0c349521945a6e7d8027861c952d067"
+    },
+    "actual-public-output/source/origo/01-deleting-the-implementation.md": {
+      "bytes": 9969,
+      "sha256": "036ce62955570cfcb0ed70701519ef972467ca60d63117714bb4e14756d48b74"
+    },
+    "actual-public-output/source/origo/02-contracts.md": {
+      "bytes": 16964,
+      "sha256": "7ebae03a4013c5e2eda4c09643d5368b274b2b5e6a8f69b5d9c80c5df8408c53"
+    },
+    "actual-public-output/source/origo/03-oracles-and-gates.md": {
+      "bytes": 11427,
+      "sha256": "ed6ba908e6359d3d9af81268405cdc5538cca7d51ed9a7694ba62ad87d77a74c"
+    },
+    "actual-public-output/source/origo/04-a-round.md": {
+      "bytes": 15043,
+      "sha256": "da53114fd04ecd46d5a9275714287a774468670966a6633995246080164338f6"
+    },
+    "actual-public-output/source/origo/examples.md": {
+      "bytes": 4968,
+      "sha256": "16bb7c93b3b747d57edd64f7254c8b7038e92cba493061d370172a01105c803b"
+    },
+    "actual-public-output/source/origo/index.md": {
+      "bytes": 2160,
+      "sha256": "2d7fb4e17abadbacd15d5969de274c301ce6c8f7fe1a0cb3d1fe58f31d1d5ca8"
+    },
+    "actual-public-output/source/origo/outline.md": {
+      "bytes": 8747,
+      "sha256": "205f331e5997a33c8ce864f748b202d14fa80dd22b72716ad39a24d6dadf9182"
+    },
+    "actual-public-output/source/package-lock.json": {
+      "bytes": 90043,
+      "sha256": "062f6ea3fe54f2abafd9b780d2cf164731a13fd28cb749b0f8a7c96761ef3ec5"
+    },
+    "actual-public-output/source/package.json": {
+      "bytes": 1516,
+      "sha256": "a1230cf0064d863052c8e60b786e295c72c94de6b54838cca6633487b60f4b38"
+    },
+    "actual-public-output/source/public/CNAME": {
+      "bytes": 12,
+      "sha256": "4e578b05296173e4e3306615da43869cb37f7a3663eb91caffe4d96283e22b77"
+    },
+    "actual-public-output/source/public/atom.svg": {
+      "bytes": 566,
+      "sha256": "5da5b42ac09fae65360e524f5af1bc4dffe03e97bfaa5b4d9ad83d9e185cf386"
+    },
+    "actual-public-output/source/public/favicon.svg": {
+      "bytes": 923,
+      "sha256": "170ae3916aec82d84acc49732f64e45d24073eb63c52a5a002c5ce1ca344a41e"
+    },
+    "actual-public-output/source/public/glimmer-book/book2/code/rushlight.glim": {
+      "bytes": 6532,
+      "sha256": "2e58d2889eb3bc87cacdd49301b10000a5a2c2b4491de4abcc96898909cd19ec"
+    },
+    "actual-public-output/source/public/glimmer-book/book2/code/skyfall-rules.glim": {
+      "bytes": 3365,
+      "sha256": "ac09248dc170ce50dca93e67835c72153f04f29bdb404c8361b9c824492167d5"
+    },
+    "actual-public-output/source/public/glimmer-book/book2/code/skyfall.glim": {
+      "bytes": 1223,
+      "sha256": "01428ea7ee8599d0f1a74efddc717197d735766f1e0a90a555ca13e63c03c68a"
+    },
+    "actual-public-output/source/public/llms.txt": {
+      "bytes": 20165,
+      "sha256": "567da131a7c104ff5b636f5d363e4ef61becb01998e1bd1fa57b4ff8b96f21e8"
+    },
+    "actual-public-output/source/public/logo.svg": {
+      "bytes": 893,
+      "sha256": "ada43f58ab55c08fa72162d312b0b6369f0b746f356d07d7c8d49e6ef0f87304"
+    },
+    "actual-public-output/source/public/tec1g/mon3-user-guide/index.html": {
+      "bytes": 321,
+      "sha256": "70578bc32521c647bb17afab0f1a79959cf6733711ebebf1f2ac16dbd7da616d"
+    },
+    "actual-public-output/source/scripts/check-links.mjs": {
+      "bytes": 3590,
+      "sha256": "03dc23c34974d5513f62aa8a76694bcbccf174c29b2a725d64e6fbf53a5cae99"
+    },
+    "actual-public-output/source/scripts/check-llms-txt.mjs": {
+      "bytes": 2895,
+      "sha256": "73542180e0255d7e340385a5d57bd348fbbd46448e89cb95cae49c5c34022e81"
+    },
+    "actual-public-output/source/scripts/check-symbols.mjs": {
+      "bytes": 6000,
+      "sha256": "2eab767cc63d5f9349e7ab83a1b3f6fdea2df82cd14c19066899bfec18668530"
+    },
+    "actual-public-output/source/scripts/generate-azm-book1-diagrams.mjs": {
+      "bytes": 32952,
+      "sha256": "35b74a517309526a604c53cbadb470183e8201b0b53c9ee34575f3a15b548cc0"
+    },
+    "actual-public-output/source/scripts/generate-azm-book2-diagrams.mjs": {
+      "bytes": 43505,
+      "sha256": "f66db2f163629ce393ada631b1fc10b41db5ad1eef4b5791e6e8c1fc48755424"
+    },
+    "actual-public-output/source/scripts/generate-azm-book3-diagrams.mjs": {
+      "bytes": 66498,
+      "sha256": "52726bc09694f10aee85912a0ee0b10edf24022d3504c3631916cc2d1075ba3b"
+    },
+    "actual-public-output/source/scripts/generate-book-diagrams.mjs": {
+      "bytes": 36424,
+      "sha256": "13e4a92dcdaaab10c1b2f91f718aec3a831906094032eb9e4318c9217922fd41"
+    },
+    "actual-public-output/source/scripts/generate-glimmer-diagrams.mjs": {
+      "bytes": 66941,
+      "sha256": "473e2e77dcb8596dfb1828a96f8d875a3be3a86d721a97654925a145a9deab6b"
+    },
+    "actual-public-output/source/scripts/generate-lanternfly-diagrams.mjs": {
+      "bytes": 5720,
+      "sha256": "5f92494f7e8cfeb9b8058deaf792d986603107dfc08d7af9dfc5f73c2a827bea"
+    },
+    "actual-public-output/source/scripts/lib/check-figures.mjs": {
+      "bytes": 12693,
+      "sha256": "4db3678f94d4296e49cad8902beaaa203842efddc52fc95f886a294193747f9b"
+    },
+    "actual-public-output/source/scripts/lib/figure.mjs": {
+      "bytes": 13750,
+      "sha256": "7bc0dc1911c678960c0445d98fd79428c5f2ed725e247e9250ad2904bacf29f5"
+    },
+    "actual-public-output/source/scripts/validate-debug80-d8.ts": {
+      "bytes": 638,
+      "sha256": "c8e468226e04262d6d4952d4d3751c47e09b20faf52cfdb94a49d08cd34aa2c2"
+    },
+    "actual-public-output/source/scripts/verify-atom-book.mjs": {
+      "bytes": 11796,
+      "sha256": "a9cfe5791cca5a24f86cc706a2fd5447665805f987406a75ee61afcb2b7dc9ad"
+    },
+    "actual-public-output/source/scripts/verify-basie-book.ts": {
+      "bytes": 5080,
+      "sha256": "39c1548cc027c56388724f75cee54b1e751984b345967fd9c44fb3c025a8a423"
+    },
+    "actual-public-output/source/scripts/verify-debug80-claims.mjs": {
+      "bytes": 5676,
+      "sha256": "927d0c9ef8ebb57bc57fc56d927766fa5218907dfe7981afb93e459205eb50fc"
+    },
+    "actual-public-output/source/skate/book1/00-introduction.md": {
+      "bytes": 2511,
+      "sha256": "1d1020ca8a0c40b0272724ad0f1a79956b93af0ffa43cd538da36a53bfc47d2b"
+    },
+    "actual-public-output/source/skate/book1/01-first-program.md": {
+      "bytes": 3208,
+      "sha256": "d0d98c011e27161245ef5ee3f3316cc5346ba26afb0525b3c6f1d995db237f8c"
+    },
+    "actual-public-output/source/skate/book1/examples/POSTAGE.SK8": {
+      "bytes": 52,
+      "sha256": "e8488b3e9f898cc4e401304429806b8b92d6bd9ecdd8cdc4c3d4069a6f82f810"
+    },
+    "actual-public-output/source/skate/book1/index.md": {
+      "bytes": 1158,
+      "sha256": "0f948f3b304601c7baecb148e4711cc8428226a88308fc75215948ff97da4774"
+    },
+    "actual-public-output/source/skate/index.md": {
+      "bytes": 1069,
+      "sha256": "c34d7e910b23ff1ae78993f827753356baad4d71f55549b8a2fc05efc92c545f"
+    },
+    "actual-public-output/source/tec-os/01-first-session.md": {
+      "bytes": 9096,
+      "sha256": "982101a7dcce73678472492d0fe0c2954a1a4a107f276099a9e333aa32c96480"
+    },
+    "actual-public-output/source/tec-os/02-make-a-small-program.md": {
+      "bytes": 10689,
+      "sha256": "ae0f232fe28f90fd6bde10f58bff7e8b1cdad461570d5b58feef6d5db5cf30f0"
+    },
+    "actual-public-output/source/tec-os/03-work-with-files.md": {
+      "bytes": 11190,
+      "sha256": "5828ff5e927bad3813e1bedb6a4324a7191bfdfe98fb0acd94c54884e7353828"
+    },
+    "actual-public-output/source/tec-os/04-drives-and-user-areas.md": {
+      "bytes": 16524,
+      "sha256": "195afaf55f6c028a1d712ea087c6342dbbac93f0f490e09a8c848c4679ffef28"
+    },
+    "actual-public-output/source/tec-os/05-cards-on-the-pc.md": {
+      "bytes": 25160,
+      "sha256": "2147bfbc8fc69d4139810502592cb7367220965950d98fa5ca83b05c6f9b7e95"
+    },
+    "actual-public-output/source/tec-os/06-choose-a-console.md": {
+      "bytes": 12038,
+      "sha256": "e48a49c798e4eedb433320728f3c24edefbea54230932701a6892b5f77a59d34"
+    },
+    "actual-public-output/source/tec-os/07-commands-at-startup.md": {
+      "bytes": 15831,
+      "sha256": "4336d1372ff50572bdfcdd5554c266ad84052e5de9421e26e7f6d743c2e3e237"
+    },
+    "actual-public-output/source/tec-os/08-call-tec-os.md": {
+      "bytes": 11342,
+      "sha256": "8aeb33d0c2bfe88de2269c343c5686cc6cfc26792f2f1b2bd2329fd902996790"
+    },
+    "actual-public-output/source/tec-os/09-read-and-write-a-file.md": {
+      "bytes": 15781,
+      "sha256": "0829de9ec9905c3d685aa06a72e432daa2aa1968e36a0753968a45fe392f1980"
+    },
+    "actual-public-output/source/tec-os/10-memory-for-programs.md": {
+      "bytes": 22679,
+      "sha256": "4c47dfaec37d5223d7d8587ee02eb75b1d9e352a7b98eb25a8ad39b8587b7d33"
+    },
+    "actual-public-output/source/tec-os/11-use-the-boards-devices.md": {
+      "bytes": 32013,
+      "sha256": "4f4c6891e9c1a8d63ffbdd3c6c809e876a200c45b6b0c4ffa6c8611663012672"
+    },
+    "actual-public-output/source/tec-os/12-results-and-command-chains.md": {
+      "bytes": 17143,
+      "sha256": "db02f131ae5284cf19d3ca63ddb2b60b91218ffdcabf21b0721ec3b930f473e6"
+    },
+    "actual-public-output/source/tec-os/13-write-a-resident-service.md": {
+      "bytes": 33521,
+      "sha256": "ce41f0d53845043fde293f184d0057d5a42ac920eca02c5e95ced6886cb1677e"
+    },
+    "actual-public-output/source/tec-os/14-state-and-memory.md": {
+      "bytes": 18295,
+      "sha256": "fe0240e11ba2572036a54881ed76640b8e0a2a227408e6d2c79cc07bfac42b28"
+    },
+    "actual-public-output/source/tec-os/15-reset-and-boot.md": {
+      "bytes": 22051,
+      "sha256": "b670b89138ff916f97c4a3caade5fc70bfd7a9989e3211d8d40b794dc6db3cc0"
+    },
+    "actual-public-output/source/tec-os/16-console-paths.md": {
+      "bytes": 31131,
+      "sha256": "5d37cb47445b9a30431c0900827d337f7844041ea2de50d90261a49ec85430cf"
+    },
+    "actual-public-output/source/tec-os/17-card-blocks-and-volumes.md": {
+      "bytes": 28539,
+      "sha256": "906bde8f2758d75297d110d2ade6083998c8a7186d9431e103aa6da2289afa91"
+    },
+    "actual-public-output/source/tec-os/18-cache-and-persistence.md": {
+      "bytes": 25126,
+      "sha256": "65452579354eb5e48380a3d8653ca733a00bf9caea5bbb8336ffa4422d4dade2"
+    },
+    "actual-public-output/source/tec-os/19-a-file-through-the-bdos.md": {
+      "bytes": 29230,
+      "sha256": "96ebc2adc830bd1aa15cc390a051a2ed9947f718021c5be860a024508d13ce0f"
+    },
+    "actual-public-output/source/tec-os/20-from-prompt-to-program.md": {
+      "bytes": 27220,
+      "sha256": "f87836a373a50f2e1da343dd7b208ed01e382d33bd0688f6e8ad2306355c610a"
+    },
+    "actual-public-output/source/tec-os/21-chains-across-warm-boot.md": {
+      "bytes": 17761,
+      "sha256": "00dafe111d60babaf2bf318374088a39d5fae3f984548c4b9890f611a418cb23"
+    },
+    "actual-public-output/source/tec-os/22-the-history-ring.md": {
+      "bytes": 13818,
+      "sha256": "6c11896d9e867c5f248df86a6cec3f541dd90d5ef182d51cc1f5e27af1cebf79"
+    },
+    "actual-public-output/source/tec-os/23-numbered-service-dispatch.md": {
+      "bytes": 15215,
+      "sha256": "167c2f5ddf58c9efb332f94b9a352288d10ea4dc0965200e1bb0a968a6bba81f"
+    },
+    "actual-public-output/source/tec-os/24-loading-and-removing-services.md": {
+      "bytes": 24807,
+      "sha256": "9ac0c0b06961ca1da739f8141051ae2733a1a0bc0df3bc96986bbaa6def15c66"
+    },
+    "actual-public-output/source/tec-os/25-startup-inside-the-ccp.md": {
+      "bytes": 19877,
+      "sha256": "b29a92c2458e7820885874af39ba3a47cbed92d653a9d2743dff44ba3f787708"
+    },
+    "actual-public-output/source/tec-os/26-build-the-rom-and-media.md": {
+      "bytes": 22388,
+      "sha256": "709eaddf642de42a4c86cb08f88e63e05368392904413a6f1cd962a2b07f7b40"
+    },
+    "actual-public-output/source/tec-os/27-diagnose-the-machine.md": {
+      "bytes": 23804,
+      "sha256": "8184d5eda73009a3fd38740328dad4eb3f9ddd919410641349315f329f245e43"
+    },
+    "actual-public-output/source/tec-os/28-the-host-model-as-evidence.md": {
+      "bytes": 22508,
+      "sha256": "405a7d80be0ebbd310c1a89c27f233d661cb7ecc891685e4353399064ee17b6f"
+    },
+    "actual-public-output/source/tec-os/appendix-a-bdos-functions.md": {
+      "bytes": 25821,
+      "sha256": "edc890f187aa8d1df0cf4b7081a4895fd07858092f1355ecca5da34d0754517b"
+    },
+    "actual-public-output/source/tec-os/appendix-b-rom-services.md": {
+      "bytes": 26984,
+      "sha256": "4d05aaaacad7faa9b75ea172e7461fb20e9662a02191e4b2dae3f4d44f9a23ff"
+    },
+    "actual-public-output/source/tec-os/appendix-c-memory-map.md": {
+      "bytes": 22752,
+      "sha256": "752031f1a8b4a04640709552750ca830e617fe81e5c4d34c343333aba383adc7"
+    },
+    "actual-public-output/source/tec-os/appendix-d-error-messages.md": {
+      "bytes": 31723,
+      "sha256": "274a082339d0ade81919c71d3e25a3d8149f7ff5b186f1d4833553db8db5bf03"
+    },
+    "actual-public-output/source/tec-os/appendix-e-container-format.md": {
+      "bytes": 13050,
+      "sha256": "7b6b46e77e665076ed4c81f15da4fb6aa177c13f460bad60b3c8c87f091496e4"
+    },
+    "actual-public-output/source/tec-os/appendix-f-tecvol.md": {
+      "bytes": 15224,
+      "sha256": "b5882ac03d08ab4c9afe00b529ccb35a4a05479b0a4f4885e7448d1f1cf972e4"
+    },
+    "actual-public-output/source/tec-os/appendix-g-tec-1g.md": {
+      "bytes": 13672,
+      "sha256": "1f5a0c5587e0ab0f5d7aa28fb160fad1ac97954ef678f28082845c9a17d60c45"
+    },
+    "actual-public-output/source/tec-os/appendix-h-service-file-format.md": {
+      "bytes": 10232,
+      "sha256": "6a69cc7cb474c52f4f0bd1d5205f09297c332eb8aa08596506d19ac76512d115"
+    },
+    "actual-public-output/source/tec-os/appendix-i-web-page.md": {
+      "bytes": 17276,
+      "sha256": "e5f095e8539a2581969edb3559b8119d622c4321e5d9472fd80636edb053b947"
+    },
+    "actual-public-output/source/tec-os/appendix-j-command-reference.md": {
+      "bytes": 12490,
+      "sha256": "ea6037d89eb85834dab5cd9d5441f235f39ba5f38fdbe1ac2a76c969d471f60b"
+    },
+    "actual-public-output/source/tec-os/editorial/STYLE.md": {
+      "bytes": 15611,
+      "sha256": "b13d95cdbfd9188c2051cc966d9a9973eadbcdcc2e90a8dc99296ce3490be482"
+    },
+    "actual-public-output/source/tec-os/editorial/c16-citation-coverage.json": {
+      "bytes": 459,
+      "sha256": "bca3f384978769ce5967855a1d7fcce2f3398bde07f4b35b59a753683508b09c"
+    },
+    "actual-public-output/source/tec-os/editorial/c16-citation-resolution-report.md": {
+      "bytes": 5543,
+      "sha256": "a4efdeb5744024d2aedfd4dcb02bd86346d3f24c238a8a61fc68f9c3f860ac54"
+    },
+    "actual-public-output/source/tec-os/editorial/c16-citation-resolutions.json": {
+      "bytes": 1464071,
+      "sha256": "68fa768f6e95f34b130ca46d06aecc4480c4ff389e4d6bba5f5491d94a40ae3f"
+    },
+    "actual-public-output/source/tec-os/editorial/c16-factual-review.md": {
+      "bytes": 1186,
+      "sha256": "875cbba6d95b9af27b2d7c7b6c9eb38c1e619a507e23fd3d05c025535b4cb892"
+    },
+    "actual-public-output/source/tec-os/editorial/c16-reviewed-source-manifest.json": {
+      "bytes": 6444,
+      "sha256": "3aae3bc1b0f1e84c44b87717272e635111a6971719406c68e6e317bdb24659de"
+    },
+    "actual-public-output/source/tec-os/editorial/c16-source-preparation.md": {
+      "bytes": 6060,
+      "sha256": "e180456820303215096c9e60b33cb4e613ee7ba013bdcc63ef5920ac9a592b87"
+    },
+    "actual-public-output/source/tec-os/editorial/check-citation-resolutions.py": {
+      "bytes": 4861,
+      "sha256": "4f7a6f6e37dd0eddac54ea4a4ebfbda2474a42aa1598b3d2b973a73650fd1436"
+    },
+    "actual-public-output/source/tec-os/editorial/citation_resolution_text.py": {
+      "bytes": 4222,
+      "sha256": "3e5fc145c09927c1804e3959395cf0b3adf34ab8c92ac2d05ad826c2dcd9e7ac"
+    },
+    "actual-public-output/source/tec-os/editorial/map-source-citations.py": {
+      "bytes": 9460,
+      "sha256": "c68bc4a4c29e53b6e205fe0fdb579484e7b817d2a780246e17e6a72ba8f467a9"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/banner-allocation-request.md": {
+      "bytes": 2170,
+      "sha256": "d1f552125920cc75461c4dc66fcdb108e75762a9185023de00738c4e146aaa5f"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/banner-validation-plan.md": {
+      "bytes": 17587,
+      "sha256": "2adcda32d163fae127fd8a12ef3dded56713177eafa1fee131d7a3e318184ff2"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/chapter-01-readiness.json": {
+      "bytes": 26134,
+      "sha256": "b5aac88589e18ed9071774b15fbcad37def78a7b9721c880feebf97027e2a75f"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/chapter-02-readiness.json": {
+      "bytes": 26024,
+      "sha256": "c244cd4a89d0640c92152ac1f1f5b27d78b01f4ec2cca2e464dc428adde68ad7"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/chapter-03-readiness.json": {
+      "bytes": 37371,
+      "sha256": "f0a4b5c1db0c2f6f889eeb2b1a76f382e82193b9558140bdb647b757963fac46"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-application-04-10.json": {
+      "bytes": 129703,
+      "sha256": "9751830c77157cea926cc7db81ee6845d19717395182d77b0e4a15dde76b7037"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-application-11-17.json": {
+      "bytes": 207640,
+      "sha256": "2ba5471d631a72ef1652fcc299fb131ad54ee60e8c3c7f740f01883993a01dbb"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-application-18-19.json": {
+      "bytes": 109479,
+      "sha256": "4499069f8297bc645a02e8abbc5407827fd29aaf5d8432cade2390a250b3a5ff"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-application-20-28.json": {
+      "bytes": 220726,
+      "sha256": "bb4633cd78f22bce50f58c29d6c050660bdfe3480eca398aa667ffad376ce2a6"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-application-A-E.json": {
+      "bytes": 6756,
+      "sha256": "883f42401d12979ef55954a8725bd04aa6c908bbe21937c2e70386f28056b21a"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-application-F-J.json": {
+      "bytes": 153215,
+      "sha256": "51f299bdd15f9f6fb089dc9964850f43c32ad745363ea688eb311d8c08dfe681"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-gate-independent.json": {
+      "bytes": 89553,
+      "sha256": "390139d08b834ffa6f3985779fccb048c46cbdaa5d435d4b1f333442ba067949"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-independent-11-17.json": {
+      "bytes": 30040,
+      "sha256": "358728b8c21352fe452676079042e3957fc6453c2758cdea28c993bd06084d9c"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-independent-18-19.json": {
+      "bytes": 15623,
+      "sha256": "b1beffecb7c61e6de3c5fcf1e1cc266e21bdabb8e4e498f586d293d44effe2fb"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-independent-20-28.json": {
+      "bytes": 37520,
+      "sha256": "61f623e2989d4b7d7db80bf8cb6ee739b2c55b710cfed97d6f55a765fda65c44"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-independent-A-E.json": {
+      "bytes": 11475,
+      "sha256": "088c62801107a60a12d4df71f890e8d374b9fce8ea3cf700c960889eb62b89d4"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-review-04-10.json": {
+      "bytes": 72523,
+      "sha256": "8ff7f909799c9f7af77ef1b58864c933d0fc8bf2418b8b3f00090dfbd3cd5c05"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-review-11-17.json": {
+      "bytes": 246059,
+      "sha256": "c09d69fd3b545431b3136bac406c99ca40b30311d0a93c4201b7b68d1d4d2442"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-review-18-19.json": {
+      "bytes": 222804,
+      "sha256": "8d2a61b7f9bc3b8332e34d08da9499af205e1d615e21278ca80e3933e33ac219"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-review-20-28.json": {
+      "bytes": 160736,
+      "sha256": "ecab9024234142a9552be1ad70f52011dcc351871c6650a50a78383d717376e2"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-review-A-E.json": {
+      "bytes": 125099,
+      "sha256": "1eccf44649c1ce338e2fbe693ff1f6d1e8cd69fd204c4e16ec8cb865cec9d4ef"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/comma-review-F-J.json": {
+      "bytes": 66379,
+      "sha256": "b9759688dbb80409f36ec5eae9a602f8a7a55a20bb66b0c7254f639534ed3ef3"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/compact-candidate-review-record.md": {
+      "bytes": 4610,
+      "sha256": "70a368c2d7df873c63f367ad7eb2fbed37fa1c5039a6c68fffc280ebb4fbdfc7"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/compact-directive-confirmation.json": {
+      "bytes": 9415,
+      "sha256": "9e7a29e654c36d53cf6468318bdae94fc4dc64b508f17fa4bbee48b56b33fe43"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/compact-include-plan-gate.json": {
+      "bytes": 5902,
+      "sha256": "4a0b9fb93be0e80c3a3e1a7ac65d79ea705b43e83a31d02969a88c214b116d25"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/compact-include-route-review.json": {
+      "bytes": 31315,
+      "sha256": "4ece3e90d245337df29db7949672ef94e338cd25791b6efe345fd40e3709770c"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/compact-proof-plan.md": {
+      "bytes": 26457,
+      "sha256": "cf3c4dfa11c41ccbf19633a2790fbd601047db3162f8be7102c548a6e02f1061"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/conjunction-comma-inventory.json": {
+      "bytes": 1155595,
+      "sha256": "dfef26ee83f180b2d6368ad34c19ef3cb73940f3046d41797c8118ec4d85f326"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/conjunction-comma-result.json": {
+      "bytes": 32576,
+      "sha256": "b1929e02a18d8bcee433409800eae32e2020d2607609052b9a0b09ae07720237"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/design-question.md": {
+      "bytes": 407,
+      "sha256": "c1787e5362d74a0fa6166d648cfb3e238c242b803e32febfbd9404022c8736e3"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/01-first-session.md": {
+      "bytes": 9096,
+      "sha256": "982101a7dcce73678472492d0fe0c2954a1a4a107f276099a9e333aa32c96480"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/01-pass-record.md": {
+      "bytes": 28539,
+      "sha256": "c94d31e62dcce5c7cee7ee0a79070396a6ebc38a99ff5a3eded8af4beec502a9"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/02-make-a-small-program.md": {
+      "bytes": 10689,
+      "sha256": "ae0f232fe28f90fd6bde10f58bff7e8b1cdad461570d5b58feef6d5db5cf30f0"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/02-pass-record.md": {
+      "bytes": 24451,
+      "sha256": "6e8ec04b1ef00a9e89e71fe6069bdc002ac25ac0b9d63267b1c517a5d1f0d917"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/03-pass-record.md": {
+      "bytes": 18262,
+      "sha256": "7b648a2c148cf26aa8f0c46049e36a62b1134cf489e5bd7bb036dbad5069a9ec"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/03-work-with-files.md": {
+      "bytes": 11190,
+      "sha256": "5828ff5e927bad3813e1bedb6a4324a7191bfdfe98fb0acd94c54884e7353828"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/04-drives-and-user-areas.md": {
+      "bytes": 16524,
+      "sha256": "195afaf55f6c028a1d712ea087c6342dbbac93f0f490e09a8c848c4679ffef28"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/04-pass-record.md": {
+      "bytes": 20969,
+      "sha256": "a1722349975b85d9d363a7d7b33ea6f6a36d45222f7d2b3c92e99b0d0e9dc98e"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/05-cards-on-the-pc.md": {
+      "bytes": 25160,
+      "sha256": "2147bfbc8fc69d4139810502592cb7367220965950d98fa5ca83b05c6f9b7e95"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/05-list-extract-candidate.md": {
+      "bytes": 11583,
+      "sha256": "6cc4ec72582886b7bd6d36f8bbfeb613c09e4fbf205b32c9c6a0d10f7f03f02b"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/05-pass-record.md": {
+      "bytes": 50612,
+      "sha256": "b012ad885ad2207d6cd9263e2d035afd620fcf9e844637fddb679159ccea8d72"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/06-choose-a-console.md": {
+      "bytes": 12038,
+      "sha256": "e48a49c798e4eedb433320728f3c24edefbea54230932701a6892b5f77a59d34"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/06-pass-record.md": {
+      "bytes": 27075,
+      "sha256": "84478ebc04d84174383f7921bca3fd1af0fc7473ad52d95772a481dd70b3e268"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/07-commands-at-startup.md": {
+      "bytes": 15831,
+      "sha256": "4336d1372ff50572bdfcdd5554c266ad84052e5de9421e26e7f6d743c2e3e237"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/07-pass-record.md": {
+      "bytes": 36029,
+      "sha256": "148f7a33cee233f2a579b280c61159139945378e9fac55659eb1507968a42dc7"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/08-call-tec-os.md": {
+      "bytes": 11342,
+      "sha256": "8aeb33d0c2bfe88de2269c343c5686cc6cfc26792f2f1b2bd2329fd902996790"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/08-line-example-candidate.md": {
+      "bytes": 2449,
+      "sha256": "77f6432cf53242e9835a0220af5efa772d650336552214cce1df16c83759df1e"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/08-pass-record.md": {
+      "bytes": 27994,
+      "sha256": "98fa5c2f655a27eac3207433bc693057b47d3aee4012d70a25943b94c2b79fec"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/09-compact-example-candidates.md": {
+      "bytes": 14057,
+      "sha256": "e2ab77f99383f6d406801e7c83ed77d5c64e9df184a22942c22c6807af5df154"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/09-pass-record.md": {
+      "bytes": 17973,
+      "sha256": "640e0ef6e5541ea5fa71ef06cfe74ce46c97d0ef9be3bf209ad8f2ae0b71af2a"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/09-read-and-write-a-file.md": {
+      "bytes": 15781,
+      "sha256": "0829de9ec9905c3d685aa06a72e432daa2aa1968e36a0753968a45fe392f1980"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/10-compact-example-candidates.md": {
+      "bytes": 12787,
+      "sha256": "b5fef0c351edad713e45f06bcb4c2588dac6c26a4933c1b52ca067c1eb5524d3"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/10-memory-for-programs.md": {
+      "bytes": 22679,
+      "sha256": "4c47dfaec37d5223d7d8587ee02eb75b1d9e352a7b98eb25a8ad39b8587b7d33"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/10-pass-record.md": {
+      "bytes": 18135,
+      "sha256": "5e910577d20be4926d0fd3b2705036b186e2ffa381479bd3b812089d92da040c"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/11-compact-example-candidates.md": {
+      "bytes": 29669,
+      "sha256": "c7002d050d3dbb56badbc49fa600642834af25ab879df8f4f181ecd493c98308"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/11-pass-record.md": {
+      "bytes": 22922,
+      "sha256": "a338f00a2ab3f08d6af5030e4a0159a2ecca3f9595458e8b443ad1fb5887847d"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/11-use-the-boards-devices.md": {
+      "bytes": 32013,
+      "sha256": "4f4c6891e9c1a8d63ffbdd3c6c809e876a200c45b6b0c4ffa6c8611663012672"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/12-compact-example-candidates.md": {
+      "bytes": 15521,
+      "sha256": "2e22d944934e7219de93aa7c64f397340446dabdc67f8114d8c1e12bdd24a0e4"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/12-pass-record.md": {
+      "bytes": 28016,
+      "sha256": "de3e12c5c67622658f168de3373c40abdf343c1b6fdb905e9e7f582c993c2179"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/12-results-and-command-chains.md": {
+      "bytes": 17143,
+      "sha256": "db02f131ae5284cf19d3ca63ddb2b60b91218ffdcabf21b0721ec3b930f473e6"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/13-compact-example-candidates.md": {
+      "bytes": 17827,
+      "sha256": "bf3af0180e2ecb446f503ca2134eddda175bd0ee4d9bb102472dd8e53914e19a"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/13-fail-example-candidate.md": {
+      "bytes": 2676,
+      "sha256": "dea741d571c4b1deccac4d75fdaa4f7fc3ccd30b04cd99629869ad679be207a5"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/13-independent-review.md": {
+      "bytes": 11536,
+      "sha256": "daa966b1ee14c79c73b8520b3f6a0f63bcb92964ee3bd1cd50e886efeaafbe2a"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/13-pass-record.md": {
+      "bytes": 30767,
+      "sha256": "81e0439847e99537160e0d47d77460b97e27d42ab3fe821293596d20d67e0030"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/13-write-a-resident-service.md": {
+      "bytes": 33521,
+      "sha256": "ce41f0d53845043fde293f184d0057d5a42ac920eca02c5e95ced6886cb1677e"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/14-pass-record.md": {
+      "bytes": 24158,
+      "sha256": "4cbb13e82a7c844ce1a1ecc7794e0798f8f4365094c1f39e069c3dedbfd4bcc7"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/14-state-and-memory.md": {
+      "bytes": 18295,
+      "sha256": "fe0240e11ba2572036a54881ed76640b8e0a2a227408e6d2c79cc07bfac42b28"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/15-cost-provenance-review.md": {
+      "bytes": 6892,
+      "sha256": "bd7ddf62f9360ca04f97cd8a7a60ee94b5fe7268139acd240778ae451c1fe61d"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/15-pass-record.md": {
+      "bytes": 38925,
+      "sha256": "8fb79b7c9bb69ba9239167aeeab0a99b2d3fa5cf704e4b6dc596fd80b7b42c1d"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/15-reset-and-boot.md": {
+      "bytes": 22051,
+      "sha256": "b670b89138ff916f97c4a3caade5fc70bfd7a9989e3211d8d40b794dc6db3cc0"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/16-console-paths.md": {
+      "bytes": 31131,
+      "sha256": "5d37cb47445b9a30431c0900827d337f7844041ea2de50d90261a49ec85430cf"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/16-pass-record.md": {
+      "bytes": 50191,
+      "sha256": "486f93c29ed24c36b3721a1de0fbbd105a92afa01101fd17a0b4952ac570fe6b"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/17-card-blocks-and-volumes.md": {
+      "bytes": 28539,
+      "sha256": "906bde8f2758d75297d110d2ade6083998c8a7186d9431e103aa6da2289afa91"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/17-pass-record.md": {
+      "bytes": 29444,
+      "sha256": "b6301178111b2089b14659996e2749043b49da8acfef4da85a8c99377df129f9"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/18-cache-and-persistence.md": {
+      "bytes": 25126,
+      "sha256": "65452579354eb5e48380a3d8653ca733a00bf9caea5bbb8336ffa4422d4dade2"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/18-compact-example-candidate.md": {
+      "bytes": 3729,
+      "sha256": "1f2136d3ebb0bf3ce325b738bcaf90351ed4f63b6b309aae5cfedb9708b2e606"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/18-independent-review.md": {
+      "bytes": 4330,
+      "sha256": "38905c5d64c48b96dc4830c4efaec99b8e3a9d8ac719ea9017ebd35e882a01a4"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/18-pass-record.md": {
+      "bytes": 30541,
+      "sha256": "067da84cae0c48bbd3971e461bb33aaf05950d1eec4da6277e9c7d0fbc8a9b7e"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/19-a-file-through-the-bdos.md": {
+      "bytes": 29230,
+      "sha256": "96ebc2adc830bd1aa15cc390a051a2ed9947f718021c5be860a024508d13ce0f"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/19-pass-record.md": {
+      "bytes": 18934,
+      "sha256": "e9a9a93196d0434f3e5ec066d15c8f8a5745ec816294a5fc69de927e68236449"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/20-compact-example-candidate.md": {
+      "bytes": 14480,
+      "sha256": "5bd3c8996519cea8696d22ae62040a1593c598108678358af0d31b5cb0286526"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/20-from-prompt-to-program.md": {
+      "bytes": 27220,
+      "sha256": "f87836a373a50f2e1da343dd7b208ed01e382d33bd0688f6e8ad2306355c610a"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/20-pass-record.md": {
+      "bytes": 36424,
+      "sha256": "3d725a81a6202ff4f402c00a52bf30f2d78c973f4fdfed0483ebbac5c2a4bd7b"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/21-chains-across-warm-boot.md": {
+      "bytes": 17761,
+      "sha256": "00dafe111d60babaf2bf318374088a39d5fae3f984548c4b9890f611a418cb23"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/21-independent-review.md": {
+      "bytes": 7429,
+      "sha256": "3124506da8c825b438152e8f417d391ac40b3ec0e35292eaf3e83c507cfbe6a1"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/21-pass-record.md": {
+      "bytes": 23384,
+      "sha256": "a7ea108fe2745ee18b1b6e920fb10c9e7791a5f84cb39365fd4e44f13bcb4414"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/22-pass-record.md": {
+      "bytes": 20015,
+      "sha256": "bfed47a182a6a193504edd700e8e9419e2654d7cbca5dca6d8862765a22e1a84"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/22-the-history-ring.md": {
+      "bytes": 13818,
+      "sha256": "6c11896d9e867c5f248df86a6cec3f541dd90d5ef182d51cc1f5e27af1cebf79"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/23-numbered-service-dispatch.md": {
+      "bytes": 15215,
+      "sha256": "167c2f5ddf58c9efb332f94b9a352288d10ea4dc0965200e1bb0a968a6bba81f"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/23-pass-record.md": {
+      "bytes": 23365,
+      "sha256": "a64484b2c00d6a753ddae3e4b4c68fb4d7f0f79ab2569d9510ba5699ccf2ff72"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/24-loading-and-removing-services.md": {
+      "bytes": 24807,
+      "sha256": "9ac0c0b06961ca1da739f8141051ae2733a1a0bc0df3bc96986bbaa6def15c66"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/24-pass-record.md": {
+      "bytes": 19662,
+      "sha256": "0a9c91d34b16ae1a8341adb561df47027e26e82ab6190c66b14e459844ec5fbb"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/25-pass-record.md": {
+      "bytes": 21457,
+      "sha256": "4311fbd4393a31ea7b1bbb11effab7e27a9bba514364f6d53750344a489e0617"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/25-startup-inside-the-ccp.md": {
+      "bytes": 19877,
+      "sha256": "b29a92c2458e7820885874af39ba3a47cbed92d653a9d2743dff44ba3f787708"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/26-build-the-rom-and-media.md": {
+      "bytes": 22388,
+      "sha256": "709eaddf642de42a4c86cb08f88e63e05368392904413a6f1cd962a2b07f7b40"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/26-compact-example-candidate.md": {
+      "bytes": 13049,
+      "sha256": "adf6e0feb8142f2f8ad0d137e6434bf70dfd0276455a6c286d579e14a8e5adc9"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/26-pass-record.md": {
+      "bytes": 37502,
+      "sha256": "5a6d94bc3c9c977c4e32394c8f848adf46bd3eeca82c128e926d35013014f08c"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/26-rom-include-candidate.md": {
+      "bytes": 2969,
+      "sha256": "5c9212fd06cb065e8b1cd0c5187664731ae83f17207adf51472f95bb0f7d2031"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/27-diagnose-the-machine.md": {
+      "bytes": 23804,
+      "sha256": "8184d5eda73009a3fd38740328dad4eb3f9ddd919410641349315f329f245e43"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/27-pass-record.md": {
+      "bytes": 27889,
+      "sha256": "25fb9cf2244cf93d5d28530e2d669af9bb436f1963dd52369637fa8fad5ab9b2"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/28-pass-record.md": {
+      "bytes": 30873,
+      "sha256": "ce712c8b5caf6b135eccad26ad1bb04daaf89d41af9159bedf70953e5784d924"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/28-the-host-model-as-evidence.md": {
+      "bytes": 22508,
+      "sha256": "405a7d80be0ebbd310c1a89c27f233d661cb7ecc891685e4353399064ee17b6f"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/a-independent-review.md": {
+      "bytes": 12813,
+      "sha256": "48eeb1daf3928de2c309c1aac57354f783c30d18e5fa22ec9007e9406b30896e"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/a-pass-record.md": {
+      "bytes": 22519,
+      "sha256": "7d188a509b3d7cc3fcaf1529072b4c29a610a005039ced630644bbf2e4e06ff2"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/appendix-a-bdos-functions.md": {
+      "bytes": 25821,
+      "sha256": "edc890f187aa8d1df0cf4b7081a4895fd07858092f1355ecca5da34d0754517b"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/appendix-b-rom-services.md": {
+      "bytes": 26984,
+      "sha256": "4d05aaaacad7faa9b75ea172e7461fb20e9662a02191e4b2dae3f4d44f9a23ff"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/appendix-c-memory-map.md": {
+      "bytes": 22752,
+      "sha256": "752031f1a8b4a04640709552750ca830e617fe81e5c4d34c343333aba383adc7"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/appendix-d-error-messages.md": {
+      "bytes": 31723,
+      "sha256": "274a082339d0ade81919c71d3e25a3d8149f7ff5b186f1d4833553db8db5bf03"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/appendix-e-container-format.md": {
+      "bytes": 13050,
+      "sha256": "7b6b46e77e665076ed4c81f15da4fb6aa177c13f460bad60b3c8c87f091496e4"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/appendix-f-tecvol.md": {
+      "bytes": 15224,
+      "sha256": "b5882ac03d08ab4c9afe00b529ccb35a4a05479b0a4f4885e7448d1f1cf972e4"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/appendix-g-tec-1g.md": {
+      "bytes": 13672,
+      "sha256": "1f5a0c5587e0ab0f5d7aa28fb160fad1ac97954ef678f28082845c9a17d60c45"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/appendix-h-service-file-format.md": {
+      "bytes": 10232,
+      "sha256": "6a69cc7cb474c52f4f0bd1d5205f09297c332eb8aa08596506d19ac76512d115"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/appendix-i-web-page.md": {
+      "bytes": 17276,
+      "sha256": "e5f095e8539a2581969edb3559b8119d622c4321e5d9472fd80636edb053b947"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/appendix-j-command-reference.md": {
+      "bytes": 12490,
+      "sha256": "ea6037d89eb85834dab5cd9d5441f235f39ba5f38fdbe1ac2a76c969d471f60b"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/b-pass-record.md": {
+      "bytes": 24206,
+      "sha256": "bb6ad65aafc2edae57d5887801ca0fdcf87d891e96dac8024e692c98c4892c12"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/c-pass-record.md": {
+      "bytes": 17950,
+      "sha256": "ea79e7bc12e3d46d26f6c3f913884c192ed37d52e1f7a7bbc0b3e3ffbdb2a9d2"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/d-pass-record.md": {
+      "bytes": 21077,
+      "sha256": "f241297156cbb7679f31f9b4c3d60041542b869f875683cf4e4a81964cbfad4a"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/e-pass-record.md": {
+      "bytes": 4490,
+      "sha256": "9d48fca3b57c5137abde3ecfaf455e7dcfde455cb33b73917bf70f51e7f2ba33"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/f-pass-record.md": {
+      "bytes": 7536,
+      "sha256": "78173deca23e31faab787c93059f25a9fc7494827a87ee3f9697aaedbd0f2a3c"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/g-independent-review.md": {
+      "bytes": 9162,
+      "sha256": "a2fd60ae2e93ac725d58a8689e336eed82e81f7dc04d9917deeaf3bf8a47e880"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/g-pass-record.md": {
+      "bytes": 17040,
+      "sha256": "4cc8106bbc2f3601d810e86d98f881a1f9da2d8bdd335c50f9ad777677a1cbc9"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/h-pass-record.md": {
+      "bytes": 5414,
+      "sha256": "2a68c930db8fde872e9cadd7d1d347d4691d4d91d73f44db992ae1945162e540"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/i-pass-record.md": {
+      "bytes": 25272,
+      "sha256": "cedb28ff890968875cdf33b7e94f41b9dc6767b2d7a119a27d43ea4fb0e7d60d"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/index-pass-record.md": {
+      "bytes": 7389,
+      "sha256": "f1d01dd563aa23e952d27bf00ef90a64009603421144356132839bc484bad54f"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/index.md": {
+      "bytes": 7628,
+      "sha256": "81cdf91fa07128f76f90873eaadb61ac58e76e43f596fe338f646ee3e3deea0c"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/draft/j-pass-record.md": {
+      "bytes": 7640,
+      "sha256": "c0e947f3a53c08d1806cb35d38627ae23fcb19bec27e296b91b0a0133df57228"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/erase-fixture-independent.json": {
+      "bytes": 17755,
+      "sha256": "ef21d030c0cbb913e9191367f725fac9412124fa3ebfe8543d5fb4560d5b1d6b"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/final-reader-order.json": {
+      "bytes": 24711,
+      "sha256": "6b213c3305dd211e8b346c83a151167c4855343c923429fe6078f643ec8b5ebe"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/form-pass-record.md": {
+      "bytes": 11129,
+      "sha256": "f137d33eafc5fa9091bbb4475fccb0097b67c42eab4ed934e38f94d5239e8534"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/integration-independent.json": {
+      "bytes": 28104,
+      "sha256": "e7aef6cb9232b13a2c2915e9a767f0b602522779e516a3209bd79a9766d7f344"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/integration-plan.json": {
+      "bytes": 374962,
+      "sha256": "218bbc606f66ef5bb10818e459037930f369b21d57ed3b37060e182b6620004f"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/integration-result.json": {
+      "bytes": 17714,
+      "sha256": "e6664f261b74d400f42ec38a28c8b5dbc356988524486d1878f116dc4832b32a"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/integration-source-checks.json": {
+      "bytes": 27755,
+      "sha256": "5db4d25120cd506fc84cdbaff49dac9a4d298521ee99d388271ceecc42c0b2ce"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/material-crosswalk.json": {
+      "bytes": 213348,
+      "sha256": "dc4ca68ec80e1372f8a05ae395399515783e505db34965a692bfd235d0bc5e2d"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/movement-coverage.json": {
+      "bytes": 701,
+      "sha256": "4bedfe37d0ded2435c07a4833c9e148c2d79134b4e9675dd0327afb9c1fa241f"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/movement-units.json": {
+      "bytes": 869064,
+      "sha256": "0f594d09a5aa4dfd2c170b9e069f23a8a5b987cfbc3a99c7884c36b2210a06ff"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/opening-craft-review.json": {
+      "bytes": 73470,
+      "sha256": "462f7da53dddad576fc25e38c4a4f14a76067b1438ce3849e2795320ab4b85ca"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/opening-factual-review.json": {
+      "bytes": 27910,
+      "sha256": "b68ccaaeb2591e62c1a8a3a617285e0b3d66b67c91eb3bc4473ae6ba1d8e86de"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/opening-reader-confirmation.json": {
+      "bytes": 41205,
+      "sha256": "60fc4106bdb2be30658654ae230a605438b8eea426c0f051e9ecec9e0d42aa5c"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/outline-review-dispositions.md": {
+      "bytes": 7748,
+      "sha256": "52eb48b224ba199af38d25e0f7d599e34ac278ba68dcbfb99ebc651e4ad0ae47"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/prose-gate-07-19.json": {
+      "bytes": 1014,
+      "sha256": "4c5299b29222b31ae82bf3adaafd8669998883d3d7063338db2330e5832138ac"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/prose-gate-baseline.json": {
+      "bytes": 9954,
+      "sha256": "1ae156f16748fecb312b667c222835b8913cc65df4342524c0cced4aba06a543"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/prose-gate-dispositions.md": {
+      "bytes": 3419,
+      "sha256": "495f1bf26c6a7d78d1fb39758b8745939d3c7c1cb5e750f8410803c9b60cc4a9"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/prose-gate-post-punctuation.json": {
+      "bytes": 15151,
+      "sha256": "5cbdf85ad4fd5185ea33ae8d8c733dcba009703615642fa511ffa0abf563102b"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reader-correction-confirmation.json": {
+      "bytes": 17243,
+      "sha256": "67b875b3b6c8330a01af5daec579a8d29bdc4c862ffd9bb28365d6f3fe392b60"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reader-order-dispositions.json": {
+      "bytes": 1811,
+      "sha256": "f4f892bf49d9e5f73b751bef4a3ef49e8c0bb8570969413f28b9c16503a4e5ea"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reading-ledger.json": {
+      "bytes": 27254,
+      "sha256": "d086f11db98f9813a384796b9bc17d8309151ef6d0ed0d16822ed8a70568bf14"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reading-plan.md": {
+      "bytes": 5610,
+      "sha256": "f57590b64ae89d62974ba44f8ef27c7936511b637ca312a2a44a3e3b6d1d05be"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/replacement-outline.md": {
+      "bytes": 18656,
+      "sha256": "a7de903ce27c75f0b0344547b76a3210b07d10674e5f63d2c77ee575f1303ec0"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reverse-outline-01-02.md": {
+      "bytes": 8587,
+      "sha256": "14a5e1699518c294c525085b563259abfbab5c5905ab401290068c182f27bba9"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reverse-outline-03-06.md": {
+      "bytes": 16960,
+      "sha256": "448cbc5627cfdf11b2eb39d1c86a73c87723384948986c2c5220f04daa48b1ea"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reverse-outline-07-09.md": {
+      "bytes": 10053,
+      "sha256": "b179e86c34e57b87b653eb356b84bfb5a9e9c38c9cecc48a7ca6d47ff313db27"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reverse-outline-10-12.md": {
+      "bytes": 13488,
+      "sha256": "e3c39369296f79e86a62ddd5816dfde94249dd7e42c2581b6af34f6a2377ac46"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reverse-outline-13-15.md": {
+      "bytes": 10734,
+      "sha256": "0e5602c19613c933e9b6cf787dac21b105c7a9665c153ab843b089c12fa7c990"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reverse-outline-16-18.md": {
+      "bytes": 12235,
+      "sha256": "535666d205f493f085b64a0fc304cc4d360be60d5b1d8bd816632d7ff84b52d6"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reverse-outline-19.md": {
+      "bytes": 8286,
+      "sha256": "5384104c0999db10aa2681430f4595e5b8592b45b64f890298f6aea2d0741d4e"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reverse-outline-20.md": {
+      "bytes": 8279,
+      "sha256": "a81c4a3fbc399cca0ef07662301341e4309290fbd60488e5938b02d10b387858"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reverse-outline-21-27.md": {
+      "bytes": 20028,
+      "sha256": "51d49959f82e07c976da77aabc7ef720e761906ce6dc5127b81076781de501b4"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reverse-outline-appendices.md": {
+      "bytes": 17727,
+      "sha256": "dca17084ff27414c96fd0daa573d3c6b568a0ce86ee10840018562f019ae7477"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/reverse-outline-index.md": {
+      "bytes": 2575,
+      "sha256": "ea0f29e63e2191d01541830c88dc7880f890ea50c88b88b85df50ecd73de9b6c"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/review-closures.md": {
+      "bytes": 4187,
+      "sha256": "d6424b05e9282396c25008779d3e7cf94000d3a6618c39b631cc934fea6919e3"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/revision-ledger.json": {
+      "bytes": 524080,
+      "sha256": "b6228a9658c53706b97a134dd4e2471a48cc34e00e3c42ebf24caa4d42967464"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/runtime-verification-needs.md": {
+      "bytes": 7475,
+      "sha256": "a781f6777ae464ee9ab235e96d55542b173b0cba6d712b1794599ed9bf755511"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/source-adoption-impact-confirmation.json": {
+      "bytes": 21869,
+      "sha256": "d65e2b9534550c189f8ebf1f13bba494dc76243e5a5369366afcdc3a73c7e879"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/source-adoption-impact.json": {
+      "bytes": 280323,
+      "sha256": "df276b238d6014d98580b26f690bf1bbb1798d197ef3a495653a1cfc3c0a0bc0"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/source-adoption-independent.json": {
+      "bytes": 307109,
+      "sha256": "2f967b57dabc867057e4e0d2b54ed7e2144fbb666b0f6bdc09e12a808ad3a083"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/source-adoption-unaffected-application.json": {
+      "bytes": 1165409,
+      "sha256": "0b4bb076a06dba1828369907f9062442edf596342763006e5de7a0fd2eb1f9af"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/source-adoption-unaffected-audit.json": {
+      "bytes": 1381804,
+      "sha256": "083efe2b179e16c0a557ed2ec0a09f4fd679ec5ec26b562d5f8cccc372d2b717"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/source-adoption-unaffected-independent.json": {
+      "bytes": 83886,
+      "sha256": "a9c633772daa57a3da79ec710f292a4d4d6822d6cb12705e53b9cc2b88146b24"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/source-question-dispositions.md": {
+      "bytes": 3895,
+      "sha256": "78dc43c4a87a68b9f87cb45dfd97933968d09e5617bd53e03658f86df6666002"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/source-receipt-gate.json": {
+      "bytes": 5754,
+      "sha256": "a815f2b37a3d8ef9851055a8bfaf43cb9ad913eb7498c8d5cb9aa06c893d05b0"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/startup-refinement-independent.json": {
+      "bytes": 17256,
+      "sha256": "ea11349080aa7723b49bcc9e76deda2443b77101df3a69f810a3b79c7c1d2a09"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/style-amendment-record.md": {
+      "bytes": 2264,
+      "sha256": "90ac87d0e34f75c1dfc5d93ff5757d24100df176924e51b4c5d7c75d18cb47e0"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/terms-amendment-record.md": {
+      "bytes": 18952,
+      "sha256": "4f4da39506f1da849fc0104aa93475faa822c1a4638deb82382faaa98d4f8d0e"
+    },
+    "actual-public-output/source/tec-os/editorial/reader-rewrite/terms-independent-review.md": {
+      "bytes": 18252,
+      "sha256": "a318511c897e42d03e06acbd856ddaff61f5c4c9fd0c5438994b23584f41055b"
+    },
+    "actual-public-output/source/tec-os/editorial/recheck-reviewed-citations.py": {
+      "bytes": 3592,
+      "sha256": "8a72aedacfe7530631a9aea035417f521fa0611f02d9f0ae2e9c18e28bbb5315"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-10.md": {
+      "bytes": 21354,
+      "sha256": "085ab3f218b2bdbd5cda38e45f48b6bf71c83e2941c10404a7a3b9e95cec6325"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-11.md": {
+      "bytes": 23494,
+      "sha256": "bc98bd8586ddf673308f4dd79337563f6f9690d5bc2e096cffefc80c09963351"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-12.md": {
+      "bytes": 21887,
+      "sha256": "dfd70699a7e01ac6bb90d9625376019c7dd272a2e9418c6fbbc58c86209b6480"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-13.md": {
+      "bytes": 15249,
+      "sha256": "5f8931775b3a503d4d4b150b3e1230f2707c77a8d1dbbd6b8b460aa06ca7b5e3"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-14.md": {
+      "bytes": 15420,
+      "sha256": "0f68f8d640c232bdc668d224fa6c3627fb03a5291aaa6a8567a31b15f240569b"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-15.md": {
+      "bytes": 9536,
+      "sha256": "ba179f5649aa959f1546bb783690bcb015b533a330145bf84133d377751f1d48"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-16.md": {
+      "bytes": 21741,
+      "sha256": "aea09b1a682d244b8673808b51555258d051b1ec1a0c203e43ab9d2b125aa2fe"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-17.md": {
+      "bytes": 23387,
+      "sha256": "be815ba7b0355929e4310cdd88428f598e0bfbdec200a0cf89d0f31514ecaba7"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-18.md": {
+      "bytes": 5934,
+      "sha256": "a252e996ba8babee31c232f1eeb5fdd7a8bf5b2114be8fa3e45d3a82fb394432"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-19.md": {
+      "bytes": 5756,
+      "sha256": "391462e9e0ee5b19246172b1d7989e4fc06cd5acbd2a0204c2215d4ec58414e5"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-20.md": {
+      "bytes": 9729,
+      "sha256": "94f02ceb11ddf226f9134cf49c8304a6d7252dff443560cea917332acbc29699"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-21.md": {
+      "bytes": 7797,
+      "sha256": "05c94c824c58752c08e9a3d60cc278f1d617ba8e69bfb2e75aa69ad709e1b712"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-22.md": {
+      "bytes": 9329,
+      "sha256": "2ec457439ab3ab3740d366214cfe672e5162cdcdaf9dc3a07662beb21db04aaa"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-23.md": {
+      "bytes": 6719,
+      "sha256": "022c8caa2d632531e7c0f1e1928c398b1aa1d3e59299dd881856280c025887b9"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-24.md": {
+      "bytes": 8013,
+      "sha256": "856da913838d54e893ad5a34816f3238e0557ea460f0024277113d6ae429a03f"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-25.md": {
+      "bytes": 5572,
+      "sha256": "e6a5f8cd3bd9796562147efd4764679133d09c93b107e3ca4204d64d4e61aef4"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-26.md": {
+      "bytes": 9804,
+      "sha256": "3fd8441d60e34fc62b728434daf3f4ce6a0b9fc2aa817e5c8405975e5480baac"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-27.md": {
+      "bytes": 8468,
+      "sha256": "aad11d1900041a3b4d40c519c10f54dc0bba4d95e70805d89203c531c09ca7d0"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-28.md": {
+      "bytes": 8336,
+      "sha256": "46e5fc1647dfaecd5ddeccb372dbc625ff070bd83c952b6c85ab0a23231e6964"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-29.md": {
+      "bytes": 11415,
+      "sha256": "b1589359b5e78b1d532138a1713c08dc6e9ae5c95b7ec105cdd301a47b56d202"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-30.md": {
+      "bytes": 15142,
+      "sha256": "5ea3b6ca9e96a7473089fc4f39134e70fe98dcc910d95f1018c80a614012ae9e"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-31.md": {
+      "bytes": 9483,
+      "sha256": "78bbdbd6e30a44e409e8d602b02469f12c20c35c83431721587cf51f3aad8fa8"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-32.md": {
+      "bytes": 9805,
+      "sha256": "e90c8298460cd5b4c63ddf9590c9bbe4eb58c101e4a0846d65b3432372ff683f"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-33.md": {
+      "bytes": 5588,
+      "sha256": "30877bf1fd4fc9571a291bc905f03e8b2a844a7dc04452ed3366fc93207b08f9"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-34.md": {
+      "bytes": 5692,
+      "sha256": "d1a97f8048e5572c26da7019ab1d36933467dfa9d87ab1d53c85028c8e2f1b31"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-35.md": {
+      "bytes": 9292,
+      "sha256": "f236a9143cc339619b8c6e775c7e3bcb0e1545dcafecb63a165d4c8821d86587"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-36.md": {
+      "bytes": 8257,
+      "sha256": "4468003c134086355f02cf984a6afa920c3bbcf16dad503d36fa68c45892b4b7"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-37.md": {
+      "bytes": 9594,
+      "sha256": "0aeab91f1928232bd6f94a78cb9aead0df91c6acc62f12816e187aab3ab921ee"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-38.md": {
+      "bytes": 8936,
+      "sha256": "6fd930f285e1913081860bf78730858f91f5afcc1cb9417e93814b1427573ba0"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-39.md": {
+      "bytes": 10021,
+      "sha256": "8809827a6fb8d93d48a83803ac563c8ca36ee2777e097a938fc62b48f0208c3d"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-40.md": {
+      "bytes": 8411,
+      "sha256": "2d0a2233394cec10d6ecc3840212f4719a3387c7bf5f48a027ac6288cde6f219"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-41.md": {
+      "bytes": 11150,
+      "sha256": "87d49b34dcfec3015dcd6b2b61dfb6a719d603c59e5cf4529a402bae870594a1"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-42.md": {
+      "bytes": 11300,
+      "sha256": "2245ebfaf0328f04b77f96c35f3d024c8cccced2c4b3ec8faa02cccf6f9e6838"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-43.md": {
+      "bytes": 7765,
+      "sha256": "0a8f96e9aec5d45d79fcb5cf5786230241561ab2eba9cc4e5ea71a6a07f07838"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-44.md": {
+      "bytes": 9636,
+      "sha256": "ae133d68496d6025cd35c3df235229bd2da55be45b81d62250a0491d70350c44"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-45.md": {
+      "bytes": 11834,
+      "sha256": "930e5db20da54f64fb7650c1a763de92533bc80274ad54bfa557c614c9bb9a1a"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-46.md": {
+      "bytes": 9170,
+      "sha256": "df3244ed10c2d1e34684b3cf0879537604a9a4572c455e8ab84a7ee46e102ccd"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-7.md": {
+      "bytes": 18523,
+      "sha256": "b592af593308b82b23d0295047fbc60f59a8b8dca9b5cf5ec95588d97903f7b0"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-8.md": {
+      "bytes": 17754,
+      "sha256": "11f149c185ce7ca3a01e0adb7c5d38a4f7579569991ab2db567eb132213295ba"
+    },
+    "actual-public-output/source/tec-os/editorial/reviews/book-9.md": {
+      "bytes": 19859,
+      "sha256": "3c414607ca6aa2bd986341b5898c61798abd6f5d990fc117f58cac48c07a26e0"
+    },
+    "actual-public-output/source/tec-os/editorial/salvage.md": {
+      "bytes": 22623,
+      "sha256": "06f59ece82932555de81463f5a4d79c43dd419bbeba9a7534848e5f8b395c5c2"
+    },
+    "actual-public-output/source/tec-os/editorial/source-citation-map.json": {
+      "bytes": 859636,
+      "sha256": "904d625f071f20831f83d396917bdc786d4be4bb942f9ef4e41d1757acd61e30"
+    },
+    "actual-public-output/source/tec-os/editorial/source-citation-report.md": {
+      "bytes": 38425,
+      "sha256": "4f8fa9d7c8e41c39e6876bdcb5dbe8af935fc2ab9afab6bfe67daac7a8c23c27"
+    },
+    "actual-public-output/source/tec-os/editorial/terms.md": {
+      "bytes": 31926,
+      "sha256": "717692e470da1316a02c45daafabad678511e6a37cce68810b114967528907e8"
+    },
+    "actual-public-output/source/tec-os/index.md": {
+      "bytes": 7628,
+      "sha256": "81cdf91fa07128f76f90873eaadb61ac58e76e43f596fe338f646ee3e3deea0c"
+    },
+    "actual-public-output/source/tec1g/index.md": {
+      "bytes": 488,
+      "sha256": "e030519f09c035e2041e5dcca932cdd37c45c02e7d49d514d4394427187aeb4a"
+    },
+    "actual-public-output/source/tec1g/mon3/01-basic-operation-and-main-menu.md": {
+      "bytes": 13756,
+      "sha256": "7a3380a5ecf4d751430b8ad27fb75713f95300a8af43f7ad7c445908f1c2070e"
+    },
+    "actual-public-output/source/tec1g/mon3/02-memory-map-and-data-entry-mode.md": {
+      "bytes": 11835,
+      "sha256": "11b31c289a00cc7e840890e6fec943fa19cb8d8062fba6e186cccb1781366b31"
+    },
+    "actual-public-output/source/tec1g/mon3/03-tiny-basic.md": {
+      "bytes": 2605,
+      "sha256": "060fe8043c681d5f566e539704cdc3f2ef6937a22bbb076ad08360f9ee002aec"
+    },
+    "actual-public-output/source/tec1g/mon3/04-terminal-monitor-and-tec-magazine-code.md": {
+      "bytes": 9786,
+      "sha256": "7995308ceb68d09f4cd5a4dca6634846261ebfdfa16015e9623809b263cdcb96"
+    },
+    "actual-public-output/source/tec1g/mon3/05-advanced-programming.md": {
+      "bytes": 31800,
+      "sha256": "bea339b18a39a4acf76c3918cbda05e1856119af67aa186fc76025d5aaff5459"
+    },
+    "actual-public-output/source/tec1g/mon3/06-real-time-clock.md": {
+      "bytes": 9574,
+      "sha256": "5bfeba64c924449c2360c2f992544192afae571704656d58729ef36dc2eb4d12"
+    },
+    "actual-public-output/source/tec1g/mon3/07-graphical-lcd.md": {
+      "bytes": 18458,
+      "sha256": "02bea79c1a9abe9fe6b578996457c93651a52ca2d3bb8aeacfbcd7353f8050d4"
+    },
+    "actual-public-output/source/tec1g/mon3/08-hard-drive-access.md": {
+      "bytes": 8295,
+      "sha256": "6cafdf30f32bc43fd6685522c07d823c7389a1d2bb436a061b4d9d1039c8761e"
+    },
+    "actual-public-output/source/tec1g/mon3/09-quick-start-programs.md": {
+      "bytes": 14897,
+      "sha256": "aa232ad38c76530d3eff7afc8c99b6ca53b4a6d8a9122a57530de67a2d830a6d"
+    },
+    "actual-public-output/source/tec1g/mon3/10-appendix-and-useful-links.md": {
+      "bytes": 7671,
+      "sha256": "eee804b5ff269f3d03bd7ae2ab3806f3a051747cf21e00f6a5561bfc19f77998"
+    },
+    "actual-public-output/source/tec1g/mon3/index.md": {
+      "bytes": 8381,
+      "sha256": "bbe45bdfe96ec4046371333c99b7ca02c4a37ed8b1e2fa9b5217396860c42a3e"
+    },
+    "actual-public-output/source/triptych/cpm/index.md": {
+      "bytes": 2147,
+      "sha256": "5edb3f9f2cebd4b0d1ad865ad96490ee7c24bca69c4ef9569d60ce87fce85b15"
+    },
+    "actual-public-output/source/triptych/index.md": {
+      "bytes": 661,
+      "sha256": "0428ed688b8a85aede0da1960e83d4bca14396557cf140801f8987ff8cb5f7d1"
+    },
+    "actual-public-output/source-after.json": {
+      "bytes": 101434,
+      "sha256": "e8ff0081388b9826234208a027533f02ee30da29a70af5d54945a853c5116eb4"
+    },
+    "actual-public-output/source.tar": {
+      "bytes": 34037760,
+      "sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28"
+    },
+    "actual-public-output/stream.log": {
+      "bytes": 415,
+      "sha256": "b9cefd98395e8806e703dc03ac4f2cb303df4740ae54c30d8b4d62f9d0e506b4"
+    },
+    "actual-public-output/terminal.json": {
+      "bytes": 197,
+      "sha256": "cf92ee710a975bafa21a15eda06315161bd326233b4df75531585cbb256fdc94"
+    },
+    "actual-public-output/validate-ended.json": {
+      "bytes": 16,
+      "sha256": "d24219f6de94b955cf36d25bd2aca88e2d35eef45b9317b7083f55ec8fe9653c"
+    },
+    "actual-public-output/validate-started.json": {
+      "bytes": 513,
+      "sha256": "bdba4dd40d895ad83f859661bbb9994bea9646abd5b6a4e99d16a1596d556553"
+    },
+    "fixture-differences.json": {
+      "bytes": 1497,
+      "sha256": "6939338759bba5ddc40fc49328a5d140aada5238f65aef0b7f00fab74918b160"
+    },
+    "fixture-packet/README.md": {
+      "bytes": 268,
+      "sha256": "a123371de84b3667f152d81eb334e7eecb30dc7ab5881adc6722b68c0a353838"
+    },
+    "fixture-packet/build_and_check.py": {
+      "bytes": 5656,
+      "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc"
+    },
+    "fixture-packet/check_html.py": {
+      "bytes": 621,
+      "sha256": "c6e180fd833fb21be4dc537a182e4bd94a7605f6fff6f6032d185bf15ecb99e7"
+    },
+    "fixture-packet/config.after.ts": {
+      "bytes": 24163,
+      "sha256": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9"
+    },
+    "fixture-packet/config.before.ts": {
+      "bytes": 3349,
+      "sha256": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e"
+    },
+    "fixture-packet/config.diff": {
+      "bytes": 21686,
+      "sha256": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489"
+    },
+    "fixture-packet/controls-result.json": {
+      "bytes": 1359432,
+      "sha256": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc"
+    },
+    "fixture-packet/dependency-manifests.json": {
+      "bytes": 189,
+      "sha256": "717514a47a6538688d10c643f03d861d8d659ac5e4ad3d4ae52757897c969fac"
+    },
+    "fixture-packet/expectations.json": {
+      "bytes": 196353,
+      "sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc"
+    },
+    "fixture-packet/installed-inputs.json": {
+      "bytes": 553,
+      "sha256": "4824bbe4378263c4bd5d9c3ea3ea44ec6efb11c06f808e30d8ee7238501d3531"
+    },
+    "fixture-packet/invoke.sh": {
+      "bytes": 77,
+      "sha256": "bb4df5a4058680538cd2ab3a91ceb554afa3683d354cc06d161f1c336d68ffee"
+    },
+    "fixture-packet/packet_inputs.py": {
+      "bytes": 4299,
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504"
+    },
+    "fixture-packet/prepare_packet.py": {
+      "bytes": 9371,
+      "sha256": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8"
+    },
+    "fixture-packet/run_once.py": {
+      "bytes": 47621,
+      "sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5"
+    },
+    "fixture-packet/seal.json": {
+      "bytes": 3231,
+      "sha256": "825df7fd25f3db62943217b1aca54be9bec9edb1b09c12b607a6d98e8a441104"
+    },
+    "fixture-packet/source-inputs.json": {
+      "bytes": 101673,
+      "sha256": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8"
+    },
+    "fixture-packet/test_checker.py": {
+      "bytes": 23685,
+      "sha256": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e"
+    },
+    "independent-final-snapshot.json": {
+      "bytes": 71265,
+      "sha256": "c70ab888305f4657e3c90e18917144fc545c8204070e6cb012050c0cc76d775a"
+    },
+    "independent-initial-snapshot.json": {
+      "bytes": 71263,
+      "sha256": "0ceb62fd47e32232d96b1137f49346dd880c38410c2f621ae550d8eb0059b4ef"
+    },
+    "independent-owned-scope-audit.json": {
+      "bytes": 798,
+      "sha256": "7a41c8d92835830d36e5bdc41bde15a42afdcc889ddcea118a80353efd0ab35f"
+    },
+    "public-command.log": {
+      "bytes": 415,
+      "sha256": "b9cefd98395e8806e703dc03ac4f2cb303df4740ae54c30d8b4d62f9d0e506b4"
+    },
+    "synthetic-node_modules/fixture-case.json": {
+      "bytes": 79,
+      "sha256": "a26508a64836163f270681f402af8e39291a48e3ba93033fbb9e99d23c52211a"
+    },
+    "synthetic-node_modules/vitepress/bin/vitepress.js": {
+      "bytes": 2256,
+      "sha256": "0fbfd135f7f5020cf6c1a04d05f07524a00c6433df319c9fc2a5de381bf7c7fb"
+    },
+    "synthetic-node_modules/vitepress/package.json": {
+      "bytes": 80,
+      "sha256": "0350d533f2dc756763902e1bbf51903fc8fbda3835a7a7fce48eb74539b45e08"
+    }
+  },
+  "source_inputs": {
+    "expectations.json": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+    "observer-state-allocation-inputs.json": "019f63903250533e78d88ed48e00b75fe7f3df270bd112ec982affd1c878578a",
+    "build_and_check.py": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+    "check_html.py": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+    "observer-repair-source-confirmation.json": "79d508acbf14b7f8005501fe2f484a6cfee8d84d7e9f30033832f969853003fa",
+    "config.after.ts": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9",
+    "dependency-manifests.json": "8631dbb874c8e8e31cb90decb7cc1b968d0ebd7cf53f6a90895a1331107c2107",
+    "seal.json": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+    "run_once.py": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+    "controls-result.json": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+    "test_observer.py": "4d8cefed169fec51c6e8692d5f421f43d18ee7d1b3bf7dbc647f1c98efd8ab20",
+    "invoke.sh": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e",
+    "fixture-inputs.json": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+    "observer-repair-authority.json": "cff8541f76105fe8e817d564c2843d0fcfd730370c9e19dfe5e024bbd42f9701",
+    "observer-control-allocation-request.json": "e11d6578482f5d247329f405cf66d4e385d61983cde9093dba1215539bd87167",
+    "observer-control-allocation-request.md": "91c1077119c8eab1eb9e31f28b101bb6466ed93db1e4138dfffa5c996c418e1c",
+    "public-fixture-source-confirmation.json": "44430c522bea7195c9b013ffbce12325e784b262616877c29d34402b51a5a6a9",
+    "public_observer_fixture.py": "9df4ae6ade0d6812205a73ff1a58e37c665a8aaf4bebc92e3fd050c52a4cbc23",
+    "observer-control-inputs.json": "83d54c40e91621a6ed30e9510b15981d706b449bad7b7e93a4cb7687865a4396",
+    "config.diff": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489",
+    "packet_inputs.py": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+    "config.before.ts": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e",
+    "test_checker.py": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e",
+    "installed-inputs.json": "cfa02ccc86400c70240ca896dec4e4af85e6acb08dcdc6f5b72803732521b911",
+    "observer-repair-source-offer.json": "0c51fe666fbb45e3a03e3e28cc1e8774bd1fabc47c90ff00631ff2de6d5d34d4",
+    "source-inputs.json": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8",
+    "observer-control-source-confirmation.json": "ddeb18453358fadfe962dd196c8ff6acbe89b2c3ccdabf22aff7f68afd0c5949"
+  },
+  "scope": "Complete original fixture work including both snapshots, actual outputs and fixture packet. Raw metadata and link topology preserved in tar. Not an OS binary bundle."
+}
