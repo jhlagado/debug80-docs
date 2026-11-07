@@ -10,7 +10,7 @@
     "run_once.py": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
     "build_and_check.py": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc"
   },
-  "harness_sha256": "2a0e3a4e59c4097244043d5f3d75a6363dfe9b78eac7b5d0ce79aea803380c5b",
+  "harness_sha256": "b5d2435af29308be0a74e8d8ad687d3f989346e7b20052f4b3b9a42181dbf1bb",
   "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
   "source_archive_sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28",
   "source_archive_bytes": 34037760,
@@ -90,7 +90,7 @@
   "cases": {
     "Q15": {
       "input": "Actual pinned Node stub verifies actual ACK/declaration/context, writes original ownership and own OS pid/ppid, then exits normally. No VitePress library or HTML render.",
-      "required": "Actual public runner exit0 and terminal PASS, fixture receipt, complete input postflight and fresh empty runner-owned audit; separately successful real0.5-second postflight identity snapshot resolving retained direct-root/ACK-group/stub scope.",
+      "required": "Actual public runner exit0 and terminal PASS, fixture receipt, complete input postflight and fresh runner-owned audit with status exactly CLEAR and remaining exactly[]. HELD, UNKNOWN_HELD, absent or other status must fail even if a candidate incorrectly emits PASS. Separately require a successful real0.5-second postflight identity snapshot resolving retained direct-root/ACK-group/stub scope.",
       "claim": "Expected fixture outcome only, never book PASS."
     },
     "Q16": {
@@ -185,6 +185,10 @@
       "source_commit": "535ecba1d4042ced7a771b0ffeed8fffd1832c81",
       "reason": "Core rejects altered ownership bytes before nonce interpretation. Fixture requires its exact typed hash-mismatch message and expected/observed raw hashes, accepted registry/ACK hash and exact nonce-only injection. It cannot accept an unrelated error, query timeout or absolute deadline.",
       "final_candidate_commit": "dcb14a834d9cc043bcb8af16b4b62b3bc4a4a7a4"
+    },
+    "Q15_oracle_precision": {
+      "status": "implemented_source_only_awaiting_bounded_confirmation",
+      "reason": "Require audit status exactly CLEAR and remaining exactly[]. Do not depend on candidate finalizer logic to reject a hypothetical false PASS with HELD."
     }
   },
   "source_readback": "Final dcb14a8 audit returns CLEAR/HELD/UNKNOWN_HELD with direct_handles and registry. Fixture reads its retained registry; Q16 still requires UNKNOWN_HELD and the exact accepted receipt hash mismatch before parsing changed ownership fields. No core runtime was imported, syntax checked or run during binding refresh."
