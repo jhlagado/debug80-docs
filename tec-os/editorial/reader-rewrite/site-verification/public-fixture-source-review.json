@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "review_kind": "independent_source_only",
+  "verdict": "finding_requires_disposition_before_allocation",
+  "scope": "Q15/Q16 public fixture controller and binding; candidate integration seams inspected as inert source, not full independent core acceptance",
+  "book_head_observed": "6672d1eb14c5949df3929fb5b4692336719eea83",
+  "authority": {
+    "origo_commit": "fc90db15163c634f5230e67e769157365dd24da3",
+    "path": "studies/p3-tec-os/reviews/book-observer-repair-adoption.md",
+    "status": "source adoption only; no controls allocated"
+  },
+  "identities": {
+    "public_observer_fixture.py": {
+      "sha256": "db486685d8ec0ce2f73f8a84dd3c776602e6ee7d183a168bebc0c722469c1284"
+    },
+    "fixture-inputs.json": {
+      "sha256": "48cb99b9adc72fed29072d11cd2c556545937d975f86ba6d9529e2e761b2dae4"
+    },
+    "run_once.py": {
+      "sha256": "5021f9a3e4ea55942e8036b0e763cae29eb2af4dd91519d5f006f209d4eff837"
+    },
+    "build_and_check.py": {
+      "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc"
+    },
+    "failed-attempt03/packet/seal.json": {
+      "sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4"
+    },
+    "failed-attempt03/packet/packet_inputs.py": {
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504"
+    },
+    "failed-attempt03/packet/check_html.py": {
+      "sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515"
+    }
+  },
+  "reading": [
+    "Complete public_observer_fixture.py and fixture-inputs.json, including generated Node stub, checker double and both complete planned command arrays.",
+    "Complete frozen Origo adoption receipt and failed-attempt03 seal and packet_inputs.py.",
+    "Complete current build_and_check.py; current run_once.py identity validation, discovery, failure latch, decision/ACK, signal handling, query launch/reaping, command registration, guard launch, postflight and exception cleanup contexts. This is integration reading, not a fresh full-core qualification."
+  ],
+  "findings": [
+    {
+      "id": "PF-01",
+      "priority": "P2",
+      "path": "public_observer_fixture.py",
+      "lines": [
+        427,
+        442
+      ],
+      "title": "Failure disposition can abandon a still-live direct runner without a bounded reap",
+      "trigger": "An early independent snapshot, receipt write or wait fails after Popen succeeds while the runner remains live.",
+      "evidence": "The except block invokes runner.terminate() and immediately enters finally. Finally calls poll() for its recorded child list but performs no wait/communicate for this runner. The main function then returns. In contrast, the normal path waits at line 391 and snapshot timeout handling attempts a bounded wait at lines 167–172.",
+      "consequence": "FAILED_OR_UNKNOWN_HELD prevents false fixture acceptance, but the controller can exit while the directly owned runner is still processing TERM/cleanup and before it is reaped. The existing runner signal handler converts TERM to Failed and starts its cleanup path, so this is not a claim that TERM necessarily kills its cleanup. The controller nevertheless drops its retained handle and opportunity to observe/reap completion while budget may remain. This weakens the stated handle-through-disposition contract and leaves cleanup evidence incomplete on ordinary controller failures.",
+      "requested_change": "After requesting runner termination, retain and wait/reap that Popen handle using only the original controller hard-end time remaining. Record termination errors, timeout and reap outcome explicitly. A timeout must remain FAILED_OR_UNKNOWN_HELD, with no numeric-PID/group rescue, retry, extra guard or extended deadline. Preserve the independent scoped-cleanup requirement when observation is unavailable."
+    }
+  ],
+  "cleared": [
+    {
+      "topic": "Prelaunch raw binding",
+      "evidence": "Lines 344–355 verify the external raw binding digest before JSON parse or adaptation, reject placeholder allocation/candidate identities; lines 194–225 bind harness, candidate payloads, original payloads, runtimes, guard, source identity and policy. Line 377 checks binding bytes again before child launch."
+    },
+    {
+      "topic": "Sealed isolation and explicit doubles",
+      "evidence": "Preparation copies into fresh work/fixture-packet; only the listed seven payload differences are permitted. Generated stub/checker source hashes are checked. Synthetic dependencies contain three sealed files. No book preparer is called. Active source/checker/expectation/control files are read or copied, not overwritten."
+    },
+    {
+      "topic": "Public route and limits",
+      "evidence": "The planned Q15/Q16 CLI uses pinned Python -S -B, an external reviewed binding hash, new work/result paths and separately allocated labels. The inner argv uses actual copied run_once.py with --packet/--seal-sha256/--output/--allocation/--deadline-utc. The runner launches one pinned Node memory guard with limit850/heap450/wait0, then pinned Python worker. Worker launches the installed Node stub at the normal VitePress build path and the labelled checker double. No outer guard or automatic retry is introduced."
+    },
+    {
+      "topic": "Fixed total deadline",
+      "evidence": "ENTRY clocks precede preparation; hard_end=ENTRY_MONO+60 and UTC inner deadline=ENTRY_WALL+55. Preparation/postflight share that limit. The daemon controller cutoff remains armed through receipt I/O. Query budgets are at most0.5 seconds capped by hard_end. Forced cutoff or missing child returncode cannot count as an expected outcome. No universal cleanup guarantee follows from that cutoff."
+    },
+    {
+      "topic": "Immediate registration and query handling",
+      "evidence": "Both fixture Popen sites append the actual handle before waiting or receipt I/O. Independent snapshots run once with real ps, UTC/C locale and retained argv/budget/output/outcome. Query timeout kills only its direct handle and attempts reap within the original query budget; pending/unavailable observations prevent success. PF-01 concerns the separate runner exception path."
+    },
+    {
+      "topic": "Q15 false-PASS boundary",
+      "evidence": "Acceptance requires actual command/terminal zero and PASS, fresh empty non-UNKNOWN runner audit, source-after receipt, no first failure and labelled fixture checker receipt. Independent audit additionally requires original declaration/context/ACK binding and absence of retained scope in a successful final real snapshot. Current runner PASS separately requires CLEAR/quiescent observer/ACK and complete postflight. Top-level record remains EXPECTED_FIXTURE_OUTCOME with real_book_acceptance=false; it is not acceptance of rendering or39-page validation."
+    },
+    {
+      "topic": "Q16 targeted cause and conservative cleanup",
+      "evidence": "Stub verifies actual context/ownership/ACK before atomically changing the private ownership nonce and blocking. Acceptance requires observer stage identity-observation, nonce_mismatch, all actual exit codes124, FAILED terminal, UNKNOWN_HELD runner audit and absence of checker.json. Timeout/deadline origin is rejected. Independent scope resolution is recorded separately and cannot relabel the runner audit CLEAR."
+    },
+    {
+      "topic": "Independent audit limit",
+      "evidence": "The audit retains direct runner, original guard/worker/stub IDs, ACK group, candidate observed/root/group/history and early/final ancestry closure. Numeric reuse remains conservatively unresolved. It never signals from numeric observations. Unobserved historical descendants and universal cleanup are expressly excluded."
+    }
+  ],
+  "binding_state": {
+    "harness_matches": true,
+    "candidate_payloads": {
+      "run_once.py": {
+        "bound_sha256": "f2af8053fc704aea0e84d7c055e1336e74f90452190b0f7b614fec6a8cbf3225",
+        "observed_sha256": "5021f9a3e4ea55942e8036b0e763cae29eb2af4dd91519d5f006f209d4eff837",
+        "matches": false
+      },
+      "build_and_check.py": {
+        "bound_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+        "observed_sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+        "matches": true
+      }
+    },
+    "unchanged_baseline_payloads_all_match": true,
+    "disposition": "run_once.py has changed from the bound3679 candidate. This is a fail-closed preallocation repinning prerequisite, not a runtime result or an additional code defect. Review the final core changes, then regenerate candidate hash, any changed harness/generated hashes and the external binding digest before allocation. Do not reuse this review as acceptance of unseen later bytes."
+  },
+  "not_performed": [
+    "candidate imports",
+    "syntax validation",
+    "fixture preparation",
+    "commands or controls",
+    "ps probes",
+    "signals",
+    "build/render",
+    "HTML validator",
+    "runtime qualification",
+    "commits"
+  ],
+  "remaining": [
+    "Disposition PF-01 and source-review final changed bytes.",
+    "Independent core review and exact final candidate/binding identity closure.",
+    "Separate explicit bounded Q15/Q16 allocation, followed by actual result and independent scoped-cleanup review.",
+    "Book39-page/48-control acceptance remains separate."
+  ]
+}

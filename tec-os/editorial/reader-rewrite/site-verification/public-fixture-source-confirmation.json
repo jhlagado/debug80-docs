@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "review_kind": "independent_source_only_bounded_confirmation",
+  "verdict": "clear_within_requested_scope",
+  "remaining_blockers_in_this_scope": [],
+  "scope": "PF-01 bounded exception TERM/wait/reap, exact post-ACK Q16 predicate, approved copy integrity and final fixture binding only. No broader lifecycle or full-core acceptance.",
+  "original_review": {
+    "path": "public-fixture-source-review.json",
+    "sha256": "62208dc40b80229af464ea3914769f299b79a8a0fb109134fb88850a045961b8",
+    "preserved": true
+  },
+  "commits": {
+    "PF_01": "3e3c362b8cbdd9fedfc10b6f3ebba6559686d4ad",
+    "Q16": "77593a0acf28fec2d897a2797b5ef399a75e0f0d",
+    "core": "dcb14a834d9cc043bcb8af16b4b62b3bc4a4a7a4",
+    "final_binding": "f128b6ea77c6aa461e2cf0564d0165a3a2f6a947",
+    "head_observed": "f128b6ea77c6aa461e2cf0564d0165a3a2f6a947"
+  },
+  "sha256": {
+    "public_observer_fixture.py": "b5d2435af29308be0a74e8d8ad687d3f989346e7b20052f4b3b9a42181dbf1bb",
+    "fixture-inputs.json": "12e8154f7af1bf645a6d21b0dce6d1f03f6c1820b94b632f276ffe59a7805e12",
+    "run_once.py": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+    "build_and_check.py": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+    "public-fixture-source-review.json": "62208dc40b80229af464ea3914769f299b79a8a0fb109134fb88850a045961b8",
+    "failed-attempt03/packet/seal.json": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+    "failed-attempt03/packet/check_html.py": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515"
+  },
+  "external_binding_sha256": "12e8154f7af1bf645a6d21b0dce6d1f03f6c1820b94b632f276ffe59a7805e12",
+  "static_identity_checks": {
+    "harness": true,
+    "baseline_seal": true,
+    "run_once.py": true,
+    "build_and_check.py": true,
+    "node_stub_sha256": true,
+    "checker_test_double_sha256": true,
+    "unchanged_reference_payloads": true,
+    "run_once.py_equals_dcb14a8": true,
+    "build_and_check.py_equals_dcb14a8": true
+  },
+  "reading": [
+    "Complete current public_observer_fixture.py from module header through main entry, including preparation, doubles, independent audit, Q15/Q16 and all exception/finally paths.",
+    "Complete final fixture-inputs.json and binding-refresh diff at ae6e676.",
+    "Original review and complete scoped changes at3e3c362/77593a0; current core accepted-receipt hash publication and mismatch context, read as inert source.",
+    "Bounded f128b6e one-line oracle change, complete binding-refresh diff and neighbouring Q15 requirements. Current harness, binding and candidate identities rehashed without importing candidate code."
+  ],
+  "dispositions": [
+    {
+      "id": "PF-01",
+      "status": "resolved_source_only",
+      "path": "public_observer_fixture.py",
+      "lines": [
+        459,
+        499
+      ],
+      "reason": "The exception path first records FAILED_OR_UNKNOWN_HELD. It retains the actual runner Popen handle, sends TERM only if poll reports live, records OSError from termination, then waits on that same handle for max(0, original hard_end minus current monotonic time minus0.5 seconds). It records budget, remaining time, REAPED or timeout/reap error and final returncode. Finally still records child statuses and refuses success for unresolved handles. The independent entry+60 cutoff stays armed; no reset, arbitrary numeric signalling or second guard was added. This closes the original missing bounded reap finding without claiming cleanup success on timeout."
+    },
+    {
+      "id": "Q16-exact-predicate",
+      "status": "confirmed_source_only",
+      "path": "public_observer_fixture.py",
+      "lines": [
+        428,
+        456
+      ],
+      "reason": "The expected injection is an exact dictionary tied to Q16, original ACK hash, old nonce and exact corruption suffix. Parsed tampered JSON must equal the original object with only that nonce replacement. Required first-failure detail is exact equality to message job ownership receipt hash mismatch and actual original/altered raw SHA values, which must differ. Observer stage and all actual runner/terminal/failure exits remain124, terminal FAILED, runner audit UNKNOWN_HELD and no checker receipt. Independent audit separately binds registry.accepted_ownership_sha256 to original ACK hash. This matches current core checking accepted receipt bytes before interpreting nonce/PID/group fields and cannot accept a generic timeout or an unrelated error substring."
+    },
+    {
+      "id": "copy-binding",
+      "status": "confirmed_source_only",
+      "path": "public_observer_fixture.py",
+      "lines": [
+        193,
+        281
+      ],
+      "reason": "The original seal is read once and authenticated before parsing. copy_approved authenticates one source byte buffer, writes those bytes and authenticates the destination. The complete final payload map must equal the approved baseline/candidate map plus explicit generated overrides before sealing. Current harness, runner, worker, generated Node/checker source literals and baseline reference hashes all match the final binding. Candidate bytes also match dcb14a8 Git blobs. This is identity evidence only, not runtime qualification."
+    },
+    {
+      "id": "Q15-oracle-precision",
+      "status": "confirmed_source_only",
+      "commit": "f128b6ea77c6aa461e2cf0564d0165a3a2f6a947",
+      "path": "public_observer_fixture.py",
+      "lines": [
+        418,
+        425
+      ],
+      "reason": "Q15 now requires both owned.remaining exactly[] and owned.status exactly CLEAR. HELD, UNKNOWN_HELD, missing and other statuses fail independently of a hypothetical erroneous candidate PASS. Actual zero exit/PASS terminal, postflight receipt, no first failure and labelled checker receipt requirements remain. Static whole-file byte comparison against ae6e676 confirms that the one status predicate is the only harness change. The refreshed binding changes its self-hash, Q15 requirement and disposition only; runner/worker and generated doubles remain the previously confirmed bytes."
+    }
+  ],
+  "preserved_boundaries": [
+    "Controller entry+60 total includes preparation, postflight and receipt I/O; inner UTC cutoff is fixed at entry+55.",
+    "Q15/Q16 remain actual public CLI candidates with one inner pinned guard, explicit test doubles and no book-result acceptance.",
+    "Q16 UNKNOWN_HELD runner audit remains separate from independent retained-scope resolution. No universal or historical-descendant cleanup proof is asserted.",
+    "39-page expectations and48 checker-control reference identities remain unchanged.",
+    "Exact external binding digest and fresh paths still belong in separately authorised allocation commands."
+  ],
+  "not_performed": [
+    "candidate imports",
+    "syntax validation",
+    "fixture materialisation",
+    "Q15/Q16 execution",
+    "probes",
+    "signals",
+    "builds",
+    "validator runs",
+    "commits"
+  ],
+  "remaining_outside_scope": [
+    "Separate full-core confirmation remains governed by its own review.",
+    "Explicit bounded allocation and subsequent actual result/scoped-cleanup review remain required. Source confirmation grants neither allocation nor runtime acceptance."
+  ]
+}
