@@ -344,6 +344,42 @@ class InvocationState:
                     'first_failure': self.failure,
                     'accepted_ownership_sha256': self.accepted_ownership_sha256}
 
+    def final_audit_disposition(self, rows):
+        # A missing birth never establishes that a retained direct handle exited.
+        # Snapshot handles briefly, then poll without failure/audit-I/O locks.
+        with self.lock:
+            handles = [(pid, child, self.roots.get(pid))
+                       for pid, child in self.children.items()]
+        direct = []
+        unresolved = rows is None
+        live = bool(rows)
+        for pid, child, birth in handles:
+            entry = {'pid': pid, 'birth': birth}
+            try:
+                code = child.poll()
+                if code is None:
+                    entry['status'] = 'LIVE'
+                    live = True
+                elif type(code) is not int:
+                    raise ValueError('direct handle poll returned no valid exit code')
+                else:
+                    entry.update(status='REAPED', exit_code=code)
+                    with self.lock:
+                        self.history.append({'kind': 'direct-audit-exit', **entry})
+                        # Retire this handle only, never authority for a new PID
+                        # birth or a separately bound acknowledged worker group.
+                        if self.children.get(pid) is child:
+                            self.children.pop(pid, None)
+                            if pid not in self.job_groups and self.roots.get(pid) == birth:
+                                self.roots.pop(pid, None)
+            except BaseException as error:
+                entry.update(status='UNRESOLVED', error=str(error),
+                             error_type=type(error).__name__)
+                unresolved = True
+            direct.append(entry)
+        return {'status': 'UNKNOWN_HELD' if unresolved else ('HELD' if live else 'CLEAR'),
+                'remaining': rows, 'direct_handles': direct, 'registry': self.snapshot()}
+
     def signal_bound(self, sig, group_signal, handle_signal):
         # Never acquire failure/audit/receipt locks or wait for query completion.
         for group in tuple(self.job_groups.copy()):
@@ -739,14 +775,13 @@ def main():
             if not observer_quiet:
                 raise Failed('observer still active; final observation unavailable', 124)
             rows = owned(cleanup_phase=True)
-            audit = {'status': 'HELD' if rows else 'CLEAR', 'remaining': rows,
-                     'registry': state.snapshot()}
-            if rows:
-                state.request_stop('final-audit', 'owned processes remain', 124)
+            audit = state.final_audit_disposition(rows)
+            if audit['status'] != 'CLEAR':
+                state.request_stop('final-audit', 'owned processes or unresolved direct handles remain', 124)
         except BaseException as error:
             state.request_stop('final-audit', str(error), 124)
-            audit = {'status': 'UNKNOWN_HELD', 'clear': False, 'error': str(error),
-                     'registry': state.snapshot()}
+            audit = state.final_audit_disposition(None)
+            audit.update(status='UNKNOWN_HELD', clear=False, error=str(error))
         durable_json(output / 'owned-process-audit.json', audit)
         return audit
 
