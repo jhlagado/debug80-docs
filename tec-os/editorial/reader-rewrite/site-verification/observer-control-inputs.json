@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "SOURCE_PREPARATION_AWAITING_RUNNER_API",
+  "status": "SOURCE_PREPARATION_CORE_DRIVER_PARTIAL_PENDING_INTEGRATION_SEAMS",
   "executed": false,
   "scope": "Owned driver covers Q01-Q14 only, calling actual candidate routines through injected clock/query/record/signal dependencies. Q15/Q16 are separately owned by public_observer_fixture.py and are not implemented or invoked here.",
   "reviewed_contracts": [
@@ -41,10 +41,45 @@
     "-B"
   ],
   "candidate_api": {
-    "status": "awaiting_supplied_runner_API",
+    "status": "Core API read as inert source; main integration is still in progress. Snapshot hashes are not a final execution binding.",
     "candidate_path": "run_once.py",
     "candidate_sha256": null,
-    "routines": null
+    "core_source_observation": {
+      "query_budget": {
+        "signature_ast": "arguments(posonlyargs=[], args=[arg(arg='now'), arg(arg='soft_deadline'), arg(arg='hard_deadline'), arg(arg='cleanup_phase')], kwonlyargs=[], kw_defaults=[], defaults=[Constant(value=False)])",
+        "source_sha256": "462222c3ee47b93796f56bab31e4f49f89050b2ee3553a11886697c033b0593a"
+      },
+      "validate_ownership": {
+        "signature_ast": "arguments(posonlyargs=[], args=[arg(arg='ownership'), arg(arg='context'), arg(arg='rows'), arg(arg='guard_alive')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+        "source_sha256": "00f02349c4634dd732ce5579236f29ad64a8b7ab8c33bc4ed48410c6e7630041"
+      },
+      "discover_owned": {
+        "signature_ast": "arguments(posonlyargs=[], args=[arg(arg='rows'), arg(arg='roots'), arg(arg='observed'), arg(arg='job_groups')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+        "source_sha256": "589f71105b2cedfe49ceb47c100474a2f49d833375f08e12bcc14bf50e2862cd"
+      },
+      "InvocationState": {
+        "methods": {
+          "__init__": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='deadline'), arg(arg='clock')], kwonlyargs=[], kw_defaults=[], defaults=[Attribute(value=Name(id='time', ctx=Load()), attr='monotonic', ctx=Load())])",
+          "_adopt_pending": "arguments(posonlyargs=[], args=[arg(arg='self')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "_queue_stop": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='failure')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "request_stop": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='stage'), arg(arg='detail'), arg(arg='code')], kwonlyargs=[], kw_defaults=[], defaults=[Constant(value=124)])",
+          "import_failure": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='failure')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "query": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='query_once'), arg(arg='record'), arg(arg='cleanup_phase')], kwonlyargs=[], kw_defaults=[], defaults=[Constant(value=False)])",
+          "register_child": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='child'), arg(arg='argv')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "stop_new_child": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='child')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "bind_group": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='ownership')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "publish_ack": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='prepare'), arg(arg='publish')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "observe": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='rows')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "snapshot": "arguments(posonlyargs=[], args=[arg(arg='self')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "signal_bound": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='sig'), arg(arg='group_signal'), arg(arg='handle_signal')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "soft_stop": "arguments(posonlyargs=[], args=[arg(arg='self')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "signal_escalation": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='group_signal'), arg(arg='handle_signal'), arg(arg='wait')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "commit_decision": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='audit'), arg(arg='observer_quiet'), arg(arg='expected_code'), arg(arg='expected_failure'), arg(arg='publish')], kwonlyargs=[], kw_defaults=[], defaults=[])",
+          "decision": "arguments(posonlyargs=[], args=[arg(arg='self'), arg(arg='audit'), arg(arg='observer_quiet')], kwonlyargs=[], kw_defaults=[], defaults=[])"
+        },
+        "source_sha256": "b69f357bb5f4df1defdf6492ad1186eecf575a2c5d7948241d65398164a3de8c"
+      }
+    }
   },
   "worker_api": {
     "status": "supplied_seams_pending_final_byte_binding",
@@ -327,5 +362,71 @@
       "Q16"
     ],
     "scope": "Separate public fixture ownership/allocation; no public-mode implementation in test_observer.py."
+  },
+  "driver": {
+    "path": "test_observer.py",
+    "validation": "Python3.9 AST parse only; not imported or executed.",
+    "coverage": {
+      "Q01": "Actual budget/query/ownership-validation/discovery calls.",
+      "Q02": "Actual timeout/latch/decision/signal-routing calls; independent scheduling belongs to Q06.",
+      "Q03": "Actual query calls for near-soft timeout, intent exhaustion and stop-during-intent; requires typed effective-budget evidence, no derived replacement.",
+      "Q04": "Actual nonpositive-budget query refusal and original deadline cause.",
+      "Q05": "Actual cleanup query, retained snapshot and UNKNOWN_HELD decision; durable main audit writer pending.",
+      "Q06": "UNAVAILABLE: exposed independent signalling/timer/I/O-interleave seam pending.",
+      "Q07": "Actual separate ownership validation mutations, child registration, memory binding and ACK stop recheck.",
+      "Q08": "Actual retained-group discovery/signalling after guard/leader absence; no site acceptance after premature guard exit.",
+      "Q09": "Actual reused PID/birth rejection, group retirement and retained history.",
+      "Q10": "Actual observed detached-identity retention; no claim about unseen identities.",
+      "Q11": "Actual first-failure/decision calls and bounded pending-request thread interleave; main terminal-writer integration seam pending.",
+      "Q12": "Actual missing/residual/unknown audit and nonquiescent decision refusals.",
+      "Q13": "Actual worker phase_stop_code and worker_identity_budget; worker main structured query-error and ACK-wait coverage pending.",
+      "Q14": "UNAVAILABLE: actual direct hard-deadline signal/finally-exit callable seam pending."
+    },
+    "unavailable_cases": [
+      "Q06",
+      "Q14"
+    ],
+    "no_passing_controls_claimed": true,
+    "pending_coverage": "Complete main terminal/audit/publisher hooks and independent soft/hard timer seams must be wired before the full suite can be represented as ready."
+  },
+  "binding_schema_for_lead": {
+    "schema": 1,
+    "allocation": "Exact allocation string matching --allocation",
+    "python": {
+      "path": "Pinned executable path",
+      "sha256": "Pinned complete executable SHA-256"
+    },
+    "driver_sha256": "Final test_observer.py complete bytes SHA-256",
+    "control_spec": {
+      "path": "Final observer-control-inputs.json absolute path",
+      "sha256": "Final control-spec SHA-256"
+    },
+    "modules": {
+      "run_once": {
+        "path": "Final absolute source path",
+        "sha256": "Final complete bytes SHA-256"
+      },
+      "packet_inputs": {
+        "path": "Final absolute source path",
+        "sha256": "Final complete bytes SHA-256"
+      },
+      "build_and_check": {
+        "path": "Final absolute source path",
+        "sha256": "Final complete bytes SHA-256"
+      }
+    },
+    "suite_wall_seconds": "Positive finite number <=60, original entry-relative real-wall cutoff",
+    "case_wall_seconds": "Positive finite number <=suite_wall_seconds; exclusive case work/result paths under suite work root",
+    "binding_digest": "SHA-256 of this complete binding file supplied separately by --inputs-sha256"
+  },
+  "Q11_pending_request_interleave": {
+    "arrangement": "Hold actual state.lock, start actual request_stop(identity-observation, pending original,124) in a bounded allocated synthetic thread, wait for actual stopping event, then call actual decision while first requester is blocked.",
+    "predicates": [
+      "decision return must not be 0",
+      "state.final_code must not become 0",
+      "release lock and join bounded requester even after predicate failure",
+      "original identity-observation stage/detail/124 must survive subsequent generic guard exit1"
+    ],
+    "thread_limits": "One daemon thread, 0.25s event wait and 0.25s join, additionally bounded by per-case and suite real-wall alarms. Only used in a future allocated control."
   }
 }
