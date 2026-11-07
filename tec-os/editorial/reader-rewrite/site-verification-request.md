@@ -1,3 +1,14 @@
+# Current production offer 04
+
+STATE01, Q15 and Q16 have scoped independent actual-result and retention
+acceptance. The resource reviews recommend release of each fixture's specific
+retained scope. Q16's runner UNKNOWN_HELD audit is preserved unchanged.
+
+The fresh unrun production packet and exact command are in
+`site-verification/production-offer04/request.md`. Its seal begins 68f1b1aa.
+Independent source/input/command reviews are clear within their scope. No production execution,
+retry or publication is allocated. The requests and results below are historical.
+
 # Current observer-repair source handoff
 
 Source implementation and independent source/control/input reviews are closed.

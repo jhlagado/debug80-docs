@@ -1,0 +1,312 @@
+{
+  "schema": 1,
+  "status": "clear_qualified_fresh_production_offer_source_command",
+  "scope": "Independent inert fresh production offer04 source/input/command review. No allocation or execution.",
+  "inputs": [
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/production-offer04/preparation.json",
+      "sha256": "1c1e6cb33982f576d820a2a92cee343576126e8f6782b0d8651cf271ea253caf",
+      "bytes": 3063
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/production-offer04/request.json",
+      "sha256": "a612794f4bcef0b1e0829e690abc5e82a00f193075081836703a803a3cf4f75e",
+      "bytes": 1408
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/production-offer04/request.md",
+      "sha256": "5ad9a069fd8de07c6c6a962f107634ca947a917e58940d270f64a769fc7cd92c",
+      "bytes": 1805
+    },
+    {
+      "path": "tec-os/editorial/reader-rewrite/site-verification/production-offer04/packet/seal.json",
+      "sha256": "68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd",
+      "bytes": 3109
+    }
+  ],
+  "fresh_seal_sha256": "68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd",
+  "consumed_baseline_seal_sha256": "8ff67aa359ad79b7a5b715a71e81942bb0c935c27707519a5454c3439bb4f2b4",
+  "payloads": [
+    {
+      "name": "README.md",
+      "sha256": "8fc7dd19f07ce4c6fc88c894768466919202280652e57f4be62628050babf786",
+      "bytes": 8266,
+      "old_sha256": "8fc7dd19f07ce4c6fc88c894768466919202280652e57f4be62628050babf786",
+      "unchanged": true
+    },
+    {
+      "name": "build_and_check.py",
+      "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+      "bytes": 5656,
+      "old_sha256": "0fff7cbc03f27d1db19874c3732ceba002da0d34d1be12f73063e6bca96f7410",
+      "unchanged": false
+    },
+    {
+      "name": "check_html.py",
+      "sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+      "bytes": 26143,
+      "old_sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+      "unchanged": true
+    },
+    {
+      "name": "config.after.ts",
+      "sha256": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9",
+      "bytes": 24163,
+      "old_sha256": "45af9161f1f97188f1113acc87d27b8b6f1cb3f7c160038f7ff86e3c3f45d1c9",
+      "unchanged": true
+    },
+    {
+      "name": "config.before.ts",
+      "sha256": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e",
+      "bytes": 3349,
+      "old_sha256": "b8411a944cf5d182e3c9ee156218de0a640dc4fd391dbcdc64ad2eba2224a24e",
+      "unchanged": true
+    },
+    {
+      "name": "config.diff",
+      "sha256": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489",
+      "bytes": 21686,
+      "old_sha256": "770a38fed1dadd32e21797fb8b41613587c780910585e65d01d94eaf9f703489",
+      "unchanged": true
+    },
+    {
+      "name": "controls-result.json",
+      "sha256": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+      "bytes": 1359432,
+      "old_sha256": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+      "unchanged": true
+    },
+    {
+      "name": "dependency-manifests.json",
+      "sha256": "8631dbb874c8e8e31cb90decb7cc1b968d0ebd7cf53f6a90895a1331107c2107",
+      "bytes": 556,
+      "old_sha256": "8631dbb874c8e8e31cb90decb7cc1b968d0ebd7cf53f6a90895a1331107c2107",
+      "unchanged": true
+    },
+    {
+      "name": "expectations.json",
+      "sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+      "bytes": 196353,
+      "old_sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+      "unchanged": true
+    },
+    {
+      "name": "installed-inputs.json",
+      "sha256": "cfa02ccc86400c70240ca896dec4e4af85e6acb08dcdc6f5b72803732521b911",
+      "bytes": 757546,
+      "old_sha256": "cfa02ccc86400c70240ca896dec4e4af85e6acb08dcdc6f5b72803732521b911",
+      "unchanged": true
+    },
+    {
+      "name": "invoke.sh",
+      "sha256": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e",
+      "bytes": 664,
+      "old_sha256": "d8bd8b531007368d319b21c20665cf01851fe7154bfdd37f5e745851a263f74e",
+      "unchanged": true
+    },
+    {
+      "name": "packet_inputs.py",
+      "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "bytes": 4299,
+      "old_sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+      "unchanged": true
+    },
+    {
+      "name": "prepare_packet.py",
+      "sha256": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8",
+      "bytes": 9371,
+      "old_sha256": "a737c4e5578e3cd5457559a98115527a3b040ab787a514fcf5ec6cc7aea7ece8",
+      "unchanged": true
+    },
+    {
+      "name": "run_once.py",
+      "sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+      "bytes": 47621,
+      "old_sha256": "8433ce3e7ab0697835467ddca0b168feb836a56f36ce083ba384eb3b556edbc6",
+      "unchanged": false
+    },
+    {
+      "name": "source-inputs.json",
+      "sha256": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8",
+      "bytes": 101673,
+      "old_sha256": "30b708f4c0b45fde841b13edd4f454b765d22bd64353ff3b2ec3fb6031bf0ca8",
+      "unchanged": true
+    },
+    {
+      "name": "test_checker.py",
+      "sha256": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e",
+      "bytes": 23685,
+      "old_sha256": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e",
+      "unchanged": true
+    }
+  ],
+  "unchanged_prior_payloads": 14,
+  "changed_payloads": [
+    "run_once.py",
+    "build_and_check.py"
+  ],
+  "nonpayload_seal_fields_unchanged": true,
+  "command": {
+    "argv": [
+      "/bin/sh",
+      "/Users/johnhardy/projects/debug80-docs-tec-os/tec-os/editorial/reader-rewrite/site-verification/production-offer04/packet/invoke.sh",
+      "68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd",
+      "/private/tmp/tec-os-site04-68f1b1aaacf6",
+      "KS47-SITE04-20261107"
+    ],
+    "MD_JSON_token_match": true,
+    "cwd": "/Users/johnhardy/projects/debug80-docs-tec-os",
+    "login_shell": false,
+    "outer_guard": false,
+    "proposed_allocation": "KS47-SITE04-20261107",
+    "allocation_granted": false,
+    "output": "/private/tmp/tec-os-site04-68f1b1aaacf6",
+    "output_absent": true,
+    "claim": "/Users/johnhardy/.origo/site-verification/claims/68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd.json",
+    "claim_absent": true
+  },
+  "independent_input_closure": {
+    "source_revision": "a3e4c292fee3022e432a18be36370d2d87cd4b30",
+    "source_tree": "f17d6f9a99fa45b8ec00bb8cb71b1adf855e877a",
+    "Git_archive_reconstructed_in_memory_sha256": "4b2e63773028566961df97fd8cafa4e0ce50b398f3fe776fb2b41f24bfa3cb28",
+    "archive_bytes": 34037760,
+    "source_regular_files": 889,
+    "all_exported_hashes_with_declared_config_after_delta_match_manifest": true,
+    "config_before_matches_frozen_export": true,
+    "all39_current_reader_and_expectation_hashes_match_frozen_source": true,
+    "real_installed_root": "/Users/johnhardy/projects/debug80-docs-tec-os/.github/site/node_modules",
+    "installed_entries_read_and_hashed": 4454,
+    "actual_installed_identity": "a020e190a5bc80db7d6ffebda4fc762328dc0c5c771c0a12ecd010b63ea79661",
+    "actual_full_entry_manifest_matches_seal": true,
+    "dependency_symlink_boundary": "All symlinks relative/internal; file bytes/size/executable flags and symlink targets independently compared without importing helper or dependencies.",
+    "method": "Earlier in this review an inert stdlib implementation independently walked/hashes all installed entries and reconstructed git archive bytes in memory. No source export or dependency file was written."
+  },
+  "runtime_and_guard_current_bytes": [
+    {
+      "name": "git",
+      "path": "/opt/homebrew/Cellar/git/2.39.1/bin/git",
+      "sha256": "5ec2979b3ed9ea1c9ab866ce7177d34324e08fa452416bdd750c090dd77ff3c0",
+      "matches": true
+    },
+    {
+      "name": "node",
+      "path": "/opt/homebrew/Cellar/node@24/24.18.0/bin/node",
+      "sha256": "72c18e2eeda260f67a5b2b66e96fa9b5ad82864676ebb54925695d87120cae3f",
+      "matches": true
+    },
+    {
+      "name": "python",
+      "path": "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+      "sha256": "bdea59019a38eb6600cc9e71e984a97fedadc406448431281e7657030f54987e",
+      "matches": true
+    },
+    {
+      "name": "guard",
+      "path": "/Users/johnhardy/projects/origo/tools/mem-guard.mjs",
+      "sha256": "45e4edaee20eba1b2d8ec67983ed3acc06be31a64eb059e8bc4ad21257871374",
+      "matches": true
+    }
+  ],
+  "expectation_coverage": {
+    "pages": 39,
+    "links": 247,
+    "fragment_bearing_link_occurrences": 45,
+    "distinct_target_fragment_pairs": 32,
+    "literal_fence_pairs": 247,
+    "sidebar_groups": [
+      7,
+      6,
+      15,
+      10
+    ],
+    "reading": "Existing checker45 fragment-reference reading preserved;45 is not a new claim of45 distinct target anchors."
+  },
+  "prior_checker_controls": {
+    "count": 48,
+    "status": "passed",
+    "report_sha256": "a0c7dbfb17f8799a8ccbc249ba3387f4336fca6153fd8dab99a17b9668e6ebcc",
+    "script_sha256": "89144330c0d6a8bcde4e94c084558bda3f545360f06de7f4f26411a26fe44b4e",
+    "checker_sha256": "eba2722c0a1f1f5b065ec1d0b2a837086fc08600e7a1af8e94289e8428f7d515",
+    "expectations_sha256": "605de43753d93755b4fdfbe47f1db67be50c9ac412e21cfd0bbc21c742a410fc",
+    "report_source_pins_match": true,
+    "replayed": false,
+    "reading": "Qualified prior48 synthetic artifacts unchanged, not a new render or host timing result."
+  },
+  "profile": {
+    "build_workers": 2,
+    "cleanup_reserved_seconds": 3,
+    "guard_limit_mb": 850,
+    "guard_wait_seconds": 0,
+    "minify": false,
+    "node_heap_mb": 450,
+    "retry": false,
+    "whole_invocation_max_seconds": 180
+  },
+  "checks": [
+    {
+      "source": "packet/invoke.sh:8-12; request.json/request.md",
+      "result": "Exact absolute/bin/sh packet command with hash/output/ID, correct checkout cwd, nonlogin and no outer guard. Script calculates UTC now+180 once before exec pinned CLT-I-S-B and derives --packet from its own directory. No deadline resets."
+    },
+    {
+      "source": "packet/run_once.py and packet/build_and_check.py",
+      "result": "Two replacements byte-equal cleared dcb14a8 source and actual Q15/Q16 private tested copies. Query2.0 ordinary/0.5 cleanup are adopted internal candidates, not registered gate changes; original180/3/850/450/wait0/workers2/no-minification/no-retry policy retained."
+    },
+    {
+      "source": "packet/run_once.py:838-935",
+      "result": "Fresh exclusive output/persistent seal claim, one seal read/hash, self/payload verification and verified private copies before helper import remain. Original UTC deadline included in hashed context. One pinned inner guard invokes actual worker only after source-verified bootstrap; no fixture controller/doubles enter the production16-payload closure."
+    },
+    {
+      "source": "packet/build_and_check.py:91-111; packet/check_html.py",
+      "result": "Worker after validated ACK executes actual copied real node_modules/vitepress/bin/vitepress.js build, then private real HTML checker with sealed39-page expectations and generated dist. Real installed4454-entry dependencies/checker match consumed production baseline, not Q15/Q16 synthetic3-file tree/receipt writer."
+    },
+    {
+      "source": "packet/run_once.py:936-964",
+      "result": "Actual zero/PASS requires real checker passed, complete reader/config/source/dependency/runtime/context/payload postflight, observer quiescence and fresh final audit including retained handles. Failure/unavailable observations remain failed/UNKNOWN for independent actual resolution. Source offer itself supplies no HTML acceptance."
+    },
+    {
+      "source": "old consumed8ff packet and new preparation.json",
+      "result": "All16 maps verified. Only runner/worker differ;14 prior payloads and every nonpayload seal field unchanged. Sourcearchive34,037,760bytes and889 source-input map independently matched; runtime/guard and4454 actual dependency entry identities match. Old consumed seal/evidence are untouched; copied preparer is not invoked."
+    }
+  ],
+  "prerequisite_review_identities": [
+    {
+      "path": "observer-repair-source-confirmation.json",
+      "sha256": "79d508acbf14b7f8005501fe2f484a6cfee8d84d7e9f30033832f969853003fa",
+      "status": "clear_qualified_core_source"
+    },
+    {
+      "path": "observer-state01-result-review.json",
+      "sha256": "118f311858dcefad087d2060b3641dc364ffcc5448759160b03627e3299fb1d6",
+      "status": "accepted_scoped_actual_state_control_result"
+    },
+    {
+      "path": "observer-q15-result-review.json",
+      "sha256": "f3c3798435e7bd593641b3bcf1f1dfc05247c9b9427b77cc39a888fdab09588e",
+      "status": "accepted_scoped_actual_Q15_fixture"
+    },
+    {
+      "path": "observer-q16-result-review.json",
+      "sha256": "1b7ff3b3435f3f28b73e1ef60f7ecf960a3518d70d1c648f26a43f006fd73352",
+      "status": "accepted_scoped_actual_Q16_expected_failure"
+    }
+  ],
+  "findings": [],
+  "remaining_before_execution": [
+    "Separate P3 acceptance of preceding specific resource release and exact fresh production allocation plus free heavy-job slot are required. No live job/slot probe performed.",
+    "Recheck fresh output/claim and immutable input identities immediately before authorised one-shot launch; current absence is not a reservation.",
+    "Retain fresh seal/packet/preparation/request/review, exact command/terminal/raw output/costs and independent actual result/resource outcome on success or failure. No retry or publication.",
+    "Actual real39-page render/checker completion remains unperformed and requires complete acceptance; scoped fixture successes do not substitute."
+  ],
+  "actions": {
+    "only_production_offer04_command_review_json_written": true,
+    "candidate_helper_imports_preparer_execution_controls_replay_probes_signals_guard_build_site_validator": false,
+    "consumed_source_evidence_edits": false,
+    "commit": false
+  },
+  "limits": [
+    "Inert stdlib file/JSON/hash reads and Git archive bytes only. Lead preparation method is reported by preparation.json; this review validates resulting artifacts rather than claiming independent instrumentation of every preparation action.",
+    "All identities/absence checks are point-in-time. No empirical2-second query sufficiency or hard real-time OS scheduling/storage/signal guarantee.",
+    "Q16 runner UNKNOWN_HELD remains unchanged despite independent specific retained-scope resolution. Generic bootstrap/unseen historical descendant limits remain.",
+    "No actual book invocation, browser/hardware/whole-site or publication acceptance authorised or performed."
+  ]
+}

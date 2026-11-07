@@ -401,5 +401,23 @@
     "production_offer_preparation_eligible": true,
     "production_execution_allocated": false,
     "site_acceptance": false
+  },
+  "site_verification_production_offer04": {
+    "status": "SOURCE_INPUT_COMMAND_REVIEWED_PREPARED_UNRUN",
+    "summary": "site-verification/production-offer04-summary.json",
+    "seal_sha256": "68f1b1aaacf6a1f93c222ddb1f7b4c2862dbbb6982253c5d13bbf22a74763efd",
+    "exact_command": "site-verification/production-offer04/request.json",
+    "policy": {
+      "build_workers": 2,
+      "cleanup_reserved_seconds": 3,
+      "guard_limit_mb": 850,
+      "guard_wait_seconds": 0,
+      "minify": false,
+      "node_heap_mb": 450,
+      "retry": false,
+      "whole_invocation_max_seconds": 180
+    },
+    "actual_allocation": false,
+    "site_acceptance": false
   }
 }
