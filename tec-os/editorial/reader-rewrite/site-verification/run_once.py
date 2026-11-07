@@ -223,6 +223,7 @@ class InvocationState:
         intent = {'query_id': query_id, 'planned_budget': planned,
                   'cleanup_phase': cleanup_phase, 'last_success_id': self.last_success_id}
         launch_data = {}
+        launch_checked_budget = planned if planned <= 0 else None
         try:
             if planned <= 0:
                 self.request_stop('absolute-deadline', 'no identity query budget', 124)
@@ -230,6 +231,7 @@ class InvocationState:
             record('query-intent', **intent)
 
             def launch(spawn):
+                nonlocal launch_checked_budget
                 # Serialize the stop check/launch intent, not native Popen.
                 # While Popen is blocked there may be no returned handle yet.
                 with self.lock:
@@ -240,6 +242,7 @@ class InvocationState:
                         start = self.clock()
                         budget = query_budget(start, self.soft_deadline,
                                               self.deadline, cleanup_phase)
+                        launch_checked_budget = budget
                         if budget <= 0:
                             self.request_stop('absolute-deadline', 'query intent consumed remaining budget', 124)
                         if budget <= 0 or (self.stopping.is_set() and not cleanup_phase):
@@ -266,9 +269,13 @@ class InvocationState:
                 'elapsed_seconds': finished - launch_data.get('start', finished),
                 **launch_data}, 124)
             # Failure is latched and signalling awake before completion-log I/O.
+            # No launch means no effective execution budget or start timestamp.
+            # Preserve the separately recomputed budget even when stop refused it.
+            completion = {**launch_data,
+                          'effective_budget': launch_data.get('effective_budget', 0.0),
+                          'launch_checked_budget': launch_checked_budget}
             record('query-failed' if launch_data else 'query-not-launched',
-                   **intent, end=finished, outcome=type(error).__name__,
-                   **{'effective_budget': 0.0, **launch_data})
+                   **intent, end=finished, outcome=type(error).__name__, **completion)
             raise Failed('identity observation unavailable', 124) from error
 
     def register_child(self, child, argv):
