@@ -161,6 +161,8 @@ class InvocationState:
     def __init__(self, deadline, clock=time.monotonic):
         self.deadline, self.soft_deadline, self.clock = deadline, deadline - 3, clock
         self.lock = threading.RLock()
+        self.failure_lock = threading.RLock()
+        self.pending_failures = []
         self.stopping = threading.Event()
         self.signal_requested = threading.Event()
         self.failure = None
@@ -172,33 +174,41 @@ class InvocationState:
         self.query_id = 0
         self.acknowledged = False
 
-    def request_stop(self, stage, detail, code=124):
-        # Wake signalling even if another thread is in a launch/publication step.
-        self.signal_requested.set()
-        with self.lock:
+    def _adopt_pending(self):
+        # Caller holds both state and failure locks. The first queued identity
+        # already exists even if its requesting thread is waiting for state.lock.
+        if self.failure is None and self.pending_failures:
+            self.failure = self.pending_failures[0]
+
+    def _queue_stop(self, failure):
+        # No receipt/audit/ownership lock is required to retain the first cause.
+        # Final publication uses this same short latch lock.
+        with self.failure_lock:
             if self.final_code is not None:
                 return False
+            if failure not in self.pending_failures:
+                self.pending_failures.append(failure)
             self.stopping.set()
-            if self.failure is None:
-                self.failure = {'status': 'FAILED', 'stage': stage, 'detail': detail,
-                                'exit_code': code if 0 < code < 256 else 1,
-                                'retry': False, 'utc': datetime.now(timezone.utc).isoformat()}
-            return True
+            self.signal_requested.set()
+        with self.lock, self.failure_lock:
+            self._adopt_pending()
+        return True
+
+    def request_stop(self, stage, detail, code=124):
+        return self._queue_stop({
+            'status': 'FAILED', 'stage': stage, 'detail': detail,
+            'exit_code': code if 0 < code < 256 else 1, 'retry': False,
+            'utc': datetime.now(timezone.utc).isoformat()})
 
     def import_failure(self, failure):
         code = failure.get('exit_code')
         if not isinstance(code, int) or not 0 < code < 256:
             raise Failed('malformed worker first-failure receipt')
-        # Read/import before a generic guard failure, never overwrite an earlier
-        # parent latch. Cross-process conflicts are retained, not time-guessed.
-        self.signal_requested.set()
-        with self.lock:
-            if self.final_code is not None:
-                return
-            self.stopping.set()
-            if self.failure is None:
-                self.failure = dict(failure)
-            elif self.failure != failure:
+        # Import before a generic guard failure, never overwrite an earlier
+        # pending or latched parent cause. Preserve structured detail verbatim.
+        self._queue_stop(dict(failure))
+        with self.lock, self.failure_lock:
+            if self.final_code is None and self.failure != failure:
                 conflict = {'kind': 'failure-receipt-conflict',
                             'latched': self.failure, 'receipt': dict(failure)}
                 if conflict not in self.history:
@@ -222,7 +232,8 @@ class InvocationState:
             def launch(spawn):
                 # No record/receipt I/O under the stop/launch lock. The adapter
                 # spawns here, then waits/parses outside it, exactly once.
-                with self.lock:
+                with self.lock, self.failure_lock:
+                    self._adopt_pending()
                     if launch_data:
                         raise Failed('identity adapter attempted a second launch', 124)
                     start = self.clock()
@@ -271,7 +282,8 @@ class InvocationState:
 
     def publish_ack(self, prepare, publish):
         prepared = prepare()  # Durable file preparation outside the failure lock.
-        with self.lock:
+        with self.lock, self.failure_lock:
+            self._adopt_pending()
             if self.stopping.is_set() or self.clock() >= self.soft_deadline:
                 raise Failed('stop prevents ownership ACK', 124)
             publish(prepared)  # Atomic link only, no fsync/record operations here.
@@ -318,7 +330,11 @@ class InvocationState:
                 pass
 
     def decision(self, audit, observer_quiet):
-        with self.lock:
+        with self.lock, self.failure_lock:
+            self._adopt_pending()
+            if self.failure is None and self.stopping.is_set():
+                # A bare externally set stop is never acceptance evidence.
+                self.request_stop('pending-stop', 'stop set without a retained cause', 124)
             if self.failure is None:
                 if (not observer_quiet or audit is None or audit.get('status') != 'CLEAR'
                         or audit.get('remaining') != []):
@@ -458,7 +474,7 @@ def main():
             prepared = prepare_receipt(output / 'terminal.json', value)
             try:
                 import_worker_failure()
-                with state.lock:
+                with state.lock, state.failure_lock:
                     current = state.decision(audit, observer_quiet)
                     if current != code or canonical(state.failure) != failure_identity:
                         continue
@@ -531,7 +547,8 @@ def main():
                     return spawn(budget)
                 return launch(tracked_spawn)
             return ps_once(tracked_launch)
-        return state.query(query_once, event, cleanup_phase)
+        with audit_lock:
+            return state.query(query_once, event, cleanup_phase)
 
     def owned_unlocked(cleanup_phase=False):
         rows = process_rows(cleanup_phase)
