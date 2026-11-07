@@ -392,5 +392,14 @@
     "resource_verdict": "Specific retained Q15 scope resolved. Independent review recommends release of this invocation hold only; P3 records disposition.",
     "Q16": "Source eligible for separate allocation consideration, not executed",
     "site_acceptance": false
+  },
+  "site_verification_observer_q16_result": {
+    "status": "ACTUAL_EXPECTED_FAILURE_INDEPENDENTLY_REVIEWED",
+    "allocation": "KS47-OBSERVER-Q16-20261107",
+    "result": "site-verification/observer-q16-result.json",
+    "resource_verdict": "Specific Q16 retained native scope resolved. Independent review recommends release of this invocation hold only. Runner UNKNOWN_HELD remains unchanged; P3 records disposition.",
+    "production_offer_preparation_eligible": true,
+    "production_execution_allocated": false,
+    "site_acceptance": false
   }
 }

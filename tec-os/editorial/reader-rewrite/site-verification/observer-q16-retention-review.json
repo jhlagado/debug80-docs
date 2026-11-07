@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "review_kind": "independent_read_only_retention_check",
+  "verdict": "clear_within_retention_scope",
+  "retention_mismatches": [],
+  "source_commit": "fb36754c78a79c2622caf8c2189b73909c607004",
+  "original_work": "/private/tmp/tec-os-observer-q16-e7faf93e1680",
+  "archive": {
+    "path": "observer-q16/complete-evidence-and-inputs.tar.gz",
+    "bytes": 36696803,
+    "sha256": "098f719e6356c6df8a082c89f00ad445fe0673eba8154a8064833609978b4f14",
+    "members": 1077,
+    "raw_files": 951,
+    "raw_paths": 1043,
+    "frozen_inputs": 27
+  },
+  "external_receipt": {
+    "path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-observer-q16-external.json",
+    "sha256": "e7138823c6dfb57ca98907fdb61907ab71f4426b5d842e679817d478aec9b958",
+    "entries": 953,
+    "root_result_key": "result.json",
+    "allocation": "a7b86b83"
+  },
+  "checks": [
+    "All951 raw file lengths/hashes match retention inventory and all953 external receipt entries. External result.json denotes the original sibling .json, retained as fixture-result.json; this naming distinction is not a content mismatch.",
+    "Archive matches requested36696803 bytes/SHA and manifest, with exact complete path set and no duplicate/unexpected members. Every raw file byte, directory type, mode, uid/gid and mtime matches original; no original regular-file hardlinks/symlinks or tar link entries.",
+    "All27 source/input/profile copies equal manifest hashes, archive bytes and exact fb36754 Git blobs.",
+    "Fixture result, outer log, external terminal receipt and a7b86b83 allocation copy equal originals and archive members. Archived retention manifest matches loose copy.",
+    "Both snapshots are archive/external-hash bound, complete and object-exact in fixture-result identity_queries.",
+    "Accepted ACK/fixture-started/registry receipt hashes agree. Original ownership object, nonce-only injected receipt and injection evidence are unchanged. UNKNOWN_HELD audit equals the full fixture-result runner_audit and external disposition; independent audit remains a distinct unchanged receipt.",
+    "Actual private/fixture seals and candidate files match frozen binding runtime/guard/policy/Q16 profiles. This is identity retention only.",
+    "Full original inode/link/metadata/content inventory before and after read-only review is identical."
+  ],
+  "snapshots": [
+    {
+      "path": "independent-initial-snapshot.json",
+      "bytes": 71473,
+      "sha256": "35e75ee1fe1b803e8a6063317a8597cd8d1c26fbc030a7fb6401233055dcda66"
+    },
+    {
+      "path": "independent-final-snapshot.json",
+      "bytes": 71346,
+      "sha256": "347c25b1bc0245bad74be89a2ff791d2822f572bbfa10b9822af7331fa30887a"
+    }
+  ],
+  "ownership_receipts": {
+    "fixture-started.json": {
+      "bytes": 798,
+      "sha256": "6510338ac7d41be34b9601cd1d5a52c045bbaf6f62436fdf7511283b0d03a6a5"
+    },
+    "job-ack.json": {
+      "bytes": 163,
+      "sha256": "418531d4808c1b71cf13a2411b557c53df5ebf82416e6f76c7ccc3c6ec8d3356"
+    },
+    "job-ownership.json": {
+      "bytes": 422,
+      "sha256": "4bad096ed00cc698995187a51a72f8361d0f3d16af1761dddadf68f681e1c6ec"
+    },
+    "fixture-injection.json": {
+      "bytes": 380,
+      "sha256": "5f603dd06eec1c8aa5389aaaccb5354aade629f0fd8d1a23acf4d801d244762e"
+    },
+    "owned-process-audit.json": {
+      "bytes": 30958,
+      "sha256": "9eb581a5c46f032f8cd2793352384ffb885a3ecd1f882688098fbdcf4913ff25"
+    }
+  },
+  "dispositions": {
+    "runner": "UNKNOWN_HELD",
+    "independent": "RESOLVED_RETAINED_SCOPE"
+  },
+  "retained_manifests": {
+    "retention.json": {
+      "bytes": 184835,
+      "sha256": "b2632391625eb68270e8486bcda321bfd207fcf0c1370f05a84a40e3fac15b33"
+    },
+    "archive-manifest.json": {
+      "bytes": 216,
+      "sha256": "60044e8793cb23d61c079a10135964b1792c46edce9501d4a506cc2722d6ff38"
+    },
+    "fixture-result.json": {
+      "bytes": 177045,
+      "sha256": "c03805ff65ec9b32e509930baf3a9a6cc3e12b0c2ea292d07e600e3e526c7d2d"
+    },
+    "outer.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "external-terminal.json": {
+      "bytes": 183642,
+      "sha256": "e7138823c6dfb57ca98907fdb61907ab71f4426b5d842e679817d478aec9b958"
+    },
+    "allocation.md": {
+      "bytes": 2417,
+      "sha256": "3c4b85f1ff0417a7b6e2cb369e7e1aaabd33701567b5348fa959f8a79d864dd6"
+    }
+  },
+  "scope_limits": "Retention/input-profile identity only. Hooke handles actual result/resource predicates. No site acceptance or universal process closure inferred.",
+  "preservation": "Only observer-q16-retention-review.json written. Original evidence and historical SITE03/48 artifacts untouched.",
+  "not_performed": [
+    "candidate imports",
+    "replay",
+    "probes",
+    "signals",
+    "guard execution",
+    "builds",
+    "site invocation",
+    "validator runs",
+    "archive extraction",
+    "commits"
+  ]
+}

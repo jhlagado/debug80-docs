@@ -1,0 +1,332 @@
+{
+  "schema": 1,
+  "status": "accepted_scoped_actual_Q16_expected_failure",
+  "resource_verdict": "Specific Q16 retained native fixture scope is resolved; recommend release/closure of this invocation resource hold only. Runner UNKNOWN_HELD remains unchanged.",
+  "allocation_authority": {
+    "commit": "a7b86b83",
+    "path": "studies/p3-tec-os/reviews/book-observer-q16-allocation.md",
+    "allocation": "KS47-OBSERVER-Q16-20261107",
+    "reading": "Separate exact Q16 fixture allocation after Q15 release. Controller0 requires exact runner124 typed post-ACK hash failure and separate retained-scope resolution; no retry or production execution allocated."
+  },
+  "external_terminal": {
+    "receipt_path": "/Users/johnhardy/projects/origo/studies/p3-tec-os/evidence/book-observer-q16-external.json",
+    "receipt_sha256": "e7138823c6dfb57ca98907fdb61907ab71f4426b5d842e679817d478aec9b958",
+    "session": 89504,
+    "controller_exit_code": 0,
+    "provenance": "Supplied retained root external receipt and terminal account; no session probe or replay here."
+  },
+  "actual_result": {
+    "path": "/private/tmp/tec-os-observer-q16-e7faf93e1680.json",
+    "sha256": "c03805ff65ec9b32e509930baf3a9a6cc3e12b0c2ea292d07e600e3e526c7d2d",
+    "status": "EXPECTED_FIXTURE_OUTCOME",
+    "runner_exit": 124,
+    "terminal": {
+      "detail": "command exited 1",
+      "elapsed_seconds": 1.806913625,
+      "exit_code": 124,
+      "first_failure": {
+        "detail": {
+          "expected_sha256": "79372cbaf100ddbb2cc1fef6140e4ebac2b71557d9b165a603327fbff02ffd3a",
+          "message": "job ownership receipt hash mismatch",
+          "observed_sha256": "4bad096ed00cc698995187a51a72f8361d0f3d16af1761dddadf68f681e1c6ec"
+        },
+        "exit_code": 124,
+        "retry": false,
+        "stage": "identity-observation",
+        "status": "FAILED",
+        "utc": "2026-11-07T05:04:51.937168+00:00"
+      },
+      "retry": false,
+      "seal_sha256": "567506ab106fa9a00c80e1ce799f6aae58eed158f6de788150ca8db04e125893",
+      "status": "FAILED"
+    },
+    "first_failure": {
+      "detail": {
+        "expected_sha256": "79372cbaf100ddbb2cc1fef6140e4ebac2b71557d9b165a603327fbff02ffd3a",
+        "message": "job ownership receipt hash mismatch",
+        "observed_sha256": "4bad096ed00cc698995187a51a72f8361d0f3d16af1761dddadf68f681e1c6ec"
+      },
+      "exit_code": 124,
+      "retry": false,
+      "stage": "identity-observation",
+      "status": "FAILED",
+      "utc": "2026-11-07T05:04:51.937168+00:00"
+    },
+    "runner_audit_status": "UNKNOWN_HELD",
+    "runner_remaining": null,
+    "runner_clear": false,
+    "runner_direct_handles": [],
+    "independent_audit_status": "RESOLVED_RETAINED_SCOPE",
+    "retry": false,
+    "book_acceptance": false
+  },
+  "typed_injection": {
+    "original_ack_ownership_sha256": "79372cbaf100ddbb2cc1fef6140e4ebac2b71557d9b165a603327fbff02ffd3a",
+    "actual_tampered_file_sha256": "4bad096ed00cc698995187a51a72f8361d0f3d16af1761dddadf68f681e1c6ec",
+    "expected_hash_independently_reproduced": "79372cbaf100ddbb2cc1fef6140e4ebac2b71557d9b165a603327fbff02ffd3a",
+    "original_raw_provenance": "Original write-once file was replaced by the intentional injection. ACK, fixture-started and candidate memory/history bind its accepted SHA. Independently serialising retained Python ack-group payload under the source-defined canonical format reproduces that SHA; this is explicitly a reconstruction, not an unmodified original raw file claim.",
+    "semantic_diff": "Only nonce value differs between retained original declaration and parsed replacement: append-fixture-corruption. Node reserialisation may change lexical numeric2.0 to2; no claim that only one raw byte span changed.",
+    "fixture_injection": {
+      "scope": "UNQUALIFIED_PUBLIC_RUNNER_FIXTURE_NOT_BOOK_ACCEPTANCE",
+      "case": "Q16",
+      "changed_field": "nonce",
+      "old": "99007245bf95c5719ad9f8494b090fade79b411141d99fd76a3d65a16a2c5ac8",
+      "new": "99007245bf95c5719ad9f8494b090fade79b411141d99fd76a3d65a16a2c5ac8-fixture-corruption",
+      "after_ack": true,
+      "original_ownership_sha256": "79372cbaf100ddbb2cc1fef6140e4ebac2b71557d9b165a603327fbff02ffd3a"
+    },
+    "original_context_nonce_and_hash_bound": true,
+    "accepted_memory_hash_matches_ACK": true,
+    "exact_failure_detail_verified": true,
+    "first_failure_not_replaced_by_later_guard_exit1": true,
+    "checker_and_validate_phase_absent": true
+  },
+  "resource_review": {
+    "known_pids": [
+      12717,
+      12719,
+      12720,
+      12721,
+      12722,
+      12723,
+      12724,
+      12725,
+      12726,
+      12727,
+      12728,
+      12729,
+      12730,
+      12738,
+      12743,
+      12745,
+      12746,
+      12747,
+      12755,
+      12771,
+      12772
+    ],
+    "scope_groups": [
+      12717,
+      12719,
+      12720,
+      12721,
+      12722,
+      12723,
+      12724,
+      12725,
+      12726,
+      12727,
+      12728,
+      12729,
+      12730,
+      12738,
+      12745,
+      12747,
+      12755,
+      12771,
+      12772
+    ],
+    "runner_pid": 12717,
+    "guard_pid": 12727,
+    "worker_pid_and_group": 12738,
+    "worker_birth_UTC_C": "Sat Nov  7 05:04:51 2026",
+    "stub_pid": 12746,
+    "snapshots": [
+      {
+        "name": "initial",
+        "sha256": "35e75ee1fe1b803e8a6063317a8597cd8d1c26fbc030a7fb6401233055dcda66",
+        "rows": 569,
+        "pid": 12718,
+        "environment": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "TZ": "UTC"
+        },
+        "budget_seconds": 0.5,
+        "elapsed_controller_local_seconds": 0.01857308399999999,
+        "outcome": "OK",
+        "reap": "REAPED",
+        "raw_stdout_sha256_recorded": "69b40a7301af9309f2a38e291d38ff9b50f2884838c42dbb510357cf4f588036"
+      },
+      {
+        "name": "final",
+        "sha256": "347c25b1bc0245bad74be89a2ff791d2822f572bbfa10b9822af7331fa30887a",
+        "rows": 568,
+        "pid": 12773,
+        "environment": {
+          "LANG": "C",
+          "LC_ALL": "C",
+          "TZ": "UTC"
+        },
+        "budget_seconds": 0.5,
+        "elapsed_controller_local_seconds": 0.018844791999999888,
+        "outcome": "OK",
+        "reap": "REAPED",
+        "raw_stdout_sha256_recorded": "84913b193742d31167313aa6200a8a826ff3cbd308d753f0bbc21454613ac345"
+      }
+    ],
+    "independently_recomputed_remaining": [],
+    "controller_handles": [
+      {
+        "argv": [
+          "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/bin/python3.9",
+          "-I",
+          "-S",
+          "-B",
+          "/private/tmp/tec-os-observer-q16-e7faf93e1680/fixture-packet/run_once.py",
+          "--packet",
+          "/private/tmp/tec-os-observer-q16-e7faf93e1680/fixture-packet",
+          "--seal-sha256",
+          "567506ab106fa9a00c80e1ce799f6aae58eed158f6de788150ca8db04e125893",
+          "--output",
+          "/private/tmp/tec-os-observer-q16-e7faf93e1680/actual-public-output",
+          "--allocation",
+          "KS47-OBSERVER-Q16-20261107",
+          "--deadline-utc",
+          "2026-11-07T05:05:45.454304+00:00"
+        ],
+        "pid": 12717,
+        "returncode": 124
+      },
+      {
+        "argv": [
+          "/bin/ps",
+          "-axo",
+          "pid=,ppid=,pgid=,lstart="
+        ],
+        "pid": 12718,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "/bin/ps",
+          "-axo",
+          "pid=,ppid=,pgid=,lstart="
+        ],
+        "pid": 12773,
+        "returncode": 0
+      }
+    ],
+    "all_retained_handles_reaped": true,
+    "independent_scope_audit_sha256": "27e5c9dfd4ae008122722499f49b05ede8182ef36ed926019ee31cb66e2c4823",
+    "runner_audit_sha256": "9eb581a5c46f032f8cd2793352384ffb885a3ecd1f882688098fbdcf4913ff25",
+    "reading": "Valid original ACK and source-defined binding precede deliberate corruption. Actual guard TERM-handler end and runner reap are retained. Independent successful UTC/C snapshots plus original identities, candidate known history/roots/groups and snapshot ancestry/group closure yield no remaining retained-scope member. This resolves the specific observed invocation, not an arbitrary empty array or universal cleanup.",
+    "preserved_unknown": "Runner final global query succeeded, but interpreting its corrupted ownership declaration still fails integrity; final audit correctly remains UNKNOWN_HELD/remaining null/clear false. Independent later scope resolution does not relabel that audit CLEAR."
+  },
+  "cost_and_profile": {
+    "controller_elapsed_seconds": 2.042504,
+    "runner_elapsed_seconds": 1.806913625,
+    "controller_deadline_exceeded": false,
+    "guard_start": {
+      "name": "tec-os-reader-site",
+      "command": "python3.9 -S -B build_and_check.py --context context.json",
+      "limitMB": 850,
+      "heapMB": 450,
+      "event": "start",
+      "at": "2026-11-07T05:04:51.709Z",
+      "freePercent": 32,
+      "load": 1.41,
+      "waitedSeconds": 0
+    },
+    "guard_end": {
+      "name": "tec-os-reader-site",
+      "command": "python3.9 -S -B build_and_check.py --context context.json",
+      "limitMB": 850,
+      "heapMB": 450,
+      "event": "end",
+      "at": "2026-11-07T05:04:51.950Z",
+      "outcome": "guard stopped by SIGTERM",
+      "code": null,
+      "peakMB": 9,
+      "processes": 1,
+      "seconds": 0.2,
+      "freePercentAtEnd": 32
+    },
+    "controller_seconds": 60,
+    "candidate_cutoff_from_controller_entry_seconds": 55,
+    "postflight_seconds_within_same_controller": 5,
+    "outer_guard": false,
+    "inner_policy": {
+      "build_workers": 2,
+      "cleanup_reserved_seconds": 3,
+      "guard_limit_mb": 850,
+      "guard_wait_seconds": 0,
+      "minify": false,
+      "node_heap_mb": 450,
+      "retry": false,
+      "whole_invocation_max_seconds": 180
+    },
+    "reading": "Actual guard0.2s, sampled9MB and one observed process; controller2.042504s, runner1.806913625s. Guard code is null with stopped-by-SIGTERM outcome, not successful guard0. Counts/peak are sampled guard scope, not a whole controller/process census or whole-job peak. The2s ordinary budget is not empirically qualified for real compilation by this short fixture."
+  },
+  "input_source_and_postflight": {
+    "offered_commit": "fb36754c78a79c2622caf8c2189b73909c607004",
+    "fixture_binding_sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+    "controller_sha256": "9df4ae6ade0d6812205a73ff1a58e37c665a8aaf4bebc92e3fd050c52a4cbc23",
+    "fixture_seal_sha256": "567506ab106fa9a00c80e1ce799f6aae58eed158f6de788150ca8db04e125893",
+    "current_consumed_source_checks": [
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/public_observer_fixture.py",
+        "sha256": "9df4ae6ade0d6812205a73ff1a58e37c665a8aaf4bebc92e3fd050c52a4cbc23",
+        "postflight_equals_offered_fb36754": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/fixture-inputs.json",
+        "sha256": "e7faf93e1680459964fd8c14069562d756f021dadf2f0640971c74461b978e2c",
+        "postflight_equals_offered_fb36754": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/run_once.py",
+        "sha256": "076c0902b966dd0359ac7779dc0820bc09cb1fb134d0c94523e0e95b9506a2d5",
+        "postflight_equals_offered_fb36754": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/build_and_check.py",
+        "sha256": "7415113d8a2292120abcafe5ad891baa7d32a99147d6117541e88bc3f1e190cc",
+        "postflight_equals_offered_fb36754": true
+      },
+      {
+        "path": "tec-os/editorial/reader-rewrite/site-verification/packet_inputs.py",
+        "sha256": "8afe1fc38aa338a79c06c328ead63408c35858b477dee52ae43cf2e6c708b504",
+        "postflight_equals_offered_fb36754": true
+      }
+    ],
+    "both_fixture_and_private_packet16_payload_maps_match_seal": true,
+    "runtime_guard_current_bytes_match_binding": true,
+    "retained_source_archive_hash_matches_binding": true,
+    "retained889_file_source_input_map_rehashed": true,
+    "synthetic_original_and_copied3_file_dependencies_match": true,
+    "successful_runner_source_after_receipt_exists": false,
+    "reading": "Expected failure occurs before ordinary successful source/input postflight; no source-after receipt or successful production postflight is asserted. This review independently rehashed retained889 inputs and synthetic dependencies at review time, checked both packet copies, runtime/guard pins and unchanged offered current source. Fixture-only Node/checker sources remain explicit; actual VitePress/HTML checker never ran."
+  },
+  "retention": {
+    "external_manifest_entries": 953,
+    "all_sizes_and_hashes_match": true,
+    "entire_work_tree_file_set_matches": true,
+    "sibling_aliases": "external result.json maps to work.json sibling; outer.log maps to work.outer.log sibling.",
+    "outer_log_bytes": 0,
+    "scope": "Complete raw archive creation/immutable source bundle remains with lead; no unseen archive identity is invented."
+  },
+  "findings": [],
+  "production_offer_preparation": {
+    "eligible": true,
+    "reading": "Within the stated parent permission, accepted state01/Q15/Q16 reviews satisfy the focused-control prerequisites for preparing a fresh production offer/seal/input review. No old consumed seal becomes reusable.",
+    "actual_execution_authorised": false,
+    "still_required": [
+      "Freeze and independently review fresh production payload/seal/source/dependency/runtime/guard identities and exact fresh command/paths.",
+      "Obtain a separate explicit allocation before any actual39-page render/checker invocation.",
+      "Actual production acceptance still requires exit0/PASS, complete real checker result, unchanged inputs and independently resolved process outcome. Fixture result supplies none of the HTML/link/fence acceptance."
+    ]
+  },
+  "actions": {
+    "only_observer_q16_result_review_json_written": true,
+    "imports_replays_probes_signals_guard_build_site_validator": false,
+    "source_or_consumed_evidence_changes": false,
+    "commit": false
+  },
+  "limits": [
+    "Specific registered/observed native fixture scope only. No generic pre-ACK, unseen detached/reparented descendant or universal historical cleanup guarantee.",
+    "Snapshots retain parsed full rows and raw stdout hashes; formatted stdout hash is not independently reconstructed. No raw monotonic values compared across processes.",
+    "No timeout/deadline/resource exhaustion substituted for the precise Q16 receipt-integrity failure. No historical failed run is retroactively passed.",
+    "No actual book run, browser/hardware check, publication, new controls or automatic successor authorised or performed by this review."
+  ]
+}
