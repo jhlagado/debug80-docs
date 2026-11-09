@@ -113,8 +113,8 @@ not proof that a ROM byte changed.
 Ordinary TEC-OS tests assert an empty violations list. The diagnostics tests
 deliberately exercise ROM and overlay writes and check their recorded
 locations instead (`test/system.test.mjs:14`, `test/diag.test.mjs:78-90`).
-At the inspected source, 28 top-level test files contain violation checks
-outside the diagnostics file. This is a source inventory, not 28 passing
+At the inspected source, 29 top-level test files contain violation checks
+outside the diagnostics file. This is a source inventory, not 29 passing
 test files and not a guarantee about unexercised program paths.
 
 A second watch covers EXPAND 1 after cold boot's clear. Writes to
@@ -320,7 +320,7 @@ does not make them a current screen result.
 
 The package test command selects top-level `test/*.test.mjs` files with
 Node's test runner and concurrency set to one (`package.json:18`). A Git-tree
-inventory at `962853f` contains 61 matching files, from arith.test.mjs through
+inventory at `a1023bd` contains 59 matching files, from arith.test.mjs through
 write.test.mjs. That is a source-only file count. It does not count test cases,
 executed files or successful assertions.
 
@@ -359,12 +359,14 @@ as described in Chapter 26. A missing test input is skipped unless STRICT=1
 makes it fail. A hash mismatch is a failure, not a reason to try another
 candidate (`test/lib/inputs.mjs:24-41`, `package.json:19`).
 
-The browser tests use Chromium through Playwright, pinned at 1.62.1.
-The README lists `npx playwright install chromium` separately after host
-setup. The dependency test checks the declared and locked versions and
-that documented install (`package.json:29`, `test/deps.test.mjs:15-27`).
-A run record must identify the installed browser and actual test outcome.
-Dependency declarations alone establish neither.
+No test in the repository drives a browser. The page's browser tests
+moved to the TEC-OS Viewer, which owns the page. Playwright stays pinned
+at 1.62.1 so that Chromium can be driven against the local page that
+`npm start` serves. The README gives `npx playwright install chromium` for
+that browser. The dependency test checks the declared and locked versions and
+that documented install (`README.md:73-77`, `package.json:29`,
+`test/deps.test.mjs:15-27`). A run record must identify the installed browser
+and actual outcome. Dependency declarations alone establish neither.
 
 ## The browser as another caller
 

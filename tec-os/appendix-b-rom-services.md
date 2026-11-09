@@ -58,8 +58,8 @@ routine addresses (`src/rom.asm:12-18`, `src/services.asm:23-56`).
 
 C selects the number. B, DE and HL carry the documented arguments. A is never an
 input because selection uses it. Except for FIND and LIST, success returns A = 0
-with Z set and carry clear. Failure returns a nonzero status with carry set. The
-requested operation has not been applied. MOUNT/UNMNT can nevertheless have
+with Z set and carry clear. Failure returns a nonzero status with carry set. What a
+refusal leaves changed depends on the service. MOUNT/UNMNT, for example, can have
 written or dropped cache lines before refusing the drive change, as their
 section explains (`src/abi.inc:32-66`, `src/services.asm:58-72`,
 `src/volsvc.asm:211-240,276-323`).
@@ -137,7 +137,7 @@ adds 17 T-states. Their retained model provenance is:
 
 The RTC set figure is an instruction adjustment to an earlier measurement, not a
 newly measured total. No cost was recorded here for services 9–14. None of these
-figures is a timing or stack measurement at 962853f.
+figures is a timing or stack measurement at a1023bd.
 
 ## The hardware services
 
@@ -424,7 +424,7 @@ address and A = generation or carry set past the end. Stack bound: 8 bytes
 ## The PICO record
 
 When the ROM PICO console starts at cold boot it publishes the permanent
-registry tail `PICO`, version 3, in PIBLK. UNLOAD removes resident owners rather
+registry tail `PICO`, version 4, in PIBLK. UNLOAD removes resident owners rather
 than that tail (`src/pico.asm:19-68`, `src/loader.asm:83-130`). The historical
 `78127ec` layout in Appendix C places the table at `BBE3h`. That is a layout
 coordinate, not a fixed ABI address. Programs obtain the table through FIND. Its
@@ -453,6 +453,14 @@ for reselection so the next console call clears its screen at that width
 Debugger offsets from the table are PICOVRB = 36 for the record version, PICOTPD
 = 41 for the drawn page and PICOTPS = 42 for the shown page
 (`src/ram.asm:75-99`). These are state bytes rather than routine entries.
+
+Version 4 adds no entry and keeps these offsets. It reserves VRAM
+`3000h–37FFh` from console writes at every width, though those pixels need not
+survive a width change. While the caller holds the claim, a PICOREG write to
+register 1 records its interrupt-enable bit. Mode restoration and release keep
+that bit and warm boot clears it. Writes made directly to the ports are not
+recorded. A client that needs only the width can still accept version 3
+(`src/abi.inc:260-319`, `src/pico.asm:198-233`, `src/pico.asm:299-359`).
 
 VTEST is a retained historical program. It finds a version-2-or-later PICO
 record, claims the chip, writes four bytes to VRAM, reads them back, releases it
@@ -530,7 +538,7 @@ Thorium `dbee66a`, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. That run
 obtained the PICO record from the then-loaded PICO.SVC rather than the later ROM
 console. It is a historical host-model VRAM round trip, not a run of the
-current 962853f source or a physical-board result. The recipe assumes the
+current a1023bd source or a physical-board result. The recipe assumes the
 earlier service chapter's `svc.img`, ABI.INC and HWLIB.ASM preparation:
 
 <!-- node tools/tecvol.mjs put svc.img B vtest.asm --text; node tools/capture.mjs --card svc.img --board pico B: "TAS VTEST" VTEST -->

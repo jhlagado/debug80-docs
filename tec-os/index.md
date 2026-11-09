@@ -9,6 +9,8 @@ nav_exclude: true
 
 <!-- Opening profile: KD-243 / KS48, TEC Compact at 40 columns.
      Selected mechanism source962853f, tested8b8664a.
+     C16 release recheck: reader source citations now use release-1
+     TEC-OS a1023bd; release TED.COM is Thorium 168e89c (75fd6c64).
      Public workflows accepted by Origo review4b5b5a50 from attempt02/e77c7ef0.
      Bounded opening craft/factual reviews closed d9d57d2/b911e84.
      That whole batch remains FAILED. Later service controls are separate.

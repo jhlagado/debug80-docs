@@ -91,7 +91,7 @@ function 10 returns to the CCP. Only afterwards does `MLTAKE` convert each
 piece's letters to capitals (`src/cpm/bdos.asm:665-666`,
 `src/cpm/ccp.asm:232-247`). The transcripts here were recorded on TEC-OS
 `78127ec`. They retain that historical build's output, separate from the
-source checks at `962853f`. In this PICO9918 screen capture, recalling `con`
+source checks at `a1023bd`. In this PICO9918 screen capture, recalling `con`
 preserves the small letters:
 
 <!-- node tools/capture.mjs --board pico --screen con "@start "$'\x17' -->

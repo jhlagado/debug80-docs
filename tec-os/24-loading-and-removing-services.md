@@ -450,7 +450,7 @@ counted above their no-service base use (`src/tables.asm:139-144`).
 measurements, limits and reserved quarter-stack margin. The loader sums
 header declarations rather than measuring a callback's use.
 
-At `962853f`, GLCD declares 2, 0 and 6 bytes, taking the whole CCP
+At `a1023bd`, GLCD declares 2, 0 and 6 bytes, taking the whole CCP
 allowance (`drivers/glcd.asm:31-35`). COUNT's additional 2 then cannot
 fit. With PICO active the startup GLCD installation fails quietly, leaving
 COUNT's allowance available. The ROM PICO console is part of the base,

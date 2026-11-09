@@ -39,7 +39,7 @@ BIOS table, outside the `CPMINIT` clear. The 16-bit return code `PRGCODE`
 is in that upper block too (`src/ram.asm:298-307`, `src/ram.asm:378-379`).
 
 The earlier map at `78127ec` placed these boundaries as follows. These are
-historical map figures, separate from the source inspection at `962853f`:
+historical map figures, separate from the source inspection at `a1023bd`:
 
 | Item | Historical location or size |
 | --- | --- |

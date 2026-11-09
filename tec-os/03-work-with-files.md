@@ -79,8 +79,10 @@ last row rather than scrolling the whole listing away. A long text line that
 wraps at the right edge uses more than one screen row. The prepared 40-column
 PICO console shows 23 rows of listing before the pause.
 
-These 24 rows are the complete first paused screen of the supplied source. The
-command echo has already scrolled away:
+These 24 rows are the complete first paused screen of the source supplied with
+the tested build. The command echo has already scrolled away. The release-1
+SAMPLE.ASM sets its equates and data in aligned columns with whole-sentence
+comments, so its screens differ from these two excerpts row by row:
 
 <!-- Actual retained fixture input: TYPE A:SAMPLE.ASM!USER 1 followed by CR.
      Do not relabel the full fixture as plain TYPE A:SAMPLE.ASM.
@@ -168,7 +170,8 @@ A>
 ```
 
 The count after `COPIED` is hexadecimal. Here `0028` means 40 records of
-128 bytes. The source on A remains in place. `TYPE B:SAMPLE.ASM` reads the
+128 bytes. The release-1 SAMPLE.ASM is shorter. On the starter card it occupies
+4,485 bytes with its line ends and end marker, which is 36 records, `0024`. The source on A remains in place. `TYPE B:SAMPLE.ASM` reads the
 new copy without changing the current drive.
 
 REN changes a name on the same drive. Its form is `REN NEW=OLD`, with the new

@@ -239,7 +239,7 @@ The complete list gives each test's name and TBEGIN title. A title describes
 the operation under test, not a passing result (`diag/out.asm:649-674`).
 T01's result is emitted by the main sequence (`diag/main.asm:60-66`).
 
-<!-- Test title definitions at 962853f:
+<!-- Test title definitions at a1023bd:
 (`diag/memory.asm:148-158`, `201-260`, `316-350`,
 `403-454`, `499-500`, `607-608`, `diag/display.asm:6-7`, `63-64`,
 `285-286`, `406-407`, `746-747`, `851-852`, `909-910`,

@@ -360,7 +360,9 @@ card receives that flag.
 A file's read-only attribute is separate. It prevents writing, renaming
 or erasing that file and gives `File R/O`. It does not hide the file from
 `DIR`. The system attribute controls that omission. The PC card tool can set
-file attributes and a program can change them through the BDOS.
+file attributes and a program can change them through the BDOS. TED checks
+the attribute before it saves. A save over a read-only file shows
+`Save failed 16` on its status row and keeps your text in the editor.
 
 A program can also make the current drive read-only temporarily. The next
 warm boot clears that temporary state. A volume

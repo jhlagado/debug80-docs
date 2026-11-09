@@ -205,7 +205,7 @@ entry. They finish at `MAINLOOP` or at `STARTED`, which adds a new line first
 ## The built-in handlers
 
 The handlers use the same FCB and DMA interfaces as a disk program. This
-table locates their implementations at `962853f`. Appendix J gives syntax
+table locates their implementations at `a1023bd`. Appendix J gives syntax
 and [Appendix D](appendix-d-error-messages.md) gives recovery from messages.
 
 | Command | Routine | Source |

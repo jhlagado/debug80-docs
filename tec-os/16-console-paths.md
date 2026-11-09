@@ -549,11 +549,16 @@ enabled, `PISTART` copies `PITPL` into the BIOS workspace's `PIBLK`,
 sets 40 columns and installs its address in `PIVEC`
 (`src/tms.asm:13-41`, `src/video.asm:18-24`, `src/pico.asm:53-68`).
 With the switch disabled or a failed probe, serial remains the console.
+A chip that answers the probe with the switch disabled gets no console
+table. Boot's `PIICLR` writes `80h` to its register 1, which leaves its
+display blanked (`src/pico.asm:323-359`).
 
 `TMSW` supports 80, 40 and 32 columns, all with 24 rows. It selects the
 register template, name-table address and row-address table for that width.
-`PIBLK` also contains the permanent registry-tail record `PICO`, version 3.
-A program finds it with `TNFIND`. `CON` changes width through `PICOWID`
+`PIBLK` also contains the permanent registry-tail record `PICO`, version 4.
+A program finds it with `TNFIND`. Version 4 keeps version 3's table and
+state offsets. It also reserves VRAM `3000h–37FFh` from console writes at
+every width (`src/abi.inc:260-319`). `CON` changes width through `PICOWID`
 at offset 24 in its table. Width changes are rejected while the PICO is
 claimed (`src/pico.asm:19-42`, `src/pico.asm:81-152`,
 `src/cpm/ccpcmd.asm:130-167`, `src/abi.inc:260-270`).

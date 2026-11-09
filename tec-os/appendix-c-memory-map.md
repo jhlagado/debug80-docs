@@ -24,7 +24,7 @@ profile was `tecos`. The starter card mounted G1M on A and G8M on B with no
 service installed unless a row says otherwise. The resident workspace addresses
 came from `build/tecos/tecos.d8.json`.
 
-Current field meanings and code contracts below use `962853f`. Later builds
+Current field meanings and code contracts below use `a1023bd`. Later builds
 require their own symbol files for build-dependent addresses.
 
 ## The CPU's address space
@@ -89,7 +89,7 @@ The historical `78127ec` ROM occupied these ranges:
 
 In that build the CCP's three files occupied `DD2Ah–E702h`, 2,521 bytes.
 The BDOS's six files occupied `E703h–F608h`, 3,846 bytes. The source at
-`962853f` includes four CCP files, including `cpm/ccpmut.asm`, then six
+`a1023bd` includes four CCP files, including `cpm/ccpmut.asm`, then six
 BDOS files (`a1023bd:src/rom.asm:31-40`).
 
 The ROM copy of the BIOS jump table is data at `BIOSBAS`. Cold boot copies
@@ -148,7 +148,7 @@ the RAM BIOS table (`a1023bd:src/layout.asm:64-69`, `a1023bd:src/abi.inc:291-293
 ## The resident workspace
 
 The following tables retain every address and size from the historical
-`78127ec` starter layout. Field descriptions use the `962853f` declarations
+`78127ec` starter layout. Field descriptions use the `a1023bd` declarations
 and their clearing paths. A row's clearing column names the boot sweeps that
 reach it. Other routines can still overwrite a retained field.
 
@@ -303,7 +303,7 @@ successful INIT sets it to 0 (`a1023bd:src/loader.asm:412-430`).
 
 ## EXPAND 1
 
-These fixed bank addresses hold the cache and history at `962853f`. They
+These fixed bank addresses hold the cache and history at `a1023bd`. They
 also occur in the historical map (`a1023bd:src/layout.asm:32-42`,
 `a1023bd:src/history.asm:16`):
 

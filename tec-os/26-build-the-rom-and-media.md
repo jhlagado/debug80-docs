@@ -30,7 +30,7 @@ generator and the ROM size/hash against the census
 
 The host setup in [Chapter 5](05-cards-on-the-pc.md) is the starting point.
 The build adds the pinned assembler host described below. These procedures
-explain the source at `962853f`. The numerical image and HELLO examples
+explain the release-1 source at `a1023bd`. The numerical image and HELLO examples
 retain their separate historical evidence.
 
 ## Prepared tools and selected assembler
@@ -95,7 +95,9 @@ code follow, with a single free gap at the end (`src/reset.asm:1-13`,
 | `FE92h–FFFFh` | 366 | Free |
 
 Its used extent was 16,018 of 16,384 bytes. These figures describe that
-historical image, not newly measured positions at `962853f`. The census
+historical image, not positions in the release-1 image. The map that the
+`a1023bd` media step generated records 16,071 bytes used and 313 free, with
+code ending at `FEC6h` (`docs/memory-map.md:1-30`). The census
 stores each region's start and exclusive end while the table above prints
 the last occupied address (`tools/build.mjs:273-288`).
 

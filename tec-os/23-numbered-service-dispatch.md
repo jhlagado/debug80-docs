@@ -77,7 +77,7 @@ The historical `78127ec` code account below totals 480 bytes for the
 dispatcher, its exits, the nine hardware services and the font's access
 routine. It excludes the font data and the other numbered routines.
 These are retained build figures, separate from the source checks at
-`962853f`.
+`a1023bd`.
 
 | Number | Name | Routine | Bytes at `78127ec` |
 | ---: | --- | --- | ---: |
@@ -221,11 +221,12 @@ fourth word at offset 6 and calls the restore routine through `VHLJP`
 
 The restore routine reinstates the mode, font and displayed page. Release also
 clears the screen and homes the cursor when the PICO9918 is the console
-(`src/pico.asm:198-274`, `src/services.asm:225-232`). Warm boot calls `HWVREL`
-before `PZINIT`. With the ROM console's table present, that restore disables the
-chip's interrupt, wired as a non-maskable interrupt (NMI) on the board, before
-page zero is rebuilt (`src/boot.asm:133-138`, `src/pico.asm:211-233`,
-`src/pico.asm:641-643`). A program's claim ends with its exit.
+(`src/pico.asm:198-274`, `src/services.asm:225-232`). Warm boot calls `PIICLR`
+and then `HWVREL` before `PZINIT`. `PIICLR` clears the tracked interrupt-enable
+bit and writes register 1 with the chip's interrupt off, so the interrupt is off
+before page zero is rebuilt. A restore during a claim keeps a tracked enable bit
+that the program set through `PICOREG` (`src/boot.asm:128-138`,
+`src/pico.asm:211-233`, `src/pico.asm:323-359`, `src/pico.asm:641-643`). A program's claim ends with its exit.
 
 `PUTAT` writes through the selected video driver while leaving the console
 cursor position unchanged. Its first test is `VTOWN`, followed by the low

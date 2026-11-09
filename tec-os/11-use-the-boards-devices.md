@@ -721,9 +721,9 @@ active claim does nothing and returns status 0.
 When the ROM PICO console started, it also registered a named PICO record. That
 record supplies the graphics entry table listed in Appendix B. The register,
 fill, write and read entries require a claim. Programs obtain the table through
-the registry rather than fixed internal ROM addresses. The inspected ABI
-describes version 3, including a width entry that instead requires an unclaimed
-display.
+the registry rather than fixed internal ROM addresses. The release ABI
+describes version 4. It keeps version 3's width entry, which instead requires an
+unclaimed display.
 
 FONT, number 15 in ABI 5.1, returns the ROM console font address in HL. It
 contains 96 characters from `20h`, each eight bytes with the top row first.

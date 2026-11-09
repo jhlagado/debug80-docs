@@ -57,7 +57,9 @@ memory (VRAM) address `3FFFh`. A successful probe sets its device bit. With the
 Matrix switch enabled the ROM then installs its PICO console before printing the
 banner (`src/tms.asm:13-41`, `src/video.asm:18-24`, `src/pico.asm:53-68`). The
 current source starts that console at 40 columns. With the switch off it
-performs no console setup after the probe. A program can still claim the
+performs no console setup after the probe. The entry to warm boot then writes
+`80h` to the chip's register 1, which leaves its display blanked
+(`src/boot.asm:128-136`, `src/pico.asm:323-359`). A program can still claim the
 responding display through `VIDEO`.
 
 ## Port 01h and the serial line

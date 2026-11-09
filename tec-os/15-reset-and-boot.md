@@ -328,10 +328,13 @@ Warm boot rebuilds the environment in this order:
 1. `DI` disables maskable interrupts. `LATCLAS` is written to `LATCHV`
    and the port before `SP` is set to the BIOS stack. Selecting EXPAND 0
    first makes that stack visible (`src/boot.asm:128-133`).
-2. `HWVREL` releases any program claim on the PICO9918 and restores its driver
-   state. Its non-maskable interrupt (NMI) is turned off before page zero is
-   rebuilt (`src/boot.asm:136-136`, `src/services.asm:208-232`,
-   `src/pico.asm:198-233`).
+2. `PIICLR` ends any program's PICO9918 interrupt session, even with no
+   claim. It clears the tracked interrupt-enable bit and, on a detected
+   chip, rewrites register 1 with the interrupt off. `HWVREL` then releases
+   any program claim and restores the driver state, so the chip's interrupt
+   is off before page zero is rebuilt. The source makes no promise about the
+   board's NMI wiring (`src/boot.asm:115-136`, `src/pico.asm:323-359`,
+   `src/services.asm:208-232`, `src/pico.asm:198-233`).
 3. `PZINIT` rebuilds the entry jumps, stub and restart vectors
    (`src/boot.asm:138-138`).
 4. Bit 7 of `SVCBSY` is cleared. An interrupted service `INIT` or `REMOVE`

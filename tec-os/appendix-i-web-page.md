@@ -8,7 +8,7 @@ nav_group: "Reference"
 # Appendix I. The web page
 
 <!-- Mechanisms inspected in TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe,
-     source only. The retained shell recipe comes from the 78127ec-era appendix.
+     source only. The shell recipe follows the release README.
      No new browser run, screen capture or physical result is claimed. -->
 
 The web page has controls for the emulated board, a serial terminal and a card
@@ -23,12 +23,14 @@ STARTUP.CMD and [Chapter 25](25-startup-inside-the-ccp.md) follows its ROM path.
 After the PC setup from [Chapter 5](05-cards-on-the-pc.md) and the ROM/media
 preparation from [Chapter 26](26-build-the-rom-and-media.md), `npm run web`
 builds the page into web/dist. The build copies the ROM, its symbols and the
-page's recipe and files. This retained shell recipe serves that directory
-(`web/build.mjs:16-45`, `package.json:22`):
+page's recipe and files. `npm start` serves that directory with the
+installed esbuild development server, so Python is not needed
+(`web/build.mjs:16-45`, `package.json:15`, `package.json:22`,
+`README.md:100-108`):
 
 ```sh
 npm run web
-python3 -m http.server 8765 --directory web/dist
+npm start
 ```
 
 The page is then at `http://localhost:8765`. These commands are preparation
