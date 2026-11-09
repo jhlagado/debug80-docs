@@ -7,7 +7,7 @@ nav_group: "Reference"
 
 # Appendix I. The web page
 
-<!-- Mechanisms inspected in TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b,
+<!-- Mechanisms inspected in TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe,
      source only. The retained shell recipe comes from the 78127ec-era appendix.
      No new browser run, screen capture or physical result is claimed. -->
 
@@ -24,7 +24,7 @@ After the PC setup from [Chapter 5](05-cards-on-the-pc.md) and the ROM/media
 preparation from [Chapter 26](26-build-the-rom-and-media.md), `npm run web`
 builds the page into web/dist. The build copies the ROM, its symbols and the
 page's recipe and files. This retained shell recipe serves that directory
-(`web/build.mjs:16-45`, `package.json:21`):
+(`web/build.mjs:16-45`, `package.json:22`):
 
 ```sh
 npm run web
@@ -41,7 +41,7 @@ PICO9918 at 80 columns. Width and display selections use the browser's local
 storage. A reload retains them when that storage is available. Otherwise
 they last only for the open page (`web/src/main.mjs:17-43`). Successful
 startup preparation selects that width explicitly after the ROM's raw
-40-column cold start (`host/card.mjs:104-117`, `src/pico.asm:36-92`).
+40-column cold start (`host/card.mjs:104-117`, `src/pico.asm:19-68`).
 
 The controls and their handlers are defined in `web/index.html:12-30`,
 `web/index.html:68-82` and `web/src/main.mjs:593-679`:
@@ -150,7 +150,7 @@ also checks its full declared length. A truncated image produces
 the standard-card byte-addressing limit and that particular truncated-image
 case. It does not exclude every `27h` mount error or every `Bad Sector`:
 the ROM also checks arithmetic overflow and volume ends against the container
-length (`src/vol.asm:330-385`). [Appendix D](appendix-d-error-messages.md) explains
+length (`src/vol.asm:253-298`). [Appendix D](appendix-d-error-messages.md) explains
 those errors and recovery actions.
 
 ## Importing a file safely
@@ -161,8 +161,8 @@ preserves pending writes on the model card. Import itself does not flush them.
 Its later reset clears the block cache. TEC-OS rebuilds free-space maps from the
 changed card as drives are accessed. Unwritten cached changes, including changes
 on WORK with write-behind enabled, are lost at that reset
-(`src/boot.asm:100-102`, `src/boot.asm:210-215`, `src/boot.asm:321-346`,
-`src/cache.asm:661-668`, `src/cpm/bdoslog.asm:268-343`).
+(`src/boot.asm:77-77`, `src/boot.asm:146-149`, `src/boot.asm:232-249`,
+`src/cache.asm:566-572`, `src/cpm/bdoslog.asm:223-281`).
 [Chapter 18](18-cache-and-persistence.md) explains the failed-flush paths. A
 browser save or download after a successful flush is still needed to preserve
 the resulting image outside RAM.
@@ -230,8 +230,8 @@ The selected display determines the first line
 No line for the other display is inserted. On the board with both displays,
 GLCD.SVC in startup cannot take the console while CRT is selected. Later
 `CON UC1` loads A:GLCD.SVC when needed
-(`src/services.asm:629-647`, `src/cpm/ccpcmd.asm:200-208`,
-`src/loader.asm:885-913`).
+(`src/services.asm:533-549`, `src/cpm/ccpcmd.asm:183-187`,
+`src/loader.asm:720-745`).
 
 Preparation removes recognised display pieces from the old startup text and
 keeps the remaining command pieces. Recognition ignores case and surrounding

@@ -7,7 +7,7 @@ nav_group: "Inside TEC-OS"
 
 # 28. The host model as evidence
 
-<!-- Source-only mechanisms: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
+<!-- Source-only mechanisms: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Unprefixed source ranges belong to that revision. The six retained
      captures and all their recipes retain TEC-OS 78127ec. The original host
      chapter names @jhlagado/debug80-runtime 0.3.3 for its evidence.
@@ -312,14 +312,14 @@ A>
 ```
 
 The pager's width/height setup and stop paths remain visible in the source
-(`src/cpm/ccpfile.asm:335-366`, `src/cpm/ccpfile.asm:451-520`). These literal
+(`src/cpm/ccpfile.asm:279-303`, `src/cpm/ccpfile.asm:390-451`). These literal
 screens remain `78127ec` evidence. Source inspection of the same mechanism
 does not make them a current screen result.
 
 ## Fixtures, assertions and pinned inputs
 
 The package test command selects top-level `test/*.test.mjs` files with
-Node's test runner and concurrency set to one (`package.json:17`). A Git-tree
+Node's test runner and concurrency set to one (`package.json:18`). A Git-tree
 inventory at `962853f` contains 61 matching files, from arith.test.mjs through
 write.test.mjs. That is a source-only file count. It does not count test cases,
 executed files or successful assertions.
@@ -357,12 +357,12 @@ path. A selected entry remains authoritative even if broken or stale
 (`tools/lib/pins.mjs:10-49`). `npm run inputs` prepares missing pinned files
 as described in Chapter 26. A missing test input is skipped unless STRICT=1
 makes it fail. A hash mismatch is a failure, not a reason to try another
-candidate (`test/lib/inputs.mjs:24-41`, `package.json:18`).
+candidate (`test/lib/inputs.mjs:24-41`, `package.json:19`).
 
 The browser tests use Chromium through Playwright, pinned at 1.62.1.
 The README lists `npx playwright install chromium` separately after host
 setup. The dependency test checks the declared and locked versions and
-that documented install (`package.json:28`, `test/deps.test.mjs:14-27`).
+that documented install (`package.json:29`, `test/deps.test.mjs:15-27`).
 A run record must identify the installed browser and actual test outcome.
 Dependency declarations alone establish neither.
 
@@ -404,7 +404,7 @@ including 80. The page's fallback preference remains 80 columns, distinct
 from the ROM's raw cold width of 40. Other display pieces are removed under
 the rewrite rules in [Appendix I](appendix-i-web-page.md)
 (`host/card.mjs:58-72`, `host/card.mjs:104-117`,
-`web/src/main.mjs:17-43`, `src/pico.asm:36-92`). This source account does not
+`web/src/main.mjs:17-43`, `src/pico.asm:19-68`). This source account does not
 establish a browser run.
 
 File import stages every selected file on a copy. It waits for any older
@@ -435,8 +435,8 @@ The `ram96` mapping is a separate configuration, not a repair to every
 legacy-model result. Diagnostics T08, T10 and T12 probe these differences.
 TEC-OS avoids overlay writes and latch reads so checked ordinary paths can
 satisfy those restrictions on a more permissive model (`host/machine.mjs:40-46`,
-`host/machine.mjs:155-172`, `docs/diagnostics.md:146-163`,
-`docs/diagnostics.md:185-195`).
+`host/machine.mjs:155-172`, `docs/diagnostics.md:147-164`,
+`docs/diagnostics.md:187-196`).
 
 [Chapter 27](27-diagnose-the-machine.md) describes obtaining a board's
 diagnostic report. `tools/diag-check.mjs` requires its image ID to match the

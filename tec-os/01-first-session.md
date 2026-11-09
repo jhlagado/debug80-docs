@@ -8,7 +8,7 @@ nav_group: "Using the machine"
 # 1. First session
 
 <!-- Source contracts inspected at TEC-OS
-     962853f499f05faf281f6cdff1deca8959f58c2b, tested source 8b8664a.
+     a1023bd0cbb4879c37ae61e6f670b442e1e60abe, tested source 8b8664a.
      ROM SHA-256 fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d.
      Cold 40-column TEC Compact / PICO record v3 evidence: attempt02,
      Origo e77c7ef0, Machine 1 phases 001–007. Scoped result review:

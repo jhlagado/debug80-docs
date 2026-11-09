@@ -10,7 +10,7 @@ nav_group: "Inside TEC-OS"
 <!-- Checked against TEC-OS 78127ec. The diagnostics ROM in this chapter is version
      0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit. -->
 
-<!-- Source-only reading: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
+<!-- Source-only reading: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Inline source coordinates refer to this revision. The retained build output,
      captures and model report remain evidence from 78127ec, not new results.
      The earlier C16 partial citation pass used fe2097f; it did not rerun them. -->
@@ -26,21 +26,21 @@ from observations on a physical board.
 The message `No volume mounted, error ` precedes a two-digit hexadecimal
 code. The character LCD shows `CARD?` on its last row. Both come from
 `DIAG`, entered after card initialisation or container mounting fails
-(`src/boot.asm:817-829`, `src/text.asm:13-15`, `src/lcd.asm:77-92`). The initialisation codes are
+(`src/boot.asm:632-640`, `src/text.asm:14-16`, `src/lcd.asm:66-80`). The initialisation codes are
 `01h` to `04h` and `0Bh`. Container errors are `20h` to `2Ah`
-(`src/sd.asm:15-30`, `src/vol.asm:22-42`).
+(`src/sd.asm:12-26`, `src/vol.asm:11-30`).
 
 At `R retry> ` you can type a single key. The routine echoes its original
 case and ends the line. Either `R` or `r` restarts the card operations. Every other key produces
 another prompt so a digit appears unchanged even though the comparison uses a
-masked value (`src/boot.asm:831-847`, `src/text.asm:14`).
+masked value (`src/boot.asm:642-653`, `src/text.asm:15`).
 
 Your available console determines where you can answer. Cold boot selects the
 PICO9918 screen when that display responds and the Matrix switch enables
 the keyboard.
 Otherwise it selects serial. The GLCD console driver is on the card and has
-not been loaded at this point (`src/console.asm:57-88`,
-`src/video.asm:22-29`, `src/pico.asm:69-92`). A board with neither an active
+not been loaded at this point (`src/console.asm:31-52`,
+`src/video.asm:18-24`, `src/pico.asm:53-68`). A board with neither an active
 PICO9918 console nor an attached terminal shows only `CARD?` on the LCD.
 
 In this retained model capture the socket is empty and the console is the
@@ -58,25 +58,25 @@ R retry>
 `R` returns to `COLDRT`. That entry resets the BDOS stack and initialises the
 20 × 4 LCD to clear `CARD?`. It then calls `SDINIT` and `MOUNT` again.
 You can insert or correct the card while the prompt waits.
-The retry needs no board reset (`src/boot.asm:119-132`, `844-845`).
+The retry needs no board reset (`src/boot.asm:92-100`, `652-652`).
 `MOUNT` reads the container table afresh rather than accepting cached table
-bytes (`src/vol.asm:56-65`, `477-529`). [Appendix D](appendix-d-error-messages.md)
+bytes (`src/vol.asm:42-47`, `376-418`). [Appendix D](appendix-d-error-messages.md)
 lists each code's cause and remedy.
 
 The banner appears before either card operation. The RAM check, console
-initialisation and clock probe precede it (`src/boot.asm:71-102`). A board
+initialisation and clock probe precede it (`src/boot.asm:60-77`). A board
 without the required RAM stops at `TEC-OS needs 64K RAM` on serial
-(`src/boot.asm:579-632`, `src/text.asm:10`). [Chapter 15](15-reset-and-boot.md#ram-before-the-workspace) explains that check.
+(`src/boot.asm:417-470`, `src/text.asm:11`). [Chapter 15](15-reset-and-boot.md#ram-before-the-workspace) explains that check.
 `COLDRT` and `DIAG` use the BDOS stack before the CCP runs. Both failure
 jumps follow completed calls so `DIAG` starts at that stack's top
-(`src/boot.asm:80-86`, `119-132`, `802-829`).
+(`src/boot.asm:66-66`, `92-100`, `622-640`).
 
 A recognised reset can retain the selected volumes through a failed mount and
 retry. `RSLCAP` copies the drive table before the cold clears. `RSLBUF`, its
-scratch buffer, is at `0100h` in fixed RAM (`src/boot.asm:59-69`, `296-303`,
-`src/layout.asm:166-174`). That buffer survives the route to `DIAG`: `MEMINIT`
+scratch buffer, is at `0100h` in fixed RAM (`src/boot.asm:41-58`, `211-216`,
+`src/layout.asm:121-133`). That buffer survives the route to `DIAG`: `MEMINIT`
 clears EXPAND 1 and the mount uses a line in the block cache there for table
-reads (`src/boot.asm:100-102`, `321-346`, `src/vol.asm:44-65`).
+reads (`src/boot.asm:77-77`, `232-249`, `src/vol.asm:32-47`).
 [Chapter 15](15-reset-and-boot.md#retained-drive-selection) explains recognition
 and reselection.
 
@@ -86,8 +86,8 @@ The card prompt diagnoses card startup and mounting. For memory, display,
 serial and other device checks, the separate diagnostics image runs in
 place of TEC-OS at `C000h–FFFFh`. It is 16 KiB and needs neither TEC-OS nor
 a console driver to start. A card is optional for starting the ROM, though
-its SD tests need one (`diag/diag.asm:1-14`, `diag/boot.asm:8-40`,
-`diag/sd.asm:310-322`).
+its SD tests need one (`diag/diag.asm:1-16`, `diag/boot.asm:8-47`,
+`diag/sd.asm:331-343`).
 
 From the prepared host checkout of [Chapter
 26](26-build-the-rom-and-media.md), the build command is:
@@ -122,10 +122,10 @@ The report's image ID identifies the ROM whose results you are comparing.
 It is the first eight bytes of a SHA-256 calculated with
 `FFF6h–FFFFh` blanked to `FFh`. The build stores that ID at `FFF6h–FFFDh`.
 Both the banner and the final report print it (`tools/diag.mjs:26-29`,
-`84-89`, `126-128`, `diag/out.asm:108-117`, `737-743`). The word at
+`84-89`, `126-128`, `diag/out.asm:111-120`, `757-763`). The word at
 `FFFEh` is a separate 16-bit sum of `C000h–FFFDh`. T05 recalculates that sum
 and compares it with the stored word (`tools/diag.mjs:129-132`,
-`diag/memory.asm:200-232`).
+`diag/memory.asm:201-233`).
 
 Before writing the image, the build checks its entry points and reserved areas.
 RESET must be at `C000h`, INT38 at `C038h` and NMIROM at `C066h`. COLD and START
@@ -136,48 +136,48 @@ within `38h` bytes (`tools/diag.mjs:117-125`).
 
 At reset, the board maps the first 2 KiB of ROM at `0000h`. The reset code
 jumps to COLD at its ROM address and removes the overlay
-(`diag/boot.asm:8-27`). COLD installs an immediate `RETN` at `0066h` then
+(`diag/boot.asm:8-34`). COLD installs an immediate `RETN` at `0066h` then
 turns off the digits, speaker and 8 × 8 LEDs and deselects the SD card
-(`diag/boot.asm:29-40`). The diagnostics variables occupy
+(`diag/boot.asm:36-47`). The diagnostics variables occupy
 `7E00h–7EFFh` and the stack occupies `7F00h–7FFFh`, both in fixed RAM
-(`diag/defs.asm:43-44`).
+(`diag/defs.asm:56-57`).
 
 ## The run
 
 Every later test uses the variables and stack at `7E00h–7FFFh`. T01 first
 checks those pages using registers alone, before any stack use. Four passes
-fill and verify an address-derived pattern (`diag/boot.asm:43-73`). A
+fill and verify an address-derived pattern (`diag/boot.asm:49-86`). A
 failure produces a serial line without using the stack. It contains
 `T01 HOME    FAIL  RAM 7E00-7FFF at `, the four-digit address,
 ` wrote ` and the written byte, then ` read ` and the byte read
-(`diag/boot.asm:75-128`).
+(`diag/boot.asm:88-154`).
 
 After a failure the ROM repeats that line indefinitely. The delay has 16
 passes of a 65,536-iteration loop. Each iteration costs 26 T-states except
 the final iteration, which costs 21. Counting the surrounding instructions
 from HCWAIT through `JR HCMSG` gives 27,263,278 T-states
-(`diag/boot.asm:118-125`). This is static instruction counting. At the
+(`diag/boot.asm:144-151`). This is static instruction counting. At the
 nominal 4 MHz it gives about 6.8 seconds of delay so the line repeats about
 every seven seconds. It is not a new board timing measurement.
 
 After T01 passes the ROM clears its variables, installs an NMI counter at
 `0066h`, reads the Matrix switch and prints the banner
-(`diag/main.asm:4-28`). It waits about five seconds for a key. `I` or `Y`
+(`diag/main.asm:8-32`). It waits about five seconds for a key. `I` or `Y`
 includes the interactive tests. Another key or the timeout selects automatic
-tests alone (`diag/main.asm:29-45`). GETKEY polls serial, the hex keypad
+tests alone (`diag/main.asm:33-49`). GETKEY polls serial, the hex keypad
 and, when enabled by the Matrix switch, the matrix keyboard. Its timeout
 unit is half a second. The keypad's `+` means `Y`, `-` means `N`, `GO` is
-Return and `AD` is Esc (`diag/out.asm:241-326`).
+Return and `AD` is Esc (`diag/out.asm:242-329`).
 
 Each test begins with a `-- T` heading, its number and its title. The LCD's
 second row shows the number and seven-character name
-(`diag/out.asm:637-658`). RESULT prints the number, name, result and
+(`diag/out.asm:653-674`). RESULT prints the number, name, result and
 following details. While recording is enabled, OUTC also copies each
 character to the report buffer at `1000h`, stopping before `3000h`
-(`diag/out.asm:49-62`, `663-716`, `diag/defs.asm:41-42`). The LCD's third
+(`diag/out.asm:52-65`, `681-734`, `diag/defs.asm:54-55`). The LCD's third
 row shows the result. Its fourth row displays running PASS, FAIL, INFO and
-SKIP totals (`diag/out.asm:592-615`, `694-703`). The six result codes have
-these meanings (`diag/defs.asm:50-56`, `diag/out.asm:706-711`):
+SKIP totals (`diag/out.asm:607-630`, `712-721`). The six result codes have
+these meanings (`diag/defs.asm:68-74`, `diag/out.asm:724-729`):
 
 | Result | Meaning |
 | --- | --- |
@@ -228,25 +228,25 @@ T02 RAMLO   PASS  all bits both ways, no aliasing
 ## The tests
 
 The automatic call sequence fixes the order. T35 and T36 run after T18, with
-T37 after T20 (`diag/main.asm:56-87`). T02–T04 run before T01's result is
+T37 after T20 (`diag/main.asm:60-91`). T02–T04 run before T01's result is
 printed because their RAM tests overwrite the report-buffer area. Their
-saved results are printed after T01 (`diag/main.asm:43-64`,
-`diag/memory.asm:99-156`). The selected interactive tests follow T26.
+saved results are printed after T01 (`diag/main.asm:47-68`,
+`diag/memory.asm:100-158`). The selected interactive tests follow T26.
 You can also start them later with `I` at the report prompt
-(`diag/main.asm:88-119`).
+(`diag/main.asm:92-123`).
 
 The complete list gives each test's name and TBEGIN title. A title describes
-the operation under test, not a passing result (`diag/out.asm:635-658`).
-T01's result is emitted by the main sequence (`diag/main.asm:56-62`).
+the operation under test, not a passing result (`diag/out.asm:649-674`).
+T01's result is emitted by the main sequence (`diag/main.asm:60-66`).
 
 <!-- Test title definitions at 962853f:
-(`diag/memory.asm:145-155`, `200-260`, `316-351`,
-`404-454`, `501-502`, `600-601`, `diag/display.asm:5-6`, `54-55`,
-`241-242`, `349-350`, `662-663`, `756-757`, `816-817`,
-`diag/sd.asm:310-311`, `451-452`, `622-623`, `diag/misc.asm:45-46`,
-`440-441`, `494-495`, `561-562`, `590-591`, `618-619`,
-`diag/interact.asm:45-46`, `104-105`, `213-214`, `329-330`, `367-368`,
-`509-510`, `626-627`, `671-672`) -->
+(`diag/memory.asm:148-158`, `201-260`, `316-350`,
+`403-454`, `499-500`, `607-608`, `diag/display.asm:6-7`, `63-64`,
+`285-286`, `406-407`, `746-747`, `851-852`, `909-910`,
+`diag/sd.asm:331-332`, `472-473`, `656-657`, `diag/misc.asm:47-48`,
+`455-456`, `512-513`, `580-581`, `609-610`, `640-641`,
+`diag/interact.asm:71-72`, `144-145`, `264-265`, `380-381`, `421-422`,
+`571-572`, `703-704`, `758-759`) -->
 
 | Test | Name | Title |
 | --- | --- | --- |
@@ -289,40 +289,40 @@ T01's result is emitted by the main sequence (`diag/main.asm:56-62`).
 | T34 | `SDTIME` | SD read rate by stopwatch: 256 blocks, 128 KiB |
 
 Some tests use the same low-level method as TEC-OS. Serial output is
-bit-banged (`diag/out.asm:10-28`, `src/console.asm:28-39`). T19 follows the
+bit-banged (`diag/out.asm:1-29`, `src/console.asm:10-14`). T19 follows the
 CMD0, CMD8, ACMD41 and CMD58 card-start sequence and records replies.
 Both initialisers also use CMD16 for a byte-addressed card. The diagnostics
 version omits some production validation. TEC-OS verifies the CMD8 echo and
 CMD55 result before continuing
-(`diag/sd.asm:115-212`, `src/sd.asm:215-371`).
+(`diag/sd.asm:122-223`, `src/sd.asm:183-323`).
 
 T17 uses the same two-pattern PICO9918 probe and selects the console's
-supported 80-column text mode (`diag/display.asm:334-372`, `src/tms.asm:17-48`).
+supported 80-column text mode (`diag/display.asm:385-429`, `src/tms.asm:13-41`).
 T35 checks the page switching that console uses
-(`diag/display.asm:751-803`). T03 checks the U9 window with EXPAND off.
+(`diag/display.asm:845-898`). T03 checks the U9 window with EXPAND off.
 T12 maps the additional bank
 selection and T13 pattern-tests each distinct bank. T07 checks the boot
-overlay and T11 records status-port bits (`diag/memory.asm:99-114`,
-`259-343`, `449-484`, `489-658`).
+overlay and T11 records status-port bits (`diag/memory.asm:100-117`,
+`259-343`, `448-484`, `487-665`).
 
 Only T37 writes the SD card. It requires the `TECOSVOL` magic in block 0,
 saves block 7 and tests a pattern there. Volume payloads begin at nonzero
 multiples of eight blocks so block 7 is outside every volume
-(`diag/sd.asm:616-683`, `src/vol.asm:303-316`,
+(`diag/sd.asm:645-717`, `src/vol.asm:234-243`,
 `format/format.json:43`). That does not mean it is always unused: a large format-1.1 descriptor table can extend through
 blocks 1–7 (`tools/lib/container.mjs:33-42`).
 
 On success T37 writes the saved block back and checks it. Restoration can
 fail and the result includes `restore failed` or `restore read back wrong`
-as appropriate (`diag/sd.asm:663-730`). Use a writable prepared card whose
+as appropriate (`diag/sd.asm:697-764`). Use a writable prepared card whose
 image you have kept. The magic check alone is not full container validation.
 
 ## The report
 
 PRREP prints the report heading, version and image ID, stored result lines,
-totals and end marker (`diag/out.asm:737-789`). The ROM then prints
+totals and end marker (`diag/out.asm:757-809`). The ROM then prints
 `R prints the report again; I runs the interactive tests.` and waits for
-one of those keys (`diag/main.asm:91-106`). The following complete report
+one of those keys (`diag/main.asm:95-110`). The following complete report
 is retained from the same historical model log:
 
 ```text
@@ -364,18 +364,18 @@ TOTAL PASS 14 FAIL 0 INFO 6 SKIP 0 LOOK 8 NONE 1
 Three INFO lines record model behaviours that a board need not share.
 T08's write under the overlay reaches RAM. T10 reads back port `FFh`.
 T12's latch field selects nine banks plus the base
-(`diag/memory.asm:316-343`, `404-447`, `489-563`). The board documentation describes a write-only latch with
+(`diag/memory.asm:316-343`, `403-446`, `487-561`). The board documentation describes a write-only latch with
 bits 3–6 unconnected to U9. It selects ROM rather than RAM for an overlay write,
-as recorded in `docs/diagnostics.md:141-163`, `184-198`. Those are documented
+as recorded in `docs/diagnostics.md:142-164`, `185-199`. Those are documented
 expectations, not observations of a board made for this chapter.
 
 TEC-OS uses a shadow latch byte at `0040h` instead of reading port `FFh`.
 Its EXPAND-1 selection uses bit 2, not the extra bank field
-(`src/layout.asm:26-39`, `81-90`). The reset path removes the overlay
-before writing low RAM (`src/boot.asm:49-70`). These choices avoid reliance
+(`src/layout.asm:19-28`, `src/abi.inc:286-289`, `src/layout.asm:64-69`, `src/abi.inc:291-293`). The reset path removes the overlay
+before writing low RAM (`src/boot.asm:35-59`). These choices avoid reliance
 on the disputed latch read-back, extra bank decoding and overlay-write
 behaviour. T12 still has a useful board result: its map determines which
-RAM T13 will test (`diag/memory.asm:600-658`).
+RAM T13 will test (`diag/memory.asm:607-665`).
 
 ## Comparing a board's report with the model's
 
@@ -404,12 +404,12 @@ The keypad restriction concerns the return from an NMI. With its jumper fitted,
 a keypad press makes the Z80 push a return address and jump to `0066h`. The
 diagnostics RAM tests overwrite that handler. T09 and T25 instead enable PROTECT
 over the stack page so an NMI cannot store its return address there
-(`diag/memory.asm:99-107`, `347-372`, `diag/misc.asm:587-607`). The counter
-handler normally preserves registers and uses RETN (`diag/main.asm:125-145`).
+(`diag/memory.asm:100-110`, `345-371`, `diag/misc.asm:604-626`). The counter
+handler normally preserves registers and uses RETN (`diag/main.asm:129-151`).
 Overwritten code or a lost return address prevents that normal path. TEC-OS
 itself installs no NMI handler and uses `0066h` within its default file control
 block (FCB) area. Its normal setup has the keypad NMI jumper off
-(`src/boot.asm:62-69`, `454-509`, `src/cpm/ccp.asm:22-23`), as [Appendix
+(`src/boot.asm:52-58`, `326-368`, `src/cpm/ccp.asm:21-22`), as [Appendix
 G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi) explains.
 
 Keep the terminal's complete session log from the banner through the last
@@ -445,7 +445,7 @@ uncompared and incomplete parts of the log.
 A board following its documented circuit can differ on T08, T10 and T12.
 The dependency descriptions assign no TEC-OS effect to the first two.
 T12 concerns EXPAND 1, whose discovered banks receive T13's pattern tests
-(`docs/board-run.md`, `diag/memory.asm:600-658`). An actual board report
+(`docs/board-run.md`, `diag/memory.asm:607-665`). An actual board report
 can establish agreement for the conditions tested.
 Those include the addressed RAM, reset overlay, EXPAND-1 bank and serial
 output, along with card replies and device operations. The matching lines

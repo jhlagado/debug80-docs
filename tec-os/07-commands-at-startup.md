@@ -8,7 +8,7 @@ nav_group: "Using the machine"
 # 7. Commands at startup
 
 <!-- Source mechanisms inspected by git text at TEC-OS
-     962853f499f05faf281f6cdff1deca8959f58c2b. Source-only draft.
+     a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Source-only draft.
      All nine retained captures, their recipes and the six shell fences
      retain TEC-OS 78127ec. No capture or workflow was rerun.
      Historical 80-column starts remain evidence of their original runs.

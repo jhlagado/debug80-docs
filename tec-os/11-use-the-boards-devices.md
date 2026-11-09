@@ -12,7 +12,7 @@ nav_group: "Writing programs"
      `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
      `DEMO` was assembled on the PC by ATOM from the repository's `atom-z80`
      0.3.7. -->
-<!-- Source-only mechanism check: 962853f499f05faf281f6cdff1deca8959f58c2b.
+<!-- Source-only mechanism check: a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Receiver adoption selected at book 9ba1f59, P3 proposal 18 / 43d5f328.
      All historical listings, recipes and captures retain their actual pins.
      Opening workflow receipt 4b5b5a50 does not repin these hardware examples.

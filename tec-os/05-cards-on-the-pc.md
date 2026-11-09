@@ -7,7 +7,7 @@ nav_group: "Using the machine"
 
 # 5. Cards on the PC
 
-<!-- Source mechanisms read at TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
+<!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Inherited recipes and output are historical TEC-OS 78127ec evidence.
      Original old03/04/05 inputs: TED.COM Thorium 128edb7,
      SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;

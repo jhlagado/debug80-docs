@@ -9,7 +9,7 @@ nav_group: "Using the machine"
 
 <!-- Checked against TEC-OS 78127ec. -->
 <!-- Historical captures retained unchanged at that pin.
-     Source-only semantic check: 962853f499f05faf281f6cdff1deca8959f58c2b.
+     Source-only semantic check: a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      No execution, new capture or physical-board result is claimed.
      The historical 80-column setup is not evidence for a new opening profile. -->
 

@@ -8,7 +8,7 @@ nav_group: "Writing programs"
 # 8. Call TEC-OS
 
 <!-- Source-only semantic check against TEC-OS
-     962853f499f05faf281f6cdff1deca8959f58c2b.
+     a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      The register-preservation fragment is unchanged from the historical SHOW
      listing in old07 at 78127ec. Historical PC assembly provenance is
      atom-z80 0.3.7.

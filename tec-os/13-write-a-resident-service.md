@@ -7,7 +7,7 @@ nav_group: "Writing programs"
 
 # 13. Write a resident service
 
-<!-- Source-only semantic check: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
+<!-- Source-only semantic check: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Retained source/recipes are preserved from frozen10821b6, not blanket
      execution evidence. COUNT workflow:78127ec Book45. CHEAT/RECS/NEEDS:
      621201d Book42. PC writer111-byte result:7458352 Book31; byte equality

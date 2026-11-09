@@ -7,7 +7,7 @@ nav_group: "Using the machine"
 
 # 3. Work with files
 
-<!-- Source mechanisms read at TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
+<!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Current COPY and pager excerpts: tested 8b8664a7d93c6dc2e8bce509b9770585e106eedc,
      landed 962853f with qualification-record differences only.
      Origo attempt02 e77c7ef0, scoped result receipt 4b5b5a50,

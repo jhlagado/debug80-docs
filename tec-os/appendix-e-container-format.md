@@ -7,7 +7,7 @@ nav_group: "Reference"
 
 # Appendix E. The container format
 
-<!-- Mechanisms checked by source inspection at TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
+<!-- Mechanisms checked by source inspection at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Historical examples retain TEC-OS 78127ec and TED.COM from Thorium
      128edb7, SHA-256
      2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f.
@@ -69,7 +69,7 @@ is a 16-bit sum, including the descriptors as well as the header fields
 (`tools/lib/container.mjs:51-59`). A change anywhere in block 0 therefore needs
 a new checksum. The ROM reads 32 bytes at a time from a line in the block cache,
 sums the whole block and subtracts the two checksum bytes
-(`src/vol.asm:592-619`, `src/volutil.asm:92-132`).
+(`src/vol.asm:477-496`, `src/volutil.asm:83-124`).
 
 A card's minor version sets three things. A 1.0 card has no drives field and
 no table sum and `tecvol` gives it at most 8 volumes. A 1.1 card may have up
@@ -77,8 +77,8 @@ to 127, may give a number of drives and has the table sum
 (`tools/lib/container.mjs:76-80`, `tools/lib/container.mjs:140-148`).
 `tecvol create` makes a 1.1 card when it is given more than 8 volumes or
 `--drives` and a 1.0 card otherwise. The ROM rejects a 1.0 card of more than
-8 volumes with code `24h` (`src/vol.asm:113-151`). It treats any minor
-version other than 0 as 1.1 (`src/vol.asm:171-175`).
+8 volumes with code `24h` (`src/vol.asm:87-119`). It treats any minor
+version other than 0 as 1.1 (`src/vol.asm:139-141`).
 
 ## The volume descriptor
 
@@ -127,39 +127,39 @@ The table sum at header offset 23 is the 16-bit sum of every byte in the
 descriptor blocks after block 0, including their unused bytes
 (`tools/lib/container.mjs:44-49`). The ROM reads `floor(count / 16)` such
 blocks. With 15 descriptors in block 0, that is the number needed for the
-remaining descriptors (`src/vol.asm:193-230`). When those blocks exist, a
-sum difference gives `25h` (`src/vol.asm:234-239`).
+remaining descriptors (`src/vol.asm:152-176`). When those blocks exist, a
+sum difference gives `25h` (`src/vol.asm:178-182`).
 
 With 15 or fewer descriptors the ROM skips this comparison entirely.
 The host validator still compares the stored table sum with the computed
 sum of zero so a 1.1 image must store zero in that field when its table
-fits in block 0 (`src/vol.asm:197-206`, `tools/lib/container.mjs:145-148`).
+fits in block 0 (`src/vol.asm:152-158`, `tools/lib/container.mjs:145-148`).
 
 ## The checks and their codes
 
 The ROM's `MOUNT` checks the header before walking the descriptors in
 table order. It mounts each assigned volume as its descriptor passes.
 The first failure stops the walk and unmounts every drive mounted so far
-(`src/vol.asm:56-461`). Cold boot prints the error code at the diagnostic
+(`src/vol.asm:42-363`). Cold boot prints the error code at the diagnostic
 prompt described in [Chapter 27](27-diagnose-the-machine.md). The table
 below follows the check order so the same code appears more than once.
 
 | Code | Check | Source |
 | --- | --- | --- |
-| `20h` | Block 0 can't be read | `src/vol.asm:57-69` |
-| `21h` | The first 8 bytes are not `TECOSVOL` | `src/vol.asm:70-86` |
-| `22h` | The major version is not 1 | `src/vol.asm:88-96` |
-| `23h` | The header bytes are not 512 or the descriptor bytes not 32 | `src/vol.asm:98-112` |
-| `24h` | The number of volumes is 0, more than 8 on a 1.0 card or more than 127 | `src/vol.asm:113-151` |
-| `25h` | The checksum differs | `src/vol.asm:147-153` |
-| `23h` | 1.1: the drives field is more than 4 | `src/vol.asm:181-186` |
-| `20h` | 1.1: a block of the table can't be read | `src/vol.asm:215-225` |
-| `25h` | 1.1 with descriptors beyond block 0: the table sum differs | `src/vol.asm:234-239` |
-| `26h` | A volume's id is 0, a flag other than read-only is set, the geometry is unknown, the length is not the geometry's or the start is 0 or not a multiple of 8 | `src/vol.asm:262-315`, `src/vol.asm:449-451` |
-| `28h` | A volume starts before the end of the one before it in the table | `src/vol.asm:316-328` |
-| `27h` | The exclusive end exceeds `FFFFFFFFh` or the container length or a standard-capacity card's last volume block exceeds `7FFFFFh` | `src/vol.asm:330-385` |
-| `29h` | A drive byte is neither `FFh` nor 0 to 3, the drive is past the number the drives field gives or two volumes name one drive | `src/vol.asm:389-427` |
-| `2Ah` | No volume is on drive A | `src/vol.asm:438-445` |
+| `20h` | Block 0 can't be read | `src/vol.asm:43-50` |
+| `21h` | The first 8 bytes are not `TECOSVOL` | `src/vol.asm:51-62` |
+| `22h` | The major version is not 1 | `src/vol.asm:64-72` |
+| `23h` | The header bytes are not 512 or the descriptor bytes not 32 | `src/vol.asm:75-85` |
+| `24h` | The number of volumes is 0, more than 8 on a 1.0 card or more than 127 | `src/vol.asm:87-119` |
+| `25h` | The checksum differs | `src/vol.asm:116-120` |
+| `23h` | 1.1: the drives field is more than 4 | `src/vol.asm:143-147` |
+| `20h` | 1.1: a block of the table can't be read | `src/vol.asm:165-173` |
+| `25h` | 1.1 with descriptors beyond block 0: the table sum differs | `src/vol.asm:178-182` |
+| `26h` | A volume's id is 0, a flag other than read-only is set, the geometry is unknown, the length is not the geometry's or the start is 0 or not a multiple of 8 | `src/vol.asm:206-242`, `src/vol.asm:355-356` |
+| `28h` | A volume starts before the end of the one before it in the table | `src/vol.asm:243-251` |
+| `27h` | The exclusive end exceeds `FFFFFFFFh` or the container length or a standard-capacity card's last volume block exceeds `7FFFFFh` | `src/vol.asm:253-298` |
+| `29h` | A drive byte is neither `FFh` nor 0 to 3, the drive is past the number the drives field gives or two volumes name one drive | `src/vol.asm:302-332` |
+| `2Ah` | No volume is on drive A | `src/vol.asm:341-351` |
 
 Both format versions require ascending, nonoverlapping volumes. Each
 volume must start at or after the previous volume's exclusive end. An
@@ -205,7 +205,7 @@ order so a card made by either passes the ROM's order check.
 
 On a 1.1 card the drives field can restrict the assignments. A nonzero
 value N permits only drives A through the Nth drive. A value of 0 leaves
-all four available, as on a 1.0 card (`src/vol.asm:398-409`). A violation
+all four available, as on a 1.0 card (`src/vol.asm:314-319`). A violation
 stops cold boot at the diagnostic prompt with code `29h`. `tecvol` makes the
 same check (`tools/lib/container.mjs:178`). `tecvol verify` rejects such a
 card and `tecvol create` rejects a volume on drive C with `--drives 2`:
@@ -278,6 +278,6 @@ Each directory occupies four allocation blocks. G8M's 512 entries of
 
 The ROM's geometry table has 6 bytes for each geometry (`src/gen/geom.asm`):
 the id, a 0, the payload in blocks as a word and the disk parameter block's
-address. `GEOFIND` finds an id in it (`src/volutil.asm:35-46`). The length
+address. `GEOFIND` finds an id in it (`src/volutil.asm:29-39`). The length
 check compares the descriptor's length with that word and requires its two
-high bytes to be 0 (`src/vol.asm:283-301`).
+high bytes to be 0 (`src/vol.asm:219-232`).

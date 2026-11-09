@@ -8,7 +8,7 @@ nav_group: "Writing programs"
 # 9. Read and write a file
 
 <!-- Source-only semantic check: TEC-OS
-     962853f499f05faf281f6cdff1deca8959f58c2b. No new runtime result claimed.
+     a1023bd0cbb4879c37ae61e6f670b442e1e60abe. No new runtime result claimed.
      The complete SHOW listing, preparation and output retain TEC-OS 78127ec.
      Historical PC assembly used atom-z80 0.3.7. The starter card's TAS.COM
      was Thorium dbee66a, SHA-256

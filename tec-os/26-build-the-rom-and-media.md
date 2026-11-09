@@ -7,8 +7,8 @@ nav_group: "Inside TEC-OS"
 
 # 26. Build the ROM and media
 
-<!-- Source mechanisms inspected at offered TEC-OS
-     962853f499f05faf281f6cdff1deca8959f58c2b. Unprefixed source ranges use
+<!-- Source mechanisms inspected at release-1 TEC-OS
+     a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Unprefixed source ranges use
      that revision. No build, import, test or capture was performed. -->
 
 <!-- Historical evidence: the ROM region figures, full SHA-256 and printed build
@@ -40,7 +40,7 @@ host dependencies and `npm run inputs` prepares the application inputs.
 The inspected `package.json` selects `atom-z80` 0.3.7. The normal production
 path at this source uses TAS for the main ROM, diagnostic ROM, `GLCD.SVC`,
 `MOUNT.COM` and `DEMO.COM`. The standalone ATOM examples use a separate
-assembly path (`package.json:1-30`, `tools/build.mjs:342-351`,
+assembly path (`package.json:1-31`, `tools/build.mjs:342-351`,
 `tools/diag.mjs:103-110`, `tools/media.mjs:186-207`).
 
 `TAS.COM` is pinned to Thorium
@@ -68,7 +68,7 @@ is used. An empty host override is an error. Assembly reads local prepared
 files and does not download them (`tools/lib/tas-rom.mjs:77-107`).
 After preparation, `npm run build` constructs the main ROM, `npm run diag`
 constructs the separate diagnostic ROM and `npm run media` prepares the
-distribution (`package.json:14-22`). The explicit ATOM reference selection is:
+distribution (`package.json:14-23`). The explicit ATOM reference selection is:
 
 ```sh
 TECOS_ROM_ASSEMBLER=atom npm run build
@@ -82,8 +82,8 @@ The default value of `TECOS_ROM_ASSEMBLER` is `tas`. Any value other than
 
 The ROM occupies `C000h–FFFFh`, exactly 16 KiB. Its fixed beginning contains
 the reset jump followed by the numbered-call interface. Read-only data and
-code follow, with a single free gap at the end (`src/reset.asm:1-14`,
-`src/abi.asm:12-20`, `src/rom.asm:1-17`, `src/end.asm:1-4`). The historical
+code follow, with a single free gap at the end (`src/reset.asm:1-13`,
+`src/abi.asm:9-14`, `src/rom.asm:1-17`, `src/end.asm:1-4`). The historical
 `78127ec` image had these regions:
 
 | Addresses | Bytes | Region |
@@ -102,7 +102,7 @@ the last occupied address (`tools/build.mjs:273-288`).
 At `C000h`, `JP RSTENT` transfers control into the code. The historical target
 was `C60Ah`. The interface at `C003h` contains `TNA`, major 5, minor 1 and a
 jump at `C008h` to `SVCDSP`. Its exclusive end is `C00Bh`
-(`src/reset.asm:12-14`, `src/abi.asm:12-20`). The boot overlay and entry path
+(`src/reset.asm:12-13`, `src/abi.asm:9-14`). The boot overlay and entry path
 are explained in [Chapter 15](15-reset-and-boot.md).
 
 The data region starts at `ROMDATA` and ends at `ROMCODE`. It contains
@@ -110,13 +110,13 @@ the BIOS jump table, keyboard tables, command names and handlers, BDOS
 function table, numbered-service table, container geometry, font and
 messages. Group headings name the source whose routines use each item.
 For example, `CWMSG` contains `Write lost` under the `cache.asm` heading
-(`src/tables.asm:1-18`, `src/tables.asm:40-146`, `src/text.asm:90-95`).
+(`src/tables.asm:1-14`, `src/tables.asm:38-144`, `src/text.asm:106-110`).
 The BIOS jumps in this region execute through the RAM copy made at
-`BF00h` during cold boot (`src/boot.asm:144-152`).
+`BF00h` during cold boot (`src/boot.asm:106-109`).
 
 Code extends from `RSTENT` to the label `CODEEND` after the last included
 file. The build fills the remaining image bytes with `FFh`
-(`src/boot.asm:38-49`, `src/end.asm:1-4`, `tools/build.mjs:250-253`).
+(`src/boot.asm:22-35`, `src/end.asm:1-4`, `tools/build.mjs:250-253`).
 A map from a different ROM can assign valid-looking labels to the wrong
 instructions so the ROM, map and census belong to the same build.
 
@@ -171,13 +171,13 @@ The first four included files define equates. `abi.inc` supplies the same
 interface addresses and service numbers used by programs. Configuration
 and format equates come from generated files. `layout.asm` names ports,
 latch values, page-zero state and fixed RAM addresses
-(`src/rom.asm:7-10`, `src/layout.asm:13-135`).
+(`src/rom.asm:7-10`, `src/layout.asm:9-99`).
 
 `ram.asm` declares resident workspace before the reset origin. Its first `ORG`
 is `WSBASE`. Unfilled `DS` declarations reserve addresses for variables and
 stacks. They are RAM declarations, not initial data that cold boot copies from
 the ROM. The second origin is `RAMBIOS+BIOSLEN`, placing the upper state after
-the 51-byte RAM jump table (`src/ram.asm:1-19`, `src/ram.asm:309-320`). The
+the 51-byte RAM jump table (`src/ram.asm:1-18`, `src/ram.asm:295-308`). The
 build interprets reservations according to the selected backend and extracts the
 ROM extent after them (`tools/build.mjs:197-206`,
 `tools/lib/tas-d8.mjs:183-188`, `tools/lib/tas-d8.mjs:239-279`).
@@ -199,7 +199,7 @@ heading (`tools/build.mjs:62-139`).
 
 `config.asm` defines `WSBASE`, version values `VERHI`, `VERLO`, `ROMVER`
 and serial delay counts. The inspected version is 0.1, printed in the boot
-banner and LCD top row (`src/text.asm:11-11`, `src/text.asm:67-67`).
+banner and LCD top row (`src/text.asm:12-12`, `src/text.asm:79-79`).
 The serial calculation uses 4,000,000 Hz and 4,800 baud with the instruction
 costs of the transmit, receive and polling loops. It produces `TXDLY`,
 `TXSTOP`, `RXDLY`, `RXHALF` and `RXPOLL`. The historical values are 49, 105,
@@ -237,8 +237,8 @@ sources, edits and limits of the original glyph attribution
 
 In the historical `78127ec` map the font occupied `C179h–C478h`. PICO accesses
 `FONT` by label and GLCD obtains its address through numbered service 15
-(`src/pico.asm:308-316`, `src/services.asm:597-603`,
-`drivers/glcd.asm:66-72`). The diagnostic ROM and tests use the same font
+(`src/pico.asm:250-257`, `src/services.asm:504-510`,
+`drivers/glcd.asm:60-64`). The diagnostic ROM and tests use the same font
 parser (`tools/diag.mjs:76-76`, `test/lib/machine.mjs:8-10`).
 
 ## Two passes to place the workspace
@@ -352,7 +352,7 @@ profile name is rejected (`tools/build.mjs:30-33`, `tools/build.mjs:354-367`).
 The same image supports the detected board devices. A responding PICO9918
 with the Matrix switch enabled starts at 40 columns. Explicit 80, 40 and
 32-column selections remain available while GLCD uses its card driver
-(`src/pico.asm:36-92`, `src/pico.asm:94-159`,
+(`src/pico.asm:19-68`, `src/pico.asm:70-124`,
 `tools/lib/starter.mjs:10-16`).
 
 The retained `78127ec` build line is actual historical output:
@@ -387,7 +387,7 @@ MESSAGE:DB      "Hello from the TEC-1G",13,10,"$"
 `ORG $0100` places the program at the CCP's load address. Function 9 prints
 from `DE` until `$` without printing the terminator. The bytes 13 and 10
 end the line. The final `RET` uses the return word installed by the CCP
-(`src/cpm/bdos.asm:414-433`, `src/cpm/ccp.asm:519-536`). The historical
+(`src/cpm/bdos.asm:361-379`, `src/cpm/ccp.asm:477-490`). The historical
 ATOM output was 33 bytes.
 
 The historical editor round used HELLO saved on B with TED and TAS on A.
@@ -489,4 +489,4 @@ B>
 ```
 
 The blank line before the command prompt comes from the CCP's program-return
-path (`src/cpm/ccp.asm:104-111`).
+path (`src/cpm/ccp.asm:90-96`).

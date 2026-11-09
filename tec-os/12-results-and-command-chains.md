@@ -7,7 +7,7 @@ nav_group: "Writing programs"
 
 # 12. Results and command chains
 
-<!-- Source-only semantic check: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
+<!-- Source-only semantic check: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Source proofs and old-unit dispositions: 12-pass-record.md. No current runtime check claimed.
      All retained output below is historical model evidence at TEC-OS 78127ec.
      The PC fixtures used atom-z80 0.3.7. Application provenance where relevant:

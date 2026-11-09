@@ -7,7 +7,7 @@ nav_group: "Reference"
 
 # Appendix J. Command reference
 
-<!-- Draft source checks: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b. The three historical captures below
+<!-- Draft source checks: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe. The three historical captures below
      retain TEC-OS 78127ec and its starter inputs. They have not been rerun
      for the new source offer. -->
 
@@ -35,15 +35,15 @@ name and type fields:
 
 A colon belongs to the optional drive prefix. A full stop or equals sign
 ends the current field. A field longer than its limit is rejected.
-The parser and delimiter checks are in `src/cpm/ccpcmd.asm:511-645`,
-`src/cpm/ccpcmd.asm:682-743` at the stated source revision.
+The parser and delimiter checks are in `src/cpm/ccpcmd.asm:466-585`,
+`src/cpm/ccpcmd.asm:618-678` at the stated source revision.
 
 `?` matches one character, including a padding space. `*` fills the rest of its
 field with question marks. Thus `G*.*` is `G???????.???`. Text after a star in
 the same field is ignored so `D*X` and `D*` select the same pattern. A short
 field is padded with spaces. `????.COM` therefore matches names of up to four
 characters with type COM, not every name ending in COM
-(`src/cpm/ccpcmd.asm:617-645`, `src/cpm/ccpcmd.asm:706-727`).
+(`src/cpm/ccpcmd.asm:562-585`, `src/cpm/ccpcmd.asm:640-661`).
 
 DIR and ERA use patterns to select files. TYPE, REN and SAVE require
 unambiguous names. COPY requires an unambiguous source and resolved
@@ -100,7 +100,7 @@ additional forms handled by the command processor.
 A built-in name must end at a space or the end of the command piece.
 `DIRX`, `DIR.COM` and `A:DIR` are program commands, not forms of built-in
 DIR. The last searches for `A:DIR.COM`. The keyword comparison uses the
-original command word (`src/cpm/ccpcmd.asm:760-795`).
+original command word (`src/cpm/ccpcmd.asm:694-724`).
 
 ### DIR and TYPE
 
@@ -132,7 +132,7 @@ The resolved source and destination must differ. A self-copy or an argument
 after the destination produces `COPY?` before either file is opened.
 A valid copy replaces any existing destination file, subject to protection.
 On success `COPIED` is followed by the number of 128-byte records copied,
-in hexadecimal (`src/cpm/ccpmut.asm:250-380`).
+in hexadecimal (`src/cpm/ccpmut.asm:193-320`).
 
 The type-only destination and self-copy cases below were captured on A
 with the original starter card.
@@ -171,7 +171,7 @@ or specify the same drive. Thus `REN B:NEW.TXT=OLD.TXT` and
 
 REN checks the new name first. If it already exists, `FILE EXISTS` is printed
 and nothing is renamed. An absent old name produces `NO FILE`
-(`src/cpm/ccpmut.asm:99-184`).
+(`src/cpm/ccpmut.asm:74-145`).
 
 ### ERA
 
@@ -183,7 +183,7 @@ character is Y or y. Other answers leave the files unchanged.
 
 A pattern whose eleven stored positions are not all question marks, such
 as `*.TXT`, is erased without confirmation. No match produces `NO FILE`
-(`src/cpm/ccpmut.asm:13-84`). Protection and write failures can stop a
+(`src/cpm/ccpmut.asm:10-63`). Protection and write failures can stop a
 multi-file erase after some entries have already been erased. The exact
 partial-result cases are in [Appendix D](appendix-d-error-messages.md).
 
@@ -223,7 +223,7 @@ An existing file of the same name is erased first. A failed make, write or
 close produces `NO SPACE`. After a write failure SAVE attempts to close the
 file. If the close succeeds, its directory entry retains the records written.
 `NO SPACE` does not confirm that the close succeeded. Digital Research's CP/M 2.2
-SAVE leaves the file open in that case (`src/cpm/ccpcmd.asm:282-445`).
+SAVE leaves the file open in that case (`src/cpm/ccpcmd.asm:249-398`).
 
 ### Drives, USER and program lookup
 
@@ -241,8 +241,8 @@ after that search. A file in user 0 needs no system attribute.
 If no file is found, a plain command on a drive other than A continues on A
 in the same user order. An explicit drive suppresses that fallback.
 A found file that cannot load stops the search rather than permitting
-another copy on a later drive. These paths are in `src/cpm/ccp.asm:445-517`
-and `src/cpm/ccp.asm:631-679`. [Chapter 4](04-drives-and-user-areas.md)
+another copy on a later drive. These paths are in `src/cpm/ccp.asm:403-467`
+and `src/cpm/ccp.asm:589-640`. [Chapter 4](04-drives-and-user-areas.md)
 works through the resulting choices.
 
 ### CON
@@ -251,7 +251,7 @@ With no argument CON reports the console in effect. The device names are
 TTY, CRT, BAT and UC1, with PICO as an alias for CRT and GLCD for UC1.
 A colon may follow a device name. A width must be separated from CRT or PICO
 by a space and must be 80, 40 or 32. Other devices take no width.
-Extra text is rejected (`src/cpm/ccpcmd.asm:70-232`).
+Extra text is rejected (`src/cpm/ccpcmd.asm:54-208`).
 
 The reply goes through the selected console and is discarded in BAT mode.
 Selecting an unavailable console can leave or restore another mode so the reply

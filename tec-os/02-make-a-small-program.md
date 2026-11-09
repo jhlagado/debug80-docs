@@ -8,7 +8,7 @@ nav_group: "Using the machine"
 # 2. Make a small program
 
 <!-- Source mechanisms inspected at TEC-OS
-     962853f499f05faf281f6cdff1deca8959f58c2b.
+     a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Accepted workflow: Origo attempt02 e77c7ef0, Machines 4 and 5,
      phases 043–096, tested source 8b8664a.
      Scoped actual-result receipt: Origo 4b5b5a50,

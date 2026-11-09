@@ -7,7 +7,7 @@ nav_group: "Reference"
 
 # Appendix H. The service file format
 
-<!-- Mechanisms checked by source inspection at TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
+<!-- Mechanisms checked by source inspection at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      The GLCD dump was reproduced at 621201d and retained in the 78127ec
      review without rerunning its commands. The GAPZERO transcript was
      rerun at 78127ec using COUNT.SVC prepared by makeSvc.
@@ -41,31 +41,31 @@ image therefore count from the header's first byte. The loader moves both
 to a page boundary and adds that page number at each relocation position.
 The card stores the file in whole 128-byte records. Its trailing padding
 is outside the relocation data and is not processed as another gap
-(`src/loader.asm:332-373`, `src/loader.asm:408-437`).
+(`src/loader.asm:258-290`, `src/loader.asm:316-338`).
 
 ## The header
 
-The loader's field definitions are at `src/loader.asm:32-66`. The final
+The loader's field definitions are at `src/loader.asm:26-48`. The final
 column gives the check applied to each field. Any failed check rejects the
 load. A name has no content check.
 
 | Offset | Bytes | Contents | The loader's check |
 | ---: | ---: | --- | --- |
-| 0 | 1 | The letter `D`, `44h` | Offsets 0 and 1 together are the word `0444h` (`src/loader.asm:197-203`) |
+| 0 | 1 | The letter `D`, `44h` | Offsets 0 and 1 together are the word `0444h` (`src/loader.asm:150-153`) |
 | 1 | 1 | The format, 4 | See offset 0 |
-| 2 | 1 | The number of dependencies | The entries, 9 bytes each after the image, end within the records read (`src/loader.asm:251-279`) |
-| 3 | 1 | Flags: bit 0 removable. Bits 1 to 7 claim `RST 1` to `RST 7` | No claimed vector holds a `JP` already (`src/loader.asm:387-410`) |
-| 4 | 2 | `REMOVE`, from the header's start | From 25 to below the size at offset 6 (`src/loader.asm:221-223`, `src/loader.asm:761-771`) |
-| 6 | 2 | The size of the header and image | The header and image end within the records read (`src/loader.asm:207-211`, `src/loader.asm:741-752`) |
-| 8 | 2 | Extra memory after the image, not cleared | The pages for the image and the extra memory start at a page from `80h` up and below the page containing the top of the transient program area (TPA) (`src/loader.asm:227-243`) |
-| 10 | 2 | The size of the relocation data | The data ends within the records read (`src/loader.asm:281-286`) |
-| 12 | 3 | Stack bytes added: BDOS, BIOS, CCP | Each is at most the room left on that stack, `SVCLIM`'s figure less what the services in have taken (`src/loader.asm:287-322`) |
-| 15 | 2 | `INIT`, from the header's start | As `REMOVE` (`src/loader.asm:215-217`) |
+| 2 | 1 | The number of dependencies | The entries, 9 bytes each after the image, end within the records read (`src/loader.asm:191-214`) |
+| 3 | 1 | Flags: bit 0 removable. Bits 1 to 7 claim `RST 1` to `RST 7` | No claimed vector holds a `JP` already (`src/loader.asm:299-319`) |
+| 4 | 2 | `REMOVE`, from the header's start | From 25 to below the size at offset 6 (`src/loader.asm:170-172`, `src/loader.asm:613-620`) |
+| 6 | 2 | The size of the header and image | The header and image end within the records read (`src/loader.asm:157-160`, `src/loader.asm:595-603`) |
+| 8 | 2 | Extra memory after the image, not cleared | The pages for the image and the extra memory start at a page from `80h` up and below the page containing the top of the transient program area (TPA) (`src/loader.asm:176-186`) |
+| 10 | 2 | The size of the relocation data | The data ends within the records read (`src/loader.asm:216-220`) |
+| 12 | 3 | Stack bytes added: BDOS, BIOS, CCP | Each is at most the room left on that stack, `SVCLIM`'s figure less what the services in have taken (`src/loader.asm:221-249`) |
+| 15 | 2 | `INIT`, from the header's start | As `REMOVE` (`src/loader.asm:164-166`) |
 | 17 | 8 | The name, padded with spaces | None |
 
 The loader compares the first two bytes, as a word, with `DMAGIC`, which is
-`SVCFMT * 256 + 'D'` (`src/loader.asm:32-35`). `SVCFMT` is 4, from `abi.inc`,
-and a file of any other format fails the load (`src/abi.inc:185-190`).
+`SVCFMT * 256 + 'D'` (`src/loader.asm:26-28`). `SVCFMT` is 4, from `abi.inc`,
+and a file of any other format fails the load (`src/abi.inc:226-231`).
 
 The source supplies the service's name, flags, extra-memory request and
 stack declarations. `TAS` on the card or `makeSvc` on the PC fills the
@@ -73,7 +73,7 @@ measured fields and routine offsets (`tools/lib/svc.mjs:122-131`):
 
 | Field | Written by |
 | --- | --- |
-| The letter `D` | The source, as `DB 'D',SVCFMT,0,1` with `abi.inc` included (`drivers/glcd.asm:29-37`) |
+| The letter `D` | The source, as `DB 'D',SVCFMT,0,1` with `abi.inc` included (`drivers/glcd.asm:26-35`) |
 | The format | The source. `makeSvc` overwrites it with 4. Pinned TAS preserves it |
 | The number of dependencies | `makeSvc` writes the count. Pinned TAS writes it when `DEPS` exists |
 | The flags | The source |
@@ -98,7 +98,7 @@ name padded with spaces (`tools/lib/svc.mjs:117`). Dependencies follow the
 image and are not relocated. For each entry the loader searches the
 registry for that name at the requested version or later. An absent record
 or one below the minimum version rejects the load
-(`src/loader.asm:251-279`). `makeSvc` takes them from its `deps` option and rejects a name of more than 8 bytes
+(`src/loader.asm:191-214`). `makeSvc` takes them from its `deps` option and rejects a name of more than 8 bytes
 (`tools/lib/svc.mjs:116`). `TAS` takes them from what follows a label named
 `DEPS` in the source, as whole 9-byte entries in `DB`.
 
@@ -123,7 +123,7 @@ the last byte is a gap of 0. That fixes the byte the 255s reached.
 
 Every position the list reaches, a gap of 255 included, must lie below the
 size at offset 6, inside the header and image. Otherwise the load fails
-(`src/loader.asm:332-373`). The loader doesn't test for a first gap of 0,
+(`src/loader.asm:258-290`). The loader doesn't test for a first gap of 0,
 which fixes header byte 24, the name's last. `makeSvc` never writes one, since
 every fixup it finds lies in the image. The example below shows what such a
 list does.
@@ -162,7 +162,7 @@ B>
 
 In this historical run the service loaded at page `B8h`. The inserted zero gap
 changed header byte 24 from a space, `20h`, to `D8h`. `PUTTRIM` masks bit 7
-(`src/cpm/ccpfile.asm:529-537`) so the name prints with an `X`.
+(`src/cpm/ccpfile.asm:464-470`) so the name prints with an `X`.
 
 ## GLCD.SVC
 
@@ -212,4 +212,4 @@ of the next five 2s reaches the next word's high byte. None of the 69 gaps is
 bit for each of the 742 image bytes would take 93 bytes.
 
 The driver contains no font. Its `INIT` obtains the ROM font address through
-service 15 and stores it for drawing (`drivers/glcd.asm:66-72`).
+service 15 and stores it for drawing (`drivers/glcd.asm:60-64`).

@@ -7,7 +7,7 @@ nav_group: "Reference"
 
 # Appendix C. Memory map
 
-<!-- Mechanism authority: TEC-OS 962853f499f05faf281f6cdff1deca8959f58c2b.
+<!-- Mechanism authority: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      All build-dependent ROM/RAM addresses, sizes and retained lookup output
      below remain historical78127ec evidence from frozen book10821b6.
      No new map, label command, build, import, test, run or capture occurred.
@@ -30,7 +30,7 @@ require their own symbol files for build-dependent addresses.
 ## The CPU's address space
 
 The 64 KiB CPU address space contains fixed RAM, a bank window and ROM
-(`962853f:src/layout.asm:3-9`):
+(`a1023bd:src/layout.asm:1-7`):
 
 | Addresses | Contents |
 | --- | --- |
@@ -40,7 +40,7 @@ The 64 KiB CPU address space contains fixed RAM, a bank window and ROM
 
 At reset the first 2 KiB of ROM also appear at `0000h–07FFh`. The overlaid
 jump enters `RSTENT` in ROM. Cold boot then sets latch bit 0 to remove the
-overlay (`962853f:src/reset.asm:1-14`, `962853f:src/boot.asm:38-58`).
+overlay (`a1023bd:src/reset.asm:1-13`, `a1023bd:src/boot.asm:22-40`).
 The historical `78127ec` starter layout with EXPAND 0 selected was:
 
 | Addresses | Contents |
@@ -53,19 +53,19 @@ The historical `78127ec` starter layout with EXPAND 0 selected was:
 TEC-OS writes the system latch at port `FFh` from its shadow at `0040h`,
 `LATCHV`. The ordinary EXPAND 0 value is `01h`. With matrix Caps Lock on bit 7
 is set, producing `81h`. Temporary EXPAND 1 accesses set bit 2 and restore the
-shadow value afterwards (`962853f:src/layout.asm:26-45`,
-`962853f:src/layout.asm:81-90`, `962853f:src/keyboard.asm:135-142`,
-`962853f:src/history.asm:35-74`). Warm boot writes `01h` before selecting its
-resident stack (`962853f:src/boot.asm:178-185`).
+shadow value afterwards (`a1023bd:src/layout.asm:19-28`, `a1023bd:src/abi.inc:286-289`,
+`a1023bd:src/layout.asm:64-69`, `a1023bd:src/abi.inc:291-293`, `a1023bd:src/keyboard.asm:137-143`,
+`a1023bd:src/history.asm:30-62`). Warm boot writes `01h` before selecting its
+resident stack (`a1023bd:src/boot.asm:128-133`).
 
 The word at `0006h` is the exclusive top of the TPA. Without a resident service
 it points to a three-byte BDOS entry stub below the allocation vectors.
 `ALVINIT` packs those vectors down from `WSBASE` and reserves the jump below the
-lowest vector (`962853f:src/boot.asm:695-800`). A format 1.1 card with a nonzero
+lowest vector (`a1023bd:src/boot.asm:522-620`). A format 1.1 card with a nonzero
 drive count reserves 256 bytes for each requested drive. Otherwise each mounted
 drive receives `(DSM >> 3) + 1` bytes. A service lowers `0006h` to its first
 page during installation. `PZTOP` is updated when its pages are committed
-(`962853f:src/loader.asm:421-441`, `962853f:src/loader.asm:608-614`).
+(`a1023bd:src/loader.asm:327-340`, `a1023bd:src/loader.asm:485-490`).
 
 These card-dependent figures are historical `78127ec` values:
 
@@ -90,18 +90,18 @@ The historical `78127ec` ROM occupied these ranges:
 In that build the CCP's three files occupied `DD2Ah–E702h`, 2,521 bytes.
 The BDOS's six files occupied `E703h–F608h`, 3,846 bytes. The source at
 `962853f` includes four CCP files, including `cpm/ccpmut.asm`, then six
-BDOS files (`962853f:src/rom.asm:31-40`).
+BDOS files (`a1023bd:src/rom.asm:31-40`).
 
 The ROM copy of the BIOS jump table is data at `BIOSBAS`. Cold boot copies
 its 17 jumps to `BF00h`. Calls use the RAM table, whose entries can be
 replaced by resident hooks. Warm boot leaves that table intact
-(`962853f:src/tables.asm:17-35`, `962853f:src/layout.asm:134-135`,
-`962853f:src/boot.asm:144-152`).
+(`a1023bd:src/tables.asm:9-31`, `a1023bd:src/layout.asm:98-99`,
+`a1023bd:src/boot.asm:106-109`).
 
 ## Page zero
 
 These fixed addresses identify the current page-zero contracts
-(`962853f:src/layout.asm:63-90`, `962853f:src/console.asm:98-111`):
+(`a1023bd:src/layout.asm:44-69`, `a1023bd:src/abi.inc:291-293`, `a1023bd:src/console.asm:61-72`):
 
 | Address | Contents |
 | --- | --- |
@@ -120,30 +120,30 @@ These fixed addresses identify the current page-zero contracts
 
 Cold boot clears page zero. `PZINIT` writes the entry jumps and stub at cold
 boot's end and on each warm boot. It leaves `0003h` and `0004h` unchanged
-(`962853f:src/boot.asm:62-70`, `962853f:src/boot.asm:157-199`,
-`962853f:src/boot.asm:412-434`). The restart sweep preserves the three bytes of
+(`a1023bd:src/boot.asm:52-59`, `a1023bd:src/boot.asm:112-141`,
+`a1023bd:src/boot.asm:297-312`). The restart sweep preserves the three bytes of
 a qualifying jump and clears its remaining five bytes. A target equal to `PZTOP`
 does not qualify. The default `EI`, `RETI` sequence at `0038h` is written only
-when no qualifying jump remains there (`962853f:src/boot.asm:454-509`).
+when no qualifying jump remains there (`a1023bd:src/boot.asm:326-368`).
 
 Service-page release clears the first byte of each claimed restart slot
 before the sweep. Successful unload and failure cleanup that releases the
 pages both use this rule. A failed `INIT` can retain its pages when a BIOS
 hook still targets them so failure alone does not imply slot release
-(`962853f:src/loader.asm:128-173`, `962853f:src/loader.asm:536-580`,
-`962853f:src/loader.asm:634-662`).
+(`a1023bd:src/loader.asm:101-130`, `a1023bd:src/loader.asm:422-461`,
+`a1023bd:src/loader.asm:506-526`).
 
 The CCP records the drive/user byte for its command prompt. Before program
 launch it writes both FCBs, then the command tail and default DMA address, then
-the load-drive byte (`962853f:src/cpm/ccp.asm:363-384`,
-`962853f:src/cpm/ccpcmd.asm:447-497`, `962853f:src/cpm/ccp.asm:519-536`). The
+the load-drive byte (`a1023bd:src/cpm/ccp.asm:335-353`,
+`a1023bd:src/cpm/ccpcmd.asm:400-450`, `a1023bd:src/cpm/ccp.asm:477-490`). The
 second FCB reaches `008Fh` so tail publication follows FCB parsing.
 
 CP/M reserves `0040h–004Fh` for BIOS scratch. TEC-OS uses only `0040h`
 there. It is the resident state byte read while EXPAND 1 hides the upper
 workspace. Cold boot leaves the other 15 bytes zero. Console state is above
-the RAM BIOS table (`962853f:src/layout.asm:81-90`,
-`962853f:src/ram.asm:426-451`).
+the RAM BIOS table (`a1023bd:src/layout.asm:64-69`, `a1023bd:src/abi.inc:291-293`,
+`a1023bd:src/ram.asm:416-434`).
 
 ## The resident workspace
 
@@ -165,22 +165,22 @@ reach it. Other routines can still overwrite a retained field.
 
 The build places `WSBASE` so that the lower workspace ends immediately before
 `BF00h`. Its upper span starts after the 51-byte RAM BIOS table at `BF33h`
-(`962853f:tools/build.mjs:237-267`, `962853f:src/ram.asm:314-319`).
+(`a1023bd:tools/build.mjs:237-267`, `a1023bd:src/ram.asm:305-307`).
 Within the historical build these spans had fixed addresses across cards.
 Allocation vectors below `WSBASE` varied with the card.
 
 Cold boot clears the workspace from `WSBASE` up to but excluding `WSEND`.
 Warm boot clears `CCPCLR` up to but excluding `BDOSRME`, then sets the DMA
 address, command-buffer maximum and stack guard. It separately clears `BUFOK`
-(`962853f:src/boot.asm:73-80`, `962853f:src/boot.asm:530-559`).
+(`a1023bd:src/boot.asm:61-66`, `a1023bd:src/boot.asm:384-404`).
 In the historical map those sweeps were `BAE7h–BFFFh` and
 `BDB7h–BEFFh` respectively. Warm boot also writes retained fields outside
 its clearing span, including `LATCHV` and `SVCBSY`
-(`962853f:src/boot.asm:178-199`).
+(`a1023bd:src/boot.asm:128-141`).
 
 ### The BIOS's block
 
-The declarations are at `962853f:src/ram.asm:16-148`. Addresses below
+The declarations are at `a1023bd:src/ram.asm:15-136`. Addresses below
 remain historical `78127ec` values.
 
 | Addresses | Bytes | Name | Contents | Cleared by |
@@ -208,11 +208,11 @@ remain historical `78127ec` values.
 The write-cleared key identifies a block cleared for a new allocation rather
 than read from the card. Clearing `BUFOK` prevents reuse of the old key.
 A new type-2 write can still clear its block without a pre-read
-(`962853f:src/bios.asm:368-426`).
+(`a1023bd:src/bios.asm:340-388`).
 
 ### The CCP's block
 
-The declarations are at `962853f:src/ram.asm:153-225`. The historical
+The declarations are at `a1023bd:src/ram.asm:141-210`. The historical
 `CCPCLR` address was `BDB7h`. The FCBs and command buffer below it survive
 the warm clearing sweep for another chained piece.
 
@@ -231,13 +231,13 @@ the warm clearing sweep for another chained piece.
 
 Retention of the line does not guarantee execution of its remaining pieces. A
 failed warm-boot flush clears `CHPOS` after dropping failed cache lines
-(`962853f:src/cache.asm:307-351`, `962853f:src/cache.asm:653-668`).
+(`a1023bd:src/cache.asm:265-299`, `a1023bd:src/cache.asm:557-572`).
 [Chapter 21](21-chains-across-warm-boot.md) explains the other cancellation
 paths.
 
 ### The BDOS's block
 
-The declarations are at `962853f:src/ram.asm:231-312`. Warm boot clears this
+The declarations are at `a1023bd:src/ram.asm:217-298`. Warm boot clears this
 whole block before setting the DMA address to `0080h`.
 
 | Addresses | Bytes | Name | Contents | Cleared by |
@@ -257,7 +257,7 @@ whole block before setting the DMA address to `0080h`.
 
 ### Above the RAM BIOS table
 
-The declarations are at `962853f:src/ram.asm:314-485`. These historical
+The declarations are at `a1023bd:src/ram.asm:305-464`. These historical
 addresses lie above the warm clearing span. Cold-only clearing therefore
 describes storage lifetime, not an assurance that its value remains unchanged.
 
@@ -295,17 +295,17 @@ describes storage lifetime, not an assurance that its value remains unchanged.
 `CIFF` occupies two bytes. `HFLAG` marks the CCP's line-input call with `FFh`.
 `HPOS` is a byte offset into the history page. `CONDEV` combines switch, probe
 and ownership state so its bits do not all prove device presence
-(`962853f:src/ram.asm:249-252`, `962853f:src/ram.asm:332-337`,
-`962853f:src/layout.asm:92-102`, `962853f:src/cpm/ccp.asm:161-166`). `SVCRA`
+(`a1023bd:src/ram.asm:237-240`, `a1023bd:src/ram.asm:323-329`,
+`a1023bd:src/layout.asm:70-75`, `a1023bd:src/cpm/ccp.asm:145-149`). `SVCRA`
 identifies a cause only when `SVCRC` is 1. Record-validation failure after
-successful INIT sets it to 0 (`962853f:src/loader.asm:519-544`).
+successful INIT sets it to 0 (`a1023bd:src/loader.asm:412-430`).
 [Chapter 24](24-loading-and-removing-services.md) explains those load outcomes.
 
 ## EXPAND 1
 
 These fixed bank addresses hold the cache and history at `962853f`. They
-also occur in the historical map (`962853f:src/layout.asm:49-58`,
-`962853f:src/history.asm:24`):
+also occur in the historical map (`a1023bd:src/layout.asm:32-42`,
+`a1023bd:src/history.asm:16`):
 
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
@@ -319,13 +319,13 @@ also occur in the historical map (`962853f:src/layout.asm:49-58`,
 | `BF00h–BFFFh` | 256 | Unused |
 
 Cold boot clears the whole bank and then marks every cache key empty
-(`962853f:src/boot.asm:321-346`). No BDOS or BIOS interface allocates a
+(`a1023bd:src/boot.asm:232-249`). No BDOS or BIOS interface allocates a
 program range there. Direct latch access can expose the bank but the
 resident EXPAND 0 stacks disappear while it is selected. Cache/history
 routines exclude maskable interrupts and restore the latch before any stack
-operation (`962853f:src/history.asm:35-74`,
-`962853f:src/bios.asm:445-478`, `962853f:src/sd.asm:525-644`,
-`962853f:src/sd.asm:653-724`).
+operation (`a1023bd:src/history.asm:30-62`,
+`a1023bd:src/bios.asm:410-440`, `a1023bd:src/sd.asm:466-571`,
+`a1023bd:src/sd.asm:583-652`).
 
 A jump to `0000h` with EXPAND 1 still selected reaches `BF03h` in that bank.
 With its normally cleared unused bytes, execution continues through zeros
@@ -333,15 +333,15 @@ into the ROM at `C000h`. `RSTENT` distinguishes that entry from reset and
 warm boot selects EXPAND 0 before setting its stack. Modified bank contents
 can break that route. A program using the inherited stack also loses access
 to its return word while EXPAND 1 is visible
-(`962853f:src/boot.asm:38-58`, `962853f:src/boot.asm:178-185`,
-`962853f:src/boot.asm:412-420`, `962853f:src/cpm/ccp.asm:527-536`).
+(`a1023bd:src/boot.asm:22-40`, `a1023bd:src/boot.asm:128-133`,
+`a1023bd:src/boot.asm:297-302`, `a1023bd:src/cpm/ccp.asm:482-490`).
 [Chapter 15](15-reset-and-boot.md) explains the exit paths and their limits.
 
 ## The stacks
 
 The addresses in this table are historical `78127ec` values. Current stack
 reservations remain defined by `BOOTSTK`, `BIOSSTN`, `CCPSTN` and `BDOSSTN`
-(`962853f:src/layout.asm:122`, `962853f:src/layout.asm:152-155`).
+(`a1023bd:src/layout.asm:94`, `a1023bd:src/layout.asm:113-115`).
 
 | Stack | Historical addresses | Bytes | Use |
 | --- | --- | ---: | --- |
@@ -353,14 +353,14 @@ reservations remain defined by `BOOTSTK`, `BIOSSTN`, `CCPSTN` and `BDOSSTN`
 Cold boot switches from `BOOTSTK` to `STKTOP` after clearing the workspace.
 Console initialisation, banner, mount, drive listing and the diagnostic prompt
 use that BDOS stack before the CCP starts. Diagnostic retries set `STKTOP`
-again (`962853f:src/boot.asm:49-88`, `962853f:src/boot.asm:104-156`).
+again (`a1023bd:src/boot.asm:35-68`, `a1023bd:src/boot.asm:79-111`).
 A BDOS call saves caller SP in `OLDSP`, sets SP to `STKTOP` and restores
-caller SP on return (`962853f:src/cpm/bdos.asm:137-142`,
-`962853f:src/cpm/bdos.asm:245-252`).
+caller SP on return (`a1023bd:src/cpm/bdos.asm:120-123`,
+`a1023bd:src/cpm/bdos.asm:204-208`).
 
 Services run on their caller's stack. `SVCLIM` limits the combined additional
 use to 8 bytes on BDOS, 12 on BIOS and 6 on CCP
-(`962853f:src/tables.asm:143-146`, `962853f:src/loader.asm:281-317`). The
+(`a1023bd:src/tables.asm:139-144`, `a1023bd:src/loader.asm:216-245`). The
 historical `78127ec` host-model census measured bases of 30, 18 and 18 bytes
 respectively. Adding the declared limits gives 38/54, 30/40 and 24/32 bytes.
 These are historical measurements and bounds, not a measurement of the inspected
@@ -373,8 +373,8 @@ explains declaration checks.
 Historically `npm run media` wrote the summary into `docs/memory-map.md` from
 `build/tecos/census.json` and the build's symbol file. The inspected media
 writer still reads those artifacts and writes the summary
-(`962853f:tools/media.mjs:66-91`, `962853f:tools/media.mjs:169-188`,
-`962853f:tools/media.mjs:259`). Chapter 26 describes ROM/media construction.
+(`a1023bd:tools/media.mjs:66-91`, `a1023bd:tools/media.mjs:169-188`,
+`a1023bd:tools/media.mjs:259`). Chapter 26 describes ROM/media construction.
 The retained lookup below reads an existing `build/tecos/tecos.d8.json`.
 It requires the matching historical artifact to reproduce these addresses:
 
@@ -397,7 +397,7 @@ CHPOS BFE4h
 
 A source change can move build-dependent addresses. Page zero, the cache and
 history addresses, RAM BIOS origin `BF00h` and ROM table origin `C003h` are
-fixed by the inspected contract (`962853f:src/layout.asm:49-90`,
-`962853f:src/layout.asm:134-135`, `962853f:src/history.asm:24`,
-`962853f:tools/build.mjs:256-267`). A symbol lookup is valid for the artifact
+fixed by the inspected contract (`a1023bd:src/layout.asm:30-69`, `a1023bd:src/abi.inc:291-293`,
+`a1023bd:src/layout.asm:98-99`, `a1023bd:src/history.asm:16`,
+`a1023bd:tools/build.mjs:256-267`). A symbol lookup is valid for the artifact
 it reads so a later map needs that build's symbols and identity.

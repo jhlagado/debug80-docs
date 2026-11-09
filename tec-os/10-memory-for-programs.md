@@ -10,7 +10,7 @@ nav_group: "Writing programs"
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the
      repository's `atom-z80` 0.3.7. -->
 <!-- Historical examples retain that pin and assembler.
-     Source-only mechanism check: 962853f499f05faf281f6cdff1deca8959f58c2b.
+     Source-only mechanism check: a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      TOP, AREA, KEY, SAVE and their recipes/output are retained unchanged.
      Numerical TPA figures and service costs belong to the historical setup.
      No build, execution, import, new capture or physical-board result claimed. -->
@@ -295,7 +295,7 @@ scratch:
 The CCP stores the current drive and user area at `0004h` before program entry.
 Warm boot uses that byte to restore the selection so changing that byte changes
 the selection used on exit. An unavailable drive falls back to A
-(`src/cpm/ccp.asm:363-384`, `src/cpm/ccp.asm:32-102`).
+(`src/cpm/ccp.asm:335-353`, `src/cpm/ccp.asm:32-88`).
 
 The tail's first byte is its length and the characters follow it. They are in
 capitals and include the leading space after the command's name. A read into the

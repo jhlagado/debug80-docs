@@ -14,7 +14,7 @@ nav_group: "Reference"
      Captures, measurements and other citations retain their earlier provenance. -->
 
 <!-- Mechanism coordinates below: TEC-OS
-     962853f499f05faf281f6cdff1deca8959f58c2b.
+     a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      The original comments above retain their historical scope. Historical
      timings, depths and VTEST output have separate pins below and in the
      pass record. No execution or new assembly proof is supplied here.
@@ -40,8 +40,8 @@ The inspected application binary interface (ABI) is 5.1. Before calling ABICALL,
 a program compares the three bytes at ABITAB with `TNA` and ABIMAJ with exactly
 5. A new major may renumber services. A new minor adds service numbers at the
 end so code using the 5.0 calls can run on 5.1. A caller requiring FONT also
-checks for minor version 1 or later (`src/abi.inc:1-32,163-168`,
-`src/abi.asm:1-20`, `test/programs/demo.asm:19-31`).
+checks for minor version 1 or later (`src/abi.inc:1-28,210-218`,
+`src/abi.asm:1-14`, `test/programs/demo.asm:19-31`).
 
 | Address | Bytes | Name | Contents |
 | --- | ---: | --- | --- |
@@ -52,7 +52,7 @@ checks for minor version 1 or later (`src/abi.inc:1-32,163-168`,
 
 ABIEND is `C00Bh`, eight bytes after ABITAB. The read-only data block follows
 the ABI table. ABICALL is a JP into the dispatcher rather than an array of fixed
-routine addresses (`src/rom.asm:12-18`, `src/services.asm:35-68`).
+routine addresses (`src/rom.asm:12-18`, `src/services.asm:23-56`).
 
 ## Calling a service
 
@@ -61,8 +61,8 @@ input because selection uses it. Except for FIND and LIST, success returns A = 0
 with Z set and carry clear. Failure returns a nonzero status with carry set. The
 requested operation has not been applied. MOUNT/UNMNT can nevertheless have
 written or dropped cache lines before refusing the drive change, as their
-section explains (`src/abi.inc:34-65`, `src/services.asm:70-86`,
-`src/volsvc.asm:246-279,326-368`).
+section explains (`src/abi.inc:32-66`, `src/services.asm:58-72`,
+`src/volsvc.asm:211-240,276-323`).
 
 | Status | `abi.inc` | Meaning |
 | ---: | --- | --- |
@@ -73,20 +73,20 @@ section explains (`src/abi.inc:34-65`, `src/services.asm:70-86`,
 Hardware failures and an invalid service number set NZ as well as carry. Volume
 and driver failures leave Z undefined so their callers test carry or A.
 FIND/LIST use carry and return a generation in A on success
-(`src/services.asm:70-86,617-658`, `src/volsvc.asm:360-368`,
-`src/loader.asm:773-880`).
+(`src/services.asm:58-72,512-557`, `src/volsvc.asm:313-323`,
+`src/loader.asm:622-718`).
 
 SVTAB holds one word per number. The dispatcher enters that routine with B, DE
 and HL restored and the caller's return address next on the stack. A number from
 TNCOUNT, 16, upwards returns status 1 with B, DE and HL unchanged
-(`src/services.asm:35-68`, `src/tables.asm:99-132`). The historical
+(`src/services.asm:23-56`, `src/tables.asm:97-130`). The historical
 invalid-number path took 58 T-states and used no stack below that return address
 at `60e0768`.
 
 Every numbered call preserves its incoming interrupt state and uses the caller's
 stack. IX, IY and the alternate registers are preserved except that MOUNT, UNMNT
 and DESC may change IX and the alternates. Treat registers not documented as
-results as destroyed (`src/abi.inc:34-65`).
+results as destroyed (`src/abi.inc:32-66`).
 
 | `C` | Name | `abi.inc` | Takes | Stack bound | Historical T-states |
 | ---: | --- | --- | --- | ---: | ---: |
@@ -107,7 +107,7 @@ results as destroyed (`src/abi.inc:34-65`).
 | 14 | `LIST` | `TNLIST` | `B` = an index | 8 | |
 | 15 | `FONT` | `TNFONT` | nothing | 4 | 194 |
 
-The names and bounds come from `src/abi.inc:66-168`. The build's ABI check
+The names and bounds come from `src/abi.inc:68-218`. The build's ABI check
 compares the fixed table bytes, verifies that the service entries lie in code
 and checks INFO's bits. It does not prove every routine's contract. Media
 generation publishes the include as `dist/abi.inc` (`tools/build.mjs:144-158`,
@@ -119,7 +119,7 @@ The table's stack figures are current source bounds below the service's return
 address, including dispatcher use. The dispatcher's temporary pushes are gone
 when the selected routine begins so its depth is not added to a routine's
 depth. The caller must allow for its own return word, saved registers and
-nesting too (`src/services.asm:45-68`).
+nesting too (`src/services.asm:33-56`).
 
 The cost figures start at the JP at ABICALL and end after the final RET. A CALL
 adds 17 T-states. Their retained model provenance is:
@@ -145,7 +145,7 @@ Numbers 0–8 are implemented in `src/services.asm`. None calls the BDOS. VCLAIM
 holds the PICO claim flag, LCD can clear CONDEV's ROM-word bit and VIDEO release
 can reset the selected console's row and column. These are resident workspace
 changes, not state stored in a transient program
-(`src/services.asm:1-25,152-279`).
+(`src/services.asm:1-19,124-232`).
 
 ### 0 INFO
 
@@ -153,7 +153,7 @@ Returns B = device bits, DE = ROM product version, L = console columns and H =
 console rows. Serial dimensions are both zero. Status is always 0. Stack bound:
 6 bytes. Historical cost: 244 T-states at `60e0768`, with no device read. D is
 the version's major and E its minor so `0001h` means product version 0.1 rather
-than ABI 5.1 (`src/services.asm:88-105`, `tools/build.mjs:28-28,64-71`).
+than ABI 5.1 (`src/services.asm:74-87`, `tools/build.mjs:28-28,64-71`).
 
 | Bit | Value | `abi.inc` | Set when |
 | ---: | ---: | --- | --- |
@@ -166,14 +166,14 @@ than ABI 5.1 (`src/services.asm:88-105`, `tools/build.mjs:28-28,64-71`).
 
 B combines CONDEV with VCLAIM. The DS1302 cold-boot bit records whether its
 seconds register read below `60h`. It is not a full BCD/date validation or a new
-probe on each INFO call (`src/abi.inc:192-203`, `src/boot.asm:90-94`,
-`src/services.asm:484-511`).
+probe on each INFO call (`src/abi.inc:233-243`, `src/boot.asm:69-72`,
+`src/services.asm:403-428`).
 
 ### 1 DIGIT
 
 Takes HL pointing to six segment patterns, leftmost first, and scans once.
 Status is always 0. Stack bound: 4 bytes. Historical cost: 20,670 T-states at
-`60e0768` (`src/services.asm:107-150`).
+`60e0768` (`src/services.asm:89-132`).
 
 For each digit it writes the pattern to port `02h` and selects the digit through
 port `01h`, from bit 5 for the leftmost to bit 0 for the rightmost. Bit 6
@@ -188,7 +188,7 @@ the instructions. It is not a physical brightness or refresh measurement.
 Takes B = row 0–3 and HL pointing to exactly 20 characters for the 20 × 4 LCD.
 Status is 0 on success or 1 for a row above 3, rejected before a write. Stack
 bound: 10 bytes. Historical cost at `60e0768`: 4,915 T-states or 4,935 for row
-3 (`src/services.asm:152-193`).
+3 (`src/services.asm:124-162`).
 
 Writing row 3 clears HWBWRD. A later GLCD.SVC installation therefore preserves
 the program's replacement text instead of blanking it as the ROM's `GLCD?`
@@ -199,7 +199,7 @@ message.
 Takes B = 1 to claim the PICO9918 or 0 to release it. Another B returns status 1
 before any device test or claim change. For valid modes, status 2 means no
 PICO9918 answered at cold boot. Success returns 0. Stack bound: 12 bytes
-(`src/services.asm:194-279`).
+(`src/services.asm:164-232`).
 
 Historical timings at `58d4345` are 1,232 T-states for a claim with a cursor to
 remove, 217,252 for release with PICO selected at 80 columns, 187,492 with PICO
@@ -217,13 +217,13 @@ started at cold boot. Mode, font and displayed page are restored. If PICO is
 selected, release also clears its screen and homes its cursor. With the
 Matrix switch disabled the ROM console did not start so release leaves the chip's
 programmed state alone. Warm boot releases an active claim before rebuilding
-page zero (`src/boot.asm:178-215`, `src/pico.asm:59-92`).
+page zero (`src/boot.asm:128-149`, `src/pico.asm:44-68`).
 
 ### 4 TONE
 
 Takes B = delay count and DE = half-cycle count. It drives port `01h` bit 7
 while holding bit 6 high. Status is always 0. Stack bound: 4 bytes
-(`src/services.asm:281-322`).
+(`src/services.asm:234-268`).
 
 Ordinary toggle spacing is 16 × B + 51 T-states, with B = 0 meaning 256. For
 nonzero DE, the retained total is DE × (16 × B + 51) + 222 T-states. It was
@@ -255,19 +255,19 @@ measurements of a physical oscillator:
 
 Returns B = active joystick lines as 1 bits, from complemented input at port
 `FEh` with BC = `F7FEh`. Status is always 0. Stack bound: 4 bytes. Historical
-cost: 214 T-states at `60e0768` (`src/services.asm:324-337`).
+cost: 214 T-states at `60e0768` (`src/services.asm:266-283`).
 
 That address also selects matrix row 3. A pressed switch there can appear as a
 joystick bit and a joystick line can appear as a matrix key. The diagnostic ROM
 labels the bits after MON-3 as `01h` up, `02h` down, `04h` left, `08h` right,
 `10h` fire 2, `20h` pin 9, `40h` fire 1 and `80h` fire 3. Those physical labels
-remain unconfirmed (`diag/interact.asm:553-557`).
+remain unconfirmed (`diag/interact.asm:615-619`).
 
 ### 6 KEYS
 
 Takes HL pointing to eight bytes and stores matrix rows 0–7, with a 1 for each
 pressed switch. Status is always 0. Stack bound: 4 bytes. Historical cost: 581
-T-states at `60e0768` (`src/services.asm:339-356`).
+T-states at `60e0768` (`src/services.asm:279-295`).
 
 Each input reads port `FEh` with one low bit in the high address byte, from
 `FEh` for row 0 to `7Fh` for row 7. KEYS does not test keyboard presence. INFO's
@@ -278,7 +278,7 @@ HWBMTX bit reports whether the matrix keyboard is enabled.
 Takes D = row, E = column, B = count and HL pointing to characters. Row and
 column are zero-based. It writes through the display's cell routine without
 moving the console cursor or using the escape parser. Stack bound: 22 bytes
-(`src/services.asm:360-427`).
+(`src/services.asm:297-354`).
 
 Status 2 means no usable video console: serial/BAT or PICO both claimed and
 selected. These checks precede count and row checks. On an available video
@@ -290,10 +290,10 @@ console.
 
 The cursor's stored position remains unchanged. CONST redraws its image when no
 character is ready and CONIN while waiting for input
-(`src/console.asm:200-225,296-332`). Bytes `80h–FFh` reach the display as
+(`src/console.asm:144-165,232-260`). Bytes `80h–FFh` reach the display as
 reverse images of `00h–7Fh` while the ordinary video-console path filters those
-high bytes (`src/pico.asm:282-336`, `drivers/glcd.asm:604-641`,
-`src/term.asm:49-65`).
+high bytes (`src/pico.asm:232-274`, `drivers/glcd.asm:527-560`,
+`src/term.asm:39-50`).
 
 Historical measured depths at `58d4345` were 22 bytes on GLCD and 18 on PICO
 with a cursor to remove or 18 and 14 respectively without one. These are
@@ -306,7 +306,7 @@ GLCD at `621201d`.
 Takes B = 0 to read the DS1302 into seven bytes at HL or B = 1 to set it from
 them. Another B returns status 1 before clock access. Each valid call probes the
 clock again and returns status 2 if it does not answer. Success returns 0. Stack
-bound: 8 bytes (`src/services.asm:432-595`).
+bound: 8 bytes (`src/services.asm:357-502`).
 
 The seven bytes are BCD seconds, minutes, hours, date, month, weekday and year.
 Setting first disables write protection and then writes `80h` as the final
@@ -319,8 +319,8 @@ mode-guard count described above.
 Numbers 9–11 use `src/volsvc.asm`. Drives count from 0 for A. Each returns A = 0
 with carry clear or TNEBAD with carry. Z is undefined on failure. All three have
 a 24-byte source stack bound and may change IX and the alternate registers.
-Appendix E defines the 32-byte descriptor (`src/abi.inc:115-138`,
-`src/volsvc.asm:186-236,360-368`).
+Appendix E defines the 32-byte descriptor (`src/abi.inc:147-180`,
+`src/volsvc.asm:155-198,313-323`).
 
 | Condition | Rejected by |
 | --- | --- |
@@ -334,39 +334,39 @@ Appendix E defines the 32-byte descriptor (`src/abi.inc:115-138`,
 A failed flush leaves the drive mapping unchanged. It may already have written
 other dirty blocks. Each line whose write failed is dropped and its pending
 changes lost. This is the exception to reading a rejected operation as an
-unchanged cache (`src/volsvc.asm:246-279,326-337,413-429`,
-`src/cache.asm:292-350`).
+unchanged cache (`src/volsvc.asm:211-240,276-285,372-387`,
+`src/cache.asm:254-299`).
 
 A format 1.0 card reserves slots only for drives mounted at cold boot. A format
 1.1 card reserves a G8M-sized slot for each requested drive, mounted or not. A
-later mount must fit that reservation (`src/boot.asm:679-800`,
-`src/volsvc.asm:287-315`).
+later mount must fit that reservation (`src/boot.asm:511-620`,
+`src/volsvc.asm:246-266`).
 
 MOUNT and UNMNT flush the card's dirty cache lines before changing a drive. They
 reset that drive through BDOS function 37 on the BDOS's own stack so its next
 access logs it in from the directory. When MOUNT changes the default drive it
 also selects it again through function 14, making functions 27 and 31 report the
 new volume immediately. They must be called from outside an active BDOS call.
-DESC makes no such BDOS call (`src/volsvc.asm:246-279,326-391`).
+DESC makes no such BDOS call (`src/volsvc.asm:211-240,276-346`).
 
 ### 9 MOUNT
 
 Takes B = drive 0–3 and E = container index. It mounts that volume in place of
 any volume on the selected drive. Status is 0 or TNEBAD. Stack bound: 24 bytes.
 A volume already mounted anywhere is refused, including on the same drive
-(`src/volsvc.asm:246-279`).
+(`src/volsvc.asm:211-240`).
 
 ### 10 UNMNT
 
 Takes B = drive 1–3 and removes its mount. Drive A cannot be emptied. Status is
-0 or TNEBAD. Stack bound: 24 bytes (`src/volsvc.asm:326-368`).
+0 or TNEBAD. Stack bound: 24 bytes (`src/volsvc.asm:276-323`).
 
 ### 11 DESC
 
 Takes E = container index and HL pointing to 32 destination bytes. It copies the
 descriptor and sets byte 14 to the drive on which the volume is currently
 mounted or `FFh` for none. Status is 0 or TNEBAD. Stack bound: 24 bytes
-(`src/volsvc.asm:212-236,457-506`, `format/format.json:27-38`).
+(`src/volsvc.asm:182-198,413-458`, `format/format.json:27-38`).
 
 ## A display driver's table
 
@@ -375,7 +375,7 @@ mounted or `FFh` for none. Status is 0 or TNEBAD. Stack bound: 24 bytes
 Takes B = 3 for UC1: and HL pointing to its driver table. Success returns A = 0,
 carry clear and HL = LINEBUF for the row read/write routines. HL = 0 instead
 drops UC1:'s table and returns A = 0 with carry clear and HL destroyed. Stack
-bound: 4 bytes (`src/services.asm:605-658`, `src/video.asm:125-212`).
+bound: 4 bytes (`src/services.asm:512-557`, `src/video.asm:120-197`).
 
 For an installation, TNEBAD with carry means B is not 3, a UC1: table is already
 installed or the Matrix switch is disabled. TNENODV means a STARTUP.CMD line
@@ -386,26 +386,26 @@ belongs to the ROM. Failed calls leave the table unchanged and Z undefined.
 The table is eight words. Its first six are routines in this order: put, get,
 clear to end of line, restore, read row and write row. The seventh handles page
 functions and only CRT: calls it so the GLCD table uses 0. The last word stores
-columns then rows as bytes (`src/video.asm:134-148`, `drivers/glcd.asm:39-46`).
-GLCD.SVC installs from INIT and drops from REMOVE (`drivers/glcd.asm:66-129`).
+columns then rows as bytes (`src/video.asm:129-141`, `drivers/glcd.asm:37-45`).
+GLCD.SVC installs from INIT and drops from REMOVE (`drivers/glcd.asm:60-103`).
 
 Dropping the selected mode's table causes the next console call to choose its
 console again. Another selected mode and its screen are preserved
-(`src/video.asm:184-212`).
+(`src/video.asm:168-197`).
 
 ## The registry
 
 FIND and LIST read published records without calling BDOS or BIOS. They can
 therefore run on the caller's stack within their eight-byte bounds. A record
 contains a link word, an eight-byte name, a version byte and a table address: 13
-bytes in all (`src/loader.asm:60-64,773-880`).
+bytes in all (`src/loader.asm:44-46,622-718`).
 
 FIND examines at most 256 records. LIST's byte index selects 0–255. The loader
 admits at most 256 records in total and at most 255 from one new service,
 validating their locations before linking the chain
-(`src/loader.asm:458-518,589-606`). Both return the eight-bit SVCGEN on success.
+(`src/loader.asm:359-410,468-483`). Both return the eight-bit SVCGEN on success.
 Successful removal increments it and can wrap it from 255 to 0
-(`src/loader.asm:128-174,864-868`). Chapter 13 explains pointer lifetime and
+(`src/loader.asm:101-130,703-706`). Chapter 13 explains pointer lifetime and
 generation checks.
 
 ### 13 FIND
@@ -413,19 +413,19 @@ generation checks.
 Takes DE pointing to an eight-byte space-padded name and B = minimum version. It
 returns the newest matching record whose version is at least B, with carry
 clear, HL = table address and A = generation. Carry set means none. Stack bound:
-8 bytes (`src/loader.asm:773-784,816-880`).
+8 bytes (`src/loader.asm:622-632,659-718`).
 
 ### 14 LIST
 
 Takes B = index from 0, newest first. It returns carry clear, HL = record
 address and A = generation or carry set past the end. Stack bound: 8 bytes
-(`src/loader.asm:786-814`).
+(`src/loader.asm:634-657`).
 
 ## The PICO record
 
 When the ROM PICO console starts at cold boot it publishes the permanent
 registry tail `PICO`, version 3, in PIBLK. UNLOAD removes resident owners rather
-than that tail (`src/pico.asm:31-92`, `src/loader.asm:110-174`). The historical
+than that tail (`src/pico.asm:19-68`, `src/loader.asm:83-130`). The historical
 `78127ec` layout in Appendix C places the table at `BBE3h`. That is a layout
 coordinate, not a fixed ABI address. Programs obtain the table through FIND. Its
 first eight words are the display table described under DRVR, followed by five
@@ -442,17 +442,17 @@ entry words:
 The first four entries require the caller to hold VIDEO's claim. They perform no
 claim or argument validation and may change AF, BC, DE and HL. Zero count
 transfers no data bytes, though the address-setup routine still writes the
-control port (`src/abi.inc:205-218`, `src/pico.asm:358-450`).
+control port (`src/abi.inc:245-258`, `src/pico.asm:292-431`).
 
 PICOWID was added in record version 3 and is the entry used by CON PICO 40. It
 requires an unclaimed chip. Any other width or an active claim returns carry
 with no width change. Success changes the saved width and marks selected CRT:
 for reselection so the next console call clears its screen at that width
-(`src/abi.inc:220-243`, `src/pico.asm:94-179`).
+(`src/abi.inc:260-270`, `src/pico.asm:70-139`).
 
 Debugger offsets from the table are PICOVRB = 36 for the record version, PICOTPD
 = 41 for the drawn page and PICOTPS = 42 for the shown page
-(`src/ram.asm:75-107`). These are state bytes rather than routine entries.
+(`src/ram.asm:75-99`). These are state bytes rather than routine entries.
 
 VTEST is a retained historical program. It finds a version-2-or-later PICO
 record, claims the chip, writes four bytes to VRAM, reads them back, releases it
@@ -556,7 +556,7 @@ directly still claims it before writing its ports.
 
 Returns HL = the ROM console font address. Status is always 0. Stack bound: 4
 bytes. Historical timing/depth at `58d4345`: 194 T-states and 4 bytes
-(`src/services.asm:597-603`, `src/abi.inc:163-168`).
+(`src/services.asm:504-510`, `src/abi.inc:210-218`).
 
 The selected font is TEC Compact from `format/font5x7.txt`. It contains 96
 characters from `20h`, eight bytes each, top row first. Each row's five pixels
@@ -570,6 +570,6 @@ remains unresolved (`format/FONT-NOTICES.txt:33-47`).
 The historical `58d4345` layout puts FONT at `C179h`. Programs use the returned
 address rather than embedding that coordinate. The PICO console uses the FONT
 label and GLCD.SVC obtains the
-address through this call during INIT (`src/pico.asm:282-336`,
-`drivers/glcd.asm:66-72`). On ABI 5.0 the number is out of range and returns
+address through this call during INIT (`src/pico.asm:232-274`,
+`drivers/glcd.asm:60-64`). On ABI 5.0 the number is out of range and returns
 status 1 so this GLCD driver's INIT refuses installation there.
