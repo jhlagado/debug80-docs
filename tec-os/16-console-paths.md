@@ -622,6 +622,8 @@ Release and warm boot both enter `HWVREL`. It returns immediately when
 there is no claim. After a claim, an installed PICO table supplies the
 routine to restore the registers, font and page even if UC1 is the console.
 The screen is cleared and homed only when PICO is the console. Without a
-PICO table the program's display state remains in place. Warm boot releases
+PICO table release leaves the display as the program set it, but warm boot
+first runs `PIICLR`, which writes 80h to register 1 of a bare chip and so
+blanks it (`src/pico.asm:323-359`). Warm boot releases
 the claim before rebuilding page zero (`src/services.asm:208-232`,
 `src/boot.asm:136-138`).

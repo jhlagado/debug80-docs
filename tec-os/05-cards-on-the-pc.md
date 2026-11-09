@@ -153,6 +153,9 @@ The complete A listing includes TED's project and session files:
  0 THOR.SES          128
 ```
 
+That listing comes from an earlier card. On the release 1 card `SAMPLE.ASM`
+takes 4608 bytes, holding the 4,485 bytes of the 40-column sample.
+
 B contains the source, program and debug file:
 
 ```text

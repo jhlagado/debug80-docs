@@ -331,8 +331,8 @@ Warm boot rebuilds the environment in this order:
 2. `PIICLR` ends any program's PICO9918 interrupt session, even with no
    claim. It clears the tracked interrupt-enable bit and, on a detected
    chip, rewrites register 1 with the interrupt off. `HWVREL` then releases
-   any program claim and restores the driver state, so the chip's interrupt
-   is off before page zero is rebuilt. The source makes no promise about the
+   any program claim and restores the driver state. With `PIICLR`'s write
+   first, the chip's interrupt is off before page zero is rebuilt. The source makes no promise about the
    board's NMI wiring (`src/boot.asm:115-136`, `src/pico.asm:323-359`,
    `src/services.asm:208-232`, `src/pico.asm:198-233`).
 3. `PZINIT` rebuilds the entry jumps, stub and restart vectors

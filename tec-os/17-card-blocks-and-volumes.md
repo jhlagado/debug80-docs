@@ -446,7 +446,7 @@ uncached directory can add metadata reads to a new-file operation.
 The starter card's `MOUNT.COM` changes drives through the numbered ROM
 service interface. It calls `ABICALL` at `C008h` with the service number
 in `C` (`src/abi.asm:9-14`, `src/abi.inc:24-26`,
-`src/abi.inc:147-178`). These three services expose the container:
+`src/abi.inc:136-166`). These three services expose the container:
 
 | Service | Arguments and effect |
 | --- | --- |
@@ -475,7 +475,7 @@ Each service has a 24-byte stack bound below its return address, including
 the dispatcher. `test/storage-boundaries.test.mjs:197-241` contains the
 six-dirty-line and all-dirty-line assertions for this bound. These source
 assertions have not been rerun here (`src/abi.inc:32-53`,
-`src/abi.inc:147-178`).
+`src/abi.inc:136-166`).
 
 Before a mount or unmount publishes a different drive assignment,
 `VFLUSH` calls `CFLALL` with interrupts masked and restores their preceding

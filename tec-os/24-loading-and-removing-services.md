@@ -350,7 +350,7 @@ traversal, even after a program corrupts links into a cycle. `REGFIND` saves
 three register pairs. An internal call adds its two-byte return word to those
 six bytes. The application binary interface (ABI) gives FIND and LIST an
 eight-byte bound below the public caller's return address, including dispatcher
-use (`src/loader.asm:640-718`, `src/abi.inc:193-208`).
+use (`src/loader.asm:640-718`, `src/abi.inc:182-203`).
 
 The count before installation is bounded too. `SVCNT` decrements B for
 links beyond the first and rejects when that limit reaches zero. A corrupted

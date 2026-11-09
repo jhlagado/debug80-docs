@@ -55,7 +55,7 @@ selected routine. `HWERR` uses `OR A` and `SCF` to return a nonzero status
 with carry set. `HWOK` uses `XOR A` to return status 0 with zero set and
 carry clear (`src/services.asm:58-72`).
 `FIND` and `LIST` have their own result convention, including the registry
-generation in `A` (`src/abi.inc:193-208`). The ABI preserves `IX`, `IY`
+generation in `A` (`src/abi.inc:182-203`). The ABI preserves `IX`, `IY`
 and the alternate registers except for `MOUNT`, `UNMNT` and `DESC`, which
 may change `IX` and the alternates. For the whole call, use the selected
 service's documented results. Other registers may be destroyed
@@ -252,7 +252,7 @@ The display drivers use the ROM's font (`src/pico.asm:250-272`,
 `drivers/glcd.asm:527-555`). `FONT`, service 15, loads its address into
 `HL` and jumps to `HWOK` (`src/services.asm:504-510`). The font has 96
 characters from code `20h`, each eight bytes in top-to-bottom row order
-(`src/abi.inc:210-218`). Its 768 data bytes are separate from the
+(`src/abi.inc:205-210`). Its 768 data bytes are separate from the
 six-byte access routine in the historical code table.
 
 The selected data is TEC Compact from `format/font5x7.txt`. Its parser puts
@@ -284,9 +284,9 @@ They are upper bounds, not a claim that every path reaches the limit
 state (`src/abi.inc:40-41`).
 
 `JOY`, `KEYS`, `DIGIT`, `TONE` and `FONT` each have a four-byte bound,
-the dispatcher's saved pairs alone (`src/abi.inc:68-119`,
-`src/abi.inc:210-218`). `PUTAT` has the deepest hardware bound at 22
+the dispatcher's saved pairs alone (`src/abi.inc:62-110`,
+`src/abi.inc:205-210`). `PUTAT` has the deepest hardware bound at 22
 bytes. Its six saved register bytes remain on the stack during a driver
 call, with the driver's nested drawing calls below them
-(`src/services.asm:342-351`, `src/abi.inc:121-132`). You therefore leave
+(`src/services.asm:342-351`, `src/abi.inc:112-121`). You therefore leave
 22 bytes free to write positioned text and four to sound a tone.

@@ -40,7 +40,7 @@ The inspected application binary interface (ABI) is 5.1. Before calling ABICALL,
 a program compares the three bytes at ABITAB with `TNA` and ABIMAJ with exactly
 5. A new major may renumber services. A new minor adds service numbers at the
 end so code using the 5.0 calls can run on 5.1. A caller requiring FONT also
-checks for minor version 1 or later (`src/abi.inc:1-28,210-218`,
+checks for minor version 1 or later (`src/abi.inc:1-28,205-210`,
 `src/abi.asm:1-14`, `test/programs/demo.asm:19-31`).
 
 | Address | Bytes | Name | Contents |
@@ -107,7 +107,7 @@ results as destroyed (`src/abi.inc:32-66`).
 | 14 | `LIST` | `TNLIST` | `B` = an index | 8 | |
 | 15 | `FONT` | `TNFONT` | nothing | 4 | 194 |
 
-The names and bounds come from `src/abi.inc:68-218`. The build's ABI check
+The names and bounds come from `src/abi.inc:62-218`. The build's ABI check
 compares the fixed table bytes, verifies that the service entries lie in code
 and checks INFO's bits. It does not prove every routine's contract. Media
 generation publishes the include as `dist/abi.inc` (`tools/build.mjs:144-158`,
@@ -216,7 +216,8 @@ clears VCLAIM and calls the ROM PICO console's restore routine when that console
 started at cold boot. Mode, font and displayed page are restored. If PICO is
 selected, release also clears its screen and homes its cursor. With the
 Matrix switch disabled the ROM console did not start so release leaves the chip's
-programmed state alone. Warm boot releases an active claim before rebuilding
+programmed state alone; warm boot first writes 80h to its register 1, blanking it
+(`src/pico.asm:323-359`). Warm boot releases an active claim before rebuilding
 page zero (`src/boot.asm:128-149`, `src/pico.asm:44-68`).
 
 ### 4 TONE
@@ -319,7 +320,7 @@ mode-guard count described above.
 Numbers 9–11 use `src/volsvc.asm`. Drives count from 0 for A. Each returns A = 0
 with carry clear or TNEBAD with carry. Z is undefined on failure. All three have
 a 24-byte source stack bound and may change IX and the alternate registers.
-Appendix E defines the 32-byte descriptor (`src/abi.inc:147-180`,
+Appendix E defines the 32-byte descriptor (`src/abi.inc:136-166`,
 `src/volsvc.asm:155-198,313-323`).
 
 | Condition | Rejected by |
@@ -564,7 +565,7 @@ directly still claims it before writing its ports.
 
 Returns HL = the ROM console font address. Status is always 0. Stack bound: 4
 bytes. Historical timing/depth at `58d4345`: 194 T-states and 4 bytes
-(`src/services.asm:504-510`, `src/abi.inc:210-218`).
+(`src/services.asm:504-510`, `src/abi.inc:205-210`).
 
 The selected font is TEC Compact from `format/font5x7.txt`. It contains 96
 characters from `20h`, eight bytes each, top row first. Each row's five pixels

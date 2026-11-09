@@ -23,6 +23,9 @@ const SKIP_DIRS = new Set([
   "dist",
   "_internal",
   "archive",
+  // basie/editorial and tec-os/editorial: excluded from the site by
+  // srcExclude in .vitepress/config.ts, so their links are never served.
+  "editorial",
 ]);
 
 function walk(dir, out = []) {

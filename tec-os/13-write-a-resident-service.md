@@ -708,6 +708,8 @@ PICO     version 03 table BBE3
 B>
 ```
 
+That run predates release 1, whose PICO record reports `version 04`.
+
 PICO is the ROM console's permanent record, registered when that console starts
 at cold boot. UNLOAD cannot remove it. Its graphics entries require the display
 claim described in Chapter 11 and listed in

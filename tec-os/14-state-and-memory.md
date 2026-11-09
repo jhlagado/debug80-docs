@@ -62,7 +62,7 @@ there and cold boot leaves the other fifteen bytes zero.
 Console state is above the RAM BIOS table. `MVCOPY` can access program
 buffers below `8000h` while EXPAND 1 is selected for transfers to fixed RAM
 (`a1023bd:src/layout.asm:64-69`, `a1023bd:src/abi.inc:291-293`, `a1023bd:src/ram.asm:416-434`,
-`a1023bd:src/cache.asm:576-584`).
+`a1023bd:src/cache.asm:624-631`).
 
 ## The workspace across a program exit
 
