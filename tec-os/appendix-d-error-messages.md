@@ -11,6 +11,9 @@ nav_group: "Reference"
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Unprefixed ranges use that pin.
      The old-card recipe/capture retains78127ec. CLOSE ERROR
      retains its actualbd15528 experiment fromBook12:65. The diagnostic prompt fence is a literal message template.
+     DEL and TED's load error cite TEC-OS
+     7fa2823357b2a96330d0b90bd120702347043116 with a 7fa2823: prefix and
+     Thorium b69d544.
      No execution, new capture or physical-board result is claimed. -->
 
 An error message identifies the operation that stopped and the recovery still
@@ -183,7 +186,7 @@ service gives a distinct cause.
 | `NAME.SVC` | Record validation failed after successful `INIT`. The status is cleared so startup also prints the name regardless of INIT's returned `A`. | Check `SERVICES`. The cleanup outcome determines whether pages remain reserved. | `src/loader.asm:359-466` |
 | `UNLOAD` | The newest service cannot be removed or none exists. Reasons include an active INIT/REMOVE, a mismatched top, a non-removable flag or carry from REMOVE. | Remove services newest first and investigate the retained service. | [Chapter 5](05-drives-and-user-areas.md), `src/cpm/ccpcmd.asm:13-16`, `src/loader.asm:101-118` |
 | `COPY` | A missing/ambiguous name, identical source and destination or text after the destination. | Give one source and a different destination with no further operand. | `src/cpm/ccpmut.asm:191-230` |
-| `ERA` | A missing, extra or invalid name. | `ERA NAME`. | `src/cpm/ccpmut.asm:10-14` |
+| `ERA` | A missing, extra or invalid name. `DEL`, another name for ERA from TEC-OS `7fa2823`, fails the same way. | `ERA NAME`. | `src/cpm/ccpmut.asm:10-14`, `7fa2823:src/tables.asm:64-67` |
 | `REN` | Invalid `NEW=OLD` syntax, a missing/ambiguous name or two different explicit drives. | Put a drive on one name or the same drive on both. | `src/cpm/ccpmut.asm:74-109` |
 | `SAVE` | An invalid decimal count, a count of 256 or more, a count reaching the BDOS-entry page or a missing/ambiguous filename. | `SAVE n NAME.COM` with a count within the memory bound. | `src/cpm/ccpcmd.asm:263-311` |
 | `USER` | The argument is not a single number from 0 to 15. | `USER n`. | `src/cpm/ccpcmd.asm:217-247` |
@@ -356,6 +359,17 @@ the volume services.
 | `Cannot unmount` | An attempt to empty A or failure of the required flush. | Replace A's volume rather than emptying A. For a write fault, recover the card before proceeding. Failed cached lines are dropped with no additional Write lost message on this path. | `src/volsvc.asm:276-315`, `372-386`, `src/cache.asm:265-295` |
 | `MOUNT needs TEC-OS with ABI 5.` | The ROM table lacks the TNA tag or its major version is not 5. | Use a MOUNT.COM matched to the ROM. | [Chapter 12](12-use-the-boards-devices.md), `test/programs/mount.asm:13-30` |
 
+## TED's load error
+
+The release card's editor prints this line and returns to the prompt when
+the file it is opening holds a byte it rejects
+(`Thorium b69d544:README.md:25-30`, `7fa2823:docs/compatibility.md:191`,
+`7fa2823:test/ted.test.mjs:92-120`).
+
+| Message | Cause | Action |
+| --- | --- | --- |
+| `EDIT error 03 Ln Cn` | The byte at that line and column is one TED rejects: a control other than tab, LF and a CR before LF, a byte from `7Fh` up, or a `00h` followed by anything but `00h` to the file's end. Each byte counts as one column, a tab included. | Correct that byte on the PC, or put the file again with `--text`. A file that ends at its first `^Z`, or in `00h` filling the rest of its last record, opens without this error. |
+
 ## Lines that report no fault
 
 These lines appear in ordinary runs and need no remedy. In `MOUNT`'s listing
@@ -367,7 +381,7 @@ These lines appear in ordinary runs and need no remedy. In `MOUNT`'s listing
 | `d: LABEL` | A mounted drive and volume at cold boot, with ` (read-only)` for a protected volume. LCD rows 1 and 2 show A and B without that suffix. | `src/boot.asm:482-509`, `src/lcd.asm:105-169`, `src/text.asm:13` |
 | `n files, nK free` | DIR's listed-file count and free space. The singular is `1 file, nK free`. | [Chapter 4](04-work-with-files.md), `src/cpm/ccpfile.asm:203-259`, `src/text.asm:27-32` |
 | `[more]` | DIR or TYPE paused at a screenful. An ordinary key continues. Esc, Q, q and `;` stop the listing. `^C` and `#` also drop the remaining chain because the comparison clears bit 5. | `src/cpm/ccpfile.asm:405-462`, `src/text.asm:33-34` |
-| `ALL (Y/N)?` | ERA's pattern is all wildcards. A line starting with Y or y confirms the erase in the current user area. Other lines and Return alone cancel without failure. Confirming does not override file/volume protection or disk errors. | `src/cpm/ccpmut.asm:18-63`, `src/text.asm:70-71` |
+| `ALL (Y/N)?` | ERA's or DEL's pattern is all wildcards. A line starting with Y or y confirms the erase in the current user area. Other lines and Return alone cancel without failure. Confirming does not override file/volume protection or disk errors. | `src/cpm/ccpmut.asm:18-63`, `src/text.asm:70-71` |
 | `COPIED nnnn` | COPY completed and closed its destination. The four hexadecimal digits count records. | `src/cpm/ccpmut.asm:289-304`, `src/text.asm:45-46` |
 | `CON: TTY:`, `CON: CRT:`, `CON: UC1:` | The effective console after CON. An unavailable CRT falls back to TTY. A returned UC1 load failure leaves the previous mode. `CON: BAT:` is generated but discarded. | [Chapter 7](07-choose-a-console.md), `src/cpm/ccpcmd.asm:183-207`, `src/loader.asm:731-745`, `src/console.asm:82-142`, `345-353` |
 | `NAME n` | SERVICES lists names and resident pages, newest first. | [Chapter 5](05-drives-and-user-areas.md), `src/cpm/ccpcmd.asm:760-786` |

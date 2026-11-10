@@ -8,6 +8,8 @@ nav_group: "Using the machine"
 # 4. Work with files
 
 <!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
+     DEL as another name for ERA: TEC-OS 7fa2823 src/tables.asm and
+     docs/compatibility.md.
      Current COPY and pager excerpts: tested 8b8664a7d93c6dc2e8bce509b9770585e106eedc,
      landed 962853f with qualification-record differences only.
      Origo attempt02 e77c7ef0, scoped result receipt 4b5b5a50,
@@ -175,7 +177,8 @@ The count after `COPIED` is hexadecimal. Here `0028` means 40 records of
 new copy without changing the current drive.
 
 REN changes a name on the same drive. Its form is `REN NEW=OLD`, with the new
-name first and no spaces around `=`. ERA removes the named file. A rename to an
+name first and no spaces around `=`. ERA removes the named file, and DEL is
+another name for ERA. A rename to an
 existing name gives `FILE EXISTS` and changes nothing. Erasing a name that is
 absent gives `NO FILE`.
 

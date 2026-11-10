@@ -9,7 +9,9 @@ nav_group: "Inside TEC-OS"
 
 <!-- Source-only semantic check: TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     Current source citations below use that revision. Historical output,
+     Current source citations below use that revision. DEL's KEYTAB record
+     is cited at 7fa2823: (TEC-OS 7fa2823357b2a96330d0b90bd120702347043116);
+     src/cpm/ is unchanged there. Historical output,
      addresses and size figures retain TEC-OS 78127ec, not a current build.
      The retained PC fixture used atom-z80 0.3.7. The historical starter's
      TED.COM was Thorium 128edb7, SHA-256
@@ -39,7 +41,8 @@ code stays in ROM while program files load into the transient program area
 
 The messages and `KEYTAB` are in the ROM data block. Each keyword in
 `KEYTAB` has a zero terminator followed by its handler address. A final
-zero ends the table (`src/tables.asm:53-80`). In the historical `78127ec`
+zero ends the table (`src/tables.asm:53-80`, `7fa2823:src/tables.asm:53-82`
+with DEL's record). In the historical `78127ec`
 build, `CCPBAS` was `DD2Ah` and the CCP ended at `E702h`. Its reported
 2,521 bytes were followed by the BDOS.
 
@@ -179,8 +182,10 @@ source name for a blank destination name so a discarded destination type may
 contain wildcards (`src/cpm/ccpcmd.asm:597-638`, `src/cpm/ccpmut.asm:193-209`).
 
 The keyword loop compares the original command text at `CMDSTRT` with
-`KEYTAB`, not the parsed FCB. Its order is DIR, TYPE, ERA, REN, SAVE,
-USER, CON, COPY, UNLOAD and SERVICES. `ISCMD` requires a space or zero
+`KEYTAB`, not the parsed FCB. Its order is DIR, TYPE, ERA, DEL, REN, SAVE,
+USER, CON, COPY, UNLOAD and SERVICES. DEL was added at TEC-OS `7fa2823`
+with ERA's handler address, `CMDERA`, so both keywords run the same
+routine (`7fa2823:src/tables.asm:60-82`). `ISCMD` requires a space or zero
 immediately after the keyword. `A:DIR` and `DIR.COM` therefore name a
 program file rather than built-in DIR. Both fail when the selected search
 finds no `DIR.COM` (`src/cpm/ccp.asm:380-405`,
@@ -212,7 +217,7 @@ and [Appendix D](appendix-d-error-messages.md) gives recovery from messages.
 | --- | --- | --- |
 | DIR | `CMDDIR` | `src/cpm/ccpfile.asm:17-260` |
 | TYPE | `CMDTYPE` | `src/cpm/ccpfile.asm:518-577` |
-| ERA | `CMDERA` | `src/cpm/ccpmut.asm:10-63` |
+| ERA, DEL | `CMDERA` | `src/cpm/ccpmut.asm:10-63` |
 | REN | `CMDREN` | `src/cpm/ccpmut.asm:74-145` |
 | SAVE | `CMDSAVE` | `src/cpm/ccpcmd.asm:263-398` |
 | USER | `CMDUSER` | `src/cpm/ccpcmd.asm:217-247` |

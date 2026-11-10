@@ -11,9 +11,9 @@ nav_group: "Reference"
      retain TEC-OS 78127ec and its starter inputs. They have not been rerun
      for the new source offer.
      The starter-card section cites TEC-OS
-     12b2ec5f470844c46cd0c92fea132f1a0ab11c40 with a 12b2ec5: prefix,
-     Thorium 967678c (TED.COM, SHA-256 150a19bd…), Thorium dbee66a (TAS.COM)
-     and Baza ae6a00d (BAZA.COM ee8465ac…, BAZA.RTL, BOUNCE.BAS).
+     7fa2823357b2a96330d0b90bd120702347043116 with a 7fa2823: prefix,
+     Thorium b69d544 (TED.COM, SHA-256 4f622390…), Thorium dbee66a (TAS.COM)
+     and Baza a9e7b2f (BAZA.COM 44a0fe17…, BAZA.RTL, BOUNCE.BAS).
      Source reading only. -->
 
 A command line contains a command and its arguments, separated by spaces.
@@ -82,8 +82,8 @@ the causes and recovery actions.
 
 ## Command forms
 
-The ten built-ins are DIR, TYPE, ERA, REN, SAVE, USER, CON, COPY, UNLOAD
-and SERVICES. Drive selection, program launch and service installation have
+The eleven built-ins are DIR, TYPE, ERA, DEL, REN, SAVE, USER, CON, COPY,
+UNLOAD and SERVICES (`7fa2823:src/tables.asm:60-82`). Drive selection, program launch and service installation have
 additional forms handled by the command processor.
 
 | Form | Operation |
@@ -93,6 +93,7 @@ additional forms handled by the command processor.
 | `COPY SOURCE [DEST]` | Copy one file, with the destination rules below |
 | `REN NEW=OLD` | Rename one file on one drive |
 | `ERA PATTERN` | Erase matching files |
+| `DEL PATTERN` | Erase matching files, as another name for ERA |
 | `SAVE N NAME` | Save N memory pages from `0100h` |
 | `USER N` | Select user area 0 to 15 |
 | `CON [DEVICE [WIDTH]]` | Report or change the console |
@@ -192,6 +193,14 @@ as `*.TXT`, is erased without confirmation. No match produces `NO FILE`
 multi-file erase after some entries have already been erased. The exact
 partial-result cases are in [Appendix D](appendix-d-error-messages.md).
 
+DEL is another name for ERA. Its keyword selects the same routine, so it
+takes the same names and patterns and asks the same `ALL (Y/N)?` question.
+Because a built-in is matched before a program is looked up, plain `DEL`
+no longer runs a `DEL.COM`, as plain `ERA` never ran an `ERA.COM`. `A:DEL`
+or `DEL.COM` still runs that file (`7fa2823:src/tables.asm:64-67`,
+`7fa2823:docs/compatibility.md:77-81`,
+`7fa2823:test/commands.test.mjs:159-208`).
+
 The following historical run starts with an empty B drive and copies one
 disposable file there. It records an `n` answer that leaves the file and a `y`
 answer that erases it. This is a separate `78127ec` demonstration, not the card
@@ -279,8 +288,8 @@ routine reports failure. The practical installation rules are in
 
 The starter card's A holds nine files. Six are programs or sources you use
 by name at the prompt. `GLCD.SVC` and `STARTUP.CMD` belong to the display
-setup and `BAZA.RTL` is read by BAZA (`12b2ec5:tools/media.mjs:29-31`,
-`12b2ec5:tools/media.mjs:197-211`, `12b2ec5:tools/lib/starter.mjs:13-16`):
+setup and `BAZA.RTL` is read by BAZA (`7fa2823:tools/media.mjs:29-31`,
+`7fa2823:tools/media.mjs:197-211`, `7fa2823:tools/lib/starter.mjs:13-16`):
 
 | File | Use |
 | --- | --- |
@@ -298,23 +307,22 @@ TED's `^T B` and `^T R` build an `.ASM` file with `TAS NAME.ASM` and a
 `.BAS` file with `BAZA NAME.BAS`. `^T D` chains `TDB NAME` for an `.ASM`
 file, which fails with `A:TDB?` on the starter card, and shows
 `No debugger` for a `.BAS` file
-(`Thorium 967678c:README.md:14-34`, `12b2ec5:docs/compatibility.md:188`).
+(`Thorium b69d544:README.md:14-41`, `7fa2823:docs/compatibility.md:191`).
 `TAS` and `BAZA` both set the failure return code `FF00h` when a build
 fails. A failed BAZA compile leaves an existing `NAME.COM` unchanged, and a
 failed TAS build normally keeps its earlier outputs
-(`12b2ec5:docs/compatibility.md:190-191`, `Baza ae6a00d:README.md:26-32`,
-`Thorium 967678c:README.md:65-66`).
+(`7fa2823:docs/compatibility.md:193-194`, `Baza a9e7b2f:README.md:26-32`,
+`Thorium b69d544:README.md:72-73`).
 [Make a small program](02-make-a-small-program.md) and
 [Build a BASIC program](03-build-a-basic-program.md) use them.
 
-The web page's card holds these nine files and three more, twelve in all
-(`12b2ec5:tools/media.mjs:240-252`, `12b2ec5:README.md:158-165`,
-`12b2ec5:test/demo.test.mjs:1-4`, `12b2ec5:test/starter.test.mjs:104-158`):
+The web page's card holds these nine files and two sources, eleven in all
+(`7fa2823:tools/media.mjs:240-251`, `7fa2823:README.md:159-166`,
+`7fa2823:test/demo.test.mjs:1-4`, `7fa2823:test/starter.test.mjs:82-183`):
 
 | File | Use |
 | --- | --- |
-| `DEMO.COM` | `DEMO` shows the LCD, the 7-segment digits, the 8 × 8 LEDs and the PICO9918 |
-| `DEMO.ASM` | DEMO.COM's source. `TED DEMO.ASM` opens it and `TAS DEMO` builds the same DEMO.COM |
+| `DEMO.ASM` | The source of DEMO. `TAS DEMO` builds DEMO.COM, then `DEMO` shows the LCD, the 7-segment digits, the 8 × 8 LEDs and the PICO9918. `TED DEMO.ASM` opens the source |
 | `BOUNCE.BAS` | A sprite game for the PICO9918, which it needs. `BAZA BOUNCE`, then `BOUNCE`. Tap W, A, S and D to steer and Q to quit |
 
 ## Several commands
