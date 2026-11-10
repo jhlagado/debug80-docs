@@ -301,8 +301,8 @@ prints the command's name with a question mark, as `GLCD.SVC?`, and sets
 return code FF00h. The application ends with a warm boot and its service
 stays installed, so `UNLOAD` removes it as before
 (`31b6083:docs/services.md:81-84`, `31b6083:docs/services.md:99-132`,
-`31b6083:docs/services.md:180-182`, `31b6083:src/loader.asm:762-771`,
-`31b6083:test/mon3.test.mjs:213-225`).
+`31b6083:docs/services.md:180-182`, `31b6083:src/loader.asm:752-778`,
+`31b6083:test/mon3.test.mjs:167-194`, `31b6083:test/mon3.test.mjs:213-225`).
 
 ## Programs on the starter card
 
