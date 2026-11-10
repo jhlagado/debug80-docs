@@ -844,9 +844,9 @@ active and polls for a key. On exit it sends dark digit/LED patterns and
 releases an active claim.
 
 The historical starter card did not include DEMO. The web-page recipe did
-include it on A so DEMO ran there without adding it to that card. Its source is
-`test/programs/demo.asm`. Media generation exports DEMO.COM to `dist/files` and
-includes it in the page recipe. At TEC-OS `7fa2823` the source is
+include it on A so DEMO ran there without adding it to that card. At `a1023bd`
+its source was `test/programs/demo.asm`, and media generation exported
+DEMO.COM to `dist/files` and included it in the page recipe. At TEC-OS `7fa2823` the source is
 `programs/DEMO.ASM` and the page's card holds that source in place of
 DEMO.COM. `TAS DEMO` builds DEMO.COM on the card, `DEMO` then runs it and
 `TED DEMO.ASM` opens the source

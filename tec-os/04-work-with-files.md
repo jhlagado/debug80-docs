@@ -178,7 +178,7 @@ new copy without changing the current drive.
 
 REN changes a name on the same drive. Its form is `REN NEW=OLD`, with the new
 name first and no spaces around `=`. ERA removes the named file, and DEL is
-another name for ERA. A rename to an
+another name for ERA at TEC-OS `7fa2823`. A rename to an
 existing name gives `FILE EXISTS` and changes nothing. Erasing a name that is
 absent gives `NO FILE`.
 

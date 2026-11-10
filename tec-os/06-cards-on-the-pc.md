@@ -324,11 +324,14 @@ last record with `^Z`. Binary padding is zero. These are file conversions,
 not a way to preserve a PC file's original byte length in a CP/M directory.
 
 A text file put without `--text` therefore ends in zero bytes, not `^Z`.
-The release card's TED takes a run of `00h` that fills the rest of the last
-record as the end of the file, so such a file opens without an error. A
-byte TED rejects elsewhere stops it at the prompt with `EDIT error 03` and
-the byte's line and column, as in `EDIT error 03 L3 C5`
-(TEC-OS 7fa2823 `docs/compatibility.md`, Thorium b69d544 `README.md`).
+The starter card's TED at TEC-OS `7fa2823` (Thorium `b69d544`) takes a run
+of `00h` that fills the rest of the last record as the end of the file, so
+such a file opens without an error. A byte that TED rejects elsewhere stops
+it at the prompt with `EDIT error 03` and the byte's line and column, as in
+`EDIT error 03 L3 C5` (TEC-OS 7fa2823 `docs/compatibility.md`, Thorium
+b69d544 `README.md`). The earlier TED, Thorium `967678c` on the release
+card, rejects that padding and stops with error 03 without a line or
+column.
 
 `era` erases a named file. Like `get`, `put` and `era` use user area 0 unless
 `--user N` selects another.

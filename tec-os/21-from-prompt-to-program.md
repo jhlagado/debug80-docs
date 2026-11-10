@@ -183,7 +183,7 @@ contain wildcards (`src/cpm/ccpcmd.asm:597-638`, `src/cpm/ccpmut.asm:193-209`).
 
 The keyword loop compares the original command text at `CMDSTRT` with
 `KEYTAB`, not the parsed FCB. Its order is DIR, TYPE, ERA, DEL, REN, SAVE,
-USER, CON, COPY, UNLOAD and SERVICES. DEL was added at TEC-OS `7fa2823`
+USER, CON, COPY, UNLOAD and SERVICES. DEL is present at TEC-OS `7fa2823`
 with ERA's handler address, `CMDERA`, so both keywords run the same
 routine (`7fa2823:src/tables.asm:60-82`). `ISCMD` requires a space or zero
 immediately after the keyword. `A:DIR` and `DIR.COM` therefore name a

@@ -83,7 +83,8 @@ the causes and recovery actions.
 ## Command forms
 
 The eleven built-ins are DIR, TYPE, ERA, DEL, REN, SAVE, USER, CON, COPY,
-UNLOAD and SERVICES (`7fa2823:src/tables.asm:60-82`). Drive selection, program launch and service installation have
+UNLOAD and SERVICES at TEC-OS `7fa2823` (`7fa2823:src/tables.asm:60-82`).
+The release-1 ROM at `a1023bd` has the other ten, without DEL. Drive selection, program launch and service installation have
 additional forms handled by the command processor.
 
 | Form | Operation |
@@ -93,7 +94,7 @@ additional forms handled by the command processor.
 | `COPY SOURCE [DEST]` | Copy one file, with the destination rules below |
 | `REN NEW=OLD` | Rename one file on one drive |
 | `ERA PATTERN` | Erase matching files |
-| `DEL PATTERN` | Erase matching files, as another name for ERA |
+| `DEL PATTERN` | Erase matching files, as another name for ERA, at TEC-OS `7fa2823` |
 | `SAVE N NAME` | Save N memory pages from `0100h` |
 | `USER N` | Select user area 0 to 15 |
 | `CON [DEVICE [WIDTH]]` | Report or change the console |

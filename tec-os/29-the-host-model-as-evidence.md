@@ -375,8 +375,8 @@ and actual outcome. Dependency declarations alone establish neither.
 bundles the page with Machine and the container/file libraries into app.js.
 The build config aliases fs to a stub, clears the previous output directory
 and copies the page, style, one ROM and its symbols, recipe and distribution
-files (`web/build.mjs:1-45`). The page recipe adds DEMO.COM to the starter
-files. At the inspected source the media tool builds that program from
+files (`web/build.mjs:1-45`). At `a1023bd` the page recipe added DEMO.COM
+to the starter files, and the media tool built that program from
 test/programs/demo.asm (`tools/media.mjs:206-238`). At TEC-OS `7fa2823` the
 page recipe adds DEMO.ASM and BOUNCE.BAS, eleven files in all. DEMO.COM is
 built from programs/DEMO.ASM on the card with `TAS DEMO`
