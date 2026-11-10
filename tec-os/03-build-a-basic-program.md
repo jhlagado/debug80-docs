@@ -20,8 +20,8 @@ nav_group: "Using the machine"
      TED BASIC run on a physical TEC-1G is recorded. -->
 
 The starter card holds a short program in BASIC, TIMES.BAS, beside SAMPLE's
-assembly source. You compile it with BAZA, run it, and then edit and build it
-in TED with the same keys that Chapter 2 used for BANNER.
+assembly source. You compile it with BAZA and run it. Then you edit and build
+it in TED with the same keys that Chapter 2 used for BANNER.
 
 The results described here are from the host model, the software TEC-1G used
 for Chapters 1 and 2. A run of BAZA and TED's BASIC keys on a physical TEC-1G
@@ -30,7 +30,7 @@ has still to be recorded.
 ## The BASIC source
 
 TIMES.BAS is on A with the other supplied files. `TYPE TIMES.BAS` prints it
-at the `A>` prompt, and Chapter 4 explains `TYPE` and its pager. The complete
+at the `A>` prompt. Chapter 4 explains `TYPE` and its pager. The complete
 file is:
 
 <!-- TEC-OS 755636b programs/TIMES.BAS, lines 1-22, complete. The starter
