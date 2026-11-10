@@ -377,10 +377,10 @@ The build config aliases fs to a stub, clears the previous output directory
 and copies the page, style, one ROM and its symbols, recipe and distribution
 files (`web/build.mjs:1-45`). At `a1023bd` the page recipe added DEMO.COM
 to the starter files, and the media tool built that program from
-test/programs/demo.asm (`tools/media.mjs:206-238`). At TEC-OS `7fa2823` the
+test/programs/demo.asm (`tools/media.mjs:206-238`). At TEC-OS `31b6083` the
 page recipe adds DEMO.ASM and BOUNCE.BAS, eleven files in all. DEMO.COM is
 built from programs/DEMO.ASM on the card with `TAS DEMO`
-(`7fa2823:tools/media.mjs:213-251`, `7fa2823:web/build.mjs:41-42`).
+(`31b6083:tools/media.mjs:217-259`, `31b6083:web/build.mjs:41-42`).
 
 Each animation frame targets 4 MHz for the elapsed wall time, capped at 100 ms.
 Every 1,024 instructions it checks a 30 ms execution budget and can stop the

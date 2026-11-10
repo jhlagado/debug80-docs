@@ -10,10 +10,11 @@ nav_group: "Reference"
 <!-- Draft source checks: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe. The three historical captures below
      retain TEC-OS 78127ec and its starter inputs. They have not been rerun
      for the new source offer.
-     The starter-card section cites TEC-OS
-     7fa2823357b2a96330d0b90bd120702347043116 with a 7fa2823: prefix,
+     The starter-card section, DEL and NAME.SVC /E cite TEC-OS
+     31b60837d24cf801b5e8cf4daa4856f520227795 with a 31b6083: prefix,
      Thorium b69d544 (TED.COM, SHA-256 4f622390…), Thorium dbee66a (TAS.COM)
-     and Baza a9e7b2f (BAZA.COM 44a0fe17…, BAZA.RTL, BOUNCE.BAS).
+     and Baza 747b9a7 (BAZA.COM 27724068…, BAZA.RTL 7c0cda03…,
+     BOUNCE.BAS).
      Source reading only. -->
 
 A command line contains a command and its arguments, separated by spaces.
@@ -83,7 +84,7 @@ the causes and recovery actions.
 ## Command forms
 
 The eleven built-ins are DIR, TYPE, ERA, DEL, REN, SAVE, USER, CON, COPY,
-UNLOAD and SERVICES at TEC-OS `7fa2823` (`7fa2823:src/tables.asm:60-82`).
+UNLOAD and SERVICES at TEC-OS `31b6083` (`31b6083:src/tables.asm:60-82`).
 The release-1 ROM at `a1023bd` has the other ten, without DEL. Drive selection, program launch and service installation have
 additional forms handled by the command processor.
 
@@ -94,7 +95,7 @@ additional forms handled by the command processor.
 | `COPY SOURCE [DEST]` | Copy one file, with the destination rules below |
 | `REN NEW=OLD` | Rename one file on one drive |
 | `ERA PATTERN` | Erase matching files |
-| `DEL PATTERN` | Erase matching files, as another name for ERA, at TEC-OS `7fa2823` |
+| `DEL PATTERN` | Erase matching files, as another name for ERA, at TEC-OS `31b6083` |
 | `SAVE N NAME` | Save N memory pages from `0100h` |
 | `USER N` | Select user area 0 to 15 |
 | `CON [DEVICE [WIDTH]]` | Report or change the console |
@@ -103,6 +104,7 @@ additional forms handled by the command processor.
 | `D:` | Select drive D, with the same form for another drive |
 | `NAME [ARGS]` | Load a COM program and pass its arguments |
 | `NAME.SVC` | Load a resident service |
+| `NAME.SVC /E [ARGS]` | Enter an installed service's application, installing the service first if it is absent, at TEC-OS `31b6083` |
 
 A built-in name must end at a space or the end of the command piece.
 `DIRX`, `DIR.COM` and `A:DIR` are program commands, not forms of built-in
@@ -198,9 +200,9 @@ DEL is another name for ERA. Its keyword selects the same routine, so it
 takes the same names and patterns and asks the same `ALL (Y/N)?` question.
 Because a built-in is matched before a program is looked up, plain `DEL`
 no longer runs a `DEL.COM`, as plain `ERA` never ran an `ERA.COM`. `A:DEL`
-or `DEL.COM` still runs that file (`7fa2823:src/tables.asm:64-67`,
-`7fa2823:docs/compatibility.md:77-81`,
-`7fa2823:test/commands.test.mjs:159-208`).
+or `DEL.COM` still runs that file (`31b6083:src/tables.asm:64-67`,
+`31b6083:docs/compatibility.md:77-81`,
+`31b6083:test/commands.test.mjs:159-209`).
 
 The following historical run starts with an empty B drive and copies one
 disposable file there. It records an `n` answer that leaves the file and a `y`
@@ -285,12 +287,25 @@ routine reports failure. The practical installation rules are in
 [Chapter 5](05-drives-and-user-areas.md) and authoring is in
 [Chapter 14](14-write-a-resident-service.md).
 
+At TEC-OS `31b6083`, `NAME.SVC /E` enters a service's application. Only a
+service whose image starts with an execution record has one, and no file on
+the starter card does. `/E` follows the name after a space, and the text
+after it is the application's command tail. A service installed from a file
+of that name is entered without reading the card. Otherwise the file is read
+from the named or current drive and installed, then entered once its `INIT`
+has made it ready. With two copies installed, `/E` is refused until
+`UNLOAD` leaves one. Any other switch, such as `/X`, is refused before a
+file is opened. The application ends with a warm boot and its service stays
+installed, so `UNLOAD` removes it as before
+(`31b6083:docs/services.md:81-84`, `31b6083:docs/services.md:99-132`,
+`31b6083:docs/services.md:180-182`).
+
 ## Programs on the starter card
 
 The starter card's A holds nine files. Six are programs or sources you use
 by name at the prompt. `GLCD.SVC` and `STARTUP.CMD` belong to the display
-setup and `BAZA.RTL` is read by BAZA (`7fa2823:tools/media.mjs:29-31`,
-`7fa2823:tools/media.mjs:197-211`, `7fa2823:tools/lib/starter.mjs:13-16`):
+setup and `BAZA.RTL` is read by BAZA (`31b6083:tools/media.mjs:30-32`,
+`31b6083:tools/media.mjs:201-215`, `31b6083:tools/lib/starter.mjs:13-16`):
 
 | File | Use |
 | --- | --- |
@@ -308,18 +323,18 @@ TED's `^T B` and `^T R` build an `.ASM` file with `TAS NAME.ASM` and a
 `.BAS` file with `BAZA NAME.BAS`. `^T D` chains `TDB NAME` for an `.ASM`
 file, which fails with `A:TDB?` on the starter card, and shows
 `No debugger` for a `.BAS` file
-(`Thorium b69d544:README.md:14-41`, `7fa2823:docs/compatibility.md:191`).
+(`Thorium b69d544:README.md:14-41`, `31b6083:docs/compatibility.md:196`).
 `TAS` and `BAZA` both set the failure return code `FF00h` when a build
 fails. A failed BAZA compile leaves an existing `NAME.COM` unchanged, and a
 failed TAS build normally keeps its earlier outputs
-(`7fa2823:docs/compatibility.md:193-194`, `Baza a9e7b2f:README.md:26-32`,
+(`31b6083:docs/compatibility.md:198-199`, `Baza 747b9a7:README.md:26-32`,
 `Thorium b69d544:README.md:72-73`).
 [Make a small program](02-make-a-small-program.md) and
 [Build a BASIC program](03-build-a-basic-program.md) use them.
 
 The web page's card holds these nine files and two sources, eleven in all
-(`7fa2823:tools/media.mjs:240-251`, `7fa2823:README.md:159-166`,
-`7fa2823:test/demo.test.mjs:1-4`, `7fa2823:test/starter.test.mjs:82-183`):
+(`31b6083:tools/media.mjs:248-259`, `31b6083:README.md:159-166`,
+`31b6083:test/demo.test.mjs:1-4`, `31b6083:test/starter.test.mjs:82-183`):
 
 | File | Use |
 | --- | --- |

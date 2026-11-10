@@ -14,6 +14,8 @@ nav_group: "Using the machine"
      TAS.COM Thorium dbee66a,
      SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      The service captures from old06 record 78127ec without a separate input pin.
+     NAME.SVC /E: TEC-OS 31b60837d24cf801b5e8cf4daa4856f520227795
+     docs/services.md, source reading only.
      No capture, application or KS48 font/default result is newly qualified. -->
 
 A file's volume and user area determine where you can use it. Program
@@ -67,6 +69,12 @@ nothing to remove. `UNLOAD?` also appears when the newest service cannot
 be removed. The command does not skip it to remove an older service.
 Removal follows the reverse of installation order. A warm boot, the restart
 after a program ends, retains the installed services. Reset empties the list.
+
+A service can also carry an application of its own. At TEC-OS `31b6083`,
+`NAME.SVC /E` starts it, installing the service first if it is not in. The
+application ends with a warm boot and leaves its service installed, so
+`UNLOAD` still removes it. `GLCD.SVC` has no application.
+[Appendix J](appendix-j-command-reference.md) gives the rules.
 
 A missing service file, a wrong format or a failed installation normally
 prints the command name with a question mark. A fatal card-read error

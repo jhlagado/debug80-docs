@@ -21,8 +21,13 @@ nav_exclude: true
      BOUNCE.BAS.
      DEL update: TEC-OS 7fa2823 (main, ROM 3ed68c47) adds the DEL built-in,
      TED.COM Thorium b69d544 (4f622390), BAZA Baza a9e7b2f (44a0fe17, with
-     varptr) and the eleven-file page card without DEMO.COM. Chapters 3, 4,
-     6, 12, 13, 21, 27 and 29 and appendices D, F, I and J cite it.
+     varptr) and the eleven-file page card without DEMO.COM.
+     Service-entry update: TEC-OS 31b6083 (main, ROM 3e5311d2) adds
+     NAME.SVC /E and starts a .COM with HL 0100h and DE 0000h, with TED.COM
+     Thorium b69d544 (4f622390) and BAZA Baza 747b9a7 (27724068, faster
+     compiling, the same language). MON3.SVC is built but on no card.
+     Chapters 2, 3, 4, 5, 6, 12, 13, 21, 27 and 29 and appendices D, F, I
+     and J cite it.
      Public workflows accepted by Origo review4b5b5a50 from attempt02/e77c7ef0.
      Bounded opening craft/factual reviews closed d9d57d2/b911e84.
      That whole batch remains FAILED. Later service controls are separate.

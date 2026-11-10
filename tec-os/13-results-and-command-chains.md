@@ -19,8 +19,8 @@ nav_group: "Writing programs"
      755636b130241173c5c30a0be8fe6b79cf2fee37, TED.COM Thorium 967678c
      (150a19bd…), BAZA Baza fbfedb6, from docs/compatibility.md:188-190
      and test/ted-baza.test.mjs, test/times.test.mjs at that revision.
-     Rechecked at TEC-OS 7fa2823 (TED.COM Thorium b69d544, BAZA Baza
-     a9e7b2f; docs/compatibility.md:191-193): the key table and return
+     Rechecked at TEC-OS 31b6083 (TED.COM Thorium b69d544, BAZA Baza
+     747b9a7; docs/compatibility.md:196-198): the key table and return
      code are unchanged in substance.
      Source-only reading. No run of these keys was made for this chapter. -->
 

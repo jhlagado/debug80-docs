@@ -10,10 +10,10 @@ nav_group: "Reference"
 <!-- Mechanisms inspected in TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe,
      source only. The shell recipe follows the release README.
      Release-card recheck: every citation below uses TEC-OS
-     7fa2823357b2a96330d0b90bd120702347043116 (main). Lines in
-     web/src/main.mjs, README.md and tools/media.mjs were remapped to it, and
-     the page recipe and card-opening passages follow its tools/media.mjs,
-     test/starter.test.mjs and useCard.
+     31b60837d24cf801b5e8cf4daa4856f520227795 (main). Lines in
+     web/src/main.mjs, README.md, tools/media.mjs and src/loader.asm were
+     remapped to it, and the page recipe and card-opening passages follow
+     its tools/media.mjs, test/starter.test.mjs and useCard.
      No new browser run, screen capture or physical result is claimed. -->
 
 The web page has controls for the emulated board, a serial terminal and a card
@@ -84,10 +84,10 @@ itself keeps its nine files at revision 6:
 
 The card does not hold DEMO.COM until you build it. BOUNCE needs the
 PICO9918 and draws through `call`, as Chapter 3 explains
-(`tools/media.mjs:222-251`, `test/starter.test.mjs:82-183`,
+(`tools/media.mjs:230-259`, `test/starter.test.mjs:82-183`,
 `test/demo.test.mjs:1-4`, `README.md:159-166`). Building a starter fetches
 each recipe file and checks its byte count and SHA-256 before returning the
-image (`tools/media.mjs:197-251`, `tools/lib/recipe.mjs:14-44`,
+image (`tools/media.mjs:201-259`, `tools/lib/recipe.mjs:14-44`,
 `web/src/main.mjs:60-63`). The file list shows user area, name and size.
 It refreshes every five seconds and after the reset and power-cycle buttons
 (`web/src/main.mjs:573-586`, `web/src/main.mjs:675-688`).
@@ -252,7 +252,7 @@ No line for the other display is inserted. On the board with both displays,
 GLCD.SVC in startup cannot take the console while CRT is selected. Later
 `CON UC1` loads A:GLCD.SVC when needed
 (`src/services.asm:533-549`, `src/cpm/ccpcmd.asm:183-187`,
-`src/loader.asm:720-745`).
+`src/loader.asm:877-902`).
 
 Preparation removes recognised display pieces from the old startup text and
 keeps the remaining command pieces. Recognition ignores case and surrounding
