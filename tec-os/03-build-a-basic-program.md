@@ -8,16 +8,18 @@ nav_group: "Using the machine"
 # 3. Build a BASIC program
 
 <!-- Source and test contracts read at TEC-OS
-     755636b130241173c5c30a0be8fe6b79cf2fee37 (branch card-r1b), with
+     12b2ec5f470844c46cd0c92fea132f1a0ab11c40 (branch card-lower), with
      programs/TIMES.BAS, tools/media.mjs, docs/compatibility.md (TED and
-     BAZA rows), test/times.test.mjs and test/ted-baza.test.mjs.
+     BAZA rows), test/times.test.mjs, test/ted-baza.test.mjs and
+     test/starter.test.mjs.
      TED.COM Thorium 967678c, SHA-256 150a19bd…; BAZA.COM and BAZA.RTL
-     Baza fbfedb6, SHA-256 725570a6… and 5854bfb6…, as test/inputs.json pins.
-     Baza README at fbfedb6; Thorium README at 967678c (TED's language table).
-     The TIMES screen below is the screen test/times.test.mjs:24-39 and
-     :90-100 checks on the host model at 40 columns. It is not a separate
+     Baza ae6a00d, SHA-256 ee8465ac… and 5854bfb6…, as test/inputs.json pins.
+     Baza README, docs/language.md, docs/call.md, src/lex.asm and
+     examples/BOUNCE.BAS at ae6a00d; Thorium README at 967678c.
+     The TIMES screen below is the screen test/times.test.mjs:27-42 and
+     :103-110 checks on the host model at 40 columns. It is not a separate
      capture. The COPY step follows Chapter 4 and src/cpm/ccpmut.asm; the
-     ^C step follows the card's instruction (tools/media.mjs:220).
+     ^C step follows the card's instruction (tools/media.mjs:227).
      No new execution occurred for this chapter, and no BAZA or
      TED BASIC run on a physical TEC-1G is recorded. -->
 
@@ -35,49 +37,59 @@ TIMES.BAS is on A with the other supplied files. `TYPE TIMES.BAS` prints it
 at the `A>` prompt. Chapter 4 explains `TYPE` and its pager. The complete
 file is:
 
-<!-- TEC-OS 755636b programs/TIMES.BAS, lines 1-22, complete. The starter
+<!-- TEC-OS 12b2ec5 programs/TIMES.BAS, lines 1-22, complete. The starter
      card stores it with CRLF line ends and a final ^Z (tools/media.mjs). -->
 ```text
-10 REM TIMES.BAS, A FIRST BASIC PROGRAM
-20 REM BUILD IT WITH BAZA TIMES,
-30 REM THEN TYPE TIMES TO RUN IT.
-40 PRINT "HELLO FROM BASIC ON TEC-OS."
-50 INPUT "WHAT IS YOUR NAME";N$
-60 PRINT "HI, ";N$;"."
-70 INPUT "PICK A NUMBER, 1 TO 12";N
-80 IF N<1 OR N>12 THEN 100
-90 IF N=INT(N) THEN 120
-100 PRINT "PLEASE PICK 1 TO 12."
-110 GOTO 70
-120 PRINT "THE";N;"TIMES TABLE:"
-130 T=0
-140 FOR I=1 TO 12
-150 P=I*N
-160 PRINT I;TAB(4);"X";N;TAB(9);"=";P
-170 T=T+P
-180 NEXT I
-190 PRINT "THEY ADD UP TO";T
-200 PRINT "THAT IS";T/12;"ON AVERAGE."
-210 PRINT "GOODBYE, ";N$;"!"
-220 END
+10 rem times.bas, a first basic program
+20 rem build it with baza times,
+30 rem then type times to run it.
+40 print "HELLO FROM BASIC ON TEC-OS."
+50 input "WHAT IS YOUR NAME"; n$
+60 print "HI, "; n$; "."
+70 input "PICK A NUMBER, 1 TO 12"; n
+80 if n < 1 or n > 12 then 100
+90 if n = int(n) then 120
+100 print "PLEASE PICK 1 TO 12."
+110 goto 70
+120 print "THE"; n; "TIMES TABLE:"
+130 t = 0
+140 for i = 1 to 12
+150 p = i * n
+160 print i; tab(4); "X"; n; tab(9); "="; p
+170 t = t + p
+180 next i
+190 print "THEY ADD UP TO"; t
+200 print "THAT IS"; t / 12; "ON AVERAGE."
+210 print "GOODBYE, "; n$; "!"
+220 end
 ```
 
 Each line starts with a line number, and the numbers ascend through the file.
-`REM` lines are remarks for you to read. `PRINT` writes text and numbers,
-`INPUT` prints its question and reads your answer into a variable, `N$` for
-the name and `N` for the number. Lines 80 and 90 send any answer outside 1 to
-12, or with a fraction, to line 100, which asks again. The `FOR` and `NEXT`
-pair repeats lines 150 to 170 for each value of `I` from 1 to 12, printing
-one row of the table and adding it to the total `T`. `TAB` moves the printing
+`rem` lines are remarks for you to read. `print` writes text and numbers,
+`input` prints its question and reads your answer into a variable, `n$` for
+the name and `n` for the number. Lines 80 and 90 send any answer outside 1 to
+12, or with a fraction, to line 100, which asks again. The `for` and `next`
+pair repeats lines 150 to 170 for each value of `i` from 1 to 12, printing
+one row of the table and adding it to the total `t`. `tab` moves the printing
 position to a column so the rows line up.
+
+The program is in lower case with spaces between its words, and its quoted
+text is in capitals. Outside quotes, `rem` remarks and `data` items, BAZA
+folds letters to capitals and ignores spaces and tabs, so `print` and
+`PRINT` are the same keyword and `n<1` and `n < 1` the same comparison. The
+bytes inside quotes are kept as written, which is why the program's output
+is in capitals (`Baza ae6a00d:docs/language.md:19`,
+`Baza ae6a00d:src/lex.asm:12-20`). Commands typed at the prompt, such as
+`BAZA TIMES`, are written in capitals in this book, though the command
+processor also accepts them in lower case.
 
 ## A compiler and its library
 
 BAZA is a compiler for classic Microsoft BASIC. It reads the whole source and
 writes a CP/M program, so `BAZA TIMES` turns TIMES.BAS into TIMES.COM. You
 then run TIMES.COM as you ran SAMPLE.COM, and it needs neither the compiler
-nor its library on the card. BAZA has no interactive commands such as `LIST`
-or `RUN`: you edit the source as a text file and compile it again. A line
+nor its library on the card. BAZA has no interactive commands such as `list`
+or `run`: you edit the source as a text file and compile it again. A line
 number that repeats or goes backwards is an error, not a replacement line.
 
 The compiler is two files on A. `BAZA.COM` is the program and `BAZA.RTL` is
@@ -96,8 +108,8 @@ Typing `TIMES` runs the program. The screen below is the one the TEC-OS host
 model test checks on the 40-column console, with the answers `TEC`, then 13,
 then 7. Its starting `A>TIMES` line is omitted:
 
-<!-- TEC-OS 755636b test/times.test.mjs:24-39, the asserted output, with
-     the screen check at :95-97: answers TEC, 13 and 7, trailing spaces
+<!-- TEC-OS 12b2ec5 test/times.test.mjs:27-42, the asserted output, with
+     the screen check at :108-110: answers TEC, 13 and 7, trailing spaces
      removed. Not a separate capture. -->
 ```text
 HELLO FROM BASIC ON TEC-OS.
@@ -126,10 +138,10 @@ GOODBYE, TEC!
 A>
 ```
 
-`INPUT` adds the `? ` after each question. A number prints with a space on
-each side, as in Microsoft BASIC, so `TAB(4)` and `TAB(9)` keep the `X` and
+`input` adds the `? ` after each question. A number prints with a space on
+each side, as in Microsoft BASIC, so `tab(4)` and `tab(9)` keep the `X` and
 the `=` in their columns whatever the width of the numbers. The answer 13
-takes the program back to line 70 for another number. After `END` the
+takes the program back to line 70 for another number. After `end` the
 program returns to the prompt.
 
 ## TIMES in TED
@@ -173,11 +185,11 @@ A>COPY A:TIMES.BAS B:TIMES.BAS
 
 `B:` makes WORK the current drive. At `B>`, `TED TIMES.BAS` opens your copy,
 with TED loaded from A. Move to line 40, the file's fourth line, and change
-the text between the quotes, keeping the line number, the `PRINT` and both
+the text between the quotes, keeping the line number, the `print` and both
 quotes. For example:
 
 ```text
-40 PRINT "HELLO FROM MY FIRST BASIC."
+40 print "HELLO FROM MY FIRST BASIC."
 ```
 
 `^S` saves the change and `^T B` compiles it with A's BAZA, writing
@@ -194,12 +206,12 @@ Chapter 1 explains why.
 ## A failed compile
 
 A mistake in the source stops the compile. In the model test a line
-`95 PRINT (` was typed at the start of the file's line 10, between lines 90
-and 100. The line number is in order but the expression after `PRINT` is
+`95 print (` was typed at the start of the file's line 10, between lines 90
+and 100. The line number is in order but the expression after `print` is
 unfinished. `^T B` saved the file and BAZA printed its message on the
 console:
 
-<!-- TEC-OS 755636b test/ted-baza.test.mjs:90-101, the asserted console
+<!-- TEC-OS 12b2ec5 test/ted-baza.test.mjs:90-101, the asserted console
      text. Not a separate capture. -->
 ```text
 A>A:BAZA TIMES.BAS
@@ -231,3 +243,41 @@ A>BAZA TIMES!:TIMES
 before it succeeded. After a good compile TIMES runs. After a failed one the
 `:TIMES` piece is skipped and the prompt returns, so a program left from an
 earlier compile does not run in its place.
+
+## Machine code from BASIC
+
+BAZA has no graphics or sound statements. A program reaches the board's
+devices by calling machine code: a ROM service, an entry of a service in
+memory, or a routine at an address. `def call` gives the routine a name,
+`call` runs it with the registers you list, and `reg` reads a register it
+left afterwards (`Baza ae6a00d:docs/call.md:1-6`). Chapter 12 describes the
+ROM services from the assembly side.
+
+BOUNCE.BAS, a sprite game on the web page's card, does all its drawing this
+way. Three of its lines show the pattern
+(`Baza ae6a00d:examples/BOUNCE.BAS:5`, `10`, `17`):
+
+<!-- Baza ae6a00d examples/BOUNCE.BAS file lines 5, 10 and 17, as the page
+     card holds it (TEC-OS 12b2ec5 tools/media.mjs:215-217). -->
+```text
+50 def call vi = rom 3 : def call bp = rom 4 : def call ft = rom 15
+100 call vi, b = 1
+170 call ft : f = reg("HL") : call vw, hl = 256, de = f, bc = 768
+```
+
+`rom 3` names the ROM's video service, `rom 4` its tone service and
+`rom 15` the font service. A name can also be a quoted service record with
+a version and an entry number, found when the `def call` runs, or an
+address (`Baza ae6a00d:docs/call.md:16-26`). Each argument of `call` loads
+one register: `a` to `l` take a byte and `bc`, `de` and `hl` a word, or the
+address of a string variable's bytes. After the call `reg("HL")` gives the
+value the routine left in HL, and `reg("CY")` its carry. `call` raises no
+error itself, so a routine that reports failure is checked with `reg`
+(`Baza ae6a00d:docs/call.md:40-65`). Line 170 asks the font service for the
+font's address and copies 768 bytes from it to the PICO9918's memory.
+
+On the web page's card, `BAZA BOUNCE` compiles it and `BOUNCE` runs it on
+the PICO9918, which it needs. Tap W, A, S and D to steer the ship. Q ends
+the game, gives the display back as the console and prints the score at
+`A>`. The host-model test checks each of these steps
+(`tools/media.mjs:240-252`, `test/starter.test.mjs:104-158`).
