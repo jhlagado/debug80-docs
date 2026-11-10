@@ -186,7 +186,7 @@ service gives a distinct cause.
 | `NAME.SVC` | Record validation failed after successful `INIT`. The status is cleared so startup also prints the name regardless of INIT's returned `A`. | Check `SERVICES`. The cleanup outcome determines whether pages remain reserved. | `src/loader.asm:359-466` |
 | `UNLOAD` | The newest service cannot be removed or none exists. Reasons include an active INIT/REMOVE, a mismatched top, a non-removable flag or carry from REMOVE. | Remove services newest first and investigate the retained service. | [Chapter 5](05-drives-and-user-areas.md), `src/cpm/ccpcmd.asm:13-16`, `src/loader.asm:101-118` |
 | `COPY` | A missing/ambiguous name, identical source and destination or text after the destination. | Give one source and a different destination with no further operand. | `src/cpm/ccpmut.asm:191-230` |
-| `ERA` | A missing, extra or invalid name. `DEL`, another name for ERA present at TEC-OS `7fa2823`, fails on the same conditions and prints `DEL?`. | `ERA NAME` or `DEL NAME`. | `src/cpm/ccpmut.asm:10-14`, `7fa2823:src/tables.asm:64-67` |
+| `ERA` | A missing, extra or invalid name. `DEL`, another name for ERA present at TEC-OS `7fa2823`, fails on the same conditions with the same output. | `ERA NAME` or `DEL NAME`. | `src/cpm/ccpmut.asm:10-14`, `7fa2823:src/tables.asm:64-67` |
 | `REN` | Invalid `NEW=OLD` syntax, a missing/ambiguous name or two different explicit drives. | Put a drive on one name or the same drive on both. | `src/cpm/ccpmut.asm:74-109` |
 | `SAVE` | An invalid decimal count, a count of 256 or more, a count reaching the BDOS-entry page or a missing/ambiguous filename. | `SAVE n NAME.COM` with a count within the memory bound. | `src/cpm/ccpcmd.asm:263-311` |
 | `USER` | The argument is not a single number from 0 to 15. | `USER n`. | `src/cpm/ccpcmd.asm:217-247` |
@@ -363,11 +363,12 @@ the volume services.
 
 The starter card's TED at TEC-OS `7fa2823` (Thorium `b69d544`) prints this
 line and returns to the prompt when the file it is opening holds a byte it
-rejects. The earlier TED, Thorium `967678c` on the release card, also
-rejects `00h` padding at the end of a file and gives error 03 without a
-line or column
+rejects
 (`Thorium b69d544:README.md:25-30`, `7fa2823:docs/compatibility.md:191`,
-`7fa2823:test/ted.test.mjs:92-120`).
+`7fa2823:test/ted.test.mjs:92-120`). The earlier TED, Thorium `967678c` on
+the release card, also rejects `00h` padding at the end of a file and gives
+error 03 without a line or column
+(`Thorium 967678c:ted/src/load.asm:48-53`, `121-125`).
 
 | Message | Cause | Action |
 | --- | --- | --- |
