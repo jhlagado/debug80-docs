@@ -1,11 +1,11 @@
 ---
 title: Chains across a warm boot
 parent: TEC-OS
-nav_order: 21
+nav_order: 22
 nav_group: "Inside TEC-OS"
 ---
 
-# 21. Chains across a warm boot
+# 22. Chains across a warm boot
 
 <!-- Source mechanisms checked by inspection against TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Source ranges use that revision
@@ -14,7 +14,7 @@ nav_group: "Inside TEC-OS"
 
 A program's ordinary exit rebuilds the CCP's working state, yet the next
 piece of its command line can still run. The line and its position survive
-in RAM outside the warm-boot clear. Chapter 12 explains their practical
+in RAM outside the warm-boot clear. Chapter 13 explains their practical
 use.
 
 ## The retained line
@@ -133,7 +133,7 @@ their own prompts by `MLECHO` (`src/cpm/ccpcmd.asm:915-922`,
 result too: on this serial-only board, replacing `NOSUCH.SVC` with
 `GLCD.SVC` would leave success and allow `:MOUNT` to run. The CCP tests
 both startup origin and the absent-device installation result before taking
-that quiet path (`src/cpm/ccp.asm:426-437`). Chapter 25 explains the full
+that quiet path (`src/cpm/ccp.asm:426-437`). Chapter 26 explains the full
 startup and display rules.
 
 ## Finding and taking a piece
@@ -181,7 +181,7 @@ The stored position uses only low-byte arithmetic. After advancing past `!`,
 A drive letter and colon alone select that drive. Other text reaches
 `NOTDRIVE`, which compares the built-in names and otherwise loads a COM
 program or installs an SVC service (`src/cpm/ccp.asm:264-287`,
-`src/cpm/ccp.asm:355-426`). Chapter 20 explains program search and launch.
+`src/cpm/ccp.asm:355-426`). Chapter 21 explains program search and launch.
 `CHPOS` is already set before any of those commands runs.
 
 An ordinary program exit reaches warm boot through the inherited return
@@ -287,7 +287,7 @@ all dirty cache lines. If a write fails, that cache line is dropped. On
 any failure `CWBOOT` clears `CHPOS` and prints `Write lost` once
 (`src/boot.asm:146-149`, `src/cache.asm:265-299`,
 `src/cache.asm:566-572`). A successful flush leaves the saved position
-available. Chapter 18 explains the card-write consequences.
+available. Chapter 19 explains the card-write consequences.
 
 A reset instead clears `CHPOS` with the whole workspace. Cold boot then
 starts with no remaining chain (`src/boot.asm:61-65`,

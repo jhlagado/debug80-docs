@@ -1,11 +1,11 @@
 ---
 title: Write a resident service
 parent: TEC-OS
-nav_order: 13
+nav_order: 14
 nav_group: "Writing programs"
 ---
 
-# 13. Write a resident service
+# 14. Write a resident service
 
 <!-- Source-only semantic check: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Retained source/recipes are preserved from frozen10821b6, not blanket
@@ -24,7 +24,7 @@ has ended. Its hook shows how resident code survives program exits and how
 another program finds a routine inside it. COUNT and its clients retain their
 historical source and results. The failed-INIT example has a separate current
 workflow below. Use the PC setup from
-[Chapter 5](05-cards-on-the-pc.md) for their card preparation.
+[Chapter 6](06-cards-on-the-pc.md) for their card preparation.
 
 ## Code that stays
 
@@ -32,7 +32,7 @@ A COM program starts at `0100h`. After it ends, a later program can overwrite
 its memory. A resident service occupies reserved pages of 256 bytes and
 remains installed through warm boots. Reset discards it. `UNLOAD` removes
 the newest service only when its flags and removal routine allow that.
-[Chapter 4](04-drives-and-user-areas.md#programs-and-resident-services)
+[Chapter 5](05-drives-and-user-areas.md#programs-and-resident-services)
 gives the installation, listing and removal commands.
 
 A driver is a service that operates hardware. A library provides routines
@@ -41,8 +41,8 @@ console's output routine and also provides a count-reading routine to clients.
 
 The pages come from the transient program area, or TPA, below the BDOS entry
 jump. Installation lowers the word at `0006h`, the program-memory ceiling
-established in [Chapter 10](10-memory-for-programs.md). The numbered ROM calls
-used in [Chapter 11](11-use-the-boards-devices.md) occupy no service pages and
+established in [Chapter 11](11-memory-for-programs.md). The numbered ROM calls
+used in [Chapter 12](12-use-the-boards-devices.md) occupy no service pages and
 do not appear in `SERVICES`. A resident service can publish named records in the
 registry so that programs can find its routines. ROM calls 13 and 14 find and
 enumerate those records.
@@ -59,7 +59,7 @@ including `WBOOT` if it changed that entry. Otherwise a later call can jump into
 overwritten program memory. COUNT instead reserves resident memory for its hook
 and restores the entry when removed. The BDOS's key check during output calls
 ROM `CONST` directly so a hook on the RAM table's `CONST` does not intercept
-that check. [Chapter 16](16-console-paths.md) describes the remaining console
+that check. [Chapter 17](17-console-paths.md) describes the remaining console
 paths.
 
 ## COUNT.SVC
@@ -212,14 +212,14 @@ of any `COUNT.SVC` already on the drive.
 
 COUNT and GLCD cannot both fit within the declared CCP stack allowance.
 For the COUNT workflow, use the serial or PICO console with GLCD absent
-from `SERVICES`. [Chapter 6](06-choose-a-console.md) explains switching
+from `SERVICES`. [Chapter 7](07-choose-a-console.md) explains switching
 consoles. Select a working replacement console before removing GLCD.
 The Stacks section below explains the declarations behind this restriction.
 
 The historical recipe below prepares a separate `svc.img` using the host
-card-tool setup from Chapter 5. Save COUNT's listing as `count.asm` beside
-the other PC sources. `HWLIB.ASM` is the helper from Chapter 11 and
-`area.asm` is Chapter 10's AREA program. `chars.asm`, listed under
+card-tool setup from Chapter 6. Save COUNT's listing as `count.asm` beside
+the other PC sources. `HWLIB.ASM` is the helper from Chapter 12 and
+`area.asm` is Chapter 11's AREA program. `chars.asm`, listed under
 Publishing a record below, reads COUNT's count. The retained captures name
 their specific run revisions:
 
@@ -286,7 +286,7 @@ In the `78127ec` workflow COUNT occupied one page, as `SERVICES` reported.
 The measured TPA fell by 420 bytes and removal restored them. The page accounted for 256 bytes.
 The remaining 164 were the alignment gap at `B900h` to `B9A3h`, below the
 original BDOS entry stub. That gap is lost with the first service only.
-[Chapter 24](24-loading-and-removing-services.md#the-resident-entry-and-its-pages)
+[Chapter 25](25-loading-and-removing-services.md#the-resident-entry-and-its-pages)
 explains the allocation. These addresses and sizes describe this historical
 layout and must not be used as a current memory ceiling.
 
@@ -345,7 +345,7 @@ and return immediately after the final setup.
 
 An accepted BDOS function 47 call from INIT takes this warm-boot path.
 The replacement line is subject to the normal flush and command-chain
-rules in [Chapter 12](12-results-and-command-chains.md). A rejected function
+rules in [Chapter 13](13-results-and-command-chains.md). A rejected function
 47 call returns `FFh` to INIT and does not warm-boot. INIT must handle that
 return and continue or report failure as appropriate.
 
@@ -390,8 +390,8 @@ ROM `fa63989b`, using the PICO9918 console at 40 columns with the Matrix
 switch enabled. Startup's GLCD command installed nothing. This is a fresh
 baseline, not a continuation of the historical COUNT session.
 
-Prepare a separate card using Chapter 5's setup with TAS on A. Put this original
-`fail.asm`, Chapter 10's original `area.asm` and the matching `abi.inc` on B
+Prepare a separate card using Chapter 6's setup with TAS on A. Put this original
+`fail.asm`, Chapter 11's original `area.asm` and the matching `abi.inc` on B
 using the text-file operation. AREA needs no HWLIB include. The build session
 included these two commands:
 
@@ -440,7 +440,7 @@ failure is quiet when cleanup releases the pages. It leaves a zero command
 result so a following `:` piece can run. Retained-page failures, failed file
 validation and rejected records do not receive that exception. A driver that
 finds its device absent can use the same return convention.
-[Chapter 7](07-commands-at-startup.md) describes the startup policy and Chapter
+[Chapter 8](08-commands-at-startup.md) describes the startup policy and Chapter
 12 explains conditional pieces.
 
 ### REMOVE and a hook on a hook
@@ -712,7 +712,7 @@ That run predates release 1, whose PICO record reports `version 04`.
 
 PICO is the ROM console's permanent record, registered when that console starts
 at cold boot. UNLOAD cannot remove it. Its graphics entries require the display
-claim described in Chapter 11 and listed in
+claim described in Chapter 12 and listed in
 [Appendix B](appendix-b-rom-services.md). GLCD publishes no record so it does
 not appear in RECS even when installed.
 

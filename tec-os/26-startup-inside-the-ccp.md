@@ -1,11 +1,11 @@
 ---
 title: Startup inside the CCP
 parent: TEC-OS
-nav_order: 25
+nav_order: 26
 nav_group: "Inside TEC-OS"
 ---
 
-# 25. Startup inside the CCP
+# 26. Startup inside the CCP
 
 <!-- Source mechanisms checked by text inspection against TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Unprefixed source ranges use
@@ -16,7 +16,7 @@ A startup command can run a program that ends through warm boot. The next
 startup line must still be available when the CCP starts again. TEC-OS
 keeps the first record of `A:STARTUP.CMD` and its next-byte position outside
 the warm-boot clear (`src/ram.asm:412-420`, `src/boot.asm:384-389`).
-The practical file setup is in [Chapter 7](07-commands-at-startup.md).
+The practical file setup is in [Chapter 8](08-commands-at-startup.md).
 
 ## A record across warm boot
 
@@ -37,7 +37,7 @@ The record and position are above the RAM BIOS table. Warm boot's
 program exit therefore preserves both. Reset enters `COLD` and clears
 the whole workspace including `STPOS`. The next startup read begins
 from zero (`src/ram.asm:295-307`, `src/boot.asm:22-65`, `384-389`).
-[Chapter 14](14-state-and-memory.md#the-workspace-across-a-program-exit)
+[Chapter 15](15-state-and-memory.md#the-workspace-across-a-program-exit)
 explains the two clearing spans.
 
 A diagnostic retry returns to `COLDRT`, after the cold clear but before
@@ -80,7 +80,7 @@ still zero from cold boot. Drive byte 1 names A regardless of the current drive
 (`src/tables.asm:137`, `src/cpm/ccpcmd.asm:809-812`, `src/ram.asm:148-149`). A
 recognised reset has already run `RESEL` so this is the volume currently
 selected as A, not necessarily the card's original SYSTEM volume
-(`src/boot.asm:99-102`, `src/volsvc.asm:1-22`). Chapter 7's `SPARE` example
+(`src/boot.asm:99-102`, `src/volsvc.asm:1-22`). Chapter 8's `SPARE` example
 demonstrates that selection.
 
 Three BDOS calls acquire the record (`src/cpm/ccpcmd.asm:813-825`):
@@ -215,9 +215,9 @@ reaches the retained startup position again
 (`src/cpm/ccp.asm:90-115`, `436-437`, `477-490`,
 `src/cpm/ccpcmd.asm:799-803`). `^C` ending a program follows warm boot
 too. It can discard that command's remaining chain without discarding
-the next startup line. [Chapter 12](12-results-and-command-chains.md)
+the next startup line. [Chapter 13](13-results-and-command-chains.md)
 explains the operators and
-[Chapter 21](21-chains-across-warm-boot.md) follows the retained pieces.
+[Chapter 22](22-chains-across-warm-boot.md) follows the retained pieces.
 
 ## Display loading and console selection
 
@@ -226,7 +226,7 @@ switch enables the matrix keyboard at cold boot. It needs no service line in the
 file (`src/console.asm:49-52`, `src/video.asm:18-24`, `src/pico.asm:53-68`). The
 supplied display line loads `GLCD.SVC`. The CCP compares all three type bytes in
 `CMDFCB`: `SVC` calls `SVCGO` while another type goes to the `.COM` search
-(`src/cpm/ccp.asm:407-452`). [Chapter 20](20-from-prompt-to-program.md) explains
+(`src/cpm/ccp.asm:407-452`). [Chapter 21](21-from-prompt-to-program.md) explains
 that search.
 
 `SVCGO` calls `LOADCOM` and `SVCLOAD`, returning carry on either failure
@@ -235,7 +235,7 @@ that search.
 returns with carry. Next it calls `GLCWAIT`. An unanswered controller
 returns `TNENODV`. Finally it passes its table through `DRVR`, service
 12, with `B` at 3 for `UC1:` (`drivers/glcd.asm:60-73`).
-[Chapter 24](24-loading-and-removing-services.md) covers the loader's
+[Chapter 25](25-loading-and-removing-services.md) covers the loader's
 other checks and rollback.
 
 `SVDRV` uses both the startup mark and the console field. A nonzero
@@ -249,7 +249,7 @@ as `TNEBAD`
 `GLCD.SVC` therefore fails while the first is installed. An older card's
 `PICO.SVC` also fails when it passes a table for `CRT:` because `DRVR`
 accepts only `UC1:` (`src/services.asm:525-531`).
-[Chapter 16](16-console-paths.md) explains the console tables and claims.
+[Chapter 17](17-console-paths.md) explains the console tables and claims.
 
 After a successful load, `SVCGO` compares the new service's page in
 `SVCHEAD` with the table page in `GLVEC`. No match leaves the console

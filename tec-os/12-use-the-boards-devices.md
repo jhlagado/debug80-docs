@@ -1,11 +1,11 @@
 ---
 title: Use the board's devices
 parent: TEC-OS
-nav_order: 11
+nav_order: 12
 nav_group: "Writing programs"
 ---
 
-# 11. Use the board's devices
+# 12. Use the board's devices
 
 <!-- Checked against TEC-OS 78127ec. The programs were assembled by the starter
      card's `TAS.COM`, from Thorium dbee66a, SHA-256
@@ -40,7 +40,7 @@ claims before graphics access.
 These *numbered services* are routines already in ROM. They are different from a
 resident service such as `GLCD.SVC`, which is a file installed in RAM. A
 numbered call selects a routine through an entry address. A resident service can
-itself make such calls. Chapter 13 explains resident programs.
+itself make such calls. Chapter 14 explains resident programs.
 
 ## The ABI and its entry address
 
@@ -77,7 +77,7 @@ contents into the assembly source.
 
 ## Registers, status and stack
 
-Chapter 8 introduced byte registers and register pairs. For a numbered call, C
+Chapter 9 introduced byte registers and register pairs. For a numbered call, C
 selects the service. B is a byte argument and DE or HL can hold word values or
 buffer addresses according to that service's contract. A carries no argument
 because the dispatcher uses it during selection. The program calls ABICALL after
@@ -113,16 +113,16 @@ hardware numbers identify these routines:
 | 8 | `TNRTC` | reads or sets the DS1302 clock |
 
 The other numbers extend the same ABI. Numbers 9–11 mount, unmount and describe
-volumes, as Chapter 17 explains. Number 12 registers the GLCD video-driver
+volumes, as Chapter 18 explains. Number 12 registers the GLCD video-driver
 table. Numbers 13 and 14 find or enumerate named records in the registry
-described in Chapter 13. Those registry calls have their own result convention,
+described in Chapter 14. Those registry calls have their own result convention,
 including a generation in A, so their callers test carry rather than applying
 the hardware status rule. Number 15 returns the ROM font and was added in ABI
 5.1.
 
 The hardware services use the caller's stack. PUTAT has the largest bound: 22
 bytes below the return address supplied by CALL. That fits the inherited 30-byte
-allowance from Chapter 10 but a caller must also count its own nested calls and
+allowance from Chapter 11 but a caller must also count its own nested calls and
 saved registers. Appendix B lists the individual bounds. These are bounds, not
 newly measured peaks.
 
@@ -299,7 +299,7 @@ node tools/tecvol.mjs put hw.img B board.asm --text
 
 Each later example's source goes on `hw.img` in the same way. `TAS BOARD` reads
 BOARD.ASM on the current drive and writes BOARD.COM beside it. TAS.COM is on A
-so the program search described in Chapter 4 finds it from B. In this historical
+so the program search described in Chapter 5 finds it from B. In this historical
 serial-model configuration, the clock set INFO's bit 3 and the console size was
 zero:
 
@@ -413,7 +413,7 @@ LCD untouched.
 Row 3 has a separate ownership mark for the ROM's `GLCD?` message. When GLCD.SVC
 installs, TEC-OS clears that message only while the mark is set. An LCD call
 writing row 3 clears the mark. Later driver installation therefore preserves the
-program's replacement text. Chapter 7 explains the startup message.
+program's replacement text. Chapter 8 explains the startup message.
 
 TONE toggles port `01h` bit 7. B controls the delay and DE the number of half
 cycles. Between ordinary toggles the delay is 16 × B + 51 T-states. A full cycle
@@ -788,7 +788,7 @@ CRLF:	DB	13,10,"$"
 
 PUTAT sends bytes directly to the display routine. Both the ROM PICO console and
 GLCD.SVC draw `80h–FFh` as reverse images of `00h–7Fh`. The ordinary
-video-console path drops those high bytes, as Chapter 16 explains. Serial
+video-console path drops those high bytes, as Chapter 17 explains. Serial
 output transmits all eight bits. This makes PUTAT a direct
 route to reverse characters without an escape sequence. The retained PICO text
 capture shows both strings alike because its decoder does not report reverse

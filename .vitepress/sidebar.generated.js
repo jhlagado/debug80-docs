@@ -2411,23 +2411,23 @@ export const sidebars = {
         },
         {
           "text": "Work with files",
-          "link": "/tec-os/03-work-with-files.html"
+          "link": "/tec-os/04-work-with-files.html"
         },
         {
           "text": "Drives and user areas",
-          "link": "/tec-os/04-drives-and-user-areas.html"
+          "link": "/tec-os/05-drives-and-user-areas.html"
         },
         {
           "text": "Cards on the PC",
-          "link": "/tec-os/05-cards-on-the-pc.html"
+          "link": "/tec-os/06-cards-on-the-pc.html"
         },
         {
           "text": "Choose a console",
-          "link": "/tec-os/06-choose-a-console.html"
+          "link": "/tec-os/07-choose-a-console.html"
         },
         {
           "text": "Commands at startup",
-          "link": "/tec-os/07-commands-at-startup.html"
+          "link": "/tec-os/08-commands-at-startup.html"
         }
       ]
     },
@@ -2437,27 +2437,27 @@ export const sidebars = {
       "items": [
         {
           "text": "Call TEC-OS",
-          "link": "/tec-os/08-call-tec-os.html"
+          "link": "/tec-os/09-call-tec-os.html"
         },
         {
           "text": "Read and write a file",
-          "link": "/tec-os/09-read-and-write-a-file.html"
+          "link": "/tec-os/10-read-and-write-a-file.html"
         },
         {
           "text": "Memory for programs",
-          "link": "/tec-os/10-memory-for-programs.html"
+          "link": "/tec-os/11-memory-for-programs.html"
         },
         {
           "text": "Use the board's devices",
-          "link": "/tec-os/11-use-the-boards-devices.html"
+          "link": "/tec-os/12-use-the-boards-devices.html"
         },
         {
           "text": "Results and command chains",
-          "link": "/tec-os/12-results-and-command-chains.html"
+          "link": "/tec-os/13-results-and-command-chains.html"
         },
         {
           "text": "Write a resident service",
-          "link": "/tec-os/13-write-a-resident-service.html"
+          "link": "/tec-os/14-write-a-resident-service.html"
         }
       ]
     },
@@ -2467,63 +2467,63 @@ export const sidebars = {
       "items": [
         {
           "text": "State and memory inside TEC-OS",
-          "link": "/tec-os/14-state-and-memory.html"
+          "link": "/tec-os/15-state-and-memory.html"
         },
         {
           "text": "Reset and boot",
-          "link": "/tec-os/15-reset-and-boot.html"
+          "link": "/tec-os/16-reset-and-boot.html"
         },
         {
           "text": "Console paths",
-          "link": "/tec-os/16-console-paths.html"
+          "link": "/tec-os/17-console-paths.html"
         },
         {
           "text": "Card blocks and volumes",
-          "link": "/tec-os/17-card-blocks-and-volumes.html"
+          "link": "/tec-os/18-card-blocks-and-volumes.html"
         },
         {
           "text": "Cache and persistence",
-          "link": "/tec-os/18-cache-and-persistence.html"
+          "link": "/tec-os/19-cache-and-persistence.html"
         },
         {
           "text": "A file through the BDOS",
-          "link": "/tec-os/19-a-file-through-the-bdos.html"
+          "link": "/tec-os/20-a-file-through-the-bdos.html"
         },
         {
           "text": "From prompt to program",
-          "link": "/tec-os/20-from-prompt-to-program.html"
+          "link": "/tec-os/21-from-prompt-to-program.html"
         },
         {
           "text": "Chains across a warm boot",
-          "link": "/tec-os/21-chains-across-warm-boot.html"
+          "link": "/tec-os/22-chains-across-warm-boot.html"
         },
         {
           "text": "The history ring",
-          "link": "/tec-os/22-the-history-ring.html"
+          "link": "/tec-os/23-the-history-ring.html"
         },
         {
           "text": "Numbered-service dispatch",
-          "link": "/tec-os/23-numbered-service-dispatch.html"
+          "link": "/tec-os/24-numbered-service-dispatch.html"
         },
         {
           "text": "Loading and removing services",
-          "link": "/tec-os/24-loading-and-removing-services.html"
+          "link": "/tec-os/25-loading-and-removing-services.html"
         },
         {
           "text": "Startup inside the CCP",
-          "link": "/tec-os/25-startup-inside-the-ccp.html"
+          "link": "/tec-os/26-startup-inside-the-ccp.html"
         },
         {
           "text": "Build the ROM and media",
-          "link": "/tec-os/26-build-the-rom-and-media.html"
+          "link": "/tec-os/27-build-the-rom-and-media.html"
         },
         {
           "text": "Diagnose the machine",
-          "link": "/tec-os/27-diagnose-the-machine.html"
+          "link": "/tec-os/28-diagnose-the-machine.html"
         },
         {
           "text": "The host model as evidence",
-          "link": "/tec-os/28-the-host-model-as-evidence.html"
+          "link": "/tec-os/29-the-host-model-as-evidence.html"
         }
       ]
     },

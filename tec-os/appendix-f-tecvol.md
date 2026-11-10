@@ -20,7 +20,7 @@ nav_group: "Reference"
 `tecvol` edits TEC-OS card images on a PC. It creates volumes, inspects their
 files and directories, copies files and writes an image to a physical device.
 Run it from a repository clone as `node tools/tecvol.mjs`. The package also
-names the command `tecvol` (`package.json:11-13`). Chapter 5 gives the working
+names the command `tecvol` (`package.json:11-13`). Chapter 6 gives the working
 procedures and recovery precautions. Appendix E defines the container format.
 
 ## Common rules
@@ -74,11 +74,11 @@ Never change a card on the PC while TEC-OS is using it. At the board's command
 prompt, a successful `^C` flush must finish before removal. `Write lost` means
 that some changes were dropped. Reset after returning a PC-changed card because
 TEC-OS's cached blocks and allocation maps otherwise describe its old contents.
-Chapter 5 gives the copy-first procedure.
+Chapter 6 gives the copy-first procedure.
 
 The examples below are retained historical runs with prepared `dist/` inputs
 and an existing `build/` directory. Follow their order when constructing the
-worked card. `build/my.img` is this appendix's separate fixture, not Chapter 4's
+worked card. `build/my.img` is this appendix's separate fixture, not Chapter 5's
 four-volume `my.img`. Historical figures and hashes are not current-build
 constants.
 
@@ -313,7 +313,7 @@ for New starter card.
 
 `npm run media` prepares `dist/starter.recipe.json` and its image. It also
 writes `dist/page.recipe.json`, which has the starter files plus DEMO and
-its own id, name and instructions (`tools/media.mjs:206-262`). Chapter 26
+its own id, name and instructions (`tools/media.mjs:206-262`). Chapter 27
 describes that preparation. The retained historical rebuild produced these
 matching hashes:
 
@@ -350,7 +350,7 @@ identification or a backup. The tool does not check whether the named device
 is the intended card. Naming the PC's disk overwrites that disk instead.
 
 This is a direct write, unlike temporary-file replacement. An interrupted
-operation can leave a partial card. Chapter 5 gives the backup and physical card
+operation can leave a partial card. Chapter 6 gives the backup and physical card
 transfer procedure.
 
 ## The worked card

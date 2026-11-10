@@ -1,11 +1,11 @@
 ---
 title: Work with files
 parent: TEC-OS
-nav_order: 3
+nav_order: 4
 nav_group: "Using the machine"
 ---
 
-# 3. Work with files
+# 4. Work with files
 
 <!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Current COPY and pager excerpts: tested 8b8664a7d93c6dc2e8bce509b9770585e106eedc,
@@ -89,7 +89,7 @@ comments, so its screens differ from these two excerpts row by row:
      Attempt02 archive member stage/results/098-type-continue.json:
      complete 24-row screen. Companions retain raw VRAM/registers/foreground.
      Later command effects and final prompts are omitted from this excerpt.
-     Their chain/user-area meaning belongs in Chapters 12/4. -->
+     Their chain/user-area meaning belongs in Chapters 13/5. -->
 ```text
 ; A first program for TEC-OS. Build it
 ; with TAS SAMPLE. Run it with SAMPLE.
@@ -215,7 +215,7 @@ B>
 `COPIED 0001` reports one 128-byte record copied. The count is hexadecimal:
 `000A` means ten 128-byte records (1,280 bytes). It counts copied records rather
 than space allocated to the file. Space is allocated in larger units, explained
-in [Cards on the PC](05-cards-on-the-pc.md#record-sizes-and-allocated-space).
+in [Cards on the PC](06-cards-on-the-pc.md#record-sizes-and-allocated-space).
 
 The first REN made NOTES.TXT from COPY.TXT. The next REN left both files alone
 because NOTES.TXT already existed. The first ERA removed NOTES.TXT. The repeated

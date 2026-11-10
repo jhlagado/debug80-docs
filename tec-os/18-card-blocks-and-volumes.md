@@ -1,11 +1,11 @@
 ---
 title: Card blocks and volumes
 parent: TEC-OS
-nav_order: 17
+nav_order: 18
 nav_group: "Inside TEC-OS"
 ---
 
-# 17. Card blocks and volumes
+# 18. Card blocks and volumes
 
 <!-- Source mechanisms inspected at release-1 TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. All unprefixed source ranges
@@ -143,7 +143,7 @@ stack while EXPAND 1 is visible (`src/cache.asm:184-196`,
 `src/sd.asm:643-652`). The BIOS transfer paths and descriptor-service cache
 walks disable maskable interrupts around their work. The SD transfer itself
 does not supply a general interrupt guard. The reason for this boundary is the
-[EXPAND 1 stack rule](14-state-and-memory.md#expand-1-and-the-stack-boundary)
+[EXPAND 1 stack rule](15-state-and-memory.md#expand-1-and-the-stack-boundary)
 (`src/bios.asm:223-227`, `src/bios.asm:254-259`, `src/vol.asm:548-553`).
 [Appendix D](appendix-d-error-messages.md) relates the SD error codes to
 likely causes and recovery.
@@ -349,7 +349,7 @@ vector is for detecting a changed disk on removable floppy drives. TEC-OS
 instead uses the DPH scratch words to retain directory state across warm
 boot. Their changed flag and scan mark determine the allocation-vector
 rebuild (`src/cpm/bdosfile.asm:19-107`). Cold-boot vector placement is
-explained under [Allocation vectors below the workspace](14-state-and-memory.md#allocation-vectors-below-the-workspace).
+explained under [Allocation vectors below the workspace](15-state-and-memory.md#allocation-vectors-below-the-workspace).
 
 ## From a record to a card block
 
@@ -430,7 +430,7 @@ line must be written successfully before `WRITE` reports success.
 On a written-behind volume
 data may remain dirty in the cache. A directory write orders the pending
 data before its own block (`src/bios.asm:380-388`,
-`src/cache.asm:517-555`). Chapter 18 explains that persistence boundary
+`src/cache.asm:517-555`). Chapter 19 explains that persistence boundary
 and the failure paths in full.
 
 Sequential writes to a new file can therefore avoid data pre-reads while

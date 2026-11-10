@@ -1,11 +1,11 @@
 ---
 title: Cache and persistence
 parent: TEC-OS
-nav_order: 18
+nav_order: 19
 nav_group: "Inside TEC-OS"
 ---
 
-# 18. Cache and persistence
+# 19. Cache and persistence
 
 <!-- Mechanisms inspected by source text at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Unprefixed citations use that revision. Historical READ/SAVE timings
@@ -24,7 +24,7 @@ Its write policy determines when a successful call also means that the block has
 reached the card.
 
 The historical host-model block read took about 55 milliseconds at `78127ec`,
-with bits passing through a port one at a time. Chapter 17 explains that
+with bits passing through a port one at a time. Chapter 18 explains that
 transfer. A CP/M program reads the same blocks again and again, the directory
 above all. The block cache keeps what it has read in EXPAND 1 so that a later
 read is a memory copy while that block remains cached. Every write goes through
@@ -48,10 +48,10 @@ holds changes the card lacks. A line is therefore empty, clean or dirty. An
 empty line has no block. A clean line holds a block the card has too and a dirty
 line holds a block whose newest bytes are only here. Every line is empty after a
 cold boot. The boot clears EXPAND 1 and marks each line empty before it mounts
-the card, as [Chapter 15](15-reset-and-boot.md) describes
+the card, as [Chapter 16](16-reset-and-boot.md) describes
 (`src/boot.asm:77-77`, `src/boot.asm:232-249`). The mount then reads the
 container's table into a line, an ordinary clean one that `CTAKE` gives out
-again in turn (`src/vol.asm:378-414`). Chapter 17 explains the mount.
+again in turn (`src/vol.asm:378-414`). Chapter 18 explains the mount.
 
 The lines are keyed by the block's number on the card, `SDLBA`, and not by
 drive and block within the volume. The absolute card address identifies a
@@ -71,7 +71,7 @@ in the resident workspace above the RAM BIOS table (`src/ram.asm:323-329`):
 To reach the table, a routine takes from `CXON` the latch value with
 `LATEXP` ORed into `LATCHV` and writes it to the latch. It reads or writes
 the bytes with no `PUSH`, `POP` or `CALL` in between, then puts `LATCHV`
-back (`src/cache.asm:29-40`). [Chapter 14](14-state-and-memory.md#expand-1-and-the-stack-boundary) explains why no
+back (`src/cache.asm:29-40`). [Chapter 15](15-state-and-memory.md#expand-1-and-the-stack-boundary) explains why no
 stack may be used while EXPAND 1 is in view.
 
 ## A record read through the cache
@@ -203,7 +203,7 @@ and directories. The line keeps its block so the block's next record is a hit.
 
 A card block holds four CP/M records. Writing each record through can therefore
 write the same block four times. Writing behind combines those changes in one
-line before a flush. Chapter 17 explains the record-to-block mapping
+line before a flush. Chapter 18 explains the record-to-block mapping
 (`src/cache.asm:359-394`, `src/cache.asm:508-536`). A volume is written behind
 when its descriptor has bit 0 of its cache byte, byte 15, set. `tecvol` permits
 the bit on one volume at most (`tools/lib/container.mjs:85-86`). The ROM applies
@@ -217,7 +217,7 @@ starter card the volume is `WORK` on drive B.
 marks the line dirty (`src/cache.asm:430-555`). If no line holds the block,
 `CTAKE` gives one out. The line is filled from the card first unless it
 already held the block. It is cleared to zeros instead, with no read, when
-by `WRITE`'s rule from Chapter 17 the card has nothing to supply
+by `WRITE`'s rule from Chapter 18 the card has nothing to supply
 (`src/cache.asm:450-469`).
 
 Either way, the record's 128 bytes are then copied from the DMA address into the
@@ -281,7 +281,7 @@ data phase of a directory write's flush leaves some new data on the card and its
 The ordering prevents publishing that update before all its data writes
 succeed. It provides no rollback. A successfully written block the file
 already had holds its new contents on the card, with or without the directory block
-after it. [Chapter 5](05-cards-on-the-pc.md#recovery-after-a-power-cut)
+after it. [Chapter 6](06-cards-on-the-pc.md#recovery-after-a-power-cut)
 describes recovery after that. A cut during the directory block's own write
 can damage any of its 16 entries. Card-reported completion is also not a
 verification of the card's physical power-loss durability
@@ -355,8 +355,8 @@ dirty.
 The retained `78127ec` run below left X.COM in the directory after a failed
 close. Its buffered records did not reach the card. It used that revision's
 prepared starter image and matching ROM. The PC setup is described in
-[Chapter 5](05-cards-on-the-pc.md#the-host-tools) and matching media in
-[Chapter 26](26-build-the-rom-and-media.md). The historical shell recipe also
+[Chapter 6](06-cards-on-the-pc.md#the-host-tools) and matching media in
+[Chapter 27](27-build-the-rom-and-media.md). The historical shell recipe also
 requires `cp` and `truncate`. It changes a separate image, not the working card.
 
 The image ends 32 card blocks into WORK, just past its directory. The directory
@@ -419,7 +419,7 @@ off. `VFLUSH`, in the volume services, uses the same pair around its flush
 `src/history.asm:41-68`).
 
 Maskable interrupts come on only when a program or a service enables them, as
-Chapter 15 states. The ROM's executable `EI` instructions restore a saved state.
+Chapter 16 states. The ROM's executable `EI` instructions restore a saved state.
 The places are `CEI`, `RXBITS`, `TXBYTE`, the history's access, `MVEND` and the
 PICO9918's `VPAIR` (`src/bios.asm:431-440`, `src/console.asm:312-337`,
 `src/console.asm:369-399`, `src/history.asm:41-68`, `src/cache.asm:731-736`,
@@ -427,7 +427,7 @@ PICO9918's `VPAIR` (`src/bios.asm:431-440`, `src/console.asm:312-337`,
 when no resident jump is retained there. That code runs on an interrupt or a
 program's `RST 38h` (`src/boot.asm:359-368`). DI does not block a non-maskable
 interrupt (NMI). These routines therefore require the NMI conditions described
-in Chapter 14 as well as their maskable-interrupt protection.
+in Chapter 15 as well as their maskable-interrupt protection.
 
 For a program that enables maskable interrupts, the protected portion of a BIOS
 disk call holds them off across mapping, cache work and card I/O. A read that

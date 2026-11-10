@@ -1,11 +1,11 @@
 ---
 title: Call TEC-OS
 parent: TEC-OS
-nav_order: 8
+nav_order: 9
 nav_group: "Writing programs"
 ---
 
-# 8. Call TEC-OS
+# 9. Call TEC-OS
 
 <!-- Source-only semantic check against TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
@@ -30,7 +30,7 @@ the addresses where the program will run.
 The CCP processes your command and starts the program. The BDOS provides its
 console and file operations. Beneath those operations, the BIOS drives the
 TEC-1G's devices. Using the BDOS keeps ordinary console calls separate from
-the machine's ports and display drivers. Chapter 10 explains the raw BIOS
+the machine's ports and display drivers. Chapter 11 explains the raw BIOS
 interface and its stack/input contract. Here both input and output use the
 BDOS.
 
@@ -72,7 +72,7 @@ those are the values you need afterwards.
 The program begins with 30 bytes available below its inherited return word.
 A call uses two of those bytes until it returns. Two saved pairs use another
 four. Balanced calls and saves in a small BDOS program can use that space
-but deeper nesting needs a stack of your own. Chapter 10 explains its
+but deeper nesting needs a stack of your own. Chapter 11 explains its
 placement and the exit rule after changing `SP`.
 
 ## Printing a character or string
@@ -94,7 +94,7 @@ character is already in `A`:
 
 The restored pointer and count are available for the next loop step. The
 reverse order of the two pops also restores the stack to its position before
-the pushes. Chapter 9 contains the complete SHOW listing and its file
+the pushes. Chapter 10 contains the complete SHOW listing and its file
 operations.
 
 Function 9 sends the string from `DE` up to a `$`, omitting that terminator.
@@ -216,7 +216,7 @@ and line editing. With `E = FFh`, it returns a waiting byte in `A` or zero
 if none is ready. It neither waits nor prints the key. With any other `E`,
 it prints that byte without the BDOS's tab expansion, pause checking or list
 copy. A full-screen program can use this call for both input and output. The
-selected console still interprets its own control bytes, as Chapter 16
+selected console still interprets its own control bytes, as Chapter 17
 explains.
 
 Function 11 reports whether input is ready: `A = 1` for a waiting key,
@@ -251,13 +251,13 @@ input and error handling can end a program there too:
 - A key pressed after a default-mode BDOS error such as
   `Bdos Err On B: Bad Sector`.
 
-Those exits pass through the BDOS's abort path before warm boot. Chapter 12
-distinguishes their effects on a remaining command chain. Chapter 9 explains
+Those exits pass through the BDOS's abort path before warm boot. Chapter 13
+distinguishes their effects on a remaining command chain. Chapter 10 explains
 disk errors and returned error modes alongside file calls.
 
 Warm boot rebuilds the jumps at the bottom of memory and restarts the CCP.
 Services remain installed and the selected console stays in use. Pending card
 writes are flushed before the next load. A successful flush puts them on the
 card while a failure drops the failed lines in the block cache and reports
-`Write lost`. Chapter 15 explains the full warm-boot sequence.
+`Write lost`. Chapter 16 explains the full warm-boot sequence.
 

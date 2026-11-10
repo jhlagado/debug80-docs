@@ -1,11 +1,11 @@
 ---
 title: Memory for programs
 parent: TEC-OS
-nav_order: 10
+nav_order: 11
 nav_group: "Writing programs"
 ---
 
-# 10. Memory for programs
+# 11. Memory for programs
 
 <!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the
      repository's `atom-z80` 0.3.7. -->
@@ -53,7 +53,7 @@ your program.
 ## The inherited stack and a private stack
 
 The CCP starts a program with `0000h` on its stack. Balanced calls and saves
-leave that word on top for the final `RET`, as Chapter 8 explained. There are 30
+leave that word on top for the final `RET`, as Chapter 9 explained. There are 30
 free bytes below it. That small inherited stack is in the resident workspace
 above the TPA rather than in your own program space.
 
@@ -168,7 +168,7 @@ programs to use:
 
 The drive and service combinations changed that boundary as follows in the same
 historical setup. The four-drive card is prepared with the host tools described
-in Chapter 5:
+in Chapter 6:
 
 | Card | Service | Word at `0006h` | TPA in bytes | Largest `.COM` that loads |
 | --- | --- | --- | ---: | ---: |
@@ -181,7 +181,7 @@ A drive's allocation vector holds one bit per allocation block. A set bit marks
 allocated storage. The BDOS can locate free blocks through it without reading
 the directory. A G1M vector occupies 64 bytes and a G8M vector 256 bytes. The
 vectors lie directly below the workspace, with the stub below them. Reserving
-vectors therefore reduces program space. Chapter 17 explains how the card's
+vectors therefore reduces program space. Chapter 18 explains how the card's
 drive count controls those reservations.
 
 Services reduce the boundary in whole 256-byte pages. Each service ends below
@@ -273,14 +273,14 @@ below the word at `0006h`.
 
 ## Page zero and the program's arguments
 
-Chapter 9 used page zero's default file control block (FCB) and command-tail
+Chapter 10 used page zero's default file control block (FCB) and command-tail
 buffer. Page zero also holds the return vectors, console selection and BIOS
 scratch:
 
 | Addresses | Contents |
 | --- | --- |
 | `0000h–0002h` | Jump to the BIOS warm-boot entry at `BF03h` |
-| `0003h` | IOBYTE, the CP/M device-selection byte described in Chapter 16 |
+| `0003h` | IOBYTE, the CP/M device-selection byte described in Chapter 17 |
 | `0004h` | Current drive in bits 0–3 and user area in bits 4–7 |
 | `0005h–0007h` | BDOS jump, with the TPA boundary in its address word |
 | `0008h–0037h` | Restart vectors for `RST 08h` through `RST 30h` |
@@ -300,7 +300,7 @@ the selection used on exit. An unavailable drive falls back to A
 The tail's first byte is its length and the characters follow it. They are in
 capitals and include the leading space after the command's name. A read into the
 default DMA buffer replaces the tail. A program that still needs it copies it
-before file input. Chapter 9 explains the FCB fields and the overlap between the
+before file input. Chapter 10 explains the FCB fields and the overlap between the
 two parsed names.
 
 `0050h` is a different drive value from the current drive at `0004h`. It follows
@@ -311,7 +311,7 @@ can remain A throughout that run.
 
 TED reads `0050h` to prefix the commands it chains. When loaded from A with B
 current, it generates `A:TAS` and `A:TED`. The source remains on B while the
-tools run from A. Chapter 12 explains the chaining interface.
+tools run from A. Chapter 13 explains the chaining interface.
 
 ## SAVE as a memory snapshot
 
@@ -352,7 +352,7 @@ written.
 CP/M 2.2's SAVE leaves that partial file open. Its final extent's records may
 then have no directory entry. TEC-OS's close avoids that omission when it
 succeeds. Closing file state and flushing pending card writes remain distinct
-operations, as Chapter 9 explains.
+operations, as Chapter 10 explains.
 
 ## Restart vectors and interrupts
 
@@ -413,13 +413,13 @@ contains zeros unless something wrote there. Execution runs through those zeros
 into the ROM at `C000h`. The reset entry tests the high address byte at `0002h`
 to distinguish this path from a reset, then takes warm boot. Warm boot restores
 EXPAND 0 and flushes the cache. A failed flush drops failed lines and reports
-`Write lost`, as Chapter 9 explains.
+`Write lost`, as Chapter 10 explains.
 
 That path depends on the bank's bytes and the page-zero jump remaining intact.
 It does not restore cache bytes a program has overwritten. Reset and BIOS
 function 0 instead run cold boot. Reset can stop a crashed or nonterminating
 program but discards pending cached writes. A recognised reset can retain the
-selected volumes when they still match the card. Chapter 15 explains that check.
+selected volumes when they still match the card. Chapter 16 explains that check.
 
 ## The raw BIOS console interface
 

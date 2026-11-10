@@ -15,8 +15,8 @@ nav_group: "Reference"
 
 A memory address needs both a bank and a build identity. This reference
 pairs the historical `78127ec` map with the source contracts for each region.
-[Chapter 10](10-memory-for-programs.md) explains the program's memory limits.
-[Chapter 14](14-state-and-memory.md) explains resident state and its lifetime.
+[Chapter 11](11-memory-for-programs.md) explains the program's memory limits.
+[Chapter 15](15-state-and-memory.md) explains resident state and its lifetime.
 
 The address tables retain the `tecos` build at `78127ec`, whose ROM SHA-256 is
 `8cad40923ce1c3c6079d3201a1a8cc294dbe501838ed54505ca12287672f8b9f`. Its single
@@ -232,7 +232,7 @@ the warm clearing sweep for another chained piece.
 Retention of the line does not guarantee execution of its remaining pieces. A
 failed warm-boot flush clears `CHPOS` after dropping failed cache lines
 (`a1023bd:src/cache.asm:265-299`, `a1023bd:src/cache.asm:557-572`).
-[Chapter 21](21-chains-across-warm-boot.md) explains the other cancellation
+[Chapter 22](22-chains-across-warm-boot.md) explains the other cancellation
 paths.
 
 ### The BDOS's block
@@ -299,7 +299,7 @@ and ownership state so its bits do not all prove device presence
 `a1023bd:src/layout.asm:70-75`, `a1023bd:src/cpm/ccp.asm:145-149`). `SVCRA`
 identifies a cause only when `SVCRC` is 1. Record-validation failure after
 successful INIT sets it to 0 (`a1023bd:src/loader.asm:412-430`).
-[Chapter 24](24-loading-and-removing-services.md) explains those load outcomes.
+[Chapter 25](25-loading-and-removing-services.md) explains those load outcomes.
 
 ## EXPAND 1
 
@@ -335,7 +335,7 @@ can break that route. A program using the inherited stack also loses access
 to its return word while EXPAND 1 is visible
 (`a1023bd:src/boot.asm:22-40`, `a1023bd:src/boot.asm:128-133`,
 `a1023bd:src/boot.asm:297-302`, `a1023bd:src/cpm/ccp.asm:482-490`).
-[Chapter 15](15-reset-and-boot.md) explains the exit paths and their limits.
+[Chapter 16](16-reset-and-boot.md) explains the exit paths and their limits.
 
 ## The stacks
 
@@ -364,8 +364,8 @@ use to 8 bytes on BDOS, 12 on BIOS and 6 on CCP
 historical `78127ec` host-model census measured bases of 30, 18 and 18 bytes
 respectively. Adding the declared limits gives 38/54, 30/40 and 24/32 bytes.
 These are historical measurements and bounds, not a measurement of the inspected
-source. [Chapter 14](14-state-and-memory.md#four-stacks-for-different-stages)
-explains their scope and [Chapter 24](24-loading-and-removing-services.md)
+source. [Chapter 15](15-state-and-memory.md#four-stacks-for-different-stages)
+explains their scope and [Chapter 25](25-loading-and-removing-services.md)
 explains declaration checks.
 
 ## Reproducing the figures
@@ -374,7 +374,7 @@ Historically `npm run media` wrote the summary into `docs/memory-map.md` from
 `build/tecos/census.json` and the build's symbol file. The inspected media
 writer still reads those artifacts and writes the summary
 (`a1023bd:tools/media.mjs:66-91`, `a1023bd:tools/media.mjs:169-188`,
-`a1023bd:tools/media.mjs:259`). Chapter 26 describes ROM/media construction.
+`a1023bd:tools/media.mjs:259`). Chapter 27 describes ROM/media construction.
 The retained lookup below reads an existing `build/tecos/tecos.d8.json`.
 It requires the matching historical artifact to reproduce these addresses:
 

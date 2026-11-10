@@ -14,14 +14,14 @@ nav_group: "Reference"
 The web page has controls for the emulated board, a serial terminal and a card
 you can save or exchange with the PC. This appendix describes those controls,
 file transfers and the startup changes made for the selected display.
-[Chapter 28](28-the-host-model-as-evidence.md) explains the host model and its
-evidence limits. [Chapter 7](07-commands-at-startup.md) explains using
-STARTUP.CMD and [Chapter 25](25-startup-inside-the-ccp.md) follows its ROM path.
+[Chapter 29](29-the-host-model-as-evidence.md) explains the host model and its
+evidence limits. [Chapter 8](08-commands-at-startup.md) explains using
+STARTUP.CMD and [Chapter 26](26-startup-inside-the-ccp.md) follows its ROM path.
 
 ## Serving the page
 
-After the PC setup from [Chapter 5](05-cards-on-the-pc.md) and the ROM/media
-preparation from [Chapter 26](26-build-the-rom-and-media.md), `npm run web`
+After the PC setup from [Chapter 6](06-cards-on-the-pc.md) and the ROM/media
+preparation from [Chapter 27](27-build-the-rom-and-media.md), `npm run web`
 builds the page into web/dist. The build copies the ROM, its symbols and the
 page's recipe and files. `npm start` serves that directory with the
 installed esbuild development server, so Python is not needed
@@ -68,7 +68,7 @@ Reset and power-on have different memory effects (`host/machine.mjs:578-587`,
 before restarting. The safe-copy procedure below applies before either one.
 
 The page recipe contains the starter files plus DEMO.COM from
-[Chapter 11](11-use-the-boards-devices.md). Building a starter fetches each
+[Chapter 12](12-use-the-boards-devices.md). Building a starter fetches each
 recipe file and checks its byte count and SHA-256 before returning the image
 (`tools/media.mjs:195-236`, `tools/lib/recipe.mjs:14-44`,
 `web/src/main.mjs:60-63`). The file list shows user area, name and size.
@@ -165,7 +165,7 @@ changed card as drives are accessed. Unwritten cached changes, including changes
 on WORK with write-behind enabled, are lost at that reset
 (`src/boot.asm:77-77`, `src/boot.asm:146-149`, `src/boot.asm:232-249`,
 `src/cache.asm:566-572`, `src/cpm/bdoslog.asm:223-281`).
-[Chapter 18](18-cache-and-persistence.md) explains the failed-flush paths. A
+[Chapter 19](19-cache-and-persistence.md) explains the failed-flush paths. A
 browser save or download after a successful flush is still needed to preserve
 the resulting image outside RAM.
 

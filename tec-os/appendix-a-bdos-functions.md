@@ -15,7 +15,7 @@ Use the function number to find its registers in the table, then its effects and
 failure results in the numbered entry. TEC-OS implements the CP/M 2.2 interface
 with selected additions numbered 44 to 48, 99 and 108. Those additions do not
 establish general CP/M 3 compatibility. Unsupported calls are listed at the end.
-[Chapter 19](19-a-file-through-the-bdos.md) explains the file machinery behind
+[Chapter 20](20-a-file-through-the-bdos.md) explains the file machinery behind
 these contracts and the file control block (FCB).
 
 | `C` | Name | In | Out |
@@ -86,7 +86,7 @@ That stack's declared allocation is 54 bytes
 
 A function that takes an FCB uses its first byte to select a drive: 0 for
 the default drive, 1 to 16 for A to P. The FCB is a 36-byte file control
-block, laid out in [Chapter 19](19-a-file-through-the-bdos.md). Selection
+block, laid out in [Chapter 20](20-a-file-through-the-bdos.md). Selection
 precedes functions 15, 16, 17, 19 to 23, 30, 33 to 35 and 40
 (`src/tables.asm:87-95`, `src/cpm/bdos.asm:150-175`). A `?` in the drive byte
 is allowed only for function 17. An explicit FCB drive changes the selected
@@ -181,7 +181,7 @@ ignored while the line contains characters. On an empty line it ends the
 program by warm boot and drops the remaining command chain. Deleting or
 clearing all characters restores that abort condition
 (`src/cpm/bdos.asm:492-540`, `589-636`).
-[Chapter 22](22-the-history-ring.md) explains the history storage.
+[Chapter 23](23-the-history-ring.md) explains the history storage.
 
 **11 Get console status.** Tests for a waiting character. A character the BIOS
 has is read and kept for the next input call (`src/cpm/bdos.asm:675-690`).
@@ -453,4 +453,4 @@ for Digital Research's BDOS encounters these differences:
 - Neither geometry uses the check vector: both set CKS to 0. This mechanism
   therefore does not detect a card exchanged while TEC-OS is running
   (`format/format.json:52`, `59`). Follow the card-change procedure in
-  [Chapter 5](05-cards-on-the-pc.md#writing-the-physical-card).
+  [Chapter 6](06-cards-on-the-pc.md#writing-the-physical-card).

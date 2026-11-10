@@ -1,11 +1,11 @@
 ---
 title: Results and command chains
 parent: TEC-OS
-nav_order: 12
+nav_order: 13
 nav_group: "Writing programs"
 ---
 
-# 12. Results and command chains
+# 13. Results and command chains
 
 <!-- Source-only semantic check: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Source proofs and old-unit dispositions: 12-pass-record.md. No current runtime check claimed.
@@ -112,7 +112,7 @@ result.
 A built-in command reports failure through its result as well as its
 message. A program must set its own return code to report failure.
 Printing an error message alone leaves a conditional piece free to run.
-For example, `SHOW NOSUCH.TXT` from Chapter 9 prints `No such file` but
+For example, `SHOW NOSUCH.TXT` from Chapter 10 prints `No such file` but
 never sets a failure code. A `:` piece after it runs.
 
 ## The return code
@@ -139,7 +139,7 @@ rule described below.
 ## A program that reports failure
 
 `EXISTS` reports whether its named file is present. It opens the default file
-control block (FCB) at `005Ch`, using the file-call conventions from Chapter 9:
+control block (FCB) at `005Ch`, using the file-call conventions from Chapter 10:
 
 ```asm
 ; EXISTS: a failure, return code FF00h, when the file named on the command
@@ -356,8 +356,8 @@ print `Not run` on that path. A CCP-prepared tail has the required terminator
 and contains neither CR nor LF. Its line always passes this validation.
 
 A service's `INIT` or `REMOVE` can also call function 47. An accepted call
-still causes warm boot. Chapter 13 explains the installation and removal
-consequences. Chapter 21 explains how the command buffer survives warm boot
+still causes warm boot. Chapter 14 explains the installation and removal
+consequences. Chapter 22 explains how the command buffer survives warm boot
 and how the CCP processes the copied line.
 
 ## TED's build and return
@@ -376,7 +376,7 @@ the other prefix commands:
 | `^T O` | Opens another file, named at a prompt |
 | `^T F` | Opens the previous file again |
 
-Chapter 10 explains the load-drive byte at `0050h`. TED uses that byte to
+Chapter 11 explains the load-drive byte at `0050h`. TED uses that byte to
 prefix the tools' names. With tools loaded from A and source on current
 drive B, the build line invokes `A:TAS` and `A:TED`. The tools remain on A
 and the source on B. The editor is a new program invocation each
@@ -388,7 +388,7 @@ TED also keeps `THOR.PRJ` and `THOR.SES` beside the source in this setup.
 After the first successful build and project-file update, `THOR.PRJ` names
 the source for the build keys. `THOR.SES` records the file and editing position from the previous
 exit. The full historical HELLO error, repair and run capture is retained
-in Chapter 26, with its original recipe and application provenance.
+in Chapter 27, with its original recipe and application provenance.
 
 ## Chains in the startup file
 

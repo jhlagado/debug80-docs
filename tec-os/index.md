@@ -66,7 +66,7 @@ A transcript includes the prompt and the command typed after it, followed by
 the output. It may begin at an already-running prompt. Any other omitted output
 is identified with the example. Control keys are written with a caret: `^C`
 means Ctrl and C together. Reproducing the runs on a PC requires the setup and tools in
-[The host model as evidence](28-the-host-model-as-evidence.md).
+[The host model as evidence](29-the-host-model-as-evidence.md).
 
 Addresses and bytes use hexadecimal with a trailing `h`, as in `0100h`.
 Sizes in bytes are decimal. A KiB is 1,024 bytes and a MiB is 1,024 KiB.
@@ -77,42 +77,42 @@ Sizes in bytes are decimal. A KiB is 1,024 bytes and a MiB is 1,024 KiB.
 | --- | --- |
 | [1. First session](01-first-session.md) | Power on, find files, run supplied SAMPLE and preserve work |
 | [2. Make a small program](02-make-a-small-program.md) | Enter, save, build, change and run a banner |
-| [3. Work with files](03-work-with-files.md) | Read, copy, rename and erase files and control long listings |
-| [4. Drives and user areas](04-drives-and-user-areas.md) | Locate programs, select volumes and use resident services |
-| [5. Cards on the PC](05-cards-on-the-pc.md) | Copy, check, recover and prepare card images |
-| [6. Choose a console](06-choose-a-console.md) | Select a display or serial terminal and its settings |
-| [7. Commands at startup](07-commands-at-startup.md) | Set up a startup file and bypass it when necessary |
+| [4. Work with files](04-work-with-files.md) | Read, copy, rename and erase files and control long listings |
+| [5. Drives and user areas](05-drives-and-user-areas.md) | Locate programs, select volumes and use resident services |
+| [6. Cards on the PC](06-cards-on-the-pc.md) | Copy, check, recover and prepare card images |
+| [7. Choose a console](07-choose-a-console.md) | Select a display or serial terminal and its settings |
+| [8. Commands at startup](08-commands-at-startup.md) | Set up a startup file and bypass it when necessary |
 
 ## Writing programs
 
 | Chapter | Use |
 | --- | --- |
-| [8. Call TEC-OS](08-call-tec-os.md) | Read keys and print through the BDOS |
-| [9. Read and write a file](09-read-and-write-a-file.md) | Use file control blocks and record buffers |
-| [10. Memory for programs](10-memory-for-programs.md) | Allocate program space and stacks and use raw BIOS calls |
-| [11. Use the board's devices](11-use-the-boards-devices.md) | Call hardware services and share the display |
-| [12. Results and command chains](12-results-and-command-chains.md) | Report a result and start the next command |
-| [13. Write a resident service](13-write-a-resident-service.md) | Install a hook, publish routines and remove the service |
+| [9. Call TEC-OS](09-call-tec-os.md) | Read keys and print through the BDOS |
+| [10. Read and write a file](10-read-and-write-a-file.md) | Use file control blocks and record buffers |
+| [11. Memory for programs](11-memory-for-programs.md) | Allocate program space and stacks and use raw BIOS calls |
+| [12. Use the board's devices](12-use-the-boards-devices.md) | Call hardware services and share the display |
+| [13. Results and command chains](13-results-and-command-chains.md) | Report a result and start the next command |
+| [14. Write a resident service](14-write-a-resident-service.md) | Install a hook, publish routines and remove the service |
 
 ## Inside TEC-OS
 
 | Chapter | Mechanism |
 | --- | --- |
-| [14. State and memory](14-state-and-memory.md) | Workspace, banks, stacks and state lifetimes |
-| [15. Reset and boot](15-reset-and-boot.md) | Reset recognition, cold boot and warm boot |
-| [16. Console paths](16-console-paths.md) | BIOS routing, keyboard, serial and terminal code |
-| [17. Card blocks and volumes](17-card-blocks-and-volumes.md) | Card commands, container checks and record mapping |
-| [18. Cache and persistence](18-cache-and-persistence.md) | Read reuse, write ordering and failed writes |
-| [19. A file through the BDOS](19-a-file-through-the-bdos.md) | Directory entries, allocation and file operations |
-| [20. From prompt to program](20-from-prompt-to-program.md) | Parsing, lookup and program launch |
-| [21. Chains across a warm boot](21-chains-across-warm-boot.md) | Retained command text and conditional continuation |
-| [22. The history ring](22-the-history-ring.md) | Bounded storage and recall of command lines |
-| [23. Numbered-service dispatch](23-numbered-service-dispatch.md) | Register handling and device routines |
-| [24. Loading and removing services](24-loading-and-removing-services.md) | Relocation, publication and rollback |
-| [25. Startup inside the CCP](25-startup-inside-the-ccp.md) | Reading lines and handling absent displays |
-| [26. Build the ROM and media](26-build-the-rom-and-media.md) | Source, generated data and qualified artifacts |
-| [27. Diagnose the machine](27-diagnose-the-machine.md) | Card errors and the separate diagnostics ROM |
-| [28. The host model as evidence](28-the-host-model-as-evidence.md) | Host machine, captures, tests and their limits |
+| [15. State and memory](15-state-and-memory.md) | Workspace, banks, stacks and state lifetimes |
+| [16. Reset and boot](16-reset-and-boot.md) | Reset recognition, cold boot and warm boot |
+| [17. Console paths](17-console-paths.md) | BIOS routing, keyboard, serial and terminal code |
+| [18. Card blocks and volumes](18-card-blocks-and-volumes.md) | Card commands, container checks and record mapping |
+| [19. Cache and persistence](19-cache-and-persistence.md) | Read reuse, write ordering and failed writes |
+| [20. A file through the BDOS](20-a-file-through-the-bdos.md) | Directory entries, allocation and file operations |
+| [21. From prompt to program](21-from-prompt-to-program.md) | Parsing, lookup and program launch |
+| [22. Chains across a warm boot](22-chains-across-warm-boot.md) | Retained command text and conditional continuation |
+| [23. The history ring](23-the-history-ring.md) | Bounded storage and recall of command lines |
+| [24. Numbered-service dispatch](24-numbered-service-dispatch.md) | Register handling and device routines |
+| [25. Loading and removing services](25-loading-and-removing-services.md) | Relocation, publication and rollback |
+| [26. Startup inside the CCP](26-startup-inside-the-ccp.md) | Reading lines and handling absent displays |
+| [27. Build the ROM and media](27-build-the-rom-and-media.md) | Source, generated data and qualified artifacts |
+| [28. Diagnose the machine](28-diagnose-the-machine.md) | Card errors and the separate diagnostics ROM |
+| [29. The host model as evidence](29-the-host-model-as-evidence.md) | Host machine, captures, tests and their limits |
 
 ## Reference
 

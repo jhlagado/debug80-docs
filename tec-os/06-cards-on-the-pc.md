@@ -1,11 +1,11 @@
 ---
 title: Cards on the PC
 parent: TEC-OS
-nav_order: 5
+nav_order: 6
 nav_group: "Using the machine"
 ---
 
-# 5. Cards on the PC
+# 6. Cards on the PC
 
 <!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Inherited recipes and output are historical TEC-OS 78127ec evidence.
@@ -37,11 +37,11 @@ The examples that use `dist/starter.img` and `dist/files/` require a prepared
 media set made with the matching TEC-OS ROM. These generated files are not
 included in a Git clone. `npm ci` installs the locked host dependencies,
 including ATOM, but does not itself produce the ROM or media.
-[Chapter 26](26-build-the-rom-and-media.md) gives the source/input preparation
+[Chapter 27](27-build-the-rom-and-media.md) gives the source/input preparation
 and build route through `npm run media`, which writes the ROM, starter image,
 recipes and component files into `dist/`. A host-assembled COM program reaches
 a card through the same `put` command as any other binary. The complete
-historical PC HELLO recipe and its output remain together in Chapter 26.
+historical PC HELLO recipe and its output remain together in Chapter 27.
 
 The BANNER recovery below uses the accepted host extraction from the saved
 Chapter 2 card. The other output retains the `78127ec` examples and their
@@ -56,7 +56,7 @@ it. `Write lost` means that some writes failed, not that the card is up to date.
 Never change a card on a PC while TEC-OS is using it. Its cached blocks and
 free-space maps would no longer match the card. Reset after returning a
 PC-changed card to the board. Warm boot retains those old copies in memory.
-[Chapter 18](18-cache-and-persistence.md) explains the persistence rules.
+[Chapter 19](19-cache-and-persistence.md) explains the persistence rules.
 
 The card reader appears on the PC as a device. On a Mac its raw-device name
 has the form `/dev/rdiskN`, on Linux a name such as `/dev/sdb`. These are
@@ -278,7 +278,7 @@ The remaining fields count files and free bytes from the directory.
 
 Cold boot validates the header's name, version and checksum and the volume
 descriptors. A failed check leaves no drive mounted and stops at the
-diagnostic prompt. [Chapter 27](27-diagnose-the-machine.md)
+diagnostic prompt. [Chapter 28](28-diagnose-the-machine.md)
 explains that prompt and [Appendix D](appendix-d-error-messages.md) lists
 the codes. [Appendix E](appendix-e-container-format.md) gives every field.
 
@@ -331,7 +331,7 @@ described below.
 
 ## Preparing the four-volume card
 
-Chapter 4's custom-volume examples use `my.img`, with SYSTEM and WORK
+Chapter 5's custom-volume examples use `my.img`, with SYSTEM and WORK
 assigned to A and B and GAMES and SPARE initially unassigned. The supplied
 starter has only SYSTEM and WORK. Preparing a separate image keeps the
 extra-volume demonstrations independent of that starter.
@@ -379,7 +379,7 @@ The historical MOUNT binary was 671 bytes on the PC. Its six records occupy
 768 bytes in a listing and binary `get` returns all six. This image has no
 startup file. Its first prompt therefore follows the mounted-drive list
 without a startup command. With the exact historical inputs it is the card
-used for Chapter 4's boot, mount and retained-selection captures. That
+used for Chapter 5's boot, mount and retained-selection captures. That
 chapter's separate empty-slot capture uses the unchanged starter card.
 
 After those puts, the historical `node tools/tecvol.mjs info my.img` output was:
@@ -408,7 +408,7 @@ the build. The same recipe with the same matching inputs produces the same
 image bytes.
 
 `npm run media` produces `dist/starter.recipe.json` as part of the media
-preparation described in Chapter 26. The retained card-building command is:
+preparation described in Chapter 27. The retained card-building command is:
 
 ```sh
 node tools/tecvol.mjs recipe dist/starter.recipe.json mystarter.img
@@ -479,7 +479,7 @@ A>
 BDOS error mode each message waits for a key before ending the command.
 Here the capture supplies `x`. A program can also make a drive temporarily
 read-only. Warm boot clears that temporary protection
-but preserves a volume's read-only flag. Chapter 4 explains the operator
+but preserves a volume's read-only flag. Chapter 5 explains the operator
 effects and [Appendix D](appendix-d-error-messages.md) gives the messages.
 
 ## Writing the physical card
@@ -519,7 +519,7 @@ The host model accepted that short byte array and the ROM reached the
 missing directory blocks. A card ending after the directory can fail later
 when a file write reaches a missing block. On a volume written behind the
 failure can surface at close when pending data is flushed. The historical
-write-failure demonstration is retained in Chapter 18.
+write-failure demonstration is retained in Chapter 19.
 
 Standard-capacity cards use byte addresses. The ROM can name their first
 4 GiB, through block `7FFFFFh`. A volume may end immediately after that

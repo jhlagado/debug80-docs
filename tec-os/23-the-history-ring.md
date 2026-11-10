@@ -1,11 +1,11 @@
 ---
 title: The history ring
 parent: TEC-OS
-nav_order: 22
+nav_order: 23
 nav_group: "Inside TEC-OS"
 ---
 
-# 22. The history ring
+# 23. The history ring
 
 <!-- Source mechanisms checked against TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe by source inspection only.
@@ -172,7 +172,7 @@ and all pops happen after EXPAND 0 is restored. The access itself uses the
 registers and the byte at `HL`. The final latch write restores the original
 view. Interrupts are enabled again only when the saved flag records that
 they were enabled on entry (`src/history.asm:47-62`).
-[Chapter 14](14-state-and-memory.md#expand-1-and-the-stack-boundary) explains
+[Chapter 15](15-state-and-memory.md#expand-1-and-the-stack-boundary) explains
 the same no-stack rule for the other uses of EXPAND 1.
 
 History storage is internal to line input. The BDOS table provides function

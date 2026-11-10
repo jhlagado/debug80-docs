@@ -1,11 +1,11 @@
 ---
 title: Choose a console
 parent: TEC-OS
-nav_order: 6
+nav_order: 7
 nav_group: "Using the machine"
 ---
 
-# 6. Choose a console
+# 7. Choose a console
 
 <!-- Checked against TEC-OS 78127ec. -->
 <!-- Historical captures retained unchanged at that pin.
@@ -33,18 +33,18 @@ console at a time.
 
 TEC-OS uses CP/M's device names: `CRT:` names the PICO9918 console and `UC1:`
 the graphics-LCD console. The command also accepts `PICO` for `CRT` and `GLCD`
-for `UC1`. Chapter 16 explains the encoding of those names in memory.
+for `UC1`. Chapter 17 explains the encoding of those names in memory.
 
 The PICO9918 has 24 rows at widths of 80, 40 or 32 characters. The 128 × 64
 graphics LCD has 21 columns and 8 rows. The separate 20 × 4 character LCD is
 never the console. At cold boot it shows the version and drives. Programs can
-write to it through the ROM services described in Chapter 11.
+write to it through the ROM services described in Chapter 12.
 
 A warm boot restarts the command prompt when a program ends and keeps the
 selected console. Reset runs cold boot and selects the console again from the
 board's configuration. A responding PICO9918 and the enabled Matrix switch
 select `CRT:` at 40 columns before the banner. Otherwise the console starts on
-`TTY:`. Chapter 7 explains the startup file that can then load the graphics-LCD
+`TTY:`. Chapter 8 explains the startup file that can then load the graphics-LCD
 console.
 
 ## The serial terminal
@@ -106,7 +106,7 @@ from the matrix keyboard and output to the PICO9918.
 
 Selecting a different display clears it and puts the cursor at the top left. A
 program's claim on the PICO9918 prevents that clear until the claim ends, as
-Chapter 11 explains. Bare `CON CRT` and `CON PICO` retain the selected width
+Chapter 12 explains. Bare `CON CRT` and `CON PICO` retain the selected width
 and any active claim. After the move back the PICO9918 capture shows only the
 reply and prompt:
 
@@ -183,7 +183,7 @@ A>
 A board with the graphics LCD and matrix keyboard can also start without a
 terminal. Where no
 PICO9918 console started, the starter card's startup file installs `GLCD.SVC`
-before the first prompt. The graphics LCD is the console from then on. Chapter 7
+before the first prompt. The graphics LCD is the console from then on. Chapter 8
 explains the startup conditions.
 
 ## A silent console and recovery
@@ -266,7 +266,7 @@ A>
 
 A width command typed at the prompt also produces a question mark where cold
 boot did not start the PICO9918 console. The same line in `STARTUP.CMD` passes
-quietly on that board, as Chapter 7 explains.
+quietly on that board, as Chapter 8 explains.
 
 ## The matrix keyboard
 
@@ -291,7 +291,7 @@ from backspace:
 | Delete, `7Fh` | Removes the last character and prints it again, as CP/M 2.2 does on a printing terminal |
 
 A matrix key is sent once when pressed. Holding it does not repeat it. A press
-and release while the program is busy elsewhere can be lost. Chapter 16 explains
+and release while the program is busy elsewhere can be lost. Chapter 17 explains
 the scan timing and character encodings.
 
 ## Text and the cursor on a display
@@ -300,7 +300,7 @@ On the PICO9918 or graphics LCD, TEC-OS interprets the text itself. Each
 printable character is drawn at the cursor and advances it one column. Control
 characters move the cursor or clear the screen. ANSI sequences provide cursor
 positioning, screen clearing and reverse video. They also insert or delete
-characters and lines. Chapter 16 lists the exact terminal subset. A program
+characters and lines. Chapter 17 lists the exact terminal subset. A program
 requiring sequences outside that subset may need a serial terminal with fuller
 ANSI support.
 

@@ -26,8 +26,8 @@ The eight-byte ROM table at `C003h` has one jump for sixteen numbered services.
 Numbers 0–8 control hardware, 9–11 manage volumes, 12 registers a display
 driver, 13–14 read the registry and 15 returns the console font. The PICO record
 provides a separate table of graphics routines. The complete hardware programs
-are in Chapter 11, the dispatcher explanation in Chapter 23 and the
-resident-service and registry contracts in Chapter 13.
+are in Chapter 12, the dispatcher explanation in Chapter 24 and the
+resident-service and registry contracts in Chapter 14.
 
 This reference gives each service's inputs, results, status and stack bound.
 Historical host model costs are labelled separately from the inspected source
@@ -406,7 +406,7 @@ admits at most 256 records in total and at most 255 from one new service,
 validating their locations before linking the chain
 (`src/loader.asm:359-410,468-483`). Both return the eight-bit SVCGEN on success.
 Successful removal increments it and can wrap it from 255 to 0
-(`src/loader.asm:101-130,703-706`). Chapter 13 explains pointer lifetime and
+(`src/loader.asm:101-130,703-706`). Chapter 14 explains pointer lifetime and
 generation checks.
 
 ### 13 FIND
@@ -466,9 +466,9 @@ recorded. A client that needs only the width can still accept version 3
 VTEST is a retained historical program. It finds a version-2-or-later PICO
 record, claims the chip, writes four bytes to VRAM, reads them back, releases it
 and prints the buffer. Its ENTRY helper reads a word pointer, unlike COUNT's JP
-entry in Chapter 13. EX (SP),HL followed by RET enters that routine with HL
-restored. Chapter 23 explains the same dispatch technique. HWLIB.ASM comes from
-Chapter 11. The program performs no removal so it does not recheck the saved
+entry in Chapter 14. EX (SP),HL followed by RET enters that routine with HL
+restored. Chapter 24 explains the same dispatch technique. HWLIB.ASM comes from
+Chapter 12. The program performs no removal so it does not recheck the saved
 table's generation before these calls.
 
 ```asm

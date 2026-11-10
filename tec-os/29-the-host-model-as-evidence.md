@@ -1,11 +1,11 @@
 ---
 title: The host model as evidence
 parent: TEC-OS
-nav_order: 28
+nav_order: 29
 nav_group: "Inside TEC-OS"
 ---
 
-# 28. The host model as evidence
+# 29. The host model as evidence
 
 <!-- Source-only mechanisms: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Unprefixed source ranges belong to that revision. The six retained
@@ -35,7 +35,7 @@ detection and memory watches use those addresses instead of fixed ROM
 offsets. The map must accompany the ROM it describes. Symbol lookup does
 not prove that an unrelated map is compatible
 (`host/machine.mjs:23-27`, `host/machine.mjs:186-212`,
-`host/machine.mjs:240-243`). [Chapter 26](26-build-the-rom-and-media.md)
+`host/machine.mjs:240-243`). [Chapter 27](27-build-the-rom-and-media.md)
 describes preparing the ROM, media and dependencies.
 
 The constructor exposes the board choices explicitly
@@ -74,7 +74,7 @@ Machine disables the runtime's automatic SD attachment and connects an
 array. `swapCard` replaces that instance with another image or an empty
 socket. It does not initialise the ROM's card driver or clear TEC-OS's
 cached blocks (`host/machine.mjs:59-74`, `host/machine.mjs:122-140`,
-`host/machine.mjs:522-526`). [Chapter 5](05-cards-on-the-pc.md) explains
+`host/machine.mjs:522-526`). [Chapter 6](06-cards-on-the-pc.md) explains
 the reset requirement after PC-side card changes.
 
 The range cases in `test/sd-range.test.mjs:36-106` assert separate limits.
@@ -83,7 +83,7 @@ block, `7FFFFFh`. Access beyond the model image returns the card's parameter
 error in R1 and the ROM reports SD error 5 without transferring data.
 High-capacity mode uses block numbers directly. These are source assertions,
 not newly passing tests or measurements of a real card's capacity.
-[Chapter 17](17-card-blocks-and-volumes.md) follows the ROM checks.
+[Chapter 18](18-card-blocks-and-volumes.md) follows the ROM checks.
 
 The DS1302 is attached separately at `FCh`, with the runtime's automatic
 RTC attachment disabled. Without a `clock` argument it uses host time.
@@ -252,9 +252,9 @@ pending input (`host/machine.mjs:528-550`, `host/machine.mjs:579-587`).
 ## A complete pagination fixture
 
 The historical GLCD pagination example used ten lines, longer than its
-starter STARTUP.CMD. Its separate card is not needed for Chapter 3's
+starter STARTUP.CMD. Its separate card is not needed for Chapter 4's
 prepared SAMPLE reading route. The following preparation requires the host
-setup from Chapter 5 and the historical prepared media:
+setup from Chapter 6 and the historical prepared media:
 
 ```sh
 printf 'The graphics LCD has 8 rows of 21 characters.\nA line wider than that goes on in the next row.\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen\n' > lines.txt
@@ -295,7 +295,7 @@ Ten
 
 At a pause, Ctrl-C, Esc or Q stops the listing. Q is case-insensitive.
 Ctrl-C also drops the remaining command chain. Esc and Q stop only the
-listing, as Chapter 12's chain rules require. The pager erases `[more]`
+listing, as Chapter 13's chain rules require. The pager erases `[more]`
 before returning. In this final retained run, `q` at the first pause left
 the rest of the file unprinted and the new prompt below the erased row:
 
@@ -337,7 +337,7 @@ symbols under `build/test-programs`. Its key includes the origin and a recursive
 digest of the source and included files. A changed included file changes the
 key. That key does not include every assembler or runtime dependency so it is
 not a complete artifact identity (`test/lib/fixtures.mjs:29-55`). `service`
-calls makeSvc for a resident image (`test/lib/fixtures.mjs:75-79`). Chapter 13
+calls makeSvc for a resident image (`test/lib/fixtures.mjs:75-79`). Chapter 14
 describes that file writer.
 
 `standardCard` creates empty SYSTEM on A and WORK on B, with optional extra
@@ -355,7 +355,7 @@ repository, full commit, path, byte count and SHA-256. Selection uses an
 explicit environment override, then `.inputs/`, then the legacy sibling
 path. A selected entry remains authoritative even if broken or stale
 (`tools/lib/pins.mjs:10-49`). `npm run inputs` prepares missing pinned files
-as described in Chapter 26. A missing test input is skipped unless STRICT=1
+as described in Chapter 27. A missing test input is skipped unless STRICT=1
 makes it fail. A hash mismatch is a failure, not a reason to try another
 candidate (`test/lib/inputs.mjs:24-41`, `package.json:19`).
 
@@ -440,7 +440,7 @@ satisfy those restrictions on a more permissive model (`host/machine.mjs:40-46`,
 `host/machine.mjs:155-172`, `docs/diagnostics.md:147-164`,
 `docs/diagnostics.md:187-196`).
 
-[Chapter 27](27-diagnose-the-machine.md) describes obtaining a board's
+[Chapter 28](28-diagnose-the-machine.md) describes obtaining a board's
 diagnostic report. `tools/diag-check.mjs` requires its image ID to match the
 selected diagnostic ROM and compares the report with that image's model
 report. It lists unmatched tests separately. Measured lines such as bit

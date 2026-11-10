@@ -1,11 +1,11 @@
 ---
 title: From prompt to program
 parent: TEC-OS
-nav_order: 20
+nav_order: 21
 nav_group: "Inside TEC-OS"
 ---
 
-# 20. From prompt to program
+# 21. From prompt to program
 
 <!-- Source-only semantic check: TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
@@ -49,7 +49,7 @@ of the state cleared by warm boot (`src/ram.asm:148-188`). The historical
 state ran from `CCPRAM` at `BCEDh` to `BE75h`, with `CCPCLR` at `BDB7h`.
 `CPMINIT` clears from `CCPCLR` through the BDOS state, leaving the command
 buffer below it intact (`src/boot.asm:384-393`).
-[Chapter 21](21-chains-across-warm-boot.md) explains the retained line.
+[Chapter 22](22-chains-across-warm-boot.md) explains the retained line.
 [Appendix C](appendix-c-memory-map.md) lists the memory locations.
 
 File operations share a short call helper. A `CALL DOSSEQ` has an inline byte
@@ -88,8 +88,8 @@ so function 32 restores the saved user. `STBOOT` then handles the first
 record of `A:STARTUP.CMD` once after cold boot. Finally function 14 selects
 the saved drive when it is not A and `STARTED` prints a new line before
 the prompt (`src/cpm/ccp.asm:74-96`, `src/cpm/bdosfile.asm:46-77`).
-[Chapter 19](19-a-file-through-the-bdos.md) explains the allocation-vector
-reset and [Chapter 25](25-startup-inside-the-ccp.md) explains startup.
+[Chapter 20](20-a-file-through-the-bdos.md) explains the allocation-vector
+reset and [Chapter 26](26-startup-inside-the-ccp.md) explains startup.
 
 This retained capture shows the unavailable-drive case. MOUNT runs from A
 while B is current and removes B's volume. The next prompt is on A.
@@ -112,7 +112,7 @@ A>
 
 The reset leaves B empty because the selection retained in RAM has B
 unmounted. It does not restore the original A/B assignment from the card.
-[Chapter 15](15-reset-and-boot.md) explains that retained selection.
+[Chapter 16](16-reset-and-boot.md) explains that retained selection.
 
 ## The prompt and its input
 
@@ -128,7 +128,7 @@ Input has three sources in priority order: the next pending command piece,
 the next startup line and a typed line. `CHSKIP` finds a pending piece.
 Otherwise `STLINE` supplies startup text or function 10 reads the keyboard
 with `HFLAG` enabled for command history (`src/cpm/ccp.asm:136-149`).
-[Chapter 22](22-the-history-ring.md) explains storage and recall.
+[Chapter 23](23-the-history-ring.md) explains storage and recall.
 
 `STFLAG` is `FFh` for a startup line and zero for typed input. Pending
 pieces retain that origin. Typed input uses `CMDBUF`, the maximum-length
@@ -139,8 +139,8 @@ maximum to 127 (`src/cpm/ccp.asm:139-165`, `src/ram.asm:152-157`,
 `MLTAKE` takes a piece up to its `!` or terminating zero. It converts
 lower-case letters to capitals and clears `PRGCODE` after any leading
 conditional test (`src/cpm/ccp.asm:210-259`).
-[Chapter 12](12-results-and-command-chains.md) explains the practical
-result rules and Chapter 21 explains the conditional test and drop paths.
+[Chapter 13](13-results-and-command-chains.md) explains the practical
+result rules and Chapter 22 explains the conditional test and drop paths.
 
 ## The parsed command
 
@@ -191,7 +191,7 @@ requires an unambiguous file name. Type SVC calls `SVCGO` to load and install a
 service. Other types are replaced by COM so `MOUNT.TXT` searches for `MOUNT.COM`
 (`src/cpm/ccp.asm:403-455`). A startup service whose INIT reports `TNENODV` has
 the quiet-success exception. Other installation failures reach `BADCMD`
-(`src/cpm/ccp.asm:426-437`). [Chapter 24](24-loading-and-removing-services.md)
+(`src/cpm/ccp.asm:426-437`). [Chapter 25](25-loading-and-removing-services.md)
 describes installation.
 
 `BADCMD` prints the word at `CMDSTRT` up to space or zero, then `?` and a new
@@ -248,7 +248,7 @@ line at LF or before a printable character beyond the last column
 `UNMORE` erases the prompt with CR, six spaces and CR (`src/text.asm:35-36`).
 The key mask makes `#` equivalent to `^C` and `;` equivalent to Esc. `^C` and
 `#` drop the chain. Esc, `Q`, `q` and `;` stop only the listing. Other keys
-continue (`src/cpm/ccpfile.asm:414-451`). Chapter 21 explains the chain
+continue (`src/cpm/ccpfile.asm:414-451`). Chapter 22 explains the chain
 distinction.
 
 TYPE opens its file and reads 128-byte records into `LOADBUF`. It prints
@@ -314,7 +314,7 @@ the field back to the active mode (`src/cpm/ccpcmd.asm:51-208`,
 CON's report prints `CON:` and the mode read from `CONMOD` after the BIOS has
 acted on the field. A missing display or keyboard can force TTY while a failed
 GLCD load restores the previous mode. Output uses the selected console and BAT
-discards it. [Chapter 16](16-console-paths.md) explains the BIOS transition
+discards it. [Chapter 17](17-console-paths.md) explains the BIOS transition
 (`src/cpm/ccpcmd.asm:183-208`, `src/console.asm:345-353`).
 
 A width after CRT or PICO is parsed as two decimal digits. CON finds the PICO
@@ -374,7 +374,7 @@ name and decimal page count. `SVCABV` supplies the page above an owner to
 calculate that count. UNLOAD calls `SVCUNL` for the lowest owner, the newest
 service. It fails there if removal is disallowed or REMOVE returns carry.
 It does not skip to another service (`src/cpm/ccpcmd.asm:13-16`,
-`src/cpm/ccpcmd.asm:760-786`, `src/loader.asm:101-130`). Chapter 24 explains
+`src/cpm/ccpcmd.asm:760-786`, `src/loader.asm:101-130`). Chapter 25 explains
 the registry and removal checks.
 
 ## Program lookup and capacity
@@ -504,7 +504,7 @@ twenty bytes of the first. The tail begins at `0080h` within the second FCB's
 last sixteen bytes so those bytes are shared with tail storage. Each FCB's drive
 and eleven name/type bytes remain intact (`src/cpm/ccpcmd.asm:410-450`). The
 complete FCB and DMA contracts are explained in
-[Chapter 9](09-read-and-write-a-file.md).
+[Chapter 10](10-read-and-write-a-file.md).
 
 ARGS prints those drive and name fields, then the tail between brackets.
 This complete historical listing is the `build/args.asm` used in the
@@ -602,7 +602,7 @@ The source reserves a 32-byte CCP stack, leaving thirty bytes below that
 return word. A guard separates the stack from command scratch
 (`src/cpm/ccp.asm:482-490`, `src/layout.asm:114-115`,
 `src/ram.asm:198-210`). CP/M 2.2's eight levels provide sixteen bytes.
-[Chapter 14](14-state-and-memory.md) distinguishes configured stack sizes
+[Chapter 15](15-state-and-memory.md) distinguishes configured stack sizes
 from historical measurements and bounds.
 
 A top-level RET reaches the warm-boot jump at `0000h`. A direct jump there or

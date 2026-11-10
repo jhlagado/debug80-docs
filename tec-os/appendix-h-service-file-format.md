@@ -20,8 +20,8 @@ A service file contains the bytes to install, the records it needs and the
 positions that require relocation. Its on-disk header describes that work. The
 loader overwrites some fields after using them so an installed header must be
 read differently from the file header below.
-[Write a resident service](13-write-a-resident-service.md) covers authoring.
-[Loading and removing services](24-loading-and-removing-services.md) follows
+[Write a resident service](14-write-a-resident-service.md) covers authoring.
+[Loading and removing services](25-loading-and-removing-services.md) follows
 installation and gives the resident header. This reference retains a historical
 GLCD.SVC dump to show the file fields and gap encoding together.
 
@@ -135,7 +135,7 @@ name another. The loader reads only the gap list
 
 ### A first gap of 0
 
-This historical example uses `COUNT.SVC` from Chapter 13's PC `makeSvc`
+This historical example uses `COUNT.SVC` from Chapter 14's PC `makeSvc`
 route. It inserts a zero at the front of the gap list and raises the size
 at offset 10 by one:
 

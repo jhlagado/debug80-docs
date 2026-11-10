@@ -1,11 +1,11 @@
 ---
 title: Diagnose the machine
 parent: TEC-OS
-nav_order: 27
+nav_order: 28
 nav_group: "Inside TEC-OS"
 ---
 
-# 27. Diagnose the machine
+# 28. Diagnose the machine
 
 <!-- Checked against TEC-OS 78127ec. The diagnostics ROM in this chapter is version
      0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit. -->
@@ -66,7 +66,7 @@ lists each code's cause and remedy.
 The banner appears before either card operation. The RAM check, console
 initialisation and clock probe precede it (`src/boot.asm:60-77`). A board
 without the required RAM stops at `TEC-OS needs 64K RAM` on serial
-(`src/boot.asm:417-470`, `src/text.asm:11`). [Chapter 15](15-reset-and-boot.md#ram-before-the-workspace) explains that check.
+(`src/boot.asm:417-470`, `src/text.asm:11`). [Chapter 16](16-reset-and-boot.md#ram-before-the-workspace) explains that check.
 `COLDRT` and `DIAG` use the BDOS stack before the CCP runs. Both failure
 jumps follow completed calls so `DIAG` starts at that stack's top
 (`src/boot.asm:66-66`, `92-100`, `622-640`).
@@ -77,7 +77,7 @@ scratch buffer, is at `0100h` in fixed RAM (`src/boot.asm:41-58`, `211-216`,
 `src/layout.asm:121-133`). That buffer survives the route to `DIAG`: `MEMINIT`
 clears EXPAND 1 and the mount uses a line in the block cache there for table
 reads (`src/boot.asm:77-77`, `232-249`, `src/vol.asm:32-47`).
-[Chapter 15](15-reset-and-boot.md#retained-drive-selection) explains recognition
+[Chapter 16](16-reset-and-boot.md#retained-drive-selection) explains recognition
 and reselection.
 
 ## The diagnostics ROM
@@ -90,7 +90,7 @@ its SD tests need one (`diag/diag.asm:1-16`, `diag/boot.asm:8-47`,
 `diag/sd.asm:331-343`).
 
 From the prepared host checkout of [Chapter
-26](26-build-the-rom-and-media.md), the build command is:
+26](27-build-the-rom-and-media.md), the build command is:
 
 ```sh
 npm run diag
@@ -193,7 +193,7 @@ PICO9918 and matrix keyboard, RAM initially filled with `76h` and an empty
 SYSTEM/WORK card with the starter's two volume geometries. It has no
 DS1302 clock (`tools/diag-check.mjs:110-134`). This is a generated test card,
 not the actual starter card with its applications and startup file.
-[Chapter 28](28-the-host-model-as-evidence.md) explains the host model.
+[Chapter 29](29-the-host-model-as-evidence.md) explains the host model.
 The retained reproduction recipe calls modelReport directly:
 
 ```sh

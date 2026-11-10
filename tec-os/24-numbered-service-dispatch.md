@@ -1,11 +1,11 @@
 ---
 title: Numbered-service dispatch
 parent: TEC-OS
-nav_order: 23
+nav_order: 24
 nav_group: "Inside TEC-OS"
 ---
 
-# 23. Numbered-service dispatch
+# 24. Numbered-service dispatch
 
 <!-- Source mechanisms checked by text inspection against TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Unprefixed source ranges use
@@ -65,12 +65,12 @@ service's documented results. Other registers may be destroyed
 
 Services 0 to 8 are the hardware routines in `src/services.asm`.
 `FONT`, 15, is there too. The volume entries 9 to 11 are in
-`src/volsvc.asm`. [Chapter 17](17-card-blocks-and-volumes.md) explains those
+`src/volsvc.asm`. [Chapter 18](18-card-blocks-and-volumes.md) explains those
 operations. `DRVR`, 12, enters `SVDRV` to install or drop a display-driver
-table. [Chapter 16](16-console-paths.md) explains that table and its
+table. [Chapter 17](17-console-paths.md) explains that table and its
 validation. `FIND` and `LIST`, 13 and 14, enter the registry routines in
 `src/loader.asm`, explained in
-[Chapter 24](24-loading-and-removing-services.md)
+[Chapter 25](25-loading-and-removing-services.md)
 (`src/tables.asm:102-130`, `src/services.asm:525-557`).
 
 The historical `78127ec` code account below totals 480 bytes for the
@@ -115,7 +115,7 @@ before any write. For row 3 it clears `CDWRD`, which records that the
 bottom row contains a ROM recovery word (`src/services.asm:134-144`).
 Your text can then remain there without a later recovery-word clear
 erasing it (`src/loader.asm:782-801`).
-[Chapter 25](25-startup-inside-the-ccp.md) explains that use of the bottom row.
+[Chapter 26](26-startup-inside-the-ccp.md) explains that use of the bottom row.
 
 `LCDROWS` supplies the row's display address. `HWSLCD` sends that command
 and then writes exactly 20 bytes from `HL`, advancing the pointer after
@@ -152,7 +152,7 @@ T-states. `B` at zero makes 256 delay turns because `DEC C` wraps to
 last port write is `TXIDLE`, leaving the speaker low and the serial line
 high (`src/services.asm:234-264`). This instruction-derived interval is
 separate from the historical program-side measurements in
-[Chapter 11](11-use-the-boards-devices.md).
+[Chapter 12](12-use-the-boards-devices.md).
 
 ## Matrix rows and the joystick
 

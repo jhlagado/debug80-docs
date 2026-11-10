@@ -1,11 +1,11 @@
 ---
 title: Read and write a file
 parent: TEC-OS
-nav_order: 9
+nav_order: 10
 nav_group: "Writing programs"
 ---
 
-# 9. Read and write a file
+# 10. Read and write a file
 
 <!-- Source-only semantic check: TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. No new runtime result claimed.
@@ -26,7 +26,7 @@ then read the records or make a new file and write them.
 ## The name from your command line
 
 `SHOW HELLO.ASM` names a program and the file it should print. The CCP
-starts SHOW at `0100h`, as in Chapter 8. Before that entry it prepares
+starts SHOW at `0100h`, as in Chapter 9. Before that entry it prepares
 arguments in *page zero*, the first 256 bytes of memory, at `0000h–00FFh`.
 Those bytes are below your code and include the BDOS call jump you already
 use at `0005h`.
@@ -188,7 +188,7 @@ call. A zero read result starts `PUT` with the buffer address in `HL` and
 
 `PUT` passes each character in `E` to function 2. It saves `HL` and `BC`
 on the stack before the call and restores them in reverse order afterwards,
-using the convention from Chapter 8. Those saves preserve the pointer and
+using the convention from Chapter 9. Those saves preserve the pointer and
 count while the BDOS changes registers. The loop then advances the pointer
 and returns for another record after processing all 128 bytes.
 
@@ -203,13 +203,13 @@ inherited return word instead of adding another return address with CALL.
 The BDOS returns through that word and the program ends. SHOW with no
 argument has a blank name in its FCB, finds no file and prints the same
 message. Reporting success or failure to a later command is a separate
-return-code convention explained in Chapter 12.
+return-code convention explained in Chapter 13.
 
 ### The historical card and output
 
 The earlier build record gives SHOW as 72 bytes with TAS or ATOM. The
 retained host recipe uses ATOM 0.3.7. Its `work.img` is the historical HELLO
-starter-card copy, whose full preparation is retained in Chapter 26.
+starter-card copy, whose full preparation is retained in Chapter 27.
 `hello.asm` is that unchanged HELLO source, not the new banner exercise.
 These original commands add SHOW and the text file to that card:
 
@@ -295,7 +295,7 @@ before writing a directory block. A successful close that issues such a
 write therefore performs that ordering. An
 unmodified FCB can close without a directory write. Function 48 provides
 an explicit flush boundary for pending writes after the file state has
-been closed. Chapter 18 explains the cache's ordering and failure paths.
+been closed. Chapter 19 explains the cache's ordering and failure paths.
 
 A write that returns 1 or 2 may follow earlier successful records. Close
 the partial file and check the close result before reporting how much was

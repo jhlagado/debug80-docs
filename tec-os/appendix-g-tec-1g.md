@@ -21,7 +21,7 @@ what an untested physical board will return.
 
 For the prepared board, fit a 32 KiB RAM chip in U9, set the CPU clock to FAST
 with the 4 MHz oscillator and leave the hex-keypad non-maskable interrupt (NMI)
-jumper off. Enable the Matrix switch when using the matrix keyboard. Chapter 27
+jumper off. Enable the Matrix switch when using the matrix keyboard. Chapter 28
 describes the separate diagnostics ROM and the report needed to compare a
 particular board with the model.
 
@@ -70,7 +70,7 @@ start of another serial character. `DIGIT` sets that bit during each digit's
 lit interval and afterwards. `TONE` keeps it set while toggling bit 7
 (`src/services.asm:22-31`, `src/services.asm:100-132`,
 `src/services.asm:234-258`). Programs use those services rather than replacing
-the shared port value. Chapter 11 gives their calling interface.
+the shared port value. Chapter 12 gives their calling interface.
 
 The CPU generates the serial bits itself. It sends through `01h` bit 6 and
 receives through `03h` bit 7. The connection uses 4800 baud, eight data bits, no
@@ -81,7 +81,7 @@ requires FAST with the 4 MHz oscillator (`tools/build.mjs:26-27`,
 There is no hardware receive buffer. A byte reaches TEC-OS only while the CPU
 is polling for its start bit and sampling the following bits. A program that
 is busy elsewhere can miss it. Model input queuing does not establish that a
-physical board can receive an uninterrupted paste. Chapter 16 explains the
+physical board can receive an uninterrupted paste. Chapter 17 explains the
 polling and the separate one-byte software reserves.
 
 ## Port 03h and the switches
@@ -127,14 +127,14 @@ appear at `0000h–07FFh`. The Z80 starts at `0000h` and executes the overlaid
 copy of the ROM jump at `C000h`, whose target is `RSTENT`. At reset that entry
 continues to `COLD`,
 which writes `01h` to remove the overlay (`src/reset.asm:1-13`,
-`src/boot.asm:22-40`). Chapter 15 distinguishes this from a program reaching
+`src/boot.asm:22-40`). Chapter 16 distinguishes this from a program reaching
 the reset entry while EXPAND 1 is selected.
 
 A program writing the latch must also update `0040h`. Otherwise the next
 TEC-OS latch write starts from an obsolete copy. Cache and history accesses
 restore that recorded value after using EXPAND 1. They perform no stack
 operation while that bank is visible because it hides the resident stacks
-in EXPAND 0 (`src/history.asm:18-62`, `src/cache.asm:12-16`). Chapter 14
+in EXPAND 0 (`src/history.asm:18-62`, `src/cache.asm:12-16`). Chapter 15
 explains the memory boundary.
 
 The model decodes bits 3–6 as a further bank field. The board documents
@@ -154,14 +154,14 @@ Before printing the banner, cold boot checks both ends of the visible window
 with complementary patterns and checks for the separate half behind it. Failure
 prints `TEC-OS needs 64K RAM` on serial and stops. The serial failure path uses
 the boot stack in fixed RAM and does not require the resident workspace in U9
-(`src/boot.asm:59-65`, `src/boot.asm:406-480`). Chapters 10 and 14 give the
+(`src/boot.asm:59-65`, `src/boot.asm:406-480`). Chapters 11 and 15 give the
 program and resident layouts once this check succeeds.
 
 ## The hex keypad and its NMI
 
 TEC-OS reads no hex-keypad key codes. It uses only the key-down bit for the
 startup bypass. Hold a key through reset with the NMI jumper off to cover
-that single sample. Chapter 7 gives the recovery procedure.
+that single sample. Chapter 8 gives the recovery procedure.
 
 With the keypad NMI jumper fitted, a press raises a non-maskable interrupt. The
 CPU pushes its return address and enters `0066h`, inside the default file
@@ -194,14 +194,14 @@ Row 3 holds the recovery words `CARD?` and `GLCD?`, described in Appendix D.
 The `LCD` hardware service writes a complete row for a program. Writing row 3
 through that call clears its recovery-word ownership flag so later console
 selection leaves the program's text alone (`src/lcd.asm:116-147`,
-`src/services.asm:134-162`). Chapter 25 explains that ownership boundary.
+`src/services.asm:134-162`). Chapter 26 explains that ownership boundary.
 
 ## The 8 × 8 LEDs
 
 The ROM supplies no service for the 8 × 8 LEDs and does not write their ports.
 DEMO writes them itself. Its host-model mapping uses `05h` for row selection
 and `06h`, `F8h` and `F9h` for red, green and blue column patterns
-(`test/programs/demo.asm:14-17`). Chapter 11 retains the program and its
+(`test/programs/demo.asm:14-17`). Chapter 12 retains the program and its
 historical preparation. It is not a starter-card file.
 
 The board's port list instead gives `05h` and `06h` as the X and Y axes of
@@ -230,7 +230,7 @@ presence test, not validation of every BCD digit or the date
 Cold boot makes the test once and records the result in `CONDEV` bit 3.
 `INFO` reports it in bit 3 of `B` without a port read. `RTC` tests again on
 each valid call and transfers seven BCD fields: seconds, minutes, hours,
-date, month, weekday and year. Chapter 11 gives the read/set contract
+date, month, weekday and year. Chapter 12 gives the read/set contract
 (`src/boot.asm:68-72`, `src/services.asm:80-87`,
 `src/services.asm:357-419`).
 
@@ -257,7 +257,7 @@ error 9 before sending a command (`src/vol.asm:273-298`,
 `src/sd.asm:350-381`, `src/sd.asm:391-394`, `src/sd.asm:664-667`).
 
 Every card wait has a finite limit. A missing or unsuitable response returns
-one of the driver codes in Appendix D. Chapter 17 follows initialisation,
+one of the driver codes in Appendix D. Chapter 18 follows initialisation,
 block transfers and the container checks.
 
 For cache transfers the block loop selects EXPAND 1 and restores the recorded

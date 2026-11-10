@@ -1,11 +1,11 @@
 ---
 title: Commands at startup
 parent: TEC-OS
-nav_order: 7
+nav_order: 8
 nav_group: "Using the machine"
 ---
 
-# 7. Commands at startup
+# 8. Commands at startup
 
 <!-- Source mechanisms inspected by git text at TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Source-only draft.
@@ -23,7 +23,7 @@ drive and user area.
 
 Each line supplies a command. The file belongs in user area 0 of drive A.
 You can use the text editing from Chapter 2 or the card tools from
-[Chapter 5](05-cards-on-the-pc.md). The changes take effect at the next
+[Chapter 6](06-cards-on-the-pc.md). The changes take effect at the next
 reset. `TYPE A:STARTUP.CMD` lets you read back the saved text before that
 reset while user area 0 is selected.
 
@@ -44,13 +44,13 @@ A>
 ```
 
 `GLCD.SVC` is the resident graphics LCD service introduced in
-[Chapter 4](04-drives-and-user-areas.md). The PICO9918 console is in ROM
+[Chapter 5](05-drives-and-user-areas.md). The PICO9918 console is in ROM
 and needs no service file. The effect of the GLCD line depends on which
 console cold boot selected.
 
 A startup line uses the same command syntax as a typed command. With an action
 on each line, its completion is followed by the next command prompt and command.
-Chapter 12 explains multiple commands and conditional execution.
+Chapter 13 explains multiple commands and conditional execution.
 
 The following historical recipe copies the starter card and replaces its
 startup file with six lines. The `tecvol put` command replaces an existing
@@ -89,7 +89,7 @@ That is why `mount` is lowercase in this capture. `B:` changes the drive
 and `USER 3` changes the user area for subsequent lines. `DIR` therefore
 lists area 3 of B, which is empty.
 
-`MOUNT.COM` is in area 0 of A. The program search described in Chapter 4
+`MOUNT.COM` is in area 0 of A. The program search described in Chapter 5
 still finds it from area 3 of B. `NOSUCH` prints its usual error and the
 next line runs. `USER 0` leaves the first interactive prompt at `B>`.
 TEC-OS takes the next startup line after the program finishes.
@@ -136,7 +136,7 @@ These rules determine the boundaries:
 
 A `$` in a command ends its displayed echo early while the command still
 runs in full within these limits.
-[Chapter 25](25-startup-inside-the-ccp.md) explains the echo mechanism
+[Chapter 26](26-startup-inside-the-ccp.md) explains the echo mechanism
 and retains the complete historical example.
 
 ## Program exits and resets
@@ -147,7 +147,7 @@ to a prompt have different effects:
 
 - An ordinary program return or a `^C` that ends a program causes a warm
   boot. Installed services and mounted volumes remain and startup continues
-  at its next unread line. [Chapter 8](08-call-tec-os.md) explains the
+  at its next unread line. [Chapter 9](09-call-tec-os.md) explains the
   program-exit routes.
 - A recognised reset finds TEC-OS's retained marks in RAM. It rebuilds the
   working state and can restore the previous drive-to-volume assignments
@@ -164,7 +164,7 @@ serial. A startup width or GLCD line can then select the intended display.
 The file is always taken from user area 0 of the volume assigned to A at
 that reset. If a recognised reset restores another volume to A, that
 volume's startup file runs. An absent file leaves no startup commands.
-[Chapter 4](04-drives-and-user-areas.md) explains retained assignments and
+[Chapter 5](05-drives-and-user-areas.md) explains retained assignments and
 fallback to the card's defaults.
 
 This historical card has a third volume, SPARE, with a different startup
@@ -231,7 +231,7 @@ can run. It does not mean that a driver was installed. A responding GLCD
 controller with the Matrix switch off instead gives `GLCD.SVC?`. That
 failure still allows the next line. Typing `GLCD.SVC` at the prompt has
 a different result on a board with both displays: it can install the
-service while leaving PICO9918 selected, as Chapter 4 demonstrated.
+service while leaving PICO9918 selected, as Chapter 5 demonstrated.
 
 The historical capture configurations produced this table:
 
@@ -361,7 +361,7 @@ terminal. `GLCD?` reports a load or installation failure returned by
 `CON UC1`, with the console still where it was. A fatal card-read error
 instead prints the BDOS disk-error message and ends the command.
 `CARD?` accompanies a card-mount failure and the diagnostic prompt described in
-[Chapter 27](27-diagnose-the-machine.md).
+[Chapter 28](28-diagnose-the-machine.md).
 
 The next historical recipe removes the startup file. On the serial board,
 `CON UC1` then fails to install GLCD and leaves `GLCD?` on that LCD row:
@@ -414,9 +414,9 @@ The `CON UC1` reply and the typed `G.SVC` line are on serial. The later
 prompt and `CON: UC1:` report are on GLCD.
 
 Clearing `GLCD?` writes blanks over only its five characters.
-[Chapter 11](11-use-the-boards-devices.md#the-lcd-and-the-speaker) explains
+[Chapter 12](12-use-the-boards-devices.md#the-lcd-and-the-speaker) explains
 how a program replaces the row through the LCD service.
-[Chapter 25](25-startup-inside-the-ccp.md#recovery-words-and-row-ownership)
+[Chapter 26](26-startup-inside-the-ccp.md#recovery-words-and-row-ownership)
 explains when later console changes preserve or clear its text.
 
 `CARD?` is cleared differently. `R` at the diagnostic prompt reinitialises

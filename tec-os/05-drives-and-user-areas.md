@@ -1,11 +1,11 @@
 ---
 title: Drives and user areas
 parent: TEC-OS
-nav_order: 4
+nav_order: 5
 nav_group: "Using the machine"
 ---
 
-# 4. Drives and user areas
+# 5. Drives and user areas
 
 <!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      All retained captures are historical TEC-OS 78127ec host-model evidence.
@@ -31,7 +31,7 @@ A file of type SVC installs a resident service. Its code stays in memory
 after the installation command ends, including across later program exits.
 It remains until reset or successful removal with `UNLOAD`. Services occupy
 whole pages of 256 bytes. Those pages reduce the memory left for programs.
-[Chapter 10](10-memory-for-programs.md) explains the program-memory boundary.
+[Chapter 11](11-memory-for-programs.md) explains the program-memory boundary.
 
 The starter card's service file is the graphics LCD driver,
 `GLCD.SVC`. The PICO9918 console is in ROM and needs no SVC installation.
@@ -87,12 +87,12 @@ A>
 Removing the driver while the graphics LCD is the console selects the
 PICO9918 if TEC-OS started its console. Otherwise output returns to
 serial. The complete example of console selection and driver removal is in
-[Chapter 6](06-choose-a-console.md).
-[Chapter 7](07-commands-at-startup.md) explains automatic startup commands,
+[Chapter 7](07-choose-a-console.md).
+[Chapter 8](08-commands-at-startup.md) explains automatic startup commands,
 including the quiet result for an unavailable device. Service authoring and
 installation internals have their separate homes in
-[Chapter 13](13-write-a-resident-service.md) and
-[Chapter 24](24-loading-and-removing-services.md).
+[Chapter 14](14-write-a-resident-service.md) and
+[Chapter 25](25-loading-and-removing-services.md).
 
 ## Drive letters and volumes
 
@@ -168,7 +168,7 @@ The `MOUNT` program still ran in area 3 because program lookup also checks area
 0. Its volume list is independent of the files' user areas. `COPY` works within
 the current area so it cannot transfer a file between areas. On a PC,
 `tecvol put --user N` places a file in a chosen area, as
-[Chapter 5](05-cards-on-the-pc.md) explains. `USER` without a number or with a
+[Chapter 6](06-cards-on-the-pc.md) explains. `USER` without a number or with a
 number outside 0 to 15 fails with a question mark.
 
 The system attribute is a separate property of a file. `DIR` omits system
@@ -240,13 +240,13 @@ A COM file starts at `0100h` in program memory. The small program from Chapter 2
 is stored on B so its plain name works at `B>`. At `A>` its plain name gives a
 question mark unless another copy is available there. An explicit `B:` before
 the name selects its file without changing the current drive.
-[Chapter 20](20-from-prompt-to-program.md) follows lookup and loading inside the
+[Chapter 21](21-from-prompt-to-program.md) follows lookup and loading inside the
 command processor.
 
 ## Changing a drive's volume
 
 The GAMES and SPARE examples use a separate historical four-volume card named
-`my.img`. [Chapter 5](05-cards-on-the-pc.md) gives its PC preparation, including
+`my.img`. [Chapter 6](06-cards-on-the-pc.md) gives its PC preparation, including
 usable slots for C and D through `--drives 4`. These examples are not steps
 required on the supplied starter. It has no GAMES or SPARE volume and no usable
 C slot.
@@ -281,7 +281,7 @@ A>
 A card prepared with `tecvol create --drives N` reserves full-size slots
 for drives A through the Nth, including drives empty at cold boot. Each
 can then take either geometry. These slots use system memory. Their byte
-cost and placement belong to [Chapter 14](14-state-and-memory.md#allocation-vectors-below-the-workspace).
+cost and placement belong to [Chapter 15](15-state-and-memory.md#allocation-vectors-below-the-workspace).
 `MOUNT` cannot add a slot to the running starter card.
 
 On that historical `my.img` card, SYSTEM and WORK start on A and B, GAMES and
@@ -354,7 +354,7 @@ new volume.
 A volume can be read-only. Its files can be read and its programs can run but
 creating, writing, renaming or erasing a file there gives `R/O`. `MOUNT` marks
 such a volume `R/O` in its list. This property belongs to the volume so changing
-its drive or warm-booting does not remove it. Chapter 5 explains how a prepared
+its drive or warm-booting does not remove it. Chapter 6 explains how a prepared
 card receives that flag.
 
 A file's read-only attribute is separate. It prevents writing, renaming
@@ -412,7 +412,7 @@ No saved drive assignment is applied if a required volume no longer matches
 or a required slot cannot hold it. The card's header assignments then stand.
 The same defaults apply when TEC-OS cannot recover its previous state.
 A normal power cycle also loses the previous assignments.
-[Chapter 15](15-reset-and-boot.md#retained-drive-selection) explains the
+[Chapter 16](16-reset-and-boot.md#retained-drive-selection) explains the
 recognition test, interrupted cold boot and recovery from an interrupted
 service installation.
 

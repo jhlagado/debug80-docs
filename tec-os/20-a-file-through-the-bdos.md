@@ -1,11 +1,11 @@
 ---
 title: A file through the BDOS
 parent: TEC-OS
-nav_order: 19
+nav_order: 20
 nav_group: "Inside TEC-OS"
 ---
 
-# 19. A file through the BDOS
+# 20. A file through the BDOS
 
 <!-- Mechanisms checked by source inspection at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Unprefixed source citations use that revision. The explicitly retained
@@ -18,11 +18,11 @@ state back to the directory. The directory and FCB can therefore differ
 while a file is open (`src/cpm/bdosfile.asm:459-528`,
 `src/cpm/bdosrec.asm:69-82`, `src/cpm/bdosfile.asm:247-282`).
 
-Chapter 9 established the calls a program uses: make, write, close, open and
+Chapter 10 established the calls a program uses: make, write, close, open and
 read. Here the same lifecycle uses the BDOS's entry, directory searches,
 allocation map and record arithmetic. The card operations use the BIOS of
-Chapter 17 and the block cache of Chapter 18. [Chapter 8](08-call-tec-os.md)
-explains the console-call contracts and [Chapter 16](16-console-paths.md) their
+Chapter 18 and the block cache of Chapter 19. [Chapter 9](09-call-tec-os.md)
+explains the console-call contracts and [Chapter 17](17-console-paths.md) their
 implementation. [Appendix A](appendix-a-bdos-functions.md) gives the complete
 function reference.
 
@@ -33,7 +33,7 @@ calls `0005h` (`src/cpm/bdos.asm:105-123`). For make, write, close, open and
 read, `DE` points to the FCB.
 
 The jump at `0005h` leads to `JP BENTRY`, which cold boot puts directly
-below the allocation vectors, as Chapter 14 describes. With a service loaded
+below the allocation vectors, as Chapter 15 describes. With a service loaded
 the same jump is at the start of the lowest service's page
 (`src/boot.asm:615-620`, `src/boot.asm:297-312`, `src/loader.asm:327-330`).
 
@@ -42,7 +42,7 @@ stack and keeps `DE` in `PARAM` (`src/cpm/bdos.asm:120-123`). The function and
 the BIOS routines it calls use that stack. The caller's `CALL` puts its return
 word on the caller's stack. `BENTRY` then tests for seven numbers above 40 that
 have the meanings CP/M 3 gave them: 44, 45, 46, 47, 48, 99 and 108
-(`src/cpm/bdos.asm:124-138`). Appendix A lists them. Chapter 12 describes 47 and
+(`src/cpm/bdos.asm:124-138`). Appendix A lists them. Chapter 13 describes 47 and
 108 and the section on errors below describes function 45, the error mode. Any
 other number above 40 returns 0 at once (`src/cpm/bdos.asm:139-140`).
 
@@ -82,7 +82,7 @@ the directory, a table of 32-byte entries at the start of the volume. Each
 entry names a file in a user area and holds a map of allocation block
 numbers, the blocks of the volume that hold the file's records. In this
 chapter *block* alone means an allocation block and a *card block* is 512
-bytes of the card, as in Chapter 17. A program names a file in an FCB of 36
+bytes of the card, as in Chapter 18. A program names a file in an FCB of 36
 bytes. The BDOS fills the FCB from the entry and changes its position, count
 and map as the program reads and writes (`src/cpm/bdosfn.asm:500-547`,
 `src/cpm/bdosrec.asm:143-160`, `src/cpm/bdosrec.asm:180-235`). The attribute
@@ -180,10 +180,10 @@ clears `S2` and keeps `EX` so the entry is the extent `EX` names among the
 file's first 32. It clears `S1`, `RC` and the map in the FCB too
 (`src/cpm/bdosfile.asm:436-444`, `src/cpm/bdosfile.asm:470-484`). Make leaves
 `CR` and the random-record bytes alone. For a sequential file the program
-supplies `CR` = 0, as in Chapter 9. Make returns an entry slot from 0 to 3 or
+supplies `CR` = 0, as in Chapter 10. Make returns an entry slot from 0 to 3 or
 `FFh` if the directory is full. Every directory write goes to the BIOS as write
 type 1 (`src/cpm/bdoslog.asm:83-112`). On a volume written behind, a directory
-write flushes the other dirty cache lines first, as Chapter 18 describes
+write flushes the other dirty cache lines first, as Chapter 19 describes
 (`src/cache.asm:546-555`).
 
 A file that was only read has nothing to write back at its close. Make and
@@ -214,7 +214,7 @@ track and a sector so `POSREC` divides that number by `SPT`. The division is
 `DIV16`, 16 steps of shift and trial subtraction. The quotient goes to the BIOS
 through `SETTRK` and the remainder through `SECTRAN` and `SETSEC`
 (`src/cpm/bdosrec.asm:738-791`). The BIOS's `MAPREC` turns track and sector back
-into a record number, as Chapter 17 describes. From that it takes `BLKOFF`, the
+into a record number, as Chapter 18 describes. From that it takes `BLKOFF`, the
 card block within the volume, and `BLKSLOT`, the record's quarter of it
 (`src/bios.asm:121-150`).
 
@@ -257,7 +257,7 @@ when the FCB is on an earlier extent than the entry records. It then writes the
 directory record back (`src/cpm/bdosfile.asm:247-282`). On a volume written
 behind the directory write flushes every other dirty cache line before writing
 its own line. A failed flush is still an error and earlier writes are not
-undone. Chapter 18 describes the resulting persistence boundary
+undone. Chapter 19 describes the resulting persistence boundary
 (`src/cache.asm:508-555`).
 
 ## Opening and reading the file
@@ -290,7 +290,7 @@ FCBs. Appendix A gives each with its return codes.
 
 The BDOS has to find a free block for each write without reading the whole
 directory. Each drive therefore has an allocation vector, one bit for each
-block of the volume, set while the block is in use. Chapter 14 describes
+block of the volume, set while the block is in use. Chapter 15 describes
 where cold boot places the vectors. The DPH holds the vector's address and
 `LOGIN` copies it into `ALVPTR` (`src/cpm/bdoslog.asm:210-213`).
 
@@ -348,7 +348,7 @@ mark only when it is higher than the one there so the higher of the two stands.
 
 CP/M 2.2's CCP resets the disk system at every warm boot. Each drive logs in
 again at its next selection, which reads its directory. On a G8M volume that is
-32 card blocks and Chapter 15 gives qualified historical timings. TEC-OS's CCP
+32 card blocks and Chapter 16 gives qualified historical timings. TEC-OS's CCP
 makes the same call, function 13, but sets `WRFLAG` first
 (`src/cpm/ccp.asm:73-77`). With the flag set function 13 goes to `WRESET`
 (`src/cpm/bdosfile.asm:19-24`).
@@ -416,7 +416,7 @@ included in this assembly order (`src/rom.asm:35-40`):
 | `bdoscon.asm` | the errors and the console's output |
 
 The retained `78127ec` ROM map places `BDOSBAS` at `E703h` and the last BDOS
-byte at `F608h`, a span of 3,846 bytes. Chapter 26 describes the ROM
+byte at `F608h`, a span of 3,846 bytes. Chapter 27 describes the ROM
 organisation. The function table and its four error messages are in the ROM's
 data block (`src/tables.asm:87-95`, `src/text.asm:85-91`). Those bytes are
 read-only so a hook must use a RAM interface.
@@ -433,15 +433,15 @@ resident workspace, has a bit for each drive whose allocation vector the BDOS
 has built (`src/ram.asm:69-69`). `PRGCODE`, the return code of function 108, is
 above the RAM BIOS table, where only cold boot clears it (`src/ram.asm:378-379`,
 `src/boot.asm:61-65`). Per-drive pointers and scan state are in the drive's DPH,
-the 16-byte disk parameter header described in Chapter 17.
+the 16-byte disk parameter header described in Chapter 18.
 
 The BDOS reaches the BIOS through the RAM BIOS table at `BF00h`. Its names
 for the entries are offsets from `RAMBIOS` (`src/cpm/bdos.asm:20-34`). A
 program that replaces an entry there therefore receives the BDOS's own
-calls, as [Chapter 16](16-console-paths.md#the-bios-boundary) describes.
+calls, as [Chapter 17](17-console-paths.md#the-bios-boundary) describes.
 The output-status check is an exception. It
 calls the ROM's `BCONST` directly, because the table's `CONST` draws the
-video cursor while no key is waiting. Chapter 16 explains that console path
+video cursor while no key is waiting. Chapter 17 explains that console path
 (`src/cpm/bdoscon.asm:151-156`, `src/console.asm:150-158`).
 
 ## Errors returned or reported
@@ -470,7 +470,7 @@ output satisfies that wait. `^P` toggles list output and `^S` consumes a
 resume key, with `^C` at that pause aborting
 (`src/cpm/bdoscon.asm:297-322`). `CHDROP` then ends the program by warm boot, whatever the key, so the
 function never returns to the program (`src/cpm/bdos.asm:100-103`). `CHDROP`
-also drops the rest of a chained line, which Chapter 21 describes.
+also drops the rest of a chained line, which Chapter 22 describes.
 
 With `ERRMODE` at `FFh` the error returns to the program with `A` = `FFh` and
 the error's code in `H`. Nothing is printed and the rest of a chained line is
@@ -480,7 +480,7 @@ program starts in the default mode (`src/ram.asm:224-225`). A read or write that
 returns an error leaves the FCB on the record it didn't read or write, as CP/M
 3's does (`src/cpm/bdosrec.asm:69-82`, `src/cpm/bdosrec.asm:222-227`).
 
-Chapter 4 explains volume protection and the read-only file attribute. They
+Chapter 5 explains volume protection and the read-only file attribute. They
 enter the BDOS through different state. The volume's read-only flag is in the
 drive table. `LOGIN` sets the drive's bit in the read-only vector from it
 (`src/cpm/bdoslog.asm:215-220`) so the BDOS rejects the change before any write
@@ -495,11 +495,11 @@ The file interface remains CP/M 2.2's and function 12 returns `22h`
 (`src/cpm/bdos.asm:696-698`). A program's disk reset still drops every login
 while the CCP's flagged reset can retain or partly rebuild vectors. ROM code
 also changes the place for a hook: the writable RAM BIOS table described in
-Chapter 10 replaces a patch to BDOS instructions.
+Chapter 11 replaces a patch to BDOS instructions.
 
 Appendix A retains the complete compatibility list, including the CP/M 3
 extensions, unsupported function returns and console differences. The console
-mechanisms are in Chapter 16. For files, both supported geometries set `CKS` to
+mechanisms are in Chapter 17. For files, both supported geometries set `CKS` to
 0 so no directory check vector detects a card changed during use
 (`format/format.json:52`, `format/format.json:59`). A card must be preserved and
-removed through the procedure in Chapter 5 before it is changed on a PC.
+removed through the procedure in Chapter 6 before it is changed on a PC.

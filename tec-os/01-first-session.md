@@ -208,7 +208,7 @@ pressing reset or removing the card.
 A `Write lost` message means that some pending changes could not be written.
 The new prompt after that message does not establish successful preservation.
 Those failed changes have been dropped so another `^C` cannot recover them.
-Keep a separate copy of valuable work. [Chapter 5](05-cards-on-the-pc.md)
+Keep a separate copy of valuable work. [Chapter 6](06-cards-on-the-pc.md)
 explains card copies and recovery and
 [Appendix D](appendix-d-error-messages.md) explains the failure messages.
 

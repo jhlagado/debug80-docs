@@ -1,11 +1,11 @@
 ---
 title: State and memory inside TEC-OS
 parent: TEC-OS
-nav_order: 14
+nav_order: 15
 nav_group: "Inside TEC-OS"
 ---
 
-# 14. State and memory inside TEC-OS
+# 15. State and memory inside TEC-OS
 
 <!-- Source-only reading against release-1 TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      This is not final artifact qualification. Address examples and measured stack

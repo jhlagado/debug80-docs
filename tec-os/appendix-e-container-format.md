@@ -15,8 +15,8 @@ nav_group: "Reference"
 
 A TEC-OS card starts with one container at block 0. Its header identifies
 CP/M volumes by location and geometry. Each volume then holds an ordinary
-CP/M disk. [Cards on the PC](05-cards-on-the-pc.md) covers image operations
-and [Card blocks and volumes](17-card-blocks-and-volumes.md) follows the
+CP/M disk. [Cards on the PC](06-cards-on-the-pc.md) covers image operations
+and [Card blocks and volumes](18-card-blocks-and-volumes.md) follows the
 ROM's mount. This reference gives the bytes and validation rules needed
 to decode a container or diagnose a rejected one.
 
@@ -141,7 +141,7 @@ The ROM's `MOUNT` checks the header before walking the descriptors in
 table order. It mounts each assigned volume as its descriptor passes.
 The first failure stops the walk and unmounts every drive mounted so far
 (`src/vol.asm:42-363`). Cold boot prints the error code at the diagnostic
-prompt described in [Chapter 27](27-diagnose-the-machine.md). The table
+prompt described in [Chapter 28](28-diagnose-the-machine.md). The table
 below follows the check order so the same code appears more than once.
 
 | Code | Check | Source |
@@ -253,7 +253,7 @@ vector. The card is not removable media in CP/M's sense.
 
 The allocation vector is the drive's map of free space in TEC-OS's memory,
 one bit for each allocation block. Its size is `floor(DSM / 8) + 1` bytes.
-[State and memory](14-state-and-memory.md) explains their placement for a
+[State and memory](15-state-and-memory.md) explains their placement for a
 particular card.
 
 Their disk parameter blocks, as `src/gen/geom.asm` holds them:

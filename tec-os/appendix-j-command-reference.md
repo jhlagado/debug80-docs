@@ -17,7 +17,7 @@ last available character also ends it. `^C` cancels only at the start of
 the line. Later in the line it is ignored. Recall and editing keys are in
 [The first session](01-first-session.md). Commands and arguments are converted to
 capitals before execution. The echo retains the case typed.
-[Work with files](03-work-with-files.md) explains the ordinary operations.
+[Work with files](04-work-with-files.md) explains the ordinary operations.
 This appendix gives their exact forms and boundary cases.
 
 ## Names and patterns
@@ -114,7 +114,7 @@ A displayed name has a 13-column field except at the end of a row. The number
 of names per row follows the console width and is at least one. Serial uses the
 80-column layout. This differs from Digital Research's DIR layout.
 Both DIR and TYPE pause at `[more]`. The practical continuation and stop
-keys are in [Chapter 3](03-work-with-files.md).
+keys are in [Chapter 4](04-work-with-files.md).
 
 TYPE takes one name without wildcards and no extra argument. It prints
 through the pager until the first Ctrl-Z byte, `1Ah`, or the end of the
@@ -216,7 +216,7 @@ SAVE takes a decimal count from 0 to 255 and one unambiguous file name. It
 writes that many 256-byte pages starting at `0100h`. A count of 0 makes an empty
 file. The count must be less than the high byte of the word at `0006h` so the
 saved pages stop below the resident entry's page.
-[Memory for programs](10-memory-for-programs.md) gives the memory boundary and
+[Memory for programs](11-memory-for-programs.md) gives the memory boundary and
 the complete capacity example.
 
 An existing file of the same name is erased first. A failed make, write or
@@ -242,7 +242,7 @@ If no file is found, a plain command on a drive other than A continues on A
 in the same user order. An explicit drive suppresses that fallback.
 A found file that cannot load stops the search rather than permitting
 another copy on a later drive. These paths are in `src/cpm/ccp.asm:403-467`
-and `src/cpm/ccp.asm:589-640`. [Chapter 4](04-drives-and-user-areas.md)
+and `src/cpm/ccp.asm:589-640`. [Chapter 5](05-drives-and-user-areas.md)
 works through the resulting choices.
 
 ### CON
@@ -257,7 +257,7 @@ The reply goes through the selected console and is discarded in BAT mode.
 Selecting an unavailable console can leave or restore another mode so the reply
 reports the mode in effect, not merely the name typed. The practical
 alternatives and recovery actions are in
-[Choose a console](06-choose-a-console.md).
+[Choose a console](07-choose-a-console.md).
 
 ### Resident services
 
@@ -267,8 +267,8 @@ the COM search's retry in user 0 nor its fallback to drive A.
 SERVICES lists installed names and page counts. UNLOAD acts on the newest
 service. Removal fails if that service is not removable or its removal
 routine reports failure. The practical installation rules are in
-[Chapter 4](04-drives-and-user-areas.md) and authoring is in
-[Chapter 13](13-write-a-resident-service.md).
+[Chapter 5](05-drives-and-user-areas.md) and authoring is in
+[Chapter 14](14-write-a-resident-service.md).
 
 ## Several commands
 
@@ -280,5 +280,5 @@ of a fresh line tests the last command's code.
 
 A program's command tail ends at its piece's separator. Neither a file name nor
 an argument can contain a literal exclamation mark.
-[Results and command chains](12-results-and-command-chains.md) gives the success
+[Results and command chains](13-results-and-command-chains.md) gives the success
 interval, every drop path and function 47's replacement-line contract.

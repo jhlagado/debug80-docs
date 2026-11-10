@@ -1,11 +1,11 @@
 ---
 title: Build the ROM and media
 parent: TEC-OS
-nav_order: 26
+nav_order: 27
 nav_group: "Inside TEC-OS"
 ---
 
-# 26. Build the ROM and media
+# 27. Build the ROM and media
 
 <!-- Source mechanisms inspected at release-1 TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Unprefixed source ranges use
@@ -28,7 +28,7 @@ map and memory census together. Media preparation checks the selected map
 generator and the ROM size/hash against the census
 (`tools/build.mjs:273-323`, `tools/media.mjs:169-184`).
 
-The host setup in [Chapter 5](05-cards-on-the-pc.md) is the starting point.
+The host setup in [Chapter 6](06-cards-on-the-pc.md) is the starting point.
 The build adds the pinned assembler host described below. These procedures
 explain the release-1 source at `a1023bd`. The numerical image and HELLO examples
 retain their separate historical evidence.
@@ -105,7 +105,7 @@ At `C000h`, `JP RSTENT` transfers control into the code. The historical target
 was `C60Ah`. The interface at `C003h` contains `TNA`, major 5, minor 1 and a
 jump at `C008h` to `SVCDSP`. Its exclusive end is `C00Bh`
 (`src/reset.asm:12-13`, `src/abi.asm:9-14`). The boot overlay and entry path
-are explained in [Chapter 15](15-reset-and-boot.md).
+are explained in [Chapter 16](16-reset-and-boot.md).
 
 The data region starts at `ROMDATA` and ends at `ROMCODE`. It contains
 the BIOS jump table, keyboard tables, command names and handlers, BDOS
@@ -186,7 +186,7 @@ ROM extent after them (`tools/build.mjs:197-206`,
 
 `reset.asm` then sets `ORG $C000`. `abi.asm` follows its jump then the
 four data files and finally the routine files. The CCP, BDOS and volume
-routines each occupy consecutive included files. Their bytes remain together in the image (`src/rom.asm:12-45`). [Chapter 14](14-state-and-memory.md)
+routines each occupy consecutive included files. Their bytes remain together in the image (`src/rom.asm:12-45`). [Chapter 15](15-state-and-memory.md)
 explains the workspace lifetimes separately from these address declarations.
 
 ## Generated configuration, geometry and font
@@ -207,7 +207,7 @@ costs of the transmit, receive and polling loops. It produces `TXDLY`,
 `TXSTOP`, `RXDLY`, `RXHALF` and `RXPOLL`. The historical values are 49, 105,
 50, 70 and 77.
 A count outside 1–255 raises an error (`tools/build.mjs:26-28`,
-`tools/build.mjs:38-76`). [Chapter 16](16-console-paths.md) explains their
+`tools/build.mjs:38-76`). [Chapter 17](17-console-paths.md) explains their
 bit-level timing scope.
 
 `format/format.json` defines `TECOSVOL`, the header and descriptor sizes,
@@ -223,7 +223,7 @@ a maximum 256-byte allocation vector and consistency of block size, `EXM`
 and directory allocation. It also bounds payload and record counts
 (`tools/lib/format.mjs:9-40`). Shared definitions prevent different field
 offsets, though the host and ROM still perform different validation checks.
-[Chapter 17](17-card-blocks-and-volumes.md) explains those boundaries.
+[Chapter 18](18-card-blocks-and-volumes.md) explains those boundaries.
 
 `FONT` comes from the selected TEC Compact data in `format/font5x7.txt`.
 Its 96 characters from `20h` through `7Fh` have eight rows each, for 768 bytes.
@@ -475,7 +475,7 @@ node tools/tecvol.mjs put work.img B hello.com
 
 `put` names it `HELLO.COM` on B (`tools/tecvol.mjs:149-156`). On a board,
 `tecvol install` writes
-`work.img` to the card as described in Chapter 5. The retained host-model
+`work.img` to the card as described in Chapter 6. The retained host-model
 capture boots that image and enters `B:`, `DIR` and `HELLO`:
 
 <!-- node tools/capture.mjs --card work.img B: DIR HELLO -->

@@ -1,11 +1,11 @@
 ---
 title: Console paths
 parent: TEC-OS
-nav_order: 16
+nav_order: 17
 nav_group: "Inside TEC-OS"
 ---
 
-# 16. Console paths
+# 17. Console paths
 
 <!-- Source mechanisms inspected at release-1 TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. All unprefixed source ranges
@@ -253,7 +253,7 @@ The CCP marks its own function-10 call with `HFLAG`. Only then do `^W`
 and `^N` replace the line from history. In an ordinary program call they
 are stored as characters. Completion consumes `HFLAG` and submits a
 nonempty marked line to `HSTORE`. Abandoned empty-line `^C` instead clears
-the flag through warm boot. [Chapter 22](22-the-history-ring.md) explains
+the flag through warm boot. [Chapter 23](23-the-history-ring.md) explains
 storage and traversal (`src/cpm/ccp.asm:136-149`,
 `src/cpm/bdos.asm:478-484`, `src/cpm/bdos.asm:651-666`,
 `src/boot.asm:384-389`).

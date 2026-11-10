@@ -1,11 +1,11 @@
 ---
 title: Loading and removing services
 parent: TEC-OS
-nav_order: 24
+nav_order: 25
 nav_group: "Inside TEC-OS"
 ---
 
-# 24. Loading and removing services
+# 25. Loading and removing services
 
 <!-- Source-only semantic check: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Unprefixed source ranges use that revision. Historical captures,
@@ -22,7 +22,7 @@ A service file first loads at `0100h` like a COM program. The loader moves
 its header and image to whole pages below the program ceiling, runs INIT
 and publishes the returned records. Removal reverses the saved owner and
 registry links. This chapter follows those changes through the commit and
-failure paths. [Chapter 13](13-write-a-resident-service.md) explains writing
+failure paths. [Chapter 14](14-write-a-resident-service.md) explains writing
 a service and [Appendix H](appendix-h-service-file-format.md) gives the
 complete file format.
 
@@ -121,7 +121,7 @@ before the image. A byte of 255 advances without patching and longer gaps
 use repeated 255 bytes. A gap exactly divisible by 255 needs a final zero
 byte to apply the fixup at that position
 (`tools/lib/svc.mjs:37-48`, `tools/lib/svc.mjs:107-133`). Appendix H describes
-the bytes. TAS produces the same file format on the card, as Chapter 13 explains.
+the bytes. TAS produces the same file format on the card, as Chapter 14 explains.
 The two writers fill different header fields, as Appendix H specifies
 (`Thorium dbee66a:src/tas/DRV.ASM:92-120`).
 
@@ -131,7 +131,7 @@ The CCP sends a command with type SVC to `SVCGO`. It calls `LOADCOM` to
 read the file into `DF`, `0100h`, then calls `SVCLOAD`. `LOADTOP` is the
 exclusive end of the records read, not an independently stored file-byte
 length (`src/cpm/ccp.asm:403-427`, `src/loader.asm:759-765`).
-[Chapter 20](20-from-prompt-to-program.md#program-lookup-and-capacity)
+[Chapter 21](21-from-prompt-to-program.md#program-lookup-and-capacity)
 explains the read and its capacity limit.
 
 Carry reports failure. `SVCRC` distinguishes the loader outcomes and
@@ -140,7 +140,7 @@ The CCP normally prints the command name with `?`. The quiet startup
 exception requires INIT's absent-device status and the appropriate loader
 outcome (`src/loader.asm:354-356`, `src/loader.asm:412-415`,
 `src/cpm/ccp.asm:426-437`).
-[Chapter 25](25-startup-inside-the-ccp.md) explains that exception.
+[Chapter 26](26-startup-inside-the-ccp.md) explains that exception.
 
 The loader has seven stages. Before the resident move its writes are
 confined to the loaded file and loader scratch. The move temporarily lowers
@@ -250,7 +250,7 @@ The historical test case records that dangling-hook outcome
 
 An accepted function 47 call from INIT reaches the same warm boot. Its
 replacement line remains subject to the failed-flush cancellation explained
-in [Chapter 12](12-results-and-command-chains.md)
+in [Chapter 13](13-results-and-command-chains.md)
 (`src/cpm/bdos.asm:85-93`, `src/cache.asm:566-572`). The historical tests
 also cover a later successful load after INIT's warm boot and function 47
 (`78127ec:test/svc.test.mjs:469-482`, `78127ec:test/svc.test.mjs:930-938`).
@@ -400,7 +400,7 @@ address until exit. A resident service retaining it longer must check the
 current generation or declare the provider as a dependency. The dependency
 prevents loading without its provider and the owner order prevents removing that
 older provider first (`src/ram.asm:388-402`, `src/loader.asm:101-130`,
-`src/loader.asm:187-214`). Chapter 13 explains the client-side dependency
+`src/loader.asm:187-214`). Chapter 14 explains the client-side dependency
 contract.
 
 Warm boot preserves `REGHEAD`, `SVCHEAD` and `PZTOP` outside the range
@@ -446,7 +446,7 @@ active interrupt source can repeat without being serviced
 
 The three stack limits are 8, 12 and 6 bytes for BDOS, BIOS and CCP,
 counted above their no-service base use (`src/tables.asm:139-144`).
-[Chapter 14](14-state-and-memory.md) distinguishes the historical base
+[Chapter 15](15-state-and-memory.md) distinguishes the historical base
 measurements, limits and reserved quarter-stack margin. The loader sums
 header declarations rather than measuring a callback's use.
 

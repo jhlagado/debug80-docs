@@ -1,11 +1,11 @@
 ---
 title: Reset and boot
 parent: TEC-OS
-nav_order: 15
+nav_order: 16
 nav_group: "Inside TEC-OS"
 ---
 
-# 15. Reset and boot
+# 16. Reset and boot
 
 <!-- Source mechanisms read at release-1 TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. All unprefixed source ranges
@@ -15,7 +15,7 @@ nav_group: "Inside TEC-OS"
      belong to TEC-OS 78127ec, with the starter card's TED.COM from Thorium
      128edb7 and TAS.COM from Thorium dbee66a. The timings used the host model
      and serial board. Original evidence: book base10821b6,
-     tec-os/15-reset-and-boot.md. No capture or measurement was rerun. -->
+     tec-os/16-reset-and-boot.md. No capture or measurement was rerun. -->
 
 A program can finish and leave the next command prompt ready without resetting
 the board. Warm boot rebuilds the program environment while retaining the drive
@@ -24,7 +24,7 @@ BIOS's first entry. It checks RAM and reconstructs the resident workspace, card
 mount and block cache before entering the same warm-boot path
 (`src/boot.asm:35-113`, `src/boot.asm:128-149`). The clearing spans and retained
 regions are mapped in
-[Chapter 14](14-state-and-memory.md#the-workspace-across-a-program-exit).
+[Chapter 15](15-state-and-memory.md#the-workspace-across-a-program-exit).
 
 ## The reset instruction
 
@@ -48,7 +48,7 @@ bank. Cold boot cleared it to zero so the CPU executes `NOP`s until it
 reaches the jump at `C000h`. Warm boot restores EXPAND 0 and attempts the
 pending cache writes. This route starts only after execution reaches the
 page-zero jump. A return through a stack hidden by EXPAND 1 has the separate
-stack problem explained in [Chapter 14](14-state-and-memory.md#expand-1-and-the-stack-boundary)
+stack problem explained in [Chapter 15](15-state-and-memory.md#expand-1-and-the-stack-boundary)
 (`src/boot.asm:13-26`, `src/boot.asm:128-149`, `src/boot.asm:232-249`).
 
 `COLD` disables maskable interrupts, sets `SP` to `8000h` and writes
@@ -292,7 +292,7 @@ entry and an explicit `RST 38h` (`src/boot.asm:335-368`).
 The sweep prevents program vectors into the TPA from surviving the program.
 Service removal also runs it after raising the top so vectors into freed
 pages are cleared. A failed `INIT` which releases its pages runs the same
-sweep. [Chapter 14's page-zero section](14-state-and-memory.md#page-zero-is-rebuilt-selectively)
+sweep. [Chapter 15's page-zero section](15-state-and-memory.md#page-zero-is-rebuilt-selectively)
 locates the other page-zero fields (`src/loader.asm:117-130`,
 `src/loader.asm:436-456`).
 
