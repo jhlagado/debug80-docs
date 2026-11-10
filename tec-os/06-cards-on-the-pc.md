@@ -10,6 +10,7 @@ nav_group: "Using the machine"
 <!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Release-card file note: TEC-OS 755636b tools/media.mjs:197-211 and
      test/starter.test.mjs:36-62; TED.COM there is Thorium 967678c.
+     Page-card files: TEC-OS 12b2ec5 tools/media.mjs:240-252.
      Inherited recipes and output are historical TEC-OS 78127ec evidence.
      Original old03/04/05 inputs: TED.COM Thorium 128edb7,
      SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;
@@ -451,8 +452,11 @@ first and applies `"readOnly": true` last. The protection then belongs to
 the whole volume, independently of each file's attributes.
 
 The browser's New starter card uses `dist/page.recipe.json`, also written
-by media preparation. It has the starter volumes and files plus `DEMO.COM`
-on A. The page uses the same size and SHA-256 checks, including DEMO's.
+by media preparation. It has the starter volumes and files plus `DEMO.COM`,
+its source `DEMO.ASM` and the BASIC game `BOUNCE.BAS` on A, twelve files at
+recipe revision 8, while the starter card keeps nine at revision 6
+(TEC-OS 12b2ec5 `tools/media.mjs`). The page uses the same size and SHA-256
+checks, including those of the three added files.
 
 ## A protection example
 

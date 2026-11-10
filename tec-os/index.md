@@ -15,6 +15,10 @@ nav_exclude: true
      starter card, TED.COM Thorium 967678c (150a19bd), BAZA.COM and
      BAZA.RTL Baza fbfedb6, and the MON3-loaded diagnostics (DIAG.HEX).
      Chapter 3 and the pages naming the card's files cite that revision.
+     Lower-case update: TEC-OS 12b2ec5 (card-lower) has the lower-case
+     TIMES.BAS, BAZA.COM Baza ae6a00d (ee8465ac, 15,744 bytes, with def call,
+     call and reg) and the twelve-file page card with DEMO.ASM and
+     BOUNCE.BAS. Chapter 3 and appendices I and J cite it.
      Public workflows accepted by Origo review4b5b5a50 from attempt02/e77c7ef0.
      Bounded opening craft/factual reviews closed d9d57d2/b911e84.
      That whole batch remains FAILED. Later service controls are separate.

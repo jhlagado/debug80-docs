@@ -11,9 +11,10 @@ nav_group: "Reference"
      retain TEC-OS 78127ec and its starter inputs. They have not been rerun
      for the new source offer.
      The starter-card section cites TEC-OS
-     755636b130241173c5c30a0be8fe6b79cf2fee37 with a 755636b: prefix,
+     12b2ec5f470844c46cd0c92fea132f1a0ab11c40 with a 12b2ec5: prefix,
      Thorium 967678c (TED.COM, SHA-256 150a19bd…), Thorium dbee66a (TAS.COM)
-     and Baza fbfedb6 (BAZA.COM, BAZA.RTL). Source reading only. -->
+     and Baza ae6a00d (BAZA.COM ee8465ac…, BAZA.RTL, BOUNCE.BAS).
+     Source reading only. -->
 
 A command line contains a command and its arguments, separated by spaces.
 Return or `^J` ends the line. The maximum is 127 characters and typing the
@@ -278,8 +279,8 @@ routine reports failure. The practical installation rules are in
 
 The starter card's A holds nine files. Six are programs or sources you use
 by name at the prompt. `GLCD.SVC` and `STARTUP.CMD` belong to the display
-setup and `BAZA.RTL` is read by BAZA (`755636b:tools/media.mjs:29-31`,
-`755636b:tools/media.mjs:197-211`, `755636b:tools/lib/starter.mjs:13-16`):
+setup and `BAZA.RTL` is read by BAZA (`12b2ec5:tools/media.mjs:29-31`,
+`12b2ec5:tools/media.mjs:197-211`, `12b2ec5:tools/lib/starter.mjs:13-16`):
 
 | File | Use |
 | --- | --- |
@@ -297,14 +298,25 @@ TED's `^T B` and `^T R` build an `.ASM` file with `TAS NAME.ASM` and a
 `.BAS` file with `BAZA NAME.BAS`. `^T D` chains `TDB NAME` for an `.ASM`
 file, which fails with `A:TDB?` on the starter card, and shows
 `No debugger` for a `.BAS` file
-(`Thorium 967678c:README.md:14-34`, `755636b:docs/compatibility.md:188`).
+(`Thorium 967678c:README.md:14-34`, `12b2ec5:docs/compatibility.md:188`).
 `TAS` and `BAZA` both set the failure return code `FF00h` when a build
 fails. A failed BAZA compile leaves an existing `NAME.COM` unchanged, and a
 failed TAS build normally keeps its earlier outputs
-(`755636b:docs/compatibility.md:190-191`, `Baza fbfedb6:README.md:26-32`,
+(`12b2ec5:docs/compatibility.md:190-191`, `Baza ae6a00d:README.md:26-32`,
 `Thorium 967678c:README.md:65-66`).
 [Make a small program](02-make-a-small-program.md) and
 [Build a BASIC program](03-build-a-basic-program.md) use them.
+
+The web page's card holds these nine files and three more, twelve in all
+(`12b2ec5:tools/media.mjs:240-252`, `12b2ec5:README.md:158-165`,
+`12b2ec5:test/demo.test.mjs:1-4`, `12b2ec5:test/starter.test.mjs:104-158`):
+
+| File | Use |
+| --- | --- |
+| `DEMO.COM` | `DEMO` shows the LCD, the 7-segment digits, the 8 × 8 LEDs and the PICO9918 |
+| `DEMO.ASM` | DEMO.COM's source. `TED DEMO.ASM` opens it and `TAS DEMO` builds the same DEMO.COM |
+| `BOUNCE.BAS` | A sprite game for the PICO9918, which it needs. `BAZA BOUNCE`, then `BOUNCE`. Tap W, A, S and D to steer and Q to quit |
+
 
 ## Several commands
 

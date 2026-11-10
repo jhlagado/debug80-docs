@@ -846,7 +846,11 @@ releases an active claim.
 The historical starter card did not include DEMO. The web-page recipe did
 include it on A so DEMO ran there without adding it to that card. Its source is
 `test/programs/demo.asm`. Media generation exports DEMO.COM to `dist/files` and
-includes it in the page recipe. The retained explicit host route used ATOM and
+includes it in the page recipe. At TEC-OS `12b2ec5` the source has moved to
+`programs/DEMO.ASM`, which the page's card also holds, so `TED DEMO.ASM`
+opens it there and `TAS DEMO` rebuilds the same DEMO.COM
+(`12b2ec5:tools/media.mjs:213-214`, `12b2ec5:test/demo.test.mjs:1-4`).
+The retained explicit host route used ATOM and
 added the program to B of `hw.img`:
 
 ```sh

@@ -25,7 +25,10 @@ nav_group: "Inside TEC-OS"
      diagnostics and the nine starter files) cite TEC-OS
      755636b130241173c5c30a0be8fe6b79cf2fee37 with a 755636b: prefix.
      Release TED.COM is Thorium 967678c (150a19bd…); BAZA.COM and BAZA.RTL
-     are Baza fbfedb6 (725570a6…, 5854bfb6…). Source reading only. -->
+     were Baza fbfedb6 (725570a6…, 5854bfb6…) there. Passages prefixed
+     12b2ec5: use TEC-OS 12b2ec5f470844c46cd0c92fea132f1a0ab11c40 (branch
+     card-lower): five inputs, BAZA.COM Baza ae6a00d (ee8465ac…, 15,744
+     bytes) and the twelve-file page card. Source reading only. -->
 
 A ROM and its symbol map must describe the same addresses. Card programs
 must use the interfaces supplied by that ROM. TEC-OS produces the image,
@@ -43,7 +46,8 @@ retain their separate historical evidence.
 The repository requires Node.js 20 or later. `npm ci` installs its locked
 host dependencies and `npm run inputs` prepares the application inputs.
 At the release-card source these are TED.COM and TAS.COM from Thorium and
-BAZA.COM and BAZA.RTL from Baza (`755636b:test/inputs.json:3-44`).
+BAZA.COM, BAZA.RTL and the page card's BOUNCE.BAS from Baza
+(`12b2ec5:test/inputs.json:3-54`).
 The inspected `package.json` selects `atom-z80` 0.3.7. The normal production
 path uses TAS for the main ROM, the board diagnostics, `GLCD.SVC`,
 `MOUNT.COM` and `DEMO.COM`. The diagnostics always use TAS. The standalone
@@ -62,9 +66,9 @@ and the 10,295-byte TAS executable (`tools/lib/tas-rom.mjs:10-11`,
 `tools/lib/tas-rom.mjs:77-98`, `test/inputs.json:4-13`).
 
 The input selection order is an explicit `TAS_COM`, `TED_COM`,
-`BAZA_COM` or `BAZA_RTL` then `.inputs/NAME` then the legacy sibling file
-under `../thorium/dist/` or `../baza/dist/`
-(`755636b:README.md:79-87`).
+`BAZA_COM`, `BAZA_RTL` or `BOUNCE_BAS` then `.inputs/NAME` then the legacy
+sibling file under `../thorium/dist/`, `../baza/dist/` or `../baza/examples/`
+(`12b2ec5:README.md:79-88`).
 The selected file must match its size and SHA-256. An empty override,
 invalid local file or wrong selected binary stops the operation. Selection
 does not fall through to another candidate after a mismatch
@@ -343,8 +347,8 @@ Media preparation validates the font package before preparing or replacing
 outputs (`tools/media.mjs:169-170`). It checks the map's generator against
 the selected backend then checks ROM length and SHA-256 against the census.
 It assembles MOUNT, GLCD and DEMO through that selection and validates pinned
-TED, TAS, BAZA.COM and BAZA.RTL before preparing the recipes
-(`755636b:tools/media.mjs:169-213`). The TAS
+TED, TAS, BAZA.COM, BAZA.RTL and BOUNCE.BAS before preparing the recipes
+(`12b2ec5:tools/media.mjs:169-217`). The TAS
 GLCD writer compares flat assemblies at `0100h` and `0200h`, checks their
 header and relative symbols and packs the relocation data. The distribution
 COM writer checks the declared zero-filled buffers of MOUNT and DEMO
@@ -354,7 +358,9 @@ The starter recipe contains SYSTEM as G1M on A and written-behind WORK as
 G8M on B. A holds nine files: MOUNT, GLCD, STARTUP, TED, the SAMPLE
 assembly source, the TIMES BASIC source, TAS, BAZA and BAZA's runtime
 library `BAZA.RTL`. `STARTUP.CMD` contains the GLCD installation line. The
-page recipe adds DEMO. Component entries record each file's size and
+page recipe adds DEMO.COM, its source DEMO.ASM and BOUNCE.BAS, a BASIC
+game pinned from Baza (`12b2ec5:tools/media.mjs:213-252`). Component
+entries record each file's size and
 SHA-256. Assemblies and recipe construction finish before the output
 replacement begins (`755636b:tools/media.mjs:197-244`,
 `tools/lib/starter.mjs:10-16`). Output files are replaced individually after
