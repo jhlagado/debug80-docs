@@ -16,7 +16,9 @@ nav_group: "Using the machine"
      Baza README at fbfedb6; Thorium README at 967678c (TED's language table).
      The TIMES screen below is the screen test/times.test.mjs:24-39 and
      :90-100 checks on the host model at 40 columns. It is not a separate
-     capture. No new execution occurred for this chapter, and no BAZA or
+     capture. The COPY step follows Chapter 4 and src/cpm/ccpmut.asm; the
+     ^C step follows the card's instruction (tools/media.mjs:220).
+     No new execution occurred for this chapter, and no BAZA or
      TED BASIC run on a physical TEC-1G is recorded. -->
 
 The starter card holds a short program in BASIC, TIMES.BAS, beside SAMPLE's
@@ -141,7 +143,7 @@ The `^T` keys take the tools from the type of the file being edited. For an
 | --- | --- | --- |
 | `^T B` | Saves and builds with `TAS` | Saves and builds with `BAZA` |
 | `^T R` | Builds with `TAS`, then runs the program | Builds with `BAZA`, then runs the program |
-| `^T D` | Runs `TDB`, a debugger the starter card does not contain | Shows `No debugger` and runs nothing |
+| `^T D` | Chains `TDB`, which the starter card does not contain, so the CCP prints `A:TDB?` and TED returns | Shows `No debugger` and runs nothing |
 
 `^T B` on TIMES.BAS saves the file and runs `A:BAZA TIMES.BAS`, naming the
 drive TED was loaded from. The console shows that line and `COM written`
@@ -154,9 +156,40 @@ waits at `Press a key` so the output stays on the screen, and a key returns
 you to the source at the same place. `^T D` leaves you in the editor with
 `No debugger` on the status row. It runs nothing and writes no file.
 
-From the `B>` prompt the same keys work on a TIMES.BAS that you keep on B.
-TED and BAZA are loaded from A and BAZA reads `BAZA.RTL` from A, its load
-drive. TIMES.COM is written on B beside the source.
+From the `B>` prompt `^T B` builds a TIMES.BAS that you keep on B. TED and
+BAZA are loaded from A and BAZA reads `BAZA.RTL` from A, its load drive.
+TIMES.COM is written on B beside the source.
+
+## A change of your own
+
+Editing A:TIMES.BAS changes the supplied copy on SYSTEM. A copy on B, as in
+Chapter 2, keeps your work on WORK and leaves the original as it was. At the
+`A>` prompt, COPY makes the copy and prints `COPIED` with the number of
+records. Chapter 4 explains its forms:
+
+```text
+A>COPY A:TIMES.BAS B:TIMES.BAS
+```
+
+`B:` makes WORK the current drive. At `B>`, `TED TIMES.BAS` opens your copy,
+with TED loaded from A. Move to line 40, the file's fourth line, and change
+the text between the quotes, keeping the line number, the `PRINT` and both
+quotes. For example:
+
+```text
+40 PRINT "HELLO FROM MY FIRST BASIC."
+```
+
+`^S` saves the change and `^T B` compiles it with A's BAZA, writing
+TIMES.COM on B. `^T R` builds and runs it in one step, and the program's
+first line is then your new text. The host-model tests ran `^T R` with
+TIMES.BAS on A and the build with it on B. Answer the questions and press a
+key to return to TED.
+
+`^Q` quits TED and returns to `B>`. Before a reset or power-off, `A:` returns
+to drive A and `^C` at the empty `A>` prompt writes any pending changes to
+the card, as the starter card's instructions say. Wait for the new prompt.
+Chapter 1 explains why.
 
 ## A failed compile
 
@@ -166,6 +199,8 @@ and 100. The line number is in order but the expression after `PRINT` is
 unfinished. `^T B` saved the file and BAZA printed its message on the
 console:
 
+<!-- TEC-OS 755636b test/ted-baza.test.mjs:90-101, the asserted console
+     text. Not a separate capture. -->
 ```text
 A>A:BAZA TIMES.BAS
 ?SYNTAX ERROR IN 95
@@ -173,8 +208,9 @@ A>A:BAZA TIMES.BAS
 
 The message names BASIC line 95. TED then opened TIMES.BAS with the cursor on
 the file's line 10, where the faulty line is, and the same message on its
-status row. BAZA records the file's line for TED in `THOR.ERR`, beside the
-source, when TED's session file `THOR.SES` is there. TED reads that record
+status row. BAZA records the file's line for TED in `THOR.ERR` when TED's
+session file `THOR.SES` is on the current drive, beside the source in these
+examples. TED reads that record
 and removes it. Correct or delete the line, then build again.
 
 The failed compile left the earlier TIMES.COM exactly as it was. BAZA writes
