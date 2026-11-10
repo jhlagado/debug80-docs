@@ -11,7 +11,9 @@ nav_group: "Reference"
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      No build, import, test, capture or physical-board run was performed.
      The diagnostics cost below retains the historical78127ec documentation
-     account. Current cold-default claims use the source above. -->
+     account. Current cold-default claims use the source above.
+     Retired diagnostics ROM tests are cited at a1023bd:, and the current
+     board diagnostics at 755636b: (TEC-OS 755636b130241173c5c30a0be8fe6b79cf2fee37). -->
 
 TEC-OS shares several ports with the board's displays, serial line and speaker.
 The tables here give the connections its code uses. They also identify the
@@ -103,8 +105,11 @@ The keypad sample and serial input are separate reads
 `src/console.asm:286-337`).
 
 The board documents and the model describe other bits of `03h` differently.
-Both describe bit 6 as low while a keypad key is down. Diagnostic T11 records
-the port's behaviour on the board being tested. The physical Protect and
+Both describe bit 6 as low while a keypad key is down. The retired
+diagnostics ROM's T11 recorded the port's readings
+(`a1023bd:docs/diagnostics.md:166-169`). The current board diagnostics do not
+read it, and which description is true on the board is still open
+(`755636b:docs/diagnostics.md:388-391`). The physical Protect and
 Expand switches are not input conditions checked by TEC-OS. They are distinct
 from the similarly named bits it writes to the system latch.
 
@@ -139,8 +144,10 @@ explains the memory boundary.
 
 The model decodes bits 3–6 as a further bank field. The board documents
 show them unconnected to U9. TEC-OS uses only bit 2 among bits 2–6.
-Diagnostic T12 records how an actual board decodes those bits rather than
-assuming the model's extra banks exist there.
+The retired diagnostics ROM's T12 mapped what those bits select
+(`a1023bd:docs/diagnostics.md:185-190`). The current board diagnostics change
+only bit 2 and do not probe bits 3–6, so how a board decodes them remains
+unrecorded (`755636b:docs/diagnostics.md:397-399`).
 
 ## U9 and the RAM
 
@@ -148,8 +155,9 @@ The board's fixed RAM provides `0000h–7FFFh`. A 32 KiB chip in U9 supplies
 two 16 KiB halves behind `8000h–BFFFh`, called EXPAND 0 and EXPAND 1.
 TEC-OS needs both, for 64 KiB of physical RAM in total. The board's recommended
 build leaves U9 empty. The prepared setup therefore adds a 62256 or similar
-and sets the EXPAND jumpers for a 32 KiB chip, as `a1023bd:docs/board-run.md`
-specifies.
+and sets the EXPAND jumpers for a 32 KiB chip. That setting is recorded in
+the earlier board checklist (`a1023bd:docs/board-run.md:45-47`). The current
+checklist does not repeat it.
 
 Before printing the banner, cold boot checks both ends of the visible window
 with complementary patterns and checks for the separate half behind it. Failure
@@ -207,8 +215,11 @@ historical preparation. It is not a starter-card file.
 
 The board's port list instead gives `05h` and `06h` as the X and Y axes of
 a single-colour matrix. DEMO's pattern need not look the same on that wiring.
-Diagnostic T24 provides a visual procedure for recording the actual pattern.
-A host-model picture cannot settle that board difference.
+The retired diagnostics ROM's T24 had a visual procedure for recording the
+pattern (`a1023bd:docs/diagnostics.md:352-355`). The current board diagnostics
+do not check the 8 × 8 LEDs, so the board's wiring is still unrecorded
+(`755636b:docs/diagnostics.md:380-381`). A host-model picture cannot settle
+that board difference.
 
 ## The DS1302 clock
 
@@ -267,5 +278,9 @@ latch afterwards. It uses no stack while the bank is visible
 historical diagnostics documentation at `78127ec` gives 354,216 T-states per
 block plus 678 for each token poll, about 89 ms at 4 MHz. That is the separate
 diagnostics driver's cost account, not a fresh TEC-OS block measurement.
-Diagnostic T20 and the timed T34 procedure allow a board's behaviour to be
-recorded alongside its image and board revision.
+The retired ROM recorded a board's token polls with T20 and its read rate
+with the timed T34 (`a1023bd:docs/diagnostics.md:283-290`,
+`a1023bd:docs/diagnostics.md:430-433`). The current board diagnostics record
+them with SD3's margins and SD6's read speed, timed by the DS1302 or by a
+stopwatch between two beeps, in a log that names its image
+(`755636b:docs/diagnostics.md:168-173`, `755636b:docs/diagnostics.md:193-196`).
