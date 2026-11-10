@@ -2410,6 +2410,10 @@ export const sidebars = {
           "link": "/tec-os/02-make-a-small-program.html"
         },
         {
+          "text": "Build a BASIC program",
+          "link": "/tec-os/03-build-a-basic-program.html"
+        },
+        {
           "text": "Work with files",
           "link": "/tec-os/04-work-with-files.html"
         },

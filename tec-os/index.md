@@ -11,6 +11,10 @@ nav_exclude: true
      Selected mechanism source962853f, tested8b8664a.
      C16 release recheck: reader source citations now use release-1
      TEC-OS a1023bd; release TED.COM is Thorium 168e89c (75fd6c64).
+     Release-card update: TEC-OS 755636b (card-r1b) has the nine-file
+     starter card, TED.COM Thorium 967678c (150a19bd), BAZA.COM and
+     BAZA.RTL Baza fbfedb6, and the MON3-loaded diagnostics (DIAG.HEX).
+     Chapter 3 and the pages naming the card's files cite that revision.
      Public workflows accepted by Origo review4b5b5a50 from attempt02/e77c7ef0.
      Bounded opening craft/factual reviews closed d9d57d2/b911e84.
      That whole batch remains FAILED. Later service controls are separate.
@@ -18,8 +22,8 @@ nav_exclude: true
      are not accepted by this front-door metadata. -->
 
 With TEC-OS in its ROM the TEC-1G starts at a command prompt. You can list
-files on an SD card and run a supplied program before using the editor and
-assembler to make one of your own. TEC-OS provides the CP/M 2.2 programming
+files on an SD card and run a supplied program before using the editor,
+the assembler or the BASIC compiler to make one of your own. TEC-OS provides the CP/M 2.2 programming
 interface and calls for the board's devices.
 
 ## Starting with a prepared machine
@@ -34,8 +38,11 @@ drive B. Hardware preparation is described in
 [First session](01-first-session.md) begins with that preparation complete.
 [Make a small program](02-make-a-small-program.md)
 continues with a short banner entered in TED. You save it, build it with TAS,
-change its text and run it again. These two sessions introduce the keys and
-commands they use without requiring an earlier CP/M or assembly course.
+change its text and run it again.
+[Build a BASIC program](03-build-a-basic-program.md) compiles the supplied
+TIMES.BAS with BAZA and builds it from TED with the same keys. These sessions
+introduce the keys and commands they use without requiring an earlier CP/M,
+BASIC or assembly course.
 
 The banner is a guided copy-and-change exercise. Its instructions and data
 are explained beside the listing. The later programming chapters assume you
@@ -77,6 +84,7 @@ Sizes in bytes are decimal. A KiB is 1,024 bytes and a MiB is 1,024 KiB.
 | --- | --- |
 | [1. First session](01-first-session.md) | Power on, find files, run supplied SAMPLE and preserve work |
 | [2. Make a small program](02-make-a-small-program.md) | Enter, save, build, change and run a banner |
+| [3. Build a BASIC program](03-build-a-basic-program.md) | Compile and run TIMES.BAS with BAZA and build it from TED |
 | [4. Work with files](04-work-with-files.md) | Read, copy, rename and erase files and control long listings |
 | [5. Drives and user areas](05-drives-and-user-areas.md) | Locate programs, select volumes and use resident services |
 | [6. Cards on the PC](06-cards-on-the-pc.md) | Copy, check, recover and prepare card images |
@@ -111,7 +119,7 @@ Sizes in bytes are decimal. A KiB is 1,024 bytes and a MiB is 1,024 KiB.
 | [25. Loading and removing services](25-loading-and-removing-services.md) | Relocation, publication and rollback |
 | [26. Startup inside the CCP](26-startup-inside-the-ccp.md) | Reading lines and handling absent displays |
 | [27. Build the ROM and media](27-build-the-rom-and-media.md) | Source, generated data and qualified artifacts |
-| [28. Diagnose the machine](28-diagnose-the-machine.md) | Card errors and the separate diagnostics ROM |
+| [28. Diagnose the machine](28-diagnose-the-machine.md) | Card errors and the board diagnostics loaded by MON3 |
 | [29. The host model as evidence](29-the-host-model-as-evidence.md) | Host machine, captures, tests and their limits |
 
 ## Reference
