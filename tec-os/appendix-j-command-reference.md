@@ -293,12 +293,16 @@ the starter card does. `/E` follows the name after a space, and the text
 after it is the application's command tail. A service installed from a file
 of that name is entered without reading the card. Otherwise the file is read
 from the named or current drive and installed, then entered once its `INIT`
-has made it ready. With two copies installed, `/E` is refused until
-`UNLOAD` leaves one. Any other switch, such as `/X`, is refused before a
-file is opened. The application ends with a warm boot and its service stays
-installed, so `UNLOAD` removes it as before
+has made it ready. A file with no execution record, such as `GLCD.SVC`, is
+refused before anything is installed, even when that service is already in.
+With two copies installed, `/E` is refused until `UNLOAD` leaves one. Any
+other switch, such as `/X`, is refused before a file is opened. Each refusal
+prints the command's name with a question mark, as `GLCD.SVC?`, and sets
+return code FF00h. The application ends with a warm boot and its service
+stays installed, so `UNLOAD` removes it as before
 (`31b6083:docs/services.md:81-84`, `31b6083:docs/services.md:99-132`,
-`31b6083:docs/services.md:180-182`).
+`31b6083:docs/services.md:180-182`, `31b6083:src/loader.asm:762-771`,
+`31b6083:test/mon3.test.mjs:213-225`).
 
 ## Programs on the starter card
 

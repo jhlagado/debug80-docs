@@ -55,7 +55,7 @@ host dependencies and `npm run inputs` prepares the application inputs.
 At TEC-OS `31b6083` these are TED.COM and TAS.COM from Thorium and
 BAZA.COM, BAZA.RTL and the page card's BOUNCE.BAS from Baza. The same step
 also fetches MON-3's ROM, `MON3.BIN`, which only the tests read
-(`31b6083:test/inputs.json:3-63`).
+(`31b6083:test/inputs.json:3-63`, `31b6083:docs/mon3.md:7-11`).
 The inspected `package.json` selects `atom-z80` 0.3.7. The normal production
 path uses TAS for the main ROM, the board diagnostics, `GLCD.SVC`,
 `MOUNT.COM` and `DEMO.COM`. The diagnostics always use TAS. The standalone
