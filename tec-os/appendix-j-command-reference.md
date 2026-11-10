@@ -317,7 +317,6 @@ The web page's card holds these nine files and three more, twelve in all
 | `DEMO.ASM` | DEMO.COM's source. `TED DEMO.ASM` opens it and `TAS DEMO` builds the same DEMO.COM |
 | `BOUNCE.BAS` | A sprite game for the PICO9918, which it needs. `BAZA BOUNCE`, then `BOUNCE`. Tap W, A, S and D to steer and Q to quit |
 
-
 ## Several commands
 
 An exclamation mark ends one command piece and starts another. Empty pieces

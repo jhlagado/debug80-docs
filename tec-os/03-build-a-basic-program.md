@@ -78,10 +78,12 @@ text is in capitals. Outside quotes, `rem` remarks and `data` items, BAZA
 folds letters to capitals and ignores spaces and tabs, so `print` and
 `PRINT` are the same keyword and `n<1` and `n < 1` the same comparison. The
 bytes inside quotes are kept as written, which is why the program's output
-is in capitals (`Baza ae6a00d:docs/language.md:19`,
-`Baza ae6a00d:src/lex.asm:12-20`). Commands typed at the prompt, such as
+is in capitals (`Baza ae6a00d:docs/language.md:19`). The lexer does the
+folding and keeps quotes, remarks and `data` items as they are
+(`Baza ae6a00d:src/lex.asm:17-19`). Commands typed at the prompt, such as
 `BAZA TIMES`, are written in capitals in this book, though the command
-processor also accepts them in lower case.
+processor also accepts them in lower case. The host-model test types
+`baza times` (`test/times.test.mjs:81`).
 
 ## A compiler and its library
 
@@ -269,12 +271,15 @@ way. Three of its lines show the pattern
 `rom 15` the font service. A name can also be a quoted service record with
 a version and an entry number, found when the `def call` runs, or an
 address (`Baza ae6a00d:docs/call.md:16-26`). Each argument of `call` loads
-one register: `a` to `l` take a byte and `bc`, `de` and `hl` a word, or the
-address of a string variable's bytes. After the call `reg("HL")` gives the
+one register: `a`, `b`, `c`, `d`, `e`, `h` and `l` take a byte and `bc`,
+`de` and `hl` a word, or the address of a string variable's bytes. After the call `reg("HL")` gives the
 value the routine left in HL, and `reg("CY")` its carry. `call` raises no
 error itself, so a routine that reports failure is checked with `reg`
 (`Baza ae6a00d:docs/call.md:40-65`). Line 170 asks the font service for the
-font's address and copies 768 bytes from it to the PICO9918's memory.
+font's address and copies 768 bytes from it to the PICO9918's memory with
+`vw`. Line 90 defines `vw` as `"PICO", 3, 10`, entry 10 of the PICO
+console's record, which copies RAM to VRAM
+(`Baza ae6a00d:examples/BOUNCE.BAS:9`, `Baza ae6a00d:docs/call.md:24-25`).
 
 On the web page's card, `BAZA BOUNCE` compiles it and `BOUNCE` runs it on
 the PICO9918, which it needs. Tap W, A, S and D to steer the ship. Q ends

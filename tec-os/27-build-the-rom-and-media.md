@@ -45,7 +45,7 @@ retain their separate historical evidence.
 
 The repository requires Node.js 20 or later. `npm ci` installs its locked
 host dependencies and `npm run inputs` prepares the application inputs.
-At the release-card source these are TED.COM and TAS.COM from Thorium and
+At TEC-OS `12b2ec5` these are TED.COM and TAS.COM from Thorium and
 BAZA.COM, BAZA.RTL and the page card's BOUNCE.BAS from Baza
 (`12b2ec5:test/inputs.json:3-54`).
 The inspected `package.json` selects `atom-z80` 0.3.7. The normal production
