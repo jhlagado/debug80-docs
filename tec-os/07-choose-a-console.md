@@ -127,7 +127,7 @@ selects the serial terminal and reports `CON: TTY:`.
 console code is in ROM so selecting it loads no service file. The graphics-LCD
 driver is a file on drive A. It loads into RAM and reduces the space left for
 programs. Chapter
-10 explains that memory boundary.
+11 explains that memory boundary.
 
 `CON UC1` loads `GLCD.SVC` from drive A if it is not installed. A failed load
 leaves the console where it was and shows `GLCD?` on the 20 × 4 LCD. Here both

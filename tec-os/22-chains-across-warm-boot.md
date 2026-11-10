@@ -257,7 +257,7 @@ jumps through the RAM BIOS warm-boot entry `BIOWBT`
 - `BDERR` takes the default disk-error path. `DISKMSG` prints `Bdos Err On`, the
   drive and the cause, then `GETCHAR` waits for a key. The exit jumps to
   `CHDROP` (`src/cpm/bdoscon.asm:46-64`, `src/cpm/bdoscon.asm:99-109`). Chapter
-  19 explains the four causes.
+  20 explains the four causes.
 
 Function 45 can select a returned error instead. With `ERRMODE = FFh`,
 `BDERR` returns `A = FFh` and `H` holding the error code from 1 to 4,

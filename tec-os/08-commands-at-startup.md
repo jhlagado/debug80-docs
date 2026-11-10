@@ -351,7 +351,7 @@ installation, provided the Matrix switch is enabled.
 At the serial prompt you can erase the bad file with `ERA STARTUP.CMD` or
 replace it with corrected text then reset. The startup file is in user area 0 of
 A so recovery must address that location. Without a usable terminal, the Chapter
-5 card tools can replace or erase it on a PC. A recognised reset with a skip
+6 card tools can replace or erase it on a PC. A recognised reset with a skip
 retains valid drive assignments just as it does without a skip.
 
 The web page has no hex keypad. Its Copy file to drive and New starter card

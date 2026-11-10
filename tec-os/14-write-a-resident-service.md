@@ -441,7 +441,7 @@ result so a following `:` piece can run. Retained-page failures, failed file
 validation and rejected records do not receive that exception. A driver that
 finds its device absent can use the same return convention.
 [Chapter 8](08-commands-at-startup.md) describes the startup policy and Chapter
-12 explains conditional pieces.
+13 explains conditional pieces.
 
 ### REMOVE and a hook on a hook
 
