@@ -15,7 +15,10 @@ nav_group: "Reference"
      2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;
      TAS.COM Thoriumdbee66a SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     No example, artifact or application pin was refreshed. -->
+     No example, artifact or application pin was refreshed.
+     Citations prefixed 755636b: and the release-card file list use TEC-OS
+     755636b130241173c5c30a0be8fe6b79cf2fee37 (tools/media.mjs,
+     test/starter.test.mjs). No release-card tecvol listing was captured. -->
 
 `tecvol` edits TEC-OS card images on a PC. It creates volumes, inspects their
 files and directories, copies files and writes an image to a physical device.
@@ -186,7 +189,10 @@ node tools/tecvol.mjs dir dist/starter.img A
 ```
 
 MOUNT was 671 bytes in `dist/files` and occupies six records, 768 bytes, on
-the card. The other sizes likewise belong to those historical inputs.
+the card. The other sizes likewise belong to those historical inputs. The
+release starter card's A holds nine files: these six, with the release
+TED.COM and SAMPLE.ASM, and TIMES.BAS, BAZA.COM and BAZA.RTL
+(`755636b:tools/media.mjs:197-211`, `755636b:test/starter.test.mjs:36-62`).
 
 ## put
 
@@ -313,7 +319,8 @@ for New starter card.
 
 `npm run media` prepares `dist/starter.recipe.json` and its image. It also
 writes `dist/page.recipe.json`, which has the starter files plus DEMO and
-its own id, name and instructions (`tools/media.mjs:206-262`). Chapter 27
+its own id, name and instructions (`755636b:tools/media.mjs:215-242`,
+`264`). Chapter 27
 describes that preparation. The retained historical rebuild produced these
 matching hashes:
 

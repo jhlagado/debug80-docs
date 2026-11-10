@@ -245,7 +245,9 @@ A>
 ```
 
 `MOUNT` ended in a warm boot, which kept 32 columns. `DIR` fits two names on
-each row here instead of the six in an 80-column listing.
+each row here instead of the six in an 80-column listing. The historical card
+had six files. The release starter card has nine, adding `TIMES.BAS`,
+`BAZA.COM` and `BAZA.RTL`, so the same listing takes five rows.
 
 An unsupported width, a width after another device name or a number joined to
 `CRT` without a space produces a question mark. The console remains as it was:

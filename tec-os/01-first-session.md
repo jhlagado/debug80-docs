@@ -19,7 +19,11 @@ nav_group: "Using the machine"
      acceptance.
      Keyboard correction/recall and failure advice are source-backed actions,
      not additional captured workflows. Historical material keeps its pins
-     in the pass record. No final integration or publication claim. -->
+     in the pass record. No final integration or publication claim.
+     Release-card text: the nine starter files are those of TEC-OS
+     755636b130241173c5c30a0be8fe6b79cf2fee37 tools/media.mjs and
+     test/starter.test.mjs. The DIR excerpt below keeps the six-file card
+     of attempt02; no nine-file DIR capture is claimed. -->
 
 Your first session starts with the supplied files. You list them, change drive
 and turn SAMPLE's source into a program you can run. Before finishing you write
@@ -82,6 +86,10 @@ TED.COM      SAMPLE.ASM   TAS.COM
 A>
 ```
 
+That listing is from an earlier starter card with six files. The release
+card also holds TIMES.BAS, BAZA.COM and BAZA.RTL, so its listing has nine
+names and its last line reports nine files.
+
 Each name has up to eight characters followed by a type of up to three
 characters. A full stop separates the two when you type a name. In
 `SAMPLE.ASM`, SAMPLE is the name and ASM is the type. The `.ASM` file holds
@@ -89,11 +97,12 @@ source text. A `.COM` file holds a program that TEC-OS can run.
 
 `TAS` is the assembler supplied on the card. It turns source text into a
 program. `TED` is the supplied text editor and `MOUNT` manages volumes.
-The automatic display setup uses `GLCD.SVC` and `STARTUP.CMD`. Leave them
-as supplied for this session.
+`BAZA` is a BASIC compiler, which uses its library `BAZA.RTL`, and
+`TIMES.BAS` is a BASIC program for it. The automatic display setup uses
+`GLCD.SVC` and `STARTUP.CMD`. Leave them as supplied for this session.
 
-The last line reports six files and the free space on A. That space is in
-KiB, units of 1,024 bytes. The spelling `980K` is the listing's notation.
+The last line reports the number of files and the free space on A. That
+space is in KiB, units of 1,024 bytes. The spelling `980K` is the listing's notation.
 The card's WORK volume on B starts empty and is available for your files.
 
 ## Correcting and recalling a line

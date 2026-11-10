@@ -20,7 +20,12 @@ nav_group: "Inside TEC-OS"
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      TED is Thorium128edb7, SHA-256
      2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f.
-     Historical PC assembly used atom-z80 0.3.7. No BANNER40 proof is implied. -->
+     Historical PC assembly used atom-z80 0.3.7. No BANNER40 proof is implied.
+     Release-card passages (the four application inputs, the board
+     diagnostics and the nine starter files) cite TEC-OS
+     755636b130241173c5c30a0be8fe6b79cf2fee37 with a 755636b: prefix.
+     Release TED.COM is Thorium 967678c (150a19bd…); BAZA.COM and BAZA.RTL
+     are Baza fbfedb6 (725570a6…, 5854bfb6…). Source reading only. -->
 
 A ROM and its symbol map must describe the same addresses. Card programs
 must use the interfaces supplied by that ROM. TEC-OS produces the image,
@@ -37,11 +42,14 @@ retain their separate historical evidence.
 
 The repository requires Node.js 20 or later. `npm ci` installs its locked
 host dependencies and `npm run inputs` prepares the application inputs.
+At the release-card source these are TED.COM and TAS.COM from Thorium and
+BAZA.COM and BAZA.RTL from Baza (`755636b:test/inputs.json:3-44`).
 The inspected `package.json` selects `atom-z80` 0.3.7. The normal production
-path at this source uses TAS for the main ROM, diagnostic ROM, `GLCD.SVC`,
-`MOUNT.COM` and `DEMO.COM`. The standalone ATOM examples use a separate
-assembly path (`package.json:1-31`, `tools/build.mjs:342-351`,
-`tools/diag.mjs:103-110`, `tools/media.mjs:186-207`).
+path uses TAS for the main ROM, the board diagnostics, `GLCD.SVC`,
+`MOUNT.COM` and `DEMO.COM`. The diagnostics always use TAS. The standalone
+ATOM examples use a separate assembly path (`package.json:1-31`,
+`tools/build.mjs:342-351`, `755636b:tools/diag.mjs:143-146`,
+`755636b:tools/media.mjs:186-196`, `755636b:README.md:89-92`).
 
 `TAS.COM` is pinned to Thorium
 `dbee66a90816df9a5884a08754ebc2d458a38325`. Its prepared host is from
@@ -53,8 +61,10 @@ existing host. The checks cover the runner, lock file, locked Z80 runtime
 and the 10,295-byte TAS executable (`tools/lib/tas-rom.mjs:10-11`,
 `tools/lib/tas-rom.mjs:77-98`, `test/inputs.json:4-13`).
 
-The input selection order is an explicit `TAS_COM` or `TED_COM` then
-`.inputs/NAME` then the legacy sibling file under `../thorium/dist/`.
+The input selection order is an explicit `TAS_COM`, `TED_COM`,
+`BAZA_COM` or `BAZA_RTL` then `.inputs/NAME` then the legacy sibling file
+under `../thorium/dist/` or `../baza/dist/`
+(`755636b:README.md:79-87`).
 The selected file must match its size and SHA-256. An empty override,
 invalid local file or wrong selected binary stops the operation. Selection
 does not fall through to another candidate after a mismatch
@@ -67,8 +77,10 @@ temporary download before replacing the local input
 is used. An empty host override is an error. Assembly reads local prepared
 files and does not download them (`tools/lib/tas-rom.mjs:77-107`).
 After preparation, `npm run build` constructs the main ROM, `npm run diag`
-constructs the separate diagnostic ROM and `npm run media` prepares the
-distribution (`package.json:14-23`). The explicit ATOM reference selection is:
+assembles the board diagnostics, `DIAG.HEX` and `DIAG.BIN` for MON3 to load
+at `4000h`, and `npm run media` prepares the distribution
+(`package.json:14-23`, `755636b:tools/diag.mjs:1-9`). Chapter 28 describes
+the diagnostics. The explicit ATOM reference selection is:
 
 ```sh
 TECOS_ROM_ASSEMBLER=atom npm run build
@@ -240,8 +252,8 @@ sources, edits and limits of the original glyph attribution
 In the historical `78127ec` map the font occupied `C179h–C478h`. PICO accesses
 `FONT` by label and GLCD obtains its address through numbered service 15
 (`src/pico.asm:250-257`, `src/services.asm:504-510`,
-`drivers/glcd.asm:60-64`). The diagnostic ROM and tests use the same font
-parser (`tools/diag.mjs:76-76`, `test/lib/machine.mjs:8-10`).
+`drivers/glcd.asm:60-64`). The tests use the same font parser
+(`test/lib/machine.mjs:8-10`).
 
 ## Two passes to place the workspace
 
@@ -331,21 +343,24 @@ Media preparation validates the font package before preparing or replacing
 outputs (`tools/media.mjs:169-170`). It checks the map's generator against
 the selected backend then checks ROM length and SHA-256 against the census.
 It assembles MOUNT, GLCD and DEMO through that selection and validates pinned
-TED and TAS before preparing the recipes (`tools/media.mjs:169-207`). The TAS
+TED, TAS, BAZA.COM and BAZA.RTL before preparing the recipes
+(`755636b:tools/media.mjs:169-213`). The TAS
 GLCD writer compares flat assemblies at `0100h` and `0200h`, checks their
 header and relative symbols and packs the relocation data. The distribution
 COM writer checks the declared zero-filled buffers of MOUNT and DEMO
 (`tools/lib/tas-distribution.mjs:12-55`).
 
 The starter recipe contains SYSTEM as G1M on A and written-behind WORK as
-G8M on B. A holds MOUNT, GLCD, STARTUP, TED, SAMPLE source and TAS.
-`STARTUP.CMD` contains the GLCD installation line. The page recipe adds
-DEMO. Component entries record each file's size and SHA-256. Assemblies
-and recipe construction finish before the output replacement begins
-(`tools/media.mjs:195-257`, `tools/lib/starter.mjs:10-16`). Output files
-are replaced individually after those preparation checks. The distribution
-also receives `FONT-NOTICES.txt` as a companion to its artifacts, separate
-from the six starter-card files (`tools/media.mjs:252-262`).
+G8M on B. A holds nine files: MOUNT, GLCD, STARTUP, TED, the SAMPLE
+assembly source, the TIMES BASIC source, TAS, BAZA and BAZA's runtime
+library `BAZA.RTL`. `STARTUP.CMD` contains the GLCD installation line. The
+page recipe adds DEMO. Component entries record each file's size and
+SHA-256. Assemblies and recipe construction finish before the output
+replacement begins (`755636b:tools/media.mjs:197-244`,
+`tools/lib/starter.mjs:10-16`). Output files are replaced individually after
+those preparation checks. The distribution also receives `FONT-NOTICES.txt`
+as a companion to its artifacts, separate from the nine starter-card files
+(`755636b:tools/media.mjs:258-268`).
 
 Media also writes `docs/memory-map.md` and refreshes the ROM-space spans
 in `docs/rom-services.md` from the census (`tools/media.mjs:46-65`,

@@ -285,6 +285,9 @@ SAMPLE.ASM   TAS.COM
 A>
 ```
 
+That card had the six historical starter files. The release starter card
+has nine, with `TIMES.BAS`, `BAZA.COM` and `BAZA.RTL` added.
+
 Where the ROM PICO console did not start, a startup width command passes
 quietly. The same command typed there reports the width with `?`, such as
 `32?`. The historical serial-only run of that same card showed both

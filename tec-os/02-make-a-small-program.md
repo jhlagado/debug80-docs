@@ -18,7 +18,11 @@ nav_group: "Using the machine"
      Exact hashes, source proofs and excerpt boundaries: 02-pass-record.md.
      Whole batch FAILED later. This covered host-model workflow qualifies no
      advanced service, physical-board, browser, audio or publication result.
-     Historical HELLO evidence is not transferred into this BANNER session. -->
+     Historical HELLO evidence is not transferred into this BANNER session.
+     Release card: TED.COM Thorium 967678c (SHA-256 150a19bd…, TEC-OS
+     755636b test/inputs.json), whose language table builds an .ASM with
+     TAS NAME.ASM as before (Thorium README at 967678c). The captures below
+     keep TED 128edb7 and were not rerun with it. -->
 
 SAMPLE came with its source already on the card. BANNER begins as text you
 enter yourself. It prints a greeting, which you can change and build again
@@ -77,7 +81,9 @@ it. At line 14 type `BROKEN` and press Return. The cursor moves to `L15 C1`.
 Saving text does not establish that it is a valid program.
 
 TED's build keys use a prefix. `^T B` means Ctrl and T together followed by
-B with Ctrl released. It saves the source and runs TAS to assemble it. The
+B with Ctrl released. For an `.ASM` file it saves the source and runs TAS to
+assemble it. Chapter 3 uses the same keys on a BASIC source, which TED builds
+with BAZA. The
 following console excerpt is from that rejected build before TED redraws
 the editor. The initial screen-clear controls, leading blank line and editor
 redraw after the last line are omitted:

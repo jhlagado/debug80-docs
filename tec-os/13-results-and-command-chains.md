@@ -14,7 +14,12 @@ nav_group: "Writing programs"
      TAS.COM, Thorium dbee66a, SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      TED.COM, Thorium 128edb7, SHA-256
-     2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f. -->
+     2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f.
+     TED's key table and BAZA's return code: release card at TEC-OS
+     755636b130241173c5c30a0be8fe6b79cf2fee37, TED.COM Thorium 967678c
+     (150a19bd…), BAZA Baza fbfedb6, from docs/compatibility.md:188-190
+     and test/ted-baza.test.mjs, test/times.test.mjs at that revision.
+     Source-only reading. No run of these keys was made for this chapter. -->
 
 You can join commands on a line and make later pieces depend on success.
 Your programs report that result through a return code. They can also
@@ -363,24 +368,30 @@ and how the CCP processes the copied line.
 ## TED's build and return
 
 TED's `^T` prefix uses function 47 to end the current editor program and
-run a command. For a build, its line invokes TAS and then TED again.
-The editor's file and cursor position are saved for that new invocation.
-The operational build and run keys from Chapter 2 are included here with
-the other prefix commands:
+run a command. For a build, its line invokes the build tool and then TED
+again. The editor's file and cursor position are saved for that new
+invocation. The tool depends on the source's type: TAS for an `.ASM` file
+and BAZA for a `.BAS` file. Any other type is plain text, and the keys then
+build the project's source if `THOR.PRJ` names one. The operational build
+and run keys from Chapters 2 and 3 are included here with the other prefix
+commands:
 
 | Keys | Effect |
 | --- | --- |
-| `^T B` | Saves the file and builds it with `TAS`. A failed build opens at the error |
+| `^T B` | Saves the file and builds it with `TAS` or `BAZA`. A failed build opens at the error |
 | `^T R` | Builds the program as `^T B` does, then runs it |
-| `^T D` | Runs the program under `TDB`, a debugger the starter card does not contain |
+| `^T D` | For an `.ASM` file, runs the program under `TDB`, a debugger the starter card does not contain. For a `.BAS` file, shows `No debugger` and runs nothing |
 | `^T O` | Opens another file, named at a prompt |
 | `^T F` | Opens the previous file again |
 
+Because `TDB` is absent, `^T D` on an `.ASM` file ends with the CCP's
+`A:TDB?` and the chained `A:TED` then reopens the editor at its place.
+
 Chapter 11 explains the load-drive byte at `0050h`. TED uses that byte to
 prefix the tools' names. With tools loaded from A and source on current
-drive B, the build line invokes `A:TAS` and `A:TED`. The tools remain on A
-and the source on B. The editor is a new program invocation each
-time it returns through the CCP.
+drive B, the build line invokes `A:TAS` or `A:BAZA` and then `A:TED`. The
+tools remain on A and the source on B. The editor is a new program
+invocation each time it returns through the CCP.
 
 TAS writes a `.DBG` debug file beside the source and its `.COM` output.
 For the historical `HELLO` example these are `HELLO.DBG` and `HELLO.COM`.

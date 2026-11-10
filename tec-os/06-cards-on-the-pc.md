@@ -8,6 +8,8 @@ nav_group: "Using the machine"
 # 6. Cards on the PC
 
 <!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
+     Release-card file note: TEC-OS 755636b tools/media.mjs:197-211 and
+     test/starter.test.mjs:36-62; TED.COM there is Thorium 967678c.
      Inherited recipes and output are historical TEC-OS 78127ec evidence.
      Original old03/04/05 inputs: TED.COM Thorium 128edb7,
      SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;
@@ -154,7 +156,10 @@ The complete A listing includes TED's project and session files:
 ```
 
 That listing comes from an earlier card. On the release 1 card `SAMPLE.ASM`
-takes 4608 bytes, holding the 4,485 bytes of the 40-column sample.
+takes 4608 bytes, holding the 4,485 bytes of the 40-column sample. That
+card's A also holds `TIMES.BAS`, `BAZA.COM` and `BAZA.RTL`, the BASIC
+source and compiler of [Chapter 3](03-build-a-basic-program.md), and its
+`TED.COM` is a later build.
 
 B contains the source, program and debug file:
 
