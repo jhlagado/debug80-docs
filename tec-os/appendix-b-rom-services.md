@@ -259,10 +259,11 @@ Returns B = active joystick lines as 1 bits, from complemented input at port
 cost: 214 T-states at `60e0768` (`src/services.asm:266-283`).
 
 That address also selects matrix row 3. A pressed switch there can appear as a
-joystick bit and a joystick line can appear as a matrix key. The diagnostic ROM
-labels the bits after MON-3 as `01h` up, `02h` down, `04h` left, `08h` right,
-`10h` fire 2, `20h` pin 9, `40h` fire 1 and `80h` fire 3. Those physical labels
-remain unconfirmed (`diag/interact.asm:615-619`).
+joystick bit and a joystick line can appear as a matrix key. The retired
+diagnostics ROM labelled the bits after MON-3 as `01h` up, `02h` down, `04h`
+left, `08h` right, `10h` fire 2, `20h` pin 9, `40h` fire 1 and `80h` fire 3.
+Those physical labels remain unconfirmed
+(`a1023bd:diag/interact.asm:615-619`).
 
 ### 6 KEYS
 

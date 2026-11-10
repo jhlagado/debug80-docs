@@ -110,9 +110,10 @@ Recording happens before the underlying memory hook processes the write
 (`host/machine.mjs:215-233`). The watch reports an attempted operation,
 not proof that a ROM byte changed.
 
-Ordinary TEC-OS tests assert an empty violations list. The diagnostics tests
-deliberately exercise ROM and overlay writes and check their recorded
-locations instead (`test/system.test.mjs:14`, `test/diag.test.mjs:78-90`).
+Ordinary TEC-OS tests assert an empty violations list. At `a1023bd` the tests
+of the since-retired diagnostics ROM deliberately exercised ROM and overlay
+writes and checked their recorded locations instead
+(`test/system.test.mjs:14`, `a1023bd:test/diag.test.mjs:78-90`).
 At the inspected source, 29 top-level test files contain violation checks
 outside the diagnostics file. This is a source inventory, not 29 passing
 test files and not a guarantee about unexercised program paths.
@@ -431,22 +432,22 @@ artifact or board.
 The runtime sends overlay writes to underlying RAM and permits latch readback.
 The board documentation instead selects ROM under the overlay and describes the
 latch as write-only. The legacy bank-field decode uses latch bits 3–6. The
-diagnostic source asserts its nine window banks plus the base mapping, which
-must not be attributed to the documented board (`test/diag.test.mjs:121-123`).
-The `ram96` mapping is a separate configuration, not a repair to every
-legacy-model result. Diagnostics T08, T10 and T12 probe these differences.
-TEC-OS avoids overlay writes and latch reads so checked ordinary paths can
-satisfy those restrictions on a more permissive model (`host/machine.mjs:40-46`,
-`host/machine.mjs:155-172`, `docs/diagnostics.md:147-164`,
-`docs/diagnostics.md:187-196`).
+retired diagnostics ROM's test asserted its nine window banks plus the base
+mapping, which must not be attributed to the documented board
+(`a1023bd:test/diag.test.mjs:121-123`). The `ram96` mapping is a separate
+configuration, not a repair to every legacy-model result. That ROM's T08,
+T10 and T12 probed these differences. TEC-OS avoids overlay writes and latch
+reads so checked ordinary paths can satisfy those restrictions on a more
+permissive model (`host/machine.mjs:40-46`, `host/machine.mjs:155-172`,
+`a1023bd:docs/diagnostics.md:147-164`, `a1023bd:docs/diagnostics.md:187-196`,
+`755636b:docs/diagnostics.md:383-399`).
 
-[Chapter 28](28-diagnose-the-machine.md) describes obtaining a board's
-diagnostic report. `tools/diag-check.mjs` requires its image ID to match the
-selected diagnostic ROM and compares the report with that image's model
-report. It lists unmatched tests separately. Measured lines such as bit
-timings and card busy polls are compared by their form with numbers printed
-side by side, not required to have identical values
-(`tools/diag-check.mjs:24-44`, `tools/diag-check.mjs:70-106`,
-`tools/diag-check.mjs:136-160`). A matching report line supports that particular
-board observation. It does not turn
-an untested timing, device or application workflow into physical evidence.
+[Chapter 28](28-diagnose-the-machine.md) describes the board diagnostics,
+a program that MON3 loads on a physical board. Their host-model test
+establishes the program's logic, not a board's behaviour. Each line of a
+board log reports whether that board did what TEC-OS relies on, with no
+model report to compare against (`755636b:docs/diagnostics.md:15-18`,
+`755636b:docs/diagnostics.md:104-127`). The retired ROM's comparison tool,
+`tools/diag-check.mjs`, is absent at that source. A board log's line
+supports that particular board observation. It does not turn an untested
+timing, device or application workflow into physical evidence.

@@ -22,8 +22,8 @@ what an untested physical board will return.
 For the prepared board, fit a 32 KiB RAM chip in U9, set the CPU clock to FAST
 with the 4 MHz oscillator and leave the hex-keypad non-maskable interrupt (NMI)
 jumper off. Enable the Matrix switch when using the matrix keyboard. Chapter 28
-describes the separate diagnostics ROM and the report needed to compare a
-particular board with the model.
+describes the board diagnostics, a program that MON3 loads, and the serial
+log that records what a particular board did.
 
 ## The ports
 
@@ -148,7 +148,8 @@ The board's fixed RAM provides `0000h–7FFFh`. A 32 KiB chip in U9 supplies
 two 16 KiB halves behind `8000h–BFFFh`, called EXPAND 0 and EXPAND 1.
 TEC-OS needs both, for 64 KiB of physical RAM in total. The board's recommended
 build leaves U9 empty. The prepared setup therefore adds a 62256 or similar
-and sets the EXPAND jumpers for a 32 KiB chip, as `docs/board-run.md` specifies.
+and sets the EXPAND jumpers for a 32 KiB chip, as `a1023bd:docs/board-run.md`
+specifies.
 
 Before printing the banner, cold boot checks both ends of the visible window
 with complementary patterns and checks for the separate half behind it. Failure
@@ -167,9 +168,9 @@ With the keypad NMI jumper fitted, a press raises a non-maskable interrupt. The
 CPU pushes its return address and enters `0066h`, inside the default file
 control block (FCB) at `005Ch–007Fh`. TEC-OS installs no NMI handler there. The
 bytes can be file metadata rather than instructions so a press can crash the
-machine. The supported TEC-OS setup leaves the jumper off. The diagnostics ROM
-has its own NMI test and different keypad instructions, which must not be
-applied to an ordinary TEC-OS session.
+machine. The supported TEC-OS setup leaves the jumper off. The board
+diagnostics run under MON3 and use the keypad through MON3. Their keypad
+instructions must not be applied to an ordinary TEC-OS session.
 
 ## The 20 × 4 LCD
 
