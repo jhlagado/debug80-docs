@@ -27,8 +27,11 @@ nav_group: "Inside TEC-OS"
      Release TED.COM is Thorium 967678c (150a19bd…); BAZA.COM and BAZA.RTL
      were Baza fbfedb6 (725570a6…, 5854bfb6…) there. Passages prefixed
      12b2ec5: use TEC-OS 12b2ec5f470844c46cd0c92fea132f1a0ab11c40 (branch
-     card-lower): five inputs, BAZA.COM Baza ae6a00d (ee8465ac…, 15,744
-     bytes) and the twelve-file page card. Source reading only. -->
+     card-lower). Passages prefixed 7fa2823: use TEC-OS
+     7fa2823357b2a96330d0b90bd120702347043116 (main): five inputs, TED.COM
+     Thorium b69d544 (4f622390…, 12,334 bytes), BAZA.COM Baza a9e7b2f
+     (44a0fe17…, 15,872 bytes), BAZA.RTL fab27179…, the eleven-file page
+     card and ROM 3ed68c47… with DEL. Source reading only. -->
 
 A ROM and its symbol map must describe the same addresses. Card programs
 must use the interfaces supplied by that ROM. TEC-OS produces the image,
@@ -45,9 +48,9 @@ retain their separate historical evidence.
 
 The repository requires Node.js 20 or later. `npm ci` installs its locked
 host dependencies and `npm run inputs` prepares the application inputs.
-At TEC-OS `12b2ec5` these are TED.COM and TAS.COM from Thorium and
+At TEC-OS `7fa2823` these are TED.COM and TAS.COM from Thorium and
 BAZA.COM, BAZA.RTL and the page card's BOUNCE.BAS from Baza
-(`12b2ec5:test/inputs.json:3-54`).
+(`7fa2823:test/inputs.json:3-54`).
 The inspected `package.json` selects `atom-z80` 0.3.7. The normal production
 path uses TAS for the main ROM, the board diagnostics, `GLCD.SVC`,
 `MOUNT.COM` and `DEMO.COM`. The diagnostics always use TAS. The standalone
@@ -68,7 +71,7 @@ and the 10,295-byte TAS executable (`tools/lib/tas-rom.mjs:10-11`,
 The input selection order is an explicit `TAS_COM`, `TED_COM`,
 `BAZA_COM`, `BAZA_RTL` or `BOUNCE_BAS` then `.inputs/NAME` then the legacy
 sibling file under `../thorium/dist/`, `../baza/dist/` or `../baza/examples/`
-(`12b2ec5:README.md:79-88`).
+(`7fa2823:README.md:79-88`).
 The selected file must match its size and SHA-256. An empty override,
 invalid local file or wrong selected binary stops the operation. Selection
 does not fall through to another candidate after a mismatch
@@ -113,7 +116,10 @@ code follow, with a single free gap at the end (`src/reset.asm:1-13`,
 Its used extent was 16,018 of 16,384 bytes. These figures describe that
 historical image, not positions in the release-1 image. The map that the
 `a1023bd` media step generated records 16,071 bytes used and 313 free, with
-code ending at `FEC6h` (`docs/memory-map.md:1-30`). The census
+code ending at `FEC6h` (`docs/memory-map.md:1-30`). At TEC-OS `7fa2823`,
+which adds DEL's record to the command table, the map records 16,077 bytes
+used and 307 free, with code ending at `FECCh`
+(`7fa2823:docs/memory-map.md:1-30`). The census
 stores each region's start and exclusive end while the table above prints
 the last occupied address (`tools/build.mjs:273-288`).
 
@@ -348,7 +354,7 @@ outputs (`tools/media.mjs:169-170`). It checks the map's generator against
 the selected backend then checks ROM length and SHA-256 against the census.
 It assembles MOUNT, GLCD and DEMO through that selection and validates pinned
 TED, TAS, BAZA.COM, BAZA.RTL and BOUNCE.BAS before preparing the recipes
-(`12b2ec5:tools/media.mjs:169-217`). The TAS
+(`7fa2823:tools/media.mjs:169-217`). The TAS
 GLCD writer compares flat assemblies at `0100h` and `0200h`, checks their
 header and relative symbols and packs the relocation data. The distribution
 COM writer checks the declared zero-filled buffers of MOUNT and DEMO
@@ -358,8 +364,10 @@ The starter recipe contains SYSTEM as G1M on A and written-behind WORK as
 G8M on B. A holds nine files: MOUNT, GLCD, STARTUP, TED, the SAMPLE
 assembly source, the TIMES BASIC source, TAS, BAZA and BAZA's runtime
 library `BAZA.RTL`. `STARTUP.CMD` contains the GLCD installation line. The
-page recipe adds DEMO.COM, its source DEMO.ASM and BOUNCE.BAS, a BASIC
-game pinned from Baza (`12b2ec5:tools/media.mjs:213-252`). Component
+page recipe adds DEMO's source DEMO.ASM and BOUNCE.BAS, a BASIC game
+pinned from Baza. Media still builds and checks DEMO.COM but writes it
+beside the card's files, not onto the card, where `TAS DEMO` makes it
+(`7fa2823:tools/media.mjs:213-251`, `7fa2823:tools/media.mjs:268-270`). Component
 entries record each file's size and
 SHA-256. Assemblies and recipe construction finish before the output
 replacement begins (`755636b:tools/media.mjs:197-244`,

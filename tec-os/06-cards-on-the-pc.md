@@ -10,7 +10,10 @@ nav_group: "Using the machine"
 <!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Release-card file note: TEC-OS 755636b tools/media.mjs:197-211 and
      test/starter.test.mjs:36-62; TED.COM there is Thorium 967678c.
-     Page-card files: TEC-OS 12b2ec5 tools/media.mjs:240-252.
+     Page-card files and TED's load rule: TEC-OS 7fa2823
+     tools/media.mjs:240-251, docs/compatibility.md:191 and
+     test/ted.test.mjs:92-120; TED.COM there is Thorium b69d544
+     (4f622390…, 12,334 bytes). Source reading only.
      Inherited recipes and output are historical TEC-OS 78127ec evidence.
      Original old03/04/05 inputs: TED.COM Thorium 128edb7,
      SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;
@@ -320,6 +323,13 @@ line endings to carriage return and line feed, appends `^Z` and pads the
 last record with `^Z`. Binary padding is zero. These are file conversions,
 not a way to preserve a PC file's original byte length in a CP/M directory.
 
+A text file put without `--text` therefore ends in zero bytes, not `^Z`.
+The release card's TED takes a run of `00h` that fills the rest of the last
+record as the end of the file, so such a file opens without an error. A
+byte TED rejects elsewhere stops it at the prompt with `EDIT error 03` and
+the byte's line and column, as in `EDIT error 03 L3 C5`
+(TEC-OS 7fa2823 `docs/compatibility.md`, Thorium b69d544 `README.md`).
+
 `era` erases a named file. Like `get`, `put` and `era` use user area 0 unless
 `--user N` selects another.
 
@@ -452,11 +462,12 @@ first and applies `"readOnly": true` last. The protection then belongs to
 the whole volume, independently of each file's attributes.
 
 The browser's New starter card uses `dist/page.recipe.json`, also written
-by media preparation. It has the starter volumes and files plus `DEMO.COM`,
-its source `DEMO.ASM` and the BASIC game `BOUNCE.BAS` on A, twelve files at
-recipe revision 8, while the starter card keeps nine at revision 6
-(TEC-OS 12b2ec5 `tools/media.mjs`). The page uses the same size and SHA-256
-checks, including those of the three added files.
+by media preparation. It has the starter volumes and files plus the demo's
+source `DEMO.ASM` and the BASIC game `BOUNCE.BAS` on A, eleven files at
+recipe revision 9, while the starter card keeps nine at revision 6
+(TEC-OS 7fa2823 `tools/media.mjs`). `TAS DEMO` builds DEMO.COM on the card.
+The page uses the same size and SHA-256 checks, including those of the two
+added files.
 
 ## A protection example
 

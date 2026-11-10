@@ -10,7 +10,7 @@ nav_group: "Reference"
 <!-- Mechanisms inspected in TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe,
      source only. The shell recipe follows the release README.
      Release-card recheck: every citation below uses TEC-OS
-     12b2ec5f470844c46cd0c92fea132f1a0ab11c40 (branch card-lower). Lines in
+     7fa2823357b2a96330d0b90bd120702347043116 (main). Lines in
      web/src/main.mjs, README.md and tools/media.mjs were remapped to it, and
      the page recipe and card-opening passages follow its tools/media.mjs,
      test/starter.test.mjs and useCard.
@@ -72,22 +72,22 @@ Reset and power-on have different memory effects (`host/machine.mjs:578-587`,
 `web/src/main.mjs:82-108`). Neither control flushes the ROM's pending writes
 before restarting. The safe-copy procedure below applies before either one.
 
-The page's card has twelve files, at recipe revision 8. They are the nine
+The page's card has eleven files, at recipe revision 9. They are the nine
 starter files, among them TIMES.BAS, BAZA.COM and BAZA.RTL for
-[Chapter 3](03-build-a-basic-program.md), and three more. The starter card
+[Chapter 3](03-build-a-basic-program.md), and two sources. The starter card
 itself keeps its nine files at revision 6:
 
 | File | Use |
 | --- | --- |
-| `DEMO.COM` | `DEMO` shows the LCD, the digits, the 8 × 8 LEDs and the PICO9918, as [Chapter 12](12-use-the-boards-devices.md) describes |
-| `DEMO.ASM` | DEMO.COM's source, with no include file. `TED DEMO.ASM` opens it and `TAS DEMO` builds the same DEMO.COM |
+| `DEMO.ASM` | The source of DEMO, with no include file. `TAS DEMO` builds DEMO.COM and `DEMO` then runs it, showing the LCD, the digits, the 8 × 8 LEDs and the PICO9918, as [Chapter 12](12-use-the-boards-devices.md) describes. `TED DEMO.ASM` opens the source |
 | `BOUNCE.BAS` | A BASIC sprite game for the PICO9918. `BAZA BOUNCE` compiles it and `BOUNCE` runs it. Tap W, A, S and D to steer and Q to quit |
 
-BOUNCE needs the PICO9918 and draws through `call`, as Chapter 3
-explains (`tools/media.mjs:222-252`, `test/starter.test.mjs:82-158`,
-`test/demo.test.mjs:1-4`, `README.md:158-165`). Building a starter fetches
+The card does not hold DEMO.COM until you build it. BOUNCE needs the
+PICO9918 and draws through `call`, as Chapter 3 explains
+(`tools/media.mjs:222-251`, `test/starter.test.mjs:82-183`,
+`test/demo.test.mjs:1-4`, `README.md:159-166`). Building a starter fetches
 each recipe file and checks its byte count and SHA-256 before returning the
-image (`tools/media.mjs:197-252`, `tools/lib/recipe.mjs:14-44`,
+image (`tools/media.mjs:197-251`, `tools/lib/recipe.mjs:14-44`,
 `web/src/main.mjs:60-63`). The file list shows user area, name and size.
 It refreshes every five seconds and after the reset and power-cycle buttons
 (`web/src/main.mjs:573-586`, `web/src/main.mjs:675-688`).

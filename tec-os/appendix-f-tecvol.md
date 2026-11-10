@@ -16,8 +16,8 @@ nav_group: "Reference"
      TAS.COM Thoriumdbee66a SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      No example, artifact or application pin was refreshed.
-     Citations prefixed 12b2ec5: use TEC-OS
-     12b2ec5f470844c46cd0c92fea132f1a0ab11c40 (branch card-lower).
+     Citations prefixed 7fa2823: use TEC-OS
+     7fa2823357b2a96330d0b90bd120702347043116 (main).
      Citations prefixed 755636b: and the release-card file list use TEC-OS
      755636b130241173c5c30a0be8fe6b79cf2fee37 (tools/media.mjs,
      test/starter.test.mjs). No release-card tecvol listing was captured. -->
@@ -320,9 +320,9 @@ are applied after the files are written (`tools/tecvol.mjs:92-101`,
 for New starter card.
 
 `npm run media` prepares `dist/starter.recipe.json` and its image. It also
-writes `dist/page.recipe.json`, which has the starter files plus DEMO.COM,
-DEMO.ASM and BOUNCE.BAS and its own id, revision, name and instructions
-(`12b2ec5:tools/media.mjs:222-252`, `276`). Chapter 27
+writes `dist/page.recipe.json`, which has the starter files plus DEMO.ASM
+and BOUNCE.BAS and its own id, revision, name and instructions
+(`7fa2823:tools/media.mjs:222-251`, `277`). Chapter 27
 describes that preparation. The retained historical rebuild produced these
 matching hashes:
 

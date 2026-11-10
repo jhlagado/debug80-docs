@@ -22,7 +22,8 @@ nav_group: "Using the machine"
      Release card: TED.COM Thorium 967678c (SHA-256 150a19bd…, TEC-OS
      755636b test/inputs.json), whose language table builds an .ASM with
      TAS NAME.ASM as before (Thorium README at 967678c). The captures below
-     keep TED 128edb7 and were not rerun with it. -->
+     keep TED 128edb7 and were not rerun with it. At TEC-OS 7fa2823 the
+     card's TED.COM is Thorium b69d544 (4f622390…), with the same keys. -->
 
 SAMPLE came with its source already on the card. BANNER begins as text you
 enter yourself. It prints a greeting, which you can change and build again
