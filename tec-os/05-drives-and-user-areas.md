@@ -15,7 +15,12 @@ nav_group: "Using the machine"
      SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      The service captures from old06 record 78127ec without a separate input pin.
      NAME.SVC /E: TEC-OS 31b60837d24cf801b5e8cf4daa4856f520227795
-     docs/services.md, source reading only.
+     docs/services.md, source reading only, unchanged at be654b3.
+     MON3.SVC on the card and "A MON-3 session": TEC-OS
+     be654b39faae4f121dd18ab6d559ceedad58b10e docs/mon3.md:3-21, 37-50,
+     54-130, 132-146, 157-164, 207-260, 281-306, 317-335 and 346-367,
+     tools/media.mjs:238-246 and test/starter.test.mjs:198-276; the figures
+     of the RST 10h calls also in Origo KD-269. Source reading only.
      No capture, application or KS48 font/default result is newly qualified. -->
 
 A file's volume and user area determine where you can use it. Program
@@ -35,8 +40,9 @@ It remains until reset or successful removal with `UNLOAD`. Services occupy
 whole pages of 256 bytes. Those pages reduce the memory left for programs.
 [Chapter 11](11-memory-for-programs.md) explains the program-memory boundary.
 
-The starter card's service file is the graphics LCD driver,
-`GLCD.SVC`. The PICO9918 console is in ROM and needs no SVC installation.
+The card holds two service files. `GLCD.SVC` is the graphics LCD driver
+and `MON3.SVC` runs programs written for MON-3, as described below. The
+PICO9918 console is in ROM and needs no SVC installation.
 At `A>`, the installation command is `GLCD.SVC`. The type is required:
 `GLCD` alone searches for `GLCD.COM`. A service file can have an explicit drive, as in
 `A:GLCD.SVC` or `B:NAME.SVC`.
@@ -70,10 +76,10 @@ be removed. The command does not skip it to remove an older service.
 Removal follows the reverse of installation order. A warm boot, the restart
 after a program ends, retains the installed services. Reset empties the list.
 
-A service can also carry an application of its own. At TEC-OS `31b6083`,
-`NAME.SVC /E` starts it, installing the service first if it is not in. The
-application ends with a warm boot and leaves its service installed, so
-`UNLOAD` still removes it. `GLCD.SVC` has no application.
+A service can also carry an application of its own. `NAME.SVC /E` starts
+it, installing the service first if it is not in. The application ends with
+a warm boot and leaves its service installed, so `UNLOAD` still removes it.
+`MON3.SVC` has an application and `GLCD.SVC` has none.
 [Appendix J](appendix-j-command-reference.md) gives the rules.
 
 A missing service file, a wrong format or a failed installation normally
@@ -101,6 +107,71 @@ including the quiet result for an unavailable device. Service authoring and
 installation internals have their separate homes in
 [Chapter 14](14-write-a-resident-service.md) and
 [Chapter 25](25-loading-and-removing-services.md).
+
+## A MON-3 session
+
+MON-3 is the TEC-1G's own monitor. A program written for it is loaded at
+`4000h` and calls the monitor through its restart instructions, as HELLO3
+does in [Chapter 1](01-first-session.md). `MON3.SVC` supplies those calls
+under TEC-OS, so such a program runs with the card and the BDOS still in
+place.
+
+`MON3.SVC /E` installs the service if it is not in and enters it, at its
+`MON3>` prompt. `MON3.SVC` alone installs it without entering. The service
+stays installed after `EXIT`, so a later `MON3.SVC /E` enters it again
+without reading the file. A warm boot keeps it, and `UNLOAD` or a reset
+removes it. Its 4,593 bytes of header and image occupy 18 pages. The BDOS
+entry in `0006h` moves from `B9A4h` to `A700h`, and the program memory from
+47,268 bytes to 42,496, or to 41,728 with `GLCD.SVC` installed too. The
+monitor's code, line buffer and stack are all in those pages, above anything
+a MON-3 program may load into.
+
+The `MON3>` line takes three commands, in capitals or lower case:
+
+| Command | Effect |
+| --- | --- |
+| `LOAD NAME.BIN [ADDR]` | Loads the file at `4000h`, or at the hexadecimal `ADDR`, in whole records. Any type but `HEX` loads this way |
+| `LOAD NAME.HEX` | Loads an Intel HEX file at its records' own addresses. The file is read twice and every record is checked before any is written |
+| `GO [ADDR]` | Runs the last good load, or the program at `ADDR`, after writing pending card changes |
+| `EXIT` | Ends the session with a warm boot to `A>` |
+
+A load must lie between `0100h` and the page of the BDOS entry in `0006h`,
+outside `0800h–08FFh`, which holds MON-3's stack and variables. Anything
+else on the line, a name with a wildcard, a file not found and a load that
+would break those bounds all print `?` with nothing written. A refused load
+leaves nothing runnable. A disk error during a load ends the session, as
+any BDOS error does.
+
+A program's `RET` returns to `MON3>`. When the console is the PICO9918 or
+the GLCD, the service first waits until no key is held, so the key that
+ended the program never reaches the `MON3>` line. On the serial terminal it
+does not wait. `^C` at `MON3>`, or a program's jump to `0000h`, also ends
+the session at `A>`.
+
+The service gives a program MON-3's restarts and 46 of the 63 calls
+reached through `RST 10h`. Of those, 42 behave as MON-3's own and 4,
+including `setCaps` and `setProtect`, are translated onto TEC-OS's state.
+It also gives calls 0 to 20 of the 34 graphics calls through `RST 18h`,
+which are MON-3's own routines moved into the service. With the matrix
+keyboard fitted, the keyboard calls read it as MON-3 does. A call that is
+not built shows MON-3's error display on the digits, waits for a key and
+returns as a key press would. MON-3's own disk calls are among those: they
+are not translated to CP/M files.
+
+Each `MON3.SVC /E` sets MON-3's workspace at `0800h` and its graphics
+workspace as a MON-3 reset leaves them. `GO` also takes a checksum of the
+service and of TEC-OS's BIOS table in RAM, and the program's return
+compares it. A difference prints `Tables damaged: EXIT and reset`, and
+later loads are refused until a reset. When the GLCD is the console, the
+return also sets the panel's modes again, so the console's text shows again
+whatever mode the program left the panel in.
+
+The service cannot recover a program that hangs: the reset button is the
+way out. A program that writes `B9A4h–BFFFh`, which holds the BDOS entry,
+the allocation vectors, TEC-OS's workspace and its BIOS table, can damage
+TEC-OS's disk tables. The service writes pending changes before `GO` and
+resets the drives after each return to limit that. Its messages are in
+[Appendix D](appendix-d-error-messages.md#the-mon-3-session).
 
 ## Drive letters and volumes
 

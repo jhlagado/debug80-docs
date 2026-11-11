@@ -11,7 +11,10 @@ nav_group: "Reference"
      All build-dependent ROM/RAM addresses, sizes and retained lookup output
      below remain historical78127ec evidence from frozen book10821b6.
      No new map, label command, build, import, test, run or capture occurred.
-     Source proof and historical evidence boundaries: c-pass-record.md. -->
+     Source proof and historical evidence boundaries: c-pass-record.md.
+     The current ROM regions and the BDOS stack census cite TEC-OS
+     be654b39faae4f121dd18ab6d559ceedad58b10e (ROM 95467cae…) with a
+     be654b3: prefix, source reading only. -->
 
 A memory address needs both a bank and a build identity. This reference
 pairs the historical `78127ec` map with the source contracts for each region.
@@ -87,10 +90,15 @@ The historical `78127ec` ROM occupied these ranges:
 | `C60Ah–FE91h` | 14,472 | Code |
 | `FE92h–FFFFh` | 366 | Unused |
 
-In that build the CCP's three files occupied `DD2Ah–E702h`, 2,521 bytes.
-The BDOS's six files occupied `E703h–F608h`, 3,846 bytes. The source at
-`a1023bd` includes four CCP files, including `cpm/ccpmut.asm`, then six
-BDOS files (`a1023bd:src/rom.asm:31-40`).
+The map generated at TEC-OS `be654b3`, ROM SHA-256 `95467cae…`, has the
+same fixed beginning. Its data runs to `C639h`, 1,583 bytes, and its code
+from `C63Ah` to `FC02h`, 13,769 bytes. That is 15,363 bytes used, with
+1,021 free at `FC03h–FFFFh` (`be654b3:docs/memory-map.md:1-30`).
+
+In that historical build the CCP's three files occupied `DD2Ah–E702h`,
+2,521 bytes. The BDOS's six files occupied `E703h–F608h`, 3,846 bytes. The
+source at `a1023bd` includes four CCP files, including `cpm/ccpmut.asm`,
+then six BDOS files (`a1023bd:src/rom.asm:31-40`).
 
 The ROM copy of the BIOS jump table is data at `BIOSBAS`. Cold boot copies
 its 17 jumps to `BF00h`. Calls use the RAM table, whose entries can be
@@ -364,7 +372,9 @@ use to 8 bytes on BDOS, 12 on BIOS and 6 on CCP
 historical `78127ec` host-model census measured bases of 30, 18 and 18 bytes
 respectively. Adding the declared limits gives 38/54, 30/40 and 24/32 bytes.
 These are historical measurements and bounds, not a measurement of the inspected
-source. [Chapter 15](15-state-and-memory.md#four-stacks-for-different-stages)
+source. At TEC-OS `be654b3` the bases are the same, and the BDOS's census, its
+deepest use of all, is 32 bytes (`be654b3:docs/services.md:316-333`).
+[Chapter 15](15-state-and-memory.md#four-stacks-for-different-stages)
 explains their scope and [Chapter 25](25-loading-and-removing-services.md)
 explains declaration checks.
 

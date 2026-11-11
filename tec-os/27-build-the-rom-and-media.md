@@ -35,7 +35,14 @@ nav_group: "Inside TEC-OS"
      bytes), BAZA.COM Baza 747b9a7 (27724068…, 16,128 bytes), BAZA.RTL
      7c0cda03… (11,136 bytes), the eleven-file page card, MON3.SVC beside
      the ROM on no card, and ROM 3e5311d2… with DEL and NAME.SVC /E.
-     Source reading only. -->
+     Passages prefixed be654b3: use TEC-OS
+     be654b39faae4f121dd18ab6d559ceedad58b10e (main): the six application
+     inputs, MON3.BIN and MON-3's sources, TAS.COM Thorium 3d1e2c0
+     (e648a1d0…, 10,343 bytes) and CHAIN.ASM from it, TED.COM Thorium
+     b69d544 as before, BAZA.COM Baza 45b138e (eed19ec1…, 16,768 bytes),
+     BAZA.RTL 51f43465… (11,648 bytes), the one fifteen-file card with
+     MON3.SVC, HELLO3 and CHAIN.ASM, and ROM 95467cae… after the ROM
+     squeeze. Source reading only. -->
 
 A ROM and its symbol map must describe the same addresses. Card programs
 must use the interfaces supplied by that ROM. TEC-OS produces the image,
@@ -52,31 +59,46 @@ retain their separate historical evidence.
 
 The repository requires Node.js 20 or later. `npm ci` installs its locked
 host dependencies and `npm run inputs` prepares the application inputs.
-At TEC-OS `31b6083` these are TED.COM and TAS.COM from Thorium and
-BAZA.COM, BAZA.RTL and the page card's BOUNCE.BAS from Baza. The same step
-also fetches MON-3's ROM, `MON3.BIN`, which only the tests read
-(`31b6083:test/inputs.json:3-63`, `31b6083:docs/mon3.md:7-11`).
+At TEC-OS `be654b3` these are TED.COM, TAS.COM and the demonstration source
+CHAIN.ASM from Thorium and BAZA.COM, BAZA.RTL and BOUNCE.BAS from Baza. The
+same step also fetches MON-3's ROM, `MON3.BIN`, and thirteen of MON-3's
+program and library sources, which only the tests read: they compare
+`MON3.SVC` with MON-3 itself (`be654b3:test/inputs.json:3-205`,
+`be654b3:docs/mon3.md:13-16`, `be654b3:docs/mon3.md:337-344`).
 The inspected `package.json` selects `atom-z80` 0.3.7. The normal production
 path uses TAS for the main ROM, the board diagnostics, `GLCD.SVC`,
-`MOUNT.COM` and `DEMO.COM`. The diagnostics always use TAS. The standalone
-ATOM examples use a separate assembly path (`package.json:1-31`,
-`tools/build.mjs:342-351`, `755636b:tools/diag.mjs:143-146`,
-`755636b:tools/media.mjs:186-196`, `755636b:README.md:89-92`).
+`MOUNT.COM`, `DEMO.COM`, `MON3.SVC` and `HELLO3.BIN`. The diagnostics always
+use TAS. The standalone ATOM examples use a separate assembly path
+(`package.json:1-31`, `tools/build.mjs:342-351`,
+`755636b:tools/diag.mjs:143-146`, `be654b3:tools/media.mjs:195-212`,
+`be654b3:README.md:91-95`).
 
 `TAS.COM` is pinned to Thorium
-`dbee66a90816df9a5884a08754ebc2d458a38325`. Its prepared host is from
+`3d1e2c0ea5269e1dfa4138671fab850c158f1670`. Its prepared host is from
 `3d16b30cb8ed7deccc0a8b0b04f1b961e29f5689`. The source repository's
 `README.md`, under Build and test, supplies the setup procedure. It prepares
 a temporary host, installs that host's locked dependencies and verifies it
 before moving it to `.inputs/tas-host`. Repeating setup validates an
 existing host. The checks cover the runner, lock file, locked Z80 runtime
-and the 10,295-byte TAS executable (`tools/lib/tas-rom.mjs:10-11`,
-`tools/lib/tas-rom.mjs:77-98`, `test/inputs.json:4-13`).
+and the 10,343-byte TAS executable (`be654b3:tools/lib/tas-rom.mjs:10-11`,
+`be654b3:tools/lib/tas-rom.mjs:77-98`, `be654b3:test/inputs.json:4-13`).
 
-The input selection order is an explicit `TAS_COM`, `TED_COM`,
+This TAS takes several statements on a line and refuses a line with more
+than 128 characters of code, as
+[Chapter 2](02-make-a-small-program.md#several-statements-on-a-line)
+describes. TEC-OS's own sources keep one statement to a line and none is
+that long, so the ROM, `GLCD.SVC`, `MON3.SVC`, `MOUNT.COM`, `DEMO.COM`,
+`HELLO3.BIN` and the test programs assemble to the same bytes as under the
+earlier `dbee66a` (`be654b3:docs/compatibility.md:199`). The ROM's map gives
+each source line one statement, so the build refuses a ROM source line that
+holds a `\` outside quotes and comments
+(`be654b3:tools/lib/tas-d8.mjs:105-121`,
+`be654b3:tools/lib/tas-d8.mjs:155-157`).
+
+The input selection order is an explicit `TAS_COM`, `TED_COM`, `CHAIN_ASM`,
 `BAZA_COM`, `BAZA_RTL` or `BOUNCE_BAS` then `.inputs/NAME` then the legacy
-sibling file under `../thorium/dist/`, `../baza/dist/` or `../baza/examples/`
-(`31b6083:README.md:79-88`).
+sibling file under `../thorium/dist/`, `../thorium/demo/chain/`,
+`../baza/dist/` or `../baza/examples/` (`be654b3:README.md:79-89`).
 The selected file must match its size and SHA-256. An empty override,
 invalid local file or wrong selected binary stops the operation. Selection
 does not fall through to another candidate after a mismatch
@@ -127,7 +149,11 @@ used and 307 free, with code ending at `FECCh`
 (`7fa2823:docs/memory-map.md:1-30`). At `31b6083`, which adds the
 `NAME.SVC /E` path to the command processor and the loader, it records
 16,247 bytes used and 137 free, with code ending at `FF76h`
-(`31b6083:docs/memory-map.md:1-30`). The census
+(`31b6083:docs/memory-map.md:1-30`). At `be654b3`, after a pass that
+shortened code throughout the ROM, it records 15,363 bytes used and 1,021
+free, with data ending at `C639h` and code at `FC02h`. The ROM's SHA-256 is
+`95467cae75ac86f0881f1deff468fdf7fd6b72ba8dfb460513daca3e28a4f902`
+(`be654b3:docs/memory-map.md:1-30`). The census
 stores each region's start and exclusive end while the table above prints
 the last occupied address (`tools/build.mjs:273-288`).
 
@@ -360,30 +386,34 @@ point (`tools/build.mjs:326-339`). After the build succeeds it also copies
 Media preparation validates the font package before preparing or replacing
 outputs (`tools/media.mjs:169-170`). It checks the map's generator against
 the selected backend then checks ROM length and SHA-256 against the census.
-It assembles MOUNT, GLCD, DEMO and MON3.SVC through that selection and
-validates pinned TED, TAS, BAZA.COM, BAZA.RTL and BOUNCE.BAS before
-preparing the recipes (`31b6083:tools/media.mjs:173-225`). The TAS
+It assembles MOUNT, GLCD, DEMO, MON3.SVC and HELLO3.BIN through that
+selection and validates pinned TED, TAS, BAZA.COM, BAZA.RTL, BOUNCE.BAS and
+CHAIN.ASM before preparing the recipe (`be654b3:tools/media.mjs:174-251`).
+HELLO3.BIN is a flat image whose own `ORG` must put it at `4000h`, where
+MON-3 programs load (`be654b3:tools/media.mjs:202-212`). The TAS
 GLCD writer compares flat assemblies at `0100h` and `0200h`, checks their
 header and relative symbols and packs the relocation data. The distribution
 COM writer checks the declared zero-filled buffers of MOUNT and DEMO
 (`tools/lib/tas-distribution.mjs:12-55`).
 
 The starter recipe contains SYSTEM as G1M on A and written-behind WORK as
-G8M on B. A holds nine files: MOUNT, GLCD, STARTUP, TED, the SAMPLE
-assembly source, the TIMES BASIC source, TAS, BAZA and BAZA's runtime
-library `BAZA.RTL`. `STARTUP.CMD` contains the GLCD installation line. The
-page recipe adds DEMO's source DEMO.ASM and BOUNCE.BAS, a BASIC game
-pinned from Baza. Media still builds and checks DEMO.COM but writes it
-beside the card's files, not onto the card, where `TAS DEMO` makes it.
-MON3.SVC, a service that runs MON-3 programs, is written beside the ROM and
-is on no card (`31b6083:tools/media.mjs:217-259`,
-`31b6083:tools/media.mjs:276-279`). Component entries record each file's
+G8M on B. At `be654b3` it is the only card recipe: the web page builds the
+same card, so media no longer writes a page recipe. A holds fifteen files:
+MOUNT, GLCD, STARTUP, TED, the SAMPLE assembly source, the TIMES BASIC
+source, TAS, BAZA, BAZA's runtime library `BAZA.RTL`, the BASIC game
+BOUNCE.BAS pinned from Baza, DEMO's source DEMO.ASM, MON3.SVC, the MON-3
+program HELLO3.BIN with its source HELLO3.ASM, and CHAIN.ASM pinned from
+Thorium. `STARTUP.CMD` contains the GLCD installation line. Media still
+builds and checks DEMO.COM but writes it beside the card's files, not onto
+the card, where `TAS DEMO` makes it. It also writes a copy of MON3.SVC
+beside the ROM (`be654b3:tools/media.mjs:213-273`,
+`be654b3:tools/media.mjs:289-297`). Component entries record each file's
 size and SHA-256. Assemblies and recipe construction finish before the output
-replacement begins (`755636b:tools/media.mjs:197-244`,
+replacement begins (`be654b3:tools/media.mjs:274-282`,
 `tools/lib/starter.mjs:10-16`). Output files are replaced individually after
 those preparation checks. The distribution also receives `FONT-NOTICES.txt`
-as a companion to its artifacts, separate from the nine starter-card files
-(`755636b:tools/media.mjs:258-268`).
+as a companion to its artifacts, separate from the fifteen card files
+(`be654b3:tools/media.mjs:293`).
 
 Media also writes `docs/memory-map.md` and refreshes the ROM-space spans
 in `docs/rom-services.md` from the census (`tools/media.mjs:46-65`,

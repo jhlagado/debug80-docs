@@ -27,7 +27,16 @@ nav_exclude: true
      Thorium b69d544 (4f622390) and BAZA Baza 747b9a7 (27724068, faster
      compiling, the same language). MON3.SVC is built but on no card.
      Chapters 2, 3, 4, 5, 6, 12, 13, 21, 27 and 29 and appendices D, F, I
-     and J cite it.
+     and J cited it.
+     One-card update: TEC-OS be654b3 (main, ROM 95467cae, 15,363 bytes used
+     and 1,021 free after the ROM squeeze) has MON3.SVC with KS53 S2 and S3
+     and its key-up wait, and one fifteen-file card, the starter card and the
+     page's card alike, with MON3.SVC, HELLO3.BIN, HELLO3.ASM and CHAIN.ASM.
+     TAS.COM is Thorium 3d1e2c0 (e648a1d0, several statements on a line and
+     a 128-character bound), TED.COM Thorium b69d544 as before, and BAZA
+     Baza 45b138e (eed19ec1, integer statements as 16-bit code, start-up
+     check 4DC2h, the integer BOUNCE.BAS). Chapters 1 to 8, 11, 12, 13, 15,
+     21, 27 and 29 and appendices C, D, F, I and J cite it.
      Public workflows accepted by Origo review4b5b5a50 from attempt02/e77c7ef0.
      Bounded opening craft/factual reviews closed d9d57d2/b911e84.
      That whole batch remains FAILED. Later service controls are separate.
@@ -95,11 +104,11 @@ Sizes in bytes are decimal. A KiB is 1,024 bytes and a MiB is 1,024 KiB.
 
 | Chapter | Use |
 | --- | --- |
-| [1. First session](01-first-session.md) | Power on, find files, run supplied SAMPLE and preserve work |
+| [1. First session](01-first-session.md) | Power on, find files, run supplied SAMPLE and the card's other programs and preserve work |
 | [2. Make a small program](02-make-a-small-program.md) | Enter, save, build, change and run a banner |
 | [3. Build a BASIC program](03-build-a-basic-program.md) | Compile and run TIMES.BAS with BAZA and build it from TED |
 | [4. Work with files](04-work-with-files.md) | Read, copy, rename and erase files and control long listings |
-| [5. Drives and user areas](05-drives-and-user-areas.md) | Locate programs, select volumes and use resident services |
+| [5. Drives and user areas](05-drives-and-user-areas.md) | Locate programs, select volumes, use resident services and run MON-3 programs |
 | [6. Cards on the PC](06-cards-on-the-pc.md) | Copy, check, recover and prepare card images |
 | [7. Choose a console](07-choose-a-console.md) | Select a display or serial terminal and its settings |
 | [8. Commands at startup](08-commands-at-startup.md) | Set up a startup file and bypass it when necessary |

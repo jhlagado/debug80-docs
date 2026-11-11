@@ -23,7 +23,14 @@ nav_group: "Using the machine"
      755636b test/inputs.json), whose language table builds an .ASM with
      TAS NAME.ASM as before (Thorium README at 967678c). The captures below
      keep TED 128edb7 and were not rerun with it. At TEC-OS 31b6083 the
-     card's TED.COM is Thorium b69d544 (4f622390…), with the same keys. -->
+     card's TED.COM is Thorium b69d544 (4f622390…), with the same keys.
+     At TEC-OS be654b39faae4f121dd18ab6d559ceedad58b10e the card's TAS.COM
+     is Thorium 3d1e2c0 (e648a1d0…, 10,343 bytes; test/inputs.json:4-13,
+     docs/compatibility.md:199). The BANNER captures keep TAS dbee66a and
+     were not rerun with it. "Several statements on a line" follows Thorium
+     3d1e2c0 docs/language.md:55-84 and :124, the CHAIN.ASM listing is
+     Thorium 3d1e2c0 demo/chain/chain.asm lines 9-19, and CHAIN's build and
+     run are TEC-OS be654b3 test/starter.test.mjs:291-344. -->
 
 SAMPLE came with its source already on the card. BANNER begins as text you
 enter yourself. It prints a greeting, which you can change and build again
@@ -189,6 +196,43 @@ when you change the greeting.
 
 BDOS calls may change registers. BANNER goes straight from printing to its
 final return and uses none of the earlier register values.
+
+## Several statements on a line
+
+BANNER has one instruction on each line. TAS also takes several statements
+on one line, with a backslash, `\`, between them. `CHAIN.ASM` on A is
+written that way. Its main part is:
+
+```asm
+START:
+  ld b,5 \ ld c,'1'             ; count five lines, numbered from 1
+
+LINE:
+  push bc \ ld de,TEXT          ; keep the count, point at "LINE "
+  ld c,PRINT \ call BDOS        ; print it
+  pop bc \ push bc \ ld e,c     ; take the line's digit
+  ld c,CONOUT \ call BDOS       ; print it
+  ld de,CRLF \ ld c,PRINT       ; point at CR LF
+  call BDOS \ pop bc            ; end the line, get the count back
+  inc c \ djnz LINE \ ret       ; the next line, or back to the CCP
+```
+
+Each `\` ends one statement and starts the next, so the first line of the
+loop is `push bc` followed by `ld de,TEXT`. A label stands alone on its
+line, as `START:` and `LINE:` do here, or begins the line. A label or an
+`EQU` cannot follow a `\`. A comment still runs from the semicolon to the end
+of the line, and here it describes the whole line's step rather than each
+instruction. A backslash inside quotes does not separate statements.
+
+The layout changes only the source. `TAS CHAIN` writes the same 43 bytes
+that the instructions written one to a line would give, and `CHAIN` prints
+`LINE 1` to `LINE 5`. Either layout is accepted. The recommended one keeps
+labels on their own lines and at most three statements on a line, each line
+with its comment.
+
+A line's code, before its comment, can be at most 128 characters long,
+blanks included. TAS refuses a longer line with `line too long` at column
+129, whether it holds one statement or several. A comment may be any length.
 
 ## A changed greeting
 

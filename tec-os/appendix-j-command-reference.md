@@ -10,11 +10,13 @@ nav_group: "Reference"
 <!-- Draft source checks: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe. The three historical captures below
      retain TEC-OS 78127ec and its starter inputs. They have not been rerun
      for the new source offer.
-     The starter-card section, DEL and NAME.SVC /E cite TEC-OS
-     31b60837d24cf801b5e8cf4daa4856f520227795 with a 31b6083: prefix,
-     Thorium b69d544 (TED.COM, SHA-256 4f622390…), Thorium dbee66a (TAS.COM)
-     and Baza 747b9a7 (BAZA.COM 27724068…, BAZA.RTL 7c0cda03…,
-     BOUNCE.BAS).
+     The starter-card section, DEL, NAME.SVC /E and the MON3> line cite
+     TEC-OS be654b39faae4f121dd18ab6d559ceedad58b10e with a be654b3:
+     prefix, Thorium b69d544 (TED.COM, SHA-256 4f622390…), Thorium 3d1e2c0
+     (TAS.COM, e648a1d0…, and CHAIN.ASM) and Baza 45b138e (BAZA.COM
+     eed19ec1…, BAZA.RTL 51f43465…, BOUNCE.BAS). The DEL, services.md and
+     test/commands.test.mjs lines are as at 31b6083; the loader and
+     test/mon3.test.mjs lines were remapped.
      Source reading only. -->
 
 A command line contains a command and its arguments, separated by spaces.
@@ -84,7 +86,7 @@ the causes and recovery actions.
 ## Command forms
 
 The eleven built-ins are DIR, TYPE, ERA, DEL, REN, SAVE, USER, CON, COPY,
-UNLOAD and SERVICES at TEC-OS `31b6083` (`31b6083:src/tables.asm:60-82`).
+UNLOAD and SERVICES at TEC-OS `be654b3` (`be654b3:src/tables.asm:60-82`).
 The release-1 ROM at `a1023bd` has the other ten, without DEL. Drive selection, program launch and service installation have
 additional forms handled by the command processor.
 
@@ -95,7 +97,7 @@ additional forms handled by the command processor.
 | `COPY SOURCE [DEST]` | Copy one file, with the destination rules below |
 | `REN NEW=OLD` | Rename one file on one drive |
 | `ERA PATTERN` | Erase matching files |
-| `DEL PATTERN` | Erase matching files, as another name for ERA, at TEC-OS `31b6083` |
+| `DEL PATTERN` | Erase matching files, as another name for ERA, at TEC-OS `be654b3` |
 | `SAVE N NAME` | Save N memory pages from `0100h` |
 | `USER N` | Select user area 0 to 15 |
 | `CON [DEVICE [WIDTH]]` | Report or change the console |
@@ -104,7 +106,7 @@ additional forms handled by the command processor.
 | `D:` | Select drive D, with the same form for another drive |
 | `NAME [ARGS]` | Load a COM program and pass its arguments |
 | `NAME.SVC` | Load a resident service |
-| `NAME.SVC /E [ARGS]` | Enter an installed service's application, installing the service first if it is absent, at TEC-OS `31b6083` |
+| `NAME.SVC /E [ARGS]` | Enter an installed service's application, installing the service first if it is absent, at TEC-OS `be654b3` |
 
 A built-in name must end at a space or the end of the command piece.
 `DIRX`, `DIR.COM` and `A:DIR` are program commands, not forms of built-in
@@ -200,9 +202,9 @@ DEL is another name for ERA. Its keyword selects the same routine, so it
 takes the same names and patterns and asks the same `ALL (Y/N)?` question.
 Because a built-in is matched before a program is looked up, plain `DEL`
 no longer runs a `DEL.COM`, as plain `ERA` never ran an `ERA.COM`. `A:DEL`
-or `DEL.COM` still runs that file (`31b6083:src/tables.asm:64-67`,
-`31b6083:docs/compatibility.md:77-81`,
-`31b6083:test/commands.test.mjs:159-209`).
+or `DEL.COM` still runs that file (`be654b3:src/tables.asm:64-67`,
+`be654b3:docs/compatibility.md:77-81`,
+`be654b3:test/commands.test.mjs:159-209`).
 
 The following historical run starts with an empty B drive and copies one
 disposable file there. It records an `n` answer that leaves the file and a `y`
@@ -287,9 +289,9 @@ routine reports failure. The practical installation rules are in
 [Chapter 5](05-drives-and-user-areas.md) and authoring is in
 [Chapter 14](14-write-a-resident-service.md).
 
-At TEC-OS `31b6083`, `NAME.SVC /E` enters a service's application. Only a
-service whose image starts with an execution record has one, and no file on
-the starter card does. `/E` follows the name after a space, and the text
+At TEC-OS `be654b3`, `NAME.SVC /E` enters a service's application. Only a
+service whose image starts with an execution record has one. On the starter
+card that is `MON3.SVC`. `/E` follows the name after a space, and the text
 after it is the application's command tail. A service installed from a file
 of that name is entered without reading the card. Otherwise the file is read
 from the named or current drive and installed, then entered once its `INIT`
@@ -300,26 +302,54 @@ other switch, such as `/X`, is refused before a file is opened. Each refusal
 prints the command's name with a question mark, as `GLCD.SVC?`, and sets
 return code FF00h. The application ends with a warm boot and its service
 stays installed, so `UNLOAD` removes it as before
-(`31b6083:docs/services.md:81-84`, `31b6083:docs/services.md:99-132`,
-`31b6083:docs/services.md:180-182`, `31b6083:src/loader.asm:752-778`,
-`31b6083:test/mon3.test.mjs:167-194`, `31b6083:test/mon3.test.mjs:213-225`).
+(`be654b3:docs/services.md:81-84`, `be654b3:docs/services.md:99-132`,
+`be654b3:docs/services.md:180-182`, `be654b3:src/loader.asm:753-779`,
+`be654b3:test/mon3.test.mjs:169-196`, `be654b3:test/mon3.test.mjs:215-227`).
+
+`MON3.SVC /E` gives the `MON3>` line, which BDOS function 10 reads and the
+service converts to capitals. It takes three commands. Anything else prints
+`?` (`be654b3:docs/mon3.md:37-42`, `be654b3:docs/mon3.md:54-108`):
+
+| Form | Operation |
+| --- | --- |
+| `LOAD [D:]NAME[.TYP] [ADDR]` | Load the file at `4000h`, or at `ADDR`, one to four hexadecimal digits, in whole records. Any type but `HEX` loads this way |
+| `LOAD [D:]NAME.HEX` | Load an Intel HEX file at its records' addresses. It takes no address |
+| `GO [ADDR]` | Run the last good load, or the program at `ADDR` |
+| `EXIT` | Restore page zero, reset the drives and warm boot to `A>` |
+
+The drive is A to P. The name has at most eight characters and the type
+three, and neither may hold `?` or `*`. Such a name is refused with `?`
+before it is looked up. `^C` at `MON3>` also ends the session. The service
+stays installed after `EXIT`, and `MON3.SVC /E` enters it again without
+reading the card. [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session)
+describes the session and
+[Appendix D](appendix-d-error-messages.md#the-mon-3-session) its messages.
 
 ## Programs on the starter card
 
-The starter card's A holds nine files. Six are programs or sources you use
-by name at the prompt. `GLCD.SVC` and `STARTUP.CMD` belong to the display
-setup and `BAZA.RTL` is read by BAZA (`31b6083:tools/media.mjs:30-32`,
-`31b6083:tools/media.mjs:201-215`, `31b6083:tools/lib/starter.mjs:13-16`):
+The starter card's A holds fifteen files, and the web page runs the same
+card. Eleven are programs or sources you use by name at the prompt.
+`GLCD.SVC` and `STARTUP.CMD` belong to the display setup, `BAZA.RTL` is read
+by BAZA and `HELLO3.BIN` is loaded at `MON3>`
+(`be654b3:tools/media.mjs:31-33`, `be654b3:tools/media.mjs:213-251`,
+`be654b3:tools/lib/starter.mjs:13-16`, `be654b3:README.md:153-178`,
+`be654b3:test/demo.test.mjs:1-4`, `be654b3:test/starter.test.mjs:50-344`):
 
 | File | Use |
 | --- | --- |
 | `MOUNT.COM` | `MOUNT` lists the card's volumes. `MOUNT B: NAME` or `MOUNT B: INDEX` mounts one on a drive and `MOUNT B:` unmounts that drive |
 | `TED.COM` | `TED [NAME.EXT [LINE]]` edits a text file, opening it at `LINE` when one is given. With no name it opens the project's file |
-| `TAS.COM` | `TAS NAME [OUT.TYP]` assembles `NAME.ASM` to `NAME.COM` and `NAME.DBG`, or to `OUT.TYP`, where a type of `SVC` makes a service |
+| `TAS.COM` | `TAS NAME [OUT.TYP]` assembles `NAME.ASM` to `NAME.COM` and `NAME.DBG`, or to `OUT.TYP`, where a type of `SVC` makes a service. A line may hold several statements with `\` between them |
 | `BAZA.COM` | `BAZA NAME` compiles `NAME.BAS`, or `NAME.BAZ` when there is no `.BAS`, to `NAME.COM` on the same drive |
 | `BAZA.RTL` | BAZA's runtime library, read from the current drive or from the drive `BAZA.COM` was loaded from |
 | `SAMPLE.ASM` | Assembly source for `TAS SAMPLE`, then `SAMPLE` |
 | `TIMES.BAS` | BASIC source for `BAZA TIMES`, then `TIMES` |
+| `BOUNCE.BAS` | A sprite game for the PICO9918, which it needs. `BAZA BOUNCE`, then `BOUNCE`. Tap W, A, S and D to steer and Q to quit |
+| `DEMO.ASM` | The source of DEMO. `TAS DEMO` builds DEMO.COM, then `DEMO` shows the LCD, the 7-segment digits, the 8 × 8 LEDs and the PICO9918. `TED DEMO.ASM` opens the source |
+| `CHAIN.ASM` | Assembly source written with several statements on a line, for `TAS CHAIN`, then `CHAIN`, which prints `LINE 1` to `LINE 5`. Its lines are up to 67 columns wide |
+| `MON3.SVC` | A resident service that runs MON-3 programs. `MON3.SVC /E` gives the `MON3>` line |
+| `HELLO3.BIN` | A MON-3 program for `LOAD HELLO3.BIN`, then `GO`, at `MON3>`. It writes four lines on the LCD and counts on the digits until AD, or Esc on the matrix keyboard |
+| `HELLO3.ASM` | HELLO3's source, for `TAS HELLO3 HELLO3.BIN` |
 | `GLCD.SVC` | The graphics LCD console driver, a resident service |
 | `STARTUP.CMD` | The startup file, holding the line `GLCD.SVC` |
 
@@ -327,23 +357,14 @@ TED's `^T B` and `^T R` build an `.ASM` file with `TAS NAME.ASM` and a
 `.BAS` file with `BAZA NAME.BAS`. `^T D` chains `TDB NAME` for an `.ASM`
 file, which fails with `A:TDB?` on the starter card, and shows
 `No debugger` for a `.BAS` file
-(`Thorium b69d544:README.md:14-41`, `31b6083:docs/compatibility.md:196`).
+(`Thorium b69d544:README.md:14-41`, `be654b3:docs/compatibility.md:196`).
 `TAS` and `BAZA` both set the failure return code `FF00h` when a build
 fails. A failed BAZA compile leaves an existing `NAME.COM` unchanged, and a
 failed TAS build normally keeps its earlier outputs
-(`31b6083:docs/compatibility.md:198-199`, `Baza 747b9a7:README.md:26-32`,
-`Thorium b69d544:README.md:72-73`).
+(`be654b3:docs/compatibility.md:198-199`, `Baza 45b138e:README.md:26-32`,
+`Thorium 3d1e2c0:docs/language.md:17-20`).
 [Make a small program](02-make-a-small-program.md) and
 [Build a BASIC program](03-build-a-basic-program.md) use them.
-
-The web page's card holds these nine files and two sources, eleven in all
-(`31b6083:tools/media.mjs:248-259`, `31b6083:README.md:159-166`,
-`31b6083:test/demo.test.mjs:1-4`, `31b6083:test/starter.test.mjs:82-183`):
-
-| File | Use |
-| --- | --- |
-| `DEMO.ASM` | The source of DEMO. `TAS DEMO` builds DEMO.COM, then `DEMO` shows the LCD, the 7-segment digits, the 8 × 8 LEDs and the PICO9918. `TED DEMO.ASM` opens the source |
-| `BOUNCE.BAS` | A sprite game for the PICO9918, which it needs. `BAZA BOUNCE`, then `BOUNCE`. Tap W, A, S and D to steer and Q to quit |
 
 ## Several commands
 

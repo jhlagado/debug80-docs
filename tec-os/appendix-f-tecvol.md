@@ -16,8 +16,9 @@ nav_group: "Reference"
      TAS.COM Thoriumdbee66a SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      No example, artifact or application pin was refreshed.
-     Citations prefixed 31b6083: use TEC-OS
-     31b60837d24cf801b5e8cf4daa4856f520227795 (main).
+     Citations prefixed be654b3: use TEC-OS
+     be654b39faae4f121dd18ab6d559ceedad58b10e (main), which replaced the
+     31b6083 citations of the card's recipe.
      Citations prefixed 755636b: and the release-card file list use TEC-OS
      755636b130241173c5c30a0be8fe6b79cf2fee37 (tools/media.mjs,
      test/starter.test.mjs). No release-card tecvol listing was captured. -->
@@ -195,6 +196,9 @@ the card. The other sizes likewise belong to those historical inputs. The
 release starter card's A holds nine files: these six, with the release
 TED.COM and SAMPLE.ASM, and TIMES.BAS, BAZA.COM and BAZA.RTL
 (`755636b:tools/media.mjs:197-211`, `755636b:test/starter.test.mjs:36-62`).
+At TEC-OS `be654b3` the one card's A holds fifteen: those nine with
+BOUNCE.BAS, DEMO.ASM, MON3.SVC, HELLO3.BIN, HELLO3.ASM and CHAIN.ASM
+(`be654b3:tools/media.mjs:213-251`, `be654b3:test/starter.test.mjs:50-85`).
 
 ## put
 
@@ -319,10 +323,10 @@ are applied after the files are written (`tools/tecvol.mjs:92-101`,
 `tools/lib/recipe.mjs:14-44`). The web page uses the same recipe function
 for New starter card.
 
-`npm run media` prepares `dist/starter.recipe.json` and its image. It also
-writes `dist/page.recipe.json`, which has the starter files plus DEMO.ASM
-and BOUNCE.BAS and its own id, revision, name and instructions
-(`31b6083:tools/media.mjs:230-259`, `286`). Chapter 27
+`npm run media` prepares `dist/starter.recipe.json` and its image. At TEC-OS
+`be654b3` that recipe is the only one: the web page builds the same card,
+and media removes a `dist/page.recipe.json` left by an older build
+(`be654b3:tools/media.mjs:253-273`, `294-297`). Chapter 27
 describes that preparation. The retained historical rebuild produced these
 matching hashes:
 

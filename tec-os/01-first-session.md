@@ -23,7 +23,15 @@ nav_group: "Using the machine"
      Release-card text: the nine starter files are those of TEC-OS
      755636b130241173c5c30a0be8fe6b79cf2fee37 tools/media.mjs and
      test/starter.test.mjs. The DIR excerpt below keeps the six-file card
-     of attempt02; no nine-file DIR capture is claimed. -->
+     of attempt02; no nine-file DIR capture is claimed.
+     One-card text: the fifteen files are those of TEC-OS
+     be654b39faae4f121dd18ab6d559ceedad58b10e tools/media.mjs:213-251 and
+     test/starter.test.mjs:50-85, the one card the web page runs too
+     (Origo KD-278). The steps in "More on the
+     card" follow be654b3 README.md:160-173, the recipe's instruction
+     (tools/media.mjs:261), test/programs/hello3.asm and
+     test/starter.test.mjs:112-344; the LCD lines are HELLO3_ROWS
+     (test/starter.test.mjs:198). No capture of those steps is claimed. -->
 
 Your first session starts with the supplied files. You list them, change drive
 and turn SAMPLE's source into a program you can run. Before finishing you write
@@ -86,9 +94,11 @@ TED.COM      SAMPLE.ASM   TAS.COM
 A>
 ```
 
-That listing is from an earlier starter card with six files. The release
-card also holds TIMES.BAS, BAZA.COM and BAZA.RTL, so its listing has nine
-names and its last line reports nine files.
+That listing is from an earlier starter card with six files. The card TEC-OS
+prepares now holds fifteen, so its listing has fifteen names and its last
+line reports fifteen files. Besides these six it holds TIMES.BAS, BAZA.COM
+and BAZA.RTL, MON3.SVC and HELLO3.BIN, and the sources DEMO.ASM, BOUNCE.BAS,
+HELLO3.ASM and CHAIN.ASM.
 
 Each name has up to eight characters followed by a type of up to three
 characters. A full stop separates the two when you type a name. In
@@ -99,7 +109,8 @@ source text. A `.COM` file holds a program that TEC-OS can run.
 program. `TED` is the supplied text editor and `MOUNT` manages volumes.
 `BAZA` is a BASIC compiler, which uses its library `BAZA.RTL`, and
 `TIMES.BAS` is a BASIC program for it. The automatic display setup uses
-`GLCD.SVC` and `STARTUP.CMD`. Leave them as supplied for this session.
+`GLCD.SVC` and `STARTUP.CMD`. Leave them as supplied for this session. The
+other files are demonstrations, which the end of this session lists.
 
 The last line reports the number of files and the free space on A. That
 space is in KiB, units of 1,024 bytes. The spelling `980K` is the listing's notation.
@@ -189,6 +200,44 @@ separate 20 × 4 LCD SAMPLE writes `Hello from SAMPLE` and its digit output is
 
 The new `A>` means the program has finished and you can type another command.
 The same prompt is also the place to finish the session safely.
+
+## More on the card
+
+The other files on A are programs to try in the same way, each with a
+command or two at `A>`:
+
+| Commands | Result |
+| --- | --- |
+| `TAS DEMO`, then `DEMO` | Builds and runs a tour of the hardware on the LCD, the digits, the 8 × 8 LEDs and the PICO9918, until you press a key. [Chapter 12](12-use-the-boards-devices.md) describes it |
+| `BAZA BOUNCE`, then `BOUNCE` | Compiles and runs a sprite game on the PICO9918. Tap W, A, S and D to steer and Q to quit. [Chapter 3](03-build-a-basic-program.md) describes it |
+| `TAS CHAIN`, then `CHAIN` | Builds and runs a program written with several statements on a line, which prints `LINE 1` to `LINE 5`. [Chapter 2](02-make-a-small-program.md) explains the layout |
+
+`TED DEMO.ASM` and `TED CHAIN.ASM` open those sources. CHAIN.ASM's lines
+are up to 67 columns wide, so at 40 columns TED scrolls sideways to show
+the rest of a line. After `CON PICO 80` it shows every line whole, and
+`CON PICO 40` returns to 40 columns.
+[Chapter 7](07-choose-a-console.md) explains the widths.
+
+`MON3.SVC` runs programs written for MON-3, the TEC-1G's own monitor.
+`MON3.SVC /E` installs it and gives its prompt, `MON3>`. There
+`LOAD HELLO3.BIN` loads the supplied MON-3 program and `GO` runs it. HELLO3
+beeps and writes four lines on the 20 × 4 LCD through MON-3's calls:
+
+<!-- TEC-OS be654b3 test/starter.test.mjs:198, the LCD rows the host-model
+     test checks, trailing spaces removed. Not a separate capture. -->
+```text
+MON-3 ON TEC-OS
+LCD BY RST 10H
+DIGITS BY RST 20H
+KEY BEEPS, AD QUITS
+```
+
+It then counts on the digits. Another key beeps and shows its code on the
+right two digits. AD on the keypad, or Esc on the matrix keyboard, returns
+to `MON3>`, and `EXIT` returns to `A>`. `HELLO3.ASM` is the program's
+source, and `TAS HELLO3 HELLO3.BIN` builds it.
+[Chapter 5](05-drives-and-user-areas.md) explains the service and what it
+keeps in memory.
 
 ## Saved work before reset or removal
 

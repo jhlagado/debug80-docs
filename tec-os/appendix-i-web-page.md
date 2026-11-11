@@ -10,10 +10,14 @@ nav_group: "Reference"
 <!-- Mechanisms inspected in TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe,
      source only. The shell recipe follows the release README.
      Release-card recheck: every citation below uses TEC-OS
-     31b60837d24cf801b5e8cf4daa4856f520227795 (main). Lines in
-     web/src/main.mjs, README.md, tools/media.mjs and src/loader.asm were
-     remapped to it, and the page recipe and card-opening passages follow
-     its tools/media.mjs, test/starter.test.mjs and useCard.
+     be654b39faae4f121dd18ab6d559ceedad58b10e (main). It was remapped from
+     31b6083: web/, host/, tools/lib/ and the tests cited are unchanged
+     there; lines in README.md, tools/media.mjs, web/build.mjs,
+     test/starter.test.mjs, src/vol.asm, src/boot.asm, src/cache.asm,
+     src/cpm/bdoslog.asm, src/services.asm, src/cpm/ccpcmd.asm and
+     src/loader.asm were remapped or rechecked, and the card passage
+     follows the one card of its tools/media.mjs, web/build.mjs and
+     test/starter.test.mjs.
      No new browser run, screen capture or physical result is claimed. -->
 
 The web page has controls for the emulated board, a serial terminal and a card
@@ -28,10 +32,10 @@ STARTUP.CMD and [Chapter 26](26-startup-inside-the-ccp.md) follows its ROM path.
 After the PC setup from [Chapter 6](06-cards-on-the-pc.md) and the ROM/media
 preparation from [Chapter 27](27-build-the-rom-and-media.md), `npm run web`
 builds the page into web/dist. The build copies the ROM, its symbols and the
-page's recipe and files. `npm start` serves that directory with the
+starter card's recipe and files. `npm start` serves that directory with the
 installed esbuild development server, so Python is not needed
 (`web/build.mjs:16-45`, `package.json:15`, `package.json:22`,
-`README.md:105-113`):
+`README.md:106-114`):
 
 ```sh
 npm run web
@@ -60,7 +64,7 @@ The controls and their handlers are defined in `web/index.html:12-30`,
 | "Reset" | Restarts the board with RAM and card contents retained. The serial terminal shows `[reset]`. |
 | "Power cycle" | Creates a fresh machine with fresh RAM and the same card. |
 | "Pause" | Stops Z80 execution. The button reads "Run" and the speed reads "paused" while stopped. It has no effect during file import. |
-| "New starter card" | Builds a fresh card from the page's recipe, checks each file's length and SHA-256, attempts to save the image and power-cycles the board. |
+| "New starter card" | Builds a fresh card from the starter recipe, checks each file's length and SHA-256, attempts to save the image and power-cycles the board. |
 | "Open image" | Checks a PC image as a container, selects it, attempts to save it and power-cycles the board. A rejected image produces `Not opened` with the reason under "SD card". |
 | "Download image" | Downloads the in-memory card as `tecos-card.img`, independently of browser storage. |
 | "Drive" | Selects the volume for the file list and file imports. |
@@ -72,22 +76,26 @@ Reset and power-on have different memory effects (`host/machine.mjs:578-587`,
 `web/src/main.mjs:82-108`). Neither control flushes the ROM's pending writes
 before restarting. The safe-copy procedure below applies before either one.
 
-The page's card has eleven files, at recipe revision 9. They are the nine
-starter files, among them TIMES.BAS, BAZA.COM and BAZA.RTL for
-[Chapter 3](03-build-a-basic-program.md), and two sources. The starter card
-itself keeps its nine files at revision 6:
+The page's card is the starter card, built from the same recipe, with
+fifteen files at recipe revision 11. Among them are TIMES.BAS, BAZA.COM and
+BAZA.RTL for [Chapter 3](03-build-a-basic-program.md) and these
+demonstrations:
 
 | File | Use |
 | --- | --- |
 | `DEMO.ASM` | The source of DEMO, with no include file. `TAS DEMO` builds DEMO.COM and `DEMO` then runs it, showing the LCD, the digits, the 8 × 8 LEDs and the PICO9918, as [Chapter 12](12-use-the-boards-devices.md) describes. `TED DEMO.ASM` opens the source |
 | `BOUNCE.BAS` | A BASIC sprite game for the PICO9918. `BAZA BOUNCE` compiles it and `BOUNCE` runs it. Tap W, A, S and D to steer and Q to quit |
+| `MON3.SVC` | Runs MON-3 programs. `MON3.SVC /E` gives `MON3>`, as [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session) describes |
+| `HELLO3.BIN` | A MON-3 program. At `MON3>`, `LOAD HELLO3.BIN` and `GO` write four lines on the LCD and count on the digits. AD, or Esc on the matrix keyboard, returns to `MON3>`, and `EXIT` to `A>` |
+| `HELLO3.ASM` | HELLO3's source. `TAS HELLO3 HELLO3.BIN` builds it |
+| `CHAIN.ASM` | A program written with several statements on a line. `TAS CHAIN` builds it and `CHAIN` prints `LINE 1` to `LINE 5`. Its lines are up to 67 columns wide, so `TED CHAIN.ASM` shows them whole with "ROM" at 80 columns or after `CON PICO 80` |
 
 The card does not hold DEMO.COM until you build it. BOUNCE needs the
 PICO9918 and draws through `call`, as Chapter 3 explains
-(`tools/media.mjs:230-259`, `test/starter.test.mjs:82-183`,
-`test/demo.test.mjs:1-4`, `README.md:159-166`). Building a starter fetches
+(`tools/media.mjs:213-273`, `test/starter.test.mjs:50-344`,
+`test/demo.test.mjs:1-4`, `README.md:153-178`). Building a starter fetches
 each recipe file and checks its byte count and SHA-256 before returning the
-image (`tools/media.mjs:201-259`, `tools/lib/recipe.mjs:14-44`,
+image (`tools/media.mjs:213-275`, `tools/lib/recipe.mjs:14-44`,
 `web/src/main.mjs:60-63`). The file list shows user area, name and size.
 It refreshes every five seconds and after the reset and power-cycle buttons
 (`web/src/main.mjs:573-586`, `web/src/main.mjs:675-688`).
@@ -171,7 +179,7 @@ also checks its full declared length. A truncated image produces
 the standard-card byte-addressing limit and that particular truncated-image
 case. It does not exclude every `27h` mount error or every `Bad Sector`:
 the ROM also checks arithmetic overflow and volume ends against the container
-length (`src/vol.asm:253-298`). [Appendix D](appendix-d-error-messages.md) explains
+length (`src/vol.asm:254-299`). [Appendix D](appendix-d-error-messages.md) explains
 those errors and recovery actions.
 
 ## Importing a file safely
@@ -182,8 +190,8 @@ preserves pending writes on the model card. Import itself does not flush them.
 Its later reset clears the block cache. TEC-OS rebuilds free-space maps from the
 changed card as drives are accessed. Unwritten cached changes, including changes
 on WORK with write-behind enabled, are lost at that reset
-(`src/boot.asm:77-77`, `src/boot.asm:146-149`, `src/boot.asm:232-249`,
-`src/cache.asm:566-572`, `src/cpm/bdoslog.asm:223-281`).
+(`src/boot.asm:77-77`, `src/boot.asm:148-151`, `src/boot.asm:234-251`,
+`src/cache.asm:564-570`, `src/cpm/bdoslog.asm:217-269`).
 [Chapter 19](19-cache-and-persistence.md) explains the failed-flush paths. A
 browser save or download after a successful flush is still needed to preserve
 the resulting image outside RAM.
@@ -251,8 +259,8 @@ The selected display determines the first line
 No line for the other display is inserted. On the board with both displays,
 GLCD.SVC in startup cannot take the console while CRT is selected. Later
 `CON UC1` loads A:GLCD.SVC when needed
-(`src/services.asm:533-549`, `src/cpm/ccpcmd.asm:183-187`,
-`src/loader.asm:877-902`).
+(`src/services.asm:539-555`, `src/cpm/ccpcmd.asm:187-191`,
+`src/loader.asm:878-903`).
 
 Preparation removes recognised display pieces from the old startup text and
 keeps the remaining command pieces. Recognition ignores case and surrounding

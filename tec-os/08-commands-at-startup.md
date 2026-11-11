@@ -12,7 +12,9 @@ nav_group: "Using the machine"
      All nine retained captures, their recipes and the six shell fences
      retain TEC-OS 78127ec. No capture or workflow was rerun.
      Historical 80-column starts remain evidence of their original runs.
-     Current cold-default and host-preparation claims use the source above. -->
+     Current cold-default and host-preparation claims use the source above.
+     The current card's file count is TEC-OS be654b3 tools/media.mjs:213-251
+     and test/starter.test.mjs:50-85. -->
 
 `A:STARTUP.CMD` holds commands you want to repeat after reset. TEC-OS runs
 them before accepting a command from the keyboard. You can use it to select
@@ -285,8 +287,10 @@ SAMPLE.ASM   TAS.COM
 A>
 ```
 
-That card had the six historical starter files. The release starter card
-has nine, with `TIMES.BAS`, `BAZA.COM` and `BAZA.RTL` added.
+That card had the six historical starter files. The starter card TEC-OS
+prepares now has fifteen, which
+[Appendix J](appendix-j-command-reference.md#programs-on-the-starter-card)
+lists.
 
 Where the ROM PICO console did not start, a startup width command passes
 quietly. The same command typed there reports the width with `?`, such as
