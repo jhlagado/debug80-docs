@@ -13,8 +13,8 @@ nav_group: "Reference"
      No new map, label command, build, import, test, run or capture occurred.
      Source proof and historical evidence boundaries: c-pass-record.md.
      The current ROM regions and the BDOS stack census cite TEC-OS
-     be654b39faae4f121dd18ab6d559ceedad58b10e (ROM 95467cae…) with a
-     be654b3: prefix, source reading only. -->
+     55114e4dfb234c81da73aea7e2e2ccaaf873b80e (ROM 95467cae…) with a
+     55114e4: prefix, source reading only. -->
 
 A memory address needs both a bank and a build identity. This reference
 pairs the historical `78127ec` map with the source contracts for each region.
@@ -90,10 +90,10 @@ The historical `78127ec` ROM occupied these ranges:
 | `C60Ah–FE91h` | 14,472 | Code |
 | `FE92h–FFFFh` | 366 | Unused |
 
-The map generated at TEC-OS `be654b3`, ROM SHA-256 `95467cae…`, has the
+The map generated at TEC-OS `55114e4`, ROM SHA-256 `95467cae…`, has the
 same fixed beginning. Its data runs to `C639h`, 1,583 bytes, and its code
 from `C63Ah` to `FC02h`, 13,769 bytes. That is 15,363 bytes used, with
-1,021 free at `FC03h–FFFFh` (`be654b3:docs/memory-map.md:1-30`).
+1,021 free at `FC03h–FFFFh` (`55114e4:docs/memory-map.md:1-30`).
 
 In that historical build the CCP's three files occupied `DD2Ah–E702h`,
 2,521 bytes. The BDOS's six files occupied `E703h–F608h`, 3,846 bytes. The
@@ -295,7 +295,7 @@ describes storage lifetime, not an assurance that its value remains unchanged.
 | `BFECh` | 1 | `ESCST` | Escape-parser state | Cold boot |
 | `BFEDh` | 1 | `ESCP1` | First numeric escape parameter | Cold boot |
 | `BFEEh` | 1 | `ESCP2` | Second numeric escape parameter | Cold boot |
-| `BFEFh` | 1 | `KBLAST` | Last held matrix key, `FFh` for none | Cold boot |
+| `BFEFh` | 1 | `KBLAST` | Last held matrix key, `FFh` for none. At `55114e4` `abi.inc` publishes it for a service that scans the matrix, and the workspace label is `KBSLOT` (`55114e4:src/abi.inc:295-302`) | Cold boot |
 | `BFF0h` | 1 | `VATTR` | `80h` for reverse video | Cold boot |
 | `BFF1h` | 1 | `VCURV` | 1 while the cursor cell is drawn reversed | Cold boot |
 | `BFF2h–BFFFh` | 14 | `MNTBLK` to `MNTLN` | Remaining mount/volume-service scratch | Cold boot |
@@ -372,8 +372,8 @@ use to 8 bytes on BDOS, 12 on BIOS and 6 on CCP
 historical `78127ec` host-model census measured bases of 30, 18 and 18 bytes
 respectively. Adding the declared limits gives 38/54, 30/40 and 24/32 bytes.
 These are historical measurements and bounds, not a measurement of the inspected
-source. At TEC-OS `be654b3` the bases are the same, and the BDOS's census, its
-deepest use of all, is 32 bytes (`be654b3:docs/services.md:316-333`).
+source. At TEC-OS `55114e4` the bases are the same, and the BDOS's census, its
+deepest use of all, is 32 bytes (`55114e4:docs/services.md:316-333`).
 [Chapter 15](15-state-and-memory.md#four-stacks-for-different-stages)
 explains their scope and [Chapter 25](25-loading-and-removing-services.md)
 explains declaration checks.

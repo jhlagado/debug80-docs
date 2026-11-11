@@ -15,11 +15,11 @@ nav_group: "Using the machine"
      SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      The service captures from old06 record 78127ec without a separate input pin.
      NAME.SVC /E: TEC-OS 31b60837d24cf801b5e8cf4daa4856f520227795
-     docs/services.md, source reading only, unchanged at be654b3.
+     docs/services.md, source reading only, unchanged at 55114e4.
      MON3.SVC on the card and "A MON-3 session": TEC-OS
-     be654b39faae4f121dd18ab6d559ceedad58b10e docs/mon3.md:3-21, 37-50,
-     54-130, 132-146, 157-164, 207-260, 281-306, 317-335 and 346-367,
-     tools/media.mjs:238-246 and test/starter.test.mjs:198-276; the figures
+     55114e4dfb234c81da73aea7e2e2ccaaf873b80e docs/mon3.md:3-21, 37-50,
+     54-137, 139-153, 164-171, 214-267, 297-322, 333-351 and 362-383,
+     tools/media.mjs:238-246 and test/starter.test.mjs:198-322; the figures
      of the RST 10h calls also in Origo KD-269. Source reading only.
      No capture, application or KS48 font/default result is newly qualified. -->
 
@@ -120,7 +120,7 @@ place.
 `MON3>` prompt. `MON3.SVC` alone installs it without entering. The service
 stays installed after `EXIT`, so a later `MON3.SVC /E` enters it again
 without reading the file. A warm boot keeps it, and `UNLOAD` or a reset
-removes it. Its 4,593 bytes of header and image occupy 18 pages. The BDOS
+removes it. Its 4,605 bytes of header and image occupy 18 pages. The BDOS
 entry in `0006h` moves from `B9A4h` to `A700h`, and the program memory from
 47,268 bytes to 42,496, or to 41,728 with `GLCD.SVC` installed too. The
 service's own code, line buffer and stack are all in those pages, above
@@ -143,11 +143,15 @@ would break those bounds all print `?` with nothing written. A refused load
 leaves nothing runnable. A disk error during a load ends the session, as
 any BDOS error does.
 
-A program's `RET` returns to `MON3>`. When the console is the PICO9918 or
-the GLCD, the service first waits until no key is held, so the key that
-ended the program never reaches the `MON3>` line. On the serial terminal it
-does not wait. `^C` at `MON3>`, or a program's jump to `0000h`, also ends
-the session at `A>`.
+A program's `RET` returns to `MON3>`. Two things keep the key that ended
+the program, Esc or AD, off the `MON3>` line. Each time the service reads
+the matrix it records the key it found in TEC-OS's last matrix key,
+`KBLAST`, so TEC-OS's own scan later takes a key still held as held, not as
+a new one. And when the console is the PICO9918 or the GLCD, the return
+holds `MON3>` back until no key is down. Each pass of that wait scans the
+matrix itself, then asks `KBLAST` for no matrix key and MON-3's `KPRESS` for
+no keypad key. On the serial terminal there is no wait. `^C` at `MON3>`, or
+a program's jump to `0000h`, also ends the session at `A>`.
 
 The service gives a program MON-3's restarts and 46 of the 63 calls
 reached through `RST 10h`. Of those, 42 behave as MON-3's own and 4,

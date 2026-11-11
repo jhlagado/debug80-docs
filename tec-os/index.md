@@ -28,14 +28,16 @@ nav_exclude: true
      compiling, the same language). MON3.SVC is built but on no card.
      Chapters 2, 3, 4, 5, 6, 12, 13, 21, 27 and 29 and appendices D, F, I
      and J cited it.
-     One-card update: TEC-OS be654b3 (main, ROM 95467cae, 15,363 bytes used
-     and 1,021 free after the ROM squeeze) has MON3.SVC with KS53 S2 and S3
-     and its key-up wait, and one fifteen-file card, the starter card and the
-     page's card alike, with MON3.SVC, HELLO3.BIN, HELLO3.ASM and CHAIN.ASM.
-     TAS.COM is Thorium 3d1e2c0 (e648a1d0, several statements on a line and
-     a 128-character bound), TED.COM Thorium b69d544 as before, and BAZA
-     Baza 45b138e (eed19ec1, integer statements as 16-bit code, start-up
-     check 4DC2h, the integer BOUNCE.BAS). Chapters 1 to 8, 11, 12, 13, 15,
+     One-card update: TEC-OS 55114e4 (ROM 95467cae, 15,363 bytes used and
+     1,021 free after the ROM squeeze) has MON3.SVC with KS53 S2 and S3
+     (4,605 bytes, 18 pages), its matrix-key record in KBLAST, which abi.inc
+     publishes, and its key-up wait, and one fifteen-file card, the starter
+     card and the page's card alike, with MON3.SVC, HELLO3.BIN, HELLO3.ASM
+     and CHAIN.ASM. TAS.COM is Thorium 3d1e2c0 (e648a1d0, several statements
+     on a line and a 128-character bound), TED.COM Thorium b69d544 as
+     before, and BAZA Baza ab4d173 (4e0fee6a, integer statements as 16-bit
+     code, BASIC-80's &H, HEX$, MOD, \, XOR, WAIT and SWAP, start-up check
+     51C3h, the integer BOUNCE.BAS). Chapters 1 to 8, 11, 12, 13, 15, 17,
      21, 27 and 29 and appendices C, D, F, I and J cite it.
      Public workflows accepted by Origo review4b5b5a50 from attempt02/e77c7ef0.
      Bounded opening craft/factual reviews closed d9d57d2/b911e84.

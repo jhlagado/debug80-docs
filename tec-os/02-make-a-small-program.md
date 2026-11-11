@@ -24,13 +24,13 @@ nav_group: "Using the machine"
      TAS NAME.ASM as before (Thorium README at 967678c). The captures below
      keep TED 128edb7 and were not rerun with it. At TEC-OS 31b6083 the
      card's TED.COM is Thorium b69d544 (4f622390…), with the same keys.
-     At TEC-OS be654b39faae4f121dd18ab6d559ceedad58b10e the card's TAS.COM
+     At TEC-OS 55114e4dfb234c81da73aea7e2e2ccaaf873b80e the card's TAS.COM
      is Thorium 3d1e2c0 (e648a1d0…, 10,343 bytes; test/inputs.json:4-13,
      docs/compatibility.md:199). The BANNER captures keep TAS dbee66a and
      were not rerun with it. "Several statements on a line" follows Thorium
      3d1e2c0 docs/language.md:55-84 and :124, the CHAIN.ASM listing is
      Thorium 3d1e2c0 demo/chain/chain.asm lines 9-19, and CHAIN's build and
-     run are TEC-OS be654b3 test/starter.test.mjs:291-344. -->
+     run are TEC-OS 55114e4 test/starter.test.mjs:337-390. -->
 
 SAMPLE came with its source already on the card. BANNER begins as text you
 enter yourself. It prints a greeting, which you can change and build again

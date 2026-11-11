@@ -10,11 +10,11 @@ nav_group: "Reference"
 <!-- Mechanisms inspected in TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe,
      source only. The shell recipe follows the release README.
      Release-card recheck: every citation below uses TEC-OS
-     be654b39faae4f121dd18ab6d559ceedad58b10e (main). It was remapped from
+     55114e4dfb234c81da73aea7e2e2ccaaf873b80e. It was remapped from
      31b6083: host/, web/src/, web/index.html and tools/lib/recipe.mjs are
-     unchanged there; lines in README.md, tools/media.mjs, web/build.mjs,
-     test/starter.test.mjs, src/vol.asm, src/boot.asm, src/cache.asm,
-     src/cpm/bdoslog.asm, src/services.asm, src/cpm/ccpcmd.asm and
+     unchanged there and at 55114e4; lines in README.md, tools/media.mjs,
+     web/build.mjs, test/starter.test.mjs, src/vol.asm, src/boot.asm,
+     src/cache.asm, src/cpm/bdoslog.asm, src/services.asm, src/cpm/ccpcmd.asm and
      src/loader.asm were remapped or rechecked, and the card passage
      follows the one card of its tools/media.mjs, web/build.mjs and
      test/starter.test.mjs.
@@ -92,7 +92,7 @@ demonstrations:
 
 The card does not hold DEMO.COM until you build it. BOUNCE needs the
 PICO9918 and draws through `call`, as Chapter 3 explains
-(`tools/media.mjs:213-273`, `test/starter.test.mjs:50-344`,
+(`tools/media.mjs:213-273`, `test/starter.test.mjs:50-390`,
 `test/demo.test.mjs:1-4`, `README.md:153-178`). Building a starter fetches
 each recipe file and checks its byte count and SHA-256 before returning the
 image (`tools/media.mjs:213-275`, `tools/lib/recipe.mjs:14-44`,

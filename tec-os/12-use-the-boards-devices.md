@@ -19,7 +19,7 @@ nav_group: "Writing programs"
      Compact-style assembly proof remains separate. No new program, build,
      import, test, capture or board result is claimed.
      The DEMO card passage cites TEC-OS
-     be654b39faae4f121dd18ab6d559ceedad58b10e with a be654b3: prefix. -->
+     55114e4dfb234c81da73aea7e2e2ccaaf873b80e with a 55114e4: prefix. -->
 
 The BDOS handles files and console text. TEC-OS's numbered ROM calls also let
 your program light the digits, sound the speaker, read the clock or write the
@@ -849,11 +849,11 @@ The historical starter card did not include DEMO. The web-page recipe did
 include it on A so DEMO ran there without adding it to that card. At `a1023bd`
 its source was `test/programs/demo.asm`, and media generation exported
 DEMO.COM to `dist/files` and included it in the page recipe. At TEC-OS
-`be654b3` the source is `programs/DEMO.ASM` and the one card, which the web
+`55114e4` the source is `programs/DEMO.ASM` and the one card, which the web
 page also runs, holds that source in place of DEMO.COM. `TAS DEMO` builds
 DEMO.COM on the card, `DEMO` then runs it and `TED DEMO.ASM` opens the source
-(`be654b3:tools/media.mjs:234-237`, `be654b3:tools/media.mjs:289-290`,
-`be654b3:test/demo.test.mjs:1-4`, `be654b3:test/starter.test.mjs:171-196`).
+(`55114e4:tools/media.mjs:234-237`, `55114e4:tools/media.mjs:289-290`,
+`55114e4:test/demo.test.mjs:1-4`, `55114e4:test/starter.test.mjs:171-196`).
 The retained explicit host route used ATOM and
 added the program to B of `hw.img`:
 

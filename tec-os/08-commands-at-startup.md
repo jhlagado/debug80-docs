@@ -13,7 +13,7 @@ nav_group: "Using the machine"
      retain TEC-OS 78127ec. No capture or workflow was rerun.
      Historical 80-column starts remain evidence of their original runs.
      Current cold-default and host-preparation claims use the source above.
-     The current card's file count is TEC-OS be654b3 tools/media.mjs:213-251
+     The current card's file count is TEC-OS 55114e4 tools/media.mjs:213-251
      and test/starter.test.mjs:50-85. -->
 
 `A:STARTUP.CMD` holds commands you want to repeat after reset. TEC-OS runs

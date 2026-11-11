@@ -11,10 +11,10 @@ nav_group: "Reference"
      retain TEC-OS 78127ec and its starter inputs. They have not been rerun
      for the new source offer.
      The starter-card section, DEL, NAME.SVC /E and the MON3> line cite
-     TEC-OS be654b39faae4f121dd18ab6d559ceedad58b10e with a be654b3:
+     TEC-OS 55114e4dfb234c81da73aea7e2e2ccaaf873b80e with a 55114e4:
      prefix, Thorium b69d544 (TED.COM, SHA-256 4f622390…), Thorium 3d1e2c0
-     (TAS.COM, e648a1d0…, and CHAIN.ASM) and Baza 45b138e (BAZA.COM
-     eed19ec1…, BAZA.RTL 51f43465…, BOUNCE.BAS). The DEL, services.md and
+     (TAS.COM, e648a1d0…, and CHAIN.ASM) and Baza ab4d173 (BAZA.COM
+     4e0fee6a…, BAZA.RTL 14d7fd11…, BOUNCE.BAS). The DEL, services.md and
      test/commands.test.mjs lines are as at 31b6083; the loader and
      test/mon3.test.mjs lines were remapped.
      Source reading only. -->
@@ -86,7 +86,7 @@ the causes and recovery actions.
 ## Command forms
 
 The eleven built-ins are DIR, TYPE, ERA, DEL, REN, SAVE, USER, CON, COPY,
-UNLOAD and SERVICES at TEC-OS `be654b3` (`be654b3:src/tables.asm:60-82`).
+UNLOAD and SERVICES at TEC-OS `55114e4` (`55114e4:src/tables.asm:60-82`).
 The release-1 ROM at `a1023bd` has the other ten, without DEL. Drive selection, program launch and service installation have
 additional forms handled by the command processor.
 
@@ -97,7 +97,7 @@ additional forms handled by the command processor.
 | `COPY SOURCE [DEST]` | Copy one file, with the destination rules below |
 | `REN NEW=OLD` | Rename one file on one drive |
 | `ERA PATTERN` | Erase matching files |
-| `DEL PATTERN` | Erase matching files, as another name for ERA, at TEC-OS `be654b3` |
+| `DEL PATTERN` | Erase matching files, as another name for ERA, at TEC-OS `55114e4` |
 | `SAVE N NAME` | Save N memory pages from `0100h` |
 | `USER N` | Select user area 0 to 15 |
 | `CON [DEVICE [WIDTH]]` | Report or change the console |
@@ -106,7 +106,7 @@ additional forms handled by the command processor.
 | `D:` | Select drive D, with the same form for another drive |
 | `NAME [ARGS]` | Load a COM program and pass its arguments |
 | `NAME.SVC` | Load a resident service |
-| `NAME.SVC /E [ARGS]` | Enter an installed service's application, installing the service first if it is absent, at TEC-OS `be654b3` |
+| `NAME.SVC /E [ARGS]` | Enter an installed service's application, installing the service first if it is absent, at TEC-OS `55114e4` |
 
 A built-in name must end at a space or the end of the command piece.
 `DIRX`, `DIR.COM` and `A:DIR` are program commands, not forms of built-in
@@ -202,9 +202,9 @@ DEL is another name for ERA. Its keyword selects the same routine, so it
 takes the same names and patterns and asks the same `ALL (Y/N)?` question.
 Because a built-in is matched before a program is looked up, plain `DEL`
 no longer runs a `DEL.COM`, as plain `ERA` never ran an `ERA.COM`. `A:DEL`
-or `DEL.COM` still runs that file (`be654b3:src/tables.asm:64-67`,
-`be654b3:docs/compatibility.md:77-81`,
-`be654b3:test/commands.test.mjs:159-209`).
+or `DEL.COM` still runs that file (`55114e4:src/tables.asm:64-67`,
+`55114e4:docs/compatibility.md:77-81`,
+`55114e4:test/commands.test.mjs:159-209`).
 
 The following historical run starts with an empty B drive and copies one
 disposable file there. It records an `n` answer that leaves the file and a `y`
@@ -289,7 +289,7 @@ routine reports failure. The practical installation rules are in
 [Chapter 5](05-drives-and-user-areas.md) and authoring is in
 [Chapter 14](14-write-a-resident-service.md).
 
-At TEC-OS `be654b3`, `NAME.SVC /E` enters a service's application. Only a
+At TEC-OS `55114e4`, `NAME.SVC /E` enters a service's application. Only a
 service whose image starts with an execution record has one. On the starter
 card that is `MON3.SVC`. `/E` follows the name after a space, and the text
 after it is the application's command tail. A service installed from a file
@@ -302,13 +302,13 @@ other switch, such as `/X`, is refused before a file is opened. Each refusal
 prints the command's name with a question mark, as `GLCD.SVC?`, and sets
 return code FF00h. The application ends with a warm boot and its service
 stays installed, so `UNLOAD` removes it as before
-(`be654b3:docs/services.md:81-84`, `be654b3:docs/services.md:99-132`,
-`be654b3:docs/services.md:180-182`, `be654b3:src/loader.asm:753-779`,
-`be654b3:test/mon3.test.mjs:169-196`, `be654b3:test/mon3.test.mjs:215-227`).
+(`55114e4:docs/services.md:81-84`, `55114e4:docs/services.md:99-132`,
+`55114e4:docs/services.md:180-182`, `55114e4:src/loader.asm:753-779`,
+`55114e4:test/mon3.test.mjs:169-196`, `55114e4:test/mon3.test.mjs:215-227`).
 
 `MON3.SVC /E` gives the `MON3>` line, which BDOS function 10 reads and the
 service converts to capitals. It takes three commands. Anything else prints
-`?` (`be654b3:docs/mon3.md:37-42`, `be654b3:docs/mon3.md:54-108`):
+`?` (`55114e4:docs/mon3.md:37-42`, `55114e4:docs/mon3.md:54-108`):
 
 | Form | Operation |
 | --- | --- |
@@ -331,9 +331,9 @@ The starter card's A holds fifteen files, and the web page runs the same
 card. Eleven are programs or sources you use by name at the prompt.
 `GLCD.SVC` and `STARTUP.CMD` belong to the display setup, `BAZA.RTL` is read
 by BAZA and `HELLO3.BIN` is loaded at `MON3>`
-(`be654b3:tools/media.mjs:31-33`, `be654b3:tools/media.mjs:213-251`,
-`be654b3:tools/lib/starter.mjs:13-16`, `be654b3:README.md:153-178`,
-`be654b3:test/demo.test.mjs:1-4`, `be654b3:test/starter.test.mjs:50-344`):
+(`55114e4:tools/media.mjs:31-33`, `55114e4:tools/media.mjs:213-251`,
+`55114e4:tools/lib/starter.mjs:13-16`, `55114e4:README.md:153-178`,
+`55114e4:test/demo.test.mjs:1-4`, `55114e4:test/starter.test.mjs:50-390`):
 
 | File | Use |
 | --- | --- |
@@ -357,11 +357,11 @@ TED's `^T B` and `^T R` build an `.ASM` file with `TAS NAME.ASM` and a
 `.BAS` file with `BAZA NAME.BAS`. `^T D` chains `TDB NAME` for an `.ASM`
 file, which fails with `A:TDB?` on the starter card, and shows
 `No debugger` for a `.BAS` file
-(`Thorium b69d544:README.md:14-41`, `be654b3:docs/compatibility.md:196`).
+(`Thorium b69d544:README.md:14-41`, `55114e4:docs/compatibility.md:196`).
 `TAS` and `BAZA` both set the failure return code `FF00h` when a build
 fails. A failed BAZA compile leaves an existing `NAME.COM` unchanged, and a
 failed TAS build normally keeps its earlier outputs
-(`be654b3:docs/compatibility.md:198-199`, `Baza 45b138e:README.md:26-32`,
+(`55114e4:docs/compatibility.md:198-199`, `Baza ab4d173:README.md:26-32`,
 `Thorium 3d1e2c0:docs/language.md:17-20`).
 [Make a small program](02-make-a-small-program.md) and
 [Build a BASIC program](03-build-a-basic-program.md) use them.

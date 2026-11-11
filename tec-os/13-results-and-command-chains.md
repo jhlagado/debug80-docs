@@ -21,8 +21,8 @@ nav_group: "Writing programs"
      and test/ted-baza.test.mjs, test/times.test.mjs at that revision.
      Rechecked at TEC-OS 31b6083 (TED.COM Thorium b69d544, BAZA Baza
      747b9a7; docs/compatibility.md:196-198): the key table and return
-     code are unchanged in substance. Rechecked again at TEC-OS be654b3
-     (TED.COM Thorium b69d544, BAZA Baza 45b138e, TAS.COM Thorium 3d1e2c0;
+     code are unchanged in substance. Rechecked again at TEC-OS 55114e4
+     (TED.COM Thorium b69d544, BAZA Baza ab4d173, TAS.COM Thorium 3d1e2c0;
      docs/compatibility.md:196-199): still unchanged in substance.
      Source-only reading. No run of these keys was made for this chapter. -->
 

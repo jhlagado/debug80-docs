@@ -12,7 +12,7 @@ nav_group: "Using the machine"
      Source-only semantic check: a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      No execution, new capture or physical-board result is claimed.
      The historical 80-column setup is not evidence for a new opening profile.
-     The current card's file count is TEC-OS be654b3 tools/media.mjs:213-251
+     The current card's file count is TEC-OS 55114e4 tools/media.mjs:213-251
      and test/starter.test.mjs:50-85; its listing was not captured. -->
 
 The console is the keyboard you type on and the display TEC-OS answers on. `CON`

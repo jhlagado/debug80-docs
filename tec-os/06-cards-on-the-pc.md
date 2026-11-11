@@ -11,7 +11,7 @@ nav_group: "Using the machine"
      Release-card file note: TEC-OS 755636b tools/media.mjs:197-211 and
      test/starter.test.mjs:36-62; TED.COM there is Thorium 967678c.
      One-card files and TED's load rule: TEC-OS
-     be654b39faae4f121dd18ab6d559ceedad58b10e tools/media.mjs:213-273 and
+     55114e4dfb234c81da73aea7e2e2ccaaf873b80e tools/media.mjs:213-273 and
      :294-297, web/build.mjs:41-42, docs/compatibility.md:196 and
      test/ted.test.mjs:92-120; TED.COM there is Thorium b69d544
      (4f622390…, 12,334 bytes), as at 31b6083. Source reading only.
@@ -325,11 +325,11 @@ last record with `^Z`. Binary padding is zero. These are file conversions,
 not a way to preserve a PC file's original byte length in a CP/M directory.
 
 A text file put without `--text` therefore ends in zero bytes, not `^Z`.
-The starter card's TED at TEC-OS `be654b3` (Thorium `b69d544`) takes a run
+The starter card's TED at TEC-OS `55114e4` (Thorium `b69d544`) takes a run
 of `00h` that fills the rest of the last record as the end of the file, so
 such a file opens without an error. A byte that TED rejects elsewhere stops
 it at the prompt with `EDIT error 03` and the byte's line and column, as in
-`EDIT error 03 L3 C5` (TEC-OS be654b3 `docs/compatibility.md`, Thorium
+`EDIT error 03 L3 C5` (TEC-OS 55114e4 `docs/compatibility.md`, Thorium
 b69d544 `README.md`). The earlier TED, Thorium `967678c` on the release
 card, rejects that padding and stops with error 03 without a line or
 column.
@@ -470,7 +470,7 @@ page's card and `dist/starter.img` are one card. Its fifteen files on A
 include the demo's source `DEMO.ASM`, the BASIC game `BOUNCE.BAS`,
 `MON3.SVC` with `HELLO3.BIN` and its source `HELLO3.ASM`, and `CHAIN.ASM`,
 at recipe revision 11. Media preparation no longer writes a separate page
-recipe (TEC-OS be654b3 `tools/media.mjs`, `web/build.mjs`). `TAS DEMO`
+recipe (TEC-OS 55114e4 `tools/media.mjs`, `web/build.mjs`). `TAS DEMO`
 builds DEMO.COM on the card. The page uses the same size and SHA-256
 checks.
 

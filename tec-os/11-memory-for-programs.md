@@ -15,7 +15,7 @@ nav_group: "Writing programs"
      Numerical TPA figures and service costs belong to the historical setup.
      No build, execution, import, new capture or physical-board result claimed.
      The MON3.SVC figures cite TEC-OS
-     be654b39faae4f121dd18ab6d559ceedad58b10e with a be654b3: prefix. -->
+     55114e4dfb234c81da73aea7e2e2ccaaf873b80e with a 55114e4: prefix. -->
 
 Your program starts at `0100h` but its upper memory limit depends on the card
 and installed services. Code, buffers and a private stack must fit below that
@@ -192,10 +192,10 @@ base. The jump at `0005h` then points to that lower address. In the historical
 starter setup, GLCD.SVC occupied `B600h–B8FFh`. Its three pages used 768 bytes
 but also excluded the alignment gap at `B900h–B9A3h`. The total reduction was
 932 bytes. A second service ends below the first and reduces the available TPA
-again. At TEC-OS `be654b3` the card's `MON3.SVC` takes 18 pages. Installed
+again. At TEC-OS `55114e4` the card's `MON3.SVC` takes 18 pages. Installed
 alone it moves the word at `0006h` from `B9A4h` to `A700h`, leaving 42,496
 bytes. Installed after `GLCD.SVC`, as on the GLCD console, it leaves 41,728
-(`be654b3:docs/mon3.md:44-47`).
+(`55114e4:docs/mon3.md:44-47`).
 
 AREA reads the boundary and subtracts `0100h` to obtain the size in bytes:
 
