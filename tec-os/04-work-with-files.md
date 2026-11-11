@@ -8,7 +8,7 @@ nav_group: "Using the machine"
 # 4. Work with files
 
 <!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     DEL as another name for ERA: TEC-OS 55114e4 src/tables.asm:60-82 and
+     DEL as another name for ERA: TEC-OS 402f30e src/tables.asm:60-82 and
      docs/compatibility.md:77-81, as at 31b6083.
      Current COPY and pager excerpts: tested 8b8664a7d93c6dc2e8bce509b9770585e106eedc,
      landed 962853f with qualification-record differences only.
@@ -178,7 +178,7 @@ new copy without changing the current drive.
 
 REN changes a name on the same drive. Its form is `REN NEW=OLD`, with the new
 name first and no spaces around `=`. ERA removes the named file, and DEL is
-another name for ERA at TEC-OS `55114e4`. A rename to an
+another name for ERA at TEC-OS `402f30e`. A rename to an
 existing name gives `FILE EXISTS` and changes nothing. Erasing a name that is
 absent gives `NO FILE`.
 

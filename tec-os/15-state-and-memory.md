@@ -10,8 +10,8 @@ nav_group: "Inside TEC-OS"
 <!-- Source-only reading against release-1 TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      This is not final artifact qualification. Address examples and measured stack
      figures explicitly labelled 78127ec retain that historical provenance.
-     The 55114e4: citation uses TEC-OS
-     55114e4dfb234c81da73aea7e2e2ccaaf873b80e. -->
+     The 402f30e: citation uses TEC-OS
+     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main). -->
 
 A program ends and the command prompt returns. The next program has a fresh BDOS
 workspace while your command history and installed services remain in RAM. A
@@ -264,12 +264,12 @@ for BIOS and CCP with no loaded services. The deepest census values were
 the same. The service limits were 8, 12 and 6 respectively.
 Base plus limit therefore used 38 of 54 bytes, 30 of 40 and 24 of 32.
 Each left at least a quarter free. These are historical host-model
-measurements, not results from the offered build. At TEC-OS `55114e4` the
+measurements, not results from the offered build. At TEC-OS `402f30e` the
 BDOS's deepest use of all, its census, is 32 bytes. Its base, the deepest
 use with no resident on the serial and PICO9918 paths, the diagnostic
 console and a recognised reset, is still 30. A service limit is counted
 from the base, so base plus limit still uses 38 of the BDOS's 54. The BIOS
-and CCP figures are unchanged (`55114e4:docs/services.md:316-333`).
+and CCP figures are unchanged (`402f30e:docs/services.md:316-333`).
 [Appendix C](appendix-c-memory-map.md#the-stacks) retains the
 historical stack addresses and reservations.
 

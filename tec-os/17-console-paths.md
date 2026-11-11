@@ -12,7 +12,7 @@ nav_group: "Inside TEC-OS"
      below use that revision. No execution or current artifact result is claimed.
      Current cold-default claims are separate from historical captures.
      The KBLAST paragraph cites TEC-OS
-     55114e4dfb234c81da73aea7e2e2ccaaf873b80e with a 55114e4: prefix. -->
+     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) with a 402f30e: prefix. -->
 
 <!-- Historical evidence: all three captures, their recipes and the TERM host
      assembly recipe retain TEC-OS 78127ec. TERM used atom-z80 0.3.7 and a
@@ -361,14 +361,14 @@ and delivers a held key only once. Holding it produces no automatic repeat
 (`src/keyboard.asm:39-100`). A press and release entirely between scans
 is lost.
 
-At TEC-OS `55114e4` `abi.inc` publishes `KBLAST` at `BFEFh`: the
+At TEC-OS `402f30e` `abi.inc` publishes `KBLAST` at `BFEFh`: the
 highest-numbered matrix key down, row × 8 + column, or `FFh` for none. A
 service that scans the matrix itself writes the key it finds there, as
 `MON3.SVC` does, so a key held from a program is not read again as new
 when TEC-OS's scan resumes. The workspace byte's own label there is
 `KBSLOT`, and the build checks that the two addresses agree
-(`55114e4:src/abi.inc:295-302`, `55114e4:docs/services.md:430-441`,
-`55114e4:src/ram.asm:432`).
+(`402f30e:src/abi.inc:295-302`, `402f30e:docs/services.md:430-441`,
+`402f30e:src/ram.asm:432`).
 
 Two ordinary keys produce no character. A retained second key below 3 is
 a modifier and a modifier alone also produces none. Caps Lock toggles

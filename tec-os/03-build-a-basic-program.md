@@ -8,16 +8,17 @@ nav_group: "Using the machine"
 # 3. Build a BASIC program
 
 <!-- Source and test contracts read at TEC-OS
-     55114e4dfb234c81da73aea7e2e2ccaaf873b80e, with
+     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main), with
      programs/TIMES.BAS, tools/media.mjs, docs/compatibility.md (TED and
      BAZA rows), test/times.test.mjs, test/ted-baza.test.mjs and
      test/starter.test.mjs.
      TED.COM Thorium b69d544, SHA-256 4f622390…; BAZA.COM and BAZA.RTL
-     Baza ab4d173, SHA-256 4e0fee6a… (17,536 bytes) and 14d7fd11…
+     Baza ebc0281, SHA-256 ec8fd42a… (13,056 bytes) and 14d7fd11…
      (12,032 bytes), as test/inputs.json pins. TIMES.COM built with them
      is 9,600 bytes (test/lib/inputs.mjs:21-22).
      Baza README, docs/language.md, docs/call.md, docs/speed.md, docs/mbasic.md,
-     src/lex.asm and examples/BOUNCE.BAS at ab4d173; Thorium README at
+     docs/size-account.md,
+     src/lex.asm and examples/BOUNCE.BAS at ebc0281; Thorium README at
      b69d544.
      The TIMES screen below is the screen test/times.test.mjs:25-40 and
      :101-108 checks on the host model at 40 columns. It is not a separate
@@ -40,7 +41,7 @@ TIMES.BAS is on A with the other supplied files. `TYPE TIMES.BAS` prints it
 at the `A>` prompt. Chapter 4 explains `TYPE` and its pager. The complete
 file is:
 
-<!-- TEC-OS 55114e4 programs/TIMES.BAS, lines 1-22, complete. The starter
+<!-- TEC-OS 402f30e programs/TIMES.BAS, lines 1-22, complete. The starter
      card stores it with CRLF line ends and a final ^Z (tools/media.mjs). -->
 ```text
 10 rem times.bas, a first basic program
@@ -81,9 +82,9 @@ text is in capitals. Outside quotes, `rem` remarks and `data` items, BAZA
 folds letters to capitals and ignores spaces and tabs, so `print` and
 `PRINT` are the same keyword and `n<1` and `n < 1` the same comparison. The
 bytes inside quotes are kept as written, which is why the program's output
-is in capitals (`Baza ab4d173:docs/language.md:19`). The lexer does the
+is in capitals (`Baza ebc0281:docs/language.md:19`). The lexer does the
 folding and keeps quotes, remarks and `data` items as they are
-(`Baza ab4d173:src/lex.asm:17-19`). Commands typed at the prompt, such as
+(`Baza ebc0281:src/lex.asm:17-19`). Commands typed at the prompt, such as
 `BAZA TIMES`, are written in capitals in this book, though the command
 processor also accepts them in lower case. The host-model test types
 `baza times` (`test/times.test.mjs:79`).
@@ -100,13 +101,16 @@ BAZA also takes a few additions from Microsoft's later BASIC-80 for CP/M:
 `&H` hexadecimal constants and `HEX$`, `MOD` and `\` for the remainder and
 whole-number division, `XOR`, `WAIT port, mask` to wait for a port's bit,
 and `SWAP a, b` to exchange two variables
-(`Baza ab4d173:docs/mbasic.md:10-12`, `:38-50`).
+(`Baza ebc0281:docs/mbasic.md:10-12`, `:38-50`).
 
 The compiler is two files on A. `BAZA.COM` is the program and `BAZA.RTL` is
 its runtime library, the routines that BAZA copies into each program it
-writes. BAZA reads `BAZA.RTL` from the current drive, or from the drive
-`BAZA.COM` was loaded from when the current drive has none. A program on B
-therefore compiles with the supplied files left on A.
+writes. `BAZA.COM` is a 13,056-byte file that unpacks itself into the
+17,024-byte compiler each time it runs, which adds about a quarter of a
+second to a compile (`Baza ebc0281:docs/size-account.md:3-27`). BAZA reads
+`BAZA.RTL` from the current drive, or from the drive `BAZA.COM` was loaded
+from when the current drive has none. A program on B therefore compiles
+with the supplied files left on A.
 
 ## Compiling and running TIMES
 
@@ -118,7 +122,7 @@ Typing `TIMES` runs the program. The screen below is the one the TEC-OS host
 model test checks on the 40-column console, with the answers `TEC`, then 13,
 then 7. Its starting `A>TIMES` line is omitted:
 
-<!-- TEC-OS 55114e4 test/times.test.mjs:25-40, the asserted output, with
+<!-- TEC-OS 402f30e test/times.test.mjs:25-40, the asserted output, with
      the screen check at :106-108: answers TEC, 13 and 7, trailing spaces
      removed. Not a separate capture. -->
 ```text
@@ -221,7 +225,7 @@ and 100. The line number is in order but the expression after `print` is
 unfinished. `^T B` saved the file and BAZA printed its message on the
 console:
 
-<!-- TEC-OS 55114e4 test/ted-baza.test.mjs:90-101, the asserted console
+<!-- TEC-OS 402f30e test/ted-baza.test.mjs:90-101, the asserted console
      text. Not a separate capture. -->
 ```text
 A>A:BAZA TIMES.BAS
@@ -260,15 +264,15 @@ BAZA has no graphics or sound statements. A program reaches the board's
 devices by calling machine code: a ROM service, an entry of a service in
 memory, or a routine at an address. `def call` gives the routine a name,
 `call` runs it with the registers you list, and `reg` reads a register it
-left afterwards (`Baza ab4d173:docs/call.md:1-6`). Chapter 12 describes the
+left afterwards (`Baza ebc0281:docs/call.md:1-6`). Chapter 12 describes the
 ROM services from the assembly side.
 
 BOUNCE.BAS, a sprite game on the card, does all its drawing this
 way. Three of its lines show the pattern
-(`Baza ab4d173:examples/BOUNCE.BAS:5`, `10`, `17`):
+(`Baza ebc0281:examples/BOUNCE.BAS:5`, `10`, `17`):
 
-<!-- Baza ab4d173 examples/BOUNCE.BAS file lines 5, 10 and 17, as the
-     card holds it (TEC-OS 55114e4 tools/media.mjs:229-232). -->
+<!-- Baza ebc0281 examples/BOUNCE.BAS file lines 5, 10 and 17, as the
+     card holds it (TEC-OS 402f30e tools/media.mjs:229-232). -->
 ```text
 50 def call vi = rom 3: def call bp = rom 4: def call ft = rom 15
 100 call vi, b = 1
@@ -280,18 +284,18 @@ A colon separates statements on one line.
 `rom 3` names the ROM's video service, `rom 4` its tone service and
 `rom 15` the font service. A name can also be a quoted service record with
 a version and an entry number, found when the `def call` runs, or an
-address (`Baza ab4d173:docs/call.md:16-26`). Each argument of `call` loads
+address (`Baza ebc0281:docs/call.md:16-26`). Each argument of `call` loads
 one register: `a`, `b`, `c`, `d`, `e`, `h` and `l` take a byte and `bc`,
 `de` and `hl` a word, or the address of a string variable's bytes. After
 the call `reg("HL")` gives the value the routine left in HL, and
 `reg("CY")` its carry. `call` raises no error itself, so a routine that
 reports failure is checked with `reg`
-(`Baza ab4d173:docs/call.md:51-64`, `Baza ab4d173:docs/call.md:72-82`).
+(`Baza ebc0281:docs/call.md:51-64`, `Baza ebc0281:docs/call.md:72-82`).
 Line 170 asks the font service for the
 font's address and copies 768 bytes from it to the PICO9918's memory with
 `vw`. Line 90 defines `vw` as `"PICO", 3, 10`, entry 10 of the PICO
 console's record, which copies RAM to VRAM
-(`Baza ab4d173:examples/BOUNCE.BAS:9`, `Baza ab4d173:docs/call.md:24-25`).
+(`Baza ebc0281:examples/BOUNCE.BAS:9`, `Baza ebc0281:docs/call.md:24-25`).
 
 BAZA's ordinary numbers are 32-bit floating-point values, and their
 arithmetic is slow on a Z80: an addition takes about 3,000 T-states, close
@@ -304,11 +308,11 @@ copy, one addition, subtraction, multiplication or division, one `\`, `MOD`,
 `AND`, `OR` or `XOR`, an `if` with one relation, and `for` and `next` on an
 integer variable. A quotient is rounded down. Anything else, such as a
 statement with more than one operator, still works, through the
-floating-point routines (`Baza ab4d173:docs/speed.md:3-31`). BOUNCE moves
+floating-point routines (`Baza ebc0281:docs/speed.md:3-31`). BOUNCE moves
 its balls this way, one step to a statement
-(`Baza ab4d173:examples/BOUNCE.BAS:46-47`, `61-64`):
+(`Baza ebc0281:examples/BOUNCE.BAS:46-47`, `61-64`):
 
-<!-- Baza ab4d173 examples/BOUNCE.BAS file lines 61 to 64. -->
+<!-- Baza ebc0281 examples/BOUNCE.BAS file lines 61 to 64. -->
 ```text
 560 for i% = 0 to 3
 570 x%(i%) = x%(i%) + dx%(i%)
@@ -319,14 +323,14 @@ its balls this way, one step to a statement
 `varptr(v)` gives the address of a variable or an array element, which
 `peek`, `poke` and `call` accept. A program can therefore `poke` a short
 routine into a dimensioned array, which never moves, and name its address
-with `def call` (`Baza ab4d173:docs/call.md:26-38`,
-`Baza ab4d173:docs/call.md:91-99`).
+with `def call` (`Baza ebc0281:docs/call.md:26-38`,
+`Baza ebc0281:docs/call.md:91-99`).
 
 While a program holds the PICO9918, TEC-OS hides the console. If the
 program then stops on a run-time error, it gives the display back before
 printing, so the message shows at the prompt. The host-model test checks
 this with a program that claims the display and then divides by zero
-(`Baza ab4d173:docs/call.md:66-70`, `test/times.test.mjs:195-218`).
+(`Baza ebc0281:docs/call.md:66-70`, `test/times.test.mjs:195-218`).
 
 On the card, `BAZA BOUNCE` compiles it and `BOUNCE` runs it on
 the PICO9918, which it needs. Tap W, A, S and D to steer the ship. Q ends

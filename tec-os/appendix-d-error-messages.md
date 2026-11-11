@@ -12,7 +12,7 @@ nav_group: "Reference"
      The old-card recipe/capture retains78127ec. CLOSE ERROR
      retains its actualbd15528 experiment fromBook12:65. The diagnostic prompt fence is a literal message template.
      DEL, TED's load error and the MON-3 session cite TEC-OS
-     55114e4dfb234c81da73aea7e2e2ccaaf873b80e with a 55114e4: prefix and
+     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) with a 402f30e: prefix and
      Thorium b69d544. The cited DEL and TED lines are as at 31b6083.
      No execution, new capture or physical-board result is claimed. -->
 
@@ -186,7 +186,7 @@ service gives a distinct cause.
 | `NAME.SVC` | Record validation failed after successful `INIT`. The status is cleared so startup also prints the name regardless of INIT's returned `A`. | Check `SERVICES`. The cleanup outcome determines whether pages remain reserved. | `src/loader.asm:359-466` |
 | `UNLOAD` | The newest service cannot be removed or none exists. Reasons include an active INIT/REMOVE, a mismatched top, a non-removable flag or carry from REMOVE. | Remove services newest first and investigate the retained service. | [Chapter 5](05-drives-and-user-areas.md), `src/cpm/ccpcmd.asm:13-16`, `src/loader.asm:101-118` |
 | `COPY` | A missing/ambiguous name, identical source and destination or text after the destination. | Give one source and a different destination with no further operand. | `src/cpm/ccpmut.asm:191-230` |
-| `ERA` | A missing, extra or invalid name. `DEL`, another name for ERA present at TEC-OS `55114e4`, fails on the same conditions with the same output. | `ERA NAME` or `DEL NAME`. | `src/cpm/ccpmut.asm:10-14`, `55114e4:src/tables.asm:64-67` |
+| `ERA` | A missing, extra or invalid name. `DEL`, another name for ERA present at TEC-OS `402f30e`, fails on the same conditions with the same output. | `ERA NAME` or `DEL NAME`. | `src/cpm/ccpmut.asm:10-14`, `402f30e:src/tables.asm:64-67` |
 | `REN` | Invalid `NEW=OLD` syntax, a missing/ambiguous name or two different explicit drives. | Put a drive on one name or the same drive on both. | `src/cpm/ccpmut.asm:74-109` |
 | `SAVE` | An invalid decimal count, a count of 256 or more, a count reaching the BDOS-entry page or a missing/ambiguous filename. | `SAVE n NAME.COM` with a count within the memory bound. | `src/cpm/ccpcmd.asm:263-311` |
 | `USER` | The argument is not a single number from 0 to 15. | `USER n`. | `src/cpm/ccpcmd.asm:217-247` |
@@ -361,11 +361,11 @@ the volume services.
 
 ## TED's load error
 
-The starter card's TED at TEC-OS `55114e4` (Thorium `b69d544`) prints this
+The starter card's TED at TEC-OS `402f30e` (Thorium `b69d544`) prints this
 line and returns to the prompt when the file it is opening holds a byte it
 rejects
-(`Thorium b69d544:README.md:25-30`, `55114e4:docs/compatibility.md:196`,
-`55114e4:test/ted.test.mjs:92-120`). The earlier TED, Thorium `967678c` on
+(`Thorium b69d544:README.md:25-30`, `402f30e:docs/compatibility.md:196`,
+`402f30e:test/ted.test.mjs:92-120`). The earlier TED, Thorium `967678c` on
 the release card, also rejects `00h` padding at the end of a file and gives
 error 03 without a line or column
 (`Thorium 967678c:ted/src/load.asm:48-53`, `121-125`).
@@ -384,13 +384,13 @@ for `NAME.SVC /E`.
 
 | Message | Cause | Action | See |
 | --- | --- | --- | --- |
-| `?` | The `MON3>` line is not `LOAD`, `GO` or `EXIT` in a form they take. For `LOAD`: a drive beyond P, a name or type too long or holding `?` or `*`, a file not found or empty, bytes outside `0100h` to the BDOS entry's page or inside `0800h–08FFh`, or a fault anywhere in a HEX file. `GO` with no address prints it when no load has ended well. A refused load writes nothing and leaves nothing runnable. | Correct the line, the file or the address. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `55114e4:docs/mon3.md:54-91` |
-| `RST nn held: UNLOAD or reset` | At `/E` a restart slot from `08h` to `30h` holds a `JP`: a service's claim, or a jump into ROM that a program left. The entry is refused with return code FF00h and nothing changed. | `UNLOAD` the service that holds the slot, or reset. | `55114e4:docs/mon3.md:191-194` |
-| `RST 38 held: no interrupts` | `0038h` held a `JP` at entry, which the session leaves alone. A program's interrupts through MON-3's `USER_INT` are not delivered. | The session runs without them. | `55114e4:docs/mon3.md:178`, `225` |
-| `MON3 active` | A program in a session called the service's entry. The call returns to the program with FF00h. | None. | `55114e4:docs/mon3.md:195-196` |
-| `BRK nnnn` | The program ran `RST 30h`, MON-3's breakpoint. The session prints `BRK` with the address and returns to `MON3>`. There is no resume. | None: the session is at `MON3>`. | `55114e4:docs/mon3.md:131-133`, `224` |
-| `Tables damaged: EXIT and reset` | After the program returned, the checksum over the service and TEC-OS's RAM BIOS table differed from the one `GO` took. Every later `LOAD` prints it again and is refused without opening the file, and each re-entry prints it. `GO` and `EXIT` still run. | `EXIT`, then press reset, which also removes the service. | `55114e4:docs/mon3.md:139-153`, `55114e4:drivers/mon3.asm:1190-1191` |
-| MON-3's error display on the digits | The program called an `RST 10h` or `RST 18h` function that the session does not build, or a number beyond MON-3's calls. The call's outputs are not written. | Press a key. The call returns to the program as a key press would. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `55114e4:docs/mon3.md:220-221`, `257-267`, `313-322` |
+| `?` | The `MON3>` line is not `LOAD`, `GO` or `EXIT` in a form they take. For `LOAD`: a drive beyond P, a name or type too long or holding `?` or `*`, a file not found or empty, bytes outside `0100h` to the BDOS entry's page or inside `0800h–08FFh`, or a fault anywhere in a HEX file. `GO` with no address prints it when no load has ended well. A refused load writes nothing and leaves nothing runnable. | Correct the line, the file or the address. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `402f30e:docs/mon3.md:54-91` |
+| `RST nn held: UNLOAD or reset` | At `/E` a restart slot from `08h` to `30h` holds a `JP`: a service's claim, or a jump into ROM that a program left. The entry is refused with return code FF00h and nothing changed. | `UNLOAD` the service that holds the slot, or reset. | `402f30e:docs/mon3.md:191-194` |
+| `RST 38 held: no interrupts` | `0038h` held a `JP` at entry, which the session leaves alone. A program's interrupts through MON-3's `USER_INT` are not delivered. | The session runs without them. | `402f30e:docs/mon3.md:178`, `225` |
+| `MON3 active` | A program in a session called the service's entry. The call returns to the program with FF00h. | None. | `402f30e:docs/mon3.md:195-196` |
+| `BRK nnnn` | The program ran `RST 30h`, MON-3's breakpoint. The session prints `BRK` with the address and returns to `MON3>`. There is no resume. | None: the session is at `MON3>`. | `402f30e:docs/mon3.md:131-133`, `224` |
+| `Tables damaged: EXIT and reset` | After the program returned, the checksum over the service and TEC-OS's RAM BIOS table differed from the one `GO` took. Every later `LOAD` prints it again and is refused without opening the file, and each re-entry prints it. `GO` and `EXIT` still run. | `EXIT`, then press reset, which also removes the service. | `402f30e:docs/mon3.md:139-153`, `402f30e:drivers/mon3.asm:1190-1191` |
+| MON-3's error display on the digits | The program called an `RST 10h` or `RST 18h` function that the session does not build, or a number beyond MON-3's calls. The call's outputs are not written. | Press a key. The call returns to the program as a key press would. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `402f30e:docs/mon3.md:220-221`, `257-267`, `313-322` |
 
 ## Lines that report no fault
 

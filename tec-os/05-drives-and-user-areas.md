@@ -15,9 +15,9 @@ nav_group: "Using the machine"
      SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      The service captures from old06 record 78127ec without a separate input pin.
      NAME.SVC /E: TEC-OS 31b60837d24cf801b5e8cf4daa4856f520227795
-     docs/services.md, source reading only, unchanged at 55114e4.
+     docs/services.md, source reading only, unchanged at 402f30e.
      MON3.SVC on the card and "A MON-3 session": TEC-OS
-     55114e4dfb234c81da73aea7e2e2ccaaf873b80e docs/mon3.md:3-21, 37-50,
+     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) docs/mon3.md:3-21, 37-50,
      54-137, 139-153, 164-171, 214-267, 297-322, 333-351 and 362-383,
      tools/media.mjs:238-246 and test/starter.test.mjs:198-322; the figures
      of the RST 10h calls also in Origo KD-269. Source reading only.

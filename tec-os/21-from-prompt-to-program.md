@@ -10,12 +10,12 @@ nav_group: "Inside TEC-OS"
 <!-- Source-only semantic check: TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      Current source citations below use that revision. DEL's KEYTAB record
-     and the shared run path are cited at 55114e4: (TEC-OS
-     55114e4dfb234c81da73aea7e2e2ccaaf873b80e). At 31b6083 src/cpm/ differed
-     from a1023bd only in ccp.asm's NAME.SVC /E path; the ROM squeeze
-     before 55114e4 changed code across src/cpm/, so the unprefixed
+     and the shared run path are cited at 402f30e: (TEC-OS
+     402f30ef67c2d800d6c6b6bec4460697b3a4d125, main). At 31b6083 src/cpm/
+     differed from a1023bd only in ccp.asm's NAME.SVC /E path; the ROM squeeze
+     before 402f30e changed code across src/cpm/, so the unprefixed
      a1023bd citations are not rechecked against it. The cited KEYTAB and
-     CMDRUN lines are the same text at 55114e4, CMDRUN three lines
+     CMDRUN lines are the same text at 402f30e, CMDRUN three lines
      earlier. Historical output,
      addresses and size figures retain TEC-OS 78127ec, not a current build.
      The retained PC fixture used atom-z80 0.3.7. The historical starter's
@@ -46,7 +46,7 @@ code stays in ROM while program files load into the transient program area
 
 The messages and `KEYTAB` are in the ROM data block. Each keyword in
 `KEYTAB` has a zero terminator followed by its handler address. A final
-zero ends the table (`src/tables.asm:53-80`, `55114e4:src/tables.asm:53-82`
+zero ends the table (`src/tables.asm:53-80`, `402f30e:src/tables.asm:53-82`
 with DEL's record). In the historical `78127ec`
 build, `CCPBAS` was `DD2Ah` and the CCP ended at `E702h`. Its reported
 2,521 bytes were followed by the BDOS.
@@ -188,9 +188,9 @@ contain wildcards (`src/cpm/ccpcmd.asm:597-638`, `src/cpm/ccpmut.asm:193-209`).
 
 The keyword loop compares the original command text at `CMDSTRT` with
 `KEYTAB`, not the parsed FCB. Its order is DIR, TYPE, ERA, DEL, REN, SAVE,
-USER, CON, COPY, UNLOAD and SERVICES. DEL is present at TEC-OS `55114e4`
+USER, CON, COPY, UNLOAD and SERVICES. DEL is present at TEC-OS `402f30e`
 with ERA's handler address, `CMDERA`, so both keywords run the same
-routine (`55114e4:src/tables.asm:60-82`). `ISCMD` requires a space or zero
+routine (`402f30e:src/tables.asm:60-82`). `ISCMD` requires a space or zero
 immediately after the keyword. `A:DIR` and `DIR.COM` therefore name a
 program file rather than built-in DIR. Both fail when the selected search
 finds no `DIR.COM` (`src/cpm/ccp.asm:380-405`,
@@ -615,11 +615,11 @@ return word. A guard separates the stack from command scratch
 [Chapter 15](15-state-and-memory.md) distinguishes configured stack sizes
 from historical measurements and bounds.
 
-At TEC-OS `55114e4` the jump goes through HL, because `NAME.SVC /E` uses the
+At TEC-OS `402f30e` the jump goes through HL, because `NAME.SVC /E` uses the
 same path to enter a service at its own address. `CMDRUN` loads `0100h`
 first, so a program now starts with HL = `0100h` and DE = `0000h`. CP/M 2.2
-promises a program no register at entry (`55114e4:src/cpm/ccp.asm:486-505`,
-`55114e4:docs/compatibility.md:163-167`).
+promises a program no register at entry (`402f30e:src/cpm/ccp.asm:486-505`,
+`402f30e:docs/compatibility.md:163-167`).
 
 A top-level RET reaches the warm-boot jump at `0000h`. A direct jump there or
 function 0 reaches warm boot too (`src/cpm/ccp.asm:487-490`,

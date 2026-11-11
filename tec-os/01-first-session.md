@@ -25,10 +25,10 @@ nav_group: "Using the machine"
      test/starter.test.mjs. The DIR excerpt below keeps the six-file card
      of attempt02; no nine-file DIR capture is claimed.
      One-card text: the fifteen files are those of TEC-OS
-     55114e4dfb234c81da73aea7e2e2ccaaf873b80e tools/media.mjs:213-251 and
+     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) tools/media.mjs:213-251 and
      test/starter.test.mjs:50-85, the one card the web page runs too
      (Origo KD-278). The steps in "More on the
-     card" follow 55114e4 README.md:160-173, the recipe's instruction
+     card" follow 402f30e README.md:160-173, the recipe's instruction
      (tools/media.mjs:261), test/programs/hello3.asm and
      test/starter.test.mjs:112-390; the LCD lines are HELLO3_ROWS
      (test/starter.test.mjs:198). With the Matrix switch on, MON3.SVC's key
@@ -226,7 +226,7 @@ the rest of a line. After `CON PICO 80` it shows every line whole, and
 `LOAD HELLO3.BIN` loads the supplied MON-3 program and `GO` runs it. HELLO3
 writes four lines on the 20 × 4 LCD through MON-3's calls, then beeps:
 
-<!-- TEC-OS 55114e4 test/starter.test.mjs:198, the LCD rows the host-model
+<!-- TEC-OS 402f30e test/starter.test.mjs:198, the LCD rows the host-model
      test checks, trailing spaces removed. Not a separate capture. -->
 ```text
 MON-3 ON TEC-OS

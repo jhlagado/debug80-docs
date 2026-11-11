@@ -15,7 +15,7 @@ nav_group: "Inside TEC-OS"
      No test, build, import, capture, browser or physical-board run was made.
      Source inventory counts are not passing-test counts. See 28-pass-record.md.
      The page-card passage cites TEC-OS
-     55114e4dfb234c81da73aea7e2e2ccaaf873b80e with a 55114e4: prefix. -->
+     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) with a 402f30e: prefix. -->
 
 A console transcript records bytes from a particular run. It does not by
 itself establish what a display drew or what a physical board would do.
@@ -379,11 +379,11 @@ The build config aliases fs to a stub, clears the previous output directory
 and copies the page, style, one ROM and its symbols, recipe and distribution
 files (`web/build.mjs:1-45`). At `a1023bd` the page recipe added DEMO.COM
 to the starter files, and the media tool built that program from
-test/programs/demo.asm (`tools/media.mjs:206-238`). At TEC-OS `55114e4`
+test/programs/demo.asm (`tools/media.mjs:206-238`). At TEC-OS `402f30e`
 the page copies the starter recipe, so it runs the one card that media
 builds, with fifteen files including DEMO.ASM. DEMO.COM is built from
 programs/DEMO.ASM on the card with `TAS DEMO`
-(`55114e4:tools/media.mjs:213-273`, `55114e4:web/build.mjs:41-42`).
+(`402f30e:tools/media.mjs:213-273`, `402f30e:web/build.mjs:41-42`).
 
 Each animation frame targets 4 MHz for the elapsed wall time, capped at 100 ms.
 Every 1,024 instructions it checks a 30 ms execution budget and can stop the

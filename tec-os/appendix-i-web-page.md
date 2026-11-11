@@ -10,9 +10,9 @@ nav_group: "Reference"
 <!-- Mechanisms inspected in TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe,
      source only. The shell recipe follows the release README.
      Release-card recheck: every citation below uses TEC-OS
-     55114e4dfb234c81da73aea7e2e2ccaaf873b80e. It was remapped from
+     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main). It was remapped from
      31b6083: host/, web/src/, web/index.html and tools/lib/recipe.mjs are
-     unchanged there and at 55114e4; lines in README.md, tools/media.mjs,
+     unchanged there and at 402f30e; lines in README.md, tools/media.mjs,
      web/build.mjs, test/starter.test.mjs, src/vol.asm, src/boot.asm,
      src/cache.asm, src/cpm/bdoslog.asm, src/services.asm, src/cpm/ccpcmd.asm and
      src/loader.asm were remapped or rechecked, and the card passage
