@@ -221,7 +221,7 @@ the rest of a line. After `CON PICO 80` it shows every line whole, and
 `MON3.SVC` runs programs written for MON-3, the TEC-1G's own monitor.
 `MON3.SVC /E` installs it and gives its prompt, `MON3>`. There
 `LOAD HELLO3.BIN` loads the supplied MON-3 program and `GO` runs it. HELLO3
-beeps and writes four lines on the 20 × 4 LCD through MON-3's calls:
+writes four lines on the 20 × 4 LCD through MON-3's calls, then beeps:
 
 <!-- TEC-OS be654b3 test/starter.test.mjs:198, the LCD rows the host-model
      test checks, trailing spaces removed. Not a separate capture. -->
@@ -232,8 +232,8 @@ DIGITS BY RST 20H
 KEY BEEPS, AD QUITS
 ```
 
-It then counts on the digits. Another key beeps and shows its code on the
-right two digits. AD on the keypad, or Esc on the matrix keyboard, returns
+It then counts on the digits. A key other than AD beeps and shows its code
+on the right two digits. AD on the keypad, or Esc on the matrix keyboard, returns
 to `MON3>`, and `EXIT` returns to `A>`. `HELLO3.ASM` is the program's
 source, and `TAS HELLO3 HELLO3.BIN` builds it.
 [Chapter 5](05-drives-and-user-areas.md) explains the service and what it
