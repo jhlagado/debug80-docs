@@ -11,8 +11,8 @@ nav_group: "Reference"
      source only. The shell recipe follows the release README.
      Release-card recheck: every citation below uses TEC-OS
      be654b39faae4f121dd18ab6d559ceedad58b10e (main). It was remapped from
-     31b6083: web/, host/, tools/lib/ and the tests cited are unchanged
-     there; lines in README.md, tools/media.mjs, web/build.mjs,
+     31b6083: host/, web/src/, web/index.html and tools/lib/recipe.mjs are
+     unchanged there; lines in README.md, tools/media.mjs, web/build.mjs,
      test/starter.test.mjs, src/vol.asm, src/boot.asm, src/cache.asm,
      src/cpm/bdoslog.asm, src/services.asm, src/cpm/ccpcmd.asm and
      src/loader.asm were remapped or rechecked, and the card passage
@@ -86,9 +86,9 @@ demonstrations:
 | `DEMO.ASM` | The source of DEMO, with no include file. `TAS DEMO` builds DEMO.COM and `DEMO` then runs it, showing the LCD, the digits, the 8 × 8 LEDs and the PICO9918, as [Chapter 12](12-use-the-boards-devices.md) describes. `TED DEMO.ASM` opens the source |
 | `BOUNCE.BAS` | A BASIC sprite game for the PICO9918. `BAZA BOUNCE` compiles it and `BOUNCE` runs it. Tap W, A, S and D to steer and Q to quit |
 | `MON3.SVC` | Runs MON-3 programs. `MON3.SVC /E` gives `MON3>`, as [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session) describes |
-| `HELLO3.BIN` | A MON-3 program. At `MON3>`, `LOAD HELLO3.BIN` and `GO` write four lines on the LCD and count on the digits. AD, or Esc on the matrix keyboard, returns to `MON3>`, and `EXIT` to `A>` |
+| `HELLO3.BIN` | A MON-3 program. At `MON3>`, `LOAD HELLO3.BIN` and `GO` write four lines on the LCD and count on the digits. With the matrix keyboard enabled, as on this page, Esc returns to `MON3>`; with the Matrix switch off, AD on the keypad does. `EXIT` returns to `A>` |
 | `HELLO3.ASM` | HELLO3's source. `TAS HELLO3 HELLO3.BIN` builds it |
-| `CHAIN.ASM` | A program written with several statements on a line. `TAS CHAIN` builds it and `CHAIN` prints `LINE 1` to `LINE 5`. Its lines are up to 67 columns wide, so `TED CHAIN.ASM` shows them whole with "ROM" at 80 columns or after `CON PICO 80` |
+| `CHAIN.ASM` | A program written with several statements on a line. `TAS CHAIN` builds it and `CHAIN` prints `LINE 1` to `LINE 5`. Its lines are up to 67 columns wide, so `TED CHAIN.ASM` shows them whole with the "ROM" control at 80 columns or after `CON PICO 80` |
 
 The card does not hold DEMO.COM until you build it. BOUNCE needs the
 PICO9918 and draws through `call`, as Chapter 3 explains

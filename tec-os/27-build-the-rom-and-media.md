@@ -70,7 +70,7 @@ path uses TAS for the main ROM, the board diagnostics, `GLCD.SVC`,
 `MOUNT.COM`, `DEMO.COM`, `MON3.SVC` and `HELLO3.BIN`. The diagnostics always
 use TAS. The standalone ATOM examples use a separate assembly path
 (`package.json:1-31`, `tools/build.mjs:342-351`,
-`755636b:tools/diag.mjs:143-146`, `be654b3:tools/media.mjs:195-212`,
+`755636b:tools/diag.mjs:143-146`, `be654b3:tools/media.mjs:195-246`,
 `be654b3:README.md:91-95`).
 
 `TAS.COM` is pinned to Thorium
@@ -83,14 +83,14 @@ existing host. The checks cover the runner, lock file, locked Z80 runtime
 and the 10,343-byte TAS executable (`be654b3:tools/lib/tas-rom.mjs:10-11`,
 `be654b3:tools/lib/tas-rom.mjs:77-98`, `be654b3:test/inputs.json:4-13`).
 
-This TAS takes several statements on a line and refuses a line with more
+This TAS takes several statements on a line and rejects a line with more
 than 128 characters of code, as
 [Chapter 2](02-make-a-small-program.md#several-statements-on-a-line)
 describes. TEC-OS's own sources keep one statement to a line and none is
 that long, so the ROM, `GLCD.SVC`, `MON3.SVC`, `MOUNT.COM`, `DEMO.COM`,
 `HELLO3.BIN` and the test programs assemble to the same bytes as under the
 earlier `dbee66a` (`be654b3:docs/compatibility.md:199`). The ROM's map gives
-each source line one statement, so the build refuses a ROM source line that
+each source line one statement, so the build rejects a ROM source line that
 holds a `\` outside quotes and comments
 (`be654b3:tools/lib/tas-d8.mjs:105-121`,
 `be654b3:tools/lib/tas-d8.mjs:155-157`).
@@ -111,7 +111,7 @@ temporary download before replacing the local input
 is used. An empty host override is an error. Assembly reads local prepared
 files and does not download them (`tools/lib/tas-rom.mjs:77-107`).
 After preparation, `npm run build` constructs the main ROM, `npm run diag`
-assembles the board diagnostics, `DIAG.HEX` and `DIAG.BIN` for MON3 to load
+assembles the board diagnostics, `DIAG.HEX` and `DIAG.BIN` for MON-3 to load
 at `4000h`, and `npm run media` prepares the distribution
 (`package.json:14-23`, `755636b:tools/diag.mjs:1-9`). Chapter 28 describes
 the diagnostics. The explicit ATOM reference selection is:

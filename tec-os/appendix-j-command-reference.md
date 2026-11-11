@@ -348,7 +348,7 @@ by BAZA and `HELLO3.BIN` is loaded at `MON3>`
 | `DEMO.ASM` | The source of DEMO. `TAS DEMO` builds DEMO.COM, then `DEMO` shows the LCD, the 7-segment digits, the 8 × 8 LEDs and the PICO9918. `TED DEMO.ASM` opens the source |
 | `CHAIN.ASM` | Assembly source written with several statements on a line, for `TAS CHAIN`, then `CHAIN`, which prints `LINE 1` to `LINE 5`. Its lines are up to 67 columns wide |
 | `MON3.SVC` | A resident service that runs MON-3 programs. `MON3.SVC /E` gives the `MON3>` line |
-| `HELLO3.BIN` | A MON-3 program for `LOAD HELLO3.BIN`, then `GO`, at `MON3>`. It writes four lines on the LCD and counts on the digits until AD, or Esc on the matrix keyboard |
+| `HELLO3.BIN` | A MON-3 program for `LOAD HELLO3.BIN`, then `GO`, at `MON3>`. It writes four lines on the LCD and counts on the digits until Esc on the matrix keyboard, or AD on the keypad with the Matrix switch off |
 | `HELLO3.ASM` | HELLO3's source, for `TAS HELLO3 HELLO3.BIN` |
 | `GLCD.SVC` | The graphics LCD console driver, a resident service |
 | `STARTUP.CMD` | The startup file, holding the line `GLCD.SVC` |

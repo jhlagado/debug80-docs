@@ -141,7 +141,7 @@ Sizes in bytes are decimal. A KiB is 1,024 bytes and a MiB is 1,024 KiB.
 | [25. Loading and removing services](25-loading-and-removing-services.md) | Relocation, publication and rollback |
 | [26. Startup inside the CCP](26-startup-inside-the-ccp.md) | Reading lines and handling absent displays |
 | [27. Build the ROM and media](27-build-the-rom-and-media.md) | Source, generated data and qualified artifacts |
-| [28. Diagnose the machine](28-diagnose-the-machine.md) | Card errors and the board diagnostics loaded by MON3 |
+| [28. Diagnose the machine](28-diagnose-the-machine.md) | Card errors and the board diagnostics loaded by MON-3 |
 | [29. The host model as evidence](29-the-host-model-as-evidence.md) | Host machine, captures, tests and their limits |
 
 ## Reference

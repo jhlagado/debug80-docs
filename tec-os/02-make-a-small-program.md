@@ -222,7 +222,8 @@ loop is `push bc` followed by `ld de,TEXT`. A label stands alone on its
 line, as `START:` and `LINE:` do here, or begins the line. A label or an
 `EQU` cannot follow a `\`. A comment still runs from the semicolon to the end
 of the line, and here it describes the whole line's step rather than each
-instruction. A backslash inside quotes does not separate statements.
+instruction. Inside quotes a backslash is still an escape, as in `'\\'`
+for the backslash character, and does not separate statements.
 
 The layout changes only the source. `TAS CHAIN` writes the same 43 bytes
 that the instructions written one to a line would give, and `CHAIN` prints
@@ -231,8 +232,10 @@ labels on their own lines and at most three statements on a line, each line
 with its comment.
 
 A line's code, before its comment, can be at most 128 characters long,
-blanks included. TAS refuses a longer line with `line too long` at column
-129, whether it holds one statement or several. A comment may be any length.
+blanks included. A longer line is rejected, normally as `line too long` at
+column 129, whether it holds one statement or several. A line much longer
+than that can be cut by TAS's source window first and then gives the error of
+its cut text, but it is rejected either way. A comment may be any length.
 
 ## A changed greeting
 

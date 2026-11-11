@@ -24,7 +24,7 @@ what an untested physical board will return.
 For the prepared board, fit a 32 KiB RAM chip in U9, set the CPU clock to FAST
 with the 4 MHz oscillator and leave the hex-keypad non-maskable interrupt (NMI)
 jumper off. Enable the Matrix switch when using the matrix keyboard. Chapter 28
-describes the board diagnostics, a program that MON3 loads, and the serial
+describes the board diagnostics, a program that MON-3 loads, and the serial
 log that records what a particular board did.
 
 ## The ports
@@ -177,7 +177,7 @@ CPU pushes its return address and enters `0066h`, inside the default file
 control block (FCB) at `005Ch–007Fh`. TEC-OS installs no NMI handler there. The
 bytes can be file metadata rather than instructions so a press can crash the
 machine. The supported TEC-OS setup leaves the jumper off. The board
-diagnostics run under MON3 and use the keypad through MON3. Their keypad
+diagnostics run under MON-3 and use the keypad through MON-3. Their keypad
 instructions must not be applied to an ordinary TEC-OS session.
 
 ## The 20 × 4 LCD

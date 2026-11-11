@@ -25,7 +25,7 @@ In a message `d` stands for a drive letter, `n` for a decimal number, `NAME`
 for a word from the command line, `LABEL` for a volume's label and `nn` for a
 code in hexadecimal. The rest is printed as it stands. `tecvol` runs on a PC
 and [Appendix F](appendix-f-tecvol.md) describes it. The board diagnostics
-are a separate program that MON3 loads, described in
+are a separate program that MON-3 loads, described in
 [Chapter 28](28-diagnose-the-machine.md).
 
 ## Cold boot

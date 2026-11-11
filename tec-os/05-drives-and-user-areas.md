@@ -123,8 +123,9 @@ without reading the file. A warm boot keeps it, and `UNLOAD` or a reset
 removes it. Its 4,593 bytes of header and image occupy 18 pages. The BDOS
 entry in `0006h` moves from `B9A4h` to `A700h`, and the program memory from
 47,268 bytes to 42,496, or to 41,728 with `GLCD.SVC` installed too. The
-monitor's code, line buffer and stack are all in those pages, above anything
-a MON-3 program may load into.
+service's own code, line buffer and stack are all in those pages, above
+anything a MON-3 program may load into. A program itself runs on MON-3's
+stack, below `0880h`.
 
 The `MON3>` line takes three commands, in capitals or lower case:
 
@@ -153,7 +154,8 @@ reached through `RST 10h`. Of those, 42 behave as MON-3's own and 4,
 including `setCaps` and `setProtect`, are translated onto TEC-OS's state.
 It also gives calls 0 to 20 of the 34 graphics calls through `RST 18h`,
 which are MON-3's own routines moved into the service. With the matrix
-keyboard fitted, the keyboard calls read it as MON-3 does. A call that is
+keyboard fitted, the keyboard calls read it as MON-3 does, and not the
+keypad. A call that is
 not built shows MON-3's error display on the digits, waits for a key and
 returns as a key press would. MON-3's own disk calls are among those: they
 are not translated to CP/M files.

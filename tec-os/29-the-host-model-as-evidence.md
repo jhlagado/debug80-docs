@@ -449,7 +449,7 @@ permissive model (`host/machine.mjs:40-46`, `host/machine.mjs:155-172`,
 `755636b:docs/diagnostics.md:383-399`).
 
 [Chapter 28](28-diagnose-the-machine.md) describes the board diagnostics,
-a program that MON3 loads on a physical board. Their host-model test
+a program that MON-3 loads on a physical board. Their host-model test
 establishes the program's logic, not a board's behaviour. Each line of a
 board log reports whether that board did what TEC-OS relies on, with no
 model report to compare against (`755636b:docs/diagnostics.md:15-18`,

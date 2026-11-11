@@ -31,7 +31,9 @@ nav_group: "Using the machine"
      card" follow be654b3 README.md:160-173, the recipe's instruction
      (tools/media.mjs:261), test/programs/hello3.asm and
      test/starter.test.mjs:112-344; the LCD lines are HELLO3_ROWS
-     (test/starter.test.mjs:198). No capture of those steps is claimed. -->
+     (test/starter.test.mjs:198). With the Matrix switch on, MON3.SVC's key
+     calls read the matrix, not the keypad (docs/mon3.md:234-236, :278-279,
+     drivers/mon3api.asm:296-305). No capture of those steps is claimed. -->
 
 Your first session starts with the supplied files. You list them, change drive
 and turn SAMPLE's source into a program you can run. Before finishing you write
@@ -96,8 +98,8 @@ A>
 
 That listing is from an earlier starter card with six files. The card TEC-OS
 prepares now holds fifteen, so its listing has fifteen names and its last
-line reports fifteen files. Besides these six it holds TIMES.BAS, BAZA.COM
-and BAZA.RTL, MON3.SVC and HELLO3.BIN, and the sources DEMO.ASM, BOUNCE.BAS,
+line reports fifteen files. Besides these six it holds TIMES.BAS, BAZA.COM,
+BAZA.RTL, MON3.SVC and HELLO3.BIN, with the sources DEMO.ASM, BOUNCE.BAS,
 HELLO3.ASM and CHAIN.ASM.
 
 Each name has up to eight characters followed by a type of up to three
@@ -110,7 +112,8 @@ program. `TED` is the supplied text editor and `MOUNT` manages volumes.
 `BAZA` is a BASIC compiler, which uses its library `BAZA.RTL`, and
 `TIMES.BAS` is a BASIC program for it. The automatic display setup uses
 `GLCD.SVC` and `STARTUP.CMD`. Leave them as supplied for this session. The
-other files are demonstrations, which the end of this session lists.
+other files are demonstrations, which [More on the card](#more-on-the-card)
+lists.
 
 The last line reports the number of files and the free space on A. That
 space is in KiB, units of 1,024 bytes. The spelling `980K` is the listing's notation.
@@ -232,10 +235,12 @@ DIGITS BY RST 20H
 KEY BEEPS, AD QUITS
 ```
 
-It then counts on the digits. A key other than AD beeps and shows its code
-on the right two digits. AD on the keypad, or Esc on the matrix keyboard, returns
-to `MON3>`, and `EXIT` returns to `A>`. `HELLO3.ASM` is the program's
-source, and `TAS HELLO3 HELLO3.BIN` builds it.
+It then counts on the digits. Another key beeps and shows its code on the
+right two digits. With the matrix keyboard enabled, as here, the
+service reads the matrix and not the keypad, so Esc on the matrix keyboard
+ends the program and returns to `MON3>`. With the Matrix switch off, AD on
+the keypad does the same. `EXIT` returns to `A>`. `HELLO3.ASM` is the
+program's source, and `TAS HELLO3 HELLO3.BIN` builds it.
 [Chapter 5](05-drives-and-user-areas.md) explains the service and what it
 keeps in memory.
 

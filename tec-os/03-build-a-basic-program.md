@@ -294,9 +294,10 @@ to a millisecond at 4 MHz. A name ending in `%`, such as `x%`, holds a whole
 number from -32768 to 32767. BAZA compiles a simple statement as short
 16-bit code when every operand in it is an integer variable, a whole number
 from 0 to 32767, or an element of an integer array whose one subscript is
-itself an integer variable or a whole number. The simple statements are a copy, one addition or subtraction, an
-`if` with one relation, and `for` and `next` on an integer variable.
-Anything else still works, through the floating-point routines
+itself an integer variable or a whole number. The simple statements are a
+copy, one addition or subtraction, an `if` with one relation, and `for` and
+`next` on an integer variable. Anything else still works, through the
+floating-point routines
 (`Baza 45b138e:docs/speed.md:3-29`). BOUNCE moves its balls this way, one
 step to a statement
 (`Baza 45b138e:examples/BOUNCE.BAS:46-47`, `61-64`):

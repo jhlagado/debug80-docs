@@ -87,8 +87,8 @@ and reselection.
 
 The card prompt diagnoses card startup and mounting with TEC-OS in the ROM
 socket. The board diagnostics answer a different question: whether a
-physical TEC-1G behaves as TEC-OS assumes. They are a RAM program that MON3,
-the TEC-1G's own monitor, loads and runs, so MON3 stays in the ROM socket
+physical TEC-1G behaves as TEC-OS assumes. They are a RAM program that MON-3,
+the TEC-1G's own monitor, loads and runs, so MON-3 stays in the ROM socket
 (`docs/diagnostics.md:1-8`, `diag/diag.asm:1-9`). The SD card comes first.
 Every TEC-OS SD result so far is from the host model, whose card answers at
 once and never stalls, so the SD checks measure how much of each of TEC-OS's
@@ -119,7 +119,7 @@ It writes four files to `build/diag/` (`tools/diag.mjs:176-192`):
 
 | File | Contents |
 | --- | --- |
-| `DIAG.HEX` | Intel HEX for `4000h`, the file MON3 loads |
+| `DIAG.HEX` | Intel HEX for `4000h`, the file MON-3 loads |
 | `DIAG.BIN` | The same bytes as a binary image for `4000h` |
 | `diag.d8.json` | The symbol map |
 | `diag.json` | Version, image ID, SHA-256, size and memory use |
@@ -133,34 +133,34 @@ stores it in the image and the program's first serial line prints it, so a
 log names the image that ran (`tools/diag.mjs:122-127`,
 `tools/diag.mjs:158-162`, `diag/main.asm:161-170`).
 
-The program runs its code and tables from `4000h`, MON3's default address.
+The program runs its code and tables from `4000h`, MON-3's default address.
 Its variables, block buffers and its own 256-byte stack are in
 `1000h–3FFFh` (`diag/main.asm:10-17`, `diag/vars.asm:8-10`,
 `diag/vars.asm:168-172`). The code and tables are never written. The RAM and
 PROTECT checks write test patterns only to free RAM after the stack, after
 the program and in the `8000h–BFFFh` window, with PROTECT turned off
-through MON3 first (`docs/diagnostics.md:45-68`).
+through MON-3 first (`docs/diagnostics.md:45-68`).
 
 ## Loading and running
 
-MON3 loads `DIAG.HEX` by either of two routes
+MON-3 loads `DIAG.HEX` by either of two routes
 (`docs/diagnostics.md:70-85`, `docs/board-run.md:36-52`):
 
 - Over the FTDI port: set the terminal to 4800 baud, 8 data bits, no parity,
-  2 stop bits and no flow control. Choose Intel HEX Load in MON3's main menu
+  2 stop bits and no flow control. Choose Intel HEX Load in MON-3's main menu
   and send `DIAG.HEX` as a plain text file. The digits show `PASS` when the
   load is good. If they show `FAIL`, set the terminal to wait a few
   milliseconds after each character or line and send it again.
 - From a FAT32 card: copy `DIAG.HEX` to the card's root, fit the card and
-  load the file through MON3's Drive Access, Catalog (`Fn-F` in data entry
+  load the file through MON-3's Drive Access, Catalog (`Fn-F` in data entry
   mode). The program asks for the card to test before any SD access, so you
   can then swap the FAT32 card for the TEC-OS card.
 
-Start the program from MON3's data entry mode with the address `4000h` and
+Start the program from MON-3's data entry mode with the address `4000h` and
 `GO`. It sends nothing until you press `GO` at `Log on? GO=send` on the LCD's
 last row, so you can start the terminal's log first. It then prints its
 header and asks for the card to test. `GO` starts the checks and `AD`
-returns to MON3 (`diag/main.asm:35-49`, `docs/board-run.md:54-61`).
+returns to MON-3 (`diag/main.asm:35-49`, `docs/board-run.md:54-61`).
 
 The first check, SHAD, runs at once after that `GO`. Keep off the keypad
 until the LCD's second row changes from `Latch bit 0` to `SD1 MISO idle`,
@@ -169,8 +169,8 @@ vectors at `0038h` and `0066h` are then the ROM's (`diag/memory.asm:330-345`,
 `docs/board-run.md:62-64`). At each question `GO` goes on and `AD` skips or
 leaves. Enter and Esc do the same on the matrix keyboard. The LCD shows the
 check on row 2, its result on row 3 and the running totals on row 4. At the
-end the program puts MON3's latch settings back through MON3's own calls and
-returns to MON3 (`diag/main.asm:94-112`, `docs/diagnostics.md:95-102`).
+end the program puts MON-3's latch settings back through MON-3's own calls and
+returns to MON-3 (`diag/main.asm:94-112`, `docs/diagnostics.md:95-102`).
 
 ## The checks
 
@@ -195,12 +195,12 @@ The checks run in a fixed order (`diag/main.asm:201-204`):
 | LCD | The 20 × 4 LCD, by reading back two addresses (`diag/devices.asm:271`) |
 | GLCD | The graphics LCD's busy flag (`diag/devices.asm:327`) |
 | RTC | The DS1302's registers, read and not set (`diag/devices.asm:357`) |
-| INT | IM 1 interrupts through MON3's vector at `0892h` (`diag/devices.asm:453-461`) |
+| INT | IM 1 interrupts through MON-3's vector at `0892h` (`diag/devices.asm:453-461`) |
 | KEYS | The code of each keypad and matrix key you press (`diag/devices.asm:569`) |
 
 Each check prints one serial line: its name, a status, then `key=value`
 fields. Other lines begin with `# `. The first line starts `TEC1G-DIAG` with
-the version, image ID, size and MON3's stack pointer, and the last is
+the version, image ID, size and MON-3's stack pointer, and the last is
 `SUMMARY` with the four totals (`diag/main.asm:72-85`,
 `diag/main.asm:161-197`, `docs/diagnostics.md:104-120`). The statuses are
 (`docs/diagnostics.md:122-127`):
@@ -262,7 +262,7 @@ pattern. Keep the backup until the run is over (`docs/diagnostics.md:274-277`).
 ## What the diagnostics establish
 
 `test/diag.test.mjs` runs the program on the Debug80 host model with a stub
-monitor in place of MON3. Each case that reaches SD8 checks that no write
+monitor in place of MON-3. Each case that reaches SD8 checks that no write
 addressed blocks 0–7, the container or the card's last block, and that
 blocks 0–7 and every volume block are unchanged afterwards. The cases
 include a starter-layout card, a byte-addressed card, fake and wrapping
@@ -273,7 +273,7 @@ and arithmetic and that SD8 leaves the modelled card as it was. The model
 supplies the card's answers, so they establish nothing about a board
 (`docs/diagnostics.md:15-18`).
 
-Because MON3 is in the socket, the program cannot check TEC-OS's own
+Because MON-3 is in the socket, the program cannot check TEC-OS's own
 power-on path: the reset overlay entry, cold boot, the mount and the
 console with the TEC-OS ROM fitted. That needs a separate run with the
 TEC-OS ROM in place. The program also leaves the PICO9918's picture, the
