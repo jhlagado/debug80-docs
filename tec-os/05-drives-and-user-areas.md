@@ -149,8 +149,8 @@ the matrix it records the key it found in TEC-OS's last matrix key,
 `KBLAST`, so TEC-OS's own scan later takes a key still held as held, not as
 a new one. And when the console is the PICO9918 or the GLCD, the return
 holds `MON3>` back until no key is down. Each pass of that wait scans the
-matrix itself, then asks `KBLAST` for no matrix key and MON-3's `KPRESS` for
-no keypad key. On the serial terminal there is no wait. `^C` at `MON3>`, or
+matrix itself, then checks that `KBLAST` shows no matrix key and that
+MON-3's key-press byte shows no keypad key. On the serial terminal there is no wait. `^C` at `MON3>`, or
 a program's jump to `0000h`, also ends the session at `A>`.
 
 The service gives a program MON-3's restarts and 46 of the 63 calls
