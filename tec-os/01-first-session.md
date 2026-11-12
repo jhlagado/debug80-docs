@@ -7,22 +7,25 @@ nav_group: "Using the machine"
 
 # 1. First session
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…, on its starter card, the one card the web page
      runs too (tools/media.mjs:200-231, tools/lib/starter.mjs:10-22,
-     test/starter.test.mjs:46-80; Origo KD-278, KD-302). The screen
+     test/starter.test.mjs:48-82; Origo KD-278, KD-302). The screen
      excerpts are captures at fdd9e5b: node tools/capture.mjs --board pico
      --screen DIR B: A: "TAS SAMPLE" SAMPLE, the rows each comment names. The ^C excerpt is the same command's serial capture, node
      tools/capture.mjs ^C, since the capture tool cannot send ^C as a
      matrix key; the text is the console's either way. SHELL.SVC and the
      recall keys follow docs/shell.md:3-26 and :144-146. The steps in "More
-     on the card" follow README.md:164-185, tools/media.mjs:241,
-     test/programs/hello3.asm and test/starter.test.mjs:107-392; the LCD
-     lines are HELLO3_ROWS (test/starter.test.mjs:217). With the Matrix
+     on the card" follow README.md:174-195, tools/media.mjs:241,
+     test/programs/hello3.asm and test/starter.test.mjs:109-394; the LCD
+     lines are HELLO3_ROWS (test/starter.test.mjs:219). With the Matrix
      switch on, MON3.SVC's key calls read the matrix, not the keypad
-     (docs/mon3.md:242-244, :286-287, drivers/mon3api.asm:296-305). A:'s
-     pending block follows docs/recovery.md:28-36 and :64-79. No capture of
-     the MON-3 steps is claimed. -->
+     (docs/mon3.md:245-247, :289-290, drivers/mon3api.asm:296-305). A:'s
+     pending block follows docs/recovery.md:28-36 and :66-81. No capture of
+     the MON-3 steps is claimed.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 Your first session starts with the supplied files. You list them, change drive
 and turn SAMPLE's source into a program you can run. Before finishing you write
@@ -217,7 +220,7 @@ Typing `MON3.SVC` installs it and gives its prompt, `MON3>`. There
 `LOAD HELLO3.BIN` loads the supplied MON-3 program and `GO` runs it. HELLO3
 writes four lines on the 20 × 4 LCD through MON-3's calls, then beeps:
 
-<!-- TEC-OS fdd9e5b test/starter.test.mjs:217, the LCD rows the host-model
+<!-- TEC-OS e59e8c4 test/starter.test.mjs:219, the LCD rows the host-model
      test checks, trailing spaces removed. Not a separate capture. -->
 ```text
 MON-3 ON TEC-OS

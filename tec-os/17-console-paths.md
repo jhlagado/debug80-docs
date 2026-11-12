@@ -7,13 +7,16 @@ nav_group: "Inside TEC-OS"
 
 # 17. Console paths
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      All unprefixed source ranges below use that revision. The three
      captures were made at fdd9e5b with the commands in their comments, on
      the starter card or con.img made as shown; TERM was assembled on the
      PC by TAS through tools/lib/assemble.mjs, 95 bytes. Serial
      TXBYTE/BCONOUT measurements retain 60cfbdc and the 4 MHz clock, as
-     recorded in Book 22:1-5,91-92, and are marked where they appear. -->
+     recorded in Book 22:1-5,91-92, and are marked where they appear.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A key can arrive while a program is printing and still be available for its
 next read. TEC-OS holds that byte while the output continues. At the other
@@ -360,14 +363,14 @@ and delivers a held key only once. Holding it produces no automatic repeat
 (`src/keyboard.asm:39-99`). A press and release entirely between scans
 is lost.
 
-At TEC-OS `fdd9e5b` `abi.inc` publishes `KBLAST` at `BFEFh`: the
+At TEC-OS `e59e8c4` `abi.inc` publishes `KBLAST` at `BFEFh`: the
 highest-numbered matrix key down, row × 8 + column, or `FFh` for none. A
 service that scans the matrix itself writes the key it finds there, as
 `MON3.SVC` does, so a key held from a program is not read again as new
 when TEC-OS's scan resumes. The workspace byte's own label there is
 `KBSLOT`, and the build checks that the two addresses agree
-(`fdd9e5b:src/abi.inc:308-315`, `fdd9e5b:docs/services.md:433-444`,
-`fdd9e5b:src/ram.asm:425`).
+(`src/abi.inc:308-315`, `docs/services.md:433-444`,
+`src/ram.asm:425`).
 
 Two ordinary keys produce no character. A retained second key below 3 is
 a modifier and a modifier alone also produces none. Caps Lock toggles

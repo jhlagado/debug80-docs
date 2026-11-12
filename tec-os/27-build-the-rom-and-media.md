@@ -7,19 +7,22 @@ nav_group: "Inside TEC-OS"
 
 # 27. Build the ROM and media
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…. Unprefixed source ranges use that revision. The
      image regions and the build line are from npm run build there, and
-     HELLO's TED round is a capture at fdd9e5b with the commands in its
-     comment, on work.img made as shown, with TED.COM Thorium b69d544
-     (4f622390…) and TAS.COM Thorium 3d1e2c0 (e648a1d0…). The PC HELLO
+     HELLO's TED round is a capture at e59e8c4 with the commands in its
+     comment, on work.img made as shown, with TED.COM Thorium a2fe556
+     (c6c8374a…) and TAS.COM Thorium 3d1e2c0 (e648a1d0…). The PC HELLO
      recipe was run there too. The inputs are TED.COM and TAS.COM from
      Thorium and BAZA.COM Baza 50dc512 (280ee372…, 13,184 bytes),
      BAZA.RTL (14d7fd11…, 12,032 bytes) and BOUNCE.BAS (615693a5…, 5,189
      bytes) from Baza. Release-card passages prefixed 755636b: use TEC-OS
      755636b130241173c5c30a0be8fe6b79cf2fee37; those prefixed 402f30e: use
      TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125, before the shell left
-     the ROM. -->
+     the ROM.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A ROM and its symbol map must describe the same addresses. Card programs
 must use the interfaces supplied by that ROM. TEC-OS produces the image,
@@ -40,7 +43,7 @@ CHAIN.ASM, an input at TEC-OS `402f30e`, has left the card and the inputs. The
 same step also fetches MON-3's ROM, `MON3.BIN`, and thirteen of MON-3's
 program and library sources, which only the tests read: they compare
 `MON3.SVC` with MON-3 itself (`test/inputs.json:3-193`,
-`docs/mon3.md:13-16`, `docs/mon3.md:354-361`).
+`docs/mon3.md:13-16`, `docs/mon3.md:357-364`).
 
 TAS is the only assembler. It builds the main ROM, the board diagnostics,
 `GLCD.SVC`, `SHELL.SVC`, `MOUNT.COM`, `DEMO.COM`, `MON3.SVC` and `HELLO3.BIN`,
@@ -420,7 +423,7 @@ Inserting `1` at its start and pressing `^T B` saves the source and chains
 `A:TAS HELLO.ASM` followed by `A:TED`, a line the shell runs piece by piece.
 These are the PICO9918's screens:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card work.img --board pico --screen "CON PICO 80" B: "@start TED HELLO.ASM 7" "@press 1" "@press ^T B" "@run 400", the screen
+<!-- TEC-OS e59e8c4: node tools/capture.mjs --card work.img --board pico --screen "CON PICO 80" B: "@start TED HELLO.ASM 7" "@press 1" "@press ^T B" "@run 400", the screen
      printed at that point, ^T, ^H and Right typed as the bytes 14h, 08h
      and ESC [ C. work.img is the starter card with hello.asm put on B as
      below. -->

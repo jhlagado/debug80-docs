@@ -7,19 +7,23 @@ nav_group: "Using the machine"
 
 # 6. Cards on the PC
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. Every tecvol command and
      capture was run at fdd9e5b on its npm run media output, and the
-     outputs shown are those runs'. saved-banner-card.img was made on the
+     outputs shown are those runs'. The BANNER card and its recovery were
+     made again at e59e8c4 with the same output. saved-banner-card.img was made on the
      host model from the starter card with Chapter 2's edited BANNER.ASM on
      B: TED opened it, ^T B saved and built it, ^Q quit and a warm boot
      flushed the card. The one card's files and TED's load rule follow
      tools/media.mjs:200-253 and :274-277, tools/lib/starter.mjs:10-22,
      web/build.mjs:41-42, docs/compatibility.md:223 and
-     test/ted.test.mjs:92-120, with TED.COM Thorium b69d544 (4f622390…,
-     12,334 bytes). A:'s coalesced writes in "Recovery after a power cut":
-     docs/recovery.md:28-47, :64-97 and :129-141. The earlier TED of the
-     release card is Thorium 967678c, at TEC-OS 755636b. -->
+     test/ted.test.mjs:92-120, with TED.COM Thorium a2fe556 (c6c8374a…,
+     12,335 bytes). A:'s coalesced writes in "Recovery after a power cut":
+     docs/recovery.md:28-47, :66-103 and :135-147. The earlier TED of the
+     release card is Thorium 967678c, at TEC-OS 755636b.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A copy of the card on your PC lets you extract work and prepare another card
 without changing the original. `tecvol` reads and edits that image, a file
@@ -318,12 +322,12 @@ last record with `^Z`. Binary padding is zero. These are file conversions,
 not a way to preserve a PC file's original byte length in a CP/M directory.
 
 A text file put without `--text` therefore ends in zero bytes, not `^Z`.
-The starter card's TED at TEC-OS `fdd9e5b` (Thorium `b69d544`) takes a run
+The starter card's TED (Thorium `a2fe556`) takes a run
 of `00h` that fills the rest of the last record as the end of the file, so
 such a file opens without an error. A byte that TED rejects elsewhere stops
 it at the prompt with `EDIT error 03` and the byte's line and column, as in
-`EDIT error 03 L3 C5` (TEC-OS fdd9e5b `docs/compatibility.md`, Thorium
-b69d544 `README.md`). The earlier TED, Thorium `967678c` on the release
+`EDIT error 03 L3 C5` (TEC-OS e59e8c4 `docs/compatibility.md`, Thorium
+a2fe556 `README.md`). The earlier TED, Thorium `967678c` on the release
 card, rejects that padding and stops with error 03 without a line or
 column.
 
@@ -463,7 +467,7 @@ page's card and `dist/starter.img` are one card. Its fifteen files on A
 include the shell `SHELL.SVC`, the demo's source `DEMO.ASM`, the BASIC game
 `BOUNCE.BAS`, and `MON3.SVC` with `HELLO3.BIN` and its source `HELLO3.ASM`,
 at recipe revision 12. Media preparation no longer writes a separate page
-recipe (TEC-OS fdd9e5b `tools/media.mjs`, `web/build.mjs`). `TAS DEMO`
+recipe (TEC-OS e59e8c4 `tools/media.mjs`, `web/build.mjs`). `TAS DEMO`
 builds DEMO.COM on the card. The page uses the same size and SHA-256
 checks.
 

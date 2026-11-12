@@ -7,13 +7,16 @@ nav_group: "Inside TEC-OS"
 
 # 25. Loading and removing services
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…. Unprefixed source ranges use that revision,
      source inspection, and the tests named are in its test/svc.test.mjs.
      The GLCD figures are from its dist/files/GLCD.SVC, the TAS bytes from
      the starter card's TAS.COM, Thorium 3d1e2c0 (e648a1d0…), and the
      SERVICES capture was made at fdd9e5b with the command in its comment.
-     Citations prefixed Thorium dbee66a name TAS's source at that commit. -->
+     Citations prefixed Thorium dbee66a name TAS's source at that commit.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A service file first loads at `0100h` like a COM program. The loader moves
 its header and image to whole pages below the program ceiling, runs INIT

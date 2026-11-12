@@ -7,15 +7,18 @@ nav_group: "Using the machine"
 
 # 8. Commands at startup
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. The ROM runs one line of
      STARTUP.CMD and SHELL.SVC the rest (docs/shell.md:115-133,
      src/cpm/ccpcmd.asm:805-875 for the ROM's line, drivers/shellio.asm:14-176
      for the shell's, tools/lib/starter.mjs:10-22 for the card's two lines).
      The card's file count is tools/media.mjs:200-231 and
-     test/starter.test.mjs:46-80. Every capture was made at fdd9e5b with the
+     test/starter.test.mjs:48-82. Every capture was made at fdd9e5b with the
      command in its comment, each card made from dist/starter.img or by the
-     recipe shown, boot rows kept where shown. -->
+     recipe shown, boot rows kept where shown.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 `A:STARTUP.CMD` holds commands you want to repeat after reset. TEC-OS runs
 them before accepting a command from the keyboard. You can use it to load the shell, select

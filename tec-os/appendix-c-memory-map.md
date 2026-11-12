@@ -7,7 +7,7 @@ nav_group: "Reference"
 
 # Appendix C. Memory map
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…. Addresses come from that build's
      build/tecos/tecos.d8.json and docs/memory-map.md. Lines cited with a
      402f30e: prefix are from TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125. -->
@@ -17,7 +17,7 @@ pairs the map of one build with the source contracts for each region.
 [Chapter 11](11-memory-for-programs.md) explains the program's memory limits.
 [Chapter 15](15-state-and-memory.md) explains resident state and its lifetime.
 
-The address tables describe the `tecos` build at TEC-OS `fdd9e5b`, whose ROM
+The address tables describe the `tecos` build at TEC-OS `e59e8c4`, whose ROM
 SHA-256 is
 `43ac0f1871cf3d979c94b74a030c1c06eeec500bd77e60ca7e3951a2de1c339e`. It is the
 one image for every board. The starter card mounts G1M on A and G8M on B with
@@ -395,7 +395,7 @@ for (const n of process.argv.slice(1)) {
 }' CMDTXT PRGCODE CHPOS
 ```
 
-At `fdd9e5b` it prints:
+At `e59e8c4` it prints:
 
 ```text
 CMDTXT BD3Ch

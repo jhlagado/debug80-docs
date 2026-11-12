@@ -7,7 +7,7 @@ nav_group: "Inside TEC-OS"
 
 # 28. Diagnose the machine
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision, source inspection. The
      board diagnostics sections follow diag/, tools/diag.mjs,
      docs/diagnostics.md, docs/board-run.md and test/diag.test.mjs there,
@@ -15,7 +15,10 @@ nav_group: "Inside TEC-OS"
      those of TEC-OS main dbbdb47. No test or board run was made for this
      chapter, and no board log from the diagnostics is recorded here. The
      diagnostic-prompt screen is a capture at fdd9e5b with the command in
-     its comment. The retired 16 KiB diagnostics ROM is not described. -->
+     its comment. The retired 16 KiB diagnostics ROM is not described.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A card failure can stop TEC-OS before the first command prompt. The error code
 and `R retry>` let you correct the card and try mounting it again. A separate

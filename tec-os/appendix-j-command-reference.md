@@ -7,23 +7,25 @@ nav_group: "Reference"
 
 # Appendix J. Command reference
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
-     Unprefixed source ranges use that revision, as do those prefixed
-     fdd9e5b:, with Thorium b69d544 (TED.COM, SHA-256 4f622390…), Thorium
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
+     Unprefixed source ranges use that revision, with Thorium a2fe556 (TED.COM, SHA-256 c6c8374a…), Thorium
      3d1e2c0 (TAS.COM, e648a1d0…) and Baza 50dc512 (BAZA.COM 280ee372…,
      BAZA.RTL 14d7fd11…, BOUNCE.BAS 615693a5…). The three captures were
      made at fdd9e5b with the commands in their comments. DEL in the ROM
-     cites 402f30e: (TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125). -->
+     cites 402f30e: (TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125).
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A command line contains a command and its arguments, separated by spaces.
 Return or `^J` ends the line. The maximum is 127 characters and typing the
 last available character also ends it. `^C` cancels only at the start of
 the line. Later in the line it is ignored. Recall and editing keys are in
-[The first session](01-first-session.md). At TEC-OS `fdd9e5b` the ROM's
+[The first session](01-first-session.md). At TEC-OS `e59e8c4` the ROM's
 command processor runs the built-ins marked ROM below, and the shell,
 `SHELL.SVC`, which the starter card's startup file installs, adds those
 marked shell, recall, the `[more]` pause, lines of several commands and
-`.CMD` scripts (`fdd9e5b:docs/shell.md:1-44`). Commands and arguments are converted to
+`.CMD` scripts (`docs/shell.md:1-44`). Commands and arguments are converted to
 capitals before execution. The echo retains the case typed.
 [Work with files](04-work-with-files.md) explains the ordinary operations.
 This appendix gives their exact forms and boundary cases.
@@ -85,9 +87,9 @@ the causes and recovery actions.
 
 ## Command forms
 
-At TEC-OS `fdd9e5b` the ROM holds eight built-ins, DIR, TYPE, ERA, REN,
+At TEC-OS `e59e8c4` the ROM holds eight built-ins, DIR, TYPE, ERA, REN,
 SAVE, USER, CON and UNLOAD, and the shell three more, COPY, DEL and SERVICES
-(`fdd9e5b:src/tables.asm:53-76`, `fdd9e5b:drivers/shell.asm:541-548`). The
+(`src/tables.asm:53-76`, `drivers/shell.asm:541-548`). The
 release-1 ROM at `a1023bd` held ten, with COPY and SERVICES, and the ROM at
 `402f30e` eleven, with DEL. Drive selection, program launch and service
 installation have additional forms handled by the command processor.
@@ -112,7 +114,7 @@ installation have additional forms handled by the command processor.
 
 Without the shell `COPY`, `DEL` and `SERVICES` are names like any other, so
 each looks for a program of that name and normally prints the name with a
-question mark (`fdd9e5b:docs/shell.md:28-41`).
+question mark (`docs/shell.md:28-41`).
 
 A built-in name must end at a space or the end of the command piece.
 `DIRX`, `DIR.COM` and `A:DIR` are program commands, not forms of built-in
@@ -208,14 +210,14 @@ multi-file erase after some entries have already been erased. The exact
 partial-result cases are in [Appendix D](appendix-d-error-messages.md).
 
 DEL is another name for ERA. At `402f30e` its keyword in the ROM selected
-the same routine (`402f30e:src/tables.asm:64-67`). At `fdd9e5b` DEL is the
+the same routine (`402f30e:src/tables.asm:64-67`). At `e59e8c4` DEL is the
 shell's: the shell rewrites the word as `ERA` and hands the piece to the
 ROM, so it takes the same names and patterns and prints the same
 `ALL (Y/N)?` question. Because a built-in is matched before a program is
 looked up, plain `DEL` under the shell does not run a `DEL.COM`, as plain
 `ERA` never runs an `ERA.COM`. `A:DEL` or `DEL.COM` still runs that file
-(`fdd9e5b:drivers/shell.asm:530-539`, `fdd9e5b:docs/compatibility.md:119-122`,
-`fdd9e5b:test/commands.test.mjs:163-213`).
+(`drivers/shell.asm:530-539`, `docs/compatibility.md:119-122`,
+`test/commands.test.mjs:163-213`).
 
 The following run starts with an empty B drive and copies one
 disposable file there. It records an `n` answer that leaves the file and a `y`
@@ -300,7 +302,7 @@ routine reports failure. The practical installation rules are in
 [Chapter 5](05-drives-and-user-areas.md) and authoring is in
 [Chapter 14](14-write-a-resident-service.md).
 
-At TEC-OS `fdd9e5b`, `NAME.SVC` also enters a service's application when the
+At TEC-OS `e59e8c4`, `NAME.SVC` also enters a service's application when the
 service has its enter-on-install bit set. Only a service whose image starts
 with an execution record that has its enter bit set has one. On the starter
 card those are `MON3.SVC` and `SHELL.SVC`. Text after the name is the
@@ -315,15 +317,15 @@ copies installed the command is refused until `UNLOAD` leaves one. Each
 refusal prints the command's name with a question mark, as `MON3.SVC?`, and
 sets return code FF00h. The application ends with a warm boot and its
 service stays installed, so `UNLOAD` removes it as before
-(`fdd9e5b:docs/services.md:82-89`, `fdd9e5b:docs/services.md:101-130`,
-`fdd9e5b:docs/services.md:157-180`, `fdd9e5b:src/loader.asm:734-783`,
-`fdd9e5b:docs/shell.md:220-235`). The `NAME.SVC /E` form of `31b6083` and
+(`docs/services.md:82-89`, `docs/services.md:101-130`,
+`docs/services.md:157-180`, `src/loader.asm:734-783`,
+`docs/shell.md:220-235`). The `NAME.SVC /E` form of `31b6083` and
 `402f30e` is gone. [Appendix H](appendix-h-service-file-format.md#the-execution-record)
 gives the record.
 
 `MON3.SVC` gives the `MON3>` line, which BDOS function 10 reads and the
 service converts to capitals. It takes three commands. Anything else prints
-`?` (`fdd9e5b:docs/mon3.md:37-43`, `fdd9e5b:docs/mon3.md:55-109`):
+`?` (`docs/mon3.md:37-43`, `docs/mon3.md:58-112`):
 
 | Form | Operation |
 | --- | --- |
@@ -346,9 +348,9 @@ The starter card's A holds fifteen files, and the web page runs the same
 card. Ten are programs or sources you use by name at the prompt.
 `SHELL.SVC`, `GLCD.SVC` and `STARTUP.CMD` belong to the startup setup,
 `BAZA.RTL` is read by BAZA and `HELLO3.BIN` is loaded at `MON3>`
-(`fdd9e5b:tools/media.mjs:29-31`, `fdd9e5b:tools/media.mjs:200-231`,
-`fdd9e5b:tools/lib/starter.mjs:10-22`, `fdd9e5b:README.md:156-185`,
-`fdd9e5b:test/demo.test.mjs:1-4`, `fdd9e5b:test/starter.test.mjs:46-392`):
+(`tools/media.mjs:29-31`, `tools/media.mjs:200-231`,
+`tools/lib/starter.mjs:10-22`, `README.md:163-195`,
+`test/demo.test.mjs:1-4`, `test/starter.test.mjs:48-394`):
 
 | File | Use |
 | --- | --- |
@@ -372,11 +374,14 @@ TED's `^T B` and `^T R` build an `.ASM` file with `TAS NAME.ASM` and a
 `.BAS` file with `BAZA NAME.BAS`. `^T D` chains `TDB NAME` for an `.ASM`
 file, which fails with `A:TDB?` on the starter card, and shows
 `No debugger` for a `.BAS` file
-(`Thorium b69d544:README.md:14-41`, `fdd9e5b:docs/compatibility.md:223`).
+(`Thorium a2fe556:README.md:14-41`, `docs/compatibility.md:223`).
+A file name and `THOR.PRJ`'s `ARGS` stop at a `!` or at an `&` after a blank,
+where the shell splits the line, so `ARGS X &Y` gives the program the tail
+` X` and nothing after it runs (`Thorium a2fe556:README.md:51-58`).
 `TAS` and `BAZA` both set the failure return code `FF00h` when a build
 fails. A failed BAZA compile leaves an existing `NAME.COM` unchanged, and a
 failed TAS build normally keeps its earlier outputs
-(`fdd9e5b:docs/compatibility.md:225-226`, `Baza 50dc512:README.md:32-37`,
+(`docs/compatibility.md:225-226`, `Baza 50dc512:README.md:32-37`,
 `Thorium 3d1e2c0:docs/language.md:17-20`).
 [Make a small program](02-make-a-small-program.md) and
 [Build a BASIC program](03-build-a-basic-program.md) use them.
@@ -392,7 +397,7 @@ B and C, and in `A &B !C` C runs. A run of separators and blanks is one
 separator, conditional when it holds only `&`. Empty pieces and spaces
 between pieces are ignored. The same 127-character bound applies to the
 whole line, typed, from a script or supplied by function 47
-(`fdd9e5b:docs/shell.md:46-82`).
+(`docs/shell.md:46-82`).
 
 A program's command tail ends before the blanks in front of its piece's
 separator. Neither a file name nor an argument can contain a literal
@@ -403,7 +408,7 @@ provided, and a piece starting with `:` is refused as a bad name.
 
 Without the shell `!` and `&` are ordinary characters. `DIR!TYPE X` is then
 one word, refused as `DIR!TYPE?`, and a function 47 line runs whole as one
-command (`fdd9e5b:docs/shell.md:28-44`).
+command (`docs/shell.md:28-44`).
 [Results and command chains](13-results-and-command-chains.md) gives the success
 interval, every drop path and function 47's replacement-line contract.
 
@@ -418,10 +423,10 @@ whose first character is `;` are passed over and not echoed. Every other
 line is echoed whole after the prompt and runs as a typed line. Scripts do
 not nest: a `NAME.CMD` piece inside a script, or one followed by more
 pieces, is refused as `NAME.CMD?` with FF00h. A missing script gives the same
-refusal (`fdd9e5b:docs/shell.md:91-113`).
+refusal (`docs/shell.md:91-113`).
 
 `STARTUP.CMD` is read the same way after the ROM has run its first line,
 when that line installs the shell. Typing `STARTUP.CMD` runs the whole file
 again as a typed script. Without the shell a typed `NAME.CMD` runs
 `NAME.COM`, and only the first line of `STARTUP.CMD` runs
-(`fdd9e5b:docs/shell.md:115-133`).
+(`docs/shell.md:115-133`).

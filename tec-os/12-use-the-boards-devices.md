@@ -7,14 +7,17 @@ nav_group: "Writing programs"
 
 # 12. Use the board's devices
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. The programs were
      assembled on the model by the starter card's TAS.COM, Thorium 3d1e2c0
      (e648a1d0…), and DEMO from the card's DEMO.ASM. Every capture was made
      at fdd9e5b with the command in its comment, on hw.img made as shown
-     or on the starter card. BOARD's message names TNCOUNT, 17 at
-     fdd9e5b. The 60e0768 PUTAT cost is a historical measurement, marked
-     where it appears. -->
+     or on the starter card. BOARD's message names TNCOUNT, 17. The
+     DIGIT, PUTAT and BDOS function 2 costs were measured on the host model
+     with the ROM 43ac0f18…, from the call to the return.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 The BDOS handles files and console text. TEC-OS's numbered ROM calls also let
 your program light the digits, sound the speaker, read the clock or write the
@@ -207,7 +210,7 @@ NOTMSG:	DB	"not TEC-OS with ABI 5",13,10,"$"
 ```
 
 The programs below assemble with the starter card's TAS, and their captures
-were made at TEC-OS `fdd9e5b`.
+were made at TEC-OS `e59e8c4`.
 
 ## The board's report
 
@@ -438,10 +441,10 @@ and port `01h` selects which digit lights. A steady-looking display requires
 repeated scans, with each digit lit only during its own turn.
 
 DIGIT, number 1, scans once through six pattern bytes at HL, leftmost first. It
-turns every digit off at the end. The `60e0768` model measurement gave
-20,670 T-states from the call target to return, about 5.2 ms at 4 MHz. A
-separate port-write trace at `bd15528` gave about 0.84 ms between selecting
-each digit and turning it off. The caller repeats the scan and supplies its
+turns every digit off at the end. On the host model it takes
+20,660 T-states from the call target to return, about 5.2 ms at 4 MHz. Its
+port writes put 3,348 T-states, about 0.84 ms, between selecting each digit
+and turning it off. The caller repeats the scan and supplies its
 own number-to-segment table.
 
 RTC, number 8, transfers seven BCD bytes through HL: seconds, minutes, hours,
@@ -829,12 +832,11 @@ while the PICO is both claimed and the console. A claim on PICO leaves PUTAT
 available on the graphics-LCD console. Portable code checks the ABI before PUTAT
 and retains a BDOS path for status 2.
 
-The `60e0768` model comparison put a PICO PUTAT character at about an eighth
-of the cost of BDOS function 2. Its PUTAT figure came from one 60-character
-call, with the BDOS path timed separately.
-A separate graphics-LCD comparison at `bd15528` used 15 characters from row 3,
-column 2. PUTAT cost about 35,136 T-states per character against about 38,407
-for BDOS function 2. Pixel drawing dominates both paths. Appendix B retains
+On the host model at 80 columns a PICO PUTAT character costs about an eighth
+of BDOS function 2: one 61-character call takes 30,907 T-states, about 507 a
+character, and function 2 takes 4,030 for one. On the graphics LCD a call of
+15 characters from row 3, column 2 takes about 35,750 T-states a character,
+against about 35,060 for function 2. Pixel drawing dominates both paths. Appendix B retains
 the per-cell figures and their conditions.
 
 ## DEMO
@@ -854,7 +856,7 @@ also runs, holds that source in place of DEMO.COM. Release 1 instead put
 DEMO.COM on the web page's card alone. `TAS DEMO` builds
 DEMO.COM on the card, `DEMO` then runs it and `TED DEMO.ASM` opens the source
 (`tools/media.mjs:220-223`, `tools/media.mjs:269-270`,
-`test/demo.test.mjs:1-4`, `test/starter.test.mjs:190-215`). This run builds
+`test/demo.test.mjs:1-4`, `test/starter.test.mjs:192-217`). This run builds
 and runs it on the starter card:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "TAS DEMO"

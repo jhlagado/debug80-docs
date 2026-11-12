@@ -7,7 +7,7 @@ nav_group: "Inside TEC-OS"
 
 # 15. State and memory inside TEC-OS
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…, where the command history is SHELL.SVC's and
      EXPAND 1 holds only the cache. Addresses come from that build's symbol
      file and docs/memory-map.md. -->

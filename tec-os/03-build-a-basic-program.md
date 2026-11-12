@@ -8,11 +8,11 @@ nav_group: "Using the machine"
 # 3. Build a BASIC program
 
 <!-- Source and test contracts read at TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), with
+     e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main), with
      programs/TIMES.BAS, tools/media.mjs, docs/compatibility.md (TED and
      BAZA rows, :223 and :225), test/times.test.mjs, test/ted-baza.test.mjs
      and test/starter.test.mjs.
-     TED.COM Thorium b69d544, SHA-256 4f622390…; BAZA.COM and BAZA.RTL
+     TED.COM Thorium a2fe556, SHA-256 c6c8374a…; BAZA.COM and BAZA.RTL
      Baza 50dc512, SHA-256 280ee372… (13,184 bytes) and 14d7fd11…
      (12,032 bytes), as test/inputs.json:24-43 pins. TIMES.COM built with
      them is 9,600 bytes, the same file as before the restyle
@@ -20,7 +20,7 @@ nav_group: "Using the machine"
      Baza README, docs/language.md, docs/call.md, docs/speed.md, docs/mbasic.md,
      docs/size-account.md,
      src/lex.asm and examples/BOUNCE.BAS at 50dc512; Thorium README at
-     b69d544. The BASIC style is TEC-OS fdd9e5b README.md:167-169 and the
+     a2fe556. The BASIC style is TEC-OS e59e8c4 README.md:177-179 and the
      check in test/times.test.mjs:89-113.
      The TIMES screen below is the screen test/times.test.mjs:28-40 and
      :115-122 checks on the host model at 40 columns. It is not a separate
@@ -29,7 +29,10 @@ nav_group: "Using the machine"
      BAZA's spinner and its screen are a capture at fdd9e5b:
      node tools/capture.mjs --board pico --screen "BAZA TIMES".
      No other new execution occurred for this chapter, and no BAZA or
-     TED BASIC run on a physical TEC-1G is recorded. -->
+     TED BASIC run on a physical TEC-1G is recorded.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 The starter card holds a short program in BASIC, TIMES.BAS, beside SAMPLE's
 assembly source. You compile it with BAZA and run it. Then you edit and build
@@ -362,5 +365,5 @@ the ship. The matrix keyboard's arrow keys reach the program as Esc, `[` and
 a letter, `A` to `D`, and lines 950 to 999 read that sequence and treat it
 as W, S, D or A. Q ends the game, gives the display back as the console and
 prints the score at `A>`. The host-model test checks each of these steps
-(`tools/media.mjs:215-218`, `test/starter.test.mjs:107-188`,
+(`tools/media.mjs:215-218`, `test/starter.test.mjs:109-190`,
 `Baza 50dc512:examples/BOUNCE.BAS:84`, `103-115`).

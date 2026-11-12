@@ -7,10 +7,13 @@ nav_group: "Inside TEC-OS"
 
 # 18. Card blocks and volumes
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…. Captures, SD block timings and SAVE write counts
      are host-model runs of that build on its starter card. The diagnostics
-     token-poll figure is the retired diagnostics ROM's at TEC-OS 78127ec. -->
+     token-poll figure is the retired diagnostics ROM's at TEC-OS 78127ec.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A CP/M disk read transfers 128 bytes. An SD card read transfers 512 bytes. The
 BIOS joins these two sizes by mapping each CP/M record to a quarter of a card
@@ -480,14 +483,15 @@ assertions have not been rerun here (`src/abi.inc:32-53`,
 `src/abi.inc:136-166`).
 
 Before a mount or unmount publishes a different drive assignment,
-`VFLUSH` calls `CFLALL` with interrupts masked and restores their preceding
-state afterwards. It preserves the requested drive, index and descriptor
-across that call. `CFLALL` attempts every dirty line. It drops a failed
-line and continues with the rest then returns failure if any write failed
-(`src/volsvc.asm:373-389`, `src/cache.asm:257-299`).
+`VFLUSH` calls `CFLUSH`, with no line excluded, with interrupts masked and
+restores their preceding state afterwards. It preserves the requested drive,
+index and descriptor across that call. `CFLUSH` attempts every dirty line. It
+keeps a failed line dirty for the next flush and continues with the rest,
+then returns failure if any write failed
+(`src/volsvc.asm:360-389`, `src/cache.asm:255-300`).
 
 Validation or this flush failure leaves the drive assignment unchanged.
-It does not roll back card writes or restore failed cache lines. Even a
+It does not roll back card writes. Even a
 descriptor read can require a dirty victim write. The old assignment is
 the protected state at this boundary, not every byte of storage or
 workspace (`src/vol.asm:399-416`, `src/volsvc.asm:211-244`,

@@ -7,11 +7,14 @@ nav_group: "Writing programs"
 
 # 10. Read and write a file
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. SHOW was assembled by TAS
      (Thorium 3d1e2c0, the pinned TAS.COM) through tools/lib/assemble.mjs,
      72 bytes, and the SHOW capture was made at fdd9e5b on the card the
-     recipe shown makes. -->
+     recipe shown makes.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A file call needs both a name and a place in memory for the data. The BDOS
 keeps the file's position in a file control block and transfers its data a
@@ -302,7 +305,7 @@ the block reaches the card at the next close, directory request, write to
 another block, console read, function 48 or warm boot. A program that writes
 a file and then waits for a key therefore leaves nothing unwritten while it
 waits. A reset before one of those points loses at most that block's
-records (`docs/recovery.md:64-97`).
+records (`docs/recovery.md:66-103`).
 
 A write that returns 1 or 2 may follow earlier successful records. Close
 the partial file and check the close result before reporting how much was
@@ -332,6 +335,6 @@ on the card before another program loads. If a write fails there, TEC-OS
 drops the failed cache lines, reports `Write lost` and cancels the remaining
 command line. Explicit function 48 also reports failure, and keeps a failed
 line for the next flush, so only warm boot drops a line that still fails
-(`docs/recovery.md:49-58`). A later successful flush cannot restore bytes
+(`docs/recovery.md:49-61`). A later successful flush cannot restore bytes
 from a line already dropped. A reset discards pending cached changes rather than finishing
 unclosed work.

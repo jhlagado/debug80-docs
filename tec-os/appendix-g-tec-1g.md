@@ -7,7 +7,7 @@ nav_group: "Reference"
 
 # Appendix G. The TEC-1G as TEC-OS uses it
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision, source inspection. No
      physical-board run was made. The retired diagnostics ROM's documents
      and tests are cited with an a1023bd: prefix (TEC-OS

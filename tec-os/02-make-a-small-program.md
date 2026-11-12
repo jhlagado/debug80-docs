@@ -7,19 +7,20 @@ nav_group: "Using the machine"
 
 # 2. Make a small program
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…, with the starter card's TED.COM, Thorium
-     b69d544 (4f622390…), and TAS.COM, Thorium 3d1e2c0 (e648a1d0…,
+     a2fe556 (c6c8374a…), and TAS.COM, Thorium 3d1e2c0 (e648a1d0…,
      10,343 bytes; test/inputs.json:4-13, docs/compatibility.md:223 and
-     :226). The console excerpts are captures at fdd9e5b on the PICO9918
+     :226). The console excerpts are captures at e59e8c4 on the PICO9918
      board at 40 columns, on starter-card copies with B:BANNER.ASM put as
      each stage's source: node tools/capture.mjs --card IMG --board pico
      "@start A:TED B:BANNER.ASM" then ^T B or ^T R typed as their bytes,
      the console text from A>A:TAS on. The final excerpt is node
      tools/capture.mjs --card IMG "A:TAS B:BANNER.ASM" ^C B:BANNER ^C on
      the serial console, whose text the PICO9918 shows the same. The
-     editing keys and status positions follow TED's own screens and were
-     not each recaptured. TED's build line runs under SHELL.SVC, which the
+     status-row positions and messages are TED's last screen row read on
+     the model at each step, the source typed through the matrix keyboard
+     at 40 columns. TED's build line runs under SHELL.SVC, which the
      card's STARTUP.CMD loads (docs/shell.md:42-44,
      drivers/shell.asm:174-232). "Several statements on a line" follows
      Thorium 3d1e2c0 docs/language.md:55-84 and :124, and the CHAIN.ASM
@@ -89,7 +90,7 @@ following console excerpt is from that rejected build before TED redraws
 the editor. The initial screen-clear controls, leading blank line and editor
 redraw after the last line are omitted:
 
-<!-- TEC-OS fdd9e5b: the source above with BROKEN as line 14, ^T B.
+<!-- TEC-OS e59e8c4: the source above with BROKEN as line 14, ^T B.
      Console text from A>A:TAS through A>A:TED. The long diagnostic wraps
      on the 40-column screen. -->
 ```text
@@ -131,7 +132,7 @@ again with the source.
 complete console text from the initial run, with the initial clear-screen
 controls and leading blank line omitted. The editor has not yet redrawn:
 
-<!-- TEC-OS fdd9e5b: the source above, ^T R. Console text from A>A:TAS
+<!-- TEC-OS e59e8c4: the source above, ^T R. Console text from A>A:TAS
      on; Press a key has no following newline. -->
 ```text
 A>A:TAS B:BANNER.ASM
@@ -255,7 +256,7 @@ MSG: db "Hello from TEC-OS!",13,10,"$"
 greeting. As before, the initial clear-screen controls and leading blank
 line are omitted:
 
-<!-- TEC-OS fdd9e5b: the edited source, ^T R, a separate run. -->
+<!-- TEC-OS e59e8c4: the edited source, ^T R, a separate run. -->
 ```text
 A>A:TAS B:BANNER.ASM
 BANNER.COM written
@@ -289,7 +290,7 @@ from B while A remains current. It does not open TED or assemble the source.
 The final excerpt shows the quit's preservation step, the standalone run
 and a final `^C`:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card IMG "A:TAS B:BANNER.ASM"
+<!-- TEC-OS e59e8c4: node tools/capture.mjs --card IMG "A:TAS B:BANNER.ASM"
      ^C B:BANNER ^C, the last lines. -->
 ```text
 A>^C

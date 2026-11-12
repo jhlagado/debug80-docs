@@ -7,7 +7,7 @@ nav_group: "Inside TEC-OS"
 
 # 19. Cache and persistence
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed citations use that revision. The READ and SAVE timings and
      the SAVE 8 and SAVE 160 write traces were measured at fdd9e5b on the
      host model, with a script that drives Machine as tools/capture.mjs does
@@ -16,7 +16,10 @@ nav_group: "Inside TEC-OS"
      16 KiB and SAVE 16 write counts are the fdd9e5b measurements recorded
      in Origo KD-303. The block-read, BIOS hit and miss, CLOOK, CWRITE
      and close costs were measured at fdd9e5b the same way, timing each call
-     from its entry to its return on the starter card. -->
+     from its entry to its return on the starter card.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A program can finish writing a record while its newest bytes are still only in
 RAM. The block cache makes that possible by collecting records into card blocks.
@@ -169,7 +172,7 @@ node tools/tecvol.mjs put time.img A data.bin
 `tools/capture.mjs` prints no T-state count so the figures come from a script
 that drives `Machine` as it does, on `time.img`, which has no startup file and
 so no shell. The script reads the model's count, `cycles`
-(`host/machine.mjs:276`), twice. The first reading is after `READ
+(`host/machine.mjs:284`), twice. The first reading is after `READ
 DATA.BIN` has been typed and echoed, before the Return that ends it. The second
 is at the next prompt. After a cold boot, the command's first run took
 6,626,603 T-states, 1.66 seconds. The next run took 1,326,691, 0.33 seconds,
@@ -206,7 +209,7 @@ For bit 5, `CWCO` records the line in `CPEND`, the line's number plus one, or
 0 when no block is pending, and the write returns once the record is in the
 line (`src/cache.asm:521-529`, `src/ram.asm:303-318`). This is the *pending
 block*. At most one block is pending, and it reaches the card at the first
-flush point (`docs/recovery.md:64-97`):
+flush point (`docs/recovery.md:66-103`):
 
 - the file's close and any other directory request: an open, make, search,
   delete, rename, attribute change, size, login or the extent change inside
@@ -236,7 +239,7 @@ stays pending. A close or another directory request then returns the error,
 `Bad Sector` or function 45's returned error. A console read does not report
 the failure: the program gets its key and the next flush point that is not a
 console read reports it. Warm boot writes the block once more and drops it
-with `Write lost` (`docs/recovery.md:99-112`).
+with `Write lost` (`docs/recovery.md:105-118`).
 
 In the host-model measurements recorded for this revision, `BAZA BOUNCE`
 compiling to A took 19.04 seconds with 48 card writes, against 25.82 seconds
@@ -334,40 +337,41 @@ after it. [Chapter 6](06-cards-on-the-pc.md#recovery-after-a-power-cut)
 describes recovery after that. A cut during the directory block's own write
 can damage any of its 16 entries. Card-reported completion is also not a
 verification of the card's physical power-loss durability
-(`docs/recovery.md:126-127`, `docs/recovery.md:152-154`).
+(`docs/recovery.md:132-133`, `docs/recovery.md:161-163`).
 
 `CWRITE` writes a single line to the card (`src/cache.asm:212-250`). It takes
 the block number from the table and sets `SDXB` so that `SDWRITE` reads its 512
 bytes straight from the line in EXPAND 1. On success it marks the line clean. On
 a failure it leaves the line dirty and returns `NZ`. A flush writes every dirty
-line, goes on past each failure and returns `NZ` if there was one. `CFLALL`
-drops each line whose write fails so the card's copy of that block stands.
-`CFLUSH`, the directory write's, leaves such a line dirty for a later flush
-(`src/cache.asm:265-299`). `CTAKE`'s write of one line, when every line is
+line, goes on past each failure and returns `NZ` if there was one. `CFLALL`,
+warm boot's flush, drops each line whose write fails so the card's copy of
+that block stands. `CFLUSH`, the flush of a directory write, function 48,
+`MOUNT` and unmount, leaves such a line dirty for a later flush
+(`src/cache.asm:255-300`). `CTAKE`'s write of one line, when every line is
 dirty, keeps a failed line dirty in the same way. `CTAKE` then returns the error
 with `CNEXT` moved past the line. The next miss writes the line after it so a
 single bad block can't fail every later miss (`src/cache.asm:340-357`).
 
 ### Five flush occasions
 
-At `a1023bd` dirty cache lines reach the card on five occasions. At
-`fdd9e5b` a volume written through adds its pending block's flush points,
-described above:
+Dirty cache lines reach the card on five occasions, and a volume written
+through adds its pending block's flush points, described above:
 
 - a directory write on the volume written behind, as above
 - `CTAKE` with every line dirty, which writes one line
 - every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:149-152`,
   `src/cache.asm:623-629`)
 - a valid change through the services `MOUNT` or `UNMNT`, whose `VFLUSH` calls
-  `CFLALL` before any drive changes and fails if a line failed
-  (`src/volsvc.asm:373-389`)
+  `CFLUSH` with no line excluded before any drive changes and fails if a line
+  failed (`src/volsvc.asm:360-389`)
 - BDOS function 48, which calls `VFLUSH` and returns 0 in `A` or `FFh` if a line
-  failed and was dropped (`src/cpm/bdos.asm:244-245`)
+  failed (`src/cpm/bdos.asm:244-245`)
 
-At `fdd9e5b` `VFLUSH` calls `CFLUSH` with no line excluded, so `MOUNT`,
-unmount and function 48 keep a line whose write fails for the next flush.
-Only warm boot's `CFLALL` drops one (`fdd9e5b:src/volsvc.asm:360-389`,
-`fdd9e5b:src/cache.asm:255-300`).
+So `MOUNT`, unmount and function 48 keep a line whose write fails for the next
+flush. Only warm boot's `CFLALL` drops a flushed line that still fails, and a
+directory write on the volume written behind whose flush fails drops its own
+directory line, unwritten, so the card's directory is read again
+(`src/cache.asm:255-300`, `src/cache.asm:556-565`, `docs/recovery.md:49-61`).
 
 A `^C` at the prompt causes a warm boot. When its flush succeeds, every pending
 cache change has reached the card. A failure prints `Write lost`, whose

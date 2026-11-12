@@ -7,9 +7,12 @@ nav_group: "Reference"
 
 # Appendix E. The container format
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. Every example was rerun at
-     fdd9e5b with its npm run media output and gave the output shown. -->
+     fdd9e5b with its npm run media output and gave the output shown.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A TEC-OS card starts with one container at block 0. Its header identifies
 CP/M volumes by location and geometry. Each volume then holds an ordinary
@@ -28,7 +31,7 @@ container's start. `tecvol install` puts that start at the card's block 0.
 ## The header
 
 The following dump shows the starter card's first 96 bytes: the header fields
-followed by two descriptors. At TEC-OS `fdd9e5b` it is the same as the
+followed by two descriptors. At TEC-OS `e59e8c4` it is the same as the
 recorded `78127ec` build's.
 
 ```sh

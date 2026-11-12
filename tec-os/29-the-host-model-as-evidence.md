@@ -7,7 +7,7 @@ nav_group: "Inside TEC-OS"
 
 # 29. The host model as evidence
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. Every capture was made at
      fdd9e5b with the command in its comment, on the starter card or
      long.img made as shown. The runtime is @jhlagado/debug80-runtime 0.3.3,
@@ -15,7 +15,10 @@ nav_group: "Inside TEC-OS"
      passing tests. The retired diagnostics ROM is cited with an a1023bd:
      prefix (TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe) and the board
      diagnostics' documents with a 755636b: prefix (TEC-OS
-     755636b130241173c5c30a0be8fe6b79cf2fee37). -->
+     755636b130241173c5c30a0be8fe6b79cf2fee37).
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A console transcript records bytes from a particular run. It does not by
 itself establish what a display drew or what a physical board would do.
@@ -36,8 +39,8 @@ the build's D8 symbols into uppercase names and addresses. Input-loop
 detection and memory watches use those addresses instead of fixed ROM
 offsets. The map must accompany the ROM it describes. Symbol lookup does
 not prove that an unrelated map is compatible
-(`host/machine.mjs:23-27`, `host/machine.mjs:187-213`,
-`host/machine.mjs:248-251`). [Chapter 27](27-build-the-rom-and-media.md)
+(`host/machine.mjs:23-27`, `host/machine.mjs:190-216`,
+`host/machine.mjs:251-254`). [Chapter 27](27-build-the-rom-and-media.md)
 describes preparing the ROM, media and dependencies.
 
 The constructor exposes the board choices explicitly
@@ -60,7 +63,7 @@ keypad, serial timing, LCDs and PICO display. Machine configures RAM at
 `0000h–BFFFh`, ROM at `C000h–FFFFh` and entry at zero, then places the 16 KiB
 ROM at `C000h`. Its `ram96` option supplies a separate MAIN/EXPAND mapping so a
 result must identify which mapping was used (`host/machine.mjs:63-78`,
-`host/machine.mjs:143-176`).
+`host/machine.mjs:143-179`).
 
 The runtime normally emits timed display updates that clear queued LED and
 digit scans. Machine disables those updates by setting `updateMs` to
@@ -76,7 +79,7 @@ Machine disables the runtime's automatic SD attachment and connects an
 array. `swapCard` replaces that instance with another image or an empty
 socket. It does not initialise the ROM's card driver or clear TEC-OS's
 cached blocks (`host/machine.mjs:59-74`, `host/machine.mjs:122-140`,
-`host/machine.mjs:545-549`). [Chapter 6](06-cards-on-the-pc.md) explains
+`host/machine.mjs:556-560`). [Chapter 6](06-cards-on-the-pc.md) explains
 the reset requirement after PC-side card changes.
 
 The range cases in `test/sd-range.test.mjs:36-106` assert separate limits.
@@ -109,7 +112,7 @@ Machine records attempted CPU writes to `C000h–FFFFh` as `rom-write`
 and writes below `0800h` with the overlay active as `overlay-write`.
 Each entry in `violations` contains the address and program counter.
 Recording happens before the underlying memory hook processes the write
-(`host/machine.mjs:217-235`). The watch reports an attempted operation,
+(`host/machine.mjs:220-238`). The watch reports an attempted operation,
 not proof that a ROM byte changed.
 
 Ordinary TEC-OS tests assert an empty violations list
@@ -125,7 +128,7 @@ the free pages `BD00h–BFFFh` are reported. On an older ROM whose history
 ring, `HRING`, is at `BD00h`, the watch starts at `BE00h` instead. The model locates
 the clear's end from MEMINIT's first LDIR and identifies writers through
 symbols, including the SD block loops, cold-boot cache initialisation and
-MVCOPY when called from the cache (`host/machine.mjs:177-227`).
+MVCOPY when called from the cache (`host/machine.mjs:180-230`).
 
 Unexpected writes go into the machine's `expand1Writes`. The first sixteen
 also go into the process-wide `EXPAND1_WRITES`. The Node test wrapper has
@@ -134,13 +137,13 @@ an after-file assertion that this shared list is empty. Its optional
 (`test/lib/machine.mjs:54-74`). The assertion applies to test files using
 that wrapper, not automatically to every caller of Machine.
 
-The source in `test/expand.test.mjs:67-77` deliberately writes `BF80h` with
+The source in `test/expand.test.mjs:68-78` deliberately writes `BF80h` with
 EXPAND 1 visible and checks that the watch reports it. The test then removes its
 intentional entry from the shared list. The model still performs the underlying
 write. It adds a report that ordinary board RAM does not provide, rather than
-preventing the write (`host/machine.mjs:225-235`). Fixture writes through
+preventing the write (`host/machine.mjs:228-238`). Fixture writes through
 `Machine.write` and force-write helpers bypass this CPU-write watch so its scope
-must remain explicit (`host/machine.mjs:175`, `host/machine.mjs:245`).
+must remain explicit (`host/machine.mjs:178`, `host/machine.mjs:248`).
 
 ## Console bytes, serial bytes and screens
 
@@ -148,7 +151,7 @@ must remain explicit (`host/machine.mjs:175`, `host/machine.mjs:245`).
 then executes an instruction and adds its cycle count. The sampled bytes
 form `output`. Bytes decoded from the emulated serial line form `serial`
 (`host/machine.mjs:51-55`, `host/machine.mjs:77`,
-`host/machine.mjs:267-278`). Output intercepted by another hook before
+`host/machine.mjs:275-286`). Output intercepted by another hook before
 BCONOUT and drawing that bypasses BCONOUT are outside that byte record.
 
 These captures show why the two byte records differ.
@@ -199,7 +202,7 @@ PICO `screen` decodes the name table into text rows. Its layout comes from the
 display registers unless the caller supplies a width or base. Bit 7 is masked so
 reversed cells appear as plain characters. `cell` returns a raw name-table byte.
 Neither observation by itself establishes glyph pixels or reverse-video
-appearance (`host/machine.mjs:403-433`).
+appearance (`host/machine.mjs:411-441`).
 
 The capture tool's PICO screen option supplies the console width from PIWID so
 the offered 40- and 32-column modes decode at those widths rather than the
@@ -209,7 +212,7 @@ not evidence that a new width or font was run.
 `glcdScreen` instead matches each six-by-eight pixel cell against
 `Machine.font`, including inverted patterns. Unknown patterns become `?`.
 The test wrapper and capture script supply the font through the repository's
-font parser (`host/machine.mjs:435-473`, `test/lib/machine.mjs:10-11`,
+font parser (`host/machine.mjs:443-481`, `test/lib/machine.mjs:10-11`,
 `tools/capture.mjs:43-50`). A decoded string depends on that supplied font.
 Matching strings alone do not qualify a new font, display default or editor
 layout.
@@ -220,13 +223,13 @@ layout.
 A halted CPU before the predicate also fails the wait. `expect` checks a
 console-output pattern only after output grows, then allows bounded settling
 time for the last character to reach the display
-(`host/machine.mjs:280-332`). An output match is therefore a stopping
+(`host/machine.mjs:288-340`). An output match is therefore a stopping
 condition, not proof of every state change a command should make.
 
 `waitingForInput` recognises named console polling ranges. `ready` additionally
 checks that startup has finished and the CCP is reading a command line. The
 capture tool combines that state with a prompt suffix and handles `[more]` and
-the diagnostic retry prompt separately (`host/machine.mjs:334-365`,
+the diagnostic retry prompt separately (`host/machine.mjs:342-373`,
 `tools/capture.mjs:76-96`). Program output that resembles a prompt can confuse a
 suffix-based wait so a workflow must check the state or persisted result that
 distinguishes real completion.
@@ -236,7 +239,7 @@ each character's reception. With a video console it uses matrix keys,
 holding a key and its modifier until the keyboard scan consumes it, then
 releasing it. `enqueueInput` and `pumpInput` provide a nonblocking queue for
 the page and capture tool. Unsupported queued matrix characters can fall
-back to serial (`host/machine.mjs:377-394`, `host/machine.mjs:476-543`).
+back to serial (`host/machine.mjs:385-402`, `host/machine.mjs:484-554`).
 This pacing differs from a physical terminal sending characters as typed.
 
 The capture tool accepts ordinary command lines and control-key notation.
@@ -252,7 +255,7 @@ runtime, card and application inputs as well as the command sequence.
 `ramImage` copies the currently mapped `0000h–BFFFh` and a selected EXPAND 1
 window into a 64 KiB array. `loadRam` restores that layout. They are not
 snapshots of every optional MAIN region, device register, CPU register or
-pending input (`host/machine.mjs:551-573`, `host/machine.mjs:602-610`).
+pending input (`host/machine.mjs:562-584`, `host/machine.mjs:613-621`).
 
 ## A complete pagination fixture
 
@@ -324,7 +327,7 @@ model results. They do not establish what a physical GLCD shows.
 
 The package test command selects top-level `test/*.test.mjs` files with
 Node's test runner and concurrency set to one (`package.json:18`). A Git-tree
-inventory at `fdd9e5b` contains 67 matching files, from arith.test.mjs through
+inventory at `e59e8c4` contains 67 matching files, from arith.test.mjs through
 write.test.mjs. That is a source-only file count. It does not count test cases,
 executed files or successful assertions.
 
@@ -389,20 +392,20 @@ Every 1,024 instructions it checks a 30 ms execution budget and can stop the
 frame early. Rendering reads the runtime's display state and shows the PICO
 screen, digits, LEDs, LCD, GLCD, latch, window bank and Caps state. A
 once-per-second display reports achieved MHz, not an unconditional 4 MHz
-execution rate (`web/src/main.mjs:178-237`). The page supplies no fixed clock so
-its DS1302 follows host time (`web/src/main.mjs:82-99`).
+execution rate (`web/src/main.mjs:185-244`). The page supplies no fixed clock so
+its DS1302 follows host time (`web/src/main.mjs:82-106`).
 
 Focused video displays route ordinary keys to the matrix queue. The serial
 terminal routes them to serial. Unsupported multi-character sequences can use
 serial even from a video focus. The page's serial display strips escape
 sequences and handles backspace so its text is a presentation of serial bytes
-rather than a complete terminal implementation (`web/src/main.mjs:362-431`).
+rather than a complete terminal implementation (`web/src/main.mjs:369-438`).
 
 Card writes mark the in-memory card dirty. A two-second timer attempts to
 save it in IndexedDB database tecos, store cards, key current. Failed saves
 leave it dirty and produce an unsaved notice. A stored image does not include
 changes that remain only in the ROM's block cache
-(`web/src/main.mjs:96-156`, `web/src/store.mjs:6-8`,
+(`web/src/main.mjs:103-163`, `web/src/store.mjs:6-8`,
 `web/src/store.mjs:42-59`).
 
 Power-on prepares a staged copy of STARTUP.CMD for the selected display and
@@ -411,7 +414,7 @@ GLCD.SVC. Every selected PICO width gets an explicit CON PICO line,
 including 80. The page's fallback preference remains 80 columns, distinct
 from the ROM's raw cold width of 40. Other display pieces are removed under
 the rewrite rules in [Appendix I](appendix-i-web-page.md)
-(`host/card.mjs:58-72`, `host/card.mjs:132-147`,
+(`host/card.mjs:109-146`, `host/card.mjs:205-220`,
 `web/src/main.mjs:17-43`, `src/pico.asm:19-68`). This source account does not
 establish a browser run.
 
@@ -420,7 +423,7 @@ save, attempts to save the staged card and then copies the bytes into the
 running card before reset. Failed persistence normally prevents publication.
 When prior storage loading has disabled saving, import can remain in memory
 only. Appendix I gives that recovery mode and its notices
-(`web/src/main.mjs:148-170`, `web/src/main.mjs:625-657`). The reset clears
+(`web/src/main.mjs:155-177`, `web/src/main.mjs:632-664`). The reset clears
 TEC-OS's cached blocks and rebuilds its free-space state. A successful Ctrl-C
 flush before import preserves changes still pending in that cache. Import
 does not perform that flush itself.
@@ -443,7 +446,7 @@ mapping, which must not be attributed to the documented board
 configuration, not a repair to every legacy-model result. That ROM's T08,
 T10 and T12 probed these differences. TEC-OS avoids overlay writes and latch
 reads so checked ordinary paths can satisfy those restrictions on a more
-permissive model (`host/machine.mjs:40-46`, `host/machine.mjs:155-172`,
+permissive model (`host/machine.mjs:40-46`, `host/machine.mjs:158-175`,
 `a1023bd:docs/diagnostics.md:147-164`, `a1023bd:docs/diagnostics.md:187-196`,
 `755636b:docs/diagnostics.md:383-399`).
 

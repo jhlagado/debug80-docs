@@ -7,7 +7,7 @@ nav_group: "Writing programs"
 
 # 13. Results and command chains
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. Lines are split by
      SHELL.SVC: docs/shell.md:28-82 and :91-133, docs/compatibility.md:21-38
      and :99-117, drivers/shell.asm:159-420, the drop flag
@@ -15,13 +15,16 @@ nav_group: "Writing programs"
      and src/cache.asm:613-629, function 47 src/cpm/bdos.asm:52-94, and the
      ROM's own path src/cpm/ccp.asm:110-232. TED's key table, its line's
      need of the shell and BAZA's return code follow
-     docs/compatibility.md:223-226, with TED.COM Thorium b69d544, TAS.COM
+     docs/compatibility.md:223-226, with TED.COM Thorium a2fe556, TAS.COM
      Thorium 3d1e2c0 and BAZA.COM Baza 50dc512, source reading. Every
      transcript is a capture at fdd9e5b with the command in its comment, on
      the serial board and the starter card or the card made by the recipe
      shown, boot rows omitted unless shown. EXISTS.COM and RUN.COM were
      built on the model by the card's TAS in the same session, before the
-     commands shown. -->
+     commands shown.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 You can join commands on a line and make later pieces depend on success.
 Your programs report that result through a return code. They can also
@@ -421,6 +424,14 @@ place.
 These lines need the shell. Without it the ROM runs TED's line whole: the
 build tool receives the rest of the line as its tail and still builds, and
 the prompt returns in place of TED.
+
+A file name or the `ARGS` key of `THOR.PRJ` goes onto that line, so TED
+stops either one where the shell would split the line: at a `!`, or at an
+`&` after a blank. With `ARGS X &Y`, `^T R` runs the program once with the
+tail ` X` and runs nothing after it. An `&` inside a word, as in
+`/M:&HE000`, stays in the tail
+(`Thorium a2fe556:README.md:51-58`, `docs/compatibility.md:223`,
+`test/ted.test.mjs:272-300`).
 
 Chapter 11 explains the load-drive byte at `0050h`. TED uses that byte to
 prefix the tools' names. With tools loaded from A and source on current

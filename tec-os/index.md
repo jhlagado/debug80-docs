@@ -8,19 +8,22 @@ nav_exclude: true
 # TEC-OS on the TEC-1G
 
 <!-- Opening profile: KD-243 / KS48, TEC Compact at 40 columns.
-     Current revision: TEC-OS fdd9e5b (main, ROM 43ac0f18, 14,875 bytes used
-     and 1,509 free) has the minimal ROM CCP with the shell hook and
+     Current revision: TEC-OS e59e8c4 (main, ROM 43ac0f18 as at fdd9e5b,
+     14,875 bytes used and 1,509 free) has the minimal ROM CCP with the shell hook and
      SHELL.SVC on the card, which STARTUP.CMD loads first: history, COPY,
      DEL, SERVICES, the [more] pager, .CMD scripts and lines joined by !
      (always) and & (on success, after a blank), with CP/M 3's : gone.
      MON3.SVC (4,606 bytes, 18 pages) is entered on install, with no /E.
      TAS is the only assembler. The card's fifteen files hold SHELL.SVC in
      place of CHAIN.ASM; TAS.COM is Thorium 3d1e2c0 (e648a1d0), TED.COM
-     Thorium b69d544 (4f622390), BAZA Baza 50dc512 (280ee372, 13,184 bytes,
+     Thorium a2fe556 (c6c8374a, stopping a name and ARGS at an & after a
+     blank), BAZA Baza 50dc512 (280ee372, 13,184 bytes,
      a compile spinner) and BOUNCE.BAS (615693a5) takes the arrow keys;
      TIMES.BAS and BOUNCE.BAS have keywords in capitals and names in lower
      case. A: coalesces its data writes in one pending block until a flush
-     point. Every chapter and appendix is checked against fdd9e5b; a
+     point. The web page gives a card saved before the shell the starter's
+     SHELL.SVC, and MON3.SVC in place of an old one, at power-on. Every
+     chapter and appendix is checked against e59e8c4; a
      passage that cites an earlier revision names it. Earlier revisions of
      these notes are in the book's history. -->
 

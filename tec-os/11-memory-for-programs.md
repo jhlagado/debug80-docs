@@ -7,12 +7,15 @@ nav_group: "Writing programs"
 
 # 11. Memory for programs
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. TOP, AREA and KEY were
      assembled on the PC by TAS, the pinned TAS.COM of Thorium 3d1e2c0,
      through tools/lib/assemble.mjs: 49, 73 and 142 bytes. Every capture was
      made at fdd9e5b with the command in its comment, on the cards the
-     recipes shown make; the four-drive card is made with tecvol create. -->
+     recipes shown make; the four-drive card is made with tecvol create.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 Your program starts at `0100h` but its upper memory limit depends on the card
 and installed services. Code, buffers and a private stack must fit below that
@@ -207,8 +210,9 @@ which takes ten pages and leaves `AF00h`, 44,544 bytes, or 43,776 with
 `docs/compatibility.md:3-14`). The card's `MON3.SVC` takes 18 pages.
 Installed alone it moves the word from `B9A9h` to `A700h`, leaving 42,496
 bytes, and installed after `GLCD.SVC` it leaves 41,728
-(`docs/mon3.md:45-48`). Installed after the shell, as on the starter card,
-it leaves `9D00h`, 39,936 bytes (`test/shell.test.mjs:737-745`).
+(`docs/mon3.md:50-51`). Installed after the shell, as on the starter card,
+it leaves `9D00h`, 39,936 bytes, and `9A00h`, 39,168 bytes, with `GLCD.SVC`
+too (`docs/mon3.md:45-56`, `test/shell.test.mjs:737-745`).
 
 AREA reads the boundary and subtracts `0100h` to obtain the size in bytes:
 
@@ -415,7 +419,7 @@ hides the workspace. The cache routines read it to restore the normal bank. A pr
 both alone unless the program changes the latch. Cold boot clears page zero and
 initialises the latch copy. TEC-OS does not use `0041h–004Fh` afterwards.
 
-Cold boot clears EXPAND 1 for TEC-OS's cache. At TEC-OS `fdd9e5b` it holds
+Cold boot clears EXPAND 1 for TEC-OS's cache. At TEC-OS `e59e8c4` it holds
 (`docs/memory-map.md:70-83`):
 
 | Addresses | Contents |

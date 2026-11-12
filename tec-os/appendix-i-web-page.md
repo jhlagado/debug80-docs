@@ -7,10 +7,10 @@ nav_group: "Reference"
 
 # Appendix I. The web page
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Every source range below uses that revision, source reading. The shell
      recipe follows the README there, and the startup rewrite follows
-     host/card.mjs:75-147 and its tests, test/pico.test.mjs:704-850. No
+     host/card.mjs:148-220 and its tests, test/pico.test.mjs:704-850. No
      browser run, screen capture or physical result is claimed. -->
 
 The web page has controls for the emulated board, a serial terminal and a card
@@ -45,10 +45,10 @@ PICO9918 at 80 columns. Width and display selections use the browser's local
 storage. A reload retains them when that storage is available. Otherwise
 they last only for the open page (`web/src/main.mjs:17-43`). Successful
 startup preparation selects that width explicitly after the ROM's raw
-40-column cold start (`host/card.mjs:126-147`, `src/pico.asm:19-68`).
+40-column cold start (`host/card.mjs:199-220`, `src/pico.asm:19-68`).
 
 The controls and their handlers are defined in `web/index.html:12-30`,
-`web/index.html:68-82` and `web/src/main.mjs:597-687`:
+`web/index.html:68-82` and `web/src/main.mjs:604-694`:
 
 | Control | Effect |
 | --- | --- |
@@ -65,8 +65,8 @@ The controls and their handlers are defined in `web/index.html:12-30`,
 | "as text" | Selects text conversion for imports and individual file downloads, as with tecvol's `--text`. |
 | "Download" on a file | Downloads that file from its listed user area, with text conversion when selected. |
 
-Reset and power-on have different memory effects (`host/machine.mjs:601-610`,
-`web/src/main.mjs:82-108`). Neither control flushes the ROM's pending writes
+Reset and power-on have different memory effects (`host/machine.mjs:612-621`,
+`web/src/main.mjs:82-115`). Neither control flushes the ROM's pending writes
 before restarting. The safe-copy procedure below applies before either one.
 
 The page's card is the starter card, built from the same recipe, with
@@ -84,25 +84,25 @@ which its STARTUP.CMD loads, TIMES.BAS, BAZA.COM and BAZA.RTL for
 
 The card does not hold DEMO.COM until you build it. BOUNCE needs the
 PICO9918 and draws through `CALL`, as Chapter 3 explains
-(`tools/media.mjs:200-253`, `test/starter.test.mjs:46-392`,
-`test/demo.test.mjs:1-4`, `README.md:156-185`). Building a starter fetches
+(`tools/media.mjs:200-253`, `test/starter.test.mjs:48-394`,
+`test/demo.test.mjs:1-4`, `README.md:163-195`). Building a starter fetches
 each recipe file and checks its byte count and SHA-256 before returning the
 image (`tools/media.mjs:200-255`, `tools/lib/recipe.mjs:14-44`,
 `web/src/main.mjs:60-63`). The file list shows user area, name and size.
 It refreshes every five seconds and after the reset and power-cycle buttons
-(`web/src/main.mjs:573-586`, `web/src/main.mjs:675-688`).
+(`web/src/main.mjs:580-593`, `web/src/main.mjs:682-695`).
 
 The execution loop targets 4 MHz. Host timing and a per-frame execution budget
 can reduce the achieved rate. The MHz value beside "Pause" updates about once
 a second and reports the achieved rate, not a guaranteed board speed
-(`web/src/main.mjs:14`, `web/src/main.mjs:178-199`).
+(`web/src/main.mjs:14`, `web/src/main.mjs:185-206`).
 
 ## Typing
 
 Keyboard routing follows the focused element. Clicking a video display gives
 it focus. The serial terminal becomes the console after `CON TTY`.
 `CON CRT` selects the PICO9918 and `CON UC1` selects the graphics LCD when
-available (`web/index.html:35-49`, `web/src/main.mjs:392-431`).
+available (`web/index.html:35-49`, `web/src/main.mjs:399-438`).
 
 | Focus | Route | Arrow keys |
 | --- | --- | --- |
@@ -110,10 +110,10 @@ available (`web/index.html:35-49`, `web/src/main.mjs:392-431`).
 | Serial terminal | Serial port | `ESC [` followed by a letter |
 
 The page's serial display removes escape sequences sent by TEC-OS and handles
-backspace (`web/src/main.mjs:362-431`). On a phone or tablet tapping a video
+backspace (`web/src/main.mjs:369-438`). On a phone or tablet tapping a video
 display or the terminal focuses a hidden text field for the on-screen keyboard.
 The extra buttons supply Ctrl, Esc, Tab and four arrows. Ctrl latches for the
-next key (`web/index.html:36-44`, `web/src/main.mjs:433-528`).
+next key (`web/index.html:36-44`, `web/src/main.mjs:440-535`).
 
 ## Saving the card
 
@@ -122,12 +122,12 @@ holds the saved image in database `tecos`, store `cards`, key `current`
 (`web/src/store.mjs:6-8`). Startup loads and validates that record. An absent
 record causes the page to build a starter card. A read or parse failure
 instead disables saving for the session, as the notices below describe
-(`web/src/main.mjs:692-706`).
+(`web/src/main.mjs:699-713`).
 
 Writes by TEC-OS mark the model card dirty. A timer attempts a save every
 two seconds when it is dirty and no file import is active. A save takes a
 snapshot for an IndexedDB write transaction and completes when that transaction
-completes (`web/src/main.mjs:96-98`, `web/src/main.mjs:110-114`,
+completes (`web/src/main.mjs:103-105`, `web/src/main.mjs:117-121`,
 `web/src/store.mjs:42-59`). Only bytes already in the card image enter that
 snapshot. Pending changes in the ROM's block cache require a successful flush
 first, even if a browser save has succeeded.
@@ -136,11 +136,11 @@ Ordinary saves use a single in-flight guard. A save requested during another
 marks the card dirty for a later timer tick. Writes after a snapshot also mark
 it dirty so an older completed save need not contain the newest card bytes. A
 failed ordinary save retains the in-memory image and the dirty mark for another
-attempt (`web/src/main.mjs:122-151`).
+attempt (`web/src/main.mjs:129-158`).
 
 The status under "SD card" lists volume labels and save problems. The
 following strings are source-defined notices, not a new page capture
-(`web/src/main.mjs:138-145`, `web/src/main.mjs:544-553`):
+(`web/src/main.mjs:145-152`, `web/src/main.mjs:551-560`):
 
 | Notice | Cause | Consequence |
 | --- | --- | --- |
@@ -150,24 +150,24 @@ following strings are source-defined notices, not a new page capture
 
 A later status refresh can replace the detailed save error with
 `Card not saved in this browser: it is kept in memory and saved again shortly.`
-while the unsaved flag remains set (`web/src/main.mjs:544-553`). Reloading
+while the unsaved flag remains set (`web/src/main.mjs:551-560`). Reloading
 before a successful save restores the last readable stored image. A PC
 download preserves the current card bytes but performs no ROM cache flush
-(`web/src/main.mjs:613-614`).
+(`web/src/main.mjs:620-621`).
 
 Whole-image opening differs from file import. After container validation,
 "Open image" publishes the new image, waits for any save of the previous
 card to finish and then attempts an ordinary save of the new one. A failed
 save does not stop its power-on. "New starter card" uses that same path
 once its recipe has been built. Either can therefore run a card that is
-newer than the saved record (`web/src/main.mjs:597-623`). Power-on detaches
+newer than the saved record (`web/src/main.mjs:604-630`). Power-on detaches
 the previous machine before preparing the card, so that machine cannot
-write the card while it is prepared (`web/src/main.mjs:82-87`).
+write the card while it is prepared (`web/src/main.mjs:82-86`).
 
 The model uses a high-capacity card (`host/machine.mjs:49`). Opening an image
 also checks its full declared length. A truncated image produces
 `Not opened: image is truncated` followed by the lengths
-(`web/src/main.mjs:602`, `tools/lib/container.mjs:149-152`). This excludes
+(`web/src/main.mjs:609`, `tools/lib/container.mjs:149-152`). This excludes
 the standard-card byte-addressing limit and that particular truncated-image
 case. It does not exclude every `27h` mount error or every `Bad Sector`:
 the ROM also checks arithmetic overflow and volume ends against the container
@@ -195,14 +195,14 @@ that turn. These staged writes validate each CP/M 8.3 name and use user 0
 of the selected volume, regardless of the ROM's current user area.
 The file list can show other user areas but there is no import user-area
 selector
-(`web/src/main.mjs:625-644`, `tools/lib/cpmfs.mjs:15-20`,
+(`web/src/main.mjs:632-651`, `tools/lib/cpmfs.mjs:15-20`,
 `tools/lib/cpmfs.mjs:180-191`).
 
 The volume's descriptor read-only flag and an existing file's read-only
 attribute are enforced. Import supplies no force option. Text conversion
 changes line endings to CRLF, appends `^Z` and pads text records with `^Z`.
 File downloads in text mode stop at the first `^Z` and convert CRLF to LF
-(`web/src/main.mjs:567-582`, `web/src/main.mjs:643-644`,
+(`web/src/main.mjs:574-589`, `web/src/main.mjs:650-651`,
 `tools/lib/cpmfs.mjs:128-149`, `tools/lib/cpmfs.mjs:180-191`).
 
 With saving enabled, import waits for any older save to finish and then saves
@@ -212,21 +212,21 @@ save error produces `Not copied` with the reason and leaves those imported
 edits unpublished. No partial selection of files is published. In the
 storage-read failure mode, saving is disabled and import instead publishes
 in memory without a storage transaction
-(`web/src/main.mjs:153-170`, `web/src/main.mjs:639-657`).
+(`web/src/main.mjs:160-177`, `web/src/main.mjs:646-664`).
 
 A second import is rejected with `Not copied: file import in progress`.
 Whole-image selection during import is rejected with
 `Not opened: file import in progress`. The machine resumes its previous
 running or paused state when import finishes
-(`web/src/main.mjs:597-600`, `web/src/main.mjs:625-657`).
+(`web/src/main.mjs:604-607`, `web/src/main.mjs:632-664`).
 
 Power-on startup preparation and import publication take turns through the
 same queue. A display or width change made during import can therefore
 cause a later startup rewrite. That rewrite marks the card dirty and relies
 on a subsequent save. Queue ordering alone does not establish that the stored
 card already includes it. Nor does an import failure undo other queued
-operations (`web/src/main.mjs:67-88`, `web/src/main.mjs:110-114`,
-`web/src/main.mjs:662-673`).
+operations (`web/src/main.mjs:67-95`, `web/src/main.mjs:117-121`,
+`web/src/main.mjs:669-680`).
 
 ## Startup preparation
 
@@ -234,14 +234,29 @@ Each power-on calls `prepareCard` for the selected display and width. It
 stages any STARTUP.CMD rewrite on a whole-card copy and publishes that copy
 only after preparation succeeds. It reads drive A's user 0, as the ROM does
 for startup, and passes the volume's read-only flag to file access
-(`web/src/main.mjs:82-88`, `host/card.mjs:18-24`,
-`host/card.mjs:58-73`). The page writes no display driver. The PICO9918
+(`web/src/main.mjs:82-95`, `host/card.mjs:18-24`,
+`host/card.mjs:109-146`). The page writes no display driver. The PICO9918
 console is in ROM and the graphics LCD requires GLCD.SVC on the card.
+
+A card saved before the shell is upgraded at power-on. Such a card has no
+`SHELL.SVC` in A's user 0, and no `MON3.SVC` whose execution record asks to
+be entered on install. For it the page first fetches the starter card, then
+copies the starter's `SHELL.SVC` onto the card, and the starter's `MON3.SVC`
+in place of the card's own if it has one. A card with no `MON3.SVC` gets
+none. `SHELL.SVC` then goes first in `STARTUP.CMD`, so the card's later
+lines, which the ROM alone never ran, now run under the shell. The card's
+other files stay as they were, and the serial pane says which files the
+page wrote. If they can't be written, for a full A: or a read-only
+`MON3.SVC`, the card gets its display line alone and the note says the
+shell was not added. A card whose `SHELL.SVC` was removed but whose
+`MON3.SVC` is the newer one counts as current and is left without the shell
+(`web/src/main.mjs:87-93`, `host/card.mjs:55-108`, `host/card.mjs:109-146`,
+`README.md:128-135`).
 
 The selected display determines the display line. When drive A holds
 SHELL.SVC the new text starts with a `SHELL.SVC` line and the display line
 follows it, since the ROM runs only the first line and the shell the rest.
-Without SHELL.SVC the display line comes first (`host/card.mjs:126-147`):
+Without SHELL.SVC the display line comes first (`host/card.mjs:199-220`):
 
 | Display | Display line |
 | --- | --- |
@@ -265,11 +280,11 @@ their .DRV forms. Width pieces are `CON PICO` or `CON CRT`, optionally with
 a colon after the device name, followed by spaces and decimal digits.
 Each recognised piece may also have a leading `:`, from an older card's
 startup file. Removing old width pieces prevents them from overriding the
-selector (`host/card.mjs:11-16`, `host/card.mjs:75-124`).
+selector (`host/card.mjs:11-16`, `host/card.mjs:148-197`).
 
 A kept piece keeps the separator before it. An older card's `:` before a
 kept piece becomes `&`, and a piece that now starts its line starts
-unconditionally (`host/card.mjs:102-124`, `test/pico.test.mjs:728-765`):
+unconditionally (`host/card.mjs:175-197`, `test/pico.test.mjs:728-765`):
 
 | Original text | Result | Rule |
 | --- | --- | --- |
@@ -283,7 +298,7 @@ Identical text causes no write so a protected file or volume does not itself
 cause an error when no rewrite is needed. Replacing STARTUP.CMD can reuse its
 existing directory entries and blocks. A full directory causes failure only when
 the replacement needs more entries than are available, including reusable
-entries. Data capacity is checked separately (`host/card.mjs:132-147`,
+entries. Data capacity is checked separately (`host/card.mjs:205-220`,
 `tools/lib/cpmfs.mjs:189-205`).
 
 For the starter's `SHELL.SVC` and `GLCD.SVC` lines, GLCD preparation leaves
@@ -301,8 +316,8 @@ Preparation first checks drive A and, for the GLCD choice, GLCD.SVC in user 0.
 The format-byte check is not complete service validation. An inaccessible A
 directory also enters the no-drive-A notice path. These checks and failed
 writes leave the staged startup edits unpublished
-(`host/card.mjs:26-72`). The serial terminal prints the notice in brackets
-after `[power on]` (`web/src/main.mjs:101-102`). These literal messages retain
+(`host/card.mjs:26-145`). The serial terminal prints the notice in brackets
+after `[power on]` (`web/src/main.mjs:108-109`). These literal messages retain
 the wording defined by that source:
 
 | Condition | Terminal notice |

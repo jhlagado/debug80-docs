@@ -7,16 +7,19 @@ nav_group: "Inside TEC-OS"
 
 # 26. Startup inside the CCP
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      All unprefixed source ranges use that revision, source inspection.
      The rest of STARTUP.CMD is SHELL.SVC's (drivers/shell.asm,
      drivers/shellio.asm, docs/shell.md:115-133). The two dollar-echo
      captures were made at fdd9e5b with the recipes shown. The bypass timing
-     was measured there on the host model. -->
+     was measured there on the host model.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A startup command can run a program that ends through warm boot. The next
 startup line must still be available when the command processor starts
-again. At TEC-OS `fdd9e5b` two readers share the file. The ROM reads one
+again. At TEC-OS `e59e8c4` two readers share the file. The ROM reads one
 record of `A:STARTUP.CMD` once after cold boot and runs its first line. When
 that line installs the shell, `SHELL.SVC` reads the rest of the file, every
 record, and runs it line by line. The shell's position is in its own pages,
@@ -293,7 +296,7 @@ PICO9918 console in use, ready for a later `CON UC1`. With the matrix
 keyboard enabled by the Matrix switch and the controller answering but
 no selected PICO9918 console, the startup line can select the graphics
 LCD. Successful web-page card preparation sets the line for the chosen display
-(`host/card.mjs:58-72`, `host/card.mjs:126-147`), as
+(`host/card.mjs:109-146`, `host/card.mjs:199-220`), as
 [Appendix I](appendix-i-web-page.md) explains.
 
 ## Recovery words and row ownership

@@ -7,14 +7,19 @@ nav_group: "Reference"
 
 # Appendix D. Error messages
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
-     Unprefixed source ranges use that revision, with Thorium b69d544 for
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
+     Unprefixed source ranges use that revision, with Thorium a2fe556 for
      TED's load error. The old-card capture was made at fdd9e5b with the
      command in its comment, on old.img made as shown. The CLOSE ERROR run
-     is the host-model experiment at TEC-OS bd15528, from book 12:65. DEL
+     is a host-model run of the starter card that changed the first name
+     byte of the FCB passed to function 16 during COPY STARTUP.CMD
+     B:NOTES.TXT. DEL
      at 402f30e cites TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125 with a
      402f30e: prefix. The diagnostic prompt fence is a literal message
-     template. -->
+     template.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 An error message identifies the operation that stopped and the recovery still
 available. The tables follow cold boot, the diagnostic prompt, the LCD, the
@@ -123,7 +128,7 @@ The browser uses a high-capacity card model and rejects truncated images
 before opening them. It therefore does not reproduce the standard-capacity
 limit or Chapter 6's short-image failure through Open image. Other code
 27 causes remain ROM checks, including end overflow and the declared
-container bound (`host/machine.mjs:49`, `web/src/main.mjs:597-623`,
+container bound (`host/machine.mjs:49`, `web/src/main.mjs:604-630`,
 `tools/lib/container.mjs:149-152`, `176`, `src/vol.asm:254-296`).
 
 ## The LCD's words
@@ -158,10 +163,11 @@ the word and a question mark (`drivers/shell.asm:550-598`).
 | `WRITE ERROR` | `COPY` received a nonzero sequential-write result, such as no free block or no entry for the next extent. It attempts to close the destination before printing this message. That close can also fail. A successful close preserves the records already copied. | Inspect or erase the partial destination, free space and copy again. | `drivers/shellcmd.asm:114-122`, `149-155`, `src/cpm/bdosrec.asm:94-135`, `drivers/shellcmd.asm:218` |
 | `CLOSE ERROR` | After reading the source, `COPY` received `FFh` from close because no directory entry matched the destination file control block (FCB). A fatal disk error aborts through the BDOS instead. | Inspect the destination and repeat the copy after correcting the cause. | `drivers/shellcmd.asm:131-136`, `src/cpm/bdosfile.asm:252-287`, `drivers/shellcmd.asm:219` |
 
-At TEC-OS `bd15528`, when COPY was the CCP's, a host-model run that altered
-the destination's name in the FCB gave `CLOSE ERROR`. The shell's COPY makes
-the same check on close's result. It is not a newly reproduced failure or a
-claim that ordinary copies have been exhaustively tested.
+A host-model run of `COPY STARTUP.CMD B:NOTES.TXT` that changed the first
+letter of the destination's name in the FCB just before the close printed
+`CLOSE ERROR`. `NOTES.TXT` was then still listed on B, made but not closed.
+This is a constructed failure, not a claim that ordinary copies have been
+exhaustively tested.
 
 ### `NAME?`
 
@@ -283,7 +289,7 @@ driver. The new file comes from `tecvol put` on a PC or "Copy file to drive"
 on the web page. A successful Power cycle preparation also removes display
 lines of either type. The page checks the chosen driver and stages the
 rewrite so missing/old drivers or protected/full storage can leave the
-startup file unchanged (`host/card.mjs:30-72`, `host/card.mjs:132-147`).
+startup file unchanged (`host/card.mjs:30-53`, `host/card.mjs:109-146`, `host/card.mjs:205-220`).
 A `GLCD.SVC` of an older format fails under the new name too, as
 `GLCD.SVC?`. A matching copy from a new starter card or one put on the card
 with `tecvol` replaces it.
@@ -322,7 +328,7 @@ back (`src/cpm/bdos.asm:223-235`, `src/ram.asm:216-217`).
 `Write lost` applies to a volume written behind, whose writes wait in the block
 cache, and also to A's pending block, the one block a
 volume written through holds until its next flush point
-(`docs/recovery.md:64-112`). At each warm boot TEC-OS writes every
+(`docs/recovery.md:66-118`). At each warm boot TEC-OS writes every
 changed block in the cache to the card. A line whose write fails is dropped from the cache. This does not undo
 an earlier successful or partial physical write. If any write failed, the
 message is printed once on a line of its own and the rest of a chained
@@ -344,7 +350,9 @@ Putting the card back does not itself run `SDINIT`. The card is started at cold
 boot or a diagnostic retry, not at warm boot (`src/boot.asm:92-101`,
 `src/boot.asm:656-667`). If writes still fail at the next warm boot, the changed
 lines are dropped and `Write lost` is printed (`src/cache.asm:265-295`,
-`566-572`). BDOS function 48 reports a failure to a program at
+`src/cache.asm:566-572`). `MOUNT`, unmount and function 48 instead keep a
+failed line for the next flush, so only a warm boot drops a flushed line that
+still fails (`docs/recovery.md:49-61`). BDOS function 48 reports a failure to a program at
 once: it writes every changed block and returns `A` = `FFh` if any write failed
 (`src/cpm/bdos.asm:237-257`). [Chapter 19](19-cache-and-persistence.md)
 explains the mechanism. [Chapter 6](06-cards-on-the-pc.md) explains the
@@ -370,10 +378,10 @@ the volume services.
 
 ## TED's load error
 
-The starter card's TED (Thorium `b69d544`) prints this
+The starter card's TED (Thorium `a2fe556`) prints this
 line and returns to the prompt when the file it is opening holds a byte it
 rejects
-(`Thorium b69d544:README.md:25-30`, `docs/compatibility.md:223`,
+(`Thorium a2fe556:README.md:25-30`, `docs/compatibility.md:223`,
 `test/ted.test.mjs:92-120`). The earlier TED, Thorium `967678c` on
 the release card, also rejects `00h` padding at the end of a file and gives
 error 03 without a line or column
@@ -393,13 +401,13 @@ gives for entering a service.
 
 | Message | Cause | Action | See |
 | --- | --- | --- | --- |
-| `?` | The `MON3>` line is not `LOAD`, `GO` or `EXIT` in a form they take. For `LOAD`: a drive beyond P, a name or type too long or holding `?` or `*`, a file not found or empty, bytes outside `0100h` to the BDOS entry's page or inside `0800h–08FFh`, or a fault anywhere in a HEX file. `GO` with no address prints it when no load has ended well. A refused load writes nothing and leaves nothing runnable. | Correct the line, the file or the address. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `docs/mon3.md:55-92` |
-| `RST nn held: UNLOAD or reset` | At entry a restart slot from `08h` to `30h` holds a `JP`: a service's claim, or a jump into ROM that a program left. The entry is refused with return code FF00h and nothing changed. | `UNLOAD` the service that holds the slot, or reset. | `docs/mon3.md:192-195` |
-| `RST 38 held: no interrupts` | `0038h` held a `JP` at entry, which the session leaves alone. A program's interrupts through MON-3's `USER_INT` are not delivered. | The session runs without them. | `docs/mon3.md:179`, `226` |
-| `MON3 active` | A program in a session called the service's entry. The call returns to the program with FF00h. | None. | `docs/mon3.md:196-197` |
-| `BRK nnnn` | The program ran `RST 30h`, MON-3's breakpoint. The session prints `BRK` with the address and returns to `MON3>`. There is no resume. | None: the session is at `MON3>`. | `docs/mon3.md:132-134`, `225` |
-| `Tables damaged: EXIT and reset` | After the program returned, the checksum over the service and TEC-OS's RAM BIOS table differed from the one `GO` took. Every later `LOAD` prints it again and is refused without opening the file, and each re-entry prints it. `GO` and `EXIT` still run. | `EXIT`, then press reset, which also removes the service. | `docs/mon3.md:140-154`, `drivers/mon3.asm:1191-1192` |
-| MON-3's error display on the digits | The program called an `RST 10h` or `RST 18h` function that the session does not build, or a number beyond MON-3's calls. The call's outputs are not written. | Press a key. The call returns to the program as a key press would. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `docs/mon3.md:221-222`, `258-268`, `314-323` |
+| `?` | The `MON3>` line is not `LOAD`, `GO` or `EXIT` in a form they take. For `LOAD`: a drive beyond P, a name or type too long or holding `?` or `*`, a file not found or empty, bytes outside `0100h` to the BDOS entry's page or inside `0800h–08FFh`, or a fault anywhere in a HEX file. `GO` with no address prints it when no load has ended well. A refused load writes nothing and leaves nothing runnable. | Correct the line, the file or the address. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `docs/mon3.md:58-95` |
+| `RST nn held: UNLOAD or reset` | At entry a restart slot from `08h` to `30h` holds a `JP`: a service's claim, or a jump into ROM that a program left. The entry is refused with return code FF00h and nothing changed. | `UNLOAD` the service that holds the slot, or reset. | `docs/mon3.md:195-198` |
+| `RST 38 held: no interrupts` | `0038h` held a `JP` at entry, which the session leaves alone. A program's interrupts through MON-3's `USER_INT` are not delivered. | The session runs without them. | `docs/mon3.md:182`, `229` |
+| `MON3 active` | A program in a session called the service's entry. The call returns to the program with FF00h. | None. | `docs/mon3.md:199-200` |
+| `BRK nnnn` | The program ran `RST 30h`, MON-3's breakpoint. The session prints `BRK` with the address and returns to `MON3>`. There is no resume. | None: the session is at `MON3>`. | `docs/mon3.md:135-137`, `228` |
+| `Tables damaged: EXIT and reset` | After the program returned, the checksum over the service and TEC-OS's RAM BIOS table differed from the one `GO` took. Every later `LOAD` prints it again and is refused without opening the file, and each re-entry prints it. `GO` and `EXIT` still run. | `EXIT`, then press reset, which also removes the service. | `docs/mon3.md:143-157`, `drivers/mon3.asm:1191-1192` |
+| MON-3's error display on the digits | The program called an `RST 10h` or `RST 18h` function that the session does not build, or a number beyond MON-3's calls. The call's outputs are not written. | Press a key. The call returns to the program as a key press would. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `docs/mon3.md:224-225`, `261-271`, `317-326` |
 
 ## Lines that report no fault
 

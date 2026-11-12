@@ -7,11 +7,14 @@ nav_group: "Reference"
 
 # Appendix H. The service file format
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. The GLCD dump was taken
      from fdd9e5b's dist/files/GLCD.SVC and the GAPZERO capture made at
      fdd9e5b with the command in its comment. Thorium dbee66a citations name
-     the TAS source of the format's DEPS rule. -->
+     the TAS source of the format's DEPS rule.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A service file contains the bytes to install, the records it needs and the
 positions that require relocation. Its on-disk header describes that work. The
@@ -101,10 +104,10 @@ or one below the minimum version rejects the load
 
 ## The execution record
 
-At TEC-OS `fdd9e5b` a service can carry an application that TEC-OS enters,
+At TEC-OS `e59e8c4` a service can carry an application that TEC-OS enters,
 as `MON3.SVC` and `SHELL.SVC` do. Its image then starts with a 16-byte
 *execution record*, at file offset 25, directly after the header
-(`fdd9e5b:docs/services.md:132-143`):
+(`docs/services.md:132-143`):
 
 | Offset | Bytes | Contents |
 | --- | --- | --- |
@@ -118,7 +121,7 @@ as `MON3.SVC` and `SHELL.SVC` do. Its image then starts with a 16-byte
 The entry is an offset, never a relocated label: TEC-OS adds the service's
 page itself, and the loader rejects a staged record whose entry lies
 outside the image. A format-4 service without a record must not start its
-image with `45h 58h 01h` (`fdd9e5b:docs/services.md:145-157`).
+image with `45h 58h 01h` (`docs/services.md:145-157`).
 
 Typing `NAME.SVC` compares `NAME` with the name in each installed service's
 ready record that has bit 1. One match is entered without reading a file.
@@ -126,14 +129,14 @@ None installs the file and, if its record has bit 1 and its INIT set it
 ready, enters it. An install that never became ready is removed again and
 the line is rejected. Two or more matches are rejected. A service with no
 record, or with bit 1 clear, only installs, and text after the name is the
-entry's command tail (`fdd9e5b:docs/services.md:82-89`,
-`fdd9e5b:docs/services.md:110-130`, `fdd9e5b:src/loader.asm:734-783`). The
+entry's command tail (`docs/services.md:82-89`,
+`docs/services.md:110-130`, `src/loader.asm:734-783`). The
 entry receives A = `FFh` for a line of `STARTUP.CMD` and 0 otherwise, with
 HL its own address and page zero prepared as for a `.COM`. It returns with
 a warm boot, which leaves the service installed
-(`fdd9e5b:docs/services.md:164-180`). The shell's record is
+(`docs/services.md:164-180`). The shell's record is
 `DB "EX",1`, then the state byte 2, then the entry offset 41 and the name
-field (`fdd9e5b:drivers/shell.asm:43-53`).
+field (`drivers/shell.asm:43-53`).
 
 ## The relocation data
 
@@ -203,7 +206,7 @@ an `N`. The release-1 run at `78127ec` loaded it at page `B8h` and printed
 
 ## GLCD.SVC
 
-This dump is of the starter card's graphics LCD driver at TEC-OS `fdd9e5b`,
+This dump is of the starter card's graphics LCD driver at TEC-OS `e59e8c4`,
 the same bytes as at `621201d`. The first command prints its header and initial image bytes. The second
 starts at its relocation data, offset 767.
 

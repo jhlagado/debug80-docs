@@ -7,16 +7,19 @@ nav_group: "Using the machine"
 
 # 5. Drives and user areas
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. Every capture was made at
      fdd9e5b with the command in its comment, on the starter card or my.img
      made as Chapter 6 shows, boot rows omitted. Entering a service on
      install follows docs/shell.md:220-235, docs/services.md:82-89 and
      :101-130 and src/loader.asm:734-783; MON3.SVC and "A MON-3 session"
      follow docs/mon3.md, tools/media.mjs:224-231 and
-     test/starter.test.mjs:217-342, with the figures of the RST 10h calls
+     test/starter.test.mjs:219-344, with the figures of the RST 10h calls
      also in Origo KD-269. The TPA with SHELL.SVC and MON3.SVC is
-     test/shell.test.mjs:737-745. -->
+     test/shell.test.mjs:737-745.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A file's volume and user area determine where you can use it. Program
 lookup can find a tool outside your current drive and area, with a separate
@@ -138,7 +141,9 @@ occupy 18 pages. On a card with nothing else installed the BDOS entry in
 `0006h` moves from `B9A9h` to `A700h`, and the program memory from 47,273
 bytes to 42,496, or to 41,728 with `GLCD.SVC` installed too. On the starter
 card, whose startup file installs the shell first, the entry moves from
-`AF00h` to `9D00h` and the program memory from 44,544 bytes to 39,936. The
+`AF00h` to `9D00h` and the program memory from 44,544 bytes to 39,936, or
+to `9A00h`, 39,168 bytes, with `GLCD.SVC` installed too (`docs/mon3.md:45-56`).
+The file is 5,032 bytes with its relocation data. The
 service's own code, line buffer and stack are all in those pages, above
 anything a MON-3 program may load into. A program itself runs on MON-3's
 stack, below `0880h`.

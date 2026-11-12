@@ -7,11 +7,14 @@ nav_group: "Inside TEC-OS"
 
 # 22. Chains across a warm boot
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      All source ranges below use that revision, source inspection. Lines
      of pieces are SHELL.SVC's: drivers/shell.asm, drivers/shellio.asm and
      docs/shell.md. The startup capture was made at fdd9e5b with the recipe
-     shown, on the starter card npm run media builds. -->
+     shown, on the starter card npm run media builds.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A program's ordinary exit rebuilds the command processor's working state,
 yet the next piece of its command line can still run. The shell keeps the
@@ -43,7 +46,7 @@ shell's piece is copied into `CMDTXT` each time the ROM runs it. A line that
 a program passes to function 47 is copied there too, and survives the
 program's warm boot there until the next prompt.
 
-`CHPOS` is above the RAM BIOS table, outside the clear. At `fdd9e5b` it holds
+`CHPOS` is above the RAM BIOS table, outside the clear. At `e59e8c4` it holds
 two flags: bit 0 when a function 47 line waits in `CMDTXT`, and bit 1 when
 the rest of the line has been dropped. The 16-bit return code `PRGCODE` is
 in that upper block too (`src/ram.asm:398-403`, `src/ram.asm:286-295`). The

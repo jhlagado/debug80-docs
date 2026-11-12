@@ -7,7 +7,7 @@ nav_group: "Inside TEC-OS"
 
 # 20. A file through the BDOS
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…. Unprefixed source citations use that revision,
      source inspection. The BDOS's addresses are from that build's
      build/tecos/tecos.d8.json. -->

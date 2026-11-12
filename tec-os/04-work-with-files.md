@@ -7,14 +7,17 @@ nav_group: "Using the machine"
 
 # 4. Work with files
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. COPY, DEL, SERVICES and the
      [more] pager are SHELL.SVC's: drivers/shell.asm:532-552,
      drivers/shellcmd.asm:54-220, drivers/shellio.asm:380-508,
      docs/shell.md:3-41 and :135-143, docs/compatibility.md:90-133; the ROM's
      own built-ins are src/tables.asm:53-76. Every excerpt is a capture at
      fdd9e5b with the command in its comment, on the starter card, the
-     screens on the PICO9918 board at 40 columns. -->
+     screens on the PICO9918 board at 40 columns.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 BANNER.ASM and its saved outputs stay on B while you read other text. A listing
 helps you choose the file before a command changes it. Long text can be read

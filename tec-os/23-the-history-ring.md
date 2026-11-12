@@ -7,14 +7,17 @@ nav_group: "Inside TEC-OS"
 
 # 23. The history ring
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      All source ranges below use that revision, source inspection. The
      history is SHELL.SVC's: drivers/shell.asm and drivers/shellio.asm, with
      the ROM's function 10 in src/cpm/bdos.asm. Every capture below was made
      at fdd9e5b with the command in its comment, on the starter card that
      npm run media builds, TAS.COM Thorium 3d1e2c0 and TED.COM Thorium
-     b69d544 as test/inputs.json pins them. Boot rows are omitted unless
-     shown. -->
+     a2fe556 as test/inputs.json pins them. Boot rows are omitted unless
+     shown.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 You can recall whole command lines even after newer input has overwritten
 older history. The shell, `SHELL.SVC`, keeps those lines in a 256-byte ring

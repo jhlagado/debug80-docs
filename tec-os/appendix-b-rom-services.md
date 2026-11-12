@@ -7,14 +7,18 @@ nav_group: "Reference"
 
 # Appendix B. The ROM table and hardware services
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. The VTEST capture was made
      at fdd9e5b on Chapter 14's svc.img, VTEST assembled by the card's TAS,
-     Thorium 3d1e2c0. The costs of the invalid number, INFO, DIGIT,
-     LCD, JOY, KEYS, RTC and FONT were measured at fdd9e5b on the host model
-     with the PICO9918 board, from the JP at ABICALL to the return; the
-     others keep their earlier runs and are labelled where they appear. Receiver selection: book
-     9ba1f59, P3 proposal 18 / 43d5f328. -->
+     Thorium 3d1e2c0. Every cost and depth was measured on the host
+     model with the PICO9918 board, the GLCD board for GLCD's figures, from
+     the JP at ABICALL to the return, on the ROM 43ac0f18… that fdd9e5b
+     and e59e8c4 share; the DIGIT lit interval is from the port writes in
+     the same run. Receiver selection: book
+     9ba1f59, P3 proposal 18 / 43d5f328.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 The eight-byte ROM table at `C003h` has one jump for seventeen numbered
 services. Numbers 0–8 control hardware, 9–11 manage volumes, 12 registers a
@@ -34,7 +38,7 @@ path uses that many bytes.
 The inspected application binary interface (ABI) is 5.1. Before calling ABICALL,
 a program compares the three bytes at ABITAB with `TNA` and ABIMAJ with exactly
 5. A new major may renumber services. A new minor adds service numbers at the
-end so code using the 5.0 calls can run on 5.1. At TEC-OS `fdd9e5b` the
+end so code using the 5.0 calls can run on 5.1. At TEC-OS `e59e8c4` the
 minor is still 1 although number 16, the shell hook, has been added. A caller
 requiring FONT also checks for minor version 1 or later (`src/abi.inc:1-28, 205-210`,
 `src/abi.asm:1-14`, `programs/DEMO.ASM:56-72`).
@@ -123,17 +127,14 @@ adds 17 T-states. Their model provenance is:
 
 | Figures | Build and method |
 | --- | --- |
-| Invalid number 58, INFO 234, DIGIT 20,660, LCD 4,905, JOY 204, KEYS 571, RTC read 6,923 and set 7,757, FONT 184 and depth 4 | `fdd9e5b`, model timing and depth on the PICO9918 board |
-| TONE formula | `60e0768`, instruction-count check |
-| DIGIT lit interval 3,348, including DJNZ 3,323 | `bd15528`, port-write timing trace and instruction count |
-| VIDEO claim 1,232 and releases 217,252/187,492/147,031 | `58d4345`, model timing under the entry's conditions |
-| PUTAT PICO cell about 509 and depths 22/18/18/14 | `58d4345`, model cell/depth checks |
-| PUTAT GLCD cell about 36,900 | `621201d`, recorded model measurement 36,909 |
+| Invalid number 58, INFO 234, DIGIT 20,660, LCD 4,905, JOY 204, KEYS 571, RTC read 6,923 and set 7,757, FONT 184 and depth 4 | Model timing and depth on the PICO9918 board |
+| TONE totals for four B and DE pairs, matching the formula below | Model timing, and the instruction count |
+| DIGIT lit interval 3,348, including DJNZ 3,323 | Port writes traced in the DIGIT run, and the instruction count |
+| VIDEO claim 1,210 and releases 217,348/187,588/147,212 | Model timing under the entry's conditions |
+| PUTAT PICO cell about 485 and depths 22/18/18/14 | Model cell and depth checks |
+| PUTAT GLCD cell about 34,190 | Model timing, a 15-character call against a 1-character one |
 
-
-No cost was recorded here for services 9–14 and 16. The figures from earlier
-builds stand for routines whose code those builds share with `fdd9e5b` in
-substance. They are not measurements of it.
+No cost was recorded here for services 9–14 and 16.
 
 ## The hardware services
 
@@ -172,11 +173,11 @@ Status is always 0. Stack bound: 4 bytes. Cost: 20,660 T-states (`src/services.a
 
 For each digit it writes the pattern to port `02h` and selects the digit through
 port `01h`, from bit 5 for the leftmost to bit 0 for the rightmost. Bit 6
-remains high for serial idle. The retained lit interval is 3,348 T-states, about
-0.84 ms at 4 MHz, including 3,323 T-states for a DJNZ count of 256. It turns the
-digit off after its interval and all six are off on return. The lit interval
-comes from a port-write trace at `bd15528`, with the DJNZ component counted from
-the instructions. It is not a physical brightness or refresh measurement.
+remains high for serial idle. The lit interval is 3,348 T-states, about 0.84 ms at
+4 MHz, including 3,323 T-states for a DJNZ count of 256. It turns the digit off
+after its interval and all six are off on return. The lit interval comes from
+the port writes of a model run, with the DJNZ component counted from the
+instructions. It is not a physical brightness or refresh measurement.
 
 ### 2 LCD
 
@@ -195,9 +196,10 @@ before any device test or claim change. For valid modes, status 2 means no
 PICO9918 answered at cold boot. Success returns 0. Stack bound: 12 bytes
 (`src/services.asm:161-230`).
 
-Historical timings at `58d4345` are 1,232 T-states for a claim with a cursor to
-remove, 217,252 for release with PICO selected at 80 columns, 187,492 with PICO
-selected at 40 columns and 147,031 with the console elsewhere. These are
+A claim with a cursor to remove takes 1,210 T-states, and 298 with the
+console elsewhere. A release takes 217,348 with PICO selected at 80 columns,
+187,588 with PICO selected at 40 columns and 147,212 with the console
+elsewhere. These are
 conditional model results rather than a universal release cost.
 
 A claim removes the selected PICO console's cursor and stores HWBCLM in VCLAIM.
@@ -221,8 +223,9 @@ while holding bit 6 high. Status is always 0. Stack bound: 4 bytes
 (`src/services.asm:233-268`).
 
 Ordinary toggle spacing is 16 × B + 51 T-states, with B = 0 meaning 256. For
-nonzero DE, the retained total is DE × (16 × B + 51) + 222 T-states. It was
-measured and checked by instruction counting at `60e0768`. DE = 0 returns
+nonzero DE, the total is DE × (16 × B + 51) + 207 T-states. The model's
+times for B = 10 with DE = 100, B = 1 with DE = 1, B = 120 with DE = 400 and
+B = 0 with DE = 2 match it exactly. DE = 0 returns
 immediately before writing the port. A nonempty tone ends with the speaker off.
 A zero-duration call leaves the port untouched.
 
@@ -291,11 +294,10 @@ reverse images of `00h–7Fh` while the ordinary video-console path filters thos
 high bytes (`src/pico.asm:235-277`, `drivers/glcd.asm:527-560`,
 `src/term.asm:39-50`).
 
-Historical measured depths at `58d4345` were 22 bytes on GLCD and 18 on PICO
-with a cursor to remove or 18 and 14 respectively without one. These are
-measured paths, distinct from the source's 22-byte bound. A cell along a row
-cost about 509 T-states on the 80-column PICO at `58d4345` and about 36,900 on
-GLCD at `621201d`.
+Measured depths are 22 bytes on GLCD and 18 on PICO with a cursor to remove,
+or 18 and 14 respectively without one. These are measured paths, distinct
+from the source's 22-byte bound. A cell along a row costs about 485 T-states
+on the 80-column PICO and about 34,190 on GLCD.
 
 ### 8 RTC
 

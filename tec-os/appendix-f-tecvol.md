@@ -7,12 +7,17 @@ nav_group: "Reference"
 
 # Appendix F. `tecvol`
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. Every recipe was run at
      fdd9e5b in a clone of that revision with its npm run media output, and
-     the outputs below are those runs'; the TEC-OS capture was made with the
+     the outputs below are those runs'; the recipe's image hash is
+     e59e8c4's, run again there, where the other outputs are the same; the
+     TEC-OS capture was made with the
      command in its comment. Citations prefixed 755636b: are the release
-     card's. -->
+     card's.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 `tecvol` edits TEC-OS card images on a PC. It creates volumes, inspects their
 files and directories, copies files and writes an image to a physical device.
@@ -193,7 +198,7 @@ node tools/tecvol.mjs dir dist/starter.img A
 MOUNT is 671 bytes in `dist/files` and occupies six records, 768 bytes, on
 the card. The fifteen files are those of `tools/media.mjs:200-231` and
 `tools/lib/starter.mjs:10-22`, and STARTUP.CMD holds `SHELL.SVC` and
-`GLCD.SVC` (`test/starter.test.mjs:46-80`). The release starter card at
+`GLCD.SVC` (`test/starter.test.mjs:48-82`). The release starter card at
 `755636b` held nine (`755636b:tools/media.mjs:197-211`).
 
 ## put
@@ -320,9 +325,9 @@ are applied after the files are written (`tools/tecvol.mjs:92-101`,
 for New starter card.
 
 `npm run media` prepares `dist/starter.recipe.json` and its image. At TEC-OS
-`fdd9e5b` that recipe, at revision 12, is the only one: the web page builds
+`e59e8c4` that recipe, at revision 12, is the only one: the web page builds
 the same card, and media removes a `dist/page.recipe.json` left by an older
-build (`fdd9e5b:tools/media.mjs:233-253`, `274-277`). Chapter 27
+build (`tools/media.mjs:233-253`, `274-277`). Chapter 27
 describes that preparation. The rebuild produced these matching hashes:
 
 ```sh
@@ -331,13 +336,13 @@ sha256sum build/fresh.img dist/starter.img
 ```
 
 ```text
-d16ee43c126c7739f9515eba888a42cfb796c6f8243bdb24ee178f83cc1cd07b  build/fresh.img
-d16ee43c126c7739f9515eba888a42cfb796c6f8243bdb24ee178f83cc1cd07b  dist/starter.img
+a77467abe18fb3a23f8da9ff66ee2a9c6be6c9376e02144036f2d234e012a2f3  build/fresh.img
+a77467abe18fb3a23f8da9ff66ee2a9c6be6c9376e02144036f2d234e012a2f3  dist/starter.img
 ```
 
 The image construction uses fixed placement, fill bytes and file contents.
 With the same recipe and matching inputs its bytes do not depend on the PC's
-clock. The printed hashes identify this recipe's result at `fdd9e5b`.
+clock. The printed hashes identify this recipe's result at `e59e8c4`.
 
 ## install
 

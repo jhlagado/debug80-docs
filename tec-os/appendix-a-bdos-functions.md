@@ -7,7 +7,7 @@ nav_group: "Reference"
 
 # Appendix A. BDOS functions
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Every source range below uses that revision, source reading. -->
 
 Use the function number to find its registers in the table, then its effects and
@@ -181,7 +181,7 @@ program by warm boot and drops the remaining command chain. Deleting or
 clearing all characters restores that abort condition
 (`src/cpm/bdos.asm:499-540`, `553-622`).
 [Chapter 23](23-the-history-ring.md) explains the history storage. At TEC-OS
-`fdd9e5b` the recall works only for the first function 10 after the shell's
+`e59e8c4` the recall works only for the first function 10 after the shell's
 `LINE` call, and the history is the shell's (`src/cpm/bdos.asm:473-490`,
 `docs/shell.md:194-208`). With no shell installed `^W` and `^N` are
 characters at the prompt too.
@@ -260,12 +260,12 @@ write, once an entry has been freed, makes the extent the FCB needs
 (`src/cpm/bdosrec.asm:94-135`). A block taken for a write that then fails
 stays in the FCB's map. A later successful close publishes it in the entry
 (`src/cpm/bdosrec.asm:593-619`). An FCB with the read-only attribute set gives
-the `File R/O` error (`src/cpm/bdosfile.asm:355-366`). At TEC-OS `fdd9e5b`, on a
+the `File R/O` error (`src/cpm/bdosfile.asm:355-366`). At TEC-OS `e59e8c4`, on a
 volume written through, such as A, success means the record is in the
 cache's copy of its block. That pending block reaches the card at the next
 close, directory request, write to another block, console read, function 48,
 `MOUNT` or warm boot, and the same holds for functions 34 and 40
-(`docs/recovery.md:64-97`). [Chapter 19](19-cache-and-persistence.md)
+(`docs/recovery.md:66-103`). [Chapter 19](19-cache-and-persistence.md)
 explains the pending block.
 
 **22 Make file.** Creates an empty entry for the FCB's name in the current
@@ -398,7 +398,7 @@ gives the `Select` error.
 the command at the DMA address, which ends with a 0 within its first 128
 bytes. It ends the program by warm boot and the CCP runs the command next
 (`src/cpm/bdos.asm:52-94`). The command may hold `!` and `&`. `E` is ignored.
-At TEC-OS `fdd9e5b` the shell splits the command at `!` and `&` and its first
+At TEC-OS `e59e8c4` the shell splits the command at `!` and `&` and its first
 piece runs whatever the program's result was. With no shell the ROM runs the
 command whole as one command (`src/cpm/bdos.asm:52-94`,
 `docs/compatibility.md:25-30`).

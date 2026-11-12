@@ -7,13 +7,16 @@ nav_group: "Writing programs"
 
 # 14. Write a resident service
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. Every capture was made at
      fdd9e5b with the command in its comment, on svc.img made as shown from
      the starter card, the programs and services assembled on the model by
      the card's TAS.COM, Thorium 3d1e2c0. The PC writer recipe was rerun at
      fdd9e5b and wrote COUNT's 111 bytes, the same as the first 111 bytes
-     of the card's TAS COUNT COUNT.SVC there. -->
+     of the card's TAS COUNT COUNT.SVC there.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 `COUNT.SVC` counts console characters after the command that installs it
 has ended. Its hook shows how resident code survives program exits and how

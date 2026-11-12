@@ -7,14 +7,17 @@ nav_group: "Inside TEC-OS"
 
 # 21. From prompt to program
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      All unprefixed source ranges use that revision, source inspection.
      The shell's parts cite drivers/shell.asm, drivers/shellcmd.asm and
      drivers/shellio.asm there. Addresses and sizes are from that build's
      build/tecos/tecos.d8.json. Every
      transcript was captured at fdd9e5b with the command in its comment, on
      the starter card or the card the recipe shown makes; ARGS was
-     assembled by TAS, Thorium 3d1e2c0, as test/inputs.json pins it. -->
+     assembled by TAS, Thorium 3d1e2c0, as test/inputs.json pins it.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 The CCP reads your command through the BDOS, parses its name and either runs a
 built-in or loads a file. A program command ends that path with page zero
@@ -25,7 +28,7 @@ exact command grammar.
 ## The minimal CCP and the shell
 
 The release-1 CCP at `a1023bd` held the command history, COPY, SERVICES,
-the pager and lines of several pieces itself. At TEC-OS `fdd9e5b` the ROM's
+the pager and lines of several pieces itself. At TEC-OS `e59e8c4` the ROM's
 CCP is smaller, and this chapter follows that CCP. Its `KEYTAB`
 holds DIR, TYPE, ERA, REN, SAVE, USER, CON and UNLOAD, and it still runs a
 `.COM` or a `.SVC`, changes drive and reads one line of `STARTUP.CMD`

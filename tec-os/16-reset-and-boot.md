@@ -7,9 +7,12 @@ nav_group: "Inside TEC-OS"
 
 # 16. Reset and boot
 
-<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…, on its starter card. Captures and timings are
-     host-model runs of that build on the serial board. -->
+     host-model runs of that build on the serial board.
+     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
+     card differs only in TED.COM and HELLO3.ASM, so captures made at
+     fdd9e5b that run neither stand for e59e8c4. -->
 
 A program can finish and leave the next command prompt ready without resetting
 the board. Warm boot rebuilds the program environment while retaining the drive
