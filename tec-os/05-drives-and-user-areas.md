@@ -14,13 +14,21 @@ nav_group: "Using the machine"
      TAS.COM Thorium dbee66a,
      SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      The service captures from old06 record 78127ec without a separate input pin.
-     NAME.SVC /E: TEC-OS 31b60837d24cf801b5e8cf4daa4856f520227795
-     docs/services.md, source reading only, unchanged at 402f30e.
-     MON3.SVC on the card and "A MON-3 session": TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) docs/mon3.md:3-21, 37-50,
-     54-137, 139-153, 164-171, 214-267, 297-322, 333-351 and 362-383,
-     tools/media.mjs:238-246 and test/starter.test.mjs:198-322; the figures
-     of the RST 10h calls also in Origo KD-269. Source reading only.
+     Entering a service on install: TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) docs/shell.md:220-235,
+     docs/services.md:82-89 and :101-130, src/loader.asm:734-783; NAME.SVC /E was
+     the form at 31b6083 and 402f30e and is gone.
+     MON3.SVC on the card and "A MON-3 session": TEC-OS fdd9e5b
+     docs/mon3.md:3-21, 37-51, 55-138, 140-154, 165-172, 215-268, 298-323,
+     334-352 and 363-384, tools/media.mjs:224-231 and
+     test/starter.test.mjs:217-342; the figures of the RST 10h calls also
+     in Origo KD-269. The TPA with SHELL.SVC and MON3.SVC is
+     test/shell.test.mjs:737-745. Source reading only.
+     The SERVICES and UNLOAD excerpt is a capture at fdd9e5b:
+     node tools/capture.mjs --board pico GLCD.SVC SERVICES UNLOAD SERVICES
+     UNLOAD SERVICES UNLOAD, boot rows omitted. The GLCD-console excerpt
+     is a capture at fdd9e5b: node tools/capture.mjs --board glcd GLCD.SVC
+     SERVICES.
      No capture, application or KS48 font/default result is newly qualified. -->
 
 A file's volume and user area determine where you can use it. Program
@@ -40,61 +48,80 @@ It remains until reset or successful removal with `UNLOAD`. Services occupy
 whole pages of 256 bytes. Those pages reduce the memory left for programs.
 [Chapter 11](11-memory-for-programs.md) explains the program-memory boundary.
 
-The card holds two service files. `GLCD.SVC` is the graphics LCD driver
-and `MON3.SVC` runs programs written for MON-3, as described below. The
-PICO9918 console is in ROM and needs no SVC installation.
+The card holds three service files. `SHELL.SVC` is the shell of
+[Chapter 1](01-first-session.md), which reads your command lines,
+`GLCD.SVC` is the graphics LCD driver and `MON3.SVC` runs programs written
+for MON-3, as described below. The startup file installs the shell and,
+where a graphics LCD is the console, the driver. The PICO9918 console is
+in ROM and needs no SVC installation.
 At `A>`, the installation command is `GLCD.SVC`. The type is required:
 `GLCD` alone searches for `GLCD.COM`. A service file can have an explicit drive, as in
 `A:GLCD.SVC` or `B:NAME.SVC`.
 
-`SERVICES` lists installed services, newest first, with each name and the
-number of pages it occupies. `UNLOAD` removes the newest service if removal
-is allowed. The following historical run used both displays with the
-PICO9918 as the console. Its automatic startup line had installed no GLCD
-driver. Typing the same file name at the prompt installed it while leaving
-the PICO9918 as the console:
+`SERVICES`, a command of the shell, lists installed services, newest first,
+with each name and the number of pages it occupies. `UNLOAD` removes the
+newest service if removal is allowed. The following run used both displays
+with the PICO9918 as the console. Its startup file had installed the shell,
+and its `GLCD.SVC` line had installed no GLCD driver. Typing the same file
+name at the prompt installed it while leaving the PICO9918 as the console:
 
-<!-- node tools/capture.mjs --board pico GLCD.SVC SERVICES UNLOAD SERVICES UNLOAD -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico GLCD.SVC SERVICES
+     UNLOAD SERVICES UNLOAD SERVICES UNLOAD. Boot rows omitted. -->
 ```text
 A>GLCD.SVC
 
 A>SERVICES
 GLCD 3
+SHELL 10
 A>UNLOAD
 
 A>SERVICES
+SHELL 10
+A>UNLOAD
+
+A>SERVICES
+SERVICES?
+
 A>UNLOAD
 UNLOAD?
 
 A>
 ```
 
-This driver occupied three pages in that build. The first `UNLOAD` removed
-it and the next `SERVICES` printed no entries. The second `UNLOAD` had
-nothing to remove. `UNLOAD?` also appears when the newest service cannot
-be removed. The command does not skip it to remove an older service.
-Removal follows the reverse of installation order. A warm boot, the restart
-after a program ends, retains the installed services. Reset empties the list.
+The driver occupies three pages and the shell ten. The first `UNLOAD`
+removed the driver, the newest service, and the second removed the shell.
+`SERVICES` then had no shell to run it and became an unknown command. The
+last `UNLOAD` had nothing to remove. `UNLOAD?` also appears when the newest
+service cannot be removed. The command does not skip it to remove an older
+service. Removal follows the reverse of installation order. A warm boot,
+the restart after a program ends, retains the installed services. Reset
+empties the list, and the startup file then installs the shell again.
 
-A service can also carry an application of its own. `NAME.SVC /E` starts
-it, installing the service first if it is not in. The application ends with
-a warm boot and leaves its service installed, so `UNLOAD` still removes it.
-`MON3.SVC` has an application and `GLCD.SVC` has none.
+A service can also carry an application of its own, which TEC-OS enters
+as soon as the service is installed. Typing `MON3.SVC` installs the service
+and starts its application, and typing it again starts the application of
+the copy already installed without reading the file. The application ends
+with a warm boot and leaves its service installed, so `UNLOAD` still
+removes it. `MON3.SVC` and `SHELL.SVC` are entered this way and `GLCD.SVC`
+only installs. Text after the name is the application's command tail, so an
+older card's `MON3.SVC /E` line still starts the session.
 [Appendix J](appendix-j-command-reference.md) gives the rules.
 
 A missing service file, a wrong format or a failed installation normally
 prints the command name with a question mark. A fatal card-read error
 instead ends the command with the BDOS's `Bad Sector` message.
 A second graphics LCD driver cannot install over the first. In this
-historical GLCD-console run, startup had already installed the driver:
+GLCD-console run, startup had already installed the shell and the driver:
 
-<!-- node tools/capture.mjs --board glcd GLCD.SVC SERVICES -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board glcd GLCD.SVC SERVICES.
+     Boot rows omitted. -->
 ```text
 A>GLCD.SVC
 GLCD.SVC?
 
 A>SERVICES
 GLCD 3
+SHELL 10
 A>
 ```
 
@@ -116,13 +143,15 @@ does in [Chapter 1](01-first-session.md). `MON3.SVC` supplies those calls
 under TEC-OS, so such a program runs with the card and the BDOS still in
 place.
 
-`MON3.SVC /E` installs the service if it is not in and enters it, at its
-`MON3>` prompt. `MON3.SVC` alone installs it without entering. The service
-stays installed after `EXIT`, so a later `MON3.SVC /E` enters it again
-without reading the file. A warm boot keeps it, and `UNLOAD` or a reset
-removes it. Its 4,605 bytes of header and image occupy 18 pages. The BDOS
-entry in `0006h` moves from `B9A4h` to `A700h`, and the program memory from
-47,268 bytes to 42,496, or to 41,728 with `GLCD.SVC` installed too. The
+`MON3.SVC` installs the service if it is not in and enters it, at its
+`MON3>` prompt. The service stays installed after `EXIT`, so a later
+`MON3.SVC` enters it again without reading the file. A warm boot keeps it,
+and `UNLOAD` or a reset removes it. Its 4,606 bytes of header and image
+occupy 18 pages. On a card with nothing else installed the BDOS entry in
+`0006h` moves from `B9A9h` to `A700h`, and the program memory from 47,273
+bytes to 42,496, or to 41,728 with `GLCD.SVC` installed too. On the starter
+card, whose startup file installs the shell first, the entry moves from
+`AF00h` to `9D00h` and the program memory from 44,544 bytes to 39,936. The
 service's own code, line buffer and stack are all in those pages, above
 anything a MON-3 program may load into. A program itself runs on MON-3's
 stack, below `0880h`.
@@ -164,7 +193,7 @@ not built shows MON-3's error display on the digits, waits for a key and
 returns as a key press would. MON-3's own disk calls are among those: they
 are not translated to CP/M files.
 
-Each `MON3.SVC /E` sets MON-3's workspace at `0800h` and its graphics
+Each entry by `MON3.SVC` sets MON-3's workspace at `0800h` and its graphics
 workspace as a MON-3 reset leaves them. `GO` also takes a checksum of the
 service and of TEC-OS's BIOS table in RAM, and the program's return
 compares it. A difference prints `Tables damaged: EXIT and reset`, and
@@ -173,7 +202,7 @@ return also sets the panel's modes again, so the console's text shows again
 whatever mode the program left the panel in.
 
 The service cannot recover a program that hangs: the reset button is the
-way out. A program that writes `B9A4h–BFFFh`, which holds the BDOS entry,
+way out. A program that writes `B9A9h–BFFFh`, which holds the BDOS entry,
 the allocation vectors, TEC-OS's workspace and its BIOS table, can damage
 TEC-OS's disk tables. The service writes pending changes before `GO` and
 resets the drives after each return to limit that. Its messages are in

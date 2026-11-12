@@ -11,10 +11,13 @@ nav_group: "Using the machine"
      Release-card file note: TEC-OS 755636b tools/media.mjs:197-211 and
      test/starter.test.mjs:36-62; TED.COM there is Thorium 967678c.
      One-card files and TED's load rule: TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) tools/media.mjs:213-273 and
-     :294-297, web/build.mjs:41-42, docs/compatibility.md:196 and
-     test/ted.test.mjs:92-120; TED.COM there is Thorium b69d544
-     (4f622390…, 12,334 bytes), as at 31b6083. Source reading only.
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) tools/media.mjs:200-253
+     and :274-277, tools/lib/starter.mjs:10-22, web/build.mjs:41-42,
+     docs/compatibility.md:223 and test/ted.test.mjs:92-120; TED.COM there
+     is Thorium b69d544 (4f622390…, 12,334 bytes), as at 31b6083. A:'s
+     coalesced writes in "Recovery after a power cut": docs/recovery.md:28-47,
+     :64-97 and :129-141. Atom's removal: README.md:91-102 and Origo KD-294.
+     Source reading only.
      Inherited recipes and output are historical TEC-OS 78127ec evidence.
      Original old03/04/05 inputs: TED.COM Thorium 128edb7,
      SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;
@@ -42,8 +45,8 @@ card tool directly without installing a command on your shell's search path.
 
 The examples that use `dist/starter.img` and `dist/files/` require a prepared
 media set made with the matching TEC-OS ROM. These generated files are not
-included in a Git clone. `npm ci` installs the locked host dependencies,
-including ATOM, but does not itself produce the ROM or media.
+included in a Git clone. `npm ci` installs the locked host dependencies but
+does not itself produce the ROM or media.
 [Chapter 27](27-build-the-rom-and-media.md) gives the source/input preparation
 and build route through `npm run media`, which writes the ROM, starter image,
 recipes and component files into `dist/`. A host-assembled COM program reaches
@@ -325,11 +328,11 @@ last record with `^Z`. Binary padding is zero. These are file conversions,
 not a way to preserve a PC file's original byte length in a CP/M directory.
 
 A text file put without `--text` therefore ends in zero bytes, not `^Z`.
-The starter card's TED at TEC-OS `402f30e` (Thorium `b69d544`) takes a run
+The starter card's TED at TEC-OS `fdd9e5b` (Thorium `b69d544`) takes a run
 of `00h` that fills the rest of the last record as the end of the file, so
 such a file opens without an error. A byte that TED rejects elsewhere stops
 it at the prompt with `EDIT error 03` and the byte's line and column, as in
-`EDIT error 03 L3 C5` (TEC-OS 402f30e `docs/compatibility.md`, Thorium
+`EDIT error 03 L3 C5` (TEC-OS fdd9e5b `docs/compatibility.md`, Thorium
 b69d544 `README.md`). The earlier TED, Thorium `967678c` on the release
 card, rejects that padding and stops with error 03 without a line or
 column.
@@ -467,10 +470,10 @@ the whole volume, independently of each file's attributes.
 
 The browser's New starter card uses the same `starter.recipe.json`, so the
 page's card and `dist/starter.img` are one card. Its fifteen files on A
-include the demo's source `DEMO.ASM`, the BASIC game `BOUNCE.BAS`,
-`MON3.SVC` with `HELLO3.BIN` and its source `HELLO3.ASM`, and `CHAIN.ASM`,
-at recipe revision 11. Media preparation no longer writes a separate page
-recipe (TEC-OS 402f30e `tools/media.mjs`, `web/build.mjs`). `TAS DEMO`
+include the shell `SHELL.SVC`, the demo's source `DEMO.ASM`, the BASIC game
+`BOUNCE.BAS`, and `MON3.SVC` with `HELLO3.BIN` and its source `HELLO3.ASM`,
+at recipe revision 12. Media preparation no longer writes a separate page
+recipe (TEC-OS fdd9e5b `tools/media.mjs`, `web/build.mjs`). `TAS DEMO`
 builds DEMO.COM on the card. The page uses the same size and SHA-256
 checks.
 
@@ -584,12 +587,18 @@ close, some writes may have reached the card and others may remain only in
 memory. A failed close is not proof of preservation and nothing automatically
 restores the old file.
 
-On a volume written through, each successful record write reaches the card
-before returning. A cut before its directory update can leave newly allocated
+On a volume written through, such as SYSTEM on A, a record write goes into
+the cache's copy of its 512-byte card block and returns. The block reaches
+the card at the next flush point: the file's close, any directory request, a
+write to another block, a console read, function 48, `MOUNT` or a warm boot.
+A cut before that point loses the records written into that one block since
+it was last written, at most four records, and the card keeps the block's
+old contents. A cut before the directory update can leave newly allocated
 data blocks with no entry naming them. They become free again when TEC-OS
 rebuilds the drive's free-space map. Overwriting a record already in a file
-replaces it directly. A cut can leave new records alongside old records that
-the program had not reached, with no saved copy of the original file.
+replaces it when its block is written. A cut can leave new records alongside
+old records that the program had not reached, with no saved copy of the
+original file.
 
 On a volume written behind, changes still in the cache are lost. Blocks written
 early to make cache space and blocks written by a completed part of a flush

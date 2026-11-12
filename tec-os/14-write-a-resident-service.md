@@ -22,7 +22,11 @@ nav_group: "Writing programs"
 `COUNT.SVC` counts console characters after the command that installs it
 has ended. Its hook shows how resident code survives program exits and how
 another program finds a routine inside it. COUNT and its clients retain their
-historical source and results. The failed-INIT example has a separate current
+historical source and results. Those captures predate the shell. On the
+starter card at TEC-OS `fdd9e5b` the startup file installs `SHELL.SVC`
+first, so `SERVICES` also lists `SHELL 10` below the newer services and
+`UNLOAD` removes it only after them
+([Chapter 5](05-drives-and-user-areas.md)). The failed-INIT example has a separate current
 workflow below. Use the PC setup from
 [Chapter 6](06-cards-on-the-pc.md) for their card preparation.
 
@@ -296,9 +300,12 @@ calls). The hook remained installed across each program's warm boot.
 ### The PC file writer
 
 The repository's `makeSvc` in `tools/lib/svc.mjs` writes service files on
-the PC using ATOM. Its input needs an indented `ORG $0100` line with no
-trailing comment. It assembles the image at origins 0 and `0100h` to find
-bytes requiring relocation. An include such as `%INCLUDE "ABI.INC"` is
+the PC. At the historical revisions below it used ATOM and assembled the
+image at origins 0 and `0100h` to find bytes requiring relocation. At TEC-OS
+`fdd9e5b` it uses TAS and assembles at `0100h` and `0200h`, as a CP/M PRL
+file is made (`fdd9e5b:tools/lib/svc.mjs:1-4`,
+`fdd9e5b:tools/lib/prl.mjs:33-53`). Its input needs an indented
+`ORG $0100` line with no trailing comment. An include such as `%INCLUDE "ABI.INC"` is
 resolved relative to the source file, matching path components without
 regard to case. Copying `abi.inc` into the current directory is sufficient
 only when `count.asm` is there too. The include remains source-adjacent

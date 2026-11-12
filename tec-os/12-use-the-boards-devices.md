@@ -19,7 +19,7 @@ nav_group: "Writing programs"
      Compact-style assembly proof remains separate. No new program, build,
      import, test, capture or board result is claimed.
      The DEMO card passage cites TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) with a 402f30e: prefix. -->
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) with a fdd9e5b: prefix. -->
 
 The BDOS handles files and console text. TEC-OS's numbered ROM calls also let
 your program light the digits, sound the speaker, read the clock or write the
@@ -849,13 +849,14 @@ The historical starter card did not include DEMO. The web-page recipe did
 include it on A so DEMO ran there without adding it to that card. At `a1023bd`
 its source was `test/programs/demo.asm`, and media generation exported
 DEMO.COM to `dist/files` and included it in the page recipe. At TEC-OS
-`402f30e` the source is `programs/DEMO.ASM` and the one card, which the web
+`fdd9e5b` the source is `programs/DEMO.ASM` and the one card, which the web
 page also runs, holds that source in place of DEMO.COM. `TAS DEMO` builds
 DEMO.COM on the card, `DEMO` then runs it and `TED DEMO.ASM` opens the source
-(`402f30e:tools/media.mjs:234-237`, `402f30e:tools/media.mjs:289-290`,
-`402f30e:test/demo.test.mjs:1-4`, `402f30e:test/starter.test.mjs:171-196`).
+(`fdd9e5b:tools/media.mjs:220-223`, `fdd9e5b:tools/media.mjs:269-270`,
+`fdd9e5b:test/demo.test.mjs:1-4`, `fdd9e5b:test/starter.test.mjs:190-215`).
 The retained explicit host route used ATOM and
-added the program to B of `hw.img`:
+added the program to B of `hw.img`. At TEC-OS `fdd9e5b` atom-z80 is no longer a dependency of the repository,
+so `npx atom` in these recipes needs atom-z80 0.3.7 installed by hand:
 
 ```sh
 npx atom test/programs/demo.asm demo.com

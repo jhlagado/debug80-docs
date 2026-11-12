@@ -24,16 +24,22 @@ nav_group: "Using the machine"
      755636b130241173c5c30a0be8fe6b79cf2fee37 tools/media.mjs and
      test/starter.test.mjs. The DIR excerpt below keeps the six-file card
      of attempt02; no nine-file DIR capture is claimed.
-     One-card text: the fifteen files are those of TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) tools/media.mjs:213-251 and
-     test/starter.test.mjs:50-85, the one card the web page runs too
-     (Origo KD-278). The steps in "More on the
-     card" follow 402f30e README.md:160-173, the recipe's instruction
-     (tools/media.mjs:261), test/programs/hello3.asm and
-     test/starter.test.mjs:112-390; the LCD lines are HELLO3_ROWS
-     (test/starter.test.mjs:198). With the Matrix switch on, MON3.SVC's key
-     calls read the matrix, not the keypad (docs/mon3.md:241-243, :285-286,
-     drivers/mon3api.asm:296-305). No capture of those steps is claimed. -->
+     Shell-card text: the fifteen files are those of TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) tools/media.mjs:200-231,
+     tools/lib/starter.mjs:10-22 and test/starter.test.mjs:46-80, the one card the web page runs too
+     (Origo KD-278, KD-302). The first-prompt and DIR excerpts are captures
+     at fdd9e5b: node tools/capture.mjs --board pico --screen, and the same
+     with DIR, screen rows from the first. SHELL.SVC and the recall keys
+     follow fdd9e5b docs/shell.md:3-26 and :144-146. The steps in "More on
+     the card" follow fdd9e5b README.md:164-185, the recipe's instruction
+     (tools/media.mjs:241), test/programs/hello3.asm and
+     test/starter.test.mjs:107-392; the LCD lines are HELLO3_ROWS
+     (test/starter.test.mjs:217), and TED's sideways scroll on BOUNCE.BAS's
+     79-column line 400 is test/starter.test.mjs:356-392. With the Matrix
+     switch on, MON3.SVC's key calls read the matrix, not the keypad
+     (docs/mon3.md:242-244, :286-287, drivers/mon3api.asm:296-305). A:'s
+     pending block follows docs/recovery.md:28-36 and :64-79. No capture of
+     the MON-3 steps is claimed. -->
 
 Your first session starts with the supplied files. You list them, change drive
 and turn SAMPLE's source into a program you can run. Before finishing you write
@@ -57,13 +63,17 @@ left out.
 Powering on starts TEC-OS. The screen names the system and the two volumes on
 the starter card:
 
-<!-- attempt02 Machine 1, 001-SAMPLE-cold.json, screen rows 1–8 (one-based).
-     Initial blank row retained; unused blank rows 9–24 omitted. -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen,
+     screen rows 1–10. Initial blank row retained; unused blank rows
+     11–24 omitted. The attempt02 cold capture, 001-SAMPLE-cold.json, had
+     the one GLCD.SVC line of the earlier card. -->
 ```text
 
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
 B: WORK
+
+A>SHELL.SVC
 
 A>GLCD.SVC
 
@@ -75,10 +85,13 @@ A and WORK to drive B. The letter before `>` identifies the *current drive*,
 the one used when you name a file without a drive letter. At `A>` you are
 working on SYSTEM. The prompt is where you type a command.
 
-The `GLCD.SVC` line was automatic. It came from the card's startup file.
-The PICO9918 is already the console, the screen and keyboard used for commands,
-so this startup line leaves it selected. You begin typing at the final `A>`.
-The separate 20 × 4 LCD also shows the system name and assigned drives.
+The `SHELL.SVC` and `GLCD.SVC` lines were automatic. They came from the
+card's startup file. `SHELL.SVC` loads the *shell*, a program that stays in
+memory and reads each command line you type. It supplies the recall keys
+below, the pause in long listings and the `COPY` command of Chapter 4. The
+PICO9918 is already the console, the screen and keyboard used for commands,
+so the `GLCD.SVC` line leaves it selected. You begin typing at the final
+`A>`. The separate 20 × 4 LCD also shows the system name and assigned drives.
 
 ## Files at the prompt
 
@@ -86,21 +99,19 @@ The separate 20 × 4 LCD also shows the system name and assigned drives.
 prompt and press Return. The prompt itself is already on the screen and is
 not part of the command. In the same session the listing was:
 
-<!-- attempt02 Machine 1, 002-opening-dir.json, screen rows 8–12.
-     Earlier boot rows omitted; unused rows below the prompt omitted. -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen DIR,
+     screen rows 10–16. Earlier boot rows omitted; unused rows below the
+     prompt omitted. -->
 ```text
 A>DIR
-MOUNT.COM    GLCD.SVC     STARTUP.CMD
-TED.COM      SAMPLE.ASM   TAS.COM
-6 files, 980K free
+MOUNT.COM    SHELL.SVC    GLCD.SVC
+STARTUP.CMD  TED.COM      SAMPLE.ASM
+TIMES.BAS    TAS.COM      BAZA.COM
+BAZA.RTL     BOUNCE.BAS   DEMO.ASM
+MON3.SVC     HELLO3.BIN   HELLO3.ASM
+15 files, 912K free
 A>
 ```
-
-That listing is from an earlier starter card with six files. The card TEC-OS
-prepares now holds fifteen, so its listing has fifteen names and its last
-line reports fifteen files. Besides these six it holds TIMES.BAS, BAZA.COM,
-BAZA.RTL, MON3.SVC and HELLO3.BIN, with the sources DEMO.ASM, BOUNCE.BAS,
-HELLO3.ASM and CHAIN.ASM.
 
 Each name has up to eight characters followed by a type of up to three
 characters. A full stop separates the two when you type a name. In
@@ -111,12 +122,12 @@ source text. A `.COM` file holds a program that TEC-OS can run.
 program. `TED` is the supplied text editor and `MOUNT` manages volumes.
 `BAZA` is a BASIC compiler, which uses its library `BAZA.RTL`, and
 `TIMES.BAS` is a BASIC program for it. The automatic display setup uses
-`GLCD.SVC` and `STARTUP.CMD`. Leave them as supplied for this session. The
-other files are demonstrations, which [More on the card](#more-on-the-card)
-lists.
+`GLCD.SVC` and `STARTUP.CMD`, and `SHELL.SVC` is the shell. Leave them as
+supplied for this session. The other files are demonstrations, which
+[More on the card](#more-on-the-card) lists.
 
 The last line reports the number of files and the free space on A. That
-space is in KiB, units of 1,024 bytes. The spelling `980K` is the listing's notation.
+space is in KiB, units of 1,024 bytes. The spelling `912K` is the listing's notation.
 The card's WORK volume on B starts empty and is available for your files.
 
 ## Correcting and recalling a line
@@ -140,7 +151,9 @@ These command-line actions let you correct a name or start again:
 Return runs a recalled line just as it runs a newly typed one. You can edit
 its last characters first with Backspace or discard it with `^X`. Recall is
 useful for another `DIR` after a file has changed. It applies at the command
-prompt, not inside an arbitrary program's own input.
+prompt, not inside an arbitrary program's own input. `^W` and `^N` belong to
+the shell, which keeps the lines you type. Without the shell, as after the
+startup bypass of Chapter 8, the other keys still work and recall does not.
 
 A mistyped command can fail with a question mark after its name. The command
 has then finished and the prompt is ready for a corrected line. `^C` has a
@@ -212,21 +225,20 @@ command or two at `A>`:
 | Commands | Result |
 | --- | --- |
 | `TAS DEMO`, then `DEMO` | Builds and runs a tour of the hardware on the LCD, the digits, the 8 × 8 LEDs and the PICO9918, until you press a key. [Chapter 12](12-use-the-boards-devices.md) describes it |
-| `BAZA BOUNCE`, then `BOUNCE` | Compiles and runs a sprite game on the PICO9918. Tap W, A, S and D to steer and Q to quit. [Chapter 3](03-build-a-basic-program.md) describes it |
-| `TAS CHAIN`, then `CHAIN` | Builds and runs a program written with several statements on a line, which prints `LINE 1` to `LINE 5`. [Chapter 2](02-make-a-small-program.md) explains the layout |
+| `BAZA BOUNCE`, then `BOUNCE` | Compiles and runs a sprite game on the PICO9918. Tap W, A, S and D, or the arrow keys, to steer and Q to quit. [Chapter 3](03-build-a-basic-program.md) describes it |
 
-`TED DEMO.ASM` and `TED CHAIN.ASM` open those sources. CHAIN.ASM's lines
-are up to 67 columns wide, so at 40 columns TED scrolls sideways to show
-the rest of a line. After `CON PICO 80` it shows every line whole, and
+`TED DEMO.ASM` and `TED BOUNCE.BAS` open those sources. BOUNCE.BAS's
+longest line is 79 columns wide, so at 40 columns TED scrolls sideways to
+show the rest of a line. After `CON PICO 80` it shows every line whole, and
 `CON PICO 40` returns to 40 columns.
 [Chapter 7](07-choose-a-console.md) explains the widths.
 
 `MON3.SVC` runs programs written for MON-3, the TEC-1G's own monitor.
-`MON3.SVC /E` installs it and gives its prompt, `MON3>`. There
+Typing `MON3.SVC` installs it and gives its prompt, `MON3>`. There
 `LOAD HELLO3.BIN` loads the supplied MON-3 program and `GO` runs it. HELLO3
 writes four lines on the 20 × 4 LCD through MON-3's calls, then beeps:
 
-<!-- TEC-OS 402f30e test/starter.test.mjs:198, the LCD rows the host-model
+<!-- TEC-OS fdd9e5b test/starter.test.mjs:217, the LCD rows the host-model
      test checks, trailing spaces removed. Not a separate capture. -->
 ```text
 MON-3 ON TEC-OS
@@ -248,13 +260,16 @@ keeps in memory.
 
 A program can report that it has saved a file while some changes remain in
 memory. WORK on B permits this delayed writing. Resetting the machine or
-removing power discards changes that have not reached the card. The same
-precaution is useful even when your current prompt is on A.
+removing power discards changes that have not reached the card. On A a
+program's writes into one 512-byte block of the card wait in memory until
+the program closes the file, uses the directory, writes another block,
+reads the console or ends. The prompt's own console read writes that block,
+so the precaution below is the same on A.
 
 Finish the program and return to the prompt before ending the session. At an
 empty prompt, Ctrl and C together, written `^C`, starts a *warm boot*: TEC-OS
-attempts pending card writes and returns to the prompt. In the same SAMPLE
-session the successful ending was:
+attempts pending card writes and returns to the prompt. In the recorded
+SAMPLE session on the earlier card the successful ending was:
 
 <!-- attempt02 Machine 1, 007-opening-direct-flush.json, screen rows 22–23.
      Earlier commands omitted. One matrix Ctrl-C input, no extra Return. -->

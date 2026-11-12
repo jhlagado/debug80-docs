@@ -10,8 +10,10 @@ nav_group: "Inside TEC-OS"
 <!-- Source-only reading against release-1 TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      This is not final artifact qualification. Address examples and measured stack
      figures explicitly labelled 78127ec retain that historical provenance.
-     The 402f30e: citation uses TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main). -->
+     The fdd9e5b: citations use TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), where the command
+     history is SHELL.SVC's (docs/shell.md:20-26, drivers/shell.asm:649-707)
+     and EXPAND 1 holds only the cache (docs/memory-map.md:70-83). -->
 
 A program ends and the command prompt returns. The next program has a fresh BDOS
 workspace while your command history and installed services remain in RAM. A
@@ -23,11 +25,16 @@ BIOS operates the board for them. Their code is in ROM while their changing
 state is in RAM. The numbered ROM services also provide access to the board's
 own devices, including the digits, 20 × 4 character LCD and speaker. Console
 output can go to serial, the PICO9918 or the graphics LCD. The SD container
-holds several volumes. The separate expansion bank holds the block cache and
-command history so those buffers occupy none of the transient program area (TPA)
+holds several volumes. The separate expansion bank holds the block cache, and
+at `a1023bd` the command history too, so those buffers occupy none of the
+transient program area (TPA)
 (`a1023bd:src/rom.asm:17-44`, `a1023bd:src/layout.asm:77-86`,
 `a1023bd:format/format.json:20-25`, `a1023bd:src/services.asm:1-19`,
-`a1023bd:src/abi.inc:62-103`).
+`a1023bd:src/abi.inc:62-103`). At TEC-OS `fdd9e5b` the history is the
+shell's. `SHELL.SVC` is a resident service, and its ten pages, the
+256-byte history ring in the last of them, lie below the TPA's ceiling like
+any other service's (`fdd9e5b:docs/shell.md:20-26`,
+`fdd9e5b:drivers/shell.asm:704-707`).
 
 ## Two banks at the same addresses
 
@@ -39,7 +46,7 @@ addresses (`a1023bd:src/layout.asm:1-7`, `a1023bd:src/abi.inc:288-289`).
 
 Programs normally run with EXPAND 0 selected. Their upper buffers share
 that bank with the resident workspace and stacks. EXPAND 1 contains the
-cache and history instead. The address `BF00h` reaches the
+cache instead, and at `a1023bd` the history too. The address `BF00h` reaches the
 RAM BIOS table in EXPAND 0 but a different byte in EXPAND 1. Fixed RAM
 and ROM remain visible during this switch.
 
@@ -264,12 +271,16 @@ for BIOS and CCP with no loaded services. The deepest census values were
 the same. The service limits were 8, 12 and 6 respectively.
 Base plus limit therefore used 38 of 54 bytes, 30 of 40 and 24 of 32.
 Each left at least a quarter free. These are historical host-model
-measurements, not results from the offered build. At TEC-OS `402f30e` the
+measurements, not results from the offered build. At TEC-OS `fdd9e5b` the
 BDOS's deepest use of all, its census, is 32 bytes. Its base, the deepest
 use with no resident on the serial and PICO9918 paths, the diagnostic
-console and a recognised reset, is still 30. A service limit is counted
-from the base, so base plus limit still uses 38 of the BDOS's 54. The BIOS
-and CCP figures are unchanged (`402f30e:docs/services.md:316-333`).
+console, a recognised reset and A:'s pending block written at each flush
+point, is still 30. A service limit is counted from the base, so base plus
+limit still uses 38 of the BDOS's 54. The BIOS and CCP figures are
+unchanged (`fdd9e5b:docs/services.md:308-330`). The shell's `LINE` and
+`PAGE` entries move at once to its own 32-byte stack, and it declares 6
+bytes of the BDOS's stack for `HREC` and `HSTORE`
+(`fdd9e5b:docs/services.md:332-339`).
 [Appendix C](appendix-c-memory-map.md#the-stacks) retains the
 historical stack addresses and reservations.
 
@@ -298,14 +309,16 @@ EXPAND 1 contains 30 cache lines of 512 bytes at `8000h–BBFFh`.
 Their four-byte card-block keys occupy `BC00h–BC77h` and their dirty
 bytes occupy `BC80h–BC9Dh`. An empty line has key `FFFFFFFFh`.
 A nonzero dirty byte marks data newer than the card's copy.
-The history ring occupies `BD00h–BDFFh`. The final 512 bytes at
-`BE00h–BFFFh` are unused. The cache and history addresses are fixed
+At `a1023bd` the history ring occupied `BD00h–BDFFh` and the final 512 bytes
+at `BE00h–BFFFh` were unused. The cache and history addresses are fixed
 in the source (`a1023bd:src/cache.asm:1-16`,
-`a1023bd:src/layout.asm:39-42`, `a1023bd:src/history.asm:1-16`).
+`a1023bd:src/layout.asm:39-42`, `a1023bd:src/history.asm:1-16`). At
+`fdd9e5b` the history has left EXPAND 1, `src/history.asm` is gone, and
+`BD00h–BFFFh`, 768 bytes, is free (`fdd9e5b:docs/memory-map.md:78-83`).
 
 Cold boot clears that whole 16 KiB bank and marks the cache lines empty.
-Warm boot leaves the history and cache storage in place and flushes
-pending writes. No BDOS, BIOS or numbered hardware call allocates a
+Warm boot leaves the cache storage in place and flushes pending writes. The
+shell's history survives warm boot in the shell's own pages. No BDOS, BIOS or numbered hardware call allocates a
 program buffer in EXPAND 1. A direct write there can corrupt a cached
 block whose bytes may later be written to the card
 (`a1023bd:src/boot.asm:232-249`, `a1023bd:src/cache.asm:254-299`).
@@ -316,9 +329,9 @@ and RAM BIOS table. A `PUSH` then writes the other bank.
 Restoring EXPAND 0 before a `POP` would read different bytes.
 Calls, returns and interrupts also use the stack.
 During an EXPAND 1 access the resident routines hold maskable interrupts
-off and use registers for temporary values. The history access saves flags
-before switching banks. It restores EXPAND 0 before popping those flags
-and restores the saved interrupt state
+off and use registers for temporary values. At `a1023bd` the history access
+saved flags before switching banks. It restored EXPAND 0 before popping
+those flags and restored the saved interrupt state
 (`a1023bd:src/history.asm:30-62`, `a1023bd:src/bios.asm:410-440`).
 
 The cache lookup, RAM-detection routine and SD block loops obey the same

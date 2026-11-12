@@ -9,7 +9,9 @@ nav_group: "Inside TEC-OS"
 
 <!-- Source mechanisms checked against TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe by source inspection only.
-     All source ranges below use that revision. No captures were rerun. -->
+     All source ranges below use that revision. No captures were rerun.
+     "The ring at TEC-OS fdd9e5b" uses TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), source reading only. -->
 
 <!-- Historical capture provenance: TEC-OS 78127ec, with the starter card's
      `TED.COM` from Thorium 128edb7, whose copy in `dist/files` has the SHA-256
@@ -22,6 +24,28 @@ You can recall whole command lines even after newer input has overwritten
 older history. TEC-OS keeps those lines in a 256-byte ring. When an insertion
 cuts through an old line, the remaining fragment is cleared before recall
 can reach it (`src/history.asm:216-251`).
+
+## The ring at TEC-OS fdd9e5b
+
+This chapter follows the ring as the release-1 ROM at `a1023bd` held it,
+in EXPAND 1 at `BD00h`. At TEC-OS `fdd9e5b` the ring is the shell's.
+`SHELL.SVC` places it in the last of its ten pages, aligned to a page so
+that stepping the low byte of an address wraps within it, and clears it
+with the rest of its variables when it installs
+(`fdd9e5b:drivers/shell.asm:70-87`, `fdd9e5b:drivers/shell.asm:700-707`).
+The ring keeps the rules described below: each entry is a line and its zero,
+`HHEAD` is the offset of the next entry, a line equal to the newest or one
+holding a zero is not stored, and the rest of an oldest line that an
+insertion cut through is cleared (`fdd9e5b:drivers/shellio.asm:498-640`).
+
+The ROM's function 10 reaches the ring through the shell's `HREC` and
+`HSTORE` entries, on the BDOS's stack, only for the first line input after
+the shell's `LINE` call. Neither entry may call the BDOS, and EXPAND 1 is
+no longer switched in, since the ring is in fixed RAM
+(`fdd9e5b:docs/shell.md:194-208`, `fdd9e5b:src/cpm/bdos.asm:473-490`,
+`fdd9e5b:src/cpm/bdos.asm:637-663`). Warm boot keeps the shell's pages and so
+the ring. A reset removes the shell and its history. `UNLOAD` of the shell
+removes them too, and recall then stops.
 
 ## A page of whole lines
 

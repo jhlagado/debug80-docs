@@ -12,8 +12,12 @@ nav_group: "Using the machine"
      Source-only semantic check: a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      No execution, new capture or physical-board result is claimed.
      The historical 80-column setup is not evidence for a new opening profile.
-     The current card's file count is TEC-OS 402f30e tools/media.mjs:213-251
-     and test/starter.test.mjs:50-85; its listing was not captured. -->
+     The current card's file count is TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) tools/media.mjs:200-231
+     and test/starter.test.mjs:46-80; its 32-column listing was not
+     captured. The CON UC1, SERVICES, UNLOAD and CON excerpt is a capture at
+     fdd9e5b: node tools/capture.mjs --board pico "CON UC1" SERVICES UNLOAD
+     CON, boot rows omitted. -->
 
 The console is the keyboard you type on and the display TEC-OS answers on. `CON`
 moves that connection between a serial terminal, the PICO9918 and the graphics
@@ -164,15 +168,17 @@ A>
 
 Removing the graphics-LCD driver while it is the console selects the
 PICO9918 if its ROM console started. Otherwise output returns to serial.
-This separate historical run on a board with both displays selected UC1,
-listed the driver, removed it and reported the resulting console:
+This separate run on a board with both displays selected UC1, listed the
+driver and the shell, removed the driver and reported the resulting console:
 
-<!-- node tools/capture.mjs --board pico "CON UC1" SERVICES UNLOAD CON -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico "CON UC1" SERVICES
+     UNLOAD CON. Boot rows omitted. -->
 ```text
 A>CON UC1
 CON: UC1:
 A>SERVICES
 GLCD 3
+SHELL 10
 A>UNLOAD
 
 A>CON
@@ -180,7 +186,8 @@ CON: CRT:
 A>
 ```
 
-`CRT:` in the final report names the PICO9918 console after removal.
+`CRT:` in the final report names the PICO9918 console after removal. The
+driver was the newest service, so `UNLOAD` removed it and left the shell.
 
 A board with the graphics LCD and matrix keyboard can also start without a
 terminal. Where no

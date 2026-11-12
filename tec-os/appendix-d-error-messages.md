@@ -11,9 +11,11 @@ nav_group: "Reference"
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Unprefixed ranges use that pin.
      The old-card recipe/capture retains78127ec. CLOSE ERROR
      retains its actualbd15528 experiment fromBook12:65. The diagnostic prompt fence is a literal message template.
-     DEL, TED's load error and the MON-3 session cite TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) with a 402f30e: prefix and
-     Thorium b69d544. The cited DEL and TED lines are as at 31b6083.
+     DEL at 402f30e cites TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125
+     with a 402f30e: prefix. The shell's messages, TED's load error, A:'s
+     pending block and the MON-3 session cite TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) with a fdd9e5b: prefix
+     and Thorium b69d544.
      No execution, new capture or physical-board result is claimed. -->
 
 An error message identifies the operation that stopped and the recovery still
@@ -140,11 +142,13 @@ is written and cleared.
 
 ## The CCP's failures
 
-Each failure in this section sets the return code to `FF00h` and a `:` piece
-after it in a chained line then drops the rest of the line
-(`src/cpm/ccp.asm:580-587`, `210-227`).
+Each failure in this section sets the return code to `FF00h`. Under the
+shell an `&` piece after it is then skipped, and a `!` piece still runs
+(`src/cpm/ccp.asm:580-587`, `210-227`, `fdd9e5b:docs/shell.md:46-82`).
 [Chapter 13](13-results-and-command-chains.md)
-explains the code.
+explains the code. At TEC-OS `fdd9e5b` COPY, DEL and SERVICES are the
+shell's commands, and the shell prints its own refusals in the same form,
+the word and a question mark (`fdd9e5b:drivers/shell.asm:550-598`).
 
 | Message | Cause | Remedy | See |
 | --- | --- | --- | --- |
@@ -185,8 +189,11 @@ service gives a distinct cause.
 | `PICO.SVC` | An old driver passed a CRT table to `DRVR`, which accepts only UC1. | Remove its startup line. The ROM supplies the PICO console. | `src/services.asm:525-531` |
 | `NAME.SVC` | Record validation failed after successful `INIT`. The status is cleared so startup also prints the name regardless of INIT's returned `A`. | Check `SERVICES`. The cleanup outcome determines whether pages remain reserved. | `src/loader.asm:359-466` |
 | `UNLOAD` | The newest service cannot be removed or none exists. Reasons include an active INIT/REMOVE, a mismatched top, a non-removable flag or carry from REMOVE. | Remove services newest first and investigate the retained service. | [Chapter 5](05-drives-and-user-areas.md), `src/cpm/ccpcmd.asm:13-16`, `src/loader.asm:101-118` |
-| `COPY` | A missing/ambiguous name, identical source and destination or text after the destination. | Give one source and a different destination with no further operand. | `src/cpm/ccpmut.asm:191-230` |
-| `ERA` | A missing, extra or invalid name. `DEL`, another name for ERA present at TEC-OS `402f30e`, fails on the same conditions with the same output. | `ERA NAME` or `DEL NAME`. | `src/cpm/ccpmut.asm:10-14`, `402f30e:src/tables.asm:64-67` |
+| `COPY` | A missing/ambiguous name, identical source and destination or text after the destination. At `fdd9e5b` the shell checks the same conditions. Without the shell `COPY` is an unknown program name. | Give one source and a different destination with no further operand. | `src/cpm/ccpmut.asm:191-230`, `fdd9e5b:drivers/shellcmd.asm:54-110` |
+| `ERA` | A missing, extra or invalid name. `DEL`, another name for ERA, present in the ROM at TEC-OS `402f30e` and in the shell at `fdd9e5b`, fails on the same conditions with the same output. | `ERA NAME` or `DEL NAME`. | `src/cpm/ccpmut.asm:10-14`, `402f30e:src/tables.asm:64-67`, `fdd9e5b:drivers/shell.asm:530-539` |
+| `&WORD` | A typed, script or startup line whose first piece starts with `&`. None of the line runs. | Remove the `&`: a new line runs whatever the last line returned. | `fdd9e5b:docs/shell.md:68-70` |
+| `:WORD` | A piece starting with CP/M 3's `:` prefix, which TEC-OS does not provide. | Join the pieces with ` &` instead. | `fdd9e5b:docs/shell.md:84-89` |
+| `NAME.CMD` | Under the shell: no such script on the named or current drive in the current user, a script named inside another script, or a script name with further pieces after it. With no shell a typed `NAME.CMD` runs `NAME.COM`, and this is the program's missing name. | Check the name and drive, and run a script from its own line. | `fdd9e5b:docs/shell.md:91-113`, `fdd9e5b:drivers/shell.asm:605-626` |
 | `REN` | Invalid `NEW=OLD` syntax, a missing/ambiguous name or two different explicit drives. | Put a drive on one name or the same drive on both. | `src/cpm/ccpmut.asm:74-109` |
 | `SAVE` | An invalid decimal count, a count of 256 or more, a count reaching the BDOS-entry page or a missing/ambiguous filename. | `SAVE n NAME.COM` with a count within the memory bound. | `src/cpm/ccpcmd.asm:263-311` |
 | `USER` | The argument is not a single number from 0 to 15. | `USER n`. | `src/cpm/ccpcmd.asm:217-247` |
@@ -313,8 +320,10 @@ back (`src/cpm/bdos.asm:217-229`, `src/ram.asm:224-225`).
 ## `Write lost`
 
 `Write lost` applies to a volume written behind, whose writes wait in the block
-cache. At each warm boot TEC-OS writes every changed block in the cache to the
-card. A line whose write fails is dropped from the cache. This does not undo
+cache, and at TEC-OS `fdd9e5b` also to A's pending block, the one block a
+volume written through holds until its next flush point
+(`fdd9e5b:docs/recovery.md:64-112`). At each warm boot TEC-OS writes every
+changed block in the cache to the card. A line whose write fails is dropped from the cache. This does not undo
 an earlier successful or partial physical write. If any write failed, the
 message is printed once on a line of its own and the rest of a chained
 line is dropped (`src/cache.asm:254-295`,
@@ -344,8 +353,8 @@ image flag that selects write-behind.
 ## `MOUNT`
 
 The starter card's `MOUNT.COM` prints these messages. Normal return leaves
-the command result at 0 so even an error message does not by itself cancel
-a following `:` piece. A failed warm-boot flush can still drop that piece
+the command result at 0 so even an error message does not by itself skip
+a following `&` piece. A failed warm-boot flush can still drop that piece
 (`test/programs/mount.asm:26-30`, `245-266`, `src/cache.asm:566-572`).
 [Chapter 5](05-drives-and-user-areas.md#changing-a-drive-s-volume) gives the
 operator commands and [Chapter 18](18-card-blocks-and-volumes.md) explains
@@ -355,17 +364,17 @@ the volume services.
 | --- | --- | --- | --- |
 | `MOUNT [D: [NAME or INDEX]]` | The argument does not begin with A to D followed by a colon. | MOUNT lists volumes. `MOUNT B: NAME` or `MOUNT B: 2` assigns one. `MOUNT B:` empties B. | `test/programs/mount.asm:32-56`, `245-247`, `266` |
 | `No such volume` | No matching label/index or a failed descriptor/table read. | List labels and indexes with MOUNT and inspect the card if a known descriptor cannot be read. | `test/programs/mount.asm:101-146`, `src/volsvc.asm:424-458` |
-| `Cannot mount: in use or too large` | The volume is already on another drive, the destination has no suitable allocation-vector slot or the pre-change flush failed. | Empty the other drive or choose a suitably sized slot. A failed flush leaves the assignment unchanged but drops failed cached lines. It prints no additional Write lost message on this path. | [Chapter 5](05-drives-and-user-areas.md#changing-a-drive-s-volume), `src/volsvc.asm:211-266`, `372-386`, `src/cache.asm:265-295` |
-| `Cannot unmount` | An attempt to empty A or failure of the required flush. | Replace A's volume rather than emptying A. For a write fault, recover the card before proceeding. Failed cached lines are dropped with no additional Write lost message on this path. | `src/volsvc.asm:276-315`, `372-386`, `src/cache.asm:265-295` |
+| `Cannot mount: in use or too large` | The volume is already on another drive, the destination has no suitable allocation-vector slot or the pre-change flush failed. | Empty the other drive or choose a suitably sized slot. A failed flush leaves the assignment unchanged. At `a1023bd` it drops failed cached lines, and at `fdd9e5b` it keeps them for the next flush, which `MOUNT.COM`'s own warm boot then is. It prints no additional Write lost message on this path. | [Chapter 5](05-drives-and-user-areas.md#changing-a-drive-s-volume), `src/volsvc.asm:211-266`, `372-386`, `src/cache.asm:265-295` |
+| `Cannot unmount` | An attempt to empty A or failure of the required flush. | Replace A's volume rather than emptying A. For a write fault, recover the card before proceeding. At `a1023bd` failed cached lines are dropped, and at `fdd9e5b` they are kept for the next flush, with no additional Write lost message on this path. | `src/volsvc.asm:276-315`, `372-386`, `src/cache.asm:265-295` |
 | `MOUNT needs TEC-OS with ABI 5.` | The ROM table lacks the TNA tag or its major version is not 5. | Use a MOUNT.COM matched to the ROM. | [Chapter 12](12-use-the-boards-devices.md), `test/programs/mount.asm:13-30` |
 
 ## TED's load error
 
-The starter card's TED at TEC-OS `402f30e` (Thorium `b69d544`) prints this
+The starter card's TED at TEC-OS `fdd9e5b` (Thorium `b69d544`) prints this
 line and returns to the prompt when the file it is opening holds a byte it
 rejects
-(`Thorium b69d544:README.md:25-30`, `402f30e:docs/compatibility.md:196`,
-`402f30e:test/ted.test.mjs:92-120`). The earlier TED, Thorium `967678c` on
+(`Thorium b69d544:README.md:25-30`, `fdd9e5b:docs/compatibility.md:223`,
+`fdd9e5b:test/ted.test.mjs:92-120`). The earlier TED, Thorium `967678c` on
 the release card, also rejects `00h` padding at the end of a file and gives
 error 03 without a line or column
 (`Thorium 967678c:ted/src/load.asm:48-53`, `121-125`).
@@ -376,21 +385,21 @@ error 03 without a line or column
 
 ## The MON-3 session
 
-`MON3.SVC` prints these at `MON3.SVC /E` or in a session at `MON3>`.
-[Chapter 5](05-drives-and-user-areas.md#a-mon-3-session) describes the
-session. A refused `/E` prints `MON3.SVC?` and sets FF00h, for the causes
-that [Appendix J](appendix-j-command-reference.md#resident-services) gives
-for `NAME.SVC /E`.
+`MON3.SVC` prints these when typing `MON3.SVC` enters it or in a session at
+`MON3>`. [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session) describes
+the session. A refused entry prints `MON3.SVC?` and sets FF00h, for the
+causes that [Appendix J](appendix-j-command-reference.md#resident-services)
+gives for entering a service.
 
 | Message | Cause | Action | See |
 | --- | --- | --- | --- |
-| `?` | The `MON3>` line is not `LOAD`, `GO` or `EXIT` in a form they take. For `LOAD`: a drive beyond P, a name or type too long or holding `?` or `*`, a file not found or empty, bytes outside `0100h` to the BDOS entry's page or inside `0800h–08FFh`, or a fault anywhere in a HEX file. `GO` with no address prints it when no load has ended well. A refused load writes nothing and leaves nothing runnable. | Correct the line, the file or the address. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `402f30e:docs/mon3.md:54-91` |
-| `RST nn held: UNLOAD or reset` | At `/E` a restart slot from `08h` to `30h` holds a `JP`: a service's claim, or a jump into ROM that a program left. The entry is refused with return code FF00h and nothing changed. | `UNLOAD` the service that holds the slot, or reset. | `402f30e:docs/mon3.md:191-194` |
-| `RST 38 held: no interrupts` | `0038h` held a `JP` at entry, which the session leaves alone. A program's interrupts through MON-3's `USER_INT` are not delivered. | The session runs without them. | `402f30e:docs/mon3.md:178`, `225` |
-| `MON3 active` | A program in a session called the service's entry. The call returns to the program with FF00h. | None. | `402f30e:docs/mon3.md:195-196` |
-| `BRK nnnn` | The program ran `RST 30h`, MON-3's breakpoint. The session prints `BRK` with the address and returns to `MON3>`. There is no resume. | None: the session is at `MON3>`. | `402f30e:docs/mon3.md:131-133`, `224` |
-| `Tables damaged: EXIT and reset` | After the program returned, the checksum over the service and TEC-OS's RAM BIOS table differed from the one `GO` took. Every later `LOAD` prints it again and is refused without opening the file, and each re-entry prints it. `GO` and `EXIT` still run. | `EXIT`, then press reset, which also removes the service. | `402f30e:docs/mon3.md:139-153`, `402f30e:drivers/mon3.asm:1190-1191` |
-| MON-3's error display on the digits | The program called an `RST 10h` or `RST 18h` function that the session does not build, or a number beyond MON-3's calls. The call's outputs are not written. | Press a key. The call returns to the program as a key press would. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `402f30e:docs/mon3.md:220-221`, `257-267`, `313-322` |
+| `?` | The `MON3>` line is not `LOAD`, `GO` or `EXIT` in a form they take. For `LOAD`: a drive beyond P, a name or type too long or holding `?` or `*`, a file not found or empty, bytes outside `0100h` to the BDOS entry's page or inside `0800h–08FFh`, or a fault anywhere in a HEX file. `GO` with no address prints it when no load has ended well. A refused load writes nothing and leaves nothing runnable. | Correct the line, the file or the address. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `fdd9e5b:docs/mon3.md:55-92` |
+| `RST nn held: UNLOAD or reset` | At entry a restart slot from `08h` to `30h` holds a `JP`: a service's claim, or a jump into ROM that a program left. The entry is refused with return code FF00h and nothing changed. | `UNLOAD` the service that holds the slot, or reset. | `fdd9e5b:docs/mon3.md:192-195` |
+| `RST 38 held: no interrupts` | `0038h` held a `JP` at entry, which the session leaves alone. A program's interrupts through MON-3's `USER_INT` are not delivered. | The session runs without them. | `fdd9e5b:docs/mon3.md:179`, `226` |
+| `MON3 active` | A program in a session called the service's entry. The call returns to the program with FF00h. | None. | `fdd9e5b:docs/mon3.md:196-197` |
+| `BRK nnnn` | The program ran `RST 30h`, MON-3's breakpoint. The session prints `BRK` with the address and returns to `MON3>`. There is no resume. | None: the session is at `MON3>`. | `fdd9e5b:docs/mon3.md:132-134`, `225` |
+| `Tables damaged: EXIT and reset` | After the program returned, the checksum over the service and TEC-OS's RAM BIOS table differed from the one `GO` took. Every later `LOAD` prints it again and is refused without opening the file, and each re-entry prints it. `GO` and `EXIT` still run. | `EXIT`, then press reset, which also removes the service. | `fdd9e5b:docs/mon3.md:140-154`, `fdd9e5b:drivers/mon3.asm:1191-1192` |
+| MON-3's error display on the digits | The program called an `RST 10h` or `RST 18h` function that the session does not build, or a number beyond MON-3's calls. The call's outputs are not written. | Press a key. The call returns to the program as a key press would. | [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session), `fdd9e5b:docs/mon3.md:221-222`, `258-268`, `314-323` |
 
 ## Lines that report no fault
 
@@ -402,11 +411,11 @@ These lines appear in ordinary runs and need no remedy. In `MOUNT`'s listing
 | `TEC-OS 0.1 for TEC-1G` | The cold-boot console banner. The LCD banner is `TEC-OS 0.1  TEC-1G`. | [Chapter 1](01-first-session.md), `src/text.asm:12`, `79`, `tools/build.mjs:28` |
 | `d: LABEL` | A mounted drive and volume at cold boot, with ` (read-only)` for a protected volume. LCD rows 1 and 2 show A and B without that suffix. | `src/boot.asm:482-509`, `src/lcd.asm:105-169`, `src/text.asm:13` |
 | `n files, nK free` | DIR's listed-file count and free space. The singular is `1 file, nK free`. | [Chapter 4](04-work-with-files.md), `src/cpm/ccpfile.asm:203-259`, `src/text.asm:27-32` |
-| `[more]` | DIR or TYPE paused at a screenful. An ordinary key continues. Esc, Q, q and `;` stop the listing. `^C` and `#` also drop the remaining chain because the comparison clears bit 5. | `src/cpm/ccpfile.asm:405-462`, `src/text.asm:33-34` |
+| `[more]` | DIR or TYPE paused at a screenful. An ordinary key continues. Esc, Q, q and `;` stop the listing. `^C` and `#` also drop the remaining line because the comparison clears bit 5. At `fdd9e5b` the pause is the shell's, and without the shell DIR and TYPE do not pause. | `src/cpm/ccpfile.asm:405-462`, `src/text.asm:33-34`, `fdd9e5b:drivers/shellio.asm:445-497` |
 | `ALL (Y/N)?` | ERA's or DEL's pattern is all wildcards. A line starting with Y or y confirms the erase in the current user area. Other lines and Return alone cancel without failure. Confirming does not override file/volume protection or disk errors. | `src/cpm/ccpmut.asm:18-63`, `src/text.asm:70-71` |
 | `COPIED nnnn` | COPY completed and closed its destination. The four hexadecimal digits count records. | `src/cpm/ccpmut.asm:289-304`, `src/text.asm:45-46` |
 | `CON: TTY:`, `CON: CRT:`, `CON: UC1:` | The effective console after CON. An unavailable CRT falls back to TTY. A returned UC1 load failure leaves the previous mode. `CON: BAT:` is generated but discarded. | [Chapter 7](07-choose-a-console.md), `src/cpm/ccpcmd.asm:183-207`, `src/loader.asm:731-745`, `src/console.asm:82-142`, `345-353` |
-| `NAME n` | SERVICES lists names and resident pages, newest first. | [Chapter 5](05-drives-and-user-areas.md), `src/cpm/ccpcmd.asm:760-786` |
+| `NAME n` | SERVICES lists names and resident pages, newest first. At `fdd9e5b` SERVICES is the shell's command. | [Chapter 5](05-drives-and-user-areas.md), `src/cpm/ccpcmd.asm:760-786`, `fdd9e5b:drivers/shellcmd.asm:15-50` |
 | `d: LABEL` from MOUNT | The drive and volume now assigned, also when already assigned there. | `test/programs/mount.asm:126-161` |
 | `Unmounted` | MOUNT emptied the named drive. | `test/programs/mount.asm:48-56`, `262` |
 | `nn LABEL G1M`, `nn LABEL G8M` | MOUNT's index in decimal, label and geometry, followed by R/O for a protected volume and `d:` when assigned. Indexes 100 and above use three digits. | `test/programs/mount.asm:163-238` |

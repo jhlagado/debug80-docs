@@ -23,29 +23,45 @@ nav_group: "Writing programs"
      747b9a7; docs/compatibility.md:196-198): the key table and return
      code are unchanged in substance. Rechecked again at TEC-OS 402f30e
      (TED.COM Thorium b69d544, BAZA Baza ebc0281, TAS.COM Thorium 3d1e2c0;
-     docs/compatibility.md:196-199): still unchanged in substance.
-     Source-only reading. No run of these keys was made for this chapter. -->
+     docs/compatibility.md:196-199): still unchanged in substance. At
+     fdd9e5b TED and TAS are the same and BAZA is Baza 50dc512
+     (docs/compatibility.md:223-226); the return code is unchanged.
+     Source-only reading. No run of these keys was made for this chapter.
+     Shell update: at TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9
+     (main) lines are split by SHELL.SVC: docs/shell.md:28-82 and
+     :91-133, docs/compatibility.md:21-38 and :99-117,
+     drivers/shell.asm:159-420, the drop flag src/cpm/bdos.asm:96-106,
+     :515-533, src/cpm/bdoscon.asm:36-66, :285-309 and src/cache.asm:613-629,
+     function 47 src/cpm/bdos.asm:52-94, and the ROM's own path
+     src/cpm/ccp.asm:110-232. TED's line and its need of the shell:
+     docs/compatibility.md:223. Every transcript in this chapter is a
+     capture at fdd9e5b with the command in its comment, on the serial
+     board and the starter card or the card made by the recipe shown, boot
+     rows omitted unless shown. EXISTS.COM and RUN.COM were built on the
+     model by the card's TAS (Thorium 3d1e2c0) in the same session, before
+     the commands shown. -->
 
 You can join commands on a line and make later pieces depend on success.
 Your programs report that result through a return code. They can also
 supply a new command line when they end, as TED does for a build and
-return to the editor.
+return to the editor. The shell, `SHELL.SVC`, which the starter card's
+startup file loads, runs these lines. The ROM's own prompt without the shell
+runs one command per line, as CP/M 2.2 does.
 
 ## Several commands on one line
 
 `!` separates commands. Each command after the first is echoed at its own
-command prompt before it runs. This is TEC-OS's form of CP/M 3 command chaining.
-CP/M 2.2 runs one command per line.
-
-The following historical capture shows two commands on the first line.
-The second line also contains empty pieces:
+command prompt before it runs. This is CP/M 3's form of command chaining.
+The following capture shows two commands on the first line. The second line
+also contains empty pieces:
 
 <!-- node tools/capture.mjs "DIR *.CMD!TYPE STARTUP.CMD" "mount!!  ! dir b:!" -->
 ```text
 A>DIR *.CMD!TYPE STARTUP.CMD
 STARTUP.CMD 
-1 file, 980K free
+1 file, 912K free
 A>TYPE STARTUP.CMD
+SHELL.SVC
 GLCD.SVC
 
 A>mount!!  ! dir b:!
@@ -57,11 +73,11 @@ NO FILE
 A>
 ```
 
-A *piece* is the text bounded by `!` or the line's edges. The CCP passes over empty pieces and pieces of spaces.
-`mount!!  ! dir b:!` therefore runs two commands. A line made entirely
-of spaces and `!` runs nothing. The CCP echoes each later piece as typed
-before converting its letters to capitals for execution. The lower-case
-`dir b:` above therefore runs as `DIR B:`.
+A *piece* is the text bounded by separators or the line's edges. A run of
+separators and spaces counts as one separator, so `mount!!  ! dir b:!` runs
+two commands. A line made entirely of spaces and `!` runs nothing. The shell
+echoes each later piece as typed and then converts its letters to capitals.
+The lower-case `dir b:` above therefore runs as `DIR B:`.
 
 Each piece is a whole command whose drive or user-area selection applies
 to the following pieces. Here `B:` selects drive B before `COPY` creates
@@ -79,9 +95,10 @@ NOTES.TXT
 B>
 ```
 
-A program receives only the command tail of its own piece. The separator ends
-that tail so `!` cannot occur inside a command or argument. The later pieces
-remain available after the program's ordinary exit.
+A program receives only the command tail of its own piece. A piece ends
+before the spaces in front of its separator, and `!` always separates, so
+it cannot occur inside a command or argument. The later pieces remain
+available after the program's ordinary exit.
 
 The complete line has the usual limit of 127 characters. For example,
 32 three-letter commands and their 31 separators fit exactly. Command
@@ -91,39 +108,61 @@ before the file's next line.
 
 ## Conditional pieces
 
-A piece beginning with `:` runs only after success. After failure it is
-echoed but skipped, together with every remaining piece on that line.
-The remaining pieces are dropped even when they have no `:` of their own:
+`&` after a space joins a piece that runs only if the command before it
+succeeded. After a failure the piece is skipped and not echoed. A skipped
+piece leaves the result as it was, so a following `&` piece is skipped too,
+and a following `!` piece runs:
 
-<!-- node tools/capture.mjs "NOSUCH!:DIR *.CMD!DIR *.SVC" "DIR *.SVC!:DIR *.CMD" ":DIR *.CMD" -->
+<!-- node tools/capture.mjs "NOSUCH &DIR *.CMD !DIR *.SVC" "DIR *.SVC &DIR *.CMD" "NOSUCH &DIR *.CMD &DIR *.SVC" -->
 ```text
-A>NOSUCH!:DIR *.CMD!DIR *.SVC
+A>NOSUCH &DIR *.CMD !DIR *.SVC
 NOSUCH?
 
-A>:DIR *.CMD
-A>DIR *.SVC!:DIR *.CMD
-GLCD.SVC    
-1 file, 980K free
-A>:DIR *.CMD
+A>DIR *.SVC
+SHELL.SVC    GLCD.SVC     MON3.SVC    
+3 files, 912K free
+A>DIR *.SVC &DIR *.CMD
+SHELL.SVC    GLCD.SVC     MON3.SVC    
+3 files, 912K free
+A>DIR *.CMD
 STARTUP.CMD 
-1 file, 980K free
-A>:DIR *.CMD
-STARTUP.CMD 
-1 file, 980K free
+1 file, 912K free
+A>NOSUCH &DIR *.CMD &DIR *.SVC
+NOSUCH?
+
 A>
 ```
 
-`NOSUCH` failed so neither directory command after it ran. The next line began
-with a successful `DIR *.SVC` so its `:DIR *.CMD` ran. The final `:DIR *.CMD`
-was typed on a new line. It tested the last command of the previous line, which
-also succeeded. A colon at the start of a fresh line still tests the previous
-result.
+`NOSUCH` failed, so `DIR *.CMD` was skipped and `DIR *.SVC`, after `!`, ran.
+The second line began with a successful `DIR *.SVC`, so its `&DIR *.CMD`
+ran. On the third line both conditional pieces were skipped.
+
+`&` is a separator only after a space, a tab or another separator. An `&`
+inside a word is text, so `OK&TYPE` is one name and a program's tail such
+as `/M:&HE000` reaches the program whole. A run of separators that holds
+any `!` always continues, and one of `&` alone is conditional.
+
+Each new line runs whatever the last line returned. A line whose first
+piece starts with `&` would test the previous line's result, so it is
+rejected and none of it runs. CP/M 3's `:` prefix for a conditional piece
+is not provided, and a piece starting with `:` is rejected as a bad name:
+
+<!-- node tools/capture.mjs "&DIR *.CMD" ":DIR *.CMD" -->
+```text
+A>&DIR *.CMD
+&DIR?
+
+A>:DIR *.CMD
+:DIR?
+
+A>
+```
 
 A built-in command reports failure through its result as well as its
 message. A program must set its own return code to report failure.
 Printing an error message alone leaves a conditional piece free to run.
 For example, `SHOW NOSUCH.TXT` from Chapter 10 prints `No such file` but
-never sets a failure code. A `:` piece after it runs.
+never sets a failure code. An `&` piece after it runs.
 
 ## The return code
 
@@ -131,20 +170,21 @@ BDOS function 108 reads or sets the 16-bit program return code, using the
 CP/M 3 convention. Values from `FF00h` through `FFFEh` mean failure.
 Every other value means success. With `DE = FFFFh`, the call reads the code
 into `HL`. Any other value in `DE` sets the code. `FFFFh` itself cannot be
-set because it selects the read operation, though the CCP treats that value
-as success.
+set because it selects the read operation, though the shell treats that
+value as success.
 
-The CCP tests a leading `:` before clearing the code to 0 for the next
-command. Your program therefore reads 0 at entry. A successful built-in
-leaves 0, as does an ordinary CP/M 2.2 program that never calls function 108.
-A reset also clears the code.
+The shell reads the code with function 108 before an `&` piece. The ROM's
+command processor then clears the code to 0 as it takes each command. Your
+program therefore reads 0 at entry. A successful built-in leaves 0, as does
+an ordinary CP/M 2.2 program that never calls function 108. A reset also
+clears the code.
 
-A command that fails in the CCP sets `FF00h`. That includes a missing
-command, a failed program load and an unsuccessful service installation.
-Built-in error messages include `NAME?`, `NO FILE`, `FILE EXISTS`, `NO SPACE`
-and COPY's errors. Answering `N` to `ERA *.*` erases nothing
-and counts as success. Startup's quiet device outcomes have a separate
-rule described below.
+A command that fails in the command processor sets `FF00h`. That includes a
+missing command, a failed program load and an unsuccessful service
+installation. Built-in error messages include `NAME?`, `NO FILE`,
+`FILE EXISTS`, `NO SPACE` and COPY's errors. Answering `N` to `ERA *.*`
+erases nothing and counts as success. Startup's quiet device outcomes have
+a separate rule described below.
 
 ## A program that reports failure
 
@@ -173,98 +213,94 @@ into zero so `RET NZ` returns immediately when the file exists. Otherwise
 `EXISTS` sets `FF00h` with function 108 before returning. It prints nothing in
 either case.
 
-The historical card for this example also contains `RUN`, whose complete
-source appears below. Both sources were assembled on the PC with ATOM
-0.3.7 and copied to drive B of a starter-card copy:
+The card for this example also holds `RUN`, whose complete source appears
+below. Both sources are copied to drive B of a starter-card copy and
+assembled there by the card's TAS:
 
 ```sh
-npx atom exists.asm exists.com
-npx atom run.asm run.com
 cp dist/starter.img chain.img
-node tools/tecvol.mjs put chain.img B exists.com
-node tools/tecvol.mjs put chain.img B run.com
+node tools/tecvol.mjs put chain.img B exists.asm --text
+node tools/tecvol.mjs put chain.img B run.asm --text
 ```
 
-`EXISTS NOTES.TXT!:TYPE NOTES.TXT` prints the file only when it is present.
-This retained capture runs the longer chain before and after creating it:
+At `B>`, `A:TAS EXISTS` and `A:TAS RUN` then write `EXISTS.COM` and
+`RUN.COM`. `EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM` prints the file only
+when it is present. This capture runs that line before and after creating
+the file:
 
-<!-- node tools/capture.mjs --card chain.img B: "EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR" "COPY A:STARTUP.CMD NOTES.TXT" "EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR" -->
+<!-- node tools/capture.mjs --card chain.img B: "A:TAS EXISTS" "A:TAS RUN" "EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM" "COPY A:STARTUP.CMD NOTES.TXT" "EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM" "EXISTS NONE.TXT !DIR *.COM" "EXISTS NONE.TXT &DIR *.COM !USER 0 &DIR *.COM"
+     The builds before the first line shown are omitted. -->
 ```text
-A>B:
-B>EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR
+B>EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM
 
-B>:TYPE NOTES.TXT
 B>COPY A:STARTUP.CMD NOTES.TXT
 COPIED 0001
 
-B>EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR
+B>EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM
 
-B>:TYPE NOTES.TXT
+B>TYPE NOTES.TXT
+SHELL.SVC
 GLCD.SVC
 
-B>DIR
-EXISTS.COM   RUN.COM      NOTES.TXT   
-3 files, 8164K free
+B>DIR *.COM
+EXISTS.COM   RUN.COM     
+2 files, 8148K free
 B>
 ```
 
-The CCP prints a new line after each program, including the silent
-`EXISTS`. On the first attempt its failure drops `:TYPE NOTES.TXT` and
-`DIR`. After `COPY` makes the file, both pieces run.
+The command processor prints a new line after each program, including the
+silent `EXISTS`. On the first attempt its failure skips `TYPE NOTES.TXT`
+and `DIR *.COM`, and neither is echoed. After `COPY` makes the file, both
+pieces run.
 
-A failure by itself does not drop an unconditional piece. This capture
-also shows the result persisting into the next typed line:
+A failure by itself does not stop an unconditional piece. The same session
+continued:
 
-<!-- node tools/capture.mjs --card chain.img B: "EXISTS NONE.TXT!DIR" "EXISTS NONE.TXT" ":DIR" "USER 0" ":DIR" -->
 ```text
-A>B:
-B>EXISTS NONE.TXT!DIR
+B>EXISTS NONE.TXT !DIR *.COM
 
-B>DIR
+B>DIR *.COM
 EXISTS.COM   RUN.COM     
-2 files, 8168K free
-B>EXISTS NONE.TXT
+2 files, 8148K free
+B>EXISTS NONE.TXT &DIR *.COM !USER 0 &DIR *.COM
 
-B>:DIR
 B>USER 0
-B>:DIR
+B>DIR *.COM
 EXISTS.COM   RUN.COM     
-2 files, 8168K free
+2 files, 8148K free
 B>
 ```
 
-`DIR` after `EXISTS NONE.TXT!` runs because it has no colon. The separate
-`EXISTS NONE.TXT` then leaves `FF00h` so the first typed `:DIR` runs nothing.
-`USER 0` succeeds and clears the result to 0. The second `:DIR` therefore lists
-the files.
+`DIR *.COM` after `!` runs whatever `EXISTS` returned. On the second line
+the failure skips the first `DIR *.COM`. `USER 0` after `!` runs, succeeds
+and clears the result to 0, so the last `&DIR *.COM` lists the files.
 
 Your program should set a failure code when its work fails, including when
 it prints an error message. Function 45 can select BDOS errors as return
-values for your program to handle. The return code for the CCP remains
+values for your program to handle. The return code for the shell remains
 your responsibility. A returned BDOS error allows the program and its
-chain to continue. In the default error mode,
-a BDOS error ends the program and drops the remaining pieces.
+line to continue. In the default error mode, a BDOS error ends the program
+and drops the remaining pieces.
 
-## Ends that drop the chain
+## Ends that drop the line
 
 An ordinary `RET`, jump to `0000h` or call of BDOS function 0 leaves the
 remaining pieces available after warm boot. These events drop them:
 
-- A conditional piece tests a failure code.
-- `^C` is typed while a line read with function 10 is empty, including at
-  the CCP prompt. At that prompt there is already no remaining piece.
+- `^C` is typed while a line read with function 10 is empty. At the
+  shell's prompt there is already no remaining piece.
 - `^C` ends a `^S` pause during a program's output.
 - `^C` ends the `[more]` pause in a TYPE or DIR listing.
 - A key ends a BDOS error in the default error mode.
 - Warm boot reports `Write lost` after a failed cache flush.
 - A reset clears the pending commands.
 
-A reset starts the startup file again. After the other events the CCP takes
-its next unread startup line or waits for typed input. Dropping the current
-chain leaves any later startup lines available.
+A reset starts the startup file again. After the other events the shell
+takes the next line of its startup file or script, or waits for typed
+input. Dropping the current line leaves any later startup lines available.
 
-In this historical capture, drive C has no volume. The key `x` ends the
-BDOS error and the `MOUNT` piece is dropped:
+In this capture, drive C has no volume. The key `x` ends the BDOS error and
+the `MOUNT` piece is dropped:
 
 <!-- node tools/capture.mjs "@start DIR C:!MOUNT" "@key x" -->
 ```text
@@ -276,7 +312,7 @@ A>
 
 Esc or `Q` at `[more]` stops only the listing. Its next piece still runs,
 as after a listing that reaches its end. This differs from `^C`, which
-drops the rest of the chain.
+drops the rest of the line.
 
 ## A program that supplies the next command
 
@@ -287,14 +323,14 @@ command line. CP/M 3 calls it *chain to program*.
 Your program places a zero-terminated line in memory and sets the DMA
 address to it with function 26. It then calls function 47. An accepted
 line is copied immediately and the call ends the program by warm boot.
-The copied line replaces everything left of the original chain.
+The copied line replaces everything left of the original line.
 The call does not return on acceptance.
 
 Warm boot flushes pending card writes before the next program loads.
 A successful flush therefore puts your writes on the card first.
 A failed flush drops the failed cache lines and prints `Write lost`.
-It also cancels the chain, including a line accepted by function 47.
-Acceptance of the line does not guarantee its execution.
+It also cancels the rest of the line, including a line accepted by
+function 47. Acceptance of the line does not guarantee its execution.
 
 `RUN` supplies the rest of its own command tail as the new command:
 
@@ -315,29 +351,30 @@ BDOS    EQU     $0005
 NOTRUN: DB      "Not run",13,10,"$"
 ```
 
-The CCP puts a zero after the tail at `0081h`. Its initial space is allowed and
-the CCP passes over it so `RUN DIR` supplies ` DIR`. Function 26 takes the
-tail's address, not the length byte at `0080h`.
+The command processor puts a zero after the tail at `0081h`. Its initial
+space is allowed and the command processor passes over it so `RUN DIR`
+supplies ` DIR`. Function 26 takes the tail's address, not the length byte
+at `0080h`.
 
-The original line's later pieces lie outside that tail. In `RUN A:MOUNT!DIR`,
-`RUN` supplies only ` A:MOUNT`. That replaces the old chain so its `DIR` is
+The original line's later pieces lie outside that tail. In `RUN A:MOUNT!DIR *.COM`,
+`RUN` supplies only ` A:MOUNT`. That replaces the old line so its `DIR` is
 gone:
 
-<!-- node tools/capture.mjs --card chain.img B: "RUN DIR" "RUN A:MOUNT!DIR" "RUN NOSUCH!DIR" "RUN" -->
+<!-- node tools/capture.mjs --card chain.img B: "A:TAS RUN" "RUN DIR *.COM" "RUN A:MOUNT!DIR *.COM" "RUN NOSUCH!DIR *.COM" "RUN"
+     Only RUN.COM was built in this session, before the first line shown. -->
 ```text
-A>B:
-B>RUN DIR
+B>RUN DIR *.COM
 
-B>DIR
-EXISTS.COM   RUN.COM     
-2 files, 8168K free
-B>RUN A:MOUNT!DIR
+B>DIR *.COM
+RUN.COM     
+1 file, 8160K free
+B>RUN A:MOUNT!DIR *.COM
 
 B>A:MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
-B>RUN NOSUCH!DIR
+B>RUN NOSUCH!DIR *.COM
 
 B>NOSUCH
 NOSUCH?
@@ -347,39 +384,45 @@ B>RUN
 B>
 ```
 
-The CCP echoes each supplied command after the prompt. A missing command
+The shell echoes each supplied command after the prompt. A missing command
 or one that cannot load fails as a typed command does, with its name and
 a question mark. `RUN` alone supplies an empty line, which ends the program
 and runs nothing before the next prompt.
 
-A supplied line may contain up to 127 characters, including `!` and `:`.
-A leading `:` tests the code your program set before calling function 47.
-The immediate copy allows the line to occupy memory that the next program
-will overwrite. TEC-OS ignores register `E`, which CP/M 3's function 47
-also takes. The next command uses the drive and user area in `0004h`, as
-after an ordinary program exit.
+A supplied line may contain up to 127 characters, including `!` and `&`.
+Under the shell its pieces follow the rules above and its first piece runs
+whatever your program's result was. A line that begins with `&` is rejected
+as a typed one is. The immediate copy allows the line to occupy memory that
+the next program will overwrite. TEC-OS ignores register `E`, which CP/M 3's
+function 47 also takes. The next command uses the drive and user area in
+`0004h`, as after an ordinary program exit.
+
+Without the shell the ROM's prompt echoes the supplied line and runs it
+whole, as one command: `TYPE X!TYPE Y` is then `TYPE` with the tail
+`X!TYPE Y`.
 
 Function 47 rejects a line with no zero in its first 128 bytes. It also rejects
 a carriage return or line feed before that zero. Rejection returns `A = FFh` and
-leaves the original chain unchanged so your program can handle it. `RUN` would
-print `Not run` on that path. A CCP-prepared tail has the required terminator
-and contains neither CR nor LF. Its line always passes this validation.
+leaves the original line unchanged so your program can handle it. `RUN` would
+print `Not run` on that path. A tail the command processor prepared has the
+required terminator and contains neither CR nor LF. Its line always passes
+this validation.
 
 A service's `INIT` or `REMOVE` can also call function 47. An accepted call
 still causes warm boot. Chapter 14 explains the installation and removal
 consequences. Chapter 22 explains how the command buffer survives warm boot
-and how the CCP processes the copied line.
+and how the copied line reaches the shell.
 
 ## TED's build and return
 
 TED's `^T` prefix uses function 47 to end the current editor program and
 run a command. For a build, its line invokes the build tool and then TED
-again. The editor's file and cursor position are saved for that new
-invocation. The tool depends on the source's type: TAS for an `.ASM` file
-and BAZA for a `.BAS` file. Any other type is plain text, and the keys then
-build the project's source if `THOR.PRJ` names one. The operational build
-and run keys from Chapters 2 and 3 are included here with the other prefix
-commands:
+again, joined by `!`, so TED returns whether the build succeeded or failed.
+The editor's file and cursor position are saved for that new invocation.
+The tool depends on the source's type: TAS for an `.ASM` file and BAZA for a
+`.BAS` file. Any other type is plain text, and the keys then build the
+project's source if `THOR.PRJ` names one. The operational build and run keys
+from Chapters 2 and 3 are included here with the other prefix commands:
 
 | Keys | Effect |
 | --- | --- |
@@ -389,14 +432,19 @@ commands:
 | `^T O` | Opens another file, named at a prompt |
 | `^T F` | Opens the previous file again |
 
-Because `TDB` is absent, `^T D` on an `.ASM` file ends with the CCP's
-`A:TDB?` and the chained `A:TED` then reopens the editor at its place.
+Because `TDB` is absent, `^T D` on an `.ASM` file ends with the command
+processor's `A:TDB?` and the chained `A:TED` then reopens the editor at its
+place.
+
+These lines need the shell. Without it the ROM runs TED's line whole: the
+build tool receives the rest of the line as its tail and still builds, and
+the prompt returns in place of TED.
 
 Chapter 11 explains the load-drive byte at `0050h`. TED uses that byte to
 prefix the tools' names. With tools loaded from A and source on current
 drive B, the build line invokes `A:TAS` or `A:BAZA` and then `A:TED`. The
 tools remain on A and the source on B. The editor is a new program
-invocation each time it returns through the CCP.
+invocation each time it returns through the command processor.
 
 TAS writes a `.DBG` debug file beside the source and its `.COM` output.
 For the historical `HELLO` example these are `HELLO.DBG` and `HELLO.COM`.
@@ -408,85 +456,64 @@ in Chapter 27, with its original recipe and application provenance.
 
 ## Chains in the startup file
 
-A line of `STARTUP.CMD` can contain the same `!` and `:` pieces.
-Its remaining pieces run before the file's next line. A program started by
-startup can also call function 47. The supplied command runs before the
-next startup line, subject to the same failed-flush cancellation.
-A `^C` that ends a program or its input drops the current chain but leaves
+A line of `STARTUP.CMD` that the shell runs can contain the same `!` and
+`&` pieces. Its remaining pieces run before the file's next line. A program
+started by startup can also call function 47. The supplied command runs
+before the next startup line, subject to the same failed-flush cancellation.
+A `^C` that ends a program or its input drops the current line but leaves
 the next startup line available.
 
 Startup has a special success rule for absent devices. A service line that
 reports its device absent passes quietly, with no failure message and a
 success code. Display commands with nothing to do on that board can also
 pass quietly. A following conditional piece therefore runs. Other failed
-installations report failure and drop a following `:` piece.
+installations report failure and skip a following `&` piece.
 
-These historical commands prepare two startup lines on a starter-card
-copy. This `chain.img` is a separate fixture from the EXISTS/RUN card:
+These commands prepare a startup file with the shell and three chained
+lines on a starter-card copy:
 
 ```sh
-printf 'GLCD.SVC!:MOUNT\nNOSUCH.SVC!:MOUNT\n' > startup.cmd
-cp dist/starter.img chain.img
-node tools/tecvol.mjs put chain.img A startup.cmd --text
+printf 'SHELL.SVC\nGLCD.SVC &MOUNT\nNOSUCH.SVC &MOUNT\nNOSUCH.SVC !MOUNT\n' > startup.cmd
+cp dist/starter.img schain.img
+node tools/tecvol.mjs put schain.img A startup.cmd --text
 ```
 
 The capture uses the serial-only board:
 
-<!-- node tools/capture.mjs --card chain.img -->
-```text
-A>GLCD.SVC!:MOUNT
-
-A>:MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
-
-A>NOSUCH.SVC!:MOUNT
-NOSUCH.SVC?
-
-A>:MOUNT
-A>
-```
-
-`GLCD.SVC` reports an absent graphics LCD and passes quietly so its `:MOUNT`
-runs. `NOSUCH.SVC` is missing from the card, which is an ordinary failure. Its
-`:MOUNT` is echoed and dropped. Quiet absence applies to a startup line. Typed
-at the prompt on this board, `GLCD.SVC` fails with `GLCD.SVC?`.
-
-The last startup command also leaves its result for the first line you
-type. This final historical fixture starts from the earlier EXISTS/RUN
-`chain.img`. Recreating that card with the ATOM and copy commands above
-puts `RUN.COM` back before preparing `chain2.img`:
-
-```sh
-printf 'B:RUN A:MOUNT\nNOSUCH\n' > startup.cmd
-cp chain.img chain2.img
-node tools/tecvol.mjs put chain2.img A startup.cmd --text
-```
-
-<!-- node tools/capture.mjs --card chain2.img ":DIR A:*.CMD" "DIR A:*.CMD" -->
+<!-- node tools/capture.mjs --card schain.img -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>B:RUN A:MOUNT
+A>SHELL.SVC
 
-A>A:MOUNT
+A>GLCD.SVC &MOUNT
+
+A>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
-A>NOSUCH
-NOSUCH?
+A>NOSUCH.SVC &MOUNT
+NOSUCH.SVC?
 
-A>:DIR A:*.CMD
-A>DIR A:*.CMD
-STARTUP.CMD 
-1 file, 980K free
+A>NOSUCH.SVC !MOUNT
+NOSUCH.SVC?
+
+A>MOUNT
+00 SYSTEM      G1M A:
+01 WORK        G8M B:
+
 A>
 ```
 
-`A:MOUNT`, supplied by `RUN`, finishes before the next startup line, `NOSUCH`.
-That missing command leaves `FF00h` so the first typed `:DIR` runs nothing.
-`DIR` without the colon runs. A quiet absent-device startup line would instead
-leave success and allow the conditional command.
+The shell echoes each startup line whole, then each later piece at its own
+prompt. `GLCD.SVC` reports an absent graphics LCD and passes quietly so its
+`MOUNT` runs. `NOSUCH.SVC` is missing from the card, which is an ordinary
+failure. Its `&MOUNT` is skipped. The last line joins the same failure to
+`MOUNT` with `!`, so `MOUNT` runs. Quiet absence applies to a startup line.
+Typed at the prompt on this board, `GLCD.SVC` fails with `GLCD.SVC?`.
 
+The ROM's own startup line, the first, runs whole without the shell. A
+`SHELL.SVC` on that line installs the shell, which then runs the following
+lines as shown here. Chapter 8 explains the two readers of the file.

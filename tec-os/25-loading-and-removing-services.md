@@ -16,7 +16,9 @@ nav_group: "Inside TEC-OS"
      Its starter TAS.COM was Thorium dbee66a, SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      No build, test, import, capture or new measurement was performed.
-     Source proofs and movement accounting: 24-pass-record.md. -->
+     Source proofs and movement accounting: 24-pass-record.md.
+     "Entering an installed service" uses TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), source reading only. -->
 
 A service file first loads at `0100h` like a COM program. The loader moves
 its header and image to whole pages below the program ceiling, runs INIT
@@ -365,6 +367,28 @@ so INIT cannot find its own newly proposed record through FIND
 (`src/services.asm:33-37`, `src/loader.asm:468-483`). Historical tests cover
 both boundaries (`78127ec:test/svc.test.mjs:383-388`,
 `78127ec:test/svc.test.mjs:461-467`).
+
+## Entering an installed service
+
+At TEC-OS `fdd9e5b` a service command can also enter the service. `SVCRUN`
+first calls `EXFIND`, which walks the owner list from `SVCHEAD` and counts
+the services whose ready execution record has its enter bit set and holds the
+command's eight-byte name. With one match `SVCENT` enters it with no file
+read. With two or more the command is rejected. With none `SVCGO` installs
+the file as this chapter describes. If the new service's record has bit 1,
+`EXFIND` runs again and the service is entered once its INIT has set it
+ready. A service that never became ready is removed with `SVCUNL` and the
+command is rejected (`fdd9e5b:src/loader.asm:734-765`,
+`fdd9e5b:src/loader.asm:785-833`).
+
+`SVCENT` adds the service's page to the record's entry offset. A carry from
+that addition means the entry word was relocated, and the command is
+rejected. Otherwise the address goes to `CMDRN1`, the path that starts a
+`.COM`, so page zero and the tail are prepared as for a program and the
+entry is called with HL at its own address
+(`fdd9e5b:src/loader.asm:767-780`, `fdd9e5b:src/cpm/ccp.asm:446-472`).
+[Appendix H](appendix-h-service-file-format.md#the-execution-record) gives
+the record's layout.
 
 ## Removing the newest owner
 

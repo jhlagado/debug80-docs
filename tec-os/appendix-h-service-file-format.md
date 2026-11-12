@@ -14,7 +14,10 @@ nav_group: "Reference"
      The historical starter's TAS.COM identity is Thorium dbee66a, SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      That identity does not identify GAPZERO's builder. No example was
-     rerun for this draft. -->
+     rerun for this draft.
+     "The execution record" uses TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) docs/services.md:101-180,
+     src/loader.asm:734-783 and drivers/shell.asm:43-53, source reading only. -->
 
 A service file contains the bytes to install, the records it needs and the
 positions that require relocation. Its on-disk header describes that work. The
@@ -101,6 +104,42 @@ or one below the minimum version rejects the load
 (`src/loader.asm:191-214`). `makeSvc` takes them from its `deps` option and rejects a name of more than 8 bytes
 (`tools/lib/svc.mjs:116`). `TAS` takes them from what follows a label named
 `DEPS` in the source, as whole 9-byte entries in `DB`.
+
+## The execution record
+
+At TEC-OS `fdd9e5b` a service can carry an application that TEC-OS enters,
+as `MON3.SVC` and `SHELL.SVC` do. Its image then starts with a 16-byte
+*execution record*, at file offset 25, directly after the header
+(`fdd9e5b:docs/services.md:132-143`):
+
+| Offset | Bytes | Contents |
+| --- | --- | --- |
+| 0 | 2 | `"EX"`, `45h 58h` |
+| 2 | 1 | The record's version, 1 |
+| 3 | 1 | Bit 0: ready, set by INIT last and cleared by REMOVE first. Bit 1: enter on install, set in the file. Bits 2 to 7: 0 |
+| 4 | 2 | The entry, an offset from the header's start, as INIT and REMOVE are |
+| 6 | 8 | The name the service was installed by, written by INIT |
+| 14 | 2 | The service's own version, for its own use |
+
+The entry is an offset, never a relocated label: TEC-OS adds the service's
+page itself, and the loader rejects a staged record whose entry lies
+outside the image. A format-4 service without a record must not start its
+image with `45h 58h 01h` (`fdd9e5b:docs/services.md:145-157`).
+
+Typing `NAME.SVC` compares `NAME` with the name in each installed service's
+ready record that has bit 1. One match is entered without reading a file.
+None installs the file and, if its record has bit 1 and its INIT set it
+ready, enters it. An install that never became ready is removed again and
+the line is rejected. Two or more matches are rejected. A service with no
+record, or with bit 1 clear, only installs, and text after the name is the
+entry's command tail (`fdd9e5b:docs/services.md:82-89`,
+`fdd9e5b:docs/services.md:110-130`, `fdd9e5b:src/loader.asm:734-783`). The
+entry receives A = `FFh` for a line of `STARTUP.CMD` and 0 otherwise, with
+HL its own address and page zero prepared as for a `.COM`. It returns with
+a warm boot, which leaves the service installed
+(`fdd9e5b:docs/services.md:164-180`). The shell's record is
+`DB "EX",1`, then the state byte 2, then the entry offset 41 and the name
+field (`fdd9e5b:drivers/shell.asm:43-53`).
 
 ## The relocation data
 

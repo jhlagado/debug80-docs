@@ -10,13 +10,37 @@ nav_group: "Inside TEC-OS"
 <!-- Source mechanisms checked by text inspection against TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Unprefixed source ranges use
      that revision. Historical addresses, bypass timing and the retained
-     dollar-echo recipe/capture remain at 78127ec. No new execution result. -->
+     dollar-echo recipe/capture remain at 78127ec. No new execution result.
+     "Startup at TEC-OS fdd9e5b" and the fdd9e5b: citations use TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), source reading with
+     docs/shell.md:115-133 and docs/services.md:182-200. -->
 
 A startup command can run a program that ends through warm boot. The next
-startup line must still be available when the CCP starts again. TEC-OS
-keeps the first record of `A:STARTUP.CMD` and its next-byte position outside
-the warm-boot clear (`src/ram.asm:412-420`, `src/boot.asm:384-389`).
+startup line must still be available when the CCP starts again. The
+release-1 ROM keeps the first record of `A:STARTUP.CMD` and its next-byte
+position outside the warm-boot clear (`src/ram.asm:412-420`, `src/boot.asm:384-389`).
 The practical file setup is in [Chapter 8](08-commands-at-startup.md).
+
+## Startup at TEC-OS fdd9e5b
+
+The sections after this one follow the release-1 ROM at `a1023bd`, which
+read every line of the file's first record itself. At TEC-OS `fdd9e5b` the
+ROM runs one line. `STBOOT` still reads the first record once after cold
+boot, unless a keypad key is down, now into `LOADBUF`. `STLINE` then takes
+the first line there that is neither empty nor starts with `;`, at most 127
+characters, echoes it through function 9 and marks startup done. Its quiet
+paths for an absent device and the PICO width line are as before
+(`fdd9e5b:src/cpm/ccpcmd.asm:747-875`, `fdd9e5b:src/ram.asm:398-401`).
+
+When that line installs `SHELL.SVC`, the service's entry, which TEC-OS calls
+with A = `FFh` for a startup line, records that the rest of the file is due.
+At its next `LINE` call `STOPEN` opens `A:STARTUP.CMD` as a script, passes
+over the line the ROM ran and runs the following lines with the startup
+origin, so their quiet paths hold too. The shell reads the file a record at
+a time by record number, as many records as it has, and echoes each line
+whole with no `$` limit (`fdd9e5b:drivers/shell.asm:126-142`,
+`fdd9e5b:drivers/shellio.asm:14-176`, `fdd9e5b:drivers/shell.asm:241-264`).
+Without the shell only the ROM's line runs.
 
 ## A record across warm boot
 

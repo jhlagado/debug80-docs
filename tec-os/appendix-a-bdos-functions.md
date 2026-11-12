@@ -9,7 +9,10 @@ nav_group: "Reference"
 
 <!-- Contracts checked by source text at TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Every source range below uses
-     that pin. No execution, measurement or new output is claimed. -->
+     that pin. No execution, measurement or new output is claimed.
+     The notes prefixed fdd9e5b: (functions 10, 47, 48 and A:'s pending
+     block) use TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+     source reading only. -->
 
 Use the function number to find its registers in the table, then its effects and
 failure results in the numbered entry. TEC-OS implements the CP/M 2.2 interface
@@ -181,7 +184,11 @@ ignored while the line contains characters. On an empty line it ends the
 program by warm boot and drops the remaining command chain. Deleting or
 clearing all characters restores that abort condition
 (`src/cpm/bdos.asm:492-540`, `589-636`).
-[Chapter 23](23-the-history-ring.md) explains the history storage.
+[Chapter 23](23-the-history-ring.md) explains the history storage. At TEC-OS
+`fdd9e5b` the recall works only for the first function 10 after the shell's
+`LINE` call, and the history is the shell's (`fdd9e5b:src/cpm/bdos.asm:473-490`,
+`fdd9e5b:docs/shell.md:194-208`). With no shell installed `^W` and `^N` are
+characters at the prompt too.
 
 **11 Get console status.** Tests for a waiting character. A character the BIOS
 has is read and kept for the next input call (`src/cpm/bdos.asm:675-690`).
@@ -257,7 +264,13 @@ write, once an entry has been freed, makes the extent the FCB needs
 (`src/cpm/bdosrec.asm:94-135`). A block taken for a write that then fails
 stays in the FCB's map. A later successful close publishes it in the entry
 (`src/cpm/bdosrec.asm:595-621`). An FCB with the read-only attribute set gives
-the `File R/O` error (`src/cpm/bdosfile.asm:357-368`).
+the `File R/O` error (`src/cpm/bdosfile.asm:357-368`). At TEC-OS `fdd9e5b`, on a
+volume written through, such as A, success means the record is in the
+cache's copy of its block. That pending block reaches the card at the next
+close, directory request, write to another block, console read, function 48,
+`MOUNT` or warm boot, and the same holds for functions 34 and 40
+(`fdd9e5b:docs/recovery.md:64-97`). [Chapter 19](19-cache-and-persistence.md)
+explains the pending block.
 
 **22 Make file.** Creates an empty entry for the FCB's name in the current
 user area, writes it to the directory and opens it
@@ -389,6 +402,10 @@ gives the `Select` error.
 the command at the DMA address, which ends with a 0 within its first 128
 bytes. It ends the program by warm boot and the CCP runs the command next
 (`src/cpm/bdos.asm:65-93`). The command may hold `!` and `:`. `E` is ignored.
+At TEC-OS `fdd9e5b` the shell splits the command at `!` and `&` and its first
+piece runs whatever the program's result was. With no shell the ROM runs the
+command whole as one command (`fdd9e5b:src/cpm/bdos.asm:52-94`,
+`fdd9e5b:docs/compatibility.md:25-30`).
 Warm boot flushes the write-behind records before the CCP loads the command.
 If that flush fails, failed cache lines are dropped and `Write lost` cancels
 the chain (`src/cache.asm:254-295`, `557-572`). Does not return on success.
@@ -398,7 +415,10 @@ a CR or LF before the 0. The program then continues with the line unchanged.
 **48 Flush buffers.** Writes every changed line of the block cache to the card
 (`src/cpm/bdos.asm:238-241`, `src/volsvc.asm:372-386`). `E` = `FFh`, CP/M 3's
 purge, gives the same flush. Returns 0 in `A` or `FFh` if any write failed.
-Failed lines are dropped, leaving no cached copy for a later retry. Earlier
+At `a1023bd` failed lines are dropped, leaving no cached copy for a later
+retry. At TEC-OS `fdd9e5b` a failed line is kept for the next flush, and A's
+pending block is among the lines written (`fdd9e5b:src/volsvc.asm:360-389`,
+`fdd9e5b:docs/compatibility.md:35-38`). Earlier
 or partial card writes are not undone. This explicit call reports failure
 through its return value, not the warm-boot `Write lost` path
 (`src/cache.asm:254-295`, `557-572`).

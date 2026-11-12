@@ -16,7 +16,13 @@ nav_group: "Inside TEC-OS"
      The listed 24-byte READ program was used by the recorded timing work.
      No TED workflow is implied by its presence on a historical starter card.
      No import, assembly, build, test, capture or measurement was performed.
-     No current font/default, KS48 workflow or hardware result is qualified. -->
+     No current font/default, KS48 workflow or hardware result is qualified.
+     Coalescing update: the section "A pending block on a volume written
+     through" and the citations prefixed fdd9e5b: use TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), source reading with
+     docs/recovery.md. Its card-write counts and the BOUNCE compile time are
+     the host-model measurements recorded for fdd9e5b in Origo KD-303,
+     not runs made for this chapter. -->
 
 A program can finish writing a record while its newest bytes are still only in
 RAM. The block cache makes that possible by collecting records into card blocks.
@@ -28,9 +34,11 @@ with bits passing through a port one at a time. Chapter 18 explains that
 transfer. A CP/M program reads the same blocks again and again, the directory
 above all. The block cache keeps what it has read in EXPAND 1 so that a later
 read is a memory copy while that block remains cached. Every write goes through
-the same cache. On a volume written through a successful write returns after its
-line has reached the card. A volume written behind keeps its writes in the cache
-and writes them to the card in batches. Chapter 1 introduced the consequence for
+the same cache. At `a1023bd` a successful write on a volume written through
+returned after its line had reached the card. At TEC-OS `fdd9e5b` such a volume,
+A among them, holds one pending block and writes it at the next flush point, as
+the section on the pending block explains. A volume written behind keeps its
+writes in the cache and writes them to the card in batches. Chapter 1 introduced the consequence for
 saved work: until a successful flush, the card can lag behind the saved file
 (`src/cache.asm:417-429`, `src/cache.asm:546-555`).
 
@@ -181,8 +189,9 @@ read along the way.
 
 ## A write that reaches the card
 
-A volume whose descriptor does not have the written-behind flag is written
-through: a successful BIOS `WRITE` returns after the card has accepted the block
+At `a1023bd` a volume whose descriptor does not have the written-behind flag
+is written through: a successful BIOS `WRITE` returns after the card has
+accepted the block
 and stopped reporting busy (`src/sd.asm:654-662`). Its record goes into the
 block's line by the path the next section describes and `WRITE` sets bit 7 of
 `CWTYPE` first. `CWRBH` then writes the line to the card with `CWRITE`
@@ -198,6 +207,50 @@ card has it from a volume written through (`src/cache.asm:531-536`). The next
 line given out is then the same one. A file written through passes through a
 single line, block after block, and the cache keeps the lines that hold programs
 and directories. The line keeps its block so the block's next record is a hit.
+
+## A pending block on a volume written through
+
+Writing each record through writes a block once for each of its four
+records. At TEC-OS `fdd9e5b` a data write on a volume written through, the
+BDOS's functions 21, 34 and 40 and `SAVE`, goes into its block's line and
+returns once the record is there. BIOS `WRITE` sets bit 5 of `CWTYPE` for
+such a write, and `CWCO` records the line in `CPEND`, the line's number plus
+one, or 0 when no block is pending. A directory write still sets bit 7 and
+goes to the card before it returns (`fdd9e5b:src/bios.asm:336-350`,
+`fdd9e5b:src/cache.asm:499-529`, `fdd9e5b:src/ram.asm:303-318`).
+
+At most one block is pending, and it reaches the card at the first flush
+point (`fdd9e5b:docs/recovery.md:64-97`):
+
+- the file's close and any other directory request: an open, make, search,
+  delete, rename, attribute change, size, login or the extent change inside
+  a write. `FNCLSE` and `READDIR` call `CPOUT` first, so the directory never
+  names a block whose data is not on the card
+  (`fdd9e5b:src/cpm/bdosfile.asm:214-217`, `fdd9e5b:src/cpm/bdoslog.asm:17-19`)
+- a BIOS write to another block, on any drive. `BWGET` calls `CPMOVE`, which
+  keeps the pending line when the new write is to the same block and
+  otherwise writes it with `CPFLSH` (`fdd9e5b:src/bios.asm:342-345`,
+  `fdd9e5b:src/cache.asm:568-597`)
+- a console read: BDOS functions 1, 10 and 11, function 6 with `E = FFh`,
+  and the BIOS's `CONIN`. A program that waits for a key therefore leaves
+  nothing unwritten while it waits (`fdd9e5b:src/cpm/bdos.asm:281`, `:333`,
+  `:404` and `:708`,
+  `fdd9e5b:src/console.asm:215-226`)
+- function 48, `MOUNT`, unmount and warm boot
+
+A reset or power loss before that point loses the records written into the
+pending block since it was last written, at most one block of four records,
+512 bytes. The card keeps the block's old contents. A block the card rejects
+stays pending. A close or another directory request then returns the error,
+`Bad Sector` or function 45's returned error. A console read does not report
+the failure: the program gets its key and the next flush point that is not a
+console read reports it. Warm boot writes the block once more and drops it
+with `Write lost` (`fdd9e5b:docs/recovery.md:99-112`).
+
+In the host-model measurements for `fdd9e5b`, `BAZA BOUNCE` compiling to A
+took 19.04 seconds with 48 card writes, against 25.82 seconds when every
+record was written through. A 16 KiB file took 33 card writes in place of 129,
+and `SAVE 16` 10 in place of 34.
 
 ## Collecting records before the directory write
 
@@ -301,7 +354,9 @@ single bad block can't fail every later miss (`src/cache.asm:340-357`).
 
 ### Five flush occasions
 
-Dirty cache lines reach the card on five occasions:
+At `a1023bd` dirty cache lines reach the card on five occasions. At
+`fdd9e5b` a volume written through adds its pending block's flush points,
+described above:
 
 - a directory write on the volume written behind, as above
 - `CTAKE` with every line dirty, which writes one line
@@ -312,6 +367,11 @@ Dirty cache lines reach the card on five occasions:
   (`src/volsvc.asm:372-387`)
 - BDOS function 48, which calls `VFLUSH` and returns 0 in `A` or `FFh` if a line
   failed and was dropped (`src/cpm/bdos.asm:238-241`)
+
+At `fdd9e5b` `VFLUSH` calls `CFLUSH` with no line excluded, so `MOUNT`,
+unmount and function 48 keep a line whose write fails for the next flush.
+Only warm boot's `CFLALL` drops one (`fdd9e5b:src/volsvc.asm:360-389`,
+`fdd9e5b:src/cache.asm:255-300`).
 
 A `^C` at the prompt causes a warm boot. When its flush succeeds, every pending
 cache change has reached the card. A failure prints `Write lost`, whose

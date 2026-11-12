@@ -12,7 +12,7 @@ nav_group: "Inside TEC-OS"
      below use that revision. No execution or current artifact result is claimed.
      Current cold-default claims are separate from historical captures.
      The KBLAST paragraph cites TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) with a 402f30e: prefix. -->
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) with a fdd9e5b: prefix. -->
 
 <!-- Historical evidence: all three captures, their recipes and the TERM host
      assembly recipe retain TEC-OS 78127ec. TERM used atom-z80 0.3.7 and a
@@ -260,6 +260,15 @@ storage and traversal (`src/cpm/ccp.asm:136-149`,
 `src/cpm/bdos.asm:478-484`, `src/cpm/bdos.asm:651-666`,
 `src/boot.asm:384-389`).
 
+At TEC-OS `fdd9e5b` the history belongs to the shell, `SHELL.SVC`. The
+ROM's `SHLINE` sets `HFLAG` before it calls the shell's `LINE` entry, so
+only the first function 10 after that call gives recall. With the flag
+set, `^W` or `^N` calls the shell's `HREC` for the older or newer line, and
+a finished nonempty line goes to the shell's `HSTORE`. With no shell
+installed nothing sets the flag (`fdd9e5b:src/cpm/ccp.asm:250-281`,
+`fdd9e5b:src/cpm/bdos.asm:473-490`, `fdd9e5b:src/cpm/bdos.asm:637-663`,
+`fdd9e5b:docs/shell.md:194-208`).
+
 ## Serial bits and timing
 
 The TEC-1G has no UART. The CPU sends on port `01h` bit 6 and receives
@@ -361,14 +370,14 @@ and delivers a held key only once. Holding it produces no automatic repeat
 (`src/keyboard.asm:39-100`). A press and release entirely between scans
 is lost.
 
-At TEC-OS `402f30e` `abi.inc` publishes `KBLAST` at `BFEFh`: the
+At TEC-OS `fdd9e5b` `abi.inc` publishes `KBLAST` at `BFEFh`: the
 highest-numbered matrix key down, row × 8 + column, or `FFh` for none. A
 service that scans the matrix itself writes the key it finds there, as
 `MON3.SVC` does, so a key held from a program is not read again as new
 when TEC-OS's scan resumes. The workspace byte's own label there is
 `KBSLOT`, and the build checks that the two addresses agree
-(`402f30e:src/abi.inc:295-302`, `402f30e:docs/services.md:430-441`,
-`402f30e:src/ram.asm:432`).
+(`fdd9e5b:src/abi.inc:308-315`, `fdd9e5b:docs/services.md:433-444`,
+`fdd9e5b:src/ram.asm:425`).
 
 Two ordinary keys produce no character. A retained second key below 3 is
 a modifier and a modifier alone also produces none. Caps Lock toggles
@@ -492,7 +501,8 @@ positions at row 1 column 3 and clears forwards to leave `AB`. It then
 writes `X` at row 5 column 10 and a reverse `R` beside it. Its source is
 `test/programs/term.asm`, not a file supplied on the starter card
 (`test/programs/term.asm:1-34`). This historical `78127ec` PC recipe used
-ATOM from `atom-z80` 0.3.7 and an existing starter-card copy, `con.img`:
+ATOM from `atom-z80` 0.3.7 and an existing starter-card copy, `con.img`. At TEC-OS `fdd9e5b` atom-z80 is no longer a dependency of the repository,
+so `npx atom` in these recipes needs atom-z80 0.3.7 installed by hand:
 
 ```sh
 npx atom test/programs/term.asm term.com

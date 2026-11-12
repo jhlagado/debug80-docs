@@ -39,6 +39,19 @@ nav_exclude: true
      bytes; integer statements as 16-bit code, BASIC-80's &H, HEX$, MOD, \, XOR, WAIT and SWAP, start-up check
      51C3h, the integer BOUNCE.BAS). Chapters 1 to 8, 11, 12, 13, 15, 17,
      21, 27 and 29 and appendices C, D, F, I and J cite it.
+     Shell update: TEC-OS fdd9e5b (main, ROM 43ac0f18, 14,875 bytes used
+     and 1,509 free) has the minimal ROM CCP with the shell hook and
+     SHELL.SVC on the card, which STARTUP.CMD loads first: history, COPY,
+     DEL, SERVICES, the [more] pager, .CMD scripts and lines joined by !
+     (always) and & (on success, after a blank), with CP/M 3's : gone.
+     MON3.SVC (4,606 bytes, 18 pages) is entered on install, with no /E.
+     TAS is the only assembler. The card's fifteen files hold SHELL.SVC in
+     place of CHAIN.ASM; BAZA is Baza 50dc512 (280ee372, 13,184 bytes, a
+     compile spinner) and BOUNCE.BAS (615693a5) takes the arrow keys;
+     TIMES.BAS and BOUNCE.BAS have keywords in capitals and names in lower
+     case. A: coalesces its data writes in one pending block until a flush
+     point. Chapters 1 to 8, 10 to 17, 19, 21 to 23, 25 to 27 and 29 and
+     appendices A, C, D, F, G, H, I and J cite it.
      Public workflows accepted by Origo review4b5b5a50 from attempt02/e77c7ef0.
      Bounded opening craft/factual reviews closed d9d57d2/b911e84.
      That whole batch remains FAILED. Later service controls are separate.

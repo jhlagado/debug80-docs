@@ -14,8 +14,10 @@ nav_group: "Writing programs"
      TOP, AREA, KEY, SAVE and their recipes/output are retained unchanged.
      Numerical TPA figures and service costs belong to the historical setup.
      No build, execution, import, new capture or physical-board result claimed.
-     The MON3.SVC figures cite TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) with a 402f30e: prefix. -->
+     The MON3.SVC, SHELL.SVC and EXPAND 1 figures cite TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) with a fdd9e5b:
+     prefix. The ATOM recipes below are historical: atom-z80 is no longer a
+     dependency at fdd9e5b (README.md:91-102). -->
 
 Your program starts at `0100h` but its upper memory limit depends on the card
 and installed services. Code, buffers and a private stack must fit below that
@@ -34,8 +36,8 @@ socket U9. Only half of U9 appears in the Z80's address space at once:
 
 Bit 2 of the system latch at port `FFh` selects the half in that bank window.
 EXPAND 0 is selected when a program starts. That gives 48 KiB of addressable RAM
-below the ROM. EXPAND 1 holds the block cache and command history. Switching it
-into view removes EXPAND 0's contents from the same addresses.
+below the ROM. EXPAND 1 holds the block cache. Switching it into view removes
+EXPAND 0's contents from the same addresses.
 
 Page zero occupies `0000h–00FFh` and contains the CP/M jumps and buffers. The
 *transient program area*, or TPA, begins at `0100h`. Its upper bound is the
@@ -77,7 +79,8 @@ before any such call.
 ## Historical memory readings
 
 TOP and AREA are retained examples from `78127ec`, built with ATOM 0.3.7. Their
-card recipes and output keep that provenance. The figures describe those
+card recipes and output keep that provenance. At TEC-OS `fdd9e5b` atom-z80 is no longer a dependency of the repository,
+so `npx atom` in these recipes needs atom-z80 0.3.7 installed by hand. The figures describe those
 historical configurations, not a new measurement of the inspected source or the
 planned opening profile.
 
@@ -192,10 +195,16 @@ base. The jump at `0005h` then points to that lower address. In the historical
 starter setup, GLCD.SVC occupied `B600h–B8FFh`. Its three pages used 768 bytes
 but also excluded the alignment gap at `B900h–B9A3h`. The total reduction was
 932 bytes. A second service ends below the first and reduces the available TPA
-again. At TEC-OS `402f30e` the card's `MON3.SVC` takes 18 pages. Installed
-alone it moves the word at `0006h` from `B9A4h` to `A700h`, leaving 42,496
-bytes. Installed after `GLCD.SVC`, as on the GLCD console, it leaves 41,728
-(`402f30e:docs/mon3.md:44-47`).
+again. At TEC-OS `fdd9e5b` the starter card's word at `0006h` is `B9A9h`
+with nothing installed, a TPA of 47,273 bytes. Its startup file installs
+`SHELL.SVC`, which takes ten pages and leaves `AF00h`, 44,544 bytes, or
+43,776 with `GLCD.SVC` installed too (`fdd9e5b:docs/memory-map.md:12-17`,
+`fdd9e5b:docs/shell.md:20-26`, `fdd9e5b:docs/compatibility.md:3-14`). The
+card's `MON3.SVC` takes 18 pages. Installed alone it moves the word from
+`B9A9h` to `A700h`, leaving 42,496 bytes, and installed after `GLCD.SVC`
+it leaves 41,728 (`fdd9e5b:docs/mon3.md:45-48`). Installed after the shell,
+as on the starter card, it leaves `9D00h`, 39,936 bytes
+(`fdd9e5b:test/shell.test.mjs:737-745`).
 
 AREA reads the boundary and subtracts `0100h` to obtain the size in bytes:
 
@@ -375,8 +384,9 @@ work. A retained handler has its own behaviour.
 
 Programs start with maskable interrupts disabled by warm boot. A program can
 enable them. TEC-OS temporarily disables them for card-block I/O, serial-byte
-transfers, PICO9918 control-port byte pairs and command-history access. It then
-restores the previous state.
+transfers and PICO9918 control-port byte pairs. It then restores the previous
+state. At `a1023bd` command-history access was among them. At `fdd9e5b` the
+history is the shell's, in its own pages, and needs no bank switch.
 
 The non-maskable interrupt (NMI) entry at `0066h` lies inside the default FCB.
 With the keypad NMI jumper fitted, a hex-keypad press can execute the FCB's
@@ -387,20 +397,22 @@ explains the wiring and the difference between maskable interrupts and NMI.
 
 The system latch is write-only. TEC-OS keeps its last value at `0040h`, in
 CP/M's BIOS scratch area. That fixed-RAM copy remains accessible when EXPAND 1
-hides the workspace. The cache and history routines read it to restore the
-normal bank. A program that writes port `FFh` must also write the same value to
+hides the workspace. The cache routines read it to restore the normal bank. A program that writes port `FFh` must also write the same value to
 `0040h`. Otherwise a later TEC-OS latch write uses the old recorded bits. Leave
 both alone unless the program changes the latch. Cold boot clears page zero and
 initialises the latch copy. TEC-OS does not use `0041h–004Fh` afterwards.
 
-Cold boot clears EXPAND 1 for TEC-OS's cache and history:
+Cold boot clears EXPAND 1 for TEC-OS's cache. At TEC-OS `fdd9e5b` it holds
+(`fdd9e5b:docs/memory-map.md:70-83`):
 
 | Addresses | Contents |
 | --- | --- |
 | `8000h–BBFFh` | the block cache's 30 lines, each with room for one card block of 512 bytes |
 | `BC00h–BC9Dh` | the cache's table: the card block each line holds and whether it has changes |
-| `BD00h–BDFFh` | the history of command lines |
-| `BE00h–BFFFh` | free |
+| `BD00h–BFFFh` | free |
+
+At `a1023bd` the history of command lines took `BD00h–BDFFh`. It is now a
+256-byte ring in the last page of `SHELL.SVC`.
 
 The free range means unused storage in that bank. It does not extend the TPA or
 supply a bank-allocation interface to a program.

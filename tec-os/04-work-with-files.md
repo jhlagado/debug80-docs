@@ -10,6 +10,12 @@ nav_group: "Using the machine"
 <!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
      DEL as another name for ERA: TEC-OS 402f30e src/tables.asm:60-82 and
      docs/compatibility.md:77-81, as at 31b6083.
+     At TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) COPY, DEL,
+     SERVICES and the [more] pager are SHELL.SVC's: drivers/shell.asm:532-552,
+     drivers/shellcmd.asm:54-220, drivers/shellio.asm:380-508,
+     docs/shell.md:3-41 and :135-143, docs/compatibility.md:90-133; the ROM's
+     own built-ins are src/tables.asm:53-76. The TYPE STARTUP.CMD excerpt is
+     a capture at fdd9e5b: node tools/capture.mjs "TYPE STARTUP.CMD".
      Current COPY and pager excerpts: tested 8b8664a7d93c6dc2e8bce509b9770585e106eedc,
      landed 962853f with qualification-record differences only.
      Origo attempt02 e77c7ef0, scoped result receipt 4b5b5a50,
@@ -39,7 +45,7 @@ A name has up to eight characters followed by a full stop and a type of up to
 three characters. Both the full stop and type can be omitted. A drive letter
 and colon select a file on another drive: `A:SAMPLE.ASM` names the supplied source
 on A. Without that prefix a name refers to the drive in your prompt. DIR is
-built into the command processor that reads each line you enter. TAS is a
+built into the command processor that runs each line you enter. TAS is a
 program stored on the card.
 
 A wildcard lets you narrow a listing without typing every complete name.
@@ -56,28 +62,32 @@ wildcard forms.
 text until its first `^Z` end marker or the end of its recorded contents. It
 does not assemble the source or run commands found in a file.
 
-A short file fits before the next prompt. This retained earlier starter-card
-session read `STARTUP.CMD`, whose one line was the automatic startup command. It
-is a historical example, separate from your BANNER session and the 40-column
-screen below:
+A short file fits before the next prompt. `STARTUP.CMD` holds the two
+automatic startup commands of Chapter 1. This run on the serial terminal is
+separate from your BANNER session and the 40-column screen below:
 
-<!-- node tools/capture.mjs "TYPE STARTUP.CMD" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "TYPE STARTUP.CMD".
+     Boot rows omitted. -->
 ```text
 A>TYPE STARTUP.CMD
+SHELL.SVC
 GLCD.SVC
 
 A>
 ```
 
-The file's carriage return and line feed end its line. The extra blank line
-before the prompt is printed by the command processor. TYPE with a missing file
+The file's carriage returns and line feeds end its lines. The extra blank
+line before the prompt is printed by the command processor. TYPE with a missing file
 or no name prints `NO FILE`. A mistyped name therefore gives you a chance to
 check the spelling and try again without changing a file.
 
 ## Read a screenful
 
 SAMPLE.ASM is longer than one screen. TYPE and DIR pause with `[more]` on the
-last row rather than scrolling the whole listing away. A long text line that
+last row rather than scrolling the whole listing away. The pause is the
+shell's, `SHELL.SVC`, which the startup file loads. Without the shell, as
+after the startup bypass of Chapter 8, they list to the end without
+pausing. A long text line that
 wraps at the right edge uses more than one screen row. The prepared 40-column
 PICO console shows 23 rows of listing before the pause.
 
@@ -147,7 +157,9 @@ being typed intact. Neither key changes a stored file.
 
 ## Copy, rename and selectively erase
 
-COPY makes another file from a source. The destination can give a new name, a
+COPY makes another file from a source. COPY, and DEL below, are commands of
+the shell. Without it, typing either one looks for a program of that name
+and normally gives `COPY?` or `DEL?`. The destination can give a new name, a
 drive or both. With a drive alone, as in `COPY STARTUP.CMD B:`, the copy keeps
 the source's name. An existing destination of that name is erased before the
 replacement is made. Check the source and destination before copying over work
@@ -177,8 +189,8 @@ The count after `COPIED` is hexadecimal. Here `0028` means 40 records of
 new copy without changing the current drive.
 
 REN changes a name on the same drive. Its form is `REN NEW=OLD`, with the new
-name first and no spaces around `=`. ERA removes the named file, and DEL is
-another name for ERA at TEC-OS `402f30e`. A rename to an
+name first and no spaces around `=`. ERA removes the named file. The shell's
+DEL is another name for ERA: the shell hands the command to ERA. A rename to an
 existing name gives `FILE EXISTS` and changes nothing. Erasing a name that is
 absent gives `NO FILE`.
 

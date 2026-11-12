@@ -10,12 +10,45 @@ nav_group: "Inside TEC-OS"
 <!-- Source mechanisms checked by inspection against TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Source ranges use that revision
      unless explicitly marked otherwise. No current runtime check claimed.
-     Historical recipe, output and map figures retain TEC-OS 78127ec. -->
+     Historical recipe, output and map figures retain TEC-OS 78127ec.
+     "The line at TEC-OS fdd9e5b" and the fdd9e5b: citations use TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), source reading only. -->
 
 A program's ordinary exit rebuilds the CCP's working state, yet the next
 piece of its command line can still run. The line and its position survive
 in RAM outside the warm-boot clear. Chapter 13 explains their practical
 use.
+
+## The line at TEC-OS fdd9e5b
+
+The sections after this one follow the release-1 ROM at `a1023bd`, which
+split lines into pieces itself with `CHPOS`, `CHSKIP` and `MLECHO`. At
+TEC-OS `fdd9e5b` the ROM runs one command per line, and the shell,
+`SHELL.SVC`, splits lines. The shell keeps the line in hand in its own
+pages: its text in `LTXT` and the next piece's position in `LPOS`, with
+`LCOND` set when the next piece follows a run of `&` alone. A resident
+service's pages are outside the warm-boot clear, so a program's ordinary
+exit leaves the rest of the line there for the next `LINE` call
+(`fdd9e5b:drivers/shell.asm:649-702`, `fdd9e5b:drivers/shell.asm:159-232`).
+
+The ROM keeps two things for the shell across warm boot. `CMDTXT` still lies
+below the `CPMINIT` clear, so a line that a program passed to function 47
+survives the program's warm boot there. `CHPOS` now holds two flags: bit 0
+for a function 47 line waiting in `CMDTXT` and bit 1 when the rest of the
+line was dropped (`fdd9e5b:src/ram.asm:398-403`,
+`fdd9e5b:src/cpm/bdos.asm:52-106`). `SHLINE` passes those flags to `LINE` in
+A and clears them. A dropped line makes the shell discard `LPOS`, and a
+function 47 line replaces the line in hand, its first piece running
+whatever the program's result was (`fdd9e5b:src/cpm/ccp.asm:250-281`,
+`fdd9e5b:drivers/shell.asm:166-196`). With no shell installed, the ROM
+echoes a function 47 line and runs it whole as one command
+(`fdd9e5b:src/cpm/ccp.asm:141-176`).
+
+Before an `&` piece the shell reads the return code with function 108. A
+code from `FF00h` to `FFFEh` skips the piece, which leaves the code as it
+was, so the next `&` piece tests the same code. The ROM still clears the code
+as it takes each piece it runs (`fdd9e5b:drivers/shell.asm:198-224`,
+`fdd9e5b:src/cpm/ccp.asm:220-223`).
 
 ## The retained line
 

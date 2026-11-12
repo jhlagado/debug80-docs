@@ -141,7 +141,9 @@ even if a cache line already holds it (`src/boot.asm:92-100`,
 ## RAM before the workspace
 
 The workspace and resident stacks need RAM at `8000h–BFFFh`. The cache
-and history need EXPAND 1 behind the same window. `RAMCHK` checks both
+needs EXPAND 1 behind the same window, and at `a1023bd` the history did too.
+At TEC-OS `fdd9e5b` the history is in the shell's own pages
+(`fdd9e5b:docs/shell.md:20-22`). `RAMCHK` checks both
 before console initialisation, using the boot stack below `8000h`
 (`src/boot.asm:406-426`, `src/layout.asm:94`).
 
@@ -253,7 +255,8 @@ A>
 
 A recognised reset retains only those assignments. Cold boot still clears
 page zero, the workspace and EXPAND 1. Loaded services, their registry,
-open-file state, cache contents and history are discarded. The initial
+open-file state, cache contents and history are discarded. At `fdd9e5b`
+the shell is one of those services, and its history goes with it. The initial
 console is selected again from the detected PICO9918 and Matrix switch
 (`src/boot.asm:52-77`, `src/boot.asm:232-249`).
 

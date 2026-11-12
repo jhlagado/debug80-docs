@@ -10,6 +10,8 @@ nav_group: "Writing programs"
 <!-- Source-only semantic check: TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe. No new runtime result claimed.
      The complete SHOW listing, preparation and output retain TEC-OS 78127ec.
+     The fdd9e5b: citations use TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), source reading only.
      Historical PC assembly used atom-z80 0.3.7. The starter card's TAS.COM
      was Thorium dbee66a, SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
@@ -208,7 +210,8 @@ return-code convention explained in Chapter 13.
 ### The historical card and output
 
 The earlier build record gives SHOW as 72 bytes with TAS or ATOM. The
-retained host recipe uses ATOM 0.3.7. Its `work.img` is the historical HELLO
+retained host recipe uses ATOM 0.3.7. At TEC-OS `fdd9e5b` atom-z80 is no longer a dependency of the repository,
+so `npx atom` in these recipes needs atom-z80 0.3.7 installed by hand. Its `work.img` is the historical HELLO
 starter-card copy, whose full preparation is retained in Chapter 27.
 `hello.asm` is that unchanged HELLO source, not the new banner exercise.
 These original commands add SHOW and the text file to that card:
@@ -297,6 +300,14 @@ unmodified FCB can close without a directory write. Function 48 provides
 an explicit flush boundary for pending writes after the file state has
 been closed. Chapter 19 explains the cache's ordering and failure paths.
 
+On a volume written through, such as A, TEC-OS `fdd9e5b` holds one pending
+block. A write returns once its record is in that block's cache line, and
+the block reaches the card at the next close, directory request, write to
+another block, console read, function 48 or warm boot. A program that writes
+a file and then waits for a key therefore leaves nothing unwritten while it
+waits. A reset before one of those points loses at most that block's
+records (`fdd9e5b:docs/recovery.md:64-97`).
+
 A write that returns 1 or 2 may follow earlier successful records. Close
 the partial file and check the close result before reporting how much was
 written. A close failure does not make the intended file complete. A
@@ -323,7 +334,9 @@ checking their result. Appendix A gives their exact bit meanings.
 At an ordinary exit, a successful warm-boot flush puts pending changes
 on the card before another program loads. If a write fails there, TEC-OS
 drops the failed cache lines, reports `Write lost` and cancels the remaining
-command chain. Explicit function 48 also reports failure and drops failed
-lines. A later successful flush cannot restore bytes from a line already
+command chain. Explicit function 48 also reports failure. At `a1023bd` it
+drops failed lines, and at TEC-OS `fdd9e5b` it keeps them for the next
+flush, so only warm boot drops a line that still fails
+(`fdd9e5b:docs/recovery.md:49-58`). A later successful flush cannot restore bytes from a line already
 dropped. A reset discards pending cached changes rather than finishing
 unclosed work.

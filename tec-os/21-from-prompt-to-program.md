@@ -22,13 +22,46 @@ nav_group: "Inside TEC-OS"
      TED.COM was Thorium 128edb7, SHA-256
      2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f.
      Source proofs and preservation accounting: 20-pass-record.md.
-     No current runtime check claimed. -->
+     No current runtime check claimed.
+     Shell update: "The minimal CCP and the shell" and the citations
+     prefixed fdd9e5b: use TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9
+     (main), source reading with docs/shell.md and docs/compatibility.md. -->
 
 The CCP reads your command through the BDOS, parses its name and either runs a
 built-in or loads a file. A program command ends that path with page zero
 prepared and a jump to `0100h`. This chapter follows the code from the command
 prompt to that jump. [Appendix J](appendix-j-command-reference.md) gives the
 exact command grammar.
+
+## The minimal CCP and the shell
+
+The walk-through below follows the release-1 CCP at `a1023bd`, whose ROM
+held the command history, COPY, DEL, SERVICES, the pager and lines of
+several pieces. At TEC-OS `fdd9e5b` the ROM's CCP is smaller. Its `KEYTAB`
+holds DIR, TYPE, ERA, REN, SAVE, USER, CON and UNLOAD, and it still runs a
+`.COM` or a `.SVC`, changes drive and reads one line of `STARTUP.CMD`
+(`fdd9e5b:src/tables.asm:53-76`, `fdd9e5b:docs/shell.md:3-5`). The rest is
+in `SHELL.SVC`, a resident service that the starter card's startup file
+installs. Its own table holds COPY, DEL and SERVICES, and DEL rewrites its
+word as `ERA` and hands the piece to the ROM
+(`fdd9e5b:drivers/shell.asm:532-548`).
+
+The shell takes the prompt through a hook in the ROM. ROM service 16,
+`TNSHELL`, records a table of four entries in the shell's pages: `LINE`,
+`PAGE`, `HREC` and `HSTORE` (`fdd9e5b:src/abi.inc:223`,
+`fdd9e5b:drivers/shell.asm:59-62`, `fdd9e5b:docs/shell.md:166-213`). At each
+prompt `MAINLOOP` tests the hook. With a shell holding it, `SHLINE` calls
+`LINE`, which prints the prompt, reads or takes the next piece and writes it
+zero-ended into the command buffer with its origin, `FFh` for a line of
+`STARTUP.CMD`. The ROM then runs that piece as a typed line. With no shell
+the ROM prints its own prompt and takes a function 47 line, then its one
+startup line, then a line read with function 10
+(`fdd9e5b:src/cpm/ccp.asm:97-158`, `fdd9e5b:src/cpm/ccp.asm:247-293`).
+`TYPE` sends every byte, and `DIR` its row breaks, through `PAGE`, which
+gives the shell's `[more]` pause. With no shell the ROM prints the byte
+(`fdd9e5b:docs/shell.md:197-200`). Chapters 22, 23 and 26 describe the
+line, history and startup paths as the a1023bd ROM held them and where
+each one now is.
 
 ## Code and working storage
 
@@ -46,8 +79,8 @@ code stays in ROM while program files load into the transient program area
 
 The messages and `KEYTAB` are in the ROM data block. Each keyword in
 `KEYTAB` has a zero terminator followed by its handler address. A final
-zero ends the table (`src/tables.asm:53-80`, `402f30e:src/tables.asm:53-82`
-with DEL's record). In the historical `78127ec`
+zero ends the table (`src/tables.asm:53-80`, and
+`fdd9e5b:src/tables.asm:53-76` with the minimal CCP's eight records). In the historical `78127ec`
 build, `CCPBAS` was `DD2Ah` and the CCP ended at `E702h`. Its reported
 2,521 bytes were followed by the BDOS.
 
@@ -188,9 +221,10 @@ contain wildcards (`src/cpm/ccpcmd.asm:597-638`, `src/cpm/ccpmut.asm:193-209`).
 
 The keyword loop compares the original command text at `CMDSTRT` with
 `KEYTAB`, not the parsed FCB. Its order is DIR, TYPE, ERA, DEL, REN, SAVE,
-USER, CON, COPY, UNLOAD and SERVICES. DEL is present at TEC-OS `402f30e`
-with ERA's handler address, `CMDERA`, so both keywords run the same
-routine (`402f30e:src/tables.asm:60-82`). `ISCMD` requires a space or zero
+USER, CON, COPY, UNLOAD and SERVICES. DEL was present at TEC-OS `402f30e`
+with ERA's handler address, `CMDERA`, so both keywords ran the same
+routine. At `fdd9e5b` DEL, COPY and SERVICES have left `KEYTAB` for the
+shell (`fdd9e5b:src/tables.asm:60-76`). `ISCMD` requires a space or zero
 immediately after the keyword. `A:DIR` and `DIR.COM` therefore name a
 program file rather than built-in DIR. Both fail when the selected search
 finds no `DIR.COM` (`src/cpm/ccp.asm:380-405`,
@@ -450,7 +484,8 @@ its first page and lowers the load ceiling with it
 The retained capacity fixture places FITS, BIG and ARGS on B. FITS and BIG
 contain RET followed by zeros. ARGS has the complete listing below.
 FITS has 47,104 bytes and BIG has 47,105. This is the original PC recipe
-using ATOM 0.3.7, not a current build:
+using ATOM 0.3.7, not a current build. At TEC-OS `fdd9e5b` atom-z80 is no longer a dependency of the repository,
+so `npx atom` in these recipes needs atom-z80 0.3.7 installed by hand:
 
 ```sh
 node -e 'const b = n => { const x = Buffer.alloc(n); x[0] = 0xC9; return x; };
@@ -615,11 +650,12 @@ return word. A guard separates the stack from command scratch
 [Chapter 15](15-state-and-memory.md) distinguishes configured stack sizes
 from historical measurements and bounds.
 
-At TEC-OS `402f30e` the jump goes through HL, because `NAME.SVC /E` uses the
-same path to enter a service at its own address. `CMDRUN` loads `0100h`
-first, so a program now starts with HL = `0100h` and DE = `0000h`. CP/M 2.2
-promises a program no register at entry (`402f30e:src/cpm/ccp.asm:486-505`,
-`402f30e:docs/compatibility.md:163-167`).
+At TEC-OS `fdd9e5b` the jump goes through HL, because a service's entry on
+install uses the same path to enter the service at its own address.
+`CMDRUN` loads `0100h` first, so a program starts with HL = `0100h` and
+DE = `0000h`, and with A = `FFh` when its line came from `STARTUP.CMD` and 0
+otherwise. CP/M 2.2 promises a program no register at entry
+(`fdd9e5b:src/cpm/ccp.asm:446-472`, `fdd9e5b:docs/compatibility.md:186-191`).
 
 A top-level RET reaches the warm-boot jump at `0000h`. A direct jump there or
 function 0 reaches warm boot too (`src/cpm/ccp.asm:487-490`,

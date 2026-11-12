@@ -12,9 +12,12 @@ nav_group: "Reference"
      below remain historical78127ec evidence from frozen book10821b6.
      No new map, label command, build, import, test, run or capture occurred.
      Source proof and historical evidence boundaries: c-pass-record.md.
-     The current ROM regions and the BDOS stack census cite TEC-OS
+     The ROM regions at 402f30e cite TEC-OS
      402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) (ROM 95467cae…) with a
-     402f30e: prefix, source reading only. -->
+     402f30e: prefix. The current ROM regions, TPA, EXPAND 1, KBLAST, the
+     shell's pages and the BDOS stack census cite TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) (ROM 43ac0f18…) with a
+     fdd9e5b: prefix. Source reading only. -->
 
 A memory address needs both a bank and a build identity. This reference
 pairs the historical `78127ec` map with the source contracts for each region.
@@ -78,6 +81,13 @@ These card-dependent figures are historical `78127ec` values:
 | Starter card with `GLCD.SVC` installed | 320 bytes | `B600h` | 46,336 bytes |
 | Four G8M volumes | 1,024 bytes | `B6E4h` | 46,564 bytes |
 
+At TEC-OS `fdd9e5b` the starter card's BDOS entry is `B9A9h`, a TPA of
+47,273 bytes, and four G8M volumes give `B6E9h`. The starter card's startup
+file installs `SHELL.SVC`, whose ten pages put the entry at `AF00h`, 44,544
+bytes, or `AC00h`, 43,776 bytes, with `GLCD.SVC` too. The shell's last page
+holds its 256-byte history ring (`fdd9e5b:docs/memory-map.md:8-20`,
+`fdd9e5b:docs/compatibility.md:3-14`, `fdd9e5b:docs/shell.md:20-26`).
+
 ## The ROM
 
 The historical `78127ec` ROM occupied these ranges:
@@ -93,7 +103,10 @@ The historical `78127ec` ROM occupied these ranges:
 The map generated at TEC-OS `402f30e`, ROM SHA-256 `95467cae…`, has the
 same fixed beginning. Its data runs to `C639h`, 1,583 bytes, and its code
 from `C63Ah` to `FC02h`, 13,769 bytes. That is 15,363 bytes used, with
-1,021 free at `FC03h–FFFFh` (`402f30e:docs/memory-map.md:1-30`).
+1,021 free at `FC03h–FFFFh` (`402f30e:docs/memory-map.md:1-30`). At
+`fdd9e5b`, ROM SHA-256 `43ac0f18…`, the data runs to `C5D0h`, 1,478 bytes,
+and the code from `C5D1h` to `FA1Ah`, 13,386 bytes. That is 14,875 bytes
+used, with 1,509 free at `FA1Bh–FFFFh` (`fdd9e5b:docs/memory-map.md:22-30`).
 
 In that historical build the CCP's three files occupied `DD2Ah–E702h`,
 2,521 bytes. The BDOS's six files occupied `E703h–F608h`, 3,846 bytes. The
@@ -267,7 +280,14 @@ whole block before setting the DMA address to `0080h`.
 
 The declarations are at `a1023bd:src/ram.asm:305-464`. These historical
 addresses lie above the warm clearing span. Cold-only clearing therefore
-describes storage lifetime, not an assurance that its value remains unchanged.
+describes storage lifetime, not an assurance that its value remains unchanged. At TEC-OS `fdd9e5b` the
+workspace differs in three ways that matter here. `HHEAD` and `STREC` have
+gone, since the history and the rest of the startup file are the shell's.
+`CHPOS` holds two flags, bit 0 for a function 47 line in `CMDTXT` and bit 1
+for a dropped line. `CPEND`, at `BF42h` on the starter card, holds A's
+pending block as its cache line plus one, 0 for none
+(`fdd9e5b:src/ram.asm:303-318`, `fdd9e5b:src/ram.asm:398-403`,
+`fdd9e5b:docs/memory-map.md:60-68`).
 
 | Addresses | Bytes | Name | Contents | Cleared by |
 | --- | ---: | --- | --- | --- |
@@ -295,7 +315,7 @@ describes storage lifetime, not an assurance that its value remains unchanged.
 | `BFECh` | 1 | `ESCST` | Escape-parser state | Cold boot |
 | `BFEDh` | 1 | `ESCP1` | First numeric escape parameter | Cold boot |
 | `BFEEh` | 1 | `ESCP2` | Second numeric escape parameter | Cold boot |
-| `BFEFh` | 1 | `KBLAST` | Last held matrix key, `FFh` for none. At `402f30e` `abi.inc` publishes it for a service that scans the matrix, and the workspace label is `KBSLOT` (`402f30e:src/abi.inc:295-302`) | Cold boot |
+| `BFEFh` | 1 | `KBLAST` | Last held matrix key, `FFh` for none. At `fdd9e5b` `abi.inc` publishes it for a service that scans the matrix, and the workspace label is `KBSLOT` (`fdd9e5b:src/abi.inc:308-315`) | Cold boot |
 | `BFF0h` | 1 | `VATTR` | `80h` for reverse video | Cold boot |
 | `BFF1h` | 1 | `VCURV` | 1 while the cursor cell is drawn reversed | Cold boot |
 | `BFF2h–BFFFh` | 14 | `MNTBLK` to `MNTLN` | Remaining mount/volume-service scratch | Cold boot |
@@ -325,6 +345,10 @@ also occur in the historical map (`a1023bd:src/layout.asm:32-42`,
 | `BD00h–BDFFh` | 256 | `HRING`, command history |
 | `BE00h–BEFFh` | 256 | Unused |
 | `BF00h–BFFFh` | 256 | Unused |
+
+At TEC-OS `fdd9e5b` the history has left the bank for the shell's own pages.
+`BD00h–BFFFh`, 768 bytes, is free, and the host model watches it so that a
+stray write fails (`fdd9e5b:docs/memory-map.md:70-83`).
 
 Cold boot clears the whole bank and then marks every cache key empty
 (`a1023bd:src/boot.asm:232-249`). No BDOS or BIOS interface allocates a
@@ -372,8 +396,10 @@ use to 8 bytes on BDOS, 12 on BIOS and 6 on CCP
 historical `78127ec` host-model census measured bases of 30, 18 and 18 bytes
 respectively. Adding the declared limits gives 38/54, 30/40 and 24/32 bytes.
 These are historical measurements and bounds, not a measurement of the inspected
-source. At TEC-OS `402f30e` the bases are the same, and the BDOS's census, its
-deepest use of all, is 32 bytes (`402f30e:docs/services.md:316-333`).
+source. At TEC-OS `fdd9e5b` the bases are the same, and the BDOS's census, its
+deepest use of all, is 32 bytes (`fdd9e5b:docs/services.md:308-330`). The
+shell runs its `LINE` and `PAGE` entries on its own 32-byte stack and
+declares 6 bytes of the BDOS's stack (`fdd9e5b:docs/services.md:332-339`).
 [Chapter 15](15-state-and-memory.md#four-stacks-for-different-stages)
 explains their scope and [Chapter 25](25-loading-and-removing-services.md)
 explains declaration checks.

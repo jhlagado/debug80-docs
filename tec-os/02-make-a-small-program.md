@@ -30,7 +30,13 @@ nav_group: "Using the machine"
      were not rerun with it. "Several statements on a line" follows Thorium
      3d1e2c0 docs/language.md:55-84 and :124, the CHAIN.ASM listing is
      Thorium 3d1e2c0 demo/chain/chain.asm lines 9-19, and CHAIN's build and
-     run are TEC-OS 402f30e test/starter.test.mjs:337-390. -->
+     run are TEC-OS 402f30e test/starter.test.mjs:337-390, when the card
+     held it. At TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main)
+     the card has no CHAIN.ASM (tools/media.mjs:200-231, Origo KD-300),
+     TAS.COM is still Thorium 3d1e2c0 (test/inputs.json:4-13,
+     docs/compatibility.md:223 and :226) and TED's build line runs under SHELL.SVC,
+     which the card's STARTUP.CMD loads (docs/shell.md:42-44,
+     drivers/shell.asm:174-232). -->
 
 SAMPLE came with its source already on the card. BANNER begins as text you
 enter yourself. It prints a greeting, which you can change and build again
@@ -156,8 +162,11 @@ Press a key
 
 `BANNER.COM written` reports the successful assembly. The greeting is your
 program's output. The `A>A:TED` lines are commands used to reopen the editor,
-not text printed by BANNER. TED waits at `Press a key` so the result remains
-visible. Space returns to the source at `L1 C1`.
+not text printed by BANNER. TED supplies its build and the return to the
+editor as one command line, and the shell that the startup file loaded runs
+its commands in turn, each after its own prompt. Chapter 13 explains such
+lines. TED waits at `Press a key` so the result remains visible. Space
+returns to the source at `L1 C1`.
 
 TAS also writes BANNER.DBG beside the source and COM file on B. It contains
 information for a debugger. Keep it with the other BANNER files, though this
@@ -200,8 +209,9 @@ final return and uses none of the earlier register values.
 ## Several statements on a line
 
 BANNER has one instruction on each line. TAS also takes several statements
-on one line, with a backslash, `\`, between them. `CHAIN.ASM` on A is
-written that way. Its main part is:
+on one line, with a backslash, `\`, between them. Thorium's demonstration
+`CHAIN.ASM`, which an earlier starter card held, is written that way. You
+can type it into TED as you typed BANNER. Its main part is:
 
 ```asm
 START:
@@ -225,9 +235,9 @@ of the line, and here it describes the whole line's step rather than each
 instruction. Inside quotes a backslash is still an escape, as in `'\\'`
 for the backslash character, and does not separate statements.
 
-The layout changes only the source. `TAS CHAIN` writes the same 43 bytes
-that the instructions written one to a line would give, and `CHAIN` prints
-`LINE 1` to `LINE 5`. Either layout is accepted. The recommended one keeps
+The layout changes only the source. On the earlier card `TAS CHAIN` wrote
+the same 43 bytes that the instructions written one to a line would give,
+and `CHAIN` printed `LINE 1` to `LINE 5`. Either layout is accepted. The recommended one keeps
 labels on their own lines and at most three statements on a line, each line
 with its comment.
 

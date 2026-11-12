@@ -13,11 +13,21 @@ nav_group: "Using the machine"
      retain TEC-OS 78127ec. No capture or workflow was rerun.
      Historical 80-column starts remain evidence of their original runs.
      Current cold-default and host-preparation claims use the source above.
-     The current card's file count is TEC-OS 402f30e tools/media.mjs:213-251
-     and test/starter.test.mjs:50-85. -->
+     Shell update: at TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main)
+     the ROM runs one line of STARTUP.CMD and SHELL.SVC the rest
+     (docs/shell.md:115-133, src/cpm/ccpcmd.asm:805-875 for the ROM's line,
+     drivers/shellio.asm:14-176 for the shell's, tools/lib/starter.mjs:10-22
+     for the card's two lines). The card's file count is
+     tools/media.mjs:200-231 and test/starter.test.mjs:46-80. These
+     captures were made at fdd9e5b with the recipes shown, each card made
+     from dist/starter.img, boot rows kept where shown: TYPE STARTUP.CMD,
+     lines.img, bare.img, cut.img, long.img, semi.img, the pico SERVICES
+     CON run, w32.img on both boards, nostart.img and gname.img. The
+     spare.img run was repeated at fdd9e5b and gave the 78127ec output
+     below unchanged. -->
 
 `A:STARTUP.CMD` holds commands you want to repeat after reset. TEC-OS runs
-them before accepting a command from the keyboard. You can use it to select
+them before accepting a command from the keyboard. You can use it to load the shell, select
 your display width, load the graphics LCD driver or choose your starting
 drive and user area.
 
@@ -35,41 +45,51 @@ means that failed cached writes were dropped so the intended file may
 be incomplete. Read back the file and correct it before relying on the
 next startup. Reset does not finish pending writes.
 
-The historical starter card contained this single line:
+The starter card's file has two lines:
 
-<!-- node tools/capture.mjs "TYPE STARTUP.CMD" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "TYPE STARTUP.CMD".
+     Boot rows omitted. -->
 ```text
 A>TYPE STARTUP.CMD
+SHELL.SVC
 GLCD.SVC
 
 A>
 ```
 
-`GLCD.SVC` is the resident graphics LCD service introduced in
+`SHELL.SVC` is the shell of [Chapter 1](01-first-session.md) and `GLCD.SVC`
+is the resident graphics LCD service introduced in
 [Chapter 5](05-drives-and-user-areas.md). The PICO9918 console is in ROM
 and needs no service file. The effect of the GLCD line depends on which
 console cold boot selected.
+
+The ROM itself runs only one line of the file. When that line installs the
+shell, the shell reads and runs the rest of the file. Keep `SHELL.SVC` on
+the first line, or after lines that are empty or begin with `;`. A file
+whose first command is anything else runs that command alone.
 
 A startup line uses the same command syntax as a typed command. With an action
 on each line, its completion is followed by the next command prompt and command.
 Chapter 13 explains multiple commands and conditional execution.
 
-The following historical recipe copies the starter card and replaces its
-startup file with six lines. The `tecvol put` command replaces an existing
-file of the same name. Its `--text` option converts each line ending to CR
-and LF and appends the CP/M text-end marker, `^Z`:
+The following recipe copies the starter card and replaces its startup file
+with seven lines, the shell first. The `tecvol put` command replaces an
+existing file of the same name. Its `--text` option converts each line ending
+to CR and LF and appends the CP/M text-end marker, `^Z`:
 
 ```sh
-printf 'B:\nUSER 3\nmount\nDIR\nNOSUCH\nUSER 0\n' > startup.cmd
+printf 'SHELL.SVC\nB:\nUSER 3\nmount\nDIR\nNOSUCH\nUSER 0\n' > startup.cmd
 cp dist/starter.img lines.img
 node tools/tecvol.mjs put lines.img A startup.cmd --text
 ```
 
-<!-- node tools/capture.mjs --card lines.img -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card lines.img -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
+
+A>SHELL.SVC
 
 A>B:
 B>USER 3
@@ -86,27 +106,45 @@ NOSUCH?
 B>
 ```
 
-The CCP echoes each line as it appears in the file before running it.
-That is why `mount` is lowercase in this capture. `B:` changes the drive
-and `USER 3` changes the user area for subsequent lines. `DIR` therefore
-lists area 3 of B, which is empty.
+Each line is echoed as it appears in the file before it runs. That is why
+`mount` is lowercase in this capture. `B:` changes the drive and `USER 3`
+changes the user area for subsequent lines. `DIR` therefore lists area 3 of
+B, which is empty.
 
 `MOUNT.COM` is in area 0 of A. The program search described in Chapter 5
 still finds it from area 3 of B. `NOSUCH` prints its usual error and the
 next line runs. `USER 0` leaves the first interactive prompt at `B>`.
 TEC-OS takes the next startup line after the program finishes.
 
-## The first 128 bytes
+The same commands without the `SHELL.SVC` line show the ROM's single line:
 
-TEC-OS reads startup text into memory once before running its first line.
-A drive or user-area change affects subsequent commands but does not change
-the text already read. Only the first 128 bytes are used. That is a CP/M
-*record*, the unit in which file data is read. Nothing in a later record runs.
+```sh
+printf 'B:\nUSER 3\nmount\n' > startup.cmd
+cp dist/starter.img bare.img
+node tools/tecvol.mjs put bare.img A startup.cmd --text
+```
 
-That limit includes line endings. Sixty blank lines take 120 bytes after
-`--text` conversion because each contains CR and LF. In this historical
-example the remaining eight bytes contain only the start of `DIR *.CMD`.
-`USER 3` lies beyond the record:
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card bare.img -->
+```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM     
+B: WORK       
+
+A>B:
+B>
+```
+
+`B:` was the ROM's line. No shell was installed, so nothing read the file's
+later lines.
+
+## The ROM's line and the shell's lines
+
+The ROM reads only the first 128 bytes of the file. That is a CP/M
+*record*, the unit in which file data is read. It takes the first line there
+that is neither empty nor begins with `;`. The record's end also ends a
+line, so a line cut by it runs in its shortened form. Sixty blank lines take
+120 bytes after `--text` conversion because each contains CR and LF. In this
+example the remaining eight bytes contain only the start of `DIR *.CMD`:
 
 ```sh
 printf '\n%.0s' $(seq 60) > startup.cmd
@@ -115,41 +153,85 @@ cp dist/starter.img cut.img
 node tools/tecvol.mjs put cut.img A startup.cmd --text
 ```
 
-<!-- node tools/capture.mjs --card cut.img -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card cut.img. Boot rows
+     omitted. -->
 ```text
 A>DIR *.CM
 NO FILE
 A>
 ```
 
-The shortened `DIR *.CM` still runs. TEC-OS executes the part of a line
-that fits instead of rejecting an incomplete final line. Count the complete
-intended commands and their line endings when checking that the file fits.
+The shortened `DIR *.CM` still runs, and `USER 3` never runs. The shell has
+no such limit. It reads the rest of the file a record at a time, as many
+records as the file has. The same sixty blank lines after a `SHELL.SVC`
+line put `DIR *.CMD` and `USER 3` in the second record, and both run whole:
+
+```sh
+printf 'SHELL.SVC\n' > startup.cmd
+printf '\n%.0s' $(seq 60) >> startup.cmd
+printf 'DIR *.CMD\nUSER 3\n' >> startup.cmd
+cp dist/starter.img long.img
+node tools/tecvol.mjs put long.img A startup.cmd --text
+```
+
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card long.img. Boot rows
+     omitted. -->
+```text
+A>SHELL.SVC
+
+A>DIR *.CMD
+STARTUP.CMD 
+1 file, 912K free
+A>USER 3
+3A>
+```
 
 These rules determine the boundaries:
 
-- CR or LF ends a line. Blank lines are skipped.
-- `^Z`, a zero byte or the end of the record ends startup text. Bytes after
-  a zero or `^Z` are not commands.
+- CR or LF ends a line. Empty lines are passed over, and so is a line
+  whose first character is `;`, which holds a comment. A `;` after blanks
+  is not a comment: the line is rejected as a bad command.
+- `^Z` or a zero byte ends startup text. For the ROM's line the end of the
+  first record ends it too.
 - A line supplies at most its first 127 characters, matching the typed-line
   limit. Further characters on that line are skipped.
-- A new line cannot start at the record's last byte, the 128th. A line
-  already in progress can use that byte.
+- A first line of only spaces or tabs is neither empty nor a comment, so it
+  is the ROM's one line and a `SHELL.SVC` after it never loads.
 
-A `$` in a command ends its displayed echo early while the command still
-runs in full within these limits.
-[Chapter 26](26-startup-inside-the-ccp.md) explains the echo mechanism
-and retains the complete historical example.
+A comment line is a place to record why a line is there:
+
+```sh
+printf '; Shell first, then the GLCD.\nSHELL.SVC\n; Start on B.\nB:\n' > startup.cmd
+cp dist/starter.img semi.img
+node tools/tecvol.mjs put semi.img A startup.cmd --text
+```
+
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card semi.img -->
+```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM     
+B: WORK       
+
+A>SHELL.SVC
+
+A>B:
+B>
+```
+
+Neither comment is echoed. A `$` in the ROM's line ends its displayed echo
+early while the command still runs in full. The shell echoes its lines
+whole. [Chapter 26](26-startup-inside-the-ccp.md) explains the ROM's echo
+mechanism and retains the complete historical example.
 
 ## Program exits and resets
 
-After an ordinary program exit TEC-OS resumes any startup text it has
-already read. Reset begins a new startup attempt. The three routes back
+After an ordinary program exit the shell resumes the startup file at its
+next unread line. Reset begins a new startup attempt. The three routes back
 to a prompt have different effects:
 
 - An ordinary program return or a `^C` that ends a program causes a warm
-  boot. Installed services and mounted volumes remain and startup continues
-  at its next unread line. [Chapter 9](09-call-tec-os.md) explains the
+  boot. Installed services, the shell among them, and mounted volumes
+  remain, and startup continues at its next unread line. [Chapter 9](09-call-tec-os.md) explains the
   program-exit routes.
 - A recognised reset finds TEC-OS's retained marks in RAM. It rebuilds the
   working state and can restore the previous drive-to-volume assignments
@@ -157,8 +239,9 @@ to a prompt have different effects:
 - An unrecognised reset, including normal power-on, has no valid retained
   selection. The drives take the assignments in the card's header.
 
-Either kind of reset is a cold boot. It removes installed services,
-selects drive A and user area 0 and runs the startup file once. At the
+Either kind of reset is a cold boot. It removes installed services, the
+shell among them, selects drive A and user area 0 and runs the startup file
+once. At the
 current source, a responding PICO9918 with the Matrix switch enabled
 starts as the 40-column console. Otherwise the console starts on
 serial. A startup width or GLCD line can then select the intended display.
@@ -169,9 +252,10 @@ volume's startup file runs. An absent file leaves no startup commands.
 [Chapter 5](05-drives-and-user-areas.md) explains retained assignments and
 fallback to the card's defaults.
 
-This historical card has a third volume, SPARE, with a different startup
-file. Its initial A file runs `MOUNT`. After `MOUNT A: SPARE` and reset,
-the new A file runs `USER 2`:
+This card has a third volume, SPARE, with a different startup file. Each
+file has one line, which the ROM runs without a shell. Its initial A file
+runs `MOUNT`. After `MOUNT A: SPARE` and reset, the new A file runs
+`USER 2`:
 
 ```sh
 node tools/tecvol.mjs create spare.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:SPARE --drives 4
@@ -244,11 +328,13 @@ The historical capture configurations produced this table:
 | Both displays and matrix keyboard, `--board pico` | Passes quietly | `CRT:` |
 
 The last configuration has no resident GLCD driver after startup.
-`SERVICES` prints no entry and `CON` reports the ROM console:
+`SERVICES` lists only the shell and `CON` reports the ROM console:
 
-<!-- node tools/capture.mjs --board pico SERVICES CON -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico SERVICES CON.
+     Boot rows omitted. -->
 ```text
 A>SERVICES
+SHELL 10
 A>CON
 CON: CRT:
 A>
@@ -261,47 +347,53 @@ only after its startup service loads.
 A startup width command selects the intended PICO width after each reset.
 Cold boot starts at 40 columns before the startup file runs. An explicit
 width command can select 80, 40 or 32 columns. Bare `CON CRT` and `CON PICO`
-retain the current width and any program claim. This historical recipe puts
-a 32-column command before the supplied GLCD line:
+retain the current width and any program claim. This recipe puts a
+32-column command between the shell and the supplied GLCD line:
 
 ```sh
-printf 'CON PICO 32\nGLCD.SVC\n' > startup.cmd
+printf 'SHELL.SVC\nCON PICO 32\nGLCD.SVC\n' > startup.cmd
 cp dist/starter.img w32.img
 node tools/tecvol.mjs put w32.img A startup.cmd --text
 ```
 
-In this historical run the banner and volumes appeared at 80 columns.
-The width command cleared the screen at 32 columns before printing its
-reply. After `DIR` the PICO screen contained:
+The banner and volumes appeared at 40 columns. The width command cleared
+the screen at 32 columns before printing its reply. After `DIR` the PICO
+screen contained:
 
-<!-- node tools/capture.mjs --card w32.img --board pico --screen DIR -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card w32.img --board pico
+     --screen DIR, the screen text. -->
 ```text
 CON: CRT:
 A>GLCD.SVC
 
 A>DIR
-MOUNT.COM    GLCD.SVC
-STARTUP.CMD  TED.COM
-SAMPLE.ASM   TAS.COM
-6 files, 980K free
+MOUNT.COM    SHELL.SVC
+GLCD.SVC     STARTUP.CMD
+TED.COM      SAMPLE.ASM
+TIMES.BAS    TAS.COM
+BAZA.COM     BAZA.RTL
+BOUNCE.BAS   DEMO.ASM
+MON3.SVC     HELLO3.BIN
+HELLO3.ASM
+15 files, 912K free
 A>
 ```
 
-That card had the six historical starter files. The starter card TEC-OS
-prepares now has fifteen, which
 [Appendix J](appendix-j-command-reference.md#programs-on-the-starter-card)
-lists.
+lists the fifteen files.
 
 Where the ROM PICO console did not start, a startup width command passes
 quietly. The same command typed there reports the width with `?`, such as
-`32?`. The historical serial-only run of that same card showed both
-display commands without an error:
+`32?`. The serial-only run of that same card showed every startup command
+without an error:
 
-<!-- node tools/capture.mjs --card w32.img -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card w32.img -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
+
+A>SHELL.SVC
 
 A>CON PICO 32
 
@@ -311,7 +403,8 @@ A>
 ```
 
 The web page's Display control prepares the startup file at power-on.
-Successful preparation places the selected display command first. Every
+Successful preparation places the selected display command after the
+`SHELL.SVC` line. Every
 PICO width has an explicit line: `CON PICO 80`, `CON PICO 40` or `CON PICO 32`.
 The page's default remains 80 columns, selected through that startup line
 after the ROM's 40-column cold start. GLCD selection puts `GLCD.SVC` first.
@@ -346,7 +439,10 @@ causes a non-maskable interrupt at an address TEC-OS uses for other data
 and can crash the system. [Appendix G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi)
 gives the board requirement.
 
-After a skip no service has been installed. A responding PICO9918 with
+After a skip no service has been installed, not even the shell. The prompt
+is the ROM's own: `DIR` and `TYPE` list without pausing, `^W` recalls
+nothing, and `COPY`, `DEL` and `SERVICES` are unknown commands. Typing
+`SHELL.SVC` installs the shell. A responding PICO9918 with
 the Matrix switch enabled remains the console. Otherwise the board has
 serial and the 20 × 4 LCD until a GLCD driver is loaded. In that latter
 configuration, matrix input becomes available with the GLCD console after
@@ -370,15 +466,16 @@ instead prints the BDOS disk-error message and ends the command.
 `CARD?` accompanies a card-mount failure and the diagnostic prompt described in
 [Chapter 28](28-diagnose-the-machine.md).
 
-The next historical recipe removes the startup file. On the serial board,
-`CON UC1` then fails to install GLCD and leaves `GLCD?` on that LCD row:
+The next recipe removes the startup file. On the serial board, `CON UC1`
+then fails to install GLCD and leaves `GLCD?` on that LCD row:
 
 ```sh
 cp dist/starter.img nostart.img
 node tools/tecvol.mjs era nostart.img A STARTUP.CMD
 ```
 
-<!-- node tools/capture.mjs --card nostart.img --lcd "CON UC1" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card nostart.img --lcd
+     "CON UC1". Boot rows omitted. -->
 ```text
 A>CON UC1
 CON: TTY:
@@ -391,8 +488,8 @@ GLCD?
 ```
 
 A successful GLCD installation clears that recovery word, whether GLCD
-becomes the console or PICO9918 stays selected. The next historical card
-keeps the driver as `G.SVC` instead. `CON UC1` cannot find `GLCD.SVC`,
+becomes the console or PICO9918 stays selected. The next card keeps the
+driver as `G.SVC` instead. `CON UC1` cannot find `GLCD.SVC`,
 then typing `G.SVC` installs it and clears the word:
 
 ```sh
@@ -401,7 +498,8 @@ node tools/tecvol.mjs put gname.img A dist/files/GLCD.SVC G.SVC
 node tools/tecvol.mjs era gname.img A GLCD.SVC
 ```
 
-<!-- node tools/capture.mjs --card gname.img --board glcd --lcd "CON UC1" G.SVC CON -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card gname.img --board glcd
+     --lcd "CON UC1" G.SVC CON. Boot rows omitted. -->
 ```text
 A>CON UC1
 CON: TTY:

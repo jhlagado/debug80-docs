@@ -9,15 +9,15 @@ nav_group: "Reference"
 
 <!-- Mechanisms inspected in TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe,
      source only. The shell recipe follows the release README.
-     Release-card recheck: every citation below uses TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main). It was remapped from
-     31b6083: host/, web/src/, web/index.html and tools/lib/recipe.mjs are
-     unchanged there and at 402f30e; lines in README.md, tools/media.mjs,
-     web/build.mjs, test/starter.test.mjs, src/vol.asm, src/boot.asm,
-     src/cache.asm, src/cpm/bdoslog.asm, src/services.asm, src/cpm/ccpcmd.asm and
-     src/loader.asm were remapped or rechecked, and the card passage
-     follows the one card of its tools/media.mjs, web/build.mjs and
-     test/starter.test.mjs.
+     Shell-card recheck: every citation below uses TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main). It was remapped from
+     402f30e: web/src/, web/index.html, web/build.mjs, tools/lib/recipe.mjs,
+     tools/lib/cpmfs.mjs, tools/lib/container.mjs, src/vol.asm and
+     src/cpm/ccpcmd.asm:187-191 are unchanged there; lines in README.md,
+     tools/media.mjs, test/starter.test.mjs, host/machine.mjs, src/boot.asm,
+     src/cache.asm, src/cpm/bdoslog.asm, src/services.asm, src/loader.asm and
+     test/pico.test.mjs were remapped, and the startup rewrite follows
+     host/card.mjs:75-147 and its tests, test/pico.test.mjs:704-850.
      No new browser run, screen capture or physical result is claimed. -->
 
 The web page has controls for the emulated board, a serial terminal and a card
@@ -35,7 +35,7 @@ builds the page into web/dist. The build copies the ROM, its symbols and the
 starter card's recipe and files. `npm start` serves that directory with the
 installed esbuild development server, so Python is not needed
 (`web/build.mjs:16-45`, `package.json:15`, `package.json:22`,
-`README.md:106-114`):
+`README.md:114-122`):
 
 ```sh
 npm run web
@@ -52,7 +52,7 @@ PICO9918 at 80 columns. Width and display selections use the browser's local
 storage. A reload retains them when that storage is available. Otherwise
 they last only for the open page (`web/src/main.mjs:17-43`). Successful
 startup preparation selects that width explicitly after the ROM's raw
-40-column cold start (`host/card.mjs:104-117`, `src/pico.asm:19-68`).
+40-column cold start (`host/card.mjs:126-147`, `src/pico.asm:19-68`).
 
 The controls and their handlers are defined in `web/index.html:12-30`,
 `web/index.html:68-82` and `web/src/main.mjs:597-687`:
@@ -72,30 +72,29 @@ The controls and their handlers are defined in `web/index.html:12-30`,
 | "as text" | Selects text conversion for imports and individual file downloads, as with tecvol's `--text`. |
 | "Download" on a file | Downloads that file from its listed user area, with text conversion when selected. |
 
-Reset and power-on have different memory effects (`host/machine.mjs:578-587`,
+Reset and power-on have different memory effects (`host/machine.mjs:601-610`,
 `web/src/main.mjs:82-108`). Neither control flushes the ROM's pending writes
 before restarting. The safe-copy procedure below applies before either one.
 
 The page's card is the starter card, built from the same recipe, with
-fifteen files at recipe revision 11. Among them are TIMES.BAS, BAZA.COM and
-BAZA.RTL for [Chapter 3](03-build-a-basic-program.md) and these
-demonstrations:
+fifteen files at recipe revision 12. Among them are the shell, SHELL.SVC,
+which its STARTUP.CMD loads, TIMES.BAS, BAZA.COM and BAZA.RTL for
+[Chapter 3](03-build-a-basic-program.md) and these demonstrations:
 
 | File | Use |
 | --- | --- |
 | `DEMO.ASM` | The source of DEMO, with no include file. `TAS DEMO` builds DEMO.COM and `DEMO` then runs it, showing the LCD, the digits, the 8 × 8 LEDs and the PICO9918, as [Chapter 12](12-use-the-boards-devices.md) describes. `TED DEMO.ASM` opens the source |
-| `BOUNCE.BAS` | A BASIC sprite game for the PICO9918. `BAZA BOUNCE` compiles it and `BOUNCE` runs it. Tap W, A, S and D to steer and Q to quit |
-| `MON3.SVC` | Runs MON-3 programs. `MON3.SVC /E` gives `MON3>`, as [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session) describes |
+| `BOUNCE.BAS` | A BASIC sprite game for the PICO9918. `BAZA BOUNCE` compiles it and `BOUNCE` runs it. Tap W, A, S and D, or the arrow keys, to steer and Q to quit |
+| `MON3.SVC` | Runs MON-3 programs. `MON3.SVC` gives `MON3>`, as [Chapter 5](05-drives-and-user-areas.md#a-mon-3-session) describes |
 | `HELLO3.BIN` | A MON-3 program. At `MON3>`, `LOAD HELLO3.BIN` and `GO` write four lines on the LCD and count on the digits. With the matrix keyboard enabled, as on this page, Esc returns to `MON3>`. With the Matrix switch off, AD on the keypad does. `EXIT` returns to `A>` |
 | `HELLO3.ASM` | HELLO3's source. `TAS HELLO3 HELLO3.BIN` builds it |
-| `CHAIN.ASM` | A program written with several statements on a line. `TAS CHAIN` builds it and `CHAIN` prints `LINE 1` to `LINE 5`. Its lines are up to 67 columns wide, so `TED CHAIN.ASM` shows them whole with the "ROM" control at 80 columns or after `CON PICO 80` |
 
 The card does not hold DEMO.COM until you build it. BOUNCE needs the
-PICO9918 and draws through `call`, as Chapter 3 explains
-(`tools/media.mjs:213-273`, `test/starter.test.mjs:50-390`,
-`test/demo.test.mjs:1-4`, `README.md:153-178`). Building a starter fetches
+PICO9918 and draws through `CALL`, as Chapter 3 explains
+(`tools/media.mjs:200-253`, `test/starter.test.mjs:46-392`,
+`test/demo.test.mjs:1-4`, `README.md:156-185`). Building a starter fetches
 each recipe file and checks its byte count and SHA-256 before returning the
-image (`tools/media.mjs:213-275`, `tools/lib/recipe.mjs:14-44`,
+image (`tools/media.mjs:200-255`, `tools/lib/recipe.mjs:14-44`,
 `web/src/main.mjs:60-63`). The file list shows user area, name and size.
 It refreshes every five seconds and after the reset and power-cycle buttons
 (`web/src/main.mjs:573-586`, `web/src/main.mjs:675-688`).
@@ -190,8 +189,8 @@ preserves pending writes on the model card. Import itself does not flush them.
 Its later reset clears the block cache. TEC-OS rebuilds free-space maps from the
 changed card as drives are accessed. Unwritten cached changes, including changes
 on WORK with write-behind enabled, are lost at that reset
-(`src/boot.asm:77-77`, `src/boot.asm:148-151`, `src/boot.asm:234-251`,
-`src/cache.asm:564-570`, `src/cpm/bdoslog.asm:217-269`).
+(`src/boot.asm:77-77`, `src/boot.asm:149-152`, `src/boot.asm:235-252`,
+`src/cache.asm:623-629`, `src/cpm/bdoslog.asm:218-270`).
 [Chapter 19](19-cache-and-persistence.md) explains the failed-flush paths. A
 browser save or download after a successful flush is still needed to preserve
 the resulting image outside RAM.
@@ -246,10 +245,12 @@ for startup, and passes the volume's read-only flag to file access
 `host/card.mjs:58-73`). The page writes no display driver. The PICO9918
 console is in ROM and the graphics LCD requires GLCD.SVC on the card.
 
-The selected display determines the first line
-(`host/card.mjs:104-117`):
+The selected display determines the display line. When drive A holds
+SHELL.SVC the new text starts with a `SHELL.SVC` line and the display line
+follows it, since the ROM runs only the first line and the shell the rest.
+Without SHELL.SVC the display line comes first (`host/card.mjs:126-147`):
 
-| Display | First line |
+| Display | Display line |
 | --- | --- |
 | PICO9918 at 80 columns | `CON PICO 80` |
 | PICO9918 at 40 columns | `CON PICO 40` |
@@ -259,43 +260,47 @@ The selected display determines the first line
 No line for the other display is inserted. On the board with both displays,
 GLCD.SVC in startup cannot take the console while CRT is selected. Later
 `CON UC1` loads A:GLCD.SVC when needed
-(`src/services.asm:539-555`, `src/cpm/ccpcmd.asm:187-191`,
-`src/loader.asm:878-903`).
+(`src/services.asm:540-556`, `src/cpm/ccpcmd.asm:187-191`,
+`src/loader.asm:862-887`).
 
-Preparation removes recognised display pieces from the old startup text and
-keeps the remaining command pieces. Recognition ignores case and surrounding
+Preparation removes recognised display pieces, and any `SHELL.SVC` piece,
+from the old startup text and keeps the remaining command pieces. It splits
+lines as the shell does: `!` always separates and `&` separates after a
+space, a tab or another separator. Recognition ignores case and surrounding
 space. Driver names are PICO.SVC, PICO40.SVC, PICO32.SVC and GLCD.SVC, plus
 their .DRV forms. Width pieces are `CON PICO` or `CON CRT`, optionally with
 a colon after the device name, followed by spaces and decimal digits.
-Each recognised piece may also have a leading `:`. Removing old width
-pieces prevents them from overriding the selector
-(`host/card.mjs:11-16`, `host/card.mjs:81-117`).
+Each recognised piece may also have a leading `:`, from an older card's
+startup file. Removing old width pieces prevents them from overriding the
+selector (`host/card.mjs:11-16`, `host/card.mjs:75-124`).
 
-Removal preserves conditional-chain relationships by these rules
-(`host/card.mjs:75-102`):
+A kept piece keeps the separator before it. An older card's `:` before a
+kept piece becomes `&`, and a piece that now starts its line starts
+unconditionally (`host/card.mjs:102-124`, `test/pico.test.mjs:728-765`):
 
 | Original text | Result | Rule |
 | --- | --- | --- |
-| `DIR!:GLCD.SVC!MOUNT` | `DIR!:MOUNT` | The removed piece passes its conditional prefix to the following piece on the line. |
-| `DIR`, then `:GLCD.SVC`, then `:MOUNT` | `DIR`, then `:MOUNT` | A leading `:` on the next line remains when the removed piece also depended on the previous command. |
-| `GLCD.SVC!:MOUNT` | `MOUNT` | A condition that depended on the removed display piece is cleared. |
+| `X!:PICO.SVC!Y` | `X!Y` | The piece after the removed one keeps its own `!`. |
+| `X!PICO.SVC!:Y` | `X &Y` | An older card's `:` becomes `&`. |
+| `X &PICO.SVC &Y` | `X &Y` | A kept `&` piece stays conditional. |
+| `PICO.SVC`, then `:VOLS` | `VOLS` | A line's first piece runs whatever the last line returned, so its `:` goes. |
 
-Blank lines are dropped. The new text uses CRLF line endings and a final `^Z`.
+A line with nothing left is dropped. The new text uses CRLF line endings and a final `^Z`.
 Identical text causes no write so a protected file or volume does not itself
 cause an error when no rewrite is needed. Replacing STARTUP.CMD can reuse its
 existing directory entries and blocks. A full directory causes failure only when
 the replacement needs more entries than are available, including reusable
-entries. Data capacity is checked separately (`host/card.mjs:105-117`,
+entries. Data capacity is checked separately (`host/card.mjs:132-147`,
 `tools/lib/cpmfs.mjs:189-205`).
 
-For the starter's original `GLCD.SVC` line, GLCD preparation leaves the text
-unchanged. PICO preparation replaces it with the selected width line at
-80, 40 or 32 columns, followed by CRLF and `^Z`. The source assertion checks
-`CON PICO 80` followed by CRLF in the startup text before its `^Z` terminator
-(`test/pico.test.mjs:834-846`). That assertion is not a newly executed browser
-result. An old startup file with no width line now requires a rewrite even
-at 80. Its read-only attribute can prevent that write and produce the notice
-below (`test/pico.test.mjs:688-700`).
+For the starter's `SHELL.SVC` and `GLCD.SVC` lines, GLCD preparation leaves
+the text unchanged. PICO preparation keeps the `SHELL.SVC` line and replaces
+the GLCD line with the selected width line at 80, 40 or 32 columns, followed
+by CRLF and `^Z`. The source assertion checks `SHELL.SVC`, then `CON PICO 80`,
+each followed by CRLF (`test/pico.test.mjs:838-850`). That assertion is not
+a newly executed browser result. An old startup file with no width line now
+requires a rewrite even at 80. Its read-only attribute can prevent that write
+and produce the notice below (`test/pico.test.mjs:689-701`).
 
 ## Preparation notices and protected cards
 

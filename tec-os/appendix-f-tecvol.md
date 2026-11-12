@@ -16,9 +16,10 @@ nav_group: "Reference"
      TAS.COM Thoriumdbee66a SHA-256
      45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
      No example, artifact or application pin was refreshed.
-     Citations prefixed 402f30e: use TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main), which replaced the
-     31b6083 citations of the card's recipe.
+     Citations prefixed fdd9e5b: use TEC-OS
+     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), which replaced the
+     402f30e citations of the card's recipe; tools/tecvol.mjs and
+     tools/lib/ are unchanged between the two but for the starter files.
      Citations prefixed 755636b: and the release-card file list use TEC-OS
      755636b130241173c5c30a0be8fe6b79cf2fee37 (tools/media.mjs,
      test/starter.test.mjs). No release-card tecvol listing was captured. -->
@@ -196,9 +197,11 @@ the card. The other sizes likewise belong to those historical inputs. The
 release starter card's A holds nine files: these six, with the release
 TED.COM and SAMPLE.ASM, and TIMES.BAS, BAZA.COM and BAZA.RTL
 (`755636b:tools/media.mjs:197-211`, `755636b:test/starter.test.mjs:36-62`).
-At TEC-OS `402f30e` the one card's A holds fifteen: those nine with
-BOUNCE.BAS, DEMO.ASM, MON3.SVC, HELLO3.BIN, HELLO3.ASM and CHAIN.ASM
-(`402f30e:tools/media.mjs:213-251`, `402f30e:test/starter.test.mjs:50-85`).
+At TEC-OS `fdd9e5b` the one card's A holds fifteen: those nine with
+SHELL.SVC, BOUNCE.BAS, DEMO.ASM, MON3.SVC, HELLO3.BIN and HELLO3.ASM, and its
+STARTUP.CMD holds `SHELL.SVC` and `GLCD.SVC`
+(`fdd9e5b:tools/media.mjs:200-231`, `fdd9e5b:tools/lib/starter.mjs:10-22`,
+`fdd9e5b:test/starter.test.mjs:46-80`).
 
 ## put
 
@@ -324,9 +327,9 @@ are applied after the files are written (`tools/tecvol.mjs:92-101`,
 for New starter card.
 
 `npm run media` prepares `dist/starter.recipe.json` and its image. At TEC-OS
-`402f30e` that recipe is the only one: the web page builds the same card,
-and media removes a `dist/page.recipe.json` left by an older build
-(`402f30e:tools/media.mjs:253-273`, `294-297`). Chapter 27
+`fdd9e5b` that recipe, at revision 12, is the only one: the web page builds
+the same card, and media removes a `dist/page.recipe.json` left by an older
+build (`fdd9e5b:tools/media.mjs:233-253`, `274-277`). Chapter 27
 describes that preparation. The retained historical rebuild produced these
 matching hashes:
 

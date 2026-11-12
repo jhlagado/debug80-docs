@@ -123,7 +123,7 @@ at `0040h`, named `LATCHV`, and constructs later writes from that copy
 | ---: | ---: | --- | --- |
 | 0 | `01h` | SHADOW | Set at cold boot to remove the boot overlay and not cleared afterwards |
 | 1 | `02h` | PROTECT | Not set by TEC-OS. A program setting it protects `4000h–7FFFh` against writes |
-| 2 | `04h` | EXPAND | Selects EXPAND 1 in the `8000h–BFFFh` bank window for access to the block cache and history |
+| 2 | `04h` | EXPAND | Selects EXPAND 1 in the `8000h–BFFFh` bank window for access to the block cache, and at `a1023bd` the history |
 | 3 | `08h` | MAIN | Not set |
 | 7 | `80h` | CAPS | Toggled by matrix Caps Lock, with the Caps lamp |
 
@@ -139,8 +139,10 @@ A program writing the latch must also update `0040h`. Otherwise the next
 TEC-OS latch write starts from an obsolete copy. Cache and history accesses
 restore that recorded value after using EXPAND 1. They perform no stack
 operation while that bank is visible because it hides the resident stacks
-in EXPAND 0 (`src/history.asm:18-62`, `src/cache.asm:12-16`). Chapter 15
-explains the memory boundary.
+in EXPAND 0 (`src/history.asm:18-62`, `src/cache.asm:12-16`). At TEC-OS
+`fdd9e5b` the history is in the shell's own pages and only the cache uses
+EXPAND 1 (`fdd9e5b:docs/memory-map.md:70-83`). Chapter 15 explains the
+memory boundary.
 
 The model decodes bits 3–6 as a further bank field. The board documents
 show them unconnected to U9. TEC-OS uses only bit 2 among bits 2–6.
