@@ -7,24 +7,15 @@ nav_group: "Using the machine"
 
 # 8. Commands at startup
 
-<!-- Source mechanisms inspected by git text at TEC-OS
-     a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Source-only draft.
-     All nine retained captures, their recipes and the six shell fences
-     retain TEC-OS 78127ec. No capture or workflow was rerun.
-     Historical 80-column starts remain evidence of their original runs.
-     Current cold-default and host-preparation claims use the source above.
-     Shell update: at TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main)
-     the ROM runs one line of STARTUP.CMD and SHELL.SVC the rest
-     (docs/shell.md:115-133, src/cpm/ccpcmd.asm:805-875 for the ROM's line,
-     drivers/shellio.asm:14-176 for the shell's, tools/lib/starter.mjs:10-22
-     for the card's two lines). The card's file count is
-     tools/media.mjs:200-231 and test/starter.test.mjs:46-80. These
-     captures were made at fdd9e5b with the recipes shown, each card made
-     from dist/starter.img, boot rows kept where shown: TYPE STARTUP.CMD,
-     lines.img, bare.img, cut.img, long.img, semi.img, the pico SERVICES
-     CON run, w32.img on both boards, nostart.img and gname.img. The
-     spare.img run was repeated at fdd9e5b and gave the 78127ec output
-     below unchanged. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision. The ROM runs one line of
+     STARTUP.CMD and SHELL.SVC the rest (docs/shell.md:115-133,
+     src/cpm/ccpcmd.asm:805-875 for the ROM's line, drivers/shellio.asm:14-176
+     for the shell's, tools/lib/starter.mjs:10-22 for the card's two lines).
+     The card's file count is tools/media.mjs:200-231 and
+     test/starter.test.mjs:46-80. Every capture was made at fdd9e5b with the
+     command in its comment, each card made from dist/starter.img or by the
+     recipe shown, boot rows kept where shown. -->
 
 `A:STARTUP.CMD` holds commands you want to repeat after reset. TEC-OS runs
 them before accepting a command from the keyboard. You can use it to load the shell, select
@@ -221,7 +212,7 @@ B>
 Neither comment is echoed. A `$` in the ROM's line ends its displayed echo
 early while the command still runs in full. The shell echoes its lines
 whole. [Chapter 26](26-startup-inside-the-ccp.md) explains the ROM's echo
-mechanism and retains the complete historical example.
+mechanism with a complete example.
 
 ## Program exits and resets
 
@@ -266,7 +257,7 @@ printf 'USER 2\n' > startup.cmd
 node tools/tecvol.mjs put spare.img SPARE startup.cmd --text
 ```
 
-<!-- node tools/capture.mjs --card spare.img "MOUNT A: SPARE" @reset -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card spare.img "MOUNT A: SPARE" @reset -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -295,7 +286,7 @@ mounted, which can remove the tools needed for recovery.
 For example, suppose the GLCD driver is absent from the new A volume.
 A recognised reset that retains that assignment cannot load the driver.
 You need `MOUNT.COM` on a mounted drive to put the original volume back.
-In this historical recipe MOUNT exists only on SYSTEM, which is no longer
+In this recipe MOUNT exists only on SYSTEM, which is no longer
 mounted. A power loss clears the retained selection so the next boot uses
 the header's SYSTEM assignment again. Merely resetting repeats the
 retained assignment while it remains valid.
@@ -319,7 +310,7 @@ failure still allows the next line. Typing `GLCD.SVC` at the prompt has
 a different result on a board with both displays: it can install the
 service while leaving PICO9918 selected, as Chapter 5 demonstrated.
 
-The historical capture configurations produced this table:
+The capture configurations produce this table:
 
 | Board | `GLCD.SVC` | Console at the first prompt |
 | --- | --- | --- |

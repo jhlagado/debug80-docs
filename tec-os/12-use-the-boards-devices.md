@@ -7,19 +7,14 @@ nav_group: "Writing programs"
 
 # 12. Use the board's devices
 
-<!-- Checked against TEC-OS 78127ec. The programs were assembled by the starter
-     card's `TAS.COM`, from Thorium dbee66a, SHA-256
-     `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
-     `DEMO` was assembled on the PC by ATOM from the repository's `atom-z80`
-     0.3.7. -->
-<!-- Source-only mechanism check: a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     Receiver adoption selected at book 9ba1f59, P3 proposal 18 / 43d5f328.
-     All historical listings, recipes and captures retain their actual pins.
-     Opening workflow receipt 4b5b5a50 does not repin these hardware examples.
-     Compact-style assembly proof remains separate. No new program, build,
-     import, test, capture or board result is claimed.
-     The DEMO card passage cites TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) with a fdd9e5b: prefix. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision. The programs were
+     assembled on the model by the starter card's TAS.COM, Thorium 3d1e2c0
+     (e648a1d0…), and DEMO from the card's DEMO.ASM. Every capture was made
+     at fdd9e5b with the command in its comment, on hw.img made as shown
+     or on the starter card. BOARD's message names TNCOUNT, 17 at
+     fdd9e5b. The 60e0768 PUTAT cost is a historical measurement, marked
+     where it appears. -->
 
 The BDOS handles files and console text. TEC-OS's numbered ROM calls also let
 your program light the digits, sound the speaker, read the clock or write the
@@ -99,8 +94,8 @@ call rather than depending on their previous contents. Hardware calls preserve
 IX, IY and the alternate registers. Appendix B gives each complete register
 contract.
 
-A number from 16 upwards returns status 1 with B, DE and HL unchanged. The
-hardware numbers identify these routines:
+A number from `TNCOUNT`, 17, upwards returns status 1 with B, DE and HL
+unchanged. The hardware numbers identify these routines:
 
 | Number | `abi.inc` | Does |
 | ---: | --- | --- |
@@ -120,7 +115,8 @@ table. Numbers 13 and 14 find or enumerate named records in the registry
 described in Chapter 14. Those registry calls have their own result convention,
 including a generation in A, so their callers test carry rather than applying
 the hardware status rule. Number 15 returns the ROM font and was added in ABI
-5.1.
+5.1. Number 16, `TNSHELL`, sets the shell hook that Chapter 21 describes
+(`src/abi.inc:205-233`).
 
 The hardware services use the caller's stack. PUTAT has the largest bound: 22
 bytes below the return address supplied by CALL. That fits the inherited 30-byte
@@ -140,7 +136,7 @@ CHKHW compares four bytes: `TNA` followed by major version 5. It returns with Z
 set only when all four match. On failure the examples branch to NOTHW, which
 prints a message through BDOS function 9 and ends without using a hardware port.
 
-The examples share this complete historical `HWLIB.ASM`. It contains both code
+The examples share this complete `HWLIB.ASM`. It contains both code
 and data so each program includes it after its own entry code. SAY prints a
 dollar-terminated string. A CALL to SAY returns to its caller while a top-level
 jump to it prints and ends through the inherited return word. LABHEX prints a
@@ -210,10 +206,8 @@ TAG:	DB	"TNA",5
 NOTMSG:	DB	"not TEC-OS with ABI 5",13,10,"$"
 ```
 
-The programs and output below are retained historical material from `78127ec`,
-with the TAS/ATOM identities in the source comment. Their original assembly
-syntax remains unchanged. These captures describe that build rather than a new
-run of the inspected source.
+The programs below assemble with the starter card's TAS, and their captures
+were made at TEC-OS `fdd9e5b`.
 
 ## The board's report
 
@@ -233,7 +227,8 @@ optional device. B's defined bits are:
 
 D holds the ROM version's major and E its minor so `0001h` means version 0.1
 rather than ABI 5.1. BOARD prints the report in hexadecimal and then calls
-number 16 to demonstrate the out-of-range status:
+`TNCOUNT`, the first number past the last service, to demonstrate the
+out-of-range status:
 
 ```asm
 ; BOARD: print what INFO reports, then what a bad number returns.
@@ -282,15 +277,15 @@ MSGVER:	DB	13,10,"Version DE = $"
 MSGCOL:	DB	13,10,"Columns  L = $"
 MSGROW:	DB	13,10,"Rows     H = $"
 ; The last line: the status, then its carry.
-MSGBAD:	DB	13,10,"Number 16: status $"
+MSGBAD:	DB	13,10,"Number 17: status $"
 MSGC:	DB	", carry set",13,10,"$"
 MSGNC:	DB	", carry clear",13,10,"$"
 %INCLUDE "HWLIB.ASM"
 ```
 
-These retained host commands placed ABI.INC, HWLIB.ASM and BOARD.ASM beside each
-other on a copy of the historical starter card. TAS uses the included files on
-the card when it assembles BOARD:
+These host commands place ABI.INC, HWLIB.ASM and BOARD.ASM beside each other
+on a copy of the starter card. TAS uses the included files on the card when it
+assembles BOARD:
 
 ```sh
 cp dist/starter.img hw.img
@@ -301,11 +296,12 @@ node tools/tecvol.mjs put hw.img B board.asm --text
 
 Each later example's source goes on `hw.img` in the same way. `TAS BOARD` reads
 BOARD.ASM on the current drive and writes BOARD.COM beside it. TAS.COM is on A
-so the program search described in Chapter 5 finds it from B. In this historical
+so the program search described in Chapter 5 finds it from B. In the
 serial-model configuration, the clock set INFO's bit 3 and the console size was
 zero:
 
-<!-- node tools/capture.mjs --card hw.img B: "TAS BOARD" BOARD -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img B: "TAS BOARD" BOARD.
+     Boot rows omitted. -->
 ```text
 A>B:
 B>TAS BOARD
@@ -316,18 +312,19 @@ Devices  B = 08
 Version DE = 0001
 Columns  L = 00
 Rows     H = 00
-Number 16: status 01, carry set
+Number 17: status 01, carry set
 
 B>
 ```
 
-The historical `--board pico` model configuration includes the PICO9918,
-graphics LCD and matrix keyboard. Cold boot selected the PICO console. Its
-device bits were `0Bh` and its size was `50h` by `18h` (80 by 24). The startup
+The `--board pico` model configuration includes the PICO9918, graphics LCD and
+matrix keyboard. Cold boot selected the PICO console at 40 columns. Its device
+bits were `0Bh` and its size was `28h` by `18h` (40 by 24). The startup
 GLCD.SVC line installed nothing while PICO was the console. This is a host-model
 run, not a browser capture:
 
-<!-- node tools/capture.mjs --card hw.img --board pico B: "TAS BOARD" BOARD -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img --board pico B: "TAS BOARD"
+     BOARD. Boot rows omitted. -->
 ```text
 A>B:
 B>TAS BOARD
@@ -336,16 +333,16 @@ BOARD.COM written
 B>BOARD
 Devices  B = 0B
 Version DE = 0001
-Columns  L = 50
+Columns  L = 28
 Rows     H = 18
-Number 16: status 01, carry set
+Number 17: status 01, carry set
 
 B>
 ```
 
-In the historical GLCD-only configuration, GLCD.SVC installed and became the
-console. The same report gave device bits `0Dh`, columns `15h` and rows `08h`:
-21 by 8.
+In the GLCD-only configuration, `--board glcd`, GLCD.SVC installed and became
+the console. The same report gave device bits `0Dh`, columns `15h` and rows
+`08h`: 21 by 8.
 
 A screen-layout program uses the size INFO returns. With a serial console, both
 values are zero because TEC-OS cannot read the terminal's dimensions. The
@@ -384,9 +381,10 @@ DONE:	DB	"Written and beeped",13,10,"$"
 %INCLUDE "HWLIB.ASM"
 ```
 
-The retained run requested the character LCD's rows with `--lcd`:
+This run requested the character LCD's rows with `--lcd`:
 
-<!-- node tools/capture.mjs --card hw.img --lcd B: "TAS LCDMSG" LCDMSG -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img --lcd B: "TAS LCDMSG"
+     LCDMSG. Boot rows omitted. -->
 ```text
 A>B:
 B>TAS LCDMSG
@@ -401,7 +399,7 @@ B>
 The same run's LCD text showed the message on its second row. The other rows
 retained cold-boot text:
 
-<!-- the same run's --lcd output -->
+<!-- TEC-OS fdd9e5b: the same run's --lcd output -->
 ```text
 TEC-OS 0.1  TEC-1G
 Hello on the LCD
@@ -582,17 +580,18 @@ TIME:	DS	7
 ```
 
 PLAN contains field-offset/separator pairs. NOW uses each offset to select a BCD
-byte, prints it through HEX and then prints its separator. The historical
-TAS/run capture was:
+byte, prints it through HEX and then prints its separator. The TAS and run
+capture was:
 
-<!-- node tools/capture.mjs --card hw.img B: "TAS NOW" NOW -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img B: "TAS NOW" NOW. Boot
+     rows omitted. -->
 ```text
 A>B:
 B>TAS NOW
 NOW.COM written
 
 B>NOW
-2026-11-01 12:00:08 07
+2026-11-01 12:00:09 07
 
 B>
 ```
@@ -676,10 +675,11 @@ STICK:	DS	1		; JOY's byte
 %INCLUDE "HWLIB.ASM"
 ```
 
-The retained `--board pico` configuration has a matrix keyboard. Its `@key`
-input pressed `x`, which is in row 7:
+The `--board pico` configuration has a matrix keyboard. Its `@key` input
+pressed `x`, which is in row 7:
 
-<!-- node tools/capture.mjs --card hw.img --board pico B: "TAS ROWS" "@start ROWS" "@key x" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img --board pico B: "TAS ROWS"
+     "@start ROWS" "@key x". Boot rows omitted. -->
 ```text
 A>B:
 B>TAS ROWS
@@ -691,9 +691,10 @@ B>ROWS
 B>
 ```
 
-<!-- the same run with "@key 5": node tools/capture.mjs --card hw.img --board pico B: "TAS ROWS" "@start ROWS" "@key 5" -->
+<!-- TEC-OS fdd9e5b, the same run with "@key 5": node tools/capture.mjs --card hw.img
+     --board pico B: "TAS ROWS" "@start ROWS" "@key 5" -->
 JOY reads port `FEh` with address line 11 low. KEYS selects row 3 in the same
-way so those inputs share wiring. In the retained alternate `5` run, the row was
+way so those inputs share wiring. In the alternate `5` run, the row was
 `00 00 00 01 00 00 00 00  JOY 01`. A row-3 matrix key can therefore appear as a
 joystick bit. A joystick line also appears in row 3, including at the console.
 On the model, bit 0 types `5`. Appendix B gives the diagnostic names for the
@@ -792,32 +793,35 @@ PUTAT sends bytes directly to the display routine. Both the ROM PICO console and
 GLCD.SVC draw `80h–FFh` as reverse images of `00h–7Fh`. The ordinary
 video-console path drops those high bytes, as Chapter 17 explains. Serial
 output transmits all eight bits. This makes PUTAT a direct
-route to reverse characters without an escape sequence. The retained PICO text
-capture shows both strings alike because its decoder does not report reverse
+route to reverse characters without an escape sequence. The PICO text capture
+shows both strings alike because its decoder does not report reverse
 presentation:
 
-<!-- node tools/capture.mjs --card hw.img --board pico --screen B: "TAS PLACE" PLACE -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img --board pico --screen B:
+     "TAS PLACE" PLACE, the screen text. -->
 ```text
 
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
 B: WORK
 
+A>SHELL.SVC
+
 A>GLCD.SVC
 
 A>B:
-B>TAS PLACE
-PLACE.COM written
-                              TEC-OS
-B>PLACE                       TEC-OS
+B>TAS PLACE                   TEC-OS
+PLACE.COM written             TEC-OS
+
+B>PLACE
 PUTAT status 00
 
 B>
 ```
 
-In this historical 80-column run the cursor remained at the start of row 12.
-PLACE's status line and the next prompt appeared beneath the positioned text.
-The second copy shared row 11 with the command line.
+In this 40-column run the two copies went to rows 10 and 11 at column 30,
+over the ends of the earlier command lines there. The cursor did not move, so
+PLACE's status line and the next prompt appeared below them.
 
 On the 8-row graphics LCD, PLACE's row 10 is below the display so it writes
 nothing and reports status 0. On serial it reports status 2. It also reports 2
@@ -845,27 +849,21 @@ counter onto the digits, scans the LED rows, moves the ball when graphics are
 active and polls for a key. On exit it sends dark digit/LED patterns and
 releases an active claim.
 
-The historical starter card did not include DEMO. The web-page recipe did
-include it on A so DEMO ran there without adding it to that card. At `a1023bd`
-its source was `test/programs/demo.asm`, and media generation exported
-DEMO.COM to `dist/files` and included it in the page recipe. At TEC-OS
-`fdd9e5b` the source is `programs/DEMO.ASM` and the one card, which the web
-page also runs, holds that source in place of DEMO.COM. `TAS DEMO` builds
+The source is `programs/DEMO.ASM`, and the one card, which the web page
+also runs, holds that source in place of DEMO.COM. Release 1 instead put
+DEMO.COM on the web page's card alone. `TAS DEMO` builds
 DEMO.COM on the card, `DEMO` then runs it and `TED DEMO.ASM` opens the source
-(`fdd9e5b:tools/media.mjs:220-223`, `fdd9e5b:tools/media.mjs:269-270`,
-`fdd9e5b:test/demo.test.mjs:1-4`, `fdd9e5b:test/starter.test.mjs:190-215`).
-The retained explicit host route used ATOM and
-added the program to B of `hw.img`. At TEC-OS `fdd9e5b` atom-z80 is no longer a dependency of the repository,
-so `npx atom` in these recipes needs atom-z80 0.3.7 installed by hand:
+(`tools/media.mjs:220-223`, `tools/media.mjs:269-270`,
+`test/demo.test.mjs:1-4`, `test/starter.test.mjs:190-215`). This run builds
+and runs it on the starter card:
 
-```sh
-npx atom test/programs/demo.asm demo.com
-node tools/tecvol.mjs put hw.img B demo.com
-```
-
-<!-- node tools/capture.mjs --card hw.img --board pico --screen "@start B:DEMO" "@key x" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "TAS DEMO"
+     "@start DEMO" "@key x". Boot rows omitted. -->
 ```text
-A>B:DEMO
+A>TAS DEMO
+DEMO.COM written
+
+A>DEMO
 
 TEC-OS hardware services demo
 PICO9918: yes   GLCD: no   clock: yes
@@ -883,7 +881,7 @@ transcript contains the console bytes sent during the run. The PICO showed its
 initial lines before the claim. The same run's text-screen dump after release
 was:
 
-<!-- the same run's --screen output -->
+<!-- TEC-OS fdd9e5b: the same run's --screen output -->
 ```text
 
 Demo stopped.

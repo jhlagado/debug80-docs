@@ -7,18 +7,11 @@ nav_group: "Reference"
 
 # Appendix I. The web page
 
-<!-- Mechanisms inspected in TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe,
-     source only. The shell recipe follows the release README.
-     Shell-card recheck: every citation below uses TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main). It was remapped from
-     402f30e: web/src/, web/index.html, web/build.mjs, tools/lib/recipe.mjs,
-     tools/lib/cpmfs.mjs, tools/lib/container.mjs, src/vol.asm and
-     src/cpm/ccpcmd.asm:187-191 are unchanged there; lines in README.md,
-     tools/media.mjs, test/starter.test.mjs, host/machine.mjs, src/boot.asm,
-     src/cache.asm, src/cpm/bdoslog.asm, src/services.asm, src/loader.asm and
-     test/pico.test.mjs were remapped, and the startup rewrite follows
-     host/card.mjs:75-147 and its tests, test/pico.test.mjs:704-850.
-     No new browser run, screen capture or physical result is claimed. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Every source range below uses that revision, source reading. The shell
+     recipe follows the README there, and the startup rewrite follows
+     host/card.mjs:75-147 and its tests, test/pico.test.mjs:704-850. No
+     browser run, screen capture or physical result is claimed. -->
 
 The web page has controls for the emulated board, a serial terminal and a card
 you can save or exchange with the PC. This appendix describes those controls,

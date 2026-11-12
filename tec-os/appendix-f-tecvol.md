@@ -7,22 +7,12 @@ nav_group: "Reference"
 
 # Appendix F. `tecvol`
 
-<!-- Source mechanisms inspected at TEC-OS
-     a1023bd0cbb4879c37ae61e6f670b442e1e60abe. No product import or execution.
-     All25 retained fences and the capture command are historical78127ec
-     results/recipes, explicitly rerun in Book45:80. Historical raw binary
-     inputs in dist/files: TED.COM Thorium128edb7 SHA-256
-     2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;
-     TAS.COM Thoriumdbee66a SHA-256
-     45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     No example, artifact or application pin was refreshed.
-     Citations prefixed fdd9e5b: use TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), which replaced the
-     402f30e citations of the card's recipe; tools/tecvol.mjs and
-     tools/lib/ are unchanged between the two but for the starter files.
-     Citations prefixed 755636b: and the release-card file list use TEC-OS
-     755636b130241173c5c30a0be8fe6b79cf2fee37 (tools/media.mjs,
-     test/starter.test.mjs). No release-card tecvol listing was captured. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision. Every recipe was run at
+     fdd9e5b in a clone of that revision with its npm run media output, and
+     the outputs below are those runs'; the TEC-OS capture was made with the
+     command in its comment. Citations prefixed 755636b: are the release
+     card's. -->
 
 `tecvol` edits TEC-OS card images on a PC. It creates volumes, inspects their
 files and directories, copies files and writes an image to a physical device.
@@ -61,15 +51,15 @@ There is no CCP program-search fallback in a host file operation.
 `--user N` takes one or two decimal digits with a value from 0 to 15.
 Without it `put`, `get` and `era` use area 0 while `dir` lists all areas.
 A malformed user value stops before the image is opened
-(`tools/tecvol.mjs:47-51`, `tools/tecvol.mjs:107-107`,
+(`tools/tecvol.mjs:47-51`, `tools/tecvol.mjs:107`,
 `tools/tecvol.mjs:142-174`).
 
 Successful commands exit with status 0. A usage error prints its reason and
 the usage line and exits with status 2. An absent file in `era` is a usage
 error too. Other failures print `tecvol: ` and the reason and exit with
 status 1. `verify` also returns 1 for reported directory problems
-(`tools/tecvol.mjs:29-33`, `tools/tecvol.mjs:139-139`,
-`tools/tecvol.mjs:173-173`, `tools/tecvol.mjs:201-206`).
+(`tools/tecvol.mjs:29-33`, `tools/tecvol.mjs:139`,
+`tools/tecvol.mjs:173`, `tools/tecvol.mjs:201-206`).
 
 Image replacement validates the changed bytes in memory, writes a temporary
 file beside the image and renames that file over it. A failure before the
@@ -83,11 +73,10 @@ that some changes were dropped. Reset after returning a PC-changed card because
 TEC-OS's cached blocks and allocation maps otherwise describe its old contents.
 Chapter 6 gives the copy-first procedure.
 
-The examples below are retained historical runs with prepared `dist/` inputs
+The examples below are runs with prepared `dist/` inputs
 and an existing `build/` directory. Follow their order when constructing the
 worked card. `build/my.img` is this appendix's separate fixture, not Chapter 5's
-four-volume `my.img`. Historical figures and hashes are not current-build
-constants.
+four-volume `my.img`. Its figures and hashes belong to this build's media and change with it.
 
 ## create
 
@@ -117,7 +106,7 @@ format 1.1. Otherwise creation uses 1.0. One volume must be assigned to A.
 Each payload is filled with `E5h`, producing an empty CP/M directory and data
 area (`tools/lib/container.mjs:79-125`).
 
-This historical fixture has SYSTEM on A, written-behind WORK on B and a
+This fixture has SYSTEM on A, written-behind WORK on B and a
 read-only ARCHIVE on no drive:
 
 ```sh
@@ -153,13 +142,13 @@ At the inspected source, directory faults are printed as `problem:` lines.
 If duplicate allocations or a block beyond DSM prevent a free-space count,
 the volume line says `free unknown` and later volumes are still listed.
 These are source-derived reporting rules, not new output added to the
-historical healthy-card example (`tools/tecvol.mjs:119-138`,
+healthy-card example (`tools/tecvol.mjs:119-138`,
 `tools/lib/cpmfs.mjs:78-89`, `tools/lib/cpmfs.mjs:241-267`).
 
 `verify IMAGE` prints the same report and returns status 1 if any directory
 problem was found. `info` does not turn those reported problems alone into
 a failing status. A malformed container fails either command before its report.
-This historical header-check example gives status 1:
+This header-check example gives status 1, after `dd`'s own report on stderr:
 
 ```sh
 cp dist/starter.img build/badsum.img
@@ -176,32 +165,36 @@ tecvol: header checksum mismatch
 `dir IMAGE [DRIVE]` lists A by default. Each line gives user area, filename and
 record-rounded byte length. `R/O` and `SYS` mark file attributes
 (`tools/tecvol.mjs:142-149`). CP/M records are 128 bytes so the listing includes
-padding rather than a PC file's original byte length. The historical starter's A
-directory was:
+padding rather than a PC file's original byte length. The starter card's A
+directory is:
 
 ```sh
 node tools/tecvol.mjs dir dist/starter.img A
 ```
 
 ```text
+ 0 BAZA.COM        13184
+ 0 BAZA.RTL        12032
+ 0 BOUNCE.BAS       5376
+ 0 DEMO.ASM        15360
  0 GLCD.SVC          896
+ 0 HELLO3.ASM       2176
+ 0 HELLO3.BIN        256
+ 0 MON3.SVC         5120
  0 MOUNT.COM         768
- 0 SAMPLE.ASM       4480
+ 0 SAMPLE.ASM       4608
+ 0 SHELL.SVC        2304
  0 STARTUP.CMD       128
  0 TAS.COM         10368
- 0 TED.COM         12032
+ 0 TED.COM         12416
+ 0 TIMES.BAS         640
 ```
 
-MOUNT was 671 bytes in `dist/files` and occupies six records, 768 bytes, on
-the card. The other sizes likewise belong to those historical inputs. The
-release starter card's A holds nine files: these six, with the release
-TED.COM and SAMPLE.ASM, and TIMES.BAS, BAZA.COM and BAZA.RTL
-(`755636b:tools/media.mjs:197-211`, `755636b:test/starter.test.mjs:36-62`).
-At TEC-OS `fdd9e5b` the one card's A holds fifteen: those nine with
-SHELL.SVC, BOUNCE.BAS, DEMO.ASM, MON3.SVC, HELLO3.BIN and HELLO3.ASM, and its
-STARTUP.CMD holds `SHELL.SVC` and `GLCD.SVC`
-(`fdd9e5b:tools/media.mjs:200-231`, `fdd9e5b:tools/lib/starter.mjs:10-22`,
-`fdd9e5b:test/starter.test.mjs:46-80`).
+MOUNT is 671 bytes in `dist/files` and occupies six records, 768 bytes, on
+the card. The fifteen files are those of `tools/media.mjs:200-231` and
+`tools/lib/starter.mjs:10-22`, and STARTUP.CMD holds `SHELL.SVC` and
+`GLCD.SVC` (`test/starter.test.mjs:46-80`). The release starter card at
+`755636b` held nine (`755636b:tools/media.mjs:197-211`).
 
 ## put
 
@@ -219,7 +212,7 @@ Binary files are padded with zero bytes to complete their final record. `--text`
 converts LF and CR LF endings to CR LF, appends `^Z` and pads with `^Z`. `--ro`
 and `--sys` set the two file attributes and `--user N` selects the destination
 area (`tools/lib/cpmfs.mjs:180-188`, `tools/lib/cpmfs.mjs:216-218`). These
-retained commands make a text file and copy the prepared binaries:
+commands make a text file and copy the prepared binaries:
 
 ```sh
 printf 'hello\nworld\n' > build/hello.txt
@@ -330,8 +323,7 @@ for New starter card.
 `fdd9e5b` that recipe, at revision 12, is the only one: the web page builds
 the same card, and media removes a `dist/page.recipe.json` left by an older
 build (`fdd9e5b:tools/media.mjs:233-253`, `274-277`). Chapter 27
-describes that preparation. The retained historical rebuild produced these
-matching hashes:
+describes that preparation. The rebuild produced these matching hashes:
 
 ```sh
 node tools/tecvol.mjs recipe dist/starter.recipe.json build/fresh.img
@@ -339,14 +331,13 @@ sha256sum build/fresh.img dist/starter.img
 ```
 
 ```text
-22881c466664eedeed4c7482fba6e9a798b77d83d2c6666d9a2a2e8b05286f70  build/fresh.img
-22881c466664eedeed4c7482fba6e9a798b77d83d2c6666d9a2a2e8b05286f70  dist/starter.img
+d16ee43c126c7739f9515eba888a42cfb796c6f8243bdb24ee178f83cc1cd07b  build/fresh.img
+d16ee43c126c7739f9515eba888a42cfb796c6f8243bdb24ee178f83cc1cd07b  dist/starter.img
 ```
 
 The image construction uses fixed placement, fill bytes and file contents.
 With the same recipe and matching inputs its bytes do not depend on the PC's
-clock. The printed hashes identify this historical recipe's result, not the
-future opening card.
+clock. The printed hashes identify this recipe's result at `fdd9e5b`.
 
 ## install
 
@@ -371,8 +362,8 @@ transfer procedure.
 
 ## The worked card
 
-Following the historical commands from create through era leaves HELLO and
-MOUNT on A. The final directory was:
+Following the commands from create through era leaves HELLO and MOUNT on A.
+The final directory is:
 
 ```sh
 node tools/tecvol.mjs dir build/my.img A
@@ -383,9 +374,9 @@ node tools/tecvol.mjs dir build/my.img A
  0 MOUNT.COM         768
 ```
 
-The same card's retained TEC-OS capture reads the text and lists all volumes:
+The same card's TEC-OS capture reads the text and lists all volumes:
 
-<!-- node tools/capture.mjs --card build/my.img DIR "TYPE HELLO.TXT" MOUNT -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/my.img DIR "TYPE HELLO.TXT" MOUNT -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     

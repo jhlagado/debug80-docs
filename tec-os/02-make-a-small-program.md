@@ -7,36 +7,25 @@ nav_group: "Using the machine"
 
 # 2. Make a small program
 
-<!-- Source mechanisms inspected at TEC-OS
-     a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     Accepted workflow: Origo attempt02 e77c7ef0, Machines 4 and 5,
-     phases 043–096, tested source 8b8664a.
-     Scoped actual-result receipt: Origo 4b5b5a50,
-     studies/p3-tec-os/reviews/book-opening-workflows.md.
-     ROM SHA-256 fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d.
-     TED.COM Thorium 128edb7, TAS.COM Thorium dbee66a.
-     Exact hashes, source proofs and excerpt boundaries: 02-pass-record.md.
-     Whole batch FAILED later. This covered host-model workflow qualifies no
-     advanced service, physical-board, browser, audio or publication result.
-     Historical HELLO evidence is not transferred into this BANNER session.
-     Release card: TED.COM Thorium 967678c (SHA-256 150a19bd…, TEC-OS
-     755636b test/inputs.json), whose language table builds an .ASM with
-     TAS NAME.ASM as before (Thorium README at 967678c). The captures below
-     keep TED 128edb7 and were not rerun with it. At TEC-OS 31b6083 the
-     card's TED.COM is Thorium b69d544 (4f622390…), with the same keys.
-     At TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125 (main) the card's
-     TAS.COM is Thorium 3d1e2c0 (e648a1d0…, 10,343 bytes; test/inputs.json:4-13,
-     docs/compatibility.md:199). The BANNER captures keep TAS dbee66a and
-     were not rerun with it. "Several statements on a line" follows Thorium
-     3d1e2c0 docs/language.md:55-84 and :124, the CHAIN.ASM listing is
-     Thorium 3d1e2c0 demo/chain/chain.asm lines 9-19, and CHAIN's build and
-     run are TEC-OS 402f30e test/starter.test.mjs:337-390, when the card
-     held it. At TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main)
-     the card has no CHAIN.ASM (tools/media.mjs:200-231, Origo KD-300),
-     TAS.COM is still Thorium 3d1e2c0 (test/inputs.json:4-13,
-     docs/compatibility.md:223 and :226) and TED's build line runs under SHELL.SVC,
-     which the card's STARTUP.CMD loads (docs/shell.md:42-44,
-     drivers/shell.asm:174-232). -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+     ROM SHA-256 43ac0f18…, with the starter card's TED.COM, Thorium
+     b69d544 (4f622390…), and TAS.COM, Thorium 3d1e2c0 (e648a1d0…,
+     10,343 bytes; test/inputs.json:4-13, docs/compatibility.md:223 and
+     :226). The console excerpts are captures at fdd9e5b on the PICO9918
+     board at 40 columns, on starter-card copies with B:BANNER.ASM put as
+     each stage's source: node tools/capture.mjs --card IMG --board pico
+     "@start A:TED B:BANNER.ASM" then ^T B or ^T R typed as their bytes,
+     the console text from A>A:TAS on. The final excerpt is node
+     tools/capture.mjs --card IMG "A:TAS B:BANNER.ASM" ^C B:BANNER ^C on
+     the serial console, whose text the PICO9918 shows the same. The
+     editing keys and status positions follow TED's own screens and were
+     not each recaptured. TED's build line runs under SHELL.SVC, which the
+     card's STARTUP.CMD loads (docs/shell.md:42-44,
+     drivers/shell.asm:174-232). "Several statements on a line" follows
+     Thorium 3d1e2c0 docs/language.md:55-84 and :124, and the CHAIN.ASM
+     listing Thorium 3d1e2c0 demo/chain/chain.asm lines 9-19; CHAIN's build
+     and run are TEC-OS 402f30e test/starter.test.mjs:337-390, when the
+     card held it. -->
 
 SAMPLE came with its source already on the card. BANNER begins as text you
 enter yourself. It prints a greeting, which you can change and build again
@@ -63,9 +52,7 @@ including the blank lines and the final line. Use the two leading spaces on
 the instruction lines and retain the comments beginning with `;`. On this
 40-column console every source line fits across the screen.
 
-<!-- attempt02 packet/BANNER.initial.asm, complete source.
-     CRLF line endings rendered as LF in this fence; all other bytes retained.
-     Matrix entry is recorded one line at a time in phases 045–057. -->
+<!-- The source the captures below assemble, put on B with tecvol put --text. -->
 ```asm
   org $0100
 
@@ -102,9 +89,9 @@ following console excerpt is from that rejected build before TED redraws
 the editor. The initial screen-clear controls, leading blank line and editor
 redraw after the last line are omitted:
 
-<!-- attempt02 stage/results/banner-rejected-console.bin.
-     Contiguous console text from the first A>A:TAS through A>A:TED.
-     CRLF rendered as lines. The long diagnostic wraps on the 40-column screen. -->
+<!-- TEC-OS fdd9e5b: the source above with BROKEN as line 14, ^T B.
+     Console text from A>A:TAS through A>A:TED. The long diagnostic wraps
+     on the 40-column screen. -->
 ```text
 A>A:TAS B:BANNER.ASM
 BANNER.ASM:14:1: unknown instruction or directive
@@ -144,9 +131,8 @@ again with the source.
 complete console text from the initial run, with the initial clear-screen
 controls and leading blank line omitted. The editor has not yet redrawn:
 
-<!-- attempt02 stage/results/BANNER-initial-run-console.bin.
-     All text after the initial clear-screen controls and leading CRLF.
-     Final Press a key has no following newline in the raw artifact. -->
+<!-- TEC-OS fdd9e5b: the source above, ^T R. Console text from A>A:TAS
+     on; Press a key has no following newline. -->
 ```text
 A>A:TAS B:BANNER.ASM
 BANNER.COM written
@@ -258,7 +244,7 @@ Right presses move to `L13 C27`, just before the quote after TEC-OS. Typing
 `!` inserts it inside the quoted greeting. The cursor moves to `L13 C28`
 and the `*` returns. Only this line changes:
 
-<!-- attempt02 packet/BANNER.edited.asm, final source line only. -->
+<!-- The edited source's MSG line. -->
 ```asm
 MSG: db "Hello from TEC-OS!",13,10,"$"
 ```
@@ -269,9 +255,7 @@ MSG: db "Hello from TEC-OS!",13,10,"$"
 greeting. As before, the initial clear-screen controls and leading blank
 line are omitted:
 
-<!-- attempt02 stage/results/BANNER-edited-run-console.bin.
-     All text after the initial clear-screen controls and leading CRLF.
-     This is not combined with the initial run. -->
+<!-- TEC-OS fdd9e5b: the edited source, ^T R, a separate run. -->
 ```text
 A>A:TAS B:BANNER.ASM
 BANNER.COM written
@@ -295,19 +279,18 @@ or removal. Wait for its successful return to the prompt. A write-failure
 message has the same consequence as in the earlier save: the prompt alone
 does not prove the file was preserved.
 
-In the reviewed host-model session, the preserved card was reopened on a
-fresh machine with new RAM. `A:TED B:BANNER.ASM` reopened the edited source,
-including its exclamation mark. The text therefore came from the saved
-file, not from the previous editor's memory. Twelve Down presses reached
-its MSG line at `L13 C1`.
+On a fresh machine with new RAM, the saved card reopens the edited source:
+`A:TED B:BANNER.ASM` shows its exclamation mark. The text therefore comes
+from the saved file, not from the previous editor's memory. Twelve Down
+presses reach its MSG line at `L13 C1`.
 
 After `^Q` and a successful empty-prompt `^C`, `B:BANNER` runs the program
 from B while A remains current. It does not open TED or assemble the source.
-The final screen excerpt omits the earlier startup and editor display,
-retaining the quit's preservation step, standalone run and final `^C`:
+The final excerpt shows the quit's preservation step, the standalone run
+and a final `^C`:
 
-<!-- attempt02 Machine 5, 096-BANNER-final-flush.json, screen rows 2–7.
-     Earlier boot/editor display omitted. No intervening text omitted here. -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card IMG "A:TAS B:BANNER.ASM"
+     ^C B:BANNER ^C, the last lines. -->
 ```text
 A>^C
 A>B:BANNER

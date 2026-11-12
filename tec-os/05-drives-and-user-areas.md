@@ -7,29 +7,16 @@ nav_group: "Using the machine"
 
 # 5. Drives and user areas
 
-<!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     All retained captures are historical TEC-OS 78127ec host-model evidence.
-     Original old03/05/07 supplied inputs: TED.COM Thorium 128edb7,
-     SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;
-     TAS.COM Thorium dbee66a,
-     SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     The service captures from old06 record 78127ec without a separate input pin.
-     Entering a service on install: TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) docs/shell.md:220-235,
-     docs/services.md:82-89 and :101-130, src/loader.asm:734-783; NAME.SVC /E was
-     the form at 31b6083 and 402f30e and is gone.
-     MON3.SVC on the card and "A MON-3 session": TEC-OS fdd9e5b
-     docs/mon3.md:3-21, 37-51, 55-138, 140-154, 165-172, 215-268, 298-323,
-     334-352 and 363-384, tools/media.mjs:224-231 and
-     test/starter.test.mjs:217-342; the figures of the RST 10h calls also
-     in Origo KD-269. The TPA with SHELL.SVC and MON3.SVC is
-     test/shell.test.mjs:737-745. Source reading only.
-     The SERVICES and UNLOAD excerpt is a capture at fdd9e5b:
-     node tools/capture.mjs --board pico GLCD.SVC SERVICES UNLOAD SERVICES
-     UNLOAD SERVICES UNLOAD, boot rows omitted. The GLCD-console excerpt
-     is a capture at fdd9e5b: node tools/capture.mjs --board glcd GLCD.SVC
-     SERVICES.
-     No capture, application or KS48 font/default result is newly qualified. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision. Every capture was made at
+     fdd9e5b with the command in its comment, on the starter card or my.img
+     made as Chapter 6 shows, boot rows omitted. Entering a service on
+     install follows docs/shell.md:220-235, docs/services.md:82-89 and
+     :101-130 and src/loader.asm:734-783; MON3.SVC and "A MON-3 session"
+     follow docs/mon3.md, tools/media.mjs:224-231 and
+     test/starter.test.mjs:217-342, with the figures of the RST 10h calls
+     also in Origo KD-269. The TPA with SHELL.SVC and MON3.SVC is
+     test/shell.test.mjs:737-745. -->
 
 A file's volume and user area determine where you can use it. Program
 lookup can find a tool outside your current drive and area, with a separate
@@ -227,9 +214,9 @@ A drive letter followed by a colon selects that drive. The prompt changes
 and a file name without a drive then refers to it. A file on another
 drive can be named explicitly, as in `DIR B:` or `TYPE A:SAMPLE.ASM`.
 Selecting an empty drive or naming a file on it gives `Select`. This
-historical starter-card run selected B and then used empty drive C:
+starter-card run selects B and then uses empty drive C:
 
-<!-- node tools/capture.mjs B: "@start C:" "@key x" "@start DIR C:" "@key x" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs B: "@start C:" "@key x" "@start DIR C:" "@key x" -->
 ```text
 A>B:
 B>C:
@@ -256,12 +243,12 @@ drive letter, as in CP/M 3. Thus `3A>` means area 3 with A current.
 TEC-OS starts in area 0, where all starter-card files are stored.
 
 File commands use the current area. A file made in area 3 remains out
-of area 0's listing even on the same volume. For this historical comparison,
-`SAVE 1 B:MINE.COM` prepared a demonstration file by saving one page of
-existing program memory in area 3. It did not create or move a file in
+of area 0's listing even on the same volume. For this comparison,
+`SAVE 1 B:MINE.COM` prepares a demonstration file by saving one page of
+existing program memory in area 3. It does not create or move a file in
 area 0:
 
-<!-- node tools/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" MOUNT "USER 0" "DIR B:" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" MOUNT "USER 0" "DIR B:" -->
 ```text
 A>USER 3
 3A>SAVE 1 B:MINE.COM
@@ -313,10 +300,10 @@ checks the current area before area 0. At `3B>` the complete order for
 
 An explicit drive prevents the drive-A fallback. `B:TOOL` checks B's
 current area and area 0 only. Loading a tool from A does not itself select A.
-In the following historical starter-card capture, both `A:MOUNT` and
+In the following starter-card capture, both `A:MOUNT` and
 plain `MOUNT` run A's program while the prompt stays on B:
 
-<!-- node tools/capture.mjs B: "A:MOUNT" MOUNT "STARTUP.CMD" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs B: "A:MOUNT" MOUNT "STARTUP.CMD" -->
 ```text
 A>B:
 B>A:MOUNT
@@ -359,7 +346,7 @@ command processor.
 
 ## Changing a drive's volume
 
-The GAMES and SPARE examples use a separate historical four-volume card named
+The GAMES and SPARE examples use a separate four-volume card named
 `my.img`. [Chapter 6](06-cards-on-the-pc.md) gives its PC preparation, including
 usable slots for C and D through `--drives 4`. These examples are not steps
 required on the supplied starter. It has no GAMES or SPARE volume and no usable
@@ -376,9 +363,9 @@ full start after reset. The starter has a G1M-sized slot for A and a
 G8M-sized slot for B. A can take G1M volumes. B can take either geometry.
 C and D have no slots and cannot
 take a volume on that card. Emptying B leaves its slot available for reuse.
-This historical starter-card run shows that difference:
+This starter-card run shows that difference:
 
-<!-- node tools/capture.mjs "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" -->
 ```text
 A>MOUNT B:
 Unmounted
@@ -398,13 +385,13 @@ can then take either geometry. These slots use system memory. Their byte
 cost and placement belong to [Chapter 15](15-state-and-memory.md#allocation-vectors-below-the-workspace).
 `MOUNT` cannot add a slot to the running starter card.
 
-On that historical `my.img` card, SYSTEM and WORK start on A and B, GAMES and
+On that `my.img` card, SYSTEM and WORK start on A and B, GAMES and
 SPARE start unassigned and all four drives have full-size slots. GAMES contains
 `TAS.COM` and SPARE contains `HELLO.TXT` with the line `Hello from the PC.`.
 This card had no startup file so its initial prompt followed the mounted-drive
 list directly:
 
-<!-- node tools/capture.mjs --card my.img -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card my.img -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -414,10 +401,10 @@ A>
 ```
 
 The list's first column is the container index. A line without a drive
-at the right is an unassigned volume. The following historical run mounted
-GAMES by label and SPARE by index, then accessed files on both:
+at the right is an unassigned volume. The following run mounts
+GAMES by label and SPARE by index, then accesses files on both:
 
-<!-- node tools/capture.mjs --card my.img MOUNT "MOUNT C: GAMES" "MOUNT D: 3" MOUNT "DIR C:" "TYPE D:HELLO.TXT" "MOUNT C: SPARE" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card my.img MOUNT "MOUNT C: GAMES" "MOUNT D: 3" MOUNT "DIR C:" "TYPE D:HELLO.TXT" "MOUNT C: SPARE" -->
 ```text
 A>MOUNT
 00 SYSTEM      G1M A:
@@ -497,10 +484,10 @@ The drive assignments can be reconstructed from recognised TEC-OS state
 left in RAM. Each assigned volume must still match a descriptor on the card
 in location, size, geometry and flags and fit the drive's slot.
 
-This historical `my.img` run mounted GAMES on C and emptied B before
-reset. The reconstructed selection kept both changes:
+This `my.img` run mounts GAMES on C and empties B before
+reset. The reconstructed selection keeps both changes:
 
-<!-- node tools/capture.mjs --card my.img "MOUNT C: GAMES" "MOUNT B:" "@reset" MOUNT -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card my.img "MOUNT C: GAMES" "MOUNT B:" "@reset" MOUNT -->
 ```text
 A>MOUNT C: GAMES
 C: GAMES      

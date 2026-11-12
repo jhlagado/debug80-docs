@@ -7,197 +7,153 @@ nav_group: "Inside TEC-OS"
 
 # 26. Startup inside the CCP
 
-<!-- Source mechanisms checked by text inspection against TEC-OS
-     a1023bd0cbb4879c37ae61e6f670b442e1e60abe. Unprefixed source ranges use
-     that revision. Historical addresses, bypass timing and the retained
-     dollar-echo recipe/capture remain at 78127ec. No new execution result.
-     "Startup at TEC-OS fdd9e5b" and the fdd9e5b: citations use TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), source reading with
-     docs/shell.md:115-133 and docs/services.md:182-200. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     All unprefixed source ranges use that revision, source inspection.
+     The rest of STARTUP.CMD is SHELL.SVC's (drivers/shell.asm,
+     drivers/shellio.asm, docs/shell.md:115-133). The two dollar-echo
+     captures were made at fdd9e5b with the recipes shown. The bypass timing
+     was measured there on the host model. -->
 
 A startup command can run a program that ends through warm boot. The next
-startup line must still be available when the CCP starts again. The
-release-1 ROM keeps the first record of `A:STARTUP.CMD` and its next-byte
-position outside the warm-boot clear (`src/ram.asm:412-420`, `src/boot.asm:384-389`).
-The practical file setup is in [Chapter 8](08-commands-at-startup.md).
+startup line must still be available when the command processor starts
+again. At TEC-OS `fdd9e5b` two readers share the file. The ROM reads one
+record of `A:STARTUP.CMD` once after cold boot and runs its first line. When
+that line installs the shell, `SHELL.SVC` reads the rest of the file, every
+record, and runs it line by line. The shell's position is in its own pages,
+outside the warm-boot clear. The practical file setup is in
+[Chapter 8](08-commands-at-startup.md).
 
-## Startup at TEC-OS fdd9e5b
+## The ROM's one line
 
-The sections after this one follow the release-1 ROM at `a1023bd`, which
-read every line of the file's first record itself. At TEC-OS `fdd9e5b` the
-ROM runs one line. `STBOOT` still reads the first record once after cold
-boot, unless a keypad key is down, now into `LOADBUF`. `STLINE` then takes
-the first line there that is neither empty nor starts with `;`, at most 127
-characters, echoes it through function 9 and marks startup done. Its quiet
-paths for an absent device and the PICO width line are as before
-(`fdd9e5b:src/cpm/ccpcmd.asm:747-875`, `fdd9e5b:src/ram.asm:398-401`).
-
-When that line installs `SHELL.SVC`, the service's entry, which TEC-OS calls
-with A = `FFh` for a startup line, records that the rest of the file is due.
-At its next `LINE` call `STOPEN` opens `A:STARTUP.CMD` as a script, passes
-over the line the ROM ran and runs the following lines with the startup
-origin, so their quiet paths hold too. The shell reads the file a record at
-a time by record number, as many records as it has, and echoes each line
-whole with no `$` limit (`fdd9e5b:drivers/shell.asm:126-142`,
-`fdd9e5b:drivers/shellio.asm:14-176`, `fdd9e5b:drivers/shell.asm:241-264`).
-Without the shell only the ROM's line runs.
-
-## A record across warm boot
-
-`STPOS` is a byte followed by the 128-byte buffer `STREC`
-(`src/ram.asm:412-414`). In the historical `78127ec` resident workspace, `STPOS`
-was at `BF63h` and the record occupied `BF64h–BFE3h`
-(`78127ec:src/ram.asm:270-271`). The position encodes both progress and
-completion (`src/cpm/ccpcmd.asm:788-825`, `845-911`):
+`STPOS` is one byte, and `CHPOS` follows it
+(`src/ram.asm:398-403`). It records progress and completion
+(`src/cpm/ccpcmd.asm:745-790`, `src/cpm/ccpcmd.asm:792-874`):
 
 | `STPOS` | Meaning |
 | --- | --- |
 | `00h` | `STBOOT` hasn't run since cold boot |
-| `01h–7Fh` | A record holds lines: the next byte's offset in `STREC`, plus 1 |
-| `80h`, `81h` | Finished, `81h` after a CR or LF in the record's last byte |
+| `01h` | A record waits in `LOADBUF` for `STLINE` |
+| `80h` | Finished: the line was taken, or there was none |
 
-The record and position are above the RAM BIOS table. Warm boot's
-`CPMINIT` clears from `CCPCLR` to `BDOSRME`, below them. An ordinary
-program exit therefore preserves both. Reset enters `COLD` and clears
-the whole workspace including `STPOS`. The next startup read begins
-from zero (`src/ram.asm:295-307`, `src/boot.asm:22-65`, `384-389`).
+The byte is above the RAM BIOS table. Warm boot's `CPMINIT` clears from
+`CCPCLR` to `BDOSRME`, below it, so an ordinary program exit preserves it.
+Reset enters `COLD` and clears the whole workspace including `STPOS`. The
+next startup read begins from zero (`src/ram.asm:286-295`,
+`src/boot.asm:22-65`, `src/boot.asm:398-403`).
 [Chapter 15](15-state-and-memory.md#the-workspace-across-a-program-exit)
-explains the two clearing spans.
+explains the two clearing spans. The release-1 ROM at `a1023bd` kept the
+whole record in a 128-byte buffer, `STREC`, beside `STPOS` and ran every line
+of it. That buffer is gone. Its space is now unused (`src/ram.asm:405-409`).
 
 A diagnostic retry returns to `COLDRT`, after the cold clear but before
 the CCP has run. `STPOS` is still zero. Once the card mounts, startup can
 begin as it would after an uninterrupted cold boot
-(`src/boot.asm:92-113`, `642-653`).
+(`src/boot.asm:92-115`).
 
 ## The first read and the bypass
 
 Each `CCPENT` resets the disks, restores the user number and calls
-`STBOOT` before selecting the entry drive (`src/cpm/ccp.asm:64-88`).
+`STBOOT` before selecting the entry drive (`src/cpm/ccp.asm:39-88`).
 Cold boot sets page zero to drive A and user 0. Warm boot passes that
 byte to the CCP so the first startup open uses user area 0
-(`src/boot.asm:112-113`, `146-149`). `STBOOT` returns immediately on
-later entries because `STPOS` is already nonzero
-(`src/cpm/ccpcmd.asm:799-803`).
+(`src/boot.asm:114-115`, `src/boot.asm:149-152`). `STBOOT` returns
+immediately on later entries because `STPOS` is already nonzero
+(`src/cpm/ccpcmd.asm:760-764`).
 
-The routine marks startup finished before attempting any file operation. It sets
-bit 7 of `STPOS`, making `80h` (`src/cpm/ccpcmd.asm:804-804`). A BDOS error can
-warm boot from inside the open or read. On the next entry the nonzero position
-prevents another attempt at that file. The source test at
-`test/startup.test.mjs:221-241` injects a failure at the file's card block and
-asserts a usable command prompt with `Bad Sector` and no execution of the stored
-command.
+The routine marks startup finished before attempting any file operation. It
+sets bit 7 of `STPOS`, making `80h` (`src/cpm/ccpcmd.asm:765`). A BDOS error
+can warm boot from inside the open or read. On the next entry the nonzero
+position prevents another attempt at that file. The source test at
+`test/startup.test.mjs:235-258` injects a failure at the file's card block
+and asserts a usable command prompt with `Bad Sector` and no execution of
+the stored command.
 
 The keypad bypass occurs after the finished mark and before the open.
 `STBOOT` reads port `03h` once and returns if bit 6 is low, meaning a
-hex-keypad key is down (`src/layout.asm:14-14`,
-`src/cpm/ccpcmd.asm:806-808`). The position stays at `80h`, just as for
-an absent file. Holding a key through reset covers that single sample.
-The historical `78127ec` account recorded the sample at 5,824,922
-T-states after reset on the web-page board with the starter card, about
-1.46 seconds. That retained measurement is not a current deadline.
-The hanging-`INIT` and repeated-cold-boot tests both exercise a held key
-as the recovery route (`test/startup.test.mjs:46-58`, `243-259`).
+hex-keypad key is down (`src/layout.asm:14`, `src/cpm/ccpcmd.asm:767-769`).
+The position stays at `80h`, just as for an absent file. No line runs, so no
+shell is installed either. Holding a key through reset covers that single
+sample. On the host model the sample comes 5,821,320 T-states after reset on the
+web-page board with the starter card, about 1.46 seconds. That measurement
+is not a deadline on a physical board. The
+hanging-`INIT` and repeated-cold-boot tests both exercise a held key as the
+recovery route (`test/startup.test.mjs:57-69`, `test/startup.test.mjs:260-273`,
+`test/startup.test.mjs:320-324`).
 
 Without the bypass, `STBOOT` copies twelve bytes from `STFCB` into `CMDFCB`:
 drive byte 1 and `STARTUP CMD`. The rest of the file control block (FCB) is
-still zero from cold boot. Drive byte 1 names A regardless of the current drive
-(`src/tables.asm:137`, `src/cpm/ccpcmd.asm:809-812`, `src/ram.asm:148-149`). A
-recognised reset has already run `RESEL` so this is the volume currently
-selected as A, not necessarily the card's original SYSTEM volume
-(`src/boot.asm:99-102`, `src/volsvc.asm:1-22`). Chapter 8's `SPARE` example
-demonstrates that selection.
+still zero from cold boot. Drive byte 1 names A regardless of the current
+drive (`src/tables.asm:137`, `src/cpm/ccpcmd.asm:770-773`,
+`src/ram.asm:148-149`). A recognised reset has already run `RESEL`, so this
+is the volume currently selected as A, not necessarily the card's original
+SYSTEM volume (`src/boot.asm:101-104`, `src/volsvc.asm:1-22`). Chapter 8's
+`SPARE` example demonstrates that selection.
 
-Three BDOS calls acquire the record (`src/cpm/ccpcmd.asm:813-825`):
+Three BDOS calls acquire the record (`src/cpm/ccpcmd.asm:774-784`):
 
-- Function 26 sets the DMA address to `STREC`.
+- Function 26 sets the DMA address to `LOADBUF`, the CCP's load buffer,
+  which nothing else uses before `STLINE` takes the line.
 - Function 15 opens the file. `INC A` makes the no-file result `FFh` zero
   for the branch to `STBDMA`.
 - Function 20 reads the first record. A nonzero result also branches to
   `STBDMA`, leaving startup finished.
 
 The open and read use `DOSSEQ`. Its inline descriptor byte holds twice
-the function number plus an FCB-selection bit. `SRL C` extracts the
-number and selects `CMDFCB` for these two calls
-(`src/cpm/ccpmut.asm:322-345`). A good read leaves `A` at zero, which
-`INC A` converts to position 1. All normal open/read outcomes then
-restore `CURDMA` directly to `DEFDMA`, `0080h`
-(`src/cpm/ccpcmd.asm:816-831`). A program launched by the first line
-therefore has the default DMA address. The bypass keeps the default
-already established by warm boot (`src/boot.asm:390-391`).
+the function number plus an FCB-selection bit (`src/cpm/ccpmut.asm:160-183`).
+A good read leaves `A` at zero, which `INC A` converts to position 1. All
+normal open/read outcomes then restore `CURDMA` directly to `DEFDMA`,
+`0080h` (`src/cpm/ccpcmd.asm:783-790`). A program launched by the first line
+therefore has the default DMA address. The bypass keeps the default already
+established by warm boot (`src/boot.asm:404-405`).
 
-There is no second read or close. `STREC` supplies every later line from
-the same 128 bytes (`src/cpm/ccpcmd.asm:799-831`, `845-924`). A `USER`
-or drive command changes the execution context for following commands
-but cannot change the record from which their text is taken.
+There is no second read or close in the ROM. `STLINE` takes its one line from
+those 128 bytes.
 
-## Bounded line extraction
+## Taking the line
 
-`MLREAD` prints a prompt before acquiring input. It takes a remaining
-chained piece first, then calls `STLINE` and finally reads the keyboard.
-`STLINE` returns carry clear for a supplied line and carry set when
-startup is finished (`src/cpm/ccp.asm:115-149`,
-`src/cpm/ccpcmd.asm:833-849`, `921-924`). Only the keyboard path sets
-`HFLAG` before BDOS function 10. That flag enables `HSTORE` at line
-completion so startup text adds no history entry
-(`src/cpm/ccp.asm:145-149`, `src/cpm/bdos.asm:651-666`).
+With no shell holding the hook, `MLDRV` prints the prompt, takes a
+function 47 line if one waits, and otherwise calls `STLINE` before the
+keyboard. `STLINE` returns carry clear for a supplied line and carry set when
+there is none. The keyboard path's function 10 runs with `HFLAG` clear, so
+startup text adds no history entry (`src/cpm/ccp.asm:138-158`). With a shell
+installed by that line, the ROM's prompt is no longer used, and `STLINE` is
+never called again before the next reset.
 
-`STLINE` rotates `STPOS` left to put its finished bit into carry and
-returns if that bit is set. Otherwise it rotates the value back and
-adds `LOW(STREC)-1`. Since the record lies within a page, that low-byte
-calculation and `HIGH(STREC)` give the source pointer without a carry
-into another page. `DE` starts at `CMDTXT` and `B` at 127
-(`src/cpm/ccpcmd.asm:845-856`).
+`STLINE` returns carry unless `STPOS` is 1, and writes `80h` before reading,
+so it supplies at most one line. `HL` starts at `LOADBUF`, `DE` at
+`CMDTXT`, `B` at 127 slots and `C` at 128 record bytes
+(`src/cpm/ccpcmd.asm:805-814`).
 
-The scan tests the record boundary before reading each byte. Zero and
-`^Z` end the file. CR and LF end the current line. Other bytes are
-copied while `B` is nonzero. Once 127 characters have been copied, the
-routine continues scanning but drops further characters until the real
-line ending (`src/cpm/ccpcmd.asm:866-886`). It can then advance to the
-correct next position without running the discarded suffix separately.
+The scan reads each of the 128 bytes in turn. Zero and `^Z` end the text,
+and the record's end ends it too. CR and LF end the current line. Other bytes
+are copied while `B` is nonzero. Once 127 characters have been copied the
+routine keeps scanning but drops further characters until the line's end
+(`src/cpm/ccpcmd.asm:819-840`). A line cut by the record's end runs in its
+shortened form.
 
-A CR or LF reaches `STL2` with `HL` just past the delimiter. End of
-record, zero or `^Z` instead reaches `STLE`, which sets `L` to the last
-record byte, `STLAST`. Both routes calculate the next offset plus 1
-and store it in `STPOS` (`src/loader.asm:48-50`,
-`src/cpm/ccpcmd.asm:888-911`). The `STLE` route therefore stores `80h`.
-Characters already copied still run even when the record ends mid-line.
-
-The position encoding also excludes a new line starting at offset 127,
-the record's last byte. A preceding CR or LF leaves position `80h` and
-the next call returns without reading that new line. A line already in
-progress can consume the last byte. A delimiter in that byte advances
-the pointer one further and stores `81h`, also finished
-(`src/cpm/ccpcmd.asm:845-911`). The exact-record test places `USER 13`
-after 121 CR bytes and asserts that the complete seven-character line
-runs without reading beyond the record (`test/startup.test.mjs:123-128`).
-
-No copied characters means a blank line so `STLINE` repeats its state
-test and scan (`src/cpm/ccpcmd.asm:912-915`). CR/LF therefore uses two
-passes: CR ends a line and LF produces a blank one. The starter file's
-eleven bytes are `GLCD.SVC`, CR, LF and `^Z`. Their positions produce
-this sequence:
-
-| Call | `STPOS` on entry | Bytes read | `STPOS` after | Result |
-| --- | --- | --- | --- | --- |
-| First | 1 | offsets 0–8 | 10 | `GLCD.SVC`, length 8 |
-| Second | 10 | offset 9, the LF | 11 | Blank: goes round |
-| | 11 | offset 10, `^Z` | `80h` | Blank: goes round |
-| | `80h` | | | Carry: the keyboard |
+At a CR or LF, `STLCR` passes over a line with nothing copied, so empty lines
+and the LF of a CR LF pair cost nothing. A line whose first byte is `;` is a
+comment: `STLCR` sets `DE` back to `CMDTXT` and `B` to 127 and goes on to the
+next line (`src/cpm/ccpcmd.asm:842-851`). A `;` after a blank is not at
+`CMDTXT`'s first byte, so that line is no comment. At the text's end `STLE`
+returns carry for a last line that is a comment or for no line at all
+(`src/cpm/ccpcmd.asm:853-861`). The tests check the first line alone running,
+empty and comment lines passed over and not echoed, the 127-character cut,
+and the record's end ending an unended line
+(`test/startup.test.mjs:291-318`).
 
 ## The echo and the command buffer
 
-For a nonempty line, `STLINE` stores `CMDLEN` and appends CR and `$`
-to the copied text. It calls `PUTSTR`, which prints through BDOS
-function 9 (`src/cpm/ccpcmd.asm:915-924`, `726-733`). A `$` already in
-the text ends that echo early. The command buffer still contains the
-whole line and its original case. `NOTDRIVE` prints `CRLFMSG` before
-dispatch so command output starts on a new row even when the echo
-did not reach its appended CR (`src/cpm/ccp.asm:368-371`).
+For a nonempty line, `STLINE` stores `CMDLEN` and appends CR and `$` to the
+copied text. It calls `PUTSTR`, which prints through BDOS function 9
+(`src/cpm/ccpcmd.asm:862-874`). A `$` already in the text ends that echo
+early. The command buffer still contains the whole line and its original
+case. `NOTDRIVE` prints `CRLFMSG` before dispatch, so command output starts on
+a new row even when the echo did not reach its appended CR
+(`src/cpm/ccp.asm:338-341`).
 
-The following recipe and capture are retained unchanged from the
-`78127ec` example. The prepared card contains `NOTE$.TXT` and its startup
-line types that file. These are historical results, separate from the
-current source inspection:
+This recipe's card contains `NOTE$.TXT`, and its startup file's one line
+types that file with no shell:
 
 ```sh
 printf 'It ran whole.\n' > 'NOTE$.TXT'
@@ -207,7 +163,8 @@ node tools/tecvol.mjs put dollar.img A startup.cmd --text
 node tools/tecvol.mjs put dollar.img A 'NOTE$.TXT' --text
 ```
 
-<!-- node tools/capture.mjs --card dollar.img -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card dollar.img. Boot rows
+     omitted. -->
 ```text
 A>TYPE NOTE
 It ran whole.
@@ -215,46 +172,89 @@ It ran whole.
 A>
 ```
 
-At the maximum copied length, the echo's CR fills the last byte of
-128-byte `CMDTXT`. The `$` goes one byte further into `BOOTDRV`, which
-immediately follows it (`src/ram.asm:156-160`,
-`src/cpm/ccpcmd.asm:916-919`). In the historical workspace those two
-bytes were `BDB6h` and `BDB7h`. `BOOTDRV` has one reader, in
-`CCPENT`. That read precedes line extraction and each new entry writes
-`BOOTDRV` before reading it. The temporary `$` is overwritten before
-it can become a drive selection (`src/cpm/ccp.asm:64-88`).
+With `SHELL.SVC` on the first line and the same command on the second, the
+shell echoes the line whole, since its `PUTZ` prints to a zero:
 
-`MLGOT` replaces the appended CR with zero and selects the first command
-piece. `CHPOS` was cleared before `STLINE` ran
-(`src/cpm/ccp.asm:136-167`). `MLTAKE` then capitalises the piece in
-place, after the echo (`src/cpm/ccp.asm:232-259`). The source test
-compares file-supplied and typed lines from `MLGOT` to the next
-`MLREAD`, including their BDOS calls. It normalises letter case for
-the output comparison (`test/startup.test.mjs:172-219`).
+```sh
+printf 'SHELL.SVC\nTYPE NOTE$.TXT\n' > startup.cmd
+cp dollar.img dollar2.img
+node tools/tecvol.mjs put dollar2.img A startup.cmd --text
+```
 
-Built-ins and failed commands return to `STARTED` or `MAINLOOP`.
-A program returns through the warm-boot word pushed by `CMDRUN`.
-On the next `CCPENT`, `STBOOT` returns without rereading and `MLREAD`
-reaches the retained startup position again
-(`src/cpm/ccp.asm:90-115`, `436-437`, `477-490`,
-`src/cpm/ccpcmd.asm:799-803`). `^C` ending a program follows warm boot
-too. It can discard that command's remaining chain without discarding
-the next startup line. [Chapter 13](13-results-and-command-chains.md)
-explains the operators and
-[Chapter 22](22-chains-across-warm-boot.md) follows the retained pieces.
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card dollar2.img. Boot rows
+     omitted. -->
+```text
+A>SHELL.SVC
+
+A>TYPE NOTE$.TXT
+It ran whole.
+
+A>
+```
+
+At the maximum copied length, the echo's CR fills the last byte of 128-byte
+`CMDTXT`. The `$` goes one byte further into `BOOTDRV`, which immediately
+follows it (`src/ram.asm:156-160`, `src/cpm/ccpcmd.asm:864-870`). `BOOTDRV`
+has one reader, in `CCPENT`. That read precedes line extraction and each new
+entry writes `BOOTDRV` before reading it. The temporary `$` is overwritten
+before it can become a drive selection (`src/cpm/ccp.asm:46-88`).
+
+`MLGOT` replaces the appended CR with zero, and `MLTAKE` capitalises the line
+in place after the echo (`src/cpm/ccp.asm:184-223`). The source test compares
+file-supplied and typed lines from `MLGOT` to the next `MLREAD`, including
+their BDOS calls. It normalises letter case for the output comparison
+(`test/startup.test.mjs:186-233`).
+
+## The rest of the file in the shell
+
+The startup line that names `SHELL.SVC` installs it and, because the
+shell's execution record asks to be entered, enters it with `A = FFh`, the
+startup origin. On that first entry the shell claims the hook and sets
+`STSKIP` (`drivers/shell.asm:126-142`). At the next prompt `LINE` finds no
+piece in hand and calls `STOPEN` (`drivers/shell.asm:241-247`).
+
+`STOPEN` clears its script FCB, `SFCB`, copies drive byte 1 and
+`STARTUP CMD` into it from `STNAME`, and opens the file. A missing file
+opens nothing. Otherwise it marks the script's lines with the startup
+origin, `FFh`, in `SORG`, and calls `SLINE` once to pass over the line the
+ROM ran. A file with no line after the first is closed at once
+(`drivers/shellio.asm:14-36`, `drivers/shellio.asm:43-63`).
+
+`SLINE` reads the next line into `LTXT` with `SGET`, a byte at a time. CR, LF
+and CR LF end a line, of which the first 127 characters are kept, and empty
+lines and lines whose first character is `;` are passed over
+(`drivers/shellio.asm:64-114`). `SGET` reads the script by record number with
+function 33 into `0080h`, starting from record 0, and reads the record again
+at each new line, since a program may use `0080h` in between. A zero, a `^Z`
+or a read past the last record ends the script
+(`drivers/shellio.asm:117-173`). The file is never closed, since it is only
+read.
+
+`NEXT` then echoes the line whole after the prompt and runs it as a typed
+line, with its pieces, but with the startup origin, so the ROM's quiet paths
+for an absent device and an unavailable PICO width line hold for every line
+of the file (`drivers/shell.asm:241-272`). The script's FCB, its record
+number and offset are in the shell's pages, so a program's warm boot leaves
+the position intact, and the next `LINE` goes on with the next line.
+
+A later `SHELL.SVC` line in the file enters the installed shell again. That
+entry finds the hook already claimed, takes it back and changes nothing else,
+so the file goes on from the line after it (`drivers/shell.asm:126-134`,
+`docs/shell.md:129-133`). Typing `STARTUP.CMD` at the prompt runs the whole
+file again as a typed script, with typed origin (`docs/shell.md:132-133`).
 
 ## Display loading and console selection
 
 The PICO9918 console starts from ROM when the display answers and the Matrix
 switch enables the matrix keyboard at cold boot. It needs no service line in the
-file (`src/console.asm:49-52`, `src/video.asm:18-24`, `src/pico.asm:53-68`). The
+file (`src/console.asm:42-45`, `src/video.asm:18-24`, `src/pico.asm:53-68`). The
 supplied display line loads `GLCD.SVC`. The CCP compares all three type bytes in
 `CMDFCB`: `SVC` calls `SVCGO` while another type goes to the `.COM` search
-(`src/cpm/ccp.asm:407-452`). [Chapter 21](21-from-prompt-to-program.md) explains
+(`src/cpm/ccp.asm:384-421`). [Chapter 21](21-from-prompt-to-program.md) explains
 that search.
 
 `SVCGO` calls `LOADCOM` and `SVCLOAD`, returning carry on either failure
-(`src/loader.asm:759-765`). Within `GLCD.SVC`, `INIT` first calls
+(`src/loader.asm:901-907`). Within `GLCD.SVC`, `INIT` first calls
 `FONT`, service 15. A pre-5.1 ROM rejects that number and the driver
 returns with carry. Next it calls `GLCWAIT`. An unanswered controller
 returns `TNENODV`. Finally it passes its table through `DRVR`, service
@@ -264,15 +264,15 @@ other checks and rollback.
 
 `SVDRV` uses both the startup mark and the console field. A nonzero
 table supplied from startup while that field is `CRT:` is rejected with
-`TNENODV`, as for an absent device (`src/services.asm:533-549`). A
+`TNENODV`, as for an absent device (`src/services.asm:540-556`). A
 controller that answers still needs the matrix keyboard enabled by the
 Matrix switch and a free UC1 table slot. `VIDHOOK` returns carry for
 either a disabled keyboard or an occupied slot, which `SVDRV` returns
 as `TNEBAD`
-(`src/video.asm:142-166`, `src/services.asm:551-557`). A second
+(`src/video.asm:142-166`, `src/services.asm:558-564`). A second
 `GLCD.SVC` therefore fails while the first is installed. An older card's
 `PICO.SVC` also fails when it passes a table for `CRT:` because `DRVR`
-accepts only `UC1:` (`src/services.asm:525-531`).
+accepts only `UC1:` (`src/services.asm:532-538`).
 [Chapter 17](17-console-paths.md) explains the console tables and claims.
 
 After a successful load, `SVCGO` compares the new service's page in
@@ -280,10 +280,10 @@ After a successful load, `SVCGO` compares the new service's page in
 unchanged. A match sets `CDGLC`. If `CONMOD` is `CMCRT`, it clears only
 the LCD recovery word and keeps the PICO9918 selected. Otherwise
 `CONSET` clears that word and passes `CMUC1` to `CONSW`
-(`src/loader.asm:766-780`). `CONSW` selects the driver and writes the
-effective mode to the console field (`src/console.asm:82-133`, `502-516`).
+(`src/loader.asm:908-922`). `CONSW` selects the driver and writes the
+effective mode to the console field (`src/console.asm:75-124`, `502-516`).
 It tests `VTOWN` before restoring or clearing the screen so a selected
-PICO9918 with an active claim is left alone (`src/console.asm:133-142`).
+PICO9918 with an active claim is left alone (`src/console.asm:124-133`).
 
 The startup and typed cases therefore have different results on a board
 with both displays and the matrix keyboard enabled. Startup rejects
@@ -293,7 +293,7 @@ PICO9918 console in use, ready for a later `CON UC1`. With the matrix
 keyboard enabled by the Matrix switch and the controller answering but
 no selected PICO9918 console, the startup line can select the graphics
 LCD. Successful web-page card preparation sets the line for the chosen display
-(`host/card.mjs:58-72`, `host/card.mjs:104-117`), as
+(`host/card.mjs:58-72`, `host/card.mjs:126-147`), as
 [Appendix I](appendix-i-web-page.md) explains.
 
 ## Recovery words and row ownership
@@ -301,18 +301,18 @@ LCD. Successful web-page card preparation sets the line for the chosen display
 `CARD?` and `GLCD?` use row 3 of the 20 × 4 character LCD. `LCD3` sets
 `B` to 3 and enters `LCDROW`. That routine selects the row and writes
 up to the string's zero terminator, then returns carry set. A failure
-path can finish with a jump to it (`src/lcd.asm:66-103`). Each word is
+path can finish with a jump to it (`src/lcd.asm:66-102`). Each word is
 five characters. `PICCLR` is five blanks and a zero
 (`src/text.asm:16`, `98-100`).
 
 `GLCLD`, used by `CON UC1`, tests `CDGLC` and returns immediately if the
 driver is already installed. A failed `SVCGO` instead restores the mode
 from `CONMOD` into the console field with `CONFLD` and writes `GLCD?`
-through `LCDWRD` (`src/loader.asm:731-745`, `src/console.asm:506-516`).
+through `LCDWRD` (`src/loader.asm:873-887`, `src/console.asm:500-510`).
 `LCDWRD` first sets `CDWRD`, bit 7 of `CONDEV`
-(`src/lcd.asm:56-60`, `src/layout.asm:75-75`). The historical address
-of `CONDEV` was `BFE7h`. Its stored bits are
-(`src/ram.asm:424-424`, `src/layout.asm:70-75`):
+(`src/lcd.asm:56-60`, `src/layout.asm:75`). `CONDEV` is
+at `BFE7h`. Its stored bits are
+(`src/ram.asm:417`, `src/layout.asm:70-75`):
 
 | Bit | Name | Meaning |
 | --- | --- | --- |
@@ -324,18 +324,18 @@ of `CONDEV` was `BFE7h`. Its stored bits are
 
 `VCLAIM` separately stores `CDCLM` (`10h`) while a program has claimed the
 PICO9918. `VIDEO` sets that byte on claim and clears it on release
-(`src/ram.asm:128-128`, `src/services.asm:189-192`, `208-213`).
+(`src/ram.asm:128`, `src/services.asm:186-188`, `208-213`).
 `INFO` combines `CONDEV` with `VCLAIM` using OR and returns the flags in `B`.
 Its returned bit 4 reports the claim rather than a stored bit of `CONDEV`
-(`src/services.asm:80-87`, `src/layout.asm:74-74`).
+(`src/services.asm:74-80`, `src/layout.asm:74`).
 
 The row may have program text by the next console selection.
 `WRDCLR` returns at once when `CDWRD` is clear. Otherwise it clears the
 bit and writes five blanks. `CONSET` calls it, as does a successful typed
-GLCD load that leaves the PICO9918 selected (`src/loader.asm:773-801`).
+GLCD load that leaves the PICO9918 selected (`src/loader.asm:915-943`).
 Hardware service `LCD` clears the bit when a program writes row 3,
 without writing blanks
-first (`src/services.asm:134-162`). A later console selection leaves
+first (`src/services.asm:130-157`). A later console selection leaves
 that program text alone. Direct port writes bypass the flag change.
 If `CDWRD` remains set, a later selection overwrites the first five
 characters of the program's row.
@@ -343,28 +343,30 @@ characters of the program's row.
 `DIAG` writes `CARD?` directly through `LCD3` without setting `CDWRD`.
 No console selection occurs at its retry prompt. `R` returns to
 `COLDRT`, where `LCDINIT` clears the whole display. Another mount
-failure writes `CARD?` again (`src/boot.asm:92-100`, `632-652`).
+failure writes `CARD?` again (`src/boot.asm:92-101`, `632-652`).
 Cold boot initialises `CONDEV` to zero before reading `CDMTX` from the
 Matrix switch so no reset starts with a retained recovery-word flag
-(`src/console.asm:31-52`).
+(`src/console.asm:32-45`).
 
 ## Startup origin and quiet results
 
 The CCP records the source of each new line in `STFLAG`. After `STLINE`,
 `CCF` and `SBC A,A` turn carry clear into `FFh` for startup and carry
-set into zero for keyboard input. A chained piece is taken before that
-call and keeps its line's mark (`src/cpm/ccp.asm:136-142`). The
-historical address of `STFLAG` was `BF62h`
-(`78127ec:src/ram.asm:268-269`).
+set into zero for keyboard input. With a shell holding the prompt,
+`SHLINE` stores the origin that the shell's `LINE` returns, `FFh` for every
+piece of a line from `STARTUP.CMD` and 0 for the rest
+(`src/cpm/ccp.asm:110-124`, `src/cpm/ccp.asm:141-158`,
+`drivers/shell.asm:514-527`). `STFLAG`
+is at `BF64h`.
 
 There are three readers of this mark: the failed-service path, `DRVR`
 registration and the PICO width command when `FIND` returns no console
-(`src/cpm/ccp.asm:426-434`, `src/services.asm:533-549`,
-`src/cpm/ccpcmd.asm:130-146`). `SVCLOAD` stores `INIT`'s returned `A`
+(`src/cpm/ccp.asm:395-408`, `src/services.asm:540-556`,
+`src/cpm/ccpcmd.asm:134-150`). `SVCLOAD` stores `INIT`'s returned `A`
 in `SVCRA`, beside the result code `SVCRC`. Record rejection after a
 successful `INIT` clears `SVCRA` so the later check cannot accept that
-result as an `INIT` device-absence status (`src/loader.asm:351-356`, `412-415`,
-`src/ram.asm:401-402`).
+result as an `INIT` device-absence status (`src/loader.asm:365-370`, `426-430`,
+`src/ram.asm:389-390`).
 
 The failed-service path reads the two result bytes as a word, `SVCRC`
 in `L` and `SVCRA` in `H`. `AND H` keeps the status only for startup.
@@ -372,7 +374,7 @@ in `L` and `SVCRA` in `H`. `AND H` keeps the status only for startup.
 zero only for `SVCRC` 1, a failed installation with nothing left
 resident. Only that combined result reaches `SVCOK` without a message.
 Other failures returned to this check reach `BADCMD` and print the name with `?`
-(`src/cpm/ccp.asm:426-437`, `553-571`, `src/loader.asm:422-466`).
+(`src/cpm/ccp.asm:395-411`, `535-567`, `src/loader.asm:436-480`).
 
 An absent graphics controller and startup registration blocked by an
 active PICO9918 console both return `TNENODV`. They can take that quiet
@@ -381,27 +383,27 @@ and prints the file's name with `?`. A disk error under the default
 BDOS error mode instead prints its disk message, waits for a key and
 warm boots through `CHDROP`, discarding the remaining chain. It does
 not return to that name-reporting path (`src/cpm/bdoscon.asm:23-64`,
-`src/cpm/bdos.asm:95-103`).
+`src/cpm/bdos.asm:96-106`).
 
 A controller that answers while the Matrix switch disables the matrix
 keyboard fails with `TNEBAD`. That failure still prints the name from
 startup. Typed on a board without the graphics controller, `GLCD.SVC`
 prints `GLCD.SVC?`. Typed with both displays and the matrix keyboard
 enabled it can install while leaving the PICO9918 selected
-(`src/loader.asm:759-780`, `drivers/glcd.asm:60-73`,
-`src/services.asm:525-557`).
+(`src/loader.asm:901-922`, `drivers/glcd.asm:60-73`,
+`src/services.asm:532-564`).
 
 The width path first uses `FIND` to locate the ROM PICO9918 console
 before passing a width to it. A `CON PICO` or `CON CRT` width line from
 startup reaches `STARTED` silently if that console is absent, as on a
 serial board. The same line typed at the prompt reaches `BADCMD` and
-prints the width with `?` (`src/cpm/ccpcmd.asm:130-165`).
+prints the width with `?` (`src/cpm/ccpcmd.asm:134-168`).
 
-Quiet handling also preserves the result used by `:`. `MLTAKE` clears
-`PRGCODE` before each command. A quiet service or unavailable-console
-width line leaves that zero intact. `BADCMD` instead reaches `ERRGO`,
-which stores `RCFAIL`, `FF00h` (`src/cpm/ccp.asm:256-259`, `573-587`).
-The conditional test checks the previous code before clearing it
-(`src/cpm/ccp.asm:210-227`). On a board without the graphics controller,
-startup `GLCD.SVC!:MOUNT` can therefore run `MOUNT`. The same typed
-line reports `GLCD.SVC?` and drops its `:MOUNT` piece.
+Quiet handling also preserves the result that an `&` piece tests.
+`MLTAKE` clears `PRGCODE` before each command. A quiet service or
+unavailable-console width line leaves that zero intact. `BADCMD` instead
+reaches `ERRGO`, which stores `RCFAIL`, `FF00h` (`src/cpm/ccp.asm:220-223`,
+`src/cpm/ccp.asm:535-567`). The shell checks the code before the next piece
+(`drivers/shell.asm:198-224`). On a board without the graphics controller,
+the startup line `GLCD.SVC &MOUNT` can therefore run `MOUNT`. The same typed
+line reports `GLCD.SVC?` and skips `MOUNT`.

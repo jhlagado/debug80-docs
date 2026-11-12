@@ -7,17 +7,13 @@ nav_group: "Reference"
 
 # Appendix J. Command reference
 
-<!-- Draft source checks: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe. The three historical captures below
-     retain TEC-OS 78127ec and its starter inputs. They have not been rerun
-     for the new source offer.
-     The starter-card section, the shell's commands and lines, entering a
-     service and the MON3> line cite TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) with a fdd9e5b:
-     prefix, Thorium b69d544 (TED.COM, SHA-256 4f622390…), Thorium 3d1e2c0
-     (TAS.COM, e648a1d0…) and Baza 50dc512 (BAZA.COM 280ee372…, BAZA.RTL
-     14d7fd11…, BOUNCE.BAS 615693a5…). DEL in the ROM cites 402f30e:
-     (TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125).
-     Source reading only. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision, as do those prefixed
+     fdd9e5b:, with Thorium b69d544 (TED.COM, SHA-256 4f622390…), Thorium
+     3d1e2c0 (TAS.COM, e648a1d0…) and Baza 50dc512 (BAZA.COM 280ee372…,
+     BAZA.RTL 14d7fd11…, BOUNCE.BAS 615693a5…). The three captures were
+     made at fdd9e5b with the commands in their comments. DEL in the ROM
+     cites 402f30e: (TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125). -->
 
 A command line contains a command and its arguments, separated by spaces.
 Return or `^J` ends the line. The maximum is 127 characters and typing the
@@ -47,15 +43,15 @@ name and type fields:
 
 A colon belongs to the optional drive prefix. A full stop or equals sign
 ends the current field. A field longer than its limit is rejected.
-The parser and delimiter checks are in `src/cpm/ccpcmd.asm:466-585`,
-`src/cpm/ccpcmd.asm:618-678` at the stated source revision.
+The parser and delimiter checks are in `src/cpm/ccpcmd.asm:457-569`,
+`src/cpm/ccpcmd.asm:602-662` at the stated source revision.
 
 `?` matches one character, including a padding space. `*` fills the rest of its
 field with question marks. Thus `G*.*` is `G???????.???`. Text after a star in
 the same field is ignored so `D*X` and `D*` select the same pattern. A short
 field is padded with spaces. `????.COM` therefore matches names of up to four
 characters with type COM, not every name ending in COM
-(`src/cpm/ccpcmd.asm:562-585`, `src/cpm/ccpcmd.asm:640-661`).
+(`src/cpm/ccpcmd.asm:546-569`, `src/cpm/ccpcmd.asm:624-645`).
 
 DIR and ERA use patterns to select files. TYPE, REN and SAVE require
 unambiguous names. COPY requires an unambiguous source and resolved
@@ -64,8 +60,8 @@ command also requires one name.
 The following retained capture shows an overlong name, a pattern where TYPE
 requires one file and a second argument where DIR accepts only one.
 
-<!-- Historical capture: TEC-OS 78127ec, original starter card.
-     node tools/capture.mjs "DIR VERYLONGNAME.TXT" "TYPE *.CMD" "DIR A: B:" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "DIR VERYLONGNAME.TXT" "TYPE *.CMD"
+     "DIR A: B:". Boot rows omitted; the output is the same as at 78127ec. -->
 ```text
 A>DIR VERYLONGNAME.TXT
 VERYLONGNAME.TXT?
@@ -121,7 +117,7 @@ question mark (`fdd9e5b:docs/shell.md:28-41`).
 A built-in name must end at a space or the end of the command piece.
 `DIRX`, `DIR.COM` and `A:DIR` are program commands, not forms of built-in
 DIR. The last searches for `A:DIR.COM`. The keyword comparison uses the
-original command word (`src/cpm/ccpcmd.asm:694-724`).
+original command word (`src/cpm/ccpcmd.asm:678-708`).
 
 ### DIR and TYPE
 
@@ -144,9 +140,8 @@ last record. No name or no matching file produces `NO FILE`.
 
 ### COPY
 
-COPY is the shell's. At TEC-OS `fdd9e5b` it takes the same forms as the ROM's
-COPY described here, which this section's citations give at `a1023bd`
-(`fdd9e5b:drivers/shellcmd.asm:54-220`, `fdd9e5b:docs/compatibility.md:123-131`).
+COPY is the shell's (`drivers/shellcmd.asm:54-220`,
+`docs/compatibility.md:123-131`).
 COPY uses the current user area on both source and destination drives.
 A name without a drive uses the current drive. A destination containing only
 a drive takes the source's complete name and type. A destination with a type
@@ -157,13 +152,13 @@ The resolved source and destination must differ. A self-copy or an argument
 after the destination produces `COPY?` before either file is opened.
 A valid copy replaces any existing destination file, subject to protection.
 On success `COPIED` is followed by the number of 128-byte records copied,
-in hexadecimal (`src/cpm/ccpmut.asm:193-320`).
+in hexadecimal (`drivers/shellcmd.asm:54-155`).
 
 The type-only destination and self-copy cases below were captured on A
-with the original starter card.
+with the starter card.
 
-<!-- Historical capture: TEC-OS 78127ec, original starter card.
-     node tools/capture.mjs "COPY STARTUP.CMD B:.DOC" "DIR B:" "COPY A:STARTUP.CMD STARTUP.CMD" "COPY STARTUP.CMD" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "COPY STARTUP.CMD B:.DOC" "DIR B:"
+     "COPY A:STARTUP.CMD STARTUP.CMD" "COPY STARTUP.CMD". Boot rows omitted. -->
 ```text
 A>COPY STARTUP.CMD B:.DOC
 COPIED 0001
@@ -196,7 +191,7 @@ or specify the same drive. Thus `REN B:NEW.TXT=OLD.TXT` and
 
 REN checks the new name first. If it already exists, `FILE EXISTS` is printed
 and nothing is renamed. An absent old name produces `NO FILE`
-(`src/cpm/ccpmut.asm:74-145`).
+(`src/cpm/ccpmut.asm:81-149`).
 
 ### ERA
 
@@ -208,7 +203,7 @@ character is Y or y. Other answers leave the files unchanged.
 
 A pattern whose eleven stored positions are not all question marks, such
 as `*.TXT`, is erased without confirmation. No match produces `NO FILE`
-(`src/cpm/ccpmut.asm:10-63`). Protection and write failures can stop a
+(`src/cpm/ccpmut.asm:10-67`). Protection and write failures can stop a
 multi-file erase after some entries have already been erased. The exact
 partial-result cases are in [Appendix D](appendix-d-error-messages.md).
 
@@ -222,12 +217,12 @@ looked up, plain `DEL` under the shell does not run a `DEL.COM`, as plain
 (`fdd9e5b:drivers/shell.asm:530-539`, `fdd9e5b:docs/compatibility.md:119-122`,
 `fdd9e5b:test/commands.test.mjs:163-213`).
 
-The following historical run starts with an empty B drive and copies one
+The following run starts with an empty B drive and copies one
 disposable file there. It records an `n` answer that leaves the file and a `y`
-answer that erases it. This is a separate `78127ec` demonstration, not the card
+answer that erases it. This is a separate demonstration, not the card
 used for BANNER in Chapter 2. `ERA *.*` would erase BANNER too on that card.
 
-<!-- node tools/capture.mjs "COPY STARTUP.CMD B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "COPY STARTUP.CMD B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
 ```text
 A>COPY STARTUP.CMD B:
 COPIED 0001
@@ -258,7 +253,7 @@ An existing file of the same name is erased first. A failed make, write or
 close produces `NO SPACE`. After a write failure SAVE attempts to close the
 file. If the close succeeds, its directory entry retains the records written.
 `NO SPACE` does not confirm that the close succeeded. Digital Research's CP/M 2.2
-SAVE leaves the file open in that case (`src/cpm/ccpcmd.asm:249-398`).
+SAVE leaves the file open in that case (`src/cpm/ccpcmd.asm:252-390`).
 
 ### Drives, USER and program lookup
 
@@ -276,8 +271,8 @@ after that search. A file in user 0 needs no system attribute.
 If no file is found, a plain command on a drive other than A continues on A
 in the same user order. An explicit drive suppresses that fallback.
 A found file that cannot load stops the search rather than permitting
-another copy on a later drive. These paths are in `src/cpm/ccp.asm:403-467`
-and `src/cpm/ccp.asm:589-640`. [Chapter 5](05-drives-and-user-areas.md)
+another copy on a later drive. These paths are in `src/cpm/ccp.asm:373-439`
+and `src/cpm/ccp.asm:571-622`. [Chapter 5](05-drives-and-user-areas.md)
 works through the resulting choices.
 
 ### CON
@@ -286,7 +281,7 @@ With no argument CON reports the console in effect. The device names are
 TTY, CRT, BAT and UC1, with PICO as an alias for CRT and GLCD for UC1.
 A colon may follow a device name. A width must be separated from CRT or PICO
 by a space and must be 80, 40 or 32. Other devices take no width.
-Extra text is rejected (`src/cpm/ccpcmd.asm:54-208`).
+Extra text is rejected (`src/cpm/ccpcmd.asm:58-214`).
 
 The reply goes through the selected console and is discarded in BAT mode.
 Selecting an unavailable console can leave or restore another mode so the reply

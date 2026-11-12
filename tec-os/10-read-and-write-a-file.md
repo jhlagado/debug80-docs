@@ -7,18 +7,11 @@ nav_group: "Writing programs"
 
 # 10. Read and write a file
 
-<!-- Source-only semantic check: TEC-OS
-     a1023bd0cbb4879c37ae61e6f670b442e1e60abe. No new runtime result claimed.
-     The complete SHOW listing, preparation and output retain TEC-OS 78127ec.
-     The fdd9e5b: citations use TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main), source reading only.
-     Historical PC assembly used atom-z80 0.3.7. The starter card's TAS.COM
-     was Thorium dbee66a, SHA-256
-     45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     TED.COM was Thorium 128edb7, SHA-256
-     2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f.
-     The 72-byte build figure is historical. Current source checking and
-     the write-call walkthrough supply no new build, capture or measurement. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision. SHOW was assembled by TAS
+     (Thorium 3d1e2c0, the pinned TAS.COM) through tools/lib/assemble.mjs,
+     72 bytes, and the SHOW capture was made at fdd9e5b on the card the
+     recipe shown makes. -->
 
 A file call needs both a name and a place in memory for the data. The BDOS
 keeps the file's position in a file control block and transfers its data a
@@ -139,7 +132,7 @@ sequence after SHOW explains how to finish both operations and check them.
 ## SHOW reads a text file
 
 SHOW uses the default FCB and DMA buffer to print the file named after
-its command. The complete historical listing is retained unchanged:
+its command. Its complete listing is:
 
 ```asm
 ; SHOW NAME: print the text file NAME on the console.
@@ -207,25 +200,29 @@ argument has a blank name in its FCB, finds no file and prints the same
 message. Reporting success or failure to a later command is a separate
 return-code convention explained in Chapter 13.
 
-### The historical card and output
+### The card and output
 
-The earlier build record gives SHOW as 72 bytes with TAS or ATOM. The
-retained host recipe uses ATOM 0.3.7. At TEC-OS `fdd9e5b` atom-z80 is no longer a dependency of the repository,
-so `npx atom` in these recipes needs atom-z80 0.3.7 installed by hand. Its `work.img` is the historical HELLO
-starter-card copy, whose full preparation is retained in Chapter 27.
-`hello.asm` is that unchanged HELLO source, not the new banner exercise.
-These original commands add SHOW and the text file to that card:
+TAS assembles SHOW to 72 bytes. Its `work.img` is the HELLO starter-card
+copy, whose preparation is in Chapter 27, and `hello.asm` is that HELLO
+source, not the banner exercise. These commands, run in the repository
+root with the TAS host prepared, assemble SHOW on the PC and add it and the
+text file to that card:
 
 ```sh
-npx atom show.asm show.com
+node --input-type=module -e '
+import { writeFileSync } from "node:fs";
+import { assembleProgram } from "./tools/lib/assemble.mjs";
+const [src, out] = process.argv.slice(1);
+writeFileSync(out, (await assembleProgram(src)).bytes);
+' show.asm show.com
 node tools/tecvol.mjs put work.img B show.com
 node tools/tecvol.mjs put work.img B hello.asm --text
 ```
 
-The capture contains both the successful read and the missing-file case.
-Its contents and application provenance remain those of `78127ec`:
+The capture contains both the successful read and the missing-file case:
 
-<!-- node tools/capture.mjs --card work.img B: "SHOW HELLO.ASM" "SHOW NOSUCH.TXT" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card work.img B: "SHOW HELLO.ASM"
+     "SHOW NOSUCH.TXT". Boot rows omitted. -->
 ```text
 A>B:
 B>SHOW HELLO.ASM
@@ -245,10 +242,9 @@ No such file
 B>
 ```
 
-The first output repeats the historical HELLO source. The second prints SHOW's
-own error message. The blank line before each returned command prompt is the
-CCP's new line after a program exit. Nothing in this capture establishes a
-current build size or a newly qualified card.
+The first output repeats the HELLO source. The second prints SHOW's own error
+message. The blank line before each returned command prompt is the command
+processor's new line after a program exit.
 
 ## Making and writing a file
 
@@ -300,13 +296,13 @@ unmodified FCB can close without a directory write. Function 48 provides
 an explicit flush boundary for pending writes after the file state has
 been closed. Chapter 19 explains the cache's ordering and failure paths.
 
-On a volume written through, such as A, TEC-OS `fdd9e5b` holds one pending
+On a volume written through, such as A, TEC-OS holds one pending
 block. A write returns once its record is in that block's cache line, and
 the block reaches the card at the next close, directory request, write to
 another block, console read, function 48 or warm boot. A program that writes
 a file and then waits for a key therefore leaves nothing unwritten while it
 waits. A reset before one of those points loses at most that block's
-records (`fdd9e5b:docs/recovery.md:64-97`).
+records (`docs/recovery.md:64-97`).
 
 A write that returns 1 or 2 may follow earlier successful records. Close
 the partial file and check the close result before reporting how much was
@@ -334,9 +330,8 @@ checking their result. Appendix A gives their exact bit meanings.
 At an ordinary exit, a successful warm-boot flush puts pending changes
 on the card before another program loads. If a write fails there, TEC-OS
 drops the failed cache lines, reports `Write lost` and cancels the remaining
-command chain. Explicit function 48 also reports failure. At `a1023bd` it
-drops failed lines, and at TEC-OS `fdd9e5b` it keeps them for the next
-flush, so only warm boot drops a line that still fails
-(`fdd9e5b:docs/recovery.md:49-58`). A later successful flush cannot restore bytes from a line already
-dropped. A reset discards pending cached changes rather than finishing
+command line. Explicit function 48 also reports failure, and keeps a failed
+line for the next flush, so only warm boot drops a line that still fails
+(`docs/recovery.md:49-58`). A later successful flush cannot restore bytes
+from a line already dropped. A reset discards pending cached changes rather than finishing
 unclosed work.

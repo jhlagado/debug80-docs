@@ -7,25 +7,19 @@ nav_group: "Writing programs"
 
 # 14. Write a resident service
 
-<!-- Source-only semantic check: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     Retained source/recipes are preserved from frozen10821b6, not blanket
-     execution evidence. COUNT workflow:78127ec Book45. CHEAT/RECS/NEEDS:
-     621201d Book42. PC writer111-byte result:7458352 Book31; byte equality
-     with TAS's first111 bytes:60e0768 Book27. FAIL: attempt04 at Origo06b3e05a,
-     actual-result closure c40c79df. Its earlier purported capture remains held
-     in13-fail-example-candidate.md and is not used below.
-     Historical TAS input:Thoriumdbee66a, SHA-256
-     45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     FAIL used tested8b8664a, landed962853f, ROMfa63989b and PICOv3.
-     No new execution accompanied this insertion. Proofs:13-pass-record.md. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision. Every capture was made at
+     fdd9e5b with the command in its comment, on svc.img made as shown from
+     the starter card, the programs and services assembled on the model by
+     the card's TAS.COM, Thorium 3d1e2c0. The PC writer recipe was rerun at
+     fdd9e5b and wrote COUNT's 111 bytes, the same as the first 111 bytes
+     of the card's TAS COUNT COUNT.SVC there. -->
 
 `COUNT.SVC` counts console characters after the command that installs it
 has ended. Its hook shows how resident code survives program exits and how
-another program finds a routine inside it. COUNT and its clients retain their
-historical source and results. Those captures predate the shell. On the
-starter card at TEC-OS `fdd9e5b` the startup file installs `SHELL.SVC`
-first, so `SERVICES` also lists `SHELL 10` below the newer services and
-`UNLOAD` removes it only after them
+another program finds a routine inside it. The starter card's startup file
+installs `SHELL.SVC` first, so `SERVICES` also lists `SHELL 10` below the
+newer services and `UNLOAD` removes it only after them
 ([Chapter 5](05-drives-and-user-areas.md)). The failed-INIT example has a separate current
 workflow below. Use the PC setup from
 [Chapter 6](06-cards-on-the-pc.md) for their card preparation.
@@ -68,7 +62,7 @@ paths.
 
 ## COUNT.SVC
 
-This historical `COUNT.SVC` source hooks `CONOUT`. Its `CHARS` word stores
+This `COUNT.SVC` source hooks `CONOUT`. Its `CHARS` word stores
 the count and its record provides a routine to read that word:
 
 ```asm
@@ -206,7 +200,7 @@ two saved bytes back over `CONOUT`'s target. Carry clear permits removal.
 A routine that returns carry set must leave the service and its external
 state usable because the loader keeps it installed.
 
-## Assembly, installation and historical measurements
+## Assembly, installation and measurements
 
 `TAS NAME OUT.TYP` writes the output under the name given. For the output
 type `.SVC` it fills in the header's fields and the relocation data. For any
@@ -220,7 +214,7 @@ from `SERVICES`. [Chapter 7](07-choose-a-console.md) explains switching
 consoles. Select a working replacement console before removing GLCD.
 The Stacks section below explains the declarations behind this restriction.
 
-The historical recipe below prepares a separate `svc.img` using the host
+The recipe below prepares a separate `svc.img` using the host
 card-tool setup from Chapter 6. Save COUNT's listing as `count.asm` beside
 the other PC sources. `HWLIB.ASM` is the helper from Chapter 12 and
 `area.asm` is Chapter 11's AREA program. `chars.asm`, listed under
@@ -236,9 +230,11 @@ node tools/tecvol.mjs put svc.img B count.asm --text
 node tools/tecvol.mjs put svc.img B chars.asm --text
 ```
 
-The confirmed `78127ec` run assembled AREA and CHARS before writing COUNT.SVC:
+This run assembles AREA and CHARS before writing COUNT.SVC:
 
-<!-- node tools/capture.mjs --card svc.img B: "TAS AREA" "TAS CHARS" "TAS COUNT COUNT.SVC" AREA COUNT.SVC SERVICES AREA CHARS CHARS UNLOAD SERVICES AREA CHARS -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card svc.img B: "TAS AREA" "TAS CHARS"
+     "TAS COUNT COUNT.SVC" AREA COUNT.SVC SERVICES AREA CHARS CHARS UNLOAD SERVICES
+     AREA CHARS. Boot rows omitted. -->
 ```text
 A>B:
 B>TAS AREA
@@ -254,29 +250,31 @@ COUNT.SVC written
 The rest of that same run measured the TPA, installed COUNT, read the count
 twice and removed the service:
 
-<!-- the same run, continued -->
+<!-- TEC-OS fdd9e5b: the same run, continued -->
 ```text
 B>AREA
-47268 bytes
+44544 bytes
 
 B>COUNT.SVC
 
 B>SERVICES
 COUNT 1
+SHELL 10
 B>AREA
-46848 bytes
+44288 bytes
 
 B>CHARS
-count 003A
+count 0044
 
 B>CHARS
-count 0052
+count 005C
 
 B>UNLOAD
 
 B>SERVICES
+SHELL 10
 B>AREA
-47268 bytes
+44544 bytes
 
 B>CHARS
 no COUNT record
@@ -284,15 +282,15 @@ no COUNT record
 B>
 ```
 
-The retained file description gives 100 header/image bytes and 11 relocation
-bytes. The earlier PC writer result at `7458352` confirms the 111-byte total.
-In the `78127ec` workflow COUNT occupied one page, as `SERVICES` reported.
-The measured TPA fell by 420 bytes and removal restored them. The page accounted for 256 bytes.
-The remaining 164 were the alignment gap at `B900h` to `B9A3h`, below the
-original BDOS entry stub. That gap is lost with the first service only.
+The file has 100 header/image bytes and 11 relocation bytes, and the PC
+writer below gives the same 111-byte total. COUNT occupied one page, as
+`SERVICES` reported. The measured TPA fell by 256 bytes, that page, and
+removal restored them. The shell, installed first, had already taken the
+alignment gap below the BDOS entry stub, which is lost with the first service
+only.
 [Chapter 25](25-loading-and-removing-services.md#the-resident-entry-and-its-pages)
-explains the allocation. These addresses and sizes describe this historical
-layout and must not be used as a current memory ceiling.
+explains the allocation. These addresses and sizes describe this card's
+layout and are not a memory ceiling for programs to assume.
 
 The two CHARS results differed by `18h` (24 characters printed between the
 calls). The hook remained installed across each program's warm boot.
@@ -300,20 +298,17 @@ calls). The hook remained installed across each program's warm boot.
 ### The PC file writer
 
 The repository's `makeSvc` in `tools/lib/svc.mjs` writes service files on
-the PC. At the historical revisions below it used ATOM and assembled the
-image at origins 0 and `0100h` to find bytes requiring relocation. At TEC-OS
-`fdd9e5b` it uses TAS and assembles at `0100h` and `0200h`, as a CP/M PRL
-file is made (`fdd9e5b:tools/lib/svc.mjs:1-4`,
-`fdd9e5b:tools/lib/prl.mjs:33-53`). Its input needs an indented
+the PC. It uses TAS and assembles at `0100h` and `0200h`, as a CP/M PRL
+file is made (`tools/lib/svc.mjs:1-4`, `tools/lib/prl.mjs:33-53`). Its input needs an indented
 `ORG $0100` line with no trailing comment. An include such as `%INCLUDE "ABI.INC"` is
 resolved relative to the source file, matching path components without
 regard to case. Copying `abi.inc` into the current directory is sufficient
 only when `count.asm` is there too. The include remains source-adjacent
 even though temporary assembly copies are written under `build/svc`.
 
-At `7458352` this PC recipe wrote COUNT's 111 meaningful bytes. An earlier
-comparison at `60e0768` confirmed equality with the first 111 bytes of TAS's
-128-byte file:
+This PC recipe, run in the repository root with `count.asm` there, writes
+COUNT's 111 meaningful bytes. They equal the first 111 bytes of the 128-byte
+file that the card's `TAS COUNT COUNT.SVC` writes:
 
 ```sh
 cp dist/abi.inc .
@@ -392,50 +387,39 @@ there is nothing to undo. The loader does not call REMOVE after this return.
 It scans the BIOS targets and releases FAIL's provisional pages because none
 points into them.
 
-The following excerpts come from a separate verified workflow on the qualified
-ROM `fa63989b`, using the PICO9918 console at 40 columns with the Matrix
-switch enabled. Startup's GLCD command installed nothing. This is a fresh
-baseline, not a continuation of the historical COUNT session.
+The following run uses the PICO9918 console at 40 columns with the Matrix
+switch enabled, on a separate copy of the starter card with `fail.asm`,
+Chapter 11's `area.asm` and the matching `abi.inc` on B. AREA needs no HWLIB
+include. The startup file had installed only the shell:
 
-Prepare a separate card using Chapter 6's setup with TAS on A. Put this original
-`fail.asm`, Chapter 11's original `area.asm` and the matching `abi.inc` on B
-using the text-file operation. AREA needs no HWLIB include. The build session
-included these two commands:
-
-<!-- attempt04 machine9: contiguous excerpt from fail-build-console.bin -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --card svc2.img B: "TAS AREA"
+     "TAS FAIL FAIL.SVC" AREA SERVICES FAIL.SVC AREA. Boot rows omitted. -->
 ```text
+A>B:
 B>TAS AREA
 AREA.COM written
 
 B>TAS FAIL FAIL.SVC
 FAIL.SVC written
-```
 
-The verification run also built a separate control service, then flushed the
-card with Ctrl+C. The next excerpt starts in fresh RAM with that saved card.
-No resident service was installed in this baseline. `SERVICES` printed no
-service line before the deliberate failure:
-
-<!-- attempt04 machine10: contiguous excerpt from fail-baseline-console.bin -->
-```text
-A>B:
 B>AREA
-47268 bytes
+44544 bytes
 
 B>SERVICES
+SHELL 10
 B>FAIL.SVC
 FAIL.SVC?
 
 B>AREA
-47268 bytes
+44544 bytes
 
 B>
 ```
 
 The question mark reports the failed installation. AREA printed the same
-47,268-byte TPA before and after it. In this verified layout FAIL left no
-resident allocation. The verification also checked the service state directly:
-INIT returned carry set once, REMOVE was not called and the loader restored
+44,544-byte TPA before and after it, and FAIL left no resident allocation.
+The attempt04 verification of this workflow, on ROM `fa63989b`, also checked
+the service state directly: INIT returned carry set once, REMOVE was not called and the loader restored
 the complete baseline after its BIOS scan. An INIT that changes hardware or
 hooks must undo those changes before returning carry set.
 
@@ -444,7 +428,7 @@ GLCD's INIT reports an absent graphics LCD with carry set and `A` = 2,
 switch is disabled or a GLCD table is already registered. For a startup line
 with CON requesting CRT, registration returns TNENODV. In STARTUP.CMD that INIT
 failure is quiet when cleanup releases the pages. It leaves a zero command
-result so a following `:` piece can run. Retained-page failures, failed file
+result so a following `&` piece can run. Retained-page failures, failed file
 validation and rejected records do not receive that exception. A driver that
 finds its device absent can use the same return convention.
 [Chapter 8](08-commands-at-startup.md) describes the startup policy and Chapter
@@ -519,21 +503,23 @@ inspected source are 8 extra bytes on the BDOS stack, 12 on the BIOS stack and 6
 on the CCP stack. GLCD declares 6 for the CCP so GLCD and COUNT cannot both be
 installed with these declarations. On a GLCD-only configuration, startup
 installs GLCD and COUNT then fails with `COUNT.SVC?`. The earlier console
-prerequisite avoids that conflict. The historical captures used configurations
-in which COUNT could load.
+prerequisite avoids that conflict. The captures here use configurations in which COUNT can load.
 
 CHEAT changes COUNT's BDOS declaration to 9, above the limit even with no
-other service installed. This confirmed `621201d` capture omits its assembly
-lines:
+other service installed. This capture omits its assembly lines:
 
-<!-- sed 's/^\tDB\t2,2,2/\tDB\t9,2,2/;s/COUNT   "\t; the name/CHEAT   "\t; the name/' count.asm > cheat.asm; node tools/tecvol.mjs put svc.img B cheat.asm --text; node tools/capture.mjs --card svc.img B: "TAS CHEAT CHEAT.SVC" CHEAT.SVC SERVICES -->
+<!-- TEC-OS fdd9e5b: sed 's/^\tDB\t2,2,2/\tDB\t9,2,2/;s/COUNT   "\t; the name/CHEAT   "\t; the name/' count.asm > cheat.asm; node tools/tecvol.mjs put svc.img B cheat.asm --text; node tools/capture.mjs --card svc.img B: "TAS CHEAT CHEAT.SVC" CHEAT.SVC SERVICES -->
 ```text
 B>CHEAT.SVC
 CHEAT.SVC?
 
 B>SERVICES
+SHELL 10
 B>
 ```
+
+The shell declares 6 bytes of the BDOS's stack, and even alone CHEAT's 9
+exceed the BDOS's limit of 8.
 
 You must calculate those declarations. The loader checks their sums, not the
 code's actual stack use. It cannot check a transient program's private stack
@@ -582,7 +568,7 @@ A client is a program or service that uses a record. For FIND, set C to
 `TNFIND`, service 13, DE to the eight-byte padded name and B to the minimum
 version, then call ABICALL. Carry clear returns the entry table in HL and
 the current registry generation in A. Carry set reports no matching record.
-This historical CHARS client uses the helpers in HWLIB.ASM:
+This CHARS client uses the helpers in HWLIB.ASM:
 
 ```asm
 ; CHARS: print the count that COUNT.SVC publishes, in hex.
@@ -628,13 +614,13 @@ GETCNT therefore returns to the instruction after `CALL CALLHL`.
 
 CHKHW checks the ABI signature and major version before the first ROM
 call. A COM file can run on a different system, where `C008h` may contain
-unrelated code. In the earlier historical transcript CHARS printed
-`no COUNT record` after UNLOAD removed COUNT.
+unrelated code. In the run above CHARS prints `no COUNT record` after UNLOAD removes
+COUNT.
 
 LIST, service 14 or `TNLIST`, takes the index in B and returns the record
 itself in HL with the generation in A. Carry is set past the last record.
 Newly published records precede older services' records, retaining their
-own linked order. This historical RECS program prints each record's name,
+own linked order. This RECS program prints each record's name,
 version and table address:
 
 ```asm
@@ -697,25 +683,26 @@ Save that source as `recs.asm` and put it on B with the same `--text`
 card-tool operation used for the other sources. The confirmed `621201d` run
 below used the PICO board configuration. Startup's GLCD line installed nothing
 while the PICO console was active, leaving stack room for COUNT.
-With the historical makeSvc-built COUNT file on the card, RECS listed
-two records. The table addresses are results from that run:
+With COUNT.SVC built by TAS on the card, RECS listed two records. The table
+addresses are results from that run:
 
-<!-- node tools/capture.mjs --card svc.img --board pico B: "TAS RECS" COUNT.SVC RECS -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card svc.img --board pico B:
+     "TAS COUNT COUNT.SVC" "TAS RECS" COUNT.SVC RECS. Boot rows and the
+     COUNT build omitted. -->
 ```text
-A>B:
 B>TAS RECS
 RECS.COM written
 
 B>COUNT.SVC
 
 B>RECS
-COUNT    version 01 table B85F
-PICO     version 03 table BBE3
+COUNT    version 01 table AE5F
+PICO     version 04 table BBE8
 
 B>
 ```
 
-That run predates release 1, whose PICO record reports `version 04`.
+The shell, which publishes no record, is not listed.
 
 PICO is the ROM console's permanent record, registered when that console starts
 at cold boot. UNLOAD cannot remove it. Its graphics entries require the display
@@ -728,7 +715,7 @@ version. A newer service's qualifying record hides an older one until
 the newer service is removed. A newer record below the minimum version
 does not hide an older qualifying record.
 
-RECS's byte-sized INDEX wraps after 255. The historical two-record listing ends
+RECS's byte-sized INDEX wraps after 255. The two-record listing ends
 normally but a full 256-record registry would wrap to zero and repeat. A client
 intended to enumerate that capacity must stop after processing index 255 rather
 than depend on a further out-of-range LIST call.
@@ -760,7 +747,7 @@ padded name. In TAS source, place whole dependency entries at the end
 under DEPS. TAS counts them, excludes them from the image and writes them
 after it. The PC writer takes dependencies from the `deps` option to
 makeSvc, not from TAS's trailing DEPS convention. Appendix H gives both
-forms. This historical NEEDS.SVC binds to COUNT once during INIT:
+forms. This NEEDS.SVC binds to COUNT once during INIT:
 
 ```asm
 ; NEEDS.SVC: a service that names COUNT's record as a dependency and binds to
@@ -798,12 +785,12 @@ DEPS:	DB	1,"COUNT   "	; the least version, then the record's name
 The loader checks each dependency before moving the service or running INIT.
 NEEDS uses the same name and version in its declaration and FIND call so that
 lookup is already satisfied when INIT starts. Without COUNT the installation
-fails before INIT. The confirmed `621201d` run below shows the failed attempt,
-then installation and removal in the required order:
+fails before INIT. The run below shows the failed attempt, then installation
+and removal in the required order:
 
-<!-- node tools/tecvol.mjs put svc.img B needs.asm --text; node tools/capture.mjs --card svc.img B: "TAS NEEDS NEEDS.SVC" NEEDS.SVC COUNT.SVC NEEDS.SVC SERVICES UNLOAD UNLOAD SERVICES -->
+<!-- TEC-OS fdd9e5b: node tools/tecvol.mjs put svc.img B needs.asm --text; node tools/capture.mjs --card svc.img B: "TAS COUNT COUNT.SVC" "TAS NEEDS NEEDS.SVC" NEEDS.SVC COUNT.SVC NEEDS.SVC SERVICES UNLOAD UNLOAD SERVICES
+     Boot rows and the COUNT build omitted. -->
 ```text
-A>B:
 B>TAS NEEDS NEEDS.SVC
 NEEDS.SVC written
 
@@ -817,11 +804,13 @@ B>NEEDS.SVC
 B>SERVICES
 NEEDS 1
 COUNT 1
+SHELL 10
 B>UNLOAD
 
 B>UNLOAD
 
 B>SERVICES
+SHELL 10
 B>
 ```
 

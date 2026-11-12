@@ -7,14 +7,13 @@ nav_group: "Writing programs"
 
 # 9. Call TEC-OS
 
-<!-- Source-only semantic check against TEC-OS
-     a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     The register-preservation fragment is unchanged from the historical SHOW
-     listing in old07 at 78127ec. Historical PC assembly provenance is
-     atom-z80 0.3.7.
-     Compact LINE and its serial TAS/input captures use the qualified attempt
-     retained at private Origo 71696f2e, line-ea3-attempt01. This is not
-     KS48, browser, font or physical-board qualification. See 08-pass-record.md. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision, source inspection. The
+     register-preservation fragment is from Chapter 10's SHOW listing. The
+     LINE captures were made at fdd9e5b on the serial board, on the starter
+     card with line.asm put on B: node tools/capture.mjs --card line.img B:
+     "TAS LINE" "@start LINE" HELLO, LINE built by the card's TAS, Thorium
+     3d1e2c0. -->
 
 Your program can read a key, print text or collect a line through the BDOS.
 The same calls work with the selected console so the program uses TEC-OS
@@ -79,8 +78,8 @@ placement and the exit rule after changing `SP`.
 
 Function 2 prints the character in `E`. A loop that keeps its text pointer
 in `HL` and its remaining count in `B` must save both across that call. This
-unchanged fragment from the historical SHOW listing assumes the next
-character is already in `A`:
+fragment from the SHOW listing assumes the next character is already in
+`A`:
 
 ```asm
         PUSH    HL
@@ -149,34 +148,31 @@ depend on their values surviving the input call. `GOT` is a fixed
 acknowledgement, not a copy of the text in `BUF`. The final `RET` uses the
 return word supplied by the CCP.
 
-On drive B, build it with `TAS LINE`. This serial-model capture at
-`ea3ef3d` begins with that command, after the earlier prompt:
+On drive B, build it with `TAS LINE`. This serial capture begins at that
+command:
 
-<!-- Origo 71696f2e line-ea3-attempt01/output/tas-console.bin;
-     CR/CRLF rendered as lines. No preceding prompt is captured. -->
+<!-- TEC-OS fdd9e5b: the run named in this chapter's header, from TAS LINE. -->
 ```text
-TAS LINE
+B>TAS LINE
 LINE.COM written
 
 B>
 ```
 
-Type `LINE` to run it, then `HELLO` and Return. The retained input capture
-starts at the program's function-10 call. It omits the earlier prompt and
-the typed `LINE` command:
+Type `LINE` to run it, then `HELLO` and Return. The same run continues:
 
-<!-- Origo 71696f2e line-ea3-attempt01/output/positive-console.bin;
-     exact bytes HELLO\r\r\nGOT\r\n\r\nB>, rendered as lines. -->
+<!-- TEC-OS fdd9e5b: the same run, LINE then HELLO. -->
 ```text
+B>LINE
 HELLO
 GOT
 
 B>
 ```
 
-Function 10 echoed `HELLO` while reading it. The recorded buffer contains
-count 5 followed by those five characters. Function 9 printed `GOT`.
-The program's final `RET` reached warm boot through `0000h`.
+Function 10 echoes `HELLO` while reading it. The buffer then holds
+count 5 followed by those five characters. Function 9 prints `GOT`.
+The program's final `RET` reaches warm boot through `0000h`.
 
 Function 10 ends the line at Return, line feed or the buffer's maximum length. The
 editing keys operate as at the command prompt: backspace removes the last

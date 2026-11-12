@@ -8,55 +8,21 @@ nav_exclude: true
 # TEC-OS on the TEC-1G
 
 <!-- Opening profile: KD-243 / KS48, TEC Compact at 40 columns.
-     Selected mechanism source962853f, tested8b8664a.
-     C16 release recheck: reader source citations now use release-1
-     TEC-OS a1023bd; release TED.COM is Thorium 168e89c (75fd6c64).
-     Release-card update: TEC-OS 755636b (card-r1b) has the nine-file
-     starter card, TED.COM Thorium 967678c (150a19bd), BAZA.COM and
-     BAZA.RTL Baza fbfedb6, and the MON3-loaded diagnostics (DIAG.HEX).
-     Chapter 3 and the pages naming the card's files cite that revision.
-     Lower-case update: TEC-OS 12b2ec5 (card-lower) has the lower-case
-     TIMES.BAS, BAZA.COM Baza ae6a00d (ee8465ac, 15,744 bytes, with def call,
-     call and reg) and the twelve-file page card with DEMO.ASM and
-     BOUNCE.BAS.
-     DEL update: TEC-OS 7fa2823 (main, ROM 3ed68c47) adds the DEL built-in,
-     TED.COM Thorium b69d544 (4f622390), BAZA Baza a9e7b2f (44a0fe17, with
-     varptr) and the eleven-file page card without DEMO.COM.
-     Service-entry update: TEC-OS 31b6083 (main, ROM 3e5311d2) adds
-     NAME.SVC /E and starts a .COM with HL 0100h and DE 0000h, with TED.COM
-     Thorium b69d544 (4f622390) and BAZA Baza 747b9a7 (27724068, faster
-     compiling, the same language). MON3.SVC is built but on no card.
-     Chapters 2, 3, 4, 5, 6, 12, 13, 21, 27 and 29 and appendices D, F, I
-     and J cited it.
-     One-card update: TEC-OS 402f30e (main, ROM 95467cae, 15,363 bytes used
-     and 1,021 free after the ROM squeeze) has MON3.SVC with KS53 S2 and S3
-     (4,605 bytes, 18 pages), its matrix-key record in KBLAST, which abi.inc
-     publishes, and its key-up wait, and one fifteen-file card, the starter
-     card and the page's card alike, with MON3.SVC, HELLO3.BIN, HELLO3.ASM
-     and CHAIN.ASM. TAS.COM is Thorium 3d1e2c0 (e648a1d0, several statements
-     on a line and a 128-character bound), TED.COM Thorium b69d544 as
-     before, and BAZA Baza ebc0281 (ec8fd42a, self-extracting, 13,056
-     bytes; integer statements as 16-bit code, BASIC-80's &H, HEX$, MOD, \, XOR, WAIT and SWAP, start-up check
-     51C3h, the integer BOUNCE.BAS). Chapters 1 to 8, 11, 12, 13, 15, 17,
-     21, 27 and 29 and appendices C, D, F, I and J cite it.
-     Shell update: TEC-OS fdd9e5b (main, ROM 43ac0f18, 14,875 bytes used
+     Current revision: TEC-OS fdd9e5b (main, ROM 43ac0f18, 14,875 bytes used
      and 1,509 free) has the minimal ROM CCP with the shell hook and
      SHELL.SVC on the card, which STARTUP.CMD loads first: history, COPY,
      DEL, SERVICES, the [more] pager, .CMD scripts and lines joined by !
      (always) and & (on success, after a blank), with CP/M 3's : gone.
      MON3.SVC (4,606 bytes, 18 pages) is entered on install, with no /E.
      TAS is the only assembler. The card's fifteen files hold SHELL.SVC in
-     place of CHAIN.ASM; BAZA is Baza 50dc512 (280ee372, 13,184 bytes, a
-     compile spinner) and BOUNCE.BAS (615693a5) takes the arrow keys;
+     place of CHAIN.ASM; TAS.COM is Thorium 3d1e2c0 (e648a1d0), TED.COM
+     Thorium b69d544 (4f622390), BAZA Baza 50dc512 (280ee372, 13,184 bytes,
+     a compile spinner) and BOUNCE.BAS (615693a5) takes the arrow keys;
      TIMES.BAS and BOUNCE.BAS have keywords in capitals and names in lower
      case. A: coalesces its data writes in one pending block until a flush
-     point. Chapters 1 to 8, 10 to 17, 19, 21 to 23, 25 to 27 and 29 and
-     appendices A, C, D, F, G, H, I and J cite it.
-     Public workflows accepted by Origo review4b5b5a50 from attempt02/e77c7ef0.
-     Bounded opening craft/factual reviews closed d9d57d2/b911e84.
-     That whole batch remains FAILED. Later service controls are separate.
-     Remaining citation reconciliation, navigation and final book review
-     are not accepted by this front-door metadata. -->
+     point. Every chapter and appendix is checked against fdd9e5b; a
+     passage that cites an earlier revision names it. Earlier revisions of
+     these notes are in the book's history. -->
 
 With TEC-OS in its ROM the TEC-1G starts at a command prompt. You can list
 files on an SD card and run a supplied program before using the editor,

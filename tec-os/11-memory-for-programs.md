@@ -7,17 +7,12 @@ nav_group: "Writing programs"
 
 # 11. Memory for programs
 
-<!-- Checked against TEC-OS 78127ec, with the ATOM assembler from the
-     repository's `atom-z80` 0.3.7. -->
-<!-- Historical examples retain that pin and assembler.
-     Source-only mechanism check: a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     TOP, AREA, KEY, SAVE and their recipes/output are retained unchanged.
-     Numerical TPA figures and service costs belong to the historical setup.
-     No build, execution, import, new capture or physical-board result claimed.
-     The MON3.SVC, SHELL.SVC and EXPAND 1 figures cite TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) with a fdd9e5b:
-     prefix. The ATOM recipes below are historical: atom-z80 is no longer a
-     dependency at fdd9e5b (README.md:91-102). -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision. TOP, AREA and KEY were
+     assembled on the PC by TAS, the pinned TAS.COM of Thorium 3d1e2c0,
+     through tools/lib/assemble.mjs: 49, 73 and 142 bytes. Every capture was
+     made at fdd9e5b with the command in its comment, on the cards the
+     recipes shown make; the four-drive card is made with tecvol create. -->
 
 Your program starts at `0100h` but its upper memory limit depends on the card
 and installed services. Code, buffers and a private stack must fit below that
@@ -76,13 +71,10 @@ BIOS uses the caller's stack. Its console calls can also enter the terminal and
 display driver on that stack. The KEY example below reserves its own stack
 before any such call.
 
-## Historical memory readings
+## Memory readings
 
-TOP and AREA are retained examples from `78127ec`, built with ATOM 0.3.7. Their
-card recipes and output keep that provenance. At TEC-OS `fdd9e5b` atom-z80 is no longer a dependency of the repository,
-so `npx atom` in these recipes needs atom-z80 0.3.7 installed by hand. The figures describe those
-historical configurations, not a new measurement of the inspected source or the
-planned opening profile.
+TOP and AREA read the boundary on the host model. They are assembled on the
+PC by TAS, as Chapter 27 explains, and put on a copy of the starter card.
 
 TOP prints the address in the word at `0006h`:
 
@@ -122,65 +114,79 @@ converts a nibble to `0` through `F` and ends with `JP BDOS`. For the high
 digit, the BDOS returns to HEX after CALL DIGIT. The low digit is entered by
 fall-through so its BDOS return goes to HEX's caller. The complete program
 prints the high byte of the boundary before the low byte and appends `h`. These
-retained commands prepared a separate copy of the starter card:
+commands, run in the repository root, assemble it and prepare a separate copy
+of the starter card:
 
 ```sh
+node --input-type=module -e '
+import { writeFileSync } from "node:fs";
+import { assembleProgram } from "./tools/lib/assemble.mjs";
+const [src, out] = process.argv.slice(1);
+writeFileSync(out, (await assembleProgram(src)).bytes);
+' top.asm top.com
 cp dist/starter.img mem.img
-npx atom top.asm top.com
 node tools/tecvol.mjs put mem.img B top.com
 ```
 
 The serial-only model capture gave:
 
-<!-- node tools/capture.mjs --card mem.img B:TOP -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card mem.img B:TOP. Boot rows
+     omitted. -->
 ```text
 A>B:TOP
-B9A4h
+AF00h
 
 A>
 ```
 
-On the historical dual-display configuration, the PICO console code was in ROM
-and no console service was loaded beneath the boundary. Its startup line skipped
-GLCD.SVC. `CON UC1` then installed the GLCD driver and lowered the word. The
-first TOP output and the echo of CON UC1 went to the PICO9918. The reply and
-second TOP output went to the graphics LCD. This is the retained host-model
-capture, not a browser or physical-board observation:
+The startup file had installed the shell, whose ten pages start at `AF00h`.
+On the dual-display configuration the PICO console code is in ROM and the
+startup file's `GLCD.SVC` line installs nothing. `CON UC1` then installed the
+GLCD driver below the shell and lowered the word. The first TOP output and
+the echo of `CON UC1` went to the PICO9918. The reply and second TOP output
+went to the graphics LCD. This is a host-model capture, not a browser or
+physical-board observation:
 
-<!-- node tools/capture.mjs --board pico --card mem.img B:TOP "CON UC1" B:TOP -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --card mem.img B:TOP
+     "CON UC1" B:TOP. Boot rows omitted. -->
 ```text
 A>B:TOP
-B9A4h
+AF00h
 
 A>CON UC1
 CON: UC1:
 A>B:TOP
-B600h
+AC00h
 
 A>
 ```
 
-The following table retains the earlier starter-card address map. The boundary
-moves with the card and residents so these addresses are not constants for
-programs to use:
+The following table gives the starter card's address map with nothing
+installed. The boundary moves with the card and residents so these addresses
+are not constants for programs to use:
 
 | Addresses | What is there |
 | --- | --- |
 | `0000h–00FFh` | Page zero, with the CP/M jumps and buffers |
-| `0100h–B9A3h` | Your program, up to 47,268 bytes on the starter card |
-| `B9A4h–BFFFh` | TEC-OS's working memory |
+| `0100h–B9A8h` | Your program, up to 47,273 bytes on the starter card |
+| `B9A9h–BFFFh` | TEC-OS's working memory |
 | `C000h–FFFFh` | The ROM, which holds TEC-OS itself |
 
-The drive and service combinations changed that boundary as follows in the same
-historical setup. The four-drive card is prepared with the host tools described
-in Chapter 6:
+The drive and service combinations change that boundary as follows. The
+starter card without its startup file gives the first two rows, the card with
+it the next two. The four-drive card has four G8M volumes, made with
+`tecvol create`, and `TOP.COM`, `GLCD.SVC` and `SHELL.SVC` on A, with no
+startup file:
 
-| Card | Service | Word at `0006h` | TPA in bytes | Largest `.COM` that loads |
+| Card | Services | Word at `0006h` | TPA in bytes | Largest `.COM` that loads |
 | --- | --- | --- | ---: | ---: |
-| starter card | none | `B9A4h` | 47,268 | 47,104 |
+| starter card | none | `B9A9h` | 47,273 | 47,104 |
 | starter card | `GLCD.SVC` | `B600h` | 46,336 | 46,336 |
-| four drives | none | `B6E4h` | 46,564 | 46,336 |
+| starter card | `SHELL.SVC` | `AF00h` | 44,544 | 44,544 |
+| starter card | `SHELL.SVC`, `GLCD.SVC` | `AC00h` | 43,776 | 43,776 |
+| four drives | none | `B6E9h` | 46,569 | 46,336 |
 | four drives | `GLCD.SVC` | `B300h` | 45,568 | 45,568 |
+| four drives | `GLCD.SVC`, `SHELL.SVC` | `A900h` | 43,008 | 43,008 |
 
 A drive's allocation vector holds one bit per allocation block. A set bit marks
 allocated storage. The BDOS can locate free blocks through it without reading
@@ -191,20 +197,18 @@ drive count controls those reservations.
 
 Services reduce the boundary in whole 256-byte pages. Each service ends below
 the page containing the preceding boundary and installs a BDOS jump at its own
-base. The jump at `0005h` then points to that lower address. In the historical
-starter setup, GLCD.SVC occupied `B600h–B8FFh`. Its three pages used 768 bytes
-but also excluded the alignment gap at `B900h–B9A3h`. The total reduction was
-932 bytes. A second service ends below the first and reduces the available TPA
-again. At TEC-OS `fdd9e5b` the starter card's word at `0006h` is `B9A9h`
-with nothing installed, a TPA of 47,273 bytes. Its startup file installs
-`SHELL.SVC`, which takes ten pages and leaves `AF00h`, 44,544 bytes, or
-43,776 with `GLCD.SVC` installed too (`fdd9e5b:docs/memory-map.md:12-17`,
-`fdd9e5b:docs/shell.md:20-26`, `fdd9e5b:docs/compatibility.md:3-14`). The
-card's `MON3.SVC` takes 18 pages. Installed alone it moves the word from
-`B9A9h` to `A700h`, leaving 42,496 bytes, and installed after `GLCD.SVC`
-it leaves 41,728 (`fdd9e5b:docs/mon3.md:45-48`). Installed after the shell,
-as on the starter card, it leaves `9D00h`, 39,936 bytes
-(`fdd9e5b:test/shell.test.mjs:737-745`).
+base. The jump at `0005h` then points to that lower address. On the starter
+card with nothing installed, GLCD.SVC occupies `B600h–B8FFh`. Its three pages
+use 768 bytes but also exclude the alignment gap at `B900h–B9A8h`. The total
+reduction is 937 bytes. A second service ends below the first and reduces the
+available TPA again. The starter card's startup file installs `SHELL.SVC`,
+which takes ten pages and leaves `AF00h`, 44,544 bytes, or 43,776 with
+`GLCD.SVC` installed too (`docs/memory-map.md:12-17`, `docs/shell.md:20-26`,
+`docs/compatibility.md:3-14`). The card's `MON3.SVC` takes 18 pages.
+Installed alone it moves the word from `B9A9h` to `A700h`, leaving 42,496
+bytes, and installed after `GLCD.SVC` it leaves 41,728
+(`docs/mon3.md:45-48`). Installed after the shell, as on the starter card,
+it leaves `9D00h`, 39,936 bytes (`test/shell.test.mjs:737-745`).
 
 AREA reads the boundary and subtracts `0100h` to obtain the size in bytes:
 
@@ -255,18 +259,23 @@ BYTES:	DB	" bytes",13,10,"$"
 PUTDEC prints five decimal digits. Each DIGIT call adds a negative power of ten
 to HL until the addition stops producing carry. At that point the remainder
 would be negative. The final SBC adds back the power subtracted once too often.
-HL is saved across function 2's output. The complete source, tabs and comments
-are retained from the historical listing.
+HL is saved across function 2's output. The complete source keeps its tabs and comments.
 
 ```sh
-npx atom area.asm area.com
+node --input-type=module -e '
+import { writeFileSync } from "node:fs";
+import { assembleProgram } from "./tools/lib/assemble.mjs";
+const [src, out] = process.argv.slice(1);
+writeFileSync(out, (await assembleProgram(src)).bytes);
+' area.asm area.com
 node tools/tecvol.mjs put mem.img B area.com
 ```
 
-<!-- node tools/capture.mjs --card mem.img B:AREA -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card mem.img B:AREA. Boot rows
+     omitted. -->
 ```text
 A>B:AREA
-47268 bytes
+44544 bytes
 
 A>
 ```
@@ -279,8 +288,9 @@ file using `LOADBUF` in the CCP workspace. An extra record is therefore
 not loaded across the program's ceiling. An oversized file gets the same
 name-and-question-mark failure as a missing program.
 
-For the historical starter card, the last loaded record ended at `B8FFh`. That
-allowed a 47,104-byte COM file, 164 bytes less than the 47,268-byte TPA. A
+On the starter card with nothing installed, the last loaded record ends at
+`B8FFh`. That allows a 47,104-byte COM file, 169 bytes less than the
+47,273-byte TPA. A
 page-aligned service boundary removes that gap. The loader limit applies to the
 file's record-rounded size. Data allocated after entry can extend to the byte
 below the word at `0006h`.
@@ -309,7 +319,7 @@ scratch:
 The CCP stores the current drive and user area at `0004h` before program entry.
 Warm boot uses that byte to restore the selection so changing that byte changes
 the selection used on exit. An unavailable drive falls back to A
-(`src/cpm/ccp.asm:335-353`, `src/cpm/ccp.asm:32-88`).
+(`src/cpm/ccp.asm:305-323`, `src/cpm/ccp.asm:32-88`).
 
 The tail's first byte is its length and the characters follow it. They are in
 capitals and include the leading space after the command's name. A read into the
@@ -338,19 +348,22 @@ The source bytes are whatever the last program loaded or left there. The count
 must be at most 255 and must stop before the page containing the BDOS entry
 address. Appendix J gives the complete command syntax.
 
-This retained `78127ec` run used the historical starter card without a resident
-service. Its limit was 184 pages. The request for 185 was rejected:
+This run used the starter card, whose startup file had installed the shell
+at `AF00h`. Its limit was 174 pages. The request for 175 was rejected and
+174 accepted:
 
-<!-- node tools/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 185 BIG.COM" DIR -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 175 BIG.COM"
+     "SAVE 174 BIG.COM" DIR. Boot rows omitted. -->
 ```text
 A>B:
 B>SAVE 2 TWO.COM
-B>SAVE 185 BIG.COM
-185?
+B>SAVE 175 BIG.COM
+175?
 
+B>SAVE 174 BIG.COM
 B>DIR
-TWO.COM     
-1 file, 8172K free
+TWO.COM      BIG.COM     
+2 files, 8128K free
 B>
 ```
 
@@ -385,7 +398,7 @@ work. A retained handler has its own behaviour.
 Programs start with maskable interrupts disabled by warm boot. A program can
 enable them. TEC-OS temporarily disables them for card-block I/O, serial-byte
 transfers and PICO9918 control-port byte pairs. It then restores the previous
-state. At `a1023bd` command-history access was among them. At `fdd9e5b` the
+state. At `a1023bd` command-history access was among them. Now the
 history is the shell's, in its own pages, and needs no bank switch.
 
 The non-maskable interrupt (NMI) entry at `0066h` lies inside the default FCB.
@@ -403,7 +416,7 @@ both alone unless the program changes the latch. Cold boot clears page zero and
 initialises the latch copy. TEC-OS does not use `0041h–004Fh` afterwards.
 
 Cold boot clears EXPAND 1 for TEC-OS's cache. At TEC-OS `fdd9e5b` it holds
-(`fdd9e5b:docs/memory-map.md:70-83`):
+(`docs/memory-map.md:70-83`):
 
 | Addresses | Contents |
 | --- | --- |
@@ -530,18 +543,24 @@ original key with Return. HEX saves A across its high-nibble output, then
 converts the low nibble. The final jump to `0000h` ends the program without
 reading a return word from its private stack.
 
-The unchanged historical host recipe assembled KEY and put it on drive B of a
-separate starter-card copy:
+These commands assemble KEY on the PC and put it on drive B of a separate
+starter-card copy:
 
 ```sh
+node --input-type=module -e '
+import { writeFileSync } from "node:fs";
+import { assembleProgram } from "./tools/lib/assemble.mjs";
+const [src, out] = process.argv.slice(1);
+writeFileSync(out, (await assembleProgram(src)).bytes);
+' key.asm key.com
 cp dist/starter.img con.img
-npx atom key.asm key.com
 node tools/tecvol.mjs put con.img B key.com
 ```
 
-This retained serial capture supplied `a`, `Z`, `^C`, Esc and Return:
+This serial capture supplied `a`, `Z`, `^C`, Esc and Return:
 
-<!-- node tools/capture.mjs --card con.img "@start B:KEY" $'@key aZ\x03\x1b\r' -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card con.img "@start B:KEY"
+     $'@key aZ\x03\x1b\r'. Boot rows omitted. -->
 ```text
 A>B:KEY
 61 5A 03 1B 0D 

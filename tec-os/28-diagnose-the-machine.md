@@ -7,16 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 28. Diagnose the machine
 
-<!-- Source-only reading: TEC-OS 755636b130241173c5c30a0be8fe6b79cf2fee37
-     (branch card-r1b), whose diagnostics are those of TEC-OS main dbbdb47.
-     Inline source coordinates refer to this revision. src/ is identical at
-     a1023bd and 755636b, so the card-prompt citations hold at both.
-     The board diagnostics sections follow diag/, tools/diag.mjs,
-     docs/diagnostics.md, docs/board-run.md and test/diag.test.mjs at
-     755636b. No build, test or board run was made for this chapter, and no
-     board log from the diagnostics is recorded here. The diagnostic-prompt
-     screen remains historical 78127ec evidence. The retired 16 KiB
-     diagnostics ROM that this chapter described before is not described. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision, source inspection. The
+     board diagnostics sections follow diag/, tools/diag.mjs,
+     docs/diagnostics.md, docs/board-run.md and test/diag.test.mjs there,
+     unchanged since TEC-OS 755636b (branch card-r1b), whose diagnostics are
+     those of TEC-OS main dbbdb47. No test or board run was made for this
+     chapter, and no board log from the diagnostics is recorded here. The
+     diagnostic-prompt screen is a capture at fdd9e5b with the command in
+     its comment. The retired 16 KiB diagnostics ROM is not described. -->
 
 A card failure can stop TEC-OS before the first command prompt. The error code
 and `R retry>` let you correct the card and try mounting it again. A separate
@@ -29,28 +28,28 @@ Host model results remain separate from observations on a physical board.
 The message `No volume mounted, error ` precedes a two-digit hexadecimal
 code. The character LCD shows `CARD?` on its last row. Both come from
 `DIAG`, entered after card initialisation or container mounting fails
-(`src/boot.asm:632-640`, `src/text.asm:14-16`, `src/lcd.asm:66-80`). The initialisation codes are
+(`src/boot.asm:646-654`, `src/text.asm:14-16`, `src/lcd.asm:66-80`). The initialisation codes are
 `01h` to `04h` and `0Bh`. Container errors are `20h` to `2Ah`
 (`src/sd.asm:12-26`, `src/vol.asm:11-30`).
 
 At `R retry> ` you can type a single key. The routine echoes its original
 case and ends the line. Either `R` or `r` restarts the card operations. Every other key produces
 another prompt so a digit appears unchanged even though the comparison uses a
-masked value (`src/boot.asm:642-653`, `src/text.asm:15`).
+masked value (`src/boot.asm:656-667`, `src/text.asm:15`).
 
 Your available console determines where you can answer. Cold boot selects the
 PICO9918 screen when that display responds and the Matrix switch enables
 the keyboard.
 Otherwise it selects serial. The GLCD console driver is on the card and has
-not been loaded at this point (`src/console.asm:31-52`,
+not been loaded at this point (`src/console.asm:32-45`,
 `src/video.asm:18-24`, `src/pico.asm:53-68`). A board with neither an active
 PICO9918 console nor an attached terminal shows only `CARD?` on the LCD.
 
-In this retained model capture the socket is empty and the console is the
+In this model capture the socket is empty and the console is the
 PICO9918 with its matrix keyboard. Typing `H` produces another prompt.
-Serial output is empty. The screen capture is historical `78127ec` evidence:
+Serial output is empty:
 
-<!-- node tools/capture.mjs --card none --board pico --screen H -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card none --board pico --screen H -->
 ```text
 TEC-OS 0.1 for TEC-1G
 No volume mounted, error 01
@@ -61,7 +60,7 @@ R retry>
 `R` returns to `COLDRT`. That entry resets the BDOS stack and initialises the
 20 × 4 LCD to clear `CARD?`. It then calls `SDINIT` and `MOUNT` again.
 You can insert or correct the card while the prompt waits.
-The retry needs no board reset (`src/boot.asm:92-100`, `652-652`).
+The retry needs no board reset (`src/boot.asm:92-101`, `652`).
 `MOUNT` reads the container table afresh rather than accepting cached table
 bytes (`src/vol.asm:42-47`, `376-418`). [Appendix D](appendix-d-error-messages.md)
 lists each code's cause and remedy.
@@ -69,17 +68,17 @@ lists each code's cause and remedy.
 The banner appears before either card operation. The RAM check, console
 initialisation and clock probe precede it (`src/boot.asm:60-77`). A board
 without the required RAM stops at `TEC-OS needs 64K RAM` on serial
-(`src/boot.asm:417-470`, `src/text.asm:11`). [Chapter 16](16-reset-and-boot.md#ram-before-the-workspace) explains that check.
+(`src/boot.asm:431-484`, `src/text.asm:11`). [Chapter 16](16-reset-and-boot.md#ram-before-the-workspace) explains that check.
 `COLDRT` and `DIAG` use the BDOS stack before the CCP runs. Both failure
 jumps follow completed calls so `DIAG` starts at that stack's top
-(`src/boot.asm:66-66`, `92-100`, `622-640`).
+(`src/boot.asm:66`, `92-100`, `622-640`).
 
 A recognised reset can retain the selected volumes through a failed mount and
 retry. `RSLCAP` copies the drive table before the cold clears. `RSLBUF`, its
 scratch buffer, is at `0100h` in fixed RAM (`src/boot.asm:41-58`, `211-216`,
 `src/layout.asm:121-133`). That buffer survives the route to `DIAG`: `MEMINIT`
 clears EXPAND 1 and the mount uses a line in the block cache there for table
-reads (`src/boot.asm:77-77`, `232-249`, `src/vol.asm:32-47`).
+reads (`src/boot.asm:77`, `232-249`, `src/vol.asm:32-47`).
 [Chapter 16](16-reset-and-boot.md#retained-drive-selection) explains recognition
 and reselection.
 

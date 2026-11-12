@@ -7,17 +7,10 @@ nav_group: "Using the machine"
 
 # 7. Choose a console
 
-<!-- Checked against TEC-OS 78127ec. -->
-<!-- Historical captures retained unchanged at that pin.
-     Source-only semantic check: a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     No execution, new capture or physical-board result is claimed.
-     The historical 80-column setup is not evidence for a new opening profile.
-     The current card's file count is TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) tools/media.mjs:200-231
-     and test/starter.test.mjs:46-80; its 32-column listing was not
-     captured. The CON UC1, SERVICES, UNLOAD and CON excerpt is a capture at
-     fdd9e5b: node tools/capture.mjs --board pico "CON UC1" SERVICES UNLOAD
-     CON, boot rows omitted. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision. Every capture was made at
+     fdd9e5b with the command in its comment, on the starter card; boot rows
+     are omitted unless shown. -->
 
 The console is the keyboard you type on and the display TEC-OS answers on. `CON`
 moves that connection between a serial terminal, the PICO9918 and the graphics
@@ -81,12 +74,10 @@ paste.
 are equivalent. An invalid name is printed back with a question mark and leaves
 the console as it was.
 
-The transcripts in this chapter are retained host-model captures from `78127ec`.
-They show their original configurations and output, including the historical
-80-column setup. Source inspection does not turn them into new runs or
-observations of a physical board.
+The transcripts in this chapter are host-model captures from TEC-OS
+`fdd9e5b`, not observations of a physical board.
 
-<!-- node tools/capture.mjs "CON XYZ" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "CON XYZ" -->
 ```text
 A>CON XYZ
 XYZ?
@@ -99,7 +90,7 @@ to the serial terminal. You type on the matrix keyboard and see the command
 there. The reply and next prompt appear on the serial terminal. This capture
 shows only the serial output:
 
-<!-- node tools/capture.mjs --board pico --serial "CON TTY" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --serial "CON TTY" -->
 ```text
 CON: TTY:
 A>
@@ -116,7 +107,7 @@ Chapter 12 explains. Bare `CON CRT` and `CON PICO` retain the selected width
 and any active claim. After the move back the PICO9918 capture shows only the
 reply and prompt:
 
-<!-- node tools/capture.mjs --board pico --screen "CON TTY" "CON CRT" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "CON TTY" "CON CRT" -->
 ```text
 CON: CRT:
 A>
@@ -139,7 +130,7 @@ programs. Chapter
 leaves the console where it was and shows `GLCD?` on the 20 × 4 LCD. Here both
 display selections leave a serial-only board on the terminal:
 
-<!-- node tools/capture.mjs CON "CON CRT" "CON UC1" CON -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs CON "CON CRT" "CON UC1" CON -->
 ```text
 A>CON
 CON: TTY:
@@ -154,11 +145,11 @@ A>
 
 On a board with both displays cold boot selects the PICO9918. The starter
 card's `GLCD.SVC` startup line then installs nothing. `CON UC1` loads the driver
-and selects the graphics LCD. This historical host-model capture used both
+and selects the graphics LCD. This host-model capture used both
 displays and the matrix keyboard. Its graphics-LCD text capture showed this
 after the command:
 
-<!-- node tools/capture.mjs --board pico --screen "CON UC1" CON -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "CON UC1" CON -->
 ```text
 CON: UC1:
 A>CON
@@ -202,14 +193,16 @@ discards console output. After `CON BAT` even the reply disappears. Commands
 still run when you type them on the serial terminal.
 
 `CON TTY` typed blind on that terminal brings the visible console back. The
-matrix keyboard is not the input device in `BAT:`. In this historical run `DIR`
+matrix keyboard is not the input device in `BAT:`. In this run `DIR`
 ran between the two `CON` commands but printed nothing on the terminal:
 
-<!-- node tools/capture.mjs --serial "@start CON BAT" "@start DIR" "CON TTY" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --serial "@start CON BAT" "@start DIR" "CON TTY" -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
+
+A>SHELL.SVC
 
 A>GLCD.SVC
 
@@ -232,13 +225,12 @@ columns and `CON CRT 32` selects 32. Both text widths, 80 and 40, have 24 rows.
 The 32-column width also has 24 rows and uses Graphics I mode. The screen clears
 when the new width takes effect.
 
-The historical captures used a cold-boot width of 80. Current cold boot starts
-the PICO9918 console at 40 columns when its probe succeeds and the Matrix switch
-is enabled. A warm boot keeps the selected width. Reset restores 40 before any
-startup width command runs. This historical capture selects 32 columns, runs
-`MOUNT` and then lists files:
+Cold boot starts the PICO9918 console at 40 columns when its probe succeeds
+and the Matrix switch is enabled. A warm boot keeps the selected width. Reset
+restores 40 before any startup width command runs. This capture selects 32
+columns, runs `MOUNT` and then lists files:
 
-<!-- node tools/capture.mjs --board pico --screen "CON PICO 32" MOUNT DIR -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "CON PICO 32" MOUNT DIR -->
 ```text
 CON: CRT:
 A>MOUNT
@@ -246,22 +238,26 @@ A>MOUNT
 01 WORK        G8M B:
 
 A>DIR
-MOUNT.COM    GLCD.SVC
-STARTUP.CMD  TED.COM
-SAMPLE.ASM   TAS.COM
-6 files, 980K free
+MOUNT.COM    SHELL.SVC
+GLCD.SVC     STARTUP.CMD
+TED.COM      SAMPLE.ASM
+TIMES.BAS    TAS.COM
+BAZA.COM     BAZA.RTL
+BOUNCE.BAS   DEMO.ASM
+MON3.SVC     HELLO3.BIN
+HELLO3.ASM
+15 files, 912K free
 A>
 ```
 
 `MOUNT` ended in a warm boot, which kept 32 columns. `DIR` fits two names on
-each row here instead of the six in an 80-column listing. The historical card
-had six files. The starter card TEC-OS prepares now has fifteen, so the
-same listing takes eight rows.
+each row here instead of the six in an 80-column listing, so the starter
+card's fifteen files take eight rows.
 
 An unsupported width, a width after another device name or a number joined to
 `CRT` without a space produces a question mark. The console remains as it was:
 
-<!-- node tools/capture.mjs --board pico "CON CRT80" "CON TTY 40" "CON PICO 50" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico "CON CRT80" "CON TTY 40" "CON PICO 50" -->
 ```text
 A>CON CRT80
 CRT80?

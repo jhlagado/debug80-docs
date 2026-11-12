@@ -7,39 +7,21 @@ nav_group: "Writing programs"
 
 # 13. Results and command chains
 
-<!-- Source-only semantic check: TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     Source proofs and old-unit dispositions: 12-pass-record.md. No current runtime check claimed.
-     All retained output below is historical model evidence at TEC-OS 78127ec.
-     The PC fixtures used atom-z80 0.3.7. Application provenance where relevant:
-     TAS.COM, Thorium dbee66a, SHA-256
-     45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     TED.COM, Thorium 128edb7, SHA-256
-     2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f.
-     TED's key table and BAZA's return code: release card at TEC-OS
-     755636b130241173c5c30a0be8fe6b79cf2fee37, TED.COM Thorium 967678c
-     (150a19bd…), BAZA Baza fbfedb6, from docs/compatibility.md:188-190
-     and test/ted-baza.test.mjs, test/times.test.mjs at that revision.
-     Rechecked at TEC-OS 31b6083 (TED.COM Thorium b69d544, BAZA Baza
-     747b9a7; docs/compatibility.md:196-198): the key table and return
-     code are unchanged in substance. Rechecked again at TEC-OS 402f30e
-     (TED.COM Thorium b69d544, BAZA Baza ebc0281, TAS.COM Thorium 3d1e2c0;
-     docs/compatibility.md:196-199): still unchanged in substance. At
-     fdd9e5b TED and TAS are the same and BAZA is Baza 50dc512
-     (docs/compatibility.md:223-226); the return code is unchanged.
-     Source-only reading. No run of these keys was made for this chapter.
-     Shell update: at TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9
-     (main) lines are split by SHELL.SVC: docs/shell.md:28-82 and
-     :91-133, docs/compatibility.md:21-38 and :99-117,
-     drivers/shell.asm:159-420, the drop flag src/cpm/bdos.asm:96-106,
-     :515-533, src/cpm/bdoscon.asm:36-66, :285-309 and src/cache.asm:613-629,
-     function 47 src/cpm/bdos.asm:52-94, and the ROM's own path
-     src/cpm/ccp.asm:110-232. TED's line and its need of the shell:
-     docs/compatibility.md:223. Every transcript in this chapter is a
-     capture at fdd9e5b with the command in its comment, on the serial
-     board and the starter card or the card made by the recipe shown, boot
-     rows omitted unless shown. EXISTS.COM and RUN.COM were built on the
-     model by the card's TAS (Thorium 3d1e2c0) in the same session, before
-     the commands shown. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision. Lines are split by
+     SHELL.SVC: docs/shell.md:28-82 and :91-133, docs/compatibility.md:21-38
+     and :99-117, drivers/shell.asm:159-420, the drop flag
+     src/cpm/bdos.asm:96-106, :515-533, src/cpm/bdoscon.asm:36-66, :285-309
+     and src/cache.asm:613-629, function 47 src/cpm/bdos.asm:52-94, and the
+     ROM's own path src/cpm/ccp.asm:110-232. TED's key table, its line's
+     need of the shell and BAZA's return code follow
+     docs/compatibility.md:223-226, with TED.COM Thorium b69d544, TAS.COM
+     Thorium 3d1e2c0 and BAZA.COM Baza 50dc512, source reading. Every
+     transcript is a capture at fdd9e5b with the command in its comment, on
+     the serial board and the starter card or the card made by the recipe
+     shown, boot rows omitted unless shown. EXISTS.COM and RUN.COM were
+     built on the model by the card's TAS in the same session, before the
+     commands shown. -->
 
 You can join commands on a line and make later pieces depend on success.
 Your programs report that result through a return code. They can also
@@ -55,7 +37,7 @@ command prompt before it runs. This is CP/M 3's form of command chaining.
 The following capture shows two commands on the first line. The second line
 also contains empty pieces:
 
-<!-- node tools/capture.mjs "DIR *.CMD!TYPE STARTUP.CMD" "mount!!  ! dir b:!" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "DIR *.CMD!TYPE STARTUP.CMD" "mount!!  ! dir b:!" -->
 ```text
 A>DIR *.CMD!TYPE STARTUP.CMD
 STARTUP.CMD 
@@ -83,7 +65,7 @@ Each piece is a whole command whose drive or user-area selection applies
 to the following pieces. Here `B:` selects drive B before `COPY` creates
 `NOTES.TXT`:
 
-<!-- node tools/capture.mjs "B:!COPY A:STARTUP.CMD NOTES.TXT!DIR" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "B:!COPY A:STARTUP.CMD NOTES.TXT!DIR" -->
 ```text
 A>B:!COPY A:STARTUP.CMD NOTES.TXT!DIR
 B>COPY A:STARTUP.CMD NOTES.TXT
@@ -113,7 +95,7 @@ succeeded. After a failure the piece is skipped and not echoed. A skipped
 piece leaves the result as it was, so a following `&` piece is skipped too,
 and a following `!` piece runs:
 
-<!-- node tools/capture.mjs "NOSUCH &DIR *.CMD !DIR *.SVC" "DIR *.SVC &DIR *.CMD" "NOSUCH &DIR *.CMD &DIR *.SVC" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "NOSUCH &DIR *.CMD !DIR *.SVC" "DIR *.SVC &DIR *.CMD" "NOSUCH &DIR *.CMD &DIR *.SVC" -->
 ```text
 A>NOSUCH &DIR *.CMD !DIR *.SVC
 NOSUCH?
@@ -147,7 +129,7 @@ piece starts with `&` would test the previous line's result, so it is
 rejected and none of it runs. CP/M 3's `:` prefix for a conditional piece
 is not provided, and a piece starting with `:` is rejected as a bad name:
 
-<!-- node tools/capture.mjs "&DIR *.CMD" ":DIR *.CMD" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "&DIR *.CMD" ":DIR *.CMD" -->
 ```text
 A>&DIR *.CMD
 &DIR?
@@ -228,7 +210,7 @@ At `B>`, `A:TAS EXISTS` and `A:TAS RUN` then write `EXISTS.COM` and
 when it is present. This capture runs that line before and after creating
 the file:
 
-<!-- node tools/capture.mjs --card chain.img B: "A:TAS EXISTS" "A:TAS RUN" "EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM" "COPY A:STARTUP.CMD NOTES.TXT" "EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM" "EXISTS NONE.TXT !DIR *.COM" "EXISTS NONE.TXT &DIR *.COM !USER 0 &DIR *.COM"
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card chain.img B: "A:TAS EXISTS" "A:TAS RUN" "EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM" "COPY A:STARTUP.CMD NOTES.TXT" "EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM" "EXISTS NONE.TXT !DIR *.COM" "EXISTS NONE.TXT &DIR *.COM !USER 0 &DIR *.COM"
      The builds before the first line shown are omitted. -->
 ```text
 B>EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM
@@ -302,7 +284,7 @@ input. Dropping the current line leaves any later startup lines available.
 In this capture, drive C has no volume. The key `x` ends the BDOS error and
 the `MOUNT` piece is dropped:
 
-<!-- node tools/capture.mjs "@start DIR C:!MOUNT" "@key x" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "@start DIR C:!MOUNT" "@key x" -->
 ```text
 A>DIR C:!MOUNT
 
@@ -360,7 +342,7 @@ The original line's later pieces lie outside that tail. In `RUN A:MOUNT!DIR *.CO
 `RUN` supplies only ` A:MOUNT`. That replaces the old line so its `DIR` is
 gone:
 
-<!-- node tools/capture.mjs --card chain.img B: "A:TAS RUN" "RUN DIR *.COM" "RUN A:MOUNT!DIR *.COM" "RUN NOSUCH!DIR *.COM" "RUN"
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card chain.img B: "A:TAS RUN" "RUN DIR *.COM" "RUN A:MOUNT!DIR *.COM" "RUN NOSUCH!DIR *.COM" "RUN"
      Only RUN.COM was built in this session, before the first line shown. -->
 ```text
 B>RUN DIR *.COM
@@ -447,12 +429,11 @@ tools remain on A and the source on B. The editor is a new program
 invocation each time it returns through the command processor.
 
 TAS writes a `.DBG` debug file beside the source and its `.COM` output.
-For the historical `HELLO` example these are `HELLO.DBG` and `HELLO.COM`.
+For Chapter 27's `HELLO` example these are `HELLO.DBG` and `HELLO.COM`.
 TED also keeps `THOR.PRJ` and `THOR.SES` beside the source in this setup.
 After the first successful build and project-file update, `THOR.PRJ` names
 the source for the build keys. `THOR.SES` records the file and editing position from the previous
-exit. The full historical HELLO error, repair and run capture is retained
-in Chapter 27, with its original recipe and application provenance.
+exit. Chapter 27 has HELLO's full error, repair and run capture with its recipe.
 
 ## Chains in the startup file
 
@@ -480,7 +461,7 @@ node tools/tecvol.mjs put schain.img A startup.cmd --text
 
 The capture uses the serial-only board:
 
-<!-- node tools/capture.mjs --card schain.img -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card schain.img -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     

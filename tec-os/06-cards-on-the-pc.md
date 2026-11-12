@@ -7,29 +7,19 @@ nav_group: "Using the machine"
 
 # 6. Cards on the PC
 
-<!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     Release-card file note: TEC-OS 755636b tools/media.mjs:197-211 and
-     test/starter.test.mjs:36-62; TED.COM there is Thorium 967678c.
-     One-card files and TED's load rule: TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) tools/media.mjs:200-253
-     and :274-277, tools/lib/starter.mjs:10-22, web/build.mjs:41-42,
-     docs/compatibility.md:223 and test/ted.test.mjs:92-120; TED.COM there
-     is Thorium b69d544 (4f622390…, 12,334 bytes), as at 31b6083. A:'s
-     coalesced writes in "Recovery after a power cut": docs/recovery.md:28-47,
-     :64-97 and :129-141. Atom's removal: README.md:91-102 and Origo KD-294.
-     Source reading only.
-     Inherited recipes and output are historical TEC-OS 78127ec evidence.
-     Original old03/04/05 inputs: TED.COM Thorium 128edb7,
-     SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;
-     TAS.COM Thorium dbee66a,
-     SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     BANNER host extraction only: Origo attempt02 e77c7ef0, accepted by
-     4b5b5a50:studies/p3-tec-os/reviews/book-opening-workflows.md.
-     Extraction source authority 962853f499f05faf281f6cdff1deca8959f58c2b;
-     tested source 8b8664a7d93c6dc2e8bce509b9770585e106eedc.
-     ROM SHA-256 fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d;
-     PICO record v3. Whole batch FAILED. No new execution in this revision.
-     Physical, browser, audio and advanced-service acceptance is excluded. -->
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision. Every tecvol command and
+     capture was run at fdd9e5b on its npm run media output, and the
+     outputs shown are those runs'. saved-banner-card.img was made on the
+     host model from the starter card with Chapter 2's edited BANNER.ASM on
+     B: TED opened it, ^T B saved and built it, ^Q quit and a warm boot
+     flushed the card. The one card's files and TED's load rule follow
+     tools/media.mjs:200-253 and :274-277, tools/lib/starter.mjs:10-22,
+     web/build.mjs:41-42, docs/compatibility.md:223 and
+     test/ted.test.mjs:92-120, with TED.COM Thorium b69d544 (4f622390…,
+     12,334 bytes). A:'s coalesced writes in "Recovery after a power cut":
+     docs/recovery.md:28-47, :64-97 and :129-141. The earlier TED of the
+     release card is Thorium 967678c, at TEC-OS 755636b. -->
 
 A copy of the card on your PC lets you extract work and prepare another card
 without changing the original. `tecvol` reads and edits that image, a file
@@ -51,12 +41,8 @@ does not itself produce the ROM or media.
 and build route through `npm run media`, which writes the ROM, starter image,
 recipes and component files into `dist/`. A host-assembled COM program reaches
 a card through the same `put` command as any other binary. The complete
-historical PC HELLO recipe and its output remain together in Chapter 27.
-
-The BANNER recovery below uses the accepted host extraction from the saved
-Chapter 2 card. The other output retains the `78127ec` examples and their
-original inputs. Each example's sizes, hashes and free-space totals belong
-to that example.
+PC HELLO recipe and its output are together in Chapter 27. Each example's
+sizes, hashes and free-space totals belong to that example's card.
 
 ## A copy before a change
 
@@ -114,8 +100,8 @@ Listing and extraction leave `card.img` unchanged.
 
 Chapter 2's saved BANNER can be recovered as raw records or editable PC text.
 This example uses `saved-banner-card.img`, the persisted image after saving the
-edited program, quitting TED and successfully flushing at the prompt. The
-recorded BANNER case began on a fresh starter card, separately from the SAMPLE
+edited program, quitting TED and successfully flushing at the prompt. This
+BANNER card began as a fresh starter card, separately from the SAMPLE
 run in Chapter 1. If you continued on the same card, A may also contain
 SAMPLE.COM and SAMPLE.DBG.
 
@@ -134,11 +120,11 @@ mkdir recovered
 node tools/tecvol.mjs verify card.img
 ```
 
-The recorded verification succeeded:
+The verification succeeds:
 
 ```text
 container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
-  A: SYSTEM      id 1 G1M start 2048 rw 8 file(s), 999424 bytes free
+  A: SYSTEM      id 1 G1M start 2048 rw 17 file(s), 929792 bytes free
   B: WORK        id 2 G8M start 4096 rw wb 3 file(s), 8359936 bytes free
 ```
 
@@ -153,21 +139,26 @@ node tools/tecvol.mjs dir card.img B
 The complete A listing includes TED's project and session files:
 
 ```text
+ 0 BAZA.COM        13184
+ 0 BAZA.RTL        12032
+ 0 BOUNCE.BAS       5376
+ 0 DEMO.ASM        15360
  0 GLCD.SVC          896
+ 0 HELLO3.ASM       2176
+ 0 HELLO3.BIN        256
+ 0 MON3.SVC         5120
  0 MOUNT.COM         768
- 0 SAMPLE.ASM       5120
+ 0 SAMPLE.ASM       4608
+ 0 SHELL.SVC        2304
  0 STARTUP.CMD       128
  0 TAS.COM         10368
- 0 TED.COM         12032
+ 0 TED.COM         12416
  0 THOR.PRJ          128
  0 THOR.SES          128
+ 0 TIMES.BAS         640
 ```
 
-That listing comes from an earlier card. On the release 1 card `SAMPLE.ASM`
-takes 4608 bytes, holding the 4,485 bytes of the 40-column sample. That
-card's A also holds `TIMES.BAS`, `BAZA.COM` and `BAZA.RTL`, the BASIC
-source and compiler of [Chapter 3](03-build-a-basic-program.md), and its
-`TED.COM` is a later build.
+These are the starter card's fifteen files and TED's two.
 
 B contains the source, program and debug file:
 
@@ -223,7 +214,7 @@ MSG: db "Hello from TEC-OS!",13,10,"$"
 
 A missing name produces an error rather than an empty recovered file. The
 saved user-0 listing contains no `MISSING.ASM`. With that name absent and
-`recovered/MISSING.ASM` still absent, the recorded check was:
+`recovered/MISSING.ASM` still absent, the check is:
 
 ```sh
 missing_status=0
@@ -237,8 +228,8 @@ missing get exit: 1
 tecvol: 0/MISSING.ASM not found
 ```
 
-The command produced no standard output and created no `MISSING.ASM` on the
-PC. Listing and both extractions also left the image unchanged. Comparing
+The command produces no standard output and creates no `MISSING.ASM` on the
+PC. Listing and both extractions also leave the image unchanged. Comparing
 the working copy with the saved card after the missing-file check again
 completed without a difference:
 
@@ -248,8 +239,7 @@ cmp saved-banner-card.img card.img
 
 The original image remains available alongside the working copy and both
 recovered files. This host-image example does not establish a physical-card
-read or write. The raw-device copy above and the card-construction examples
-below retain their historical inputs and results.
+read or write.
 
 ## The container and its volumes
 
@@ -265,8 +255,8 @@ and default drive, if any. Further descriptors can occupy blocks after the
 header. A container holds up to 127 volumes, with at most four assigned to
 drives A to D at a time.
 
-`info` prints the container layout and each volume's directory totals. The
-historical starter image gave this output:
+`info` prints the container layout and each volume's directory totals. For
+the starter image it prints:
 
 ```sh
 node tools/tecvol.mjs info dist/starter.img
@@ -274,7 +264,7 @@ node tools/tecvol.mjs info dist/starter.img
 
 ```text
 container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
-  A: SYSTEM      id 1 G1M start 2048 rw 6 file(s), 1003520 bytes free
+  A: SYSTEM      id 1 G1M start 2048 rw 15 file(s), 933888 bytes free
   B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
 ```
 
@@ -375,17 +365,17 @@ from 1 to 4. `--align` replaces the default 2,048-block alignment with a
 positive whole number up to 16,777,215 that is a multiple of 8. An invalid
 value stops creation before an image is written.
 
-The historical preparation used the matching media's `dist/files/MOUNT.COM` and
-`dist/files/TAS.COM`. Its remaining input was `hello.txt`, containing the
+The preparation uses the matching media's `dist/files/MOUNT.COM` and
+`dist/files/TAS.COM`. Its remaining input is `hello.txt`, containing the
 line `Hello from the PC.` followed by a line feed. This preparation line
-supplies that text input for the retained recipe:
+supplies that text input for the recipe:
 
 ```sh
 printf 'Hello from the PC.\n' > hello.txt
 ```
 
-The retained commands put MOUNT on SYSTEM, TAS on GAMES and that text file
-on SPARE, then list A:
+These commands put MOUNT on SYSTEM, TAS on GAMES and that text file on SPARE,
+then list A:
 
 ```sh
 node tools/tecvol.mjs put my.img A dist/files/MOUNT.COM
@@ -398,14 +388,14 @@ node tools/tecvol.mjs dir my.img
  0 MOUNT.COM         768
 ```
 
-The historical MOUNT binary was 671 bytes on the PC. Its six records occupy
-768 bytes in a listing and binary `get` returns all six. This image has no
-startup file. Its first prompt therefore follows the mounted-drive list
-without a startup command. With the exact historical inputs it is the card
-used for Chapter 5's boot, mount and retained-selection captures. That
+The MOUNT binary is 671 bytes on the PC. Its six records occupy 768 bytes in a
+listing and binary `get` returns all six. This image has no startup file. Its
+first prompt therefore follows the mounted-drive list without a startup
+command, and no shell is installed. It is the card used for Chapter 5's boot,
+mount and retained-selection captures. That
 chapter's separate empty-slot capture uses the unchanged starter card.
 
-After those puts, the historical `node tools/tecvol.mjs info my.img` output was:
+After those puts, `node tools/tecvol.mjs info my.img` prints this:
 
 ```text
 container: format 1.1, 38912 blocks (19922944 bytes), 4 volume(s), 4 drive(s) wanted
@@ -431,13 +421,13 @@ the build. The same recipe with the same matching inputs produces the same
 image bytes.
 
 `npm run media` produces `dist/starter.recipe.json` as part of the media
-preparation described in Chapter 27. The retained card-building command is:
+preparation described in Chapter 27. The card-building command is:
 
 ```sh
 node tools/tecvol.mjs recipe dist/starter.recipe.json mystarter.img
 ```
 
-The historical recipe's volume list is:
+The recipe's volume list is:
 
 ```json
 "volumes": [
@@ -446,8 +436,8 @@ The historical recipe's volume list is:
 ]
 ```
 
-A file inside a component's `files` list has an entry such as this retained
-MOUNT entry:
+A file inside a component's `files` list has an entry such as this MOUNT
+entry:
 
 ```json
 {
@@ -459,7 +449,7 @@ MOUNT entry:
 }
 ```
 
-The byte count and hash identify that historical binary. They are not values
+The byte count and hash identify this build's binary. They are not values
 to copy onto a different build's file. The actual recipe accompanying a
 prepared media set records its own component identities.
 
@@ -479,7 +469,7 @@ checks.
 
 ## A protection example
 
-The following historical fixture separates volume protection from a file
+The following fixture separates volume protection from a file
 attribute. It uses prepared media files and an existing `build/` directory.
 The commands make writable WORK on B with a read-only `STARTUP.CMD` and
 an empty read-only ARCHIVE volume on C:
@@ -489,7 +479,7 @@ node tools/tecvol.mjs create build/errs.img --volume G1M:SYSTEM:A --volume G8M:W
 node tools/tecvol.mjs put build/errs.img B dist/files/STARTUP.CMD --ro
 ```
 
-<!-- node tools/capture.mjs --card build/errs.img "@start SAVE 1 C:X.COM" "@key x" "@start ERA B:STARTUP.CMD" "@key x" "DIR B:" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/errs.img "@start SAVE 1 C:X.COM" "@key x" "@start ERA B:STARTUP.CMD" "@key x" "DIR B:" -->
 ```text
 A>SAVE 1 C:X.COM
 
@@ -526,8 +516,8 @@ exclusive use of the card in turn. Reset after putting the changed card
 back in the board.
 
 TEC-OS does not read the card's capacity. A valid header can therefore
-describe blocks beyond a smaller card's end. The historical short-card
-example cut the starter image to 4,110 blocks, 14 blocks into WORK and
+describe blocks beyond a smaller card's end. The short-card
+example cuts the starter image to 4,110 blocks, 14 blocks into WORK and
 inside its directory:
 
 ```sh
@@ -535,7 +525,7 @@ cp dist/starter.img short.img
 truncate -s 2104320 short.img
 ```
 
-<!-- node tools/capture.mjs --card short.img "@start DIR B:" "@key x" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card short.img "@start DIR B:" "@key x" -->
 ```text
 A>DIR B:
 
@@ -543,11 +533,11 @@ Bdos Err On B: Bad Sector
 A>
 ```
 
-The host model accepted that short byte array and the ROM reached the
+The host model accepts that short byte array and the ROM reaches the
 missing directory blocks. A card ending after the directory can fail later
 when a file write reaches a missing block. On a volume written behind the
-failure can surface at close when pending data is flushed. The historical
-write-failure demonstration is retained in Chapter 19.
+failure can surface at close when pending data is flushed. The
+write-failure demonstration is in Chapter 19.
 
 Standard-capacity cards use byte addresses. The ROM can name their first
 4 GiB, through block `7FFFFFh`. A volume may end immediately after that

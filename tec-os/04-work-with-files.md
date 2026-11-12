@@ -7,27 +7,14 @@ nav_group: "Using the machine"
 
 # 4. Work with files
 
-<!-- Source mechanisms read at TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe.
-     DEL as another name for ERA: TEC-OS 402f30e src/tables.asm:60-82 and
-     docs/compatibility.md:77-81, as at 31b6083.
-     At TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) COPY, DEL,
-     SERVICES and the [more] pager are SHELL.SVC's: drivers/shell.asm:532-552,
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main).
+     Unprefixed source ranges use that revision. COPY, DEL, SERVICES and the
+     [more] pager are SHELL.SVC's: drivers/shell.asm:532-552,
      drivers/shellcmd.asm:54-220, drivers/shellio.asm:380-508,
      docs/shell.md:3-41 and :135-143, docs/compatibility.md:90-133; the ROM's
-     own built-ins are src/tables.asm:53-76. The TYPE STARTUP.CMD excerpt is
-     a capture at fdd9e5b: node tools/capture.mjs "TYPE STARTUP.CMD".
-     Current COPY and pager excerpts: tested 8b8664a7d93c6dc2e8bce509b9770585e106eedc,
-     landed 962853f with qualification-record differences only.
-     Origo attempt02 e77c7ef0, scoped result receipt 4b5b5a50,
-     studies/p3-tec-os/reviews/book-opening-workflows.md.
-     The whole batch remains FAILED after a later service-observer defect.
-     These excerpts qualify no advanced service, physical, browser or audio case.
-     Historical TYPE/COPY/REN/ERA captures remain TEC-OS 78127ec.
-     Old03 input pins: TED.COM Thorium 128edb7,
-     SHA-256 2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f;
-     TAS.COM Thorium dbee66a,
-     SHA-256 45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2.
-     Source inspection is separate from each captured result. -->
+     own built-ins are src/tables.asm:53-76. Every excerpt is a capture at
+     fdd9e5b with the command in its comment, on the starter card, the
+     screens on the PICO9918 board at 40 columns. -->
 
 BANNER.ASM and its saved outputs stay on B while you read other text. A listing
 helps you choose the file before a command changes it. Long text can be read
@@ -91,41 +78,35 @@ pausing. A long text line that
 wraps at the right edge uses more than one screen row. The prepared 40-column
 PICO console shows 23 rows of listing before the pause.
 
-These 24 rows are the complete first paused screen of the source supplied with
-the tested build. The command echo has already scrolled away. The release-1
-SAMPLE.ASM sets its equates and data in aligned columns with whole-sentence
-comments, so its screens differ from these two excerpts row by row:
+These 24 rows are the complete first paused screen. The command echo has
+already scrolled away:
 
-<!-- Actual retained fixture input: TYPE A:SAMPLE.ASM!USER 1 followed by CR.
-     Do not relabel the full fixture as plain TYPE A:SAMPLE.ASM.
-     Attempt02 archive member stage/results/098-type-continue.json:
-     complete 24-row screen. Companions retain raw VRAM/registers/foreground.
-     Later command effects and final prompts are omitted from this excerpt.
-     Their chain/user-area meaning belongs in Chapters 13/5. -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "TYPE A:SAMPLE.ASM",
+     the screen at the pause. -->
 ```text
 ; A first program for TEC-OS. Build it
 ; with TAS SAMPLE. Run it with SAMPLE.
-;
+
 ; Say hello through CP/M BDOS, then
 ; check for the TEC-OS ABI 5 table.
 ; Print the screen size, write to LCD
 ; row 2, show 123456 and beep.
 
-; TEC-OS's table and service numbers, by
-; the names abi.inc gives them. "TNA",
-; then the major version
+; TEC-OS's table and service numbers use
+; the names from abi.inc. ABITAB points
+; to "TNA", then the major version.
 
-ABITAB EQU $C003
+ABITAB    EQU   $C003
 
-; the major version this speaks: 5
+; The major version this speaks: 5.
 
-ABIMAJ EQU $C006
+ABIMAJ    EQU   $C006
 
-; CALL here with the service in C
+; CALL here with the service in C.
 
-ABICALL EQU $C008
-TNINFO EQU 0     ; -> L = columns, H =
-                 ; rows
+ABICALL   EQU   $C008
+
+; INFO returns L=columns, H=rows.
 [more]
 ```
 
@@ -133,18 +114,16 @@ Space continues the listing. The pause disappears and the next rows follow. The
 next excerpt contains only the first eight rows of the following paused screen.
 The remaining rows of that screen and its final `[more]` are omitted:
 
-<!-- Same reviewed continue case, actual Space input 20h.
-     stage/results/099-type-continue-1.json, screen rows 1–8 only.
-     This is not a new invocation or a return-to-prompt capture. -->
+<!-- TEC-OS fdd9e5b: the same command then "@key " (Space), screen rows 1–8. -->
 ```text
-TNDIGIT EQU 1    ; HL -> six digit
-                 ; patterns
-TNLCD EQU 2      ; B = row 0-3, HL -> 20
-                 ; characters
-TNTONE EQU 4     ; B = pitch, DE =
-                 ; length
-BDOS EQU 5       ; CP/M's entry, for the
-                 ; console
+
+TNINFO    EQU   0
+
+; HL points to six digit patterns.
+
+TNDIGIT   EQU   1
+
+; B=row 0-3, HL points to 20 characters.
 ```
 
 Space continues at each pause until the text ends. Esc, Q or q stops a listing
@@ -169,23 +148,22 @@ A working copy of SAMPLE's source on B gives you a file of your own to read
 or edit. `COPY A:SAMPLE.ASM B:SAMPLE.ASM` names both source and destination.
 Keep an existing B:SAMPLE.ASM rather than overwriting it for this exercise.
 
-The recorded copy below started at A on a fresh starter card with B empty.
+The copy below starts at A on a fresh starter card with B empty.
 It is separate from the BANNER session. On your working card, BANNER's files
 have different names. This command writes only B:SAMPLE.ASM:
 
-<!-- Accepted attempt02 Machine 2, stage/results/009-copy-sample.json,
-     screen rows 8–11. Fresh starter card, B initially empty.
-     Earlier boot rows and unused rows after the prompt omitted. -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen
+     "COPY A:SAMPLE.ASM B:SAMPLE.ASM", screen rows 10–13. -->
 ```text
 A>COPY A:SAMPLE.ASM B:SAMPLE.ASM
-COPIED 0028
+COPIED 0024
 
 A>
 ```
 
-The count after `COPIED` is hexadecimal. Here `0028` means 40 records of
-128 bytes. The release-1 SAMPLE.ASM is shorter. On the starter card it occupies
-4,485 bytes with its line ends and end marker, which is 36 records, `0024`. The source on A remains in place. `TYPE B:SAMPLE.ASM` reads the
+The count after `COPIED` is hexadecimal. Here `0024` means 36 records of
+128 bytes. On the starter card SAMPLE.ASM occupies 4,485 bytes with its line
+ends and end marker, which fits in 36 records. The source on A remains in place. `TYPE B:SAMPLE.ASM` reads the
 new copy without changing the current drive.
 
 REN changes a name on the same drive. Its form is `REN NEW=OLD`, with the new
@@ -194,13 +172,13 @@ DEL is another name for ERA: the shell hands the command to ERA. A rename to an
 existing name gives `FILE EXISTS` and changes nothing. Erasing a name that is
 absent gives `NO FILE`.
 
-The following complete historical example began on a separate starter card with
-B empty. It did not contain BANNER.ASM, BANNER.COM or BANNER.DBG. Read it as
+The following complete example begins on a separate starter card with
+B empty. It does not contain BANNER.ASM, BANNER.COM or BANNER.DBG. Read it as
 that separate session, not as a sequence to repeat on your current card. It
 copies A's STARTUP.CMD under two names, renames one copy and erases only
 NOTES.TXT. The listings and free-space figures belong to that card:
 
-<!-- node tools/capture.mjs "COPY STARTUP.CMD B:" "COPY STARTUP.CMD B:COPY.TXT" B: DIR "REN NOTES.TXT=COPY.TXT" "REN NOTES.TXT=STARTUP.CMD" DIR "ERA NOTES.TXT" "ERA NOTES.TXT" DIR -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "COPY STARTUP.CMD B:" "COPY STARTUP.CMD B:COPY.TXT" B: DIR "REN NOTES.TXT=COPY.TXT" "REN NOTES.TXT=STARTUP.CMD" DIR "ERA NOTES.TXT" "ERA NOTES.TXT" DIR -->
 ```text
 A>COPY STARTUP.CMD B:
 COPIED 0001

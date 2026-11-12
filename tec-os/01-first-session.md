@@ -7,35 +7,18 @@ nav_group: "Using the machine"
 
 # 1. First session
 
-<!-- Source contracts inspected at TEC-OS
-     a1023bd0cbb4879c37ae61e6f670b442e1e60abe, tested source 8b8664a.
-     ROM SHA-256 fa63989b65d1e7e7a07f45e2a2b33e52f785d74216a3fde38af86b2d913f302d.
-     Cold 40-column TEC Compact / PICO record v3 evidence: attempt02,
-     Origo e77c7ef0, Machine 1 phases 001–007. Scoped result review:
-     Origo 4b5b5a50, reviews/book-opening-workflows.md.
-     TAS.COM is Thorium dbee66a; exact tool/card hashes and excerpt boundaries
-     are in 01-pass-record.md. No new execution occurred for this chapter.
-     Whole batch FAILED later; no advanced-service, physical, browser or audio
-     acceptance.
-     Keyboard correction/recall and failure advice are source-backed actions,
-     not additional captured workflows. Historical material keeps its pins
-     in the pass record. No final integration or publication claim.
-     Release-card text: the nine starter files are those of TEC-OS
-     755636b130241173c5c30a0be8fe6b79cf2fee37 tools/media.mjs and
-     test/starter.test.mjs. The DIR excerpt below keeps the six-file card
-     of attempt02; no nine-file DIR capture is claimed.
-     Shell-card text: the fifteen files are those of TEC-OS
-     fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main) tools/media.mjs:200-231,
-     tools/lib/starter.mjs:10-22 and test/starter.test.mjs:46-80, the one card the web page runs too
-     (Origo KD-278, KD-302). The first-prompt and DIR excerpts are captures
-     at fdd9e5b: node tools/capture.mjs --board pico --screen, and the same
-     with DIR, screen rows from the first. SHELL.SVC and the recall keys
-     follow fdd9e5b docs/shell.md:3-26 and :144-146. The steps in "More on
-     the card" follow fdd9e5b README.md:164-185, the recipe's instruction
-     (tools/media.mjs:241), test/programs/hello3.asm and
-     test/starter.test.mjs:107-392; the LCD lines are HELLO3_ROWS
-     (test/starter.test.mjs:217), and TED's sideways scroll on BOUNCE.BAS's
-     79-column line 400 is test/starter.test.mjs:356-392. With the Matrix
+<!-- Checked against TEC-OS fdd9e5b9a241af2a740d7baac2673f9ddd181bf9 (main),
+     ROM SHA-256 43ac0f18…, on its starter card, the one card the web page
+     runs too (tools/media.mjs:200-231, tools/lib/starter.mjs:10-22,
+     test/starter.test.mjs:46-80; Origo KD-278, KD-302). The screen
+     excerpts are captures at fdd9e5b: node tools/capture.mjs --board pico
+     --screen DIR B: A: "TAS SAMPLE" SAMPLE, the rows each comment names. The ^C excerpt is the same command's serial capture, node
+     tools/capture.mjs ^C, since the capture tool cannot send ^C as a
+     matrix key; the text is the console's either way. SHELL.SVC and the
+     recall keys follow docs/shell.md:3-26 and :144-146. The steps in "More
+     on the card" follow README.md:164-185, tools/media.mjs:241,
+     test/programs/hello3.asm and test/starter.test.mjs:107-392; the LCD
+     lines are HELLO3_ROWS (test/starter.test.mjs:217). With the Matrix
      switch on, MON3.SVC's key calls read the matrix, not the keypad
      (docs/mon3.md:242-244, :286-287, drivers/mon3api.asm:296-305). A:'s
      pending block follows docs/recovery.md:28-36 and :64-79. No capture of
@@ -65,8 +48,7 @@ the starter card:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen,
      screen rows 1–10. Initial blank row retained; unused blank rows
-     11–24 omitted. The attempt02 cold capture, 001-SAMPLE-cold.json, had
-     the one GLCD.SVC line of the earlier card. -->
+     11–24 omitted. -->
 ```text
 
 TEC-OS 0.1 for TEC-1G
@@ -164,8 +146,7 @@ different use at an empty prompt, described at the end of this session.
 A drive letter followed by a colon changes the current drive. `B:` selects
 WORK and `A:` returns to SYSTEM. The next excerpt continues after the listing:
 
-<!-- attempt02 Machine 1, 004-opening-system.json, screen rows 12–14.
-     Earlier boot/listing rows omitted; no commands omitted within the excerpt. -->
+<!-- TEC-OS fdd9e5b: the same --screen run with B: and A: after DIR, their screen rows. -->
 ```text
 A>B:
 B>A:
@@ -183,8 +164,7 @@ program as `SAMPLE.COM`. You type SAMPLE without `.ASM` in the build
 command because TAS supplies the file types. The assembler's completion
 message gives the output file's name:
 
-<!-- attempt02 Machine 1, 005-opening-direct-build.json, screen rows 14–17.
-     Earlier commands omitted; build response and blank row retained. -->
+<!-- TEC-OS fdd9e5b: the same run, the rows of "TAS SAMPLE". -->
 ```text
 A>TAS SAMPLE
 SAMPLE.COM written
@@ -199,8 +179,7 @@ or edit after the build.
 Typing `SAMPLE` now runs `SAMPLE.COM`. TEC-OS loads the program and starts it.
 The program prints its greeting and screen size then returns to the prompt:
 
-<!-- attempt02 Machine 1, 006-opening-direct-run.json, screen rows 17–22.
-     Earlier commands omitted; response and blank row retained. -->
+<!-- TEC-OS fdd9e5b: the same run, the rows of SAMPLE, the screen's last. -->
 ```text
 A>SAMPLE
 Hello from TEC-OS.
@@ -268,11 +247,9 @@ so the precaution below is the same on A.
 
 Finish the program and return to the prompt before ending the session. At an
 empty prompt, Ctrl and C together, written `^C`, starts a *warm boot*: TEC-OS
-attempts pending card writes and returns to the prompt. In the recorded
-SAMPLE session on the earlier card the successful ending was:
+attempts pending card writes and returns to the prompt. A successful ending looks like this:
 
-<!-- attempt02 Machine 1, 007-opening-direct-flush.json, screen rows 22–23.
-     Earlier commands omitted. One matrix Ctrl-C input, no extra Return. -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs ^C, the serial console's text. -->
 ```text
 A>^C
 A>
