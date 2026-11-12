@@ -27,8 +27,8 @@ its buffers occupy none of the transient program area (TPA)
 (`src/rom.asm:17-43`, `src/layout.asm:77-86`,
 `format/format.json:20-25`, `src/services.asm:1-20`,
 `src/abi.inc:65-106`). The command history is the shell's. `SHELL.SVC` is a
-resident service, and its ten pages, the 256-byte history ring in the last of
-them, lie below the TPA's ceiling like any other service's
+resident service, and its fifteen pages, the 256-byte history ring in the
+last of them, lie below the TPA's ceiling like any other service's
 (`docs/shell.md:20-26`, `drivers/shell.asm:793-796`).
 
 ## Two banks at the same addresses
@@ -168,9 +168,9 @@ geometry's vector
 With no drives field, including every format 1.0 card, only mounted drives
 receive slots. Each slot is sized from its volume's `DSM`. `DRVSLOT` records 0
 for no slot, 1 for 64 bytes and 2 for 256. A later mount must fit the slot
-allocated at cold boot. The starter card's G1M on A and G8M on B therefore need
-320 bytes. Four G8M-sized slots need 1,024 bytes and reduce the TPA by another
-704 bytes (`src/boot.asm:569-633`, `src/volsvc.asm:254-265`).
+allocated at cold boot. A card with a G1M on A and a G8M on B therefore needs
+320 bytes. The starter card asks for four drives, whose four G8M-sized slots
+need 1,024 bytes, 704 more, so that any of its volumes fits any drive (`src/boot.asm:569-633`, `src/volsvc.asm:254-265`).
 
 `ALVINIT` reserves three more bytes for the BDOS entry stub directly below the
 lowest vector. `STUBAD` stores that address and `PZINIT` writes `JP BENTRY`
@@ -182,13 +182,14 @@ below it. Its relocated header starts with another `JP BENTRY` and the word at
 `src/boot.asm:300-315`, `src/loader.asm:1-10`,
 `src/loader.asm:337-350`, `src/loader.asm:499-504`).
 
-The starter card gives a concrete example of that subtraction.
-Its workspace begins at `BAECh`, above the starter vectors at `B9ACh–BAEBh`
-and the stub at `B9A9h–B9ABh`. Programs have 47,273 bytes from
-`0100h` to `B9A8h`. With four full-sized slots the stub is at `B6E9h`
-and the TPA is 46,569 bytes. The starter card's `STARTUP.CMD` then installs
-`SHELL.SVC`, whose ten pages lower the word at `0006h` to `AF00h`, leaving
-44,544 bytes. [Appendix C](appendix-c-memory-map.md#the-cpu-s-address-space)
+The starter card gives a concrete example of that subtraction. It asks for
+four drives, each with a full-sized 256-byte slot. Its workspace begins at
+`BAECh`, above the four vectors at `B6ECh–BAEBh` and the stub at
+`B6E9h–B6EBh`. Programs have 46,569 bytes from `0100h` to `B6E8h`. A card of
+two volumes, a G1M on A and a G8M on B, with no drives field, has 320 bytes
+of vectors, the stub at `B9A9h` and 47,273 bytes. The starter card's
+`STARTUP.CMD` then installs `SHELL.SVC`, whose fifteen pages lower the word
+at `0006h` to `A700h`, leaving 42,496 bytes. [Appendix C](appendix-c-memory-map.md#the-cpu-s-address-space)
 has these figures. The workspace below `BF00h` occupies 1,044 bytes. The
 warm-boot sweep clears 324 of them, from `BDBCh` through `BEFFh`. The 205
 bytes above the RAM BIOS table extend from `BF33h` through `BFFFh`
