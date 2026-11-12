@@ -13,9 +13,9 @@ nav_group: "Reference"
      command in its comment, on old.img made as shown. The CLOSE ERROR run
      is a host-model run of the starter card that changed the first name
      byte of the FCB passed to function 16 during COPY STARTUP.CMD
-     B:NOTES.TXT. DEL
-     at 402f30e cites TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125 with a
-     402f30e: prefix. The diagnostic prompt fence is a literal message
+     B:NOTES.TXT. DEL was a ROM keyword at TEC-OS
+     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (402f30e:src/tables.asm:64-67)
+     and is now the shell's. The diagnostic prompt fence is a literal message
      template.
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
      card differs only in TED.COM and HELLO3.ASM, so captures made at
@@ -195,7 +195,7 @@ service gives a distinct cause.
 | `NAME.SVC` | Record validation failed after successful `INIT`. The status is cleared so startup also prints the name regardless of INIT's returned `A`. | Check `SERVICES`. The cleanup outcome determines whether pages remain reserved. | `src/loader.asm:373-480` |
 | `UNLOAD` | The newest service cannot be removed or none exists. Reasons include an active INIT/REMOVE, a mismatched top, a non-removable flag or carry from REMOVE. | Remove services newest first and investigate the retained service. | [Chapter 5](05-drives-and-user-areas.md), `src/cpm/ccpcmd.asm:13-18`, `src/loader.asm:97-114` |
 | `COPY` | A missing/ambiguous name, identical source and destination or text after the destination. The shell checks these conditions. Without the shell `COPY` is an unknown program name. | Give one source and a different destination with no further operand. | `drivers/shellcmd.asm:54-91` |
-| `ERA` | A missing, extra or invalid name. `DEL`, another name for ERA, present in the ROM at TEC-OS `402f30e` and now in the shell, fails on the same conditions with the same output. | `ERA NAME` or `DEL NAME`. | `src/cpm/ccpmut.asm:10-14`, `402f30e:src/tables.asm:64-67`, `drivers/shell.asm:530-539` |
+| `ERA` | A missing, extra or invalid name. `DEL`, the shell's other name for ERA, fails on the same conditions with the same output. | `ERA NAME` or `DEL NAME`. | `src/cpm/ccpmut.asm:10-14`, `drivers/shell.asm:530-539` |
 | `&WORD` | A typed, script or startup line whose first piece starts with `&`. None of the line runs. | Remove the `&`: a new line runs whatever the last line returned. | `docs/shell.md:68-70` |
 | `:WORD` | A piece starting with CP/M 3's `:` prefix, which TEC-OS does not provide. | Join the pieces with ` &` instead. | `docs/shell.md:84-89` |
 | `NAME.CMD` | Under the shell: no such script on the named or current drive in the current user, a script named inside another script, or a script name with further pieces after it. With no shell a typed `NAME.CMD` runs `NAME.COM`, and this is the program's missing name. | Check the name and drive, and run a script from its own line. | `docs/shell.md:91-113`, `drivers/shell.asm:605-626` |
@@ -350,7 +350,7 @@ Putting the card back does not itself run `SDINIT`. The card is started at cold
 boot or a diagnostic retry, not at warm boot (`src/boot.asm:92-101`,
 `src/boot.asm:656-667`). If writes still fail at the next warm boot, the changed
 lines are dropped and `Write lost` is printed (`src/cache.asm:265-295`,
-`src/cache.asm:566-572`). `MOUNT`, unmount and function 48 instead keep a
+`src/cache.asm:613-629`). `MOUNT`, unmount and function 48 instead keep a
 failed line for the next flush, so only a warm boot drops a flushed line that
 still fails (`docs/recovery.md:49-61`). BDOS function 48 reports a failure to a program at
 once: it writes every changed block and returns `A` = `FFh` if any write failed
@@ -372,8 +372,8 @@ the volume services.
 | --- | --- | --- | --- |
 | `MOUNT [D: [NAME or INDEX]]` | The argument does not begin with A to D followed by a colon. | MOUNT lists volumes. `MOUNT B: NAME` or `MOUNT B: 2` assigns one. `MOUNT B:` empties B. | `test/programs/mount.asm:32-56`, `245-247`, `266` |
 | `No such volume` | No matching label/index or a failed descriptor/table read. | List labels and indexes with MOUNT and inspect the card if a known descriptor cannot be read. | `test/programs/mount.asm:101-146`, `src/volsvc.asm:426-460` |
-| `Cannot mount: in use or too large` | The volume is already on another drive, the destination has no suitable allocation-vector slot or the pre-change flush failed. | Empty the other drive or choose a suitably sized slot. A failed flush leaves the assignment unchanged. It keeps failed cached lines for the next flush, where release 1 at `a1023bd` dropped them, which `MOUNT.COM`'s own warm boot then is. It prints no additional Write lost message on this path. | [Chapter 5](05-drives-and-user-areas.md#changing-a-drive-s-volume), `src/volsvc.asm:211-265`, `372-386`, `src/cache.asm:265-295` |
-| `Cannot unmount` | An attempt to empty A or failure of the required flush. | Replace A's volume rather than emptying A. For a write fault, recover the card before proceeding. Failed cached lines are kept for the next flush, where release 1 at `a1023bd` dropped them, with no additional Write lost message on this path. | `src/volsvc.asm:275-314`, `372-386`, `src/cache.asm:265-295` |
+| `Cannot mount: in use or too large` | The volume is already on another drive, the destination has no suitable allocation-vector slot or the pre-change flush failed. | Empty the other drive or choose a suitably sized slot. A failed flush leaves the assignment unchanged. It keeps failed cached lines for the next flush, which `MOUNT.COM`'s own warm boot then is. It prints no additional Write lost message on this path. | [Chapter 5](05-drives-and-user-areas.md#changing-a-drive-s-volume), `src/volsvc.asm:211-265`, `372-386`, `src/cache.asm:265-295` |
+| `Cannot unmount` | An attempt to empty A or failure of the required flush. | Replace A's volume rather than emptying A. For a write fault, recover the card before proceeding. Failed cached lines are kept for the next flush, with no additional Write lost message on this path. | `src/volsvc.asm:275-314`, `372-386`, `src/cache.asm:265-295` |
 | `MOUNT needs TEC-OS with ABI 5.` | The ROM table lacks the TNA tag or its major version is not 5. | Use a MOUNT.COM matched to the ROM. | [Chapter 12](12-use-the-boards-devices.md), `test/programs/mount.asm:13-30` |
 
 ## TED's load error
@@ -382,8 +382,7 @@ The starter card's TED (Thorium `a2fe556`) prints this
 line and returns to the prompt when the file it is opening holds a byte it
 rejects
 (`Thorium a2fe556:README.md:25-30`, `docs/compatibility.md:223`,
-`test/ted.test.mjs:92-120`). The earlier TED, Thorium `967678c` on
-the release card, also rejects `00h` padding at the end of a file and gives
+`test/ted.test.mjs:92-120`). An older TED, Thorium `967678c`, also rejects `00h` padding at the end of a file and gives
 error 03 without a line or column
 (`Thorium 967678c:ted/src/load.asm:48-53`, `121-125`).
 

@@ -16,10 +16,12 @@ nav_group: "Inside TEC-OS"
      recipe was run there too. The inputs are TED.COM and TAS.COM from
      Thorium and BAZA.COM Baza 50dc512 (280ee372…, 13,184 bytes),
      BAZA.RTL (14d7fd11…, 12,032 bytes) and BOUNCE.BAS (615693a5…, 5,189
-     bytes) from Baza. Release-card passages prefixed 755636b: use TEC-OS
-     755636b130241173c5c30a0be8fe6b79cf2fee37; those prefixed 402f30e: use
-     TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125, before the shell left
-     the ROM.
+     bytes) from Baza. At TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125,
+     before the shell left the ROM, the image was 488 bytes larger, 15,363
+     used (402f30e:docs/memory-map.md:1-30), and Thorium's CHAIN.ASM was an
+     input and on the card. The card at TEC-OS
+     755636b130241173c5c30a0be8fe6b79cf2fee37 is the one passages about its
+     nine files name.
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
      card differs only in TED.COM and HELLO3.ASM, so captures made at
      fdd9e5b that run neither stand for e59e8c4. -->
@@ -38,9 +40,7 @@ The build adds the pinned assembler host described below.
 The repository requires Node.js 20 or later. `npm ci` installs its locked
 host dependencies and `npm run inputs` prepares the application inputs.
 These are TED.COM and TAS.COM from Thorium and
-BAZA.COM, BAZA.RTL and BOUNCE.BAS from Baza. Thorium's demonstration source
-CHAIN.ASM, an input at TEC-OS `402f30e`, has left the card and the inputs. The
-same step also fetches MON-3's ROM, `MON3.BIN`, and thirteen of MON-3's
+BAZA.COM, BAZA.RTL and BOUNCE.BAS from Baza. The same step also fetches MON-3's ROM, `MON3.BIN`, and thirteen of MON-3's
 program and library sources, which only the tests read: they compare
 `MON3.SVC` with MON-3 itself (`test/inputs.json:3-193`,
 `docs/mon3.md:13-16`, `docs/mon3.md:357-364`).
@@ -48,8 +48,8 @@ program and library sources, which only the tests read: they compare
 TAS is the only assembler. It builds the main ROM, the board diagnostics,
 `GLCD.SVC`, `SHELL.SVC`, `MOUNT.COM`, `DEMO.COM`, `MON3.SVC` and `HELLO3.BIN`,
 and the tests' programs and services. atom-z80 is not a dependency, and no
-build selects another assembler. A tree from before TAS built the ROM, such as
-the release-1 source at `a1023bd`, needs atom-z80 0.3.7 installed by hand
+build selects another assembler. A tree from before TAS built the ROM needs
+atom-z80 0.3.7 installed by hand
 (`package.json:14-29`, `tools/build.mjs:345-351`,
 `tools/media.mjs:188-231`, `README.md:91-102`).
 
@@ -93,7 +93,7 @@ files and does not download them (`tools/lib/tas-rom.mjs:77-109`).
 After preparation, `npm run build` constructs the main ROM, `npm run diag`
 assembles the board diagnostics, `DIAG.HEX` and `DIAG.BIN` for MON-3 to load
 at `4000h`, and `npm run media` prepares the distribution
-(`package.json:14-23`, `755636b:tools/diag.mjs:1-9`). Chapter 28 describes
+(`package.json:14-23`, `tools/diag.mjs:1-9`). Chapter 28 describes
 the diagnostics. `npm run build` always uses TAS (`tools/build.mjs:345-351`).
 
 ## Image regions and their addresses
@@ -114,8 +114,7 @@ these regions:
 
 Its used extent is 14,875 of 16,384 bytes. Its SHA-256 is
 `43ac0f1871cf3d979c94b74a030c1c06eeec500bd77e60ca7e3951a2de1c339e`
-(`docs/memory-map.md:1-30`). With the CCP's command set and history moved to
-`SHELL.SVC`, the image is 488 bytes smaller than at TEC-OS `402f30e` (`402f30e:docs/memory-map.md:1-30`). The census stores each
+(`docs/memory-map.md:1-30`). The census stores each
 region's start and exclusive end while the table above prints the last
 occupied address (`tools/build.mjs:276-291`).
 
@@ -418,15 +417,23 @@ end the line. The final `RET` uses the return word installed by the CCP
 to 33 bytes.
 
 The editor round uses HELLO saved on B with TED and TAS on A, on the
-PICO9918 at 80 columns. `TED HELLO.ASM 7` opens at the `CALL BDOS` line.
+PICO9918 at 80 columns. With the source saved as `hello.asm` in the
+repository root, these commands put it on B of a copy of the starter card:
+
+```sh
+cp dist/starter.img work.img
+node tools/tecvol.mjs put work.img B hello.asm --text
+```
+
+At `A>`, `CON PICO 80` sets 80 columns and `B:` selects B, where
+`TED HELLO.ASM 7` opens at the `CALL BDOS` line.
 Inserting `1` at its start and pressing `^T B` saves the source and chains
 `A:TAS HELLO.ASM` followed by `A:TED`, a line the shell runs piece by piece.
 These are the PICO9918's screens:
 
 <!-- TEC-OS e59e8c4: node tools/capture.mjs --card work.img --board pico --screen "CON PICO 80" B: "@start TED HELLO.ASM 7" "@press 1" "@press ^T B" "@run 400", the screen
      printed at that point, ^T, ^H and Right typed as the bytes 14h, 08h
-     and ESC [ C. work.img is the starter card with hello.asm put on B as
-     below. -->
+     and ESC [ C. work.img is made as shown above. -->
 ```text
 
 B>A:TAS HELLO.ASM

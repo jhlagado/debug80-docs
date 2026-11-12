@@ -13,8 +13,8 @@ nav_group: "Reference"
      the outputs below are those runs'; the recipe's image hash is
      e59e8c4's, run again there, where the other outputs are the same; the
      TEC-OS capture was made with the
-     command in its comment. Citations prefixed 755636b: are the release
-     card's.
+     command in its comment. The card at TEC-OS 755636b held nine
+     files (755636b:tools/media.mjs:197-211).
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
      card differs only in TED.COM and HELLO3.ASM, so captures made at
      fdd9e5b that run neither stand for e59e8c4. -->
@@ -198,8 +198,7 @@ node tools/tecvol.mjs dir dist/starter.img A
 MOUNT is 671 bytes in `dist/files` and occupies six records, 768 bytes, on
 the card. The fifteen files are those of `tools/media.mjs:200-231` and
 `tools/lib/starter.mjs:10-22`, and STARTUP.CMD holds `SHELL.SVC` and
-`GLCD.SVC` (`test/starter.test.mjs:48-82`). The release starter card at
-`755636b` held nine (`755636b:tools/media.mjs:197-211`).
+`GLCD.SVC` (`test/starter.test.mjs:48-82`).
 
 ## put
 
@@ -324,8 +323,7 @@ are applied after the files are written (`tools/tecvol.mjs:92-101`,
 `tools/lib/recipe.mjs:14-44`). The web page uses the same recipe function
 for New starter card.
 
-`npm run media` prepares `dist/starter.recipe.json` and its image. At TEC-OS
-`e59e8c4` that recipe, at revision 12, is the only one: the web page builds
+`npm run media` prepares `dist/starter.recipe.json` and its image. That recipe, at revision 12, is the only one: the web page builds
 the same card, and media removes a `dist/page.recipe.json` left by an older
 build (`tools/media.mjs:233-253`, `274-277`). Chapter 27
 describes that preparation. The rebuild produced these matching hashes:

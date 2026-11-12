@@ -13,9 +13,7 @@ nav_group: "Inside TEC-OS"
      long.img made as shown. The runtime is @jhlagado/debug80-runtime 0.3.3,
      as the package locks it. Inventory counts are of source files, not of
      passing tests. The retired diagnostics ROM is cited with an a1023bd:
-     prefix (TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe) and the board
-     diagnostics' documents with a 755636b: prefix (TEC-OS
-     755636b130241173c5c30a0be8fe6b79cf2fee37).
+     prefix (TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe).
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
      card differs only in TED.COM and HELLO3.ASM, so captures made at
      fdd9e5b that run neither stand for e59e8c4. -->
@@ -327,7 +325,7 @@ model results. They do not establish what a physical GLCD shows.
 
 The package test command selects top-level `test/*.test.mjs` files with
 Node's test runner and concurrency set to one (`package.json:18`). A Git-tree
-inventory at `e59e8c4` contains 67 matching files, from arith.test.mjs through
+inventory contains 67 matching files, from arith.test.mjs through
 write.test.mjs. That is a source-only file count. It does not count test cases,
 executed files or successful assertions.
 
@@ -448,14 +446,14 @@ T10 and T12 probed these differences. TEC-OS avoids overlay writes and latch
 reads so checked ordinary paths can satisfy those restrictions on a more
 permissive model (`host/machine.mjs:40-46`, `host/machine.mjs:158-175`,
 `a1023bd:docs/diagnostics.md:147-164`, `a1023bd:docs/diagnostics.md:187-196`,
-`755636b:docs/diagnostics.md:383-399`).
+`docs/diagnostics.md:383-399`).
 
 [Chapter 28](28-diagnose-the-machine.md) describes the board diagnostics,
 a program that MON-3 loads on a physical board. Their host-model test
 establishes the program's logic, not a board's behaviour. Each line of a
 board log reports whether that board did what TEC-OS relies on, with no
-model report to compare against (`755636b:docs/diagnostics.md:15-18`,
-`755636b:docs/diagnostics.md:104-127`). The retired ROM's comparison tool,
+model report to compare against (`docs/diagnostics.md:15-18`,
+`docs/diagnostics.md:104-127`). The retired ROM's comparison tool,
 `tools/diag-check.mjs`, is absent at that source. A board log's line
 supports that particular board observation. It does not turn an untested
 timing, device or application workflow into physical evidence.

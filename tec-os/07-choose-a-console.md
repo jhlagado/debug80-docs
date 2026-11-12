@@ -77,8 +77,8 @@ paste.
 are equivalent. An invalid name is printed back with a question mark and leaves
 the console as it was.
 
-The transcripts in this chapter are host-model captures from TEC-OS
-`fdd9e5b`, not observations of a physical board.
+The transcripts in this chapter are host-model captures, not observations of
+a physical board.
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs "CON XYZ" -->
 ```text

@@ -104,7 +104,7 @@ or one below the minimum version rejects the load
 
 ## The execution record
 
-At TEC-OS `e59e8c4` a service can carry an application that TEC-OS enters,
+A service can carry an application that TEC-OS enters,
 as `MON3.SVC` and `SHELL.SVC` do. Its image then starts with a 16-byte
 *execution record*, at file offset 25, directly after the header
 (`docs/services.md:132-143`):
@@ -201,13 +201,11 @@ B>
 In this run the service loaded at page `AEh`, below the shell. The inserted
 zero gap changed header byte 24 from a space, `20h`, to `CEh`. The shell's
 `PUTTRIM` masks bit 7 (`drivers/shellio.asm:262-278`) so the name prints with
-an `N`. The release-1 run at `78127ec` loaded it at page `B8h` and printed
-`COUNTX`.
+an `N`.
 
 ## GLCD.SVC
 
-This dump is of the starter card's graphics LCD driver at TEC-OS `e59e8c4`,
-the same bytes as at `621201d`. The first command prints its header and initial image bytes. The second
+This dump is of the starter card's graphics LCD driver. The first command prints its header and initial image bytes. The second
 starts at its relocation data, offset 767.
 
 ```sh

@@ -61,8 +61,7 @@ count of stored lines.
 
 The ring is in the shell's pages below the TPA's ceiling, in fixed memory or
 EXPAND 0, so the routines read and write its bytes directly with no bank
-switch. The ring had its own page in EXPAND 1 at the release-1 source,
-`a1023bd`, with byte routines that switched banks around each access.
+switch.
 
 ## Lines from the prompt
 

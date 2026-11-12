@@ -12,8 +12,7 @@ nav_group: "Reference"
      physical-board run was made. The retired diagnostics ROM's documents
      and tests are cited with an a1023bd: prefix (TEC-OS
      a1023bd0cbb4879c37ae61e6f670b442e1e60abe), its cost figure at TEC-OS
-     78127ec, and the current board diagnostics with a 755636b: prefix
-     (TEC-OS 755636b130241173c5c30a0be8fe6b79cf2fee37). -->
+     78127ec. -->
 
 TEC-OS shares several ports with the board's displays, serial line and speaker.
 The tables here give the connections its code uses. They also identify the
@@ -109,7 +108,7 @@ Both describe bit 6 as low while a keypad key is down. The retired
 diagnostics ROM's T11 recorded the port's readings
 (`a1023bd:docs/diagnostics.md:166-169`). The current board diagnostics do not
 read it, and which description is true on the board is still open
-(`755636b:docs/diagnostics.md:388-391`). The physical Protect and
+(`docs/diagnostics.md:388-391`). The physical Protect and
 Expand switches are not input conditions checked by TEC-OS. They are distinct
 from the similarly named bits it writes to the system latch.
 
@@ -148,7 +147,7 @@ show them unconnected to U9. TEC-OS uses only bit 2 among bits 2–6.
 The retired diagnostics ROM's T12 mapped what those bits select
 (`a1023bd:docs/diagnostics.md:185-190`). The current board diagnostics change
 only bit 2 and do not probe bits 3–6, so how a board decodes them remains
-unrecorded (`755636b:docs/diagnostics.md:397-399`).
+unrecorded (`docs/diagnostics.md:397-399`).
 
 ## U9 and the RAM
 
@@ -219,7 +218,7 @@ a single-colour matrix. DEMO's pattern need not look the same on that wiring.
 The retired diagnostics ROM's T24 had a visual procedure for recording the
 pattern (`a1023bd:docs/diagnostics.md:352-355`). The current board diagnostics
 do not check the 8 × 8 LEDs, so the board's wiring is still unrecorded
-(`755636b:docs/diagnostics.md:380-381`). A host-model picture cannot settle
+(`docs/diagnostics.md:380-381`). A host-model picture cannot settle
 that board difference.
 
 ## The DS1302 clock
@@ -285,4 +284,4 @@ with the timed T34 (`a1023bd:docs/diagnostics.md:283-290`,
 `a1023bd:docs/diagnostics.md:430-433`). The current board diagnostics record
 them with SD3's margins and SD6's read speed, timed by the DS1302 or by a
 stopwatch between two beeps, in a log that names its image
-(`755636b:docs/diagnostics.md:168-173`, `755636b:docs/diagnostics.md:193-196`).
+(`docs/diagnostics.md:168-173`, `docs/diagnostics.md:193-196`).

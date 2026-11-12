@@ -11,8 +11,11 @@ nav_group: "Reference"
      Unprefixed source ranges use that revision, with Thorium a2fe556 (TED.COM, SHA-256 c6c8374a…), Thorium
      3d1e2c0 (TAS.COM, e648a1d0…) and Baza 50dc512 (BAZA.COM 280ee372…,
      BAZA.RTL 14d7fd11…, BOUNCE.BAS 615693a5…). The three captures were
-     made at fdd9e5b with the commands in their comments. DEL in the ROM
-     cites 402f30e: (TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125).
+     made at fdd9e5b with the commands in their comments. The ROM held ten
+     built-ins with COPY and SERVICES at TEC-OS a1023bd, and eleven with
+     DEL at TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125, whose DEL
+     keyword selected ERA's routine (402f30e:src/tables.asm:64-67). The
+     NAME.SVC /E form of 31b6083 and 402f30e is gone.
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
      card differs only in TED.COM and HELLO3.ASM, so captures made at
      fdd9e5b that run neither stand for e59e8c4. -->
@@ -21,7 +24,7 @@ A command line contains a command and its arguments, separated by spaces.
 Return or `^J` ends the line. The maximum is 127 characters and typing the
 last available character also ends it. `^C` cancels only at the start of
 the line. Later in the line it is ignored. Recall and editing keys are in
-[The first session](01-first-session.md). At TEC-OS `e59e8c4` the ROM's
+[The first session](01-first-session.md). The ROM's
 command processor runs the built-ins marked ROM below, and the shell,
 `SHELL.SVC`, which the starter card's startup file installs, adds those
 marked shell, recall, the `[more]` pause, lines of several commands and
@@ -87,11 +90,9 @@ the causes and recovery actions.
 
 ## Command forms
 
-At TEC-OS `e59e8c4` the ROM holds eight built-ins, DIR, TYPE, ERA, REN,
-SAVE, USER, CON and UNLOAD, and the shell three more, COPY, DEL and SERVICES
-(`src/tables.asm:53-76`, `drivers/shell.asm:541-548`). The
-release-1 ROM at `a1023bd` held ten, with COPY and SERVICES, and the ROM at
-`402f30e` eleven, with DEL. Drive selection, program launch and service
+The ROM holds eight built-ins, DIR, TYPE, ERA, REN, SAVE, USER, CON and
+UNLOAD, and the shell three more, COPY, DEL and SERVICES
+(`src/tables.asm:53-76`, `drivers/shell.asm:541-548`). Drive selection, program launch and service
 installation have additional forms handled by the command processor.
 
 | Form | In | Operation |
@@ -209,9 +210,7 @@ as `*.TXT`, is erased without confirmation. No match produces `NO FILE`
 multi-file erase after some entries have already been erased. The exact
 partial-result cases are in [Appendix D](appendix-d-error-messages.md).
 
-DEL is another name for ERA. At `402f30e` its keyword in the ROM selected
-the same routine (`402f30e:src/tables.asm:64-67`). At `e59e8c4` DEL is the
-shell's: the shell rewrites the word as `ERA` and hands the piece to the
+DEL is another name for ERA and is the shell's: the shell rewrites the word as `ERA` and hands the piece to the
 ROM, so it takes the same names and patterns and prints the same
 `ALL (Y/N)?` question. Because a built-in is matched before a program is
 looked up, plain `DEL` under the shell does not run a `DEL.COM`, as plain
@@ -302,7 +301,7 @@ routine reports failure. The practical installation rules are in
 [Chapter 5](05-drives-and-user-areas.md) and authoring is in
 [Chapter 14](14-write-a-resident-service.md).
 
-At TEC-OS `e59e8c4`, `NAME.SVC` also enters a service's application when the
+`NAME.SVC` also enters a service's application when the
 service has its enter-on-install bit set. Only a service whose image starts
 with an execution record that has its enter bit set has one. On the starter
 card those are `MON3.SVC` and `SHELL.SVC`. Text after the name is the
@@ -319,8 +318,9 @@ sets return code FF00h. The application ends with a warm boot and its
 service stays installed, so `UNLOAD` removes it as before
 (`docs/services.md:82-89`, `docs/services.md:101-130`,
 `docs/services.md:157-180`, `src/loader.asm:734-783`,
-`docs/shell.md:220-235`). The `NAME.SVC /E` form of `31b6083` and
-`402f30e` is gone. [Appendix H](appendix-h-service-file-format.md#the-execution-record)
+`docs/shell.md:220-235`). An older card's `MON3.SVC /E` line still enters:
+the `/E` is only a tail, which the service does not read
+(`docs/mon3.md:42-43`). [Appendix H](appendix-h-service-file-format.md#the-execution-record)
 gives the record.
 
 `MON3.SVC` gives the `MON3>` line, which BDOS function 10 reads and the
@@ -429,4 +429,4 @@ refusal (`docs/shell.md:91-113`).
 when that line installs the shell. Typing `STARTUP.CMD` runs the whole file
 again as a typed script. Without the shell a typed `NAME.CMD` runs
 `NAME.COM`, and only the first line of `STARTUP.CMD` runs
-(`docs/shell.md:115-133`).
+(`docs/shell.md:28-44`, `docs/shell.md:115-133`).

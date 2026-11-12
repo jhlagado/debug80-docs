@@ -31,8 +31,7 @@ container's start. `tecvol install` puts that start at the card's block 0.
 ## The header
 
 The following dump shows the starter card's first 96 bytes: the header fields
-followed by two descriptors. At TEC-OS `e59e8c4` it is the same as the
-recorded `78127ec` build's.
+followed by two descriptors.
 
 ```sh
 od -A x -t x1 -N 96 dist/starter.img

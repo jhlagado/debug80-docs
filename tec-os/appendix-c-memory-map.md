@@ -9,8 +9,11 @@ nav_group: "Reference"
 
 <!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…. Addresses come from that build's
-     build/tecos/tecos.d8.json and docs/memory-map.md. Lines cited with a
-     402f30e: prefix are from TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125. -->
+     build/tecos/tecos.d8.json and docs/memory-map.md. At TEC-OS
+     402f30ef67c2d800d6c6b6bec4460697b3a4d125, before the shell left the
+     ROM, the code ran on to FC02h with 1,021 bytes free
+     (402f30e:docs/memory-map.md:1-30), and the history was at BD00h in
+     EXPAND 1 (402f30e:src/history.asm:16). -->
 
 A memory address needs both a bank and a build identity. This reference
 pairs the map of one build with the source contracts for each region.
@@ -90,9 +93,7 @@ The ROM occupies these ranges:
 | `C5D1h–FA1Ah` | 13,386 | Code |
 | `FA1Bh–FFFFh` | 1,509 | Unused |
 
-That is 14,875 of the 16,384 bytes (`docs/memory-map.md:22-30`). At TEC-OS
-`402f30e`, before the shell left the ROM, the code ran on to `FC02h` and
-1,021 bytes were free (`402f30e:docs/memory-map.md:1-30`).
+That is 14,875 of the 16,384 bytes (`docs/memory-map.md:22-30`).
 
 The CCP's four files occupy `DBBBh–E3C2h`, 2,056 bytes, from `CCPBAS`. The
 BDOS's six files follow at `BDOSBAS`, `E3C3h–F19Dh`, 3,547 bytes (`src/rom.asm:31-40`).
@@ -117,7 +118,7 @@ These fixed addresses identify the current page-zero contracts
 | `0008h–0037h` | Restart vectors 1–6. Each defaults to seven zeros followed by `RET`, unless a `JP` target is strictly above `PZTOP` |
 | `0038h` | Restart 7 and mode 1 interrupt entry. Defaults to `EI`, `RETI` unless a qualifying `JP` remains |
 | `0040h` | `LATCHV`, the system latch shadow |
-| `0041h–004Fh` | Unused |
+| `0041h–004Fh` | Unused by TEC-OS. A `MON3.SVC` session holds them while it runs and gives them back at `EXIT` or warm boot |
 | `0050h` | Load-drive byte. 0 means current drive, 1 means A and so on |
 | `005Ch` | First default file control block (FCB) |
 | `006Ch` | Second FCB, overlapping the first FCB's last 20 bytes |
@@ -146,9 +147,11 @@ second FCB reaches `008Fh` so tail publication follows FCB parsing.
 
 CP/M reserves `0040h–004Fh` for BIOS scratch. TEC-OS uses only `0040h`
 there. It is the resident state byte read while EXPAND 1 hides the upper
-workspace. Cold boot leaves the other 15 bytes zero. Console state is above
-the RAM BIOS table (`src/layout.asm:64-69`, `src/abi.inc:304-306`,
-`src/ram.asm:410-427`).
+workspace. Cold boot leaves the other 15 bytes zero. A `MON3.SVC` session
+holds them while it runs: the latch stub its restarts pass through, GO's
+return and a `RETN`. It gives them back at `EXIT` or warm boot. Console
+state is above the RAM BIOS table (`src/layout.asm:64-69`,
+`src/abi.inc:304-306`, `src/ram.asm:410-427`, `docs/memory-map.md:32-39`).
 
 ## The resident workspace
 
@@ -324,8 +327,8 @@ These fixed bank addresses hold the cache (`src/layout.asm:32-42`,
 | `BC9Eh–BCFFh` | 98 | Unused |
 | `BD00h–BFFFh` | 768 | Unused. The host model watches it so that a stray write fails |
 
-The history was at `BD00h` until it moved to the shell's own pages
-(`402f30e:src/history.asm:16`).
+The command history is in the shell's own pages, not in this bank
+(`docs/shell.md:20-26`).
 
 Cold boot clears the whole bank and then marks every cache key empty
 (`src/boot.asm:235-252`). No BDOS or BIOS interface allocates a
@@ -395,7 +398,7 @@ for (const n of process.argv.slice(1)) {
 }' CMDTXT PRGCODE CHPOS
 ```
 
-At `e59e8c4` it prints:
+It prints:
 
 ```text
 CMDTXT BD3Ch

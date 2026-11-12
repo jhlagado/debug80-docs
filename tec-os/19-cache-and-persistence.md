@@ -15,7 +15,9 @@ nav_group: "Inside TEC-OS"
      TAS through tools/lib/assemble.mjs. The BOUNCE compile time and the
      16 KiB and SAVE 16 write counts are the fdd9e5b measurements recorded
      in Origo KD-303. The block-read, BIOS hit and miss, CLOOK, CWRITE
-     and close costs were measured at fdd9e5b the same way, timing each call
+     and close costs were measured at fdd9e5b the same way. The 7.65 s
+     figure for writing each record through is TEC-OS 78127ec's, and the
+     write counts without coalescing are those of a1023bd, timing each call
      from its entry to its return on the starter card.
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
      card differs only in TED.COM and HELLO3.ASM, so captures made at
@@ -63,14 +65,15 @@ block independently of the drive used to reach it. The lookup therefore
 prevents two lines from holding separate copies of the same block
 (`src/cache.asm:48-90`).
 
-The cache's lines and table are in EXPAND 1. Its four other bytes of state are
-in the resident workspace above the RAM BIOS table (`src/ram.asm:315-322`):
+The cache's lines and table are in EXPAND 1. Its five other bytes of state are
+in the resident workspace above the RAM BIOS table (`src/ram.asm:304-318`):
 
 - `CNEXT`, the next line to give out
 - `CWTYPE`, the write type of the current BIOS `WRITE`, with bit 7 set for a
-  volume written through and bit 6 once a line has been given out for the
-  write
-- `CIFF`, the interrupt state at the current BIOS call's entry
+  write that goes straight through, bit 6 once a line has been given out for
+  the write and bit 5 for a data write held to coalesce
+- `CIFF`, two bytes, the interrupt state at the current BIOS call's entry
+- `CPEND`, the pending block's line plus one, 0 for none
 
 To reach the table, a routine takes from `CXON` the latch value with
 `LATEXP` ORed into `LATCHV` and writes it to the latch. It reads or writes
@@ -228,9 +231,8 @@ flush point (`docs/recovery.md:66-103`):
 
 A file written through therefore passes through a single line, block after
 block, each block written once when the write moves on, and the cache keeps
-the lines that hold programs and directories. Writing each record through,
-as the release-1 source at `a1023bd` did, wrote a block once for each of its
-four records.
+the lines that hold programs and directories. Writing each record through
+would write a block once for each of its four records.
 
 A reset or power loss before a flush point loses the records written into the
 pending block since it was last written, at most one block of four records,
@@ -299,9 +301,8 @@ and 4,129, the data in the order of their lines, and then 4,096 again. The
 trace was taken on the host model by recording `SDLBA` at each call of
 `SDWRITE`. That run used six card writes. The same command on
 written-through A also used six, 2,048, then the data blocks 2,272 to 2,275
-in order as each pending block was written, then 2,048 again. The
-release-1 source at `a1023bd` used eighteen there, one for each record and
-the directory.
+in order as each pending block was written, then 2,048 again. Writing each
+record through would use eighteen, one for each record and the directory.
 
 The run of `SAVE 160 Z.COM` on B wrote 85 blocks: the 80 data blocks and
 the directory block five times. Each extent change writes the directory, and
@@ -312,9 +313,9 @@ write. During the second extent every line became dirty, so `CTAKE` wrote
 directory write at that extent's end wrote the rest.
 
 On `time.img`, `SAVE 64 X.COM`, 16 KiB, took 10,105,383 T-states, 2.53
-seconds, on `THROUGH`, and 9,936,556, 2.48 seconds, on `BEHIND`. Before
-A's writes were coalesced, the release-1 build at `78127ec` took 7.65
-seconds on `THROUGH`, three times its 2.49 on `BEHIND`. Each run followed a cold boot and a change to the
+seconds, on `THROUGH`, and 9,936,556, 2.48 seconds, on `BEHIND`. Writing
+each record through took 7.65 seconds on `THROUGH`, three times its 2.49 on
+`BEHIND`. Each run followed a cold boot and a change to the
 drive. The count, taken as for the reads, leaves out the change of drive.
 
 ## Flush order and interrupted updates

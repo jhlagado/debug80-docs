@@ -683,11 +683,11 @@ CRLF:	DB	13,10,"$"
 ```
 
 Save that source as `recs.asm` and put it on B with the same `--text`
-card-tool operation used for the other sources. The confirmed `621201d` run
-below used the PICO board configuration. Startup's GLCD line installed nothing
-while the PICO console was active, leaving stack room for COUNT.
-With COUNT.SVC built by TAS on the card, RECS listed two records. The table
-addresses are results from that run:
+card-tool operation used for the other sources. The run below uses the PICO
+board configuration. Startup's GLCD line installs nothing
+while the PICO console is active, leaving stack room for COUNT.
+With COUNT.SVC built by TAS on the card, RECS lists two records. The table
+addresses are this run's:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card svc.img --board pico B:
      "TAS COUNT COUNT.SVC" "TAS RECS" COUNT.SVC RECS. Boot rows and the

@@ -402,8 +402,8 @@ work. A retained handler has its own behaviour.
 Programs start with maskable interrupts disabled by warm boot. A program can
 enable them. TEC-OS temporarily disables them for card-block I/O, serial-byte
 transfers and PICO9918 control-port byte pairs. It then restores the previous
-state. At `a1023bd` command-history access was among them. Now the
-history is the shell's, in its own pages, and needs no bank switch.
+state. The command history is the shell's, in its own pages, and needs no
+bank switch.
 
 The non-maskable interrupt (NMI) entry at `0066h` lies inside the default FCB.
 With the keypad NMI jumper fitted, a hex-keypad press can execute the FCB's
@@ -417,9 +417,11 @@ CP/M's BIOS scratch area. That fixed-RAM copy remains accessible when EXPAND 1
 hides the workspace. The cache routines read it to restore the normal bank. A program that writes port `FFh` must also write the same value to
 `0040h`. Otherwise a later TEC-OS latch write uses the old recorded bits. Leave
 both alone unless the program changes the latch. Cold boot clears page zero and
-initialises the latch copy. TEC-OS does not use `0041h–004Fh` afterwards.
+initialises the latch copy. TEC-OS does not use `0041h–004Fh` afterwards,
+but a `MON3.SVC` session holds them while it runs and gives them back at
+`EXIT` or warm boot (`docs/memory-map.md:32-39`).
 
-Cold boot clears EXPAND 1 for TEC-OS's cache. At TEC-OS `e59e8c4` it holds
+Cold boot clears EXPAND 1 for TEC-OS's cache. It holds
 (`docs/memory-map.md:70-83`):
 
 | Addresses | Contents |
@@ -428,8 +430,8 @@ Cold boot clears EXPAND 1 for TEC-OS's cache. At TEC-OS `e59e8c4` it holds
 | `BC00h–BC9Dh` | the cache's table: the card block each line holds and whether it has changes |
 | `BD00h–BFFFh` | free |
 
-At `a1023bd` the history of command lines took `BD00h–BDFFh`. It is now a
-256-byte ring in the last page of `SHELL.SVC`.
+The history of command lines is a 256-byte ring in the last page of
+`SHELL.SVC`, not in this bank.
 
 The free range means unused storage in that bank. It does not extend the TPA or
 supply a bank-allocation interface to a program.

@@ -38,7 +38,7 @@ path uses that many bytes.
 The inspected application binary interface (ABI) is 5.1. Before calling ABICALL,
 a program compares the three bytes at ABITAB with `TNA` and ABIMAJ with exactly
 5. A new major may renumber services. A new minor adds service numbers at the
-end so code using the 5.0 calls can run on 5.1. At TEC-OS `e59e8c4` the
+end so code using the 5.0 calls can run on 5.1. The
 minor is still 1 although number 16, the shell hook, has been added. A caller
 requiring FONT also checks for minor version 1 or later (`src/abi.inc:1-28, 205-210`,
 `src/abi.asm:1-14`, `programs/DEMO.ASM:56-72`).

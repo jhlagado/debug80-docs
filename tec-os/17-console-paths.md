@@ -305,8 +305,8 @@ another attempt rather than becoming a character. The generated counts
 are written to `src/gen/config.asm` (`tools/build.mjs:39-77`,
 `src/console.asm:184-204`, `src/console.asm:306-315`).
 
-At `60cfbdc`, the model measured 9,293 T-states for a whole `TXBYTE`
-character and 9,448 through serial `BCONOUT`. At 4 MHz the latter is
+On the model a whole `TXBYTE` character takes 9,293 T-states and one
+through serial `BCONOUT` 9,448. At 4 MHz the latter is
 roughly 420 characters a second.
 
 Reception has no hardware buffer. A byte arriving while the CPU is not
@@ -363,7 +363,7 @@ and delivers a held key only once. Holding it produces no automatic repeat
 (`src/keyboard.asm:39-99`). A press and release entirely between scans
 is lost.
 
-At TEC-OS `e59e8c4` `abi.inc` publishes `KBLAST` at `BFEFh`: the
+`abi.inc` publishes `KBLAST` at `BFEFh`: the
 highest-numbered matrix key down, row × 8 + column, or `FFh` for none. A
 service that scans the matrix itself writes the key it finds there, as
 `MON3.SVC` does, so a key held from a program is not read again as new

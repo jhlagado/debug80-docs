@@ -19,8 +19,8 @@ nav_group: "Using the machine"
      web/build.mjs:41-42, docs/compatibility.md:223 and
      test/ted.test.mjs:92-120, with TED.COM Thorium a2fe556 (c6c8374a…,
      12,335 bytes). A:'s coalesced writes in "Recovery after a power cut":
-     docs/recovery.md:28-47, :66-103 and :135-147. The earlier TED of the
-     release card is Thorium 967678c, at TEC-OS 755636b.
+     docs/recovery.md:28-47, :66-103 and :135-147. The older TED named is
+     Thorium 967678c, the TED of the card at TEC-OS 755636b.
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
      card differs only in TED.COM and HELLO3.ASM, so captures made at
      fdd9e5b that run neither stand for e59e8c4. -->
@@ -327,8 +327,7 @@ of `00h` that fills the rest of the last record as the end of the file, so
 such a file opens without an error. A byte that TED rejects elsewhere stops
 it at the prompt with `EDIT error 03` and the byte's line and column, as in
 `EDIT error 03 L3 C5` (TEC-OS e59e8c4 `docs/compatibility.md`, Thorium
-a2fe556 `README.md`). The earlier TED, Thorium `967678c` on the release
-card, rejects that padding and stops with error 03 without a line or
+a2fe556 `README.md`). An older TED, Thorium `967678c`, rejects that padding and stops with error 03 without a line or
 column.
 
 `era` erases a named file. Like `get`, `put` and `era` use user area 0 unless

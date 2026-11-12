@@ -46,10 +46,10 @@ shell's piece is copied into `CMDTXT` each time the ROM runs it. A line that
 a program passes to function 47 is copied there too, and survives the
 program's warm boot there until the next prompt.
 
-`CHPOS` is above the RAM BIOS table, outside the clear. At `e59e8c4` it holds
+`CHPOS` is above the RAM BIOS table, outside the clear. It holds
 two flags: bit 0 when a function 47 line waits in `CMDTXT`, and bit 1 when
 the rest of the line has been dropped. The 16-bit return code `PRGCODE` is
-in that upper block too (`src/ram.asm:398-403`, `src/ram.asm:286-295`). The
+in that upper block too (`src/ram.asm:398-403`, `src/ram.asm:365-366`). The
 address of the shell's table, `SHOWN`, which tells the ROM a shell holds
 the prompt, is beside them (`src/ram.asm:381`).
 

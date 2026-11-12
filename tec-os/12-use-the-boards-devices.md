@@ -209,8 +209,7 @@ TAG:	DB	"TNA",5
 NOTMSG:	DB	"not TEC-OS with ABI 5",13,10,"$"
 ```
 
-The programs below assemble with the starter card's TAS, and their captures
-were made at TEC-OS `e59e8c4`.
+The programs below assemble with the starter card's TAS.
 
 ## The board's report
 
@@ -729,8 +728,8 @@ active claim does nothing and returns status 0.
 When the ROM PICO console started, it also registered a named PICO record. That
 record supplies the graphics entry table listed in Appendix B. The register,
 fill, write and read entries require a claim. Programs obtain the table through
-the registry rather than fixed internal ROM addresses. The release ABI
-describes version 4. It keeps version 3's width entry, which instead requires an
+the registry rather than fixed internal ROM addresses. The record is
+version 4. It keeps version 3's width entry, which instead requires an
 unclaimed display.
 
 FONT, number 15 in ABI 5.1, returns the ROM console font address in HL. It
@@ -852,8 +851,7 @@ active and polls for a key. On exit it sends dark digit/LED patterns and
 releases an active claim.
 
 The source is `programs/DEMO.ASM`, and the one card, which the web page
-also runs, holds that source in place of DEMO.COM. Release 1 instead put
-DEMO.COM on the web page's card alone. `TAS DEMO` builds
+also runs, holds that source in place of DEMO.COM. `TAS DEMO` builds
 DEMO.COM on the card, `DEMO` then runs it and `TED DEMO.ASM` opens the source
 (`tools/media.mjs:220-223`, `tools/media.mjs:269-270`,
 `test/demo.test.mjs:1-4`, `test/starter.test.mjs:192-217`). This run builds

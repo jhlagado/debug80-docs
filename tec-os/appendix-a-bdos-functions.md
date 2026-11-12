@@ -180,8 +180,7 @@ ignored while the line contains characters. On an empty line it ends the
 program by warm boot and drops the remaining command chain. Deleting or
 clearing all characters restores that abort condition
 (`src/cpm/bdos.asm:499-540`, `553-622`).
-[Chapter 23](23-the-history-ring.md) explains the history storage. At TEC-OS
-`e59e8c4` the recall works only for the first function 10 after the shell's
+[Chapter 23](23-the-history-ring.md) explains the history storage. The recall works only for the first function 10 after the shell's
 `LINE` call, and the history is the shell's (`src/cpm/bdos.asm:473-490`,
 `docs/shell.md:194-208`). With no shell installed `^W` and `^N` are
 characters at the prompt too.
@@ -260,7 +259,7 @@ write, once an entry has been freed, makes the extent the FCB needs
 (`src/cpm/bdosrec.asm:94-135`). A block taken for a write that then fails
 stays in the FCB's map. A later successful close publishes it in the entry
 (`src/cpm/bdosrec.asm:593-619`). An FCB with the read-only attribute set gives
-the `File R/O` error (`src/cpm/bdosfile.asm:355-366`). At TEC-OS `e59e8c4`, on a
+the `File R/O` error (`src/cpm/bdosfile.asm:355-366`). On a
 volume written through, such as A, success means the record is in the
 cache's copy of its block. That pending block reaches the card at the next
 close, directory request, write to another block, console read, function 48,
@@ -398,7 +397,7 @@ gives the `Select` error.
 the command at the DMA address, which ends with a 0 within its first 128
 bytes. It ends the program by warm boot and the CCP runs the command next
 (`src/cpm/bdos.asm:52-94`). The command may hold `!` and `&`. `E` is ignored.
-At TEC-OS `e59e8c4` the shell splits the command at `!` and `&` and its first
+The shell splits the command at `!` and `&` and its first
 piece runs whatever the program's result was. With no shell the ROM runs the
 command whole as one command (`src/cpm/bdos.asm:52-94`,
 `docs/compatibility.md:25-30`).
@@ -411,8 +410,7 @@ a CR or LF before the 0. The program then continues with the line unchanged.
 **48 Flush buffers.** Writes every changed line of the block cache to the card
 (`src/cpm/bdos.asm:244-245`, `src/volsvc.asm:373-388`). `E` = `FFh`, CP/M 3's
 purge, gives the same flush. Returns 0 in `A` or `FFh` if any write failed.
-A failed line is kept for the next flush, where release 1 at `a1023bd`
-dropped it, and A's
+A failed line is kept for the next flush, and A's
 pending block is among the lines written (`src/volsvc.asm:360-389`,
 `docs/compatibility.md:35-38`). Earlier
 or partial card writes are not undone. This explicit call reports failure
@@ -425,7 +423,7 @@ through its return value, not the warm-boot `Write lost` path
 **108 Get or set program return code.** With `DE` = `FFFFh`, reads the code.
 With any other `DE`, sets the code to `DE` (`src/cpm/bdos.asm:257-272`). All
 programs share one code. A cold reset clears it to 0 and warm boot keeps it
-(`src/boot.asm:61-65`, `384-391`, `src/ram.asm:286-295`, `378-379`). The
+(`src/boot.asm:61-65`, `388-407`, `src/ram.asm:365-366`). The
 CCP sets the code to 0 as it takes each command and to `FF00h` when a command
 fails. Under the shell a piece after ` &` runs only when the code is outside
 `FF00h` to `FFFEh` (`src/cpm/ccp.asm:220-223`, `562-567`,

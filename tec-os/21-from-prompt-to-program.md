@@ -27,9 +27,7 @@ exact command grammar.
 
 ## The minimal CCP and the shell
 
-The release-1 CCP at `a1023bd` held the command history, COPY, SERVICES,
-the pager and lines of several pieces itself. At TEC-OS `e59e8c4` the ROM's
-CCP is smaller, and this chapter follows that CCP. Its `KEYTAB`
+The ROM's CCP is small, and this chapter follows it. Its `KEYTAB`
 holds DIR, TYPE, ERA, REN, SAVE, USER, CON and UNLOAD, and it still runs a
 `.COM` or a `.SVC`, changes drive and reads one line of `STARTUP.CMD`
 (`src/tables.asm:53-76`, `docs/shell.md:3-5`). The rest is

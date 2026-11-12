@@ -19,7 +19,7 @@ nav_group: "Inside TEC-OS"
 
 A startup command can run a program that ends through warm boot. The next
 startup line must still be available when the command processor starts
-again. At TEC-OS `e59e8c4` two readers share the file. The ROM reads one
+again. Two readers share the file. The ROM reads one
 record of `A:STARTUP.CMD` once after cold boot and runs its first line. When
 that line installs the shell, `SHELL.SVC` reads the rest of the file, every
 record, and runs it line by line. The shell's position is in its own pages,
@@ -44,9 +44,8 @@ Reset enters `COLD` and clears the whole workspace including `STPOS`. The
 next startup read begins from zero (`src/ram.asm:286-295`,
 `src/boot.asm:22-65`, `src/boot.asm:398-403`).
 [Chapter 15](15-state-and-memory.md#the-workspace-across-a-program-exit)
-explains the two clearing spans. The release-1 ROM at `a1023bd` kept the
-whole record in a 128-byte buffer, `STREC`, beside `STPOS` and ran every line
-of it. That buffer is gone. Its space is now unused (`src/ram.asm:405-409`).
+explains the two clearing spans. The space after `CHPOS`, up to the console
+state, is unused (`src/ram.asm:405-409`).
 
 A diagnostic retry returns to `COLDRT`, after the cold clear but before
 the CCP has run. `STPOS` is still zero. Once the card mounts, startup can

@@ -195,7 +195,7 @@ These rules determine the boundaries:
 A comment line is a place to record why a line is there:
 
 ```sh
-printf '; Shell first, then the GLCD.\nSHELL.SVC\n; Start on B.\nB:\n' > startup.cmd
+printf '; Shell first.\nSHELL.SVC\n; Start on B.\nB:\n' > startup.cmd
 cp dist/starter.img semi.img
 node tools/tecvol.mjs put semi.img A startup.cmd --text
 ```
@@ -425,8 +425,8 @@ A program that hangs or resets the board can prevent startup from reaching an
 interactive prompt. With the keypad non-maskable interrupt (NMI) jumper off,
 hold any hex-keypad key from reset until the prompt appears. TEC-OS samples the
 keypad once just before opening the file and skips startup when a key is down.
-The host model run at `58d4345` placed that sample about 1.5 seconds after
-reset.
+On the host model that sample comes about 1.46 seconds after reset on the
+starter card.
 
 The NMI jumper must be off for this bypass. A key press with it fitted
 causes a non-maskable interrupt at an address TEC-OS uses for other data
