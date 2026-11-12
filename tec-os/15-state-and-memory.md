@@ -26,10 +26,10 @@ holds several volumes. The separate expansion bank holds the block cache, so
 its buffers occupy none of the transient program area (TPA)
 (`src/rom.asm:17-43`, `src/layout.asm:77-86`,
 `format/format.json:20-25`, `src/services.asm:1-20`,
-`src/abi.inc:62-103`). The command history is the shell's. `SHELL.SVC` is a
+`src/abi.inc:65-106`). The command history is the shell's. `SHELL.SVC` is a
 resident service, and its ten pages, the 256-byte history ring in the last of
 them, lie below the TPA's ceiling like any other service's
-(`docs/shell.md:20-26`, `drivers/shell.asm:704-707`).
+(`docs/shell.md:20-26`, `drivers/shell.asm:793-796`).
 
 ## Two banks at the same addresses
 
@@ -37,7 +37,7 @@ The Z80 can address 64 KiB at once. The TEC-1G's fixed RAM occupies
 `0000h–7FFFh` and the ROM occupies `C000h–FFFFh`. Between them `8000h–BFFFh` is
 a 16 KiB bank window onto either half of the RAM in U9. The two halves are
 EXPAND 0 and EXPAND 1. Selecting a bank changes the bytes visible at those
-addresses (`src/layout.asm:1-7`, `src/abi.inc:301-302`).
+addresses (`src/layout.asm:1-7`, `src/abi.inc:304-305`).
 
 Programs normally run with EXPAND 0 selected. Their upper buffers share
 that bank with the resident workspace and stacks. EXPAND 1 contains the
@@ -49,7 +49,7 @@ The system latch at port `FFh` controls the window. Its bit 2 selects
 EXPAND 1 when set. Bit 0 turns off the boot overlay when set.
 After reset that overlay shows the first 2 KiB of ROM at `0000h–07FFh`.
 Cold boot removes it and selects EXPAND 0 with `LATCLAS`, `01h`
-(`src/layout.asm:19-28`, `src/abi.inc:299-302`, `src/reset.asm:1-13`,
+(`src/layout.asm:19-28`, `src/abi.inc:302-305`, `src/reset.asm:1-13`,
 `src/boot.asm:35-59`).
 
 The latch is write-only so TEC-OS stores its normal value in `LATCHV` at
@@ -58,15 +58,15 @@ sets bit 2 in the value sent to the port and restores the saved normal
 value afterwards. The cache lookup does this around its table scan.
 The other latch bits survive the temporary switch, including Caps Lock's
 bit 7. The keyboard routine toggles that bit in both `LATCHV` and the
-latch (`src/layout.asm:64-69`, `src/abi.inc:304-306`, `src/cache.asm:37-90`,
+latch (`src/layout.asm:64-69`, `src/abi.inc:307-309`, `src/cache.asm:38-91`,
 `src/keyboard.asm:130-137`).
 
 CP/M reserves `0040h–004Fh` for BIOS scratch. TEC-OS uses only `0040h`
 there and cold boot leaves the other fifteen bytes zero.
 Console state is above the RAM BIOS table. `MVCOPY` can access program
 buffers below `8000h` while EXPAND 1 is selected for transfers to fixed RAM
-(`src/layout.asm:64-69`, `src/abi.inc:304-306`, `src/ram.asm:410-427`,
-`src/cache.asm:681-688`).
+(`src/layout.asm:64-69`, `src/abi.inc:307-309`, `src/ram.asm:411-428`,
+`src/cache.asm:692-699`).
 
 ## The workspace across a program exit
 
@@ -110,8 +110,8 @@ A newly allocated block can still qualify for clearing without a read.
 At the end of warm boot the cache flush writes pending changes.
 If a write fails, its line is dropped and `CWBOOT` clears `CHPOS` before
 printing `Write lost`. The remaining command chain is then cancelled
-(`src/boot.asm:416-418`, `src/bios.asm:298-361`,
-`src/cache.asm:265-299`, `src/cache.asm:623-629`).
+(`src/boot.asm:416-418`, `src/bios.asm:298-358`,
+`src/cache.asm:266-300`, `src/cache.asm:634-640`).
 
 The drive table and logged-in vector remain in the BIOS block.
 The installed-service registry, program return code and startup position
@@ -120,7 +120,7 @@ block. Those values remain available while warm boot reconstructs the next
 program's environment. Reset follows the cold path and clears these regions,
 although a recognised reset can reconstruct a retained drive selection
 (`src/ram.asm:37-69`, `src/ram.asm:71-99`,
-`src/ram.asm:363-413`, `src/boot.asm:35-65`,
+`src/ram.asm:364-414`, `src/boot.asm:35-65`,
 `src/boot.asm:101-104`).
 
 Cold boot copies seventeen three-byte BIOS jumps from ROM to `BF00h`. Warm boot
@@ -139,8 +139,8 @@ variables and their addresses
 ([resident workspace](appendix-c-memory-map.md#the-resident-workspace)).
 Through `INFO` a program obtains `VWID` in `L` and `VHGT` in `H`.
 It can read the console dimensions without using variable addresses
-(`tools/build.mjs:220-250`, `src/ram.asm:295-297`,
-`src/ram.asm:455-457`, `src/services.asm:74-80`).
+(`tools/build.mjs:218-248`, `src/ram.asm:295-297`,
+`src/ram.asm:456-458`, `src/services.asm:74-80`).
 
 ## Allocation vectors below the workspace
 
@@ -152,7 +152,7 @@ It can then allocate blocks by scanning RAM.
 The vector needs `DSM / 8 + 1`
 bytes, where `DSM` is the last allocation block number. G1M's `DSM` of
 511 needs 64 bytes and G8M's 2047 needs 256
-(`format/format.json:47-59`, `src/cpm/bdoslog.asm:164-275`,
+(`format/format.json:46-58`, `src/cpm/bdoslog.asm:164-275`,
 `src/cpm/bdosrec.asm:555-626`).
 
 Every drive has a 16-byte disk parameter header, or DPH, in the workspace.
@@ -195,7 +195,7 @@ bytes above the RAM BIOS table extend from `BF33h` through `BFFFh`
 (`docs/memory-map.md:8-20`, `docs/memory-map.md:45-58`,
 `docs/compatibility.md:3-14`).
 The offered build still checks a minimum starter TPA of 45,830 bytes
-(`tools/build.mjs:206-215`, `tools/build.mjs:273-274`).
+(`tools/build.mjs:204-213`, `tools/build.mjs:271-272`).
 
 ## Page zero is rebuilt selectively
 
@@ -222,8 +222,8 @@ It contains the command FCB's drive byte, with 0 for the current drive
 and 1 for A. A program found by fallback to A therefore receives 1.
 The full page-zero table is in
 [Appendix C](appendix-c-memory-map.md#page-zero)
-(`src/cpm/ccp.asm:431-470`,
-`src/cpm/ccpcmd.asm:392-440`, `src/layout.asm:44-69`, `src/abi.inc:304-306`).
+(`src/cpm/ccp.asm:432-471`,
+`src/cpm/ccpcmd.asm:392-440`, `src/layout.asm:44-69`, `src/abi.inc:307-309`).
 
 ## Four stacks for different stages
 
@@ -245,7 +245,7 @@ At program launch the CCP resets `SP` there and pushes the warm-boot
 address before jumping to `0100h`. That return word leaves 30 bytes
 below it for the program's calls and saved registers
 (`src/boot.asm:131-144`, `src/layout.asm:113-115`,
-`src/ram.asm:196-201`, `src/cpm/ccp.asm:453-470`).
+`src/ram.asm:196-201`, `src/cpm/ccp.asm:454-471`).
 
 A BDOS call switches to its 54-byte stack from `STKBASE` to `STKTOP`.
 `BENTRY` stores the caller's `SP` in `OLDSP` and runs the function on
@@ -286,8 +286,8 @@ failures, command chains and deep CCP paths. It checks the guard and requires
 both measured use and base plus service limit to leave a quarter free. Reading
 these assertions establishes the test's scope, not a fresh passing result
 (`src/tables.asm:139-144`, `src/loader.asm:225-254`,
-`src/abi.inc:32-50`, `test/stacks.test.mjs:1-12`, `test/stacks.test.mjs:25-46`,
-`test/stacks.test.mjs:163-225`).
+`src/abi.inc:35-53`, `test/stacks.test.mjs:1-12`, `test/stacks.test.mjs:25-46`,
+`test/stacks.test.mjs:164-229`).
 
 The test triggers a keypad non-maskable interrupt (NMI) only at a new stack
 depth where `0066h` contains `RETN`. The quoted depths exclude an NMI frame
@@ -304,7 +304,7 @@ bytes occupy `BC80h–BC9Dh`. An empty line has key `FFFFFFFFh`.
 A nonzero dirty byte marks data newer than the card's copy.
 The final 768 bytes at `BD00h–BFFFh` are unused, since the command history
 is in the shell's own pages. The cache addresses are fixed in the source
-(`src/cache.asm:1-16`, `src/layout.asm:39-42`,
+(`src/cache.asm:1-17`, `src/layout.asm:39-42`,
 `docs/memory-map.md:78-83`).
 
 Cold boot clears that whole 16 KiB bank and marks the cache lines empty.
@@ -312,7 +312,7 @@ Warm boot leaves the cache storage in place and flushes pending writes. The
 shell's history survives warm boot in the shell's own pages. No BDOS, BIOS or numbered hardware call allocates a
 program buffer in EXPAND 1. A direct write there can corrupt a cached
 block whose bytes may later be written to the card
-(`src/boot.asm:235-252`, `src/cache.asm:257-299`).
+(`src/boot.asm:235-252`, `src/cache.asm:258-300`).
 
 All three resident stacks are in the banked window. Selecting EXPAND 1
 hides their saved registers and return addresses along with the workspace
@@ -322,14 +322,14 @@ Calls, returns and interrupts also use the stack.
 During an EXPAND 1 access the resident routines hold maskable interrupts
 off and use registers for temporary values. A BIOS entry that reaches the
 cache saves the interrupt state it found in `CIFF`, not on the stack, and
-restores it after EXPAND 0 is back (`src/bios.asm:383-449`).
+restores it after EXPAND 0 is back (`src/bios.asm:379-446`).
 
 The cache lookup, RAM-detection routine and SD block loops obey the same
 visibility rule. `MVCOPY` can copy directly between a cache line and fixed RAM
 with EXPAND 1 selected. For a buffer in EXPAND 0 it switches the window between
 each byte's read and write. Temporary values stay in registers until the normal
-bank is visible again (`src/cache.asm:48-90`,
-`src/cache.asm:644-793`, `src/boot.asm:254-291`,
+bank is visible again (`src/cache.asm:49-91`,
+`src/cache.asm:655-804`, `src/boot.asm:254-291`,
 `src/sd.asm:469-574`, `src/sd.asm:586-655`).
 
 Your program's stack may also be in EXPAND 0. Switching banks then hides

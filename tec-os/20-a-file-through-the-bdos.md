@@ -112,7 +112,7 @@ two-byte numbers.
 
 A logical extent is 128 records, 16 KiB, and one entry holds as many extents
 as its map has room for. The disk parameter block, the DPB, gives the
-numbers the arithmetic needs (`format/format.json:47-59`):
+numbers the arithmetic needs (`format/format.json:46-58`):
 
 | Field | G1M | G8M | Meaning |
 | --- | ---: | ---: | --- |
@@ -184,7 +184,7 @@ supplies `CR` = 0, as in Chapter 10. Make returns an entry slot from 0 to 3 or
 `FFh` if the directory is full. Every directory write goes to the BIOS as write
 type 1 (`src/cpm/bdoslog.asm:82-107`). On a volume written behind, a directory
 write flushes the other dirty cache lines first, as Chapter 19 describes
-(`src/cache.asm:556-565`).
+(`src/cache.asm:538-547`).
 
 A file that was only read has nothing to write back at its close. Make and
 open therefore set bit 7 of `S2` (`src/cpm/bdosfile.asm:495-499`,
@@ -197,7 +197,7 @@ has no block for the record, `ALLOCBLK` takes the first free block of the drive.
 The record then goes to the BIOS as write type 2, the first write to a new block
 (`src/cpm/bdosrec.asm:43-59`). For that type the BIOS obtains the card block's
 cache line without a pre-read and clears it before copying the record
-(`src/bios.asm:298-348`, `src/cache.asm:450-469`). Any other write of a record
+(`src/bios.asm:298-348`, `src/cache.asm:447-466`). Any other write of a record
 is type 0. `CR` moves on only after the BIOS has returned success so a write
 that fails leaves the FCB on the record it didn't write
 (`src/cpm/bdosrec.asm:69-82`).
@@ -258,7 +258,7 @@ directory record back (`src/cpm/bdosfile.asm:252-287`). On a volume written
 behind the directory write flushes every other dirty cache line before writing
 its own line. A failed flush is still an error and earlier writes are not
 undone. Chapter 19 describes the resulting persistence boundary
-(`src/cache.asm:509-565`).
+(`src/cache.asm:505-547`).
 
 ## Opening and reading the file
 
@@ -330,7 +330,7 @@ nothing: `LOGFAST` takes the drive's mark from its DPH
 ## Rebuilding after warm boot
 
 The DPH has three words for the BDOS's own use, at offsets 2, 4 and 6.
-`MNDPH` clears them when it builds the DPH (`src/vol.asm:613-620`). TEC-OS's
+`MNDPH` clears them when it builds the DPH (`src/vol.asm:608-615`). TEC-OS's
 BDOS keeps in them what the scan at warm boot needs:
 
 | Offset | Contents | Written by |
@@ -430,7 +430,7 @@ from disk would leave it, and sets the DMA address to `0080h`
 because a warm boot must not clear them. `LOGINV`, in the BIOS's part of the
 resident workspace, has a bit for each drive whose allocation vector the BDOS
 has built (`src/ram.asm:69`). `PRGCODE`, the return code of function 108, is
-above the RAM BIOS table, where only cold boot clears it (`src/ram.asm:365-366`,
+above the RAM BIOS table, where only cold boot clears it (`src/ram.asm:366-367`,
 `src/boot.asm:61-65`). Per-drive pointers and scan state are in the drive's DPH,
 the 16-byte disk parameter header described in Chapter 18.
 
@@ -500,5 +500,5 @@ Appendix A retains the complete compatibility list, including the CP/M 3
 extensions, unsupported function returns and console differences. The console
 mechanisms are in Chapter 17. For files, both supported geometries set `CKS` to
 0 so no directory check vector detects a card changed during use
-(`format/format.json:52`, `format/format.json:59`). A card must be preserved and
+(`format/format.json:51`, `format/format.json:58`). A card must be preserved and
 removed through the procedure in Chapter 6 before it is changed on a PC.

@@ -29,7 +29,7 @@ outside the warm-boot clear. The practical file setup is in
 ## The ROM's one line
 
 `STPOS` is one byte, and `CHPOS` follows it
-(`src/ram.asm:398-403`). It records progress and completion
+(`src/ram.asm:399-404`). It records progress and completion
 (`src/cpm/ccpcmd.asm:745-790`, `src/cpm/ccpcmd.asm:792-874`):
 
 | `STPOS` | Meaning |
@@ -45,7 +45,7 @@ next startup read begins from zero (`src/ram.asm:286-295`,
 `src/boot.asm:22-65`, `src/boot.asm:398-403`).
 [Chapter 15](15-state-and-memory.md#the-workspace-across-a-program-exit)
 explains the two clearing spans. The space after `CHPOS`, up to the console
-state, is unused (`src/ram.asm:405-409`).
+state, is unused (`src/ram.asm:406-410`).
 
 A diagnostic retry returns to `COLDRT`, after the cold clear but before
 the CCP has run. `STPOS` is still zero. Once the card mounts, startup can
@@ -152,7 +152,7 @@ copied text. It calls `PUTSTR`, which prints through BDOS function 9
 early. The command buffer still contains the whole line and its original
 case. `NOTDRIVE` prints `CRLFMSG` before dispatch, so command output starts on
 a new row even when the echo did not reach its appended CR
-(`src/cpm/ccp.asm:338-341`).
+(`src/cpm/ccp.asm:339-342`).
 
 This recipe's card contains `NOTE$.TXT`, and its startup file's one line
 types that file with no shell:
@@ -212,8 +212,8 @@ their BDOS calls. It normalises letter case for the output comparison
 The startup line that names `SHELL.SVC` installs it and, because the
 shell's execution record asks to be entered, enters it with `A = FFh`, the
 startup origin. On that first entry the shell claims the hook and sets
-`STSKIP` (`drivers/shell.asm:126-142`). At the next prompt `LINE` finds no
-piece in hand and calls `STOPEN` (`drivers/shell.asm:241-247`).
+`STSKIP` (`drivers/shell.asm:128-144`). At the next prompt `LINE` finds no
+piece in hand and calls `STOPEN` (`drivers/shell.asm:243-249`).
 
 `STOPEN` clears its script FCB, `SFCB`, copies drive byte 1 and
 `STARTUP CMD` into it from `STNAME`, and opens the file. A missing file
@@ -229,21 +229,21 @@ lines and lines whose first character is `;` are passed over
 function 33 into `0080h`, starting from record 0, and reads the record again
 at each new line, since a program may use `0080h` in between. A zero, a `^Z`
 or a read past the last record ends the script
-(`drivers/shellio.asm:117-173`). The file is never closed, since it is only
+(`drivers/shellio.asm:117-171`). The file is never closed, since it is only
 read.
 
 `NEXT` then echoes the line whole after the prompt and runs it as a typed
 line, with its pieces, but with the startup origin, so the ROM's quiet paths
 for an absent device and an unavailable PICO width line hold for every line
-of the file (`drivers/shell.asm:241-272`). The script's FCB, its record
+of the file (`drivers/shell.asm:243-274`). The script's FCB, its record
 number and offset are in the shell's pages, so a program's warm boot leaves
 the position intact, and the next `LINE` goes on with the next line.
 
 A later `SHELL.SVC` line in the file enters the installed shell again. That
 entry finds the hook already claimed, takes it back and changes nothing else,
-so the file goes on from the line after it (`drivers/shell.asm:126-134`,
-`docs/shell.md:129-133`). Typing `STARTUP.CMD` at the prompt runs the whole
-file again as a typed script, with typed origin (`docs/shell.md:132-133`).
+so the file goes on from the line after it (`drivers/shell.asm:128-136`,
+`docs/shell.md:135-139`). Typing `STARTUP.CMD` at the prompt runs the whole
+file again as a typed script, with typed origin (`docs/shell.md:138-139`).
 
 ## Display loading and console selection
 
@@ -252,7 +252,7 @@ switch enables the matrix keyboard at cold boot. It needs no service line in the
 file (`src/console.asm:42-45`, `src/video.asm:18-24`, `src/pico.asm:53-68`). The
 supplied display line loads `GLCD.SVC`. The CCP compares all three type bytes in
 `CMDFCB`: `SVC` calls `SVCGO` while another type goes to the `.COM` search
-(`src/cpm/ccp.asm:384-421`). [Chapter 21](21-from-prompt-to-program.md) explains
+(`src/cpm/ccp.asm:385-422`). [Chapter 21](21-from-prompt-to-program.md) explains
 that search.
 
 `SVCGO` calls `LOADCOM` and `SVCLOAD`, returning carry on either failure
@@ -314,7 +314,7 @@ through `LCDWRD` (`src/loader.asm:873-887`, `src/console.asm:500-510`).
 `LCDWRD` first sets `CDWRD`, bit 7 of `CONDEV`
 (`src/lcd.asm:56-60`, `src/layout.asm:75`). `CONDEV` is
 at `BFE7h`. Its stored bits are
-(`src/ram.asm:417`, `src/layout.asm:70-75`):
+(`src/ram.asm:418`, `src/layout.asm:70-75`):
 
 | Bit | Name | Meaning |
 | --- | --- | --- |
@@ -358,17 +358,17 @@ set into zero for keyboard input. With a shell holding the prompt,
 `SHLINE` stores the origin that the shell's `LINE` returns, `FFh` for every
 piece of a line from `STARTUP.CMD` and 0 for the rest
 (`src/cpm/ccp.asm:110-124`, `src/cpm/ccp.asm:141-158`,
-`drivers/shell.asm:514-527`). `STFLAG`
+`drivers/shell.asm:527-540`). `STFLAG`
 is at `BF64h`.
 
 There are three readers of this mark: the failed-service path, `DRVR`
 registration and the PICO width command when `FIND` returns no console
-(`src/cpm/ccp.asm:395-408`, `src/services.asm:540-556`,
+(`src/cpm/ccp.asm:396-409`, `src/services.asm:540-556`,
 `src/cpm/ccpcmd.asm:134-150`). `SVCLOAD` stores `INIT`'s returned `A`
 in `SVCRA`, beside the result code `SVCRC`. Record rejection after a
 successful `INIT` clears `SVCRA` so the later check cannot accept that
 result as an `INIT` device-absence status (`src/loader.asm:365-370`, `426-430`,
-`src/ram.asm:389-390`).
+`src/ram.asm:390-391`).
 
 The failed-service path reads the two result bytes as a word, `SVCRC`
 in `L` and `SVCRA` in `H`. `AND H` keeps the status only for startup.
@@ -376,7 +376,7 @@ in `L` and `SVCRA` in `H`. `AND H` keeps the status only for startup.
 zero only for `SVCRC` 1, a failed installation with nothing left
 resident. Only that combined result reaches `SVCOK` without a message.
 Other failures returned to this check reach `BADCMD` and print the name with `?`
-(`src/cpm/ccp.asm:395-411`, `535-567`, `src/loader.asm:436-480`).
+(`src/cpm/ccp.asm:396-412`, `536-568`, `src/loader.asm:436-480`).
 
 An absent graphics controller and startup registration blocked by an
 active PICO9918 console both return `TNENODV`. They can take that quiet
@@ -405,7 +405,7 @@ Quiet handling also preserves the result that an `&` piece tests.
 `MLTAKE` clears `PRGCODE` before each command. A quiet service or
 unavailable-console width line leaves that zero intact. `BADCMD` instead
 reaches `ERRGO`, which stores `RCFAIL`, `FF00h` (`src/cpm/ccp.asm:220-223`,
-`src/cpm/ccp.asm:535-567`). The shell checks the code before the next piece
-(`drivers/shell.asm:198-224`). On a board without the graphics controller,
-the startup line `GLCD.SVC &MOUNT` can therefore run `MOUNT`. The same typed
-line reports `GLCD.SVC?` and skips `MOUNT`.
+`src/cpm/ccp.asm:536-568`). The shell checks the code before the next piece
+(`drivers/shell.asm:200-226`). On a board without the graphics controller,
+the startup line `GLCD.SVC &CD` can therefore run `CD`. The same typed
+line reports `GLCD.SVC?` and skips `CD`.

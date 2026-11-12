@@ -26,7 +26,7 @@ The eight disk entries in the BIOS are `HOME`, `SELDSK`, `SETTRK`, `SETSEC`,
 operations from the card's electrical interface. A volume descriptor defines
 the permitted range between those boundaries. The block cache holds the
 512-byte blocks used for both record transfers and container-table reads
-(`src/tables.asm:23-31`, `src/cache.asm:172-200`, `src/vol.asm:378-416`).
+(`src/tables.asm:23-31`, `src/cache.asm:173-201`, `src/vol.asm:378-416`).
 
 ## Bytes on the card interface
 
@@ -137,13 +137,13 @@ at 4 MHz) and `SDWRITE` takes 216,264. Most of that work transferred the block's
 
 A cache transfer sets `SDXB` to `LATEXP`. The block loop then selects
 EXPAND 1 for the buffer and restores `LATCHV` before returning. It uses no
-stack while EXPAND 1 is visible (`src/cache.asm:182-194`,
-`src/cache.asm:212-236`, `src/sd.asm:469-478`, `src/sd.asm:566-591`,
+stack while EXPAND 1 is visible (`src/cache.asm:183-195`,
+`src/cache.asm:213-237`, `src/sd.asm:469-478`, `src/sd.asm:566-591`,
 `src/sd.asm:646-655`). The BIOS transfer paths and descriptor-service cache
 walks disable maskable interrupts around their work. The SD transfer itself
 does not supply a general interrupt guard. The reason for this boundary is the
 [EXPAND 1 stack rule](15-state-and-memory.md#expand-1-and-the-stack-boundary)
-(`src/bios.asm:398-402`, `src/bios.asm:421-425`, `src/vol.asm:535-545`).
+(`src/bios.asm:395-399`, `src/bios.asm:418-422`, `src/vol.asm:535-545`).
 [Appendix D](appendix-d-error-messages.md) relates the SD error codes to
 likely causes and recovery.
 
@@ -156,11 +156,11 @@ sizes, volume count, container length in blocks and a checksum. Format 1.1
 adds a drives field and an extra-table sum. The descriptors are 32 bytes
 each. Fifteen fit after the header fields in block 0 and sixteen fit in
 each of blocks 1–7, for a maximum of 127
-(`format/format.json:2-43`).
+(`format/format.json:2-42`).
 
 The ROM's field offsets and geometry definitions are generated from
 `format/format.json` into `gen/format.asm` and `gen/geom.asm`
-(`tools/build.mjs:79-136`). [Appendix E](appendix-e-container-format.md)
+(`tools/build.mjs:79-134`). [Appendix E](appendix-e-container-format.md)
 contains the byte layout and the host/ROM validation comparison. A fresh
 table read avoids using bytes cached during an earlier mount.
 
@@ -174,7 +174,7 @@ Obtaining a line can first require writing a dirty victim. `CWRITE` restores
 `SDLBA` by remapping the BIOS record after that write. `MNBLK` therefore calls
 `MNLBA` again before filling the line, restoring the requested table block's
 address. A failed eviction or read ends this operation with NZ
-(`src/cache.asm:212-250`, `src/vol.asm:399-435`). `MNCPH` copies 32 bytes
+(`src/cache.asm:213-251`, `src/vol.asm:399-435`). `MNCPH` copies 32 bytes
 through `MVCOPY` into the resident workspace's `MNBUF`. Field checks and sums
 then use ordinary workspace memory. `MNSUM` processes a whole block in these
 32-byte pieces without stack use under the EXPAND 1 mapping
@@ -197,7 +197,7 @@ and returns the first failing check's hexadecimal code
 Minor 0 selects the format 1.0 path. Every other minor value selects the
 1.1-style checks, not only minor 1. The host creator uses 1.1 for more than
 eight volumes or a nonzero drives field (`src/vol.asm:89-100`,
-`src/vol.asm:132-143`, `tools/lib/container.mjs:80-87`).
+`src/vol.asm:132-143`, `tools/lib/container.mjs:79-85`).
 
 For that path, the number of table blocks after block 0 is
 `floor(volumeCount / 16)`. `MOUNT` adds every byte of those whole 512-byte
@@ -208,7 +208,7 @@ the comparison altogether. The ROM accepts a nonzero stored `tableSum`
 there if the other checks pass. The host parser computes an empty sum of
 zero and rejects a nonzero stored value (`src/vol.asm:145-180`,
 `src/vol.asm:479-501`, `tools/lib/container.mjs:41-49`,
-`tools/lib/container.mjs:130-148`). `HDRSUM` uses
+`tools/lib/container.mjs:127-145`). `HDRSUM` uses
 the same byte-summing path for block 0 and subtracts its two checksum bytes
 before comparison (`src/volutil.asm:83-128`).
 
@@ -238,7 +238,7 @@ returns `29h`. After the walk, an empty A returns `2Ah`
 (`src/vol.asm:307-353`). The ROM checks that ids are nonzero but does not
 check their uniqueness. It interprets only bit 0 of the separate cache
 byte as written-behind and ignores its upper bits
-(`src/vol.asm:204-211`, `src/vol.asm:583-603`).
+(`src/vol.asm:204-211`, `src/vol.asm:582-598`).
 
 The host validator also checks cache flags and duplicate ids. For nonzero
 minor versions it checks duplicate labels too. By default it compares the
@@ -246,7 +246,7 @@ declared extent against the image's byte length. Its checks and the ROM's
 checks are not universally nested. The host parser has no
 `SDBYTE` card-mode input for the standard-capacity limit. Neither path
 validates every reserved byte. Appendix E gives the field-by-field boundary
-(`tools/lib/container.mjs:130-193`, `src/vol.asm:204-353`).
+(`tools/lib/container.mjs:127-185`, `src/vol.asm:204-353`).
 
 ## Declared length and physical capacity
 
@@ -309,13 +309,13 @@ length, one of geometry and one of flags. `MNFILL` copies the contiguous
 start and low length fields with one `LDIR`. Read-only occupies flag bit 0
 and written-behind occupies bit 1. `DRVIDX` separately holds container
 index plus one, with zero for an empty drive
-(`src/vol.asm:558-603`, `src/ram.asm:37-55`).
+(`src/vol.asm:558-598`, `src/ram.asm:37-55`).
 
 An empty entry has geometry zero. `SELDSK` returns `HL` = 0 for that drive
 or a number past D and leaves `DSKCUR` unchanged. For a valid drive it sets
 `DSKCUR` and returns its disk parameter header (DPH).
 `DPHADR` computes `DPHTAB + 16 × drive` (`src/bios.asm:53-92`).
-`MNDPH` fills the sixteen bytes as follows (`src/vol.asm:605-641`, `src/ram.asm:71`):
+`MNDPH` fills the sixteen bytes as follows (`src/vol.asm:600-636`, `src/ram.asm:71`):
 
 | Offset | Contents |
 | ---: | --- |
@@ -328,7 +328,7 @@ or a number past D and leaves `DSKCUR` unchanged. For a valid drive it sets
 
 The two geometries use 64 records per track, no reserved tracks and four
 allocation blocks for the directory. Their sizes are
-(`format/format.json:47-59`, `tools/lib/format.mjs:9-40`):
+(`format/format.json:46-58`, `tools/lib/format.mjs:9-40`):
 
 | Parameter | G8M (`DPB1`) | G1M (`DPB2`) |
 | --- | ---: | ---: |
@@ -368,13 +368,13 @@ intermediate `BLKSLOT` or `BLKOFF` values may have been stored
 Track 2 and sector 5 give record 133. Division by four gives
 block offset 33 and slot 1. On a volume starting at block 2,048, this is
 card block 2,081. Slot 1 occupies bytes 128–255 of that block
-(`src/bios.asm:141-155`, `src/cache.asm:369-377`).
+(`src/bios.asm:141-155`, `src/cache.asm:370-378`).
 
 `READ` masks interrupts, maps the record and calls `CREAD` to copy its
 128 bytes from a cache line to the DMA address. It restores the preceding
 interrupt state and returns `A` = 0 for success or 1 for error
-(`src/bios.asm:390-402`, `src/bios.asm:376-449`,
-`src/cache.asm:359-416`).
+(`src/bios.asm:387-399`, `src/bios.asm:373-446`,
+`src/cache.asm:360-417`).
 
 ## Merging a write
 
@@ -408,7 +408,7 @@ Every write merges through `CWRBH` into the block's cache line. A normal
 miss first reads the card block so its other records survive. For type 2,
 `WRITE` selects no pre-read. `CWRBH` clears the whole line to zero even
 if it was already a cache hit then copies the record into it
-(`src/bios.asm:298-361`, `src/cache.asm:418-473`).
+(`src/bios.asm:298-358`, `src/cache.asm:419-470`).
 
 The following SD block can also be cleared without reading when it is in
 the same allocation block. `GETKEY` records the cleared block's drive and
@@ -429,18 +429,18 @@ On a written-through volume a directory write, type 1, sets bit 7 of
 reports success. A data write there sets bit 5 instead and its line becomes
 the pending one in `CPEND`. It reaches the card when a write moves to
 another block, at the next directory write or at a flush point
-(`src/cache.asm:499-611`).
+(`src/cache.asm:496-622`).
 On a written-behind volume
 data may remain dirty in the cache. A directory write orders the pending
-data before its own block (`src/bios.asm:342-361`,
-`src/cache.asm:520-565`). Chapter 19 explains that persistence boundary
+data before its own block (`src/bios.asm:343-358`,
+`src/cache.asm:514-547`). Chapter 19 explains that persistence boundary
 and the failure paths in full.
 
 Sequential writes to a new file can therefore avoid data pre-reads. On
 written-through A they also avoid writing each SD block after each of its
 four records. The cache holds A's block as pending and writes it once, when
 a write moves to another block or a flush point arrives
-(`src/cache.asm:499-611`). On the starter card `SAVE 8 X.COM` writes sixteen
+(`src/cache.asm:496-622`). On the starter card `SAVE 8 X.COM` writes sixteen
 records in four data blocks on A. It causes four data-block writes plus two
 directory-block writes, six writes in total. No reads are needed because
 the directory block is already cached after boot. An
@@ -448,10 +448,10 @@ uncached directory can add metadata reads to a new-file operation.
 
 ## Volume services and publication
 
-The starter card's `MOUNT.COM` changes drives through the numbered ROM
-service interface. It calls `ABICALL` at `C008h` with the service number
-in `C` (`src/abi.asm:9-14`, `src/abi.inc:24-26`,
-`src/abi.inc:136-166`). These three services expose the container:
+The shell's `CD` changes drives through the numbered ROM service
+interface. It calls `ABICALL` at `C008h` with the service number in `C` (`src/abi.asm:9-14`, `src/abi.inc:27-29`,
+`src/abi.inc:139-169`, `drivers/shellcd.asm:110-117`). These three services
+expose the container:
 
 | Service | Arguments and effect |
 | --- | --- |
@@ -477,10 +477,10 @@ read (`src/volsvc.asm:182-198`, `src/volsvc.asm:275-282`).
 
 [Appendix B](appendix-b-rom-services.md) gives the register contracts.
 Each service has a 24-byte stack bound below its return address, including
-the dispatcher. `test/storage-boundaries.test.mjs:199-243` contains the
+the dispatcher. `test/storage-boundaries.test.mjs:205-250` contains the
 six-dirty-line and all-dirty-line assertions for this bound. These source
-assertions have not been rerun here (`src/abi.inc:32-53`,
-`src/abi.inc:136-166`).
+assertions have not been rerun here (`src/abi.inc:35-56`,
+`src/abi.inc:139-169`).
 
 Before a mount or unmount publishes a different drive assignment,
 `VFLUSH` calls `CFLUSH`, with no line excluded, with interrupts masked and
@@ -488,7 +488,7 @@ restores their preceding state afterwards. It preserves the requested drive,
 index and descriptor across that call. `CFLUSH` attempts every dirty line. It
 keeps a failed line dirty for the next flush and continues with the rest,
 then returns failure if any write failed
-(`src/volsvc.asm:360-389`, `src/cache.asm:255-300`).
+(`src/volsvc.asm:360-389`, `src/cache.asm:256-301`).
 
 Validation or this flush failure leaves the drive assignment unchanged.
 It does not roll back card writes. Even a
@@ -512,7 +512,7 @@ error uses ordinary BDOS error handling rather than the earlier validation
 rollback boundary (`src/volsvc.asm:335-345`,
 `src/cpm/bdosfile.asm:109-146`, `src/cpm/bdoscon.asm:23-74`). These
 BDOS calls use its private stack. Programs must call mount and unmount
-from outside an ongoing BDOS call (`src/abi.inc:44-46`).
+from outside an ongoing BDOS call (`src/abi.inc:47-49`).
 
 The services leave the container header's drive assignments unchanged.
 Their flush can write pending data but their new assignment is held in RAM.
@@ -521,37 +521,16 @@ reselection restores the card's defaults through the boot mount path
 (`src/boot.asm:1-6`, `src/boot.asm:97-104`,
 `src/volsvc.asm:13-129`, `src/volsvc.asm:231-244`).
 
-The following capture uses the format 1.0 starter card.
-Only A and B have allocation-vector slots. `WORK` is initially on B so the first
-attempt on C fails as already mounted. After unmounting B, the attempt on C
-fails because C has no slot. Remounting on B succeeds. The final command lists
-descriptors through service 11 (`test/programs/mount.asm:163-216`):
+The starter card is format 1.1 with drives = 4, so cold boot allocates four
+256-byte slots and any of its volumes fits any drive (`src/boot.asm:525-633`).
+`CD ?` lists the card's descriptors through service 11, `CD D:GAMES` mounts
+GAMES on the empty D through service 9, and `CD C:WORK` is refused because
+WORK is on B (`drivers/shellcd.asm:99-117`):
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "MOUNT C: WORK" "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" MOUNT -->
-```text
-A>MOUNT C: WORK
-Cannot mount: in use or too large
+<!-- CAPTURE18 -->
 
-A>MOUNT B:
-Unmounted
-
-A>MOUNT C: WORK
-Cannot mount: in use or too large
-
-A>MOUNT B: WORK
-B: WORK       
-
-A>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
-
-A>
-```
-
-A format 1.1 card with drives = 4 allocates four 256-byte slots at cold boot
-(`src/boot.asm:525-633`). C can then hold an otherwise unmounted supported
-volume after the service checks and flush succeed (`src/volsvc.asm:211-265`).
-The four-slot configuration has a 46,569-byte transient
-program area (TPA), 704 bytes less than the 47,273-byte starter configuration.
-Four slots use 1,024 bytes where the starter used
-320. The extra slots reduce transient-program space by the same amount.
+The four slots use 1,024 bytes where a card with a G1M slot on A and a G8M
+slot on B uses 320, so the starter card's transient program area (TPA) is
+46,569 bytes, 704 less than the 47,273 of such a two-volume card. A format
+1.0 card reserves slots only for the drives mounted at cold boot, and a
+mount there must fit them: a G8M volume onto a G1M-sized slot is refused.

@@ -54,9 +54,9 @@ The starter card's layout with EXPAND 0 selected and no service loaded is:
 TEC-OS writes the system latch at port `FFh` from its shadow at `0040h`,
 `LATCHV`. The ordinary EXPAND 0 value is `01h`. With matrix Caps Lock on bit 7
 is set, producing `81h`. Temporary EXPAND 1 accesses set bit 2 and restore the
-shadow value afterwards (`src/layout.asm:19-28`, `src/abi.inc:299-302`,
-`src/layout.asm:64-69`, `src/abi.inc:304-306`, `src/keyboard.asm:130-137`,
-`src/cache.asm:20-40`). Warm boot writes `01h` before selecting its
+shadow value afterwards (`src/layout.asm:19-28`, `src/abi.inc:302-305`,
+`src/layout.asm:64-69`, `src/abi.inc:307-309`, `src/keyboard.asm:130-137`,
+`src/cache.asm:21-41`). Warm boot writes `01h` before selecting its
 resident stack (`src/boot.asm:131-136`).
 
 The word at `0006h` is the exclusive top of the TPA. Without a resident service
@@ -107,7 +107,7 @@ replaced by resident hooks. Warm boot leaves that table intact
 ## Page zero
 
 These fixed addresses identify the current page-zero contracts
-(`src/layout.asm:44-69`, `src/abi.inc:304-306`, `src/console.asm:54-65`):
+(`src/layout.asm:44-69`, `src/abi.inc:307-309`, `src/console.asm:54-65`):
 
 | Address | Contents |
 | --- | --- |
@@ -141,8 +141,8 @@ hook still targets them so failure alone does not imply slot release
 
 The CCP records the drive/user byte for its command prompt. Before program
 launch it writes both FCBs, then the command tail and default DMA address, then
-the load-drive byte (`src/cpm/ccp.asm:305-323`,
-`src/cpm/ccpcmd.asm:392-440`, `src/cpm/ccp.asm:453-470`). The
+the load-drive byte (`src/cpm/ccp.asm:306-324`,
+`src/cpm/ccpcmd.asm:392-440`, `src/cpm/ccp.asm:454-471`). The
 second FCB reaches `008Fh` so tail publication follows FCB parsing.
 
 CP/M reserves `0040h–004Fh` for BIOS scratch. TEC-OS uses only `0040h`
@@ -151,7 +151,7 @@ workspace. Cold boot leaves the other 15 bytes zero. A `MON3.SVC` session
 holds them while it runs: the latch stub its restarts pass through, GO's
 return and a `RETN`. It gives them back at `EXIT` or warm boot. Console
 state is above the RAM BIOS table (`src/layout.asm:64-69`,
-`src/abi.inc:304-306`, `src/ram.asm:410-427`, `docs/memory-map.md:32-39`).
+`src/abi.inc:307-309`, `src/ram.asm:411-428`, `docs/memory-map.md:32-39`).
 
 ## The resident workspace
 
@@ -171,7 +171,7 @@ row's clearing column names the boot sweeps that reach it. Other routines can st
 
 The build places `WSBASE` so that the lower workspace ends immediately before
 `BF00h`. Its upper span starts after the 51-byte RAM BIOS table at `BF33h`
-(`tools/build.mjs:220-250`, `src/ram.asm:295-297`).
+(`tools/build.mjs:218-248`, `src/ram.asm:295-297`).
 These spans have fixed addresses across cards. The allocation vectors below
 `WSBASE`, at `BAECh`, vary with the card.
 
@@ -212,7 +212,7 @@ The declarations are at `src/ram.asm:15-136`.
 The write-cleared key identifies a block cleared for a new allocation rather
 than read from the card. Clearing `BUFOK` prevents reuse of the old key.
 A new type-2 write can still clear its block without a pre-read
-(`src/bios.asm:298-361`).
+(`src/bios.asm:298-358`).
 
 ### The CCP's block
 
@@ -236,7 +236,7 @@ the warm clearing sweep for another chained piece.
 Retention of the line does not guarantee that it runs. Without the shell the
 CCP runs a function 47 line whole. A failed warm-boot flush cancels the line,
 writing 2 to `CHPOS` after dropping failed cache lines
-(`src/cache.asm:265-299`, `src/cache.asm:613-629`).
+(`src/cache.asm:266-300`, `src/cache.asm:624-640`).
 [Chapter 22](22-chains-across-warm-boot.md) explains the other cancellation
 paths.
 
@@ -262,13 +262,13 @@ whole block before setting the DMA address to `0080h`.
 
 ### Above the RAM BIOS table
 
-The declarations are at `src/ram.asm:295-457`. These
+The declarations are at `src/ram.asm:295-458`. These
 addresses lie above the warm clearing span. Cold-only clearing therefore
 describes storage lifetime, not an assurance that its value remains unchanged.
 The history and the rest of the startup file are the shell's, so no field here
 holds them. `CPEND` holds A's pending block for the coalescing in
 [Chapter 19](19-cache-and-persistence.md)
-(`src/ram.asm:303-318`, `src/ram.asm:398-403`,
+(`src/ram.asm:303-319`, `src/ram.asm:399-404`,
 `docs/memory-map.md:60-68`).
 
 | Addresses | Bytes | Name | Contents | Cleared by |
@@ -297,7 +297,7 @@ holds them. `CPEND` holds A's pending block for the coalescing in
 | `BFECh` | 1 | `ESCST` | Escape-parser state | Cold boot |
 | `BFEDh` | 1 | `ESCP1` | First numeric escape parameter | Cold boot |
 | `BFEEh` | 1 | `ESCP2` | Second numeric escape parameter | Cold boot |
-| `BFEFh` | 1 | `KBLAST` | Last held matrix key, `FFh` for none. `abi.inc` publishes it for a service that scans the matrix, and the workspace label is `KBSLOT` (`src/abi.inc:308-315`) | Cold boot |
+| `BFEFh` | 1 | `KBLAST` | Last held matrix key, `FFh` for none. `abi.inc` publishes it for a service that scans the matrix, and the workspace label is `KBSLOT` (`src/abi.inc:311-318`) | Cold boot |
 | `BFF0h` | 1 | `VATTR` | `80h` for reverse video | Cold boot |
 | `BFF1h` | 1 | `VCURV` | 1 while the cursor cell is drawn reversed | Cold boot |
 | `BFF2h–BFFFh` | 14 | `MNTBLK` to `MNTLN` | Remaining mount/volume-service scratch | Cold boot |
@@ -306,8 +306,8 @@ holds them. `CPEND` holds A's pending block for the coalescing in
 one line, so that line's function 10 call can use the history. `SHOWN` holds
 the address of the shell's entry table, 0 with no shell. `CONDEV` combines switch, probe
 and ownership state so its bits do not all prove device presence
-(`src/ram.asm:229`, `src/ram.asm:381`, `src/ram.asm:315-322`,
-`src/cpm/ccp.asm:250-279`,
+(`src/ram.asm:229`, `src/ram.asm:382`, `src/ram.asm:315-323`,
+`src/cpm/ccp.asm:251-280`,
 `src/layout.asm:70-75`, `src/cpm/ccp.asm:156-158`). `SVCRA`
 identifies a cause only when `SVCRC` is 1. Record-validation failure after
 successful INIT sets it to 0 (`src/loader.asm:426-444`).
@@ -335,7 +335,7 @@ Cold boot clears the whole bank and then marks every cache key empty
 program range there. Direct latch access can expose the bank but the
 resident EXPAND 0 stacks disappear while it is selected. Cache
 routines exclude maskable interrupts and restore the latch before any stack
-operation (`src/bios.asm:383-449`, `src/sd.asm:469-574`,
+operation (`src/bios.asm:379-446`, `src/sd.asm:469-574`,
 `src/sd.asm:586-655`).
 
 A jump to `0000h` with EXPAND 1 still selected reaches `BF03h` in that bank.
@@ -345,7 +345,7 @@ warm boot selects EXPAND 0 before setting its stack. Modified bank contents
 can break that route. A program using the inherited stack also loses access
 to its return word while EXPAND 1 is visible
 (`src/boot.asm:22-40`, `src/boot.asm:131-136`,
-`src/boot.asm:300-305`, `src/cpm/ccp.asm:463-470`).
+`src/boot.asm:300-305`, `src/cpm/ccp.asm:464-471`).
 [Chapter 16](16-reset-and-boot.md) explains the exit paths and their limits.
 
 ## The stacks
@@ -386,7 +386,7 @@ explains declaration checks.
 `npm run media` writes the summary into `docs/memory-map.md` from
 `build/tecos/census.json` and the build's symbol file
 (`tools/media.mjs:66-91`, `tools/media.mjs:172-189`,
-`tools/media.mjs:278`). Chapter 27 describes ROM/media construction.
+`tools/media.mjs:282`). Chapter 27 describes ROM/media construction.
 The lookup below reads `build/tecos/tecos.d8.json` after `npm run build`:
 
 ```sh
@@ -407,7 +407,7 @@ CHPOS BF66h
 ```
 
 A source change can move build-dependent addresses. Page zero, the cache addresses, RAM BIOS origin `BF00h` and ROM table origin `C003h` are
-fixed by the inspected contract (`src/layout.asm:30-69`, `src/abi.inc:304-306`,
+fixed by the inspected contract (`src/layout.asm:30-69`, `src/abi.inc:307-309`,
 `src/layout.asm:98-99`,
-`tools/build.mjs:239-250`). A symbol lookup is valid for the artifact
+`tools/build.mjs:237-248`). A symbol lookup is valid for the artifact
 it reads so a later map needs that build's symbols and identity.

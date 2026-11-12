@@ -365,5 +365,5 @@ the ship. The matrix keyboard's arrow keys reach the program as Esc, `[` and
 a letter, `A` to `D`, and lines 950 to 999 read that sequence and treat it
 as W, S, D or A. Q ends the game, gives the display back as the console and
 prints the score at `A>`. The host-model test checks each of these steps
-(`tools/media.mjs:215-218`, `test/starter.test.mjs:109-190`,
+(`tools/media.mjs:215-218`, `test/starter.test.mjs:108-189`,
 `Baza 50dc512:examples/BOUNCE.BAS:84`, `103-115`).

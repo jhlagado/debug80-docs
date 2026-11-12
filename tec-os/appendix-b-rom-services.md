@@ -40,7 +40,7 @@ a program compares the three bytes at ABITAB with `TNA` and ABIMAJ with exactly
 5. A new major may renumber services. A new minor adds service numbers at the
 end so code using the 5.0 calls can run on 5.1. The
 minor is still 1 although number 16, the shell hook, has been added. A caller
-requiring FONT also checks for minor version 1 or later (`src/abi.inc:1-28, 205-210`,
+requiring FONT also checks for minor version 1 or later (`src/abi.inc:1-31, 208-213`,
 `src/abi.asm:1-14`, `programs/DEMO.ASM:56-72`).
 
 | Address | Bytes | Name | Contents |
@@ -61,7 +61,7 @@ input because selection uses it. Except for FIND and LIST, success returns A = 0
 with Z set and carry clear. Failure returns a nonzero status with carry set. What a
 refusal leaves changed depends on the service. MOUNT/UNMNT, for example, can have
 written or dropped cache lines before refusing the drive change, as their
-section explains (`src/abi.inc:32-66`, `src/services.asm:59-67`,
+section explains (`src/abi.inc:35-69`, `src/services.asm:59-67`,
 `src/volsvc.asm:211-240, 275-322`).
 
 | Status | `abi.inc` | Meaning |
@@ -86,7 +86,7 @@ address.
 Every numbered call preserves its incoming interrupt state and uses the caller's
 stack. IX, IY and the alternate registers are preserved except that MOUNT, UNMNT
 and DESC may change IX and the alternates. Treat registers not documented as
-results as destroyed (`src/abi.inc:32-66`).
+results as destroyed (`src/abi.inc:35-69`).
 
 | `C` | Name | `abi.inc` | Takes | Stack bound | T-states |
 | ---: | --- | --- | --- | ---: | ---: |
@@ -108,11 +108,11 @@ results as destroyed (`src/abi.inc:32-66`).
 | 15 | `FONT` | `TNFONT` | nothing | 4 | 184 |
 | 16 | `SHELL` | `TNSHELL` | `HL` = a shell's table or 0 | 4 | |
 
-The names and bounds come from `src/abi.inc:62-231`. The build's ABI check
+The names and bounds come from `src/abi.inc:65-234`. The build's ABI check
 compares the fixed table bytes, verifies that the service entries lie in code
 and checks INFO's bits. It does not prove every routine's contract. Media
-generation publishes the include as `dist/abi.inc` (`tools/build.mjs:142-157`,
-`tools/media.mjs:272-279`).
+generation publishes the include as `dist/abi.inc` (`tools/build.mjs:140-155`,
+`tools/media.mjs:276-283`).
 
 ### Costs and depths
 
@@ -163,7 +163,7 @@ than ABI 5.1 (`src/services.asm:68-80`, `tools/build.mjs:28, 64-71`).
 
 B combines CONDEV with VCLAIM. The DS1302 cold-boot bit records whether its
 seconds register read below `60h`. It is not a full BCD/date validation or a new
-probe on each INFO call (`src/abi.inc:246-256`, `src/boot.asm:69-72`,
+probe on each INFO call (`src/abi.inc:249-259`, `src/boot.asm:69-72`,
 `src/services.asm:412-438`).
 
 ### 1 DIGIT
@@ -315,7 +315,7 @@ control byte to enable it again. A read takes 6,923 T-states and a set 7,757.
 Numbers 9–11 use `src/volsvc.asm`. Drives count from 0 for A. Each returns A = 0
 with carry clear or TNEBAD with carry. Z is undefined on failure. All three have
 a 24-byte source stack bound and may change IX and the alternate registers.
-Appendix E defines the 32-byte descriptor (`src/abi.inc:136-166`,
+Appendix E defines the 32-byte descriptor (`src/abi.inc:139-169`,
 `src/volsvc.asm:155-198, 312-322`).
 
 | Condition | Rejected by |
@@ -328,10 +328,9 @@ Appendix E defines the 32-byte descriptor (`src/abi.inc:136-166`,
 | A failed cache flush | MOUNT, UNMNT |
 
 A failed flush leaves the drive mapping unchanged. It may already have written
-other dirty blocks. Each line whose write failed is dropped and its pending
-changes lost. This is the exception to reading a rejected operation as an
-unchanged cache (`src/volsvc.asm:211-240, 275-284, 373-389`,
-`src/cache.asm:257-299`).
+other dirty blocks. Each line whose write failed is kept dirty for the next
+flush, so a rejected operation leaves the cache's changes in place
+(`src/volsvc.asm:211-240, 275-284, 360-389`, `src/cache.asm:258-300`).
 
 A format 1.0 card reserves slots only for drives mounted at cold boot. A format
 1.1 card reserves a G8M-sized slot for each requested drive, mounted or not. A
@@ -343,7 +342,10 @@ reset that drive through BDOS function 37 on the BDOS's own stack so its next
 access logs it in from the directory. When MOUNT changes the default drive it
 also selects it again through function 14, making functions 27 and 31 report the
 new volume immediately. They must be called from outside an active BDOS call.
-DESC makes no such BDOS call (`src/volsvc.asm:211-240, 275-345`).
+DESC makes no such BDOS call (`src/volsvc.asm:211-240, 275-345`). The
+shell's `CD` uses MOUNT and DESC: it walks the card's descriptors with DESC
+and mounts by index (`drivers/shellcd.asm:110-117`, `drivers/shellcd.asm:166-258`).
+The starter card has no program of its own that calls these services.
 
 ### 9 MOUNT
 
@@ -438,13 +440,13 @@ entry words:
 The first four entries require the caller to hold VIDEO's claim. They perform no
 claim or argument validation and may change AF, BC, DE and HL. Zero count
 transfers no data bytes, though the address-setup routine still writes the
-control port (`src/abi.inc:258-271`, `src/pico.asm:295-429`).
+control port (`src/abi.inc:261-274`, `src/pico.asm:295-429`).
 
 PICOWID was added in record version 3 and is the entry used by CON PICO 40. It
 requires an unclaimed chip. Any other width or an active claim returns carry
 with no width change. Success changes the saved width and marks selected CRT:
 for reselection so the next console call clears its screen at that width
-(`src/abi.inc:273-283`, `src/pico.asm:70-139`).
+(`src/abi.inc:276-286`, `src/pico.asm:70-139`).
 
 Debugger offsets from the table are PICOVRB = 36 for the record version, PICOTPD
 = 41 for the drawn page and PICOTPS = 42 for the shown page
@@ -456,7 +458,7 @@ survive a width change. While the caller holds the claim, a PICOREG write to
 register 1 records its interrupt-enable bit. Mode restoration and release keep
 that bit and warm boot clears it. Writes made directly to the ports are not
 recorded. A client that needs only the width can still accept version 3
-(`src/abi.inc:273-341`, `src/pico.asm:201-236`, `src/pico.asm:302-362`).
+(`src/abi.inc:276-344`, `src/pico.asm:201-236`, `src/pico.asm:302-362`).
 
 VTEST finds a version-2-or-later PICO
 record, claims the chip, writes four bytes to VRAM, reads them back, releases it
@@ -557,7 +559,7 @@ directly still claims it before writing its ports.
 
 Returns HL = the ROM console font address. Status is always 0. Stack bound: 4
 bytes. Cost: 184 T-states and a depth of 4 bytes
-(`src/services.asm:510-517`, `src/abi.inc:205-210`).
+(`src/services.asm:510-517`, `src/abi.inc:208-213`).
 
 The selected font is TEC Compact from `format/font5x7.txt`. It contains 96
 characters from `20h`, eight bytes each, top row first. Each row's five pixels
@@ -586,7 +588,7 @@ command processor. A table must lie in a resident's pages, at or above
 at most `F8h`. Any other nonzero HL returns `TNEBAD`, status 1, with carry and
 the hook unchanged. Otherwise it returns HL = the table it replaced, 0 for
 none, with A = 0 and carry clear. BC, IX and IY are kept and DE changes. It
-makes no BDOS call (`src/services.asm:566-602`, `src/abi.inc:223`,
-`docs/shell.md:166-178`). Numbers from `TNCOUNT`, 17, upwards return status 1
-(`src/abi.inc:225-233`). Chapter 21 describes the hook's use, and
+makes no BDOS call (`src/services.asm:566-602`, `src/abi.inc:226`,
+`docs/shell.md:273-285`). Numbers from `TNCOUNT`, 17, upwards return status 1
+(`src/abi.inc:228-236`). Chapter 21 describes the hook's use, and
 `SHELL.SVC` is its one caller on the starter card.

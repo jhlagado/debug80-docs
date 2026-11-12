@@ -284,10 +284,10 @@ A reset starts the startup file again. After the other events the shell
 takes the next line of its startup file or script, or waits for typed
 input. Dropping the current line leaves any later startup lines available.
 
-In this capture, drive C has no volume. The key `x` ends the BDOS error and
-the `MOUNT` piece is dropped:
+In this capture, drive D has no volume. The key `x` ends the BDOS error and
+the `CD` piece is dropped:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "@start DIR C:!MOUNT" "@key x" -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs "@start DIR D:!CD" "@key x" -->
 ```text
 A>DIR C:!MOUNT
 
@@ -341,11 +341,11 @@ space is allowed and the command processor passes over it so `RUN DIR`
 supplies ` DIR`. Function 26 takes the tail's address, not the length byte
 at `0080h`.
 
-The original line's later pieces lie outside that tail. In `RUN A:MOUNT!DIR *.COM`,
-`RUN` supplies only ` A:MOUNT`. That replaces the old line so its `DIR` is
+The original line's later pieces lie outside that tail. In `RUN CD!DIR *.COM`,
+`RUN` supplies only ` CD`. That replaces the old line so its `DIR` is
 gone:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card chain.img B: "A:TAS RUN" "RUN DIR *.COM" "RUN A:MOUNT!DIR *.COM" "RUN NOSUCH!DIR *.COM" "RUN"
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card chain.img B: "A:TAS RUN" "RUN DIR *.COM" "RUN CD!DIR *.COM" "RUN NOSUCH!DIR *.COM" "RUN"
      Only RUN.COM was built in this session, before the first line shown. -->
 ```text
 B>RUN DIR *.COM
@@ -431,7 +431,7 @@ stops either one where the shell would split the line: at a `!`, or at an
 tail ` X` and runs nothing after it. An `&` inside a word, as in
 `/M:&HE000`, stays in the tail
 (`Thorium a2fe556:README.md:51-58`, `docs/compatibility.md:223`,
-`test/ted.test.mjs:272-300`).
+`test/ted.test.mjs:305-333`).
 
 Chapter 11 explains the load-drive byte at `0050h`. TED uses that byte to
 prefix the tools' names. With tools loaded from A and source on current
@@ -465,14 +465,14 @@ These commands prepare a startup file with the shell and three chained
 lines on a starter-card copy:
 
 ```sh
-printf 'SHELL.SVC\nGLCD.SVC &MOUNT\nNOSUCH.SVC &MOUNT\nNOSUCH.SVC !MOUNT\n' > startup.cmd
+printf 'SHELL.SVC\nGLCD.SVC &CD\nNOSUCH.SVC &CD\nNOSUCH.SVC !CD\n' > startup.cmd
 cp dist/starter.img schain.img
 node tools/tecvol.mjs put schain.img A startup.cmd --text
 ```
 
 The capture uses the serial-only board:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card schain.img -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card schain.img -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -501,9 +501,9 @@ A>
 
 The shell echoes each startup line whole, then each later piece at its own
 prompt. `GLCD.SVC` reports an absent graphics LCD and passes quietly so its
-`MOUNT` runs. `NOSUCH.SVC` is missing from the card, which is an ordinary
-failure. Its `&MOUNT` is skipped. The last line joins the same failure to
-`MOUNT` with `!`, so `MOUNT` runs. Quiet absence applies to a startup line.
+`CD` runs and shows A's volume. `NOSUCH.SVC` is missing from the card, which
+is an ordinary failure. Its `&CD` is skipped. The last line joins the same
+failure to `CD` with `!`, so `CD` runs. Quiet absence applies to a startup line.
 Typed at the prompt on this board, `GLCD.SVC` fails with `GLCD.SVC?`.
 
 The ROM's own startup line, the first, runs whole without the shell. A

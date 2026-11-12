@@ -27,7 +27,7 @@ procedures and recovery precautions. Appendix E defines the container format.
 
 ## Common rules
 
-The nine commands have these arguments (`tools/tecvol.mjs:4-17`):
+The nine commands have these arguments (`tools/tecvol.mjs:4-15`):
 
 ```text
 tecvol create IMAGE --volume G1M:SYSTEM:A [--volume G8M:WORK:B:ro] [--align N] [--drives N]
@@ -43,34 +43,34 @@ tecvol install IMAGE DEVICE --yes
 
 Options can appear anywhere after the command. An unknown `--` option is a
 usage error. Argument parsing checks `--user`, `--align` and `--drives`
-before opening or changing an image (`tools/tecvol.mjs:35-63`). Except for
+before opening or changing an image (`tools/tecvol.mjs:33-61`). Except for
 `create` and `recipe`, commands open an existing image and validate its
 container first. That validation is separate from the directory checks made
-by `info` and `verify` (`tools/tecvol.mjs:73-82`, `tools/tecvol.mjs:109-197`).
+by `info` and `verify` (`tools/tecvol.mjs:71-80`, `tools/tecvol.mjs:107-195`).
 
 `DRIVE` selects a volume by drive letter, with or without a colon, then by
 label and finally by id. The first matching form wins. A label or id reaches
-a volume that has no assigned drive (`tools/lib/container.mjs:202-209`).
+a volume that has no assigned drive (`tools/lib/container.mjs:194-201`).
 There is no CCP program-search fallback in a host file operation.
 
 `--user N` takes one or two decimal digits with a value from 0 to 15.
 Without it `put`, `get` and `era` use area 0 while `dir` lists all areas.
 A malformed user value stops before the image is opened
-(`tools/tecvol.mjs:47-51`, `tools/tecvol.mjs:107`,
-`tools/tecvol.mjs:142-174`).
+(`tools/tecvol.mjs:45-49`, `tools/tecvol.mjs:105`,
+`tools/tecvol.mjs:140-172`).
 
 Successful commands exit with status 0. A usage error prints its reason and
 the usage line and exits with status 2. An absent file in `era` is a usage
 error too. Other failures print `tecvol: ` and the reason and exit with
 status 1. `verify` also returns 1 for reported directory problems
-(`tools/tecvol.mjs:29-33`, `tools/tecvol.mjs:139`,
-`tools/tecvol.mjs:173`, `tools/tecvol.mjs:201-206`).
+(`tools/tecvol.mjs:27-31`, `tools/tecvol.mjs:137`,
+`tools/tecvol.mjs:171`, `tools/tecvol.mjs:199-204`).
 
 Image replacement validates the changed bytes in memory, writes a temporary
 file beside the image and renames that file over it. A failure before the
 rename leaves the original image unchanged. It does not reread the temporary
 file or explicitly synchronise it to durable storage. This is distinct from
-`install` writing directly to a device (`tools/tecvol.mjs:65-71`).
+`install` writing directly to a device (`tools/tecvol.mjs:63-69`).
 
 Never change a card on the PC while TEC-OS is using it. At the board's command
 prompt, a successful `^C` flush must finish before removal. `Write lost` means
@@ -86,36 +86,39 @@ four-volume `my.img`. Its figures and hashes belong to this build's media and ch
 ## create
 
 `create IMAGE --volume SPEC ...` makes an empty image and rejects an output
-path that already exists (`tools/tecvol.mjs:109-114`). Each `--volume` adds
+path that already exists (`tools/tecvol.mjs:107-112`). Each `--volume` adds
 one descriptor in the given order:
 
-| Part of `GEOMETRY:LABEL:DRIVE[:ro][:wb]` | Meaning |
+| Part of `GEOMETRY:LABEL:DRIVE[:ro]` | Meaning |
 | --- | --- |
 | `GEOMETRY` | `G1M` or `G8M` |
 | `LABEL` | Capitalised and limited to 11 characters. The resulting labels must differ |
 | `DRIVE` | A–D or empty for a volume on no drive |
 | `:ro` | Read-only volume |
-| `:wb` | Written-behind volume. At most one and never together with `:ro` |
+
+Any other flag, `:wb` among them, is refused. No volume is marked written
+behind: TEC-OS writes behind the drive you are on, and descriptor byte 15 is
+reserved and written zero
+([Appendix E](appendix-e-container-format.md#the-header))
 
 `--align N` places volumes at multiples of N card blocks. The decimal value must
 be from 1 to 16,777,215 and must also be a multiple of 8. The default is 2,048
 blocks or 1 MiB. A value outside the decimal range gives a usage error. A value
 inside it that is not a multiple of 8 fails container creation with
 `alignment must be a multiple of 8 blocks` and status 1
-(`tools/tecvol.mjs:35-39`, `tools/tecvol.mjs:52-53`,
-`tools/lib/container.mjs:89-99`).
+(`tools/tecvol.mjs:33-37`, `tools/tecvol.mjs:50-51`,
+`tools/lib/container.mjs:87-97`).
 
 `--drives N` takes 1 to 4 and records the number of drive slots to reserve
 at cold boot. Supplying it or requesting more than eight volumes selects
 format 1.1. Otherwise creation uses 1.0. One volume must be assigned to A.
 Each payload is filled with `E5h`, producing an empty CP/M directory and data
-area (`tools/lib/container.mjs:79-125`).
+area (`tools/lib/container.mjs:78-122`).
 
-This fixture has SYSTEM on A, written-behind WORK on B and a
-read-only ARCHIVE on no drive:
+This fixture has SYSTEM on A, WORK on B and a read-only ARCHIVE on no drive:
 
 ```sh
-node tools/tecvol.mjs create build/my.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:ARCHIVE::ro
+node tools/tecvol.mjs create build/my.img --volume G1M:SYSTEM:A --volume G8M:WORK:B --volume G1M:ARCHIVE::ro
 ```
 
 Successful creation prints nothing.
@@ -123,7 +126,7 @@ Successful creation prints nothing.
 ## info and verify
 
 `info IMAGE` prints the container and then every volume
-(`tools/tecvol.mjs:115-140`):
+(`tools/tecvol.mjs:113-138`):
 
 ```sh
 node tools/tecvol.mjs info build/my.img
@@ -132,14 +135,14 @@ node tools/tecvol.mjs info build/my.img
 ```text
 container: format 1.0, 22528 blocks (11534336 bytes), 3 volume(s)
   A: SYSTEM      id 1 G1M start 2048 rw 0 file(s), 1040384 bytes free
-  B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
+  B: WORK        id 2 G8M start 4096 rw 0 file(s), 8372224 bytes free
   -: ARCHIVE     id 3 G1M start 20480 ro 0 file(s), 1040384 bytes free
 ```
 
 The container line gives format, block/byte length and volume count. A
 format-1.1 card gives its requested drive count when that field is nonzero. Each volume line gives
-drive or `-`, label, id, geometry, start block, protection, optional `wb`,
-file count and free space. WORK ends at exclusive block 20,480, where ARCHIVE
+drive or `-`, label, id, geometry, start block, protection, file count and
+free space. WORK ends at exclusive block 20,480, where ARCHIVE
 starts. G1M's free space is its 512 allocation blocks less four directory
 blocks, at 2 KiB each.
 
@@ -147,7 +150,7 @@ At the inspected source, directory faults are printed as `problem:` lines.
 If duplicate allocations or a block beyond DSM prevent a free-space count,
 the volume line says `free unknown` and later volumes are still listed.
 These are source-derived reporting rules, not new output added to the
-healthy-card example (`tools/tecvol.mjs:119-138`,
+healthy-card example (`tools/tecvol.mjs:117-136`,
 `tools/lib/cpmfs.mjs:78-89`, `tools/lib/cpmfs.mjs:241-267`).
 
 `verify IMAGE` prints the same report and returns status 1 if any directory
@@ -169,7 +172,7 @@ tecvol: header checksum mismatch
 
 `dir IMAGE [DRIVE]` lists A by default. Each line gives user area, filename and
 record-rounded byte length. `R/O` and `SYS` mark file attributes
-(`tools/tecvol.mjs:142-149`). CP/M records are 128 bytes so the listing includes
+(`tools/tecvol.mjs:140-147`). CP/M records are 128 bytes so the listing includes
 padding rather than a PC file's original byte length. The starter card's A
 directory is:
 
@@ -195,8 +198,8 @@ node tools/tecvol.mjs dir dist/starter.img A
  0 TIMES.BAS         640
 ```
 
-MOUNT is 671 bytes in `dist/files` and occupies six records, 768 bytes, on
-the card. The fifteen files are those of `tools/media.mjs:200-231` and
+SHELL.SVC is 3,655 bytes in `dist/files` and occupies 29 records, 3,712
+bytes, on the card. The fourteen files are those of `tools/media.mjs:200-231` and
 `tools/lib/starter.mjs:10-22`, and STARTUP.CMD holds `SHELL.SVC` and
 `GLCD.SVC` (`test/starter.test.mjs:48-82`).
 
@@ -204,7 +207,7 @@ the card. The fifteen files are those of `tools/media.mjs:200-231` and
 
 `put IMAGE DRIVE FILE [CPMNAME]` copies a PC file to the selected volume.
 The card name is `CPMNAME` or the capitalised PC basename. The host validates
-that name as an 8.3 spelling (`tools/tecvol.mjs:150-157`,
+that name as an 8.3 spelling (`tools/tecvol.mjs:148-155`,
 `tools/lib/cpmfs.mjs:15-20`).
 
 A file of the same name in the same area is replaced unless its read-only
@@ -220,8 +223,10 @@ commands make a text file and copy the prepared binaries:
 
 ```sh
 printf 'hello\nworld\n' > build/hello.txt
+printf 'SHELL.SVC\n' > build/startup.cmd
 node tools/tecvol.mjs put build/my.img A build/hello.txt --text
-node tools/tecvol.mjs put build/my.img A dist/files/MOUNT.COM
+node tools/tecvol.mjs put build/my.img A dist/files/SHELL.SVC
+node tools/tecvol.mjs put build/my.img A build/startup.cmd --text
 node tools/tecvol.mjs put build/my.img B dist/files/TAS.COM --user 3
 ```
 
@@ -251,7 +256,7 @@ usage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/t
 `get IMAGE DRIVE CPMNAME [OUTFILE]` extracts a file into OUTFILE or writes
 its bytes to standard output when no output path is supplied. Without `--text`
 it returns whole records, including padding. With it extraction stops at
-the first `^Z` and converts CR LF to LF (`tools/tecvol.mjs:159-167`,
+the first `^Z` and converts CR LF to LF (`tools/tecvol.mjs:157-165`,
 `tools/lib/cpmfs.mjs:128-150`).
 
 Each directory entry supplies records only through its recorded extent/count.
@@ -274,7 +279,7 @@ world
 `era IMAGE DRIVE CPMNAME` erases the file in area 0 or the area given by
 `--user`. An absent name gives usage status 2. A read-only file fails with
 status 1 unless `--force` is supplied. The volume itself must be writable
-(`tools/tecvol.mjs:169-175`, `tools/lib/cpmfs.mjs:157-173`).
+(`tools/tecvol.mjs:167-173`, `tools/lib/cpmfs.mjs:157-173`).
 
 ```sh
 node tools/tecvol.mjs era build/my.img B TAS.COM
@@ -314,18 +319,18 @@ separately. Volume entries give geometry, label, `mount` and optional
 name, URL/path, `drive`,
 byte size, SHA-256 and optional user area (`tools/lib/recipe.mjs:14-26`).
 Unlike `create`, this command can replace an existing output image
-(`tools/tecvol.mjs:177-182`).
+(`tools/tecvol.mjs:175-180`).
 
 An `http://` or `https://` URL is fetched from that address. A relative
 file path is resolved from the recipe's directory. Each fetched component
 must match its size and SHA-256 before placement. Read-only volume flags
-are applied after the files are written (`tools/tecvol.mjs:92-101`,
+are applied after the files are written (`tools/tecvol.mjs:90-99`,
 `tools/lib/recipe.mjs:14-44`). The web page uses the same recipe function
 for New starter card.
 
 `npm run media` prepares `dist/starter.recipe.json` and its image. That recipe, at revision 12, is the only one: the web page builds
 the same card, and media removes a `dist/page.recipe.json` left by an older
-build (`tools/media.mjs:233-253`, `274-277`). Chapter 27
+build (`tools/media.mjs:233-257`, `278-281`). Chapter 27
 describes that preparation. The rebuild produced these matching hashes:
 
 ```sh
@@ -346,7 +351,7 @@ clock. The printed hashes identify this recipe's result at `e59e8c4`.
 
 `install IMAGE DEVICE --yes` validates the image as a container, opens the
 device and writes from offset 0. Without `--yes` it gives a usage error
-(`tools/tecvol.mjs:184-195`).
+(`tools/tecvol.mjs:182-193`).
 
 ```sh
 node tools/tecvol.mjs install dist/starter.img /dev/rdiskN --yes
@@ -365,7 +370,8 @@ transfer procedure.
 
 ## The worked card
 
-Following the commands from create through era leaves HELLO and MOUNT on A.
+Following the commands from create through era leaves HELLO, the shell and
+its startup file on A.
 The final directory is:
 
 ```sh
@@ -379,7 +385,7 @@ node tools/tecvol.mjs dir build/my.img A
 
 The same card's TEC-OS capture reads the text and lists all volumes:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/my.img DIR "TYPE HELLO.TXT" MOUNT -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card build/my.img DIR "TYPE HELLO.TXT" "CD ?" -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -400,6 +406,6 @@ A>MOUNT
 A>
 ```
 
-There is no STARTUP.CMD on this card so the first prompt follows the volume list
-without a startup command. MOUNT with no argument lists ARCHIVE too, even though
-it has no assigned drive.
+The startup file loads the shell, so the prompt shows the drive's volume and
+DIR lists sizes. `CD ?` lists ARCHIVE too, even though it has no assigned
+drive.

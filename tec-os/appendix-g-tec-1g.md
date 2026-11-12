@@ -28,7 +28,7 @@ log that records what a particular board did.
 
 ## The ports
 
-The shared port names are in `src/layout.asm:9-17`, `src/abi.inc:297-320`. The individual drivers
+The shared port names are in `src/layout.asm:9-17`, `src/abi.inc:300-323`. The individual drivers
 define their other ports.
 
 | Port | Direction | Device | TEC-OS's use |
@@ -116,7 +116,7 @@ from the similarly named bits it writes to the system latch.
 
 The board documents describe `FFh` as write-only. TEC-OS keeps its last value
 at `0040h`, named `LATCHV`, and constructs later writes from that copy
-(`src/layout.asm:19-28`, `src/abi.inc:299-302`, `src/layout.asm:64-69`, `src/abi.inc:304-306`).
+(`src/layout.asm:19-28`, `src/abi.inc:302-305`, `src/layout.asm:64-69`, `src/abi.inc:307-309`).
 
 | Bit | Value | Name | TEC-OS's use |
 | ---: | ---: | --- | --- |
@@ -138,7 +138,7 @@ A program writing the latch must also update `0040h`. Otherwise the next
 TEC-OS latch write starts from an obsolete copy. Cache accesses, the only
 TEC-OS use of EXPAND 1, restore that recorded value after using the bank.
 They perform no stack operation while that bank is visible because it hides
-the resident stacks in EXPAND 0 (`src/cache.asm:12-40`,
+the resident stacks in EXPAND 0 (`src/cache.asm:13-41`,
 `docs/memory-map.md:70-83`). Chapter 15 explains the
 memory boundary.
 
@@ -183,7 +183,7 @@ instructions must not be applied to an ordinary TEC-OS session.
 ## The 20 × 4 LCD
 
 The HD44780 character LCD uses `04h` for commands and status and `84h` for
-data (`src/abi.inc:316-318`). Cold boot sends four initialisation commands
+data (`src/abi.inc:319-321`). Cold boot sends four initialisation commands
 (`src/lcd.asm:13-21`, `src/tables.asm:44-51`):
 
 | Command | Effect |

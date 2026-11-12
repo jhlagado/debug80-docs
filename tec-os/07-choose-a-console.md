@@ -231,9 +231,9 @@ when the new width takes effect.
 Cold boot starts the PICO9918 console at 40 columns when its probe succeeds
 and the Matrix switch is enabled. A warm boot keeps the selected width. Reset
 restores 40 before any startup width command runs. This capture selects 32
-columns, runs `MOUNT` and then lists files:
+columns, runs `TAS` with no name and then lists files across the row:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "CON PICO 32" MOUNT DIR -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs --board pico --screen "CON PICO 32" TAS "DIR /W" -->
 ```text
 CON: CRT:
 A>MOUNT
@@ -253,9 +253,9 @@ HELLO3.ASM
 A>
 ```
 
-`MOUNT` ended in a warm boot, which kept 32 columns. `DIR` fits two names on
+`TAS` ended in a warm boot, which kept 32 columns. `DIR /W` fits two names on
 each row here instead of the six in an 80-column listing, so the starter
-card's fifteen files take eight rows.
+card's fourteen files take seven rows.
 
 An unsupported width, a width after another device name or a number joined to
 `CRT` without a space produces a question mark. The console remains as it was:

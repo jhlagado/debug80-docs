@@ -28,7 +28,7 @@ builds the page into web/dist. The build copies the ROM, its symbols and the
 starter card's recipe and files. `npm start` serves that directory with the
 installed esbuild development server, so Python is not needed
 (`web/build.mjs:16-45`, `package.json:15`, `package.json:22`,
-`README.md:114-122`):
+`README.md:116-124`):
 
 ```sh
 npm run web
@@ -84,10 +84,10 @@ which its STARTUP.CMD loads, TIMES.BAS, BAZA.COM and BAZA.RTL for
 
 The card does not hold DEMO.COM until you build it. BOUNCE needs the
 PICO9918 and draws through `CALL`, as Chapter 3 explains
-(`tools/media.mjs:200-253`, `test/starter.test.mjs:48-394`,
-`test/demo.test.mjs:1-4`, `README.md:163-195`). Building a starter fetches
+(`tools/media.mjs:200-257`, `test/starter.test.mjs:48-394`,
+`test/demo.test.mjs:1-4`, `README.md:165-202`). Building a starter fetches
 each recipe file and checks its byte count and SHA-256 before returning the
-image (`tools/media.mjs:200-255`, `tools/lib/recipe.mjs:14-44`,
+image (`tools/media.mjs:200-259`, `tools/lib/recipe.mjs:14-44`,
 `web/src/main.mjs:60-63`). The file list shows user area, name and size.
 It refreshes every five seconds and after the reset and power-cycle buttons
 (`web/src/main.mjs:580-593`, `web/src/main.mjs:682-695`).
@@ -167,7 +167,7 @@ write the card while it is prepared (`web/src/main.mjs:82-86`).
 The model uses a high-capacity card (`host/machine.mjs:49`). Opening an image
 also checks its full declared length. A truncated image produces
 `Not opened: image is truncated` followed by the lengths
-(`web/src/main.mjs:609`, `tools/lib/container.mjs:149-152`). This excludes
+(`web/src/main.mjs:609`, `tools/lib/container.mjs:146-149`). This excludes
 the standard-card byte-addressing limit and that particular truncated-image
 case. It does not exclude every `27h` mount error or every `Bad Sector`:
 the ROM also checks arithmetic overflow and volume ends against the container
@@ -183,7 +183,7 @@ Its later reset clears the block cache. TEC-OS rebuilds free-space maps from the
 changed card as drives are accessed. Unwritten cached changes, including changes
 on WORK with write-behind enabled, are lost at that reset
 (`src/boot.asm:77-77`, `src/boot.asm:149-152`, `src/boot.asm:235-252`,
-`src/cache.asm:623-629`, `src/cpm/bdoslog.asm:218-270`).
+`src/cache.asm:634-640`, `src/cpm/bdoslog.asm:218-270`).
 [Chapter 19](19-cache-and-persistence.md) explains the failed-flush paths. A
 browser save or download after a successful flush is still needed to preserve
 the resulting image outside RAM.
@@ -251,7 +251,7 @@ page wrote. If they can't be written, for a full A: or a read-only
 shell was not added. A card whose `SHELL.SVC` was removed but whose
 `MON3.SVC` is the newer one counts as current and is left without the shell
 (`web/src/main.mjs:87-93`, `host/card.mjs:55-108`, `host/card.mjs:109-146`,
-`README.md:128-135`).
+`README.md:130-137`).
 
 The selected display determines the display line. When drive A holds
 SHELL.SVC the new text starts with a `SHELL.SVC` line and the display line

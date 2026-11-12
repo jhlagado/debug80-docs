@@ -26,15 +26,15 @@ buffer.
 `ABICALL` is the jump at `C008h` to `SVCDSP`. It is the last three bytes of the
 eight-byte ROM table. The preceding bytes are the signature `TNA` and
 application binary interface (ABI) major and minor versions 5 and 1
-(`src/abi.asm:9-14`, `src/abi.inc:14-30`). You supply the service number in `C`
+(`src/abi.asm:9-14`, `src/abi.inc:17-33`). You supply the service number in `C`
 and arguments in `B`, `DE` and `HL`. `A` is never an argument so the dispatcher
-can use it and the flags before saving a register (`src/abi.inc:32-53`).
+can use it and the flags before saving a register (`src/abi.inc:35-56`).
 
 There are 16 entries, numbered 0 to 15. `SVCDSP` copies `C` to `A` and
 compares it with `TNCOUNT`, 16. The following `LD A,TNEBAD` leaves the
 comparison flags intact. A number of 16 or more branches to `HWERR`
 without changing `B`, `DE` or `HL` (`src/services.asm:34-38`,
-`src/abi.inc:234-235`). The error exit returns status 1 with carry set
+`src/abi.inc:237-238`). The error exit returns status 1 with carry set
 and zero clear (`src/services.asm:63-66`).
 
 For a valid number, the dispatcher pushes `HL` and `DE`. It doubles the
@@ -57,11 +57,11 @@ success path ends with its own `XOR A` and `RET`, returning status 0 with
 zero set and carry clear (`src/services.asm:59-67`,
 `src/services.asm:74-82`).
 `FIND` and `LIST` have their own result convention, including the registry
-generation in `A` (`src/abi.inc:182-203`). The ABI preserves `IX`, `IY`
+generation in `A` (`src/abi.inc:185-206`). The ABI preserves `IX`, `IY`
 and the alternate registers except for `MOUNT`, `UNMNT` and `DESC`, which
 may change `IX` and the alternates. For the whole call, use the selected
 service's documented results. Other registers may be destroyed
-(`src/abi.inc:32-53`).
+(`src/abi.inc:35-56`).
 
 ## The code behind the table
 
@@ -99,7 +99,7 @@ and change with the source.
 `INFO` returns stored state without reading a device. It ORs `CONDEV` with
 `VCLAIM` for the result in `B`, loads `ROMVER` into `DE` and reads the adjacent
 `VWID` and `VHGT` bytes into `L` and `H` (`src/services.asm:74-80`,
-`src/ram.asm:420-421`). In the resident workspace those
+`src/ram.asm:421-422`). In the resident workspace those
 dimensions are at `BFEAh` and `BFEBh`, near its upper end.
 
 The device bits and claim bit have different lifetimes. Cold boot calls
@@ -252,7 +252,7 @@ The display drivers use the ROM's font (`src/pico.asm:253-275`,
 `drivers/glcd.asm:527-555`). `FONT`, service 15, loads its address into
 `HL`, clears `A` and returns (`src/services.asm:510-517`). The font has 96
 characters from code `20h`, each eight bytes in top-to-bottom row order
-(`src/abi.inc:205-210`). Its 768 data bytes are separate from the
+(`src/abi.inc:208-213`). Its 768 data bytes are separate from the
 five-byte access routine in the code table.
 
 The selected data is TEC Compact from `format/font5x7.txt`. Its parser puts
@@ -273,20 +273,20 @@ BDOS call. Their state changes use resident bytes such as `VCLAIM` and
 or within a BDOS call without re-entering the BDOS. `MOUNT` and `UNMNT`
 are the exceptions among numbered services: they reset a drive through
 BDOS function 37 and must be called from outside an existing BDOS call
-(`src/services.asm:1-16`, `src/abi.inc:32-53`).
+(`src/services.asm:1-16`, `src/abi.inc:35-56`).
 
 The caller may be a program, the CCP or the BDOS with part of its stack
 already occupied. The byte counts in `abi.inc` bound additional space
 below the caller's return address. They include the dispatcher's two
 pushes, even though those words are gone before the routine begins.
 They are upper bounds, not a claim that every path reaches the limit
-(`src/abi.inc:47-50`). The routines also preserve the caller's interrupt
-state (`src/abi.inc:40-41`).
+(`src/abi.inc:50-53`). The routines also preserve the caller's interrupt
+state (`src/abi.inc:43-44`).
 
 `JOY`, `KEYS`, `DIGIT`, `TONE` and `FONT` each have a four-byte bound,
-the dispatcher's saved pairs alone (`src/abi.inc:62-110`,
-`src/abi.inc:205-210`). `PUTAT` has the deepest hardware bound at 22
+the dispatcher's saved pairs alone (`src/abi.inc:65-113`,
+`src/abi.inc:208-213`). `PUTAT` has the deepest hardware bound at 22
 bytes. Its six saved register bytes remain on the stack during a driver
 call, with the driver's nested drawing calls below them
-(`src/services.asm:348-357`, `src/abi.inc:112-121`). You therefore leave
+(`src/services.asm:348-357`, `src/abi.inc:115-124`). You therefore leave
 22 bytes free to write positioned text and four to sound a tone.

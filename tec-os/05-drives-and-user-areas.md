@@ -142,7 +142,7 @@ occupy 18 pages. On a card with nothing else installed the BDOS entry in
 bytes to 42,496, or to 41,728 with `GLCD.SVC` installed too. On the starter
 card, whose startup file installs the shell first, the entry moves from
 `AF00h` to `9D00h` and the program memory from 44,544 bytes to 39,936, or
-to `9A00h`, 39,168 bytes, with `GLCD.SVC` installed too (`docs/mon3.md:45-56`).
+to `9A00h`, 39,168 bytes, with `GLCD.SVC` installed too (`docs/mon3.md:45-57`).
 The file is 5,032 bytes with its relocation data. The
 service's own code, line buffer and stack are all in those pages, above
 anything a MON-3 program may load into. A program itself runs on MON-3's
@@ -202,34 +202,34 @@ resets the drives after each return to limit that. Its messages are in
 
 ## Drive letters and volumes
 
-TEC-OS has four drives, A to D. A drive letter identifies a current
-assignment, not a separate card. Each drive can hold one volume from the
-card's container, the collection of CP/M disks stored on that card.
-The starter assigns SYSTEM to A and WORK to B. They are volumes with
-labels as well as drive letters.
+TEC-OS has four drives, A to D, and they are equal. A drive letter
+identifies a current assignment, not a separate card. Each drive can hold one
+volume from the card's container, the collection of CP/M disks stored on that
+card. The starter card holds five volumes. SYSTEM is on A, WORK on B and
+PROJECTS on C. GAMES and SPARE are on no drive, and D is empty. The prompt
+shows the drive and its volume, so `A:SYSTEM>` means drive A holding SYSTEM.
 
-Before changing a drive selection, enter `MOUNT` with no arguments to list
-the starter's volumes, including any assigned to no drive.
-Each line gives the volume's container index, label, geometry
-and current drive. The starter's list has SYSTEM at index 00 and WORK
-at 01. G1M is the 1 MiB geometry and G8M is the 8 MiB geometry. Their
-directory layouts are described in [Appendix E](appendix-e-container-format.md).
+`CD ?` lists the card's volumes, in the card's order, each with the drive it
+is on:
+
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs "CD ?". Boot rows omitted. -->
+```text
+CD05A
+```
+
+WORK is a G8M volume, 8 MiB, and the others are G1M, 1 MiB. Their directory
+layouts are described in [Appendix E](appendix-e-container-format.md). WORK,
+PROJECTS, GAMES and SPARE start empty and are available for your files.
 
 A drive letter followed by a colon selects that drive. The prompt changes
 and a file name without a drive then refers to it. A file on another
 drive can be named explicitly, as in `DIR B:` or `TYPE A:SAMPLE.ASM`.
 Selecting an empty drive or naming a file on it gives `Select`. This
-starter-card run selects B and then uses empty drive C:
+starter-card run selects B and then uses empty drive D:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs B: "@start C:" "@key x" "@start DIR C:" "@key x" -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs B: "@start D:" "@key x" "@start DIR D:" "@key x" -->
 ```text
-A>B:
-B>C:
-Bdos Err On C: Select
-B>DIR C:
-
-Bdos Err On C: Select
-B>
+CD05B
 ```
 
 The default error path waits for a key, `x` in this capture, then ends the
@@ -253,7 +253,7 @@ of area 0's listing even on the same volume. For this comparison,
 existing program memory in area 3. It does not create or move a file in
 area 0:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" MOUNT "USER 0" "DIR B:" -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" TAS "USER 0" "DIR B:" -->
 ```text
 A>USER 3
 3A>SAVE 1 B:MINE.COM
@@ -270,8 +270,8 @@ NO FILE
 A>
 ```
 
-The `MOUNT` program still ran in area 3 because program lookup also checks area
-0. Its volume list is independent of the files' user areas. `COPY` works within
+The `TAS` program still ran in area 3 because program lookup also checks area
+0. `COPY` works within
 the current area so it cannot transfer a file between areas. On a PC,
 `tecvol put --user N` places a file in a chosen area, as
 [Chapter 6](06-cards-on-the-pc.md) explains. `USER` without a number or with a
@@ -305,10 +305,11 @@ checks the current area before area 0. At `3B>` the complete order for
 
 An explicit drive prevents the drive-A fallback. `B:TOOL` checks B's
 current area and area 0 only. Loading a tool from A does not itself select A.
-In the following starter-card capture, both `A:MOUNT` and
-plain `MOUNT` run A's program while the prompt stays on B:
+In the following starter-card capture, both `A:TAS` and
+plain `TAS` run A's program, which prints its usage line, while the prompt
+stays on B:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs B: "A:MOUNT" MOUNT "STARTUP.CMD" -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs B: "A:TAS" TAS "STARTUP.CMD" -->
 ```text
 A>B:
 B>A:MOUNT
@@ -325,8 +326,8 @@ STARTUP.CMD?
 B>
 ```
 
-A type written after the program's name is replaced by COM. `MOUNT.COM`
-and `MOUNT.TXT` both search for `MOUNT.COM`. In this run `STARTUP.CMD`
+A type written after the program's name is replaced by COM. `TAS.COM`
+and `TAS.TXT` both search for `TAS.COM`. In this run `STARTUP.CMD`
 searched for `STARTUP.COM` on B and then A. Neither drive had that program.
 Typing a startup file's name does not run its text as commands.
 
@@ -351,115 +352,66 @@ command processor.
 
 ## Changing a drive's volume
 
-The GAMES and SPARE examples use a separate four-volume card named
-`my.img`. [Chapter 6](06-cards-on-the-pc.md) gives its PC preparation, including
-usable slots for C and D through `--drives 4`. These examples are not steps
-required on the supplied starter. It has no GAMES or SPARE volume and no usable
-C slot.
+`CD`, a command of the shell, puts a volume on a drive. `CD NAME` puts the
+volume labelled NAME on the current drive, A included. `CD D:NAME` puts it on
+D and leaves you where you are. `CD` alone and `CD D:` show a drive's volume,
+read from the card again. A volume is on at most one drive, so `CD` of a
+volume already on another drive is refused and names that drive. To take a
+volume off a drive, put another there. Every drive of the starter card has a
+slot large enough for either geometry, so any volume fits any drive.
 
-`MOUNT C: GAMES` assigns the volume labelled GAMES to C. An index can be used
-instead of the label, as in `MOUNT D: 3`. A volume can occupy at most one drive.
-A drive can be emptied with `MOUNT B:` and filled again without changing the
-card's saved assignments. Drive A must keep a volume so `MOUNT A:` cannot empty
-it. A different volume can replace A's current one.
+This run puts GAMES on the empty D, shows it, tries to put WORK on C and
+lists the volumes again:
 
-Mounting is also limited by the drive slots prepared at cold boot, the
-full start after reset. The starter has a G1M-sized slot for A and a
-G8M-sized slot for B. A can take G1M volumes. B can take either geometry.
-C and D have no slots and cannot
-take a volume on that card. Emptying B leaves its slot available for reuse.
-This starter-card run shows that difference:
-
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs "CD D:GAMES" "CD D:" "CD C:WORK" "CD ?". Boot rows omitted. -->
 ```text
-A>MOUNT B:
-Unmounted
-
-A>MOUNT C: WORK
-Cannot mount: in use or too large
-
-A>MOUNT B: WORK
-B: WORK       
-
-A>
+CD05C
 ```
 
-A card prepared with `tecvol create --drives N` reserves full-size slots
-for drives A through the Nth, including drives empty at cold boot. Each
-can then take either geometry. These slots use system memory. Their byte
-cost and placement belong to [Chapter 15](15-state-and-memory.md#allocation-vectors-below-the-workspace).
-`MOUNT` cannot add a slot to the running starter card.
+The third command failed because WORK was already on B. `CD` of a volume
+already on the drive named shows it and mounts nothing. A label not on the
+card gives the name with a question mark, and a name of more than 11
+characters, a drive past D or text after the name gives `CD?`. Each refusal
+sets the failure return code, so an `&` piece after it is skipped
+([Chapter 13](13-results-and-command-chains.md)).
 
-On that `my.img` card, SYSTEM and WORK start on A and B, GAMES and
-SPARE start unassigned and all four drives have full-size slots. GAMES contains
-`TAS.COM` and SPARE contains `HELLO.TXT` with the line `Hello from the PC.`.
-This card had no startup file so its initial prompt followed the mounted-drive
-list directly:
+TEC-OS holds some recent writes in memory in its block cache. Before it
+changes a drive, the mount writes them to the card. If a write fails, the
+mount is refused with `CANNOT MOUNT` and the drive keeps its volume. The
+same message means the volume is too large for the drive's slot, which can
+happen on a card that reserves slots only for the drives mounted at cold
+boot ([Chapter 15](15-state-and-memory.md#allocation-vectors-below-the-workspace)).
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card my.img -->
+`CD` changes the running assignments in memory, not the drive fields saved
+in the card's header. The changed drive's directory is read afresh on its
+next use. Putting a volume on the current drive selects it again at once so
+that access uses the new volume. The prompt's label comes from a table the
+shell keeps, filled at its first prompt and by `CD` itself. A program that
+mounts a volume through the ROM's services leaves that label stale until `CD`
+alone reads the card again (`docs/shell.md:141-191`).
+
+### CD on drive A
+
+The commands found on A follow its volume, and so does the shell's next
+start. `CD A:GAMES` puts GAMES on A. A program on SYSTEM, such as TAS, is then
+not found, and `CD A:SYSTEM` brings SYSTEM back. A reset keeps the drives'
+selection, so a reset after `CD A:GAMES` starts from GAMES, which has no
+startup file and no shell. The bare prompt `A>` follows and there is no `CD`:
+
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs "CD A:GAMES" TAS "@reset". Boot rows before the first command omitted. -->
 ```text
-TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
-B: WORK       
-
-A>
+CD05D
 ```
 
-The list's first column is the container index. A line without a drive
-at the right is an unassigned volume. The following run mounts
-GAMES by label and SPARE by index, then accesses files on both:
-
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card my.img MOUNT "MOUNT C: GAMES" "MOUNT D: 3" MOUNT "DIR C:" "TYPE D:HELLO.TXT" "MOUNT C: SPARE" -->
-```text
-A>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
-02 GAMES       G8M
-03 SPARE       G1M
-
-A>MOUNT C: GAMES
-C: GAMES      
-
-A>MOUNT D: 3
-D: SPARE      
-
-A>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
-02 GAMES       G8M C:
-03 SPARE       G1M D:
-
-A>DIR C:
-TAS.COM     
-1 file, 8164K free
-A>TYPE D:HELLO.TXT
-Hello from the PC.
-
-A>MOUNT C: SPARE
-Cannot mount: in use or too large
-
-A>
-```
-
-The last command failed because SPARE was already on D. The same message can
-mean the destination slot is too small or absent. TEC-OS holds some recent
-writes in memory in its block cache. A cache flush writes those pending changes
-to the card. A failed flush can also prevent the mount and the assignment
-changes only after the writes succeed. A label or index not found in the table
-gives `No such volume`. Invalid command syntax prints
-`MOUNT [D: [NAME or INDEX]]`. An attempt to empty A gives `Cannot unmount`.
-
-`MOUNT` changes the running assignments in memory, not the drive fields saved in
-the card's header. Before changing an assignment it flushes pending writes to
-the card. The changed drive's directory is read afresh on its next use. Mounting
-a volume on the current drive selects it again at once so that access uses the
-new volume.
+Power off and on, or Power cycle on the web page, gives the card's own drives
+and the shell again. A `CD` in a script cannot change the drive the script
+is read from: it is refused with `CD?`, and the script goes on.
 
 ## Volume and file protection
 
 A volume can be read-only. Its files can be read and its programs can run but
-creating, writing, renaming or erasing a file there gives `R/O`. `MOUNT` marks
-such a volume `R/O` in its list. This property belongs to the volume so changing
+creating, writing, renaming or erasing a file there gives `R/O`. A read-only
+volume is never written behind. This property belongs to the volume so changing
 its drive or warm-booting does not remove it. Chapter 6 explains how a prepared
 card receives that flag.
 
@@ -489,29 +441,11 @@ The drive assignments can be reconstructed from recognised TEC-OS state
 left in RAM. Each assigned volume must still match a descriptor on the card
 in location, size, geometry and flags and fit the drive's slot.
 
-This `my.img` run mounts GAMES on C and empties B before
-reset. The reconstructed selection keeps both changes:
+This run puts GAMES on D before reset. The reconstructed selection keeps it:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card my.img "MOUNT C: GAMES" "MOUNT B:" "@reset" MOUNT -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs "CD D:GAMES" "@reset" "CD ?". Boot rows before the first command omitted. -->
 ```text
-A>MOUNT C: GAMES
-C: GAMES      
-
-A>MOUNT B:
-Unmounted
-
-A>
-TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
-C: GAMES      
-
-A>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M
-02 GAMES       G8M C:
-03 SPARE       G1M
-
-A>
+CD05E
 ```
 
 No saved drive assignment is applied if a required volume no longer matches

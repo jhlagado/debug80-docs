@@ -31,7 +31,7 @@ visible at `0000h–07FFh` as well as `C000h–C7FFh`. Latch bit 0 controls
 this boot overlay. The first instruction is `JP RSTENT`, whose target is
 in high ROM. After that jump the CPU can remove the overlay without
 removing the code it is executing (`src/reset.asm:1-13`,
-`src/layout.asm:19-28`, `src/abi.inc:299-302`, `src/boot.asm:35-39`).
+`src/layout.asm:19-28`, `src/abi.inc:302-305`, `src/boot.asm:35-39`).
 
 `RSTENT` reads `0002h`. At reset the overlay supplies the high byte of
 that first jump's target, `HIGH(RSTENT)`. Equality sends execution to
@@ -54,7 +54,7 @@ EXPAND 0 selected. It then selects interrupt mode 1, whose interrupt entry
 is `0038h` (`src/boot.asm:35-40`, `src/layout.asm:22-28`). Maskable
 interrupts stay disabled unless a program or service enables them.
 Routines such as the BIOS's `CEI` restore an enabled state only if it was
-saved on entry (`src/bios.asm:383-449`). The default restart code written
+saved on entry (`src/bios.asm:379-446`). The default restart code written
 at `0038h` contains another `EI`. Writing that instruction does not execute
 it and a qualifying resident jump there is preserved instead
 (`src/boot.asm:332-382`).
@@ -232,11 +232,10 @@ the drive table and builds each mounted drive's DPH. It performs no card
 read and has no failure exit. A previously empty drive stays empty even if
 the card assigns a volume to that letter (`src/volsvc.asm:30-129`).
 
-In this capture, `MOUNT B:` emptied B before reset.
-The remaining saved assignment matched the starter card so only A was
-listed afterwards:
+In this capture, `CD D:GAMES` put GAMES on the empty D before reset.
+The saved assignment matched the starter card so D was listed afterwards:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "MOUNT B:" "@reset" -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs "CD D:GAMES" "@reset" -->
 ```text
 A>MOUNT B:
 Unmounted
@@ -305,7 +304,7 @@ The jump at `0000h` reaches `WBOOTR` through the second RAM BIOS entry at
 `BF03h`. At launch the CCP pushes `0000h` before jumping to `0100h` so a
 program's final return follows that path. An explicit jump to `0000h`, BDOS
 function 0 and an accepted function-47 command also lead to warm boot
-(`src/boot.asm:117-131`, `src/cpm/ccp.asm:453-470`, `src/cpm/bdos.asm:85-105`,
+(`src/boot.asm:117-131`, `src/cpm/ccp.asm:454-471`, `src/cpm/bdos.asm:85-105`,
 `src/cpm/bdos.asm:220`).
 
 `CHDROP` clears the remaining chain before that jump. The BDOS uses it
@@ -356,21 +355,21 @@ Warm boot rebuilds the environment in this order:
    card before the CCP can load a chained program. Each failed line is
    dropped and flushing continues. After any failure `CWBOOT` clears
    `CHPOS` and prints `Write lost` once. A successful flush leaves the
-   chain position intact (`src/boot.asm:149`, `src/cache.asm:265-299`,
-   `src/cache.asm:613-629`).
+   chain position intact (`src/boot.asm:149`, `src/cache.asm:266-300`,
+   `src/cache.asm:624-640`).
 8. `CCPENT` receives the page-zero drive/user byte in `C`
    (`src/boot.asm:150-152`).
 
 Clearing `BUFOK` prevents a write from reusing the pre-boot key to skip
 a block read. A new type-2 allocation write can still clear its block
-without a pre-read (`src/boot.asm:416-418`, `src/bios.asm:298-361`).
+without a pre-read (`src/boot.asm:416-418`, `src/bios.asm:298-358`).
 
 An accepted function 47 supplies a new command chain but its warm boot has
 the same flush qualification. The next command proceeds after a successful
 flush. A failure discards the failed cache line and the chain, leaving the
 card's existing copy for that line. Warm boot continues to the CCP in either
-case (`src/cpm/bdos.asm:85-95`, `src/cache.asm:257-299`,
-`src/cache.asm:623-629`, `src/boot.asm:149-152`).
+case (`src/cpm/bdos.asm:85-95`, `src/cache.asm:258-300`,
+`src/cache.asm:634-640`, `src/boot.asm:149-152`).
 
 The CCP then selects its own stack, sets `WRFLAG` and calls BDOS function
 13. That flagged reset retains a logged-in drive whose directory is clean

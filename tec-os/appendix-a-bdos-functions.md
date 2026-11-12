@@ -182,7 +182,7 @@ clearing all characters restores that abort condition
 (`src/cpm/bdos.asm:499-540`, `553-622`).
 [Chapter 23](23-the-history-ring.md) explains the history storage. The recall works only for the first function 10 after the shell's
 `LINE` call, and the history is the shell's (`src/cpm/bdos.asm:473-490`,
-`docs/shell.md:194-208`). With no shell installed `^W` and `^N` are
+`docs/shell.md:301-315`). With no shell installed `^W` and `^N` are
 characters at the prompt too.
 
 **11 Get console status.** Tests for a waiting character. A character the BIOS
@@ -325,7 +325,7 @@ other `E`, sets the user number to the low five bits of `E`, as in CP/M 2.2
 (`src/cpm/bdosfn.asm:162-177`). Returns the user number in `A` or 0 after a
 set. The CCP's `USER` command takes 0 to 15 and the byte at `0004h` holds
 only four bits of the number
-(`src/cpm/ccpcmd.asm:223-246`, `src/cpm/ccp.asm:305-323`).
+(`src/cpm/ccpcmd.asm:223-246`, `src/cpm/ccp.asm:306-324`).
 
 **33 Read random.** Reads the record whose number is in the FCB's `R0` and
 `R1` into the DMA address and leaves the FCB's extent and `CR` at that record
@@ -400,10 +400,10 @@ bytes. It ends the program by warm boot and the CCP runs the command next
 The shell splits the command at `!` and `&` and its first
 piece runs whatever the program's result was. With no shell the ROM runs the
 command whole as one command (`src/cpm/bdos.asm:52-94`,
-`docs/compatibility.md:25-30`).
+`docs/compatibility.md:27-32`).
 Warm boot flushes the write-behind records before the CCP loads the command.
 If that flush fails, failed cache lines are dropped and `Write lost` cancels
-the chain (`src/cache.asm:257-295`, `557-572`). Does not return on success.
+the chain (`src/cache.asm:258-296`, `539-554`). Does not return on success.
 Returns `FFh` in `A` for a command with no 0 in its first 128 bytes or with
 a CR or LF before the 0. The program then continues with the line unchanged.
 
@@ -412,10 +412,10 @@ a CR or LF before the 0. The program then continues with the line unchanged.
 purge, gives the same flush. Returns 0 in `A` or `FFh` if any write failed.
 A failed line is kept for the next flush, and A's
 pending block is among the lines written (`src/volsvc.asm:360-389`,
-`docs/compatibility.md:35-38`). Earlier
+`docs/compatibility.md:37-40`). Earlier
 or partial card writes are not undone. This explicit call reports failure
 through its return value, not the warm-boot `Write lost` path
-(`src/cache.asm:257-295`, `557-572`).
+(`src/cache.asm:258-296`, `539-554`).
 
 **99 Truncate file.** Changes nothing (`src/cpm/bdos.asm:81-82`,
 `src/cpm/bdos.asm:143-144`). Returns `FFh` in `A`. TEC-OS has no truncate.
@@ -423,11 +423,11 @@ through its return value, not the warm-boot `Write lost` path
 **108 Get or set program return code.** With `DE` = `FFFFh`, reads the code.
 With any other `DE`, sets the code to `DE` (`src/cpm/bdos.asm:257-272`). All
 programs share one code. A cold reset clears it to 0 and warm boot keeps it
-(`src/boot.asm:61-65`, `388-407`, `src/ram.asm:365-366`). The
+(`src/boot.asm:61-65`, `388-407`, `src/ram.asm:366-367`). The
 CCP sets the code to 0 as it takes each command and to `FF00h` when a command
 fails. Under the shell a piece after ` &` runs only when the code is outside
-`FF00h` to `FFFEh` (`src/cpm/ccp.asm:220-223`, `562-567`,
-`drivers/shell.asm:198-224`). Returns the code in
+`FF00h` to `FFFEh` (`src/cpm/ccp.asm:220-223`, `563-568`,
+`drivers/shell.asm:200-226`). Returns the code in
 `HL` or 0 after a set.
 
 ## Other numbers
@@ -466,5 +466,5 @@ for Digital Research's BDOS encounters these differences:
   program receives those keys as characters (`src/cpm/bdos.asm:482-486`).
 - Neither geometry uses the check vector: both set CKS to 0. This mechanism
   therefore does not detect a card exchanged while TEC-OS is running
-  (`format/format.json:52`, `59`). Follow the card-change procedure in
+  (`format/format.json:51`, `58`). Follow the card-change procedure in
   [Chapter 6](06-cards-on-the-pc.md#writing-the-physical-card).

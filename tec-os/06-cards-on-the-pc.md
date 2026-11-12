@@ -50,9 +50,10 @@ sizes, hashes and free-space totals belong to that example's card.
 
 ## A copy before a change
 
-Before removing a card from the TEC-1G, `^C` at the command prompt writes the
-pending changes. A fresh prompt after a successful flush is the point to remove
-it. `Write lost` means that some writes failed, not that the card is up to date.
+Before removing a card from the TEC-1G, wait for the command prompt. Every
+time TEC-OS waits for a key it writes every change it holds, on every drive,
+so at the prompt everything is on the card. `Write lost` means that some
+writes failed, not that the card is up to date.
 Never change a card on a PC while TEC-OS is using it. Its cached blocks and
 free-space maps would no longer match the card. Reset after returning a
 PC-changed card to the board. Warm boot retains those old copies in memory.
@@ -345,74 +346,60 @@ does not guarantee preservation through a PC power failure. Writing an image
 to a physical device with `install` has a different failure consequence,
 described below.
 
-## Preparing the four-volume card
+## Preparing a card of your own
 
-Chapter 5's custom-volume examples use `my.img`, with SYSTEM and WORK
-assigned to A and B and GAMES and SPARE initially unassigned. The supplied
-starter has only SYSTEM and WORK. Preparing a separate image keeps the
-extra-volume demonstrations independent of that starter.
-
-`create` makes empty volumes. Each `--volume` gives the geometry, label and
-optional drive separated by colons. `:ro` after the drive makes a volume
-read-only and `:wb` makes it written behind. At most one volume can be
-written behind and it must be writable. `--drives 4` reserves usable slots
-for all four drives at cold boot, including the two initially empty ones:
+`create` makes a card of your own volumes, empty. This example makes
+`my.img`, with SYSTEM and WORK assigned to A and B and GAMES and SPARE
+initially unassigned. Each `--volume` gives the geometry, label and optional
+drive separated by colons. `:ro` after the drive makes a volume read-only.
+`--drives 4` reserves usable slots for all four drives at cold boot,
+including the two initially empty ones:
 
 ```sh
-node tools/tecvol.mjs create my.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G8M:GAMES --volume G1M:SPARE --drives 4
+node tools/tecvol.mjs create my.img --volume G1M:SYSTEM:A --volume G8M:WORK:B --volume G8M:GAMES --volume G1M:SPARE --drives 4
 ```
 
 `create` stops if the image already exists. Every card needs a volume on A.
 Two volumes cannot share a drive or a label. `--drives` takes a whole number
 from 1 to 4. `--align` replaces the default 2,048-block alignment with a
 positive whole number up to 16,777,215 that is a multiple of 8. An invalid
-value stops creation before an image is written.
+value, or a flag it does not know such as `:wb`, stops creation before an
+image is written. No volume is marked written behind: TEC-OS writes behind
+the drive you are on, whatever the card says
+([Chapter 19](19-cache-and-persistence.md)).
 
-The preparation uses the matching media's `dist/files/MOUNT.COM` and
-`dist/files/TAS.COM`. Its remaining input is `hello.txt`, containing the
-line `Hello from the PC.` followed by a line feed. This preparation line
-supplies that text input for the recipe:
+The preparation uses the matching media's `dist/files/SHELL.SVC` and
+`dist/files/TAS.COM`. Its other inputs are a startup file that loads the
+shell, so the card has `CD`, and `hello.txt`, containing the line
+`Hello from the PC.` followed by a line feed:
 
 ```sh
+printf 'SHELL.SVC\n' > startup.cmd
 printf 'Hello from the PC.\n' > hello.txt
 ```
 
-These commands put MOUNT on SYSTEM, TAS on GAMES and that text file on SPARE,
-then list A:
+These commands put the shell and its startup file on SYSTEM, TAS on GAMES
+and the text file on SPARE, then list A:
 
 ```sh
-node tools/tecvol.mjs put my.img A dist/files/MOUNT.COM
+node tools/tecvol.mjs put my.img A dist/files/SHELL.SVC
+node tools/tecvol.mjs put my.img A startup.cmd --text
 node tools/tecvol.mjs put my.img GAMES dist/files/TAS.COM
 node tools/tecvol.mjs put my.img SPARE hello.txt --text
 node tools/tecvol.mjs dir my.img
 ```
 
-```text
- 0 MOUNT.COM         768
-```
-
-The MOUNT binary is 671 bytes on the PC. Its six records occupy 768 bytes in a
-listing and binary `get` returns all six. This image has no startup file. Its
-first prompt therefore follows the mounted-drive list without a startup
-command, and no shell is installed. It is the card used for Chapter 5's boot,
-mount and retained-selection captures. That
-chapter's separate empty-slot capture uses the unchanged starter card.
+<!-- TECVOL06A -->
 
 After those puts, `node tools/tecvol.mjs info my.img` prints this:
 
-```text
-container: format 1.1, 38912 blocks (19922944 bytes), 4 volume(s), 4 drive(s) wanted
-  A: SYSTEM      id 1 G1M start 2048 rw 1 file(s), 1038336 bytes free
-  B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
-  -: GAMES       id 3 G8M start 20480 rw 1 file(s), 8359936 bytes free
-  -: SPARE       id 4 G1M start 36864 rw 1 file(s), 1038336 bytes free
-```
+<!-- TECVOL06B -->
 
 The `-` means no default drive. GAMES and SPARE stay unassigned at cold boot
-until a retained selection or a `MOUNT` command assigns them. A card with
-more than eight volumes or an explicit `--drives` count uses format 1.1.
-Both `info` and `verify` check each volume's directory and print problems
-under its line. `verify` also exits with status 1 for directory problems.
+until a retained selection or `CD` assigns them. A card with more than eight
+volumes or an explicit `--drives` count uses format 1.1. Both `info` and
+`verify` check each volume's directory and print problems under its line.
+`verify` also exits with status 1 for directory problems.
 
 ## Recipes and read-only volumes
 
@@ -478,7 +465,7 @@ The commands make writable WORK on B with a read-only `STARTUP.CMD` and
 an empty read-only ARCHIVE volume on C:
 
 ```sh
-node tools/tecvol.mjs create build/errs.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:ARCHIVE:C:ro
+node tools/tecvol.mjs create build/errs.img --volume G1M:SYSTEM:A --volume G8M:WORK:B --volume G1M:ARCHIVE:C:ro
 node tools/tecvol.mjs put build/errs.img B dist/files/STARTUP.CMD --ro
 ```
 
@@ -551,10 +538,9 @@ does not write the card.
 ## Browser images and physical limits
 
 Open image loads an image file into the browser's card. Download image
-saves that card as a file that the PC tools can inspect or install. Before
-downloading, a successful `^C` at the TEC-OS prompt flushes writes still in
-the emulated cache into the image. Downloading the image alone does not
-perform that flush.
+saves that card as a file that the PC tools can inspect or install. Download
+it while TEC-OS waits at its prompt, where every change is already in the
+image. Downloading does not itself write the emulated cache.
 
 The page also prepares `STARTUP.CMD` for its selected display when it can.
 Keep an untouched copy if you need the original startup text. The exact
@@ -580,10 +566,11 @@ close, some writes may have reached the card and others may remain only in
 memory. A failed close is not proof of preservation and nothing automatically
 restores the old file.
 
-On a volume written through, such as SYSTEM on A, a record write goes into
-the cache's copy of its 512-byte card block and returns. The block reaches
-the card at the next flush point: the file's close, any directory request, a
-write to another block, a console read, function 48, `MOUNT` or a warm boot.
+On a drive other than the one you are on, a record write goes into the
+cache's copy of its 512-byte card block and returns. The block reaches the
+card at the next flush point: the file's close, any directory request, a
+write to another block, a console read, function 48, a drive change, `CD` or
+a warm boot.
 A cut before that point loses the records written into that one block since
 it was last written, at most four records, and the card keeps the block's
 old contents. A cut before the directory update can leave newly allocated
@@ -593,9 +580,10 @@ replaces it when its block is written. A cut can leave new records alongside
 old records that the program had not reached, with no saved copy of the
 original file.
 
-On a volume written behind, changes still in the cache are lost. Blocks written
-early to make cache space and blocks written by a completed part of a flush
-remain on the card. Newly allocated blocks may again have no directory entry.
+On the drive you are on, the logged drive, writes are held behind: a cut
+loses the changes still in the cache, at most those since the program's last
+key wait or directory write. Blocks written early to make cache space and
+blocks written by a completed part of a flush remain on the card. Newly allocated blocks may again have no directory entry.
 Overwritten blocks contain the new data. The directory write follows successful
 data writes so an interrupted flush does not publish a new allocation map before
 those data writes succeed.

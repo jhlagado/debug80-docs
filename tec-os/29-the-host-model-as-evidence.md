@@ -99,7 +99,7 @@ this supplied clock merely because wall time passed
 The test fixture starts at 1 January 2026, 12:00. The capture tool starts
 at 1 November 2026, 12:00. Record the chosen clock with the other inputs
 when reproducing a time-dependent result
-(`test/lib/fixtures.mjs:79-80`, `tools/capture.mjs:72`). Times expressed in
+(`test/lib/fixtures.mjs:85-86`, `tools/capture.mjs:72`). Times expressed in
 T-states are Z80 clock cycles. At 4 MHz one T-state is a quarter of a
 microsecond and four million T-states are one emulated second. A host
 wall-clock duration is a different measurement.
@@ -318,7 +318,7 @@ A>
 ```
 
 The pager's width/height setup and stop paths are in the shell's source
-(`drivers/shellio.asm:340-369`, `drivers/shellio.asm:445-497`). These screens are
+(`drivers/shellio.asm:345-374`, `drivers/shellio.asm:450-502`). These screens are
 model results. They do not establish what a physical GLCD shows.
 
 ## Fixtures, assertions and pinned inputs
@@ -335,21 +335,21 @@ test clock. `withDisplay` preserves an existing STARTUP.CMD. With matrix
 input and no PICO it can add GLCD.SVC and startup. With PICO and matrix
 input, a width other than the raw cold 40 can add a CON PICO line when
 startup is absent. The helper's default width argument remains 80
-(`test/lib/fixtures.mjs:21-26`, `test/lib/fixtures.mjs:115-143`).
+(`test/lib/fixtures.mjs:27-32`, `test/lib/fixtures.mjs:121-149`).
 
 `program` uses TAS, through `assembleProgram`, to assemble
 `test/programs/NAME.asm` and caches bytes and symbols under
 `build/test-programs`. Its key includes the origin, the first sixteen digits of
 TAS.COM's SHA-256 and a recursive digest of the source and included files. A changed included file changes the
 key. That key does not include every assembler or runtime dependency so it is
-not a complete artifact identity (`test/lib/fixtures.mjs:29-62`). `service`
-calls makeSvc for a resident image (`test/lib/fixtures.mjs:82-89`). Chapter 14
+not a complete artifact identity (`test/lib/fixtures.mjs:35-68`). `service`
+calls makeSvc for a resident image (`test/lib/fixtures.mjs:88-95`). Chapter 14
 describes that file writer.
 
 `standardCard` creates empty SYSTEM on A and WORK on B, with optional extra
 volumes. It is not the populated supplied starter. `volume` opens the payload
 as a CpmVolume and deliberately passes `readOnly: false`, allowing test setup
-to populate it (`test/lib/fixtures.mjs:64-77`). The shared CpmVolume library
+to populate it (`test/lib/fixtures.mjs:70-83`). The shared CpmVolume library
 also serves tecvol and the page. Its ordinary read rejects references beyond
 DSM and its write/erase enforce file attributes unless force is supplied
 (`tools/lib/cpmfs.mjs:128-173`, `tools/lib/cpmfs.mjs:175-233`). A fixture's
@@ -370,7 +370,7 @@ moved to the TEC-OS Viewer, which owns the page. Playwright stays pinned
 at 1.62.1 so that Chromium can be driven against the local page that
 `npm start` serves. The README gives `npx playwright install chromium` for
 that browser. The dependency test checks the declared and locked versions and
-that documented install (`README.md:74-78`, `package.json:28`,
+that documented install (`README.md:75-79`, `package.json:28`,
 `test/deps.test.mjs:15-27`). A run record must identify the installed browser
 and actual outcome. Dependency declarations alone establish neither.
 
@@ -383,7 +383,7 @@ and copies the page, style, one ROM and its symbols, recipe and distribution
 files (`web/build.mjs:1-45`). The page copies the starter recipe, so it runs the one card that media
 builds, with fifteen files including SHELL.SVC and DEMO.ASM. DEMO.COM is
 built from programs/DEMO.ASM on the card with `TAS DEMO`
-(`tools/media.mjs:200-253`, `web/build.mjs:41-42`).
+(`tools/media.mjs:200-257`, `web/build.mjs:41-42`).
 
 Each animation frame targets 4 MHz for the elapsed wall time, capped at 100 ms.
 Every 1,024 instructions it checks a 30 ms execution budget and can stop the
@@ -429,7 +429,7 @@ does not perform that flush itself.
 ## From a model result to a board observation
 
 The transcripts and T-state figures in this book are model evidence. The offered
-README also records model-only execution (`README.md:28-29`). A source
+README also records model-only execution (`README.md:29-30`). A source
 assertion describes a condition to check. A recorded passing run establishes
 that condition only for its actual ROM, runtime, inputs and exercised paths.
 A matching code range at a later pin cannot transfer that result to a new

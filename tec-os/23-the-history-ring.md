@@ -23,7 +23,7 @@ You can recall whole command lines even after newer input has overwritten
 older history. The shell, `SHELL.SVC`, keeps those lines in a 256-byte ring
 in its own pages. When an insertion cuts through an old line, the remaining
 fragment is cleared before recall can reach it
-(`drivers/shellio.asm:572-634`). The ROM's line input, BDOS function 10,
+(`drivers/shellio.asm:577-639`). The ROM's line input, BDOS function 10,
 offers the keys and calls the shell to store and fetch lines. Without the
 shell there is no ring and `^W` and `^N` recall nothing.
 
@@ -31,31 +31,31 @@ shell there is no ring and `^W` and `^N` recall nothing.
 
 The ring is the last page of the shell's memory. `RING` is the first page
 boundary above the shell's own stack, and the shell's extra RAM ends 256
-bytes later (`drivers/shell.asm:700-707`). Each entry contains a line's
+bytes later (`drivers/shell.asm:789-796`). Each entry contains a line's
 characters followed by a zero byte. `HHEAD` is the offset where the next
 entry will start, and `HPOS` the offset of the terminator of the line being
 shown. Both are bytes among the shell's variables, below the ring
-(`drivers/shell.asm:667-688`). After an insertion `HHEAD` points immediately
-past the newest entry's zero (`drivers/shellio.asm:614-623`).
+(`drivers/shell.asm:710-731`). After an insertion `HHEAD` points immediately
+past the newest entry's zero (`drivers/shellio.asm:619-628`).
 
 The high byte of a ring address is `HIGH(RING)` throughout. Only the low
 byte changes as a routine steps along the page. `INC L` advances from offset
 `FFh` to `00h` so a line can continue across the end of the page without a
-separate wrap test (`drivers/shellio.asm:578-579`,
-`drivers/shellio.asm:614-619`). A line's position in this order is
+separate wrap test (`drivers/shellio.asm:583-584`,
+`drivers/shellio.asm:619-624`). A line's position in this order is
 independent of whether its address is above or below another line's
 address.
 
 The byte at `HHEAD` is also zero. Together with the newest line's terminator
 at `HHEAD − 1`, it forms an empty entry between the newest and oldest lines.
 A backwards scan stops at that empty entry instead of continuing around the
-page into the newest line again (`drivers/shellio.asm:516-523`,
-`drivers/shellio.asm:563-570`). The ring therefore needs a zero beyond the
+page into the newest line again (`drivers/shellio.asm:521-528`,
+`drivers/shellio.asm:568-575`). The ring therefore needs a zero beyond the
 bytes occupied by its entries.
 
 A line costs its character count plus a terminator. `DIR` occupies four
 bytes. The shell reads a typed line with a capacity of 127 characters, so a
-longest line occupies 128 bytes of the ring (`drivers/shell.asm:274-280`).
+longest line occupies 128 bytes of the ring (`drivers/shell.asm:276-282`).
 Long commands displace more history than short ones. There is no fixed
 count of stored lines.
 
@@ -68,9 +68,9 @@ switch.
 A program and the shell both call BDOS function 10 to read a line. The ROM
 marks the shell's call. `SHLINE` sets `HFLAG` to `FFh` before it calls the
 shell's `LINE` entry and clears it after `LINE` returns
-(`src/cpm/ccp.asm:250-281`, `src/ram.asm:229`). `LINE` reads a typed line
+(`src/cpm/ccp.asm:251-282`, `src/ram.asm:229`). `LINE` reads a typed line
 with function 10 only when no piece, startup line or script line is waiting
-(`drivers/shell.asm:234-280`). That call is the only one that can see the
+(`drivers/shell.asm:236-282`). That call is the only one that can see the
 flag set.
 
 Function 10 completes a line at Return, at a line feed or when the buffer
@@ -91,14 +91,14 @@ A typed line of several pieces is stored as the whole line, including its
 `!` and `&`. Its pieces add no entries because the shell takes them from
 its own copy of the line. A line supplied through function 47, a script
 line and a startup line also bypass the marked function-10 call
-(`drivers/shell.asm:174-232`, `drivers/shell.asm:241-272`). History is empty
+(`drivers/shell.asm:176-234`, `drivers/shell.asm:243-274`). History is empty
 after the shell installs, since its `INIT` clears its variables and the ring
-(`drivers/shell.asm:70-85`), until you complete a nonempty prompt line that
+(`drivers/shell.asm:72-87`), until you complete a nonempty prompt line that
 passes `HSTORE`'s checks.
 
 The stored bytes keep the case you typed. `HSTORE` runs before function 10
 returns to the shell, which only afterwards converts a piece's letters to
-capitals (`src/cpm/bdos.asm:654-661`, `drivers/shell.asm:421-424`, `drivers/shell.asm:492-505`). In this
+capitals (`src/cpm/bdos.asm:654-661`, `drivers/shell.asm:426-429`, `drivers/shell.asm:492-505`). In this
 PICO9918 screen capture, recalling `con` preserves the small letters:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen con "@start "$'\x17' -->
@@ -114,21 +114,21 @@ A>
 
 A zero inside a line would end recall before the rest of its characters.
 `HSTORE` checks every incoming character as it compares the line and
-leaves the ring unchanged if it meets a zero (`drivers/shellio.asm:588-591`,
-`drivers/shellio.asm:636-639`). That check occurs before any new bytes are
+leaves the ring unchanged if it meets a zero (`drivers/shellio.asm:593-596`,
+`drivers/shellio.asm:641-644`). That check occurs before any new bytes are
 written so a rejected line cannot leave a partial entry.
 
 Consecutive duplicates also consume no new space. `HSTORE` first locates
 the newest entry from its terminator at `HHEAD − 1`. It calls `HSTART`,
 which scans backwards until the preceding byte is zero. On return `L`
-points to the entry's first byte (`drivers/shellio.asm:578-583`,
-`drivers/shellio.asm:563-570`). This scan also handles an empty entry by
+points to the entry's first byte (`drivers/shellio.asm:583-588`,
+`drivers/shellio.asm:568-575`). This scan also handles an empty entry by
 returning its original offset.
 
 The comparison reads the newest entry alongside the incoming line. `C`
 counts differing bytes. A duplicate requires both a zero difference count
 and equal lengths, checked by comparing the final offset with `HHEAD − 1`
-(`drivers/shellio.asm:586-608`). Repeating the newest command therefore
+(`drivers/shellio.asm:591-613`). Repeating the newest command therefore
 leaves its existing entry in place. In this capture `CON` was typed twice
 before `DIR *.CMD`. Three `^W` presses reached `CON` and then stopped because
 there were only two entries:
@@ -149,13 +149,13 @@ A>
 
 For an accepted line, `HSTORE` writes each character from `HHEAD` forwards.
 It adds the zero terminator and advances `HHEAD` to the next byte
-(`drivers/shellio.asm:609-623`). That byte may still contain part of an
+(`drivers/shellio.asm:614-628`). That byte may still contain part of an
 older line. Returning at this point would permit recall of a suffix whose
 first characters had already been overwritten.
 
 `HSCLR` removes that suffix. It reads the byte at the new `HHEAD`, writes
 zero over it and advances. The loop continues until it has also cleared a
-byte that was already zero (`drivers/shellio.asm:625-634`). When an insertion
+byte that was already zero (`drivers/shellio.asm:630-639`). When an insertion
 partly overwrote an old entry, that existing zero was its terminator. The
 whole remainder of the entry is erased. When the new `HHEAD` already held
 zero, the loop clears that byte and ends immediately.
@@ -168,14 +168,14 @@ before wrapping into newer text.
 
 History storage is the shell's, and the ROM calls it through the shell's
 table of four words: `LINE`, `PAGE`, `HREC` and `HSTORE`
-(`drivers/shell.asm:59-62`, `docs/shell.md:176-208`). `SHENT` reads a word of
+(`drivers/shell.asm:61-64`, `docs/shell.md:283-315`). `SHENT` reads a word of
 that table from the address the ROM keeps for the hook
-(`src/cpm/ccp.asm:283-293`). There is no history entry in the numbered-
+(`src/cpm/ccp.asm:284-294`). There is no history entry in the numbered-
 service table.
 
 `HREC` and `HSTORE` run on the BDOS's stack, inside function 10, and neither
 may call the BDOS. The shell declares 6 bytes of the BDOS's stack for them
-(`docs/shell.md:202-203`, `drivers/shell.asm:30-41`).
+(`docs/shell.md:309-310`, `drivers/shell.asm:32-43`).
 
 ## Recall in the line buffer
 
@@ -188,7 +188,7 @@ characters, as in CP/M 2.2 (`src/cpm/bdos.asm:473-490`).
 
 `HPOS` is the offset of the terminator of the entry currently shown. The
 shell's `LINE` sets it to `HHEAD`, the empty entry, at each call
-(`drivers/shell.asm:166-167`). You can move backwards from there through
+(`drivers/shell.asm:168-169`). You can move backwards from there through
 older entries with `^W` and then forwards with `^N`. Moving forwards past
 the newest entry selects the empty entry again.
 
@@ -196,18 +196,18 @@ For `^W`, `HREC` calls `HSTART` on the shown entry's terminator. It then
 steps back to the previous entry's terminator and one byte further to test
 its last character. A zero there means the previous entry is empty, so
 `HREC` returns carry and the current line is unchanged
-(`drivers/shellio.asm:509-524`). At the oldest line, another `^W` leaves the
+(`drivers/shellio.asm:514-529`). At the oldest line, another `^W` leaves the
 buffer and its edited text as they are.
 
 For `^N`, `HREC` first compares `HPOS` with `HHEAD`. Equality means there is
 no newer entry to show, so it returns carry. Otherwise it advances through
 the ring to the next zero, which terminates the next entry
-(`drivers/shellio.asm:526-536`). The zero at `HHEAD` follows the newest
+(`drivers/shellio.asm:531-541`). The zero at `HHEAD` follows the newest
 terminator. Selecting it gives an empty line.
 
 `HRSHOW` stores the new `HPOS`, calls `HSTART` to find the entry's beginning
 and copies the entry, zero-ended, into the shell's line text, `LTXT`, and
-returns its address in HL (`drivers/shellio.asm:538-558`). `LTXT` is the
+returns its address in HL (`drivers/shellio.asm:543-563`). `LTXT` is the
 buffer that function 10 is filling for the shell. Back in the ROM, `LINHR`
 calls `LINERASE`, which backs up `LINPTR` and reduces `LINCNT` to zero,
 erasing each character with backspace, space and backspace through the BIOS
@@ -265,7 +265,7 @@ A>
 
 A reset enters cold boot, which forgets every service, the shell among them.
 The startup file's `SHELL.SVC` line installs a new copy, whose `INIT` clears
-its variables and its ring (`drivers/shell.asm:70-85`). Both the ring byte at
+its variables and its ring (`drivers/shell.asm:72-87`). Both the ring byte at
 offset `00h` and its predecessor at `FFh` are then zero, the same empty-entry
 boundary that insertion preserves. A recognised reset retains only the drive
 selection, so the history goes too. In this run `^W` and Return after the
@@ -291,8 +291,8 @@ A>
 `HREC` started from the empty entry at `HHEAD`. Its backwards test found
 zero before any stored line, so it returned carry without replacing the
 empty buffer. The Return then completed an empty line, and the shell gave
-another prompt (`drivers/shell.asm:294-297`, `drivers/shell.asm:507-527`).
+another prompt (`drivers/shell.asm:296-299`, `drivers/shell.asm:520-540`).
 
 `UNLOAD` with the shell as the newest service removes it, and its pages and
 ring with it. The ROM's prompt then returns, and `^W` and `^N` enter the
-line as characters, since nothing sets `HFLAG` (`docs/shell.md:156-160`).
+line as characters, since nothing sets `HFLAG` (`docs/shell.md:263-267`).

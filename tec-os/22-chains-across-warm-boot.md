@@ -33,11 +33,11 @@ Everything a line needs to survive a program's exit is outside that span.
 The shell holds the line it is working through. `LTXT` is its text, up to
 127 characters and a zero, `LPOS` the address of the next piece or 0 when
 none remains, and `LCOND` nonzero when that piece follows a run of `&` alone
-(`drivers/shell.asm:649-702`). These are variables in the shell's own pages,
+(`drivers/shell.asm:692-791`). These are variables in the shell's own pages,
 a resident service's memory below the TPA's ceiling, so neither warm boot
 nor a program's normal use of the TPA reaches them. `LORG` holds the line's
 origin, `FFh` for a line of `STARTUP.CMD` and 0 otherwise, and is passed
-with each piece (`drivers/shell.asm:159-165`, `drivers/shell.asm:514-527`).
+with each piece (`drivers/shell.asm:161-167`, `drivers/shell.asm:527-540`).
 
 The ROM keeps its command buffer below `CCPCLR`. That span is 202 bytes:
 two 36-byte FCBs, the maximum-length byte `CMDBUF`, the input-length byte
@@ -49,26 +49,26 @@ program's warm boot there until the next prompt.
 `CHPOS` is above the RAM BIOS table, outside the clear. It holds
 two flags: bit 0 when a function 47 line waits in `CMDTXT`, and bit 1 when
 the rest of the line has been dropped. The 16-bit return code `PRGCODE` is
-in that upper block too (`src/ram.asm:398-403`, `src/ram.asm:365-366`). The
+in that upper block too (`src/ram.asm:399-404`, `src/ram.asm:366-367`). The
 address of the shell's table, `SHOWN`, which tells the ROM a shell holds
-the prompt, is beside them (`src/ram.asm:381`).
+the prompt, is beside them (`src/ram.asm:382`).
 
 Cold boot clears the entire resident workspace from `WSBASE` through the span
 ending at `WSEND`. That includes `CMDTXT`, `CHPOS`, `PRGCODE` and `SHOWN`, and
 cold boot forgets every service, so a reset starts with no shell, no line in
-hand and a zero result (`src/boot.asm:61-65`, `docs/shell.md:162-164`). The
+hand and a zero result (`src/boot.asm:61-65`, `docs/shell.md:269-271`). The
 startup file then installs the shell again.
 
 ## The line and tail limits
 
 A line must also fit the command tail prepared for each program. The shell
 reads a typed line with a capacity of 127 characters, and a script or
-startup line keeps its first 127 (`drivers/shell.asm:274-280`,
+startup line keeps its first 127 (`drivers/shell.asm:276-282`,
 `drivers/shellio.asm:70-114`). Function 47 requires a zero within its first
 128 bytes, giving the same 127-character maximum, and the shell copies at
-most 127 bytes of it (`src/cpm/bdos.asm:66-84`, `drivers/shell.asm:178-186`).
+most 127 bytes of it (`src/cpm/bdos.asm:66-84`, `drivers/shell.asm:180-188`).
 `SHLINE` writes a zero at the ROM buffer's last byte after each `LINE` call,
-so a piece handed to the ROM is bounded (`src/cpm/ccp.asm:274-276`).
+so a piece handed to the ROM is bounded (`src/cpm/ccp.asm:275-277`).
 
 A program name occupies at least one character of its piece, leaving at most
 126 for the tail. `PREPPAGE` copies that tail to `0081h` and appends a zero.
@@ -76,7 +76,7 @@ At the maximum length, the zero lands at `00FFh`. One further character would
 put it at `0100h`, over the program's first byte (`src/cpm/ccp.asm:18-24`,
 `src/cpm/ccpcmd.asm:402-445`). Loading precedes `PREPPAGE` so the limit
 protects code already in memory. The load-drive byte at `0050h` lies below
-the tail and is written separately before entry (`src/cpm/ccp.asm:453-472`,
+the tail and is written separately before entry (`src/cpm/ccp.asm:454-473`,
 `src/layout.asm:56-62`).
 
 ## The next command source
@@ -85,9 +85,9 @@ After a command or warm boot, `MAINLOOP` restores the CCP stack and calls
 `SAVEDU`, which records the current drive and user area at `0004h`. With a
 shell holding the hook, `SHLINE` sets `HFLAG` for one history line, passes
 `CHPOS`'s flags in A, clears them, and calls the shell's `LINE` with `DE`
-at `CMDTXT` (`src/cpm/ccp.asm:110-124`, `src/cpm/ccp.asm:250-281`). `LINE`
+at `CMDTXT` (`src/cpm/ccp.asm:110-124`, `src/cpm/ccp.asm:251-282`). `LINE`
 takes its own stack and then finds the next piece from the first available
-source in this order (`drivers/shell.asm:159-298`):
+source in this order (`drivers/shell.asm:161-300`):
 
 1. With bit 1 set, the rest of the line in hand is dropped: `LPOS` becomes 0.
 2. With bit 0 set, the function 47 line in `CMDTXT` replaces the line in
@@ -104,12 +104,12 @@ started during startup. The example below uses three startup lines after
 the shell's:
 
 ```sh
-printf 'SHELL.SVC\nDIR *.CMD &TYPE STARTUP.CMD\nNOSUCH.SVC &MOUNT\nUSER 0\n' > startup.cmd
+printf 'SHELL.SVC\nDIR *.CMD &TYPE STARTUP.CMD\nNOSUCH.SVC &CD\nUSER 0\n' > startup.cmd
 cp dist/starter.img start.img
 node tools/tecvol.mjs put start.img A startup.cmd --text
 ```
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card start.img -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card start.img -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -134,21 +134,21 @@ A>
 ```
 
 The first `DIR` succeeds so its `TYPE STARTUP.CMD` runs before the
-`NOSUCH.SVC` line. That service file is missing, so its `MOUNT` is skipped,
+`NOSUCH.SVC` line. That service file is missing, so its `CD` is skipped,
 not echoed, and the shell proceeds to `USER 0`, the file's last line. The
 path back to the file depends on `LPOS` being 0, not on the previous command
-having succeeded (`drivers/shell.asm:198-264`).
+having succeeded (`drivers/shell.asm:200-266`).
 
 The ROM's own startup line, the first, is echoed whole through BDOS
 function 9, so a `$` ends that echo but not the line. The shell echoes each
 later line whole after its prompt and each later piece at its own prompt,
 with no `$` limit (`src/cpm/ccpcmd.asm:850-875`,
-`drivers/shell.asm:241-264`, `drivers/shell.asm:227-232`). The quiet
+`drivers/shell.asm:243-266`, `drivers/shell.asm:229-234`). The quiet
 absent-device exception changes the result too: on this serial-only board,
-replacing `NOSUCH.SVC` with `GLCD.SVC` would leave success and allow `MOUNT`
+replacing `NOSUCH.SVC` with `GLCD.SVC` would leave success and allow `CD`
 to run. The ROM tests both the line's origin, which the shell passes back
 as `FFh`, and the absent-device installation result before taking that
-quiet path (`src/cpm/ccp.asm:395-411`). Chapter 26 explains the full
+quiet path (`src/cpm/ccp.asm:396-412`). Chapter 26 explains the full
 startup and display rules.
 
 ## Finding and taking a piece
@@ -157,8 +157,8 @@ startup and display rules.
 `Z` at the line's zero, so empty lines and lines of spaces and `!` need no
 separate case. A line whose first piece starts with `&` would test the
 previous line's result, so `LEAD` drops the line, folds the word and rejects
-it through `BADW` as `&WORD?` with `FF00h` (`drivers/shell.asm:300-317`,
-`drivers/shellio.asm:188-205`).
+it through `BADW` as `&WORD?` with `FF00h` (`drivers/shell.asm:302-319`,
+`drivers/shellio.asm:186-203`).
 
 `SPLIT` takes the piece at `HL`. It scans forwards, keeping in `DE` the end
 of the last byte that is not a blank, until the line's zero, a `!`, or an `&`
@@ -168,14 +168,14 @@ blanks in front of its separator. It then passes over the whole run of
 blanks, `&` and `!` that follows. A `!` anywhere in the run makes the next
 piece unconditional, and a run of `&` alone makes it conditional. `LPOS`
 becomes the next piece's address and `LCOND` records how it runs, or `LPOS`
-becomes 0 at the line's end (`drivers/shell.asm:319-411`).
+becomes 0 at the line's end (`drivers/shell.asm:321-413`).
 
 A piece after the first goes to `LNRUN`, which prints the prompt and the
 piece as typed with `PUTZ`, up to the zero `SPLIT` wrote. A function 47
 line's first piece takes the same path, so it is echoed too. A typed line's
 first piece was already echoed by function 10, and a script's line is echoed
 whole before its first piece, so `FIRST` takes them without another echo
-(`drivers/shell.asm:227-232`, `drivers/shell.asm:292-298`).
+(`drivers/shell.asm:229-234`, `drivers/shell.asm:294-300`).
 
 `BUILTIN` folds the piece's letters to capitals and compares its first word
 with COPY, DEL and SERVICES, a word ending at a blank or the piece's end. A
@@ -183,15 +183,15 @@ match runs the shell's own handler. Otherwise `SCRCHK` parses the word as a
 file name, and a type of `CMD` opens a script. Anything else goes to `HAND`,
 which copies the piece, zero-ended, to the ROM's buffer, puts back the
 CCP's stack and returns the line's origin to `SHLINE`
-(`drivers/shell.asm:421-527`).
+(`drivers/shell.asm:426-540`).
 
 The ROM then runs the piece as a typed line. `MLSKIP` passes over spaces,
 and an empty piece returns to the prompt. `MLTAKE` sets `ARGSTRT`, converts
 letters to capitals to the zero and clears `PRGCODE` for the new command. A
 drive letter and colon alone select that drive. Other text reaches
 `NOTDRIVE`, which compares the ROM's built-in names and otherwise loads a COM
-program or installs an SVC service (`src/cpm/ccp.asm:184-247`,
-`src/cpm/ccp.asm:338-440`). Chapter 21 explains program search and launch.
+program or installs an SVC service (`src/cpm/ccp.asm:184-248`,
+`src/cpm/ccp.asm:339-441`). Chapter 21 explains program search and launch.
 `LPOS` is already set before any of those commands runs.
 
 A built-in reads from `ARGSTRT`, and a loaded program receives a copy of only
@@ -202,11 +202,11 @@ An ordinary program exit reaches warm boot through the inherited return
 word, a jump to `0000h` or BDOS function 0. After a successful flush, the
 next `LINE` call resumes at `LPOS`. The ROM's built-ins return through
 `MAINLOOP` or `STARTED` and use the same `LINE` call
-(`src/cpm/ccp.asm:94-124`, `src/cpm/ccp.asm:466-472`,
+(`src/cpm/ccp.asm:94-124`, `src/cpm/ccp.asm:467-473`,
 `src/cpm/bdos.asm:216-221`, `src/boot.asm:141-152`). The shell's own
 built-ins end through `CODED`, which sets the return code with function 108
 and hands the ROM an empty line, so the ROM prints the next prompt's new line
-and calls `LINE` again with the code untouched (`drivers/shell.asm:572-594`).
+and calls `LINE` again with the code untouched (`drivers/shell.asm:576-598`).
 
 ## The result before the next piece
 
@@ -215,12 +215,12 @@ clears it for the new command. At `LN2`, with `LCOND` set, the shell reads
 the code with function 108, `DE = FFFFh`. A high byte below `FFh` accepts
 the piece. When the high byte is `FFh` the low byte decides: `FFh` accepts
 `FFFFh`, and any other value is a failure, so `FF00h` through `FFFEh` fail
-(`drivers/shell.asm:198-224`).
+(`drivers/shell.asm:200-226`).
 
 A failure skips the piece. `SPLIT` still runs on it to find the next
 separator, but nothing is echoed or handed to the ROM, and the code is left
 as it was. The next conditional piece therefore tests the same code, and a
-piece after `!` runs (`drivers/shell.asm:218-224`). The ROM's clear at
+piece after `!` runs (`drivers/shell.asm:220-226`). The ROM's clear at
 `MLTK3` occurs only when a piece is taken, so a program begins with a zero
 code (`src/cpm/ccp.asm:220-223`).
 
@@ -234,30 +234,30 @@ zero through `RETZERO` (`src/cpm/bdos.asm:124-134`,
 
 There is one shared return code. The ROM's explicit stores are in `FNRETC`,
 `MLTK3` and `ERRGO`. Cold boot also zeros its workspace location
-(`src/cpm/bdos.asm:264`, `src/cpm/ccp.asm:221-222`, `src/cpm/ccp.asm:562-565`,
+(`src/cpm/bdos.asm:264`, `src/cpm/ccp.asm:221-222`, `src/cpm/ccp.asm:563-566`,
 `src/boot.asm:61-65`). The shell's built-ins store theirs through function
 108 in `CODED`. A program that leaves the code untouched returns the zero
 established when its piece was taken.
 
 `ERRGO` stores `RCFAIL`, or `FF00h`, before printing the error message.
 `BADCMD` echoes the failed command or argument with a question mark and falls
-through to that store (`src/cpm/ccp.asm:26-30`, `src/cpm/ccp.asm:535-567`).
+through to that store (`src/cpm/ccp.asm:26-30`, `src/cpm/ccp.asm:536-568`).
 `NO FILE` from `FILENO`, `FILE EXISTS` from REN and `NO SPACE` from SAVE all
 use `ERRGO` (`src/cpm/ccpfile.asm:412-420`, `src/cpm/ccpmut.asm:144-149`,
 `src/cpm/ccpcmd.asm:383-390`). Missing programs, failed loads and
 unsuccessful service installations reach `BADCMD` too. Startup's quiet
 absent-device service path instead returns through `SVCOK` with the initial
-zero (`src/cpm/ccp.asm:395-411`). The shell's `BADW` prints its refusals in
+zero (`src/cpm/ccp.asm:396-412`). The shell's `BADW` prints its refusals in
 the same form and sets `FF00h`, and COPY's four error messages go through
 `ERRMSG` to the same failure code. A successful COPY ends through `BDONE`
-with 0 (`drivers/shell.asm:550-604`, `drivers/shellcmd.asm:131-155`).
+with 0 (`drivers/shell.asm:554-608`, `drivers/shellcmd.asm:130-154`).
 
 ## Cancellation instead of continuation
 
 Cancelling a line clears `LPOS`. The text can remain in `LTXT` because the
 next-piece check no longer selects it. The ROM cannot reach the shell's
 variables, so it sets bit 1 of `CHPOS` and the shell clears `LPOS` at its
-next `LINE` call (`drivers/shell.asm:168-172`). The BDOS uses `CHDROP`, which
+next `LINE` call (`drivers/shell.asm:170-174`). The BDOS uses `CHDROP`, which
 sets that bit and jumps through the RAM BIOS warm-boot entry `BIOWBT`
 (`src/cpm/bdos.asm:96-106`). Three paths reach `CHDROP`:
 
@@ -287,7 +287,7 @@ bit 5 of the key with `AND DFh`, then compares the result with `03h`, `1Bh`
 and `Q`. This makes `^C`, Esc, `Q` and `q` stop the listing. It also maps
 `#` to `^C` and `;` to Esc. `^C` and `#` go through `PGDROP`, which clears
 `LPOS` directly. Esc, `;`, `Q` and `q` go straight to `PGSTOP`, leaving the
-next piece available (`drivers/shellio.asm:445-497`).
+next piece available (`drivers/shellio.asm:450-502`).
 
 Both stop paths return carry set through `PAGE`. DIR and TYPE use that carry
 to finish the listing and return through `STARTED`, as at an ordinary
@@ -299,14 +299,14 @@ Warm boot can cancel a line after a program has already ended. `WBOOTR`
 calls `CWBOOT` before entering the CCP. `CWBOOT` calls `CFLALL` to attempt
 all dirty cache lines, A:'s pending block among them. If a write fails,
 that cache line is dropped. On any failure `CWBOOT` sets the drop flag and
-prints `Write lost` once (`src/boot.asm:149-152`, `src/cache.asm:613-629`).
+prints `Write lost` once (`src/boot.asm:149-152`, `src/cache.asm:624-640`).
 A successful flush leaves the line in hand. Chapter 19 explains the
 card-write consequences.
 
 A drop ends only the current line. A script, or the rest of `STARTUP.CMD`,
 goes on with its next line, since `LINE` falls through to `NEXT` with
-`LPOS` at 0 (`drivers/shell.asm:168-172`, `drivers/shell.asm:241-264`,
-`docs/shell.md:79-82`). A reset instead removes the shell with every other
+`LPOS` at 0 (`drivers/shell.asm:170-174`, `drivers/shell.asm:243-266`,
+`docs/shell.md:85-88`). A reset instead removes the shell with every other
 service and clears the workspace, so cold boot starts with no line.
 
 ## A replacement line from function 47
@@ -335,14 +335,14 @@ The normal warm-boot path flushes pending writes before the next prompt.
 Only a successful flush guarantees that those writes reached the card. A
 failure drops failed lines, reports `Write lost` and writes 2 to `CHPOS`.
 That store clears the function 47 flag, so the shell drops the line in hand
-and the supplied line does not run either (`src/cache.asm:623-629`,
-`drivers/shell.asm:168-196`). An accepted function-47 call ends the caller
+and the supplied line does not run either (`src/cache.asm:634-640`,
+`drivers/shell.asm:170-198`). An accepted function-47 call ends the caller
 but does not guarantee execution of the supplied command.
 
 At the next prompt `SHLINE` passes bit 0 to `LINE`, which copies at most 127
 bytes from `CMDTXT` into `LTXT`, marks its origin as typed and starts it at
 `LEAD`. Its first piece runs whatever the calling program's code was, and
-its later pieces follow the rules above (`drivers/shell.asm:174-196`).
+its later pieces follow the rules above (`drivers/shell.asm:176-198`).
 Register `E` selects no additional operation in this implementation. The
 next command uses the drive and user area from `0004h`, passed in `C` by
 warm boot (`src/boot.asm:150-152`, `src/cpm/ccp.asm:46-88`).
@@ -350,10 +350,10 @@ warm boot (`src/boot.asm:150-152`, `src/cpm/ccp.asm:46-88`).
 The copy replaces the old line and its position, so none of its later pieces
 survives. An empty supplied line is valid: its first byte is zero. `LEAD`
 then finds no piece and the shell proceeds to the next startup or script
-line or keyboard input (`drivers/shell.asm:186-188`).
+line or keyboard input (`drivers/shell.asm:188-190`).
 
 With no shell, the ROM's prompt takes the function 47 line itself.
 `MLDRV` reads and clears `CHPOS`, and with bit 0 set `MLCHN` echoes
 `CMDTXT` to its zero and runs it whole as one command, so `TYPE X!TYPE Y` is
 `TYPE` with the tail `X!TYPE Y` (`src/cpm/ccp.asm:138-182`,
-`docs/shell.md:37-38`).
+`docs/shell.md:41-42`).

@@ -84,9 +84,8 @@ so the `GLCD.SVC` line leaves it selected. You begin typing at the final
 prompt and press Return. The prompt itself is already on the screen and is
 not part of the command. In the same session the listing was:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen DIR,
-     screen rows 10–16. Earlier boot rows omitted; unused rows below the
-     prompt omitted. -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs --board pico --screen DIR,
+     the screen's last rows. Earlier rows omitted. -->
 ```text
 A>DIR
 MOUNT.COM    SHELL.SVC    GLCD.SVC
@@ -98,22 +97,24 @@ MON3.SVC     HELLO3.BIN   HELLO3.ASM
 A>
 ```
 
-Each name has up to eight characters followed by a type of up to three
-characters. A full stop separates the two when you type a name. In
+The listing starts after a blank line and gives one file a row, with its
+size in bytes. Each name has up to eight characters followed by a type of up
+to three characters. A full stop separates the two when you type a name. In
 `SAMPLE.ASM`, SAMPLE is the name and ASM is the type. The `.ASM` file holds
 source text. A `.COM` file holds a program that TEC-OS can run.
 
 `TAS` is the assembler supplied on the card. It turns source text into a
-program. `TED` is the supplied text editor and `MOUNT` manages volumes.
+program. `TED` is the supplied text editor.
 `BAZA` is a BASIC compiler, which uses its library `BAZA.RTL`, and
 `TIMES.BAS` is a BASIC program for it. The automatic display setup uses
 `GLCD.SVC` and `STARTUP.CMD`, and `SHELL.SVC` is the shell. Leave them as
 supplied for this session. The other files are demonstrations, which
 [More on the card](#more-on-the-card) lists.
 
-The last line reports the number of files and the free space on A. That
-space is in KiB, units of 1,024 bytes. The spelling `912K` is the listing's notation.
-The card's WORK volume on B starts empty and is available for your files.
+The last two lines report the number of files and their bytes, and the free
+space on A with the drive's volume, `A:SYSTEM`. The prompt shows the same
+pair: `A:SYSTEM>` means drive A, holding the volume SYSTEM. The card's WORK
+volume on B starts empty and is available for your files.
 
 ## Correcting and recalling a line
 
@@ -141,8 +142,9 @@ the shell, which keeps the lines you type. Without the shell, as after the
 startup bypass of Chapter 8, the other keys still work and recall does not.
 
 A mistyped command can fail with a question mark after its name. The command
-has then finished and the prompt is ready for a corrected line. `^C` has a
-different use at an empty prompt, described at the end of this session.
+has then finished and the prompt is ready for a corrected line. `^C` at an
+empty prompt starts a *warm boot*, which restarts the command processor and
+returns to the prompt.
 
 ## Drive A and drive B
 
@@ -241,37 +243,24 @@ keeps in memory.
 ## Saved work before reset or removal
 
 A program can report that it has saved a file while some changes remain in
-memory. WORK on B permits this delayed writing. Resetting the machine or
-removing power discards changes that have not reached the card. On A a
-program's writes into one 512-byte block of the card wait in memory until
-the program closes the file, uses the directory, writes another block,
-reads the console or ends. The prompt's own console read writes that block,
-so the precaution below is the same on A.
+memory. TEC-OS holds the writes of the drive you are on in memory and writes
+them to the card later. Resetting the machine or removing power discards
+changes that have not reached the card. Whenever TEC-OS waits for a key,
+though, it first writes every change it holds, on every drive. The prompt
+waits for a key, so at the prompt everything is on the card.
 
-Finish the program and return to the prompt before ending the session. At an
-empty prompt, Ctrl and C together, written `^C`, starts a *warm boot*: TEC-OS
-attempts pending card writes and returns to the prompt. A successful ending looks like this:
-
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs ^C, the serial console's text. -->
-```text
-A>^C
-A>
-```
-
-If a line is partly typed or recalled, `^X` erases it first. `^C` is ignored
-while that line still contains characters. You do not press Return after the
-empty-prompt `^C` action. Wait for the new prompt before switching off,
-pressing reset or removing the card.
+Finish the program and wait for the prompt before switching off, pressing
+reset or removing the card. Only a program still running, one that never
+waits for a key, can hold changes in memory.
 
 A `Write lost` message means that some pending changes could not be written.
 The new prompt after that message does not establish successful preservation.
-Those failed changes have been dropped so another `^C` cannot recover them.
+Those failed changes have been dropped and cannot be recovered.
 Keep a separate copy of valuable work. [Chapter 6](06-cards-on-the-pc.md)
 explains card copies and recovery and
 [Appendix D](appendix-d-error-messages.md) explains the failure messages.
 
-Only a successful completion brings pending saved changes up to date on the
-card. Save the file and exit an editor normally before this step. `^C` cannot
+Save the file and exit an editor normally before this step. The prompt cannot
 preserve edits that exist only inside the editor.
 
 The card must be out of the TEC-1G before you change it on a PC. After putting

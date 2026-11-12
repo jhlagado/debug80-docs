@@ -136,7 +136,7 @@ The BIOS keeps one received character in `RXCHAR`, with `RXFULL` marking
 it ready. These bytes are above the RAM BIOS table. Serial reception and
 keyboard delivery both publish there. `CINTAKE` returns the character and
 clears the flag or advances a queued arrow sequence while leaving the
-flag set (`src/ram.asm:295-297`, `src/ram.asm:415-416`,
+flag set (`src/ram.asm:295-297`, `src/ram.asm:416-417`,
 `src/console.asm:201-209`,
 `src/console.asm:253-271`, `src/keyboard.asm:111-124`).
 
@@ -259,8 +259,8 @@ characters. Completion consumes `HFLAG` and passes a nonempty marked line to
 the shell's `HSTORE`. Abandoned empty-line `^C` instead clears the flag
 through warm boot. With no shell installed nothing sets the flag.
 [Chapter 23](23-the-history-ring.md) explains storage and traversal
-(`src/cpm/ccp.asm:250-281`, `src/cpm/bdos.asm:473-490`,
-`src/cpm/bdos.asm:645-662`, `src/boot.asm:398-403`, `docs/shell.md:194-208`).
+(`src/cpm/ccp.asm:251-282`, `src/cpm/bdos.asm:473-490`,
+`src/cpm/bdos.asm:645-662`, `src/boot.asm:398-403`, `docs/shell.md:301-315`).
 
 ## Serial bits and timing
 
@@ -369,8 +369,8 @@ service that scans the matrix itself writes the key it finds there, as
 `MON3.SVC` does, so a key held from a program is not read again as new
 when TEC-OS's scan resumes. The workspace byte's own label there is
 `KBSLOT`, and the build checks that the two addresses agree
-(`src/abi.inc:308-315`, `docs/services.md:433-444`,
-`src/ram.asm:425`).
+(`src/abi.inc:311-318`, `docs/services.md:433-444`,
+`src/ram.asm:426`).
 
 Two ordinary keys produce no character. A retained second key below 3 is
 a modifier and a modifier alone also produces none. Caps Lock toggles
@@ -411,7 +411,7 @@ A claimed PICO console suppresses that output before the terminal runs
 `VROW` and `VCOL` store the cursor position. `VPUT` writes a cell, `VGET`
 reads one and `VCLREOL` clears from a column to its row's end. `VRDROW`
 and `VWRROW` transfer a row through the 80-byte `LINEBUF`
-(`src/ram.asm:116-125`, `src/ram.asm:418-421`, `src/video.asm:30-78`).
+(`src/ram.asm:116-125`, `src/ram.asm:419-422`, `src/video.asm:30-78`).
 
 Printable bytes `20h–7Eh` are drawn with `VATTR` ORed into them.
 Reverse video sets `VATTR` to `80h`, selecting the reverse glyph.
@@ -544,7 +544,7 @@ page-operation routine and a final columns/rows pair. `PIVEC` and `GLVEC`
 hold the PICO and GLCD table addresses. The six routines are `VPUT`,
 `VGET`, `VCLREOL`, `VREST`, `VRDROW` and `VWRROW`
 (`src/video.asm:129-141`, `src/console.asm:111-119`,
-`src/ram.asm:342-343`).
+`src/ram.asm:343-344`).
 
 The PICO console has two name tables in video memory (VRAM). Page function 0
 shows the page already drawn. Functions 1 and 2 begin and end a row move. At the
@@ -579,10 +579,10 @@ register template, name-table address and row-address table for that width.
 `PIBLK` also contains the permanent registry-tail record `PICO`, version 4.
 A program finds it with `TNFIND`. Version 4 keeps version 3's table and
 state offsets. It also reserves VRAM `3000h–37FFh` from console writes at
-every width (`src/abi.inc:273-341`). `CON` changes width through `PICOWID`
+every width (`src/abi.inc:276-344`). `CON` changes width through `PICOWID`
 at offset 24 in its table. Width changes are rejected while the PICO is
 claimed (`src/pico.asm:19-42`, `src/pico.asm:81-155`,
-`src/cpm/ccpcmd.asm:134-171`, `src/abi.inc:273-283`).
+`src/cpm/ccpcmd.asm:134-171`, `src/abi.inc:276-286`).
 
 For an active CRT console, `TMSWID` temporarily sets `CONMOD` to serial
 while the IOBYTE still requests CRT. The next console call then copies
@@ -614,7 +614,7 @@ for that startup absent-device result. A typed `GLCD.SVC`
 installation can instead succeed while PICO remains the applied console.
 `SVCGO` keeps that mode when `CONMOD` is CRT, otherwise it selects UC1.
 A later `CON UC1` can select the loaded table without loading it again
-(`src/services.asm:540-556`, `src/cpm/ccp.asm:402-411`,
+(`src/services.asm:540-556`, `src/cpm/ccp.asm:403-412`,
 `src/loader.asm:873-922`).
 
 `VIDHOOK` rejects a nonzero table if the Matrix switch was disabled at

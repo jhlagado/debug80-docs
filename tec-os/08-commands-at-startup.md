@@ -72,12 +72,12 @@ existing file of the same name. Its `--text` option converts each line ending
 to CR and LF and appends the CP/M text-end marker, `^Z`:
 
 ```sh
-printf 'SHELL.SVC\nB:\nUSER 3\nmount\nDIR\nNOSUCH\nUSER 0\n' > startup.cmd
+printf 'SHELL.SVC\nB:\nUSER 3\ncd\nDIR\nNOSUCH\nUSER 0\n' > startup.cmd
 cp dist/starter.img lines.img
 node tools/tecvol.mjs put lines.img A startup.cmd --text
 ```
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card lines.img -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card lines.img -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -101,13 +101,11 @@ B>
 ```
 
 Each line is echoed as it appears in the file before it runs. That is why
-`mount` is lowercase in this capture. `B:` changes the drive and `USER 3`
-changes the user area for subsequent lines. `DIR` therefore lists area 3 of
-B, which is empty.
-
-`MOUNT.COM` is in area 0 of A. The program search described in Chapter 5
-still finds it from area 3 of B. `NOSUCH` prints its usual error and the
-next line runs. `USER 0` leaves the first interactive prompt at `B>`.
+`cd` is lowercase in this capture. The shell folds a command's first word to
+capitals to match its own commands, so `cd` is its `CD`, which shows the
+current drive's volume. `B:` changes the drive and `USER 3` changes the user
+area for subsequent lines. `DIR` therefore lists area 3 of B, which is empty.
+`NOSUCH` prints its usual error and the next line runs. `USER 0` leaves the first interactive prompt at `B>`.
 TEC-OS takes the next startup line after the program finishes.
 
 The same commands without the `SHELL.SVC` line show the ROM's single line:
@@ -246,21 +244,21 @@ volume's startup file runs. An absent file leaves no startup commands.
 [Chapter 5](05-drives-and-user-areas.md) explains retained assignments and
 fallback to the card's defaults.
 
-This card has a third volume, SPARE, with a different startup file. Each
-file has one line, which the ROM runs without a shell. Its initial A file
-runs `MOUNT`. After `MOUNT A: SPARE` and reset, the new A file runs
-`USER 2`:
+This card has a third volume, SPARE, with a different startup file. Its
+initial A file loads the shell and lists the card's volumes with `CD ?`.
+After `CD A:SPARE` and reset, SPARE's file is A's. Its one line, `USER 2`,
+is the ROM's, and SPARE has no shell:
 
 ```sh
-node tools/tecvol.mjs create spare.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:SPARE --drives 4
-node tools/tecvol.mjs put spare.img A dist/files/MOUNT.COM
-printf 'MOUNT\n' > startup.cmd
+node tools/tecvol.mjs create spare.img --volume G1M:SYSTEM:A --volume G8M:WORK:B --volume G1M:SPARE --drives 4
+node tools/tecvol.mjs put spare.img A dist/files/SHELL.SVC
+printf 'SHELL.SVC\nCD ?\n' > startup.cmd
 node tools/tecvol.mjs put spare.img A startup.cmd --text
 printf 'USER 2\n' > startup.cmd
 node tools/tecvol.mjs put spare.img SPARE startup.cmd --text
 ```
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card spare.img "MOUNT A: SPARE" @reset -->
+<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card spare.img "CD A:SPARE" @reset -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -283,16 +281,12 @@ A>USER 2
 2A>
 ```
 
-The reset has kept SPARE on A so the final prompt is `2A>`. SYSTEM is no longer
-mounted, which can remove the tools needed for recovery.
-
-For example, suppose the GLCD driver is absent from the new A volume.
-A recognised reset that retains that assignment cannot load the driver.
-You need `MOUNT.COM` on a mounted drive to put the original volume back.
-In this recipe MOUNT exists only on SYSTEM, which is no longer
-mounted. A power loss clears the retained selection so the next boot uses
-the header's SYSTEM assignment again. Merely resetting repeats the
-retained assignment while it remains valid.
+The reset has kept SPARE on A so the final prompt is the bare `2A>`. SYSTEM
+is no longer mounted, and with it the shell and the tools needed for
+recovery. With no shell there is no `CD` to put SYSTEM back, and a
+recognised reset repeats the retained assignment while it remains valid. A
+power loss clears the retained selection so the next boot uses the header's
+SYSTEM assignment again. On the web page, Power cycle does the same.
 
 ## Display commands in the file
 
@@ -374,7 +368,7 @@ A>
 ```
 
 [Appendix J](appendix-j-command-reference.md#programs-on-the-starter-card)
-lists the fifteen files.
+lists the fourteen files.
 
 Where the ROM PICO console did not start, a startup width command passes
 quietly. The same command typed there reports the width with `?`, such as

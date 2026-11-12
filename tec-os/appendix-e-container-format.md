@@ -23,7 +23,7 @@ to decode a container or diagnose a rejected one.
 
 `format/format.json` defines the fields and geometries. The build generates
 `src/gen/format.asm` and `src/gen/geom.asm` from it
-(`tools/build.mjs:79-136`). The host container module and `tecvol` read the
+(`tools/build.mjs:79-134`). The host container module and `tecvol` read the
 same definition through `tools/lib/format.mjs`. All multibyte numbers are
 little-endian. Each block is 512 bytes and its number counts from the
 container's start. `tecvol install` puts that start at the card's block 0.
@@ -74,7 +74,7 @@ sums the whole block and subtracts the two checksum bytes
 A card's minor version sets three things. A 1.0 card has no drives field and
 no table sum and `tecvol` gives it at most 8 volumes. A 1.1 card may have up
 to 127, may give a number of drives and has the table sum
-(`tools/lib/container.mjs:76-80`, `tools/lib/container.mjs:140-148`).
+(`tools/lib/container.mjs:75-79`, `tools/lib/container.mjs:137-145`).
 `tecvol create` makes a 1.1 card when it is given more than 8 volumes or
 `--drives` and a 1.0 card otherwise. The ROM rejects a 1.0 card of more than
 8 volumes with code `24h` (`src/vol.asm:89-115`). It treats any minor
@@ -92,7 +92,7 @@ Each descriptor is 32 bytes (`format/format.json`, `descriptor`):
 | 12 | 1 | Geometry id: 1 for G8M, 2 for G1M |
 | 13 | 1 | Flags: bit 0 read-only. Other bits 0 |
 | 14 | 1 | Drive: 0 to 3 for A to D, `FFh` for none |
-| 15 | 1 | Cache flags: bit 0 written behind. Other bits 0 |
+| 15 | 1 | Reserved: written zero, never read |
 | 16 | 11 | Label, ASCII, padded with spaces |
 | 27 | 5 | Reserved, 0 |
 
@@ -103,14 +103,23 @@ starting at block `1000h` (4,096), 16,384 blocks long, geometry 1, on drive B,
 written behind, labelled `WORK`.
 
 The drive byte assigns a drive at cold boot. The volume id stays with the
-volume when that assignment changes. At most one volume is written behind
-and it cannot also be read-only (`tools/lib/container.mjs:85-86`,
-`tools/lib/container.mjs:187-188`). `tecvol create` starts the first volume at
+volume when that assignment changes.
+
+Byte 15 is reserved. It once marked one volume written behind. TEC-OS now
+writes behind the volume on the drive you are on and coalesces the data
+writes of every other volume, as [Chapter 19](19-cache-and-persistence.md)
+explains, so no descriptor marks one. `tecvol` and the container library
+write the byte zero, and neither they nor the ROM read it. A card made with
+the mark still mounts, its drive's flags holding only the read-only bit.
+`tecvol create` refuses `:wb` as an unknown flag, and `createContainer`
+refuses a volume that names `writeBehind`
+(`format/format.json:36`, `tools/lib/container.mjs:84`,
+`docs/container-format.md`). `tecvol create` starts the first volume at
 block 2,048, 1 MiB into the card. Each later volume starts at the next
 multiple of 2,048 blocks after the one before. `--align` puts another multiple
 of 8 in place of 2,048 (`tools/lib/container.mjs:14`,
-`tools/lib/container.mjs:89-99`). `tecvol create` fills each payload with
-`E5h`, giving it an empty CP/M directory (`tools/lib/container.mjs:121`).
+`tools/lib/container.mjs:87-97`). `tecvol create` fills each payload with
+`E5h`, giving it an empty CP/M directory (`tools/lib/container.mjs:118`).
 
 ## The table beyond block 0
 
@@ -133,7 +142,7 @@ sum difference gives `25h` (`src/vol.asm:174-180`).
 With 15 or fewer descriptors the ROM skips this comparison entirely.
 The host validator still compares the stored table sum with the computed
 sum of zero so a 1.1 image must store zero in that field when its table
-fits in block 0 (`src/vol.asm:148-154`, `tools/lib/container.mjs:145-148`).
+fits in block 0 (`src/vol.asm:148-154`, `tools/lib/container.mjs:142-145`).
 
 ## The checks and their codes
 
@@ -165,7 +174,7 @@ Both format versions require ascending, nonoverlapping volumes. Each
 volume must start at or after the previous volume's exclusive end. An
 out-of-order or overlapping descriptor therefore gives `28h`. `tecvol`
 makes the same check on every card
-(`tools/lib/container.mjs:174`). A card whose two descriptors were swapped,
+(`tools/lib/container.mjs:169`). A card whose two descriptors were swapped,
 with its checksum made good, fails `tecvol verify`. The ROM stops at the
 diagnostic prompt with code `28h`. One Node.js command makes such a card,
 `build/swapped.img`, from the starter card:
@@ -207,7 +216,7 @@ On a 1.1 card the drives field can restrict the assignments. A nonzero
 value N permits only drives A through the Nth drive. A value of 0 leaves
 all four available, as on a 1.0 card (`src/vol.asm:319-321`). A violation
 stops cold boot at the diagnostic prompt with code `29h`. `tecvol` makes the
-same check (`tools/lib/container.mjs:178`). `tecvol verify` rejects such a
+same check (`tools/lib/container.mjs:173`). `tecvol verify` rejects such a
 card and `tecvol create` rejects a volume on drive C with `--drives 2`:
 
 ```sh
@@ -219,7 +228,7 @@ tecvol: volume 1: drive C is past the card's 2 drive(s)
 ```
 
 The host validator also enforces the volume-count limit, descriptor order
-and drive assignments (`tools/lib/container.mjs:130-194`). It cannot test
+and drive assignments (`tools/lib/container.mjs:127-186`). It cannot test
 the physical card's addressing mode from image bytes alone so the ROM's
 standard-capacity bound remains a separate check. These additional image
 requirements apply in `tecvol`:
@@ -227,14 +236,11 @@ requirements apply in `tecvol`:
 | `tecvol` also requires |
 | --- |
 | A zero table sum on a 1.1 image with no descriptors beyond block 0 |
-| A known cache flag |
 | Volume ids different from each other |
 | Unique labels on a 1.1 card |
-| No volume both read-only and written behind |
-| At most one volume written behind |
 | An image as long as the header's container length |
 
-The ROM does not validate the cache byte, labels, reserved bytes or duplicate
+The ROM does not read byte 15 and does not validate labels, reserved bytes or duplicate
 volume ids. It cannot check the physical card's size. The host validator
 also leaves reserved bytes unchecked.
 

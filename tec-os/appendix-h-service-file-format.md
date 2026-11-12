@@ -65,7 +65,7 @@ load. A name has no content check.
 
 The loader compares the first two bytes, as a word, with `DMAGIC`, which is
 `SVCFMT * 256 + 'D'` (`src/loader.asm:26-28`). `SVCFMT` is 4, from `abi.inc`,
-and a file of any other format fails the load (`src/abi.inc:239-244`).
+and a file of any other format fails the load (`src/abi.inc:242-247`).
 
 The source supplies the service's name, flags, extra-memory request and
 stack declarations. `TAS` on the card or `makeSvc` on the PC fills the
@@ -136,7 +136,7 @@ HL its own address and page zero prepared as for a `.COM`. It returns with
 a warm boot, which leaves the service installed
 (`docs/services.md:164-180`). The shell's record is
 `DB "EX",1`, then the state byte 2, then the entry offset 41 and the name
-field (`drivers/shell.asm:43-53`).
+field (`drivers/shell.asm:45-55`).
 
 ## The relocation data
 
@@ -200,7 +200,7 @@ B>
 
 In this run the service loaded at page `AEh`, below the shell. The inserted
 zero gap changed header byte 24 from a space, `20h`, to `CEh`. The shell's
-`PUTTRIM` masks bit 7 (`drivers/shellio.asm:262-278`) so the name prints with
+`PUTTRIM` masks bit 7 (`drivers/shellio.asm:264-283`) so the name prints with
 an `N`.
 
 ## GLCD.SVC

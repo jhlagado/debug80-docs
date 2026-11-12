@@ -212,7 +212,7 @@ Installed alone it moves the word from `B9A9h` to `A700h`, leaving 42,496
 bytes, and installed after `GLCD.SVC` it leaves 41,728
 (`docs/mon3.md:50-51`). Installed after the shell, as on the starter card,
 it leaves `9D00h`, 39,936 bytes, and `9A00h`, 39,168 bytes, with `GLCD.SVC`
-too (`docs/mon3.md:45-56`, `test/shell.test.mjs:737-745`).
+too (`docs/mon3.md:45-57`, `test/shell.test.mjs:737-745`).
 
 AREA reads the boundary and subtracts `0100h` to obtain the size in bytes:
 
@@ -323,7 +323,7 @@ scratch:
 The CCP stores the current drive and user area at `0004h` before program entry.
 Warm boot uses that byte to restore the selection so changing that byte changes
 the selection used on exit. An unavailable drive falls back to A
-(`src/cpm/ccp.asm:305-323`, `src/cpm/ccp.asm:32-88`).
+(`src/cpm/ccp.asm:306-324`, `src/cpm/ccp.asm:32-88`).
 
 The tail's first byte is its length and the characters follow it. They are in
 capitals and include the leading space after the command's name. A read into the

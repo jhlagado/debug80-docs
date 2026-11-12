@@ -119,7 +119,7 @@ described in Chapter 14. Those registry calls have their own result convention,
 including a generation in A, so their callers test carry rather than applying
 the hardware status rule. Number 15 returns the ROM font and was added in ABI
 5.1. Number 16, `TNSHELL`, sets the shell hook that Chapter 21 describes
-(`src/abi.inc:205-233`).
+(`src/abi.inc:208-236`).
 
 The hardware services use the caller's stack. PUTAT has the largest bound: 22
 bytes below the return address supplied by CALL. That fits the inherited 30-byte
@@ -853,8 +853,8 @@ releases an active claim.
 The source is `programs/DEMO.ASM`, and the one card, which the web page
 also runs, holds that source in place of DEMO.COM. `TAS DEMO` builds
 DEMO.COM on the card, `DEMO` then runs it and `TED DEMO.ASM` opens the source
-(`tools/media.mjs:220-223`, `tools/media.mjs:269-270`,
-`test/demo.test.mjs:1-4`, `test/starter.test.mjs:192-217`). This run builds
+(`tools/media.mjs:220-223`, `tools/media.mjs:273-274`,
+`test/demo.test.mjs:1-4`, `test/starter.test.mjs:191-216`). This run builds
 and runs it on the starter card:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "TAS DEMO"

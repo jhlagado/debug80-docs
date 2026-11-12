@@ -133,7 +133,7 @@ The two writers fill different header fields, as Appendix H specifies
 The CCP sends a command with type SVC to `SVCGO`. It calls `LOADCOM` to
 read the file into `DF`, `0100h`, then calls `SVCLOAD`. `LOADTOP` is the
 exclusive end of the records read, not an independently stored file-byte
-length (`src/loader.asm:896-906`, `src/cpm/ccp.asm:624-660`).
+length (`src/loader.asm:896-906`, `src/cpm/ccp.asm:625-661`).
 [Chapter 21](21-from-prompt-to-program.md#program-lookup-and-capacity)
 explains the read and its capacity limit.
 
@@ -142,7 +142,7 @@ Carry reports failure. `SVCRC` distinguishes the loader outcomes and
 The CCP normally prints the command name with `?`. The quiet startup
 exception requires INIT's absent-device status and the appropriate loader
 outcome (`src/loader.asm:368-370`, `src/loader.asm:426-429`,
-`src/cpm/ccp.asm:402-411`).
+`src/cpm/ccp.asm:403-412`).
 [Chapter 26](26-startup-inside-the-ccp.md) explains that exception.
 
 The loader has seven stages. Before the resident move its writes are
@@ -157,7 +157,7 @@ the reservation (`src/loader.asm:140-299`, `src/loader.asm:331-370`,
 It checks the leading D and `SVCFMT`, currently 4. `SVCEXT` checks the
 header-plus-image size against `LOADTOP`. `SVCIN` requires both INIT and
 REMOVE offsets to lie from byte 25 through the last image byte
-(`src/loader.asm:140-168`, `src/loader.asm:609-634`, `src/abi.inc:244-249`).
+(`src/loader.asm:140-168`, `src/loader.asm:609-634`, `src/abi.inc:247-252`).
 
 The loader adds the requested extra memory to the header/image size,
 subtracts one and takes the high byte as the page count minus one. It
@@ -253,7 +253,7 @@ A test records that dangling-hook outcome
 An accepted function 47 call from INIT reaches the same warm boot. Its
 replacement line remains subject to the failed-flush cancellation explained
 in [Chapter 13](13-results-and-command-chains.md)
-(`src/cpm/bdos.asm:85-95`, `src/cache.asm:623-629`). The tests
+(`src/cpm/bdos.asm:85-95`, `src/cache.asm:634-640`). The tests
 also cover a later successful load after INIT's warm boot and function 47
 (`test/svc.test.mjs:554-567`, `test/svc.test.mjs:1033-1041`).
 A reset can recognise a hung INIT's temporary ceiling because `RSLCAP`
@@ -352,7 +352,7 @@ traversal, even after a program corrupts links into a cycle. `REGFIND` saves
 three register pairs. An internal call adds its two-byte return word to those
 six bytes. The application binary interface (ABI) gives FIND and LIST an
 eight-byte bound below the public caller's return address, including dispatcher
-use (`src/loader.asm:654-732`, `src/abi.inc:182-203`).
+use (`src/loader.asm:654-732`, `src/abi.inc:185-206`).
 
 The count before installation is bounded too. `SVCNT` decrements B for
 links beyond the first and rejects when that limit reaches zero. A corrupted
@@ -385,7 +385,7 @@ that addition means the entry word was relocated, and the command is
 rejected. Otherwise the address goes to `CMDRN1`, the path that starts a
 `.COM`, so page zero and the tail are prepared as for a program and the
 entry is called with HL at its own address
-(`src/loader.asm:767-780`, `src/cpm/ccp.asm:446-472`).
+(`src/loader.asm:767-780`, `src/cpm/ccp.asm:447-473`).
 [Appendix H](appendix-h-service-file-format.md#the-execution-record) gives
 the record's layout.
 
@@ -422,14 +422,14 @@ interface removal happens at the CCP so a running program can retain a record
 address until exit. A resident service retaining it longer must check the
 current generation or declare the provider as a dependency. The dependency
 prevents loading without its provider and the owner order prevents removing that
-older provider first (`src/ram.asm:375-390`, `src/loader.asm:97-126`,
+older provider first (`src/ram.asm:376-391`, `src/loader.asm:97-126`,
 `src/loader.asm:196-223`). Chapter 14 explains the client-side dependency
 contract.
 
 Warm boot preserves `REGHEAD`, `SVCHEAD` and `PZTOP` outside the range
 cleared by `CPMINIT`. Cold boot clears resident workspace and removes
 loaded owners. A ROM PICO record can be registered again during that cold
-boot (`src/ram.asm:363-390`, `src/boot.asm:61-72`,
+boot (`src/ram.asm:364-391`, `src/boot.asm:61-72`,
 `src/boot.asm:398-407`, `src/pico.asm:62-65`). The serial-board
 reset test leaves both heads empty (`test/svc.test.mjs:475-487`).
 
@@ -477,7 +477,7 @@ GLCD declares 2, 0 and 6 bytes, taking the whole CCP
 allowance (`drivers/glcd.asm:31-35`). COUNT's additional 2 then cannot
 fit. `SHELL.SVC` declares 6, 0 and 0, so after the starter card's startup
 the shell and GLCD have spent the BDOS allowance as well
-(`drivers/shell.asm:37-39`). With PICO active the startup GLCD installation
+(`drivers/shell.asm:39-41`). With PICO active the startup GLCD installation
 fails quietly, leaving 2 BDOS bytes and the whole CCP allowance for COUNT. The ROM PICO console is part of the base,
 not another loaded service.
 The stack-watch test declares 2 while using 6 and still
