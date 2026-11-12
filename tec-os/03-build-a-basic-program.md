@@ -25,7 +25,7 @@ nav_group: "Using the machine"
      The TIMES screen below is the screen test/times.test.mjs:28-40 and
      :115-122 checks on the host model at 40 columns. It is not a separate
      capture. The COPY step follows Chapter 4 and drivers/shellcmd.asm; the
-     ^C step follows the card's instruction (tools/media.mjs:241).
+     prompt's console read writes every changed line (docs/recovery.md).
      BAZA's spinner and its screen are a capture at fdd9e5b:
      node tools/capture.mjs --board pico --screen "BAZA TIMES".
      No other new execution occurred for this chapter, and no BAZA or
@@ -45,7 +45,7 @@ has still to be recorded.
 ## The BASIC source
 
 TIMES.BAS is on A with the other supplied files. `TYPE TIMES.BAS` prints it
-at the `A>` prompt. Chapter 4 explains `TYPE` and its pager. The complete
+at the `A:SYSTEM>` prompt. Chapter 4 explains `TYPE` and its pager. The complete
 file is:
 
 <!-- TEC-OS fdd9e5b programs/TIMES.BAS, lines 1-22, complete. The starter
@@ -125,7 +125,7 @@ with the supplied files left on A.
 
 ## Compiling and running TIMES
 
-At `A>`, `BAZA TIMES` reads TIMES.BAS and writes TIMES.COM on the same drive.
+At `A:SYSTEM>`, `BAZA TIMES` reads TIMES.BAS and writes TIMES.COM on the same drive.
 You type the name without a type, as with `TAS SAMPLE`. While it works BAZA
 turns a mark at the start of the line, `|`, `/`, `-` and `\` in turn, each
 followed by a backspace. A successful compile then prints `COM written` over
@@ -134,10 +134,10 @@ the last mark before the prompt returns. The screen then shows:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen
      "BAZA TIMES", screen rows 10–13. Earlier boot rows omitted. -->
 ```text
-A>BAZA TIMES
+A:SYSTEM>BAZA TIMES
 COM written
 
-A>
+A:SYSTEM>
 ```
 
 The marks go only to the console, and the compiled program is the same
@@ -145,7 +145,7 @@ with or without them (`Baza 50dc512:README.md:26-30`).
 
 Typing `TIMES` runs the program. The screen below is the one the TEC-OS host
 model test checks on the 40-column console, with the answers `TEC`, then 13,
-then 7. Its starting `A>TIMES` line is omitted:
+then 7. Its starting `A:SYSTEM>TIMES` line is omitted:
 
 <!-- TEC-OS fdd9e5b test/times.test.mjs:28-40, the asserted output, with
      the screen check at :120-122: answers TEC, 13 and 7, trailing spaces
@@ -174,7 +174,7 @@ THEY ADD UP TO 546
 THAT IS 45.5 ON AVERAGE.
 GOODBYE, TEC!
 
-A>
+A:SYSTEM>
 ```
 
 `INPUT` adds the `? ` after each question. A number prints with a space on
@@ -202,12 +202,18 @@ before TED opens the source again at the place you left. After the first
 good build the status row shows `THOR.PRJ: TIMES.BAS`: TED has recorded
 TIMES.BAS in its project file as the source that the build keys use.
 
+On the four-drive starter card TED has 28,694 bytes of text room with
+the shell loaded. Leaving a MON-3 session with `EXIT` keeps `MON3.SVC`
+installed and reduces that room to 24,086 bytes, or 23,318 with the GLCD
+driver too. Unload MON3.SVC before editing a larger source. These are
+host-model measurements (`docs/compatibility.md`).
+
 `^T R` builds the program again and runs TIMES. When the program ends TED
 waits at `Press a key` so the output stays on the screen, and a key returns
 you to the source at the same place. `^T D` leaves you in the editor with
 `No debugger` on the status row. It runs nothing and writes no file.
 
-From the `B>` prompt `^T B` builds a TIMES.BAS that you keep on B. TED and
+From the `B:WORK>` prompt `^T B` builds a TIMES.BAS that you keep on B. TED and
 BAZA are loaded from A and BAZA reads `BAZA.RTL` from A, its load drive.
 TIMES.COM is written on B beside the source.
 
@@ -215,14 +221,14 @@ TIMES.COM is written on B beside the source.
 
 Editing A:TIMES.BAS changes the supplied copy on SYSTEM. A copy on B, as in
 Chapter 2, keeps your work on WORK and leaves the original as it was. At the
-`A>` prompt, COPY makes the copy and prints `COPIED` with the number of
+`A:SYSTEM>` prompt, COPY makes the copy and prints `COPIED` with the number of
 records. Chapter 4 explains its forms:
 
 ```text
-A>COPY A:TIMES.BAS B:TIMES.BAS
+A:SYSTEM>COPY A:TIMES.BAS B:TIMES.BAS
 ```
 
-`B:` makes WORK the current drive. At `B>`, `TED TIMES.BAS` opens your copy,
+`B:` makes WORK the current drive. At `B:WORK>`, `TED TIMES.BAS` opens your copy,
 with TED loaded from A. Move to line 40, the file's fourth line, and change
 the text between the quotes, keeping the line number, the `PRINT` and both
 quotes. For example:
@@ -237,10 +243,9 @@ first line is then your new text. The host-model tests ran `^T R` with
 TIMES.BAS on A and the build with it on B. Answer the questions and press a
 key to return to TED.
 
-`^Q` quits TED and returns to `B>`. Before a reset or power-off, `A:` returns
-to drive A and `^C` at the empty `A>` prompt writes any pending changes to
-the card, as the starter card's instructions say. Wait for the new prompt.
-Chapter 1 explains why.
+`^Q` quits TED and returns to `B:WORK>`. Wait for that prompt before a
+reset or power-off: its console read writes all pending changes on every
+drive. Chapter 1 explains why.
 
 ## A failed compile
 
@@ -254,7 +259,7 @@ console, over its last spinner mark:
      text with the spinner's marks taken out (:29-31). Not a separate
      capture. -->
 ```text
-A>A:BAZA TIMES.BAS
+A:SYSTEM>A:BAZA TIMES.BAS
 ?SYNTAX ERROR IN 95
 ```
 
@@ -276,7 +281,7 @@ does. Chapter 13 explains return codes and command chains. At the prompt you
 can make running the program depend on the compile:
 
 ```text
-A>BAZA TIMES &TIMES
+A:SYSTEM>BAZA TIMES &TIMES
 ```
 
 `&` after a space starts a second command on the line that runs only if the
@@ -299,7 +304,7 @@ way. Three of its lines show the pattern
 (`Baza 50dc512:examples/BOUNCE.BAS:6`, `11`, `18`):
 
 <!-- Baza 50dc512 examples/BOUNCE.BAS file lines 6, 11 and 18, as the
-     card holds it (TEC-OS fdd9e5b tools/media.mjs:215-218). -->
+     card holds it (TEC-OS fdd9e5b tools/media.mjs:224-227). -->
 ```text
 50 DEF CALL vi = ROM 3: DEF CALL bp = ROM 4: DEF CALL ft = ROM 15
 100 CALL vi, b = 1
@@ -364,6 +369,6 @@ the PICO9918, which it needs. Tap W, A, S and D, or the arrow keys, to steer
 the ship. The matrix keyboard's arrow keys reach the program as Esc, `[` and
 a letter, `A` to `D`, and lines 950 to 999 read that sequence and treat it
 as W, S, D or A. Q ends the game, gives the display back as the console and
-prints the score at `A>`. The host-model test checks each of these steps
-(`tools/media.mjs:215-218`, `test/starter.test.mjs:108-189`,
+prints the score at `A:SYSTEM>`. The host-model test checks each of these steps
+(`tools/media.mjs:224-227`, `test/starter.test.mjs:108-189`,
 `Baza 50dc512:examples/BOUNCE.BAS:84`, `103-115`).

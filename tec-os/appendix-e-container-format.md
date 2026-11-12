@@ -53,16 +53,16 @@ The header's fields (`format/format.json`, `header`):
 | ---: | ---: | --- | --- |
 | 0 | 8 | Magic, `TECOSVOL` | `TECOSVOL` |
 | 8 | 1 | Major version, 1 | 1 |
-| 9 | 1 | Minor version, 0 or 1 | 0 |
+| 9 | 1 | Minor version, 0 or 1 | 1 |
 | 10 | 2 | Header bytes, 512 | `0200h` |
 | 12 | 2 | Descriptor bytes, 32 | `0020h` |
-| 14 | 2 | Number of volumes | 2 |
-| 16 | 4 | Container length in blocks | `00005000h`, 20,480 |
-| 20 | 2 | Checksum | `07F4h` |
-| 22 | 1 | 1.1: drive count, 0 to 4. 0 in 1.0 | 0 |
+| 14 | 2 | Number of volumes | 5 |
+| 16 | 4 | Container length in blocks | `00006800h`, 26,624 |
+| 20 | 2 | Checksum | `1277h` |
+| 22 | 1 | 1.1: drive count, 0 to 4. 0 in 1.0 | 4 |
 | 23 | 2 | 1.1: table sum. 0 in 1.0 | 0 |
 | 25 | 7 | Reserved, 0 | 0 |
-| 32 | 32 each | The first 15 volume descriptors | 2 |
+| 32 | 32 each | The first 15 volume descriptors | 5 |
 
 The header checksum covers all 512 bytes of block 0 except its own two bytes. It
 is a 16-bit sum, including the descriptors as well as the header fields
@@ -98,9 +98,9 @@ Each descriptor is 32 bytes (`format/format.json`, `descriptor`):
 
 The starter card's first descriptor, at `20h`, is volume 1, starting at block
 `0800h` (2,048), 2,048 blocks long, geometry 2, not read-only, on drive A,
-written through, labelled `SYSTEM`. Its second, at `40h`, is volume 2,
+labelled `SYSTEM`. Its second, at `40h`, is volume 2,
 starting at block `1000h` (4,096), 16,384 blocks long, geometry 1, on drive B,
-written behind, labelled `WORK`.
+labelled `WORK`.
 
 The drive byte assigns a drive at cold boot. The volume id stays with the
 volume when that assignment changes.

@@ -305,7 +305,7 @@ zero:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img B: "TAS BOARD" BOARD.
      Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>TAS BOARD
 BOARD.COM written
 
@@ -328,7 +328,7 @@ run, not a browser capture:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img --board pico B: "TAS BOARD"
      BOARD. Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>TAS BOARD
 BOARD.COM written
 
@@ -388,7 +388,7 @@ This run requested the character LCD's rows with `--lcd`:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img --lcd B: "TAS LCDMSG"
      LCDMSG. Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>TAS LCDMSG
 LCDMSG.COM written
 
@@ -588,7 +588,7 @@ capture was:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img B: "TAS NOW" NOW. Boot
      rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>TAS NOW
 NOW.COM written
 
@@ -683,7 +683,7 @@ pressed `x`, which is in row 7:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img --board pico B: "TAS ROWS"
      "@start ROWS" "@key x". Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>TAS ROWS
 ROWS.COM written
 
@@ -807,11 +807,11 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM
 B: WORK
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 
-A>B:
+A:SYSTEM>B:
 B>TAS PLACE                   TEC-OS
 PLACE.COM written             TEC-OS
 
@@ -853,17 +853,17 @@ releases an active claim.
 The source is `programs/DEMO.ASM`, and the one card, which the web page
 also runs, holds that source in place of DEMO.COM. `TAS DEMO` builds
 DEMO.COM on the card, `DEMO` then runs it and `TED DEMO.ASM` opens the source
-(`tools/media.mjs:220-223`, `tools/media.mjs:273-274`,
+(`tools/media.mjs:229-232`, `tools/media.mjs:282-283`,
 `test/demo.test.mjs:1-4`, `test/starter.test.mjs:191-216`). This run builds
 and runs it on the starter card:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "TAS DEMO"
      "@start DEMO" "@key x". Boot rows omitted. -->
 ```text
-A>TAS DEMO
+A:SYSTEM>TAS DEMO
 DEMO.COM written
 
-A>DEMO
+A:SYSTEM>DEMO
 
 TEC-OS hardware services demo
 PICO9918: yes   GLCD: no   clock: yes
@@ -872,7 +872,7 @@ Press any key to stop.
 
 Demo stopped.
 
-A>
+A:SYSTEM>
 ```
 
 Here `GLCD: no` reports INFO bit 2, not the physical absence of the display. The
@@ -886,7 +886,7 @@ was:
 
 Demo stopped.
 
-A>
+A:SYSTEM>
 ```
 
 No hardware service scans the 8 × 8 LEDs. DEMO writes those ports itself, one

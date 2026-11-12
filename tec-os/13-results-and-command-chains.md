@@ -9,13 +9,13 @@ nav_group: "Writing programs"
 
 <!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. Lines are split by
-     SHELL.SVC: docs/shell.md:28-82 and :91-133, docs/compatibility.md:21-38
-     and :99-117, drivers/shell.asm:159-420, the drop flag
+     SHELL.SVC: docs/shell.md:32-88 and :91-133, docs/compatibility.md:21-38
+     and :99-117, drivers/shell.asm:161-425, the drop flag
      src/cpm/bdos.asm:96-106, :515-533, src/cpm/bdoscon.asm:36-66, :285-309
      and src/cache.asm:613-629, function 47 src/cpm/bdos.asm:52-94, and the
      ROM's own path src/cpm/ccp.asm:110-232. TED's key table, its line's
      need of the shell and BAZA's return code follow
-     docs/compatibility.md:223-226, with TED.COM Thorium a2fe556, TAS.COM
+     docs/compatibility.md:222-225, with TED.COM Thorium a2fe556, TAS.COM
      Thorium 3d1e2c0 and BAZA.COM Baza 50dc512, source reading. Every
      transcript is a capture at fdd9e5b with the command in its comment, on
      the serial board and the starter card or the card made by the recipe
@@ -40,26 +40,26 @@ command prompt before it runs. This is CP/M 3's form of command chaining.
 The following capture shows two commands on the first line. The second line
 also contains empty pieces:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "DIR *.CMD!TYPE STARTUP.CMD" "mount!!  ! dir b:!" -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "DIR *.CMD!TYPE STARTUP.CMD" "cd!!  ! dir b:!" -->
 ```text
-A>DIR *.CMD!TYPE STARTUP.CMD
+A:SYSTEM>DIR *.CMD!TYPE STARTUP.CMD
 STARTUP.CMD 
 1 file, 912K free
-A>TYPE STARTUP.CMD
+A:SYSTEM>TYPE STARTUP.CMD
 SHELL.SVC
 GLCD.SVC
 
-A>mount!!  ! dir b:!
+A:SYSTEM>cd!!  ! dir b:!
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
-A>dir b:
+A:SYSTEM>dir b:
 NO FILE
-A>
+A:SYSTEM>
 ```
 
 A *piece* is the text bounded by separators or the line's edges. A run of
-separators and spaces counts as one separator, so `mount!!  ! dir b:!` runs
+separators and spaces counts as one separator, so `cd!!  ! dir b:!` runs
 two commands. A line made entirely of spaces and `!` runs nothing. The shell
 echoes each later piece as typed and then converts its letters to capitals.
 The lower-case `dir b:` above therefore runs as `DIR B:`.
@@ -70,7 +70,7 @@ to the following pieces. Here `B:` selects drive B before `COPY` creates
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs "B:!COPY A:STARTUP.CMD NOTES.TXT!DIR" -->
 ```text
-A>B:!COPY A:STARTUP.CMD NOTES.TXT!DIR
+A:SYSTEM>B:!COPY A:STARTUP.CMD NOTES.TXT!DIR
 B>COPY A:STARTUP.CMD NOTES.TXT
 COPIED 0001
 
@@ -100,22 +100,22 @@ and a following `!` piece runs:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs "NOSUCH &DIR *.CMD !DIR *.SVC" "DIR *.SVC &DIR *.CMD" "NOSUCH &DIR *.CMD &DIR *.SVC" -->
 ```text
-A>NOSUCH &DIR *.CMD !DIR *.SVC
+A:SYSTEM>NOSUCH &DIR *.CMD !DIR *.SVC
 NOSUCH?
 
-A>DIR *.SVC
+A:SYSTEM>DIR *.SVC
 SHELL.SVC    GLCD.SVC     MON3.SVC    
 3 files, 912K free
-A>DIR *.SVC &DIR *.CMD
+A:SYSTEM>DIR *.SVC &DIR *.CMD
 SHELL.SVC    GLCD.SVC     MON3.SVC    
 3 files, 912K free
-A>DIR *.CMD
+A:SYSTEM>DIR *.CMD
 STARTUP.CMD 
 1 file, 912K free
-A>NOSUCH &DIR *.CMD &DIR *.SVC
+A:SYSTEM>NOSUCH &DIR *.CMD &DIR *.SVC
 NOSUCH?
 
-A>
+A:SYSTEM>
 ```
 
 `NOSUCH` failed, so `DIR *.CMD` was skipped and `DIR *.SVC`, after `!`, ran.
@@ -134,13 +134,13 @@ is not provided, and a piece starting with `:` is rejected as a bad name:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs "&DIR *.CMD" ":DIR *.CMD" -->
 ```text
-A>&DIR *.CMD
+A:SYSTEM>&DIR *.CMD
 &DIR?
 
-A>:DIR *.CMD
+A:SYSTEM>:DIR *.CMD
 :DIR?
 
-A>
+A:SYSTEM>
 ```
 
 A built-in command reports failure through its result as well as its
@@ -208,7 +208,7 @@ node tools/tecvol.mjs put chain.img B exists.asm --text
 node tools/tecvol.mjs put chain.img B run.asm --text
 ```
 
-At `B>`, `A:TAS EXISTS` and `A:TAS RUN` then write `EXISTS.COM` and
+At `B:WORK>`, `A:TAS EXISTS` and `A:TAS RUN` then write `EXISTS.COM` and
 `RUN.COM`. `EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM` prints the file only
 when it is present. This capture runs that line before and after creating
 the file:
@@ -289,10 +289,10 @@ the `CD` piece is dropped:
 
 <!-- TEC-OS 1a6ce29: node tools/capture.mjs "@start DIR D:!CD" "@key x" -->
 ```text
-A>DIR C:!MOUNT
+A:SYSTEM>DIR C:!MOUNT
 
 Bdos Err On C: Select
-A>
+A:SYSTEM>
 ```
 
 Esc or `Q` at `[more]` stops only the listing. Its next piece still runs,
@@ -430,7 +430,7 @@ stops either one where the shell would split the line: at a `!`, or at an
 `&` after a blank. With `ARGS X &Y`, `^T R` runs the program once with the
 tail ` X` and runs nothing after it. An `&` inside a word, as in
 `/M:&HE000`, stays in the tail
-(`Thorium a2fe556:README.md:51-58`, `docs/compatibility.md:223`,
+(`Thorium a2fe556:README.md:51-58`, `docs/compatibility.md:222`,
 `test/ted.test.mjs:305-333`).
 
 Chapter 11 explains the load-drive byte at `0050h`. TED uses that byte to
@@ -478,25 +478,25 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>GLCD.SVC &MOUNT
+A:SYSTEM>GLCD.SVC &MOUNT
 
-A>MOUNT
+A:SYSTEM>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
-A>NOSUCH.SVC &MOUNT
+A:SYSTEM>NOSUCH.SVC &MOUNT
 NOSUCH.SVC?
 
-A>NOSUCH.SVC !MOUNT
+A:SYSTEM>NOSUCH.SVC !MOUNT
 NOSUCH.SVC?
 
-A>MOUNT
+A:SYSTEM>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
-A>
+A:SYSTEM>
 ```
 
 The shell echoes each startup line whole, then each later piece at its own

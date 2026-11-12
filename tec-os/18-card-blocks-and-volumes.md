@@ -273,13 +273,13 @@ error, A's directory remains accessible:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/short.img "@start DIR B:" "@key x" "DIR A:*.CMD" -->
 ```text
-A>DIR B:
+A:SYSTEM>DIR B:
 
 Bdos Err On B: Bad Sector
-A>DIR A:*.CMD
+A:SYSTEM>DIR A:*.CMD
 STARTUP.CMD 
 1 file, 912K free
-A>
+A:SYSTEM>
 ```
 
 A header failure takes a different route. Cold boot enters the diagnostic
@@ -421,25 +421,23 @@ A write which preserves a line's bytes keeps this key only when it names
 the key's own block and drive. Otherwise it clears `BUFOK`. With the
 BDOS's correct write types, out-of-order writes therefore cannot use a
 stale sequential key to clear an already filled block
-(`src/cache.asm:472-516`). This protection relies on the type-2 contract.
+(`src/cache.asm:469-511`). This protection relies on the type-2 contract.
 A direct BIOS caller must not label existing data as newly allocated.
 
-On a written-through volume a directory write, type 1, sets bit 7 of
-`CWTYPE`. The merged line must be written successfully before `WRITE`
-reports success. A data write there sets bit 5 instead and its line becomes
-the pending one in `CPEND`. It reaches the card when a write moves to
-another block, at the next directory write or at a flush point
-(`src/cache.asm:496-622`).
-On a written-behind volume
-data may remain dirty in the cache. A directory write orders the pending
-data before its own block (`src/bios.asm:343-358`,
-`src/cache.asm:514-547`). Chapter 19 explains that persistence boundary
-and the failure paths in full.
+Every directory write, type 1, writes every changed or kept data line
+first, on any drive. Only after those writes succeed does its own merged
+line reach the card; a failed data write refuses the directory write.
+A data write off the logged drive sets bit 5 of `CWTYPE` and leaves one
+pending block in `CPEND`. Data on the logged drive may remain in several
+dirty lines until a console read, directory write or another flush point
+(`src/bios.asm:343-358`, `src/cache.asm:496-622`). Chapter 19 explains
+these two rules and the failure paths in full.
 
 Sequential writes to a new file can therefore avoid data pre-reads. On
-written-through A they also avoid writing each SD block after each of its
-four records. The cache holds A's block as pending and writes it once, when
-a write moves to another block or a flush point arrives
+a drive not logged they also avoid writing each SD block after each of its
+four records: one block stays pending and is written when the write moves
+on or a flush point arrives. On the logged drive several changed blocks
+can wait together until the next key read or directory write
 (`src/cache.asm:496-622`). On the starter card `SAVE 8 X.COM` writes sixteen
 records in four data blocks on A. It causes four data-block writes plus two
 directory-block writes, six writes in total. No reads are needed because

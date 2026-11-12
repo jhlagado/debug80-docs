@@ -82,10 +82,10 @@ a physical board.
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs "CON XYZ" -->
 ```text
-A>CON XYZ
+A:SYSTEM>CON XYZ
 XYZ?
 
-A>
+A:SYSTEM>
 ```
 
 On a board using the PICO9918 and matrix keyboard, `CON TTY` moves the console
@@ -96,7 +96,7 @@ shows only the serial output:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --serial "CON TTY" -->
 ```text
 CON: TTY:
-A>
+A:SYSTEM>
 ```
 
 The boot text went to the PICO9918. The terminal's first line is the reply. The
@@ -113,7 +113,7 @@ reply and prompt:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "CON TTY" "CON CRT" -->
 ```text
 CON: CRT:
-A>
+A:SYSTEM>
 ```
 
 ## An unavailable display
@@ -135,15 +135,15 @@ display selections leave a serial-only board on the terminal:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs CON "CON CRT" "CON UC1" CON -->
 ```text
-A>CON
+A:SYSTEM>CON
 CON: TTY:
-A>CON CRT
+A:SYSTEM>CON CRT
 CON: TTY:
-A>CON UC1
+A:SYSTEM>CON UC1
 CON: TTY:
-A>CON
+A:SYSTEM>CON
 CON: TTY:
-A>
+A:SYSTEM>
 ```
 
 On a board with both displays cold boot selects the PICO9918. The starter
@@ -155,9 +155,9 @@ after the command:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "CON UC1" CON -->
 ```text
 CON: UC1:
-A>CON
+A:SYSTEM>CON
 CON: UC1:
-A>
+A:SYSTEM>
 ```
 
 Removing the graphics-LCD driver while it is the console selects the
@@ -168,16 +168,16 @@ driver and the shell, removed the driver and reported the resulting console:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico "CON UC1" SERVICES
      UNLOAD CON. Boot rows omitted. -->
 ```text
-A>CON UC1
+A:SYSTEM>CON UC1
 CON: UC1:
-A>SERVICES
+A:SYSTEM>SERVICES
 GLCD 3
 SHELL 10
-A>UNLOAD
+A:SYSTEM>UNLOAD
 
-A>CON
+A:SYSTEM>CON
 CON: CRT:
-A>
+A:SYSTEM>
 ```
 
 `CRT:` in the final report names the PICO9918 console after removal. The
@@ -205,13 +205,13 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 
-A>CON BAT
+A:SYSTEM>CON BAT
 CON: TTY:
-A>
+A:SYSTEM>
 ```
 
 The visible reply belongs to `CON TTY`, which also restores serial output. If a
@@ -236,11 +236,11 @@ columns, runs `TAS` with no name and then lists files across the row:
 <!-- TEC-OS 1a6ce29: node tools/capture.mjs --board pico --screen "CON PICO 32" TAS "DIR /W" -->
 ```text
 CON: CRT:
-A>MOUNT
+A:SYSTEM>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
-A>DIR
+A:SYSTEM>DIR
 MOUNT.COM    SHELL.SVC
 GLCD.SVC     STARTUP.CMD
 TED.COM      SAMPLE.ASM
@@ -250,7 +250,7 @@ BOUNCE.BAS   DEMO.ASM
 MON3.SVC     HELLO3.BIN
 HELLO3.ASM
 15 files, 912K free
-A>
+A:SYSTEM>
 ```
 
 `TAS` ended in a warm boot, which kept 32 columns. `DIR /W` fits two names on
@@ -262,16 +262,16 @@ An unsupported width, a width after another device name or a number joined to
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico "CON CRT80" "CON TTY 40" "CON PICO 50" -->
 ```text
-A>CON CRT80
+A:SYSTEM>CON CRT80
 CRT80?
 
-A>CON TTY 40
+A:SYSTEM>CON TTY 40
 40?
 
-A>CON PICO 50
+A:SYSTEM>CON PICO 50
 50?
 
-A>
+A:SYSTEM>
 ```
 
 A width command typed at the prompt also produces a question mark where cold

@@ -189,7 +189,7 @@ node tools/tecvol.mjs put svc.img B GAPZERO.SVC
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card svc.img B: GAPZERO.SVC SERVICES.
      Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>GAPZERO.SVC
 
 B>SERVICES

@@ -14,7 +14,7 @@ nav_exclude: true
      DEL, SERVICES, the [more] pager, .CMD scripts and lines joined by !
      (always) and & (on success, after a blank), with CP/M 3's : gone.
      MON3.SVC (4,606 bytes, 18 pages) is entered on install, with no /E.
-     TAS is the only assembler. The card's fifteen files hold SHELL.SVC in
+     TAS is the only assembler. The card's fourteen files hold SHELL.SVC in
      place of CHAIN.ASM; TAS.COM is Thorium 3d1e2c0 (e648a1d0), TED.COM
      Thorium a2fe556 (c6c8374a, stopping a name and ARGS at an & after a
      blank), BAZA Baza 50dc512 (280ee372, 13,184 bytes,

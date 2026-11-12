@@ -136,13 +136,13 @@ The serial-only model capture gave:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card mem.img B:TOP. Boot rows
      omitted. -->
 ```text
-A>B:TOP
+A:SYSTEM>B:TOP
 AF00h
 
-A>
+A:SYSTEM>
 ```
 
-The startup file had installed the shell, whose ten pages start at `AF00h`.
+The startup file had installed the shell, whose fifteen pages start at `A700h`.
 On the dual-display configuration the PICO console code is in ROM and the
 startup file's `GLCD.SVC` line installs nothing. `CON UC1` then installed the
 GLCD driver below the shell and lowered the word. The first TOP output and
@@ -153,15 +153,15 @@ physical-board observation:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --card mem.img B:TOP
      "CON UC1" B:TOP. Boot rows omitted. -->
 ```text
-A>B:TOP
+A:SYSTEM>B:TOP
 AF00h
 
-A>CON UC1
+A:SYSTEM>CON UC1
 CON: UC1:
-A>B:TOP
+A:SYSTEM>B:TOP
 AC00h
 
-A>
+A:SYSTEM>
 ```
 
 The following table gives the starter card's address map with nothing
@@ -171,8 +171,8 @@ are not constants for programs to use:
 | Addresses | What is there |
 | --- | --- |
 | `0000h–00FFh` | Page zero, with the CP/M jumps and buffers |
-| `0100h–B9A8h` | Your program, up to 47,273 bytes on the starter card |
-| `B9A9h–BFFFh` | TEC-OS's working memory |
+| `0100h–B6E8h` | Your program, up to 46,569 bytes on the starter card |
+| `B6E9h–BFFFh` | TEC-OS's working memory |
 | `C000h–FFFFh` | The ROM, which holds TEC-OS itself |
 
 The drive and service combinations change that boundary as follows. The
@@ -183,13 +183,12 @@ startup file:
 
 | Card | Services | Word at `0006h` | TPA in bytes | Largest `.COM` that loads |
 | --- | --- | --- | ---: | ---: |
-| starter card | none | `B9A9h` | 47,273 | 47,104 |
-| starter card | `GLCD.SVC` | `B600h` | 46,336 | 46,336 |
-| starter card | `SHELL.SVC` | `AF00h` | 44,544 | 44,544 |
-| starter card | `SHELL.SVC`, `GLCD.SVC` | `AC00h` | 43,776 | 43,776 |
-| four drives | none | `B6E9h` | 46,569 | 46,336 |
-| four drives | `GLCD.SVC` | `B300h` | 45,568 | 45,568 |
-| four drives | `GLCD.SVC`, `SHELL.SVC` | `A900h` | 43,008 | 43,008 |
+| starter card | none | `B6E9h` | 46,569 | 46,336 |
+| starter card | `GLCD.SVC` | `B300h` | 45,568 | 45,568 |
+| starter card | `SHELL.SVC` | `A700h` | 42,496 | 42,496 |
+| starter card | `SHELL.SVC`, `GLCD.SVC` | `A400h` | 41,728 | 41,728 |
+| four G8M volumes | none | `B6E9h` | 46,569 | 46,336 |
+| four G8M volumes | `GLCD.SVC`, `SHELL.SVC` | `A400h` | 41,728 | 41,728 |
 
 A drive's allocation vector holds one bit per allocation block. A set bit marks
 allocated storage. The BDOS can locate free blocks through it without reading
@@ -201,18 +200,18 @@ drive count controls those reservations.
 Services reduce the boundary in whole 256-byte pages. Each service ends below
 the page containing the preceding boundary and installs a BDOS jump at its own
 base. The jump at `0005h` then points to that lower address. On the starter
-card with nothing installed, GLCD.SVC occupies `B600h–B8FFh`. Its three pages
-use 768 bytes but also exclude the alignment gap at `B900h–B9A8h`. The total
-reduction is 937 bytes. A second service ends below the first and reduces the
+card with nothing installed, GLCD.SVC occupies `B300h–B5FFh`. Its three pages
+use 768 bytes but also exclude the alignment gap at `B600h–B6E8h`. The total
+reduction is 1,001 bytes. A second service ends below the first and reduces the
 available TPA again. The starter card's startup file installs `SHELL.SVC`,
-which takes ten pages and leaves `AF00h`, 44,544 bytes, or 43,776 with
-`GLCD.SVC` installed too (`docs/memory-map.md:12-17`, `docs/shell.md:20-26`,
-`docs/compatibility.md:3-14`). The card's `MON3.SVC` takes 18 pages.
-Installed alone it moves the word from `B9A9h` to `A700h`, leaving 42,496
-bytes, and installed after `GLCD.SVC` it leaves 41,728
-(`docs/mon3.md:50-51`). Installed after the shell, as on the starter card,
-it leaves `9D00h`, 39,936 bytes, and `9A00h`, 39,168 bytes, with `GLCD.SVC`
-too (`docs/mon3.md:45-57`, `test/shell.test.mjs:737-745`).
+which takes fifteen pages and leaves `A700h`, 42,496 bytes, or 41,728 with
+`GLCD.SVC` installed too (`docs/memory-map.md:12-21`, `docs/shell.md:22-30`,
+`docs/compatibility.md:3-16`). The card's `MON3.SVC` takes 18 pages.
+Installed alone it moves the word from `B6E9h` to `A400h`, leaving 41,728
+bytes, and installed after `GLCD.SVC` it leaves 40,960
+(`docs/mon3.md:47-52`). Installed after the shell, as on the starter card,
+it leaves `9500h`, 37,888 bytes, and `9200h`, 37,120 bytes, with `GLCD.SVC`
+too (`docs/mon3.md:45-57`, `test/shell2.test.mjs:719-741`).
 
 AREA reads the boundary and subtracts `0100h` to obtain the size in bytes:
 
@@ -278,10 +277,10 @@ node tools/tecvol.mjs put mem.img B area.com
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card mem.img B:AREA. Boot rows
      omitted. -->
 ```text
-A>B:AREA
+A:SYSTEM>B:AREA
 44544 bytes
 
-A>
+A:SYSTEM>
 ```
 
 ## Loaded file size and working space
@@ -293,8 +292,8 @@ not loaded across the program's ceiling. An oversized file gets the same
 name-and-question-mark failure as a missing program.
 
 On the starter card with nothing installed, the last loaded record ends at
-`B8FFh`. That allows a 47,104-byte COM file, 169 bytes less than the
-47,273-byte TPA. A
+`B5FFh`. That allows a 46,336-byte COM file, 233 bytes less than the
+46,569-byte TPA. A
 page-aligned service boundary removes that gap. The loader limit applies to the
 file's record-rounded size. Data allocated after entry can extend to the byte
 below the word at `0006h`.
@@ -334,7 +333,7 @@ two parsed names.
 `0050h` is a different drive value from the current drive at `0004h`. It follows
 CP/M 3's load-drive convention. A plain command loaded from the current drive
 gives 0. A search that finds the program on A gives 1. An explicit prefix
-supplies its drive number so `B:SHOW` at `A>` leaves 2 there. The current drive
+supplies its drive number so `B:SHOW` at `A:SYSTEM>` leaves 2 there. The current drive
 can remain A throughout that run.
 
 TED reads `0050h` to prefix the commands it chains. When loaded from A with B
@@ -353,13 +352,13 @@ must be at most 255 and must stop before the page containing the BDOS entry
 address. Appendix J gives the complete command syntax.
 
 This run used the starter card, whose startup file had installed the shell
-at `AF00h`. Its limit was 174 pages. The request for 175 was rejected and
-174 accepted:
+at `A700h`. Its limit is 166 pages. The request for 167 is rejected and
+166 accepted:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 175 BIG.COM"
-     "SAVE 174 BIG.COM" DIR. Boot rows omitted. -->
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 167 BIG.COM"
+     "SAVE 166 BIG.COM" DIR. Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>SAVE 2 TWO.COM
 B>SAVE 175 BIG.COM
 175?
@@ -568,10 +567,10 @@ This serial capture supplied `a`, `Z`, `^C`, Esc and Return:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card con.img "@start B:KEY"
      $'@key aZ\x03\x1b\r'. Boot rows omitted. -->
 ```text
-A>B:KEY
+A:SYSTEM>B:KEY
 61 5A 03 1B 0D 
 
-A>
+A:SYSTEM>
 ```
 
 The `^C` is printed as `03` and KEY continues. BDOS function 10 instead ends a

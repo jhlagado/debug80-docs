@@ -260,11 +260,11 @@ write, once an entry has been freed, makes the extent the FCB needs
 stays in the FCB's map. A later successful close publishes it in the entry
 (`src/cpm/bdosrec.asm:593-619`). An FCB with the read-only attribute set gives
 the `File R/O` error (`src/cpm/bdosfile.asm:355-366`). On a
-volume written through, such as A, success means the record is in the
+volume on a drive other than the logged drive, success means the record is in the
 cache's copy of its block. That pending block reaches the card at the next
 close, directory request, write to another block, console read, function 48,
 `MOUNT` or warm boot, and the same holds for functions 34 and 40
-(`docs/recovery.md:66-103`). [Chapter 19](19-cache-and-persistence.md)
+(`docs/recovery.md:98-138`). [Chapter 19](19-cache-and-persistence.md)
 explains the pending block.
 
 **22 Make file.** Creates an empty entry for the FCB's name in the current

@@ -9,19 +9,19 @@ nav_group: "Using the machine"
 
 <!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…, on its starter card, the one card the web page
-     runs too (tools/media.mjs:200-231, tools/lib/starter.mjs:10-22,
-     test/starter.test.mjs:48-82; Origo KD-278, KD-302). The screen
+     runs too (tools/media.mjs:209-240, tools/lib/starter.mjs:10-22,
+     test/starter.test.mjs:48-81; Origo KD-278, KD-302). The screen
      excerpts are captures at fdd9e5b: node tools/capture.mjs --board pico
      --screen DIR B: A: "TAS SAMPLE" SAMPLE, the rows each comment names. The ^C excerpt is the same command's serial capture, node
      tools/capture.mjs ^C, since the capture tool cannot send ^C as a
      matrix key; the text is the console's either way. SHELL.SVC and the
-     recall keys follow docs/shell.md:3-26 and :144-146. The steps in "More
-     on the card" follow README.md:174-195, tools/media.mjs:241,
-     test/programs/hello3.asm and test/starter.test.mjs:109-394; the LCD
+     recall keys follow docs/shell.md:3-30 and :144-146. The steps in "More
+     on the card" follow README.md:174-195, tools/media.mjs:250,
+     test/programs/hello3.asm and test/starter.test.mjs:108-393; the LCD
      lines are HELLO3_ROWS (test/starter.test.mjs:219). With the Matrix
      switch on, MON3.SVC's key calls read the matrix, not the keypad
      (docs/mon3.md:245-247, :289-290, drivers/mon3api.asm:296-305). A:'s
-     pending block follows docs/recovery.md:28-36 and :66-81. No capture of
+     pending block follows docs/recovery.md:56-72 and :66-81. No capture of
      the MON-3 steps is claimed.
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
      card differs only in TED.COM and HELLO3.ASM, so captures made at
@@ -58,16 +58,16 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM
 B: WORK
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 
-A>
+A:SYSTEM>
 ```
 
 A *volume* is a disk's worth of files on the card. SYSTEM is assigned to drive
 A and WORK to drive B. The letter before `>` identifies the *current drive*,
-the one used when you name a file without a drive letter. At `A>` you are
+the one used when you name a file without a drive letter. At `A:SYSTEM>` you are
 working on SYSTEM. The prompt is where you type a command.
 
 The `SHELL.SVC` and `GLCD.SVC` lines were automatic. They came from the
@@ -76,7 +76,7 @@ memory and reads each command line you type. It supplies the recall keys
 below, the pause in long listings and the `COPY` command of Chapter 4. The
 PICO9918 is already the console, the screen and keyboard used for commands,
 so the `GLCD.SVC` line leaves it selected. You begin typing at the final
-`A>`. The separate 20 × 4 LCD also shows the system name and assigned drives.
+`A:SYSTEM>`. The separate 20 × 4 LCD also shows the system name and assigned drives.
 
 ## Files at the prompt
 
@@ -87,14 +87,14 @@ not part of the command. In the same session the listing was:
 <!-- TEC-OS 1a6ce29: node tools/capture.mjs --board pico --screen DIR,
      the screen's last rows. Earlier rows omitted. -->
 ```text
-A>DIR
+A:SYSTEM>DIR
 MOUNT.COM    SHELL.SVC    GLCD.SVC
 STARTUP.CMD  TED.COM      SAMPLE.ASM
 TIMES.BAS    TAS.COM      BAZA.COM
 BAZA.RTL     BOUNCE.BAS   DEMO.ASM
 MON3.SVC     HELLO3.BIN   HELLO3.ASM
 15 files, 912K free
-A>
+A:SYSTEM>
 ```
 
 The listing starts after a blank line and gives one file a row, with its
@@ -153,9 +153,9 @@ WORK and `A:` returns to SYSTEM. The next excerpt continues after the listing:
 
 <!-- TEC-OS fdd9e5b: the same --screen run with B: and A: after DIR, their screen rows. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>A:
-A>
+A:SYSTEM>
 ```
 
 The current drive supplies the location for a plain file name. The files on A
@@ -171,10 +171,10 @@ message gives the output file's name:
 
 <!-- TEC-OS fdd9e5b: the same run, the rows of "TAS SAMPLE". -->
 ```text
-A>TAS SAMPLE
+A:SYSTEM>TAS SAMPLE
 SAMPLE.COM written
 
-A>
+A:SYSTEM>
 ```
 
 The source and program are separate files. An edit to the source affects the
@@ -186,25 +186,25 @@ The program prints its greeting and screen size then returns to the prompt:
 
 <!-- TEC-OS fdd9e5b: the same run, the rows of SAMPLE, the screen's last. -->
 ```text
-A>SAMPLE
+A:SYSTEM>SAMPLE
 Hello from TEC-OS.
 Screen: 40 by 24
 Back to the prompt.
 
-A>
+A:SYSTEM>
 ```
 
 The dimensions are 40 columns by 24 rows, matching this console. On the
 separate 20 × 4 LCD SAMPLE writes `Hello from SAMPLE` and its digit output is
 `123456`. The source also includes a short speaker tone.
 
-The new `A>` means the program has finished and you can type another command.
+The new `A:SYSTEM>` means the program has finished and you can type another command.
 The same prompt is also the place to finish the session safely.
 
 ## More on the card
 
 The other files on A are programs to try in the same way, each with a
-command or two at `A>`:
+command or two at `A:SYSTEM>`:
 
 | Commands | Result |
 | --- | --- |
@@ -235,7 +235,7 @@ It then counts on the digits. Another key beeps and shows its code on the
 right two digits. With the matrix keyboard enabled, as here, the
 service reads the matrix and not the keypad, so Esc on the matrix keyboard
 ends the program and returns to `MON3>`. With the Matrix switch off, AD on
-the keypad does the same. `EXIT` returns to `A>`. `HELLO3.ASM` is the
+the keypad does the same. `EXIT` returns to `A:SYSTEM>`. `HELLO3.ASM` is the
 program's source, and `TAS HELLO3 HELLO3.BIN` builds it.
 [Chapter 5](05-drives-and-user-areas.md) explains the service and what it
 keeps in memory.

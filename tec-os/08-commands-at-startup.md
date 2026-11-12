@@ -10,10 +10,10 @@ nav_group: "Using the machine"
 <!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. The ROM runs one line of
      STARTUP.CMD and SHELL.SVC the rest (docs/shell.md:115-133,
-     src/cpm/ccpcmd.asm:805-875 for the ROM's line, drivers/shellio.asm:14-176
+     src/cpm/ccpcmd.asm:805-874 for the ROM's line, drivers/shellio.asm:14-174
      for the shell's, tools/lib/starter.mjs:10-22 for the card's two lines).
-     The card's file count is tools/media.mjs:200-231 and
-     test/starter.test.mjs:48-82. Every capture was made at fdd9e5b with the
+     The card's file count is tools/media.mjs:209-240 and
+     test/starter.test.mjs:48-81. Every capture was made at fdd9e5b with the
      command in its comment, each card made from dist/starter.img or by the
      recipe shown, boot rows kept where shown.
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
@@ -44,11 +44,11 @@ The starter card's file has two lines:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs "TYPE STARTUP.CMD".
      Boot rows omitted. -->
 ```text
-A>TYPE STARTUP.CMD
+A:SYSTEM>TYPE STARTUP.CMD
 SHELL.SVC
 GLCD.SVC
 
-A>
+A:SYSTEM>
 ```
 
 `SHELL.SVC` is the shell of [Chapter 1](01-first-session.md) and `GLCD.SVC`
@@ -83,9 +83,9 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>B:
+A:SYSTEM>B:
 B>USER 3
 3B>mount
 00 SYSTEM      G1M A:
@@ -105,13 +105,13 @@ Each line is echoed as it appears in the file before it runs. That is why
 capitals to match its own commands, so `cd` is its `CD`, which shows the
 current drive's volume. `B:` changes the drive and `USER 3` changes the user
 area for subsequent lines. `DIR` therefore lists area 3 of B, which is empty.
-`NOSUCH` prints its usual error and the next line runs. `USER 0` leaves the first interactive prompt at `B>`.
+`NOSUCH` prints its usual error and the next line runs. `USER 0` leaves the first interactive prompt at `B:WORK>`.
 TEC-OS takes the next startup line after the program finishes.
 
 The same commands without the `SHELL.SVC` line show the ROM's single line:
 
 ```sh
-printf 'B:\nUSER 3\nmount\n' > startup.cmd
+printf 'B:\nUSER 3\ncd\n' > startup.cmd
 cp dist/starter.img bare.img
 node tools/tecvol.mjs put bare.img A startup.cmd --text
 ```
@@ -122,7 +122,7 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>B:
+A:SYSTEM>B:
 B>
 ```
 
@@ -148,9 +148,9 @@ node tools/tecvol.mjs put cut.img A startup.cmd --text
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card cut.img. Boot rows
      omitted. -->
 ```text
-A>DIR *.CM
+A:SYSTEM>DIR *.CM
 NO FILE
-A>
+A:SYSTEM>
 ```
 
 The shortened `DIR *.CM` still runs, and `USER 3` never runs. The shell has
@@ -169,13 +169,13 @@ node tools/tecvol.mjs put long.img A startup.cmd --text
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card long.img. Boot rows
      omitted. -->
 ```text
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>DIR *.CMD
+A:SYSTEM>DIR *.CMD
 STARTUP.CMD 
 1 file, 912K free
-A>USER 3
-3A>
+A:SYSTEM>USER 3
+3A:SYSTEM>
 ```
 
 These rules determine the boundaries:
@@ -204,9 +204,9 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>B:
+A:SYSTEM>B:
 B>
 ```
 
@@ -264,21 +264,21 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>MOUNT
+A:SYSTEM>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 02 SPARE       G1M
 
-A>MOUNT A: SPARE
+A:SYSTEM>MOUNT A: SPARE
 A: SPARE      
 
-A>
+A:SYSTEM>
 TEC-OS 0.1 for TEC-1G
 A: SPARE      
 B: WORK       
 
-A>USER 2
-2A>
+A:SYSTEM>USER 2
+2A:SYSTEM>
 ```
 
 The reset has kept SPARE on A so the final prompt is the bare `2A>`. SYSTEM
@@ -321,11 +321,11 @@ The last configuration has no resident GLCD driver after startup.
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico SERVICES CON.
      Boot rows omitted. -->
 ```text
-A>SERVICES
+A:SYSTEM>SERVICES
 SHELL 10
-A>CON
+A:SYSTEM>CON
 CON: CRT:
-A>
+A:SYSTEM>
 ```
 
 On the serial and GLCD configurations, the banner and volume names first
@@ -352,9 +352,9 @@ screen contained:
      --screen DIR, the screen text. -->
 ```text
 CON: CRT:
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 
-A>DIR
+A:SYSTEM>DIR
 MOUNT.COM    SHELL.SVC
 GLCD.SVC     STARTUP.CMD
 TED.COM      SAMPLE.ASM
@@ -364,7 +364,7 @@ BOUNCE.BAS   DEMO.ASM
 MON3.SVC     HELLO3.BIN
 HELLO3.ASM
 15 files, 912K free
-A>
+A:SYSTEM>
 ```
 
 [Appendix J](appendix-j-command-reference.md#programs-on-the-starter-card)
@@ -381,13 +381,13 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>CON PICO 32
+A:SYSTEM>CON PICO 32
 
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 
-A>
+A:SYSTEM>
 ```
 
 The web page's Display control prepares the startup file at power-on.
@@ -466,9 +466,9 @@ node tools/tecvol.mjs era nostart.img A STARTUP.CMD
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card nostart.img --lcd
      "CON UC1". Boot rows omitted. -->
 ```text
-A>CON UC1
+A:SYSTEM>CON UC1
 CON: TTY:
-A>
+A:SYSTEM>
 --- LCD
 TEC-OS 0.1  TEC-1G
 A: SYSTEM
@@ -490,13 +490,13 @@ node tools/tecvol.mjs era gname.img A GLCD.SVC
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card gname.img --board glcd
      --lcd "CON UC1" G.SVC CON. Boot rows omitted. -->
 ```text
-A>CON UC1
+A:SYSTEM>CON UC1
 CON: TTY:
-A>G.SVC
+A:SYSTEM>G.SVC
 
-A>CON
+A:SYSTEM>CON
 CON: UC1:
-A>
+A:SYSTEM>
 --- LCD
 TEC-OS 0.1  TEC-1G
 A: SYSTEM

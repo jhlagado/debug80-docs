@@ -29,7 +29,7 @@ its buffers occupy none of the transient program area (TPA)
 `src/abi.inc:65-106`). The command history is the shell's. `SHELL.SVC` is a
 resident service, and its fifteen pages, the 256-byte history ring in the
 last of them, lie below the TPA's ceiling like any other service's
-(`docs/shell.md:20-26`, `drivers/shell.asm:793-796`).
+(`docs/shell.md:22-30`, `drivers/shell.asm:793-796`).
 
 ## Two banks at the same addresses
 
@@ -193,10 +193,10 @@ at `0006h` to `A700h`, leaving 42,496 bytes. [Appendix C](appendix-c-memory-map.
 has these figures. The workspace below `BF00h` occupies 1,044 bytes. The
 warm-boot sweep clears 324 of them, from `BDBCh` through `BEFFh`. The 205
 bytes above the RAM BIOS table extend from `BF33h` through `BFFFh`
-(`docs/memory-map.md:8-20`, `docs/memory-map.md:45-58`,
-`docs/compatibility.md:3-14`).
+(`docs/memory-map.md:8-22`, `docs/memory-map.md:47-58`,
+`docs/compatibility.md:3-16`).
 The offered build still checks a minimum starter TPA of 45,830 bytes
-(`tools/build.mjs:204-213`, `tools/build.mjs:271-272`).
+(`tools/build.mjs:204-213`, `tools/build.mjs:271-273`).
 
 ## Page zero is rebuilt selectively
 
@@ -306,7 +306,7 @@ A nonzero dirty byte marks data newer than the card's copy.
 The final 768 bytes at `BD00h–BFFFh` are unused, since the command history
 is in the shell's own pages. The cache addresses are fixed in the source
 (`src/cache.asm:1-17`, `src/layout.asm:39-42`,
-`docs/memory-map.md:78-83`).
+`docs/memory-map.md:78-84`).
 
 Cold boot clears that whole 16 KiB bank and marks the cache lines empty.
 Warm boot leaves the cache storage in place and flushes pending writes. The

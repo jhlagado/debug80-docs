@@ -239,7 +239,7 @@ This run assembles AREA and CHARS before writing COUNT.SVC:
      "TAS COUNT COUNT.SVC" AREA COUNT.SVC SERVICES AREA CHARS CHARS UNLOAD SERVICES
      AREA CHARS. Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>TAS AREA
 AREA.COM written
 
@@ -398,7 +398,7 @@ include. The startup file had installed only the shell:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --card svc2.img B: "TAS AREA"
      "TAS FAIL FAIL.SVC" AREA SERVICES FAIL.SVC AREA. Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>TAS AREA
 AREA.COM written
 
@@ -420,7 +420,7 @@ B>
 ```
 
 The question mark reports the failed installation. AREA printed the same
-44,544-byte TPA before and after it, and FAIL left no resident allocation.
+42,496-byte TPA before and after it, and FAIL left no resident allocation.
 The attempt04 verification of this workflow, on ROM `fa63989b`, also checked
 the service state directly: INIT returned carry set once, REMOVE was not called and the loader restored
 the complete baseline after its BIOS scan. An INIT that changes hardware or

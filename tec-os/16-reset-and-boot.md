@@ -140,7 +140,7 @@ even if a cache line already holds it (`src/boot.asm:92-101`,
 The workspace and resident stacks need RAM at `8000h–BFFFh`. The cache
 needs EXPAND 1 behind the same window. The command history is in the
 shell's own pages, not in either bank's fixed areas
-(`docs/shell.md:20-22`). `RAMCHK` checks both
+(`docs/shell.md:22-30`). `RAMCHK` checks both
 before console initialisation, using the boot stack below `8000h`
 (`src/boot.asm:420-440`, `src/layout.asm:94`).
 
@@ -237,18 +237,18 @@ The saved assignment matched the starter card so D was listed afterwards:
 
 <!-- TEC-OS 1a6ce29: node tools/capture.mjs "CD D:GAMES" "@reset" -->
 ```text
-A>MOUNT B:
+A:SYSTEM>MOUNT B:
 Unmounted
 
-A>
+A:SYSTEM>
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 
-A>
+A:SYSTEM>
 ```
 
 A recognised reset retains only those assignments. Cold boot still clears
@@ -322,8 +322,8 @@ route:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs ^C -->
 ```text
-A>^C
-A>
+A:SYSTEM>^C
+A:SYSTEM>
 ```
 
 Warm boot rebuilds the environment in this order:

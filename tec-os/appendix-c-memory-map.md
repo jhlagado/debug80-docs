@@ -47,8 +47,8 @@ The starter card's layout with EXPAND 0 selected and no service loaded is:
 | Addresses | Contents |
 | --- | --- |
 | `0000h–00FFh` | Page zero |
-| `0100h–B9A8h` | Transient program area (TPA), 47,273 bytes |
-| `B9A9h–BFFFh` | BDOS entry jump and resident workspace in EXPAND 0 |
+| `0100h–B6E8h` | Transient program area (TPA), 46,569 bytes |
+| `B6E9h–BFFFh` | BDOS entry jump and resident workspace in EXPAND 0 |
 | `C000h–FFFFh` | ROM |
 
 TEC-OS writes the system latch at port `FFh` from its shadow at `0040h`,
@@ -72,14 +72,14 @@ These figures depend on the card and the services loaded:
 
 | Card | Vectors | Word at `0006h` | TPA |
 | --- | ---: | --- | ---: |
-| Starter card, G1M on A and G8M on B | 320 bytes | `B9A9h` | 47,273 bytes |
-| Starter card with `GLCD.SVC` installed | 320 bytes | `B600h` | 46,336 bytes |
-| Starter card after `STARTUP.CMD` installs `SHELL.SVC` | 320 bytes | `AF00h` | 44,544 bytes |
-| Starter card with `SHELL.SVC` and `GLCD.SVC` | 320 bytes | `AC00h` | 43,776 bytes |
-| Four G8M volumes | 1,024 bytes | `B6E9h` | 46,569 bytes |
+| Starter card, four reserved drive slots | 1,024 bytes | `B6E9h` | 46,569 bytes |
+| Starter card with `GLCD.SVC` installed | 1,024 bytes | `B300h` | 45,568 bytes |
+| Starter card after `STARTUP.CMD` installs `SHELL.SVC` | 1,024 bytes | `A700h` | 42,496 bytes |
+| Starter card with `SHELL.SVC` and `GLCD.SVC` | 1,024 bytes | `A400h` | 41,728 bytes |
+| Two-volume reference, no drives field, no service | 320 bytes | `B9A9h` | 47,273 bytes |
 
-The shell takes ten pages, and its last page holds its 256-byte history ring (`docs/memory-map.md:8-20`,
-`docs/compatibility.md:3-14`, `docs/shell.md:20-26`).
+The shell takes fifteen pages, and its last page holds its 256-byte history ring (`docs/memory-map.md:8-22`,
+`docs/compatibility.md:3-16`, `docs/shell.md:22-30`).
 
 ## The ROM
 
@@ -95,8 +95,8 @@ The ROM occupies these ranges:
 
 That is 14,875 of the 16,384 bytes (`docs/memory-map.md:22-30`).
 
-The CCP's four files occupy `DBBBh–E3C2h`, 2,056 bytes, from `CCPBAS`. The
-BDOS's six files follow at `BDOSBAS`, `E3C3h–F19Dh`, 3,547 bytes (`src/rom.asm:31-40`).
+The CCP's four files occupy `DBB3h–E3BDh`, 2,059 bytes, from `CCPBAS`. The
+BDOS's six files follow at `BDOSBAS`, `E3BEh–F198h`, 3,547 bytes (`src/rom.asm:31-40`).
 
 The ROM copy of the BIOS jump table is data at `BIOSBAS`. Cold boot copies
 its 17 jumps to `BF00h`. Calls use the RAM table, whose entries can be
@@ -160,8 +160,8 @@ row's clearing column names the boot sweeps that reach it. Other routines can st
 
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
-| `B9A9h–B9ABh` | 3 | BDOS entry jump, `JP BENTRY` |
-| `B9ACh–BAEBh` | 320 | Allocation vectors, B's 256 bytes at `B9ACh` then A's 64 at `BAACh` |
+| `B6E9h–B6EBh` | 3 | BDOS entry jump, `JP BENTRY` |
+| `B6ECh–BAEBh` | 1,024 | Four 256-byte allocation-vector slots |
 | `BAECh–BCC9h` | 478 | BIOS disk state/buffers, PICO console block, mount scratch and terminal state |
 | `BCCAh–BCF1h` | 40 | BIOS stack |
 | `BCF2h–BE76h` | 389 | CCP state and stack |
@@ -266,16 +266,17 @@ The declarations are at `src/ram.asm:295-458`. These
 addresses lie above the warm clearing span. Cold-only clearing therefore
 describes storage lifetime, not an assurance that its value remains unchanged.
 The history and the rest of the startup file are the shell's, so no field here
-holds them. `CPEND` holds A's pending block for the coalescing in
+holds them. `CPEND` holds the pending block on a drive not logged, for the coalescing in
 [Chapter 19](19-cache-and-persistence.md)
 (`src/ram.asm:303-319`, `src/ram.asm:399-404`,
-`docs/memory-map.md:60-68`).
+`docs/memory-map.md:60-69`).
 
 | Addresses | Bytes | Name | Contents | Cleared by |
 | --- | ---: | --- | --- | --- |
 | `BF33h–BF3Dh` | 11 | `SDBYTE` to `SDXB` | SD addressing flag, big-endian argument, little-endian block address, last error and cache-transfer bank selector | Cold boot |
-| `BF3Eh–BF41h` | 4 | `CNEXT` to `CIFF` | Replacement index, BIOS write type and two-byte saved interrupt state | Cold boot |
-| `BF42h` | 1 | `CPEND` | A:'s pending block: its cache line plus one, 0 for none | Cold boot |
+| `BF3Eh–BF40h` | 3 | `CNEXT` to `CIFF` | Replacement index, BIOS write type and saved interrupt flags | Cold boot |
+| `BF41h` | 1 | `CANY` | Nonzero when a data line may be held behind on the logged drive | Cold boot |
+| `BF42h` | 1 | `CPEND` | The coalesced pending block: its cache line plus one, 0 for none | Cold boot |
 | `BF43h–BF49h` | 7 | `KBMASK` to `KBT2` | Matrix scan and pending arrow-sequence state | Cold boot |
 | `BF4Ah–BF4Dh` | 4 | `PIVEC`, `GLVEC` | Console-table pointers, `PIBLK` for PICO or 0 when absent, and GLCD's table | Cold boot |
 | `BF4Eh–BF51h` | 4 | `XMDST` to `MVREST` | MVCOPY source/destination banks and remaining byte count | Cold boot |
@@ -302,7 +303,7 @@ holds them. `CPEND` holds A's pending block for the coalescing in
 | `BFF1h` | 1 | `VCURV` | 1 while the cursor cell is drawn reversed | Cold boot |
 | `BFF2h–BFFFh` | 14 | `MNTBLK` to `MNTLN` | Remaining mount/volume-service scratch | Cold boot |
 
-`CIFF` occupies two bytes. The CCP sets `HFLAG` to `FFh` while the shell's `LINE` entry reads
+`CIFF` occupies one byte; `CANY` uses the byte after it. The CCP sets `HFLAG` to `FFh` while the shell's `LINE` entry reads
 one line, so that line's function 10 call can use the history. `SHOWN` holds
 the address of the shell's entry table, 0 with no shell. `CONDEV` combines switch, probe
 and ownership state so its bits do not all prove device presence
@@ -328,7 +329,7 @@ These fixed bank addresses hold the cache (`src/layout.asm:32-42`,
 | `BD00h–BFFFh` | 768 | Unused. The host model watches it so that a stray write fails |
 
 The command history is in the shell's own pages, not in this bank
-(`docs/shell.md:20-26`).
+(`docs/shell.md:22-30`).
 
 Cold boot clears the whole bank and then marks every cache key empty
 (`src/boot.asm:235-252`). No BDOS or BIOS interface allocates a
@@ -385,8 +386,8 @@ explains declaration checks.
 
 `npm run media` writes the summary into `docs/memory-map.md` from
 `build/tecos/census.json` and the build's symbol file
-(`tools/media.mjs:66-91`, `tools/media.mjs:172-189`,
-`tools/media.mjs:282`). Chapter 27 describes ROM/media construction.
+(`tools/media.mjs:66-98`, `tools/media.mjs:181-198`,
+`tools/media.mjs:291`). Chapter 27 describes ROM/media construction.
 The lookup below reads `build/tecos/tecos.d8.json` after `npm run build`:
 
 ```sh

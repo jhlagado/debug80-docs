@@ -199,9 +199,9 @@ node tools/tecvol.mjs dir dist/starter.img A
 ```
 
 SHELL.SVC is 3,655 bytes in `dist/files` and occupies 29 records, 3,712
-bytes, on the card. The fourteen files are those of `tools/media.mjs:200-231` and
+bytes, on the card. The fourteen files are those of `tools/media.mjs:209-240` and
 `tools/lib/starter.mjs:10-22`, and STARTUP.CMD holds `SHELL.SVC` and
-`GLCD.SVC` (`test/starter.test.mjs:48-82`).
+`GLCD.SVC` (`test/starter.test.mjs:48-81`).
 
 ## put
 
@@ -315,7 +315,8 @@ NOTE.TXT with `--force`.
 `recipe RECIPE.json IMAGE` constructs an image from the
 `tecos-file-recipe-v1` JSON schema. A recipe lists volumes and components
 separately. Volume entries give geometry, label, `mount` and optional
-`readOnly` or `writeBehind`. Components contain files. File entries give
+`readOnly`. A volume naming `writeBehind` is refused: write-behind follows
+the logged drive. Components contain files. File entries give
 name, URL/path, `drive`,
 byte size, SHA-256 and optional user area (`tools/lib/recipe.mjs:14-26`).
 Unlike `create`, this command can replace an existing output image
@@ -328,9 +329,9 @@ are applied after the files are written (`tools/tecvol.mjs:90-99`,
 `tools/lib/recipe.mjs:14-44`). The web page uses the same recipe function
 for New starter card.
 
-`npm run media` prepares `dist/starter.recipe.json` and its image. That recipe, at revision 12, is the only one: the web page builds
+`npm run media` prepares `dist/starter.recipe.json` and its image. That recipe, at revision 13, is the only one: the web page builds
 the same card, and media removes a `dist/page.recipe.json` left by an older
-build (`tools/media.mjs:233-257`, `278-281`). Chapter 27
+build (`tools/media.mjs:242-266`, `278-281`). Chapter 27
 describes that preparation. The rebuild produced these matching hashes:
 
 ```sh
@@ -391,19 +392,19 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>DIR
+A:SYSTEM>DIR
 HELLO.TXT    MOUNT.COM   
 2 files, 1012K free
-A>TYPE HELLO.TXT
+A:SYSTEM>TYPE HELLO.TXT
 hello
 world
 
-A>MOUNT
+A:SYSTEM>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 02 ARCHIVE     G1M R/O
 
-A>
+A:SYSTEM>
 ```
 
 The startup file loads the shell, so the prompt shows the drive's volume and

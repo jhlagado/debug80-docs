@@ -168,10 +168,10 @@ node tools/tecvol.mjs put dollar.img A 'NOTE$.TXT' --text
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card dollar.img. Boot rows
      omitted. -->
 ```text
-A>TYPE NOTE
+A:SYSTEM>TYPE NOTE
 It ran whole.
 
-A>
+A:SYSTEM>
 ```
 
 With `SHELL.SVC` on the first line and the same command on the second, the
@@ -186,12 +186,12 @@ node tools/tecvol.mjs put dollar2.img A startup.cmd --text
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card dollar2.img. Boot rows
      omitted. -->
 ```text
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>TYPE NOTE$.TXT
+A:SYSTEM>TYPE NOTE$.TXT
 It ran whole.
 
-A>
+A:SYSTEM>
 ```
 
 At the maximum copied length, the echo's CR fills the last byte of 128-byte

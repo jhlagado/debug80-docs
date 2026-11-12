@@ -9,9 +9,9 @@ nav_group: "Using the machine"
 
 <!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
      Unprefixed source ranges use that revision. COPY, DEL, SERVICES and the
-     [more] pager are SHELL.SVC's: drivers/shell.asm:532-552,
-     drivers/shellcmd.asm:54-220, drivers/shellio.asm:380-508,
-     docs/shell.md:3-41 and :135-143, docs/compatibility.md:90-133; the ROM's
+     [more] pager are SHELL.SVC's: drivers/shell.asm:545-556,
+     drivers/shellcmd.asm:54-219, drivers/shellio.asm:380-508,
+     docs/shell.md:3-47 and :135-143, docs/compatibility.md:90-133; the ROM's
      own built-ins are src/tables.asm:53-76. Every excerpt is a capture at
      fdd9e5b with the command in its comment, on the starter card, the
      screens on the PICO9918 board at 40 columns.
@@ -59,11 +59,11 @@ separate from your BANNER session and the 40-column screen below:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs "TYPE STARTUP.CMD".
      Boot rows omitted. -->
 ```text
-A>TYPE STARTUP.CMD
+A:SYSTEM>TYPE STARTUP.CMD
 SHELL.SVC
 GLCD.SVC
 
-A>
+A:SYSTEM>
 ```
 
 The file's carriage returns and line feeds end its lines. The extra blank
@@ -158,10 +158,10 @@ have different names. This command writes only B:SAMPLE.ASM:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen
      "COPY A:SAMPLE.ASM B:SAMPLE.ASM", screen rows 10–13. -->
 ```text
-A>COPY A:SAMPLE.ASM B:SAMPLE.ASM
+A:SYSTEM>COPY A:SAMPLE.ASM B:SAMPLE.ASM
 COPIED 0024
 
-A>
+A:SYSTEM>
 ```
 
 The count after `COPIED` is hexadecimal. Here `0024` means 36 records of
@@ -183,13 +183,13 @@ NOTES.TXT. The listings and free-space figures belong to that card:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs "COPY STARTUP.CMD B:" "COPY STARTUP.CMD B:COPY.TXT" B: DIR "REN NOTES.TXT=COPY.TXT" "REN NOTES.TXT=STARTUP.CMD" DIR "ERA NOTES.TXT" "ERA NOTES.TXT" DIR -->
 ```text
-A>COPY STARTUP.CMD B:
+A:SYSTEM>COPY STARTUP.CMD B:
 COPIED 0001
 
-A>COPY STARTUP.CMD B:COPY.TXT
+A:SYSTEM>COPY STARTUP.CMD B:COPY.TXT
 COPIED 0001
 
-A>B:
+A:SYSTEM>B:
 B>DIR
 STARTUP.CMD  COPY.TXT    
 2 files, 8168K free

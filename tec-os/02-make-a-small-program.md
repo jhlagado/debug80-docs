@@ -10,12 +10,12 @@ nav_group: "Using the machine"
 <!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
      ROM SHA-256 43ac0f18…, with the starter card's TED.COM, Thorium
      a2fe556 (c6c8374a…), and TAS.COM, Thorium 3d1e2c0 (e648a1d0…,
-     10,343 bytes; test/inputs.json:4-13, docs/compatibility.md:223 and
+     10,343 bytes; test/inputs.json:4-13, docs/compatibility.md:222 and
      :226). The console excerpts are captures at e59e8c4 on the PICO9918
      board at 40 columns, on starter-card copies with B:BANNER.ASM put as
      each stage's source: node tools/capture.mjs --card IMG --board pico
      "@start A:TED B:BANNER.ASM" then ^T B or ^T R typed as their bytes,
-     the console text from A>A:TAS on. The final excerpt is node
+     the console text from A:SYSTEM>A:TAS on. The final excerpt is node
      tools/capture.mjs --card IMG "A:TAS B:BANNER.ASM" ^C B:BANNER ^C on
      the serial console, whose text the PICO9918 shows the same. The
      status-row positions and messages are TED's last screen row read on
@@ -35,7 +35,7 @@ with TED's build keys.
 ## A new source file
 
 The prepared tools are on A and your new file goes on B. Starting at the
-`A>` prompt from the first session, `A:TED B:BANNER.ASM` opens TED from A
+`A:SYSTEM>` prompt from the first session, `A:TED B:BANNER.ASM` opens TED from A
 with BANNER.ASM on B as the file to edit. The two drive prefixes name the
 tool and the source separately. Press Return after the command.
 
@@ -91,13 +91,13 @@ the editor. The initial screen-clear controls, leading blank line and editor
 redraw after the last line are omitted:
 
 <!-- TEC-OS e59e8c4: the source above with BROKEN as line 14, ^T B.
-     Console text from A>A:TAS through A>A:TED. The long diagnostic wraps
+     Console text from A:SYSTEM>A:TAS through A:SYSTEM>A:TED. The long diagnostic wraps
      on the 40-column screen. -->
 ```text
-A>A:TAS B:BANNER.ASM
+A:SYSTEM>A:TAS B:BANNER.ASM
 BANNER.ASM:14:1: unknown instruction or directive
 
-A>A:TED
+A:SYSTEM>A:TED
 ```
 
 TAS reports the source name, line 14 and column 1. `BROKEN` is neither an
@@ -114,7 +114,7 @@ extra line too. It supplies the Delete action on the matrix keyboard, which
 has no separate Delete key. The source is now the complete listing above.
 
 `^S` saves the repaired text. Wait for `Saved` before `^Q` quits TED and
-returns to `A>`. At the empty prompt, `^C` finishes pending card writes.
+returns to `A:SYSTEM>`. The prompt's own key read finishes pending card writes.
 The successful return to the prompt establishes preservation only if no
 write-failure message appeared. `Write lost` means some pending changes
 were dropped. Another `^C` cannot recover those changes.
@@ -132,23 +132,23 @@ again with the source.
 complete console text from the initial run, with the initial clear-screen
 controls and leading blank line omitted. The editor has not yet redrawn:
 
-<!-- TEC-OS e59e8c4: the source above, ^T R. Console text from A>A:TAS
+<!-- TEC-OS e59e8c4: the source above, ^T R. Console text from A:SYSTEM>A:TAS
      on; Press a key has no following newline. -->
 ```text
-A>A:TAS B:BANNER.ASM
+A:SYSTEM>A:TAS B:BANNER.ASM
 BANNER.COM written
 
-A>A:TED
+A:SYSTEM>A:TED
 
-A>B:BANNER
+A:SYSTEM>B:BANNER
 Hello from TEC-OS
 
-A>A:TED
+A:SYSTEM>A:TED
 Press a key
 ```
 
 `BANNER.COM written` reports the successful assembly. The greeting is your
-program's output. The `A>A:TED` lines are commands used to reopen the editor,
+program's output. The `A:SYSTEM>A:TED` lines are commands used to reopen the editor,
 not text printed by BANNER. TED supplies its build and the return to the
 editor as one command line, and the shell that the startup file loaded runs
 its commands in turn, each after its own prompt. Chapter 13 explains such
@@ -258,15 +258,15 @@ line are omitted:
 
 <!-- TEC-OS e59e8c4: the edited source, ^T R, a separate run. -->
 ```text
-A>A:TAS B:BANNER.ASM
+A:SYSTEM>A:TAS B:BANNER.ASM
 BANNER.COM written
 
-A>A:TED
+A:SYSTEM>A:TED
 
-A>B:BANNER
+A:SYSTEM>B:BANNER
 Hello from TEC-OS!
 
-A>A:TED
+A:SYSTEM>A:TED
 Press a key
 ```
 
@@ -275,8 +275,8 @@ and the rebuilt program. Saving alone would have left the earlier COM unchanged.
 
 ## Saved source and the standalone program
 
-`^Q` quits the editor. At `A>`, `^C` completes pending writes before a reset
-or removal. Wait for its successful return to the prompt. A write-failure
+`^Q` quits the editor. Wait for `A:SYSTEM>` before a reset or card removal:
+the prompt's key read writes every changed line. A write-failure
 message has the same consequence as in the earlier save: the prompt alone
 does not prove the file was preserved.
 
@@ -293,12 +293,12 @@ and a final `^C`:
 <!-- TEC-OS e59e8c4: node tools/capture.mjs --card IMG "A:TAS B:BANNER.ASM"
      ^C B:BANNER ^C, the last lines. -->
 ```text
-A>^C
-A>B:BANNER
+A:SYSTEM>^C
+A:SYSTEM>B:BANNER
 Hello from TEC-OS!
 
-A>^C
-A>
+A:SYSTEM>^C
+A:SYSTEM>
 ```
 
 Running the COM leaves BANNER.ASM available for your next edit.

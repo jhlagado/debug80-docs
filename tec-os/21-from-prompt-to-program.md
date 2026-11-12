@@ -34,7 +34,7 @@ holds DIR, TYPE, ERA, REN, SAVE, USER, CON and UNLOAD, and it still runs a
 in `SHELL.SVC`, a resident service that the starter card's startup file
 installs. Its own table holds COPY, DEL and SERVICES, and DEL rewrites its
 word as `ERA` and hands the piece to the ROM
-(`drivers/shell.asm:532-548`).
+(`drivers/shell.asm:545-552`).
 
 The shell takes the prompt through a hook in the ROM. ROM service 16,
 `TNSHELL`, records a table of four entries in the shell's pages: `LINE`,
@@ -133,7 +133,7 @@ the empty drive could succeed (`src/cpm/ccp.asm:74-96`,
 reads the user with function 32 and the drive with function 25, then packs
 them into `0004h`. With a shell holding the hook, `SHLINE` calls its `LINE`
 entry, which prints the prompt itself. Otherwise the ROM prints a nonzero
-user number in decimal before the drive letter and `>`, giving `A>` or `3A>`
+user number in decimal before the drive letter and `>`, giving `A:SYSTEM>` or `3A:SYSTEM>`
 (`src/cpm/ccp.asm:110-144`, `src/cpm/ccp.asm:306-324`). A program's ordinary
 exit preserves that selection. Removing the current volume gives the
 fallback to A described above. Cold reset starts from A and user 0.
@@ -205,7 +205,7 @@ The keyword loop compares the original command text at `CMDSTRT` with
 `KEYTAB`, not the parsed FCB. Its order is DIR, TYPE, ERA, REN, SAVE,
 USER, CON and UNLOAD. COPY, DEL and SERVICES are not in it: the shell
 takes them before the ROM sees the piece, and DEL reaches the ROM as `ERA`
-(`src/tables.asm:60-76`, `drivers/shell.asm:532-548`). `ISCMD` requires a space or zero
+(`src/tables.asm:60-76`, `drivers/shell.asm:545-552`). `ISCMD` requires a space or zero
 immediately after the keyword. `A:DIR` and `DIR.COM` therefore name a
 program file rather than built-in DIR. Both fail when the selected search
 finds no `DIR.COM` (`src/cpm/ccp.asm:351-376`,
@@ -307,19 +307,19 @@ the new name at offset 17 for function 23. An absent old name gives
 SAVE converts a decimal page count with a carry check at every arithmetic
 step. It rejects values above 255 and counts reaching the high byte of
 the word at `0006h`. On the starter card with the shell installed that byte
-is `AFh`: 174 pages cover `0100h` through `AEFFh`. Both 175 and 320 were
+is `A7h`: 166 pages cover `0100h` through `A6FFh`. Both 167 and 320 are
 rejected in this capture (`src/cpm/ccpcmd.asm:266-307`):
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "SAVE 320 B:X.COM" "SAVE 175 B:X.COM".
+<!-- TEC-OS fdd9e5b: node tools/capture.mjs "SAVE 320 B:X.COM" "SAVE 167 B:X.COM".
      Boot rows omitted. -->
 ```text
-A>SAVE 320 B:X.COM
+A:SYSTEM>SAVE 320 B:X.COM
 320?
 
-A>SAVE 175 B:X.COM
+A:SYSTEM>SAVE 175 B:X.COM
 175?
 
-A>
+A:SYSTEM>
 ```
 
 SAVE erases an existing file, makes it again and writes two 128-byte records per
@@ -334,7 +334,7 @@ page-zero buffers so they leave program memory available to save. Loading a COM
 program or a service overwrites that memory, including a GLCD service loaded by
 CON (`src/cpm/ccpcmd.asm:315-360`, `src/loader.asm:862-906`,
 `src/cpm/ccp.asm:625-663`). The shell's COPY uses the DMA at `0080h` and also
-leaves the TPA alone (`drivers/shellcmd.asm:92-95`).
+leaves the TPA alone (`drivers/shellcmd.asm:93-94`).
 
 ### Selection and consoles
 
@@ -362,20 +362,20 @@ shows both:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico "CON PICO 40" "CON CRT80"
      "CON PICO 50" "CON TTY 80" "CON CRT: 32". Boot rows omitted. -->
 ```text
-A>CON PICO 40
+A:SYSTEM>CON PICO 40
 CON: CRT:
-A>CON CRT80
+A:SYSTEM>CON CRT80
 CRT80?
 
-A>CON PICO 50
+A:SYSTEM>CON PICO 50
 50?
 
-A>CON TTY 80
+A:SYSTEM>CON TTY 80
 80?
 
-A>CON CRT: 32
+A:SYSTEM>CON CRT: 32
 CON: CRT:
-A>
+A:SYSTEM>
 ```
 
 `PICOWID` also rejects a change while the display is claimed. An accepted
@@ -436,7 +436,7 @@ explicit B drive. The plain TAS reaches A, and prints its usage line, while
 <!-- TEC-OS 1a6ce29: node tools/capture.mjs B: TAS B:TAS. Boot rows
      omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
@@ -469,23 +469,23 @@ falling through to another drive. In the default BDOS error mode a card
 read failure prints `Bad Sector` and warm-boots before this routine returns
 (`src/cpm/bdoscon.asm:47-64`).
 
-With nothing installed the starter card's resident entry is at `B9A9h`. Its
-load ceiling is `B900h`, allowing 47,104 bytes from `0100h`, 169 fewer than
+With nothing installed the starter card's resident entry is at `B6E9h`. Its
+load ceiling is `B600h`, allowing 46,336 bytes from `0100h`, 233 fewer than
 the TPA's byte-address limit. The startup file installs the shell, whose
-first page is `AF00h`, so the starter card's prompt loads at most 44,544
+first page is `A700h`, so the starter card's prompt loads at most 42,496
 bytes. An installed service lowers the entry word to
 its first page and lowers the load ceiling with it
 (`src/cpm/ccp.asm:637-639`, `src/loader.asm:494-507`).
 
 The capacity fixture places FITS, BIG and ARGS on B. FITS and BIG contain
 RET followed by zeros. ARGS has the complete listing below and is assembled
-on the PC by TAS, as Chapter 27's HELLO is. FITS has 44,544 bytes and BIG
-has 44,545:
+on the PC by TAS, as Chapter 27's HELLO is. FITS has 42,496 bytes and BIG
+has 42,497:
 
 ```sh
 node -e 'const b = n => { const x = Buffer.alloc(n); x[0] = 0xC9; return x; };
-require("fs").writeFileSync("build/fits.com", b(44544));
-require("fs").writeFileSync("build/big.com", b(44545));'
+require("fs").writeFileSync("build/fits.com", b(42496));
+require("fs").writeFileSync("build/big.com", b(42497));'
 node --input-type=module -e '
 import { writeFileSync } from "node:fs";
 import { assembleProgram } from "./tools/lib/assemble.mjs";
@@ -504,7 +504,7 @@ rejected:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/ccp.img B: FITS BIG.
      Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>FITS
 
 B>BIG
@@ -520,7 +520,7 @@ the empty current area:
 <!-- TEC-OS 1a6ce29: node tools/capture.mjs --card build/ccp.img B: "USER 3" ARGS
      TAS B:TAS DIR. Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>USER 3
 3B>ARGS
 0            
@@ -618,7 +618,7 @@ while the tail preserves the spaces within the piece:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/ccp.img B: "args one.txt a:*.c"
      "ARGS X Y ! ARGS". Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>args one.txt a:*.c
 0 ONE     TXT
 1 ????????C  

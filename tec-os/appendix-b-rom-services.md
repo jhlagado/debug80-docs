@@ -112,7 +112,7 @@ The names and bounds come from `src/abi.inc:65-234`. The build's ABI check
 compares the fixed table bytes, verifies that the service entries lie in code
 and checks INFO's bits. It does not prove every routine's contract. Media
 generation publishes the include as `dist/abi.inc` (`tools/build.mjs:140-155`,
-`tools/media.mjs:276-283`).
+`tools/media.mjs:285-292`).
 
 ### Costs and depths
 
@@ -538,7 +538,7 @@ ABI.INC and HWLIB.ASM preparation:
 <!-- TEC-OS fdd9e5b: node tools/tecvol.mjs put svc.img B vtest.asm --text; node tools/capture.mjs --card svc.img --board pico B: "TAS VTEST" VTEST
      Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>TAS VTEST
 VTEST.COM written
 
@@ -588,7 +588,7 @@ command processor. A table must lie in a resident's pages, at or above
 at most `F8h`. Any other nonzero HL returns `TNEBAD`, status 1, with carry and
 the hook unchanged. Otherwise it returns HL = the table it replaced, 0 for
 none, with A = 0 and carry clear. BC, IX and IY are kept and DE changes. It
-makes no BDOS call (`src/services.asm:566-602`, `src/abi.inc:226`,
+makes no BDOS call (`src/services.asm:566-601`, `src/abi.inc:226`,
 `docs/shell.md:273-285`). Numbers from `TNCOUNT`, 17, upwards return status 1
 (`src/abi.inc:228-236`). Chapter 21 describes the hook's use, and
 `SHELL.SVC` is its one caller on the starter card.

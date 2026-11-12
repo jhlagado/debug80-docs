@@ -264,22 +264,22 @@ too:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card old.img --board glcd "REN PICO.SVC=PICO.DRV" "REN GLCD.SVC=GLCD.DRV" PICO.SVC GLCD.SVC CON SERVICES -->
 ```text
-A>PICO.DRV
+A:SYSTEM>PICO.DRV
 PICO.DRV?
 
-A>REN PICO.SVC=PICO.DRV
-A>REN GLCD.SVC=GLCD.DRV
-A>PICO.SVC
+A:SYSTEM>REN PICO.SVC=PICO.DRV
+A:SYSTEM>REN GLCD.SVC=GLCD.DRV
+A:SYSTEM>PICO.SVC
 PICO.SVC?
 
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 
-A>CON
+A:SYSTEM>CON
 CON: UC1:
-A>SERVICES
+A:SYSTEM>SERVICES
 SERVICES?
 
-A>
+A:SYSTEM>
 ```
 
 `STARTUP.CMD` still names the old files so the next board reset prints the
@@ -354,7 +354,7 @@ boot or a diagnostic retry, not at warm boot (`src/boot.asm:92-101`,
 lines are dropped and `Write lost` is printed (`src/cache.asm:266-296`,
 `src/cache.asm:624-640`). `MOUNT`, unmount and function 48 instead keep a
 failed line for the next flush, so only a warm boot drops a flushed line that
-still fails (`docs/recovery.md:49-61`). BDOS function 48 reports a failure to a program at
+still fails (`docs/recovery.md:75-96`). BDOS function 48 reports a failure to a program at
 once: it writes every changed block and returns `A` = `FFh` if any write failed
 (`src/cpm/bdos.asm:237-257`). [Chapter 19](19-cache-and-persistence.md)
 explains the mechanism, and which drive is written behind.
@@ -380,7 +380,7 @@ the volume services.
 The starter card's TED (Thorium `a2fe556`) prints this
 line and returns to the prompt when the file it is opening holds a byte it
 rejects
-(`Thorium a2fe556:README.md:25-30`, `docs/compatibility.md:223`,
+(`Thorium a2fe556:README.md:25-30`, `docs/compatibility.md:222`,
 `test/ted.test.mjs:94-122`). An older TED, Thorium `967678c`, also rejects `00h` padding at the end of a file and gives
 error 03 without a line or column
 (`Thorium 967678c:ted/src/load.asm:48-53`, `121-125`).

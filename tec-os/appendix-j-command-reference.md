@@ -28,8 +28,9 @@ the line. Later in the line it is ignored. Recall and editing keys are in
 command processor runs the built-ins marked ROM below, and the shell,
 `SHELL.SVC`, which the starter card's startup file installs, adds those
 marked shell, recall, the `[more]` pause, lines of several commands and
-`.CMD` scripts (`docs/shell.md:1-50`). Commands and arguments are converted to
-capitals before execution. The echo retains the case typed.
+`.CMD` scripts (`docs/shell.md:1-50`). Command names and ordinary program arguments are converted to capitals
+before execution. ECHO and PAUSE keep their text as typed. The command
+echo also retains the case typed.
 [Work with files](04-work-with-files.md) explains the ordinary operations.
 This appendix gives their exact forms and boundary cases.
 
@@ -68,16 +69,16 @@ requires one file and a second argument where DIR accepts only one.
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs "DIR VERYLONGNAME.TXT" "TYPE *.CMD"
      "DIR A: B:". Boot rows omitted; the output is the same as at 78127ec. -->
 ```text
-A>DIR VERYLONGNAME.TXT
+A:SYSTEM>DIR VERYLONGNAME.TXT
 VERYLONGNAME.TXT?
 
-A>TYPE *.CMD
+A:SYSTEM>TYPE *.CMD
 *.CMD?
 
-A>DIR A: B:
+A:SYSTEM>DIR A: B:
 A:?
 
-A>
+A:SYSTEM>
 ```
 
 For built-ins other than COPY and UNLOAD, the word before `?` is the first
@@ -195,19 +196,19 @@ with the starter card.
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs "COPY STARTUP.CMD B:.DOC" "DIR B:"
      "COPY A:STARTUP.CMD STARTUP.CMD" "COPY STARTUP.CMD". Boot rows omitted. -->
 ```text
-A>COPY STARTUP.CMD B:.DOC
+A:SYSTEM>COPY STARTUP.CMD B:.DOC
 COPIED 0001
 
-A>DIR B:
+A:SYSTEM>DIR B:
 STARTUP.CMD 
 1 file, 8172K free
-A>COPY A:STARTUP.CMD STARTUP.CMD
+A:SYSTEM>COPY A:STARTUP.CMD STARTUP.CMD
 COPY?
 
-A>COPY STARTUP.CMD
+A:SYSTEM>COPY STARTUP.CMD
 COPY?
 
-A>
+A:SYSTEM>
 ```
 
 On B, `COPY A:STARTUP.CMD` instead has distinct source and destination drives
@@ -257,10 +258,10 @@ used for BANNER in Chapter 2. `ERA *.*` would erase BANNER too on that card.
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs "COPY STARTUP.CMD B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
 ```text
-A>COPY STARTUP.CMD B:
+A:SYSTEM>COPY STARTUP.CMD B:
 COPIED 0001
 
-A>B:
+A:SYSTEM>B:
 B>ERA *.*
 ALL (Y/N)?n
 B>DIR
@@ -296,7 +297,7 @@ selection fails. USER accepts a single digit from 0 to 9 or one of 10 to 15.
 Leading-zero forms such as `00` and `03` are rejected. A nonzero user number
 appears before the drive in the command prompt. Under the shell the drive's
 volume follows the drive, as in `A:SYSTEM>` and `3B:GAMES>`, and a drive
-with no volume shows `C:>`. Without the shell the prompt is `A>`.
+with no volume shows `C:>`. Without the shell the prompt is `A:SYSTEM>`.
 
 For a program command the type is replaced by COM, except for SVC. Lookup starts
 on the named drive or the current drive when none is named. On that drive it
@@ -403,7 +404,7 @@ service converts to capitals. It takes three commands. Anything else prints
 | `LOAD [D:]NAME[.TYP] [ADDR]` | Load the file at `4000h`, or at `ADDR`, one to four hexadecimal digits, in whole records. Any type but `HEX` loads this way |
 | `LOAD [D:]NAME.HEX` | Load an Intel HEX file at its records' addresses. It takes no address |
 | `GO [ADDR]` | Run the last good load, or the program at `ADDR` |
-| `EXIT` | Restore page zero, reset the drives and warm boot to `A>` |
+| `EXIT` | Restore page zero, reset the drives and warm boot to `A:SYSTEM>` |
 
 The drive is A to P. The name has at most eight characters and the type
 three, and neither may hold `?` or `*`. Such a name is refused with `?`
@@ -419,9 +420,9 @@ The starter card's A holds fourteen files, and the web page runs the same
 card. Nine are programs or sources you use by name at the prompt.
 `SHELL.SVC`, `GLCD.SVC` and `STARTUP.CMD` belong to the startup setup,
 `BAZA.RTL` is read by BAZA and `HELLO3.BIN` is loaded at `MON3>`
-(`tools/media.mjs:29-31`, `tools/media.mjs:200-231`,
+(`tools/media.mjs:29-31`, `tools/media.mjs:209-240`,
 `tools/lib/starter.mjs:10-22`, `README.md:165-202`,
-`test/demo.test.mjs:1-4`, `test/starter.test.mjs:48-394`):
+`test/demo.test.mjs:1-4`, `test/starter.test.mjs:48-393`):
 
 | File | Use |
 | --- | --- |
@@ -444,7 +445,7 @@ TED's `^T B` and `^T R` build an `.ASM` file with `TAS NAME.ASM` and a
 `.BAS` file with `BAZA NAME.BAS`. `^T D` chains `TDB NAME` for an `.ASM`
 file, which fails with `A:TDB?` on the starter card, and shows
 `No debugger` for a `.BAS` file
-(`Thorium a2fe556:README.md:14-41`, `docs/compatibility.md:223`).
+(`Thorium a2fe556:README.md:14-41`, `docs/compatibility.md:222`).
 A file name and `THOR.PRJ`'s `ARGS` stop at a `!` or at an `&` after a blank,
 where the shell splits the line, so `ARGS X &Y` gives the program the tail
 ` X` and nothing after it runs (`Thorium a2fe556:README.md:51-58`).

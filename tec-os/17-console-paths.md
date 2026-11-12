@@ -125,9 +125,9 @@ in the serial capture:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --serial CON "CON TTY" CON -->
 ```text
 CON: TTY:
-A>CON
+A:SYSTEM>CON
 CON: TTY:
-A>
+A:SYSTEM>
 ```
 
 ## Input held at two levels
@@ -239,15 +239,15 @@ complete one before Return:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs $'TYPE X\x15DIR *.CMD' $'DIR *.CMD\x12'.
      Boot rows omitted. -->
 ```text
-A>TYPE X#
+A:SYSTEM>TYPE X#
 DIR *.CMD
 STARTUP.CMD 
 1 file, 912K free
-A>DIR *.CMD#
+A:SYSTEM>DIR *.CMD#
 DIR *.CMD
 STARTUP.CMD 
 1 file, 912K free
-A>
+A:SYSTEM>
 ```
 
 The history belongs to the shell, `SHELL.SVC`. The ROM's `SHLINE` sets
@@ -521,7 +521,7 @@ AB
 
          XR
 
-A>
+A:SYSTEM>
 ```
 
 With any command tail, such as `B:TERM S`, the program continues with

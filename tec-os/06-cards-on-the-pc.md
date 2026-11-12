@@ -15,11 +15,11 @@ nav_group: "Using the machine"
      host model from the starter card with Chapter 2's edited BANNER.ASM on
      B: TED opened it, ^T B saved and built it, ^Q quit and a warm boot
      flushed the card. The one card's files and TED's load rule follow
-     tools/media.mjs:200-253 and :274-277, tools/lib/starter.mjs:10-22,
-     web/build.mjs:41-42, docs/compatibility.md:223 and
-     test/ted.test.mjs:92-120, with TED.COM Thorium a2fe556 (c6c8374a…,
+     tools/media.mjs:209-266 and :274-277, tools/lib/starter.mjs:10-22,
+     web/build.mjs:41-42, docs/compatibility.md:222 and
+     test/ted.test.mjs:94-122, with TED.COM Thorium a2fe556 (c6c8374a…,
      12,335 bytes). A:'s coalesced writes in "Recovery after a power cut":
-     docs/recovery.md:28-47, :66-103 and :135-147. The older TED named is
+     docs/recovery.md:56-73, :66-103 and :135-147. The older TED named is
      Thorium 967678c, the TED of the card at TEC-OS 755636b.
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
      card differs only in TED.COM and HELLO3.ASM, so captures made at
@@ -67,11 +67,11 @@ write goes to the named device even if that device contains your PC's files.
 Unmount its filesystems before a raw write so the PC is not also writing
 through a mounted filesystem.
 
-For the 10 MiB starter container, the recovery recipe copies its first
-20,480 blocks and checks the copy:
+For the 13 MiB starter container, the recovery recipe copies its first
+26,624 blocks and checks the copy:
 
 ```sh
-dd if=/dev/rdiskN of=card.img bs=512 count=20480
+dd if=/dev/rdiskN of=card.img bs=512 count=26624
 node tools/tecvol.mjs verify card.img
 ```
 
@@ -163,7 +163,7 @@ The complete A listing includes TED's project and session files:
  0 TIMES.BAS         640
 ```
 
-These are the starter card's fifteen files and TED's two.
+These are the starter card's fourteen files and TED's two.
 
 B contains the source, program and debug file:
 
@@ -273,16 +273,16 @@ container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
   B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
 ```
 
-The container occupies 20,480 blocks or 10 MiB. SYSTEM begins at block
-2,048, 1 MiB into the card, and occupies 1 MiB. WORK starts at block 4,096
-and occupies 8 MiB. The default alignment puts each volume on a multiple of
-2,048 blocks, a common SD erase-block multiple. On this two-volume image
-the space before SYSTEM contains only the header and unused padding.
+The container occupies 26,624 blocks or 13 MiB. SYSTEM begins at block
+2,048 and occupies 1 MiB. WORK starts at 4,096 and occupies 8 MiB;
+PROJECTS, GAMES and SPARE each occupy another 1 MiB. Each volume begins
+on a multiple of 2,048 blocks, the default alignment. The header requests
+four equal drive slots, including the initially empty D drive.
 
 Each volume line gives its drive, label, number (`id`), geometry and first
-block. `rw` means writable and `ro` means read-only. `wb` marks a volume
-written behind: TEC-OS can hold its recent changes in memory until a flush.
-The remaining fields count files and free bytes from the directory.
+block. `rw` means writable and `ro` means read-only. The remaining fields
+count files and free bytes from the directory. Write-behind follows the
+logged drive; the card does not mark a volume for it.
 
 Cold boot validates the header's name, version and checksum and the volume
 descriptors. A failed check leaves no drive mounted and stops at the
@@ -422,20 +422,23 @@ The recipe's volume list is:
 ```json
 "volumes": [
   { "geometry": "G1M", "label": "SYSTEM", "mount": "A" },
-  { "geometry": "G8M", "label": "WORK", "mount": "B", "writeBehind": true }
+  { "geometry": "G8M", "label": "WORK", "mount": "B" },
+  { "geometry": "G1M", "label": "PROJECTS", "mount": "C" },
+  { "geometry": "G1M", "label": "GAMES" },
+  { "geometry": "G1M", "label": "SPARE" }
 ]
 ```
 
-A file inside a component's `files` list has an entry such as this MOUNT
+A file inside a component's `files` list has an entry such as this shell
 entry:
 
 ```json
 {
-  "name": "MOUNT.COM",
-  "url": "files/MOUNT.COM",
+  "name": "SHELL.SVC",
+  "url": "files/SHELL.SVC",
   "drive": "A",
-  "bytes": 671,
-  "sha256": "5273f0ba443817f9168a1909fe7c934a5ad186ba1480d35b7ab169c27ead83cc"
+  "bytes": 3663,
+  "sha256": "3609c78ef2ee459ca076bf6fa0073dec9f2153159bf51a5ec0055f92aabe9a78"
 }
 ```
 
@@ -449,10 +452,10 @@ first and applies `"readOnly": true` last. The protection then belongs to
 the whole volume, independently of each file's attributes.
 
 The browser's New starter card uses the same `starter.recipe.json`, so the
-page's card and `dist/starter.img` are one card. Its fifteen files on A
+page's card and `dist/starter.img` are one card. Its fourteen files on A
 include the shell `SHELL.SVC`, the demo's source `DEMO.ASM`, the BASIC game
 `BOUNCE.BAS`, and `MON3.SVC` with `HELLO3.BIN` and its source `HELLO3.ASM`,
-at recipe revision 12. Media preparation no longer writes a separate page
+at recipe revision 13. Media preparation no longer writes a separate page
 recipe (TEC-OS e59e8c4 `tools/media.mjs`, `web/build.mjs`). `TAS DEMO`
 builds DEMO.COM on the card. The page uses the same size and SHA-256
 checks.
@@ -471,16 +474,16 @@ node tools/tecvol.mjs put build/errs.img B dist/files/STARTUP.CMD --ro
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/errs.img "@start SAVE 1 C:X.COM" "@key x" "@start ERA B:STARTUP.CMD" "@key x" "DIR B:" -->
 ```text
-A>SAVE 1 C:X.COM
+A:SYSTEM>SAVE 1 C:X.COM
 
 Bdos Err On C: R/O
-A>ERA B:STARTUP.CMD
+A:SYSTEM>ERA B:STARTUP.CMD
 
 Bdos Err On B: File R/O
-A>DIR B:
+A:SYSTEM>DIR B:
 STARTUP.CMD 
 1 file, 8172K free
-A>
+A:SYSTEM>
 ```
 
 `SAVE` made no file on C and `ERA` left B's file in place. In the default
@@ -517,10 +520,10 @@ truncate -s 2104320 short.img
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card short.img "@start DIR B:" "@key x" -->
 ```text
-A>DIR B:
+A:SYSTEM>DIR B:
 
 Bdos Err On B: Bad Sector
-A>
+A:SYSTEM>
 ```
 
 The host model accepts that short byte array and the ROM reaches the

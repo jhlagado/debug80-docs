@@ -182,8 +182,8 @@ file's first 32. It clears `S1`, `RC` and the map in the FCB too
 `CR` and the random-record bytes alone. For a sequential file the program
 supplies `CR` = 0, as in Chapter 10. Make returns an entry slot from 0 to 3 or
 `FFh` if the directory is full. Every directory write goes to the BIOS as write
-type 1 (`src/cpm/bdoslog.asm:82-107`). On a volume written behind, a directory
-write flushes the other dirty cache lines first, as Chapter 19 describes
+type 1 (`src/cpm/bdoslog.asm:82-107`). On any volume, a directory
+write flushes the other dirty and kept cache lines first, as Chapter 19 describes
 (`src/cache.asm:538-547`).
 
 A file that was only read has nothing to write back at its close. Make and
@@ -197,7 +197,7 @@ has no block for the record, `ALLOCBLK` takes the first free block of the drive.
 The record then goes to the BIOS as write type 2, the first write to a new block
 (`src/cpm/bdosrec.asm:43-59`). For that type the BIOS obtains the card block's
 cache line without a pre-read and clears it before copying the record
-(`src/bios.asm:298-348`, `src/cache.asm:447-466`). Any other write of a record
+(`src/bios.asm:298-351`, `src/cache.asm:447-466`). Any other write of a record
 is type 0. `CR` moves on only after the BIOS has returned success so a write
 that fails leaves the FCB on the record it didn't write
 (`src/cpm/bdosrec.asm:69-82`).

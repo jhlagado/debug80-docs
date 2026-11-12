@@ -227,7 +227,7 @@ The capture contains both the successful read and the missing-file case:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card work.img B: "SHOW HELLO.ASM"
      "SHOW NOSUCH.TXT". Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>SHOW HELLO.ASM
 ; HELLO: print a line and return to the CCP.
 BDOS    EQU     $0005
@@ -292,20 +292,20 @@ The two operations have different inputs: a flush cannot recover file
 state that was left only in an unclosed FCB. Warm boot flushes the cache
 but does not close the FCBs in a departed program's memory.
 
-On a volume using write-behind caching, TEC-OS writes pending dirty data
+On every volume, TEC-OS writes every changed or kept data line
 before writing a directory block. A successful close that issues such a
 write therefore performs that ordering. An
 unmodified FCB can close without a directory write. Function 48 provides
 an explicit flush boundary for pending writes after the file state has
 been closed. Chapter 19 explains the cache's ordering and failure paths.
 
-On a volume written through, such as A, TEC-OS holds one pending
+On any drive other than the logged drive, TEC-OS holds one pending
 block. A write returns once its record is in that block's cache line, and
 the block reaches the card at the next close, directory request, write to
 another block, console read, function 48 or warm boot. A program that writes
 a file and then waits for a key therefore leaves nothing unwritten while it
 waits. A reset before one of those points loses at most that block's
-records (`docs/recovery.md:66-103`).
+records (`docs/recovery.md:98-138`).
 
 A write that returns 1 or 2 may follow earlier successful records. Close
 the partial file and check the close result before reporting how much was
@@ -335,6 +335,6 @@ on the card before another program loads. If a write fails there, TEC-OS
 drops the failed cache lines, reports `Write lost` and cancels the remaining
 command line. Explicit function 48 also reports failure, and keeps a failed
 line for the next flush, so only warm boot drops a line that still fails
-(`docs/recovery.md:49-61`). A later successful flush cannot restore bytes
+(`docs/recovery.md:75-96`). A later successful flush cannot restore bytes
 from a line already dropped. A reset discards pending cached changes rather than finishing
 unclosed work.

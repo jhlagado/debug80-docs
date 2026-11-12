@@ -52,19 +52,19 @@ vectors. A program must read the word rather than assume page alignment.
 
 The first service is allocated below the stub's page so the unused bytes between
 that page boundary and the stub also leave the transient program area (TPA). On
-the starter card, vectors begin at `B9ACh` and the stub at `B9A9h`. A first
-one-page service such as Chapter 14's COUNT costs 425 bytes: 256 for the page
-and 169 for the alignment gap. Later services cost whole pages without another
+the starter card, vectors begin at `B6ECh` and the stub at `B6E9h`. A first
+one-page service such as Chapter 14's COUNT costs 489 bytes: 256 for the page
+and 233 for the alignment gap. Later services cost whole pages without another
 alignment gap. With `GLCD.SVC` as the first service, and a possible second
 one, the layout is:
 
 | Addresses | What is there |
 | --- | --- |
-| `B9ACh` up | The allocation vectors, then the resident workspace |
-| `B9A9h–B9ABh` | The stub, `JP BENTRY`, the top with no service in |
-| `B900h–B9A8h` | 169 bytes no service can use |
-| `B600h–B8FFh` | `GLCD.SVC`, three pages. `B600h` holds `JP BENTRY` |
-| `B500h–B5FFh` | A second service of one page. `B500h` would hold `JP BENTRY` |
+| `B6ECh` up | The allocation vectors, then the resident workspace |
+| `B6E9h–B6EBh` | The stub, `JP BENTRY`, the top with no service in |
+| `B600h–B6E8h` | 233 bytes no service can use |
+| `B300h–B5FFh` | `GLCD.SVC`, three pages. `B300h` holds `JP BENTRY` |
+| `B200h–B2FFh` | A second service of one page. `B200h` would hold `JP BENTRY` |
 | `0100h` up | The TPA, its top at the word in `0006h` |
 
 The file header and resident header occupy the same 25 bytes but several
@@ -163,8 +163,8 @@ The loader adds the requested extra memory to the header/image size,
 subtracts one and takes the high byte as the page count minus one. It
 subtracts that count from the page below `PZTOP`. Overflow, borrow or a
 base below `8000h` rejects the load. The resulting page is stored in
-`SLDL` as the relocation delta (`src/loader.asm:183-195`). With no other service, COUNT's 100 bytes below `B9A9h`
-select page `B8h`.
+`SLDL` as the relocation delta (`src/loader.asm:183-195`). With no other service, COUNT's 100 bytes below `B6E9h`
+select page `B5h`.
 
 ### 2. Dependencies
 
@@ -186,7 +186,7 @@ remaining allowance (`src/loader.asm:225-258`).
 
 The order is BDOS, BIOS and CCP. For COUNT loaded first, the limits 8, 12
 and 6 less its declarations of 2 each leave `06h`, `0Ah` and `04h` at
-`B80Ch`. The loader stores those remaining values in the resident
+`B50Ch`. The loader stores those remaining values in the resident
 header instead of maintaining another total.
 
 ### 4. Fixups in the loaded file
@@ -199,9 +199,9 @@ by HL. A rejected list can leave the loaded file partly relocated
 (`src/loader.asm:260-299`).
 
 In `GLCD.SVC` the driver table begins with `00F2h`, `014Dh` and `0152h`.
-Installation at `B600h` changes them to `B6F2h`, `B74Dh` and `B752h` at
-`B619h`. Its 767 header/image bytes occupy three pages. With the 169-byte
-alignment gap, the TPA falls from 47,273 to 46,336 bytes. SERVICES, the shell's command, counts whole reserved pages, including unused
+Installation at `B300h` changes them to `B3F2h`, `B44Dh` and `B452h` at
+`B319h`. Its 767 header/image bytes occupy three pages. With the 233-byte
+alignment gap, the TPA falls from 46,569 to 45,568 bytes. SERVICES, the shell's command, counts whole reserved pages, including unused
 bytes in the final page (`drivers/shellcmd.asm:15-50`).
 
 The PICO-plus-GLCD startup case has another outcome. With CRT already
@@ -211,9 +211,9 @@ shell had left it, and SERVICES, the shell's, listed only the shell:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico SERVICES -->
 ```text
-A>SERVICES
+A:SYSTEM>SERVICES
 SHELL 10
-A>
+A:SYSTEM>
 ```
 
 A successful typed GLCD installation while PICO is active is a different

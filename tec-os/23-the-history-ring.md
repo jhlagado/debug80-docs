@@ -98,16 +98,16 @@ passes `HSTORE`'s checks.
 
 The stored bytes keep the case you typed. `HSTORE` runs before function 10
 returns to the shell, which only afterwards converts a piece's letters to
-capitals (`src/cpm/bdos.asm:654-661`, `drivers/shell.asm:426-429`, `drivers/shell.asm:492-505`). In this
+capitals (`src/cpm/bdos.asm:654-661`, `drivers/shell.asm:426-429`, `drivers/shell.asm:498-518`). In this
 PICO9918 screen capture, recalling `con` preserves the small letters:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen con "@start "$'\x17' -->
 ```text
-A>con
+A:SYSTEM>con
 CON: CRT:
-A>con
+A:SYSTEM>con
 CON: CRT:
-A>
+A:SYSTEM>
 ```
 
 ## Insertion and the oldest line
@@ -135,16 +135,16 @@ there were only two entries:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen CON CON "DIR *.CMD" "@start "$'\x17\x17\x17' -->
 ```text
-A>CON
+A:SYSTEM>CON
 CON: CRT:
-A>CON
+A:SYSTEM>CON
 CON: CRT:
-A>DIR *.CMD
+A:SYSTEM>DIR *.CMD
 STARTUP.CMD
 1 file, 912K free
-A>CON
+A:SYSTEM>CON
 CON: CRT:
-A>
+A:SYSTEM>
 ```
 
 For an accepted line, `HSTORE` writes each character from `HHEAD` forwards.
@@ -224,15 +224,15 @@ Here two commands were typed before `^W`, `^W` and Return selected `CON`:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen CON "TYPE STARTUP.CMD" "@start "$'\x17\x17' -->
 ```text
-A>CON
+A:SYSTEM>CON
 CON: CRT:
-A>TYPE STARTUP.CMD
+A:SYSTEM>TYPE STARTUP.CMD
 SHELL.SVC
 GLCD.SVC
 
-A>CON
+A:SYSTEM>CON
 CON: CRT:
-A>
+A:SYSTEM>
 ```
 
 The capture records the PICO9918 screen after erasure so it shows the
@@ -255,12 +255,12 @@ capture `^C` was followed by `^W`, which recalled `CON`:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs CON "^C" "@start "$'\x17' -->
 ```text
-A>CON
+A:SYSTEM>CON
 CON: TTY:
-A>^C
-A>CON
+A:SYSTEM>^C
+A:SYSTEM>CON
 CON: TTY:
-A>
+A:SYSTEM>
 ```
 
 A reset enters cold boot, which forgets every service, the shell among them.
@@ -273,19 +273,19 @@ reset produced an empty line:
 
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs CON "@reset" "@start "$'\x17' -->
 ```text
-A>CON
+A:SYSTEM>CON
 CON: TTY:
-A>
+A:SYSTEM>
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 
-A>
-A>
+A:SYSTEM>
+A:SYSTEM>
 ```
 
 `HREC` started from the empty entry at `HHEAD`. Its backwards test found

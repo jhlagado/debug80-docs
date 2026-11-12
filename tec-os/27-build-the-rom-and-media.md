@@ -30,7 +30,7 @@ A ROM and its symbol map must describe the same addresses. Card programs
 must use the interfaces supplied by that ROM. TEC-OS produces the image,
 map and memory census together. Media preparation checks the selected map
 generator and the ROM size/hash against the census
-(`tools/build.mjs:274-324`, `tools/media.mjs:172-186`).
+(`tools/build.mjs:275-325`, `tools/media.mjs:181-195`).
 
 The host setup in [Chapter 6](06-cards-on-the-pc.md) is the starting point.
 The build adds the pinned assembler host described below.
@@ -46,12 +46,12 @@ program and library sources, which only the tests read: they compare
 `docs/mon3.md:13-16`, `docs/mon3.md:358-365`).
 
 TAS is the only assembler. It builds the main ROM, the board diagnostics,
-`GLCD.SVC`, `SHELL.SVC`, `MOUNT.COM`, `DEMO.COM`, `MON3.SVC` and `HELLO3.BIN`,
+`GLCD.SVC`, `SHELL.SVC`, `DEMO.COM`, `MON3.SVC` and `HELLO3.BIN`,
 and the tests' programs and services. atom-z80 is not a dependency, and no
 build selects another assembler. A tree from before TAS built the ROM needs
 atom-z80 0.3.7 installed by hand
-(`package.json:14-29`, `tools/build.mjs:343-349`,
-`tools/media.mjs:188-231`, `README.md:91-102`).
+(`package.json:14-29`, `tools/build.mjs:344-350`,
+`tools/media.mjs:197-240`, `README.md:91-102`).
 
 `TAS.COM` is pinned to Thorium
 `3d1e2c0ea5269e1dfa4138671fab850c158f1670`. Its prepared host is from
@@ -67,7 +67,7 @@ This TAS takes several statements on a line and rejects a line with more
 than 128 characters of code, as
 [Chapter 2](02-make-a-small-program.md#several-statements-on-a-line)
 describes. TEC-OS's own sources keep one statement to a line and none is
-that long, so the ROM, `GLCD.SVC`, `MON3.SVC`, `MOUNT.COM`, `DEMO.COM`,
+that long, so the ROM, `GLCD.SVC`, `MON3.SVC`, `DEMO.COM`,
 `HELLO3.BIN` and the test programs assemble to the same bytes as under the
 earlier `dbee66a` (`docs/compatibility.md:225`). The ROM's map gives
 each source line one statement, so the build rejects a ROM source line that
@@ -94,7 +94,7 @@ After preparation, `npm run build` constructs the main ROM, `npm run diag`
 assembles the board diagnostics, `DIAG.HEX` and `DIAG.BIN` for MON-3 to load
 at `4000h`, and `npm run media` prepares the distribution
 (`package.json:14-23`, `tools/diag.mjs:1-9`). Chapter 28 describes
-the diagnostics. `npm run build` always uses TAS (`tools/build.mjs:343-349`).
+the diagnostics. `npm run build` always uses TAS (`tools/build.mjs:344-350`).
 
 ## Image regions and their addresses
 
@@ -114,9 +114,9 @@ these regions:
 
 Its used extent is 14,875 of 16,384 bytes. Its SHA-256 is
 `43ac0f1871cf3d979c94b74a030c1c06eeec500bd77e60ca7e3951a2de1c339e`
-(`docs/memory-map.md:1-30`). The census stores each
+(`docs/memory-map.md:1-32`). The census stores each
 region's start and exclusive end while the table above prints the last
-occupied address (`tools/build.mjs:274-289`).
+occupied address (`tools/build.mjs:275-290`).
 
 At `C000h`, `JP RSTENT` transfers control into the code, at `C5D1h`. The interface at `C003h` contains `TNA`, major 5, minor 1 and a
 jump at `C008h` to `SVCDSP`. Its exclusive end is `C00Bh`
@@ -207,7 +207,7 @@ explains the workspace lifetimes separately from these address declarations.
 
 Before generating files or assembling, the build validates the selected font,
 its retained original inputs and complete notices
-(`tools/build.mjs:343-349`, `tools/lib/font-package.mjs:8-21`).
+(`tools/build.mjs:344-350`, `tools/lib/font-package.mjs:8-21`).
 It then writes four included files before assembly: `config.asm`,
 `format.asm`, `geom.asm` and `font.asm` under `src/gen/`. The first two
 supply equates and the last two supply ROM data. Each has a generated-file
@@ -312,14 +312,16 @@ Before writing the outputs, the build checks these properties:
   51-byte BIOS table. Upper state ends by `C000h` and the BIOS stack ends
   no higher than the CCP workspace (`tools/build.mjs:245-249`).
 - The starter transient program area (TPA) has at least 45,830 bytes
-  (`tools/build.mjs:271-272`).
+  (`tools/build.mjs:271-273`).
 
 The last check is arithmetic, not a boot. `cardLayout` packs allocation
 vectors down from `WSBASE` using `floor(DSM / 8) + 1` bytes each then
-subtracts three bytes for the BDOS entry. The starter's `DSM` values 511
+subtracts three bytes for the BDOS entry. The two-volume reference card's `DSM` values 511
 and 2047 give 64 and 256 bytes for 320 together
-(`tools/build.mjs:204-213`). The starter's entry is `B9A9h`, leaving 47,273
-bytes from `0100h`, as the build line below reports. Another build must
+(`tools/build.mjs:204-213`). That reference entry is `B9A9h`, leaving 47,273
+bytes from `0100h`, the TPA printed by the build line. The starter instead
+reserves four 256-byte slots, with its bare entry at `B6E9h`, 46,569 bytes.
+The generated memory map and media manifest report the starter's layout. Another build must
 supply its own census instead of copying that ceiling.
 
 ## Matching the ROM and media
@@ -327,35 +329,37 @@ supply its own census instead of copying that ceiling.
 The main build writes `build/tecos/tecos.rom`, `tecos.d8.json` and
 `census.json`. The census includes the ROM's SHA-256, used/free regions,
 serial counts, RAM regions, card-layout figures and stack extents
-(`tools/build.mjs:274-322`). `tools/capture.mjs` reads the D8 file beside
+(`tools/build.mjs:275-323`). `tools/capture.mjs` reads the D8 file beside
 the selected ROM to locate labels (`tools/capture.mjs:65-72`).
 
 When `dist/` exists, the build also copies the ROM, map and census there,
 renaming the last to `tecos.census.json`. It updates an existing manifest's
 profile figures. It does not rebuild the card or its program files at that
-point (`tools/build.mjs:327-340`). After the build succeeds it also copies
-`FONT-NOTICES.txt` into an existing `dist/` (`tools/build.mjs:347-349`).
+point (`tools/build.mjs:328-341`). After the build succeeds it also copies
+`FONT-NOTICES.txt` into an existing `dist/` (`tools/build.mjs:348-350`).
 `npm run media` prepares those outputs from the selected build
-(`tools/media.mjs:172-219`).
+(`tools/media.mjs:181-228`).
 
 Media preparation validates the font package before preparing or replacing
-outputs (`tools/media.mjs:172-173`). It checks that the map was
+outputs (`tools/media.mjs:181-182`). It checks that the map was
 generated by TAS, then checks ROM length and SHA-256 against the census.
-It assembles MOUNT, GLCD.SVC, SHELL.SVC, DEMO, MON3.SVC and HELLO3.BIN with
+It assembles GLCD.SVC, SHELL.SVC, DEMO, MON3.SVC and HELLO3.BIN with
 TAS and validates pinned TED, TAS, BAZA.COM, BAZA.RTL and BOUNCE.BAS before
-preparing the recipe (`tools/media.mjs:172-231`). HELLO3.BIN is a
+preparing the recipe (`tools/media.mjs:181-240`). HELLO3.BIN is a
 flat image whose own `ORG` must put it at `4000h`, where MON-3 programs
-load (`tools/media.mjs:194-199`). The TAS service writer compares
+load (`tools/media.mjs:203-208`). The TAS service writer compares
 flat assemblies at `0100h` and `0200h`, checks their header and relative
 symbols and packs the relocation data, for GLCD.SVC, SHELL.SVC and
 MON3.SVC (`tools/lib/tas-distribution.mjs:6-59`). The distribution
-COM writer checks the declared zero-filled buffers of MOUNT and DEMO
+COM writer checks DEMO's declared zero-filled buffers
 (`tools/lib/tas-distribution.mjs:21-74`).
 
-The starter recipe contains SYSTEM as G1M on A and written-behind WORK as
-G8M on B. It is the only card recipe, at revision 12: the web
+The starter recipe requests four equal drive slots. It contains SYSTEM as
+G1M on A, WORK as G8M on B and PROJECTS as G1M on C, with G1M volumes
+GAMES and SPARE unassigned. The logged drive is written behind. This is the
+only card recipe, at revision 13: the web
 page builds the same card, so media no longer writes a page recipe. A holds
-fifteen files: MOUNT, SHELL.SVC, GLCD, STARTUP, TED, the SAMPLE assembly
+fourteen files: SHELL.SVC, GLCD, STARTUP, TED, the SAMPLE assembly
 source, the TIMES BASIC source, TAS, BAZA, BAZA's runtime library
 `BAZA.RTL`, the BASIC game BOUNCE.BAS pinned from Baza, DEMO's source
 DEMO.ASM, MON3.SVC, and the MON-3 program HELLO3.BIN with its source
@@ -363,19 +367,19 @@ HELLO3.ASM. `STARTUP.CMD` holds two lines, `SHELL.SVC` and then the GLCD
 installation line. Media still builds and checks DEMO.COM but writes it
 beside the card's files, not onto the card, where `TAS DEMO` makes it. It
 also writes a copy of MON3.SVC beside the ROM
-(`tools/media.mjs:200-257`, `tools/media.mjs:273-281`,
+(`tools/media.mjs:209-266`, `tools/media.mjs:282-290`,
 `tools/lib/starter.mjs:10-22`). Component entries record each
 file's size and SHA-256. Assemblies and recipe construction finish before
-the output replacement begins (`tools/media.mjs:258-266`). Output
+the output replacement begins (`tools/media.mjs:267-275`). Output
 files are replaced individually after those preparation checks. The
 distribution also receives `FONT-NOTICES.txt` as a companion to its
-artifacts, separate from the fifteen card files
-(`tools/media.mjs:277`).
+artifacts, separate from the fourteen card files
+(`tools/media.mjs:286`).
 
 Media also writes `docs/memory-map.md` and refreshes the ROM-space spans
 in `docs/rom-services.md` from the census (`tools/media.mjs:46-65`,
-`tools/media.mjs:282-284`). The image profile is `tecos`. Any other command-line
-profile name is rejected (`tools/build.mjs:30-33`, `tools/build.mjs:352-365`).
+`tools/media.mjs:291-293`). The image profile is `tecos`. Any other command-line
+profile name is rejected (`tools/build.mjs:30-33`, `tools/build.mjs:353-366`).
 The same image supports the detected board devices. A responding PICO9918
 with the Matrix switch enabled starts at 40 columns. Explicit 80, 40 and
 32-column selections remain available while GLCD uses its card driver
@@ -390,7 +394,7 @@ tecos: ROM 14875/16384 bytes, TPA $0100-$B9A8 (47273 bytes), sha256 43ac0f1871cf
 
 Its printed hash is the first sixteen hexadecimal digits of the full
 SHA-256, `43ac0f1871cf3d979c94b74a030c1c06eeec500bd77e60ca7e3951a2de1c339e`
-(`tools/build.mjs:277`, `tools/build.mjs:357-360`).
+(`tools/build.mjs:278`, `tools/build.mjs:358-361`).
 
 ## HELLO through TED and TAS
 
@@ -425,7 +429,7 @@ cp dist/starter.img work.img
 node tools/tecvol.mjs put work.img B hello.asm --text
 ```
 
-At `A>`, `CON PICO 80` sets 80 columns and `B:` selects B, where
+At `A:SYSTEM>`, `CON PICO 80` sets 80 columns and `B:` selects B, where
 `TED HELLO.ASM 7` opens at the `CALL BDOS` line.
 Inserting `1` at its start and pressing `^T B` saves the source and chains
 `A:TAS HELLO.ASM` followed by `A:TED`, a line the shell runs piece by piece.
@@ -524,7 +528,7 @@ boots that image and enters `B:`, `DIR` and `HELLO`:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --card work.img B: DIR HELLO.
      Boot rows omitted. -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>DIR
 HELLO.COM   
 1 file, 8172K free

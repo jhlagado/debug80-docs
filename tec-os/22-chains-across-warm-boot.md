@@ -115,22 +115,22 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>DIR *.CMD &TYPE STARTUP.CMD
+A:SYSTEM>DIR *.CMD &TYPE STARTUP.CMD
 STARTUP.CMD 
 1 file, 912K free
-A>TYPE STARTUP.CMD
+A:SYSTEM>TYPE STARTUP.CMD
 SHELL.SVC
 DIR *.CMD &TYPE STARTUP.CMD
 NOSUCH.SVC &MOUNT
 USER 0
 
-A>NOSUCH.SVC &MOUNT
+A:SYSTEM>NOSUCH.SVC &MOUNT
 NOSUCH.SVC?
 
-A>USER 0
-A>
+A:SYSTEM>USER 0
+A:SYSTEM>
 ```
 
 The first `DIR` succeeds so its `TYPE STARTUP.CMD` runs before the
@@ -142,7 +142,7 @@ having succeeded (`drivers/shell.asm:200-266`).
 The ROM's own startup line, the first, is echoed whole through BDOS
 function 9, so a `$` ends that echo but not the line. The shell echoes each
 later line whole after its prompt and each later piece at its own prompt,
-with no `$` limit (`src/cpm/ccpcmd.asm:850-875`,
+with no `$` limit (`src/cpm/ccpcmd.asm:850-874`,
 `drivers/shell.asm:243-266`, `drivers/shell.asm:229-234`). The quiet
 absent-device exception changes the result too: on this serial-only board,
 replacing `NOSUCH.SVC` with `GLCD.SVC` would leave success and allow `CD`

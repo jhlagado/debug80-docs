@@ -64,14 +64,14 @@ block independently of the drive used to reach it. The lookup therefore
 prevents two lines from holding separate copies of the same block
 (`src/cache.asm:49-91`).
 
-The cache's lines and table are in EXPAND 1. Its five other bytes of state are
+The cache's lines and table are in EXPAND 1. Its five bytes of control state are
 in the resident workspace above the RAM BIOS table (`src/ram.asm:304-319`):
 
 - `CNEXT`, the next line to give out
-- `CWTYPE`, the write type of the current BIOS `WRITE`, with bit 7 set for a
-  write that goes straight through, bit 6 once a line has been given out for
-  the write and bit 5 for a data write held to coalesce
-- `CIFF`, two bytes, the interrupt state at the current BIOS call's entry
+- `CWTYPE`, the write type of the current BIOS `WRITE` in its low bits,
+  with bit 5 set for a data write held to coalesce
+- `CIFF`, the saved flags containing the interrupt state at the BIOS call's entry
+- `CANY`, nonzero while a data line may be held behind on the logged drive
 - `CPEND`, the pending block's line plus one, 0 for none
 
 To reach the table, a routine takes from `CXON` the latch value with
@@ -337,7 +337,7 @@ since `CTAKE` hands lines out in turn. The blocks of a file can therefore
 reach the card in any order.
 
 A type-1 directory write ends with its line clean after success or absent
-after failure. On a volume written behind the data flush precedes that
+after failure. On every volume the data flush precedes that
 line's write (`src/cache.asm:538-547`). With the BDOS's directory write
 types, later flushes have only data lines left. A power cut during the
 data phase of a directory write's flush leaves some new data on the card and its directory update unwritten.
@@ -386,7 +386,7 @@ So `MOUNT`, unmount and function 48 keep a line whose write fails for the next
 flush. Only warm boot's `CFLALL` drops a flushed line that still fails, and a
 directory write on any volume whose flush fails drops its own
 directory line, unwritten, so the card's directory is read again
-(`src/cache.asm:256-301`, `src/cache.asm:538-547`, `docs/recovery.md:49-61`).
+(`src/cache.asm:256-301`, `src/cache.asm:538-547`, `docs/recovery.md:75-96`).
 
 At the prompt every change has already reached the card, since the prompt's
 own console read writes every line. A `^C` there causes a warm boot, whose
@@ -454,14 +454,14 @@ truncate -s 2113536 nodata.img
 <!-- TEC-OS 1a6ce29: node tools/capture.mjs --card nodata.img "@start SAVE 1 B:X.COM"
      "@key x" "DIR B:". Boot rows omitted. -->
 ```text
-A>SAVE 1 B:X.COM
+A:SYSTEM>SAVE 1 B:X.COM
 
 Bdos Err On B: Bad Sector
 Write lost
-A>DIR B:
+A:SYSTEM>DIR B:
 X.COM       
 1 file, 8176K free
-A>
+A:SYSTEM>
 ```
 
 `SAVE` first made X.COM's empty directory entry and buffered its two records.

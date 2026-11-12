@@ -13,10 +13,10 @@ nav_group: "Using the machine"
      made as Chapter 6 shows, boot rows omitted. Entering a service on
      install follows docs/shell.md:220-235, docs/services.md:82-89 and
      :101-130 and src/loader.asm:734-783; MON3.SVC and "A MON-3 session"
-     follow docs/mon3.md, tools/media.mjs:224-231 and
-     test/starter.test.mjs:219-344, with the figures of the RST 10h calls
+     follow docs/mon3.md, tools/media.mjs:233-240 and
+     test/starter.test.mjs:218-343, with the figures of the RST 10h calls
      also in Origo KD-269. The TPA with SHELL.SVC and MON3.SVC is
-     test/shell.test.mjs:737-745.
+     test/shell2.test.mjs:719-741.
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
      card differs only in TED.COM and HELLO3.ASM, so captures made at
      fdd9e5b that run neither stand for e59e8c4. -->
@@ -44,7 +44,7 @@ The card holds three service files. `SHELL.SVC` is the shell of
 for MON-3, as described below. The startup file installs the shell and,
 where a graphics LCD is the console, the driver. The PICO9918 console is
 in ROM and needs no SVC installation.
-At `A>`, the installation command is `GLCD.SVC`. The type is required:
+At `A:SYSTEM>`, the installation command is `GLCD.SVC`. The type is required:
 `GLCD` alone searches for `GLCD.COM`. A service file can have an explicit drive, as in
 `A:GLCD.SVC` or `B:NAME.SVC`.
 
@@ -58,27 +58,27 @@ name at the prompt installed it while leaving the PICO9918 as the console:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico GLCD.SVC SERVICES
      UNLOAD SERVICES UNLOAD SERVICES UNLOAD. Boot rows omitted. -->
 ```text
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 
-A>SERVICES
+A:SYSTEM>SERVICES
 GLCD 3
 SHELL 10
-A>UNLOAD
+A:SYSTEM>UNLOAD
 
-A>SERVICES
+A:SYSTEM>SERVICES
 SHELL 10
-A>UNLOAD
+A:SYSTEM>UNLOAD
 
-A>SERVICES
+A:SYSTEM>SERVICES
 SERVICES?
 
-A>UNLOAD
+A:SYSTEM>UNLOAD
 UNLOAD?
 
-A>
+A:SYSTEM>
 ```
 
-The driver occupies three pages and the shell ten. The first `UNLOAD`
+The driver occupies three pages and the shell fifteen. The first `UNLOAD`
 removed the driver, the newest service, and the second removed the shell.
 `SERVICES` then had no shell to run it and became an unknown command. The
 last `UNLOAD` had nothing to remove. `UNLOAD?` also appears when the newest
@@ -106,13 +106,13 @@ GLCD-console run, startup had already installed the shell and the driver:
 <!-- TEC-OS fdd9e5b: node tools/capture.mjs --board glcd GLCD.SVC SERVICES.
      Boot rows omitted. -->
 ```text
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 GLCD.SVC?
 
-A>SERVICES
+A:SYSTEM>SERVICES
 GLCD 3
 SHELL 10
-A>
+A:SYSTEM>
 ```
 
 Removing the driver while the graphics LCD is the console selects the
@@ -138,11 +138,11 @@ place.
 `MON3.SVC` enters it again without reading the file. A warm boot keeps it,
 and `UNLOAD` or a reset removes it. Its 4,606 bytes of header and image
 occupy 18 pages. On a card with nothing else installed the BDOS entry in
-`0006h` moves from `B9A9h` to `A700h`, and the program memory from 47,273
-bytes to 42,496, or to 41,728 with `GLCD.SVC` installed too. On the starter
+`0006h` moves from `B6E9h` to `A400h`, and the program memory from 46,569
+bytes to 41,728, or to 40,960 with `GLCD.SVC` installed too. On the starter
 card, whose startup file installs the shell first, the entry moves from
-`AF00h` to `9D00h` and the program memory from 44,544 bytes to 39,936, or
-to `9A00h`, 39,168 bytes, with `GLCD.SVC` installed too (`docs/mon3.md:45-57`).
+`A700h` to `9500h` and the program memory from 42,496 bytes to 37,888, or
+to `9200h`, 37,120 bytes, with `GLCD.SVC` installed too (`docs/mon3.md:45-57`).
 The file is 5,032 bytes with its relocation data. The
 service's own code, line buffer and stack are all in those pages, above
 anything a MON-3 program may load into. A program itself runs on MON-3's
@@ -155,7 +155,7 @@ The `MON3>` line takes three commands, in capitals or lower case:
 | `LOAD NAME.BIN [ADDR]` | Loads the file at `4000h`, or at the hexadecimal `ADDR`, in whole records. Any type but `HEX` loads this way |
 | `LOAD NAME.HEX` | Loads an Intel HEX file at its records' own addresses. The file is read twice and every record is checked before any is written |
 | `GO [ADDR]` | Runs the last good load, or the program at `ADDR`, after writing pending card changes |
-| `EXIT` | Ends the session with a warm boot to `A>` |
+| `EXIT` | Ends the session with a warm boot to `A:SYSTEM>` |
 
 A load must lie between `0100h` and the page of the BDOS entry in `0006h`,
 outside `0800h–08FFh`, which holds MON-3's stack and variables. Anything
@@ -172,7 +172,7 @@ a new one. And when the console is the PICO9918 or the GLCD, the return
 holds `MON3>` back until no key is down. Each pass of that wait scans the
 matrix itself, then checks that `KBLAST` shows no matrix key and that
 MON-3's key-press byte shows no keypad key. On the serial terminal there is no wait. `^C` at `MON3>`, or
-a program's jump to `0000h`, also ends the session at `A>`.
+a program's jump to `0000h`, also ends the session at `A:SYSTEM>`.
 
 The service gives a program MON-3's restarts and 46 of the 63 calls
 reached through `RST 10h`. Of those, 42 behave as MON-3's own and 4,
@@ -194,7 +194,7 @@ return also sets the panel's modes again, so the console's text shows again
 whatever mode the program left the panel in.
 
 The service cannot recover a program that hangs: the reset button is the
-way out. A program that writes `B9A9h–BFFFh`, which holds the BDOS entry,
+way out. A program that writes `B6E9h–BFFFh`, which holds the BDOS entry,
 the allocation vectors, TEC-OS's workspace and its BIOS table, can damage
 TEC-OS's disk tables. The service writes pending changes before `GO` and
 resets the drives after each return to limit that. Its messages are in
@@ -244,7 +244,7 @@ returned-error option for programs.
 At the command prompt `USER` selects an area from 0 to 15. Every file
 belongs to one area. `USER 3` selects area 3 on all drives, not a separate
 area for each drive. The prompt includes a nonzero area number before the
-drive letter, as in CP/M 3. Thus `3A>` means area 3 with A current.
+drive letter, as in CP/M 3. Thus `3A:SYSTEM>` means area 3 with A current.
 TEC-OS starts in area 0, where all starter-card files are stored.
 
 File commands use the current area. A file made in area 3 remains out
@@ -255,19 +255,19 @@ area 0:
 
 <!-- TEC-OS 1a6ce29: node tools/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" TAS "USER 0" "DIR B:" -->
 ```text
-A>USER 3
-3A>SAVE 1 B:MINE.COM
-3A>DIR B:
+A:SYSTEM>USER 3
+3A:SYSTEM>SAVE 1 B:MINE.COM
+3A:SYSTEM>DIR B:
 MINE.COM    
 1 file, 8172K free
-3A>MOUNT
+3A:SYSTEM>MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
 
-3A>USER 0
-A>DIR B:
+3A:SYSTEM>USER 0
+A:SYSTEM>DIR B:
 NO FILE
-A>
+A:SYSTEM>
 ```
 
 The `TAS` program still ran in area 3 because program lookup also checks area
@@ -311,7 +311,7 @@ stays on B:
 
 <!-- TEC-OS 1a6ce29: node tools/capture.mjs B: "A:TAS" TAS "STARTUP.CMD" -->
 ```text
-A>B:
+A:SYSTEM>B:
 B>A:MOUNT
 00 SYSTEM      G1M A:
 01 WORK        G8M B:
@@ -326,14 +326,16 @@ STARTUP.CMD?
 B>
 ```
 
-A type written after the program's name is replaced by COM. `TAS.COM`
-and `TAS.TXT` both search for `TAS.COM`. In this run `STARTUP.CMD`
-searched for `STARTUP.COM` on B and then A. Neither drive had that program.
-Typing a startup file's name does not run its text as commands.
+For an ordinary program, a type written after the name is replaced by COM.
+`TAS.COM` and `TAS.TXT` both search for `TAS.COM`. Under the shell, an
+explicit `.CMD` instead names a script on the named or current drive.
+Here B has no `STARTUP.CMD`, so it is refused; scripts do not use the
+program search's A fallback. `A:STARTUP.CMD` would run A's script again.
+With no shell, `.CMD` has no special meaning and the ROM searches for COM.
 
 The exception is type SVC. A service command reads only the current user
 area on the named or current drive. It has neither area-0 fallback nor
-drive-A fallback. At `B>` the starter's driver therefore needs the explicit
+drive-A fallback. At `B:WORK>` the starter's driver therefore needs the explicit
 command `A:GLCD.SVC`. The special command `CON UC1` also names A's driver
 explicitly when it loads it.
 
@@ -344,7 +346,7 @@ A card-read failure in the default error mode gives `Bad Sector` and ends
 the command through the BDOS instead. It does not print that question mark.
 
 A COM file starts at `0100h` in program memory. The small program from Chapter 2
-is stored on B so its plain name works at `B>`. At `A>` its plain name gives a
+is stored on B so its plain name works at `B:WORK>`. At `A:SYSTEM>` its plain name gives a
 question mark unless another copy is available there. An explicit `B:` before
 the name selects its file without changing the current drive.
 [Chapter 21](21-from-prompt-to-program.md) follows lookup and loading inside the

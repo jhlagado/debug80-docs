@@ -163,13 +163,13 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 
-A>CON
+A:SYSTEM>CON
 CON: UC1:
-A>
+A:SYSTEM>
 ```
 
 The serial capture ends at that switch:
@@ -180,9 +180,9 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>SHELL.SVC
+A:SYSTEM>SHELL.SVC
 
-A>GLCD.SVC
+A:SYSTEM>GLCD.SVC
 ```
 
 The graphics-LCD screen excerpt contains the later command because
@@ -191,9 +191,9 @@ the driver cleared the display when it started:
 <!-- the same --screen run's screen -->
 ```text
 
-A>CON
+A:SYSTEM>CON
 CON: UC1:
-A>
+A:SYSTEM>
 ```
 
 PICO `screen` decodes the name table into text rows. Its layout comes from the
@@ -314,7 +314,7 @@ t goes on in the next
  row.
 Three
 
-A>
+A:SYSTEM>
 ```
 
 The pager's width/height setup and stop paths are in the shell's source
@@ -381,9 +381,9 @@ bundles the page with Machine and the container/file libraries into app.js.
 The build config aliases fs to a stub, clears the previous output directory
 and copies the page, style, one ROM and its symbols, recipe and distribution
 files (`web/build.mjs:1-45`). The page copies the starter recipe, so it runs the one card that media
-builds, with fifteen files including SHELL.SVC and DEMO.ASM. DEMO.COM is
+builds, with fourteen files including SHELL.SVC and DEMO.ASM. DEMO.COM is
 built from programs/DEMO.ASM on the card with `TAS DEMO`
-(`tools/media.mjs:200-257`, `web/build.mjs:41-42`).
+(`tools/media.mjs:209-266`, `web/build.mjs:41-42`).
 
 Each animation frame targets 4 MHz for the elapsed wall time, capped at 100 ms.
 Every 1,024 instructions it checks a 30 ms execution budget and can stop the
