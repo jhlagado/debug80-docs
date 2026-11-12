@@ -305,8 +305,7 @@ routine reports failure. The practical installation rules are in
 service has its enter-on-install bit set. Only a service whose image starts
 with an execution record that has its enter bit set has one. On the starter
 card those are `MON3.SVC` and `SHELL.SVC`. Text after the name is the
-application's command tail, and no switch is parsed, so an older card's
-`MON3.SVC /E` enters with `/E` as its tail. A service installed from a file
+application's command tail, and no switch is parsed. A service installed from a file
 of that name is entered without reading the card. Otherwise the file is read
 from the named or current drive and installed, then entered once its `INIT`
 has made it ready. An install that never becomes ready is removed again and

@@ -15,10 +15,10 @@ nav_group: "Inside TEC-OS"
      TAS through tools/lib/assemble.mjs. The BOUNCE compile time and the
      16 KiB and SAVE 16 write counts are the fdd9e5b measurements recorded
      in Origo KD-303. The block-read, BIOS hit and miss, CLOOK, CWRITE
-     and close costs were measured at fdd9e5b the same way. The 7.65 s
-     figure for writing each record through is TEC-OS 78127ec's, and the
-     write counts without coalescing are those of a1023bd, timing each call
-     from its entry to its return on the starter card.
+     and close costs were measured at fdd9e5b the same way, timing each
+     call from its entry to its return on the starter card. The 7.65 s
+     figure from before coalescing is TEC-OS 78127ec's, and the write
+     counts without coalescing are those of a1023bd.
      The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
      card differs only in TED.COM and HELLO3.ASM, so captures made at
      fdd9e5b that run neither stand for e59e8c4. -->
@@ -313,9 +313,9 @@ write. During the second extent every line became dirty, so `CTAKE` wrote
 directory write at that extent's end wrote the rest.
 
 On `time.img`, `SAVE 64 X.COM`, 16 KiB, took 10,105,383 T-states, 2.53
-seconds, on `THROUGH`, and 9,936,556, 2.48 seconds, on `BEHIND`. Writing
-each record through took 7.65 seconds on `THROUGH`, three times its 2.49 on
-`BEHIND`. Each run followed a cold boot and a change to the
+seconds, on `THROUGH`, and 9,936,556, 2.48 seconds, on `BEHIND`. Before
+A's writes were coalesced, TEC-OS took 7.65 seconds on `THROUGH`, three times
+its 2.49 on `BEHIND`. Each run followed a cold boot and a change to the
 drive. The count, taken as for the reads, leaves out the change of drive.
 
 ## Flush order and interrupted updates
