@@ -7,14 +7,15 @@ nav_group: "Reference"
 
 # Appendix H. The service file format
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. The GLCD dump was taken
-     from fdd9e5b's dist/files/GLCD.SVC and the GAPZERO capture made at
-     fdd9e5b with the command in its comment. Thorium dbee66a citations name
-     the TAS source of the format's DEPS rule.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A service file contains the bytes to install, the records it needs and the
 positions that require relocation. Its on-disk header describes that work. The
@@ -186,22 +187,30 @@ writeFileSync("GAPZERO.SVC", out);
 node tools/tecvol.mjs put svc.img B GAPZERO.SVC
 ```
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card svc.img B: GAPZERO.SVC SERVICES.
-     Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card svc.img B: GAPZERO.SVC SERVICES. Boot rows included in this complete serial transcript. -->
 ```text
-A:SYSTEM>B:
-B>GAPZERO.SVC
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
-B>SERVICES
-COUNTN 1
-SHELL 10
-B>
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>B:
+B:WORK>GAPZERO.SVC
+
+B:WORK>SERVICES
+COUNTF 1
+SHELL 15
+B:WORK>
 ```
 
-In this run the service loaded at page `AEh`, below the shell. The inserted
-zero gap changed header byte 24 from a space, `20h`, to `CEh`. The shell's
+In this run the service loaded at page `A6h`, below the shell. The inserted
+zero gap changed header byte 24 from a space, `20h`, to `C6h`. The shell's
 `PUTTRIM` masks bit 7 (`drivers/shellio.asm:264-283`) so the name prints with
-an `N`.
+an `F`.
 
 ## GLCD.SVC
 

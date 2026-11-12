@@ -7,23 +7,15 @@ nav_group: "Using the machine"
 
 # 6. Cards on the PC
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. Every tecvol command and
-     capture was run at fdd9e5b on its npm run media output, and the
-     outputs shown are those runs'. The BANNER card and its recovery were
-     made again at e59e8c4 with the same output. saved-banner-card.img was made on the
-     host model from the starter card with Chapter 2's edited BANNER.ASM on
-     B: TED opened it, ^T B saved and built it, ^Q quit and a warm boot
-     flushed the card. The one card's files and TED's load rule follow
-     tools/media.mjs:209-266 and :274-277, tools/lib/starter.mjs:10-22,
-     web/build.mjs:41-42, docs/compatibility.md:222 and
-     test/ted.test.mjs:94-122, with TED.COM Thorium a2fe556 (c6c8374a…,
-     12,335 bytes). A:'s coalesced writes in "Recovery after a power cut":
-     docs/recovery.md:56-73, :66-103 and :135-147. The older TED named is
-     Thorium 967678c, the TED of the card at TEC-OS 755636b.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A copy of the card on your PC lets you extract work and prepare another card
 without changing the original. `tecvol` reads and edits that image, a file
@@ -128,9 +120,12 @@ node tools/tecvol.mjs verify card.img
 The verification succeeds:
 
 ```text
-container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
-  A: SYSTEM      id 1 G1M start 2048 rw 17 file(s), 929792 bytes free
-  B: WORK        id 2 G8M start 4096 rw wb 3 file(s), 8359936 bytes free
+container: format 1.1, 26624 blocks (13631488 bytes), 5 volume(s), 4 drive(s) wanted
+  A: SYSTEM      id 1 G1M start 2048 rw 16 file(s), 931840 bytes free
+  B: WORK        id 2 G8M start 4096 rw 3 file(s), 8359936 bytes free
+  C: PROJECTS    id 3 G1M start 20480 rw 0 file(s), 1040384 bytes free
+  -: GAMES       id 4 G1M start 22528 rw 0 file(s), 1040384 bytes free
+  -: SPARE       id 5 G1M start 24576 rw 0 file(s), 1040384 bytes free
 ```
 
 Listing without a volume selects A. The next command lists B, where the
@@ -152,9 +147,8 @@ The complete A listing includes TED's project and session files:
  0 HELLO3.ASM       2176
  0 HELLO3.BIN        256
  0 MON3.SVC         5120
- 0 MOUNT.COM         768
  0 SAMPLE.ASM       4608
- 0 SHELL.SVC        2304
+ 0 SHELL.SVC        3712
  0 STARTUP.CMD       128
  0 TAS.COM         10368
  0 TED.COM         12416
@@ -268,9 +262,12 @@ node tools/tecvol.mjs info dist/starter.img
 ```
 
 ```text
-container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
-  A: SYSTEM      id 1 G1M start 2048 rw 15 file(s), 933888 bytes free
-  B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
+container: format 1.1, 26624 blocks (13631488 bytes), 5 volume(s), 4 drive(s) wanted
+  A: SYSTEM      id 1 G1M start 2048 rw 14 file(s), 935936 bytes free
+  B: WORK        id 2 G8M start 4096 rw 0 file(s), 8372224 bytes free
+  C: PROJECTS    id 3 G1M start 20480 rw 0 file(s), 1040384 bytes free
+  -: GAMES       id 4 G1M start 22528 rw 0 file(s), 1040384 bytes free
+  -: SPARE       id 5 G1M start 24576 rw 0 file(s), 1040384 bytes free
 ```
 
 The container occupies 26,624 blocks or 13 MiB. SYSTEM begins at block
@@ -327,7 +324,7 @@ The starter card's TED (Thorium `a2fe556`) takes a run
 of `00h` that fills the rest of the last record as the end of the file, so
 such a file opens without an error. A byte that TED rejects elsewhere stops
 it at the prompt with `EDIT error 03` and the byte's line and column, as in
-`EDIT error 03 L3 C5` (TEC-OS e59e8c4 `docs/compatibility.md`, Thorium
+`EDIT error 03 L3 C5` (TEC-OS b3134cf `docs/compatibility.md`, Thorium
 a2fe556 `README.md`). An older TED, Thorium `967678c`, rejects that padding and stops with error 03 without a line or
 column.
 
@@ -389,11 +386,20 @@ node tools/tecvol.mjs put my.img SPARE hello.txt --text
 node tools/tecvol.mjs dir my.img
 ```
 
-<!-- TECVOL06A -->
+```text
+ 0 SHELL.SVC        3712
+ 0 STARTUP.CMD       128
+```
 
 After those puts, `node tools/tecvol.mjs info my.img` prints this:
 
-<!-- TECVOL06B -->
+```text
+container: format 1.1, 38912 blocks (19922944 bytes), 4 volume(s), 4 drive(s) wanted
+  A: SYSTEM      id 1 G1M start 2048 rw 2 file(s), 1034240 bytes free
+  B: WORK        id 2 G8M start 4096 rw 0 file(s), 8372224 bytes free
+  -: GAMES       id 3 G8M start 20480 rw 1 file(s), 8359936 bytes free
+  -: SPARE       id 4 G1M start 36864 rw 1 file(s), 1038336 bytes free
+```
 
 The `-` means no default drive. GAMES and SPARE stay unassigned at cold boot
 until a retained selection or `CD` assigns them. A card with more than eight
@@ -456,7 +462,7 @@ page's card and `dist/starter.img` are one card. Its fourteen files on A
 include the shell `SHELL.SVC`, the demo's source `DEMO.ASM`, the BASIC game
 `BOUNCE.BAS`, and `MON3.SVC` with `HELLO3.BIN` and its source `HELLO3.ASM`,
 at recipe revision 13. Media preparation no longer writes a separate page
-recipe (TEC-OS e59e8c4 `tools/media.mjs`, `web/build.mjs`). `TAS DEMO`
+recipe (TEC-OS b3134cf `tools/media.mjs`, `web/build.mjs`). `TAS DEMO`
 builds DEMO.COM on the card. The page uses the same size and SHA-256
 checks.
 
@@ -472,18 +478,23 @@ node tools/tecvol.mjs create build/errs.img --volume G1M:SYSTEM:A --volume G8M:W
 node tools/tecvol.mjs put build/errs.img B dist/files/STARTUP.CMD --ro
 ```
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/errs.img "@start SAVE 1 C:X.COM" "@key x" "@start ERA B:STARTUP.CMD" "@key x" "DIR B:" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/errs.img '@start SAVE 1 C:X.COM' '@key x' '@start ERA B:STARTUP.CMD' '@key x' 'DIR B:'. Boot rows included in this complete serial transcript. -->
 ```text
-A:SYSTEM>SAVE 1 C:X.COM
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: ARCHIVE     (read-only)
+
+A>SAVE 1 C:X.COM
 
 Bdos Err On C: R/O
-A:SYSTEM>ERA B:STARTUP.CMD
+A>ERA B:STARTUP.CMD
 
 Bdos Err On B: File R/O
-A:SYSTEM>DIR B:
-STARTUP.CMD 
+A>DIR B:
+STARTUP.CMD
 1 file, 8172K free
-A:SYSTEM>
+A>
 ```
 
 `SAVE` made no file on C and `ERA` left B's file in place. In the default
@@ -518,8 +529,17 @@ cp dist/starter.img short.img
 truncate -s 2104320 short.img
 ```
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card short.img "@start DIR B:" "@key x" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card short.img '@start DIR B:' '@key x'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>DIR B:
 
 Bdos Err On B: Bad Sector

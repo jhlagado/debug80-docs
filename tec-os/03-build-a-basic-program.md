@@ -7,32 +7,14 @@ nav_group: "Using the machine"
 
 # 3. Build a BASIC program
 
-<!-- Source and test contracts read at TEC-OS
-     e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main), with
-     programs/TIMES.BAS, tools/media.mjs, docs/compatibility.md (TED and
-     BAZA rows, :223 and :225), test/times.test.mjs, test/ted-baza.test.mjs
-     and test/starter.test.mjs.
-     TED.COM Thorium a2fe556, SHA-256 c6c8374a…; BAZA.COM and BAZA.RTL
-     Baza 50dc512, SHA-256 280ee372… (13,184 bytes) and 14d7fd11…
-     (12,032 bytes), as test/inputs.json:24-43 pins. TIMES.COM built with
-     them is 9,600 bytes, the same file as before the restyle
-     (test/lib/inputs.mjs:20-22, Origo KD-297).
-     Baza README, docs/language.md, docs/call.md, docs/speed.md, docs/mbasic.md,
-     docs/size-account.md,
-     src/lex.asm and examples/BOUNCE.BAS at 50dc512; Thorium README at
-     a2fe556. The BASIC style is TEC-OS e59e8c4 README.md:177-179 and the
-     check in test/times.test.mjs:89-113.
-     The TIMES screen below is the screen test/times.test.mjs:28-40 and
-     :115-122 checks on the host model at 40 columns. It is not a separate
-     capture. The COPY step follows Chapter 4 and drivers/shellcmd.asm; the
-     prompt's console read writes every changed line (docs/recovery.md).
-     BAZA's spinner and its screen are a capture at fdd9e5b:
-     node tools/capture.mjs --board pico --screen "BAZA TIMES".
-     No other new execution occurred for this chapter, and no BAZA or
-     TED BASIC run on a physical TEC-1G is recorded.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Source and test contracts checked at TEC-OS
+     c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     programs/TIMES.BAS, test/times.test.mjs and test/ted-baza.test.mjs.
+     TED.COM is pinned at Thorium a2fe556 and Baza at 50dc512. The BAZA
+     screen was retaken with the landed firmware; outputs taken from strict
+     test assertions are labelled as source-derived excerpts, not captures.
+     Both full firmware strict passes include the BASIC and TED scenarios.
+     Host-model evidence is retained in Origo's book-shell2 evidence. -->
 
 The starter card holds a short program in BASIC, TIMES.BAS, beside SAMPLE's
 assembly source. You compile it with BAZA and run it. Then you edit and build
@@ -48,7 +30,7 @@ TIMES.BAS is on A with the other supplied files. `TYPE TIMES.BAS` prints it
 at the `A:SYSTEM>` prompt. Chapter 4 explains `TYPE` and its pager. The complete
 file is:
 
-<!-- TEC-OS fdd9e5b programs/TIMES.BAS, lines 1-22, complete. The starter
+<!-- TEC-OS 8b69e51 programs/TIMES.BAS, lines 1-22, complete. The starter
      card stores it with CRLF line ends and a final ^Z (tools/media.mjs). -->
 ```text
 10 REM TIMES.BAS, a first BASIC program
@@ -131,9 +113,18 @@ turns a mark at the start of the line, `|`, `/`, `-` and `\` in turn, each
 followed by a backspace. A successful compile then prints `COM written` over
 the last mark before the prompt returns. The screen then shows:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen
-     "BAZA TIMES", screen rows 10–13. Earlier boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen 'BAZA TIMES'. The full screen, with trailing empty rows omitted. -->
 ```text
+
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>BAZA TIMES
 COM written
 
@@ -147,7 +138,7 @@ Typing `TIMES` runs the program. The screen below is the one the TEC-OS host
 model test checks on the 40-column console, with the answers `TEC`, then 13,
 then 7. Its starting `A:SYSTEM>TIMES` line is omitted:
 
-<!-- TEC-OS fdd9e5b test/times.test.mjs:28-40, the asserted output, with
+<!-- TEC-OS 8b69e51 test/times.test.mjs:28-40, the asserted output, with
      the screen check at :120-122: answers TEC, 13 and 7, trailing spaces
      removed. Not a separate capture. -->
 ```text
@@ -255,7 +246,7 @@ and 100. The line number is in order but the expression after `print` is
 unfinished. `^T B` saved the file and BAZA printed its message on the
 console, over its last spinner mark:
 
-<!-- TEC-OS fdd9e5b test/ted-baza.test.mjs:94-101, the asserted console
+<!-- TEC-OS 8b69e51 test/ted-baza.test.mjs:94-101, the asserted console
      text with the spinner's marks taken out (:29-31). Not a separate
      capture. -->
 ```text
@@ -304,7 +295,7 @@ way. Three of its lines show the pattern
 (`Baza 50dc512:examples/BOUNCE.BAS:6`, `11`, `18`):
 
 <!-- Baza 50dc512 examples/BOUNCE.BAS file lines 6, 11 and 18, as the
-     card holds it (TEC-OS fdd9e5b tools/media.mjs:224-227). -->
+     card holds it (TEC-OS 8b69e51 tools/media.mjs:224-227). -->
 ```text
 50 DEF CALL vi = ROM 3: DEF CALL bp = ROM 4: DEF CALL ft = ROM 15
 100 CALL vi, b = 1

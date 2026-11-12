@@ -7,12 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 16. Reset and boot
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
-     ROM SHA-256 43ac0f18…, on its starter card. Captures and timings are
-     host-model runs of that build on the serial board.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A program can finish and leave the next command prompt ready without resetting
 the board. Warm boot rebuilds the program environment while retaining the drive
@@ -235,16 +238,27 @@ the card assigns a volume to that letter (`src/volsvc.asm:30-129`).
 In this capture, `CD D:GAMES` put GAMES on the empty D before reset.
 The saved assignment matched the starter card so D was listed afterwards:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs "CD D:GAMES" "@reset" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'CD D:GAMES' @reset. Boot rows included in this complete serial transcript. -->
 ```text
-A:SYSTEM>MOUNT B:
-Unmounted
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>CD D:GAMES
+D:GAMES
 A:SYSTEM>
 TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
+A: SYSTEM
+B: WORK
+C: PROJECTS
+D: GAMES
 
-A:SYSTEM>SHELL.SVC
+A>SHELL.SVC
 
 A:SYSTEM>GLCD.SVC
 
@@ -320,8 +334,17 @@ The prompt line is read with function 10, by the shell's `LINE` entry or,
 with no shell, by the CCP itself, so `^C` at an empty prompt uses that first
 route:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs ^C -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs '^C'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>^C
 A:SYSTEM>
 ```

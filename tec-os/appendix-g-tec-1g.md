@@ -7,12 +7,15 @@ nav_group: "Reference"
 
 # Appendix G. The TEC-1G as TEC-OS uses it
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision, source inspection. No
-     physical-board run was made. The retired diagnostics ROM's documents
-     and tests are cited with an a1023bd: prefix (TEC-OS
-     a1023bd0cbb4879c37ae61e6f670b442e1e60abe), its cost figure at TEC-OS
-     78127ec. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 TEC-OS shares several ports with the board's displays, serial line and speaker.
 The tables here give the connections its code uses. They also identify the
@@ -106,7 +109,7 @@ The keypad sample and serial input are separate reads
 The board documents and the model describe other bits of `03h` differently.
 Both describe bit 6 as low while a keypad key is down. The retired
 diagnostics ROM's T11 recorded the port's readings
-(`a1023bd:docs/diagnostics.md:166-169`). The current board diagnostics do not
+(`46be5a4:docs/diagnostics.md:166-169`). The current board diagnostics do not
 read it, and which description is true on the board is still open
 (`docs/diagnostics.md:388-391`). The physical Protect and
 Expand switches are not input conditions checked by TEC-OS. They are distinct
@@ -145,7 +148,7 @@ memory boundary.
 The model decodes bits 3–6 as a further bank field. The board documents
 show them unconnected to U9. TEC-OS uses only bit 2 among bits 2–6.
 The retired diagnostics ROM's T12 mapped what those bits select
-(`a1023bd:docs/diagnostics.md:185-190`). The current board diagnostics change
+(`46be5a4:docs/diagnostics.md:185-190`). The current board diagnostics change
 only bit 2 and do not probe bits 3–6, so how a board decodes them remains
 unrecorded (`docs/diagnostics.md:397-399`).
 
@@ -156,7 +159,7 @@ two 16 KiB halves behind `8000h–BFFFh`, called EXPAND 0 and EXPAND 1.
 TEC-OS needs both, for 64 KiB of physical RAM in total. The board's recommended
 build leaves U9 empty. The prepared setup therefore adds a 62256 or similar
 and sets the EXPAND jumpers for a 32 KiB chip. That setting is recorded in
-the earlier board checklist (`a1023bd:docs/board-run.md:45-47`). The current
+the earlier board checklist (`46be5a4:docs/board-run.md:45-47`). The current
 checklist does not repeat it.
 
 Before printing the banner, cold boot checks both ends of the visible window
@@ -216,7 +219,7 @@ DEMO.ASM, is on the starter card, and `TAS DEMO` builds it there.
 The board's port list instead gives `05h` and `06h` as the X and Y axes of
 a single-colour matrix. DEMO's pattern need not look the same on that wiring.
 The retired diagnostics ROM's T24 had a visual procedure for recording the
-pattern (`a1023bd:docs/diagnostics.md:352-355`). The current board diagnostics
+pattern (`46be5a4:docs/diagnostics.md:352-355`). The current board diagnostics
 do not check the 8 × 8 LEDs, so the board's wiring is still unrecorded
 (`docs/diagnostics.md:380-381`). A host-model picture cannot settle
 that board difference.
@@ -277,11 +280,11 @@ latch afterwards. It uses no stack while the bank is visible
 (`src/sd.asm:469-478`, `src/sd.asm:566-591`, `src/sd.asm:646-655`). TEC-OS's
 own `SDREAD` takes 219,232 T-states a block on the host model, about 55 ms
 at 4 MHz, as [Chapter 18](18-card-blocks-and-volumes.md) gives. The retired
-diagnostics ROM's documents at `78127ec` give 354,216 T-states per block
+diagnostics ROM's documents at `b706f61` give 354,216 T-states per block
 plus 678 for each token poll, about 89 ms, for that ROM's separate driver.
 The retired ROM recorded a board's token polls with T20 and its read rate
-with the timed T34 (`a1023bd:docs/diagnostics.md:283-290`,
-`a1023bd:docs/diagnostics.md:430-433`). The current board diagnostics record
+with the timed T34 (`46be5a4:docs/diagnostics.md:283-290`,
+`46be5a4:docs/diagnostics.md:430-433`). The current board diagnostics record
 them with SD3's margins and SD6's read speed, timed by the DS1302 or by a
 stopwatch between two beeps, in a log that names its image
 (`docs/diagnostics.md:168-173`, `docs/diagnostics.md:193-196`).

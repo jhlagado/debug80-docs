@@ -7,21 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 19. Cache and persistence
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed citations use that revision. The READ and SAVE timings and
-     the SAVE 8 and SAVE 160 write traces were measured at fdd9e5b on the
-     host model, with a script that drives Machine as tools/capture.mjs does
-     and records cycles, and SDLBA at each SDWRITE; READ was assembled by
-     TAS through tools/lib/assemble.mjs. The BOUNCE compile time and the
-     16 KiB and SAVE 16 write counts are the fdd9e5b measurements recorded
-     in Origo KD-303. The block-read, BIOS hit and miss, CLOOK, CWRITE
-     and close costs were measured at fdd9e5b the same way, timing each
-     call from its entry to its return on the starter card. The 7.65 s
-     figure from before coalescing is TEC-OS 78127ec's, and the write
-     counts without coalescing are those of a1023bd.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/. READ/SAVE/DIR timings use the measurements retained there.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A program can finish writing a record while its newest bytes are still only in
 RAM. The block cache makes that possible by collecting records into card blocks.
@@ -34,8 +28,8 @@ transfer. A CP/M program reads the same blocks again and again, the directory
 above all. The block cache keeps what it has read in EXPAND 1 so that a later
 read is a memory copy while that block remains cached. Every write goes through
 the same cache. The drive you are on is written behind: its writes stay in
-the cache and reach the card in batches. Every other drive holds one pending
-block and writes it at the next flush point. Chapter 1 introduced the
+the cache and reach the card in batches. Writes off the logged drive share one pending block across all drives;
+that block reaches the card at the next flush point. Chapter 1 introduced the
 consequence for saved work: until the next key wait or flush, the card can
 lag behind the saved file (`src/bios.asm:329-358`, `src/cache.asm:581-622`).
 
@@ -104,13 +98,15 @@ It sets `CNEXT` to the line after the one it gave out. When every line is dirty,
 order is round-robin and not least recently used. A block that is read often is
 still given up when its turn comes and read again from the card at its next use.
 
-On the starter card, a BIOS read in `DIR` that hits takes 13,537 T-states,
-with its record going to the directory buffer `DIRBUF`. A read in `DIR B:`
-that misses takes about 235,260. These are complete BIOS reads, including
-lookup and copying.
+On the four-drive starter, a BIOS read in `DIR /W` that hits takes 13,538
+T-states, with its record going to the directory buffer `DIRBUF`. In
+`DIR /W B:`, misses take 235,235–235,280. These are complete BIOS reads,
+including lookup and copying. The four reads on A all hit; the empty WORK
+directory makes 32 misses and 96 hits while it is scanned.
 
-`CLOOK` itself takes 264 T-states for a block in line 0 and about 2,000,
-1,977 to 1,999, for the full search of a miss.
+`CLOOK` itself takes 264 T-states for a hit in line 0 in the READ workload.
+Its misses take 1,977–2,021 across these READ, SAVE and directory workloads;
+the saved Z flag distinguishes hits from misses in the trace.
 
 `CRDREC` and `CWRREC` put the two banks in `XMDST` and `XMSRC` as 0 for the
 program's view and 1 for EXPAND 1. Both then call `MVCOPY`, the cache's copy
@@ -126,11 +122,9 @@ the latch switched between each read and its write
 because the caller's stack may be in EXPAND 0 (`src/cache.asm:13-17`).
 `MVEND` writes `LATCHV` back to the latch and enables interrupts only if
 they were on at entry (`src/cache.asm:790-804`). A BIOS read to a DMA
-address below `8000h` can use the faster fixed-RAM copy path. In a run of
-`MOUNT`, a hit takes 6,294 T-states and a miss 226,367. A program loaded at `0100h` uses that kind of address too.
-
-In the same starter-card run, `DIR` on A makes four BIOS reads. All hit
-because the directory block is still in the cache after boot.
+address below `8000h` can use the faster fixed-RAM copy path. In the READ workload below, reads to `0080h` take 4,565–6,334 T-states on
+a hit and 226,345–226,346 on a miss. The directory buffer uses the slower
+EXPAND-0 copy path; those timings must not be interchanged.
 
 The READ program gives a complete-file comparison. Its 24-byte binary opens
 the file named on its command line and repeatedly reads records to `0080h`
@@ -177,13 +171,13 @@ so no shell. The script reads the model's count, `cycles`
 (`host/machine.mjs:284`), twice. The first reading is after `READ
 DATA.BIN` has been typed and echoed, before the Return that ends it. The second
 is at the next prompt. After a cold boot, the command's first run took
-6,626,603 T-states, 1.66 seconds. The next run took 1,326,691, 0.33 seconds,
+6,617,191 T-states, 1.65 seconds. The next run took 1,317,279, 0.33 seconds,
 a fifth of the first. Both figures include loading the program from
 drive A.
 
 The gain depends on which blocks remain in the cache. A 15,360-byte file,
-`BIG.BIN` on a copy of `time.img`, took 2.05 seconds and then 2.10. The
-counts were 8,188,331 and 8,411,044 T-states. `CTAKE`
+`BIG.BIN` on a copy of `time.img`, took 2.04 seconds and then 2.10. The
+counts were 8,164,976 and 8,387,689 T-states. `CTAKE`
 had given up each line before the next read reached it. The file data alone
 occupied all 30 lines, leaving no room for the directory and program blocks
 read along the way.
@@ -273,12 +267,27 @@ the failure: the program gets its key and the next flush point that is not a
 console read reports it. Warm boot writes the block once more and drops it
 with `Write lost` (`docs/recovery.md:142-152`).
 
-MEAS19A
+The SAVE comparison uses a fresh `time.img` for each run, with the same
+READ and DATA files still on A. SAVE counts 256-byte pages, so 8, 16 and
+160 pages mean 2,048, 4,096 and 40,960 bytes, or 16, 32 and 320 records.
+With A logged, `SAVE 8 B:X.COM` took 2.782 seconds, `SAVE 16` 3.069 and
+`SAVE 160` 8.607. Each interval starts before Return and ends at the next
+prompt, including B's first directory login. The recorded SDWRITE calls all
+returned success, and the file read from the resulting card matched the
+RAM bytes saved.
+
+The 8-page run wrote six blocks in this order: directory block 4096,
+data blocks 4128–4131, then directory block 4096 again. Each of the four
+data blocks was written once, after its records had been collected. The
+16-page run made ten writes: eight data blocks and two directory writes.
+The 160-page run made 85 writes: 80 data blocks and five directory writes,
+including extent transitions. These are measured counts, not a promise
+that every workload writes each block only once.
 
 ## Collecting records on the logged drive
 
-A card block holds four CP/M records. A volume off the logged drive holds one
-block at a time. The logged drive holds every changed block in the cache
+A card block holds four CP/M records. Writes off the logged drive share one
+pending block across all volumes. The logged drive holds every changed block in the cache
 until a flush. Chapter 18 explains the record-to-block mapping
 (`src/cache.asm:360-395`). A volume is written behind while its drive is the
 logged one, whatever its descriptor says: byte 15, which once marked a volume
@@ -322,11 +331,32 @@ brings changed cache data to the card first
 `CKEY`, at each console read, writes every changed line when `CANY` is set
 and clears the flag once no line is kept. While `CANY` is clear only the
 pending block can be changed, and `CKEY` goes to `CPOUT`, the cheaper test
-that writes that one block. A program that writes and rewrites blocks
-between key waits therefore writes each changed block once
+that writes that one block. A program can combine rewrites of a cached block into one card write
+while no flush or eviction intervenes. A directory write or an eviction
+can end that interval before the next key wait
 (`src/cache.asm:581-622`, `src/ram.asm:315-319`).
 
-MEAS19B
+Selecting `B:` before the measured command makes the same destination
+the logged drive. On fresh two-volume cards, the results were:
+
+| SAVE pages | Bytes | A logged, seconds | B logged, seconds | SDWRITE calls in either run |
+| ---: | ---: | ---: | ---: | ---: |
+| 8 | 2,048 | 2.782 | 0.488 | 6 |
+| 16 | 4,096 | 3.069 | 0.767 | 10 |
+| 160 | 40,960 | 8.607 | 6.205 | 85 |
+
+B's directory was already logged by the drive change, outside its timed
+interval; the faster total is therefore not a measurement of write policy
+alone. The larger logged-drive run also flushed data blocks in cache-line
+order rather than ascending block order. The trace contains the same
+80 data-block writes and five directory writes, and the completed file
+again matched the saved RAM bytes.
+
+The close in the logged-B 8-page run took 1,129,449 T-states, including the
+four retained data blocks and the directory update. With A logged, each
+preceding off-drive block transition had already flushed the earlier
+pending block; that close took 477,956 T-states. Both obey the same
+data-before-directory rule.
 
 ## Flush order and interrupted updates
 
@@ -451,16 +481,26 @@ cp dist/starter.img nodata.img
 truncate -s 2113536 nodata.img
 ```
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card nodata.img "@start SAVE 1 B:X.COM"
-     "@key x" "DIR B:". Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card nodata.img '@start SAVE 1 B:X.COM' '@key x' 'DIR B:'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>SAVE 1 B:X.COM
 
 Bdos Err On B: Bad Sector
 Write lost
 A:SYSTEM>DIR B:
-X.COM       
-1 file, 8176K free
+
+X       .COM       0
+1 file, 0 bytes
+8372224 free on B:WORK
 A:SYSTEM>
 ```
 
@@ -515,7 +555,7 @@ disk call holds them off across mapping, cache work and card I/O. A read that
 misses holds them off for about 235,000 T-states, 59 milliseconds. A directory
 write, on any drive, holds them off while every dirty line is written, and so
 does a console read when a line may be held behind. After `SAVE 8 B:X.COM` the close of that file of four blocks takes
-1,130,516 T-states. Each line's `CWRITE` costs 217,338 T-states. Multiplying it by 30 gives about 6.5 million T-states, or 1.6 seconds,
+1,129,449 T-states in the logged-B measurement above. Each line's `CWRITE` costs 217,338 T-states. Multiplying it by 30 gives about 6.5 million T-states, or 1.6 seconds,
 for data transfer alone. That is an estimate from the model cost, not a measured
 all-dirty flush or an upper bound for a physical card. A program with an
 interrupt response requirement can place disk calls outside the interval that

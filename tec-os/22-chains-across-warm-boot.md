@@ -7,14 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 22. Chains across a warm boot
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     All source ranges below use that revision, source inspection. Lines
-     of pieces are SHELL.SVC's: drivers/shell.asm, drivers/shellio.asm and
-     docs/shell.md. The startup capture was made at fdd9e5b with the recipe
-     shown, on the starter card npm run media builds.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A program's ordinary exit rebuilds the command processor's working state,
 yet the next piece of its command line can still run. The shell keeps the
@@ -109,24 +110,27 @@ cp dist/starter.img start.img
 node tools/tecvol.mjs put start.img A startup.cmd --text
 ```
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card start.img -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card start.img. Boot rows included in this complete serial transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
-B: WORK       
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
-A:SYSTEM>SHELL.SVC
+A>SHELL.SVC
 
 A:SYSTEM>DIR *.CMD &TYPE STARTUP.CMD
-STARTUP.CMD 
-1 file, 912K free
+
+STARTUP .CMD     128
+1 file, 128 bytes
+935936 free on A:SYSTEM
 A:SYSTEM>TYPE STARTUP.CMD
 SHELL.SVC
 DIR *.CMD &TYPE STARTUP.CMD
-NOSUCH.SVC &MOUNT
+NOSUCH.SVC &CD
 USER 0
 
-A:SYSTEM>NOSUCH.SVC &MOUNT
+A:SYSTEM>NOSUCH.SVC &CD
 NOSUCH.SVC?
 
 A:SYSTEM>USER 0

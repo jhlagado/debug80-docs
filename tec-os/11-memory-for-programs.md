@@ -7,15 +7,15 @@ nav_group: "Writing programs"
 
 # 11. Memory for programs
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. TOP, AREA and KEY were
-     assembled on the PC by TAS, the pinned TAS.COM of Thorium 3d1e2c0,
-     through tools/lib/assemble.mjs: 49, 73 and 142 bytes. Every capture was
-     made at fdd9e5b with the command in its comment, on the cards the
-     recipes shown make; the four-drive card is made with tecvol create.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 Your program starts at `0100h` but its upper memory limit depends on the card
 and installed services. Code, buffers and a private stack must fit below that
@@ -133,11 +133,19 @@ node tools/tecvol.mjs put mem.img B top.com
 
 The serial-only model capture gave:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card mem.img B:TOP. Boot rows
-     omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card mem.img B:TOP. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:TOP
-AF00h
+A700h
 
 A:SYSTEM>
 ```
@@ -150,16 +158,24 @@ the echo of `CON UC1` went to the PICO9918. The reply and second TOP output
 went to the graphics LCD. This is a host-model capture, not a browser or
 physical-board observation:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --card mem.img B:TOP
-     "CON UC1" B:TOP. Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --card mem.img B:TOP 'CON UC1' B:TOP. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:TOP
-AF00h
+A700h
 
 A:SYSTEM>CON UC1
 CON: UC1:
 A:SYSTEM>B:TOP
-AC00h
+A400h
 
 A:SYSTEM>
 ```
@@ -274,11 +290,19 @@ writeFileSync(out, (await assembleProgram(src)).bytes);
 node tools/tecvol.mjs put mem.img B area.com
 ```
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card mem.img B:AREA. Boot rows
-     omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card mem.img B:AREA. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:AREA
-44544 bytes
+42496 bytes
 
 A:SYSTEM>
 ```
@@ -355,19 +379,30 @@ This run used the starter card, whose startup file had installed the shell
 at `A700h`. Its limit is 166 pages. The request for 167 is rejected and
 166 accepted:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 167 BIG.COM"
-     "SAVE 166 BIG.COM" DIR. Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs B: 'SAVE 2 TWO.COM' 'SAVE 167 BIG.COM' 'SAVE 166 BIG.COM' DIR. Boot rows included in this complete serial transcript. -->
 ```text
-A:SYSTEM>B:
-B>SAVE 2 TWO.COM
-B>SAVE 175 BIG.COM
-175?
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
-B>SAVE 174 BIG.COM
-B>DIR
-TWO.COM      BIG.COM     
-2 files, 8128K free
-B>
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>B:
+B:WORK>SAVE 2 TWO.COM
+B:WORK>SAVE 167 BIG.COM
+167?
+
+B:WORK>SAVE 166 BIG.COM
+B:WORK>DIR
+
+TWO     .COM     512
+BIG     .COM   42496
+2 files, 43008 bytes
+8323072 free on B:WORK
+B:WORK>
 ```
 
 A count above 255 is rejected too: `SAVE 320 X.COM` gives `320?`. SAVE erases an
@@ -564,11 +599,19 @@ node tools/tecvol.mjs put con.img B key.com
 
 This serial capture supplied `a`, `Z`, `^C`, Esc and Return:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card con.img "@start B:KEY"
-     $'@key aZ\x03\x1b\r'. Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card con.img '@start B:KEY' $'@key aZ\x03\x1b\x0d'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:KEY
-61 5A 03 1B 0D 
+61 5A 03 1B 0D
 
 A:SYSTEM>
 ```

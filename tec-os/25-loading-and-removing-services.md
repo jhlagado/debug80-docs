@@ -7,16 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 25. Loading and removing services
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
-     ROM SHA-256 43ac0f18…. Unprefixed source ranges use that revision,
-     source inspection, and the tests named are in its test/svc.test.mjs.
-     The GLCD figures are from its dist/files/GLCD.SVC, the TAS bytes from
-     the starter card's TAS.COM, Thorium 3d1e2c0 (e648a1d0…), and the
-     SERVICES capture was made at fdd9e5b with the command in its comment.
-     Citations prefixed Thorium dbee66a name TAS's source at that commit.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A service file first loads at `0100h` like a COM program. The loader moves
 its header and image to whole pages below the program ceiling, runs INIT
@@ -209,10 +208,19 @@ selected, DRVR rejected the GLCD INIT's table with `TNENODV`. The failed load
 returned `SVCRC` 1, freed its pages and passed quietly. The TPA stayed as the
 shell had left it, and SERVICES, the shell's, listed only the shell:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico SERVICES -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico SERVICES. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>SERVICES
-SHELL 10
+SHELL 15
 A:SYSTEM>
 ```
 

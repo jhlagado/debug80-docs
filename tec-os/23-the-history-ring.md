@@ -7,17 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 23. The history ring
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     All source ranges below use that revision, source inspection. The
-     history is SHELL.SVC's: drivers/shell.asm and drivers/shellio.asm, with
-     the ROM's function 10 in src/cpm/bdos.asm. Every capture below was made
-     at fdd9e5b with the command in its comment, on the starter card that
-     npm run media builds, TAS.COM Thorium 3d1e2c0 and TED.COM Thorium
-     a2fe556 as test/inputs.json pins them. Boot rows are omitted unless
-     shown.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 You can recall whole command lines even after newer input has overwritten
 older history. The shell, `SHELL.SVC`, keeps those lines in a 256-byte ring
@@ -101,8 +99,18 @@ returns to the shell, which only afterwards converts a piece's letters to
 capitals (`src/cpm/bdos.asm:654-661`, `drivers/shell.asm:426-429`, `drivers/shell.asm:498-518`). In this
 PICO9918 screen capture, recalling `con` preserves the small letters:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen con "@start "$'\x17' -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen con $'@start \x17'. The full screen, with trailing empty rows omitted. -->
 ```text
+
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>con
 CON: CRT:
 A:SYSTEM>con
@@ -133,15 +141,27 @@ leaves its existing entry in place. In this capture `CON` was typed twice
 before `DIR *.CMD`. Three `^W` presses reached `CON` and then stopped because
 there were only two entries:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen CON CON "DIR *.CMD" "@start "$'\x17\x17\x17' -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen CON CON 'DIR *.CMD' $'@start \x17\x17\x17'. The full screen, with trailing empty rows omitted. -->
 ```text
+
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>CON
 CON: CRT:
 A:SYSTEM>CON
 CON: CRT:
 A:SYSTEM>DIR *.CMD
-STARTUP.CMD
-1 file, 912K free
+
+STARTUP .CMD     128
+1 file, 128 bytes
+935936 free on A:SYSTEM
 A:SYSTEM>CON
 CON: CRT:
 A:SYSTEM>
@@ -222,8 +242,18 @@ before pressing Return.
 
 Here two commands were typed before `^W`, `^W` and Return selected `CON`:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen CON "TYPE STARTUP.CMD" "@start "$'\x17\x17' -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen CON 'TYPE STARTUP.CMD' $'@start \x17\x17'. The full screen, with trailing empty rows omitted. -->
 ```text
+
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>CON
 CON: CRT:
 A:SYSTEM>TYPE STARTUP.CMD
@@ -253,8 +283,17 @@ A program's exit, BDOS function 0 and `^C` at an empty prompt all reach
 warm boot (`src/cpm/bdos.asm:216-221`, `src/cpm/bdos.asm:521-533`). In this
 capture `^C` was followed by `^W`, which recalled `CON`:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs CON "^C" "@start "$'\x17' -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs CON '^C' $'@start \x17'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>CON
 CON: TTY:
 A:SYSTEM>^C
@@ -271,16 +310,26 @@ boundary that insertion preserves. A recognised reset retains only the drive
 selection, so the history goes too. In this run `^W` and Return after the
 reset produced an empty line:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs CON "@reset" "@start "$'\x17' -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs CON @reset $'@start \x17'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>CON
 CON: TTY:
 A:SYSTEM>
 TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
-B: WORK       
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
-A:SYSTEM>SHELL.SVC
+A>SHELL.SVC
 
 A:SYSTEM>GLCD.SVC
 

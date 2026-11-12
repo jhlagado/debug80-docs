@@ -7,10 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 15. State and memory inside TEC-OS
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
-     ROM SHA-256 43ac0f18…, where the command history is SHELL.SVC's and
-     EXPAND 1 holds only the cache. Addresses come from that build's symbol
-     file and docs/memory-map.md. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A program ends and the command prompt returns. The next program has a fresh BDOS
 workspace while your command history and installed services remain in RAM. A

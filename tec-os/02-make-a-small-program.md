@@ -7,26 +7,15 @@ nav_group: "Using the machine"
 
 # 2. Make a small program
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
-     ROM SHA-256 43ac0f18…, with the starter card's TED.COM, Thorium
-     a2fe556 (c6c8374a…), and TAS.COM, Thorium 3d1e2c0 (e648a1d0…,
-     10,343 bytes; test/inputs.json:4-13, docs/compatibility.md:222 and
-     :226). The console excerpts are captures at e59e8c4 on the PICO9918
-     board at 40 columns, on starter-card copies with B:BANNER.ASM put as
-     each stage's source: node tools/capture.mjs --card IMG --board pico
-     "@start A:TED B:BANNER.ASM" then ^T B or ^T R typed as their bytes,
-     the console text from A:SYSTEM>A:TAS on. The final excerpt is node
-     tools/capture.mjs --card IMG "A:TAS B:BANNER.ASM" ^C B:BANNER ^C on
-     the serial console, whose text the PICO9918 shows the same. The
-     status-row positions and messages are TED's last screen row read on
-     the model at each step, the source typed through the matrix keyboard
-     at 40 columns. TED's build line runs under SHELL.SVC, which the
-     card's STARTUP.CMD loads (docs/shell.md:42-44,
-     drivers/shell.asm:174-232). "Several statements on a line" follows
-     Thorium 3d1e2c0 docs/language.md:55-84 and :124, and the CHAIN.ASM
-     listing Thorium 3d1e2c0 demo/chain/chain.asm lines 9-19; CHAIN's build
-     and run are TEC-OS 402f30e test/starter.test.mjs:337-390, when the
-     card held it. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 SAMPLE came with its source already on the card. BANNER begins as text you
 enter yourself. It prints a greeting, which you can change and build again
@@ -90,9 +79,7 @@ following console excerpt is from that rejected build before TED redraws
 the editor. The initial screen-clear controls, leading blank line and editor
 redraw after the last line are omitted:
 
-<!-- TEC-OS e59e8c4: the source above with BROKEN as line 14, ^T B.
-     Console text from A:SYSTEM>A:TAS through A:SYSTEM>A:TED. The long diagnostic wraps
-     on the 40-column screen. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card IMG --board pico --screen '@start A:TED B:BANNER.ASM' $'@press \x14B' '@run 400'. Console excerpt from the build command; terminal controls and redraw omitted. -->
 ```text
 A:SYSTEM>A:TAS B:BANNER.ASM
 BANNER.ASM:14:1: unknown instruction or directive
@@ -132,8 +119,7 @@ again with the source.
 complete console text from the initial run, with the initial clear-screen
 controls and leading blank line omitted. The editor has not yet redrawn:
 
-<!-- TEC-OS e59e8c4: the source above, ^T R. Console text from A:SYSTEM>A:TAS
-     on; Press a key has no following newline. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card IMG --board pico --screen '@start A:TED B:BANNER.ASM' $'@press \x14R' '@run 400'. Console excerpt from the build command; terminal controls and redraw omitted. -->
 ```text
 A:SYSTEM>A:TAS B:BANNER.ASM
 BANNER.COM written
@@ -256,7 +242,7 @@ MSG: db "Hello from TEC-OS!",13,10,"$"
 greeting. As before, the initial clear-screen controls and leading blank
 line are omitted:
 
-<!-- TEC-OS e59e8c4: the edited source, ^T R, a separate run. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card IMG --board pico --screen '@start A:TED B:BANNER.ASM' $'@press \x14R' '@run 400'. Console excerpt from the build command; terminal controls and redraw omitted. -->
 ```text
 A:SYSTEM>A:TAS B:BANNER.ASM
 BANNER.COM written
@@ -290,9 +276,20 @@ from B while A remains current. It does not open TED or assemble the source.
 The final excerpt shows the quit's preservation step, the standalone run
 and a final `^C`:
 
-<!-- TEC-OS e59e8c4: node tools/capture.mjs --card IMG "A:TAS B:BANNER.ASM"
-     ^C B:BANNER ^C, the last lines. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card IMG 'A:TAS B:BANNER.ASM' '^C' B:BANNER '^C'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>A:TAS B:BANNER.ASM
+BANNER.COM written
+
 A:SYSTEM>^C
 A:SYSTEM>B:BANNER
 Hello from TEC-OS!

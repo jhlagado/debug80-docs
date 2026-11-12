@@ -7,17 +7,15 @@ nav_group: "Reference"
 
 # Appendix F. `tecvol`
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. Every recipe was run at
-     fdd9e5b in a clone of that revision with its npm run media output, and
-     the outputs below are those runs'; the recipe's image hash is
-     e59e8c4's, run again there, where the other outputs are the same; the
-     TEC-OS capture was made with the
-     command in its comment. The card at TEC-OS 755636b held nine
-     files (755636b:tools/media.mjs:197-211).
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 `tecvol` edits TEC-OS card images on a PC. It creates volumes, inspects their
 files and directories, copies files and writes an image to a physical device.
@@ -189,9 +187,8 @@ node tools/tecvol.mjs dir dist/starter.img A
  0 HELLO3.ASM       2176
  0 HELLO3.BIN        256
  0 MON3.SVC         5120
- 0 MOUNT.COM         768
  0 SAMPLE.ASM       4608
- 0 SHELL.SVC        2304
+ 0 SHELL.SVC        3712
  0 STARTUP.CMD       128
  0 TAS.COM         10368
  0 TED.COM         12416
@@ -335,18 +332,18 @@ build (`tools/media.mjs:242-266`, `278-281`). Chapter 27
 describes that preparation. The rebuild produced these matching hashes:
 
 ```sh
-node tools/tecvol.mjs recipe dist/starter.recipe.json build/fresh.img
-sha256sum build/fresh.img dist/starter.img
+node tools/tecvol.mjs recipe dist/starter.recipe.json build/book-fresh.img
+sha256sum build/book-fresh.img dist/starter.img
 ```
 
 ```text
-a77467abe18fb3a23f8da9ff66ee2a9c6be6c9376e02144036f2d234e012a2f3  build/fresh.img
-a77467abe18fb3a23f8da9ff66ee2a9c6be6c9376e02144036f2d234e012a2f3  dist/starter.img
+dd44f1c28c3b9296c6348e5723720dc0088f34d984028f4072e1785e36f3cebe  build/book-fresh.img
+dd44f1c28c3b9296c6348e5723720dc0088f34d984028f4072e1785e36f3cebe  dist/starter.img
 ```
 
 The image construction uses fixed placement, fill bytes and file contents.
 With the same recipe and matching inputs its bytes do not depend on the PC's
-clock. The printed hashes identify this recipe's result at `e59e8c4`.
+clock. The printed hashes identify this recipe's result at `c4ec0f4`.
 
 ## install
 
@@ -381,29 +378,36 @@ node tools/tecvol.mjs dir build/my.img A
 
 ```text
  0 HELLO.TXT         128
- 0 MOUNT.COM         768
+ 0 SHELL.SVC        3712
+ 0 STARTUP.CMD       128
 ```
 
 The same card's TEC-OS capture reads the text and lists all volumes:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card build/my.img DIR "TYPE HELLO.TXT" "CD ?" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/my.img DIR 'TYPE HELLO.TXT' 'CD ?'. Boot rows included in this complete serial transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
-B: WORK       
+A: SYSTEM
+B: WORK
+
+A>SHELL.SVC
 
 A:SYSTEM>DIR
-HELLO.TXT    MOUNT.COM   
-2 files, 1012K free
+
+HELLO   .TXT     128
+SHELL   .SVC    3712
+STARTUP .CMD     128
+3 files, 3968 bytes
+1032192 free on A:SYSTEM
 A:SYSTEM>TYPE HELLO.TXT
 hello
 world
 
-A:SYSTEM>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
-02 ARCHIVE     G1M R/O
+A:SYSTEM>CD ?
 
+SYSTEM      A:
+WORK        B:
+ARCHIVE
 A:SYSTEM>
 ```
 

@@ -7,14 +7,15 @@ nav_group: "Writing programs"
 
 # 10. Read and write a file
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. SHOW was assembled by TAS
-     (Thorium 3d1e2c0, the pinned TAS.COM) through tools/lib/assemble.mjs,
-     72 bytes, and the SHOW capture was made at fdd9e5b on the card the
-     recipe shown makes.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A file call needs both a name and a place in memory for the data. The BDOS
 keeps the file's position in a file control block and transfers its data a
@@ -224,11 +225,19 @@ node tools/tecvol.mjs put work.img B hello.asm --text
 
 The capture contains both the successful read and the missing-file case:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card work.img B: "SHOW HELLO.ASM"
-     "SHOW NOSUCH.TXT". Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card work.img B: 'SHOW HELLO.ASM' 'SHOW NOSUCH.TXT'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>SHOW HELLO.ASM
+B:WORK>SHOW HELLO.ASM
 ; HELLO: print a line and return to the CCP.
 BDOS    EQU     $0005
 
@@ -239,10 +248,10 @@ BDOS    EQU     $0005
         RET                     ; back to TEC-OS
 MESSAGE:DB      "Hello from the TEC-1G",13,10,"$"
 
-B>SHOW NOSUCH.TXT
+B:WORK>SHOW NOSUCH.TXT
 No such file
 
-B>
+B:WORK>
 ```
 
 The first output repeats the HELLO source. The second prints SHOW's own error

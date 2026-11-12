@@ -7,17 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 21. From prompt to program
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     All unprefixed source ranges use that revision, source inspection.
-     The shell's parts cite drivers/shell.asm, drivers/shellcmd.asm and
-     drivers/shellio.asm there. Addresses and sizes are from that build's
-     build/tecos/tecos.d8.json. Every
-     transcript was captured at fdd9e5b with the command in its comment, on
-     the starter card or the card the recipe shown makes; ARGS was
-     assembled by TAS, Thorium 3d1e2c0, as test/inputs.json pins it.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 The CCP reads your command through the BDOS, parses its name and either runs a
 built-in or loads a file. A program command ends that path with page zero
@@ -310,14 +308,22 @@ the word at `0006h`. On the starter card with the shell installed that byte
 is `A7h`: 166 pages cover `0100h` through `A6FFh`. Both 167 and 320 are
 rejected in this capture (`src/cpm/ccpcmd.asm:266-307`):
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "SAVE 320 B:X.COM" "SAVE 167 B:X.COM".
-     Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'SAVE 320 B:X.COM' 'SAVE 167 B:X.COM'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>SAVE 320 B:X.COM
 320?
 
-A:SYSTEM>SAVE 175 B:X.COM
-175?
+A:SYSTEM>SAVE 167 B:X.COM
+167?
 
 A:SYSTEM>
 ```
@@ -359,9 +365,17 @@ path passes quietly. A separated width becomes the error word while a joined
 form names the whole token (`src/cpm/ccpcmd.asm:105-180`). This PICO capture
 shows both:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico "CON PICO 40" "CON CRT80"
-     "CON PICO 50" "CON TTY 80" "CON CRT: 32". Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico 'CON PICO 40' 'CON CRT80' 'CON PICO 50' 'CON TTY 80' 'CON CRT: 32'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>CON PICO 40
 CON: CRT:
 A:SYSTEM>CON CRT80
@@ -433,18 +447,25 @@ This starter-card capture contrasts a plain command with an
 explicit B drive. The plain TAS reaches A, and prints its usage line, while
 `B:TAS` stays on B:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs B: TAS B:TAS. Boot rows
-     omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs B: TAS B:TAS. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
+B:WORK>TAS
+usage: TAS NAME [OUT.TYP]
 
-B>B:MOUNT
-B:MOUNT?
+B:WORK>B:TAS
+B:TAS?
 
-B>
+B:WORK>
 ```
 
 A service command calls `LOADCOM` directly through `SVCGO`. It searches
@@ -501,41 +522,57 @@ node tools/tecvol.mjs put build/ccp.img B build/big.com
 TAS writes the 76-byte ARGS.COM. FITS returned to the prompt and BIG was
 rejected:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/ccp.img B: FITS BIG.
-     Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/ccp.img B: FITS BIG. Boot rows included in this complete serial transcript. -->
 ```text
-A:SYSTEM>B:
-B>FITS
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
-B>BIG
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>B:
+B:WORK>FITS
+
+B:WORK>BIG
 BIG?
 
-B>
+B:WORK>
 ```
 
 The same fixture also demonstrates user fallback. Under user 3,
 ARGS is found in B's user 0 and TAS in A's user 0. DIR still lists only
 the empty current area:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card build/ccp.img B: "USER 3" ARGS
-     TAS B:TAS DIR. Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/ccp.img B: 'USER 3' ARGS TAS B:TAS DIR. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>USER 3
-3B>ARGS
-0            
-0            
+B:WORK>USER 3
+3B:WORK>ARGS
+0
+0
 []
-3B>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
+3B:WORK>TAS
+usage: TAS NAME [OUT.TYP]
 
-3B>B:MOUNT
-B:MOUNT?
+3B:WORK>B:TAS
+B:TAS?
 
-3B>DIR
+3B:WORK>DIR
 NO FILE
-3B>
+
+3B:WORK>
 ```
 
 ## Page zero before entry
@@ -615,23 +652,31 @@ pointer. `SHOWFCB` prints eleven name/type bytes and `TAIL` uses the length
 byte at `0080h`. In this capture the parsed names use padded FCB fields
 while the tail preserves the spaces within the piece:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/ccp.img B: "args one.txt a:*.c"
-     "ARGS X Y ! ARGS". Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/ccp.img B: 'args one.txt a:*.c' 'ARGS X Y ! ARGS'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>args one.txt a:*.c
+B:WORK>args one.txt a:*.c
 0 ONE     TXT
-1 ????????C  
+1 ????????C
 [ ONE.TXT A:*.C]
-B>ARGS X Y ! ARGS
-0 X          
-0 Y          
+B:WORK>ARGS X Y ! ARGS
+0 X
+0 Y
 [ X Y]
-B>ARGS
-0            
-0            
+B:WORK>ARGS
+0
+0
 []
-B>
+B:WORK>
 ```
 
 The first FCB has drive zero for the current drive and the second has 1

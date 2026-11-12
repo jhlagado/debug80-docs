@@ -7,25 +7,15 @@ nav_group: "Using the machine"
 
 # 1. First session
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
-     ROM SHA-256 43ac0f18…, on its starter card, the one card the web page
-     runs too (tools/media.mjs:209-240, tools/lib/starter.mjs:10-22,
-     test/starter.test.mjs:48-81; Origo KD-278, KD-302). The screen
-     excerpts are captures at fdd9e5b: node tools/capture.mjs --board pico
-     --screen DIR B: A: "TAS SAMPLE" SAMPLE, the rows each comment names. The ^C excerpt is the same command's serial capture, node
-     tools/capture.mjs ^C, since the capture tool cannot send ^C as a
-     matrix key; the text is the console's either way. SHELL.SVC and the
-     recall keys follow docs/shell.md:3-30 and :144-146. The steps in "More
-     on the card" follow README.md:174-195, tools/media.mjs:250,
-     test/programs/hello3.asm and test/starter.test.mjs:108-393; the LCD
-     lines are HELLO3_ROWS (test/starter.test.mjs:219). With the Matrix
-     switch on, MON3.SVC's key calls read the matrix, not the keypad
-     (docs/mon3.md:245-247, :289-290, drivers/mon3api.asm:296-305). A:'s
-     pending block follows docs/recovery.md:56-72 and :66-81. No capture of
-     the MON-3 steps is claimed.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 Your first session starts with the supplied files. You list them, change drive
 and turn SAMPLE's source into a program you can run. Before finishing you write
@@ -46,19 +36,18 @@ left out.
 
 ## The first prompt
 
-Powering on starts TEC-OS. The screen names the system and the two volumes on
+Powering on starts TEC-OS. The screen names the system and the three assigned volumes on
 the starter card:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen,
-     screen rows 1–10. Initial blank row retained; unused blank rows
-     11–24 omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen. The full screen, with trailing empty rows omitted. -->
 ```text
 
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
 B: WORK
+C: PROJECTS
 
-A:SYSTEM>SHELL.SVC
+A>SHELL.SVC
 
 A:SYSTEM>GLCD.SVC
 
@@ -66,7 +55,7 @@ A:SYSTEM>
 ```
 
 A *volume* is a disk's worth of files on the card. SYSTEM is assigned to drive
-A and WORK to drive B. The letter before `>` identifies the *current drive*,
+A, WORK to drive B and PROJECTS to drive C. The letter before `>` identifies the *current drive*,
 the one used when you name a file without a drive letter. At `A:SYSTEM>` you are
 working on SYSTEM. The prompt is where you type a command.
 
@@ -84,16 +73,31 @@ so the `GLCD.SVC` line leaves it selected. You begin typing at the final
 prompt and press Return. The prompt itself is already on the screen and is
 not part of the command. In the same session the listing was:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs --board pico --screen DIR,
-     the screen's last rows. Earlier rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen DIR. The full screen, with trailing empty rows omitted. -->
 ```text
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>DIR
-MOUNT.COM    SHELL.SVC    GLCD.SVC
-STARTUP.CMD  TED.COM      SAMPLE.ASM
-TIMES.BAS    TAS.COM      BAZA.COM
-BAZA.RTL     BOUNCE.BAS   DEMO.ASM
-MON3.SVC     HELLO3.BIN   HELLO3.ASM
-15 files, 912K free
+
+SHELL   .SVC    3712
+GLCD    .SVC     896
+STARTUP .CMD     128
+TED     .COM   12416
+SAMPLE  .ASM    4608
+TIMES   .BAS     640
+TAS     .COM   10368
+BAZA    .COM   13184
+BAZA    .RTL   12032
+BOUNCE  .BAS    5376
+DEMO    .ASM   15360
+MON3    .SVC    5120
+HELLO3  .BIN     256
+HELLO3  .ASM    2176
+14 files, 86272 bytes
+935936 free on A:SYSTEM
 A:SYSTEM>
 ```
 
@@ -151,10 +155,31 @@ returns to the prompt.
 A drive letter followed by a colon changes the current drive. `B:` selects
 WORK and `A:` returns to SYSTEM. The next excerpt continues after the listing:
 
-<!-- TEC-OS fdd9e5b: the same --screen run with B: and A: after DIR, their screen rows. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen DIR B: A:. The full screen; trailing empty rows omitted. -->
 ```text
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>DIR
+
+SHELL   .SVC    3712
+GLCD    .SVC     896
+STARTUP .CMD     128
+TED     .COM   12416
+SAMPLE  .ASM    4608
+TIMES   .BAS     640
+TAS     .COM   10368
+BAZA    .COM   13184
+BAZA    .RTL   12032
+BOUNCE  .BAS    5376
+DEMO    .ASM   15360
+MON3    .SVC    5120
+HELLO3  .BIN     256
+HELLO3  .ASM    2176
+14 files, 86272 bytes
+935936 free on A:SYSTEM
 A:SYSTEM>B:
-B>A:
+B:WORK>A:
 A:SYSTEM>
 ```
 
@@ -169,8 +194,18 @@ program as `SAMPLE.COM`. You type SAMPLE without `.ASM` in the build
 command because TAS supplies the file types. The assembler's completion
 message gives the output file's name:
 
-<!-- TEC-OS fdd9e5b: the same run, the rows of "TAS SAMPLE". -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen 'TAS SAMPLE'. The full screen; trailing empty rows omitted. -->
 ```text
+
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>TAS SAMPLE
 SAMPLE.COM written
 
@@ -184,8 +219,21 @@ or edit after the build.
 Typing `SAMPLE` now runs `SAMPLE.COM`. TEC-OS loads the program and starts it.
 The program prints its greeting and screen size then returns to the prompt:
 
-<!-- TEC-OS fdd9e5b: the same run, the rows of SAMPLE, the screen's last. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen 'TAS SAMPLE' SAMPLE. The full screen; trailing empty rows omitted. -->
 ```text
+
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>TAS SAMPLE
+SAMPLE.COM written
+
 A:SYSTEM>SAMPLE
 Hello from TEC-OS.
 Screen: 40 by 24
@@ -222,7 +270,7 @@ Typing `MON3.SVC` installs it and gives its prompt, `MON3>`. There
 `LOAD HELLO3.BIN` loads the supplied MON-3 program and `GO` runs it. HELLO3
 writes four lines on the 20 × 4 LCD through MON-3's calls, then beeps:
 
-<!-- TEC-OS e59e8c4 test/starter.test.mjs:219, the LCD rows the host-model
+<!-- TEC-OS b3134cf test/starter.test.mjs:219, the LCD rows the host-model
      test checks, trailing spaces removed. Not a separate capture. -->
 ```text
 MON-3 ON TEC-OS

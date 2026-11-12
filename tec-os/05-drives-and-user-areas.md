@@ -7,19 +7,15 @@ nav_group: "Using the machine"
 
 # 5. Drives and user areas
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. Every capture was made at
-     fdd9e5b with the command in its comment, on the starter card or my.img
-     made as Chapter 6 shows, boot rows omitted. Entering a service on
-     install follows docs/shell.md:220-235, docs/services.md:82-89 and
-     :101-130 and src/loader.asm:734-783; MON3.SVC and "A MON-3 session"
-     follow docs/mon3.md, tools/media.mjs:233-240 and
-     test/starter.test.mjs:218-343, with the figures of the RST 10h calls
-     also in Origo KD-269. The TPA with SHELL.SVC and MON3.SVC is
-     test/shell2.test.mjs:719-741.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A file's volume and user area determine where you can use it. Program
 lookup can find a tool outside your current drive and area, with a separate
@@ -55,27 +51,35 @@ with the PICO9918 as the console. Its startup file had installed the shell,
 and its `GLCD.SVC` line had installed no GLCD driver. Typing the same file
 name at the prompt installed it while leaving the PICO9918 as the console:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico GLCD.SVC SERVICES
-     UNLOAD SERVICES UNLOAD SERVICES UNLOAD. Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico GLCD.SVC SERVICES UNLOAD SERVICES UNLOAD SERVICES UNLOAD. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>GLCD.SVC
 
 A:SYSTEM>SERVICES
 GLCD 3
-SHELL 10
+SHELL 15
 A:SYSTEM>UNLOAD
 
 A:SYSTEM>SERVICES
-SHELL 10
+SHELL 15
 A:SYSTEM>UNLOAD
 
-A:SYSTEM>SERVICES
+A>SERVICES
 SERVICES?
 
-A:SYSTEM>UNLOAD
+A>UNLOAD
 UNLOAD?
 
-A:SYSTEM>
+A>
 ```
 
 The driver occupies three pages and the shell fifteen. The first `UNLOAD`
@@ -103,15 +107,23 @@ instead ends the command with the BDOS's `Bad Sector` message.
 A second graphics LCD driver cannot install over the first. In this
 GLCD-console run, startup had already installed the shell and the driver:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board glcd GLCD.SVC SERVICES.
-     Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board glcd GLCD.SVC SERVICES. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>GLCD.SVC
 GLCD.SVC?
 
 A:SYSTEM>SERVICES
 GLCD 3
-SHELL 10
+SHELL 15
 A:SYSTEM>
 ```
 
@@ -212,9 +224,25 @@ shows the drive and its volume, so `A:SYSTEM>` means drive A holding SYSTEM.
 `CD ?` lists the card's volumes, in the card's order, each with the drive it
 is on:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs "CD ?". Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'CD ?'. Boot rows included in this complete serial transcript. -->
 ```text
-CD05A
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>CD ?
+
+SYSTEM      A:
+WORK        B:
+PROJECTS    C:
+GAMES
+SPARE
+A:SYSTEM>
 ```
 
 WORK is a G8M volume, 8 MiB, and the others are G1M, 1 MiB. Their directory
@@ -227,9 +255,24 @@ drive can be named explicitly, as in `DIR B:` or `TYPE A:SAMPLE.ASM`.
 Selecting an empty drive or naming a file on it gives `Select`. This
 starter-card run selects B and then uses empty drive D:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs B: "@start D:" "@key x" "@start DIR D:" "@key x" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs B: '@start D:' '@key x' '@start DIR D:' '@key x'. Boot rows included in this complete serial transcript. -->
 ```text
-CD05B
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>B:
+B:WORK>D:
+Bdos Err On D: Select
+B:WORK>DIR D:
+
+Bdos Err On D: Select
+B:WORK>
 ```
 
 The default error path waits for a key, `x` in this capture, then ends the
@@ -253,20 +296,31 @@ of area 0's listing even on the same volume. For this comparison,
 existing program memory in area 3. It does not create or move a file in
 area 0:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" TAS "USER 0" "DIR B:" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'USER 3' 'SAVE 1 B:MINE.COM' 'DIR B:' TAS 'USER 0' 'DIR B:'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>USER 3
 3A:SYSTEM>SAVE 1 B:MINE.COM
 3A:SYSTEM>DIR B:
-MINE.COM    
-1 file, 8172K free
-3A:SYSTEM>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
+
+MINE    .COM     256
+1 file, 256 bytes
+8368128 free on B:WORK
+3A:SYSTEM>TAS
+usage: TAS NAME [OUT.TYP]
 
 3A:SYSTEM>USER 0
 A:SYSTEM>DIR B:
 NO FILE
+
 A:SYSTEM>
 ```
 
@@ -309,21 +363,28 @@ In the following starter-card capture, both `A:TAS` and
 plain `TAS` run A's program, which prints its usage line, while the prompt
 stays on B:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs B: "A:TAS" TAS "STARTUP.CMD" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs B: A:TAS TAS STARTUP.CMD. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>A:MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
+B:WORK>A:TAS
+usage: TAS NAME [OUT.TYP]
 
-B>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
+B:WORK>TAS
+usage: TAS NAME [OUT.TYP]
 
-B>STARTUP.CMD
+B:WORK>STARTUP.CMD
 STARTUP.CMD?
 
-B>
+B:WORK>
 ```
 
 For an ordinary program, a type written after the name is replaced by COM.
@@ -365,9 +426,32 @@ slot large enough for either geometry, so any volume fits any drive.
 This run puts GAMES on the empty D, shows it, tries to put WORK on C and
 lists the volumes again:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs "CD D:GAMES" "CD D:" "CD C:WORK" "CD ?". Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'CD D:GAMES' 'CD D:' 'CD C:WORK' 'CD ?'. Boot rows included in this complete serial transcript. -->
 ```text
-CD05C
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>CD D:GAMES
+D:GAMES
+A:SYSTEM>CD D:
+D:GAMES
+A:SYSTEM>CD C:WORK
+WORK is on B:
+
+A:SYSTEM>CD ?
+
+SYSTEM      A:
+WORK        B:
+PROJECTS    C:
+GAMES       D:
+SPARE
+A:SYSTEM>
 ```
 
 The third command failed because WORK was already on B. `CD` of a volume
@@ -400,9 +484,29 @@ not found, and `CD A:SYSTEM` brings SYSTEM back. A reset keeps the drives'
 selection, so a reset after `CD A:GAMES` starts from GAMES, which has no
 startup file and no shell. The bare prompt `A>` follows and there is no `CD`:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs "CD A:GAMES" TAS "@reset". Boot rows before the first command omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'CD A:GAMES' TAS @reset. Boot rows included in this complete serial transcript. -->
 ```text
-CD05D
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>CD A:GAMES
+A:GAMES
+A:GAMES>TAS
+TAS?
+
+A:GAMES>
+TEC-OS 0.1 for TEC-1G
+A: GAMES
+B: WORK
+C: PROJECTS
+
+A>
 ```
 
 Power off and on, or Power cycle on the web page, gives the card's own drives
@@ -445,9 +549,38 @@ in location, size, geometry and flags and fit the drive's slot.
 
 This run puts GAMES on D before reset. The reconstructed selection keeps it:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs "CD D:GAMES" "@reset" "CD ?". Boot rows before the first command omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'CD D:GAMES' @reset 'CD ?'. Boot rows included in this complete serial transcript. -->
 ```text
-CD05E
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>CD D:GAMES
+D:GAMES
+A:SYSTEM>
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+D: GAMES
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>CD ?
+
+SYSTEM      A:
+WORK        B:
+PROJECTS    C:
+GAMES       D:
+SPARE
+A:SYSTEM>
 ```
 
 No saved drive assignment is applied if a required volume no longer matches

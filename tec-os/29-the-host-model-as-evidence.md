@@ -7,16 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 29. The host model as evidence
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. Every capture was made at
-     fdd9e5b with the command in its comment, on the starter card or
-     long.img made as shown. The runtime is @jhlagado/debug80-runtime 0.3.3,
-     as the package locks it. Inventory counts are of source files, not of
-     passing tests. The retired diagnostics ROM is cited with an a1023bd:
-     prefix (TEC-OS a1023bd0cbb4879c37ae61e6f670b442e1e60abe).
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A console transcript records bytes from a particular run. It does not by
 itself establish what a display drew or what a physical board would do.
@@ -157,13 +156,14 @@ They used the graphics LCD and matrix keyboard with no PICO9918. The
 console-byte capture includes the boot and the command after GLCD took
 the console:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board glcd CON -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board glcd CON. Boot rows included in this complete serial transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
-B: WORK       
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
-A:SYSTEM>SHELL.SVC
+A>SHELL.SVC
 
 A:SYSTEM>GLCD.SVC
 
@@ -174,13 +174,14 @@ A:SYSTEM>
 
 The serial capture ends at that switch:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board glcd --serial CON -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board glcd --serial CON. Boot rows included in this complete serial transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
-B: WORK       
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
-A:SYSTEM>SHELL.SVC
+A>SHELL.SVC
 
 A:SYSTEM>GLCD.SVC
 ```
@@ -188,7 +189,7 @@ A:SYSTEM>GLCD.SVC
 The graphics-LCD screen excerpt contains the later command because
 the driver cleared the display when it started:
 
-<!-- the same --screen run's screen -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board glcd --screen CON. The full screen; trailing empty rows omitted. -->
 ```text
 
 A:SYSTEM>CON
@@ -271,7 +272,7 @@ node tools/tecvol.mjs put long.img A lines.txt --text
 The GLCD has eight rows of 21 characters. The shell's pager leaves the final
 row for `[more]` so the first pause follows seven text rows:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card long.img --board glcd --screen "TYPE LINES.TXT" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card long.img --board glcd --screen 'TYPE LINES.TXT'. The full screen, with trailing empty rows omitted. -->
 ```text
 The graphics LCD has
 8 rows of 21 characte
@@ -287,7 +288,7 @@ Each of the first two file lines occupies three rows. Counting begins with the
 listing's first row so the command line has scrolled away by the pause. The next
 run supplies `x` to erase the pause prompt and continue:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card long.img --board glcd --screen "TYPE LINES.TXT" "@key x" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card long.img --board glcd --screen 'TYPE LINES.TXT' '@key x'. The full screen, with trailing empty rows omitted. -->
 ```text
 Four
 Five
@@ -305,7 +306,7 @@ listing, as Chapter 13's chain rules require. The pager erases `[more]`
 before returning. In this final run, `q` at the first pause leaves
 the rest of the file unprinted and the new prompt below the erased row:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card long.img --board glcd --screen "TYPE LINES.TXT" "@key q" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card long.img --board glcd --screen 'TYPE LINES.TXT' '@key q'. The full screen, with trailing empty rows omitted. -->
 ```text
 8 rows of 21 characte
 rs.
@@ -440,12 +441,12 @@ The board documentation instead selects ROM under the overlay and describes the
 latch as write-only. The legacy bank-field decode uses latch bits 3–6. The
 retired diagnostics ROM's test asserted its nine window banks plus the base
 mapping, which must not be attributed to the documented board
-(`a1023bd:test/diag.test.mjs:121-123`). The `ram96` mapping is a separate
+(`46be5a4:test/diag.test.mjs:121-123`). The `ram96` mapping is a separate
 configuration, not a repair to every legacy-model result. That ROM's T08,
 T10 and T12 probed these differences. TEC-OS avoids overlay writes and latch
 reads so checked ordinary paths can satisfy those restrictions on a more
 permissive model (`host/machine.mjs:40-46`, `host/machine.mjs:158-175`,
-`a1023bd:docs/diagnostics.md:147-164`, `a1023bd:docs/diagnostics.md:187-196`,
+`46be5a4:docs/diagnostics.md:147-164`, `46be5a4:docs/diagnostics.md:187-196`,
 `docs/diagnostics.md:383-399`).
 
 [Chapter 28](28-diagnose-the-machine.md) describes the board diagnostics,

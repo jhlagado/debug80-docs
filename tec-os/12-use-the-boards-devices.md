@@ -7,17 +7,15 @@ nav_group: "Writing programs"
 
 # 12. Use the board's devices
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. The programs were
-     assembled on the model by the starter card's TAS.COM, Thorium 3d1e2c0
-     (e648a1d0…), and DEMO from the card's DEMO.ASM. Every capture was made
-     at fdd9e5b with the command in its comment, on hw.img made as shown
-     or on the starter card. BOARD's message names TNCOUNT, 17. The
-     DIGIT, PUTAT and BDOS function 2 costs were measured on the host model
-     with the ROM 43ac0f18…, from the call to the return.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 The BDOS handles files and console text. TEC-OS's numbered ROM calls also let
 your program light the digits, sound the speaker, read the clock or write the
@@ -302,21 +300,29 @@ so the program search described in Chapter 5 finds it from B. In the
 serial-model configuration, the clock set INFO's bit 3 and the console size was
 zero:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img B: "TAS BOARD" BOARD.
-     Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card hw.img B: 'TAS BOARD' BOARD. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>TAS BOARD
+B:WORK>TAS BOARD
 BOARD.COM written
 
-B>BOARD
+B:WORK>BOARD
 Devices  B = 08
 Version DE = 0001
 Columns  L = 00
 Rows     H = 00
 Number 17: status 01, carry set
 
-B>
+B:WORK>
 ```
 
 The `--board pico` model configuration includes the PICO9918, graphics LCD and
@@ -325,21 +331,29 @@ bits were `0Bh` and its size was `28h` by `18h` (40 by 24). The startup
 GLCD.SVC line installed nothing while PICO was the console. This is a host-model
 run, not a browser capture:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img --board pico B: "TAS BOARD"
-     BOARD. Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card hw.img --board pico B: 'TAS BOARD' BOARD. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>TAS BOARD
+B:WORK>TAS BOARD
 BOARD.COM written
 
-B>BOARD
+B:WORK>BOARD
 Devices  B = 0B
 Version DE = 0001
 Columns  L = 28
 Rows     H = 18
 Number 17: status 01, carry set
 
-B>
+B:WORK>
 ```
 
 In the GLCD-only configuration, `--board glcd`, GLCD.SVC installed and became
@@ -385,23 +399,35 @@ DONE:	DB	"Written and beeped",13,10,"$"
 
 This run requested the character LCD's rows with `--lcd`:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img --lcd B: "TAS LCDMSG"
-     LCDMSG. Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card hw.img --lcd B: 'TAS LCDMSG' LCDMSG. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>TAS LCDMSG
+B:WORK>TAS LCDMSG
 LCDMSG.COM written
 
-B>LCDMSG
+B:WORK>LCDMSG
 Written and beeped
 
-B>
+B:WORK>
+--- LCD
+TEC-OS 0.1  TEC-1G
+Hello on the LCD
+B: WORK
 ```
 
 The same run's LCD text showed the message on its second row. The other rows
 retained cold-boot text:
 
-<!-- TEC-OS fdd9e5b: the same run's --lcd output -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card hw.img --lcd B: 'TAS LCDMSG' LCDMSG. The complete LCD rows, trailing spaces removed. -->
 ```text
 TEC-OS 0.1  TEC-1G
 Hello on the LCD
@@ -585,17 +611,25 @@ PLAN contains field-offset/separator pairs. NOW uses each offset to select a BCD
 byte, prints it through HEX and then prints its separator. The TAS and run
 capture was:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img B: "TAS NOW" NOW. Boot
-     rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card hw.img B: 'TAS NOW' NOW. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>TAS NOW
+B:WORK>TAS NOW
 NOW.COM written
 
-B>NOW
+B:WORK>NOW
 2026-11-01 12:00:09 07
 
-B>
+B:WORK>
 ```
 
 That model run began with its clock at 12:00 on 1 November 2026. The clock
@@ -680,20 +714,28 @@ STICK:	DS	1		; JOY's byte
 The `--board pico` configuration has a matrix keyboard. Its `@key` input
 pressed `x`, which is in row 7:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img --board pico B: "TAS ROWS"
-     "@start ROWS" "@key x". Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card hw.img --board pico B: 'TAS ROWS' '@start ROWS' '@key x'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>TAS ROWS
+B:WORK>TAS ROWS
 ROWS.COM written
 
-B>ROWS
+B:WORK>ROWS
 00 00 00 00 00 00 00 08  JOY 00
 
-B>
+B:WORK>
 ```
 
-<!-- TEC-OS fdd9e5b, the same run with "@key 5": node tools/capture.mjs --card hw.img
+<!-- TEC-OS 8b69e51, the same run with "@key 5": node tools/capture.mjs --card hw.img
      --board pico B: "TAS ROWS" "@start ROWS" "@key 5" -->
 JOY reads port `FEh` with address line 11 low. KEYS selects row 3 in the same
 way so those inputs share wiring. In the alternate `5` run, the row was
@@ -799,26 +841,26 @@ route to reverse characters without an escape sequence. The PICO text capture
 shows both strings alike because its decoder does not report reverse
 presentation:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card hw.img --board pico --screen B:
-     "TAS PLACE" PLACE, the screen text. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card hw.img --board pico --screen B: 'TAS PLACE' PLACE. The full screen, with trailing empty rows omitted. -->
 ```text
 
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
 B: WORK
+C: PROJECTS
 
-A:SYSTEM>SHELL.SVC
+A>SHELL.SVC
 
 A:SYSTEM>GLCD.SVC
 
-A:SYSTEM>B:
-B>TAS PLACE                   TEC-OS
-PLACE.COM written             TEC-OS
+A:SYSTEM>B:                   TEC-OS
+B:WORK>TAS PLACE              TEC-OS
+PLACE.COM written
 
-B>PLACE
+B:WORK>PLACE
 PUTAT status 00
 
-B>
+B:WORK>
 ```
 
 In this 40-column run the two copies went to rows 10 and 11 at column 30,
@@ -857,9 +899,17 @@ DEMO.COM on the card, `DEMO` then runs it and `TED DEMO.ASM` opens the source
 `test/demo.test.mjs:1-4`, `test/starter.test.mjs:191-216`). This run builds
 and runs it on the starter card:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen "TAS DEMO"
-     "@start DEMO" "@key x". Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen 'TAS DEMO' '@start DEMO' '@key x'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>TAS DEMO
 DEMO.COM written
 
@@ -881,7 +931,7 @@ transcript contains the console bytes sent during the run. The PICO showed its
 initial lines before the claim. The same run's text-screen dump after release
 was:
 
-<!-- TEC-OS fdd9e5b: the same run's --screen output -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen 'TAS DEMO' '@start DEMO' '@key x'. The full screen; trailing empty rows omitted. -->
 ```text
 
 Demo stopped.

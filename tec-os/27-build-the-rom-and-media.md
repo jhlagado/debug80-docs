@@ -7,24 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 27. Build the ROM and media
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
-     ROM SHA-256 43ac0f18…. Unprefixed source ranges use that revision. The
-     image regions and the build line are from npm run build there, and
-     HELLO's TED round is a capture at e59e8c4 with the commands in its
-     comment, on work.img made as shown, with TED.COM Thorium a2fe556
-     (c6c8374a…) and TAS.COM Thorium 3d1e2c0 (e648a1d0…). The PC HELLO
-     recipe was run there too. The inputs are TED.COM and TAS.COM from
-     Thorium and BAZA.COM Baza 50dc512 (280ee372…, 13,184 bytes),
-     BAZA.RTL (14d7fd11…, 12,032 bytes) and BOUNCE.BAS (615693a5…, 5,189
-     bytes) from Baza. At TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125,
-     before the shell left the ROM, the image was 488 bytes larger, 15,363
-     used (402f30e:docs/memory-map.md:1-30), and Thorium's CHAIN.ASM was an
-     input and on the card. The card at TEC-OS
-     755636b130241173c5c30a0be8fe6b79cf2fee37 is the one passages about its
-     nine files name.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A ROM and its symbol map must describe the same addresses. Card programs
 must use the interfaces supplied by that ROM. TEC-OS produces the image,
@@ -113,7 +104,7 @@ these regions:
 | `FA1Bh–FFFFh` | 1,509 | Free |
 
 Its used extent is 14,875 of 16,384 bytes. Its SHA-256 is
-`43ac0f1871cf3d979c94b74a030c1c06eeec500bd77e60ca7e3951a2de1c339e`
+`a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1`
 (`docs/memory-map.md:1-32`). The census stores each
 region's start and exclusive end while the table above prints the last
 occupied address (`tools/build.mjs:275-290`).
@@ -389,11 +380,11 @@ with the Matrix switch enabled starts at 40 columns. Explicit 80, 40 and
 `npm run build` ends with this line:
 
 ```text
-tecos: ROM 14875/16384 bytes, TPA $0100-$B9A8 (47273 bytes), sha256 43ac0f1871cf3d97
+tecos: ROM 14875/16384 bytes, TPA $0100-$B9A8 (47273 bytes), sha256 a65b6e4523b5f7ba
 ```
 
 Its printed hash is the first sixteen hexadecimal digits of the full
-SHA-256, `43ac0f1871cf3d979c94b74a030c1c06eeec500bd77e60ca7e3951a2de1c339e`
+SHA-256, `a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1`
 (`tools/build.mjs:278`, `tools/build.mjs:358-361`).
 
 ## HELLO through TED and TAS
@@ -435,22 +426,19 @@ Inserting `1` at its start and pressing `^T B` saves the source and chains
 `A:TAS HELLO.ASM` followed by `A:TED`, a line the shell runs piece by piece.
 These are the PICO9918's screens:
 
-<!-- TEC-OS e59e8c4: node tools/capture.mjs --card work.img --board pico --screen "CON PICO 80" B: "@start TED HELLO.ASM 7" "@press 1" "@press ^T B" "@run 400", the screen
-     printed at that point, ^T, ^H and Right typed as the bytes 14h, 08h
-     and ESC [ C. work.img is made as shown above. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card work.img --board pico --screen 'CON PICO 80' B: '@start TED HELLO.ASM 7' '@press 1' $'@press \x14B' '@run 400'. Console error excerpt; redraw omitted. -->
 ```text
-
-B>A:TAS HELLO.ASM
+B:WORK>A:TAS HELLO.ASM
 HELLO.ASM:7:1: expected a label, instruction or directive
 
-B>A:TED
+B:WORK>A:TED
 ```
 
 The diagnostic gives the source filename, line and column. TED reopens
-at that position and displays the message on its status row. Fourteen blank rows
-between the source and status row are omitted from this screen:
+at that position and displays the message on its status row. The following screen includes the blank rows between the source and the
+status row:
 
-<!-- the same run, once TED had drawn its screen -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card work.img --board pico --screen 'CON PICO 80' B: '@start TED HELLO.ASM 7' '@press 1' $'@press \x14B' '@run 400'. The full screen; trailing empty rows omitted. -->
 ```text
 ; HELLO: print a line and return to the CCP.
 BDOS    EQU     $0005
@@ -461,6 +449,20 @@ BDOS    EQU     $0005
 1        CALL    BDOS
         RET                     ; back to TEC-OS
 MESSAGE:DB      "Hello from the TEC-1G",13,10,"$"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 TED  HELLO.ASM    expected a label, instruction or directive  ^S Save  ^Q Quit
 ```
 
@@ -468,18 +470,18 @@ The matrix keyboard has no Delete key. Right moves the cursor past `1`
 and `^H` removes it. `^T R` then saves, assembles and runs the corrected
 source. TED waits for a key before redrawing:
 
-<!-- the same run continued: "@press Right" "@press ^H" "@press ^T R" "@run 600", the screen -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card work.img --board pico --screen 'CON PICO 80' B: '@start TED HELLO.ASM 7' '@press 1' $'@press \x14B' '@run 400' $'@press \x1b[C' $'@press \x08' $'@press \x14R' '@run 600'. The full screen; trailing empty rows omitted. -->
 ```text
 
-B>A:TAS HELLO.ASM
+B:WORK>A:TAS HELLO.ASM
 HELLO.COM written
 
-B>A:TED
+B:WORK>A:TED
 
-B>HELLO
+B:WORK>HELLO
 Hello from the TEC-1G
 
-B>A:TED
+B:WORK>A:TED
 Press a key
 ```
 
@@ -525,17 +527,27 @@ node tools/tecvol.mjs put work.img B hello.com
 `work.img` to the card as described in Chapter 6. This host-model capture
 boots that image and enters `B:`, `DIR` and `HELLO`:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card work.img B: DIR HELLO.
-     Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card work.img B: DIR HELLO. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>DIR
-HELLO.COM   
-1 file, 8172K free
-B>HELLO
+B:WORK>DIR
+
+HELLO   .COM     128
+1 file, 128 bytes
+8368128 free on B:WORK
+B:WORK>HELLO
 Hello from the TEC-1G
 
-B>
+B:WORK>
 ```
 
 The blank line before the command prompt comes from the CCP's program-return

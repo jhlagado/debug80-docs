@@ -7,21 +7,20 @@ nav_group: "Writing programs"
 
 # 14. Write a resident service
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. Every capture was made at
-     fdd9e5b with the command in its comment, on svc.img made as shown from
-     the starter card, the programs and services assembled on the model by
-     the card's TAS.COM, Thorium 3d1e2c0. The PC writer recipe was rerun at
-     fdd9e5b and wrote COUNT's 111 bytes, the same as the first 111 bytes
-     of the card's TAS COUNT COUNT.SVC there.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 `COUNT.SVC` counts console characters after the command that installs it
 has ended. Its hook shows how resident code survives program exits and how
 another program finds a routine inside it. The starter card's startup file
-installs `SHELL.SVC` first, so `SERVICES` also lists `SHELL 10` below the
+installs `SHELL.SVC` first, so `SERVICES` also lists `SHELL 15` below the
 newer services and `UNLOAD` removes it only after them
 ([Chapter 5](05-drives-and-user-areas.md)). The failed-INIT example has a separate current
 workflow below. Use the PC setup from
@@ -235,55 +234,61 @@ node tools/tecvol.mjs put svc.img B chars.asm --text
 
 This run assembles AREA and CHARS before writing COUNT.SVC:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card svc.img B: "TAS AREA" "TAS CHARS"
-     "TAS COUNT COUNT.SVC" AREA COUNT.SVC SERVICES AREA CHARS CHARS UNLOAD SERVICES
-     AREA CHARS. Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card svc.img B: 'TAS AREA' 'TAS CHARS' 'TAS COUNT COUNT.SVC' AREA COUNT.SVC SERVICES AREA CHARS CHARS UNLOAD SERVICES AREA CHARS. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>TAS AREA
+B:WORK>TAS AREA
 AREA.COM written
 
-B>TAS CHARS
+B:WORK>TAS CHARS
 CHARS.COM written
 
-B>TAS COUNT COUNT.SVC
+B:WORK>TAS COUNT COUNT.SVC
 COUNT.SVC written
+
+B:WORK>AREA
+42496 bytes
+
+B:WORK>COUNT.SVC
+
+B:WORK>SERVICES
+COUNT 1
+SHELL 15
+B:WORK>AREA
+42240 bytes
+
+B:WORK>CHARS
+count 0053
+
+B:WORK>CHARS
+count 0070
+
+B:WORK>UNLOAD
+
+B:WORK>SERVICES
+SHELL 15
+B:WORK>AREA
+42496 bytes
+
+B:WORK>CHARS
+no COUNT record
+
+B:WORK>
 ```
 
 The rest of that same run measured the TPA, installed COUNT, read the count
 twice and removed the service:
 
-<!-- TEC-OS fdd9e5b: the same run, continued -->
-```text
-B>AREA
-44544 bytes
 
-B>COUNT.SVC
-
-B>SERVICES
-COUNT 1
-SHELL 10
-B>AREA
-44288 bytes
-
-B>CHARS
-count 0044
-
-B>CHARS
-count 005C
-
-B>UNLOAD
-
-B>SERVICES
-SHELL 10
-B>AREA
-44544 bytes
-
-B>CHARS
-no COUNT record
-
-B>
-```
 
 The file has 100 header/image bytes and 11 relocation bytes, and the PC
 writer below gives the same 111-byte total. COUNT occupied one page, as
@@ -395,28 +400,34 @@ switch enabled, on a separate copy of the starter card with `fail.asm`,
 Chapter 11's `area.asm` and the matching `abi.inc` on B. AREA needs no HWLIB
 include. The startup file had installed only the shell:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --card svc2.img B: "TAS AREA"
-     "TAS FAIL FAIL.SVC" AREA SERVICES FAIL.SVC AREA. Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --card svc2.img B: 'TAS AREA' 'TAS FAIL FAIL.SVC' AREA SERVICES FAIL.SVC AREA. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
 A:SYSTEM>B:
-B>TAS AREA
+B:WORK>TAS AREA
 AREA.COM written
 
-B>TAS FAIL FAIL.SVC
+B:WORK>TAS FAIL FAIL.SVC
 FAIL.SVC written
 
-B>AREA
-44544 bytes
+B:WORK>AREA
+42496 bytes
 
-B>SERVICES
-SHELL 10
-B>FAIL.SVC
+B:WORK>SERVICES
+SHELL 15
+B:WORK>FAIL.SVC
 FAIL.SVC?
 
-B>AREA
-44544 bytes
+B:WORK>AREA
+42496 bytes
 
-B>
+B:WORK>
 ```
 
 The question mark reports the failed installation. AREA printed the same
@@ -511,14 +522,27 @@ prerequisite avoids that conflict. The captures here use configurations in which
 CHEAT changes COUNT's BDOS declaration to 9, above the limit even with no
 other service installed. This capture omits its assembly lines:
 
-<!-- TEC-OS fdd9e5b: sed 's/^\tDB\t2,2,2/\tDB\t9,2,2/;s/COUNT   "\t; the name/CHEAT   "\t; the name/' count.asm > cheat.asm; node tools/tecvol.mjs put svc.img B cheat.asm --text; node tools/capture.mjs --card svc.img B: "TAS CHEAT CHEAT.SVC" CHEAT.SVC SERVICES -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card svc.img B: 'TAS CHEAT CHEAT.SVC' CHEAT.SVC SERVICES. Boot rows included in this complete serial transcript. -->
 ```text
-B>CHEAT.SVC
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>B:
+B:WORK>TAS CHEAT CHEAT.SVC
+CHEAT.SVC written
+
+B:WORK>CHEAT.SVC
 CHEAT.SVC?
 
-B>SERVICES
-SHELL 10
-B>
+B:WORK>SERVICES
+SHELL 15
+B:WORK>
 ```
 
 The shell declares 6 bytes of the BDOS's stack, and even alone CHEAT's 9
@@ -689,20 +713,31 @@ while the PICO console is active, leaving stack room for COUNT.
 With COUNT.SVC built by TAS on the card, RECS lists two records. The table
 addresses are this run's:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card svc.img --board pico B:
-     "TAS COUNT COUNT.SVC" "TAS RECS" COUNT.SVC RECS. Boot rows and the
-     COUNT build omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card svc.img --board pico B: 'TAS COUNT COUNT.SVC' 'TAS RECS' COUNT.SVC RECS. Boot rows included in this complete serial transcript. -->
 ```text
-B>TAS RECS
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>B:
+B:WORK>TAS COUNT COUNT.SVC
+COUNT.SVC written
+
+B:WORK>TAS RECS
 RECS.COM written
 
-B>COUNT.SVC
+B:WORK>COUNT.SVC
 
-B>RECS
-COUNT    version 01 table AE5F
+B:WORK>RECS
+COUNT    version 01 table A65F
 PICO     version 04 table BBE8
 
-B>
+B:WORK>
 ```
 
 The shell, which publishes no record, is not listed.
@@ -791,30 +826,42 @@ lookup is already satisfied when INIT starts. Without COUNT the installation
 fails before INIT. The run below shows the failed attempt, then installation
 and removal in the required order:
 
-<!-- TEC-OS fdd9e5b: node tools/tecvol.mjs put svc.img B needs.asm --text; node tools/capture.mjs --card svc.img B: "TAS COUNT COUNT.SVC" "TAS NEEDS NEEDS.SVC" NEEDS.SVC COUNT.SVC NEEDS.SVC SERVICES UNLOAD UNLOAD SERVICES
-     Boot rows and the COUNT build omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card svc.img B: 'TAS COUNT COUNT.SVC' 'TAS NEEDS NEEDS.SVC' NEEDS.SVC COUNT.SVC NEEDS.SVC SERVICES UNLOAD UNLOAD SERVICES. Boot rows included in this complete serial transcript. -->
 ```text
-B>TAS NEEDS NEEDS.SVC
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>B:
+B:WORK>TAS COUNT COUNT.SVC
+COUNT.SVC written
+
+B:WORK>TAS NEEDS NEEDS.SVC
 NEEDS.SVC written
 
-B>NEEDS.SVC
+B:WORK>NEEDS.SVC
 NEEDS.SVC?
 
-B>COUNT.SVC
+B:WORK>COUNT.SVC
 
-B>NEEDS.SVC
+B:WORK>NEEDS.SVC
 
-B>SERVICES
+B:WORK>SERVICES
 NEEDS 1
 COUNT 1
-SHELL 10
-B>UNLOAD
+SHELL 15
+B:WORK>UNLOAD
 
-B>UNLOAD
+B:WORK>UNLOAD
 
-B>SERVICES
-SHELL 10
-B>
+B:WORK>SERVICES
+SHELL 15
+B:WORK>
 ```
 
 The first UNLOAD removed NEEDS, the lowest service. Only then could the

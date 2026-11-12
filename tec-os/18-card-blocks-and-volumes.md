@@ -7,13 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 18. Card blocks and volumes
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
-     ROM SHA-256 43ac0f18…. Captures, SD block timings and SAVE write counts
-     are host-model runs of that build on its starter card. The diagnostics
-     token-poll figure is the retired diagnostics ROM's at TEC-OS 78127ec.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A CP/M disk read transfers 128 bytes. An SD card read transfers 512 bytes. The
 BIOS joins these two sizes by mapping each CP/M record to a quarter of a card
@@ -113,7 +115,7 @@ without checking them (`src/sd.asm:397-457`).
 The extra error-token classification costs 11 T-states on a normal `FFh`
 wait: `INC A` followed by the untaken `JR NZ,SDRERR`. That is only the
 additional check, not the entire token poll (`src/sd.asm:421-422`). The
-retired diagnostics ROM's account at `78127ec:docs/diagnostics.md:285-291`
+retired diagnostics ROM's account at `b706f61:docs/diagnostics.md:285-291`
 gives 678 T-states for a full poll in that ROM. The 11-T-state addition
 therefore cannot be compared directly with that full-poll cost.
 
@@ -271,14 +273,25 @@ Its first 4,112 blocks include only sixteen of B's thirty-two directory
 blocks. Logging B in reaches the missing seventeenth block. After the
 error, A's directory remains accessible:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/short.img "@start DIR B:" "@key x" "DIR A:*.CMD" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/short.img '@start DIR B:' '@key x' 'DIR A:*.CMD'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>DIR B:
 
 Bdos Err On B: Bad Sector
 A:SYSTEM>DIR A:*.CMD
-STARTUP.CMD 
-1 file, 912K free
+
+STARTUP .CMD     128
+1 file, 128 bytes
+935936 free on A:SYSTEM
 A:SYSTEM>
 ```
 
@@ -289,12 +302,12 @@ with its first `T` changed to `X` by
 `printf X | dd of=build/bad.img bs=1 seek=0 conv=notrunc`. Typing `H`
 produced another prompt:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/bad.img H -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/bad.img H. Boot rows included in this complete serial transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 No volume mounted, error 21
 R retry> H
-R retry> 
+R retry>
 ```
 
 `21h` is `MEMAGIC`. `R` or `r` retries card initialisation and mounting.
@@ -525,7 +538,31 @@ The starter card is format 1.1 with drives = 4, so cold boot allocates four
 GAMES on the empty D through service 9, and `CD C:WORK` is refused because
 WORK is on B (`drivers/shellcd.asm:99-117`):
 
-<!-- CAPTURE18 -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'CD ?' 'CD D:GAMES' 'CD C:WORK'. Boot rows included. -->
+```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>CD ?
+
+SYSTEM      A:
+WORK        B:
+PROJECTS    C:
+GAMES
+SPARE
+A:SYSTEM>CD D:GAMES
+D:GAMES
+A:SYSTEM>CD C:WORK
+WORK is on B:
+
+A:SYSTEM>
+```
 
 The four slots use 1,024 bytes where a card with a G1M slot on A and a G8M
 slot on B uses 320, so the starter card's transient program area (TPA) is

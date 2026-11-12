@@ -7,18 +7,15 @@ nav_group: "Reference"
 
 # Appendix B. The ROM table and hardware services
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. The VTEST capture was made
-     at fdd9e5b on Chapter 14's svc.img, VTEST assembled by the card's TAS,
-     Thorium 3d1e2c0. Every cost and depth was measured on the host
-     model with the PICO9918 board, the GLCD board for GLCD's figures, from
-     the JP at ABICALL to the return, on the ROM 43ac0f18… that fdd9e5b
-     and e59e8c4 share; the DIGIT lit interval is from the port writes in
-     the same run. Receiver selection: book
-     9ba1f59, P3 proposal 18 / 43d5f328.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 The eight-byte ROM table at `C003h` has one jump for seventeen numbered
 services. Numbers 0–8 control hardware, 9–11 manage volumes, 12 registers a
@@ -260,7 +257,7 @@ joystick bit and a joystick line can appear as a matrix key. The retired
 diagnostics ROM labelled the bits after MON-3 as `01h` up, `02h` down, `04h`
 left, `08h` right, `10h` fire 2, `20h` pin 9, `40h` fire 1 and `80h` fire 3.
 Those physical labels remain unconfirmed
-(`a1023bd:diag/interact.asm:615-619`).
+(`46be5a4:diag/interact.asm:615-619`).
 
 ### 6 KEYS
 
@@ -535,17 +532,25 @@ This host-model VRAM round trip, not a physical-board result, obtains the
 PICO record from the ROM console. The recipe assumes Chapter 14's `svc.img`,
 ABI.INC and HWLIB.ASM preparation:
 
-<!-- TEC-OS fdd9e5b: node tools/tecvol.mjs put svc.img B vtest.asm --text; node tools/capture.mjs --card svc.img --board pico B: "TAS VTEST" VTEST
-     Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card svc.img --board pico B: 'TAS VTEST' VTEST. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:
-B>TAS VTEST
+B:WORK>TAS VTEST
 VTEST.COM written
 
-B>VTEST
+B:WORK>VTEST
 VRAM
 
-B>
+B:WORK>
 ```
 
 Without a started ROM PICO console there is no PICO record. The existing program

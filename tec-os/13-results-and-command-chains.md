@@ -7,24 +7,15 @@ nav_group: "Writing programs"
 
 # 13. Results and command chains
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. Lines are split by
-     SHELL.SVC: docs/shell.md:32-88 and :91-133, docs/compatibility.md:21-38
-     and :99-117, drivers/shell.asm:161-425, the drop flag
-     src/cpm/bdos.asm:96-106, :515-533, src/cpm/bdoscon.asm:36-66, :285-309
-     and src/cache.asm:613-629, function 47 src/cpm/bdos.asm:52-94, and the
-     ROM's own path src/cpm/ccp.asm:110-232. TED's key table, its line's
-     need of the shell and BAZA's return code follow
-     docs/compatibility.md:222-225, with TED.COM Thorium a2fe556, TAS.COM
-     Thorium 3d1e2c0 and BAZA.COM Baza 50dc512, source reading. Every
-     transcript is a capture at fdd9e5b with the command in its comment, on
-     the serial board and the starter card or the card made by the recipe
-     shown, boot rows omitted unless shown. EXISTS.COM and RUN.COM were
-     built on the model by the card's TAS in the same session, before the
-     commands shown.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 You can join commands on a line and make later pieces depend on success.
 Your programs report that result through a return code. They can also
@@ -40,21 +31,31 @@ command prompt before it runs. This is CP/M 3's form of command chaining.
 The following capture shows two commands on the first line. The second line
 also contains empty pieces:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "DIR *.CMD!TYPE STARTUP.CMD" "cd!!  ! dir b:!" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'DIR *.CMD!TYPE STARTUP.CMD' 'cd!!  ! dir b:!'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>DIR *.CMD!TYPE STARTUP.CMD
-STARTUP.CMD 
-1 file, 912K free
+
+STARTUP .CMD     128
+1 file, 128 bytes
+935936 free on A:SYSTEM
 A:SYSTEM>TYPE STARTUP.CMD
 SHELL.SVC
 GLCD.SVC
 
 A:SYSTEM>cd!!  ! dir b:!
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
-
+A:SYSTEM
 A:SYSTEM>dir b:
 NO FILE
+
 A:SYSTEM>
 ```
 
@@ -68,16 +69,27 @@ Each piece is a whole command whose drive or user-area selection applies
 to the following pieces. Here `B:` selects drive B before `COPY` creates
 `NOTES.TXT`:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "B:!COPY A:STARTUP.CMD NOTES.TXT!DIR" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'B:!COPY A:STARTUP.CMD NOTES.TXT!DIR'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>B:!COPY A:STARTUP.CMD NOTES.TXT!DIR
-B>COPY A:STARTUP.CMD NOTES.TXT
+B:WORK>COPY A:STARTUP.CMD NOTES.TXT
 COPIED 0001
 
-B>DIR
-NOTES.TXT   
-1 file, 8172K free
-B>
+B:WORK>DIR
+
+NOTES   .TXT     128
+1 file, 128 bytes
+8368128 free on B:WORK
+B:WORK>
 ```
 
 A program receives only the command tail of its own piece. A piece ends
@@ -98,20 +110,39 @@ succeeded. After a failure the piece is skipped and not echoed. A skipped
 piece leaves the result as it was, so a following `&` piece is skipped too,
 and a following `!` piece runs:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "NOSUCH &DIR *.CMD !DIR *.SVC" "DIR *.SVC &DIR *.CMD" "NOSUCH &DIR *.CMD &DIR *.SVC" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'NOSUCH &DIR *.CMD !DIR *.SVC' 'DIR *.SVC &DIR *.CMD' 'NOSUCH &DIR *.CMD &DIR *.SVC'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>NOSUCH &DIR *.CMD !DIR *.SVC
 NOSUCH?
 
 A:SYSTEM>DIR *.SVC
-SHELL.SVC    GLCD.SVC     MON3.SVC    
-3 files, 912K free
+
+SHELL   .SVC    3712
+GLCD    .SVC     896
+MON3    .SVC    5120
+3 files, 9728 bytes
+935936 free on A:SYSTEM
 A:SYSTEM>DIR *.SVC &DIR *.CMD
-SHELL.SVC    GLCD.SVC     MON3.SVC    
-3 files, 912K free
+
+SHELL   .SVC    3712
+GLCD    .SVC     896
+MON3    .SVC    5120
+3 files, 9728 bytes
+935936 free on A:SYSTEM
 A:SYSTEM>DIR *.CMD
-STARTUP.CMD 
-1 file, 912K free
+
+STARTUP .CMD     128
+1 file, 128 bytes
+935936 free on A:SYSTEM
 A:SYSTEM>NOSUCH &DIR *.CMD &DIR *.SVC
 NOSUCH?
 
@@ -132,8 +163,17 @@ piece starts with `&` would test the previous line's result, so it is
 rejected and none of it runs. CP/M 3's `:` prefix for a conditional piece
 is not provided, and a piece starting with `:` is rejected as a bad name:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "&DIR *.CMD" ":DIR *.CMD" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs '&DIR *.CMD' ':DIR *.CMD'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>&DIR *.CMD
 &DIR?
 
@@ -213,24 +253,59 @@ At `B:WORK>`, `A:TAS EXISTS` and `A:TAS RUN` then write `EXISTS.COM` and
 when it is present. This capture runs that line before and after creating
 the file:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card chain.img B: "A:TAS EXISTS" "A:TAS RUN" "EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM" "COPY A:STARTUP.CMD NOTES.TXT" "EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM" "EXISTS NONE.TXT !DIR *.COM" "EXISTS NONE.TXT &DIR *.COM !USER 0 &DIR *.COM"
-     The builds before the first line shown are omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card chain.img B: 'A:TAS EXISTS' 'A:TAS RUN' 'EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM' 'COPY A:STARTUP.CMD NOTES.TXT' 'EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM' 'EXISTS NONE.TXT !DIR *.COM' 'EXISTS NONE.TXT &DIR *.COM !USER 0 &DIR *.COM'. Boot rows included in this complete serial transcript. -->
 ```text
-B>EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
-B>COPY A:STARTUP.CMD NOTES.TXT
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>B:
+B:WORK>A:TAS EXISTS
+EXISTS.COM written
+
+B:WORK>A:TAS RUN
+RUN.COM written
+
+B:WORK>EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM
+
+B:WORK>COPY A:STARTUP.CMD NOTES.TXT
 COPIED 0001
 
-B>EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM
+B:WORK>EXISTS NOTES.TXT &TYPE NOTES.TXT &DIR *.COM
 
-B>TYPE NOTES.TXT
+B:WORK>TYPE NOTES.TXT
 SHELL.SVC
 GLCD.SVC
 
-B>DIR *.COM
-EXISTS.COM   RUN.COM     
-2 files, 8148K free
-B>
+B:WORK>DIR *.COM
+
+EXISTS  .COM     128
+RUN     .COM     128
+2 files, 256 bytes
+8343552 free on B:WORK
+B:WORK>EXISTS NONE.TXT !DIR *.COM
+
+B:WORK>DIR *.COM
+
+EXISTS  .COM     128
+RUN     .COM     128
+2 files, 256 bytes
+8343552 free on B:WORK
+B:WORK>EXISTS NONE.TXT &DIR *.COM !USER 0 &DIR *.COM
+
+B:WORK>USER 0
+B:WORK>DIR *.COM
+
+EXISTS  .COM     128
+RUN     .COM     128
+2 files, 256 bytes
+8343552 free on B:WORK
+B:WORK>
 ```
 
 The command processor prints a new line after each program, including the
@@ -238,23 +313,8 @@ silent `EXISTS`. On the first attempt its failure skips `TYPE NOTES.TXT`
 and `DIR *.COM`, and neither is echoed. After `COPY` makes the file, both
 pieces run.
 
-A failure by itself does not stop an unconditional piece. The same session
-continued:
-
-```text
-B>EXISTS NONE.TXT !DIR *.COM
-
-B>DIR *.COM
-EXISTS.COM   RUN.COM     
-2 files, 8148K free
-B>EXISTS NONE.TXT &DIR *.COM !USER 0 &DIR *.COM
-
-B>USER 0
-B>DIR *.COM
-EXISTS.COM   RUN.COM     
-2 files, 8148K free
-B>
-```
+A failure by itself does not stop an unconditional piece. The end of the
+transcript above shows both unconditional and conditional pieces.
 
 `DIR *.COM` after `!` runs whatever `EXISTS` returned. On the second line
 the failure skips the first `DIR *.COM`. `USER 0` after `!` runs, succeeds
@@ -287,11 +347,20 @@ input. Dropping the current line leaves any later startup lines available.
 In this capture, drive D has no volume. The key `x` ends the BDOS error and
 the `CD` piece is dropped:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs "@start DIR D:!CD" "@key x" -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs '@start DIR D:!CD' '@key x'. Boot rows included in this complete serial transcript. -->
 ```text
-A:SYSTEM>DIR C:!MOUNT
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
-Bdos Err On C: Select
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
+A:SYSTEM>DIR D:!CD
+
+Bdos Err On D: Select
 A:SYSTEM>
 ```
 
@@ -345,28 +414,40 @@ The original line's later pieces lie outside that tail. In `RUN CD!DIR *.COM`,
 `RUN` supplies only ` CD`. That replaces the old line so its `DIR` is
 gone:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card chain.img B: "A:TAS RUN" "RUN DIR *.COM" "RUN CD!DIR *.COM" "RUN NOSUCH!DIR *.COM" "RUN"
-     Only RUN.COM was built in this session, before the first line shown. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card chain.img B: 'A:TAS RUN' 'RUN DIR *.COM' 'RUN CD!DIR *.COM' 'RUN NOSUCH!DIR *.COM' RUN. Boot rows included in this complete serial transcript. -->
 ```text
-B>RUN DIR *.COM
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
-B>DIR *.COM
-RUN.COM     
-1 file, 8160K free
-B>RUN A:MOUNT!DIR *.COM
+A>SHELL.SVC
 
-B>A:MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
+A:SYSTEM>GLCD.SVC
 
-B>RUN NOSUCH!DIR *.COM
+A:SYSTEM>B:
+B:WORK>A:TAS RUN
+RUN.COM written
 
-B>NOSUCH
+B:WORK>RUN DIR *.COM
+
+B:WORK>DIR *.COM
+
+RUN     .COM     128
+1 file, 128 bytes
+8355840 free on B:WORK
+B:WORK>RUN CD!DIR *.COM
+
+B:WORK>CD
+B:WORK
+B:WORK>RUN NOSUCH!DIR *.COM
+
+B:WORK>NOSUCH
 NOSUCH?
 
-B>RUN
+B:WORK>RUN
 
-B>
+B:WORK>
 ```
 
 The shell echoes each supplied command after the prompt. A missing command
@@ -472,30 +553,27 @@ node tools/tecvol.mjs put schain.img A startup.cmd --text
 
 The capture uses the serial-only board:
 
-<!-- TEC-OS 1a6ce29: node tools/capture.mjs --card schain.img -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card schain.img. Boot rows included in this complete serial transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
-A: SYSTEM     
-B: WORK       
+A: SYSTEM
+B: WORK
+C: PROJECTS
 
-A:SYSTEM>SHELL.SVC
+A>SHELL.SVC
 
-A:SYSTEM>GLCD.SVC &MOUNT
+A:SYSTEM>GLCD.SVC &CD
 
-A:SYSTEM>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
-
-A:SYSTEM>NOSUCH.SVC &MOUNT
+A:SYSTEM>CD
+A:SYSTEM
+A:SYSTEM>NOSUCH.SVC &CD
 NOSUCH.SVC?
 
-A:SYSTEM>NOSUCH.SVC !MOUNT
+A:SYSTEM>NOSUCH.SVC !CD
 NOSUCH.SVC?
 
-A:SYSTEM>MOUNT
-00 SYSTEM      G1M A:
-01 WORK        G8M B:
-
+A:SYSTEM>CD
+A:SYSTEM
 A:SYSTEM>
 ```
 

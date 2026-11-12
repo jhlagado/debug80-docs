@@ -7,18 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 28. Diagnose the machine
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision, source inspection. The
-     board diagnostics sections follow diag/, tools/diag.mjs,
-     docs/diagnostics.md, docs/board-run.md and test/diag.test.mjs there,
-     unchanged since TEC-OS 755636b (branch card-r1b), whose diagnostics are
-     those of TEC-OS main dbbdb47. No test or board run was made for this
-     chapter, and no board log from the diagnostics is recorded here. The
-     diagnostic-prompt screen is a capture at fdd9e5b with the command in
-     its comment. The retired 16 KiB diagnostics ROM is not described.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A card failure can stop TEC-OS before the first command prompt. The error code
 and `R retry>` let you correct the card and try mounting it again. A separate
@@ -52,8 +49,9 @@ In this model capture the socket is empty and the console is the
 PICO9918 with its matrix keyboard. Typing `H` produces another prompt.
 Serial output is empty:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card none --board pico --screen H -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card none --board pico --screen H. The full screen, with trailing empty rows omitted. -->
 ```text
+
 TEC-OS 0.1 for TEC-1G
 No volume mounted, error 01
 R retry> H

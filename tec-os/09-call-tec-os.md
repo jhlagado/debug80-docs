@@ -7,16 +7,15 @@ nav_group: "Writing programs"
 
 # 9. Call TEC-OS
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision, source inspection. The
-     register-preservation fragment is from Chapter 10's SHOW listing. The
-     LINE captures were made at fdd9e5b on the serial board, on the starter
-     card with line.asm put on B: node tools/capture.mjs --card line.img B:
-     "TAS LINE" "@start LINE" HELLO, LINE built by the card's TAS, Thorium
-     3d1e2c0.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 Your program can read a key, print text or collect a line through the BDOS.
 The same calls work with the selected console so the program uses TEC-OS
@@ -154,23 +153,21 @@ return word supplied by the CCP.
 On drive B, build it with `TAS LINE`. This serial capture begins at that
 command:
 
-<!-- TEC-OS fdd9e5b: the run named in this chapter's header, from TAS LINE. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card line.img B: 'TAS LINE' '@start LINE' HELLO. Console excerpt from TAS LINE. -->
 ```text
-B>TAS LINE
+B:WORK>TAS LINE
 LINE.COM written
-
-B>
 ```
 
 Type `LINE` to run it, then `HELLO` and Return. The same run continues:
 
-<!-- TEC-OS fdd9e5b: the same run, LINE then HELLO. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card line.img B: 'TAS LINE' '@start LINE' HELLO. Console excerpt from LINE. -->
 ```text
-B>LINE
+B:WORK>LINE
 HELLO
 GOT
 
-B>
+B:WORK>
 ```
 
 Function 10 echoes `HELLO` while reading it. The buffer then holds

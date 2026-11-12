@@ -7,16 +7,15 @@ nav_group: "Inside TEC-OS"
 
 # 17. Console paths
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     All unprefixed source ranges below use that revision. The three
-     captures were made at fdd9e5b with the commands in their comments, on
-     the starter card or con.img made as shown; TERM was assembled on the
-     PC by TAS through tools/lib/assemble.mjs, 95 bytes. Serial
-     TXBYTE/BCONOUT measurements retain 60cfbdc and the 4 MHz clock, as
-     recorded in Book 22:1-5,91-92, and are marked where they appear.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A key can arrive while a program is printing and still be available for its
 next read. TEC-OS holds that byte while the output continues. At the other
@@ -122,7 +121,7 @@ console had printed the banner, drive list, startup lines, first `CON` reply
 and the typed `CON TTY` line. Only the new reply and subsequent input appear
 in the serial capture:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --serial CON "CON TTY" CON -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --serial CON 'CON TTY' CON. Boot rows included in this complete serial transcript. -->
 ```text
 CON: TTY:
 A:SYSTEM>CON
@@ -236,17 +235,29 @@ bytes directly through BIOS `CONOUT`, bypassing the printer echo.
 This example shows `^U` discarding a partial command and `^R` retyping a
 complete one before Return:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs $'TYPE X\x15DIR *.CMD' $'DIR *.CMD\x12'.
-     Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs $'TYPE X\x15DIR *.CMD' $'DIR *.CMD\x12'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>TYPE X#
 DIR *.CMD
-STARTUP.CMD 
-1 file, 912K free
+
+STARTUP .CMD     128
+1 file, 128 bytes
+935936 free on A:SYSTEM
 A:SYSTEM>DIR *.CMD#
 DIR *.CMD
-STARTUP.CMD 
-1 file, 912K free
+
+STARTUP .CMD     128
+1 file, 128 bytes
+935936 free on A:SYSTEM
 A:SYSTEM>
 ```
 
@@ -512,8 +523,7 @@ The 40-column PICO screen capture shows the result after exit.
 The textual screen extraction omits attributes so the reverse `R` appears
 as an ordinary letter:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --board pico --screen --card con.img B:TERM,
-     the screen text. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen --card con.img B:TERM. The full screen, with trailing empty rows omitted. -->
 ```text
 AB
 

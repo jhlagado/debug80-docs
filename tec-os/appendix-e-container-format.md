@@ -7,12 +7,15 @@ nav_group: "Reference"
 
 # Appendix E. The container format
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision. Every example was rerun at
-     fdd9e5b with its npm run media output and gave the output shown.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A TEC-OS card starts with one container at block 0. Its header identifies
 CP/M volumes by location and geometry. Each volume then holds an ordinary
@@ -38,11 +41,11 @@ od -A x -t x1 -N 96 dist/starter.img
 ```
 
 ```text
-000000 54 45 43 4f 53 56 4f 4c 01 00 00 02 20 00 02 00
-000010 00 50 00 00 f4 07 00 00 00 00 00 00 00 00 00 00
+000000 54 45 43 4f 53 56 4f 4c 01 01 00 02 20 00 05 00
+000010 00 68 00 00 77 12 04 00 00 00 00 00 00 00 00 00
 000020 01 00 00 00 00 08 00 00 00 08 00 00 02 00 00 00
 000030 53 59 53 54 45 4d 20 20 20 20 20 00 00 00 00 00
-000040 02 00 00 00 00 10 00 00 00 40 00 00 01 00 01 01
+000040 02 00 00 00 00 10 00 00 00 40 00 00 01 00 01 00
 000050 57 4f 52 4b 20 20 20 20 20 20 20 00 00 00 00 00
 000060
 ```
@@ -202,11 +205,11 @@ node tools/tecvol.mjs verify build/swapped.img
 tecvol: volume 1: not after volume 0
 ```
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card build/swapped.img -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/swapped.img. Boot rows included in this complete serial transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 No volume mounted, error 28
-R retry> 
+R retry>
 ```
 
 `tecvol create` and the starter card's recipe always place the volumes in

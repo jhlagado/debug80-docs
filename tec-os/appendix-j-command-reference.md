@@ -7,18 +7,15 @@ nav_group: "Reference"
 
 # Appendix J. Command reference
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision, with Thorium a2fe556 (TED.COM, SHA-256 c6c8374a…), Thorium
-     3d1e2c0 (TAS.COM, e648a1d0…) and Baza 50dc512 (BAZA.COM 280ee372…,
-     BAZA.RTL 14d7fd11…, BOUNCE.BAS 615693a5…). The three captures were
-     made at fdd9e5b with the commands in their comments. The ROM held ten
-     built-ins with COPY and SERVICES at TEC-OS a1023bd, and eleven with
-     DEL at TEC-OS 402f30ef67c2d800d6c6b6bec4460697b3a4d125, whose DEL
-     keyword selected ERA's routine (402f30e:src/tables.asm:64-67). The
-     NAME.SVC /E form of 31b6083 and 402f30e is gone.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A command line contains a command and its arguments, separated by spaces.
 Return or `^J` ends the line. The maximum is 127 characters and typing the
@@ -66,17 +63,25 @@ command also requires one name.
 The following retained capture shows an overlong name, a pattern where TYPE
 requires one file and a second argument where DIR accepts only one.
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "DIR VERYLONGNAME.TXT" "TYPE *.CMD"
-     "DIR A: B:". Boot rows omitted; the output is the same as at 78127ec. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'DIR VERYLONGNAME.TXT' 'TYPE *.CMD' 'DIR A: B:'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>DIR VERYLONGNAME.TXT
-VERYLONGNAME.TXT?
+DIR?
 
 A:SYSTEM>TYPE *.CMD
 *.CMD?
 
 A:SYSTEM>DIR A: B:
-A:?
+DIR?
 
 A:SYSTEM>
 ```
@@ -193,15 +198,25 @@ in hexadecimal (`drivers/shellcmd.asm:54-154`).
 The type-only destination and self-copy cases below were captured on A
 with the starter card.
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "COPY STARTUP.CMD B:.DOC" "DIR B:"
-     "COPY A:STARTUP.CMD STARTUP.CMD" "COPY STARTUP.CMD". Boot rows omitted. -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'COPY STARTUP.CMD B:.DOC' 'DIR B:' 'COPY A:STARTUP.CMD STARTUP.CMD' 'COPY STARTUP.CMD'. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>COPY STARTUP.CMD B:.DOC
 COPIED 0001
 
 A:SYSTEM>DIR B:
-STARTUP.CMD 
-1 file, 8172K free
+
+STARTUP .CMD     128
+1 file, 128 bytes
+8368128 free on B:WORK
 A:SYSTEM>COPY A:STARTUP.CMD STARTUP.CMD
 COPY?
 
@@ -256,22 +271,34 @@ disposable file there. It records an `n` answer that leaves the file and a `y`
 answer that erases it. This is a separate demonstration, not the card
 used for BANNER in Chapter 2. `ERA *.*` would erase BANNER too on that card.
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs "COPY STARTUP.CMD B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'COPY STARTUP.CMD B:' B: '@start ERA *.*' $'@key n\x0d' DIR '@start ERA *.*' $'@key y\x0d' DIR. Boot rows included in this complete serial transcript. -->
 ```text
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>SHELL.SVC
+
+A:SYSTEM>GLCD.SVC
+
 A:SYSTEM>COPY STARTUP.CMD B:
 COPIED 0001
 
 A:SYSTEM>B:
-B>ERA *.*
+B:WORK>ERA *.*
 ALL (Y/N)?n
-B>DIR
-STARTUP.CMD 
-1 file, 8172K free
-B>ERA *.*
+B:WORK>DIR
+
+STARTUP .CMD     128
+1 file, 128 bytes
+8368128 free on B:WORK
+B:WORK>ERA *.*
 ALL (Y/N)?y
-B>DIR
+B:WORK>DIR
 NO FILE
-B>
+
+B:WORK>
 ```
 
 ### SAVE

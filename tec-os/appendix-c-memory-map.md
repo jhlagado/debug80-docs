@@ -7,24 +7,27 @@ nav_group: "Reference"
 
 # Appendix C. Memory map
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main),
-     ROM SHA-256 43ac0f18…. Addresses come from that build's
-     build/tecos/tecos.d8.json and docs/memory-map.md. At TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125, before the shell left the
-     ROM, the code ran on to FC02h with 1,021 bytes free
-     (402f30e:docs/memory-map.md:1-30), and the history was at BD00h in
-     EXPAND 1 (402f30e:src/history.asm:16). -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 A memory address needs both a bank and a build identity. This reference
 pairs the map of one build with the source contracts for each region.
 [Chapter 11](11-memory-for-programs.md) explains the program's memory limits.
 [Chapter 15](15-state-and-memory.md) explains resident state and its lifetime.
 
-The address tables describe the `tecos` build at TEC-OS `e59e8c4`, whose ROM
+The address tables describe the `tecos` build at TEC-OS `c4ec0f4`, whose ROM
 SHA-256 is
-`43ac0f1871cf3d979c94b74a030c1c06eeec500bd77e60ca7e3951a2de1c339e`. It is the
-one image for every board. The starter card mounts G1M on A and G8M on B with
-no service installed unless a row says otherwise. The resident workspace
+`a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1`. It is the
+one image for every board. The starter card reserves four equal drive slots and mounts SYSTEM on A,
+WORK on B and PROJECTS on C. Its startup file installs the shell; table rows
+that describe the bare allocation layout explicitly exclude services. The resident workspace
 addresses come from `build/tecos/tecos.d8.json`. Other builds need their own
 symbol files for build-dependent addresses.
 

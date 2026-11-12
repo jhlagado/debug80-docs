@@ -7,19 +7,15 @@ nav_group: "Reference"
 
 # Appendix D. Error messages
 
-<!-- Checked against TEC-OS e59e8c40ff26ac0f3c98dec0549d43988fe3c81c (main).
-     Unprefixed source ranges use that revision, with Thorium a2fe556 for
-     TED's load error. The old-card capture was made at fdd9e5b with the
-     command in its comment, on old.img made as shown. The CLOSE ERROR run
-     is a host-model run of the starter card that changed the first name
-     byte of the FCB passed to function 16 during COPY STARTUP.CMD
-     B:NOTES.TXT. DEL was a ROM keyword at TEC-OS
-     402f30ef67c2d800d6c6b6bec4460697b3a4d125 (402f30e:src/tables.asm:64-67)
-     and is now the shell's. The diagnostic prompt fence is a literal message
-     template.
-     The ROM, 43ac0f18…, is the same at e59e8c4 as at fdd9e5b, and e59e8c4's
-     card differs only in TED.COM and HELLO3.ASM, so captures made at
-     fdd9e5b that run neither stand for e59e8c4. -->
+<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
+     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+     Unprefixed source citations use this revision. Explicit historical
+     prefixes retain their stated revisions. Host-model capture recipes and
+     raw output/hash receipts are retained in Origo
+     studies/p3-tec-os/evidence/book-shell2/.
+     The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
+     Baza is the qualified 50dc512 payload. Source-derived excerpts are
+     labelled separately from console captures. -->
 
 An error message identifies the operation that stopped and the recovery still
 available. The tables follow cold boot, the diagnostic prompt, the LCD, the
@@ -49,7 +45,7 @@ A card that can't be started or mounted stops cold boot after the banner:
 
 ```text
 No volume mounted, error nn
-R retry> 
+R retry>
 ```
 
 The prompt uses the ROM PICO9918 console when the PICO9918 responded at cold
@@ -249,7 +245,7 @@ an older card's, has no `SHELL.SVC` line:
 
 ```sh
 cp dist/starter.img old.img
-node tools/tecvol.mjs put old.img A test/fixtures/e5154ad/PICO.SVC PICO.DRV
+node tools/tecvol.mjs put old.img A test/fixtures/8f50c61/PICO.SVC PICO.DRV
 node tools/tecvol.mjs put old.img A dist/files/GLCD.SVC GLCD.DRV
 node tools/tecvol.mjs era old.img A GLCD.SVC
 printf 'PICO.DRV\nGLCD.DRV\n' > startup.cmd
@@ -262,24 +258,29 @@ still fails and leaves no installed service. GLCD installs and takes the
 console. `SERVICES` is the shell's command, so without the shell it fails
 too:
 
-<!-- TEC-OS fdd9e5b: node tools/capture.mjs --card old.img --board glcd "REN PICO.SVC=PICO.DRV" "REN GLCD.SVC=GLCD.DRV" PICO.SVC GLCD.SVC CON SERVICES -->
+<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card old.img --board glcd 'REN PICO.SVC=PICO.DRV' 'REN GLCD.SVC=GLCD.DRV' PICO.SVC GLCD.SVC CON SERVICES. Boot rows included in this complete serial transcript. -->
 ```text
-A:SYSTEM>PICO.DRV
+TEC-OS 0.1 for TEC-1G
+A: SYSTEM
+B: WORK
+C: PROJECTS
+
+A>PICO.DRV
 PICO.DRV?
 
-A:SYSTEM>REN PICO.SVC=PICO.DRV
-A:SYSTEM>REN GLCD.SVC=GLCD.DRV
-A:SYSTEM>PICO.SVC
+A>REN PICO.SVC=PICO.DRV
+A>REN GLCD.SVC=GLCD.DRV
+A>PICO.SVC
 PICO.SVC?
 
-A:SYSTEM>GLCD.SVC
+A>GLCD.SVC
 
-A:SYSTEM>CON
+A>CON
 CON: UC1:
-A:SYSTEM>SERVICES
+A>SERVICES
 SERVICES?
 
-A:SYSTEM>
+A>
 ```
 
 `STARTUP.CMD` still names the old files so the next board reset prints the
