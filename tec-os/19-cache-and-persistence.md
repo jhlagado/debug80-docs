@@ -7,12 +7,13 @@ nav_group: "Inside TEC-OS"
 
 # 19. Cache and persistence
 
-<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+<!-- Checked against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (main),
      ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
-     studies/p3-tec-os/evidence/book-shell2/. READ/SAVE/DIR timings use the measurements retained there.
+     studies/p3-tec-os/evidence/book-recovery-core/ and
+     studies/p3-tec-os/evidence/book-recovery-host/. READ/SAVE/DIR timings use the measurements retained there.
      The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
      Baza is the qualified 50dc512 payload. Source-derived excerpts are
      labelled separately from console captures. -->
@@ -171,13 +172,15 @@ so no shell. The script reads the model's count, `cycles`
 (`host/machine.mjs:284`), twice. The first reading is after `READ
 DATA.BIN` has been typed and echoed, before the Return that ends it. The second
 is at the next prompt. After a cold boot, the command's first run took
-6,617,191 T-states, 1.65 seconds. The next run took 1,317,279, 0.33 seconds,
+6,617,943 T-states, 1.65 seconds. The next run took 1,318,031, 0.33 seconds,
 a fifth of the first. Both figures include loading the program from
-drive A.
+drive A. The trace counts the loader separately: it reads READ.COM's
+one record and its EOF. The program's data loop makes one function-20 call
+per data record, followed by its own EOF call.
 
 The gain depends on which blocks remain in the cache. A 15,360-byte file,
 `BIG.BIN` on a copy of `time.img`, took 2.04 seconds and then 2.10. The
-counts were 8,164,976 and 8,387,689 T-states. `CTAKE`
+counts were 8,165,728 and 8,388,441 T-states. `CTAKE`
 had given up each line before the next read reached it. The file data alone
 occupied all 30 lines, leaving no room for the directory and program blocks
 read along the way.
@@ -481,7 +484,7 @@ cp dist/starter.img nodata.img
 truncate -s 2113536 nodata.img
 ```
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card nodata.img '@start SAVE 1 B:X.COM' '@key x' 'DIR B:'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card nodata.img '@start SAVE 1 B:X.COM' '@key x' 'DIR B:'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM

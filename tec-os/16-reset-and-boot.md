@@ -7,12 +7,13 @@ nav_group: "Inside TEC-OS"
 
 # 16. Reset and boot
 
-<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+<!-- Checked against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (main),
      ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
-     studies/p3-tec-os/evidence/book-shell2/.
+     studies/p3-tec-os/evidence/book-recovery-core/ and
+     studies/p3-tec-os/evidence/book-recovery-host/.
      The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
      Baza is the qualified 50dc512 payload. Source-derived excerpts are
      labelled separately from console captures. -->
@@ -238,7 +239,7 @@ the card assigns a volume to that letter (`src/volsvc.asm:30-129`).
 In this capture, `CD D:GAMES` put GAMES on the empty D before reset.
 The saved assignment matched the starter card so D was listed afterwards:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'CD D:GAMES' @reset. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs 'CD D:GAMES' @reset. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -334,7 +335,7 @@ The prompt line is read with function 10, by the shell's `LINE` entry or,
 with no shell, by the CCP itself, so `^C` at an empty prompt uses that first
 route:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs '^C'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs '^C'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM

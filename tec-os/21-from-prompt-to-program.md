@@ -7,12 +7,13 @@ nav_group: "Inside TEC-OS"
 
 # 21. From prompt to program
 
-<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+<!-- Checked against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (main),
      ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
-     studies/p3-tec-os/evidence/book-shell2/.
+     studies/p3-tec-os/evidence/book-recovery-core/ and
+     studies/p3-tec-os/evidence/book-recovery-host/.
      The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
      Baza is the qualified 50dc512 payload. Source-derived excerpts are
      labelled separately from console captures. -->
@@ -309,7 +310,7 @@ the word at `0006h`. On the starter card with the shell installed that byte
 is `A7h`: 166 pages cover `0100h` through `A6FFh`. Both 167 and 320 are
 rejected in this capture (`src/cpm/ccpcmd.asm:266-307`):
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'SAVE 320 B:X.COM' 'SAVE 167 B:X.COM'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs 'SAVE 320 B:X.COM' 'SAVE 167 B:X.COM'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -366,7 +367,7 @@ path passes quietly. A separated width becomes the error word while a joined
 form names the whole token (`src/cpm/ccpcmd.asm:105-180`). This PICO capture
 shows both:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico 'CON PICO 40' 'CON CRT80' 'CON PICO 50' 'CON TTY 80' 'CON CRT: 32'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --board pico 'CON PICO 40' 'CON CRT80' 'CON PICO 50' 'CON TTY 80' 'CON CRT: 32'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -448,7 +449,7 @@ This starter-card capture contrasts a plain command with an
 explicit B drive. The plain TAS reaches A, and prints its usage line, while
 `B:TAS` stays on B:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs B: TAS B:TAS. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs B: TAS B:TAS. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -523,7 +524,7 @@ node tools/tecvol.mjs put build/ccp.img B build/big.com
 TAS writes the 76-byte ARGS.COM. FITS returned to the prompt and BIG was
 rejected:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/ccp.img B: FITS BIG. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card build/ccp.img B: FITS BIG. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -547,7 +548,7 @@ The same fixture also demonstrates user fallback. Under user 3,
 ARGS is found in B's user 0 and TAS in A's user 0. DIR still lists only
 the empty current area:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/ccp.img B: 'USER 3' ARGS TAS B:TAS DIR. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card build/ccp.img B: 'USER 3' ARGS TAS B:TAS DIR. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -653,7 +654,7 @@ pointer. `SHOWFCB` prints eleven name/type bytes and `TAIL` uses the length
 byte at `0080h`. In this capture the parsed names use padded FCB fields
 while the tail preserves the spaces within the piece:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/ccp.img B: 'args one.txt a:*.c' 'ARGS X Y ! ARGS'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card build/ccp.img B: 'args one.txt a:*.c' 'ARGS X Y ! ARGS'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM

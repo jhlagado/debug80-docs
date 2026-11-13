@@ -7,12 +7,13 @@ nav_group: "Inside TEC-OS"
 
 # 23. The history ring
 
-<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+<!-- Checked against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (main),
      ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
-     studies/p3-tec-os/evidence/book-shell2/.
+     studies/p3-tec-os/evidence/book-recovery-core/ and
+     studies/p3-tec-os/evidence/book-recovery-host/.
      The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
      Baza is the qualified 50dc512 payload. Source-derived excerpts are
      labelled separately from console captures. -->
@@ -99,7 +100,7 @@ returns to the shell, which only afterwards converts a piece's letters to
 capitals (`src/cpm/bdos.asm:654-661`, `drivers/shell.asm:426-429`, `drivers/shell.asm:498-518`). In this
 PICO9918 screen capture, recalling `con` preserves the small letters:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen con $'@start \x17'. The full screen, with trailing empty rows omitted. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --board pico --screen con $'@start \x17'. Full screen; trailing empty rows omitted. -->
 ```text
 
 TEC-OS 0.1 for TEC-1G
@@ -141,7 +142,7 @@ leaves its existing entry in place. In this capture `CON` was typed twice
 before `DIR *.CMD`. Three `^W` presses reached `CON` and then stopped because
 there were only two entries:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen CON CON 'DIR *.CMD' $'@start \x17\x17\x17'. The full screen, with trailing empty rows omitted. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --board pico --screen CON CON 'DIR *.CMD' $'@start \x17\x17\x17'. Full screen; trailing empty rows omitted. -->
 ```text
 
 TEC-OS 0.1 for TEC-1G
@@ -161,7 +162,7 @@ A:SYSTEM>DIR *.CMD
 
 STARTUP .CMD     128
 1 file, 128 bytes
-935936 free on A:SYSTEM
+937984 free on A:SYSTEM
 A:SYSTEM>CON
 CON: CRT:
 A:SYSTEM>
@@ -242,7 +243,7 @@ before pressing Return.
 
 Here two commands were typed before `^W`, `^W` and Return selected `CON`:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen CON 'TYPE STARTUP.CMD' $'@start \x17\x17'. The full screen, with trailing empty rows omitted. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --board pico --screen CON 'TYPE STARTUP.CMD' $'@start \x17\x17'. Full screen; trailing empty rows omitted. -->
 ```text
 
 TEC-OS 0.1 for TEC-1G
@@ -283,7 +284,7 @@ A program's exit, BDOS function 0 and `^C` at an empty prompt all reach
 warm boot (`src/cpm/bdos.asm:216-221`, `src/cpm/bdos.asm:521-533`). In this
 capture `^C` was followed by `^W`, which recalled `CON`:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs CON '^C' $'@start \x17'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs CON '^C' $'@start \x17'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -310,7 +311,7 @@ boundary that insertion preserves. A recognised reset retains only the drive
 selection, so the history goes too. In this run `^W` and Return after the
 reset produced an empty line:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs CON @reset $'@start \x17'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs CON @reset $'@start \x17'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM

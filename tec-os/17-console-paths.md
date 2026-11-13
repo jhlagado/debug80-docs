@@ -7,12 +7,13 @@ nav_group: "Inside TEC-OS"
 
 # 17. Console paths
 
-<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+<!-- Checked against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (main),
      ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
-     studies/p3-tec-os/evidence/book-shell2/.
+     studies/p3-tec-os/evidence/book-recovery-core/ and
+     studies/p3-tec-os/evidence/book-recovery-host/.
      The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
      Baza is the qualified 50dc512 payload. Source-derived excerpts are
      labelled separately from console captures. -->
@@ -121,7 +122,7 @@ console had printed the banner, drive list, startup lines, first `CON` reply
 and the typed `CON TTY` line. Only the new reply and subsequent input appear
 in the serial capture:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --serial CON 'CON TTY' CON. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --board pico --serial CON 'CON TTY' CON. Complete serial transcript. -->
 ```text
 CON: TTY:
 A:SYSTEM>CON
@@ -235,7 +236,7 @@ bytes directly through BIOS `CONOUT`, bypassing the printer echo.
 This example shows `^U` discarding a partial command and `^R` retyping a
 complete one before Return:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs $'TYPE X\x15DIR *.CMD' $'DIR *.CMD\x12'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs $'TYPE X\x15DIR *.CMD' $'DIR *.CMD\x12'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -251,13 +252,13 @@ DIR *.CMD
 
 STARTUP .CMD     128
 1 file, 128 bytes
-935936 free on A:SYSTEM
+937984 free on A:SYSTEM
 A:SYSTEM>DIR *.CMD#
 DIR *.CMD
 
 STARTUP .CMD     128
 1 file, 128 bytes
-935936 free on A:SYSTEM
+937984 free on A:SYSTEM
 A:SYSTEM>
 ```
 
@@ -523,7 +524,7 @@ The 40-column PICO screen capture shows the result after exit.
 The textual screen extraction omits attributes so the reverse `R` appears
 as an ordinary letter:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --screen --card con.img B:TERM. The full screen, with trailing empty rows omitted. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --board pico --screen --card con.img B:TERM. Full screen; trailing empty rows omitted. -->
 ```text
 AB
 

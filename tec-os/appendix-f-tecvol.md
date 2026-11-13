@@ -7,12 +7,13 @@ nav_group: "Reference"
 
 # Appendix F. `tecvol`
 
-<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+<!-- Checked against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (main),
      ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
-     studies/p3-tec-os/evidence/book-shell2/.
+     studies/p3-tec-os/evidence/book-recovery-core/ and
+     studies/p3-tec-os/evidence/book-recovery-host/.
      The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
      Baza is the qualified 50dc512 payload. Source-derived excerpts are
      labelled separately from console captures. -->
@@ -130,6 +131,7 @@ Successful creation prints nothing.
 node tools/tecvol.mjs info build/my.img
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
 container: format 1.0, 22528 blocks (11534336 bytes), 3 volume(s)
   A: SYSTEM      id 1 G1M start 2048 rw 0 file(s), 1040384 bytes free
@@ -162,6 +164,7 @@ printf 'X' | dd of=build/badsum.img bs=1 seek=25 conv=notrunc
 node tools/tecvol.mjs verify build/badsum.img
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
 tecvol: header checksum mismatch
 ```
@@ -178,6 +181,7 @@ directory is:
 node tools/tecvol.mjs dir dist/starter.img A
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
  0 BAZA.COM        13184
  0 BAZA.RTL        12032
@@ -185,7 +189,6 @@ node tools/tecvol.mjs dir dist/starter.img A
  0 DEMO.ASM        15360
  0 GLCD.SVC          896
  0 HELLO3.ASM       2176
- 0 HELLO3.BIN        256
  0 MON3.SVC         5120
  0 SAMPLE.ASM       4608
  0 SHELL.SVC        3712
@@ -233,6 +236,7 @@ Copying to the read-only volume fails without changing the image:
 node tools/tecvol.mjs put build/my.img ARCHIVE build/hello.txt
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
 tecvol: volume is read-only
 ```
@@ -243,6 +247,7 @@ The invalid user value is rejected with status 2 before opening the image:
 node tools/tecvol.mjs put build/my.img A build/hello.txt --user 1.5
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
 tecvol: --user "1.5": a user number 0 to 15
 usage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/tecvol.mjs)
@@ -266,6 +271,7 @@ and block in the error (`tools/lib/cpmfs.mjs:128-150`).
 node tools/tecvol.mjs get build/my.img A HELLO.TXT --text
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
 hello
 world
@@ -283,6 +289,7 @@ node tools/tecvol.mjs era build/my.img B TAS.COM
 node tools/tecvol.mjs era build/my.img B TAS.COM --user 3
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
 tecvol: TAS.COM not found
 usage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/tecvol.mjs)
@@ -299,6 +306,7 @@ node tools/tecvol.mjs era build/my.img B NOTE.TXT
 node tools/tecvol.mjs era build/my.img B NOTE.TXT --force
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
 tecvol: 0/NOTE.TXT is read-only
 tecvol: 0/NOTE.TXT is read-only
@@ -336,14 +344,15 @@ node tools/tecvol.mjs recipe dist/starter.recipe.json build/book-fresh.img
 sha256sum build/book-fresh.img dist/starter.img
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
-dd44f1c28c3b9296c6348e5723720dc0088f34d984028f4072e1785e36f3cebe  build/book-fresh.img
-dd44f1c28c3b9296c6348e5723720dc0088f34d984028f4072e1785e36f3cebe  dist/starter.img
+b11cd5b0504ae93ad2dd57db2ed0dbce8684ca80c607c5332d0c5e0fc701ebb7  build/book-fresh.img
+b11cd5b0504ae93ad2dd57db2ed0dbce8684ca80c607c5332d0c5e0fc701ebb7  dist/starter.img
 ```
 
 The image construction uses fixed placement, fill bytes and file contents.
 With the same recipe and matching inputs its bytes do not depend on the PC's
-clock. The printed hashes identify this recipe's result at `c4ec0f4`.
+clock. The printed hashes identify this recipe's result at `46cf3f1`.
 
 ## install
 
@@ -376,6 +385,7 @@ The final directory is:
 node tools/tecvol.mjs dir build/my.img A
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
  0 HELLO.TXT         128
  0 SHELL.SVC        3712
@@ -384,7 +394,7 @@ node tools/tecvol.mjs dir build/my.img A
 
 The same card's TEC-OS capture reads the text and lists all volumes:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/my.img DIR 'TYPE HELLO.TXT' 'CD ?'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card build/my.img DIR 'TYPE HELLO.TXT' 'CD ?'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM

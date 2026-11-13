@@ -7,12 +7,13 @@ nav_group: "Writing programs"
 
 # 11. Memory for programs
 
-<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+<!-- Checked against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (main),
      ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
-     studies/p3-tec-os/evidence/book-shell2/.
+     studies/p3-tec-os/evidence/book-recovery-core/ and
+     studies/p3-tec-os/evidence/book-recovery-host/.
      The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
      Baza is the qualified 50dc512 payload. Source-derived excerpts are
      labelled separately from console captures. -->
@@ -133,7 +134,7 @@ node tools/tecvol.mjs put mem.img B top.com
 
 The serial-only model capture gave:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card mem.img B:TOP. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card mem.img B:TOP. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -158,7 +159,7 @@ the echo of `CON UC1` went to the PICO9918. The reply and second TOP output
 went to the graphics LCD. This is a host-model capture, not a browser or
 physical-board observation:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --board pico --card mem.img B:TOP 'CON UC1' B:TOP. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --board pico --card mem.img B:TOP 'CON UC1' B:TOP. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -290,7 +291,7 @@ writeFileSync(out, (await assembleProgram(src)).bytes);
 node tools/tecvol.mjs put mem.img B area.com
 ```
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card mem.img B:AREA. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card mem.img B:AREA. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -379,7 +380,7 @@ This run used the starter card, whose startup file had installed the shell
 at `A700h`. Its limit is 166 pages. The request for 167 is rejected and
 166 accepted:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs B: 'SAVE 2 TWO.COM' 'SAVE 167 BIG.COM' 'SAVE 166 BIG.COM' DIR. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs B: 'SAVE 2 TWO.COM' 'SAVE 167 BIG.COM' 'SAVE 166 BIG.COM' DIR. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -599,7 +600,7 @@ node tools/tecvol.mjs put con.img B key.com
 
 This serial capture supplied `a`, `Z`, `^C`, Esc and Return:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card con.img '@start B:KEY' $'@key aZ\x03\x1b\x0d'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card con.img '@start B:KEY' $'@key aZ\x03\x1b\x0d'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM

@@ -7,12 +7,13 @@ nav_group: "Reference"
 
 # Appendix H. The service file format
 
-<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+<!-- Checked against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (main),
      ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
-     studies/p3-tec-os/evidence/book-shell2/.
+     studies/p3-tec-os/evidence/book-recovery-core/ and
+     studies/p3-tec-os/evidence/book-recovery-host/.
      The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
      Baza is the qualified 50dc512 payload. Source-derived excerpts are
      labelled separately from console captures. -->
@@ -187,7 +188,7 @@ writeFileSync("GAPZERO.SVC", out);
 node tools/tecvol.mjs put svc.img B GAPZERO.SVC
 ```
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card svc.img B: GAPZERO.SVC SERVICES. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card svc.img B: GAPZERO.SVC SERVICES. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -218,19 +219,22 @@ This dump is of the starter card's graphics LCD driver. The first command prints
 starts at its relocation data, offset 767.
 
 ```sh
-xxd -g 1 -l 48 dist/files/GLCD.SVC
-xxd -g 1 -s 767 dist/files/GLCD.SVC
+od -A x -t x1 -N 48 dist/files/GLCD.SVC
+od -A x -t x1 -j 767 dist/files/GLCD.SVC
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
-00000000: 44 04 00 01 4e 00 ff 02 00 00 45 00 02 00 06 2b  D...N.....E....+
-00000010: 00 47 4c 43 44 20 20 20 20 f2 00 4d 01 52 01 c9  .GLCD    ..M.R..
-00000020: 00 a7 00 b6 00 00 00 15 08 00 00 0e 0f cd 08 c0  ................
-000002ff: 02 02 02 02 02 02 0f 03 09 09 08 29 08 04 0a 03  ...........)....
-0000030f: 03 07 03 03 09 04 0c 04 09 03 04 06 0d 13 08 04  ................
-0000031f: 22 06 05 03 04 04 05 09 08 09 10 03 07 06 04 03  "...............
-0000032f: 04 04 03 0a 08 0f 03 06 03 04 11 0a 07 0a 06 06  ................
-0000033f: 18 05 17 07 05                                   .....
+000000 44 04 00 01 4e 00 ff 02 00 00 45 00 02 00 06 2b
+000010 00 47 4c 43 44 20 20 20 20 f2 00 4d 01 52 01 c9
+000020 00 a7 00 b6 00 00 00 15 08 00 00 0e 0f cd 08 c0
+000030
+0002ff 02 02 02 02 02 02 0f 03 09 09 08 29 08 04 0a 03
+00030f 03 07 03 03 09 04 0c 04 09 03 04 06 0d 13 08 04
+00031f 22 06 05 03 04 04 05 09 08 09 10 03 07 06 04 03
+00032f 04 04 03 0a 08 0f 03 06 03 04 11 0a 07 0a 06 06
+00033f 18 05 17 07 05
+000344
 ```
 
 The header's fields are:

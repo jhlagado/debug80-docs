@@ -7,12 +7,13 @@ nav_group: "Inside TEC-OS"
 
 # 27. Build the ROM and media
 
-<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+<!-- Checked against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (main),
      ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
-     studies/p3-tec-os/evidence/book-shell2/.
+     studies/p3-tec-os/evidence/book-recovery-core/ and
+     studies/p3-tec-os/evidence/book-recovery-host/.
      The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
      Baza is the qualified 50dc512 payload. Source-derived excerpts are
      labelled separately from console captures. -->
@@ -380,14 +381,13 @@ with the Matrix switch enabled starts at 40 columns. Explicit 80, 40 and
 
 `npm run build` ends with this line:
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
-tecos: ROM 14875/16384 bytes, TPA $0100-$B9A8 (47273 bytes), sha256 a65b6e4523b5f7ba
+tecos: ROM 15312/16384 bytes, TPA $0100-$B984 (47237 bytes), sha256 ac86ad233696d22a
 ```
 
-This retained c4ec0f4 build capture prints the first sixteen hexadecimal
-digits of SHA-256
-`a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1`.
-The recovery candidate's hash is listed in the current ROM table above
+Its printed hash is the first sixteen hexadecimal digits of SHA-256
+`ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3`
 (`tools/build.mjs:278`, `tools/build.mjs:358-361`).
 
 ## HELLO through TED and TAS
@@ -429,7 +429,7 @@ Inserting `1` at its start and pressing `^T B` saves the source and chains
 `A:TAS HELLO.ASM` followed by `A:TED`, a line the shell runs piece by piece.
 These are the PICO9918's screens:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card work.img --board pico --screen 'CON PICO 80' B: '@start TED HELLO.ASM 7' '@press 1' $'@press \x14B' '@run 400'. Console error excerpt; redraw omitted. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card work.img --board pico --screen 'CON PICO 80' B: '@start TED HELLO.ASM 7' '@press 1' $'@press \x14B' '@run 400'. Console excerpt; terminal controls and editor redraw outside the selected span omitted. -->
 ```text
 B:WORK>A:TAS HELLO.ASM
 HELLO.ASM:7:1: expected a label, instruction or directive
@@ -441,7 +441,7 @@ The diagnostic gives the source filename, line and column. TED reopens
 at that position and displays the message on its status row. The following screen includes the blank rows between the source and the
 status row:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card work.img --board pico --screen 'CON PICO 80' B: '@start TED HELLO.ASM 7' '@press 1' $'@press \x14B' '@run 400'. The full screen; trailing empty rows omitted. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card work.img --board pico --screen 'CON PICO 80' B: '@start TED HELLO.ASM 7' '@press 1' $'@press \x14B' '@run 400'. Full screen; trailing empty rows omitted. -->
 ```text
 ; HELLO: print a line and return to the CCP.
 BDOS    EQU     $0005
@@ -473,9 +473,8 @@ The matrix keyboard has no Delete key. Right moves the cursor past `1`
 and `^H` removes it. `^T R` then saves, assembles and runs the corrected
 source. TED waits for a key before redrawing:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card work.img --board pico --screen 'CON PICO 80' B: '@start TED HELLO.ASM 7' '@press 1' $'@press \x14B' '@run 400' $'@press \x1b[C' $'@press \x08' $'@press \x14R' '@run 600'. The full screen; trailing empty rows omitted. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card work.img --board pico --screen 'CON PICO 80' B: '@start TED HELLO.ASM 7' '@press 1' $'@press \x14B' '@run 400' $'@press \x1b[C' $'@press \x08' $'@press \x14R' '@run 600'. Console excerpt; terminal controls and editor redraw outside the selected span omitted. -->
 ```text
-
 B:WORK>A:TAS HELLO.ASM
 HELLO.COM written
 
@@ -530,7 +529,7 @@ node tools/tecvol.mjs put work.img B hello.com
 `work.img` to the card as described in Chapter 6. This host-model capture
 boots that image and enters `B:`, `DIR` and `HELLO`:
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card work.img B: DIR HELLO. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card work.img B: DIR HELLO. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM

@@ -7,12 +7,13 @@ nav_group: "Using the machine"
 
 # 6. Cards on the PC
 
-<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+<!-- Checked against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (main),
      ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
-     studies/p3-tec-os/evidence/book-shell2/.
+     studies/p3-tec-os/evidence/book-recovery-core/ and
+     studies/p3-tec-os/evidence/book-recovery-host/.
      The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
      Baza is the qualified 50dc512 payload. Source-derived excerpts are
      labelled separately from console captures. -->
@@ -119,9 +120,10 @@ node tools/tecvol.mjs verify card.img
 
 The verification succeeds:
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
 container: format 1.1, 26624 blocks (13631488 bytes), 5 volume(s), 4 drive(s) wanted
-  A: SYSTEM      id 1 G1M start 2048 rw 16 file(s), 931840 bytes free
+  A: SYSTEM      id 1 G1M start 2048 rw 15 file(s), 933888 bytes free
   B: WORK        id 2 G8M start 4096 rw 3 file(s), 8359936 bytes free
   C: PROJECTS    id 3 G1M start 20480 rw 0 file(s), 1040384 bytes free
   -: GAMES       id 4 G1M start 22528 rw 0 file(s), 1040384 bytes free
@@ -138,6 +140,7 @@ node tools/tecvol.mjs dir card.img B
 
 The complete A listing includes TED's project and session files:
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
  0 BAZA.COM        13184
  0 BAZA.RTL        12032
@@ -145,7 +148,6 @@ The complete A listing includes TED's project and session files:
  0 DEMO.ASM        15360
  0 GLCD.SVC          896
  0 HELLO3.ASM       2176
- 0 HELLO3.BIN        256
  0 MON3.SVC         5120
  0 SAMPLE.ASM       4608
  0 SHELL.SVC        3712
@@ -161,6 +163,7 @@ These are the starter card's thirteen files and TED's two.
 
 B contains the source, program and debug file:
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
  0 BANNER.ASM        384
  0 BANNER.COM        128
@@ -180,10 +183,11 @@ wc -c recovered/BANNER.REC recovered/BANNER.ASM
 
 The filtered listing repeats the three B entries above. The byte counts are:
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
-     384 recovered/BANNER.REC
-     273 recovered/BANNER.ASM
-     657 total
+384 recovered/BANNER.REC
+273 recovered/BANNER.ASM
+657 total
 ```
 
 `BANNER.REC` is the raw PC copy, not another file on B. Its three records
@@ -222,6 +226,7 @@ printf 'missing get exit: %s\n' "$missing_status"
 cat recovered/missing.stderr
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
 missing get exit: 1
 tecvol: 0/MISSING.ASM not found
@@ -261,9 +266,10 @@ the starter image it prints:
 node tools/tecvol.mjs info dist/starter.img
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
 container: format 1.1, 26624 blocks (13631488 bytes), 5 volume(s), 4 drive(s) wanted
-  A: SYSTEM      id 1 G1M start 2048 rw 14 file(s), 935936 bytes free
+  A: SYSTEM      id 1 G1M start 2048 rw 13 file(s), 937984 bytes free
   B: WORK        id 2 G8M start 4096 rw 0 file(s), 8372224 bytes free
   C: PROJECTS    id 3 G1M start 20480 rw 0 file(s), 1040384 bytes free
   -: GAMES       id 4 G1M start 22528 rw 0 file(s), 1040384 bytes free
@@ -386,6 +392,7 @@ node tools/tecvol.mjs put my.img SPARE hello.txt --text
 node tools/tecvol.mjs dir my.img
 ```
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
  0 SHELL.SVC        3712
  0 STARTUP.CMD       128
@@ -393,6 +400,7 @@ node tools/tecvol.mjs dir my.img
 
 After those puts, `node tools/tecvol.mjs info my.img` prints this:
 
+<!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text
 container: format 1.1, 38912 blocks (19922944 bytes), 4 volume(s), 4 drive(s) wanted
   A: SYSTEM      id 1 G1M start 2048 rw 2 file(s), 1034240 bytes free
@@ -438,13 +446,14 @@ The recipe's volume list is:
 A file inside a component's `files` list has an entry such as this shell
 entry:
 
+<!-- TEC-OS 46cf3f1: Source-derived SHELL.SVC object from the generated starter recipe. -->
 ```json
 {
   "name": "SHELL.SVC",
   "url": "files/SHELL.SVC",
   "drive": "A",
-  "bytes": 3663,
-  "sha256": "3609c78ef2ee459ca076bf6fa0073dec9f2153159bf51a5ec0055f92aabe9a78"
+  "bytes": 3660,
+  "sha256": "5beea5051f93853f43ac54143665f741a19db6ddba873fe0a2c8834aab31c4c4"
 }
 ```
 
@@ -478,7 +487,7 @@ node tools/tecvol.mjs create build/errs.img --volume G1M:SYSTEM:A --volume G8M:W
 node tools/tecvol.mjs put build/errs.img B dist/files/STARTUP.CMD --ro
 ```
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card build/errs.img '@start SAVE 1 C:X.COM' '@key x' '@start ERA B:STARTUP.CMD' '@key x' 'DIR B:'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card build/errs.img '@start SAVE 1 C:X.COM' '@key x' '@start ERA B:STARTUP.CMD' '@key x' 'DIR B:'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -529,7 +538,7 @@ cp dist/starter.img short.img
 truncate -s 2104320 short.img
 ```
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs --card short.img '@start DIR B:' '@key x'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs --card short.img '@start DIR B:' '@key x'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM

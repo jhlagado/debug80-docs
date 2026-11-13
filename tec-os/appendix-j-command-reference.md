@@ -7,12 +7,13 @@ nav_group: "Reference"
 
 # Appendix J. Command reference
 
-<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+<!-- Checked against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (main),
      ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
-     studies/p3-tec-os/evidence/book-shell2/.
+     studies/p3-tec-os/evidence/book-recovery-core/ and
+     studies/p3-tec-os/evidence/book-recovery-host/.
      The tool inputs are the pinned TAS host 3d16b30 and TED a2fe556;
      Baza is the qualified 50dc512 payload. Source-derived excerpts are
      labelled separately from console captures. -->
@@ -63,7 +64,7 @@ command also requires one name.
 The following retained capture shows an overlong name, a pattern where TYPE
 requires one file and a second argument where DIR accepts only one.
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'DIR VERYLONGNAME.TXT' 'TYPE *.CMD' 'DIR A: B:'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs 'DIR VERYLONGNAME.TXT' 'TYPE *.CMD' 'DIR A: B:'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -198,7 +199,7 @@ in hexadecimal (`drivers/shellcmd.asm:54-154`).
 The type-only destination and self-copy cases below were captured on A
 with the starter card.
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'COPY STARTUP.CMD B:.DOC' 'DIR B:' 'COPY A:STARTUP.CMD STARTUP.CMD' 'COPY STARTUP.CMD'. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs 'COPY STARTUP.CMD B:.DOC' 'DIR B:' 'COPY A:STARTUP.CMD STARTUP.CMD' 'COPY STARTUP.CMD'. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
@@ -271,7 +272,7 @@ disposable file there. It records an `n` answer that leaves the file and a `y`
 answer that erases it. This is a separate demonstration, not the card
 used for BANNER in Chapter 2. `ERA *.*` would erase BANNER too on that card.
 
-<!-- TEC-OS c4ec0f4: node tools/capture.mjs 'COPY STARTUP.CMD B:' B: '@start ERA *.*' $'@key n\x0d' DIR '@start ERA *.*' $'@key y\x0d' DIR. Boot rows included in this complete serial transcript. -->
+<!-- TEC-OS 46cf3f1: node tools/capture.mjs 'COPY STARTUP.CMD B:' B: '@start ERA *.*' $'@key n\x0d' DIR '@start ERA *.*' $'@key y\x0d' DIR. Complete captured console transcript. -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM
