@@ -7,8 +7,8 @@ nav_group: "Reference"
 
 # Appendix F. `tecvol`
 
-<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
-     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+     ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
@@ -195,10 +195,10 @@ node tools/tecvol.mjs dir dist/starter.img A
  0 TIMES.BAS         640
 ```
 
-SHELL.SVC is 3,655 bytes in `dist/files` and occupies 29 records, 3,712
-bytes, on the card. The fourteen files are those of `tools/media.mjs:209-240` and
+SHELL.SVC is 3,660 bytes in `dist/files` and occupies 29 records, 3,712
+bytes, on the card. The thirteen files are those of `tools/media.mjs:203-231` and
 `tools/lib/starter.mjs:10-22`, and STARTUP.CMD holds `SHELL.SVC` and
-`GLCD.SVC` (`test/starter.test.mjs:48-81`).
+`GLCD.SVC` (`test/starter.test.mjs:44-81`).
 
 ## put
 
@@ -326,9 +326,9 @@ are applied after the files are written (`tools/tecvol.mjs:90-99`,
 `tools/lib/recipe.mjs:14-44`). The web page uses the same recipe function
 for New starter card.
 
-`npm run media` prepares `dist/starter.recipe.json` and its image. That recipe, at revision 13, is the only one: the web page builds
+`npm run media` prepares `dist/starter.recipe.json` and its image. That recipe, at revision 14, is the only one: the web page builds
 the same card, and media removes a `dist/page.recipe.json` left by an older
-build (`tools/media.mjs:242-266`, `278-281`). Chapter 27
+build (`tools/media.mjs:233-257`, `278-281`). Chapter 27
 describes that preparation. The rebuild produced these matching hashes:
 
 ```sh

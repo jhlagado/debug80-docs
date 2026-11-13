@@ -7,8 +7,8 @@ nav_group: "Inside TEC-OS"
 
 # 25. Loading and removing services
 
-<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
-     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+     ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
@@ -51,17 +51,17 @@ vectors. A program must read the word rather than assume page alignment.
 
 The first service is allocated below the stub's page so the unused bytes between
 that page boundary and the stub also leave the transient program area (TPA). On
-the starter card, vectors begin at `B6ECh` and the stub at `B6E9h`. A first
-one-page service such as Chapter 14's COUNT costs 489 bytes: 256 for the page
-and 233 for the alignment gap. Later services cost whole pages without another
+the starter card, vectors begin at `B6C8h` and the stub at `B6C5h`. A first
+one-page service such as Chapter 14's COUNT costs 453 bytes: 256 for the page
+and 197 for the alignment gap. Later services cost whole pages without another
 alignment gap. With `GLCD.SVC` as the first service, and a possible second
 one, the layout is:
 
 | Addresses | What is there |
 | --- | --- |
-| `B6ECh` up | The allocation vectors, then the resident workspace |
-| `B6E9h–B6EBh` | The stub, `JP BENTRY`, the top with no service in |
-| `B600h–B6E8h` | 233 bytes no service can use |
+| `B6C8h` up | The allocation vectors, then the resident workspace |
+| `B6C5h–B6C7h` | The stub, `JP BENTRY`, the top with no service in |
+| `B600h–B6C4h` | 197 bytes no service can use |
 | `B300h–B5FFh` | `GLCD.SVC`, three pages. `B300h` holds `JP BENTRY` |
 | `B200h–B2FFh` | A second service of one page. `B200h` would hold `JP BENTRY` |
 | `0100h` up | The TPA, its top at the word in `0006h` |
@@ -162,7 +162,7 @@ The loader adds the requested extra memory to the header/image size,
 subtracts one and takes the high byte as the page count minus one. It
 subtracts that count from the page below `PZTOP`. Overflow, borrow or a
 base below `8000h` rejects the load. The resulting page is stored in
-`SLDL` as the relocation delta (`src/loader.asm:183-195`). With no other service, COUNT's 100 bytes below `B6E9h`
+`SLDL` as the relocation delta (`src/loader.asm:183-195`). With no other service, COUNT's 100 bytes below `B6C5h`
 select page `B5h`.
 
 ### 2. Dependencies
@@ -199,8 +199,8 @@ by HL. A rejected list can leave the loaded file partly relocated
 
 In `GLCD.SVC` the driver table begins with `00F2h`, `014Dh` and `0152h`.
 Installation at `B300h` changes them to `B3F2h`, `B44Dh` and `B452h` at
-`B319h`. Its 767 header/image bytes occupy three pages. With the 233-byte
-alignment gap, the TPA falls from 46,569 to 45,568 bytes. SERVICES, the shell's command, counts whole reserved pages, including unused
+`B319h`. Its 767 header/image bytes occupy three pages. With the 197-byte
+alignment gap, the TPA falls from 46,533 to 45,568 bytes. SERVICES, the shell's command, counts whole reserved pages, including unused
 bytes in the final page (`drivers/shellcmd.asm:15-50`).
 
 The PICO-plus-GLCD startup case has another outcome. With CRT already
@@ -430,14 +430,14 @@ interface removal happens at the CCP so a running program can retain a record
 address until exit. A resident service retaining it longer must check the
 current generation or declare the provider as a dependency. The dependency
 prevents loading without its provider and the owner order prevents removing that
-older provider first (`src/ram.asm:376-391`, `src/loader.asm:97-126`,
+older provider first (`src/ram.asm:382-397`, `src/loader.asm:97-126`,
 `src/loader.asm:196-223`). Chapter 14 explains the client-side dependency
 contract.
 
 Warm boot preserves `REGHEAD`, `SVCHEAD` and `PZTOP` outside the range
 cleared by `CPMINIT`. Cold boot clears resident workspace and removes
 loaded owners. A ROM PICO record can be registered again during that cold
-boot (`src/ram.asm:364-391`, `src/boot.asm:61-72`,
+boot (`src/ram.asm:370-397`, `src/boot.asm:61-72`,
 `src/boot.asm:398-407`, `src/pico.asm:62-65`). The serial-board
 reset test leaves both heads empty (`test/svc.test.mjs:475-487`).
 
@@ -476,7 +476,7 @@ active interrupt source can repeat without being serviced
 (`src/loader.asm:368-370`, `src/boot.asm:139-144`, `src/boot.asm:332-382`).
 
 The three stack limits are 8, 12 and 6 bytes for BDOS, BIOS and CCP,
-counted above their no-service base use (`src/tables.asm:139-144`).
+counted above their no-service base use (`src/tables.asm:141-146`).
 [Chapter 15](15-state-and-memory.md) distinguishes the base
 measurements, limits and reserved quarter-stack margin. The loader sums
 header declarations rather than measuring a callback's use.

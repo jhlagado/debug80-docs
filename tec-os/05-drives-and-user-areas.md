@@ -7,8 +7,8 @@ nav_group: "Using the machine"
 
 # 5. Drives and user areas
 
-<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
-     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+     ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
@@ -145,16 +145,17 @@ does in [Chapter 1](01-first-session.md). `MON3.SVC` supplies those calls
 under TEC-OS, so such a program runs with the card and the BDOS still in
 place.
 
-`MON3.SVC` installs the service if it is not in and enters it, at its
-`MON3>` prompt. The service stays installed after `EXIT`, so a later
+First build the source-only example at the CP/M prompt with
+`TAS HELLO3 HELLO3.BIN`. Then `MON3.SVC` installs the service if it is not in
+and enters it at its `MON3>` prompt. The service stays installed after `EXIT`, so a later
 `MON3.SVC` enters it again without reading the file. A warm boot keeps it,
 and `UNLOAD` or a reset removes it. Its 4,606 bytes of header and image
 occupy 18 pages. On a card with nothing else installed the BDOS entry in
-`0006h` moves from `B6E9h` to `A400h`, and the program memory from 46,569
+`0006h` moves from `B6C5h` to `A400h`, and the program memory from 46,533
 bytes to 41,728, or to 40,960 with `GLCD.SVC` installed too. On the starter
 card, whose startup file installs the shell first, the entry moves from
 `A700h` to `9500h` and the program memory from 42,496 bytes to 37,888, or
-to `9200h`, 37,120 bytes, with `GLCD.SVC` installed too (`docs/mon3.md:45-57`).
+to `9200h`, 37,120 bytes, with `GLCD.SVC` installed too (`docs/mon3.md:47-59`).
 The file is 5,032 bytes with its relocation data. The
 service's own code, line buffer and stack are all in those pages, above
 anything a MON-3 program may load into. A program itself runs on MON-3's
@@ -206,7 +207,7 @@ return also sets the panel's modes again, so the console's text shows again
 whatever mode the program left the panel in.
 
 The service cannot recover a program that hangs: the reset button is the
-way out. A program that writes `B6E9h–BFFFh`, which holds the BDOS entry,
+way out. A program that writes `B6C5h–BFFFh`, which holds the BDOS entry,
 the allocation vectors, TEC-OS's workspace and its BIOS table, can damage
 TEC-OS's disk tables. The service writes pending changes before `GO` and
 resets the drives after each return to limit that. Its messages are in
@@ -415,8 +416,9 @@ command processor.
 
 ## Changing a drive's volume
 
-`CD`, a command of the shell, puts a volume on a drive. `CD NAME` puts the
-volume labelled NAME on the current drive, A included. `CD D:NAME` puts it on
+CD changes the directory presented by a drive, selecting a named on-card
+volume. It works in the bare ROM CCP and the shell. `CD NAME` selects NAME
+on the current drive, A included. `CD D:NAME` puts it on
 D and leaves you where you are. `CD` alone and `CD D:` show a drive's volume,
 read from the card again. A volume is on at most one drive, so `CD` of a
 volume already on another drive is refused and names that drive. To take a
@@ -463,7 +465,7 @@ sets the failure return code, so an `&` piece after it is skipped
 
 TEC-OS holds some recent writes in memory in its block cache. Before it
 changes a drive, the mount writes them to the card. If a write fails, the
-mount is refused with `CANNOT MOUNT` and the drive keeps its volume. The
+mount is refused with `CD FAILED` and the drive keeps its volume. The
 same message means the volume is too large for the drive's slot, which can
 happen on a card that reserves slots only for the drives mounted at cold
 boot ([Chapter 15](15-state-and-memory.md#allocation-vectors-below-the-workspace)).
@@ -474,7 +476,7 @@ next use. Putting a volume on the current drive selects it again at once so
 that access uses the new volume. The prompt's label comes from a table the
 shell keeps, filled at its first prompt and by `CD` itself. A program that
 mounts a volume through the ROM's services leaves that label stale until `CD`
-alone reads the card again (`docs/shell.md:141-191`).
+alone reads the card again (`docs/shell.md:142-198`).
 
 ### CD on drive A
 
@@ -482,7 +484,8 @@ The commands found on A follow its volume, and so does the shell's next
 start. `CD A:GAMES` puts GAMES on A. A program on SYSTEM, such as TAS, is then
 not found, and `CD A:SYSTEM` brings SYSTEM back. A reset keeps the drives'
 selection, so a reset after `CD A:GAMES` starts from GAMES, which has no
-startup file and no shell. The bare prompt `A>` follows and there is no `CD`:
+startup file and no shell. The bare prompt `A>` follows. Its ROM CD commands
+remain available for restoring SYSTEM:
 
 <!-- TEC-OS c4ec0f4: node tools/capture.mjs 'CD A:GAMES' TAS @reset. Boot rows included in this complete serial transcript. -->
 ```text
@@ -509,8 +512,11 @@ C: PROJECTS
 A>
 ```
 
-Power off and on, or Power cycle on the web page, gives the card's own drives
-and the shell again. A `CD` in a script cannot change the drive the script
+At the bare prompt, use `CD ?`, `CD A:SYSTEM` and `SHELL.SVC` to restore
+the shell. CD preserves the current drive and user area. The starter's shell
+is in user 0; use `USER 0` before loading it if you have changed the area.
+A reset itself starts in user 0. Power cycle restores all the card's default
+drive assignments and startup. A `CD` in a script cannot change the drive the script
 is read from: it is refused with `CD?`, and the script goes on.
 
 ## Volume and file protection

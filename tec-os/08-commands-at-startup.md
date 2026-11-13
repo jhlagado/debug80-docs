@@ -7,8 +7,8 @@ nav_group: "Using the machine"
 
 # 8. Commands at startup
 
-<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
-     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+     ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
@@ -301,10 +301,11 @@ A>USER 2
 
 The reset has kept SPARE on A so the final prompt is the bare `2A>`. SYSTEM
 is no longer mounted, and with it the shell and the tools needed for
-recovery. With no shell there is no `CD` to put SYSTEM back, and a
-recognised reset repeats the retained assignment while it remains valid. A
-power loss clears the retained selection so the next boot uses the header's
-SYSTEM assignment again. On the web page, Power cycle does the same.
+recovery. The ROM's CD remains available: `CD ?` lists the named directories
+and `CD A:SYSTEM` restores SYSTEM. The current user area remains 2, so use
+`USER 0` and then `SHELL.SVC` to load the starter's shell. A recognised reset
+repeats the retained assignment while it remains valid. Power cycle restores
+the header's default drive assignments and startup.
 
 ## Display commands in the file
 
@@ -401,7 +402,7 @@ A:SYSTEM>
 ```
 
 [Appendix J](appendix-j-command-reference.md#programs-on-the-starter-card)
-lists the fourteen files.
+lists the thirteen files.
 
 Where the ROM PICO console did not start, a startup width command passes
 quietly. The same command typed there reports the width with `?`, such as

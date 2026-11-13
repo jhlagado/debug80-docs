@@ -7,8 +7,8 @@ nav_group: "Reference"
 
 # Appendix H. The service file format
 
-<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
-     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+     ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
@@ -108,7 +108,7 @@ or one below the minimum version rejects the load
 A service can carry an application that TEC-OS enters,
 as `MON3.SVC` and `SHELL.SVC` do. Its image then starts with a 16-byte
 *execution record*, at file offset 25, directly after the header
-(`docs/services.md:132-143`):
+(`docs/services.md:133-144`):
 
 | Offset | Bytes | Contents |
 | --- | --- | --- |
@@ -122,7 +122,7 @@ as `MON3.SVC` and `SHELL.SVC` do. Its image then starts with a 16-byte
 The entry is an offset, never a relocated label: TEC-OS adds the service's
 page itself, and the loader rejects a staged record whose entry lies
 outside the image. A format-4 service without a record must not start its
-image with `45h 58h 01h` (`docs/services.md:145-157`).
+image with `45h 58h 01h` (`docs/services.md:146-158`).
 
 Typing `NAME.SVC` compares `NAME` with the name in each installed service's
 ready record that has bit 1. One match is entered without reading a file.
@@ -130,12 +130,12 @@ None installs the file and, if its record has bit 1 and its INIT set it
 ready, enters it. An install that never became ready is removed again and
 the line is rejected. Two or more matches are rejected. A service with no
 record, or with bit 1 clear, only installs, and text after the name is the
-entry's command tail (`docs/services.md:82-89`,
-`docs/services.md:110-130`, `src/loader.asm:734-783`). The
+entry's command tail (`docs/services.md:83-90`,
+`docs/services.md:111-131`, `src/loader.asm:734-783`). The
 entry receives A = `FFh` for a line of `STARTUP.CMD` and 0 otherwise, with
 HL its own address and page zero prepared as for a `.COM`. It returns with
 a warm boot, which leaves the service installed
-(`docs/services.md:164-180`). The shell's record is
+(`docs/services.md:165-181`). The shell's record is
 `DB "EX",1`, then the state byte 2, then the entry offset 41 and the name
 field (`drivers/shell.asm:45-55`).
 

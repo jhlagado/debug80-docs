@@ -7,8 +7,8 @@ nav_group: "Inside TEC-OS"
 
 # 17. Console paths
 
-<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
-     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+     ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
@@ -135,7 +135,7 @@ The BIOS keeps one received character in `RXCHAR`, with `RXFULL` marking
 it ready. These bytes are above the RAM BIOS table. Serial reception and
 keyboard delivery both publish there. `CINTAKE` returns the character and
 clears the flag or advances a queued arrow sequence while leaving the
-flag set (`src/ram.asm:295-297`, `src/ram.asm:416-417`,
+flag set (`src/ram.asm:301-303`, `src/ram.asm:422-423`,
 `src/console.asm:201-209`,
 `src/console.asm:253-271`, `src/keyboard.asm:111-124`).
 
@@ -166,7 +166,7 @@ own workspace. `GETCHAR` returns that byte first and otherwise calls the
 RAM BIOS `CONIN` entry. `CONSTAT` reports it ready before consulting the
 BIOS. Function 11 goes further: a character reported ready by the BIOS is
 read into the BDOS reserve and the call returns 1. It returns 0 when
-neither level has input (`src/ram.asm:222-225`,
+neither level has input (`src/ram.asm:228-231`,
 `src/cpm/bdoscon.asm:120-143`, `src/cpm/bdos.asm:707-720`).
 
 A direct BIOS read cannot return a byte already held inside the BDOS.
@@ -271,7 +271,7 @@ the shell's `HSTORE`. Abandoned empty-line `^C` instead clears the flag
 through warm boot. With no shell installed nothing sets the flag.
 [Chapter 23](23-the-history-ring.md) explains storage and traversal
 (`src/cpm/ccp.asm:251-282`, `src/cpm/bdos.asm:473-490`,
-`src/cpm/bdos.asm:645-662`, `src/boot.asm:398-403`, `docs/shell.md:301-315`).
+`src/cpm/bdos.asm:645-662`, `src/boot.asm:398-403`, `docs/shell.md:308-322`).
 
 ## Serial bits and timing
 
@@ -380,8 +380,8 @@ service that scans the matrix itself writes the key it finds there, as
 `MON3.SVC` does, so a key held from a program is not read again as new
 when TEC-OS's scan resumes. The workspace byte's own label there is
 `KBSLOT`, and the build checks that the two addresses agree
-(`src/abi.inc:311-318`, `docs/services.md:433-444`,
-`src/ram.asm:426`).
+(`src/abi.inc:311-318`, `docs/services.md:436-447`,
+`src/ram.asm:432`).
 
 Two ordinary keys produce no character. A retained second key below 3 is
 a modifier and a modifier alone also produces none. Caps Lock toggles
@@ -422,7 +422,7 @@ A claimed PICO console suppresses that output before the terminal runs
 `VROW` and `VCOL` store the cursor position. `VPUT` writes a cell, `VGET`
 reads one and `VCLREOL` clears from a column to its row's end. `VRDROW`
 and `VWRROW` transfer a row through the 80-byte `LINEBUF`
-(`src/ram.asm:116-125`, `src/ram.asm:419-422`, `src/video.asm:30-78`).
+(`src/ram.asm:116-125`, `src/ram.asm:425-428`, `src/video.asm:30-78`).
 
 Printable bytes `20h–7Eh` are drawn with `VATTR` ORed into them.
 Reverse video sets `VATTR` to `80h`, selecting the reverse glyph.
@@ -554,7 +554,7 @@ page-operation routine and a final columns/rows pair. `PIVEC` and `GLVEC`
 hold the PICO and GLCD table addresses. The six routines are `VPUT`,
 `VGET`, `VCLREOL`, `VREST`, `VRDROW` and `VWRROW`
 (`src/video.asm:129-141`, `src/console.asm:111-119`,
-`src/ram.asm:343-344`).
+`src/ram.asm:349-350`).
 
 The PICO console has two name tables in video memory (VRAM). Page function 0
 shows the page already drawn. Functions 1 and 2 begin and end a row move. At the

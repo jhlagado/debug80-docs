@@ -7,8 +7,8 @@ nav_group: "Using the machine"
 
 # 6. Cards on the PC
 
-<!-- Checked against TEC-OS c4ec0f4950446f92b658643ee23b63e2c02bb33b (main),
-     ROM SHA-256 a65b6e4523b5f7bab612810370ec13d4c0056deeab574acda80ef9a8e5d358d1.
+<!-- Prepared against TEC-OS 46cf3f1f1c6ea7ff361a568672a41ab1a7e2c1ee (recovery candidate),
+     ROM SHA-256 ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3.
      Unprefixed source citations use this revision. Explicit historical
      prefixes retain their stated revisions. Host-model capture recipes and
      raw output/hash receipts are retained in Origo
@@ -157,7 +157,7 @@ The complete A listing includes TED's project and session files:
  0 TIMES.BAS         640
 ```
 
-These are the starter card's fourteen files and TED's two.
+These are the starter card's thirteen files and TED's two.
 
 B contains the source, program and debug file:
 
@@ -458,10 +458,10 @@ first and applies `"readOnly": true` last. The protection then belongs to
 the whole volume, independently of each file's attributes.
 
 The browser's New starter card uses the same `starter.recipe.json`, so the
-page's card and `dist/starter.img` are one card. Its fourteen files on A
+page's card and `dist/starter.img` are one card. Its thirteen files on A
 include the shell `SHELL.SVC`, the demo's source `DEMO.ASM`, the BASIC game
-`BOUNCE.BAS`, and `MON3.SVC` with `HELLO3.BIN` and its source `HELLO3.ASM`,
-at recipe revision 13. Media preparation no longer writes a separate page
+`BOUNCE.BAS`, MON3.SVC and the source-only HELLO3.ASM example,
+at recipe revision 14. Media preparation no longer writes a separate page
 recipe (TEC-OS b3134cf `tools/media.mjs`, `web/build.mjs`). `TAS DEMO`
 builds DEMO.COM on the card. The page uses the same size and SHA-256
 checks.

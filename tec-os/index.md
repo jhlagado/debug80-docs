@@ -8,13 +8,13 @@ nav_exclude: true
 # TEC-OS on the TEC-1G
 
 <!-- Opening profile: KD-243 / KS48, TEC Compact at 40 columns.
-     Current revision: TEC-OS c4ec0f4 (main, ROM a65b6e45,
-     14,875 bytes used and 1,509 free) has the minimal ROM CCP with the shell hook and
+     Receiving draft: TEC-OS 46cf3f1 (recovery candidate, ROM ac86ad23,
+     15,312 bytes used and 1,072 free) has the minimal ROM CCP with the shell hook and
      SHELL.SVC on the card, which STARTUP.CMD loads first: history, COPY,
      DEL, SERVICES, the [more] pager, .CMD scripts and lines joined by !
      (always) and & (on success, after a blank), with CP/M 3's : gone.
      MON3.SVC (4,606 bytes, 18 pages) is entered on install, with no /E.
-     TAS is the only assembler. The card's fourteen files include the 15-page SHELL.SVC; TAS.COM is Thorium 3d1e2c0 (e648a1d0), TED.COM
+     TAS is the only assembler. The card's thirteen files include the 15-page SHELL.SVC; TAS.COM is Thorium 3d1e2c0 (e648a1d0), TED.COM
      Thorium a2fe556 (c6c8374a, stopping a name and ARGS at an & after a
      blank), BAZA Baza 50dc512 (280ee372, 13,184 bytes,
      a compile spinner) and BOUNCE.BAS (615693a5) takes the arrow keys;
