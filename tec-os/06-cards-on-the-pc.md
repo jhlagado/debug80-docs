@@ -43,10 +43,14 @@ sizes, hashes and free-space totals belong to that example's card.
 
 ## A copy before a change
 
-Before removing a card from the TEC-1G, wait for the command prompt. Every
-time TEC-OS waits for a key it writes every change it holds, on every drive,
-so at the prompt everything is on the card. `Write lost` means that some
-writes failed, not that the card is up to date.
+Before removing a card, close its files normally and wait for the prompt.
+Required input attempts the queued writes, but a prompt after `Write pending`
+is not proof of success. Failed acknowledged data stays in RAM through warm
+boot. Resolve the original initialised backend's refusal and wait for
+`Cache clear`; cold reset discards retained data. Queue clearance does not
+complete an unclosed file or guarantee physical power-loss durability
+(`a40d482:docs/recovery.md:69-117`).
+
 Never change a card on a PC while TEC-OS is using it. Its cached blocks and
 free-space maps would no longer match the card. Reset after returning a
 PC-changed card to the board. Warm boot retains those old copies in memory.
@@ -571,8 +575,11 @@ does not write the card.
 
 Open image loads an image file into the browser's card. Download image
 saves that card as a file that the PC tools can inspect or install. Download
-it while TEC-OS waits at its prompt, where every change is already in the
-image. Downloading does not itself write the emulated cache.
+it after files are closed and guest writes have completed. After `Write pending`,
+a prompt is insufficient; resolve the original backend refusal and wait for
+`Cache clear`. Downloading does not flush the guest cache or complete a file's
+metadata. Browser persistence is a separate step
+(`a40d482:docs/recovery.md:69-117`).
 
 The page also prepares `STARTUP.CMD` for its selected display when it can.
 Keep an untouched copy if you need the original startup text. The exact
@@ -598,27 +605,24 @@ close, some writes may have reached the card and others may remain only in
 memory. A failed close is not proof of preservation and nothing automatically
 restores the old file.
 
-On a drive other than the one you are on, a record write goes into the
-cache's copy of its 512-byte card block and returns. The block reaches the
-card at the next flush point: the file's close, any directory request, a
-write to another block, a console read, function 48, a drive change, `CD` or
-a warm boot.
-A cut before that point loses the records written into that one block since
-it was last written, at most four records, and the card keeps the block's
-old contents. A cut before the directory update can leave newly allocated
-data blocks with no entry naming them. They become free again when TEC-OS
-rebuilds the drive's free-space map. Overwriting a record already in a file
-replaces it when its block is written. A cut can leave new records alongside
-old records that the program had not reached, with no saved copy of the
-original file.
+A record write can return after copying its bytes into the cached 512-byte
+block. On the logged drive, several blocks can remain changed. All other
+volumes retain one shared pending-block boundary. Ordinary outer OS calls now
+attempt one eligible block before their normal work; required flushes still
+attempt their bounded passes. Thus a next public call can commit a prior
+same-block update, and four separate record calls can produce four SD writes.
+Already received updates still merge and preserve neighbouring records.
+No work progresses solely because time passes while a program holds the CPU
+(`a40d482:docs/recovery.md:25-67`).
 
-On the drive you are on, the logged drive, writes are held behind: a cut
-loses the changes still in the cache, at most those since the program's last
-key wait or directory write. Blocks written early to make cache space and
-blocks written by a completed part of a flush remain on the card. Newly allocated blocks may again have no directory entry.
-Overwritten blocks contain the new data. The directory write follows successful
-data writes so an interrupted flush does not publish a new allocation map before
-those data writes succeed.
+A cut loses the changes that have not yet reached SD. Earlier committed blocks
+remain changed, and newly allocated data can have no completed directory entry.
+Overwriting an existing file can leave mixed old and new blocks with the old
+length. A successful directory write follows successful data prerequisites;
+a rejected metadata image is dropped and must not be replayed later. Failed
+acknowledged data is retained for retry while RAM survives, including warm
+boot. This supplies neither rollback nor completion of the file's FCB
+(`a40d482:docs/recovery.md:111-132`).
 
 A cut during a single block write can leave old, new or mixed contents in
 that block. A directory block holds sixteen 32-byte entries, any of which

@@ -32,7 +32,7 @@ The BIOS jump table gives the BDOS and programs fixed offsets for machine
 operations. TEC-OS supplies all seventeen CP/M 2.2 entries. Each is a
 three-byte jump (`src/tables.asm:15-31`):
 
-| Offset | Entry | Routine |
+| Offset | Entry | Original handler |
 | ---: | --- | --- |
 | `00h` | cold boot | `COLD` |
 | `03h` | warm boot | `WBOOTR` |
@@ -51,6 +51,21 @@ three-byte jump (`src/tables.asm:15-31`):
 | `2Ah` | `WRITE` | `BWRITE` |
 | `2Dh` | `LISTST` | `BLISTST` |
 | `30h` | `SECTRAN` | `BSECTRN` |
+
+For housekeeping candidate `a40d482`, the fifteen returning slots route
+through `HKBI2` to `HKBI16` before the original handlers listed here. Cold and
+warm boot remain their own nonreturning paths. An outer wrapper admits one
+queued write opportunity and owns the original return slot through `APIRTPC`
+and `HKAPIRET`; nested calls tail-enter their handler under the existing
+context. The RAM table remains replaceable, so a hook still receives public
+calls and can call through normally. Housekeeping does not bypass installed
+hooks or allow general BDOS reentry
+(`a40d482:src/tables.asm:14-31`, `a40d482:src/hk.asm:238-337`).
+
+BIOS `CONIN` retains required input drainage. BIOS `CONST` and the raw reader
+provide ordinary entry opportunities, not a new full-drain guarantee. A hook
+replacing CONIN owns the input behaviour it replaces; long reader calls have
+no new wall-clock deadline (`a40d482:docs/recovery.md:106-109`).
 
 Cold boot copies the ROM table to `BF00h`. The word at `0001h` points to its
 warm-boot entry, `BF03h`, so subtracting three gives the table base. The BDOS's
@@ -275,6 +290,11 @@ through warm boot. With no shell installed nothing sets the flag.
 `src/cpm/bdos.asm:645-662`, `src/boot.asm:398-403`, `docs/shell.md:308-322`).
 
 ## Serial bits and timing
+
+The numeric timing examples below remain the recovery-baseline `46cf3f1`
+receipts. A raw bit-transfer interval and a complete wrapped BIOS call have
+different scopes; entry maintenance can add work to the latter. Retain the old
+measurements until fresh, identically scoped receipts are available.
 
 The TEC-1G has no UART. The CPU sends on port `01h` bit 6 and receives
 on port `03h` bit 7. Port `01h` also selects the seven-segment digits.

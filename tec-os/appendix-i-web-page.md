@@ -180,17 +180,18 @@ those errors and recovery actions.
 
 ## Importing a file safely
 
-Before copying PC files into the running card, wait for the command prompt
-and check that no write-failure message appeared. The prompt's console
-read writes every changed line, on every drive. Import itself does not flush them.
-Its later reset clears the block cache. TEC-OS rebuilds free-space maps from the
-changed card as drives are accessed. Unwritten cached changes, including changes
-on the logged drive, are lost at that reset
-(`src/boot.asm:77-77`, `src/boot.asm:149-152`, `src/boot.asm:235-252`,
-`src/cache.asm:634-640`, `src/cpm/bdoslog.asm:218-270`).
-[Chapter 19](19-cache-and-persistence.md) explains the failed-flush paths. A
-browser save or download after a successful flush is still needed to preserve
-the resulting image outside RAM.
+Before copying PC files into the running card, finish and close guest files
+and wait for the prompt. After `Write pending`, the prompt is not evidence
+that all writes completed. Resolve the original initialised backend failure
+and await `Cache clear`; an import's later reset still discards pending RAM.
+That notice covers cached record writes, not a rejected directory update,
+an unclosed file, browser persistence or physical card durability
+(`a40d482:docs/recovery.md:69-117`, `a40d482:docs/recovery.md:206-222`).
+
+Import itself does not flush the guest cache. Its reset rebuilds free-space
+maps as drives are accessed. A completed browser save or download is a separate
+step after guest writes succeed. The housekeeping firmware does not by itself
+implement the Viewer's later persistence/status work.
 
 "Copy file to drive" pauses the machine and reads all selected PC files.
 It uppercases their names while reading them. The import then joins the

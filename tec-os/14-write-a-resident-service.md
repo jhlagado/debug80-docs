@@ -513,6 +513,13 @@ it can add on the BDOS, BIOS and CCP stacks, in that order. MYCO pushes one word
 while intercepting CONOUT and then pops it before the tail jump. CONOUT can run
 on any of those stacks so COUNT declares 2, 2 and 2.
 
+Housekeeping can temporarily move queued writes and notice callbacks to a
+separate 56-byte worker stack. That physical stack change does not create a new
+public service declaration or relax the logical caller's restrictions: a hook
+entered during BDOS still must not re-enter BDOS and must return normally.
+The existing BDOS/BIOS/CCP declarations and their limits remain in force
+(`a40d482:docs/services.md:312-345`).
+
 The loader sums the declarations of all installed services. The limits at the
 inspected source are 8 extra bytes on the BDOS stack, 12 on the BIOS stack and 6
 on the CCP stack. GLCD declares 6 for the CCP so GLCD and COUNT cannot both be

@@ -16,6 +16,14 @@ nav_exclude: true
      Explicit historical source/test excerpts retain their stated pins.
      Viewer 3494f4a, published as 3de3198, receives this firmware. -->
 
+Housekeeping draft sections explicitly cite candidate `a40d482`: cooperative
+first-dirty write service, retained failed data and the guarded private worker.
+Its source/build resource account is 16,016 ROM bytes used, 368 free, ROM
+`c9586263…`; final qualification and replacement book captures are pending.
+Existing checked-against headers and raw numeric receipts retain their original
+recovery-baseline identities. [Chapter 19](19-cache-and-persistence.md) separates
+the new policy from those historical measurements.
+
 With TEC-OS in its ROM the TEC-1G starts at a command prompt. You can list
 files on an SD card and run a supplied program before using the editor,
 the assembler or the BASIC compiler to make one of your own. TEC-OS provides the CP/M 2.2 programming

@@ -102,10 +102,13 @@ extra line too. It supplies the Delete action on the matrix keyboard, which
 has no separate Delete key. The source is now the complete listing above.
 
 `^S` saves the repaired text. Wait for `Saved` before `^Q` quits TED and
-returns to `A:SYSTEM>`. The prompt's own key read finishes pending card writes.
-The successful return to the prompt establishes preservation only if no
-write-failure message appeared. `Write lost` means some pending changes
-were dropped. Another `^C` cannot recover those changes.
+returns to `A:SYSTEM>`. The prompt's own key read tries to finish pending card writes.
+If `Write pending` appears, do not treat that prompt as proof of completion:
+the failed data remains in RAM. Resolve the original backend failure and wait
+for `Cache clear` before reset. That notice does not complete an unclosed file
+or browser save, and a cold reset discards queued RAM. The old captured editor
+session here remains `46cf3f1` evidence; these recovery rules describe the
+housekeeping candidate (`a40d482:docs/recovery.md:69-117`).
 
 Reopening `A:TED B:BANNER.ASM` reads the saved source. It starts at `L1 C1`
 in this session. The deliberate extra line has gone. The save, quit and
@@ -263,9 +266,10 @@ and the rebuilt program. Saving alone would have left the earlier COM unchanged.
 ## Saved source and the standalone program
 
 `^Q` quits the editor. Wait for `A:SYSTEM>` before a reset or card removal:
-the prompt's key read writes every changed line. A write-failure
-message has the same consequence as in the earlier save: the prompt alone
-does not prove the file was preserved.
+the key read attempts pending writes. If `Write pending` appears, preserve RAM
+and resolve the original backend's failure before waiting for `Cache clear`.
+The prompt alone does not prove file closure or browser preservation
+(`a40d482:docs/recovery.md:69-117`).
 
 On a fresh machine with new RAM, the saved card reopens the edited source:
 `A:TED B:BANNER.ASM` shows its exclamation mark. The text therefore comes

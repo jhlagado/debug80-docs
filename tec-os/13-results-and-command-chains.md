@@ -338,7 +338,9 @@ remaining pieces available after warm boot. These events drop them:
 - `^C` ends a `^S` pause during a program's output.
 - `^C` ends the `[more]` pause in a TYPE or DIR listing.
 - A key ends a BDOS error in the default error mode.
-- Warm boot reports `Write lost` after a failed cache flush.
+- Warm boot's complete pass fails: command continuation is cancelled while
+  acknowledged dirty data stays queued. Its notice is `Write pending`, not a
+  claim that the file is complete (`a40d482:src/cache.asm:638-649`).
 - A reset clears the pending commands.
 
 A reset starts the startup file again. After the other events the shell
@@ -383,9 +385,10 @@ The call does not return on acceptance.
 
 Warm boot flushes pending card writes before the next program loads.
 A successful flush therefore puts your writes on the card first.
-A failed flush drops the failed cache lines and prints `Write lost`.
-It also cancels the rest of the line, including a line accepted by
-function 47. Acceptance of the line does not guarantee its execution.
+A failed pass retains acknowledged cache data and cancels the rest of the
+line, including one accepted by function 47. The reporter's `Write pending`
+and later `Cache clear` describe queued record writes, not file closure
+(`a40d482:src/cache.asm:638-649`, `a40d482:src/hk.asm:204-237`). Acceptance of the line does not guarantee its execution.
 
 `RUN` supplies the rest of its own command tail as the new command:
 

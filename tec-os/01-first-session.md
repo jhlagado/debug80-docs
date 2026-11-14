@@ -293,20 +293,23 @@ keeps in memory.
 
 ## Saved work before reset or removal
 
-A program can report that it has saved a file while some changes remain in
-memory. TEC-OS holds the writes of the drive you are on in memory and writes
-them to the card later. Resetting the machine or removing power discards
-changes that have not reached the card. Whenever TEC-OS waits for a key,
-though, it first writes every change it holds, on every drive. The prompt
-waits for a key, so at the prompt everything is on the card.
+A program can report a successful record write while its newest bytes are
+still in memory. Ordinary calls to TEC-OS give queued writes opportunities to
+reach the card; required console input tries to drain them. There is no timer
+that keeps writing while a program owns the CPU without making another call.
 
-Finish the program and wait for the prompt before switching off, pressing
-reset or removing the card. Only a program still running, one that never
-waits for a key, can hold changes in memory.
+Save and close the file normally, check the program's result and wait for the
+prompt before resetting or removing the card. If `Write pending` appears, a
+prompt alone no longer proves completion. The failed acknowledged data remains
+in RAM, even through warm boot. Resolve the failure on the original initialised
+backend and wait for `Cache clear`. A cold reset still discards pending RAM.
 
-A `Write lost` message means that some pending changes could not be written.
-The new prompt after that message does not establish successful preservation.
-Those failed changes have been dropped and cannot be recovered.
+`Cache clear` describes cached record writes. It does not finish an unclosed
+file, recover a rejected directory update, complete browser storage or prove
+physical power-loss durability. Card reinsertion is not permission to replay
+pending writes onto an unidentified card
+(`a40d482:docs/recovery.md:69-117`, `a40d482:docs/recovery.md:206-222`).
+
 Keep a separate copy of valuable work. [Chapter 6](06-cards-on-the-pc.md)
 explains card copies and recovery and
 [Appendix D](appendix-d-error-messages.md) explains the failure messages.

@@ -95,23 +95,25 @@ The ROM occupies `C000h–FFFFh`, exactly 16 KiB. Its fixed beginning contains
 the reset jump followed by the numbered-call interface. Read-only data and
 code follow, with a single free gap at the end (`src/reset.asm:1-13`,
 `src/abi.asm:9-14`, `src/rom.asm:1-17`, `src/end.asm:1-4`). The image has
-these regions:
+these regions in housekeeping candidate `a40d482`. Its identities are
+provisional until final qualification; the historical host-tool and guest
+receipts later in this chapter are not relabelled as current:
 
 | Addresses | Bytes | Region |
 | --- | ---: | --- |
 | `C000h–C002h` | 3 | Reset jump |
 | `C003h–C00Ah` | 8 | ROM interface |
-| `C00Bh–C5D5h` | 1,483 | Read-only data |
-| `C5D6h–FBCFh` | 13,818 | Code |
-| `FBD0h–FFFFh` | 1,072 | Free |
+| `C00Bh–C61Fh` | 1,557 | Read-only data |
+| `C620h–FE8Fh` | 14,448 | Code |
+| `FE90h–FFFFh` | 368 | Free |
 
-Its used extent is 15,312 of 16,384 bytes. Its SHA-256 is
-`ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3`
-(`docs/memory-map.md:1-32`). The census stores each
+Its candidate used extent is 16,016 of 16,384 bytes. Its SHA-256 is
+`c95862634ee002bb9a5ef1d3d0ee8ea831e12fda4e96792b36454170aafabf7f`
+(`a40d482:docs/memory-map.md:1-32`). The census stores each
 region's start and exclusive end while the table above prints the last
 occupied address (`tools/build.mjs:275-290`).
 
-At `C000h`, `JP RSTENT` transfers control into the code, at `C5D1h`. The interface at `C003h` contains `TNA`, major 5, minor 1 and a
+At `C000h`, `JP RSTENT` transfers control into the candidate code, at `C620h`. The interface at `C003h` contains `TNA`, major 5, minor 1 and a
 jump at `C008h` to `SVCDSP`. Its exclusive end is `C00Bh`
 (`src/reset.asm:12-13`, `src/abi.asm:9-14`). The boot overlay and entry path
 are explained in [Chapter 16](16-reset-and-boot.md).
@@ -120,8 +122,10 @@ The data region starts at `ROMDATA` and ends at `ROMCODE`. It contains
 the BIOS jump table, keyboard tables, command names and handlers, BDOS
 function table, numbered-service table, container geometry, font and
 messages. Group headings name the source whose routines use each item.
-For example, `CWMSG` contains `Write lost` under the `cache.asm` heading
-(`src/tables.asm:1-14`, `src/tables.asm:38-146`, `src/text.asm:92-96`).
+For example, `CWMSG` now contains `Write pending`, followed by the separate
+`Cache clear` and `Write error` strings. The bootstrap recovery words are data
+before `ROMCODE`, not executable instructions
+(`a40d482:src/text.asm:92-101`).
 The BIOS jumps in this region execute through the RAM copy made at
 `BF00h` during cold boot (`src/boot.asm:108-111`).
 
@@ -133,8 +137,11 @@ instructions so the ROM, map and census belong to the same build.
 
 ## Source order and reserved RAM
 
-`src/rom.asm` includes the files in assembly order. The complete include
-listing is:
+`src/rom.asm` includes the files in assembly order. The following include listing is retained from the recovery baseline.
+Housekeeping adds `hk.asm` after `cache.asm`; the current CCP also includes
+`cpm/ccpdir.asm`. These are source-layout changes, not changes to the book's
+example programs or recipes. Use `a40d482:src/rom.asm:31-46` for the candidate
+source order until its source-derived excerpt is refreshed:
 
 ```asm
 	%INCLUDE	"abi.inc"
@@ -379,7 +386,9 @@ with the Matrix switch enabled starts at 40 columns. Explicit 80, 40 and
 (`src/pico.asm:19-68`, `src/pico.asm:70-125`,
 `tools/lib/starter.mjs:15-22`).
 
-`npm run build` ends with this line:
+The retained `46cf3f1` build ended with this line. It is a historical raw
+receipt, not current output from the housekeeping candidate. A fresh final
+build receipt must bind its ROM, map and census:
 
 <!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text

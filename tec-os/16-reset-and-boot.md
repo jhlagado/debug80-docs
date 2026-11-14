@@ -375,39 +375,60 @@ Warm boot rebuilds the environment in this order:
 6. `VREST` restores the display mode for a video console. `VTREGR` resets
    the scroll region to the whole screen (`src/boot.asm:145-148`,
    `src/term.asm:172-181`).
-7. `CWBOOT` attempts every dirty cache line. Successful writes reach the
-   card before the CCP can load a chained program. Each failed line is
-   dropped and flushing continues. After any failure `CWBOOT` clears
-   `CHPOS` and prints `Write lost` once. A successful flush leaves the
-   chain position intact (`src/boot.asm:149`, `src/cache.asm:266-300`,
-   `src/cache.asm:624-640`).
-8. `CCPENT` receives the page-zero drive/user byte in `C`
-   (`src/boot.asm:150-152`).
+7. `CWBOOT` takes a bounded complete pass in first-dirty order. Successful
+   writes reach the card; failed acknowledged lines stay dirty and queued.
+   A failure cancels remaining chained commands through `CHPOS`. The separate
+   reporter can warn `Write pending`, later report `Cache clear`, or report
+   `Write error` when no dirty retry remains. It preserves unrelated API
+   results and defers notices in silent `FFh` mode
+   (`a40d482:src/cache.asm:638-649`, `a40d482:src/hk.asm:204-237`).
+8. The CCP receives the page-zero drive/user byte. It resets disk defaults
+   and restores the saved drive/user under the bootstrap policy below
+   (`a40d482:src/boot.asm:153-156`, `a40d482:src/cpm/ccp.asm:48-134`).
 
-Clearing `BUFOK` prevents a write from reusing the pre-boot key to skip
-a block read. A new type-2 allocation write can still clear its block
-without a pre-read (`src/boot.asm:416-418`, `src/bios.asm:298-358`).
+Warm boot also resets abandoned housekeeping nesting/round context after
+selecting classic memory, without discarding the queue's data
+(`a40d482:src/boot.asm:131-139`). Clearing `BUFOK` still prevents an old
+no-pre-read key being reused. New allocation writes retain their separate
+zero-fill rule.
 
-An accepted function 47 supplies a new command chain but its warm boot has
-the same flush qualification. The next command proceeds after a successful
-flush. A failure discards the failed cache line and the chain, leaving the
-card's existing copy for that line. Warm boot continues to the CCP in either
-case (`src/cpm/bdos.asm:85-95`, `src/cache.asm:258-300`,
-`src/cache.asm:634-640`, `src/boot.asm:149-152`).
+An accepted function-47 chain proceeds after successful warm-boot flushing.
+A failure cancels the supplied chain but retains acknowledged dirty data.
+It neither completes an unclosed file nor undoes physical writes already
+made (`a40d482:src/cache.asm:638-649`).
 
-The CCP then selects its own stack, sets `WRFLAG` and calls BDOS function
-13. That flagged reset retains a logged-in drive whose directory is clean
-and whose allocation-vector sum still matches. A changed directory requires
-a rebuild to its recorded mark. A mismatched vector requires a full scan.
-`STBOOT` prepares startup once after cold boot, before the prompt's command
-source checks. Subsequent warm boots retain its position
-(`src/cpm/ccp.asm:46-88`, `src/cpm/bdosfile.asm:19-107`,
-`src/cpm/ccpcmd.asm:747-790`).
+### Bootstrap recovery before normal commands
+
+The CCP's flagged disk reset keeps its allocation-vector reuse policy, but
+reset or saved-drive selection can fail while acknowledged data remains in RAM.
+The bootstrap uses returned-error mode rather than recursively taking the
+normal disk-error warm-boot path. On failure it clears incomplete `LOGINV`
+and `WARMV` state, drops command continuation and prints `Disk reset failed`
+and `Enter retries`. No normal command, shell `LINE` or program is dispatched
+with incomplete default-disk pointers (`a40d482:src/cpm/ccp.asm:75-134`).
+
+CR retries the disk reset; LF, ordinary keys and Ctrl-C from the retry input
+are ignored. Ctrl-S output pause followed by Ctrl-C remains the deliberate
+warm-boot escape. Output and input still provide maintenance opportunities,
+so writes can be attempted before Enter. None of these paths runs `SDINIT`,
+identifies an inserted card or grants permission to replay pending writes onto
+it. Cold reset retains its separate data-discard and initialisation contract.
+
+After success, the saved user and non-A drive are restored before normal
+commands resume. If `STBOOT` had already buffered a cold-start line before
+saved-drive refusal, it remains pending and runs once after success. Dropping
+`CHPOS` continuation does not consume that startup line. This console is not
+the earlier cold-mount diagnostic `R retry>` interface.
+
+The existing captures above remain `46cf3f1` evidence. New receipts must show
+CR-only retry, ignored input, saved B/user-3 restoration and delayed one-shot
+startup, rather than relabelling those older normal-boot transcripts.
 
 ## Boot costs
 
-These costs are host-model measurements on the starter card and serial
-board. At 4 MHz, 4,000,000 T-states take one second.
+These are historical `46cf3f1` host-model measurements on the starter card
+and serial board. Housekeeping entry/worker and bootstrap paths need fresh
+measurements; none of these numbers is repriced merely by changing a header. At 4 MHz, 4,000,000 T-states take one second.
 
 Cold boot measured 1,371,831 T-states from the first instruction to the
 CCP entry, about 0.34 seconds. `MEMINIT` took 346,677 of them, mostly

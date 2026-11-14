@@ -72,8 +72,11 @@ file or explicitly synchronise it to durable storage. This is distinct from
 `install` writing directly to a device (`tools/tecvol.mjs:63-69`).
 
 Never change a card on the PC while TEC-OS is using it. At the board's command
-prompt, a successful `^C` flush must finish before removal. `Write lost` means
-that some changes were dropped. Reset after returning a PC-changed card because
+prompt, close files and wait for successful cache completion before removal.
+After `Write pending`, a prompt is insufficient: resolve the original initialised
+backend failure and await `Cache clear`. Warm boot retains acknowledged data;
+cold reset discards it. Queue clearance is not file closure or browser storage
+(`a40d482:docs/recovery.md:69-117`). Reset after returning a PC-changed card because
 TEC-OS's cached blocks and allocation maps otherwise describe its old contents.
 Chapter 6 gives the copy-first procedure.
 

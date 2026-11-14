@@ -300,13 +300,15 @@ listing end (`src/cpm/ccpfile.asm:210-220`, `src/cpm/ccpfile.asm:262-283`,
 `src/cpm/ccpfile.asm:382-400`). The difference between stopping a listing
 and dropping its line is the store to `LPOS`, not the carry result.
 
-Warm boot can cancel a line after a program has already ended. `WBOOTR`
-calls `CWBOOT` before entering the CCP. `CWBOOT` calls `CFLALL` to attempt
-all dirty cache lines, A:'s pending block among them. If a write fails,
-that cache line is dropped. On any failure `CWBOOT` sets the drop flag and
-prints `Write lost` once (`src/boot.asm:149-152`, `src/cache.asm:624-640`).
-A successful flush leaves the line in hand. Chapter 19 explains the
-card-write consequences.
+Warm boot can cancel a line after a program has ended. Its complete pass
+retains failed acknowledged data, but `CWBOOT` sets the chain-drop flag if any
+line refuses. The separate reporter warns `Write pending` once per episode,
+and `Cache clear` when a reported queue drains. An otherwise unreported
+metadata-only refusal with no retry left gives `Write error`, not a recovered-write
+claim. An operation's metadata error and the queue's episode notice are separate
+(`a40d482:src/cache.asm:638-649`, `a40d482:src/hk.asm:204-237`).
+A successful pass leaves the line in hand. Data retention does not guarantee
+that an unclosed file's directory was published.
 
 A drop ends only the current line. A script, or the rest of `STARTUP.CMD`,
 goes on with its next line, since `LINE` falls through to `NEXT` with
@@ -336,13 +338,16 @@ through `BIOWBT`, the RAM BIOS warm-boot entry at `BF03h`. A program that
 replaced that entry receives the call just as for other BDOS warm boots
 (`src/cpm/bdos.asm:94-95`, `src/layout.asm:99-100`).
 
-The normal warm-boot path flushes pending writes before the next prompt.
-Only a successful flush guarantees that those writes reached the card. A
-failure drops failed lines, reports `Write lost` and writes 2 to `CHPOS`.
-That store clears the function 47 flag, so the shell drops the line in hand
-and the supplied line does not run either (`src/cache.asm:634-640`,
-`drivers/shell.asm:170-198`). An accepted function-47 call ends the caller
-but does not guarantee execution of the supplied command.
+The normal warm-boot path attempts pending writes before the next prompt.
+A failed acknowledged line remains queued, while `CWBOOT` writes 2 to `CHPOS`.
+That clears the function-47 flag, so neither the remaining line nor its supplied
+replacement runs. The separate pending notice does not change that continuation
+rule (`a40d482:src/cache.asm:638-649`, `drivers/shell.asm:170-198`). An accepted
+function-47 call ends the caller but does not guarantee its supplied command.
+
+If disk defaults cannot be rebuilt, the bootstrap retry console precedes any
+normal prompt or shell dispatch. A buffered cold-start line has its own lifetime
+and waits for successful recovery; it is not the function-47 line.
 
 At the next prompt `SHLINE` passes bit 0 to `LINE`, which copies at most 127
 bytes from `CMDTXT` into `LTXT`, marks its origin as typed and starts it at

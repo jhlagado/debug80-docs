@@ -75,7 +75,9 @@ Codes `05h` to `0Ah` are the SD card driver's codes for a block read or write
 (`src/sd.asm:18-26`, `336-347`). They do not reach this prompt directly.
 The driver stores them in `SDERR`, with no later reader in the ROM. A failed
 table read during mounting becomes code `20h`. A failed BDOS transfer gives
-a disk error while a failed warm-boot flush gives `Write lost`. The
+a disk error. In the housekeeping candidate a failed warm-boot pass retains
+acknowledged data and the reporter can warn `Write pending`
+(`a40d482:src/cache.asm:638-649`). The
 `CD` command's refusals are in their own table below.
 
 | Code | Meaning |
@@ -325,41 +327,51 @@ back (`src/cpm/bdos.asm:223-235`, `src/ram.asm:222-223`).
 | `Bdos Err On d: Bad Sector` | 1 | A volume extends beyond the card and the card rejects the command. The ROM reports that rejection before transferring block data. The source of a host-model test checks that no image byte changes in this case. | Use a card large enough for the container or build a smaller container with create. | [Chapter 18](18-card-blocks-and-volumes.md), `src/sd.asm:397-405`, `437-454`, `664-672`, `test/sd-range.test.mjs:86-107` |
 | `Bdos Err On d: Bad Sector` | 1 | A file's allocation map names a block beyond the volume. Login and delete skip that invalid reference rather than indexing outside the vector. Access to the block fails. | ERA can remove the damaged entry if the required directory writes succeed. Verify a copy before further changes. | [Chapter 20](20-a-file-through-the-bdos.md), `src/cpm/bdosrec.asm:699-700`, `src/cpm/bdoslog.asm:576-604`, `src/cpm/bdoscon.asm:76-92` |
 
-## `Write lost`
+## `Write pending`, `Cache clear` and `Write error`
 
-`Write lost` applies to the drive you are on, the logged drive, whose writes
-wait in the block cache, and also to the pending block, the one block a
-volume on another drive holds until its next flush point. Every console read
-writes every changed line, so the lines a warm boot can find are those a
-program left between its last key wait and its end, or those the card
-refused (`docs/recovery.md:1-82`, `docs/recovery.md:120-174`). At each warm boot TEC-OS writes every
-changed block in the cache to the card. A line whose write fails is dropped from the cache. This does not undo
-an earlier successful or partial physical write. If any write failed, the
-message is printed once on a line of its own and the rest of a chained
-line is dropped (`src/cache.asm:258-296`,
-`634-640`, `src/text.asm:94`).
+In housekeeping candidate `a40d482`, failed acknowledged data stays dirty and
+queued, including through warm boot. The reporter uses three distinct notices:
 
-The cached changes in dropped lines are lost and the next warm boot has
-no such lines left to retry. A directory line is dropped when its write
-or preceding data flush fails. The BDOS reports `Bad Sector` at once. If
-only the directory write failed, its dropped block leaves nothing for the next
-warm boot to retry so that failure alone gives no `Write lost`. The data blocks
-that failed stay dirty in the cache. Another close or flush can retry them.
-The warm boot after the recovery key writes them again and gives `Write lost`
-if writes still fail (`src/cache.asm:258-296`, `546-555`). The file
-that was being written needs writing again, once the card is put right and the
-board reset.
+| Notice | Meaning | Action |
+| --- | --- | --- |
+| `Write pending` | A failed-write episode has dirty data to retry; warned once per episode | Resolve the failure on the original initialised backend; preserve RAM while doing so |
+| `Cache clear` | A previously reported episode's dirty queue has drained successfully | Check file-operation results and normal closure separately |
+| `Write error` | An otherwise unreported failure has no dirty retry left, such as rejected metadata | Correct and repeat the failed operation; this is not successful recovery |
 
-Putting the card back does not itself run `SDINIT`. The card is started at cold
-boot or a diagnostic retry, not at warm boot (`src/boot.asm:92-101`,
-`src/boot.asm:656-667`). If writes still fail at the next warm boot, the changed
-lines are dropped and `Write lost` is printed (`src/cache.asm:266-296`,
-`src/cache.asm:624-640`). `MOUNT`, unmount and function 48 instead keep a
-failed line for the next flush, so only a warm boot drops a flushed line that
-still fails (`docs/recovery.md:97-118`). BDOS function 48 reports a failure to a program at
-once: it writes every changed block and returns `A` = `FFh` if any write failed
-(`src/cpm/bdos.asm:237-257`). [Chapter 19](19-cache-and-persistence.md)
-explains the mechanism, and which drive is written behind.
+These notices do not borrow the result registers of an unrelated call.
+Function 45's silent `FFh` mode defers them without forgetting the event
+(`a40d482:src/hk.asm:204-237`, `a40d482:src/text.asm:94-96`).
+
+A failed warm-boot pass drops command continuation, not acknowledged data.
+A directory image explicitly rejected because its own write or a prerequisite
+failed is still dropped; later queued writes must not replay it. `Cache clear`
+describes record data, not completion of an unclosed file's FCB, recovery of
+rejected metadata, browser storage or physical power-loss durability
+(`a40d482:src/cache.asm:550-569`, `a40d482:src/cache.asm:638-649`).
+
+A prompt after `Write pending` is not proof that the card is up to date.
+Cold reset discards pending RAM. Removing and reinserting a card does not
+initialise or identify it; neither warm boot nor Enter in the recovery console
+restarts SD or authorises replay onto an inserted stranger
+(`a40d482:docs/recovery.md:206-222`). The old `Write lost` wording remains only
+in explicitly historical receipts.
+
+## `Disk reset failed` and `Enter retries`
+
+These words identify the bootstrap recovery console, after returned failure
+of the disk reset or saved-drive selection. Incomplete login vectors and
+command continuation are cleared, but dirty data is retained. Normal commands,
+the shell's `LINE` and program dispatch wait until disk defaults are valid.
+This is distinct from cold mount's diagnostic `R retry>` prompt
+(`a40d482:src/cpm/ccp.asm:75-134`).
+
+Only CR, the Enter key, retries the disk reset. LF, ordinary keys and Ctrl-C
+returned by its input read do not. Output pause with Ctrl-S followed by Ctrl-C
+retains the existing deliberate warm-boot escape. Printing and reading can
+still attempt queued writes before Enter: the explicit retry controls disk
+reset, not every possible SD write. No `SDINIT` occurs on this path.
+A cold-start line buffered before saved-drive refusal waits and runs once
+only after recovery succeeds; it does not run inside this console.
 
 ## `CD`
 
@@ -375,7 +387,7 @@ the volume services.
 | `CD?` | A name of more than 11 characters, a drive past D, text after the name or after `?`, or CD of the drive the running script is read from. A script goes on to its next line. | `CD ?` lists the card's volumes. In a script, put the volume on another drive. | `drivers/shellcd.asm:17-82`, `docs/shell.md:194-198` |
 | `NAME?` | No volume on the card has that label. | List the labels with `CD ?`. | `drivers/shellcd.asm:99-103`, `143-152` |
 | `NAME is on B:` | The volume is already on another drive. A volume is never on two drives. | Use that drive, or put another volume there first. | `drivers/shellcd.asm:104-109`, `154-163` |
-| `CD FAILED` | The ROM's `MOUNT` service refused: the volume is too large for the drive's slot, or the flush before the change failed. The flush keeps a failed line for the next flush and prints no `Write lost` on this path. | Choose a drive whose slot fits, or recover the card if a write failed. | `drivers/shellcd.asm:110-117`, `drivers/shellcd.asm:164`, `src/volsvc.asm:211-265`, `src/volsvc.asm:360-389` |
+| `CD FAILED` | The ROM's `MOUNT` service refused: the volume is too large for the drive's slot, or the flush before the change failed. Failed acknowledged data stays queued; separate housekeeping notices retain their own reporting policy. | Choose a drive whose slot fits, or recover the card if a write failed. | `drivers/shellcd.asm:110-117`, `drivers/shellcd.asm:164`, `src/volsvc.asm:211-265`, `src/volsvc.asm:360-389`; retained data and separate notice policy: `a40d482:docs/recovery.md:69-84`, `a40d482:src/hk.asm:204-237` |
 
 ## TED's load error
 

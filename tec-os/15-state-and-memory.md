@@ -101,7 +101,7 @@ The storage regions receive these treatments at warm boot:
 | CCP working state and BDOS block | Cleared by `CPMINIT` |
 | RAM BIOS jump table | Left in place |
 | State above that table | Outside the sweep, with selected fields updated separately |
-| EXPAND 1 | Outside the sweep, with dirty cache lines flushed |
+| EXPAND 1 | Outside the sweep; acknowledged data is attempted and failures retained |
 
 A retained byte can still receive a new value. Warm boot restores EXPAND 0
 and `LATCHV`, releases a program's PICO9918 claim and clears the service
@@ -114,10 +114,12 @@ It also clears `BUFOK`, the BIOS key for continuing writes without a
 pre-read. A write after warm boot cannot reuse that old key.
 A newly allocated block can still qualify for clearing without a read.
 At the end of warm boot the cache flush writes pending changes.
-If a write fails, its line is dropped and `CWBOOT` clears `CHPOS` before
-printing `Write lost`. The remaining command chain is then cancelled
-(`src/boot.asm:416-418`, `src/bios.asm:298-358`,
-`src/cache.asm:266-300`, `src/cache.asm:634-640`).
+In the housekeeping candidate, a failed acknowledged data line stays queued.
+`CWBOOT` cancels command continuation after a failed pass and invokes the
+separate notice reporter; it does not drop the retained data
+(`a40d482:src/cache.asm:638-649`). The queue remains in classic workspace
+outside the bulk warm clear; abandoned nesting/round state is reset before
+that pass (`a40d482:src/boot.asm:131-139`).
 
 The drive table and logged-in vector remain in the BIOS block.
 The installed-service registry, program return code and startup position
@@ -232,7 +234,7 @@ The full page-zero table is in
 (`src/cpm/ccp.asm:432-471`,
 `src/cpm/ccpcmd.asm:392-440`, `src/layout.asm:44-69`, `src/abi.inc:307-309`).
 
-## Four stacks for different stages
+## Five stacks for different stages
 
 Cold boot starts with `SP` at `BOOTSTK`, `8000h`, so its stack grows down
 into fixed RAM. It can clear page zero and check the expansion RAM
@@ -282,6 +284,19 @@ arbitrary interrupt handler or interrupt-initiated OS call (`docs/services.md:30
 `PAGE` entries move at once to its own 48-byte stack, and it declares 6
 bytes of the BDOS's stack for `HREC` and `HSTORE`
 (`docs/services.md:335-342`).
+Housekeeping adds a fifth physical stack: 56 bytes at `BFADh–BFE4h`, with
+its two-byte guard at `BFABh–BFACh`. The worker temporarily uses it for queued
+writes and notices, then restores the caller's stack. This does not change the
+logical BDOS reentry restriction or a hook's obligation to return normally.
+The candidate's independent refusal-base account is 28 bytes plus the 12-byte
+hook allowance and two-byte synthetic NMI return frame: 42 of 56. The synthetic
+RETN scope admits no arbitrary interrupt-handler body or unsafe-bank NMI.
+The queue/round/context's 68 bytes plus guard 2 and worker 56 consume 126 bytes
+already reserved; they add neither fixed RAM nor a shell page. The existing
++36-byte recovery allocation, public 48/64/48 stacks and fifteen-page shell
+are unchanged (`a40d482:src/ram.asm:412-426`,
+`a40d482:docs/services.md:338-345`).
+
 [Appendix C](appendix-c-memory-map.md#the-stacks) lists the stack addresses
 and reservations.
 

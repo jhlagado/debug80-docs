@@ -34,25 +34,31 @@ application binary interface (ABI) major and minor versions 5 and 1
 and arguments in `B`, `DE` and `HL`. `A` is never an argument so the dispatcher
 can use it and the flags before saving a register (`src/abi.inc:35-56`).
 
-There are 16 entries, numbered 0 to 15. `SVCDSP` copies `C` to `A` and
-compares it with `TNCOUNT`, 16. The following `LD A,TNEBAD` leaves the
-comparison flags intact. A number of 16 or more branches to `HWERR`
-without changing `B`, `DE` or `HL` (`src/services.asm:34-38`,
-`src/abi.inc:237-238`). The error exit returns status 1 with carry set
-and zero clear (`src/services.asm:63-66`).
+There are 17 entries, numbered 0 to 16; `TNCOUNT` is 17. `SHELL` is the
+last entry. A number of 17 or more returns `TNEBAD`, with B, DE and HL unchanged.
+The table contains 17 words, 34 bytes, separate from the eight-byte public
+signature/version/jump table (`a40d482:src/services.asm:45-68`,
+`a40d482:src/tables.asm:95-132`). No public signature or ABI version changes.
 
-For a valid number, the dispatcher pushes `HL` and `DE`. It doubles the
-number into `DE` and adds that offset to `SVTAB`. Each entry is a routine
-address so the 16 words occupy 32 bytes in the ROM's data block
-(`src/services.asm:39-46`, `src/tables.asm:100-128`). This table is separate
-from the eight-byte signature/version/jump table at `C003h`.
+Before dispatch, an outer call marks its housekeeping context and attempts one
+eligible dirty block. Nested or busy calls inherit the existing context and
+start no recursive worker. Maintenance keeps the call's arguments and does not
+borrow its result registers for an unrelated failure
+(`a40d482:src/services.asm:26-49`, `a40d482:src/hk.asm:124-202`).
 
-The selected address is loaded into `HL` and the saved `DE` is popped.
-`EX (SP),HL` then exchanges the routine address with the saved argument
-`HL`. The next `RET` consumes that address and enters the routine. Its
-arguments are back in place and the caller's return word is next on the
-stack. Neither of the dispatcher's saved pairs remains there
-(`src/services.asm:47-57`).
+The outer wrapper replaces the existing caller return word with `HKAPIRET`,
+keeping the original return PC in the already allocated two-byte `APIRTPC`.
+It does not insert another live handler word. A nested call retains its return
+slot and cannot steal that owner. `HKAPIRET` balances context and returns to
+the original PC while preserving the operation's result. Queued writes and
+notices temporarily use the private worker stack before the handler resumes
+on its caller's stack (`a40d482:src/services.asm:33-68`,
+`a40d482:src/hk.asm:238-274`).
+
+For valid selectors the dispatcher still pushes HL and DE, indexes the selected
+address and uses `EX (SP),HL` followed by `RET` to restore argument HL and enter
+the routine. Those temporary pairs are gone when the handler starts. The public
+register, flag, IFF and caller-stack contracts remain their own bounds.
 
 The failure exit `HWERR` leaves `B`, `DE` and `HL` as they are on entry
 to it. It does not restore values changed by the selected routine. It uses
@@ -67,6 +73,11 @@ may change `IX` and the alternates. For the whole call, use the selected
 service's documented results. Other registers may be destroyed
 (`src/abi.inc:35-56`).
 
+The existing hardware timing examples and byte account below remain historical
+`46cf3f1` observations. Their raw handler work must be distinguished from the
+new containing call, which can first perform queued writes and notices. They
+must be remeasured before being described as housekeeping-current costs.
+
 ## The code behind the table
 
 Services 0 to 8 are the hardware routines in `src/services.asm`.
@@ -79,10 +90,11 @@ validation. `FIND` and `LIST`, 13 and 14, enter the registry routines in
 [Chapter 25](25-loading-and-removing-services.md)
 (`src/tables.asm:100-128`, `src/services.asm:532-564`).
 
-The code account below totals 442 bytes for the dispatcher, its exits,
+The historical `46cf3f1` code account below totals 442 bytes for the dispatcher, its exits,
 the nine hardware services and the font's access routine. It excludes the
-font data and the other numbered routines. The figures are this build's
-and change with the source.
+font data and the other numbered routines. These figures are retained baseline evidence, not the current wrapper/module
+account. Candidate `hk.asm` adds the queue, worker and API-context implementation;
+its current containing-call costs need their own receipts.
 
 | Number | Name | Routine | Bytes |
 | ---: | --- | --- | ---: |
@@ -278,6 +290,12 @@ or within a BDOS call without re-entering the BDOS. `MOUNT` and `UNMNT`
 are the exceptions among numbered services: they reset a drive through
 BDOS function 37 and must be called from outside an existing BDOS call
 (`src/services.asm:1-16`, `src/abi.inc:35-56`).
+
+The private 56-byte worker covers maintenance and notices. A hook called from
+that worker must return normally and keep the logical caller's BDOS restrictions;
+using a separate physical stack does not permit BDOS recursion. The outer
+hardware/returning-BIOS wrapper owns `APIRTPC`; nested entries inherit its owner
+(`a40d482:src/hk.asm:204-274`).
 
 The caller may be a program, the CCP or the BDOS with part of its stack
 already occupied. The byte counts in `abi.inc` bound additional space

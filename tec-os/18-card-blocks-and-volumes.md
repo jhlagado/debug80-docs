@@ -438,25 +438,24 @@ stale sequential key to clear an already filled block
 (`src/cache.asm:469-511`). This protection relies on the type-2 contract.
 A direct BIOS caller must not label existing data as newly allocated.
 
-Every directory write, type 1, writes every changed or kept data line
-first, on any drive. Only after those writes succeed does its own merged
-line reach the card; a failed data write refuses the directory write.
-A data write off the logged drive sets bit 5 of `CWTYPE` and leaves one
-pending block in `CPEND`. Data on the logged drive may remain in several
-dirty lines until a console read, directory write or another flush point
-(`src/bios.asm:343-358`, `src/cache.asm:496-622`). Chapter 19 explains
-these two rules and the failure paths in full.
+Every directory write, type 1, attempts the other dirty data before its
+own metadata. It publishes that metadata only after successful prerequisites.
+A failed prerequisite or metadata write drops the rejected directory image;
+acknowledged data remains queued (`a40d482:src/cache.asm:550-569`).
 
-Sequential writes to a new file can therefore avoid data pre-reads. On
-a drive not logged they also avoid writing each SD block after each of its
-four records: one block stays pending and is written when the write moves
-on or a flush point arrives. On the logged drive several changed blocks
-can wait together until the next key read or directory write
-(`src/cache.asm:496-622`). On the starter card `SAVE 8 X.COM` writes sixteen
-records in four data blocks on A. It causes four data-block writes plus two
-directory-block writes, six writes in total. No reads are needed because
-the directory block is already cached after boot. An
-uncached directory can add metadata reads to a new-file operation.
+Off the logged drive, data still shares one pending-block boundary in `CPEND`.
+The logged drive can hold multiple dirty blocks, but ordinary outer OS calls
+also attempt one eligible line before their normal work. Thus the next public
+record call can commit the preceding same-block update. Sequential allocation
+can still avoid pre-reads and received updates still preserve neighbouring
+records; it no longer promises one SD write for four separately issued records
+(`a40d482:src/cache.asm:527-601`, `a40d482:docs/recovery.md:25-67`).
+
+The old recovery-baseline `SAVE 8 X.COM` count was sixteen records, four data
+blocks and six SD writes including two directory writes. That retained traffic
+receipt is historical `46cf3f1` evidence, not a housekeeping cost. Retake its
+same workload and byte/file-length checks before pricing the new public path.
+Chapter 19 separates ordinary opportunities, required drains and failure notices.
 
 ## Volume services and publication
 

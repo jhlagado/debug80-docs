@@ -111,9 +111,11 @@ The drive byte assigns a drive at cold boot. The volume id stays with the
 volume when that assignment changes.
 
 Byte 15 is reserved. It once marked one volume written behind. TEC-OS now
-writes behind the volume on the drive you are on and coalesces the data
-writes of every other volume, as [Chapter 19](19-cache-and-persistence.md)
-explains, so no descriptor marks one. `tecvol` and the container library
+allows multiple dirty blocks on the logged drive and keeps one shared
+pending-block boundary off that drive. Ordinary outer calls also attempt queued
+writes, so this no longer promises cross-call batching
+(`a40d482:docs/recovery.md:33-52`). [Chapter 19](19-cache-and-persistence.md)
+explains this policy; no descriptor marks one volume for it. `tecvol` and the container library
 write the byte zero, and neither they nor the ROM read it. A card made with
 the mark still mounts, its drive's flags holding only the read-only bit.
 `tecvol create` refuses `:wb` as an unknown flag, and `createContainer`

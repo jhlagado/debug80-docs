@@ -32,10 +32,21 @@ reset. `TYPE A:STARTUP.CMD` lets you read back the saved text before that
 reset while user area 0 is selected.
 
 After saving on the board, exit the editor normally before resetting.
-A successful exit flush puts pending changes on the card. `Write lost`
-means that failed cached writes were dropped so the intended file may
-be incomplete. Read back the file and correct it before relying on the
-next startup. Reset does not finish pending writes.
+Close the edited startup file normally and check its save result before
+reset. A prompt following `Write pending` is not proof of completion: failed
+acknowledged data remains in RAM. Resolve the original initialised backend
+failure and wait for `Cache clear`; resetting still discards queued RAM.
+Queue clearance does not repair a rejected directory update or finish an
+unclosed file (`a40d482:docs/recovery.md:69-117`).
+
+If bootstrap disk reset or saved-drive selection fails, `Disk reset failed`
+and `Enter retries` replace normal command input. Enter (CR) retries reset;
+LF, ordinary keys and input Ctrl-C do not. Printing/input can still service
+queued writes, but Enter does not initialise an inserted card. A startup line
+already buffered before saved-drive refusal waits and executes once after
+recovery succeeds. It cannot run inside the retry console
+(`a40d482:src/cpm/ccp.asm:75-134`). The existing bare-CD, user-area and script
+protection examples below remain unchanged; this is a distinct recovery path.
 
 The starter card's file has two lines:
 

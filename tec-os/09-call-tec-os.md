@@ -253,8 +253,11 @@ distinguishes their effects on a remaining command chain. Chapter 10 explains
 disk errors and returned error modes alongside file calls.
 
 Warm boot rebuilds the jumps at the bottom of memory and restarts the CCP.
-Services remain installed and the selected console stays in use. Pending card
-writes are flushed before the next load. A successful flush puts them on the
-card while a failure drops the failed lines in the block cache and reports
-`Write lost`. Chapter 16 explains the full warm-boot sequence.
+Services remain installed and the selected console stays in use. Queued card writes are attempted before the next load. A failed acknowledged
+line remains in RAM, while warm boot cancels continuation and the separate
+reporter warns `Write pending`. A later reported queue drainage gives
+`Cache clear`; that does not complete an unclosed file
+(`a40d482:src/cache.asm:638-649`, `a40d482:src/hk.asm:204-237`).
+
+Chapter 16 explains the full warm-boot sequence.
 

@@ -483,8 +483,10 @@ still selected. The page-zero jump targets `BF03h`. That unused part of EXPAND 1
 contains zeros unless something wrote there. Execution runs through those zeros
 into the ROM at `C000h`. The reset entry tests the high address byte at `0002h`
 to distinguish this path from a reset, then takes warm boot. Warm boot restores
-EXPAND 0 and flushes the cache. A failed flush drops failed lines and reports
-`Write lost`, as Chapter 10 explains.
+EXPAND 0 and attempts the queued writes. Failed acknowledged data remains
+queued, with the separate `Write pending` notice; warm boot cancels command
+continuation but does not discard that data. Cold reset remains different
+(`a40d482:src/cache.asm:638-649`). Chapter 10 explains the file-state limits.
 
 That path depends on the bank's bytes and the page-zero jump remaining intact.
 It does not restore cache bytes a program has overwritten. Reset and BIOS

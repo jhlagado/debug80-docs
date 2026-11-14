@@ -309,13 +309,13 @@ unmodified FCB can close without a directory write. Function 48 provides
 an explicit flush boundary for pending writes after the file state has
 been closed. Chapter 19 explains the cache's ordering and failure paths.
 
-On any drive other than the logged drive, TEC-OS holds one pending
-block. A write returns once its record is in that block's cache line, and
-the block reaches the card at the next close, directory request, write to
-another block, console read, function 48 or warm boot. A program that writes
-a file and then waits for a key therefore leaves nothing unwritten while it
-waits. A reset before one of those points loses at most that block's
-records (`docs/recovery.md:120-160`).
+Off the logged drive there is still one shared pending block. An accepted
+record can remain cached until an admitted service opportunity or required
+flush. Ordinary outer calls now attempt one eligible line before their own
+work, so the next public call can commit the preceding update. Required
+console input tries to drain queued data; a backend refusal can retain it even
+at a prompt. `Write pending` must be resolved before treating the card as up to
+date (`a40d482:docs/recovery.md:25-78`).
 
 A write that returns 1 or 2 may follow earlier successful records. Close
 the partial file and check the close result before reporting how much was
@@ -340,11 +340,12 @@ corresponding bits in the FCB's name/type fields. That is how a program can
 set the system attribute discussed with DIR. Attribute operations still require
 checking their result. Appendix A gives their exact bit meanings.
 
-At an ordinary exit, a successful warm-boot flush puts pending changes
-on the card before another program loads. If a write fails there, TEC-OS
-drops the failed cache lines, reports `Write lost` and cancels the remaining
-command line. Explicit function 48 also reports failure, and keeps a failed
-line for the next flush, so only warm boot drops a line that still fails
-(`docs/recovery.md:97-118`). A later successful flush cannot restore bytes
-from a line already dropped. A reset discards pending cached changes rather than finishing
-unclosed work.
+At ordinary exit, warm boot attempts pending data before another program.
+Failed acknowledged lines stay queued, and command continuation is cancelled.
+The separate reporter distinguishes `Write pending`, later `Cache clear` and
+an otherwise unreported `Write error` with no dirty retry. Function 48 still
+returns its own failure. An explicitly rejected directory image is dropped and
+must never be replayed later. Clearing data does not complete an unclosed file
+or repair its rejected metadata. Cold reset discards pending cached data rather
+than finishing unclosed work (`a40d482:src/cache.asm:550-569`,
+`a40d482:src/cache.asm:638-649`, `a40d482:src/hk.asm:204-237`).

@@ -23,9 +23,12 @@ pairs the map of one build with the source contracts for each region.
 [Chapter 11](11-memory-for-programs.md) explains the program's memory limits.
 [Chapter 15](15-state-and-memory.md) explains resident state and its lifetime.
 
-The address tables describe the `tecos` build at TEC-OS `46cf3f1`, whose ROM
-SHA-256 is
-`ac86ad233696d22a46b4f98a4119c53b718bfe89881952a08e9f92223f3fa1c3`. It is the
+The updated resource tables below describe housekeeping candidate `a40d482`,
+whose ROM SHA-256 is
+`c95862634ee002bb9a5ef1d3d0ee8ea831e12fda4e96792b36454170aafabf7f`.
+These are source/build identities, pending final qualification and fresh book
+receipts. Existing checked-against headers and unprefixed citations still name
+the recovery baseline until their separate semantic audit. It is the
 one image for every board. The starter card reserves four equal drive slots and mounts SYSTEM on A,
 WORK on B and PROJECTS on C. Its startup file installs the shell; table rows
 that describe the bare allocation layout explicitly exclude services. The resident workspace
@@ -93,14 +96,17 @@ The ROM occupies these ranges:
 | --- | ---: | --- |
 | `C000h–C002h` | 3 | Reset jump, `JP RSTENT` |
 | `C003h–C00Ah` | 8 | ROM table |
-| `C00Bh–C5D5h` | 1,483 | Read-only data from `ROMDATA` up to `ROMCODE`, including `FONT` at `C198h–C497h` |
-| `C5D6h–FBCFh` | 13,818 | Code |
-| `FBD0h–FFFFh` | 1,072 | Unused |
+| `C00Bh–C61Fh` | 1,557 | Read-only data from `ROMDATA` to `ROMCODE` |
+| `C620h–FE8Fh` | 14,448 | Code |
+| `FE90h–FFFFh` | 368 | Unused |
 
-That is 15,312 of the 16,384 bytes (`docs/memory-map.md:24-32`).
+The candidate uses 16,016 of 16,384 bytes
+(`a40d482:docs/memory-map.md:24-32`).
 
-The CCP's five files occupy `DBB8h–E572h`, 2,491 bytes, from `CCPBAS`. The
-BDOS's six files follow at `BDOSBAS`, `E573h–F34Dh`, 3,547 bytes (`src/rom.asm:31-41`).
+The housekeeping module is `hk.asm`; its queue, worker and outer-call wrappers
+are separate from the CCP and BDOS files. Use the candidate D8 labels for their
+current extents rather than the recovery baseline's numeric code addresses
+(`a40d482:src/rom.asm:31-46`).
 
 The ROM copy of the BIOS jump table is data at `BIOSBAS`. Cold boot copies
 its 17 jumps to `BF00h`. Calls use the RAM table, whose entries can be
@@ -240,8 +246,8 @@ the warm clearing sweep for another chained piece.
 
 Retention of the line does not guarantee that it runs. Without the shell the
 CCP runs a function 47 line whole. A failed warm-boot flush cancels the line,
-writing 2 to `CHPOS` after dropping failed cache lines
-(`src/cache.asm:266-300`, `src/cache.asm:624-640`).
+writing 2 to `CHPOS` while retaining failed acknowledged data in the queue
+(`a40d482:src/cache.asm:638-649`).
 [Chapter 22](22-chains-across-warm-boot.md) explains the other cancellation
 paths.
 
@@ -292,7 +298,17 @@ holds them. `CPEND` holds the pending block on a drive not logged, for the coale
 | `BF64h` | 1 | `STFLAG` | `FFh` during a startup line, 0 during a typed line | Cold boot |
 | `BF65h` | 1 | `STPOS` | Startup state: 0 untried, 1 a record waits, `80h` done | Cold boot |
 | `BF66h` | 1 | `CHPOS` | Bit 0 a function 47 line in `CMDTXT`, bit 1 the rest of the line dropped | Cold boot |
-| `BF67h–BFE4h` | 126 | `HIFREE` | Unused | Cold boot |
+| `BF67h–BF84h` | 30 | `HKQ` | First-dirty queue of cache line numbers | Cold boot |
+| `BF85h–BFA2h` | 30 | `HKROUND` | Frozen service-round line numbers | Cold boot |
+| `BFA3h` | 1 | `HKCNT` | Number of dirty queue entries | Cold boot |
+| `BFA4h` | 1 | `HKRPOS` | Next position in the frozen round | Cold boot; abandoned round reset at warm boot |
+| `BFA5h` | 1 | `HKRLEN` | Frozen-round length | Cold boot; abandoned round reset at warm boot |
+| `BFA6h` | 1 | `HKDEP` | Logical outer/nested API depth | Cold boot; abandoned context reset at warm boot |
+| `BFA7h` | 1 | `HKBUSY` | Worker and report callback guard | Cold boot; abandoned context reset at warm boot |
+| `BFA8h` | 1 | `HKERR` | Deferred or reported write-failure episode | Cold boot |
+| `BFA9h–BFAAh` | 2 | `HKSP` | Saved worker caller SP and brief wrapper setup scratch | Cold boot |
+| `BFABh–BFACh` | 2 | `HKGRD` | Worker stack guard | Cold boot |
+| `BFADh–BFE4h` | 56 | `HKSTKB` | Private worker stack, exclusive top `HKSTKT` at `BFE5h` | Cold boot |
 | `BFE5h` | 1 | `RXFULL` | Nonzero while a console byte is pending in `RXCHAR` | Cold boot |
 | `BFE6h` | 1 | `RXCHAR` | Pending console byte | Cold boot |
 | `BFE7h` | 1 | `CONDEV` | Device/switch status and LCD recovery-word ownership bits | Cold boot |
@@ -318,6 +334,15 @@ and ownership state so its bits do not all prove device presence
 identifies a cause only when `SVCRC` is 1. Record-validation failure after
 successful INIT sets it to 0 (`src/loader.asm:426-444`).
 [Chapter 25](25-loading-and-removing-services.md) explains those load outcomes.
+
+The queue, round and context use 68 bytes, their guard 2 and worker stack 56:
+126 bytes from the existing reservation, not a second fixed-RAM charge.
+`APIRTPC` remains the separate two-byte slot at `BDA0h–BDA1h` already included
+in the recovery allocation. RXFULL and the later console addresses do not move
+(`a40d482:src/ram.asm:412-439`, `a40d482:docs/memory-map.md:77-86`).
+Warm boot resets `HKRPOS` and `HKRLEN` alongside abandoned `HKDEP`/`HKBUSY`
+context. This discards the service round, not `HKQ`, `HKCNT` or acknowledged data
+(`a40d482:src/boot.asm:135-139`).
 
 ## EXPAND 1
 
@@ -366,6 +391,7 @@ The stack reservations are defined by `BOOTSTK`, `BIOSSTN`, `CCPSTN` and
 | BIOS | `BCA6h–BCD5h` | 48 | Warm boot |
 | CCP | `BE3Dh–BE6Ch` | 48 | CCP and a program's inherited stack, with `0000h` pushed at launch |
 | BDOS | `BEC0h–BEFFh` | 64 | BDOS functions and their BIOS calls, plus cold boot after workspace clearing |
+| Housekeeping | `BFADh–BFE4h` | 56 | Queued writes and notices; guard `BFABh–BFACh` |
 
 Cold boot switches from `BOOTSTK` to `STKTOP` after clearing the workspace.
 Console initialisation, banner, mount, drive listing and the diagnostic prompt
@@ -384,7 +410,7 @@ the declared limits and a two-byte NMI return-frame reserve gives 40/64,
 deepest use of all, is 32 bytes (`docs/services.md:309-333`). The
 shell runs its `LINE` and `PAGE` entries on its own 48-byte stack and
 declares 6 bytes of the BDOS's stack (`docs/services.md:335-342`).
-[Chapter 15](15-state-and-memory.md#four-stacks-for-different-stages)
+[Chapter 15](15-state-and-memory.md#five-stacks-for-different-stages)
 explains their scope and [Chapter 25](25-loading-and-removing-services.md)
 explains declaration checks.
 
@@ -405,7 +431,9 @@ for (const n of process.argv.slice(1)) {
 }' CMDTXT PRGCODE CHPOS
 ```
 
-It prints:
+The retained `46cf3f1` lookup printed the following. This raw receipt remains
+historical even where candidate addresses are unchanged; a fresh lookup must
+be bound to its actual ROM and D8:
 
 <!-- TEC-OS 46cf3f1: Host-tool output; exact raw receipts in Origo book-recovery-host. -->
 ```text

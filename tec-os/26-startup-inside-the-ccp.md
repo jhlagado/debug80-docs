@@ -45,8 +45,9 @@ Reset enters `COLD` and clears the whole workspace including `STPOS`. The
 next startup read begins from zero (`src/ram.asm:292-301`,
 `src/boot.asm:22-65`, `src/boot.asm:398-403`).
 [Chapter 15](15-state-and-memory.md#the-workspace-across-a-program-exit)
-explains the two clearing spans. The space after `CHPOS`, up to the console
-state, is unused (`src/ram.asm:412-416`).
+explains the two clearing spans. Housekeeping now uses the formerly reserved space after `CHPOS` for its
+queue, frozen round, context and guarded worker stack
+(`a40d482:src/ram.asm:412-426`).
 
 A diagnostic retry returns to `COLDRT`, after the cold clear but before
 the CCP has run. `STPOS` is still zero. Once the card mounts, startup can
@@ -55,13 +56,29 @@ begin as it would after an uninterrupted cold boot
 
 ## The first read and the bypass
 
-Each `CCPENT` resets the disks, restores the user number and calls
-`STBOOT` before selecting the entry drive (`src/cpm/ccp.asm:39-88`).
-Cold boot sets page zero to drive A and user 0. Warm boot passes that
-byte to the CCP so the first startup open uses user area 0
-(`src/boot.asm:114-115`, `src/boot.asm:149-152`). `STBOOT` returns
-immediately on later entries because `STPOS` is already nonzero
-(`src/cpm/ccpcmd.asm:760-764`).
+In the housekeeping candidate, `CCPENT` uses returned-error mode for its
+disk reset and saved-drive selection. It restores the user and keeps the
+one-shot `STBOOT` ordering, but reaches normal command input only once disk
+defaults are valid (`a40d482:src/cpm/ccp.asm:75-134`). Cold boot starts at A,
+user 0; warm entry receives the saved drive/user byte.
+
+If reset or saved-drive selection fails, incomplete `LOGINV`/`WARMV` and
+command continuation are cleared. `Disk reset failed` and `Enter retries`
+identify the distinct bootstrap recovery console. Only CR retries disk reset;
+LF, other keys and ordinary input Ctrl-C do not. The existing Ctrl-S/output
+Ctrl-C escape deliberately warm boots. Printing and input can still service
+queued data before Enter, with the same hook/nonreentry rules. This path does
+not initialise SD or identify an inserted card.
+
+A startup line already buffered before saved-drive refusal remains pending.
+It runs once after successful recovery, never inside the retry console.
+Subsequent warm boots retain the startup position. `CHPOS`'s chain-drop bit
+does not erase the buffered `STPOS` record
+(`a40d482:src/cpm/ccp.asm:92-134`, `a40d482:src/ram.asm:399-410`).
+
+The following source discussion and existing receipts retain the recovery
+baseline until the housekeeping capture/citation pass. The new retry states
+need separate evidence, including restored B/user 3 and one-shot startup.
 
 The routine marks startup finished before attempting any file operation. It
 sets bit 7 of `STPOS`, making `80h` (`src/cpm/ccpcmd.asm:765`). A BDOS error

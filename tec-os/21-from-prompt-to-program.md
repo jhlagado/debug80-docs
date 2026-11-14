@@ -711,8 +711,12 @@ otherwise. CP/M 2.2 promises a program no register at entry
 
 A top-level RET reaches the warm-boot jump at `0000h`. A direct jump there or
 function 0 reaches warm boot too (`src/cpm/ccp.asm:469-471`,
-`src/cpm/bdos.asm:216-221`). Warm boot flushes the block cache before
-re-entering the CCP. A failed flush prints `Write lost` and sets the drop
-flag, so the shell cancels the line's pending pieces (`src/boot.asm:141-152`, `src/cache.asm:634-640`). The CCP enters at
+`src/cpm/bdos.asm:216-221`). Warm boot attempts queued writes before
+re-entering the CCP. A failed acknowledged line stays queued, but continuation
+is dropped so the shell cancels pending pieces. The separate reporter can warn
+`Write pending`; queue recovery does not restore a cancelled command or finish
+unclosed metadata (`a40d482:src/cache.asm:638-649`).
+
+The CCP enters at
 `STARTED` and prints a new line before its prompt. A program whose output
 already ended with a new line therefore has a blank line before that prompt.

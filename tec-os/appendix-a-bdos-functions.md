@@ -268,12 +268,14 @@ write, once an entry has been freed, makes the extent the FCB needs
 stays in the FCB's map. A later successful close publishes it in the entry
 (`src/cpm/bdosrec.asm:593-619`). An FCB with the read-only attribute set gives
 the `File R/O` error (`src/cpm/bdosfile.asm:355-366`). On a
-volume on a drive other than the logged drive, success means the record is in the
-cache's copy of its block. That pending block reaches the card at the next
-close, directory request, write to another block, console read, function 48,
-`MOUNT` or warm boot, and the same holds for functions 34 and 40
-(`docs/recovery.md:120-160`). [Chapter 19](19-cache-and-persistence.md)
-explains the pending block.
+volume on any drive, success can mean acceptance into cache. Off the logged
+drive there is still one shared pending block, but each admitted outer public
+call also attempts one eligible queued line before its own operation. The next
+same-block write can therefore commit the prior update; functions 21, 34 and 40
+no longer promise one SD write across four separate record calls. Received
+updates still merge and preserve other records. Required input/directory/flush
+paths remain (`a40d482:docs/recovery.md:25-67`).
+[Chapter 19](19-cache-and-persistence.md) explains queued data and metadata.
 
 **22 Make file.** Creates an empty entry for the FCB's name in the current
 user area, writes it to the directory and opens it
@@ -409,21 +411,25 @@ The shell splits the command at `!` and `&` and its first
 piece runs whatever the program's result was. With no shell the ROM runs the
 command whole as one command (`src/cpm/bdos.asm:52-94`,
 `docs/compatibility.md:27-32`).
-Warm boot flushes the write-behind records before the CCP loads the command.
-If that flush fails, failed cache lines are dropped and `Write lost` cancels
-the chain (`src/cache.asm:258-296`, `539-554`). Does not return on success.
-Returns `FFh` in `A` for a command with no 0 in its first 128 bytes or with
-a CR or LF before the 0. The program then continues with the line unchanged.
+Warm boot attempts the queued records before the next command. If any
+acknowledged data refuses, it remains dirty, but `CHPOS` cancels the chain.
+The separate reporter can warn `Write pending`; no failed data is thrown away
+by this warm boot (`a40d482:src/cache.asm:638-649`). Does not return on success.
+An input with no NUL in its first 128 bytes, or with CR or LF before that
+NUL, returns `FFh` in `A` with the original command line unchanged. Housekeeping
+failure does not replace this unchanged validation result
+(`a40d482:src/cpm/bdos.asm:52-83`).
 
 **48 Flush buffers.** Writes every changed line of the block cache to the card
 (`src/cpm/bdos.asm:244-245`, `src/volsvc.asm:373-388`). `E` = `FFh`, CP/M 3's
 purge, gives the same flush. Returns 0 in `A` or `FFh` if any write failed.
-A failed line is kept for the next flush, and A's
-pending block is among the lines written (`src/volsvc.asm:360-389`,
+A failed acknowledged line is kept for the next flush; the pending block
+off the logged drive is among the lines attempted (`src/volsvc.asm:360-389`,
 `docs/compatibility.md:37-40`). Earlier
 or partial card writes are not undone. This explicit call reports failure
-through its return value, not the warm-boot `Write lost` path
-(`src/cache.asm:258-296`, `539-554`).
+through its own return value; the separate housekeeping notices describe
+retained data or a metadata-only failure (`a40d482:src/hk.asm:204-237`,
+`a40d482:src/cache.asm:265-306`).
 
 **99 Truncate file.** Changes nothing (`src/cpm/bdos.asm:81-82`,
 `src/cpm/bdos.asm:143-144`). Returns `FFh` in `A`. TEC-OS has no truncate.

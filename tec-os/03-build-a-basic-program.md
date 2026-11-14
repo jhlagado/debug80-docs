@@ -237,8 +237,10 @@ TIMES.BAS on A and the build with it on B. Answer the questions and press a
 key to return to TED.
 
 `^Q` quits TED and returns to `B:WORK>`. Wait for that prompt before a
-reset or power-off: its console read writes all pending changes on every
-drive. Chapter 1 explains why.
+reset or power-off. Its input read attempts pending writes; after `Write pending`,
+the prompt alone is insufficient. Preserve RAM, resolve the original backend
+failure and await `Cache clear`. That notice does not finish an unclosed file
+or browser save (`a40d482:docs/recovery.md:69-117`). Chapter 1 explains why.
 
 ## A failed compile
 

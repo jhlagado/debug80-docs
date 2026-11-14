@@ -58,8 +58,9 @@ C selects the number. B, DE and HL carry the documented arguments. A is never an
 input because selection uses it. Except for FIND and LIST, success returns A = 0
 with Z set and carry clear. Failure returns a nonzero status with carry set. What a
 refusal leaves changed depends on the service. MOUNT/UNMNT, for example, can have
-written or dropped cache lines before refusing the drive change, as their
-section explains (`src/abi.inc:35-69`, `src/services.asm:59-67`,
+completed some prerequisite writes before refusing the drive change. Failed
+acknowledged data remains queued; prior physical writes are not undone
+(`a40d482:docs/recovery.md:58-78`), as their section explains (`src/abi.inc:35-69`, `src/services.asm:59-67`,
 `src/volsvc.asm:211-240, 275-322`).
 
 | Status | `abi.inc` | Meaning |
@@ -74,12 +75,19 @@ FIND/LIST use carry and return a generation in A on success
 (`src/services.asm:59-67, 519-564`, `src/volsvc.asm:312-322`,
 `src/loader.asm:636-732`).
 
-SVTAB holds one word per number. The dispatcher enters that routine with B, DE
-and HL restored and the caller's return address next on the stack. A number from
-TNCOUNT, 17, upwards returns status 1 with B, DE and HL unchanged
-(`src/services.asm:24-57`, `src/tables.asm:95-128`). The
-invalid-number path takes 58 T-states and uses no stack below that return
-address.
+SVTAB holds 17 words, for selectors 0 to 16. Selectors 17 and above return
+status 1 with B, DE and HL unchanged. An admitted outer call first attempts
+one dirty line on the private worker stack, then dispatches its normal operation.
+Nested/busy entries inherit that context. The outer wrapper substitutes
+`HKAPIRET` in the existing return slot and keeps the original PC in `APIRTPC`;
+nested calls do not overwrite it. This preserves published signatures and
+caller-stack bounds without adding a live handler word
+(`a40d482:src/services.asm:26-68`, `a40d482:src/hk.asm:238-274`).
+
+The old invalid-selector cost of 58 T-states and zero extra internal stack use
+is historical, not a statement about this complete wrapper path. The table's
+T-state column and the detailed timing examples below remain baseline
+measurements pending current containing-call receipts.
 
 Every numbered call preserves its incoming interrupt state and uses the caller's
 stack. IX, IY and the alternate registers are preserved except that MOUNT, UNMNT
@@ -120,7 +128,7 @@ when the selected routine begins so its depth is not added to a routine's
 depth. The caller must allow for its own return word, saved registers and
 nesting too (`src/services.asm:34-57`).
 
-The cost figures start at the JP at ABICALL and end after the final RET. A CALL
+The historical cost figures start at the JP at ABICALL and end after the final RET. A CALL
 adds 17 T-states. Their model provenance is:
 
 | Figures | Build and method |
@@ -133,6 +141,13 @@ adds 17 T-states. Their model provenance is:
 | PUTAT GLCD cell about 34,190 | Model timing, a 15-character call against a 1-character one |
 
 No cost was recorded here for services 9–14 and 16.
+
+Housekeeping's 56-byte private worker and two-byte guard lie in existing
+reserved workspace. Its independent refusal base of 28, hook allowance 12 and
+synthetic NMI return reserve 2 total 42 of 56. This does not widen published
+caller-stack bounds, service declarations or logical BDOS reentry permission.
+Callbacks must return normally. No arbitrary interrupt-handler body or unsafe-bank
+NMI is covered (`a40d482:docs/services.md:338-345`).
 
 ## The hardware services
 
